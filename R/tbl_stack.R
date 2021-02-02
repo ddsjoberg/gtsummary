@@ -134,7 +134,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
             df <-
               df %>%
               mutate(
-                rows = ifelse(is.na(rows),rows,
+                rows = ifelse(is.na(.data$rows), .data$rows,
                               glue("tbl_id == {i} & ( {rows} )") %>% as.character())
               )
           }

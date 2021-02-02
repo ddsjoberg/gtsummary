@@ -127,11 +127,12 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
     )
 
   # fmt (part 2) ---------------------------------------------------------------
+  .apply_fmt_fun2 <- rlang::parse_expr("gtsummary:::.apply_fmt_fun") %>% eval()
   tibble_calls[["fmt"]] <-
     list(expr(mutate_at(vars(!!!syms(.cols_to_show(x))), as.character))) %>%
     c(map(
       seq_len(nrow(x$table_styling$fmt_fun)),
-      ~expr(gtsummary:::.apply_fmt_fun(
+      ~expr(.apply_fmt_fun2(
         columns = !!x$table_styling$fmt_fun$column[[.x]],
         row_numbers = !!x$table_styling$fmt_fun$row_numbers[[.x]],
         fmt_fun = !!x$table_styling$fmt_fun$fmt_fun[[.x]],

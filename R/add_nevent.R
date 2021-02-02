@@ -118,7 +118,7 @@ add_nevent.tbl_regression <- function(x, quiet = NULL, ...) {
   x <-
     modify_table_styling(
       x,
-      column = "nevent",
+      columns = "nevent",
       label = "**Event N**",
       hide = FALSE,
       fmt_fun = function(x) style_number(x, digits = 0)
@@ -193,7 +193,7 @@ add_nevent.tbl_uvregression <- function(x, ...) {
   x <-
     modify_table_styling(
       x,
-      column = "nevent",
+      columns = "nevent",
       label = "**Event N**",
       hide = FALSE,
       fmt_fun = function(x) style_number(x, digits = 0)

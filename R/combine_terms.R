@@ -136,7 +136,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     x <-
       modify_table_styling(
         x,
-        column = "p.value",
+        columns = "p.value",
         label = "**p-value**",
         hide = FALSE,
         fmt_fun = x$inputs$pvalue_fun %||% getOption("gtsummary.pvalue_fun", default = style_pvalue)

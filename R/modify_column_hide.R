@@ -32,7 +32,7 @@ modify_column_hide <- function(x, columns) {
 modify_column_unhide <- function(x, columns) {
   modify_table_styling(
     x = x,
-    column = {{ columns }},
+    columns = {{ columns }},
     hide = FALSE
   )
 }

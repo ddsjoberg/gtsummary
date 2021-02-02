@@ -34,7 +34,7 @@ bold_labels <- function(x) {
     modify_table_styling(
       x,
       columns = "label",
-      rows = row_type == 'label',
+      rows = .data$row_type == 'label',
       text_format = "bold"
     )
 
@@ -56,7 +56,7 @@ bold_levels <- function(x) {
     modify_table_styling(
       x,
       columns = "label",
-      rows = row_type != 'label',
+      rows = .data$row_type != 'label',
       text_format = "bold"
     )
 
@@ -79,7 +79,7 @@ italicize_labels <- function(x) {
     modify_table_styling(
       x,
       columns = "label",
-      rows = row_type == 'label',
+      rows = .data$row_type == 'label',
       text_format = "italic"
     )
 
@@ -102,7 +102,7 @@ italicize_levels <- function(x) {
     modify_table_styling(
       x,
       columns = "label",
-      rows = row_type != 'label',
+      rows = .data$row_type != 'label',
       text_format = "italic"
     )
 
