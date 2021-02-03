@@ -128,14 +128,16 @@ table_styling_to_gt_calls <- function(x, ...) {
   gt_calls <- list()
 
   # gt -------------------------------------------------------------------------
+  groupname_col <- switch("groupname_col" %in% x$table_styling$header$column, "groupname_col")
   if (!is.null(x$list_output$caption) && "caption" %in% names(as.list(gt::gt))) {
     caption <- rlang::call2(attr(x$list_output$caption, "text_interpret"), x$list_output$caption)
     gt_calls[["gt"]] <-
-      expr(gt::gt(data = x$table_body, caption = !!caption, !!!list(...)))
+      expr(gt::gt(data = x$table_body, groupname_col = !!groupname_col,
+                  caption = !!caption, !!!list(...)))
   }
   else
     gt_calls[["gt"]] <-
-    expr(gt::gt(data = x$table_body, !!!list(...)))
+    expr(gt::gt(data = x$table_body,  groupname_col = !!groupname_col, !!!list(...)))
 
   # fmt_missing ----------------------------------------------------------------
   gt_calls[["fmt_missing"]] <-

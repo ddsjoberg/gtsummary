@@ -32,9 +32,6 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
     "1.4.0", "gtsummary::modify_table_header()", "modify_table_styling()")
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
 
-  # update table_header --------------------------------------------------------
-  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
-
   # convert column input to string ---------------------------------------------
   column <-
     .select_to_varnames(
@@ -49,75 +46,74 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
   # if no columns selected, returning unaltered
   if (is.null(column)) return(x)
 
-  .convert_call_to_table_styling(
+  .convert_header_call_to_styling_call(
     x = x, column = column, label = label, hide = hide, align = align,
     missing_emdash = missing_emdash, indent = indent,
     text_interpret = text_interpret, bold = bold, italic = italic,
     fmt_fun = fmt_fun, footnote_abbrev = footnote_abbrev,
-    footnote = footnote, spanning_header = spanning_header
+    footnote = footnote, spanning_header = spanning_header,
+    call = match.call(), env = rlang::caller_env()
   )
 }
 
-.convert_call_to_table_styling <- function(x, column, label, hide, align,
+.convert_header_call_to_styling_call <- function(x, column, label, hide, align,
                                                 missing_emdash, indent,
                                                 text_interpret, bold, italic,
                                                 fmt_fun, footnote_abbrev,
-                                                footnote, spanning_header) {
-  call_list <- list()
+                                                footnote, spanning_header,
+                                                call, env) {
+  styling_call_list <- list()
+  call_list <- as.list(call)[-1]
+  names(call_list)[which(names(call_list) %in% "column")] <- "columns"
 
-  if (!is.null(label)) {
-    if (!is.null(text_interpret))
-      call_list[["label"]] <- expr(modify_table_styling(columns = !!column, label = !!label, text_interpret = !!text_interpret))
-    else
-      call_list[["label"]] <- expr(modify_table_styling(columns = !!column, label = !!label))
-  }
-  if (!is.null(spanning_header)) {
-    call_list[["spanning_header"]] <- expr(modify_table_styling(columns = !!column, label = !!spanning_header))
-  }
-  if (!is.null(hide)) {
-    call_list[["hide"]] <- expr(modify_table_styling(columns = !!column, hide = !!hide))
-  }
-  if (!is.null(hide)) {
-    call_list[["align"]] <- expr(modify_table_styling(columns = !!column, hide = !!align))
-  }
-  if (!is.null(missing_emdash)) {
-    call_list[["missing_emdash"]] <- expr(modify_table_styling(columns = !!column, rows = !!missing_emdash, missing_symbol = "---"))
-  }
-  if (!is.null(indent)) {
-    call_list[["indent"]] <- expr(modify_table_styling(columns = !!column, rows = !!indent, text_format = "indent"))
-  }
-  if (!is.null(bold)) {
-    call_list[["bold"]] <- expr(modify_table_styling(columns = !!column, rows = !!bold, text_format = "bold"))
-  }
-  if (!is.null(italic)) {
-    call_list[["italic"]] <- expr(modify_table_styling(columns = !!column, rows = !!italic, text_format = "italic"))
-  }
-  if (!is.null(fmt_fun)) {
-    call_list[["fmt_fun"]] <- expr(modify_table_styling(columns = !!column, rows = NA, fmt_fun = fmt_fun))
-  }
-  if (!is.null(footnote_abbrev)) {
-    call_list[["footnote_abbrev"]] <- expr(modify_table_styling(columns = !!column, rows = NA, footnote_abbrev = !!footnote_abbrev))
-  }
-  if (!is.null(footnote)) {
-    call_list[["footnote"]] <- expr(modify_table_styling(columns = !!column, rows = NA, footnote = !!footnote))
+  # header formatting ----------------------------------------------------------
+  header_args <- c("columns", "label", "hide", "align", "text_interpret",
+                   "spanning_header", "footnote", "footnote_abbrev", "fmt_fun")
+  header_call_list <- call_list[names(call_list) %in% header_args]
+  if (length(header_call_list) > 1) {
+    styling_call_list[["header"]] <- expr(modify_table_styling(!!!header_call_list))
   }
 
-  lifecycle::deprecate_warn("1.4.0",
-                            "gtsummary::modify_table_header()",
-                            "modify_table_styling()")
+  # row formatting -------------------------------------------------------------
+  if ("bold" %in% names(call_list)) {
+    styling_call_list[["bold"]] <-
+      expr(modify_table_styling(columns = !!call_list$columns,
+                                rows = !!parse_expr(call_list$bold),
+                                text_format = "bold"))
+  }
+  if ("italic" %in% names(call_list)) {
+    styling_call_list[["italic"]] <-
+      expr(modify_table_styling(columns = !!call_list$columns,
+                                rows = !!parse_expr(call_list$italic),
+                                text_format = "italic"))
+  }
+  if ("indent" %in% names(call_list)) {
+    styling_call_list[["indent"]] <-
+      expr(modify_table_styling(columns = !!call_list$columns,
+                                rows = !!parse_expr(call_list$indent),
+                                text_format = "indent"))
+  }
+  if ("missing_emdash" %in% names(call_list)) {
+    styling_call_list[["missing_emdash"]] <-
+      expr(modify_table_styling(columns = !!call_list$columns,
+                                rows = !!parse_expr(call_list$missing_emdash),
+                                missing_symbol = "---"))
+  }
+
+  # printing code to use instead of `modify_table_header()`
   ui_info("Use {ui_code('modify_table_styling()')} instead of {ui_code('modify_table_header()')}")
-  usethis::ui_todo("Replace your code with the following.")
-  c(list(expr(x)), call_list) %>%
-    map(deparse) %>%
+  usethis::ui_todo("Replace the {ui_code('modify_table_header()')} call with the following.")
+  c(list(expr(x)), styling_call_list) %>%
+    map(~deparse(.) %>% paste(collapse = "") %>% stringr::str_squish()) %>%
     unlist() %>%
-    paste(collapse = " %>% ") %>%
-    ui_code() %>%
-    usethis::ui_todo()
+    paste(collapse = " %>%\n  ") %>%
+    cat()
 
-  c(list(expr(x)), call_list) %>%
+  # evaluating `modify_table_header()` code
+  c(list(expr(!!x)), styling_call_list) %>%
     # concatenating expressions with %>% between each of them
     reduce(function(x, y) expr(!!x %>% !!y)) %>%
     # evaluating expressions
-    eval()
+    eval_tidy(env = env)
 }
 

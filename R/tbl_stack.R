@@ -106,8 +106,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
         if (!is.null(group_header))
           table_body <-
             table_body %>%
-            mutate(groupname_col = group_header[id]) %>%
-            group_by(.data$groupname_col)
+            mutate(groupname_col = group_header[id])
 
         table_body %>% select(any_of(c("groupname_col", "tbl_id")), everything())
       }

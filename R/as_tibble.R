@@ -86,16 +86,13 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
   tibble_calls[["tibble"]] <- expr(x$table_body)
 
   # ungroup --------------------------------------------------------------------
-  group_var <- select(x$table_body, dplyr::group_cols()) %>% names()
-  if (length(group_var) > 0) {
-    if (group_var != "groupname_col")
-      stop("`.$table_body` may only be grouped by column 'groupname_col'")
-
-    tibble_calls[["ungroup"]] <- list(
-      expr(mutate(groupname_col =
-                    ifelse(dplyr::row_number() == 1, .data$groupname_col, NA))),
-      expr(ungroup())
-    )
+  if ("groupname_col" %in% x$table_styling$header$column) {
+    tibble_calls[["ungroup"]] <-
+      list(
+        expr(group_by(.data$groupname_col)),
+        expr(mutate(groupname_col = ifelse(dplyr::row_number() == 1, .data$groupname_col, NA))),
+        expr(ungroup())
+      )
   }
 
   # fmt (part 1) ---------------------------------------------------------------

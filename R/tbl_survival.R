@@ -208,16 +208,20 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       by = "column"
     )
 
+
+  # renaming grouping variable, 'level_label', added in v1.4.0--could cause breaking changes
   if ("level_label" %in% names(result$table_body)) {
     result$table_header <-
       result$table_header %>%
-      dplyr::rows_update(
-        tibble::tribble(
-          ~column, ~label, ~hide,
-          "level_label", "**Group**", FALSE
-        ),
-        by = "column"
+      mutate(
+        column = ifelse(.data$column == "level_label", "groupname_col", .data$column),
+        label = ifelse(.data$column == "groupname_col", "**Group**", .data$label),
+        align = ifelse(.data$column == "groupname_col", "left", .data$align),
+        hide = ifelse(.data$column == "groupname_col", FALSE, .data$hide),
       )
+    result$table_body <-
+      rename(result$table_body, groupname_col = .data$level_label) %>%
+      ungroup()
   }
 
   # returning results
