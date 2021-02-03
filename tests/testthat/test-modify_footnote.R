@@ -17,6 +17,15 @@ test_that("modify_footnote works", {
 
   expect_error(
     tbl_summary %>%
+      modify_footnote(
+        update = starts_with("stat_") ~ "Row footnote!",
+        rows = variable == "age"
+      ),
+    NA
+  )
+
+  expect_error(
+    tbl_summary %>%
       modify_footnote(update = everything() ~ NA),
     NA
   )

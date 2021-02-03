@@ -233,8 +233,8 @@ table_styling_to_gt_calls <- function(x, ...) {
       nest(data = c(.data$column, .data$row_numbers)) %>%
       rowwise() %>%
       mutate(
-        columns = .data$data %>% pull(.data$column) %>% list(),
-        rows = .data$data %>% pull(.data$row_numbers) %>% list()
+        columns = .data$data %>% pull(.data$column) %>% unique() %>% list(),
+        rows = .data$data %>% pull(.data$row_numbers) %>% unique() %>% list()
       ) %>%
       ungroup()
     df_footnotes$footnote_exp <-
@@ -245,24 +245,25 @@ table_styling_to_gt_calls <- function(x, ...) {
       )
 
 
-    gt_calls[["tab_footnote"]] <- pmap(
-      list(df_footnotes$tab_location, df_footnotes$footnote_exp,
-           df_footnotes$columns, df_footnotes$rows),
-      function(tab_location, footnote, columns, rows) {
-        if (tab_location == "header") return(expr(
-          gt::tab_footnote(
-            footnote = !!footnote,
-            locations = gt::cells_column_labels(columns = vars(!!!syms(columns)))
-          )
-        ))
-        if (tab_location == "body") return(expr(
-          gt::tab_footnote(
-            footnote = !!footnote,
-            locations = gt::cells_body(columns = vars(!!!syms(columns)), rows = !!!rows)
-          )
-        ))
-      }
-    )
+    gt_calls[["tab_footnote"]] <-
+      pmap(
+        list(df_footnotes$tab_location, df_footnotes$footnote_exp,
+             df_footnotes$columns, df_footnotes$rows),
+        function(tab_location, footnote, columns, rows) {
+          if (tab_location == "header") return(expr(
+            gt::tab_footnote(
+              footnote = !!footnote,
+              locations = gt::cells_column_labels(columns = vars(!!!syms(columns)))
+            )
+          ))
+          if (tab_location == "body") return(expr(
+            gt::tab_footnote(
+              footnote = !!footnote,
+              locations = gt::cells_body(columns = vars(!!!syms(columns)), rows = !!rows)
+            )
+          ))
+        }
+      )
   }
 
   # spanning_header ------------------------------------------------------------
