@@ -187,8 +187,7 @@ chr_w_backtick <- function(x) map_chr(x, ~rlang::sym(.) %>% deparse(backtick = T
     case_when(
       result$label %in% c("OR", "log(OR)") ~ "OR = Odds Ratio",
       result$label %in% c("HR", "log(HR)") ~ "HR = Hazard Ratio",
-      result$label %in% c("IRR", "log(IRR)") ~ "IRR = Incidence Rate Ratio",
-      result$label %in% c("OR", "log(OR)") ~ "OR = Odds Ratio",
+      result$label %in% c("IRR", "log(IRR)") ~ "IRR = Incidence Rate Ratio"
     ) %>%
     translate_text(language) %>%
     {switch(!is.na(.), .)}
