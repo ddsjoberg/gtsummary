@@ -2,7 +2,7 @@
 #'
 #' Adds a column of the number of events to tables created with
 #' [tbl_regression] or [tbl_uvregression].  Supported
-#' model types include GLMs with binomial distribution family (e.g.
+#' model types are among GLMs with binomial distribution family (e.g.
 #' [stats::glm], [lme4::glmer], and
 #' [geepack::geeglm]) and Cox
 #' Proportion Hazards regression models ([survival::coxph]).
@@ -12,15 +12,14 @@
 #' @export
 #' @author Daniel D. Sjoberg
 #' @seealso [add_nevent.tbl_regression], [add_nevent.tbl_uvregression],
-#' [tbl_regression], [tbl_uvregression]
+#'  [add_nevent.tbl_survfit]
 
 add_nevent <- function(x, ...) UseMethod("add_nevent")
 
 #' Add event N to regression table
 #'
 #' @inheritParams add_n.tbl_regression
-#' @rdname add_nevent.tbl_regression
-#' @export
+#' @name add_n_regression
 #'
 #' @examples
 #' # Example 1 ----------------------------------
@@ -47,7 +46,11 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{add_nevent.tbl_regression_ex2.png}{options: width=64\%}}
-add_nevent.tbl_regression <- function(x, location = NULL) {
+NULL
+
+#' @rdname add_n_regression
+#' @export
+add_nevent.tbl_regression <- function(x, location = NULL, ...) {
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
   if ("level" %in% location && !"n_event" %in% x$table_header$column)
@@ -79,7 +82,7 @@ add_nevent.tbl_regression <- function(x, location = NULL) {
 }
 
 #' @export
-#' @rdname add_nevent.tbl_regression
+#' @rdname add_n_regression
 add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 
 #' Add column with number of observed events

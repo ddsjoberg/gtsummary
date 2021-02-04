@@ -5,9 +5,9 @@
 \alias{add_n.tbl_uvregression}
 \title{Add N to regression table}
 \usage{
-\method{add_n}{tbl_regression}(x, location = NULL)
+\method{add_n}{tbl_regression}(x, location = NULL, ...)
 
-\method{add_n}{tbl_uvregression}(x, location = NULL)
+\method{add_n}{tbl_uvregression}(x, location = NULL, ...)
 }
 \arguments{
 \item{x}{a \code{tbl_regression} or \code{tbl_uvregression} table}
@@ -16,6 +16,8 @@
 on each variable's label row. When \code{"level"} level counts are placed on the
 variable level for categorical variables, and total N on the variable's label
 row for continuous.}
+
+\item{...}{Not used}
 }
 \description{
 Add N to regression table

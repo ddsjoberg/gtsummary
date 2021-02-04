@@ -270,6 +270,7 @@ add_n.tbl_survfit <- function(x, ...) {
 #' on each variable's label row. When `"level"` level counts are placed on the
 #' variable level for categorical variables, and total N on the variable's label
 #' row for continuous.
+#' @param ... Not used
 #'
 #' @rdname add_n.tbl_regression
 #' @export
@@ -300,7 +301,7 @@ add_n.tbl_survfit <- function(x, ...) {
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{add_n.tbl_regression_ex2.png}{options: width=64\%}}
-add_n.tbl_regression <- function(x, location = NULL) {
+add_n.tbl_regression <- function(x, location = NULL, ...) {
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
   if ("level" %in% location && !"n_obs" %in% x$table_header$column)
