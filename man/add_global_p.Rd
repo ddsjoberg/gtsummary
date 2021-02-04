@@ -83,7 +83,6 @@ tbl_uv_global_ex2 <-
 }
 \seealso{
 Other tbl_uvregression tools: 
-\code{\link{add_nevent.tbl_uvregression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_uvregression}()},
@@ -93,7 +92,6 @@ Other tbl_uvregression tools:
 \code{\link{tbl_uvregression}()}
 
 Other tbl_regression tools: 
-\code{\link{add_nevent.tbl_regression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{combine_terms}()},
