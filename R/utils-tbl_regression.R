@@ -49,7 +49,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
   # adding these back to the data frame for backwards compatibility
   if ("N_obs" %in% names(df_tidy)) df_tidy <- mutate(df_tidy, N = .data$N_obs)
   if ("N_event" %in% names(df_tidy)) df_tidy <- mutate(df_tidy, nevent = .data$N_event)
-  
+
   df_tidy %>%
     select(
       any_of(c("variable", "var_label", "var_type",
@@ -190,6 +190,7 @@ chr_w_backtick <- function(x) map_chr(x, ~rlang::sym(.) %>% deparse(backtick = T
       result$label %in% c("IRR", "log(IRR)") ~ "IRR = Incidence Rate Ratio",
       result$label %in% c("OR", "log(OR)") ~ "OR = Odds Ratio",
     ) %>%
-    translate_text(language)
+    translate_text(language) %>%
+    {switch(!is.na(.), .)}
   result
 }
