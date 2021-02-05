@@ -7,14 +7,6 @@
 #' @param x `tbl_summary` or `tbl_svysummary` object
 #' @param fns list of formulas indicating the functions that create the statistic.
 #' See details below.
-#' @param fmt_fun for numeric statistics, `fmt_fun=` is the styling/formatting
-#' function. When multiple columns are added, supply a list of styling functions.
-#' @param header Column header of new column(s). Default is `"**Statistic**"`
-#' when a single column is returned; otherwise, the column name.
-#' @param footnote Footnote associated with new column. Supply vector of footnotes
-#' if more than one column added.
-#' @param new_col_name DEPRECATED. name of new column to be created in `.$table_body`.
-#' Default is `"add_stat_1"`, unless that column exists then it is `"add_stat_2"`, etc.
 #' @param location list of formulas indicating the location the new statistics
 #' are placed. The RHS of the formula must be one of `c("label", "level", "missing")`.
 #' When `"label"` a single statistic
@@ -22,6 +14,10 @@
 #' on the variable level rows. The length of the vector of statistics returned from the
 #' `fns` function must match the dimension of levels. Default is to place the
 #' new statistics on the label row.
+#' @param fmt_fun DEPRECATED.
+#' @param header DEPRECATED.
+#' @param footnote DEPRECATED.
+#' @param new_col_name DEPRECATED.
 #'
 #' @section Details:
 #'
@@ -46,6 +42,9 @@
 #' *will* be passed to the function, even if not all inputs are utilized by
 #' the user's function, e.g. `foo(data, variable, by, ...)`
 #'
+#' - To update the column headers use `modify_header()`
+#' - To update the functions that format the statistics use `modify_fmt_fun()`
+#'
 #' @export
 #' @examples
 #' library(dplyr); library(stringr)
@@ -59,13 +58,11 @@
 #'   trial %>%
 #'   select(trt, age, marker) %>%
 #'   tbl_summary(by = trt, missing = "no") %>%
-#'   add_stat(
-#'     fns = everything() ~ my_ttest, # all variables compared with with t-test
-#'     fmt_fun = style_pvalue,        # format result with style_pvalue()
-#'     header = "**My p-value**",     # new column header
-#'     footnote = "Welch's two-sample t-test"
-#'   ) %>%
-#'   modify_header(all_stat_cols() ~ "**{level}**")
+#'   add_stat(fns = everything() ~ my_ttest) %>%
+#'   modify_header(
+#'     list(p.value ~ "**p-value**",
+#'          all_stat_cols() ~ "**{level}**")
+#'   )
 #'
 #' # Example 2 ----------------------------------
 #' # fn returns t-test test statistic and pvalue
@@ -82,11 +79,8 @@
 #'   trial %>%
 #'   select(trt, age, marker) %>%
 #'   tbl_summary(by = trt, missing = "no") %>%
-#'   add_stat(
-#'     fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-#'     fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-#'     header = "**Treatment Comparison**"       # column header
-#'   )
+#'   add_stat(fns = everything() ~ my_ttest2) %>%
+#'   modify_header(add_stat_1 ~ "**Treatment Comparison**")
 #'
 #' # Example 3 ----------------------------------
 #' # return test statistic and p-value is separate columns
@@ -100,10 +94,14 @@
 #'   trial %>%
 #'   select(trt, age, marker) %>%
 #'   tbl_summary(by = trt, missing = "no") %>%
-#'   add_stat(
-#'     fns = everything() ~ my_ttest3,    # all variables will be compared by t-test
-#'     fmt_fun = list(style_sigfig, style_pvalue),
-#'     header = c("**t-statistic**", "**p-value**")       # column header
+#'   add_stat(fns = everything() ~ my_ttest3) %>%
+#'   modify_header(
+#'     list(statistic ~ "**t-statistic**",
+#'          p.value ~ "**p-value**")
+#'   ) %>%
+#'   modify_fmt_fun(
+#'     list(statistic ~ style_sigfig,
+#'          p.value ~ style_pvalue)
 #'   )
 #'
 #' @section Example Output:
@@ -119,31 +117,28 @@
 #'
 #' \if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
 
-add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
-                     footnote = NULL, location = NULL,
-                     new_col_name = NULL) {
+add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
+                     footnote = NULL, new_col_name = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, c("tbl_summary", "tbl_svysummary"))) {
     abort("Argument `x=` must be of class 'tbl_summary'")
   }
 
-  if (!is.null(fmt_fun) && !is_function(fmt_fun) && !purrr::every(fmt_fun, is_function)) {
-    abort("Argument `fmt_fun=` must be a function or list of functions.")
+  if (!is.null(fmt_fun)) {
+    lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(fmt_fun=)",
+                              "modify_fmt_fun()", "Argument has been ignored.")
   }
-
+  if (!is.null(header)) {
+    lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(header=)",
+                              "modify_header()", "Argument has been ignored.")
+  }
+  if (!is.null(footnote)) {
+    lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(footnote=)",
+                              "modify_footnote()", "Argument has been ignored.")
+  }
   if (!is.null(new_col_name)) {
-    lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(new_col_name=)")
-    if (!is.character(new_col_name)) {
-      abort("Argument `new_col_name=` must be a character string or vector.")
-    }
-  }
-
-  if (!is.null(header) && !is.character(header)) {
-    abort("Argument `header=` must be a character string or vector.")
-  }
-
-  if (!is.null(footnote) && !is.character(footnote)) {
-    abort("Argument `footnote=` must be a character string or vector.")
+    lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(new_col_name=)",
+                              details = "Argument has been ignored.")
   }
 
   # convert to named lists -----------------------------------------------------
@@ -163,7 +158,7 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
   )
   imap(location,
        ~switch(!is_string(.x) || !.x %in% c("label", "level", "missing"),
-                stop("RHS of `location=` formulas must be one of 'label', 'level', or 'missing'")))
+                abort("RHS of `location=` formulas must be one of 'label', 'level', or 'missing'")))
 
   fns <-
     .formula_list_to_named_list(
@@ -177,8 +172,10 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
 
   # setting new column name ----------------------------------------------------
   stat_col_name <-
-    switch(!is.null(new_col_name), new_col_name) %||%
-    (names(x$table_body) %>% .[startsWith(., "add_stat_")] %>% length() %>% {paste0("add_stat_", . + 1)})
+    select(x$table_body, dplyr::matches("^add_stat_\\d*[1-9]\\d*$")) %>%
+    names() %>%
+    length() %>%
+    {paste0("add_stat_", . + 1)}
 
   # calculating statistics -----------------------------------------------------
   df_new_stat <-
@@ -222,61 +219,23 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
   }
 
   # merging new columns with `x$table_body` ------------------------------------
-  x<-
+  x <-
     x %>%
     modify_table_body(
       left_join,
       df_new_stat %>% tidyr::unnest(cols = c(.data$label, .data$df_add_stats)),
       by = c("variable", "row_type", "label")
+    ) %>%
+    # showing all new columns
+    modify_table_styling(
+      columns = all_of(new_col_names),
+      hide = FALSE,
+    ) %>%
+    # assigning a default fmt_fun
+    modify_table_styling(
+      columns = vars(where(is.numeric) & all_of(new_col_names)),
+      fmt_fun = function(x) style_sigfig(x, digits = 3)
     )
-
-  # table attributes -----------------------------------------------------------
-  df_new_tibble_to_add <- bind_rows(df_new_stat$df_add_stats)
-  new_col_names <- names(df_new_tibble_to_add)
-  if (!rlang::is_empty(intersect(new_col_names, names(x$table_body)))) {
-    glue("New added columns {quoted_list(intersect(new_col_names, names(x$table_body)))} ",
-         "already exist in `x$table_body`.") %>%
-      stringr::str_wrap() %>%
-      abort()
-  }
-
-  table_header_updates <-
-    tibble(
-      column = new_col_names,
-      label =
-        switch(!is.null(header), rep_len(header, length(new_col_names))) %||%
-        switch(is.null(header) && length(new_col_names) == 1, "**Statistic**") %||%
-        new_col_names,
-      footnote = rep_len(footnote %||% NA_character_, length(new_col_names)),
-      column_is_character = map_lgl(column, ~is.character(df_new_tibble_to_add[[.x]]))
-    )
-  table_header_updates$fmt_fun <-
-    # if user passes a single formatting function, apply it to all new columns
-    switch(!is.null(fmt_fun) && is.function(fmt_fun), rep_len(list(fmt_fun), length(new_col_names))) %||%
-    # if users passed a list of formatting function, apply them all to the new columns
-    switch(!is.null(fmt_fun) && is.list(fmt_fun), rep_len(fmt_fun, length(new_col_names))) %||%
-    # if the user did not pass a fmt_fun, use style_sigfig as default (NULL for character columns)
-    switch(is.null(fmt_fun),
-           map(table_header_updates$column_is_character,
-               ~switch(!.x, style_sigfig)))
-    # creating an expression of the updates
-  expr_table_header_updates <-
-    pmap(
-      list(table_header_updates$column,
-           table_header_updates$label,
-           table_header_updates$footnote,
-           table_header_updates$fmt_fun),
-      function(column, label, footnote, fmt_fun) {
-        expr(modify_table_header(column = !!column, label = !!label,
-                                 hide = FALSE, footnote = !!footnote,
-                                 fmt_fun = !!fmt_fun))
-      }
-    )
-
-  # updating tbl_summary object ------------------------------------------------
-
-  # applying table_header updates
-  x <- expr_table_header_updates %>% reduce(function(x, y) expr(!!x %>% !!y), .init = x) %>% eval()
 
   # return tbl_summary object --------------------------------------------------
   x

@@ -4,17 +4,17 @@
 \alias{modify_fmt_fun}
 \title{Modify Formatting Functions}
 \usage{
-modify_fmt_fun(x, columns, rows, fmt_fun)
+modify_fmt_fun(x, update, rows = NULL)
 }
 \arguments{
 \item{x}{gtsummary object}
 
-\item{columns}{vector or selector of columns in \code{x$table_body}}
+\item{update}{list of formulas or a single formula specifying the updated
+formatting function.
+The LHS specifies the column(s) to be updated,
+and the RHS is the updated formatting function.}
 
 \item{rows}{predicate string expression to select rows. \code{rows = NA} often indicates all rows.}
-
-\item{fmt_fun}{function that formats the statistics in the
-columns/rows in \verb{columns=} and \verb{rows=}}
 }
 \description{
 \lifecycle{experimental}
@@ -35,9 +35,8 @@ modify_fmt_fun_ex1 <-
   lm(age ~ marker + grade, trial) \%>\%
   tbl_regression() \%>\%
   modify_fmt_fun(
-    columns = p.value,
-    rows = variable == 'grade',
-    fmt_fun = function(x) style_pvalue(x, digits = 3)
+    update = p.value ~ function(x) style_pvalue(x, digits = 3),
+    rows = variable == 'grade'
   )
 
 }

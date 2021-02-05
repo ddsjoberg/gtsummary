@@ -7,10 +7,10 @@
 add_stat(
   x,
   fns,
+  location = NULL,
   fmt_fun = NULL,
   header = NULL,
   footnote = NULL,
-  location = NULL,
   new_col_name = NULL
 )
 }
@@ -20,15 +20,6 @@ add_stat(
 \item{fns}{list of formulas indicating the functions that create the statistic.
 See details below.}
 
-\item{fmt_fun}{for numeric statistics, \verb{fmt_fun=} is the styling/formatting
-function. When multiple columns are added, supply a list of styling functions.}
-
-\item{header}{Column header of new column(s). Default is \code{"**Statistic**"}
-when a single column is returned; otherwise, the column name.}
-
-\item{footnote}{Footnote associated with new column. Supply vector of footnotes
-if more than one column added.}
-
 \item{location}{list of formulas indicating the location the new statistics
 are placed. The RHS of the formula must be one of \code{c("label", "level", "missing")}.
 When \code{"label"} a single statistic
@@ -37,8 +28,13 @@ on the variable level rows. The length of the vector of statistics returned from
 \code{fns} function must match the dimension of levels. Default is to place the
 new statistics on the label row.}
 
-\item{new_col_name}{DEPRECATED. name of new column to be created in \code{.$table_body}.
-Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_stat_2"}, etc.}
+\item{fmt_fun}{DEPRECATED.}
+
+\item{header}{DEPRECATED.}
+
+\item{footnote}{DEPRECATED.}
+
+\item{new_col_name}{DEPRECATED.}
 }
 \description{
 \lifecycle{experimental}
@@ -72,6 +68,10 @@ The user-defined does not need to utilize each of these inputs. It's
 encouraged the user-defined function accept \code{...} as each of the arguments
 \emph{will} be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. \code{foo(data, variable, by, ...)}
+\itemize{
+\item To update the column headers use \code{modify_header()}
+\item To update the functions that format the statistics use \code{modify_fmt_fun()}
+}
 }
 
 \section{Example Output}{
@@ -101,13 +101,11 @@ add_stat_ex1 <-
   trial \%>\%
   select(trt, age, marker) \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
-  add_stat(
-    fns = everything() ~ my_ttest, # all variables compared with with t-test
-    fmt_fun = style_pvalue,        # format result with style_pvalue()
-    header = "**My p-value**",     # new column header
-    footnote = "Welch's two-sample t-test"
-  ) \%>\%
-  modify_header(all_stat_cols() ~ "**{level}**")
+  add_stat(fns = everything() ~ my_ttest) \%>\%
+  modify_header(
+    list(p.value ~ "**p-value**",
+         all_stat_cols() ~ "**{level}**")
+  )
 
 # Example 2 ----------------------------------
 # fn returns t-test test statistic and pvalue
@@ -124,11 +122,8 @@ add_stat_ex2 <-
   trial \%>\%
   select(trt, age, marker) \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
-  add_stat(
-    fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-    fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-    header = "**Treatment Comparison**"       # column header
-  )
+  add_stat(fns = everything() ~ my_ttest2) \%>\%
+  modify_header(add_stat_1 ~ "**Treatment Comparison**")
 
 # Example 3 ----------------------------------
 # return test statistic and p-value is separate columns
@@ -142,10 +137,14 @@ add_stat_ex3 <-
   trial \%>\%
   select(trt, age, marker) \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
-  add_stat(
-    fns = everything() ~ my_ttest3,    # all variables will be compared by t-test
-    fmt_fun = list(style_sigfig, style_pvalue),
-    header = c("**t-statistic**", "**p-value**")       # column header
+  add_stat(fns = everything() ~ my_ttest3) \%>\%
+  modify_header(
+    list(statistic ~ "**t-statistic**",
+         p.value ~ "**p-value**")
+  ) \%>\%
+  modify_fmt_fun(
+    list(statistic ~ style_sigfig,
+         p.value ~ style_pvalue)
   )
 
 }
