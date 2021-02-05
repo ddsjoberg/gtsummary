@@ -14,14 +14,14 @@ add_nevent(x, ...)
 \description{
 Adds a column of the number of events to tables created with
 \link{tbl_regression} or \link{tbl_uvregression}.  Supported
-model types include GLMs with binomial distribution family (e.g.
+model types are among GLMs with binomial distribution family (e.g.
 \link[stats:glm]{stats::glm}, \link[lme4:glmer]{lme4::glmer}, and
 \link[geepack:geeglm]{geepack::geeglm}) and Cox
 Proportion Hazards regression models (\link[survival:coxph]{survival::coxph}).
 }
 \seealso{
 \link{add_nevent.tbl_regression}, \link{add_nevent.tbl_uvregression},
-\link{tbl_regression}, \link{tbl_uvregression}
+\link{add_nevent.tbl_survfit}
 }
 \author{
 Daniel D. Sjoberg
