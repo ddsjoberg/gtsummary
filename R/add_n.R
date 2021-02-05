@@ -3,7 +3,8 @@
 #' @param x Object created from a gtsummary function
 #' @param ... Additional arguments passed to other methods.
 #' @author Daniel D. Sjoberg
-#' @seealso [add_n.tbl_summary()], [add_n.tbl_svysummary()], [add_n.tbl_survfit()]
+#' @seealso [add_n.tbl_summary()], [add_n.tbl_svysummary()], [add_n.tbl_survfit()],
+#' [add_n.tbl_regression], [add_n.tbl_uvregression]
 #' @export
 add_n <- function(x, ...) {
   UseMethod("add_n")
@@ -260,3 +261,79 @@ add_n.tbl_survfit <- function(x, ...) {
 
   x
 }
+
+
+#' Add N to regression table
+#'
+#' @param x a `tbl_regression` or `tbl_uvregression` table
+#' @param location location to place Ns. When `"label"` total Ns are placed
+#' on each variable's label row. When `"level"` level counts are placed on the
+#' variable level for categorical variables, and total N on the variable's label
+#' row for continuous.
+#' @param ... Not used
+#'
+#' @name add_n_regression
+#' @examples
+#' # Example 1 ----------------------------------
+#' add_n.tbl_regression_ex1 <-
+#'   trial %>%
+#'   select(response, trt, grade) %>%
+#'   tbl_uvregression(
+#'     y = response,
+#'     method = glm,
+#'     method.args = list(family = binomial),
+#'     hide_n = TRUE
+#'   ) %>%
+#'   add_n(location = "level")
+#'
+#' # Example 2 ----------------------------------
+#' add_n.tbl_regression_ex2 <-
+#'   glm(response ~ age + grade, trial, family = binomial) %>%
+#'   tbl_regression(exponentiate = TRUE) %>%
+#'   add_n(location = "level")
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{add_n.tbl_regression_ex1.png}{options: width=64\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{add_n.tbl_regression_ex2.png}{options: width=64\%}}
+NULL
+
+#' @rdname add_n_regression
+#' @export
+add_n.tbl_regression <- function(x, location = NULL, ...) {
+  location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
+
+  if ("level" %in% location && !"n_obs" %in% x$table_header$column)
+    abort("Reporting N on level rows is not available for this model type.")
+  if ("label" %in% location && !"N_obs" %in% x$table_header$column)
+    abort("Reporting N on label rows is not available for this model type.")
+
+  x %>%
+    modify_table_body(
+      mutate,
+      stat_n =
+        case_when(
+          .data$row_type == "label" ~ .data$N_obs %>% as.integer(),
+          .data$row_type == "level" ~ .data$n_obs %>% as.integer()
+        ) %>%
+        as.integer(),
+      stat_n = case_when(
+        !"level" %in% .env$location & .data$row_type %in% "level" ~ NA_integer_,
+        !"label" %in% .env$location & .data$row_type %in% "label" & .data$var_type == "categorical" ~ NA_integer_,
+        TRUE ~ .data$stat_n
+      )
+    ) %>%
+    modify_table_body(
+      dplyr::relocate,
+      .data$stat_n,
+      .after = .data$label
+    ) %>%
+    modify_header(stat_n ~ "**N**")
+}
+
+#' @export
+#' @rdname add_n_regression
+add_n.tbl_uvregression <- add_n.tbl_regression

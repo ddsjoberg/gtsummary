@@ -34,17 +34,27 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
         strict = TRUE,
         !!!tidy_plus_plus_args
       )
-    ) %>% rlang::eval_tidy()
-
-  # final tidying before returning ---------------------------------------------
-  df_tidy %>%
-    mutate(
-      N = nrow(gtsummary_model_frame(x)),
-      row_type = ifelse(.data$header_row | is.na(.data$header_row), "label", "level")
     ) %>%
+    rlang::eval_tidy() %>%
+    {dplyr::bind_cols(
+      .,
+      attributes(.)[names(attributes(.)) %in% c("N_obs", "N_event", "coefficients_type", "coefficients_label")] %>%
+        tibble::as_tibble()
+    )} %>%
+    mutate(
+      row_type = ifelse(.data$header_row | is.na(.data$header_row), "label", "level")
+    )
+
+  # these are old column names, but i prefer to keep the consistently names from broom.helpers
+  # adding these back to the data frame for backwards compatibility
+  if ("N_obs" %in% names(df_tidy)) df_tidy <- mutate(df_tidy, N = .data$N_obs)
+  if ("N_event" %in% names(df_tidy)) df_tidy <- mutate(df_tidy, nevent = .data$N_event)
+
+  df_tidy %>%
     select(
       any_of(c("variable", "var_label", "var_type",
-               "reference_row", "row_type", "label", "N")),
+               "reference_row", "row_type", "header_row", "N_obs", "N_event", "N",
+               "coefficients_type", "coefficients_label", "label")),
       everything()
     )
 }
@@ -76,15 +86,16 @@ gtsummary_model_frame <- function(x) {
     )
 
   # estimate -------------------------------------------------------------------
+  estimate_column_labels <- .estimate_column_labels(x)
   if ("estimate" %in% names(x$table_body))
     x <- modify_table_header(
       x,
       column = "estimate",
-      label = glue("**{estimate_header(x$model_obj, exponentiate)}**") %>% as.character(),
+      label = glue("**{estimate_column_labels$label}**") %>% as.character(),
       hide = !"estimate" %in% tidy_columns_to_report,
       missing_emdash = "reference_row == TRUE",
-      footnote_abbrev =
-        estimate_header(x$model_obj, exponentiate) %>% attr("footnote") %||% NA_character_,
+      footnote_abbrev = switch(!is.null(estimate_column_labels$footnote),
+                               glue("{estimate_column_labels$footnote}") %>% as.character()),
       fmt_fun = estimate_fun
     )
 
@@ -167,3 +178,18 @@ chr_w_backtick <- function(x) map_chr(x, ~rlang::sym(.) %>% deparse(backtick = T
 # > chr_w_backtick("var with spaces")
 # [1] "`var with spaces`"
 
+.estimate_column_labels <- function(x) {
+  language <- get_theme_element("pkgwide-str:language", default = "en")
+
+  result <- list()
+  result$label <- unique(x$table_body$coefficients_label) %>% translate_text(language)
+  result$footnote <-
+    case_when(
+      result$label %in% c("OR", "log(OR)") ~ "OR = Odds Ratio",
+      result$label %in% c("HR", "log(HR)") ~ "HR = Hazard Ratio",
+      result$label %in% c("IRR", "log(IRR)") ~ "IRR = Incidence Rate Ratio"
+    ) %>%
+    translate_text(language) %>%
+    {switch(!is.na(.), .)}
+  result
+}

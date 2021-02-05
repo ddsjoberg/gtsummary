@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added/updated functions `add_n()` and `add_nevent()` to work with `tbl_regression` and `tbl_uvregression` objects. Each function now has an argument to place Ns on the label or level rows. (#744)
+
 * Bug fix for column ordering when spanning columns added with `tbl_merge()`
 
 * Added a custom tidier for `mgcv::gam()` models (`tidy_gam()`) and a method function (`tbl_regression.gam()`) that uses the new tidier by default. (#745)
