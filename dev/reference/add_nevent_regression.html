@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bold significant p-values or q-values — bold_p • gtsummary</title>
+<title>Add event N to regression table — add_nevent_regression • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,9 +52,8 @@
 
 
 
-<meta property="og:title" content="Bold significant p-values or q-values — bold_p" />
-<meta property="og:description" content="Bold values below a chosen threshold (e.g. &amp;lt;0.05)
-in a gtsummary tables." />
+<meta property="og:title" content="Add event N to regression table — add_nevent_regression" />
+<meta property="og:description" content="Add event N to regression table" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -169,33 +168,38 @@ in a gtsummary tables." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Bold significant p-values or q-values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/bold_p.R'><code>R/bold_p.R</code></a></small>
-    <div class="hidden name"><code>bold_p.Rd</code></div>
+    <h1>Add event N to regression table</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_nevent.R'><code>R/add_nevent.R</code></a></small>
+    <div class="hidden name"><code>add_nevent_regression.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Bold values below a chosen threshold (e.g. &lt;0.05)
-in a gtsummary tables.</p>
+    <p>Add event N to regression table</p>
     </div>
 
-    <pre class="usage"><span class='fu'>bold_p</span><span class='op'>(</span><span class='va'>x</span>, t <span class='op'>=</span> <span class='fl'>0.05</span>, q <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_regression</span>
+<span class='fu'><a href='add_nevent.html'>add_nevent</a></span><span class='op'>(</span><span class='va'>x</span>, location <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for tbl_uvregression</span>
+<span class='fu'><a href='add_nevent.html'>add_nevent</a></span><span class='op'>(</span><span class='va'>x</span>, location <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object created using gtsummary functions</p></td>
+      <td><p>a <code>tbl_regression</code> or <code>tbl_uvregression</code> table</p></td>
     </tr>
     <tr>
-      <th>t</th>
-      <td><p>Threshold below which values will be bold. Default is 0.05.</p></td>
+      <th>location</th>
+      <td><p>location to place Ns. When <code>"label"</code> total Ns are placed
+on each variable's label row. When <code>"level"</code> level counts are placed on the
+variable level for categorical variables, and total N on the variable's label
+row for continuous.</p></td>
     </tr>
     <tr>
-      <th>q</th>
-      <td><p>Logical argument. When TRUE will bold the q-value column rather
-than the p-values. Default is <code>FALSE</code>.</p></td>
+      <th>...</th>
+      <td><p>Not used</p></td>
     </tr>
     </table>
 
@@ -204,26 +208,26 @@ than the p-values. Default is <code>FALSE</code>.</p></td>
     
 
 <p>Example 1</p>
-<p><img src='figures/bold_p_ex1.png' width=60% /></p>
+<p><img src='figures/add_nevent.tbl_regression_ex1.png' width=64% /></p>
 <p>Example 2</p>
-<p><img src='figures/bold_p_ex2.png' width=50% /></p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Daniel D. Sjoberg, Esther Drill</p>
+<p><img src='figures/add_nevent.tbl_regression_ex2.png' width=64% /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='va'>bold_p_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"response"</span>, <span class='st'>"trt"</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>bold_p</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fl'>0.65</span><span class='op'>)</span>
-
+<span class='va'>add_nevent.tbl_regression_ex1</span> <span class='op'>&lt;-</span>
+  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>trt</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span><span class='op'>(</span>
+    y <span class='op'>=</span> <span class='va'>response</span>,
+    method <span class='op'>=</span> <span class='va'>glm</span>,
+    method.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span>,
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_nevent.html'>add_nevent</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='va'>bold_p_ex2</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>response</span> <span class='op'>~</span> <span class='va'>trt</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span>, family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+<span class='va'>add_nevent.tbl_regression_ex2</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>response</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span>, family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span>exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>bold_p</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fl'>0.65</span><span class='op'>)</span>
+  <span class='fu'><a href='add_nevent.html'>add_nevent</a></span><span class='op'>(</span>location <span class='op'>=</span> <span class='st'>"level"</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
