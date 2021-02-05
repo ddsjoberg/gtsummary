@@ -18,8 +18,8 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 
 #' Add event N to regression table
 #'
-#' @inheritParams add_n.tbl_regression
-#' @name add_n_regression
+#' @inheritParams add_n_regression
+#' @name add_nevent_regression
 #'
 #' @examples
 #' # Example 1 ----------------------------------
@@ -48,7 +48,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' \if{html}{\figure{add_nevent.tbl_regression_ex2.png}{options: width=64\%}}
 NULL
 
-#' @rdname add_n_regression
+#' @rdname add_nevent_regression
 #' @export
 add_nevent.tbl_regression <- function(x, location = NULL, ...) {
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
@@ -82,7 +82,7 @@ add_nevent.tbl_regression <- function(x, location = NULL, ...) {
 }
 
 #' @export
-#' @rdname add_n_regression
+#' @rdname add_nevent_regression
 add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 
 #' Add column with number of observed events

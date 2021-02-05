@@ -272,9 +272,7 @@ add_n.tbl_survfit <- function(x, ...) {
 #' row for continuous.
 #' @param ... Not used
 #'
-#' @rdname add_n.tbl_regression
-#' @export
-#'
+#' @name add_n_regression
 #' @examples
 #' # Example 1 ----------------------------------
 #' add_n.tbl_regression_ex1 <-
@@ -301,6 +299,10 @@ add_n.tbl_survfit <- function(x, ...) {
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{add_n.tbl_regression_ex2.png}{options: width=64\%}}
+NULL
+
+#' @rdname add_n_regression
+#' @export
 add_n.tbl_regression <- function(x, location = NULL, ...) {
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
@@ -333,5 +335,5 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
 }
 
 #' @export
-#' @rdname add_n.tbl_regression
+#' @rdname add_n_regression
 add_n.tbl_uvregression <- add_n.tbl_regression
