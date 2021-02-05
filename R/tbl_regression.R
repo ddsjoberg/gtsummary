@@ -194,9 +194,6 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
 
   func_inputs$include <- unique(table_body$variable)
 
-  # model N
-  n <- pluck(table_body, "N", 1)
-
   # adding character CI
   if (all(c("conf.low", "conf.high") %in% names(table_body))) {
     ci.sep <- get_theme_element("pkgwide-str:ci.sep", default = ", ")
@@ -218,6 +215,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     dplyr::relocate(any_of(c("conf.low", "conf.high", "ci", "p.value")), .after = last_col())
 
   # table of column headers
+<<<<<<< HEAD
   x <-
     .create_gtsummary_object(
       table_body = table_body,
@@ -226,6 +224,26 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
       inputs = func_inputs,
       call_list = list(tbl_regression = match.call())
     )
+=======
+  table_header <-
+    tibble(column = names(table_body)) %>%
+    table_header_fill_missing() %>%
+    table_header_fmt_fun(estimate = estimate_fun)
+
+  # constructing return object
+  results <-
+    list(
+      table_body = table_body,
+      table_header = table_header,
+      N = pluck(table_body, "N_obs", 1),
+      n = pluck(table_body, "N_obs", 1), # i want to remove this eventually
+      N_event = pluck(table_body, "N_event", 1),
+      model_obj = x,
+      inputs = func_inputs,
+      call_list = list(tbl_regression = match.call())
+    ) %>%
+    purrr::discard(is.null)
+>>>>>>> 347ae3c2239f724b98d0ccafe82f5485d64262ef
 
   # assigning a class of tbl_regression (for special printing in R markdown)
   class(x) <- c("tbl_regression", class(x))
@@ -249,60 +267,4 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
 
   # return results -------------------------------------------------------------
   x
-}
-
-# identifies headers for common models (logistic, poisson, and PH regression)
-estimate_header <- function(x, exponentiate) {
-  # first identify the type ----------------------------------------------------
-  model_type <- "generic"
-  # GLM and GEE models
-  if (inherits(x, c("glm", "geeglm")) &&
-    x$family$family == "binomial" &&
-    x$family$link == "logit") {
-    model_type <- "logistic"
-  } else if (inherits(x, "clogit")) {
-    model_type <- "logistic"
-  } else if (inherits(x, c("glm", "geeglm")) &&
-    x$family$family == "poisson" &&
-    x$family$link == "log") {
-    model_type <- "poisson"
-  } # Cox Models
-  else if (inherits(x, "coxph")) {
-    model_type <- "prop_hazard"
-  } # LME4 models
-  else if (inherits(x, "glmerMod") &&
-    attr(class(x), "package") == "lme4" &&
-    x@resp$family$family == "binomial" &&
-    x@resp$family$link == "logit") {
-    model_type <- "logistic"
-  } else if (inherits(x, "glmerMod") &&
-    attr(class(x), "package") == "lme4" &&
-    x@resp$family$family == "poisson" &&
-    x@resp$family$link == "log") {
-    model_type <- "poisson"
-  }
-
-  # assigning header and footer ------------------------------------------------
-  language <- get_theme_element("pkgwide-str:language", default = "en")
-  if (model_type == "logistic") {
-    header <- ifelse(exponentiate == TRUE, "OR", "log(OR)") %>% translate_text(language)
-    attr(header, "footnote") <- translate_text("OR = Odds Ratio", language)
-  }
-  else if (model_type == "poisson") {
-    header <- ifelse(exponentiate == TRUE, "IRR", "log(IRR)") %>% translate_text(language)
-    attr(header, "footnote") <- translate_text("IRR = Incidence Rate Ratio", language)
-  }
-  else if (model_type == "prop_hazard") {
-    header <- ifelse(exponentiate == TRUE, "HR", "log(HR)") %>% translate_text(language)
-    attr(header, "footnote") <- translate_text("HR = Hazard Ratio", language)
-  }
-  else {
-    header <-
-      get_theme_element("tbl_regression-str:coef_header") %||%
-      ifelse(exponentiate == TRUE, "exp(Beta)", "Beta") %>%
-      as.character() %>%
-      translate_text(language)
-  }
-
-  header
 }

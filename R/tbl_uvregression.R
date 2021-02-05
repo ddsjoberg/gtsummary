@@ -328,33 +328,6 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     }
   )
 
-  # adding N to table ----------------------------------------------------------
-  if (hide_n == FALSE) {
-    df_model <-
-      df_model %>%
-      mutate(
-        tbl = map(
-          .data$tbl,
-          function(tbl) {
-            tbl <- modify_header(tbl, N ~ "**N**")
-            # only display N on label row
-            tbl$table_body$N <- ifelse(tbl$table_body$row_type == "label",
-                                       tbl$table_body$N, NA)
-
-            # adding a format function to the N column
-            tbl <-
-              modify_table_styling(
-                tbl,
-                columns = "N",
-                fmt_fun = function(x) style_number(x, digits = 0)
-              )
-
-            tbl
-          }
-        )
-      )
-  }
-
   # stacking results to return -------------------------------------------------
   results <- tbl_stack(df_model$tbl)
   names(results$tbls) <- all_vars
@@ -365,7 +338,10 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   results$meta_data <-
     results$table_body %>%
     filter(.data$row_type == "label") %>%
-    select(c("variable", "var_type", "label", "N"))
+    select(any_of(c("variable", "var_type", "label", "N_obs", "N_event")))
+
+  # adding column of N ---------------------------------------------------------
+  if (hide_n == FALSE) results <- add_n(results, location = "label")
 
   # exporting results ----------------------------------------------------------
   results$inputs <- tbl_uvregression_inputs

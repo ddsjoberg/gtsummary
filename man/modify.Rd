@@ -183,7 +183,6 @@ Other tbl_svysummary tools:
 
 Other tbl_regression tools: 
 \code{\link{add_global_p}()},
-\code{\link{add_nevent.tbl_regression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{combine_terms}()},
@@ -194,7 +193,6 @@ Other tbl_regression tools:
 
 Other tbl_uvregression tools: 
 \code{\link{add_global_p}()},
-\code{\link{add_nevent.tbl_uvregression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_uvregression}()},

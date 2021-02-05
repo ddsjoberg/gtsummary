@@ -2,7 +2,7 @@
 #'
 #' Adds a column of the number of events to tables created with
 #' [tbl_regression] or [tbl_uvregression].  Supported
-#' model types include GLMs with binomial distribution family (e.g.
+#' model types are among GLMs with binomial distribution family (e.g.
 #' [stats::glm], [lme4::glmer], and
 #' [geepack::geeglm]) and Cox
 #' Proportion Hazards regression models ([survival::coxph]).
@@ -12,33 +12,17 @@
 #' @export
 #' @author Daniel D. Sjoberg
 #' @seealso [add_nevent.tbl_regression], [add_nevent.tbl_uvregression],
-#' [tbl_regression], [tbl_uvregression]
+#'  [add_nevent.tbl_survfit]
 
 add_nevent <- function(x, ...) UseMethod("add_nevent")
 
-#' Add number of events to a regression table
+#' Add event N to regression table
 #'
-#' @description
-#' This function adds a column of the number of events to tables created with
-#' [tbl_regression].  Supported
-#' model types include GLMs with binomial distribution family (e.g.
-#' [stats::glm], [lme4::glmer], and
-#' [geepack::geeglm]) and Cox
-#' Proportion Hazards regression models ([survival::coxph]).
+#' @inheritParams add_n_regression
+#' @name add_nevent_regression
 #'
-#' The number of events is added to the internal `.$table_body` tibble,
-#' and not printed in the default output table (similar to N). The number
-#' of events is accessible via the [inline_text] function for printing in a report.
-#'
-#' @param x `tbl_regression` object
-#' @param ... Not used
-#' @inheritParams add_global_p
-#' @export
-#' @author Daniel D. Sjoberg
-#' @family tbl_regression tools
-#' @export
-#' @return A `tbl_regression` object
 #' @examples
+<<<<<<< HEAD
 #' add_nevent_ex <-
 #'   glm(response ~ trt, trial, family = binomial) %>%
 #'   tbl_regression() %>%
@@ -152,38 +136,60 @@ add_nevent.tbl_regression <- function(x, quiet = NULL, ...) {
 #' @examples
 #' tbl_uv_nevent_ex <-
 #'   trial[c("response", "trt", "age", "grade")] %>%
+=======
+#' # Example 1 ----------------------------------
+#' add_nevent.tbl_regression_ex1 <-
+#'   trial %>%
+#'   select(response, trt, grade) %>%
+>>>>>>> 347ae3c2239f724b98d0ccafe82f5485d64262ef
 #'   tbl_uvregression(
-#'     method = glm,
 #'     y = response,
-#'     method.args = list(family = binomial)
+#'     method = glm,
+#'     method.args = list(family = binomial),
 #'   ) %>%
 #'   add_nevent()
+#
+#' # Example 2 ----------------------------------
+#' add_nevent.tbl_regression_ex2 <-
+#'   glm(response ~ age + grade, trial, family = binomial) %>%
+#'   tbl_regression(exponentiate = TRUE) %>%
+#'   add_nevent(location = "level")
 #' @section Example Output:
-#' \if{html}{\figure{tbl_uv_nevent_ex.png}{options: width=50\%}}
+#' \if{html}{Example 1}
 #'
-add_nevent.tbl_uvregression <- function(x, ...) {
+#' \if{html}{\figure{add_nevent.tbl_regression_ex1.png}{options: width=64\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{add_nevent.tbl_regression_ex2.png}{options: width=64\%}}
+NULL
 
-  # adding nevent to each tbl_regression object
-  x$tbls <- x$tbls %>%
-    map(add_nevent.tbl_regression)
+#' @rdname add_nevent_regression
+#' @export
+add_nevent.tbl_regression <- function(x, location = NULL, ...) {
+  location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
-  # extracting nevent from each individual table and adding
-  # it to the overall $table_body
-  table_nevent <-
-    x$tbls %>%
-    map_dfr(
-      ~ pluck(.x, "table_body") %>%
-        select(c("variable", "var_type", "row_type", "label", "nevent")) %>%
-        filter(.data$row_type == "label")
-    )
+  if ("level" %in% location && !"n_event" %in% x$table_header$column)
+    abort("Reporting event N on level rows is not available for this model type.")
+  if ("label" %in% location && !"N_event" %in% x$table_header$column)
+    abort("Reporting event N on label rows is not available for this model type.")
 
-  # merging nevent with the rest of $table_body
-  x$table_body <-
-    x$table_body %>%
-    left_join(
-      table_nevent,
-      by = c("variable", "var_type", "row_type", "label")
+  x %>%
+    modify_table_body(
+      mutate,
+      stat_nevent =
+        case_when(
+          .data$row_type == "label" ~ .data$N_event %>% as.integer(),
+          .data$row_type == "level" ~ .data$n_event %>% as.integer()
+        ) %>%
+        as.integer(),
+      stat_nevent = case_when(
+        !"level" %in% .env$location & .data$row_type %in% "level" ~ NA_integer_,
+        !"label" %in% .env$location & .data$row_type %in% "label" & .data$var_type == "categorical" ~ NA_integer_,
+        TRUE ~ .data$stat_nevent
+      )
     ) %>%
+<<<<<<< HEAD
     select(
       .data$variable, .data$var_type, .data$row_type,
       .data$label, .data$N, .data$nevent, everything()
@@ -200,7 +206,19 @@ add_nevent.tbl_uvregression <- function(x, ...) {
     )
 
   x
+=======
+    modify_table_body(
+      dplyr::relocate,
+      .data$stat_nevent,
+      .before = .data$estimate
+    ) %>%
+    modify_header(stat_nevent ~ "**Event N**")
+>>>>>>> 347ae3c2239f724b98d0ccafe82f5485d64262ef
 }
+
+#' @export
+#' @rdname add_nevent_regression
+add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 
 #' Add column with number of observed events
 #'
