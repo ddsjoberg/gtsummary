@@ -298,7 +298,6 @@ NULL
 add_n.tbl_regression <- function(x, location = NULL, ...) {
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
-  browser()
   if ("level" %in% location && !"n_obs" %in% x$table_styling$header$column)
     abort("Reporting N on level rows is not available for this model type.")
   if ("label" %in% location && !"N_obs" %in% x$table_styling$header$column)

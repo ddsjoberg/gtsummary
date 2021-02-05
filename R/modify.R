@@ -393,7 +393,7 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   df_new_cols <- x[names(x) %in% c("N", "N_event", "n")] %>% tibble::as_tibble()
 
   # if no new cols, return without adding anything
-  if (ncol(df_new_cols) == 0) return(x$table_header %>% select(.data$column))
+  if (ncol(df_new_cols) == 0) return(x$table_styling$header %>% select(.data$column))
 
   # adding n as a synonym of N if not already present
   # in V1.3.6, all documentation about {n} being supported was removed. This can be removed eventually
@@ -401,7 +401,7 @@ show_header_names <- function(x = NULL, quiet = NULL) {
     df_new_cols <- mutate(df_new_cols, n = .data$N)
 
   # returning tibble with new vars added
-  x$table_header %>%
+  x$table_styling$header %>%
     select(.data$column) %>%
     bind_cols(df_new_cols)
 }
