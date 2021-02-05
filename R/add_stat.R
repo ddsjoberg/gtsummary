@@ -60,7 +60,7 @@
 #'   tbl_summary(by = trt, missing = "no") %>%
 #'   add_stat(fns = everything() ~ my_ttest) %>%
 #'   modify_header(
-#'     list(p.value ~ "**p-value**",
+#'     list(add_stat_1 ~ "**p-value**",
 #'          all_stat_cols() ~ "**{level}**")
 #'   )
 #'
@@ -185,7 +185,7 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
     mutate(
       row_type = map_chr(.data$variable, ~location[[.x]] %||% "label"),
       label = map2(
-        variable, row_type,
+        .data$variable, .data$row_type,
         ~filter(x$table_body, .data$variable == .x, .data$row_type == .y)$label
       )
     ) %>%

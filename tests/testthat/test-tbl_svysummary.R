@@ -466,10 +466,3 @@ test_that("tbl_summary(digits=) tests with fn inputs", {
   )
 })
 
-
-survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) %>%
-  tbl_svysummary(statistic = all_continuous() ~ "{min} {max}",
-                 digits = all_continuous() ~ style_sigfig,
-                 include = c(emer))
-
-

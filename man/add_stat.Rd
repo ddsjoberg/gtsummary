@@ -103,7 +103,7 @@ add_stat_ex1 <-
   tbl_summary(by = trt, missing = "no") \%>\%
   add_stat(fns = everything() ~ my_ttest) \%>\%
   modify_header(
-    list(p.value ~ "**p-value**",
+    list(add_stat_1 ~ "**p-value**",
          all_stat_cols() ~ "**{level}**")
   )
 
