@@ -27,7 +27,8 @@
 #'   - Use the `statistic=` argument to set the default continuous variable summary statistics
 #' - `theme_gtsummary_mean_sd()`
 #'   - Set default summary statistics to mean and standard deviation in `tbl_summary()`
-#'   - Set default tests in `add_p.tbl_summary()` to t-tests and ANOVA
+#'   - Set default continuous tests in `add_p.tbl_summary()` to t-tests and ANOVA
+#'   - Set default continuous test in `add_p.tbl_svysummary()` to survey adapted t-test
 #'
 #' Use `reset_gtsummary_theme()` to restore the default settings
 #'
@@ -249,7 +250,8 @@ theme_gtsummary_mean_sd <- function(set_theme = TRUE) {
   lst_theme <- list(
     "tbl_summary-str:continuous_stat" = "{mean} ({sd})",
     "add_p.tbl_summary-attr:test.continuous_by2" = "t.test",
-    "add_p.tbl_summary-attr:test.continuous" = "aov"
+    "add_p.tbl_summary-attr:test.continuous" = "aov",
+    "add_p.tbl_svysummary-attr:test.continuous" = "svy.t.test"
   )
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)

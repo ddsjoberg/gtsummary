@@ -35,18 +35,18 @@ Authors:
 \itemize{
   \item Michael Curry (\href{https://orcid.org/0000-0002-0261-4044}{ORCID})
   \item Margie Hannum (\href{https://orcid.org/0000-0002-2953-0449}{ORCID})
+  \item Joseph Larmarange (\href{https://orcid.org/0000-0001-7097-700X}{ORCID})
   \item Karissa Whiting (\href{https://orcid.org/0000-0002-4683-1868}{ORCID})
-  \item Emily C. Zabor (\href{https://orcid.org/0000-0002-1402-4498}{ORCID})
 }
 
 Other contributors:
 \itemize{
   \item Esther Drill (\href{https://orcid.org/0000-0002-3315-4538}{ORCID}) [contributor]
   \item Jessica Flynn (\href{https://orcid.org/0000-0001-8310-6684}{ORCID}) [contributor]
-  \item Joseph Larmarange (\href{https://orcid.org/0000-0001-7097-700X}{ORCID}) [contributor]
   \item Jessica Lavery (\href{https://orcid.org/0000-0002-2746-5647}{ORCID}) [contributor]
   \item Stephanie Lobaugh [contributor]
   \item Gustavo Zapata Wainberg (\href{https://orcid.org/0000-0002-2524-3637}{ORCID}) [contributor]
+  \item Emily C. Zabor (\href{https://orcid.org/0000-0002-1402-4498}{ORCID}) [contributor]
 }
 
 }
