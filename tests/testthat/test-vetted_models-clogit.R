@@ -115,7 +115,7 @@ test_that("vetted_models clogit()", {
   }
 
   expect_error(
-    tbl_clogit_lin4 <- tbl_clogit_lin %>% add_nevent(), NULL
+    tbl_clogit_lin4 <- tbl_clogit_lin %>% add_nevent(), NA
   )
   #       - numbers in table are correct
   # clogit models fail in car::Anova on old versions
