@@ -91,8 +91,11 @@ add_overall_merge <- function(x, overall, last, col_label) {
       footnote = footnote_stat_label(x$meta_data),
       hide = FALSE
     ) %>%
-    modify_header(stat_0 = col_label %||% paste0("**", translate_text("Overall"), "**, N = {style_number(N)}"),
-)
+    modify_header(
+      stat_0 =
+        col_label %||%
+        paste0("**", translate_text("Overall"), "**, N = {style_number(N)}"),
+    )
 
   x
 }
