@@ -137,14 +137,15 @@ add_nevent.tbl_survfit <- function(x, ...) {
     )} %>%
     select(any_of(c("variable", "row_type", "label", "N", "nevent")), everything())
 
-  # adding N to table_header and assigning header label ------------------------
-  x$table_header <-
-    table_header_fill_missing(
-      x$table_header,
-      x$table_body
-    ) %>%
-    table_header_fmt_fun(N = style_number)
-  x <- modify_header(x, nevent = "**Event N**")
+  # adding N to table_styling and assigning header label -----------------------
+  x <-
+    modify_table_styling(
+      x,
+      columns = "nevent",
+      label = "**Event N**",
+      fmt_fun = style_number,
+      hide = FALSE
+    )
 
   # adding indicator to output that add_n was run on this data
   x$call_list <- c(x$call_list, list(add_nevent = match.call()))
