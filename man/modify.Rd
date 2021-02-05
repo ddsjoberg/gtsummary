@@ -91,7 +91,8 @@ Syntax follows \code{\link[glue:glue]{glue::glue()}}, e.g. \code{all_stat_cols()
 \section{tbl_regression()}{
 
 When assigning column headers for \code{tbl_regression} tables,
-you may use \code{{N}} to insert the number of observations.
+you may use \code{{N}} to insert the number of observations, and \code{{N_event}}
+for the number of events (when applicable).
 }
 
 \section{captions}{

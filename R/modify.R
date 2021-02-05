@@ -42,7 +42,8 @@
 #' Syntax follows [glue::glue()], e.g. `all_stat_cols() ~ "**{level}**, N = {n}"`.
 #' @section tbl_regression():
 #' When assigning column headers for `tbl_regression` tables,
-#' you may use `{N}` to insert the number of observations.
+#' you may use `{N}` to insert the number of observations, and `{N_event}`
+#' for the number of events (when applicable).
 #'
 #' @section captions:
 #' Captions are assigned based on output type.
