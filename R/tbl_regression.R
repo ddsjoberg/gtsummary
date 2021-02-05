@@ -215,35 +215,16 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     dplyr::relocate(any_of(c("conf.low", "conf.high", "ci", "p.value")), .after = last_col())
 
   # table of column headers
-<<<<<<< HEAD
   x <-
     .create_gtsummary_object(
       table_body = table_body,
-      n = n,
-      model_obj = x,
-      inputs = func_inputs,
-      call_list = list(tbl_regression = match.call())
-    )
-=======
-  table_header <-
-    tibble(column = names(table_body)) %>%
-    table_header_fill_missing() %>%
-    table_header_fmt_fun(estimate = estimate_fun)
-
-  # constructing return object
-  results <-
-    list(
-      table_body = table_body,
-      table_header = table_header,
       N = pluck(table_body, "N_obs", 1),
       n = pluck(table_body, "N_obs", 1), # i want to remove this eventually
-      N_event = pluck(table_body, "N_event", 1),
-      model_obj = x,
+      N_event = pluck(table_body, "N_event", 1),      model_obj = x,
       inputs = func_inputs,
       call_list = list(tbl_regression = match.call())
     ) %>%
     purrr::discard(is.null)
->>>>>>> 347ae3c2239f724b98d0ccafe82f5485d64262ef
 
   # assigning a class of tbl_regression (for special printing in R markdown)
   class(x) <- c("tbl_regression", class(x))
