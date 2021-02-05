@@ -213,6 +213,23 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
     }
   )
 
+  # check new column names do not exist in `x$table_body`
+  new_col_names <- bind_rows(df_new_stat$df_add_stats) %>% names()
+  if (any(new_col_names %in% names(x$table_body))) {
+    paste("Cannot add new column that already exist in gtsummary table:",
+          "{ui_field(quoted_list(new_col_names %in% intersect(names(x$table_body))))}") %>%
+      abort()
+  }
+
+  # merging new columns with `x$table_body` ------------------------------------
+  x<-
+    x %>%
+    modify_table_body(
+      left_join,
+      df_new_stat %>% tidyr::unnest(cols = c(.data$label, .data$df_add_stats)),
+      by = c("variable", "row_type", "label")
+    )
+
   # table attributes -----------------------------------------------------------
   df_new_tibble_to_add <- bind_rows(df_new_stat$df_add_stats)
   new_col_names <- names(df_new_tibble_to_add)
@@ -257,12 +274,6 @@ add_stat <- function(x, fns, fmt_fun = NULL, header = NULL,
     )
 
   # updating tbl_summary object ------------------------------------------------
-  x <- x %>%
-    modify_table_body(
-      dplyr::left_join,
-      unnest(df_new_stat, cols = all_of(c("label", "df_add_stats"))),
-      by = c("variable", "row_type", "label")
-    )
 
   # applying table_header updates
   x <- expr_table_header_updates %>% reduce(function(x, y) expr(!!x %>% !!y), .init = x) %>% eval()

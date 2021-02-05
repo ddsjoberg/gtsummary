@@ -1,6 +1,4 @@
-context("test-add_glance_source_note")
-testthat::skip_on_cran()
-
+skip_on_cran()
 
 test_that("add_glance_source_note: no errors/warnings with standard use", {
 

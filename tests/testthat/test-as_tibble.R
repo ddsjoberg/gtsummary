@@ -1,5 +1,4 @@
-context("test-as_tibble")
-testthat::skip_on_cran()
+skip_on_cran()
 
 t1 <- trial %>%
   tbl_summary() %>%
@@ -49,7 +48,7 @@ test_that("as_tibble works with bold_p()", {
   expect_equal(
     bold_p_data %>%
       tbl_summary(by = x) %>%
-      add_p %>%
+      add_p() %>%
       bold_labels() %>%
       bold_p() %>%
       as_tibble(col_labels = FALSE) %>%

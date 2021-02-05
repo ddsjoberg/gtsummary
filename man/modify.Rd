@@ -18,9 +18,21 @@ modify_header(
   stat_by = NULL
 )
 
-modify_footnote(x, update = NULL, abbreviation = FALSE, quiet = NULL)
+modify_footnote(
+  x,
+  update = NULL,
+  abbreviation = FALSE,
+  rows = NULL,
+  text_interpret = c("md", "html"),
+  quiet = NULL
+)
 
-modify_spanning_header(x, update = NULL, quiet = NULL)
+modify_spanning_header(
+  x,
+  update = NULL,
+  text_interpret = c("md", "html"),
+  quiet = NULL
+)
 
 modify_caption(x, caption, text_interpret = c("md", "html"))
 
@@ -47,6 +59,8 @@ e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an al
 \item{stat_by}{DEPRECATED, use \code{update = all_stat_cols() ~ "<label>"} instead.}
 
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.}
+
+\item{rows}{predicate string expression to select rows. \code{rows = NA} often indicates all rows.}
 
 \item{caption}{a string of the table caption/title}
 }
@@ -77,7 +91,8 @@ Syntax follows \code{\link[glue:glue]{glue::glue()}}, e.g. \code{all_stat_cols()
 \section{tbl_regression()}{
 
 When assigning column headers for \code{tbl_regression} tables,
-you may use \code{{N}} to insert the number of observations.
+you may use \code{{N}} to insert the number of observations, and \code{{N_event}}
+for the number of events (when applicable).
 }
 
 \section{captions}{
@@ -169,7 +184,6 @@ Other tbl_svysummary tools:
 
 Other tbl_regression tools: 
 \code{\link{add_global_p}()},
-\code{\link{add_nevent.tbl_regression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{combine_terms}()},
@@ -180,7 +194,6 @@ Other tbl_regression tools:
 
 Other tbl_uvregression tools: 
 \code{\link{add_global_p}()},
-\code{\link{add_nevent.tbl_uvregression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_uvregression}()},

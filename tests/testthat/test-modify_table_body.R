@@ -1,5 +1,4 @@
-context("test-modify_table_body")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("modify_table_body with standard use", {
   expect_error(

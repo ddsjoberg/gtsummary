@@ -175,10 +175,10 @@ tbl_cross <- function(data,
 
   # adding column margin
   if ("column" %in% margin) {
-    x <- add_overall(x, last = TRUE) %>%
-      modify_header(
-        update = list(stat_0 ~ paste0("**", margin_text, "**"))
-      )
+    x <-
+      add_overall(x, last = TRUE) %>%
+      modify_header(update = list(stat_0 ~ paste0("**", margin_text, "**"))) %>%
+      modify_footnote(stat_0 ~ NA_character_)
   }
 
   # returning results ----------------------------------------------------------

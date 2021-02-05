@@ -34,17 +34,27 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
         strict = TRUE,
         !!!tidy_plus_plus_args
       )
-    ) %>% rlang::eval_tidy()
-
-  # final tidying before returning ---------------------------------------------
-  df_tidy %>%
-    mutate(
-      N = nrow(gtsummary_model_frame(x)),
-      row_type = ifelse(.data$header_row | is.na(.data$header_row), "label", "level")
     ) %>%
+    rlang::eval_tidy() %>%
+    {dplyr::bind_cols(
+      .,
+      attributes(.)[names(attributes(.)) %in% c("N_obs", "N_event", "coefficients_type", "coefficients_label")] %>%
+        tibble::as_tibble()
+    )} %>%
+    mutate(
+      row_type = ifelse(.data$header_row | is.na(.data$header_row), "label", "level")
+    )
+
+  # these are old column names, but i prefer to keep the consistently names from broom.helpers
+  # adding these back to the data frame for backwards compatibility
+  if ("N_obs" %in% names(df_tidy)) df_tidy <- mutate(df_tidy, N = .data$N_obs)
+  if ("N_event" %in% names(df_tidy)) df_tidy <- mutate(df_tidy, nevent = .data$N_event)
+
+  df_tidy %>%
     select(
       any_of(c("variable", "var_label", "var_type",
-               "reference_row", "row_type", "label", "N")),
+               "reference_row", "row_type", "header_row", "N_obs", "N_event", "N",
+               "coefficients_type", "coefficients_label", "label")),
       everything()
     )
 }
@@ -68,55 +78,70 @@ gtsummary_model_frame <- function(x) {
                                                 conf.level) {
   # label ----------------------------------------------------------------------
   x <-
-    modify_table_header(
+    modify_table_styling(
       x,
-      column = "label",
+      columns = "label",
+      rows = .data$row_type != 'label',
       label = paste0("**", translate_text("Characteristic"), "**"),
-      hide = FALSE
+      hide = FALSE,
+      text_format = "indent"
     )
 
   # estimate -------------------------------------------------------------------
+  estimate_column_labels <- .estimate_column_labels(x)
   if ("estimate" %in% names(x$table_body))
-    x <- modify_table_header(
-      x,
-      column = "estimate",
-      label = glue("**{estimate_header(x$model_obj, exponentiate)}**") %>% as.character(),
-      hide = !"estimate" %in% tidy_columns_to_report,
-      missing_emdash = "reference_row == TRUE",
-      footnote_abbrev =
-        estimate_header(x$model_obj, exponentiate) %>% attr("footnote") %||% NA_character_,
-      fmt_fun = estimate_fun
-    )
+    x <-
+      modify_table_styling(
+        x,
+        columns = "estimate",
+        label = glue("**{estimate_column_labels$label}**") %>% as.character(),
+        hide = !"estimate" %in% tidy_columns_to_report,
+        footnote_abbrev = glue("{estimate_column_labels$footnote}") %>% as.character(),
+        fmt_fun = estimate_fun
+      ) %>%
+      modify_table_styling(
+        columns = "estimate",
+        rows = .data$reference_row == TRUE,
+        missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
+      )
 
   # N --------------------------------------------------------------------------
   if ("N" %in% names(x$table_body))
-    x <- modify_table_header(
-      x,
-      column = "N",
-      label = glue("**{translate_text('N')}**")  %>% as.character(),
-      fmt_fun = style_number
-    )
+    x <-
+      modify_table_styling(
+        x,
+        columns = "N",
+        label = glue("**{translate_text('N')}**")  %>% as.character(),
+        fmt_fun = style_number
+      )
 
   # ci -------------------------------------------------------------------------
   if (all(c("conf.low", "conf.high") %in% names(x$table_body))) {
-    x <- modify_table_header(
-      x,
-      column = "ci",
-      label = glue("**{style_percent(conf.level, symbol = TRUE)} {translate_text('CI')}**") %>% as.character(),
-      hide = !all(c("conf.low", "conf.high") %in% tidy_columns_to_report),
-      missing_emdash = "reference_row == TRUE",
-      footnote_abbrev = translate_text("CI = Confidence Interval")
-    )
-    x <- modify_table_header(x,
-                             column = c("conf.low", "conf.high"),
-                             fmt_fun = estimate_fun)
+    x <-
+      modify_table_styling(
+        x,
+        columns = "ci",
+        label = glue("**{style_percent(conf.level, symbol = TRUE)} {translate_text('CI')}**") %>% as.character(),
+        hide = !all(c("conf.low", "conf.high") %in% tidy_columns_to_report),
+        footnote_abbrev = translate_text("CI = Confidence Interval")
+      ) %>%
+      modify_table_styling(
+        columns = "ci",
+        rows = .data$reference_row == TRUE,
+        missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
+      )
+
+    x <-
+      modify_table_styling(x,
+                           columns = c("conf.low", "conf.high"),
+                           fmt_fun = estimate_fun)
   }
 
   # p.value --------------------------------------------------------------------
   if ("p.value" %in% names(x$table_body))
-    x <- modify_table_header(
+    x <- modify_table_styling(
       x,
-      column = "p.value",
+      columns = "p.value",
       label = paste0("**", translate_text("p-value"), "**"),
       fmt_fun = pvalue_fun,
       hide = !"p.value" %in% tidy_columns_to_report
@@ -124,40 +149,45 @@ gtsummary_model_frame <- function(x) {
 
   # std.error ------------------------------------------------------------------
   if ("std.error" %in% names(x$table_body))
-    x <- modify_table_header(
-      x,
-      column = "std.error",
-      label = paste0("**", translate_text("SE"), "**"),
-      footnote_abbrev = translate_text("SE = Standard Error"),
-      missing_emdash = "reference_row == TRUE",
-      fmt_fun = purrr::partial(style_sigfig, digits = 3),
-      hide = !"std.error" %in% tidy_columns_to_report
-    )
+    x <-
+      modify_table_styling(
+        x,
+        columns = "std.error",
+        label = paste0("**", translate_text("SE"), "**"),
+        footnote_abbrev = translate_text("SE = Standard Error"),
+        fmt_fun = purrr::partial(style_sigfig, digits = 3),
+        hide = !"std.error" %in% tidy_columns_to_report
+      ) %>%
+      modify_table_styling(
+        columns = "std.error",
+        rows = .data$reference_row == TRUE,
+        missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
+      )
 
   # statistic ------------------------------------------------------------------
   if ("statistic" %in% names(x$table_body))
-    x <- modify_table_header(
-      x,
-      column = "statistic",
-      label = paste0("**", translate_text("Statistic"), "**"),
-      fmt_fun = purrr::partial(style_sigfig, digits = 3),
-      missing_emdash = "reference_row == TRUE",
-      hide = !"statistic" %in% tidy_columns_to_report
-    )
+    x <-
+      modify_table_styling(
+        x,
+        columns = "statistic",
+        label = paste0("**", translate_text("Statistic"), "**"),
+        fmt_fun = purrr::partial(style_sigfig, digits = 3),
+        hide = !"statistic" %in% tidy_columns_to_report
+      ) %>%
+      modify_table_styling(
+        columns = "statistic",
+        rows = .data$reference_row == TRUE,
+        missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
+      )
 
   # finally adding style_sigfig(x, digits = 3) as default for all other columns
-  for (v in names(x$table_body)) {
-    if (
-      is.numeric(x$table_body[[v]]) && # is a numeric column
-      is.null(x$table_header$fmt_fun[x$table_header$column == v][[1]]) # fmt_fun is empty
+  x <-
+    modify_table_styling(
+      x,
+      columns =
+        vars(where(is.numeric), -any_of(c("estimate", "conf.low", "conf.high", "p.value", "std.error", "statistic"))),
+      fmt_fun = purrr::partial(style_sigfig, digits = 3)
     )
-      x <-
-        modify_table_header(
-          x,
-          column = v,
-          fmt_fun = purrr::partial(style_sigfig, digits = 3)
-        )
-  }
 
   x
 }
@@ -167,3 +197,18 @@ chr_w_backtick <- function(x) map_chr(x, ~rlang::sym(.) %>% deparse(backtick = T
 # > chr_w_backtick("var with spaces")
 # [1] "`var with spaces`"
 
+.estimate_column_labels <- function(x) {
+  language <- get_theme_element("pkgwide-str:language", default = "en")
+
+  result <- list()
+  result$label <- unique(x$table_body$coefficients_label) %>% translate_text(language)
+  result$footnote <-
+    case_when(
+      result$label %in% c("OR", "log(OR)") ~ "OR = Odds Ratio",
+      result$label %in% c("HR", "log(HR)") ~ "HR = Hazard Ratio",
+      result$label %in% c("IRR", "log(IRR)") ~ "IRR = Incidence Rate Ratio"
+    ) %>%
+    translate_text(language) %>%
+    {switch(!is.na(.), .)}
+  result
+}

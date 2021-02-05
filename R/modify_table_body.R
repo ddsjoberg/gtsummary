@@ -7,7 +7,7 @@
 #' in each gtsummary object.
 #'
 #' If a new column is added to the table, default printing instructions will then
-#' be added to `.$table_header`. By default, columns are hidden.
+#' be added to `.$table_styling`. By default, columns are hidden.
 #' To show a column, add a column header with `modify_header()`.
 #'
 #' @param x gtsummary object
@@ -16,7 +16,7 @@
 #' must be `x$table_body`
 #'
 #' @export
-#' @seealso `modify_table_header()`
+#' @seealso `modify_table_styling()`
 #' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #'
 #' @examples
@@ -44,13 +44,13 @@
 modify_table_body <- function(x, fun, ...) {
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
 
-  # execute function on x$table_body
+  # execute function on x$table_body -------------------------------------------
   x$table_body <- fun(x$table_body, ...)
 
-  # update table_header
-  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
+  # update table_styling -------------------------------------------------------
+  x <- .update_table_styling(x)
 
-  # return gtsummary object
+  # return gtsummary object ----------------------------------------------------
   x
 }
 

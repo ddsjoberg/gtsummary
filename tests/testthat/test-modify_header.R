@@ -1,5 +1,4 @@
-context("test-modify_header")
-testthat::skip_on_cran()
+skip_on_cran()
 
 tbl_summary_noby <- trial %>% tbl_summary()
 tbl_summary_by <- trial %>% tbl_summary(by = trt)
@@ -43,7 +42,7 @@ test_that("checking glue inserts to headers", {
   )
 
   expect_equal(
-    tbl1$table_header %>% filter(hide == FALSE) %>% pull(label),
+    tbl1$table_styling$header %>% filter(hide == FALSE) %>% pull(label),
     c("Variable (N = 200)", "Drug A (98/200; 49%)", "Drug B (102/200; 51%)")
   )
 
@@ -60,7 +59,7 @@ test_that("checking glue inserts to headers", {
   )
 
   expect_equal(
-    tbl2$table_header %>% filter(hide == FALSE) %>% pull(label),
+    tbl2$table_styling$header %>% filter(hide == FALSE) %>% pull(label),
     c("Variable (N = 2201: Unweighted 32)",
       "No (1490/2201; 68%): Unweighted 16/32; 50%",
       "Yes (711/2201; 32%): Unweighted 16/32; 50%")
@@ -74,7 +73,7 @@ test_that("checking glue inserts to headers", {
     NA
   )
   expect_equal(
-    tbl3$table_header %>% filter(column == "label") %>% pull(label),
+    tbl3$table_styling$header %>% filter(column == "label") %>% pull(label),
     c("Variable (N = 32)")
   )
 })

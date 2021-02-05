@@ -301,14 +301,14 @@ The {gtsummary} table has two important internal objects:
 tibble::tribble(
   ~`Internal Object`, ~Description,
   "`.$table_body`",   "data frame that is printed as the gtsummary output table",
-  "`.$table_header`", "contains instructions for formatting `.$table_body` when printed"
+  "`.$table_styling`", "contains instructions for styling `.$table_body` when printed"
 ) %>%
   gt::gt() %>%
   gt::fmt_markdown(columns = everything()) %>%
   gt_compact_fun()
 ```
 
-When you print output from the `tbl_summary()` function into the R console or into an R markdown document, the `.$table_body` data frame is formatted using the instructions listed in  `.$table_header`.
+When you print output from the `tbl_summary()` function into the R console or into an R markdown document, the `.$table_body` data frame is formatted using the instructions listed in  `.$table_styling`.
 The default printer converts the {gtsummary} object to a {gt} object with `as_gt()` via a sequence of {gt} commands executed on `.$table_body`.
 Here's an example of the first few calls saved with `tbl_summary()`:
 

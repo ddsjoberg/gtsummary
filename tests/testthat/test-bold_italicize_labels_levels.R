@@ -1,5 +1,4 @@
-context("test-tab_style")
-testthat::skip_on_cran()
+skip_on_cran()
 
 tbl <- trial %>%
   tbl_summary(by = trt) %>%
