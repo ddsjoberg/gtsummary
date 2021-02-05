@@ -227,7 +227,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     purrr::discard(is.null)
 
   # assigning a class of tbl_regression (for special printing in R markdown)
-  class(x) <- c("tbl_regression", class(x))
+  class(x) <- c("tbl_regression", "gtsummary")
 
   # setting column headers, and print instructions
   tidy_columns_to_report <-
