@@ -121,7 +121,7 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
                      footnote = NULL, new_col_name = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, c("tbl_summary", "tbl_svysummary"))) {
-    abort("Argument `x=` must be of class 'tbl_summary'")
+    abort("Argument `x=` must be of class 'tbl_summary' or 'tbl_svysummary'")
   }
 
   if (!is.null(fmt_fun)) {
