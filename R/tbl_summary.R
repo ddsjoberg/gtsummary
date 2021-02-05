@@ -341,6 +341,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     )
   }
 
+  # returning tbl_summary table
+  x
 }
 
 
