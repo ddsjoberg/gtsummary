@@ -53,9 +53,9 @@ NULL
 add_nevent.tbl_regression <- function(x, location = NULL, ...) {
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
-  if ("level" %in% location && !"n_event" %in% x$table_header$column)
+  if ("level" %in% location && !"n_event" %in% x$table_styling$header$column)
     abort("Reporting event N on level rows is not available for this model type.")
-  if ("label" %in% location && !"N_event" %in% x$table_header$column)
+  if ("label" %in% location && !"N_event" %in% x$table_styling$header$column)
     abort("Reporting event N on label rows is not available for this model type.")
 
   x %>%
