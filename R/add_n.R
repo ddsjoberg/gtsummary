@@ -303,20 +303,24 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
   if ("label" %in% location && !"N_obs" %in% x$table_styling$header$column)
     abort("Reporting N on label rows is not available for this model type.")
 
+  x$table_body$stat_n <- NA_integer_
+  if ("label" %in% location)
+    x$table_body$stat_n <- ifelse(x$table_body$row_type == "label",
+                                  x$table_body$N_obs %>% as.integer(),
+                                  x$table_body$stat_n)
+  if ("level" %in% location)
+    x$table_body$stat_n <- ifelse(x$table_body$row_type == "level",
+                                  x$table_body$n_obs %>% as.integer(),
+                                  x$table_body$stat_n)
   x %>%
     modify_table_body(
       mutate,
       stat_n =
         case_when(
-          .data$row_type == "label" ~ .data$N_obs %>% as.integer(),
-          .data$row_type == "level" ~ .data$n_obs %>% as.integer()
-        ) %>%
-        as.integer(),
-      stat_n = case_when(
-        !"level" %in% .env$location & .data$row_type %in% "level" ~ NA_integer_,
-        !"label" %in% .env$location & .data$row_type %in% "label" & .data$var_type == "categorical" ~ NA_integer_,
-        TRUE ~ .data$stat_n
-      )
+          !"level" %in% .env$location & .data$row_type %in% "level" ~ NA_integer_,
+          !"label" %in% .env$location & .data$row_type %in% "label" & .data$var_type == "categorical" ~ NA_integer_,
+          TRUE ~ .data$stat_n
+        )
     ) %>%
     modify_table_body(
       dplyr::relocate,

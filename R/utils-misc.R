@@ -58,7 +58,7 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
 #' @noRd
 #' @keywords internal
 
-gts_mapper <- function(x, context, ...) {
+gts_mapper <- function(x, context) {
   # checking input, and giving informative error msg
   if (!rlang::is_function(x) && !rlang::is_formula(x)) {
     paste("Expecting a function in argument `{context}`,\n",
@@ -68,5 +68,5 @@ gts_mapper <- function(x, context, ...) {
     rlang::abort()
   }
 
-  purrr::as_mapper(x, ...)
+  purrr::as_mapper(x)
 }

@@ -58,20 +58,24 @@ add_nevent.tbl_regression <- function(x, location = NULL, ...) {
   if ("label" %in% location && !"N_event" %in% x$table_styling$header$column)
     abort("Reporting event N on label rows is not available for this model type.")
 
+  x$table_body$stat_nevent <- NA_integer_
+  if ("label" %in% location)
+    x$table_body$stat_nevent <- ifelse(x$table_body$row_type == "label",
+                                       x$table_body$N_event %>% as.integer(),
+                                       x$table_body$stat_nevent)
+  if ("level" %in% location)
+    x$table_body$stat_nevent <- ifelse(x$table_body$row_type == "level",
+                                       x$table_body$n_event %>% as.integer(),
+                                       x$table_body$stat_nevent)
   x %>%
     modify_table_body(
       mutate,
       stat_nevent =
         case_when(
-          .data$row_type == "label" ~ .data$N_event %>% as.integer(),
-          .data$row_type == "level" ~ .data$n_event %>% as.integer()
-        ) %>%
-        as.integer(),
-      stat_nevent = case_when(
-        !"level" %in% .env$location & .data$row_type %in% "level" ~ NA_integer_,
-        !"label" %in% .env$location & .data$row_type %in% "label" & .data$var_type == "categorical" ~ NA_integer_,
-        TRUE ~ .data$stat_nevent
-      )
+          !"level" %in% .env$location & .data$row_type %in% "level" ~ NA_integer_,
+          !"label" %in% .env$location & .data$row_type %in% "label" & .data$var_type == "categorical" ~ NA_integer_,
+          TRUE ~ .data$stat_nevent
+        )
     ) %>%
     modify_table_body(
       dplyr::relocate,

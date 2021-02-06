@@ -49,8 +49,15 @@ modify_table_body <- function(x, fun, ...) {
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
 
   # execute function on x$table_body -------------------------------------------
-  fun <- gts_mapper(fun, "modify_table_body(fun=)")
-  x$table_body <- fun(x$table_body, ...)
+  if_function <- rlang::is_function(fun)
+  if (if_function) {
+    x$table_body <- fun(x$table_body, ...)
+  }
+  else {
+    fun <- gts_mapper(fun, "modify_table_body(fun=)")
+    x$table_body <- fun(x$table_body)
+  }
+
 
   # update table_styling -------------------------------------------------------
   x <- .update_table_styling(x)
