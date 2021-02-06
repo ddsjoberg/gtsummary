@@ -11,10 +11,10 @@
 #' To show a column, add a column header with `modify_header()`.
 #'
 #' @param x gtsummary object
-#' @param fun a bare function name or formula shortcut notation to create a new
-#' function, e.g. `fun = ~ .x %>% arrange(variable)`. The `x$table_body`
-#' data frame will be passed to the function.
-#' @param ... arguments passed to `fun()` function if a bare function passed in `fun=`.
+#' @param fun A function or formula. If a _function_, it is used as is.
+#' If a _formula_, e.g. `fun = ~ .x %>% arrange(variable)`,
+#' it is converted to a function. The argument passed to `fun=` is `x$table_body`.
+#' @param ... Additional arguments passed on to the mapped function
 #'
 #' @export
 #' @seealso `modify_table_styling()`
@@ -49,15 +49,9 @@ modify_table_body <- function(x, fun, ...) {
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
 
   # execute function on x$table_body -------------------------------------------
-  if_function <- rlang::is_function(fun)
-  if (if_function) {
-    x$table_body <- fun(x$table_body, ...)
-  }
-  else {
-    fun <- gts_mapper(fun, "modify_table_body(fun=)")
-    x$table_body <- fun(x$table_body)
-  }
-
+  x$table_body <-
+    list(x$table_body) %>%
+    map_dfr(fun, ...)
 
   # update table_styling -------------------------------------------------------
   x <- .update_table_styling(x)

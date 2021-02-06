@@ -9,11 +9,11 @@ modify_table_body(x, fun, ...)
 \arguments{
 \item{x}{gtsummary object}
 
-\item{fun}{a bare function name or formula shortcut notation to create a new
-function, e.g. \code{fun = ~ .x \%>\% arrange(variable)}. The \code{x$table_body}
-data frame will be passed to the function.}
+\item{fun}{A function or formula. If a \emph{function}, it is used as is.
+If a \emph{formula}, e.g. \code{fun = ~ .x \%>\% arrange(variable)},
+it is converted to a function. The argument passed to \verb{fun=} is \code{x$table_body}.}
 
-\item{...}{arguments passed to \code{fun()} function if a bare function passed in \verb{fun=}.}
+\item{...}{Additional arguments passed on to the mapped function}
 }
 \description{
 \lifecycle{experimental}
