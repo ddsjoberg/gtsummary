@@ -38,14 +38,14 @@ Add N to regression table
 # Example 1 ----------------------------------
 add_n.tbl_regression_ex1 <-
   trial \%>\%
-  select(response, trt, grade) \%>\%
+  select(response, age, grade) \%>\%
   tbl_uvregression(
     y = response,
     method = glm,
     method.args = list(family = binomial),
     hide_n = TRUE
   ) \%>\%
-  add_n(location = "level")
+  add_n(location = "label")
 
 # Example 2 ----------------------------------
 add_n.tbl_regression_ex2 <-

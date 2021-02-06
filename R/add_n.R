@@ -269,14 +269,14 @@ add_n.tbl_survfit <- function(x, ...) {
 #' # Example 1 ----------------------------------
 #' add_n.tbl_regression_ex1 <-
 #'   trial %>%
-#'   select(response, trt, grade) %>%
+#'   select(response, age, grade) %>%
 #'   tbl_uvregression(
 #'     y = response,
 #'     method = glm,
 #'     method.args = list(family = binomial),
 #'     hide_n = TRUE
 #'   ) %>%
-#'   add_n(location = "level")
+#'   add_n(location = "label")
 #'
 #' # Example 2 ----------------------------------
 #' add_n.tbl_regression_ex2 <-
@@ -304,11 +304,11 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
     abort("Reporting N on label rows is not available for this model type.")
 
   x$table_body$stat_n <- NA_integer_
-  if ("label" %in% location)
+  if ("N_obs" %in% names(x$table_body))
     x$table_body$stat_n <- ifelse(x$table_body$row_type == "label",
                                   x$table_body$N_obs %>% as.integer(),
                                   x$table_body$stat_n)
-  if ("level" %in% location)
+  if ("n_obs" %in% names(x$table_body))
     x$table_body$stat_n <- ifelse(x$table_body$row_type == "level",
                                   x$table_body$n_obs %>% as.integer(),
                                   x$table_body$stat_n)
@@ -318,7 +318,8 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
       stat_n =
         case_when(
           !"level" %in% .env$location & .data$row_type %in% "level" ~ NA_integer_,
-          !"label" %in% .env$location & .data$row_type %in% "label" & .data$var_type == "categorical" ~ NA_integer_,
+          !"label" %in% .env$location & .data$row_type %in% "label" &
+            .data$var_type %in% c("categorical", "dichotomous") ~ NA_integer_,
           TRUE ~ .data$stat_n
         )
     ) %>%

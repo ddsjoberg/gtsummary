@@ -59,11 +59,11 @@ add_nevent.tbl_regression <- function(x, location = NULL, ...) {
     abort("Reporting event N on label rows is not available for this model type.")
 
   x$table_body$stat_nevent <- NA_integer_
-  if ("label" %in% location)
+  if ("N_event" %in% names(x$table_body))
     x$table_body$stat_nevent <- ifelse(x$table_body$row_type == "label",
                                        x$table_body$N_event %>% as.integer(),
                                        x$table_body$stat_nevent)
-  if ("level" %in% location)
+  if ("n_event" %in% names(x$table_body))
     x$table_body$stat_nevent <- ifelse(x$table_body$row_type == "level",
                                        x$table_body$n_event %>% as.integer(),
                                        x$table_body$stat_nevent)
@@ -73,7 +73,8 @@ add_nevent.tbl_regression <- function(x, location = NULL, ...) {
       stat_nevent =
         case_when(
           !"level" %in% .env$location & .data$row_type %in% "level" ~ NA_integer_,
-          !"label" %in% .env$location & .data$row_type %in% "label" & .data$var_type == "categorical" ~ NA_integer_,
+          !"label" %in% .env$location & .data$row_type %in% "label" &
+            .data$var_type %in% c("categorical", "dichotomous") ~ NA_integer_,
           TRUE ~ .data$stat_nevent
         )
     ) %>%
