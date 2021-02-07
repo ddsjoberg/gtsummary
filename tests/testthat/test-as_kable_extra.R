@@ -3,6 +3,13 @@ skip_on_cran()
 test_that("tbl_summary", {
   expect_error(tbl_summary(trial) %>% as_kable_extra(), NA)
   expect_warning(tbl_summary(trial) %>% as_kable_extra(), NA)
+
+  expect_error(
+    tbl_summary(trial[c("trt", "age")]) %>%
+      modify_footnote(label ~ "test footnote", rows = variable == "age") %>%
+      as_kable_extra(),
+    NA
+  )
 })
 
 test_that("tbl_summary", {
