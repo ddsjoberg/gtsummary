@@ -1,5 +1,4 @@
-context("test-modify_header")
-testthat::skip_on_cran()
+skip_on_cran()
 
 tbl_summary_noby <- trial %>% tbl_summary()
 tbl_summary_by <- trial %>% tbl_summary(by = trt)

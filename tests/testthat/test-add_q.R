@@ -1,5 +1,4 @@
-context("test-add_q")
-testthat::skip_on_cran()
+skip_on_cran()
 
 table1 <- trial %>%
   tbl_summary(by = trt) %>%
