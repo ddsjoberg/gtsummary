@@ -177,11 +177,11 @@ test_that("Factor ordering preserved", {
   tbl1 <- tbl_survfit(mod1, times = 12)
   tbl2 <- tbl_survfit(mod1, probs = 0.2)
 
-  expect_equa(
+  expect_equal(
     tbl1$table_body$label,
     c("trt", "Drug B", "Drug A")
   )
-  expect_equa(
+  expect_equal(
     tbl2$table_body$label,
     c("trt", "Drug B", "Drug A")
   )
