@@ -149,7 +149,8 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
         partial(style_sigfig, digits = 2),
       times = getOption("gtsummary.tbl_survfit.times.estimate_fun") %||%
         partial(style_percent, symbol = TRUE)
-    )
+    ) %>%
+    gts_mapper("tbl_survfit(estimate_fun=)")
 
   # will return call, and all object passed to in tbl_summary call -------------
   # the object func_inputs is a list of every object passed to the function

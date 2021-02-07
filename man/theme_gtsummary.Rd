@@ -118,7 +118,8 @@ for details.
 \item \code{theme_gtsummary_mean_sd()}
 \itemize{
 \item Set default summary statistics to mean and standard deviation in \code{tbl_summary()}
-\item Set default tests in \code{add_p.tbl_summary()} to t-tests and ANOVA
+\item Set default continuous tests in \code{add_p.tbl_summary()} to t-tests and ANOVA
+\item Set default continuous test in \code{add_p.tbl_svysummary()} to survey adapted t-test
 }
 }
 
