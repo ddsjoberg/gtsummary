@@ -169,3 +169,21 @@ test_that("no errors/warnings with competing events", {
                summod2$meta_data$df_stats[[1]]$estimate)
 })
 
+test_that("Factor ordering preserved", {
+  trial2 <- mutate(trial, trt = ifelse(trt == "Drug A",1,0),
+                  trt = factor(trt, levels = c(0,1),labels = c("Drug B", "Drug A")))
+  mod1 <- survfit(Surv(ttdeath, death)~trt, trial2)
+
+  tbl1 <- tbl_survfit(mod1, times = 12)
+  tbl2 <- tbl_survfit(mod1, probs = 0.2)
+
+  expect_equa(
+    tbl1$table_body$label,
+    c("trt", "Drug B", "Drug A")
+  )
+  expect_equa(
+    tbl2$table_body$label,
+    c("trt", "Drug B", "Drug A")
+  )
+
+})
