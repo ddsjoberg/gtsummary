@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_strata.R
 \name{tbl_strata}
 \alias{tbl_strata}
-\title{Stratified gtsummary table}
+\title{Stratified gtsummary tables}
 \usage{
 tbl_strata(
   data,
@@ -10,14 +10,14 @@ tbl_strata(
   .tbl_fun,
   ...,
   .sep = ", ",
-  combine_with = c("tbl_merge", "tbl_stack")
+  .combine_with = c("tbl_merge", "tbl_stack")
 )
 }
 \arguments{
-\item{data}{a date frame}
-
-\item{strata}{character vector or tidyselector of columns in data to
+\item{data}{a date frame
 stratify tables by}
+
+\item{strata}{character vector or tidy-selector of columns in data to}
 
 \item{.tbl_fun}{A function or formula. If a \emph{function}, it is used as is.
 If a formula, e.g. \code{~ .x \%>\% tbl_summary() \%>\% add_p()}, it is converted to a function.
@@ -28,10 +28,11 @@ The stratified data frame is passed to this function.}
 \item{.sep}{when more than one stratifying variable is passed, this string is
 used to separate the levels. Default is \code{", "}}
 
-\item{combine_with}{One of \code{c("tbl_merge", "tbl_stack")}. Names the function
+\item{.combine_with}{One of \code{c("tbl_merge", "tbl_stack")}. Names the function
 used to combine the stratified tables.}
 }
 \description{
+\lifecycle{experimental}
 Build a stratified gtsummary table. Any gtsummary table that accepts
 a data frame as its first argument is accepted
 }
@@ -59,6 +60,7 @@ each stratum's summary table.
 }
 
 \examples{
+# Example 1 ----------------------------------
 tbl_strata_ex1 <-
   trial \%>\%
   select(age, grade, stage, trt) \%>\%
@@ -67,8 +69,8 @@ tbl_strata_ex1 <-
     strata = grade,
     .tbl_fun =
       ~.x \%>\%
-      tbl_summary(by = trt) \%>\%
-      add_p()
+      tbl_summary(by = trt, missing = "no") \%>\%
+      add_n()
   )
 }
 \author{
