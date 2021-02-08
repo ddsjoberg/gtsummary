@@ -15,6 +15,19 @@
 #' @param combine_with One of `c("tbl_merge", "tbl_stack")`. Names the function
 #' used to combine the stratified tables.
 #'
+#' @section Tips:
+#'
+#' * `tbl_summary()`
+#'
+#'     * The number of digits continuous variables are rounded to is determined
+#'     separately within each stratum of the data frame. Set the `digits=`
+#'     argument to ensure continuous variables are rounded to the same number
+#'     of decimal places.
+#'
+#'     * For a categorical variable, if some levels are unobserved within a
+#'     stratum, convert the variable to a factor to ensure all levels appear in
+#'     each stratum's summary table.
+#'
 #' @author Daniel D. Sjoberg
 #' @export
 #'
@@ -25,12 +38,17 @@
 #'   mutate(grade = paste("Grade", grade)) %>%
 #'   tbl_strata(
 #'     strata = grade,
-#'     ~ .x %>%
+#'     .tbl_fun =
+#'       ~.x %>%
 #'       tbl_summary(by = trt) %>%
 #'       add_p()
 #'   )
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{tbl_strata_ex1.png}{options: width=64\%}}
 
-tbl_strata <- function(data, strata, .f, ..., .sep = ", ", combine_with = c("tbl_merge", "tbl_stack")) {
+tbl_strata <- function(data, strata, .tbl_fun, ..., .sep = ", ", combine_with = c("tbl_merge", "tbl_stack")) {
   # checking inputs ------------------------------------------------------------
   if (!is.data.frame(data)) abort("`data=` must be a data frame.")
   combine_with <- match.arg(combine_with)
@@ -45,7 +63,7 @@ tbl_strata <- function(data, strata, .f, ..., .sep = ", ", combine_with = c("tbl
     nest(data = -all_of(strata)) %>%
     rename(!!!syms(new_strata_names)) %>%
     mutate(
-      tbl = map(.data$data, .f, ...)
+      tbl = map(.data$data, .tbl_fun, ...)
     ) %>%
     rowwise() %>%
     mutate(

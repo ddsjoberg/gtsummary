@@ -7,7 +7,7 @@
 tbl_strata(
   data,
   strata,
-  .f,
+  .tbl_fun,
   ...,
   .sep = ", ",
   combine_with = c("tbl_merge", "tbl_stack")
@@ -19,6 +19,10 @@ tbl_strata(
 \item{strata}{character vector or tidyselector of columns in data to
 stratify tables by}
 
+\item{.tbl_fun}{A function or formula. If a \emph{function}, it is used as is.
+If a formula, e.g. \code{~ .x \%>\% tbl_summary() \%>\% add_p()}, it is converted to a function.
+The stratified data frame is passed to this function.}
+
 \item{...}{Additional arguments passed on to the \code{.tbl_fun} function.}
 
 \item{.sep}{when more than one stratifying variable is passed, this string is
@@ -26,15 +30,34 @@ used to separate the levels. Default is \code{", "}}
 
 \item{combine_with}{One of \code{c("tbl_merge", "tbl_stack")}. Names the function
 used to combine the stratified tables.}
-
-\item{.tbl_fun}{A function or formula. If a \emph{function}, it is used as is.
-If a formula, e.g. \code{~ .x \%>\% tbl_summary() \%>\% add_p()}, it is converted to a function.
-The stratified data frame is passed to this function.}
 }
 \description{
 Build a stratified gtsummary table. Any gtsummary table that accepts
 a data frame as its first argument is accepted
 }
+\section{Tips}{
+
+\itemize{
+\item \code{tbl_summary()}
+\itemize{
+\item The number of digits continuous variables are rounded to is determined
+separately within each stratum of the data frame. Set the \verb{digits=}
+argument to ensure continuous variables are rounded to the same number
+of decimal places.
+\item For a categorical variable, if some levels are unobserved within a
+stratum, convert the variable to a factor to ensure all levels appear in
+each stratum's summary table.
+}
+}
+}
+
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{tbl_strata_ex1.png}{options: width=64\%}}
+}
+
 \examples{
 tbl_strata_ex1 <-
   trial \%>\%
@@ -42,7 +65,8 @@ tbl_strata_ex1 <-
   mutate(grade = paste("Grade", grade)) \%>\%
   tbl_strata(
     strata = grade,
-    ~ .x \%>\%
+    .tbl_fun =
+      ~.x \%>\%
       tbl_summary(by = trt) \%>\%
       add_p()
   )

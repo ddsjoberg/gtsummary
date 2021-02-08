@@ -61,7 +61,7 @@ tbl_survival <- function(x, ...) {
 #' # Example 1 ----------------------------------
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
-#' tbl_strata_ex1 <-
+#' tbl_survival_ex1 <-
 #'   tbl_survival(
 #'     fit1,
 #'     times = c(12, 24),
@@ -70,7 +70,7 @@ tbl_survival <- function(x, ...) {
 #'
 #' # Example 2 ----------------------------------
 #' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
-#' tbl_nostrata_ex2 <-
+#' tbl_survival_ex2 <-
 #'   tbl_survival(
 #'     fit2,
 #'     probs = c(0.1, 0.2),
@@ -95,11 +95,11 @@ tbl_survival <- function(x, ...) {
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_strata_ex1.png}{options: width=40\%}}
+#' \if{html}{\figure{tbl_survival_ex1.png}{options: width=40\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_nostrata_ex2.png}{options: width=40\%}}
+#' \if{html}{\figure{tbl_survival_ex2.png}{options: width=40\%}}
 
 tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
                                  label = ifelse(is.null(probs), "{time}", "{prob*100}%"),
