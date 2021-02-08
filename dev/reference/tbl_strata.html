@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sort and filter variables in table by p-values — sort_filter_p • gtsummary</title>
+<title>Stratified gtsummary tables — tbl_strata • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,11 @@
 
 
 
-<meta property="og:title" content="Sort and filter variables in table by p-values — sort_filter_p" />
-<meta property="og:description" content="Sort and filter variables in table by p-values" />
+<meta property="og:title" content="Stratified gtsummary tables — tbl_strata" />
+<meta property="og:description" content="
+
+Build a stratified gtsummary table. Any gtsummary table that accepts
+a data frame as its first argument is accepted" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -168,64 +171,100 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Sort and filter variables in table by p-values</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/sort_filter_p.R'><code>R/sort_filter_p.R</code></a></small>
-    <div class="hidden name"><code>sort_filter_p.Rd</code></div>
+    <h1>Stratified gtsummary tables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/tbl_strata.R'><code>R/tbl_strata.R</code></a></small>
+    <div class="hidden name"><code>tbl_strata.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Sort and filter variables in table by p-values</p>
+    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
+
+Build a stratified gtsummary table. Any gtsummary table that accepts
+a data frame as its first argument is accepted</p>
     </div>
 
-    <pre class="usage"><span class='fu'>sort_p</span><span class='op'>(</span><span class='va'>x</span>, q <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='fu'>filter_p</span><span class='op'>(</span><span class='va'>x</span>, q <span class='op'>=</span> <span class='cn'>FALSE</span>, t <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tbl_strata</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  <span class='va'>strata</span>,
+  <span class='va'>.tbl_fun</span>,
+  <span class='va'>...</span>,
+  .sep <span class='op'>=</span> <span class='st'>", "</span>,
+  .combine_with <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"tbl_merge"</span>, <span class='st'>"tbl_stack"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>An object created using gtsummary functions</p></td>
+      <th>data</th>
+      <td><p>a date frame
+stratify tables by</p></td>
     </tr>
     <tr>
-      <th>q</th>
-      <td><p>Logical argument. When <code>TRUE</code> will the q-value column is used</p></td>
+      <th>strata</th>
+      <td><p>character vector or tidy-selector of columns in data to</p></td>
     </tr>
     <tr>
-      <th>t</th>
-      <td><p>p-values/q-values less than or equal to this threshold
-will be retained. Default is 0.05</p></td>
+      <th>.tbl_fun</th>
+      <td><p>A function or formula. If a <em>function</em>, it is used as is.
+If a formula, e.g. <code>~ .x %&gt;% tbl_summary() %&gt;% add_p()</code>, it is converted to a function.
+The stratified data frame is passed to this function.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Additional arguments passed on to the <code>.tbl_fun</code> function.</p></td>
+    </tr>
+    <tr>
+      <th>.sep</th>
+      <td><p>when more than one stratifying variable is passed, this string is
+used to separate the levels. Default is <code>", "</code></p></td>
+    </tr>
+    <tr>
+      <th>.combine_with</th>
+      <td><p>One of <code><a href='https://rdrr.io/r/base/c.html'>c("tbl_merge", "tbl_stack")</a></code>. Names the function
+used to combine the stratified tables.</p></td>
     </tr>
     </table>
+
+    <h2 class="hasAnchor" id="tips"><a class="anchor" href="#tips"></a>Tips</h2>
+
+    
+
+<ul>
+<li><p><code><a href='tbl_summary.html'>tbl_summary()</a></code></p><ul>
+<li><p>The number of digits continuous variables are rounded to is determined
+separately within each stratum of the data frame. Set the <code>digits=</code>
+argument to ensure continuous variables are rounded to the same number
+of decimal places.</p></li>
+<li><p>For a categorical variable, if some levels are unobserved within a
+stratum, convert the variable to a factor to ensure all levels appear in
+each stratum's summary table.</p></li>
+</ul></li>
+</ul>
 
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
 
 <p>Example 1</p>
-<p><img src='figures/sort_filter_p_ex1.png' width=50% /></p>
-<p>Example 2</p>
-<p><img src='figures/sort_p_ex2.png' width=50% /></p>
+<p><img src='figures/tbl_strata_ex1.png' width=64% /></p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Karissa Whiting, Daniel D. Sjoberg</p>
+    <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='va'>sort_filter_p_ex1</span> <span class='op'>&lt;-</span>
+<span class='va'>tbl_strata_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>response</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>filter_p</span><span class='op'>(</span>t <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>sort_p</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># Example 2 ----------------------------------</span>
-<span class='va'>sort_p_ex2</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>response</span> <span class='op'>~</span> <span class='va'>trt</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span>, family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span>exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>sort_p</span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>stage</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>grade <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Grade"</span>, <span class='va'>grade</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_strata</span><span class='op'>(</span>
+    strata <span class='op'>=</span> <span class='va'>grade</span>,
+    .tbl_fun <span class='op'>=</span>
+      <span class='op'>~</span><span class='va'>.x</span> <span class='op'>%&gt;%</span>
+      <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+      <span class='fu'><a href='add_n.html'>add_n</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

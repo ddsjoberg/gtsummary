@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9007</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Added new function <code><a href="../reference/tbl_strata.html">tbl_strata()</a></code>. The function aids in a preparing a gtsummary table stratified by a variable (<a href='https://github.com/ddsjoberg/gtsummary/issues/679'>#679</a>)</p></li>
 <li><p>Added the survey-adapted t-test to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_mean_sd()</a></code> for continuous variables in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/758'>#758</a>)</p></li>
 <li><p>Allowing for tidyverse shortcut notation in <code><a href="../reference/tbl_survfit.html">tbl_survfit(estimate_fun=)</a></code> specification, e.g. <code><a href="../reference/tbl_survfit.html">tbl_survfit(estimate_fun= ~style_sigfig(.x * 100))</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/761'>#761</a>)</p></li>
 <li><p>Added/updated functions <code><a href="../reference/add_n.html">add_n()</a></code> and <code><a href="../reference/add_nevent.html">add_nevent()</a></code> to work with <code>tbl_regression</code> and <code>tbl_uvregression</code> objects. Each function now has an argument to place Ns on the label or level rows. (<a href='https://github.com/ddsjoberg/gtsummary/issues/744'>#744</a>)</p></li>
