@@ -16,6 +16,21 @@ test_that("no errors with standard use", {
   expect_error(
     trial %>%
       select(age, grade, stage, trt) %>%
+      mutate(grade = paste("Grade", grade),
+             stage = paste("Stage", stage)) %>%
+      tbl_strata(
+        strata = c(grade, stage),
+        .tbl_fun =
+          ~.x %>%
+          tbl_summary(by = trt) %>%
+          add_p(test = all_continuous() ~ "t.test")
+      ),
+    NA
+  )
+
+  expect_error(
+    trial %>%
+      select(age, grade, stage, trt) %>%
       mutate(grade = paste("Grade", grade)) %>%
       tbl_strata(
         strata = grade,

@@ -2,10 +2,9 @@
 #'
 #' \lifecycle{experimental}
 #' Build a stratified gtsummary table. Any gtsummary table that accepts
-#' a data frame as its first argument is accepted
+#' a data frame as its first argument can be stratified.
 #'
-#' @param data a date frame
-#' stratify tables by
+#' @param data a data frame
 #' @param .tbl_fun A function or formula. If a _function_, it is used as is.
 #' If a formula, e.g. `~ .x %>% tbl_summary() %>% add_p()`, it is converted to a function.
 #' The stratified data frame is passed to this function.
@@ -25,7 +24,7 @@
 #'     argument to ensure continuous variables are rounded to the same number
 #'     of decimal places.
 #'
-#'     * For a categorical variable, if some levels are unobserved within a
+#'     * If some levels of a categorical variable are unobserved within a
 #'     stratum, convert the variable to a factor to ensure all levels appear in
 #'     each stratum's summary table.
 #'

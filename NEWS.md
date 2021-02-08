@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added new function `tbl_strata()`. The function aids in a preparing a gtsummary table stratified by a variable (#679)
+
 * Added the survey-adapted t-test to `theme_gtsummary_mean_sd()` for continuous variables in `add_p.tbl_svysummary()` (#758)
 
 * Allowing for tidyverse shortcut notation in `tbl_survfit(estimate_fun=)` specification, e.g. `tbl_survfit(estimate_fun= ~style_sigfig(.x * 100))` (#761)
