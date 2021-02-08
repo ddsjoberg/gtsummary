@@ -9,7 +9,8 @@
 #' @param by A column name (quoted or unquoted) in `data`.
 #' Summary statistics will be calculated separately for each level of the `by`
 #' variable (e.g. `by = trt`). If `NULL`, summary statistics
-#' are calculated using all observations.
+#' are calculated using all observations. To stratify a table by two or more
+#' variables, use `tbl_strata()`
 #' @param label List of formulas specifying variables labels,
 #' e.g. `list(age ~ "Age", stage ~ "Path T Stage")`.  If a
 #' variable's label is not specified here, the label attribute
