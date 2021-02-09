@@ -116,6 +116,21 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
         )
     })
 
+  # checking that merging rows are unique --------------------------------------
+  nested_table %>%
+    purrr::some(
+      ~nrow(.x) !=
+        select(.x, all_of(c("variable", "row_type", "var_label", "label"))) %>% distinct() %>% nrow()
+    ) %>%
+    switch(
+      paste("The merging columns (variable name, variable label, row type, and label column)",
+            "are not unique and the merge may fail or result in a malformed table.",
+            "If you previously 'tbl_stack'ed your tables, then 'tbl_merge'ing",
+            "before you 'tbl_stack' may resolve the issue.") %>%
+        stringr::str_wrap() %>%
+        inform()
+    )
+
   # nesting results within variable
   nested_table <- map(
     nested_table,
