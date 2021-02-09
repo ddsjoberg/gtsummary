@@ -5,14 +5,14 @@
 \alias{modify_column_unhide}
 \title{Modify Hidden Columns}
 \usage{
-modify_column_hide(x, column)
+modify_column_hide(x, columns)
 
-modify_column_unhide(x, column)
+modify_column_unhide(x, columns)
 }
 \arguments{
 \item{x}{gtsummary object}
 
-\item{column}{vector or selector of columns in \code{x$table_body}}
+\item{columns}{vector or selector of columns in \code{x$table_body}}
 }
 \description{
 \lifecycle{experimental}
@@ -31,7 +31,7 @@ Use these functions to hide or unhide columns in a gtsummary tables.
 modify_column_hide_ex1 <-
   lm(age ~ marker + grade, trial) \%>\%
   tbl_regression() \%>\%
-  modify_column_hide(column = ci) \%>\%
-  modify_column_unhide(column = std.error)
+  modify_column_hide(columns = ci) \%>\%
+  modify_column_unhide(columns = std.error)
 
 }

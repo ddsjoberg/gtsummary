@@ -82,8 +82,7 @@ tbl_regression.multinom <- function(x, ...) {
     mutate(groupname_col = .data$y.level) %>%
     select(.data$groupname_col, everything()) %>%
     group_by(.data$groupname_col)
-  result$table_header <-
-    table_header_fill_missing(result$table_header, result$table_body)
+  result <- .update_table_styling(result)
 
   # warning about multi-nomial models
   paste("Multinomial models have a different underlying structure than",

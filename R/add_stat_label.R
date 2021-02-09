@@ -164,24 +164,15 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
       ) %>%
       select(any_of(c("variable", "row_type", "label", "stat_label")), everything())
 
-    # adding new column to table_header
-    x$table_header <-
-      tibble(column = names(x$table_body)) %>%
-      left_join(x$table_header, by = "column") %>%
-      table_header_fill_missing()
+    # adding new column to table_styling
+    x <- .update_table_styling(x)
 
     # updating header
     x <- modify_header(x, stat_label = paste0("**", translate_text("Statistic"), "**"))
   }
 
   # removing stat label footnote
-  x$table_header <-
-    x$table_header %>%
-    # removing statistics presented footnote
-    mutate(
-      footnote = ifelse(startsWith(.data$column, "stat_"),
-                        NA_character_, .data$footnote)
-    )
+  x <- modify_footnote(x, all_stat_cols() ~ NA_character_)
 
   # keeping track of all functions previously run
   x$call_list <- c(x$call_list, list(add_stat_label = match.call()))
