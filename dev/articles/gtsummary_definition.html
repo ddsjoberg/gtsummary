@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9008</span>
       </span>
     </div>
 
@@ -133,10 +133,9 @@
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<p>Every {gtsummary} object has a few characteristics common among all objects. Here, we review those characteristics, and provide instructions on how to construct a {gtsummary} object.</p>
+<p>Every {gtsummary} table has a few characteristics common among all tables created with the package. Here, we review those characteristics, and provide instructions on how to construct a {gtsummary} object.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary">gtsummary</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>; <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>; <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span>
 
 <span class="va">tbl_regression_ex</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">grade</span> <span class="op">+</span> <span class="va">marker</span>, <span class="va">trial</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -152,7 +151,7 @@
 <h2 class="hasAnchor">
 <a href="#structure-of-a-gtsummary-object" class="anchor"></a>Structure of a {gtsummary} object</h2>
 <p>Every {gtsummary} object is a list comprising of, at minimum, these elements:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>.<span class="op">$</span>table_body    .<span class="op">$</span>table_header         </span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>.<span class="op">$</span>table_body    .<span class="op">$</span>table_styling         </span></code></pre></div>
 <div id="table_body" class="section level4">
 <h4 class="hasAnchor">
 <a href="#table_body" class="anchor"></a>table_body</h4>
@@ -171,14 +170,17 @@
 <span class="co">#&gt; 7 response dichotomo… integer   Tumor Resp… label    Tumor Re… 28 (29%) 33 (34%)</span>
 <span class="co">#&gt; 8 response dichotomo… integer   Tumor Resp… missing  Unknown   3        4</span></code></pre></div>
 </div>
-<div id="table_header" class="section level4">
+<div id="table_styling" class="section level4">
 <h4 class="hasAnchor">
-<a href="#table_header" class="anchor"></a>table_header</h4>
-<p>The <code>.$table_header</code> object is a data frame containing information about each of the columns in <code>.$table_body</code> (one row per column in <code>.$table_body</code>). The table header has the following columns:</p>
+<a href="#table_styling" class="anchor"></a>table_styling</h4>
+<p>The <code>.$table_styling</code> object is a list of data frames containing information about how <code>.$table_body</code> is printed, formatted, and styled.<br>
+The list contains the following data frames <code>header</code>, <code>footnote</code>, <code>footnote_abbrev</code>, <code>fmt_fun</code>, <code>text_format</code>, and <code>fmt_missing</code>.</p>
+<p><strong><code>header</code></strong></p>
+<p>The <code>header</code> table has the following columns and is one row per column found in <code>.$table_body</code>. The table contains styling information that applies to entire column or the columns headers.</p>
 <table class="table">
 <colgroup>
-<col width="7%">
-<col width="92%">
+<col width="20%">
+<col width="79%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Column</th>
@@ -190,78 +192,199 @@
 <td align="left">Column name from table_body</td>
 </tr>
 <tr class="even">
+<td align="left">hide</td>
+<td align="left">Logical indicating whether the column is hidden in the output</td>
+</tr>
+<tr class="odd">
+<td align="left">align</td>
+<td align="left">Specifies the alignment/justification of the column, e.g. ‘center’ or ‘left’</td>
+</tr>
+<tr class="even">
 <td align="left">label</td>
 <td align="left">Label that will be displayed (if column is displayed in output)</td>
 </tr>
 <tr class="odd">
-<td align="left">hide</td>
-<td align="left">Logical indicating whether the column is hidden in the output</td>
-</tr>
-<tr class="even">
-<td align="left">align</td>
-<td align="left">Specifies the alignment/justification of the column, e.g. ‘center’ or ‘left’</td>
-</tr>
-<tr class="odd">
-<td align="left">missing_emdash</td>
-<td align="left">Indicates the rows to include an em-dash for missing cells. For example <code>row_ref == TRUE</code> in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>
+<td align="left">interpret_label</td>
+<td align="left">the {gt} function that is used to interpret the column label, <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code> or <code><a href="https://rdrr.io/pkg/gt/man/html.html">gt::html()</a></code>
 </td>
 </tr>
 <tr class="even">
-<td align="left">indent</td>
-<td align="left">String of R code that results in a logical vector that specifies rows to indent, e.g. <code>row_type != 'label'</code>
-</td>
-</tr>
-<tr class="odd">
-<td align="left">text_interpret</td>
-<td align="left">the {gt} function that is used to interpret the column label</td>
-</tr>
-<tr class="even">
-<td align="left">bold</td>
-<td align="left">For columns that bold rows conditionally, the column includes a string of R code that results in a logical vector indicating the rows to bold For example, <code>row_type == 'label'</code>
-</td>
-</tr>
-<tr class="odd">
-<td align="left">italic</td>
-<td align="left">For columns that italicize rows conditionally, the column includes a string of R code that results in a logical vector indicating the rows to italicize. For example, <code>row_type == 'label'</code>
-</td>
-</tr>
-<tr class="even">
-<td align="left">fmt_fun</td>
-<td align="left">If the column needs to be formatted, this list column contains the function that performs the formatting. Note, this is the function object; not the character name of a function.</td>
-</tr>
-<tr class="odd">
-<td align="left">footnote_abbrev</td>
-<td align="left">Lists the abbreviation footnotes for a table. All abbreviation footnotes are collated into a single footnote. For example, ‘OR = Odds Ratio’ and ‘CI = Confidence Interval’ appear in a single footnote.</td>
-</tr>
-<tr class="even">
-<td align="left">footnote</td>
-<td align="left">Lists the footnotes that will appear for each column.</td>
-</tr>
-<tr class="odd">
 <td align="left">spanning_header</td>
-<td align="left">Includes text printed above columns as spanning headers. See <code>tbl_merge(...)$table_header</code> output for example of use.</td>
+<td align="left">Includes text printed above columns as spanning headers.</td>
+</tr>
+<tr class="odd">
+<td align="left">interpret_spanning_header</td>
+<td align="left">the {gt} function that is used to interpret the column spanning headers, <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code> or <code><a href="https://rdrr.io/pkg/gt/man/html.html">gt::html()</a></code>
+</td>
 </tr>
 </tbody>
 </table>
-<p>NOTE: Columns ‘hide’, ‘align’, ‘missing_emdash’, ‘indent’, ‘bold’, and ‘italic’ MUST follow the tidyverse style guidelines and include spaces around any variable names, e.g. <code>row_type == 'label'</code> (NOT <code>row_type=='label'</code>).</p>
+<p><strong><code>footnote</code> &amp; <code>footnote_abbrev</code></strong></p>
+<p>Each {gtsummary} table may contain a single footnote per header and cell within the table. Footnotes and footnote abbreviations are handled separately. Updates/changes to footnote are appended to the bottom of the tibble. A footnote of <code>NA_character_</code> deletes an existing footnote.</p>
+<table class="table">
+<colgroup>
+<col width="9%">
+<col width="90%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Column</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">column</td>
+<td align="left">Column name from table_body</td>
+</tr>
+<tr class="even">
+<td align="left">rows</td>
+<td align="left">expression selecting rows in <code>.$table_body</code>, <code>NA</code> indicates to add footnote to header</td>
+</tr>
+<tr class="odd">
+<td align="left">footnote</td>
+<td align="left">string containing footnote to add to column/row</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>fmt_fun</code></strong></p>
+<p>Numeric columns/rows are styled with the functions stored in <code>fmt_fun</code>. Updates/changes to styling functions are appended to the bottom of the tibble.</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Column</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">column</td>
+<td align="left">Column name from table_body</td>
+</tr>
+<tr class="even">
+<td align="left">rows</td>
+<td align="left">expression selecting rows in <code>.$table_body</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">fmt_fun</td>
+<td align="left">list of formatting/styling functions</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>text_format</code></strong></p>
+<p>Columns/rows are styled with bold, italic, or indenting stored in <code>text_format</code>. Updates/changes to styling functions are appended to the bottom of the tibble.</p>
+<table class="table">
+<colgroup>
+<col width="18%">
+<col width="81%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Column</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">column</td>
+<td align="left">Column name from table_body</td>
+</tr>
+<tr class="even">
+<td align="left">rows</td>
+<td align="left">expression selecting rows in <code>.$table_body</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">format_type</td>
+<td align="left">one of <code><a href="https://rdrr.io/r/base/c.html">c('bold', 'italic', 'indent')</a></code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">undo_text_format</td>
+<td align="left">logical indicating where the formatting indicated should be undone/removed.</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>fmt_missing</code></strong></p>
+<p>By default, all <code>NA</code> values are shown blanks. Missing values in columns/rows are replaced with the <code>symbol</code>. For example, reference rows in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> are shown with an em-dash. Updates/changes to styling functions are appended to the bottom of the tibble.</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">Column</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">column</td>
+<td align="left">Column name from table_body</td>
+</tr>
+<tr class="even">
+<td align="left">rows</td>
+<td align="left">expression selecting rows in <code>.$table_body</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">symbol</td>
+<td align="left">string to replace missing values with, e.g. an em-dash</td>
+</tr>
+</tbody>
+</table>
 <p>Example from <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl_regression_ex</span><span class="op">$</span><span class="va">table_header</span>
-<span class="co">#&gt; # A tibble: 24 x 13</span>
-<span class="co">#&gt;    column label hide  align missing_emdash indent text_interpret bold  italic</span>
-<span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt; </span>
-<span class="co">#&gt;  1 varia… vari… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  2 var_l… var_… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  3 var_t… var_… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  4 refer… refe… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  5 row_t… row_… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  6 heade… head… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  7 N_obs  N_obs TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  8 N      **N** TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  9 coeff… coef… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 10 coeff… coef… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; # … with 14 more rows, and 4 more variables: fmt_fun &lt;list&gt;,</span>
-<span class="co">#&gt; #   footnote_abbrev &lt;chr&gt;, footnote &lt;chr&gt;, spanning_header &lt;chr&gt;</span></code></pre></div>
+<code class="sourceCode R"><span class="va">tbl_regression_ex</span><span class="op">$</span><span class="va">table_styling</span>
+<span class="co">#&gt; $header</span>
+<span class="co">#&gt; # A tibble: 24 x 7</span>
+<span class="co">#&gt;    column   hide  align interpret_label label  interpret_spanni… spanning_header</span>
+<span class="co">#&gt;    &lt;chr&gt;    &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;           &lt;chr&gt;  &lt;chr&gt;             &lt;chr&gt;          </span>
+<span class="co">#&gt;  1 variable TRUE  cent… gt::md          varia… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  2 var_lab… TRUE  cent… gt::md          var_l… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  3 var_type TRUE  cent… gt::md          var_t… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  4 referen… TRUE  cent… gt::md          refer… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  5 row_type TRUE  cent… gt::md          row_t… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  6 header_… TRUE  cent… gt::md          heade… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  7 N_obs    TRUE  cent… gt::md          N_obs  gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  8 N        TRUE  cent… gt::md          **N**  gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  9 coeffic… TRUE  cent… gt::md          coeff… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt; 10 coeffic… TRUE  cent… gt::md          coeff… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt; # … with 14 more rows</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $footnote</span>
+<span class="co">#&gt; # A tibble: 0 x 4</span>
+<span class="co">#&gt; # … with 4 variables: column &lt;chr&gt;, rows &lt;chr&gt;, text_interpret &lt;chr&gt;,</span>
+<span class="co">#&gt; #   footnote &lt;chr&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $footnote_abbrev</span>
+<span class="co">#&gt; # A tibble: 2 x 4</span>
+<span class="co">#&gt;   column    rows  text_interpret footnote                </span>
+<span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;          &lt;chr&gt;                   </span>
+<span class="co">#&gt; 1 ci        &lt;NA&gt;  gt::md         CI = Confidence Interval</span>
+<span class="co">#&gt; 2 std.error &lt;NA&gt;  gt::md         SE = Standard Error     </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $text_format</span>
+<span class="co">#&gt; # A tibble: 3 x 4</span>
+<span class="co">#&gt;   column  rows                          format_type undo_text_format</span>
+<span class="co">#&gt;   &lt;chr&gt;   &lt;chr&gt;                         &lt;chr&gt;       &lt;lgl&gt;           </span>
+<span class="co">#&gt; 1 label   "row_type != 'label'"         indent      FALSE           </span>
+<span class="co">#&gt; 2 label   ".data$row_type != \"label\"" indent      FALSE           </span>
+<span class="co">#&gt; 3 p.value "p.value &lt;= 0.5"              bold        FALSE           </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $fmt_missing</span>
+<span class="co">#&gt; # A tibble: 4 x 3</span>
+<span class="co">#&gt;   column    rows                        symbol</span>
+<span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;                       &lt;chr&gt; </span>
+<span class="co">#&gt; 1 estimate  .data$reference_row == TRUE —     </span>
+<span class="co">#&gt; 2 ci        .data$reference_row == TRUE —     </span>
+<span class="co">#&gt; 3 std.error .data$reference_row == TRUE —     </span>
+<span class="co">#&gt; 4 statistic .data$reference_row == TRUE —     </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $fmt_fun</span>
+<span class="co">#&gt; # A tibble: 10 x 3</span>
+<span class="co">#&gt;    column      rows  fmt_fun   </span>
+<span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt; &lt;list&gt;    </span>
+<span class="co">#&gt;  1 estimate    &lt;NA&gt;  &lt;fn&gt;      </span>
+<span class="co">#&gt;  2 N           &lt;NA&gt;  &lt;fn&gt;      </span>
+<span class="co">#&gt;  3 N_obs       &lt;NA&gt;  &lt;fn&gt;      </span>
+<span class="co">#&gt;  4 n_obs       &lt;NA&gt;  &lt;fn&gt;      </span>
+<span class="co">#&gt;  5 conf.low    &lt;NA&gt;  &lt;fn&gt;      </span>
+<span class="co">#&gt;  6 conf.high   &lt;NA&gt;  &lt;fn&gt;      </span>
+<span class="co">#&gt;  7 p.value     &lt;NA&gt;  &lt;fn&gt;      </span>
+<span class="co">#&gt;  8 std.error   &lt;NA&gt;  &lt;prrr_fn_&gt;</span>
+<span class="co">#&gt;  9 statistic   &lt;NA&gt;  &lt;prrr_fn_&gt;</span>
+<span class="co">#&gt; 10 var_nlevels &lt;NA&gt;  &lt;prrr_fn_&gt;</span></code></pre></div>
 </div>
 </div>
 <div id="constructing-a-gtsummary-object" class="section level2">
@@ -273,7 +396,7 @@
 <p>When constructing a {gtsummary} object, the author will begin with the <code>.$table_body</code> object. Recall the <code>.$table_body</code> data frame must include columns <code>"label"</code>, <code>"row_type"</code>, and <code>"variable"</code>. Of these columns, only the <code>"label"</code> column will be printed with the final results. The <code>"row_type"</code> column typically will control whether or not the label column is indented. The <code>"variable"</code> column is often used in the <code><a href="../reference/inline_text.html">inline_text()</a></code> family of functions, and merging {gtsummary} tables with <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl_regression_ex</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span><span class="op">(</span><span class="st">"table_body"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span><span class="op">(</span><span class="st">"table_body"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">row_type</span>, <span class="va">label</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 5 x 3</span>
 <span class="co">#&gt;   variable row_type label               </span>
@@ -283,49 +406,37 @@
 <span class="co">#&gt; 3 grade    level    II                  </span>
 <span class="co">#&gt; 4 grade    level    III                 </span>
 <span class="co">#&gt; 5 marker   label    Marker Level (ng/mL)</span></code></pre></div>
-<p>The other columns in <code>.$table_body</code> are created by the user and are likely printed in the output. Formatting and printing instructions for these columns is stored in <code>.$table_header</code>.</p>
+<p>The other columns in <code>.$table_body</code> are created by the user and are likely printed in the output. Formatting and printing instructions for these columns is stored in <code>.$table_styling</code>.</p>
 </div>
-<div id="table_header-1" class="section level3">
+<div id="table_styling-1" class="section level3">
 <h3 class="hasAnchor">
-<a href="#table_header-1" class="anchor"></a>table_header</h3>
-<p>The <code>.$table_header</code> has one row for every column in <code>.$table_body</code> containing instructions how to format each column, the column headers, and more. There are a few internal {gtsummary} functions to assist in constructing and modifying a <code>.$table_header</code> data frame.</p>
-<p>First is the <code>table_header_fill_missing()</code> function. This function ensures <code>.$table_header</code> contains a row for every column of <code>.$table_body</code>. If a column does not exist, it is populated with appropriate default values.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">gtsummary</span><span class="fu">:::</span><span class="fu">table_header_fill_missing</span><span class="op">(</span>
-  table_header <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>column <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">tbl_regression_ex</span><span class="op">$</span><span class="va">table_body</span><span class="op">)</span><span class="op">)</span>
-<span class="op">)</span> 
-<span class="co">#&gt; # A tibble: 24 x 13</span>
-<span class="co">#&gt;    column label hide  align missing_emdash indent text_interpret bold  italic</span>
-<span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt; </span>
-<span class="co">#&gt;  1 varia… vari… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  2 var_l… var_… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  3 var_t… var_… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  4 refer… refe… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  5 row_t… row_… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  6 heade… head… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  7 N_obs  N_obs TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  8 N      N     TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt;  9 coeff… coef… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; 10 coeff… coef… TRUE  cent… &lt;NA&gt;           &lt;NA&gt;   gt::md         &lt;NA&gt;  &lt;NA&gt;  </span>
-<span class="co">#&gt; # … with 14 more rows, and 4 more variables: fmt_fun &lt;list&gt;,</span>
-<span class="co">#&gt; #   footnote_abbrev &lt;chr&gt;, footnote &lt;chr&gt;, spanning_header &lt;chr&gt;</span></code></pre></div>
-<p>The <code>modify_header_internal()</code> is useful for assigning column headers. The function accepts a complete {gtsummary} object as its input, and returns an updated version where the column labels have been added to <code>.$table_header</code>. The function also switches the default <code>.$table_header$hide</code> from <code>TRUE</code> to <code>FALSE</code>, resulting in column with labels being printed.</p>
+<a href="#table_styling-1" class="anchor"></a>table_styling</h3>
+<p>There are a few internal {gtsummary} functions to assist in constructing and modifying a <code>.$table_header</code> data frame.</p>
+<ol style="list-style-type: decimal">
+<li><p><code><a href="../reference/.create_gtsummary_object.html">.create_gtsummary_object(table_body)</a></code> After a user creates a <code>table_body</code>, pass it to this function and the skeleton of a gtsummary object is created and returned (including the full <code>table_styling</code> list of tables).</p></li>
+<li><p><code>.update_table_styling()</code> After columns are added or removed from <code>table_body</code>, run this function to update <code>.$table_styling</code> to include or remove styling instructions for the columns. FYI the default styling for each new column is to hide it.</p></li>
+<li><p><code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code> This exported function modifies the printing instructions for a single column or groups of columns.</p></li>
+<li><p><code><a href="../reference/modify_table_body.html">modify_table_body()</a></code> This exported function helps users make changes to <code>.$table_body</code>. The function runs <code>.update_table_styling()</code> internally to maintain internal validity with the printing instructions.</p></li>
+</ol>
 </div>
 </div>
 <div id="printing-a-gtsummary-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#printing-a-gtsummary-object" class="anchor"></a>Printing a {gtsummary} object</h2>
-<p>All {gtsummary} objects are printed with <code><a href="../reference/print_gtsummary.html">print.gtsummary()</a></code>. But before a {gtsummary} object is printed, it is converted to a {gt} object using <code><a href="../reference/as_gt.html">as_gt()</a></code>. This function takes the {gtsummary} object as its sole input, and uses the information in <code>.$table_header</code> to construct a list of {gt} calls that will be executed on <code>.$table_body</code>. After the {gtsummary} object is converted to {gt}, it is then printed as any other {gt} object.</p>
-<p>In some cases, the package defaults to printing with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> utilizing the <code><a href="../reference/as_kable.html">as_kable()</a></code> function.</p>
+<p>All {gtsummary} objects are printed with <code><a href="../reference/print_gtsummary.html">print.gtsummary()</a></code>. Before a {gtsummary} object is printed, it is converted to a {gt} object using <code><a href="../reference/as_gt.html">as_gt()</a></code>. This function takes the {gtsummary} object as its input, and uses the information in <code>.$table_styling</code> to construct a list of {gt} calls that will be executed on <code>.$table_body</code>. After the {gtsummary} object is converted to {gt}, it is then printed as any other {gt} object.</p>
+<p>In some cases, the package defaults to printing with other engines, such as flextable (<code><a href="../reference/as_flex_table.html">as_flex_table()</a></code>), huxtable (<code><a href="../reference/as_hux_table.html">as_hux_table()</a></code>), kableExtra (<code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code>), and kable (<code><a href="../reference/as_kable.html">as_kable()</a></code>). The default print engine is set with the theme element <code>"pkgwide-str:print_engine"</code></p>
 <p>While the actual print function is slightly more involved, it is basically this:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">print.gtsummary</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
-  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">"gtsummary.print_engine"</span><span class="op">)</span> <span class="op">==</span> <span class="st">"gt"</span><span class="op">)</span> <span class="op">{</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">}</span>
-  <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/options.html">getOption</a></span><span class="op">(</span><span class="st">"gtsummary.print_engine"</span><span class="op">)</span> <span class="op">==</span> <span class="st">"kable"</span><span class="op">)</span> <span class="op">{</span>
-    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="fu"><a href="../reference/as_kable.html">as_kable</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">}</span>
+  <span class="fu">get_theme_element</span><span class="op">(</span><span class="st">"pkgwide-str:print_engine"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="kw"><a href="https://rdrr.io/r/base/switch.html">switch</a></span><span class="op">(</span>
+      <span class="st">"gt"</span> <span class="op">=</span> <span class="fu"><a href="../reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
+      <span class="st">"flextable"</span> <span class="op">=</span> <span class="fu"><a href="../reference/as_flex_table.html">as_flex_table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
+      <span class="st">"huxtable"</span> <span class="op">=</span> <span class="fu"><a href="../reference/as_hux_table.html">as_hux_table</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
+      <span class="st">"kable_extra"</span> <span class="op">=</span> <span class="fu"><a href="../reference/as_kable_extra.html">as_kable_extra</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,
+      <span class="st">"kable"</span> <span class="op">=</span> <span class="fu"><a href="../reference/as_kable.html">as_kable</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
+    <span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 </div>
   </div>

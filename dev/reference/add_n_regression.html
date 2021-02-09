@@ -96,7 +96,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9008</span>
       </span>
     </div>
 
@@ -216,14 +216,14 @@ row for continuous.</p></td>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
 <span class='va'>add_n.tbl_regression_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>trt</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>age</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span><span class='op'>(</span>
     y <span class='op'>=</span> <span class='va'>response</span>,
     method <span class='op'>=</span> <span class='va'>glm</span>,
     method.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span>,
     hide_n <span class='op'>=</span> <span class='cn'>TRUE</span>
   <span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_n.html'>add_n</a></span><span class='op'>(</span>location <span class='op'>=</span> <span class='st'>"level"</span><span class='op'>)</span>
+  <span class='fu'><a href='add_n.html'>add_n</a></span><span class='op'>(</span>location <span class='op'>=</span> <span class='st'>"label"</span><span class='op'>)</span>
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='va'>add_n.tbl_regression_ex2</span> <span class='op'>&lt;-</span>

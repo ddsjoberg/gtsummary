@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9008</span>
       </span>
     </div>
 
@@ -176,6 +176,13 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Print infrastructure has been updated to allow for both row and column specification when formatting data or table styling. The <code>x$table_header</code> object has been replaced with a more general <code>x$table_styling</code>. Review the updated vignette <code>"gtsummary_definition.Rmd"</code> for details. The <code>x$table_body</code> is no longer grouped after <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code>; rather, the grouping variable is specified in <code><a href="https://rdrr.io/pkg/gt/man/gt.html">gt::gt(groupname_col=)</a></code></p></li>
+<li><p>New function introduced, <code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code>, to update printing instructions of tables. <code><a href="../reference/modify_table_header.html">modify_table_header()</a></code> is now deprecated.</p></li>
+<li><p>New function <code><a href="../reference/modify_fmt_fun.html">modify_fmt_fun()</a></code> has been introduced to help update the functions that format numeric columns and rows in <code>.x$table_body</code>.</p></li>
+<li><p>Functions <code><a href="../reference/modify.html">modify_footnote()</a></code> and <code><a href="../reference/modify.html">modify_spanning_header()</a></code> now include the <code>text_interpret=</code> argument indicating whether to use <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code> or <code><a href="https://rdrr.io/pkg/gt/man/html.html">gt::html()</a></code> to format text. Default is <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code>.</p></li>
+<li><p>The <code><a href="../reference/modify.html">modify_footnote()</a></code> function now has a rows argument and can place footnotes in the body of a table.</p></li>
+<li><p>The <code><a href="../reference/modify_table_body.html">modify_table_body(fun=)</a></code> argument has been generalized to accept formula short notation.</p></li>
+<li><p><code><a href="../reference/tbl_survival.html">tbl_survival()</a></code> has moved from questioning to deprecated. This function maintains the old <code>x$table_header</code> format (instead of the more flexible <code>x$table_styling</code>). The <code>"level_label"</code> column was renamed to <code>"groupname_col"</code> and the <code>x$table_body</code> is no longer grouped with <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by(level_label)</a></code></p></li>
 <li><p>Added new function <code><a href="../reference/tbl_strata.html">tbl_strata()</a></code>. The function aids in a preparing a gtsummary table stratified by a variable (<a href='https://github.com/ddsjoberg/gtsummary/issues/679'>#679</a>)</p></li>
 <li><p>Added the survey-adapted t-test to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_mean_sd()</a></code> for continuous variables in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/758'>#758</a>)</p></li>
 <li><p>Allowing for tidyverse shortcut notation in <code><a href="../reference/tbl_survfit.html">tbl_survfit(estimate_fun=)</a></code> specification, e.g. <code><a href="../reference/tbl_survfit.html">tbl_survfit(estimate_fun= ~style_sigfig(.x * 100))</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/761'>#761</a>)</p></li>

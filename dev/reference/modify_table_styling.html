@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Set a gtsummary theme — set_gtsummary_theme • gtsummary</title>
+<title>Modify table_styling — modify_table_styling • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,16 +52,10 @@
 
 
 
-<meta property="og:title" content="Set a gtsummary theme — set_gtsummary_theme" />
-<meta property="og:description" content="
-
-Use this function to set preferences for the display of gtsummary tables.
-The default formatting and styling throughout the gtsummary package are
-taken from the published reporting guidelines of the top four urology
-journals: European Urology, The Journal of Urology, Urology and
-the British Journal of Urology International. Use this function to change
-the default reporting style to match another journal, or your own
-personal style." />
+<meta property="og:title" content="Modify table_styling — modify_table_styling" />
+<meta property="og:description" content="This is a function meant for advanced users to gain
+more control over the characteristics of the resulting
+gtsummary table." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -176,64 +170,110 @@ personal style." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Set a gtsummary theme</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/set_gtsummary_theme.R'><code>R/set_gtsummary_theme.R</code></a></small>
-    <div class="hidden name"><code>set_gtsummary_theme.Rd</code></div>
+    <h1>Modify table_styling</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/modify_table_styling.R'><code>R/modify_table_styling.R</code></a></small>
+    <div class="hidden name"><code>modify_table_styling.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
-
-Use this function to set preferences for the display of gtsummary tables.
-The default formatting and styling throughout the gtsummary package are
-taken from the published reporting guidelines of the top four urology
-journals: European Urology, The Journal of Urology, Urology and
-the British Journal of Urology International. Use this function to change
-the default reporting style to match another journal, or your own
-personal style.</p>
+    <p>This is a function meant for advanced users to gain
+more control over the characteristics of the resulting
+gtsummary table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>set_gtsummary_theme</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-
-<span class='fu'>reset_gtsummary_theme</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>modify_table_styling</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>columns</span>,
+  rows <span class='op'>=</span> <span class='cn'>NULL</span>,
+  label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  spanning_header <span class='op'>=</span> <span class='cn'>NULL</span>,
+  hide <span class='op'>=</span> <span class='cn'>NULL</span>,
+  footnote <span class='op'>=</span> <span class='cn'>NULL</span>,
+  footnote_abbrev <span class='op'>=</span> <span class='cn'>NULL</span>,
+  align <span class='op'>=</span> <span class='cn'>NULL</span>,
+  missing_symbol <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fmt_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  text_format <span class='op'>=</span> <span class='cn'>NULL</span>,
+  undo_text_format <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  text_interpret <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"md"</span>, <span class='st'>"html"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A gtsummary theme function, e.g. <code><a href='theme_gtsummary.html'>theme_gtsummary_journal()</a></code>, or a
-named list defining a gtsummary theme. See details below.</p></td>
+      <td><p>gtsummary object</p></td>
+    </tr>
+    <tr>
+      <th>columns</th>
+      <td><p>vector or selector of columns in <code>x$table_body</code></p></td>
+    </tr>
+    <tr>
+      <th>rows</th>
+      <td><p>predicate string expression to select rows. <code>rows = NA</code> often indicates all rows.</p></td>
+    </tr>
+    <tr>
+      <th>label</th>
+      <td><p>string of column label(s)</p></td>
+    </tr>
+    <tr>
+      <th>spanning_header</th>
+      <td><p>string with text for spanning header</p></td>
+    </tr>
+    <tr>
+      <th>hide</th>
+      <td><p>logical indicating whether to hide column from output</p></td>
+    </tr>
+    <tr>
+      <th>footnote</th>
+      <td><p>string with text for footnote</p></td>
+    </tr>
+    <tr>
+      <th>footnote_abbrev</th>
+      <td><p>string with abbreviation definition, e.g.
+<code>"CI = Confidence Interval"</code></p></td>
+    </tr>
+    <tr>
+      <th>align</th>
+      <td><p>string indicating alignment of column, must be one of
+<code><a href='https://rdrr.io/r/base/c.html'>c("left", "right", "center")</a></code></p></td>
+    </tr>
+    <tr>
+      <th>missing_symbol</th>
+      <td><p>string indicating how missing values are formatted.</p></td>
+    </tr>
+    <tr>
+      <th>fmt_fun</th>
+      <td><p>function that formats the statistics in the
+columns/rows in <code>columns=</code> and <code>rows=</code></p></td>
+    </tr>
+    <tr>
+      <th>text_format</th>
+      <td><p>string indicated which type of text formatting to apply to the rows and columns.
+Must be one of <code><a href='https://rdrr.io/r/base/c.html'>c("bold", "italic", "indent")</a></code></p></td>
+    </tr>
+    <tr>
+      <th>undo_text_format</th>
+      <td><p>rarely used. Logical that undoes the indent, bold,
+and italic styling when <code>TRUE</code></p></td>
+    </tr>
+    <tr>
+      <th>text_interpret</th>
+      <td><p>string, must be one of <code>"md"</code> or <code>"html"</code></p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    
-
-<p>Example</p>
-<p><img src='figures/set_gtsummary_theme_ex1.png' width=70% /></p>
+    <p>Review the
+<a href='http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html'>gtsummary definition</a>
+vignette for information on <code>.$table_styling</code> objects.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='http://www.danieldsjoberg.com/gtsummary/articles/themes.html'>Themes vignette</a></p>
-<p>Available <a href='theme_gtsummary.html'>gtsummary themes</a></p></div>
+    <div class='dont-index'><p><code><a href='modify_table_body.html'>modify_table_body()</a></code></p>
+<p>See <a href='http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html'>gtsummary internals vignette</a></p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Setting JAMA theme for gtsummary</span>
-<span class='fu'>set_gtsummary_theme</span><span class='op'>(</span><span class='fu'><a href='theme_gtsummary.html'>theme_gtsummary_journal</a></span><span class='op'>(</span><span class='st'>"jama"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Setting `JAMA` theme</span></div><div class='output co'>#&gt; <span class='message'>Setting `JAMA` theme</span></div><div class='input'><span class='co'># Themes can be combined by including more than one</span>
-<span class='fu'>set_gtsummary_theme</span><span class='op'>(</span><span class='fu'><a href='theme_gtsummary.html'>theme_gtsummary_compact</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Setting `Compact` theme</span></div><div class='output co'>#&gt; <span class='message'>Setting `Compact` theme</span></div><div class='input'>
-<span class='va'>set_gtsummary_theme_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_stat_label.html'>add_stat_label</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='as_gt.html'>as_gt</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># reset gtsummary theme</span>
-<span class='fu'>reset_gtsummary_theme</span><span class='op'>(</span><span class='op'>)</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

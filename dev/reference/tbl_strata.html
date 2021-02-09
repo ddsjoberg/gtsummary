@@ -56,7 +56,7 @@
 <meta property="og:description" content="
 
 Build a stratified gtsummary table. Any gtsummary table that accepts
-a data frame as its first argument is accepted" />
+a data frame as its first argument can be stratified." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -99,7 +99,7 @@ a data frame as its first argument is accepted" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9008</span>
       </span>
     </div>
 
@@ -180,7 +180,7 @@ a data frame as its first argument is accepted" />
     <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
 
 Build a stratified gtsummary table. Any gtsummary table that accepts
-a data frame as its first argument is accepted</p>
+a data frame as its first argument can be stratified.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tbl_strata</span><span class='op'>(</span>
@@ -197,8 +197,7 @@ a data frame as its first argument is accepted</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>a date frame
-stratify tables by</p></td>
+      <td><p>a data frame</p></td>
     </tr>
     <tr>
       <th>strata</th>
@@ -236,7 +235,7 @@ used to combine the stratified tables.</p></td>
 separately within each stratum of the data frame. Set the <code>digits=</code>
 argument to ensure continuous variables are rounded to the same number
 of decimal places.</p></li>
-<li><p>For a categorical variable, if some levels are unobserved within a
+<li><p>If some levels of a categorical variable are unobserved within a
 stratum, convert the variable to a factor to ensure all levels appear in
 each stratum's summary table.</p></li>
 </ul></li>
