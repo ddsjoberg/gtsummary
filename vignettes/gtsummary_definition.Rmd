@@ -19,12 +19,11 @@ If this does not describe you, please refer to the [{gtsummary} website](http://
 
 ## Introduction
 
-Every {gtsummary} object has a few characteristics common among all objects.
+Every {gtsummary} table has a few characteristics common among all tables created with the package.
 Here, we review those characteristics, and provide instructions on how to construct a {gtsummary} object.
 
 ```{r setup, message=FALSE}
 library(gtsummary)
-library(purrr); library(dplyr); library(tibble)
 
 tbl_regression_ex <-
   lm(age ~ grade + marker, trial) %>%
@@ -42,7 +41,7 @@ tbl_summary_ex <-
 Every {gtsummary} object is a list comprising of, at minimum, these elements:
 
 ```r
-.$table_body    .$table_header         
+.$table_body    .$table_styling         
 ```
 
 #### table_body
@@ -55,37 +54,102 @@ The `"label"` column is printed, and the other two are hidden from the final out
 tbl_summary_ex$table_body
 ```
 
-#### table_header
+#### table_styling
 
-The `.$table_header` object is a data frame containing information about each of the columns in `.$table_body` (one row per column in `.$table_body`).
-The table header has the following columns:
+The `.$table_styling` object is a list of data frames containing information about how `.$table_body` is printed, formatted, and styled.  
+The list contains the following data frames `header`, `footnote`, `footnote_abbrev`, `fmt_fun`, `text_format`, and `fmt_missing`. 
+
+**`header`**
+
+The `header` table has the following columns and is one row per column found in `.$table_body`.
+The table contains styling information that applies to entire column or the columns headers.
 
 ```{r, echo=FALSE}
-tribble(
+tibble::tribble(
   ~Column, ~Description,
   "column", "Column name from table_body",
-  "label", "Label that will be displayed (if column is displayed in output)",
   "hide", "Logical indicating whether the column is hidden in the output",
   "align", "Specifies the alignment/justification of the column, e.g. 'center' or 'left'",
-  "missing_emdash", "Indicates the rows to include an em-dash for missing cells. For example `row_ref == TRUE` in `tbl_regression()`",
-  "indent", "String of R code that results in a logical vector that specifies rows to indent, e.g. `row_type != 'label'`",
-  "text_interpret", "the {gt} function that is used to interpret the column label",
-  "bold", "For columns that bold rows conditionally, the column includes a string of R code that results in a logical vector indicating the rows to bold For example, `row_type == 'label'`",
-  "italic", "For columns that italicize rows conditionally, the column includes a string of R code that results in a logical vector indicating the rows to italicize. For example, `row_type == 'label'`",
-  "fmt_fun", "If the column needs to be formatted, this list column contains the function that performs the formatting.  Note, this is the function object; not the character name of a function.",
-  "footnote_abbrev", "Lists the abbreviation footnotes for a table.  All abbreviation footnotes are collated into a single footnote.  For example, 'OR = Odds Ratio' and 'CI = Confidence Interval' appear in a single footnote.",
-  "footnote", "Lists the footnotes that will appear for each column.",
-  "spanning_header", "Includes text printed above columns as spanning headers. See `tbl_merge(...)$table_header` output for example of use."
+  "label", "Label that will be displayed (if column is displayed in output)",
+  "interpret_label", "the {gt} function that is used to interpret the column label, `gt::md()` or `gt::html()`",
+  "spanning_header", "Includes text printed above columns as spanning headers.",
+  "interpret_spanning_header", "the {gt} function that is used to interpret the column spanning headers, `gt::md()` or `gt::html()`"
 ) %>%
   knitr::kable() 
 ```
 
-NOTE: Columns 'hide', 'align', 'missing_emdash', 'indent', 'bold', and 'italic' MUST follow the tidyverse style guidelines and include spaces around any variable names, e.g. `row_type == 'label'` (NOT `row_type=='label'`).
+**`footnote` & `footnote_abbrev`**
+
+Each {gtsummary} table may contain a single footnote per header and cell within the table.
+Footnotes and footnote abbreviations are handled separately. 
+Updates/changes to footnote are appended to the bottom of the tibble.
+A footnote of `NA_character_` deletes an existing footnote.
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from table_body",
+  "rows", "expression selecting rows in `.$table_body`, `NA` indicates to add footnote to header",
+  "footnote", "string containing footnote to add to column/row"
+) %>%
+  knitr::kable() 
+``` 
+
+**`fmt_fun`**
+
+Numeric columns/rows are styled with the functions stored in `fmt_fun`.
+Updates/changes to styling functions are appended to the bottom of the tibble.
+
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from table_body",
+  "rows", "expression selecting rows in `.$table_body`",
+  "fmt_fun", "list of formatting/styling functions"
+) %>%
+  knitr::kable() 
+``` 
+
+**`text_format`**
+
+Columns/rows are styled with bold, italic, or indenting stored in `text_format`.
+Updates/changes to styling functions are appended to the bottom of the tibble.
+
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from table_body",
+  "rows", "expression selecting rows in `.$table_body`",
+  "format_type", "one of `c('bold', 'italic', 'indent')`",
+  "undo_text_format", "logical indicating where the formatting indicated should be undone/removed."
+) %>%
+  knitr::kable() 
+``` 
+
+**`fmt_missing`**
+
+By default, all `NA` values are shown blanks.
+Missing values in columns/rows are replaced with the `symbol`.
+For example, reference rows in `tbl_regression()` are shown with an em-dash.
+Updates/changes to styling functions are appended to the bottom of the tibble.
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from table_body",
+  "rows", "expression selecting rows in `.$table_body`",
+  "symbol", "string to replace missing values with, e.g. an em-dash"
+) %>%
+  knitr::kable() 
+``` 
+
 
 Example from `tbl_regression()`
 
 ```{r} 
-tbl_regression_ex$table_header
+tbl_regression_ex$table_styling
 ```
 
 ## Constructing a {gtsummary} object
@@ -100,53 +164,47 @@ The `"variable"` column is often used in the `inline_text()` family of functions
 
 ```{r}
 tbl_regression_ex %>%
-  pluck("table_body") %>%
+  purrr::pluck("table_body") %>%
   select(variable, row_type, label)
 ```
 
 The other columns in `.$table_body` are created by the user and are likely printed in the output.
-Formatting and printing instructions for these columns is stored in `.$table_header`.
+Formatting and printing instructions for these columns is stored in `.$table_styling`.
 
-### table_header
+### table_styling
 
-The `.$table_header` has one row for every column in `.$table_body` containing instructions how to format each column, the column headers, and more.
 There are a few internal {gtsummary} functions to assist in constructing and modifying a `.$table_header` data frame.
 
-First is the `table_header_fill_missing()` function.
-This function ensures `.$table_header` contains a row for every column of `.$table_body`.
-If a column does not exist, it is populated with appropriate default values.
+1. `.create_gtsummary_object(table_body)` After a user creates a `table_body`, pass it to this function and the skeleton of a gtsummary object is created and returned (including the full `table_styling` list of tables).
 
-```{r}
-gtsummary:::table_header_fill_missing(
-  table_header = tibble(column = names(tbl_regression_ex$table_body))
-) 
-```
+1. `.update_table_styling()` After columns are added or removed from `table_body`, run this function to update `.$table_styling` to include or remove styling instructions for the columns. FYI the default styling for each new column is to hide it.
 
-The `modify_header_internal()` is useful for assigning column headers.
-The function accepts a complete {gtsummary} object as its input, and returns an updated version where the column labels have been added to `.$table_header`.
-The function also switches the default `.$table_header$hide` from `TRUE` to `FALSE`, resulting in column with labels being printed.
+1. `modify_table_styling()` This exported function modifies the printing instructions for a single column or groups of columns.
+
+1. `modify_table_body()` This exported function helps users make changes to `.$table_body`. The function runs `.update_table_styling()` internally to maintain internal validity with the printing instructions.
 
 ## Printing a {gtsummary} object
 
 All {gtsummary} objects are printed with `print.gtsummary()`.
-But before a {gtsummary} object is printed, it is converted to a {gt} object using `as_gt()`.
-This function takes the {gtsummary} object as its sole input, and uses the information in `.$table_header` to construct a list of {gt} calls that will be executed on `.$table_body`.
+Before a {gtsummary} object is printed, it is converted to a {gt} object using `as_gt()`.
+This function takes the {gtsummary} object as its input, and uses the information in `.$table_styling` to construct a list of {gt} calls that will be executed on `.$table_body`.
 After the {gtsummary} object is converted to {gt}, it is then printed as any other {gt} object.
 
-In some cases, the package defaults to printing with `knitr::kable()` utilizing the `as_kable()` function.
+In some cases, the package defaults to printing with other engines, such as flextable (`as_flex_table()`), huxtable (`as_hux_table()`), kableExtra (`as_kable_extra()`),  and kable (`as_kable()`).
+The default print engine is set with the theme element `"pkgwide-str:print_engine"`
 
 While the actual print function is slightly more involved, it is basically this:
 
 ```{r, eval = FALSE}
 print.gtsummary <- function(x) {
-  if (getOption("gtsummary.print_engine") == "gt") {
-    return(as_gt(x) %>% print())
-  }
-  else if (getOption("gtsummary.print_engine") == "kable") {
-    return(as_kable(x) %>% print())
-  }
+  get_theme_element("pkgwide-str:print_engine") %>%
+    switch(
+      "gt" = as_gt(x),
+      "flextable" = as_flex_table(x),
+      "huxtable" = as_hux_table(x),
+      "kable_extra" = as_kable_extra(x),
+      "kable" = as_kable(x)
+    ) %>%
+    print()
 }
-
 ```
-
-

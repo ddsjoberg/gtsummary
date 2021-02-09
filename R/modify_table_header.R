@@ -1,12 +1,7 @@
 #' Modify table_header
 #'
-#' This is a function meant for advanced users to gain
-#' more control over the characteristics of the resulting
-#' gtsummary table.
-#'
-#' Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
-#' vignette for information on `.$table_header` objects.
+#' \lifecycle{deprecated}
+#' Use `modify_table_styling()` instead.
 #'
 #' @param x gtsummary object
 #' @param column vector or selector of columns in `x$table_body`
@@ -25,27 +20,7 @@
 #' `"CI = Confidence Interval"`
 #' @param footnote string with text for column footnote
 #' @param spanning_header string with text for spanning header
-#'
-#' @seealso `modify_table_body()`
-#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #' @export
-#'
-#'
-#' @examples
-#' # Example 1 ----------------------------------
-#' modify_table_header_ex1 <-
-#'   lm(mpg ~ factor(cyl), mtcars) %>%
-#'   tbl_regression() %>%
-#'   modify_table_header(column = estimate,
-#'                       label = "**Coefficient**",
-#'                       fmt_fun = function(x) style_sigfig(x, digits = 5),
-#'                       footnote = "Regression Coefficient") %>%
-#'   modify_table_header(column = "p.value",
-#'                       hide = TRUE)
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\figure{modify_table_header_ex1.png}{options: width=50\%}}
 
 modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NULL,
                                 missing_emdash = NULL, indent = NULL,
@@ -53,10 +28,9 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
                                 fmt_fun = NULL, footnote_abbrev = NULL,
                                 footnote = NULL, spanning_header = NULL) {
   # checking inputs ------------------------------------------------------------
+  lifecycle::deprecate_warn(
+    "1.4.0", "gtsummary::modify_table_header()", "modify_table_styling()")
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
-
-  # update table_header --------------------------------------------------------
-  x$table_header <- table_header_fill_missing(x$table_header, x$table_body)
 
   # convert column input to string ---------------------------------------------
   column <-
@@ -66,114 +40,80 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
       arg_name = "column"
     )
 
+  # Updating gtsummary internals
+  if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
+
   # if no columns selected, returning unaltered
   if (is.null(column)) return(x)
 
-  # label ----------------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "label", update = label,
-    class_check = "is.character", in_check = NULL
+  .convert_header_call_to_styling_call(
+    x = x, column = column, label = label, hide = hide, align = align,
+    missing_emdash = missing_emdash, indent = indent,
+    text_interpret = text_interpret, bold = bold, italic = italic,
+    fmt_fun = fmt_fun, footnote_abbrev = footnote_abbrev,
+    footnote = footnote, spanning_header = spanning_header,
+    call = match.call(), env = rlang::caller_env()
   )
-
-  # hide -----------------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "hide", update = hide,
-    class_check = "is.logical", in_check = NULL
-  )
-
-  # align ----------------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "align", update = align,
-    class_check = "is.character", in_check = c("left", "right", "center")
-  )
-
-  # missing_emdash -------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "missing_emdash", update = missing_emdash,
-    class_check = "is.character", in_check = NULL
-  )
-
-  # indent ---------------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "indent", update = indent,
-    class_check = "is.character", in_check = NULL
-  )
-
-  # text_interpret -------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "text_interpret", update = text_interpret,
-    class_check = "is.character", in_check = c("gt::md", "gt::html")
-  )
-
-  # bold -----------------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "bold", update = bold,
-    class_check = "is.character", in_check = NULL
-  )
-
-  # italic ---------------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "italic", update = italic,
-    class_check = "is.character", in_check = NULL
-  )
-
-  # fmt_fun --------------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "fmt_fun", update = fmt_fun,
-    class_check = "is.function", in_check = NULL, in_list = TRUE
-  )
-
-  # footnote_abbrev ------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "footnote_abbrev", update = footnote_abbrev,
-    class_check = "is.character", in_check = NULL
-  )
-
-  # footnote -------------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "footnote", update = footnote,
-    class_check = "is.character", in_check = NULL
-  )
-
-  # spanning_header ------------------------------------------------------------
-  x <- .update_table_header_element(
-    x = x, column = column, element = "spanning_header", update = spanning_header,
-    class_check = "is.character", in_check = NULL
-  )
-
-  # return gtsummary object ----------------------------------------------------
-  x
 }
 
-.update_table_header_element <- function(x, column, element, update,
-                                         class_check = NULL, in_check = NULL,
-                                         in_list = FALSE) {
-  # return unaltered if no change requested ------------------------------------
-  if (is.null(update)) return(x)
+.convert_header_call_to_styling_call <- function(x, column, label, hide, align,
+                                                missing_emdash, indent,
+                                                text_interpret, bold, italic,
+                                                fmt_fun, footnote_abbrev,
+                                                footnote, spanning_header,
+                                                call, env) {
+  styling_call_list <- list()
+  call_list <- as.list(call)[-1]
+  names(call_list)[which(names(call_list) %in% "column")] <- "columns"
 
-  # checking inputs ------------------------------------------------------------
-  if (length(update) != 1) {
-    glue("`{element}=` argument must be of length one.") %>%
-      abort()
-  }
-  if (!is.null(class_check) && !do.call(class_check, list(update))) {
-    glue("`{element}=` argument must satisfy `{class_check}()`") %>%
-      abort()
-  }
-  if (!is.null(in_check) && !update %in% in_check) {
-    glue("`{element}=` argument must be one of {paste(in_check, collapse = ", ")}") %>%
-      abort()
+  # header formatting ----------------------------------------------------------
+  header_args <- c("columns", "label", "hide", "align", "text_interpret",
+                   "spanning_header", "footnote", "footnote_abbrev", "fmt_fun")
+  header_call_list <- call_list[names(call_list) %in% header_args]
+  if (length(header_call_list) > 1) {
+    styling_call_list[["header"]] <- expr(modify_table_styling(!!!header_call_list))
   }
 
-  # making update --------------------------------------------------------------
-  if (in_list) update <- list(update)
-  x$table_header <-
-    x$table_header %>%
-    dplyr::rows_update(
-      tibble(column = column, element = update) %>% set_names(c("column", element)),
-      by = "column"
-    )
+  # row formatting -------------------------------------------------------------
+  if ("bold" %in% names(call_list)) {
+    styling_call_list[["bold"]] <-
+      expr(modify_table_styling(columns = !!call_list$columns,
+                                rows = !!parse_expr(call_list$bold),
+                                text_format = "bold"))
+  }
+  if ("italic" %in% names(call_list)) {
+    styling_call_list[["italic"]] <-
+      expr(modify_table_styling(columns = !!call_list$columns,
+                                rows = !!parse_expr(call_list$italic),
+                                text_format = "italic"))
+  }
+  if ("indent" %in% names(call_list)) {
+    styling_call_list[["indent"]] <-
+      expr(modify_table_styling(columns = !!call_list$columns,
+                                rows = !!parse_expr(call_list$indent),
+                                text_format = "indent"))
+  }
+  if ("missing_emdash" %in% names(call_list)) {
+    styling_call_list[["missing_emdash"]] <-
+      expr(modify_table_styling(columns = !!call_list$columns,
+                                rows = !!parse_expr(call_list$missing_emdash),
+                                missing_symbol = "---"))
+  }
 
-  # return gtsummary object ----------------------------------------------------
-  x
+  # printing code to use instead of `modify_table_header()`
+  ui_info("Use {ui_code('modify_table_styling()')} instead of {ui_code('modify_table_header()')}")
+  usethis::ui_todo("Replace the {ui_code('modify_table_header()')} call with the following.")
+  c(list(expr(x)), styling_call_list) %>%
+    map(~deparse(.) %>% paste(collapse = "") %>% stringr::str_squish()) %>%
+    unlist() %>%
+    paste(collapse = " %>%\n  ") %>%
+    cat()
+
+  # evaluating `modify_table_header()` code
+  c(list(expr(!!x)), styling_call_list) %>%
+    # concatenating expressions with %>% between each of them
+    reduce(function(x, y) expr(!!x %>% !!y)) %>%
+    # evaluating expressions
+    eval_tidy(env = env)
 }
+

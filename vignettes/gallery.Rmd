@@ -140,7 +140,7 @@ t1 <- trial %>%
   add_p() %>%
   modify_header(p.value ~ md("**I vs. II**")) %>%
   # hide summary stat columns
-  modify_table_header(all_stat_cols(), hide = TRUE)
+  modify_table_styling(all_stat_cols(), hide = TRUE)
 
 # table comparing grade I and II
 t2 <- trial %>%
@@ -150,7 +150,7 @@ t2 <- trial %>%
   add_p()  %>%
   modify_header(p.value ~ md("**I vs. III**")) %>%
   # hide summary stat columns
-  modify_table_header(all_stat_cols(), hide = TRUE)
+  modify_table_styling(all_stat_cols(), hide = TRUE)
 
 # merging the 3 tables together, and adding additional gt formatting
 tbl_merge(list(t0, t1, t2)) %>%

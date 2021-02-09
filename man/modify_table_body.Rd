@@ -9,10 +9,11 @@ modify_table_body(x, fun, ...)
 \arguments{
 \item{x}{gtsummary object}
 
-\item{fun}{unquoted (bare) function name}
+\item{fun}{A function or formula. If a \emph{function}, it is used as is.
+If a \emph{formula}, e.g. \code{fun = ~ .x \%>\% arrange(variable)},
+it is converted to a function. The argument passed to \verb{fun=} is \code{x$table_body}.}
 
-\item{...}{arguments passed to \code{fun()} function. First argument of \code{fun()}
-must be \code{x$table_body}}
+\item{...}{Additional arguments passed on to the mapped function}
 }
 \description{
 \lifecycle{experimental}
@@ -21,7 +22,7 @@ It allow users to modify the \code{.$table_body} data frame included
 in each gtsummary object.
 
 If a new column is added to the table, default printing instructions will then
-be added to \code{.$table_header}. By default, columns are hidden.
+be added to \code{.$table_styling}. By default, columns are hidden.
 To show a column, add a column header with \code{modify_header()}.
 }
 \section{Example Output}{
@@ -42,15 +43,18 @@ modify_table_body_ex1 <-
                    method.args = list(family = binomial),
                    exponentiate = TRUE,
                    hide_n = TRUE) \%>\%
-  add_nevent() \%>\%
   # adding number of non-events to table
-  modify_table_body(dplyr::mutate, n_nonevent = N - nevent) \%>\%
-  # move new column to before the nevent column
-  modify_table_body(dplyr::relocate, n_nonevent, .before = nevent) \%>\%
-  modify_header(n_nonevent = "**Control N**", nevent = "**Case N**")
+  modify_table_body(
+    ~.x \%>\%
+      dplyr::mutate(N_nonevent = N_obs - N_event) \%>\%
+      dplyr::relocate(c(N_event, N_nonevent), .before = estimate)
+  ) \%>\%
+  # assigning header labels
+  modify_header(N_nonevent = "**Control N**", N_event = "**Case N**") \%>\%
+  modify_fmt_fun(c(N_event, N_nonevent) ~ style_number)
 }
 \seealso{
-\code{modify_table_header()}
+\code{modify_table_styling()}
 
 See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 }

@@ -54,36 +54,6 @@ include em-dash for missing values, e.g. \code{"reference_row == TRUE"}}
 \item{spanning_header}{string with text for spanning header}
 }
 \description{
-This is a function meant for advanced users to gain
-more control over the characteristics of the resulting
-gtsummary table.
-}
-\details{
-Review the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
-vignette for information on \code{.$table_header} objects.
-}
-\section{Example Output}{
-
-\if{html}{Example 1}
-
-\if{html}{\figure{modify_table_header_ex1.png}{options: width=50\%}}
-}
-
-\examples{
-# Example 1 ----------------------------------
-modify_table_header_ex1 <-
-  lm(mpg ~ factor(cyl), mtcars) \%>\%
-  tbl_regression() \%>\%
-  modify_table_header(column = estimate,
-                      label = "**Coefficient**",
-                      fmt_fun = function(x) style_sigfig(x, digits = 5),
-                      footnote = "Regression Coefficient") \%>\%
-  modify_table_header(column = "p.value",
-                      hide = TRUE)
-}
-\seealso{
-\code{modify_table_body()}
-
-See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
+\lifecycle{deprecated}
+Use \code{modify_table_styling()} instead.
 }

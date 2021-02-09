@@ -192,38 +192,39 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
       rlang::inform()
   }
 
-  # table_header ---------------------------------------------------------------
+  # table_body -----------------------------------------------------------------
   table_body <-
     meta_data %>%
     select(.data$var_label, .data$table_body) %>%
     unnest(.data$table_body) %>%
     select(.data$variable, .data$var_label, everything())
-  table_header <-
-    tibble(column = names(table_body)) %>%
-    table_header_fill_missing()
 
   # finishing up ---------------------------------------------------------------
   # constructing final result
-  results <- list(
-    table_body = table_body,
-    table_header = table_header,
-    meta_data = meta_data,
-    inputs = tbl_survfit_inputs,
-    call_list = list(tbl_survfit = match.call())
-  )
+  x <-
+    .create_gtsummary_object(
+      table_body = table_body,
+      meta_data = meta_data,
+      inputs = tbl_survfit_inputs
+    )
 
   # applying labels
-  lbls <- as.list(unique(meta_data$df_stats[[1]]$col_label)) %>% set_names(unique(meta_data$df_stats[[1]]$col_name))
-  results <-
-    expr(modify_header(results, label = !!paste0("**", translate_text("Characteristic"), "**"), !!!lbls)) %>%
+  lbls <-
+    meta_data$df_stats[[1]] %>%
+    select(.data$col_name, .data$col_label) %>%
+    distinct() %>%
+    tibble::deframe() %>%
+    as.list()
+
+  x <-
+    expr(modify_header(x, label = !!paste0("**", translate_text("Characteristic"), "**"), !!!lbls)) %>%
     eval()
 
   # exporting results ----------------------------------------------------------
-  results$inputs <- tbl_survfit_inputs
-  results$call_list = list(tbl_survfit = match.call())
-  class(results) <- c("tbl_survfit", "gtsummary")
+  x$call_list <- list(tbl_survfit = match.call())
+  class(x) <- c("tbl_survfit", "gtsummary")
 
-  results
+  x
 }
 
 #' @export

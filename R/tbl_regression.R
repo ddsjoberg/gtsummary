@@ -215,27 +215,19 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     dplyr::relocate(any_of(c("conf.low", "conf.high", "ci", "p.value")), .after = last_col())
 
   # table of column headers
-  table_header <-
-    tibble(column = names(table_body)) %>%
-    table_header_fill_missing() %>%
-    table_header_fmt_fun(estimate = estimate_fun)
-
-  # constructing return object
-  results <-
-    list(
+  x <-
+    .create_gtsummary_object(
       table_body = table_body,
-      table_header = table_header,
       N = pluck(table_body, "N_obs", 1),
       n = pluck(table_body, "N_obs", 1), # i want to remove this eventually
-      N_event = pluck(table_body, "N_event", 1),
-      model_obj = x,
+      N_event = pluck(table_body, "N_event", 1),      model_obj = x,
       inputs = func_inputs,
       call_list = list(tbl_regression = match.call())
     ) %>%
     purrr::discard(is.null)
 
   # assigning a class of tbl_regression (for special printing in R markdown)
-  class(results) <- c("tbl_regression", "gtsummary")
+  class(x) <- c("tbl_regression", "gtsummary")
 
   # setting column headers, and print instructions
   tidy_columns_to_report <-
@@ -245,9 +237,9 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     intersect(names(table_body))
 
   # setting default table_header values
-  results <-
+  x <-
     .tbl_regression_default_table_header(
-      results,
+      x,
       exponentiate = exponentiate,
       tidy_columns_to_report = tidy_columns_to_report,
       estimate_fun = estimate_fun,
@@ -255,5 +247,5 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
       conf.level = conf.level)
 
   # return results -------------------------------------------------------------
-  results
+  x
 }

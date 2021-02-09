@@ -14,8 +14,7 @@ tbl_strata(
 )
 }
 \arguments{
-\item{data}{a date frame
-stratify tables by}
+\item{data}{a data frame}
 
 \item{strata}{character vector or tidy-selector of columns in data to}
 
@@ -34,7 +33,7 @@ used to combine the stratified tables.}
 \description{
 \lifecycle{experimental}
 Build a stratified gtsummary table. Any gtsummary table that accepts
-a data frame as its first argument is accepted
+a data frame as its first argument can be stratified.
 }
 \section{Tips}{
 
@@ -45,7 +44,7 @@ a data frame as its first argument is accepted
 separately within each stratum of the data frame. Set the \verb{digits=}
 argument to ensure continuous variables are rounded to the same number
 of decimal places.
-\item For a categorical variable, if some levels are unobserved within a
+\item If some levels of a categorical variable are unobserved within a
 stratum, convert the variable to a factor to ensure all levels appear in
 each stratum's summary table.
 }

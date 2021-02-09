@@ -227,7 +227,8 @@ inline_text.tbl_regression <-
 
     # setting defaults ---------------------------------------------------------
     estimate_fun <- estimate_fun %||%
-      (filter(x$table_header, .data$column == "estimate") %>% pluck("fmt_fun", 1)) %>%
+      (filter(x$table_styling$fmt_fun, .data$column == "estimate") %>%
+         dplyr::slice_tail() %>% pluck("fmt_fun", 1)) %>%
       gts_mapper("inline_text(estimate_fun=)")
 
     # table_body preformatting -------------------------------------------------
@@ -377,10 +378,14 @@ inline_text.tbl_survival <-
            pattern = "{estimate} ({conf.level*100}% CI {ci})",
            estimate_fun = NULL,
            ...) {
+    if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
 
     # setting defaults ---------------------------------------------------------
-    if (is.null(estimate_fun)) estimate_fun <- x$table_header %>%
+    if (is.null(estimate_fun))
+      estimate_fun <-
+        x$table_styling$fmt_fun %>%
         filter(.data$column == "estimate") %>%
+        dplyr::slice_tail() %>%
         pull("fmt_fun") %>%
         purrr::pluck(1)
 
@@ -468,7 +473,6 @@ inline_text.tbl_survival <-
 
     result
   }
-
 
 #' Report statistics from survfit tables inline
 #'

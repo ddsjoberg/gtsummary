@@ -3,7 +3,7 @@
 #' \lifecycle{experimental}
 #' Use these functions to hide or unhide columns in a gtsummary tables.
 #'
-#' @inheritParams modify_table_header
+#' @inheritParams modify_table_styling
 #'
 #' @export
 #' @examples
@@ -12,27 +12,27 @@
 #' modify_column_hide_ex1 <-
 #'   lm(age ~ marker + grade, trial) %>%
 #'   tbl_regression() %>%
-#'   modify_column_hide(column = ci) %>%
-#'   modify_column_unhide(column = std.error)
+#'   modify_column_hide(columns = ci) %>%
+#'   modify_column_unhide(columns = std.error)
 #'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
 #' \if{html}{\figure{modify_column_hide_ex1.png}{options: width=45\%}}
-modify_column_hide <- function(x, column) {
-  modify_table_header(
+modify_column_hide <- function(x, columns) {
+  modify_table_styling(
     x = x,
-    column = {{ column }},
+    columns = {{ columns }},
     hide = TRUE
   )
 }
 
 #' @name modify_column_hide
 #' @export
-modify_column_unhide <- function(x, column) {
-  modify_table_header(
+modify_column_unhide <- function(x, columns) {
+  modify_table_styling(
     x = x,
-    column = {{ column }},
+    columns = {{ columns }},
     hide = FALSE
   )
 }

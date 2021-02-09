@@ -46,12 +46,15 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
     )
   }
 
-  # creating list of kable calls --------------------------------------------------
+  # converting row specifications to row numbers, and removing old cmds --------
+  x <- .clean_table_styling(x)
+
+  # creating list of kable calls -----------------------------------------------
   kable_calls <-
-    table_header_to_kable_calls(x = x, ...)
+    table_styling_to_kable_calls(x = x, ...)
   if (return_calls == TRUE) return(kable_calls)
 
-  # converting to charcter vector ----------------------------------------------
+  # converting to character vector ---------------------------------------------
   include <-
     .select_to_varnames(
       select = {{ include }},
@@ -84,19 +87,18 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-table_header_to_kable_calls <- function(x, ...) {
+table_styling_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
-  table_header <- .clean_table_header(x$table_header)
+  kable_calls <- table_styling_to_tibble_calls(x, col_labels =  FALSE)
 
-  kable_calls <- as_tibble(x, return_calls = TRUE, include = -c("cols_label"))
 
   # fmt_missing ----------------------------------------------------------------
   kable_calls[["fmt_missing"]] <- expr(dplyr::mutate_all(~ifelse(is.na(.), "", .)))
 
   # kable ----------------------------------------------------------------------
   df_col_labels <-
-    dplyr::filter(table_header, .data$hide == FALSE)
+    dplyr::filter(x$table_styling$header, .data$hide == FALSE)
 
   if (!is.null(x$list_output$caption))
     kable_calls[["kable"]] <-

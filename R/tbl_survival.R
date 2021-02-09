@@ -1,25 +1,12 @@
 #' Creates table of univariate summary statistics for time-to-event endpoints
 #'
-#' \lifecycle{questioning}
+#' \lifecycle{deprecated}
 #' Please use [tbl_survfit].
 #' Function takes a `survfit` object as an argument, and provides a
 #' formatted summary of the results
 #'
-#' @param x A survfit object
-#' @param ... Additional arguments passed to other methods
-#' @seealso [tbl_survival.survfit]
 #' @keywords internal
-#' @export
-tbl_survival <- function(x, ...) {
-  UseMethod("tbl_survival")
-}
-
-#' Creates table of survival probabilities
-#'
-#' \lifecycle{questioning}
-#' Please use [tbl_survfit].
-#' Function takes a `survfit` object as an argument, and provides a
-#' formatted summary of the results
+#' @name tbl_survival
 #'
 #' @param x A survfit object with a no stratification
 #' (e.g. `survfit(Surv(ttdeath, death) ~ 1, trial)`), or a single stratifying
@@ -52,55 +39,20 @@ tbl_survival <- function(x, ...) {
 #' probabilities, and
 #' `style_sigfig(x, digits = 3)` for time estimates.
 #' @param ... Not used
-#' @family tbl_survival tools
-#' @author Daniel D. Sjoberg
-#' @export
-#' @keywords internal
-#' @return A `tbl_survival` object
-#' @examples
-#' # Example 1 ----------------------------------
-#' library(survival)
-#' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
-#' tbl_survival_ex1 <-
-#'   tbl_survival(
-#'     fit1,
-#'     times = c(12, 24),
-#'     label = "{time} Months"
-#'   )
-#'
-#' # Example 2 ----------------------------------
-#' fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
-#' tbl_survival_ex2 <-
-#'   tbl_survival(
-#'     fit2,
-#'     probs = c(0.1, 0.2),
-#'     header_estimate = "**Months**"
-#'   )
-#' @section level_label argument:
-#' The `level_label` is used to modify the stratum labels. The default is
-#' \code{level_label = "{level}, N = {n}"}. The quantities in the curly
-#' brackets evaluate to stratum-specific values.  For example, in the trial
-#' data set, there is a column called `trt` with levels 'Drug A' and 'Drug B'.
-#' In this example, `{level}` would evaluate to either 'Drug A' or 'Drug B'
-#' depending on the stratum.  Other quantities available to print are:
-#' \itemize{
-#'   \item `{level}` level of the stratification variable
-#'   \item `{level_label}` label of level for the stratification variable
-#'   \item `{n}` number of observations, or number within stratum
-#'   \item `{n.event.tot}` total number of events (total across stratum, if applicable)
-#'   \item `{n.event.strata}` total number of events within stratum, if applicable
-#'   \item `{strata}` raw stratum specification from \code{survfit} object
-#' }
-#'
-#' @section Example Output:
-#' \if{html}{Example 1}
-#'
-#' \if{html}{\figure{tbl_survival_ex1.png}{options: width=40\%}}
-#'
-#' \if{html}{Example 2}
-#'
-#' \if{html}{\figure{tbl_survival_ex2.png}{options: width=40\%}}
+NULL
 
+#' @rdname tbl_survival
+#' @export
+tbl_survival <- function(x, ...) {
+  lifecycle::deprecate_warn(when = "1.4.0",
+                            what = "gtsummary::tbl_survival()",
+                            with = "tbl_survfit()")
+  UseMethod("tbl_survival")
+}
+
+
+#' @rdname tbl_survival
+#' @export
 tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
                                  label = ifelse(is.null(probs), "{time}", "{prob*100}%"),
                                  level_label = "{level}, N = {n}",
@@ -221,14 +173,6 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
     select(starts_with("level_label"), c("label", "estimate", "conf.low", "conf.high", "ci"), everything())
   table_body <- table_long %>% mutate(row_type = "label")
 
-  cols_hide_list <-
-    c(
-      "prob", "time", "strata", "n.risk", "n.event", "n", "n.event.tot",
-      "n.event.strata", "variable", "level", "conf.low", "conf.high", "row_type"
-    ) %>%
-    intersect(names(table_body)) %>%
-    paste(collapse = ", ")
-
   # table of column headers
   table_header <-
     tibble(column = names(table_body)) %>%
@@ -249,28 +193,36 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   result[["table_long"]] <- table_long
   result[["survfit"]] <- x
   result[["call_list"]] <- list(tbl_survival = match.call())
-  # result[["gt_calls"]] <- eval(tbl_survival_gt_calls)
-  # result[["kable_calls"]] <- eval(tbl_survival_kable_calls)
 
   # specifying labels
-  result <-
-    modify_header(
-      result,
-      label = glue("{header_label}"),
-      estimate = glue("{header_estimate}"),
-      ci = glue("**{x$conf.int*100}% CI**")
+  result$table_header <-
+    result$table_header %>%
+    dplyr::rows_update(
+      tibble::tribble(
+        ~column, ~label,
+        "label", glue("{header_label}") %>% as.character(),
+        "estimate", glue("{header_estimate}") %>% as.character(),
+        "ci", glue("**{x$conf.int*100}% CI**") %>% as.character()
+      ) %>%
+        mutate(hide = FALSE),
+      by = "column"
     )
 
-  if ("level_label" %in% names(result$table_body)) {
-    result <-
-      modify_header(
-        result,
-        level_label = "**Group**"
-      )
-  }
 
-  # # writing additional gt and kable calls with data from table_header
-  # result <- update_calls_from_table_header(result)
+  # renaming grouping variable, 'level_label', added in v1.4.0--could cause breaking changes
+  if ("level_label" %in% names(result$table_body)) {
+    result$table_header <-
+      result$table_header %>%
+      mutate(
+        column = ifelse(.data$column == "level_label", "groupname_col", .data$column),
+        label = ifelse(.data$column == "groupname_col", "**Group**", .data$label),
+        align = ifelse(.data$column == "groupname_col", "left", .data$align),
+        hide = ifelse(.data$column == "groupname_col", FALSE, .data$hide),
+      )
+    result$table_body <-
+      rename(result$table_body, groupname_col = .data$level_label) %>%
+      ungroup()
+  }
 
   # returning results
   class(result) <- c("tbl_survival", "gtsummary")
@@ -375,4 +327,148 @@ surv_quantile <- function(x, probs) {
       conf.low = .data$lower,
       conf.high = .data$upper
     )
+}
+
+
+# table_header_fmt_fun ---------------------------------------------------------
+# this function makes it easy to update table_header with new formatting functions
+# e.g. table_header_fmt_fun(table_header, p.value = pvalue_fun)
+#' Function makes it easy to update table_header with new formatting functions
+#'
+#' @param table_header A `table_header` object
+#' @param ... The name of the arg is a column name, and the value is a function
+#'
+#' @return A `table_header` object
+#' @keywords internal
+#' @noRd
+#' @examples
+#' table_header_fmt_fun(
+#'   table_header,
+#'   p.value = style_pvalue,
+#'   estimate = style_sigfig
+#' )
+table_header_fmt_fun <- function(table_header, ...) {
+  # saving passed_dots arguments as a named list
+  passed_dots <- list(...)
+
+  # ordering the names to be the same as in table_header
+  names_ordered <- table_header$column %>% intersect(names(passed_dots))
+  passed_dots <- passed_dots[names_ordered]
+
+  table_header_update <-
+    tibble::tibble(
+      column = table_header$column %>% intersect(names(passed_dots)),
+      fmt_fun = passed_dots
+    )
+
+  # updating table_header
+  table_header[
+    table_header$column %in% table_header_update$column, # selecting rows
+    c("column", "fmt_fun") # selecting columns
+  ] <- table_header_update[c("column", "fmt_fun")]
+
+  table_header
+}
+
+
+# table_header_fill_missing -----------------------------------------------------
+#' Function fills out table_header when there are missing columns
+#'
+#' @param table_header A table_header object
+#'
+#' @return A table_header object
+#' @keywords internal
+#' @noRd
+table_header_fill_missing <- function(table_header, table_body = NULL) {
+  # if table_body is not null,
+  # ensuring table_header has a row for each col in table_body
+  if (!is.null(table_body)) {
+    table_header <-
+      tibble::tibble(column = names(table_body)) %>%
+      dplyr::left_join(table_header, by = "column")
+  }
+
+  # table_header must be a tibble with the following columns with
+  # at minimum a column named 'column'
+
+  # label ----------------------------------------------------------------------
+  if (!"label" %in% names(table_header)) {
+    table_header$label <- table_header$column
+  }
+
+  # hide -----------------------------------------------------------------------
+  # lgl vector
+  if (!"hide" %in% names(table_header)) {
+    table_header$hide <- TRUE
+  }
+
+  # align ----------------------------------------------------------------------
+  if (!"align" %in% names(table_header)) {
+    table_header$align <-
+      ifelse(table_header$column %in% c("label", "groupname_col"), "left", "center")
+  }
+
+  # missing_emdash -------------------------------------------------------------
+  # results in logical vector indicating which missing cells to replace with emdash
+  if (!"missing_emdash" %in% names(table_header)) {
+    table_header$missing_emdash <- NA_character_
+  }
+
+  # indent ---------------------------------------------------------------------
+  # results in logical vector indicating which cells to indent in table_body
+  if (!"indent" %in% names(table_header)) {
+    table_header$indent <- ifelse(table_header$column == "label",
+                                  "row_type != 'label'", NA_character_)
+  }
+
+  # text_interpret -------------------------------------------------------------
+  # currently defaults to `gt::md` as the only option
+  if (!"text_interpret" %in% names(table_header)) {
+    table_header$text_interpret <- "gt::md"
+  }
+
+  # bold -----------------------------------------------------------------------
+  # results in logical vector indicating which cells to bold
+  if (!"bold" %in% names(table_header)) {
+    table_header$bold <- NA_character_
+  }
+
+  # italic ---------------------------------------------------------------------
+  # results in logical vector indicating which cells to bold
+  if (!"italic" %in% names(table_header)) {
+    table_header$italic <- NA_character_
+  }
+
+  # fmt_fun --------------------------------------------------------------------
+  # list of functions that format the column
+  if (!"fmt_fun" %in% names(table_header)) {
+    table_header$fmt_fun <- list(NULL)
+  }
+
+  # footnote_abbrev ------------------------------------------------------------
+  if (!"footnote_abbrev" %in% names(table_header)) {
+    table_header$footnote_abbrev <- NA_character_
+  }
+
+  # footnote -------------------------------------------------------------------
+  if (!"footnote" %in% names(table_header)) {
+    table_header$footnote <- NA_character_
+  }
+
+  # spanning_header ------------------------------------------------------------
+  if (!"spanning_header" %in% names(table_header)) {
+    table_header$spanning_header <- NA_character_
+  }
+
+  # filling in missing values with default -------------------------------------
+  table_header <-
+    table_header %>%
+    dplyr::mutate(
+      label = dplyr::coalesce(.data$label, .data$column),
+      hide = dplyr::coalesce(.data$hide, TRUE),
+      text_interpret = dplyr::coalesce(.data$text_interpret, "gt::md"),
+      align = dplyr::coalesce(.data$align, "center")
+    )
+
+  table_header
 }
