@@ -138,16 +138,14 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
   if (!"p.value" %in% names(x$table_body)) {
     # adding p.value to table_body
     x$table_body <- mutate(x$table_body, p.value = NA_real_)
-    # adding to table_header
-    x$table_header <-
-      tibble(column = names(x$table_body)) %>%
-      left_join(x$table_header, by = "column") %>%
-      table_header_fill_missing() %>%
-      table_header_fmt_fun(
-        p.value = x$inputs$pvalue_fun %||%
-          getOption("gtsummary.pvalue_fun", default = style_pvalue)
+    x <-
+      modify_table_styling(
+        x,
+        columns = "p.value",
+        label = "**p-value**",
+        hide = FALSE,
+        fmt_fun = x$inputs$pvalue_fun %||% getOption("gtsummary.pvalue_fun", default = style_pvalue)
       )
-    x <- modify_header(x, p.value = "**p-value**")
   }
   # adding global p-values
   x$table_body <-
@@ -260,13 +258,14 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
   if (!"p.value" %in% names(x$table_body)) {
     # adding p.value to table_body
     x$table_body <- mutate(x$table_body, p.value = NA_real_)
-    # adding to table_header
-    x$table_header <-
-      tibble(column = names(x$table_body)) %>%
-      left_join(x$table_header, by = "column") %>%
-      table_header_fill_missing() %>%
-      table_header_fmt_fun(p.value = x$inputs$pvalue_fun)
-    x <- modify_header(x, p.value = "**p-value**")
+    x <-
+      modify_table_styling(
+        x,
+        columns = "p.value",
+        label = "**p-value**",
+        hide = FALSE,
+        fmt_fun = x$inputs$pvalue_fun %||% getOption("gtsummary.pvalue_fun", default = style_pvalue)
+      )
   }
   # adding global p-values
   x$table_body <-

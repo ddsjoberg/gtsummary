@@ -53,25 +53,30 @@ NULL
 add_nevent.tbl_regression <- function(x, location = NULL, ...) {
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
-  if ("level" %in% location && !"n_event" %in% x$table_header$column)
+  if ("level" %in% location && !"n_event" %in% x$table_styling$header$column)
     abort("Reporting event N on level rows is not available for this model type.")
-  if ("label" %in% location && !"N_event" %in% x$table_header$column)
+  if ("label" %in% location && !"N_event" %in% x$table_styling$header$column)
     abort("Reporting event N on label rows is not available for this model type.")
 
+  x$table_body$stat_nevent <- NA_integer_
+  if ("N_event" %in% names(x$table_body))
+    x$table_body$stat_nevent <- ifelse(x$table_body$row_type == "label",
+                                       x$table_body$N_event %>% as.integer(),
+                                       x$table_body$stat_nevent)
+  if ("n_event" %in% names(x$table_body))
+    x$table_body$stat_nevent <- ifelse(x$table_body$row_type == "level",
+                                       x$table_body$n_event %>% as.integer(),
+                                       x$table_body$stat_nevent)
   x %>%
     modify_table_body(
       mutate,
       stat_nevent =
         case_when(
-          .data$row_type == "label" ~ .data$N_event %>% as.integer(),
-          .data$row_type == "level" ~ .data$n_event %>% as.integer()
-        ) %>%
-        as.integer(),
-      stat_nevent = case_when(
-        !"level" %in% .env$location & .data$row_type %in% "level" ~ NA_integer_,
-        !"label" %in% .env$location & .data$row_type %in% "label" & .data$var_type == "categorical" ~ NA_integer_,
-        TRUE ~ .data$stat_nevent
-      )
+          !"level" %in% .env$location & .data$row_type %in% "level" ~ NA_integer_,
+          !"label" %in% .env$location & .data$row_type %in% "label" &
+            .data$var_type %in% c("categorical", "dichotomous") ~ NA_integer_,
+          TRUE ~ .data$stat_nevent
+        )
     ) %>%
     modify_table_body(
       dplyr::relocate,
@@ -137,18 +142,18 @@ add_nevent.tbl_survfit <- function(x, ...) {
     )} %>%
     select(any_of(c("variable", "row_type", "label", "N", "nevent")), everything())
 
-  # adding N to table_header and assigning header label ------------------------
-  x$table_header <-
-    table_header_fill_missing(
-      x$table_header,
-      x$table_body
-    ) %>%
-    table_header_fmt_fun(N = style_number)
-  x <- modify_header(x, nevent = "**Event N**")
+  # adding N to table_styling and assigning header label -----------------------
+  x <-
+    modify_table_styling(
+      x,
+      columns = "nevent",
+      label = "**Event N**",
+      fmt_fun = style_number,
+      hide = FALSE
+    )
 
   # adding indicator to output that add_n was run on this data
   x$call_list <- c(x$call_list, list(add_nevent = match.call()))
 
   x
 }
-

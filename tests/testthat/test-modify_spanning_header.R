@@ -21,7 +21,7 @@ test_that("modify_spanning_header works", {
   expect_true(
     tbl1 %>%
       modify_spanning_header(everything() ~ NA) %>%
-      purrr::pluck("table_header", "spanning_header") %>%
+      purrr::pluck("table_styling", "header", "spanning_header") %>%
       is.na() %>%
       all()
   )
