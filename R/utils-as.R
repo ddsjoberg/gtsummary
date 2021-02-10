@@ -186,8 +186,19 @@
     filter(!is.na(.data$footnote)) # keep non-missing additions
 
   if (footnote_type == "footnote_abbrev") {
-    df_clean$footnote <- paste(unique(df_clean$footnote), collapse = ", ")
-  }
+    # order the footnotes by where they first appear in the table,
+    df_clean <-
+      df_clean %>%
+      inner_join(
+        x$table_styling$header %>%
+          select(.data$column) %>%
+          mutate(column_id = row_number()),
+        by = "column"
+      ) %>%
+      arrange(desc(.data$tab_location), .data$column_id, .data$row_numbers) %>%
+      ungroup() %>%
+      mutate(footnote = paste(unique(.data$footnote), collapse = ", "))
+    }
 
   df_clean %>%
     select(all_of(c("column", "tab_location", "row_numbers", "text_interpret", "footnote")))
