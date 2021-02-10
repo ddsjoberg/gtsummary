@@ -22,8 +22,7 @@ test_that("no errors/warnings with pool_and_tidy_mice", {
     with(glm(response ~ age + marker + grade, family = binomial))
 
   expect_error(tbl_regression(mod_mice), NA)
-  # expect_warning(tbl_regression(mod_mice, exponentiate = TRUE), NA)
-
+  expect_error(mice::pool(mod_mice) %>% tbl_regression(), NA)
   expect_output(mice::pool(mod_mice), NA)
 })
 

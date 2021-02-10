@@ -1,5 +1,27 @@
 # gtsummary (development version)
 
+* Added new function `add_significance_stars()` adding significance star indicators to significant estimates, and an explanatory footnote.
+
+* Print infrastructure has been updated to allow for both row and column specification when formatting data or table styling. The `x$table_header` object has been replaced with a more general `x$table_styling`. Review the updated vignette `"gtsummary_definition.Rmd"` for details. The `x$table_body` is no longer grouped after `tbl_stack()`; rather, the grouping variable is specified in `gt::gt(groupname_col=)`
+
+* New function introduced,  `modify_table_styling()`, to update printing instructions of tables. `modify_table_header()` is now deprecated. 
+
+* New function `modify_fmt_fun()` has been introduced to help update the functions that format numeric columns and rows in `.x$table_body`.
+
+* Functions `modify_footnote()` and `modify_spanning_header()` now include the `text_interpret=` argument indicating whether to use `gt::md()` or `gt::html()` to format text. Default is `gt::md()`.
+
+* The `modify_footnote()` function now has a rows argument and can place footnotes in the body of a table.
+
+* The `modify_table_body(fun=)` argument has been generalized to accept formula short notation.
+
+* `tbl_survival()` has moved from questioning to deprecated. This function maintains the old `x$table_header` format (instead of the more flexible `x$table_styling`). The `"level_label"` column was renamed to `"groupname_col"` and the `x$table_body` is no longer grouped with `group_by(level_label)` 
+
+* Added new function `tbl_strata()`. The function aids in a preparing a gtsummary table stratified by a variable (#679)
+
+* Added the survey-adapted t-test to `theme_gtsummary_mean_sd()` for continuous variables in `add_p.tbl_svysummary()` (#758)
+
+* Allowing for tidyverse shortcut notation in `tbl_survfit(estimate_fun=)` specification, e.g. `tbl_survfit(estimate_fun= ~style_sigfig(.x * 100))` (#761)
+
 * Added/updated functions `add_n()` and `add_nevent()` to work with `tbl_regression` and `tbl_uvregression` objects. Each function now has an argument to place Ns on the label or level rows. (#744)
 
 * Bug fix for column ordering when spanning columns added with `tbl_merge()`
