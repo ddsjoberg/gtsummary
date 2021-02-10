@@ -24,7 +24,8 @@ add_significance_stars(
 \item{hide_se}{logical whether to hide standard error. Default is \code{FALSE}}
 }
 \description{
-Add significance stars
+\lifecycle{experimental}
+Add significance stars to estimates with small p-values
 }
 \section{Example Output}{
 

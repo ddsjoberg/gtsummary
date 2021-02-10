@@ -1,6 +1,7 @@
 #' Add significance stars
 #'
-#'
+#' \lifecycle{experimental}
+#' Add significance stars to estimates with small p-values
 #'
 #' @param x a `'tbl_regression'` or `'tbl_uvregression'` object
 #' @param thresholds thresholds for significance stars. Default is `c(0.001, 0.01, 0.05)`
