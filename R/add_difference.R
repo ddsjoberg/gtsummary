@@ -8,7 +8,10 @@
 #' @inheritParams  add_p.tbl_summary
 #' @inheritParams tbl_regression
 #' @param adj.vars Variables to include in mean difference adjustment (e.g. in ANCOVA models)
-#' @param estimate_fun Function to round and format difference. Default is [style_sigfig()]
+#' @param estimate_fun List of formulas specifying the formatting functions
+#' to round and format differences. Default is
+#' `list(all_continuous() ~ style_sigfig, all_categorical() ~ function(x) paste0(style_sigfig(x * 100), "%"))`
+#' Function to round and format difference. Default is [style_sigfig()]
 #' @param test List of formulas specifying statistical tests to perform for each variable,
 #' e.g. `list(all_continuous() ~ "t.test")`.
 #' Common tests include `"t.test"` or `"ancova"` for continuous data, and
@@ -20,23 +23,28 @@
 #' # Example 1 ----------------------------------
 #' add_difference_ex1 <-
 #'   trial %>%
-#'   select(trt, age, marker) %>%
+#'   select(trt, age, marker, response, death) %>%
 #'   tbl_summary(by = trt,
-#'               statistic = all_continuous() ~ "{mean} ({sd})",
+#'               statistic =
+#'                 list(all_continuous() ~ "{mean} ({sd})",
+#'                      all_dichotomous() ~ "{p}%"),
 #'               missing = "no") %>%
 #'   add_n() %>%
 #'   add_difference()
 #'
 #' # Example 2 ----------------------------------
+#' # ANCOVA adjusted for grade and stage
 #' add_difference_ex2 <-
 #'   trial %>%
-#'   select(trt, response, death) %>%
-#'   tbl_summary(by = trt,
-#'               statistic = all_dichotomous() ~ "{p}%",
-#'               missing = "no") %>%
-#'   modify_footnote(all_stat_cols() ~ NA) %>%
+#'   select(trt, age, marker, grade, stage) %>%
+#'   tbl_summary(
+#'     by = trt,
+#'     statistic = list(all_continuous() ~ "{mean} ({sd})"),
+#'     missing = "no",
+#'     include = c(age, marker, trt)
+#'   ) %>%
 #'   add_n() %>%
-#'   add_difference(estimate_fun = ~paste0(style_sigfig(. * 100), "%"))
+#'   add_difference(adj.vars = c(grade, stage))
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -48,7 +56,7 @@
 add_difference <- function(x, test = NULL, group = NULL,
                            adj.vars = NULL, test.args = NULL,
                            conf.level = 0.95, include = everything(),
-                           pvalue_fun = NULL, estimate_fun = style_sigfig) {
+                           pvalue_fun = NULL, estimate_fun = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "tbl_summary"))
     stop("`x=` must be class 'tbl_summary'")
@@ -56,6 +64,15 @@ add_difference <- function(x, test = NULL, group = NULL,
     stop("'tbl_summary' object must have a `by=` value with exactly two levels")
   if ("add_p" %in% names(x$call_list))
     stop("`add_difference()` cannot be run after `add_p()`, and vice versa")
+  if (rlang::is_function(estimate_fun)) {
+    lifecycle::deprecate_warn(
+      "1.4.0",
+      "gtsummary::add_difference(estimate_fun = 'must be a list of forumulas')",
+      details = "Argument has been converted to `list(everything() ~ estimate_fun)`"
+    )
+    estimate_fun <-
+      inject(everything() ~ !!gts_mapper(estimate_fun, "add_difference(estimate_fun=)"))
+  }
 
   # expanding formula lists/var selects ----------------------------------------
   include <-
@@ -65,6 +82,27 @@ add_difference <- function(x, test = NULL, group = NULL,
       var_info = x$table_body,
       arg_name = "include"
     )
+
+  estimate_fun <-
+    .select_to_varnames(
+      select = {{ estimate_fun }},
+      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      var_info = x$table_body,
+      arg_name = "estimate_fun"
+    )
+  estimate_fun <-
+    x$meta_data$variable %>%
+    map(
+      ~estimate_fun[[.x]] %||%
+        switch(
+          x$meta_data %>%
+            filter(.data$variable %in% .x) %>%
+            pull(.data$summary_type) %in% c("continuous", "continuous2"),
+          style_sigfig
+        ) %||%
+        (function(x) paste0(style_sigfig(x * 100), "%"))
+    ) %>%
+    set_names(x$meta_data$variable)
 
   adj.vars <-
     .select_to_varnames(
@@ -88,8 +126,6 @@ add_difference <- function(x, test = NULL, group = NULL,
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
     getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
     gts_mapper("add_p(pvalue_fun=)")
-
-  estimate_fun <- gts_mapper(estimate_fun, "add_difference(estimate_fun=)")
 
   group <-
     .select_to_varnames(

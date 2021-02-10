@@ -225,7 +225,7 @@ footnote_add_p <- function(meta_data) {
 # function to merge p-values to tbl
 add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
                                  meta_data, pvalue_fun,
-                                 estimate_fun = style_sigfig,
+                                 estimate_fun = NULL,
                                  conf.level = 0.95,
                                  adj.vars = NULL) {
 
@@ -261,20 +261,43 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
                        paste0("**", translate_text("Difference"), "**"),
                        paste0("**", translate_text("Adjusted Difference"), "**")),
         hide = FALSE,
-        fmt_fun = estimate_fun,
+        fmt_fun = switch(is_function(estimate_fun), estimate_fun),
         footnote = footnote_add_p(meta_data)
       )
+
+    # add row formatting for difference and CI
+    if (is.list(estimate_fun)) {
+      x$table_styling$fmt_fun <-
+        x$table_styling$fmt_fun %>%
+        bind_rows(
+          estimate_fun %>%
+            tibble::enframe("variable", "fmt_fun") %>%
+            mutate(
+              column =
+                c("estimate", "conf.low", "conf.high") %>%
+                intersect(names(x$table_body)) %>%
+                list(),
+              rows = glue(".data$variable == '{variable}'") %>% as.character()
+            ) %>%
+            select(.data$column, .data$rows, .data$fmt_fun) %>%
+            unnest(cols = .data$column)
+        )
+    }
+
 
     # adding formatted CI column
     if (all(c("conf.low", "conf.high") %in% names(x$table_body)) &&
         !"ci" %in% names(x$table_body)) {
       x <- x %>%
         modify_table_body(
-          mutate,
-          ci = case_when(
-            !is.na(.data$conf.low) | !is.na(.data$conf.high) ~
-              glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}")
-          )
+          ~.x %>%
+            mutate(
+              ci = pmap_chr(
+                list(variable, conf.low, conf.high),
+                ~paste(do.call(estimate_fun[[..1]], list(..2)),
+                       do.call(estimate_fun[[..1]], list(..3)), sep = ", ")
+              )
+            )
         ) %>%
         modify_table_body(dplyr::relocate, .data$ci, .before = "conf.low") %>%
         # adding print instructions for estimates
