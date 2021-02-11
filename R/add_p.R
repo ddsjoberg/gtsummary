@@ -294,8 +294,11 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
             mutate(
               ci = pmap_chr(
                 list(variable, conf.low, conf.high),
-                ~paste(do.call(estimate_fun[[..1]], list(..2)),
-                       do.call(estimate_fun[[..1]], list(..3)), sep = ", ")
+                ~case_when(
+                  !is.na(..2) | !is.na(..3) ~
+                    paste(do.call(estimate_fun[[..1]], list(..2)),
+                          do.call(estimate_fun[[..1]], list(..3)), sep = ", ")
+                )
               )
             )
         ) %>%

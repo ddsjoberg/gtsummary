@@ -100,7 +100,7 @@ add_difference <- function(x, test = NULL, group = NULL,
             pull(.data$summary_type) %in% c("continuous", "continuous2"),
           style_sigfig
         ) %||%
-        (function(x) paste0(style_sigfig(x * 100), "%"))
+        (function(x) ifelse(!is.na(x), paste0(style_sigfig(x * 100), "%"), NA_character_))
     ) %>%
     set_names(x$meta_data$variable)
 
