@@ -30,6 +30,7 @@ Package-wide,pkgwide-str:ci.sep,FALSE,"string indicating separator between upper
 Package-wide,pkgwide-str:language,FALSE,"string indicating language; default is `""en""`","""es"""
 Package-wide,pkgwide-str:print_engine,FALSE,"string indicating the default print engine; default is `""gt""`","""flextable"""
 Package-wide,pkgwide-str:theme_name,FALSE,optional name of theme; name is printed when theme loaded,"""My Personal Theme"""
+Package-wide,pkgwide-fun:pre_conversion,FALSE,"function that is executed on the gtsummary object before it is converted with `as_gt()`, `as_flex_table()`, etc. Must be a function that can be run on every and any gtsummary object",bold_levels
 style_number,style_number-arg:big.mark,TRUE,,
 style_number,style_number-arg:decimal.mark,TRUE,,
 tbl_regression,tbl_regression-chr:tidy_columns,FALSE,"character vector of columns from `tidy_fun=` tibble to print. 'estimate' column will always be printed. Select among columns 'conf.low', 'conf.high', 'std.error', 'statistic', or 'p.value'.","c(""std.error"", ""p.value"")"

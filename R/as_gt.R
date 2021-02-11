@@ -64,6 +64,9 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
     )
   }
 
+  # running pre-conversion function, if present --------------------------------
+  x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
+
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .clean_table_styling(x)
 

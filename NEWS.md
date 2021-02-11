@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added theme element `"pkgwide-fun:pre_conversion"`. The function specified here will be executed on the gtsummary object before it is printed or converted with the `as_gt()`, `as_flex_table()`, etc functions. (#773)
+
 * Added new function `add_significance_stars()` adding significance star indicators to significant estimates, and an explanatory footnote.
 
 * Print infrastructure has been updated to allow for both row and column specification when formatting data or table styling. The `x$table_header` object has been replaced with a more general `x$table_styling`. Review the updated vignette `"gtsummary_definition.Rmd"` for details. The `x$table_body` is no longer grouped after `tbl_stack()`; rather, the grouping variable is specified in `gt::gt(groupname_col=)`
