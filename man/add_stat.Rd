@@ -22,7 +22,7 @@ See details below.}
 
 \item{location}{list of formulas indicating the location the new statistics
 are placed. The RHS of the formula must be one of \code{c("label", "level", "missing")}.
-When \code{"label"} a single statistic
+When \code{"label"}, a single statistic
 is placed on the variable label row. When \code{"level"} the statistics are placed
 on the variable level rows. The length of the vector of statistics returned from the
 \code{fns} function must match the dimension of levels. Default is to place the
@@ -69,8 +69,9 @@ encouraged the user-defined function accept \code{...} as each of the arguments
 \emph{will} be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. \code{foo(data, variable, by, ...)}
 \itemize{
-\item To update the column headers use \code{modify_header()}
-\item To update the functions that format the statistics use \code{modify_fmt_fun()}
+\item Use \code{modify_header()} to update the column headers
+\item Use \code{modify_fmt_fun()} to update the functions that format the statistics
+\item Use \code{modify_footnote()} to add a explanatory footnote
 }
 }
 
@@ -86,7 +87,7 @@ the user's function, e.g. \code{foo(data, variable, by, ...)}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
+\if{html}{\figure{add_stat_ex3.png}{options: width=40\%}}
 }
 
 \examples{

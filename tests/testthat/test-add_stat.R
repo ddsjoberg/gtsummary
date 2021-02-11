@@ -115,4 +115,20 @@ test_that("expect errors", {
       ),
     NA
   )
+
+  return_one_by_two_10s <- function(...) tibble::tibble(one = rep_len(10, 1), two = rep_len(10, 1))
+  expect_error(
+    trial %>%
+      select(age) %>%
+      tbl_summary(
+        type = age ~ "continuous2",
+        statistic = everything() ~ c("{mean}", "{sd}"),
+        missing = "always"
+      ) %>%
+      add_stat(
+        fns = everything() ~ return_one_by_two_10s,
+        location = everything() ~ "missing"
+      ),
+    NA
+  )
 })

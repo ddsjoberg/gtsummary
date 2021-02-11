@@ -9,7 +9,7 @@
 #' See details below.
 #' @param location list of formulas indicating the location the new statistics
 #' are placed. The RHS of the formula must be one of `c("label", "level", "missing")`.
-#' When `"label"` a single statistic
+#' When `"label"`, a single statistic
 #' is placed on the variable label row. When `"level"` the statistics are placed
 #' on the variable level rows. The length of the vector of statistics returned from the
 #' `fns` function must match the dimension of levels. Default is to place the
@@ -42,8 +42,9 @@
 #' *will* be passed to the function, even if not all inputs are utilized by
 #' the user's function, e.g. `foo(data, variable, by, ...)`
 #'
-#' - To update the column headers use `modify_header()`
-#' - To update the functions that format the statistics use `modify_fmt_fun()`
+#' - Use `modify_header()` to update the column headers
+#' - Use `modify_fmt_fun()` to update the functions that format the statistics
+#' - Use `modify_footnote()` to add a explanatory footnote
 #'
 #' @export
 #' @examples
@@ -115,7 +116,7 @@
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
+#' \if{html}{\figure{add_stat_ex3.png}{options: width=40\%}}
 
 add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
                      footnote = NULL, new_col_name = NULL) {
