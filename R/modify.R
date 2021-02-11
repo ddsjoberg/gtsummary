@@ -144,7 +144,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
   update <-
     update %>%
     imap(
-      ~expr(glue(!!.x)) %>%
+      ~expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
         eval_tidy(
           data = df_info_tibble %>%
             filter(column %in% .y) %>%
@@ -200,7 +200,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, rows = NULL,
   update <-
     update %>%
     imap(
-      ~expr(glue(!!.x)) %>%
+      ~expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
         eval_tidy(
           data = df_info_tibble %>%
             filter(column %in% .y) %>%
@@ -266,7 +266,7 @@ modify_spanning_header <- function(x, update = NULL,
   update <-
     update %>%
     imap(
-      ~expr(glue(!!.x)) %>%
+      ~expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
         eval_tidy(
           data = df_info_tibble %>%
             filter(column %in% .y) %>%
