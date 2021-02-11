@@ -140,18 +140,18 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     stop("All labels must be strings of length one.")
 
   # evaluating update with glue ------------------------------------------------
+  df_info_tibble <- .info_tibble(x)
   update <-
-    unlist(update) %>%
-    tibble::enframe("column", "label") %>%
-    inner_join(.info_tibble(x), by = "column") %>%
-    dplyr::rowwise() %>%
-    mutate(
-      updated_value = switch(is.na(.data$label), NA_character_) %||%
-        as.character(glue(.data$label)),
-    ) %>%
-    select(.data$column, .data$updated_value) %>%
-    tibble::deframe() %>%
-    as.list()
+    update %>%
+    imap(
+      ~expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
+        eval_tidy(
+          data = df_info_tibble %>%
+            filter(column %in% .y) %>%
+            as.list() %>%
+            discard(is.na)
+        )
+    )
 
   # updating column headers ----------------------------------------------------
   x <-
@@ -196,19 +196,18 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, rows = NULL,
   footnote_column_name <- ifelse(abbreviation == TRUE, "footnote_abbrev", "footnote")
 
   # updating footnote ----------------------------------------------------------
+  df_info_tibble <- .info_tibble(x)
   update <-
-    unlist(update) %>%
-    tibble::enframe(name = "column", value = "footnote") %>%
-    dplyr::inner_join(.info_tibble(x), by = "column") %>%
-    dplyr::rowwise() %>%
-    mutate(
-      updated_value = switch(is.na(.data$footnote), NA_character_) %||%
-        as.character(glue(.data$footnote)),
-    ) %>%
-    ungroup() %>%
-    select(.data$column, .data$updated_value) %>%
-    tibble::deframe() %>%
-    as.list()
+    update %>%
+    imap(
+      ~expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
+        eval_tidy(
+          data = df_info_tibble %>%
+            filter(column %in% .y) %>%
+            as.list() %>%
+            discard(is.na)
+        )
+    )
 
   # updating footnotes ---------------------------------------------------------
   if (abbreviation == FALSE) {
@@ -263,19 +262,18 @@ modify_spanning_header <- function(x, update = NULL,
   if (is.null(update)) return(x)
 
   # updating spanning header ---------------------------------------------------
+  df_info_tibble <- .info_tibble(x)
   update <-
-    unlist(update) %>%
-    tibble::enframe(name = "column", value = "spanning_header") %>%
-    dplyr::inner_join(.info_tibble(x), by = "column") %>%
-    dplyr::rowwise() %>%
-    mutate(
-      updated_value = switch(is.na(.data$spanning_header), NA_character_) %||%
-        as.character(glue(.data$spanning_header)),
-    ) %>%
-    ungroup() %>%
-    select(.data$column, .data$updated_value) %>%
-    tibble::deframe() %>%
-    as.list()
+    update %>%
+    imap(
+      ~expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
+        eval_tidy(
+          data = df_info_tibble %>%
+            filter(column %in% .y) %>%
+            as.list() %>%
+            discard(is.na)
+        )
+    )
 
   x <-
     modify_table_styling(
