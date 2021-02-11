@@ -101,7 +101,7 @@ test_that("expect errors", {
     NA
   )
 
-  return_two_by_two_10s <- function() tibble::tibble(one = rep_len(10, 2), two = rep_len(10, 2))
+  return_two_by_two_10s <- function(...) tibble::tibble(one = rep_len(10, 2), two = rep_len(10, 2))
   expect_error(
     trial %>%
       select(age) %>%
