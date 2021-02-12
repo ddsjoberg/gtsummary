@@ -252,7 +252,6 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
 }
 
 
-
 eval_fn_safe <- function(variable, tbl, fn) {
 
   tryCatch(
