@@ -50,6 +50,7 @@ jobs:
 
       - name: Fetch existing benchmarks
         run: Rscript -e 'bench::cb_fetch()'
+                     -e 'bench::cb_merge()'
 
       - name: Run benchmarks
         run: |
