@@ -46,6 +46,10 @@
 #' - Use `modify_fmt_fun()` to update the functions that format the statistics
 #' - Use `modify_footnote()` to add a explanatory footnote
 #'
+#' If you return a tibble with column names `p.value` or `q.value`, default
+#' p-value formatting will be applied, and you may take advantage of subsequent
+#' p-value formatting functions, such as `bold_p()` or `add_q()`.
+#'
 #' @export
 #' @examples
 #' library(dplyr); library(stringr)
@@ -236,6 +240,11 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
     modify_table_styling(
       columns = vars(where(is.numeric) & all_of(new_col_names)),
       fmt_fun = function(x) style_sigfig(x, digits = 3)
+    ) %>%
+    # if a numeric column is called 'p.value' or 'q.value', giving p-value default formatting
+    modify_table_styling(
+      columns = vars(where(is.numeric) & any_of(c("p.value", "q.value"))),
+      fmt_fun = get_theme_element("pkgwide-fn:pvalue_fun", default = style_pvalue)
     )
 
   # return tbl_summary object --------------------------------------------------
