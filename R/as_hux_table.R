@@ -37,6 +37,9 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = TRUE) {
   assert_package("huxtable", "as_hux_table()")
 
+  # running pre-conversion function, if present --------------------------------
+  x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
+
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .clean_table_styling(x)
 
