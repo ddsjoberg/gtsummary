@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added variable-specific formatting to `add_difference(estimate_fun=)` allowing a single table to show, for example, mean and rate differences that are formatted/rounded differently.
+
 * The `add_stat()` function may now return multiple columns of new statistics. Some arguments have been deprecated in the update. (#746)
 
 * Added theme element `"pkgwide-fun:pre_conversion"`. The function specified here will be executed on the gtsummary object before it is printed or converted with the `as_gt()`, `as_flex_table()`, etc functions. (#773)
