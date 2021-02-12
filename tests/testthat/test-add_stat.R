@@ -25,9 +25,7 @@ test_that("no errors/warnings with standard use", {
       add_p(test = everything() ~ t.test) %>%
       # replicating result of `add_p()` with `add_stat()`
       add_stat(
-        fns = everything() ~ my_ttest, # all variables compared with with t-test
-        fmt_fun = style_pvalue,        # format result with style_pvalue()
-        header = "**My p-value**"      # new column header
+        fns = everything() ~ my_ttest # all variables compared with with t-test
       ),
     NA
   )
@@ -43,9 +41,7 @@ test_that("no errors/warnings with standard use", {
     tbl %>%
       add_stat(
         fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-        fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = "T-test statistic and p-value"  # footnote
+        fmt_fun = NULL # fn returns and chr, so no formatting function needed
       ),
     NA
   )
@@ -55,55 +51,7 @@ test_that("expect errors", {
   expect_message(
     tbl %>%
       add_stat(
-        fns = everything() ~ mean,    # all variables will be compared by t-test
-        fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = "T-test statistic and p-value"  # footnote
-      ),
-    NULL
-  )
-
-  expect_error(
-    tbl %>%
-      add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-        fmt_fun = "string", # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = "T-test statistic and p-value"  # footnote
-      ),
-    NULL
-  )
-
-  expect_error(
-    tbl %>%
-      add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-        fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = c("**Treatment Comparison**", "**Treatment Comparison**"),       # column header
-        footnote = "T-test statistic and p-value"  # footnote
-      ),
-    NULL
-  )
-
-  expect_error(
-    tbl %>%
-      add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-        fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = c("T-test statistic and p-value", "T-test statistic and p-value")  # footnote
-      ),
-    NULL
-  )
-
-  expect_error(
-    tbl %>%
-      add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-        fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        new_col_name = mean,
-        footnote = "T-test statistic and p-value"  # footnote
+        fns = everything() ~ mean   # all variables will be compared by t-test
       ),
     NULL
   )
@@ -111,10 +59,7 @@ test_that("expect errors", {
   expect_error(
     mtcars %>%
       add_stat(
-        fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-        fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-        header = "**Treatment Comparison**",       # column header
-        footnote = "T-test statistic and p-value"  # footnote
+        fns = everything() ~ my_ttest2    # all variables will be compared by t-test
       ),
     NULL
   )
@@ -126,7 +71,7 @@ test_that("expect errors", {
       tbl_summary() %>%
       add_stat(
         fns = everything() ~ return_three_10s,
-        location = "level"
+        location = all_categorical() ~ "level"
       ),
     NA
   )
@@ -140,7 +85,7 @@ test_that("expect errors", {
       ) %>%
       add_stat(
         fns = everything() ~ return_three_10s,
-        location = "level"
+        location = everything() ~ "level"
       ),
     NA
   )
@@ -151,7 +96,38 @@ test_that("expect errors", {
       tbl_svysummary(include = Sex) %>%
       add_stat(
         fns = everything() ~ return_two_10s,
-        location = "level"
+        location = all_categorical() ~ "level"
+      ),
+    NA
+  )
+
+  return_two_by_two_10s <- function(...) tibble::tibble(one = rep_len(10, 2), two = rep_len(10, 2))
+  expect_error(
+    trial %>%
+      select(age) %>%
+      tbl_summary(
+        type = age ~ "continuous2",
+        statistic = everything() ~ c("{mean}", "{sd}")
+      ) %>%
+      add_stat(
+        fns = everything() ~ return_two_by_two_10s,
+        location = everything() ~ "level"
+      ),
+    NA
+  )
+
+  return_one_by_two_10s <- function(...) tibble::tibble(one = rep_len(10, 1), two = rep_len(10, 1))
+  expect_error(
+    trial %>%
+      select(age) %>%
+      tbl_summary(
+        type = age ~ "continuous2",
+        statistic = everything() ~ c("{mean}", "{sd}"),
+        missing = "always"
+      ) %>%
+      add_stat(
+        fns = everything() ~ return_one_by_two_10s,
+        location = everything() ~ "missing"
       ),
     NA
   )
