@@ -55,7 +55,10 @@ for (f in gt_functions) {
                                  path = here::here("man", "figures", stringr::str_glue("{example_chr}.png")))
 
       # shrink image
-      webshot::shrink(here::here("man", "figures", stringr::str_glue("{example_chr}.png")))
+      tryCatch(
+        webshot::shrink(here::here("man", "figures", stringr::str_glue("{example_chr}.png"))),
+        error = function(e) return(invisible())
+      )
       return(invisible())
     }
   )

@@ -7,64 +7,76 @@
 add_stat(
   x,
   fns,
+  location = NULL,
   fmt_fun = NULL,
-  header = "**Statistic**",
+  header = NULL,
   footnote = NULL,
-  new_col_name = NULL,
-  location = c("label", "level")
+  new_col_name = NULL
 )
 }
 \arguments{
 \item{x}{\code{tbl_summary} or \code{tbl_svysummary} object}
 
-\item{fns}{list of formulas indicating the functions that create the statistic}
+\item{fns}{list of formulas indicating the functions that create the statistic.
+See details below.}
 
-\item{fmt_fun}{for numeric statistics, \verb{fmt_fun=} is the styling/formatting
-function. Default is \code{NULL}}
-
-\item{header}{Column header of new column. Default is \code{"**Statistic**"}}
-
-\item{footnote}{Footnote associated with new column. Default is no
-footnote (i.e. NULL)}
-
-\item{new_col_name}{name of new column to be created in \code{.$table_body}.
-Default is \code{"add_stat_1"}, unless that column exists then it is \code{"add_stat_2"}, etc.}
-
-\item{location}{Must be one of \code{c("label", "level")} and indicates which
-row(s) the new statistics are placed on. When \code{"label"} a single statistic
+\item{location}{list of formulas indicating the location the new statistics
+are placed. The RHS of the formula must be one of \code{c("label", "level", "missing")}.
+When \code{"label"}, a single statistic
 is placed on the variable label row. When \code{"level"} the statistics are placed
 on the variable level rows. The length of the vector of statistics returned from the
-\code{fns} function must match the dimension of levels. Continuous and dichotomous
-statistics are placed on the variable label row.}
+\code{fns} function must match the dimension of levels. Default is to place the
+new statistics on the label row.}
+
+\item{fmt_fun}{DEPRECATED.}
+
+\item{header}{DEPRECATED.}
+
+\item{footnote}{DEPRECATED.}
+
+\item{new_col_name}{DEPRECATED.}
 }
 \description{
 \lifecycle{experimental}
-The function allows a user to add a new column with a custom, user-defined statistic.
+The function allows a user to add a new column (or columns) of statistics to an
+existing \code{tbl_summary} or \code{tbl_svysummary} object.
 }
 \section{Details}{
 
 
-The custom functions passed in \verb{fns=} are required to follow a specified
-format. Each of these function will execute on a single variable from
+The returns from custom functions passed in \verb{fns=} are required to follow a
+specified format. Each of these function will execute on a single variable from
 \code{tbl_summary()}/\code{tbl_svysummary()}.
 \enumerate{
-\item Each function must return a single scalar or character value of length one when
-\code{location = "label"}. When \code{location = "level"}, the returned statistic
-must be a vector of the length of the number of levels (excluding the
+\item Each function must return a tibble or a vector. If a vector is returned,
+it will be converted to a tibble with one column and number of rows equal
+to the length of the vector.
+\item When \code{location = "label"}, the returned statistic from the custom function
+must be a tibble with one row. When \code{location = "level"} the tibble must have
+the same number of rows as there are levels in the variable (excluding the
 row for unknown values).
-\item Each function may take the following arguments: \code{foo(data, variable, by, tbl)}
-}
+\item Each function may take the following arguments: \code{foo(data, variable, by, tbl, ...)}
 \itemize{
 \item \verb{data=} is the input data frame passed to \code{tbl_summary()}
 \item \verb{variable=} is a string indicating the variable to perform the calculation on
 \item \verb{by=} is a string indicating the by variable from \verb{tbl_summary=}, if present
-\item \verb{tbl=} the original \code{tbl_summary()} object is also available to utilize
+\item \verb{tbl=} the original \code{tbl_summary()}/\code{tbl_svysummary()} object is also available to utilize
+}
 }
 
 The user-defined does not need to utilize each of these inputs. It's
 encouraged the user-defined function accept \code{...} as each of the arguments
 \emph{will} be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. \code{foo(data, variable, by, ...)}
+\itemize{
+\item Use \code{modify_header()} to update the column headers
+\item Use \code{modify_fmt_fun()} to update the functions that format the statistics
+\item Use \code{modify_footnote()} to add a explanatory footnote
+}
+
+If you return a tibble with column names \code{p.value} or \code{q.value}, default
+p-value formatting will be applied, and you may take advantage of subsequent
+p-value formatting functions, such as \code{bold_p()} or \code{add_q()}.
 }
 
 \section{Example Output}{
@@ -79,13 +91,12 @@ the user's function, e.g. \code{foo(data, variable, by, ...)}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
+\if{html}{\figure{add_stat_ex3.png}{options: width=40\%}}
 }
 
 \examples{
+library(dplyr); library(stringr)
 # Example 1 ----------------------------------
-# this example replicates `add_p()`
-
 # fn returns t-test pvalue
 my_ttest <- function(data, variable, by, ...) {
   t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
@@ -95,58 +106,50 @@ add_stat_ex1 <-
   trial \%>\%
   select(trt, age, marker) \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
-  add_p(test = everything() ~ t.test) \%>\%
-  # replicating result of `add_p()` with `add_stat()`
-  add_stat(
-    fns = everything() ~ my_ttest, # all variables compared with with t-test
-    fmt_fun = style_pvalue,        # format result with style_pvalue()
-    header = "**My p-value**"      # new column header
+  add_stat(fns = everything() ~ my_ttest) \%>\%
+  modify_header(
+    list(add_stat_1 ~ "**p-value**",
+         all_stat_cols() ~ "**{level}**")
   )
 
 # Example 2 ----------------------------------
 # fn returns t-test test statistic and pvalue
 my_ttest2 <- function(data, variable, by, ...) {
-  tt <- t.test(data[[variable]] ~ as.factor(data[[by]]))
-
-  # returning test statistic and pvalue
-  stringr::str_glue(
-    "t={style_sigfig(tt$statistic)}, {style_pvalue(tt$p.value, prepend_p = TRUE)}"
-  )
+  t.test(data[[variable]] ~ as.factor(data[[by]])) \%>\%
+    broom::tidy() \%>\%
+    mutate(
+      stat = str_glue("t={style_sigfig(statistic)}, {style_pvalue(p.value, prepend_p = TRUE)}")
+    ) \%>\%
+    pull(stat)
 }
 
 add_stat_ex2 <-
   trial \%>\%
   select(trt, age, marker) \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
-  add_stat(
-    fns = everything() ~ my_ttest2,    # all variables will be compared by t-test
-    fmt_fun = NULL, # fn returns and chr, so no formatting function needed
-    header = "**Treatment Comparison**",       # column header
-    footnote = "T-test statistic and p-value"  # footnote
-  )
+  add_stat(fns = everything() ~ my_ttest2) \%>\%
+  modify_header(add_stat_1 ~ "**Treatment Comparison**")
 
 # Example 3 ----------------------------------
-# Add CI for categorical variables
-categorical_ci <- function(variable, tbl, ...) {
-  dplyr::filter(tbl$meta_data, variable == .env$variable) \%>\%
-    purrr::pluck("df_stats", 1) \%>\%
-    dplyr::mutate(
-      # calculate and format 95\% CI
-      prop_ci = purrr::map2(n, N, ~prop.test(.x, .y)$conf.int \%>\% style_percent(symbol = TRUE)),
-      ci = purrr::map_chr(prop_ci, ~glue::glue("{.x[1]}, {.x[2]}"))
-    ) \%>\%
-    dplyr::pull(ci)
+# return test statistic and p-value is separate columns
+my_ttest3 <- function(data, variable, by, ...) {
+  t.test(data[[variable]] ~ as.factor(data[[by]])) \%>\%
+    broom::tidy() \%>\%
+    select(statistic, p.value)
 }
 
 add_stat_ex3 <-
   trial \%>\%
-  select(grade) \%>\%
-  tbl_summary(statistic = everything() ~ "{p}\%") \%>\%
-  add_stat(
-    fns = everything() ~ "categorical_ci",
-    location = "level",
-    header = "**95\% CI**"
+  select(trt, age, marker) \%>\%
+  tbl_summary(by = trt, missing = "no") \%>\%
+  add_stat(fns = everything() ~ my_ttest3) \%>\%
+  modify_header(
+    list(statistic ~ "**t-statistic**",
+         p.value ~ "**p-value**")
   ) \%>\%
-  modify_footnote(everything() ~ NA)
+  modify_fmt_fun(
+    list(statistic ~ style_sigfig,
+         p.value ~ style_pvalue)
+  )
 
 }
