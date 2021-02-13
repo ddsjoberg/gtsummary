@@ -326,13 +326,13 @@ show_header_names <- function(x = NULL, quiet = NULL) {
 
   if (identical(quiet, FALSE)) {
     cat("\n")
-    usethis::ui_info("As a usage guide, the code below re-creates the current column headers.")
+    cli_alert_info("As a usage guide, the code below re-creates the current column headers.")
     block <- mutate(df_cols, formula = glue("  {column} ~ {shQuote(label)}")) %>%
       pull(.data$formula) %>%
       paste0("", collapse = ",\n") %>%
       {glue("modify_header(update = list(\n{.}\n))")}
 
-    ui_code_block(block)
+    cli_code(block)
 
     knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
       print()
@@ -344,9 +344,9 @@ show_header_names <- function(x = NULL, quiet = NULL) {
 # prints a helpful message when no columns were selected in the modify functions
 .modify_no_selected_vars <- function(x) {
   paste("No columns were selected.",
-        "Use {ui_code('quiet = TRUE')} to supress these messages.") %>%
+        "Use {.code quiet = TRUE} to supress these messages.") %>%
     stringr::str_wrap() %>%
-    usethis::ui_info()
+    cli_alert_info()
 
   show_header_names(x)
 }

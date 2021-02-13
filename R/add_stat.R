@@ -219,7 +219,7 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
   new_col_names <- bind_rows(df_new_stat$df_add_stats) %>% names()
   if (any(new_col_names %in% names(x$table_body))) {
     paste("Cannot add new column that already exist in gtsummary table:",
-          "{ui_field(quoted_list(new_col_names %in% intersect(names(x$table_body))))}") %>%
+          "{.field {quoted_list(new_col_names %in% intersect(names(x$table_body)))}}") %>%
       abort()
   }
 

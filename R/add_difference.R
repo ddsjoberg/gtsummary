@@ -156,12 +156,12 @@ add_difference <- function(x, test = NULL, group = NULL,
            .data$variable %in% include) %>%
       pull(.data$variable)
     if (!rlang::is_empty(bad_percent_vars))
-      paste("{ui_code('add_difference()')} results for categorical variables",
+      paste("{.code add_difference()} results for categorical variables",
             "may not compatible with",
-            "{ui_code('tbl_summary(percent = c(\"cell\", \"row\"))')} options.",
-            "Use column percentages, {ui_code('tbl_summary(percent = \"column\")')}.") %>%
+            "{.code tbl_summary(percent = c(\"cell\", \"row\"))} options.",
+            "Use column percentages, {.code tbl_summary(percent = \"column\")}.") %>%
       stringr::str_wrap() %>%
-      ui_info()
+      cli_alert_info()
   }
 
   # caller_env for add_p

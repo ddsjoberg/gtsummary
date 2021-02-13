@@ -97,12 +97,12 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
     styling_call_list[["missing_emdash"]] <-
       expr(modify_table_styling(columns = !!call_list$columns,
                                 rows = !!parse_expr(call_list$missing_emdash),
-                                missing_symbol = "---"))
+                                missing_symbol = "\U2014"))
   }
 
   # printing code to use instead of `modify_table_header()`
-  ui_info("Use {ui_code('modify_table_styling()')} instead of {ui_code('modify_table_header()')}")
-  usethis::ui_todo("Replace the {ui_code('modify_table_header()')} call with the following.")
+  cli_alert_info("Use {.code modify_table_styling()} instead of {.code modify_table_header()}")
+  cli_ul("Replace the {.code modify_table_header()} call with the following.")
   c(list(expr(x)), styling_call_list) %>%
     map(~deparse(.) %>% paste(collapse = "") %>% stringr::str_squish()) %>%
     unlist() %>%
