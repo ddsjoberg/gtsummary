@@ -166,3 +166,29 @@ test_that("p-values are replicated within tbl_summary()", {
     ignore_attr = TRUE
   )
 })
+
+test_that("row formatting of differences and CIs work", {
+  expect_error(
+    tbl1 <-
+      trial %>%
+      select(trt, age, marker, response, death) %>%
+      tbl_summary(by = trt,
+                  statistic =
+                    list(all_continuous() ~ "{mean} ({sd})",
+                         all_dichotomous() ~ "{p}%"),
+                  missing = "no") %>%
+      add_difference() %>%
+      as_tibble(col_labels = FALSE),
+    NA
+  )
+
+  expect_equal(
+    tbl1$estimate,
+    c("-0.44", "0.20", "-4.2%", "-5.8%")
+  )
+
+  expect_equal(
+    tbl1$ci,
+    c("-4.6, 3.7", "-0.05, 0.44", "-18%, 9.9%", "-21%, 9.0%" )
+  )
+})
