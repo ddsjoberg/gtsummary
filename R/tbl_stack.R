@@ -184,15 +184,15 @@ print_stack_differences <- function(tbls) {
 
   if (nrow(tbl_differences) > 0) {
     paste("Column headers among stacked tables differ. Headers from the first table are used.",
-          "Use {ui_code('quiet = TRUE')} to supress this message.") %>%
+          "Use {.code quiet = TRUE} to supress this message.") %>%
       stringr::str_wrap() %>%
-      usethis::ui_info()
+      cli_alert_info()
 
     # purrr::pwalk(
     #   list(tbl_differences$name_fmt, tbl_differences$..tbl_id..,
     #        tbl_differences$column, tbl_differences$value, tbl_differences$new_value),
     #   function(name_fmt, ..tbl_id.., column, value, new_value)
-    #     ui_done("{name_fmt}, table {..tbl_id..} ({column}): {ui_field(value)} ---> {ui_field(new_value)}")
+    #     cli_alert_success("{name_fmt}, table {..tbl_id..} ({column}): {.field {value}} ---> {.field {new_value}}")
     # )
   }
 
