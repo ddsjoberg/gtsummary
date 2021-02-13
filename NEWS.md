@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Removed {usethis} package dependency and replaced with {cli}. (#768)
+
 * Added variable-specific formatting to `add_difference(estimate_fun=)` allowing a single table to show, for example, mean and rate differences that are formatted/rounded differently.
 
 * The `add_stat()` function may now return multiple columns of new statistics. Some arguments have been deprecated in the update. (#746)
