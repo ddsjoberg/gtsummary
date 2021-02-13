@@ -90,9 +90,9 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   vif <- tryCatch(
     car::vif(x),
     error = function(e) {
-      paste("The {ui_code('add_vif()')} uses {ui_code('car::vif()')} to",
+      paste("The {.code add_vif()} uses {.code car::vif()} to",
             "calculate the VIF, and the function returned an error (see below).") %>%
-        stringr::str_wrap() %>%  ui_oops()
+        stringr::str_wrap() %>%  cli_alert_danger()
       stop(e)
     }
   )

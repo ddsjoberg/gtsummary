@@ -62,10 +62,10 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 gtsummary_model_frame <- function(x) {
   tryCatch(stats::model.frame(x),
   error = function(e) {
-    paste("There was an error calling {usethis::ui_code('stats::model.frame(x)')},",
+    paste("There was an error calling {.code stats::model.frame(x)},",
           "and the model N will not be available in the output.") %>%
       stringr::str_wrap() %>%
-      usethis::ui_oops()
+      cli_alert_danger()
     data.frame()
   }
   )

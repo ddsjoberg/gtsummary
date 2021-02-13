@@ -11,18 +11,18 @@
 #' @author David Hugh-Jones
 assert_package <- function(pkg, fn, version = NULL) {
   if (is.null(version) && !requireNamespace(pkg, quietly = TRUE)) {
-    ui_oops("The {ui_value(pkg)} package is required for function {ui_code(fn)}.")
-    usethis::ui_todo("Install {ui_value(pkg)} with the code below.")
-    ui_code_block('install.packages("{pkg}")')
+    cli_alert_danger("The {.val {pkg}} package is required for function {.code {fn}}.")
+    cli_ul("Install {.val {pkg}} with the code below.")
+    cli_code(glue('install.packages("{pkg}")'))
     stop("Install required package", call. = FALSE)
   }
 
   if (!is.null(version) &&
       (!requireNamespace(pkg, quietly = TRUE) ||
        (requireNamespace(pkg, quietly = TRUE) && utils::packageVersion(pkg) < version))) {
-    ui_oops("The {ui_value(pkg)} package v{version} or greater is required for function {ui_code(fn)}.")
-    usethis::ui_todo("Install/update {ui_value(pkg)} with the code below.")
-    ui_code_block('install.packages("{pkg}")')
+    cli_alert_danger("The {.val {pkg}} package v{version} or greater is required for function {.code {fn}}.")
+    cli_ul("Install/update {.val {pkg}} with the code below.")
+    cli_code(glue('install.packages("{pkg}")'))
     stop("Install required package", call. = FALSE)
   }
 }

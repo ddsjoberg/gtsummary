@@ -13,9 +13,9 @@
 #' @importFrom glue glue as_glue glue_collapse
 #' @importFrom stringr fixed word str_extract_all str_remove_all str_starts
 #' str_split str_detect str_remove str_replace_all str_wrap str_sub str_locate
-#' @importFrom usethis ui_info ui_oops ui_code ui_code_block ui_value ui_field ui_done
 #' @importFrom broom.helpers .formula_list_to_named_list .select_to_varnames
 #' .generic_selector
+#' @importFrom cli cli_alert_info cli_alert_info cli_alert_danger cli_code cli_ul
 #' @importFrom gt md html
 #' @keywords internal
 "_PACKAGE"
@@ -27,6 +27,12 @@ utils::globalVariables(".")
 #' @importFrom lifecycle deprecate_soft
 ## usethis namespace: end
 NULL
+
+# Switching from usethis to cli, I am lazy and defining the ui_*() fns
+# instead of replacing them all
+# ui_code_block <- function(x) cli::cli_code()
+
+
 
 release_questions <- function() {
   c(
