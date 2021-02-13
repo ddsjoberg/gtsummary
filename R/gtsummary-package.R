@@ -28,12 +28,6 @@ utils::globalVariables(".")
 ## usethis namespace: end
 NULL
 
-# Switching from usethis to cli, I am lazy and defining the ui_*() fns
-# instead of replacing them all
-# ui_code_block <- function(x) cli::cli_code()
-
-
-
 release_questions <- function() {
   c(
     "Do you need to run `usethis::use_latest_dependencies(overwrite = TRUE)`?",

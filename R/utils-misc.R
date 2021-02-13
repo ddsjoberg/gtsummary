@@ -20,7 +20,7 @@ assert_package <- function(pkg, fn, version = NULL) {
   if (!is.null(version) &&
       (!requireNamespace(pkg, quietly = TRUE) ||
        (requireNamespace(pkg, quietly = TRUE) && utils::packageVersion(pkg) < version))) {
-    cli_alert_danger("The {.val {pkg}} package v{version} or greater is required for function {.code {fn}}.")
+    cli_alert_danger("The {.val {pkg}} package {.field v{version}} or greater is required for function {.code {fn}}.")
     cli_ul("Install/update {.val {pkg}} with the code below.")
     cli_code(glue('install.packages("{pkg}")'))
     stop("Install required package", call. = FALSE)

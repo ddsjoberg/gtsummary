@@ -58,19 +58,6 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       everything()
     )
 }
-
-gtsummary_model_frame <- function(x) {
-  tryCatch(stats::model.frame(x),
-  error = function(e) {
-    paste("There was an error calling {.code stats::model.frame(x)},",
-          "and the model N will not be available in the output.") %>%
-      stringr::str_wrap() %>%
-      cli_alert_danger()
-    data.frame()
-  }
-  )
-}
-
 .tbl_regression_default_table_header <- function(x, exponentiate,
                                                 tidy_columns_to_report,
                                                 estimate_fun,

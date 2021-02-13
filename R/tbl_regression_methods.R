@@ -37,7 +37,7 @@ tbl_regression.mipo <- function(x, ...) {
     cli_alert_danger()
   paste("\n\nmice::mice(trial, m = 2) %>%",
         "with(lm(age ~ marker + grade)) %>%",
-        "tbl_regression()", sep = "\n") %>%
+        "tbl_regression()", sep = "\n  ") %>%
     cli_code()
 }
 
