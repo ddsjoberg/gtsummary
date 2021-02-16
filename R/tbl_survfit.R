@@ -400,6 +400,8 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
   # adding time 0 to data frame
   tidy <-
     tidy %>%
+    # making strata a fct to preserve ordering
+    mutate_at(vars(!!!strata), ~factor(., levels = unique(.))) %>%
     # if CI is missing, and SE is 0, making the CIs the estimate
     mutate_at(vars(.data$conf.high, .data$conf.low),
               ~ifelse(is.na(.) & .data$std.error == 0, .data$estimate, .)) %>%
@@ -413,8 +415,6 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
                conf.high = ifelse(multi_state, 0, 1))
     ) %>%
     ungroup()
-
-
 
   # getting requested estimates
   df_stat <-

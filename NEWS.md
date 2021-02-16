@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Preserve ordering for factor variables in tbl_survfit(). (#764)
+
 * Removed {usethis} package dependency and replaced with {cli}. (#768)
 
 * Added variable-specific formatting to `add_difference(estimate_fun=)` allowing a single table to show, for example, mean and rate differences that are formatted/rounded differently.
