@@ -99,7 +99,7 @@ along with the difference confidence interval and p-value." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9013</span>
       </span>
     </div>
 
@@ -177,7 +177,7 @@ along with the difference confidence interval and p-value." />
     </div>
 
     <div class="ref-description">
-    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
 
 Add the difference between two groups (typically mean difference),
 along with the difference confidence interval and p-value.</p>
@@ -192,7 +192,7 @@ along with the difference confidence interval and p-value.</p>
   conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
   include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
   pvalue_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
-  estimate_fun <span class='op'>=</span> <span class='va'>style_sigfig</span>
+  estimate_fun <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -248,7 +248,10 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     <tr>
       <th>estimate_fun</th>
-      <td><p>Function to round and format difference. Default is <code><a href='style_sigfig.html'>style_sigfig()</a></code></p></td>
+      <td><p>List of formulas specifying the formatting functions
+to round and format differences. Default is
+<code><a href='https://rdrr.io/r/base/list.html'>list(all_continuous() ~ style_sigfig, all_categorical() ~ function(x) paste0(style_sigfig(x * 100), "%"))</a></code>
+Function to round and format difference. Default is <code><a href='style_sigfig.html'>style_sigfig()</a></code></p></td>
     </tr>
     </table>
 
@@ -265,23 +268,28 @@ and return a string that is the rounded/formatted p-value (e.g.
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
 <span class='va'>add_difference_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span>, <span class='va'>response</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>,
-              statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
+              statistic <span class='op'>=</span>
+                <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
+                     <span class='fu'><a href='select_helpers.html'>all_dichotomous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span><span class='op'>)</span>,
               missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_n.html'>add_n</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>add_difference</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># Example 2 ----------------------------------</span>
+<span class='co'># ANCOVA adjusted for grade and stage</span>
 <span class='va'>add_difference_ex2</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>response</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>,
-              statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_dichotomous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span>,
-              missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span><span class='fu'><a href='select_helpers.html'>all_stat_cols</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='cn'>NA</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span>, <span class='va'>grade</span>, <span class='va'>stage</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>
+    by <span class='op'>=</span> <span class='va'>trt</span>,
+    statistic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span><span class='op'>)</span>,
+    missing <span class='op'>=</span> <span class='st'>"no"</span>,
+    include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>marker</span>, <span class='va'>trt</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_n.html'>add_n</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>add_difference</span><span class='op'>(</span>estimate_fun <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='style_sigfig.html'>style_sigfig</a></span><span class='op'>(</span><span class='va'>.</span> <span class='op'>*</span> <span class='fl'>100</span><span class='op'>)</span>, <span class='st'>"%"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'>add_difference</span><span class='op'>(</span>adj.vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>grade</span>, <span class='va'>stage</span><span class='op'>)</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

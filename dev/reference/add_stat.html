@@ -55,7 +55,8 @@
 <meta property="og:title" content="Add a custom statistic column — add_stat" />
 <meta property="og:description" content="
 
-The function allows a user to add a new column with a custom, user-defined statistic." />
+The function allows a user to add a new column (or columns) of statistics to an
+existing tbl_summary or tbl_svysummary object." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -98,7 +99,7 @@ The function allows a user to add a new column with a custom, user-defined stati
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9013</span>
       </span>
     </div>
 
@@ -176,19 +177,20 @@ The function allows a user to add a new column with a custom, user-defined stati
     </div>
 
     <div class="ref-description">
-    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
 
-The function allows a user to add a new column with a custom, user-defined statistic.</p>
+The function allows a user to add a new column (or columns) of statistics to an
+existing <code>tbl_summary</code> or <code>tbl_svysummary</code> object.</p>
     </div>
 
     <pre class="usage"><span class='fu'>add_stat</span><span class='op'>(</span>
   <span class='va'>x</span>,
   <span class='va'>fns</span>,
+  location <span class='op'>=</span> <span class='cn'>NULL</span>,
   fmt_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
-  header <span class='op'>=</span> <span class='st'>"**Statistic**"</span>,
+  header <span class='op'>=</span> <span class='cn'>NULL</span>,
   footnote <span class='op'>=</span> <span class='cn'>NULL</span>,
-  new_col_name <span class='op'>=</span> <span class='cn'>NULL</span>,
-  location <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"label"</span>, <span class='st'>"level"</span><span class='op'>)</span>
+  new_col_name <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -200,35 +202,34 @@ The function allows a user to add a new column with a custom, user-defined stati
     </tr>
     <tr>
       <th>fns</th>
-      <td><p>list of formulas indicating the functions that create the statistic</p></td>
-    </tr>
-    <tr>
-      <th>fmt_fun</th>
-      <td><p>for numeric statistics, <code>fmt_fun=</code> is the styling/formatting
-function. Default is <code>NULL</code></p></td>
-    </tr>
-    <tr>
-      <th>header</th>
-      <td><p>Column header of new column. Default is <code>"**Statistic**"</code></p></td>
-    </tr>
-    <tr>
-      <th>footnote</th>
-      <td><p>Footnote associated with new column. Default is no
-footnote (i.e. NULL)</p></td>
-    </tr>
-    <tr>
-      <th>new_col_name</th>
-      <td><p>name of new column to be created in <code>.$table_body</code>.
-Default is <code>"add_stat_1"</code>, unless that column exists then it is <code>"add_stat_2"</code>, etc.</p></td>
+      <td><p>list of formulas indicating the functions that create the statistic.
+See details below.</p></td>
     </tr>
     <tr>
       <th>location</th>
-      <td><p>Must be one of <code><a href='https://rdrr.io/r/base/c.html'>c("label", "level")</a></code> and indicates which
-row(s) the new statistics are placed on. When <code>"label"</code> a single statistic
+      <td><p>list of formulas indicating the location the new statistics
+are placed. The RHS of the formula must be one of <code><a href='https://rdrr.io/r/base/c.html'>c("label", "level", "missing")</a></code>.
+When <code>"label"</code>, a single statistic
 is placed on the variable label row. When <code>"level"</code> the statistics are placed
 on the variable level rows. The length of the vector of statistics returned from the
-<code>fns</code> function must match the dimension of levels. Continuous and dichotomous
-statistics are placed on the variable label row.</p></td>
+<code>fns</code> function must match the dimension of levels. Default is to place the
+new statistics on the label row.</p></td>
+    </tr>
+    <tr>
+      <th>fmt_fun</th>
+      <td><p>DEPRECATED.</p></td>
+    </tr>
+    <tr>
+      <th>header</th>
+      <td><p>DEPRECATED.</p></td>
+    </tr>
+    <tr>
+      <th>footnote</th>
+      <td><p>DEPRECATED.</p></td>
+    </tr>
+    <tr>
+      <th>new_col_name</th>
+      <td><p>DEPRECATED.</p></td>
     </tr>
     </table>
 
@@ -237,26 +238,36 @@ statistics are placed on the variable label row.</p></td>
     
 
 
-<p>The custom functions passed in <code>fns=</code> are required to follow a specified
-format. Each of these function will execute on a single variable from
+<p>The returns from custom functions passed in <code>fns=</code> are required to follow a
+specified format. Each of these function will execute on a single variable from
 <code><a href='tbl_summary.html'>tbl_summary()</a></code>/<code><a href='tbl_svysummary.html'>tbl_svysummary()</a></code>.</p><ol>
-<li><p>Each function must return a single scalar or character value of length one when
-<code>location = "label"</code>. When <code>location = "level"</code>, the returned statistic
-must be a vector of the length of the number of levels (excluding the
+<li><p>Each function must return a tibble or a vector. If a vector is returned,
+it will be converted to a tibble with one column and number of rows equal
+to the length of the vector.</p></li>
+<li><p>When <code>location = "label"</code>, the returned statistic from the custom function
+must be a tibble with one row. When <code>location = "level"</code> the tibble must have
+the same number of rows as there are levels in the variable (excluding the
 row for unknown values).</p></li>
-<li><p>Each function may take the following arguments: <code>foo(data, variable, by, tbl)</code></p></li>
-</ol>
-<ul>
+<li><p>Each function may take the following arguments: <code>foo(data, variable, by, tbl, ...)</code></p><ul>
 <li><p><code>data=</code> is the input data frame passed to <code><a href='tbl_summary.html'>tbl_summary()</a></code></p></li>
 <li><p><code>variable=</code> is a string indicating the variable to perform the calculation on</p></li>
 <li><p><code>by=</code> is a string indicating the by variable from <code>tbl_summary=</code>, if present</p></li>
-<li><p><code>tbl=</code> the original <code><a href='tbl_summary.html'>tbl_summary()</a></code> object is also available to utilize</p></li>
-</ul>
+<li><p><code>tbl=</code> the original <code><a href='tbl_summary.html'>tbl_summary()</a></code>/<code><a href='tbl_svysummary.html'>tbl_svysummary()</a></code> object is also available to utilize</p></li>
+</ul></li>
+</ol>
 
 <p>The user-defined does not need to utilize each of these inputs. It's
 encouraged the user-defined function accept <code>...</code> as each of the arguments
 <em>will</em> be passed to the function, even if not all inputs are utilized by
-the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
+the user's function, e.g. <code>foo(data, variable, by, ...)</code></p><ul>
+<li><p>Use <code><a href='modify.html'>modify_header()</a></code> to update the column headers</p></li>
+<li><p>Use <code><a href='modify_fmt_fun.html'>modify_fmt_fun()</a></code> to update the functions that format the statistics</p></li>
+<li><p>Use <code><a href='modify.html'>modify_footnote()</a></code> to add a explanatory footnote</p></li>
+</ul>
+
+<p>If you return a tibble with column names <code>p.value</code> or <code>q.value</code>, default
+p-value formatting will be applied, and you may take advantage of subsequent
+p-value formatting functions, such as <code><a href='bold_p.html'>bold_p()</a></code> or <code><a href='add_q.html'>add_q()</a></code>.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -266,12 +277,16 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
 <p>Example 2</p>
 <p><img src='figures/add_stat_ex2.png' width=60% /></p>
 <p>Example 3</p>
-<p><img src='figures/add_stat_ex3.png' width=60% /></p>
+<p><img src='figures/add_stat_ex3.png' width=40% /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='co'># this example replicates `add_p()`</span>
-
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>; <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://stringr.tidyverse.org'>stringr</a></span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='input'><span class='co'># Example 1 ----------------------------------</span>
 <span class='co'># fn returns t-test pvalue</span>
 <span class='va'>my_ttest</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>variable</span>, <span class='va'>by</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>variable</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>by</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span><span class='op'>$</span><span class='va'>p.value</span>
@@ -281,66 +296,52 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span>test <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>t.test</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='co'># replicating result of `add_p()` with `add_stat()`</span>
-  <span class='fu'>add_stat</span><span class='op'>(</span>
-    fns <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>my_ttest</span>, <span class='co'># all variables compared with with t-test</span>
-    fmt_fun <span class='op'>=</span> <span class='va'>style_pvalue</span>,        <span class='co'># format result with style_pvalue()</span>
-    header <span class='op'>=</span> <span class='st'>"**My p-value**"</span>      <span class='co'># new column header</span>
+  <span class='fu'>add_stat</span><span class='op'>(</span>fns <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>my_ttest</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='modify.html'>modify_header</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>add_stat_1</span> <span class='op'>~</span> <span class='st'>"**p-value**"</span>,
+         <span class='fu'><a href='select_helpers.html'>all_stat_cols</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"**{level}**"</span><span class='op'>)</span>
   <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'lme4':</span>
-#&gt; <span class='message'>  method                          from</span>
-#&gt; <span class='message'>  cooks.distance.influence.merMod car </span>
-#&gt; <span class='message'>  influence.merMod                car </span>
-#&gt; <span class='message'>  dfbeta.influence.merMod         car </span>
-#&gt; <span class='message'>  dfbetas.influence.merMod        car </span></div><div class='input'>
+
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># fn returns t-test test statistic and pvalue</span>
 <span class='va'>my_ttest2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>variable</span>, <span class='va'>by</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>tt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>variable</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>by</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
-
-  <span class='co'># returning test statistic and pvalue</span>
-  <span class='fu'>stringr</span><span class='fu'>::</span><span class='fu'><a href='https://stringr.tidyverse.org/reference/str_glue.html'>str_glue</a></span><span class='op'>(</span>
-    <span class='st'>"t={style_sigfig(tt$statistic)}, {style_pvalue(tt$p.value, prepend_p = TRUE)}"</span>
-  <span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>variable</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>by</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>
+      stat <span class='op'>=</span> <span class='fu'><a href='https://stringr.tidyverse.org/reference/str_glue.html'>str_glue</a></span><span class='op'>(</span><span class='st'>"t={style_sigfig(statistic)}, {style_pvalue(p.value, prepend_p = TRUE)}"</span><span class='op'>)</span>
+    <span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span><span class='op'>(</span><span class='va'>stat</span><span class='op'>)</span>
 <span class='op'>}</span>
 
 <span class='va'>add_stat_ex2</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>add_stat</span><span class='op'>(</span>
-    fns <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>my_ttest2</span>,    <span class='co'># all variables will be compared by t-test</span>
-    fmt_fun <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='co'># fn returns and chr, so no formatting function needed</span>
-    header <span class='op'>=</span> <span class='st'>"**Treatment Comparison**"</span>,       <span class='co'># column header</span>
-    footnote <span class='op'>=</span> <span class='st'>"T-test statistic and p-value"</span>  <span class='co'># footnote</span>
-  <span class='op'>)</span>
+  <span class='fu'>add_stat</span><span class='op'>(</span>fns <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>my_ttest2</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='modify.html'>modify_header</a></span><span class='op'>(</span><span class='va'>add_stat_1</span> <span class='op'>~</span> <span class='st'>"**Treatment Comparison**"</span><span class='op'>)</span>
 
 <span class='co'># Example 3 ----------------------------------</span>
-<span class='co'># Add CI for categorical variables</span>
-<span class='va'>categorical_ci</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>tbl</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>$</span><span class='va'>meta_data</span>, <span class='va'>variable</span> <span class='op'>==</span> <span class='va'>.env</span><span class='op'>$</span><span class='va'>variable</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/pluck.html'>pluck</a></span><span class='op'>(</span><span class='st'>"df_stats"</span>, <span class='fl'>1</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>
-      <span class='co'># calculate and format 95% CI</span>
-      prop_ci <span class='op'>=</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map2.html'>map2</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>N</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/prop.test.html'>prop.test</a></span><span class='op'>(</span><span class='va'>.x</span>, <span class='va'>.y</span><span class='op'>)</span><span class='op'>$</span><span class='va'>conf.int</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='style_percent.html'>style_percent</a></span><span class='op'>(</span>symbol <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,
-      ci <span class='op'>=</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map_chr</a></span><span class='op'>(</span><span class='va'>prop_ci</span>, <span class='op'>~</span><span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"{.x[1]}, {.x[2]}"</span><span class='op'>)</span><span class='op'>)</span>
-    <span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span><span class='op'>(</span><span class='va'>ci</span><span class='op'>)</span>
+<span class='co'># return test statistic and p-value is separate columns</span>
+<span class='va'>my_ttest3</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>variable</span>, <span class='va'>by</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>variable</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>by</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>statistic</span>, <span class='va'>p.value</span><span class='op'>)</span>
 <span class='op'>}</span>
 
 <span class='va'>add_stat_ex3</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>statistic <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>add_stat</span><span class='op'>(</span>
-    fns <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"categorical_ci"</span>,
-    location <span class='op'>=</span> <span class='st'>"level"</span>,
-    header <span class='op'>=</span> <span class='st'>"**95% CI**"</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>add_stat</span><span class='op'>(</span>fns <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>my_ttest3</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='modify.html'>modify_header</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>statistic</span> <span class='op'>~</span> <span class='st'>"**t-statistic**"</span>,
+         <span class='va'>p.value</span> <span class='op'>~</span> <span class='st'>"**p-value**"</span><span class='op'>)</span>
   <span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='cn'>NA</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>There was an error for variable 'grade':</span>
-#&gt; <span class='message'>Error in categorical_ci(data = structure(list(grade = structure(c(2L, : could not find function "categorical_ci"</span></div><div class='output co'>#&gt; <span class='error'>Error: Dimension of 'grade' and the added statistic do not match. Expecting statistic to be length 3.</span></div><div class='input'>
+  <span class='fu'><a href='modify_fmt_fun.html'>modify_fmt_fun</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>statistic</span> <span class='op'>~</span> <span class='va'>style_sigfig</span>,
+         <span class='va'>p.value</span> <span class='op'>~</span> <span class='va'>style_pvalue</span><span class='op'>)</span>
+  <span class='op'>)</span>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
