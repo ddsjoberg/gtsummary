@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9014</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.6.9015</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>The broom tidier for GAMs does not include an <code>exponentiate=</code> argument. This argument, however, was still being passed within gtsummary. The custom GAM tidier has been updated to respect the exponentiation request.</p></li>
 <li><p>Preserve ordering for factor variables in tbl_survfit(). (<a href='https://github.com/ddsjoberg/gtsummary/issues/764'>#764</a>)</p></li>
 <li><p>Removed {usethis} package dependency and replaced with {cli}. (<a href='https://github.com/ddsjoberg/gtsummary/issues/768'>#768</a>)</p></li>
 <li><p>Added variable-specific formatting to <code><a href="../reference/add_difference.html">add_difference(estimate_fun=)</a></code> allowing a single table to show, for example, mean and rate differences that are formatted/rounded differently.</p></li>
