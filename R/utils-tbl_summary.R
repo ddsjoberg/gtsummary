@@ -1,23 +1,3 @@
-#' Extract class of variable
-#'
-#' Some packages append non-base classes to data frame columns, e.g.
-#' if data is labeled with the `Hmisc` package the class of a string will
-#' be `c("labelled", "character")` rather than `c("character")` only.  This
-#' simple function extracts the base R class.
-#'
-#' @param data data frame
-#' @param variable string vector of column names from data
-#' @keywords internal
-#' @noRd
-#' @author Daniel D. Sjoberg
-
-assign_class <- function(data, variable, classes_expected) {
-  # extracting the base R class
-  classes_return <-
-    map(variable, ~class(data[[.x]]) %>% intersect(classes_expected))
-  classes_return
-}
-
 #' For dichotomous data, returns that value that will be printed in table.
 #'
 #' @param data data frame
@@ -30,14 +10,14 @@ assign_class <- function(data, variable, classes_expected) {
 #' @author Daniel D. Sjoberg
 
 # wrapper for assign_dichotomous_value_one() function
-assign_dichotomous_value <- function(data, variable, summary_type, class, value) {
+assign_dichotomous_value <- function(data, variable, summary_type, value) {
   pmap(
-    list(variable, summary_type, class),
-    ~ assign_dichotomous_value_one(data, ..1, ..2, ..3, value)
+    list(variable, summary_type),
+    ~ assign_dichotomous_value_one(data, ..1, ..2, value)
   )
 }
 
-assign_dichotomous_value_one <- function(data, variable, summary_type, class, value) {
+assign_dichotomous_value_one <- function(data, variable, summary_type, value) {
 
   # only assign value for dichotomous data
   if (summary_type != "dichotomous") {
@@ -45,7 +25,7 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
   }
 
   # removing all NA values
-  var_vector <- data[[variable]][!is.na(data[[variable]])]
+  var_vector <- data[[variable]] %>% stats::na.omit()
 
   # if 'value' provided, then dichotomous_value is the provided one
   if (!is.null(value[[variable]])) {
@@ -53,13 +33,13 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
   }
 
   # if class is logical, then value will be TRUE
-  if (class == "logical") {
+  if (inherits(var_vector, "logical")) {
     return(TRUE)
   }
 
   # if column provided is a factor with "Yes" and "No" (or "yes" and "no") then
   # the value is "Yes" (or "yes")
-  if (class %in% c("factor", "character")) {
+  if (inherits(data[[variable]], c("factor", "character"))) {
     if (setdiff(var_vector, c("Yes", "No")) %>% length() == 0) {
       return("Yes")
     }
@@ -77,16 +57,14 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, class, va
   }
 
   # otherwise, the value must be passed from the values argument to tbl_summary
-  stop(glue(
-    "'{variable}' is dichotomous, but I was unable to determine the ",
+  glue(
+    "Variable '{variable}' is dichotomous, and I was unable to determine the ",
     "level to display. Use the 'value = list({variable} = <level>)' argument ",
     "to specify level."
-  ), call. = FALSE)
+  ) %>%
+    str_wrap() %>%
+    stop(call. = FALSE)
 }
-
-# assign_dichotomous_value_one(mtcars, "am", "dichotomous", "double", NULL)
-
-
 
 #' Assign type of summary statistic
 #'
@@ -173,88 +151,108 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
 #'   class = apply(mtcars, 2, class),
 #'   summary_type = NULL, value = NULL
 #' )
-assign_summary_type <- function(data, variable, class, summary_type, value) {
-  # checking if user requested type = "categorical" for variable that is all missing
-  if (!is.null(summary_type)) {
-    summary_type <- purrr::imap(
-      summary_type,
-      function(.x, .y) {
-        categorical_missing <-
-          .x == "categorical" &&
-          length(data[[.y]]) == sum(is.na(data[[.y]])) &&
-          !"factor" %in% class(data[[.y]]) # factor can be summarized with categorical
-        if(categorical_missing == FALSE) return(.x)
-        message(glue(
-          "Variable '{.y}' is `NA` for all observations and cannot be summarized as 'categorical'.\n",
-          "Using `{.y} ~ \"dichotomous\"` instead."
-        ))
-        return("dichotomous")
-      }
-    )
-  }
+assign_summary_type <- function(data, variable, summary_type, value,
+                                # types are NOT checked on the first pass at guessing the type
+                                check_assignment = FALSE) {
+  # base classes that can be summarized as continuous
+  base_numeric_classes <- c("numeric", "integer", "difftime", "Date", "POSIXt")
 
-  # assigning types ------------------------------------------------------------
-  type <- map2_chr(
-    variable, class,
-    ~ summary_type[[.x]] %||%
-      case_when(
-        # if a value to display was supplied, then dichotomous
-        !is.null(value[[.x]]) &
-          length(intersect(value[[.x]], data[[.x]]))
-        ~ "dichotomous",
+  # assigning the summary type for each variable -------------------------------
+  assigned_summary_type <-
+    map_chr(
+      variable,
+      function(variable) {
+        # checking if user requested type = "categorical" for variable that is all missing
+        if (identical(summary_type[[variable]], "categorical") && sum(is.na(data[[variable]])) == nrow(data)) {
+          glue("Variable '{variable}' is `NA` for all observations and cannot be summarized as 'categorical'. ",
+               "Using `{variable} ~ \"dichotomous\"` instead.") %>%
+            str_wrap() %>%
+            inform()
+          return("dichotomous")
+        }
 
-        # logical variables will be dichotmous
-        .y == "logical" ~ "dichotomous",
+        # return type if specified by user
+        if (!is.null(summary_type[[variable]])) return(summary_type[[variable]])
+
+        # return dichotomous if dichotomous value passed
+        if (!is.null(value[[variable]])) return("dichotomous")
+
+        # logical variables are dichotomous
+        if (inherits(data[[variable]], "logical")) return("dichotomous")
+
+        # if all missing
+        if (sum(is.na(data[[variable]])) == nrow(data)) {
+          if (inherits(data[[variable]], base_numeric_classes)) return("continuous")
+          if (inherits(data[[variable]], "character")) return("dichotomous")
+          if (inherits(data[[variable]], "factor")) return("categorical")
+        }
 
         # numeric variables that are 0 and 1 only, will be dichotomous
-        .y %in% c("integer", "numeric") &
-          length(setdiff(na.omit(data[[.x]]), c(0, 1))) == 0 &
-          nrow(data) != sum(is.na(data[[.x]])) ~
-          "dichotomous",
+        if (inherits(data[[variable]], c("integer", "numeric")) &&
+            length(setdiff(stats::na.omit(data[[variable]]), c(0, 1))) == 0)
+          return("dichotomous")
 
         # factor variables that are "No" and "Yes" only, will be dichotomous
-        .y %in% c("factor") & setequal(attr(data[[.x]], "levels"), c("No", "Yes")) ~
-          "dichotomous",
-        .y %in% c("factor") & setequal(attr(data[[.x]], "levels"), c("no", "yes")) ~
-          "dichotomous",
-        .y %in% c("factor") & setequal(attr(data[[.x]], "levels"), c("NO", "YES")) ~
-          "dichotomous",
+        if (inherits(data[[variable]], "factor") &&
+            setequal(attr(data[[variable]], "levels"), c("No", "Yes")))
+          return("dichotomous")
+        if (inherits(data[[variable]], "factor") &&
+            setequal(attr(data[[variable]], "levels"), c("no", "yes")))
+          return("dichotomous")
+        if (inherits(data[[variable]], "factor") &&
+            setequal(attr(data[[variable]], "levels"), c("NO", "YES")))
+          return("dichotomous")
 
         # character variables that are "No" and "Yes" only, will be dichotomous
-        .y %in% c("character") & setequal(na.omit(data[[.x]]), c("No", "Yes")) ~
-          "dichotomous",
-        .y %in% c("character") & setequal(na.omit(data[[.x]]), c("no", "yes")) ~
-          "dichotomous",
-        .y %in% c("character") & setequal(na.omit(data[[.x]]), c("NO", "YES")) ~
-          "dichotomous",
+        if (inherits(data[[variable]], "character") &&
+            setequal(stats::na.omit(data[[variable]]), c("No", "Yes")))
+          return("dichotomous")
+        if (inherits(data[[variable]], "character") &&
+            setequal(stats::na.omit(data[[variable]]), c("no", "yes")))
+          return("dichotomous")
+        if (inherits(data[[variable]], "character") &&
+            setequal(stats::na.omit(data[[variable]]), c("NO", "YES")))
+          return("dichotomous")
 
         # factors and characters are categorical (except when all missing)
-        .y == "character" & nrow(data) == sum(is.na(data[[.x]])) ~ "dichotomous",
-        .y %in% c("factor", "character") ~ "categorical",
+        if (inherits(data[[variable]], c("factor", "character"))) return("categorical")
 
         # numeric variables with fewer than 10 levels will be categorical
-        .y %in% c("integer", "numeric", "difftime") &
-          length(unique(na.omit(data[[.x]]))) < 10 &
-          nrow(data) != sum(is.na(data[[.x]])) ~
-          "categorical",
+        if (inherits(data[[variable]], base_numeric_classes) &&
+            length(unique(stats::na.omit(data[[variable]]))) < 10)
+          return("categorical")
 
-        # everything else is assigned to continuous
-        TRUE ~ get_theme_element("tbl_summary-str:default_con_type", default = "continuous")
-      )
-  )
+        # all other numeric classes are continuous
+        if (inherits(data[[variable]], base_numeric_classes))
+          return(get_theme_element("tbl_summary-str:default_con_type", default = "continuous"))
+
+        # otherwise return NA (which will print an informative message later)
+        return(NA_character_)
+      }
+    )
+
+  # checking for variables that were not assigned a summary type
+  if (check_assignment == TRUE && sum(is.na(assigned_summary_type))) {
+    vars_with_no_type <- variable[is.na(assigned_summary_type)]
+    glue("Unable to determine how to summarize variables ",
+         "{quoted_list(vars_with_no_type)} (e.g. 'continuous', 'categorical', or 'continuous'). ",
+         "This is most likely because they are not base R classes. ",
+         "Specify the summary type using the `type=` argument. For example,\n",
+         "`type = list(c({paste(vars_with_no_type, collapse = ', ')}) ~ \"categorical\")`") %>%
+      str_wrap() %>%
+      abort()
+  }
 
   # checking user did not request a factor or character variable be summarized
   # as a continuous variable
   purrr::pwalk(
-    list(type, class, variable),
-    ~ if(..1 %in% c("continuous", "continuous2") && ..2 %in% c("factor", "character"))
-      stop(glue(
-        "Column '{..3}' is class \"{..2}\" and cannot be summarized as a continuous variable."
-      ), call. = FALSE)
+    list(assigned_summary_type, variable),
+    ~ if(..1 %in% c("continuous", "continuous2") && inherits(data[[..2]], c("factor", "character")))
+      glue("Column '{..2}' is factor or character class and cannot be summarized as continuous.") %>%
+      abort()
   )
 
-
-  type
+  assigned_summary_type
 }
 
 
@@ -277,12 +275,19 @@ assign_summary_type <- function(data, variable, class, summary_type, value) {
 assign_var_label <- function(data, variable, var_label) {
   map_chr(
     variable,
-    ~ var_label[[.x]] %||%
-      attr(data[[.x]], "label") %||%
+    function(.x) {
+      # if user-specified, then return
+      if (!is.null(var_label[[.x]])) return(var_label[[.x]])
+
+      # there is a variable label, return it
+      attr_label <- attr(data[[.x]], "label")
+      if (!is.null(attr_label) && length(attr_label) == 1)
+        return(attr_label)
+
       .x
+    }
   )
 }
-
 
 #' Guesses how many digits to use in rounding continuous variables
 #' or summary statistics
@@ -371,7 +376,7 @@ df_by <- function(data, by) {
         p = .data$n / .data$N,
         by_id = 1:n(), # 'by' variable ID
         by_chr = as.character(.data$by), # Character version of 'by' variable
-        by_col = paste0("stat_", .data$by_id) # Column name of in fmt_table1 output
+        by_col = paste0("stat_", .data$by_id)
       ) %>%
       select(starts_with("by"), everything())
 
@@ -806,15 +811,6 @@ footnote_stat_label <- function(meta_data) {
 # summarize_categorical --------------------------------------------------------
 summarize_categorical <- function(data, variable, by, class, dichotomous_value,
                                   sort, percent, stat_display) {
-  # stripping attributes/classes that cause issues -----------------------------
-  # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
-  # when variable has label.  So deleting it.
-  attr(data[[variable]], "label") <- NULL
-  if (!is.null(by)) attr(data[[by]], "label") <- NULL
-  # same thing when the class "labelled" is included when labeled with the Hmisc package
-  class(data[[variable]]) <- setdiff(class(data[[variable]]), "labelled")
-  if (!is.null(by)) class(data[[by]]) <- setdiff(class(data[[by]]), "labelled")
-
   # tabulating data ------------------------------------------------------------
   df_by <- df_by(data, by)
   variable_by_chr <- c("variable", switch(!is.null(by), "by"))
@@ -825,28 +821,32 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value,
 
   df_tab <-
     data %>%
+    # converting to factor, if not already factor
+    mutate_at(vars(any_of(c("variable", "by"))), as.factor) %>%
     mutate(
-      # converting to factor, if not already factor
-      variable = switch(class, factor = .data$variable) %||% factor(.data$variable),
       # adding dichotomous level (in case it is unobserved)
       variable = forcats::fct_expand(.data$variable, as.character(dichotomous_value)),
-      # # re-leveling by alphanumeric order or frequency
+      # re-leveling by alphanumeric order or frequency
       variable = switch(sort,
                         "alphanumeric" = .data$variable,
                         "frequency" = forcats::fct_infreq(.data$variable))
     ) %>%
-    {suppressWarnings(count(., !!!syms(variable_by_chr)))} %>%
-    stats::na.omit() %>%
-    # if there is a by variable, merging in all levels
-    {switch(
-      !is.null(by),
-      full_join(.,
-                list(by = df_by$by,
-                     variable = factor(attr(.$variable, "levels"),
-                                       levels = attr(.$variable, "levels"))) %>%
-                  purrr::cross_df(),
-                by = c("by", "variable"))[c("by", "variable", "n")]) %||% .} %>%
-    tidyr::complete(!!!syms(variable_by_chr), fill = list(n = 0))
+    filter(!is.na(.data$variable)) %>%
+    count(!!!syms(variable_by_chr), .drop = FALSE)
+
+  # replacing factor by with original version
+  if ("by" %in% variable_by_chr) {
+    df_tab <-
+      df_tab %>%
+      left_join(
+        data %>%
+          select(by_original = .data$by) %>%
+          dplyr::distinct() %>%
+          mutate(by = as.factor(.data$by_original)),
+        by = "by"
+      ) %>%
+      select(.data$variable, by = .data$by_original, .data$n)
+  }
 
   # calculating percent
   group_by_percent <- switch(
@@ -856,7 +856,8 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value,
     "row" = "variable"
   )
 
-  result <- df_tab %>%
+  result <-
+    df_tab %>%
     group_by(!!!syms(group_by_percent)) %>%
     mutate(
       N = sum(.data$n),
@@ -1255,7 +1256,7 @@ calculate_missing_row <- function(data, variable, by, missing_text) {
 # df_stats_fun -----------------------------------------------------------------
 # this function creates df_stats in the tbl_summary meta data table
 # and includes the number of missing values
-df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
+df_stats_fun <- function(summary_type, variable, dichotomous_value, sort,
                          stat_display, data, by, percent, digits) {
   # first table are the standard stats
   t1 <- switch(
@@ -1267,12 +1268,12 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
                                         by = by, stat_display = stat_display,
                                         summary_type = summary_type),
     "categorical" = summarize_categorical(data = data, variable = variable,
-                                          by = by, class = class,
+                                          by = by,
                                           dichotomous_value = dichotomous_value,
                                           sort = sort, percent = percent,
                                           stat_display = stat_display),
     "dichotomous" = summarize_categorical(data = data, variable = variable,
-                                          by = by, class = class,
+                                          by = by,
                                           dichotomous_value = dichotomous_value,
                                           sort = sort, percent = percent,
                                           stat_display = stat_display)
@@ -1281,7 +1282,7 @@ df_stats_fun <- function(summary_type, variable, class, dichotomous_value, sort,
   # adding the N_obs and N_missing, etc
   t2 <- summarize_categorical(data = mutate_at(data, vars(all_of(variable)), is.na),
                               variable = variable,
-                              by = by, class = "logical",
+                              by = by,
                               dichotomous_value = TRUE,
                               sort = "alphanumeric", percent = "column",
                               stat_display = "{n}") %>%

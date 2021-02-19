@@ -181,10 +181,6 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_inputs <- as.list(environment())
   tbl_summary_inputs$exclude <- NULL # should not be exported
 
-  # removing variables with unsupported variable types from data ---------------
-  classes_expected <- c("character", "factor", "numeric", "logical", "integer", "difftime")
-  data$variables <- removing_variables_with_unsupported_types(data$variables, include, classes_expected)
-
   # checking function inputs ---------------------------------------------------
   tbl_summary_input_checks(
     data$variables, by, label, type, value, statistic,
@@ -192,7 +188,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   )
 
   # generate meta_data --------------------------------------------------------
-  meta_data <- generate_metadata(data$variables, value, by, classes_expected, type, label, statistic, digits, percent, sort, survey = data)
+  meta_data <- generate_metadata(data$variables, value, by, type, label, statistic, digits, percent, sort, survey = data)
 
   # calculating summary statistics ---------------------------------------------
   table_body <-
@@ -453,7 +449,7 @@ compute_survey_stat <- function(data, variable, by, f) {
 # df_stats_fun_survey -----------------------------------------------------------
 # this function creates df_stats in the tbl_svysummary meta data table
 # and includes the number of missing values
-df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value, sort,
+df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
                                 stat_display, digits, data, by, percent) {
   # first table are the standard stats
   t1 <- switch(
@@ -465,12 +461,12 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
                                                 by = by, stat_display = stat_display,
                                                 digits = digits, summary_type = summary_type),
     "categorical" = summarize_categorical_survey(data = data, variable = variable,
-                                                 by = by, class = class,
+                                                 by = by,
                                                  dichotomous_value = dichotomous_value,
                                                  sort = sort, percent = percent,
                                                  stat_display = stat_display),
     "dichotomous" = summarize_categorical_survey(data = data, variable = variable,
-                                                 by = by, class = class,
+                                                 by = by,
                                                  dichotomous_value = dichotomous_value,
                                                  sort = sort, percent = percent,
                                                  stat_display = stat_display)
@@ -483,7 +479,7 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
 
   t2 <- summarize_categorical_survey(data = data_is_na,
                                      variable = variable,
-                                     by = by, class = "logical",
+                                     by = by,
                                      dichotomous_value = TRUE,
                                      sort = "alphanumeric", percent = "column",
                                      stat_display = "{n}") %>%
