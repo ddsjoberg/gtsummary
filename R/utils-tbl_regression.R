@@ -187,14 +187,16 @@ chr_w_backtick <- function(x) map_chr(x, ~rlang::sym(.) %>% deparse(backtick = T
   language <- get_theme_element("pkgwide-str:language", default = "en")
 
   result <- list()
-  result$label <- unique(x$table_body$coefficients_label) %>% translate_text(language)
+  result$label <- unique(x$table_body$coefficients_label)
   result$footnote <-
     case_when(
       result$label %in% c("OR", "log(OR)") ~ "OR = Odds Ratio",
       result$label %in% c("HR", "log(HR)") ~ "HR = Hazard Ratio",
+      result$label %in% c("RR", "log(RR)") ~ "RR = Relative Risk",
       result$label %in% c("IRR", "log(IRR)") ~ "IRR = Incidence Rate Ratio"
     ) %>%
     translate_text(language) %>%
     {switch(!is.na(.), .)}
+  result$label <- translate_text(result$label, language)
   result
 }
