@@ -44,6 +44,14 @@ test_that("no errors/warnings with tbl_regression.gam", {
     NA
   )
 
+  # test the exp argument is working
+  expect_equal(
+    mod %>% tidy_gam(exponentiate = TRUE, conf.int = TRUE),
+    mod %>%
+      tidy_gam(exponentiate = FALSE, conf.int = TRUE) %>%
+      dplyr::mutate_at(vars(any_of(c("estimate", "conf.low", "conf.high"))), exp)
+  )
+
   expect_error(
     mod %>%
       tbl_regression(exponentiate = TRUE,
