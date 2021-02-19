@@ -822,7 +822,8 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value,
   df_tab <-
     data %>%
     # converting to factor, if not already factor
-    mutate_at(vars(any_of(c("variable", "by"))), as.factor) %>%
+    mutate_at(vars(any_of(c("variable", "by"))),
+              ~factor(., levels = attr(., "levels"), ordered = FALSE)) %>%
     mutate(
       # adding dichotomous level (in case it is unobserved)
       variable = forcats::fct_expand(.data$variable, as.character(dichotomous_value)),
