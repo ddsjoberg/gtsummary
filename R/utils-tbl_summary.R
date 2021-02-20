@@ -80,7 +80,7 @@ assign_dichotomous_value_one <- function(data, variable, summary_type, value) {
 #' @noRd
 #' @author Daniel D. Sjoberg
 
-assign_stat_display <- function(variable, summary_type, stat_display) {
+assign_stat_display <- function(data, variable, summary_type, stat_display) {
   # dichotomous and categorical are treated in the same fashion here
   summary_type <- ifelse(summary_type == "dichotomous", "categorical", summary_type)
 
@@ -88,19 +88,23 @@ assign_stat_display <- function(variable, summary_type, stat_display) {
   stat_display <-
     map2(
       variable, summary_type,
-      ~switch(.y,
-              "continuous" = stat_display[[.x]] %||%
-                get_theme_element("tbl_summary-str:continuous_stat") %||%
-                "{median} ({p25}, {p75})",
-              "continuous2" = stat_display[[.x]] %||%
-                get_theme_element("tbl_summary-str:continuous_stat") %||%
-                "{median} ({p25}, {p75})",
+      ~switch(inherits(data[[.x]], c("POSIXt", "Date")) &&
+                .y %in% c("continuous", "continuous2"),
+              stat_display[[.x]] %||% "{min} to {max}") %||%
+        switch(.y,
               "categorical" = stat_display[[.x]] %||%
                 get_theme_element("tbl_summary-str:categorical_stat") %||%
                 "{n} ({p}%)",
               "dichotomous" = stat_display[[.x]] %||%
                 get_theme_element("tbl_summary-str:categorical_stat") %||%
-                "{n} ({p}%)"
+                "{n} ({p}%)",
+              "continuous" = stat_display[[.x]] %||%
+                get_theme_element("tbl_summary-str:continuous_stat") %||%
+                "{median} ({p25}, {p75})",
+              "continuous2" = stat_display[[.x]] %||%
+                get_theme_element("tbl_summary-str:continuous_stat") %||%
+                "{median} ({p25}, {p75})"
+
       )
     )
 
@@ -362,21 +366,23 @@ df_by <- function(data, by) {
 
   if (!is_survey(data)) {
     # classic data.frame
-    if (inherits(data[[by]], "factor"))
-      result <- tibble(by = attr(data[[by]], "levels") %>%
-                         factor(x = ., levels= ., labels = .))
-    else result <- data %>% select(by) %>% dplyr::distinct() %>% set_names("by")
-
     result <-
-      result %>%
+      data %>%
+      select(by = all_of(by)) %>%
+      count(!!sym("by"), .drop = FALSE) %>%
       arrange(!!sym("by")) %>%
       mutate(
-        n = purrr::map_int(.data$by, ~ sum(data[[!!by]] == .x)),
         N = sum(.data$n),
         p = .data$n / .data$N,
         by_id = 1:n(), # 'by' variable ID
         by_chr = as.character(.data$by), # Character version of 'by' variable
-        by_col = paste0("stat_", .data$by_id)
+        by_fct =  # factor version of 'by' variable
+          switch(
+            inherits(.data$by, "factor"),
+            factor(.data$by, levels = attr(.data$by, "levels"), ordered = FALSE)
+          ) %||%
+          factor(.data$by),
+        by_col = paste0("stat_", .data$by_id) # Column name of in fmt_table1 output
       ) %>%
       select(starts_with("by"), everything())
 
@@ -769,6 +775,7 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
           ~stat, ~label,
           "{min}, {max}", translate_text("Range", language),
           "{min} \U2013 {max}", translate_text("Range", language),
+          "{min} to {max}", translate_text("Range", language),
           "{min} - {max}", translate_text("Range", language)
         ),
         labels
@@ -823,7 +830,10 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value,
     data %>%
     # converting to factor, if not already factor
     mutate_at(vars(any_of(c("variable", "by"))),
-              ~factor(., levels = attr(., "levels"), ordered = FALSE)) %>%
+              ~switch(inherits(., "factor"),
+                      factor(., levels = attr(., "levels"), ordered = FALSE)) %||%
+                factor(.)
+    ) %>%
     mutate(
       # adding dichotomous level (in case it is unobserved)
       variable = forcats::fct_expand(.data$variable, as.character(dichotomous_value)),
@@ -839,14 +849,9 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value,
   if ("by" %in% variable_by_chr) {
     df_tab <-
       df_tab %>%
-      left_join(
-        data %>%
-          select(by_original = .data$by) %>%
-          dplyr::distinct() %>%
-          mutate(by = as.factor(.data$by_original)),
-        by = "by"
-      ) %>%
-      select(.data$variable, by = .data$by_original, .data$n)
+      select(by_fct = .data$by, everything()) %>%
+      left_join(df_by[c("by", "by_fct")], by = "by_fct") %>%
+      select(-.data$by_fct)
   }
 
   # calculating percent
@@ -886,15 +891,6 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value,
 
 # summarize_continuous ---------------------------------------------------------
 summarize_continuous <- function(data, variable, by, stat_display, summary_type) {
-  # stripping attributes/classes that cause issues -----------------------------
-  # tidyr::complete throws warning `has different attributes on LHS and RHS of join`
-  # when variable has label.  So deleting it.
-  attr(data[[variable]], "label") <- NULL
-  if (!is.null(by)) attr(data[[by]], "label") <- NULL
-  # same thing when the class "labelled" is included when labelled with the Hmisc package
-  class(data[[variable]]) <- setdiff(class(data[[variable]]), "labelled")
-  if (!is.null(by)) class(data[[by]]) <- setdiff(class(data[[by]]), "labelled")
-
   # extracting function calls
   fns_names_chr <- extracting_function_calls_from_stat_display(stat_display, variable)
 
@@ -929,43 +925,31 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
   data <-
     data %>%
     select(c(variable, by)) %>%
-    stats::na.omit() %>%
     # renaming variables to c("variable", "by") (if there is a by variable)
     set_names(variable_by_chr)
 
   # calculating stats for each var and by level
+  fns_names_expr <- map(fns_names_chr, rlang::sym) # converting chars to expressions
+  df_stats <-
+    data  %>%
+    mutate_at(vars(any_of("by")),
+              ~switch(inherits(., "factor"),
+                      factor(., levels = attr(., "levels"), ordered = FALSE)) %||%
+                factor(.)
+    ) %>%
+    stats::na.omit() %>%
+    dplyr::group_by_at(switch(!is.null(by), "by"), .drop = FALSE) %>%
+    dplyr::summarise_at(vars(.data$variable), tibble::lst(!!!fns_names_expr)) %>%
+    mutate(variable = .env$variable) %>%
+    select(any_of(c("by", "variable")), everything())
+
+  # replacing by variable with original (non-factor version)
   if (!is.null(by)) {
     df_stats <-
-      list(
-        fn = fns_names_chr,
-        by = df_by$by
-      ) %>%
-      cross_df() %>%
-      mutate(
-        variable = variable,
-        value = purrr::map2_dbl(
-          .data$fn, .data$by,
-          function(x, y) {
-            var_vctr <- filter(data, .data$by == y) %>% pull(.data$variable)
-            if (length(var_vctr) == 0) return(NA)
-            do.call(what = x, args = list(x = var_vctr))
-          }
-        )
-      ) %>%
-      tidyr::pivot_wider(id_cols = c("by", "variable"), names_from = "fn")
-  }
-  else if (is.null(by)) {
-    df_stats <-
-      list(fn = fns_names_chr) %>%
-      cross_df() %>%
-      mutate(
-        variable = variable,
-        value = map_dbl(
-          .data$fn,
-          ~do.call(what = .x, args = list(x = pull(data, .data$variable)))
-        )
-      ) %>%
-      tidyr::pivot_wider(id_cols = c("variable"), names_from = "fn")
+      df_stats %>%
+      select(by_fct = .data$by, everything()) %>%
+      left_join(df_by[c("by", "by_fct")], by = "by_fct") %>%
+      select(-.data$by_fct)
   }
 
   # adding stat_display to the data frame
@@ -1057,6 +1041,14 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
           switch(is.numeric(.x), purrr::partial(style_number, digits = !!.x)) %||%
           .x # if user passed a function, then return the function
       )
+  }
+
+  # if variable is a date, then convert to character
+  else if (inherits(data[[variable]], c("POSIXt", "Date")) &&
+           summary_type %in% c("continuous", "continuous2")) {
+    digits[[variable]] <-
+      rep(list(as.character), length.out = length(fns_names_chr %>% setdiff(base_stats))) %>%
+      rlang::set_names(fns_names_chr %>% setdiff(base_stats))
   }
 
   # if no digits supplied and variable is continuous, guess how to summarize

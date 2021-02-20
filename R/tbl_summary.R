@@ -420,7 +420,7 @@ generate_metadata <- function(data, value, by, type, label,
     mutate(
       dichotomous_value = assign_dichotomous_value(data, .data$variable, .data$summary_type, value),
       var_label = assign_var_label(data, .data$variable, label),
-      stat_display = assign_stat_display(.data$variable, .data$summary_type, statistic),
+      stat_display = assign_stat_display(data, .data$variable, .data$summary_type, statistic),
       stat_label = stat_label_match(.data$stat_display),
       sort = assign_sort(.data$variable, .data$summary_type, sort),
       df_stats = pmap(
