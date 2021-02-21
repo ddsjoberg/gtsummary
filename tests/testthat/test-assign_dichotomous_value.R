@@ -12,7 +12,6 @@ test_that("assign_dichotomous_value_one for yes/no factors", {
     assign_dichotomous_value_one(
       data = test_df, variable = "v2",
       summary_type = "dichotomous",
-      class = "factor",
       value = NULL
     ),
     "yes"
@@ -24,7 +23,7 @@ test_that("input checks", {
     assign_dichotomous_value(
       data = trial, variable = "stage",
       summary_type = "dichotomous",
-      class = "factor", value = NULL
+      value = NULL
     ),
     "'stage' is dichotomous, but I was unable to determine the level.*"
   )
