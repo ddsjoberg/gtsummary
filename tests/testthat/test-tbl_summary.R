@@ -544,3 +544,33 @@ test_that("tbl_summary() continuous vars with cat summary vars only", {
                ignore_attr = TRUE)
 
 })
+
+test_that("tbl_summary() works with date and date/time", {
+  df_date <-
+    data.frame(
+      dates = as.Date("2021-02-20") + 1:10,
+      times = as.POSIXct("2021-02-20 20:31:33 EST") + 1:10,
+      group = 1:10 %% 2
+    )
+
+  expect_error(
+    tbl1 <- df_date %>% tbl_summary(),
+    NA
+  )
+
+  month_year <- function(x) format(x, "%B %Y")
+  expect_error(
+    tbl1 <- df_date %>% select(-group) %>% tbl_summary(type = everything() ~ "continuous", digits = everything() ~ month_year),
+    NA
+  )
+
+  expect_error(
+    tbl1 <- df_date %>% tbl_summary(by = group, type = everything() ~ "continuous", digits = everything() ~ month_year),
+    NA
+  )
+
+  expect_error(
+    tbl2 <- df_date %>% tbl_summary(by = group),
+    NA
+  )
+})
