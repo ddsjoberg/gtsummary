@@ -24,7 +24,6 @@ test_that("input checks", {
       data = trial, variable = "stage",
       summary_type = "dichotomous",
       value = NULL
-    ),
-    "'stage' is dichotomous, but I was unable to determine the level.*"
+    )
   )
 })
