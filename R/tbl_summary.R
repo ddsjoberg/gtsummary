@@ -257,7 +257,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   )
 
   # generate meta_data --------------------------------------------------------
-  meta_data <- generate_metadata(data = data, value = value, by = by,
+  meta_data <- generate_metadata(data = data %>% select(all_of(include)),
+                                 value = value, by = by,
                                  type = type, label = label, statistic =  statistic,
                                  digits = digits, percent = percent, sort = sort)
 
@@ -326,25 +327,6 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
 
   # returning tbl_summary table
   x
-}
-
-
-# removing variables with unsupported variable types from data -------------------------
-removing_variables_with_unsupported_types <- function(data, include, classes_expected) {
-  data <- select(data, !!include)
-  var_to_remove <-
-    map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
-    discard(. == TRUE) %>%
-    names()
-  data <- select(data, -var_to_remove)
-  if (length(var_to_remove) > 0) {
-    message(glue(
-      "Column(s) {glue_collapse(paste(sQuote(var_to_remove)), sep = ', ', last = ', and ')} ",
-      "omitted from output.\n",
-      "Accepted classes are {glue_collapse(paste(sQuote(classes_expected)), sep = ', ', last = ', or ')}."
-    ))
-  }
-  data
 }
 
 

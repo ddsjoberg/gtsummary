@@ -558,3 +558,21 @@ c_form <- function(left = NULL, right = 1) {
                      all.vars(x$call$fpc),
                      all.vars(x$call$weights))))
 }
+
+# removing variables with unsupported variable types from data -------------------------
+removing_variables_with_unsupported_types <- function(data, include, classes_expected) {
+  data <- select(data, !!include)
+  var_to_remove <-
+    map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
+    discard(. == TRUE) %>%
+    names()
+  data <- select(data, -var_to_remove)
+  if (length(var_to_remove) > 0) {
+    message(glue(
+      "Column(s) {glue_collapse(paste(sQuote(var_to_remove)), sep = ', ', last = ', and ')} ",
+      "omitted from output.\n",
+      "Accepted classes are {glue_collapse(paste(sQuote(classes_expected)), sep = ', ', last = ', or ')}."
+    ))
+  }
+  data
+}
