@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* The broom tidier for GAMs does not include an `exponentiate=` argument. This argument, however, was still being passed within gtsummary. The custom GAM tidier has been updated to respect the exponentiation request.
+
+* Preserve ordering for factor variables in tbl_survfit(). (#764)
+
 * Removed {usethis} package dependency and replaced with {cli}. (#768)
 
 * Added variable-specific formatting to `add_difference(estimate_fun=)` allowing a single table to show, for example, mean and rate differences that are formatted/rounded differently.
