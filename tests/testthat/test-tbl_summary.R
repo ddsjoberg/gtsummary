@@ -584,3 +584,15 @@ test_that("tbl_summary() works with date and date/time", {
     NA
   )
 })
+
+
+test_that("unobserved levels can be dichotomously summarized", {
+  epxect_equal(
+    trial %>%
+      dplyr::transmute(trt = forcats::fct_expand(trt, 'Drug C')) %>%
+      tbl_summary(value = trt ~ "Drug C") %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull(stat_0),
+    "0 (0%)"
+  )
+})
