@@ -1045,7 +1045,7 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
 
   # if variable is a date, then convert to character
   else if ((inherits(data[[variable]], c("POSIXt", "Date")) ||
-            inherits(data$variables[[variable]], c("POSIXt", "Date"))) &&
+            inherits(data[["variables"]][[variable]], c("POSIXt", "Date"))) &&
            summary_type %in% c("continuous", "continuous2")) {
     digits[[variable]] <-
       rep(list(as.character), length.out = length(fns_names_chr %>% setdiff(base_stats))) %>%
