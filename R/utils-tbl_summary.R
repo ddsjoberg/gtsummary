@@ -238,12 +238,12 @@ assign_summary_type <- function(data, variable, summary_type, value,
   # checking for variables that were not assigned a summary type
   if ((check_assignment == TRUE || is.null(summary_type)) && sum(is.na(assigned_summary_type))) {
     vars_with_no_type <- variable[is.na(assigned_summary_type)]
-    glue("Unable to determine how to summarize variables ",
+    glue("Assign summary types for variables ",
          "{quoted_list(vars_with_no_type)} (e.g. 'continuous', 'categorical', or 'continuous'). ",
-         "This is most likely because they are not base R classes. ",
-         "Specify the summary type using the `type=` argument. For example,\n",
+         "Specify the summary type using the `type=` argument. For example, ",
          "`type = list(c({paste(vars_with_no_type, collapse = ', ')}) ~ \"categorical\")`") %>%
       str_wrap() %>%
+      {c(paste("Unable to determine a summary type!", ., sep = "\n\n"))} %>%
       abort()
   }
 
