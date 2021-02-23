@@ -182,9 +182,8 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
     digits, missing, missing_text, sort
   )
 
-  # removing variables with unsupported variable types from data ---------------
-  classes_expected <- c("character", "factor", "numeric", "logical", "integer", "difftime")
-  data$variables <- removing_variables_with_unsupported_types(data$variables, include, classes_expected)
+  # removing variables not selected for summary --------------------------------
+  data$variables <- select(data$variables, !!include)
 
   # generate meta_data --------------------------------------------------------
   meta_data <- generate_metadata(data$variables, value, by, type, label, statistic, digits, percent, sort, survey = data)
@@ -406,12 +405,10 @@ compute_survey_stat <- function(data, variable, by, f) {
     args$quantiles <- .5
   }
   if (f == "min") {
-    fun <- survey::svyquantile
-    args$quantiles <- 0
+    fun <- svymin
   }
   if (f == "max") {
-    fun <- survey::svyquantile
-    args$quantiles <- 1
+    fun <- svymax
   }
   if (f %in% paste0("p", 0:100)) {
     fun <- survey::svyquantile
@@ -559,20 +556,13 @@ c_form <- function(left = NULL, right = 1) {
                      all.vars(x$call$weights))))
 }
 
-# removing variables with unsupported variable types from data -------------------------
-removing_variables_with_unsupported_types <- function(data, include, classes_expected) {
-  data <- select(data, !!include)
-  var_to_remove <-
-    map_lgl(data, ~ class(.x) %in% classes_expected %>% any()) %>%
-    discard(. == TRUE) %>%
-    names()
-  data <- select(data, -var_to_remove)
-  if (length(var_to_remove) > 0) {
-    message(glue(
-      "Column(s) {glue_collapse(paste(sQuote(var_to_remove)), sep = ', ', last = ', and ')} ",
-      "omitted from output.\n",
-      "Accepted classes are {glue_collapse(paste(sQuote(classes_expected)), sep = ', ', last = ', or ')}."
-    ))
-  }
-  data
+#' Min and Max Values for survey design
+svymin <- function(x, design, na.rm = FALSE, ...) {
+  x <- all.vars(x)
+  min(design$variables[[x]], na.rm = na.rm)
+}
+
+svymax <- function(x, design, na.rm = FALSE, ...) {
+  x <- all.vars(x)
+  max(design$variables[[x]], na.rm = na.rm)
 }

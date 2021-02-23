@@ -365,7 +365,7 @@ generate_metadata <- function(data, value, by, type, label,
       mutate(
         summary_type = assign_summary_type(
           data = data, variable = .data$variable,
-          summary_type = type, value = value
+          summary_type = type, value = value, check_assignment = TRUE
         )
       )
   }

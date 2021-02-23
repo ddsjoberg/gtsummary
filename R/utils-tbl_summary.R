@@ -20,7 +20,7 @@ assign_dichotomous_value <- function(data, variable, summary_type, value) {
 assign_dichotomous_value_one <- function(data, variable, summary_type, value) {
 
   # only assign value for dichotomous data
-  if (summary_type != "dichotomous") {
+  if (!summary_type %in% "dichotomous") {
     return(NULL)
   }
 
@@ -236,7 +236,7 @@ assign_summary_type <- function(data, variable, summary_type, value,
     )
 
   # checking for variables that were not assigned a summary type
-  if (check_assignment == TRUE && sum(is.na(assigned_summary_type))) {
+  if ((check_assignment == TRUE || is.null(summary_type)) && sum(is.na(assigned_summary_type))) {
     vars_with_no_type <- variable[is.na(assigned_summary_type)]
     glue("Unable to determine how to summarize variables ",
          "{quoted_list(vars_with_no_type)} (e.g. 'continuous', 'categorical', or 'continuous'). ",
@@ -1044,7 +1044,8 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
   }
 
   # if variable is a date, then convert to character
-  else if (inherits(data[[variable]], c("POSIXt", "Date")) &&
+  else if ((inherits(data[[variable]], c("POSIXt", "Date")) ||
+            inherits(data$variables[[variable]], c("POSIXt", "Date"))) &&
            summary_type %in% c("continuous", "continuous2")) {
     digits[[variable]] <-
       rep(list(as.character), length.out = length(fns_names_chr %>% setdiff(base_stats))) %>%
