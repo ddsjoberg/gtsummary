@@ -109,7 +109,7 @@
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, !!.data$rows) %>% list(),
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
@@ -126,8 +126,9 @@
   x$table_styling$fmt_missing <-
     x$table_styling$fmt_missing %>%
     filter(.data$column %in% .cols_to_show(x)) %>%
+    rowwise() %>%
     mutate(
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, !!.data$rows) %>% list(),
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
@@ -151,7 +152,7 @@
     rowwise() %>%
     mutate(
       row_numbers =
-        .rows_expr_to_row_numbers(x$table_body, !!.data$rows,
+        .rows_expr_to_row_numbers(x$table_body, .data$rows,
                                   return_when_null = seq_len(nrow(x$table_body))) %>% list()
     ) %>%
     select(-.data$rows) %>%
@@ -183,7 +184,7 @@
           "header",
           "body"
         ),
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, !!.data$rows) %>% as.list()
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% as.list()
     ) %>%
     select(-.data$rows) %>%
     unnest(cols = .data$row_numbers) %>%

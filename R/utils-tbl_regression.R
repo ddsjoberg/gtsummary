@@ -68,10 +68,8 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     modify_table_styling(
       x,
       columns = any_of("label"),
-      rows = .data$row_type != 'label',
       label = paste0("**", translate_text("Characteristic"), "**"),
-      hide = FALSE,
-      text_format = "indent"
+      hide = FALSE
     )
 
   # estimate -------------------------------------------------------------------
