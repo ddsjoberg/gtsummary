@@ -44,25 +44,7 @@ bmTags <- benchmarks_previos %>% filter(str_detect(ref_names, "tag:"))
 
 write_excel_csv(x = as.data.frame(bm3$benchmarks), file = "bench/benchmark.csv")
 
-# bm1 <- benchmarks_previos[2,][4][[1]]
-
-# as.data.frame(bm1)
-
-
-# benchmarks_previos[[commit_hash=="376062d75141cda1f883f099721ef6b38c7fd9e0"]]
-
-benchmarks_previos %>% filter(!is.na(benchmarks))
-
-listo <- as.list(benchmarks_previos)
-
-head(listo, 5)
-bind_rows(benchmarks_previos[[4]])
-
 lista <- benchmarks_previos[[4]]
-
-
-
-
 
 # Hay que darle nombre a cada elemento de la lista,
 # lo saco de un vector que contiene los hashs (commit_hash),
@@ -78,5 +60,5 @@ df <- bind_rows(lista, .id = "hash")
 
 library(ggplot2)
 
-df %>% ggplot(aes(x = time, y=p50, color=hash))+
+df %>% ggplot(aes(x = time, y=p50))+geom_smooth()+
   geom_point()+facet_wrap(vars(name))
