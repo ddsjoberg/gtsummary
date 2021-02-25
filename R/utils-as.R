@@ -178,13 +178,8 @@
     df_clean %>%
     rowwise() %>%
     mutate(
-      tab_location =
-        ifelse(
-          eval_tidy(rows, data = x$table_body) %>% is.null(),
-          "header",
-          "body"
-        ),
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% as.list()
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
+      tab_location = ifelse(identical(row_numbers, NA), "header", "body")
     ) %>%
     select(-.data$rows) %>%
     unnest(cols = .data$row_numbers) %>%
