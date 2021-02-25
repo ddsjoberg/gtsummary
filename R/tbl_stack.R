@@ -129,16 +129,24 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
         rev(seq_along(tbls)),
         function(i) {
           df <- tbls[[i]]$table_styling[[style_type]]
-          if ("rows" %in% names(df)) {
+          if ("rows" %in% names(df) && nrow(df) > 0) {
+            browser()
             df <-
               df %>%
+              rowwise() %>%
               mutate(
-                rows = ifelse(is.na(.data$rows), .data$rows,
-                              glue("tbl_id == {i} & ( {rows} )") %>% as.character())
-              )
+                rows =
+                  ifelse(
+                    eval_tidy(.data$rows, data = tbls[[i]]$table_body) %>% is.null(),
+                    list(.data$rows),
+                    list(rlang::quo(.data$tbl_id == !!i & (!!.data$rows)) %>%
+                      structure(.Environment = attr(.data$rows, ".Environment")))
+                  )
+              ) %>%
+              ungroup()
           }
           df %>%
-            mutate_at(vars(any_of(c("column", "rows", "text_interpret",
+            mutate_at(vars(any_of(c("column", "text_interpret",
                                     "footnote", "format_type", "symbol"))), as.character)
         }
       )

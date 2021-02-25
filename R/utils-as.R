@@ -41,7 +41,7 @@
       select(all_of(c("column", .env$column))) %>%
       set_names(c("column", "footnote")) %>%
       filter(!is.na(.data$footnote)) %>%
-      mutate(rows = NA_character_,
+      mutate(rows = list(expr(NULL)),
              text_interpret = "gt::md") %>%
       select(all_of(c("column", "rows", "text_interpret", "footnote")))
   }
@@ -52,6 +52,7 @@
       filter(!is.na(.data[[column]])) %>%
       set_names(c("column", "rows")) %>%
       mutate(
+        rows = map(rows, parse_expr),
         format_type = .env$column,
         undo_text_format = FALSE
       ) %>%
@@ -63,15 +64,18 @@
       select(all_of(c("column", .env$column))) %>%
       filter(!is.na(.data[[column]])) %>%
       set_names(c("column", "rows")) %>%
-      mutate(symbol = get_theme_element("tbl_regression-str:ref_row_text",
-                                        default = "\U2014"))
+      mutate(
+        rows = map(rows, parse_expr),
+        symbol = get_theme_element("tbl_regression-str:ref_row_text",
+                                        default = "\U2014")
+      )
   }
   else if (column %in% "fmt_fun") {
     x$table_styling[[column]] <-
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%
       filter(!map_lgl(.data[[column]], is.null)) %>%
-      mutate(rows = NA_character_)  %>%
+      mutate(rows = expr(NULL))  %>%
       select(all_of(c("column", "rows", .env$column)))
   }
 
@@ -80,10 +84,11 @@
 }
 
 # takes a table_body and a character rows expression, and returns the resulting row numbers
-.rows_expr_to_row_numbers <- function(table_body, rows) {
-  if (all(is.na(rows))) return(NA)
-  rlang::eval_tidy(rlang::parse_expr(rows), data = table_body) %>%
-    which()
+.rows_expr_to_row_numbers <- function(table_body, rows, return_when_null = NA) {
+  rows_evaluated <- rlang::eval_tidy(rows, data = table_body)
+
+  if (is.null(rows_evaluated)) return(return_when_null)
+  which(rows_evaluated)
 }
 
 .cols_to_show <- function(x) {
@@ -104,7 +109,7 @@
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list()
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, !!.data$rows) %>% list(),
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
@@ -121,9 +126,8 @@
   x$table_styling$fmt_missing <-
     x$table_styling$fmt_missing %>%
     filter(.data$column %in% .cols_to_show(x)) %>%
-    rowwise() %>%
     mutate(
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list()
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, !!.data$rows) %>% list(),
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
@@ -147,11 +151,8 @@
     rowwise() %>%
     mutate(
       row_numbers =
-        map(
-          .data$rows,
-          ~switch(is.na(.x), seq_len(nrow(x$table_body))) %||%
-            .rows_expr_to_row_numbers(x$table_body, .x)
-        )
+        .rows_expr_to_row_numbers(x$table_body, !!.data$rows,
+                                  return_when_null = seq_len(nrow(x$table_body))) %>% list()
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
@@ -176,8 +177,13 @@
     df_clean %>%
     rowwise() %>%
     mutate(
-      tab_location = ifelse(is.na(.data$rows), "header", "body"),
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
+      tab_location =
+        ifelse(
+          eval_tidy(rows, data = x$table_body) %>% is.null(),
+          "header",
+          "body"
+        ),
+      row_numbers = .rows_expr_to_row_numbers(x$table_body, !!.data$rows) %>% as.list()
     ) %>%
     select(-.data$rows) %>%
     unnest(cols = .data$row_numbers) %>%
