@@ -44,6 +44,10 @@
 
 * Added function `add_vif()` to include variance inflation factors in `tbl_regression()` output. (#717)
 
+# gtsummary 1.3.7
+
+* No changes. Resubmitting to resolve CRAN quirk.
+
 # gtsummary 1.3.6
   
 ### New Functions
