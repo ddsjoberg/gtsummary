@@ -3,14 +3,13 @@ on:
     branches:
       - master
   pull_request:
-    branches:
-      - master
 
 name: test-coverage
 
 jobs:
   test-coverage:
-    runs-on: macOS-latest
+    runs-on: ubuntu-16.04
+    # runs-on: macOS-latest 2020-01-23 erring on lme4 installation
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -35,7 +34,7 @@ jobs:
       # Added by DS 2020-04-09 (https://github.com/r-lib/actions/issues/78)
       - name: Install XQuartz on macOS
         if: runner.os == 'macOS'
-        run: brew cask install xquartz
+        run: brew install xquartz --cask
 
       - name: Query dependencies
         run: |

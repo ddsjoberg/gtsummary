@@ -1,9 +1,15 @@
-context("test-as_hux_table")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("tbl_summary", {
   expect_error(tbl_summary(trial) %>% as_hux_table(), NA)
   expect_warning(tbl_summary(trial) %>% as_hux_table(), NA)
+
+  expect_error(
+    tbl_summary(trial[c("trt", "age")]) %>%
+      modify_footnote(label ~ "test footnote", rows = variable == "age") %>%
+      as_hux_table(),
+    NA
+  )
 })
 
 test_that("tbl_summary", {

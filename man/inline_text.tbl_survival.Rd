@@ -74,10 +74,6 @@ inline_text(surv_table,
   time = 12
 )
 }
-\seealso{
-Other tbl_survival tools: 
-\code{\link{tbl_survival.survfit}()}
-}
 \author{
 Karissa Whiting
 }

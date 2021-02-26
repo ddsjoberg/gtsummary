@@ -1,5 +1,4 @@
-context("test-add_n")
-testthat::skip_on_cran()
+skip_on_cran()
 
 t1 <- trial %>% tbl_summary()
 t2 <- trial %>% tbl_summary(by = trt)
@@ -118,7 +117,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
 })
 
 
-# add_nevent.tbl_surfit --------------------------------------------------------
+# add_n.tbl_surfit --------------------------------------------------------
 
 test_that("add_n.tbl_surfit", {
   library(survival)
@@ -135,3 +134,49 @@ test_that("add_n.tbl_surfit", {
     NA
   )
 })
+
+
+# add_n.tbl_regression ---------------------------------------------------------
+test_that("add_n.tbl_regression", {
+  tbl <-
+    glm(response ~ grade + age, trial, family = binomial) %>%
+    tbl_regression()
+
+  expect_error(
+    tbl %>% add_n(), NA
+  )
+
+  expect_error(
+    tbl %>% add_n(location = "level"), NA
+  )
+
+  expect_error(
+    tbl %>% add_n(location = c("label", "level")), NA
+  )
+})
+
+# add_n.tbl_uvregression ---------------------------------------------------------
+test_that("add_n.tbl_regression", {
+  tbl <-
+    trial %>%
+    select(response, age, grade) %>%
+    tbl_uvregression(
+      y = response,
+      method = glm,
+      method.args = list(family = binomial)
+    )
+
+  expect_error(
+    tbl %>% add_n(), NA
+  )
+
+  expect_error(
+    tbl %>% add_n(location = "level"), NA
+  )
+
+  expect_error(
+    tbl %>% add_n(location = c("label", "level")), NA
+  )
+})
+
+

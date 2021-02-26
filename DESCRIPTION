@@ -16,14 +16,14 @@ Authors@R:
              family = "Hannum",
              role = "aut",
              comment = c(ORCID = "0000-0002-2953-0449")),
+      person(given = "Joseph",
+             family = "Larmarange",
+             role = "aut",
+             comment = c(ORCID = "0000-0001-7097-700X")),
       person(given = "Karissa",
              family = "Whiting",
              role = "aut",
              comment = c(ORCID = "0000-0002-4683-1868")),
-      person(given = "Emily C.",
-             family = "Zabor",
-             role = "aut",
-             comment = c(ORCID = "0000-0002-1402-4498")),
       person(given = "Esther",
              family = "Drill",
              role = "ctb",
@@ -32,10 +32,6 @@ Authors@R:
              family = "Flynn",
              role = "ctb",
              comment = c(ORCID = "0000-0001-8310-6684")),
-      person(given = "Joseph",
-             family = "Larmarange",
-             role = "ctb",
-             comment = c(ORCID = "0000-0001-7097-700X")),
       person(given = "Jessica",
              family = "Lavery",
              role = "ctb",
@@ -46,7 +42,11 @@ Authors@R:
       person(given = "Gustavo",
              family = "Zapata Wainberg",
              role = "ctb",
-             comment = c(ORCID = "0000-0002-2524-3637")))
+             comment = c(ORCID = "0000-0002-2524-3637")),
+      person(given = "Emily C.",
+             family = "Zabor",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-1402-4498")))
 Description: Creates presentation-ready tables summarizing data
     sets, regression models, and more. The code to create the tables is
     concise and highly customizable. Data frames can be summarized with
@@ -64,8 +64,9 @@ Depends:
     R (>= 3.4)
 Imports: 
     broom (>= 0.7.3),
-    broom.helpers  (>= 1.1.0),
-    dplyr (>= 1.0.1),
+    broom.helpers  (>= 1.1.0.9001),
+    cli (>= 2.3.0),
+    dplyr (>= 1.0.3),
     forcats (>= 0.5.0),
     glue (>= 1.4.1),
     gt (>= 0.2.2),
@@ -76,8 +77,7 @@ Imports:
     stringr (>= 1.4.0),
     survival,
     tibble (>= 3.0.3),
-    tidyr (>= 1.1.1),
-    usethis (>= 1.6.1)
+    tidyr (>= 1.1.1)
 Suggests: 
     broom.mixed (>= 0.2.6),
     car,
@@ -89,6 +89,7 @@ Suggests:
     huxtable (>= 5.0.0),
     kableExtra,
     lme4,
+    mgcv,
     mice,
     nnet,
     officer,
@@ -99,6 +100,8 @@ Suggests:
     spelling (>= 2.2),
     survey,
     testthat
+Remotes:
+    larmarange/broom.helpers
 VignetteBuilder: 
     knitr
 RdMacros: 
@@ -108,3 +111,5 @@ Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Config/testthat/edition: 3
+Config/testthat/parallel: true

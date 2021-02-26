@@ -36,8 +36,14 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
     )
   }
 
+  # running pre-conversion function, if present --------------------------------
+  x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
+
+  # converting row specifications to row numbers, and removing old cmds --------
+  x <- .clean_table_styling(x)
+
   # creating list of calls to get formatted tibble -----------------------------
-  tibble_calls <- table_header_to_tibble_calls(x = x, col_labels = col_labels)
+  tibble_calls <- table_styling_to_tibble_calls(x = x, col_labels = col_labels)
 
   # converting to character vector ---------------------------------------------
   include <-
@@ -76,24 +82,20 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 }
 
 
-table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
-  table_header <- .clean_table_header(x$table_header)
+table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
   tibble_calls <- list()
 
   # tibble ---------------------------------------------------------------------
   tibble_calls[["tibble"]] <- expr(x$table_body)
 
   # ungroup --------------------------------------------------------------------
-  group_var <- select(x$table_body, dplyr::group_cols()) %>% names()
-  if (length(group_var) > 0) {
-    if (group_var != "groupname_col")
-      stop("`.$table_body` may only be grouped by column 'groupname_col'")
-
-    tibble_calls[["ungroup"]] <- list(
-      expr(mutate(groupname_col =
-                    ifelse(dplyr::row_number() == 1, .data$groupname_col, NA))),
-      expr(ungroup())
-    )
+  if ("groupname_col" %in% x$table_styling$header$column) {
+    tibble_calls[["ungroup"]] <-
+      list(
+        expr(group_by(.data$groupname_col)),
+        expr(mutate(groupname_col = ifelse(dplyr::row_number() == 1, .data$groupname_col, NA))),
+        expr(ungroup())
+      )
   }
 
   # fmt (part 1) ---------------------------------------------------------------
@@ -103,65 +105,61 @@ table_header_to_tibble_calls <- function(x, col_labels =  TRUE) {
   tibble_calls[["fmt"]] <- list()
 
   # tab_style_bold -------------------------------------------------------------
-  df_tab_style_bold <-
-    table_header %>%
-    filter(!is.na(.data$bold)) %>%
-    mutate(# lgl indicating the rows to bold
-      row_id = map(.data$bold, ~with(x$table_body, eval(parse_expr(.x))))
-    )
+  df_bold <- x$table_styling$text_format %>% filter(.data$format_type == "bold")
 
   tibble_calls[["tab_style_bold"]] <-
     map(
-      seq_len(nrow(df_tab_style_bold)),
-      ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_bold$column[[.x]])),
-                       ~ifelse(!!df_tab_style_bold$row_id[[.x]], paste0("__", ., "__"), .)))
+      seq_len(nrow(df_bold)),
+      ~ expr(mutate_at(gt::vars(!!!syms(df_bold$column[[.x]])),
+                       ~ifelse(row_number() %in% !!df_bold$row_numbers[[.x]],
+                               paste0("__", ., "__"), .)))
     )
 
   # tab_style_italic -------------------------------------------------------------
-  df_tab_style_italic <- table_header %>%
-    filter(!is.na(.data$italic)) %>%
-    mutate(# lgl indicating the rows to italicize
-      row_id = map(.data$italic, ~with(x$table_body, eval(parse_expr(.x))))
-    )
+  df_italic <- x$table_styling$text_format %>% filter(.data$format_type == "italic")
 
   tibble_calls[["tab_style_italic"]] <-
     map(
-      seq_len(nrow(df_tab_style_italic)),
-      ~ expr(mutate_at(gt::vars(!!!syms(df_tab_style_italic$column[[.x]])),
-                       ~ifelse(!!df_tab_style_italic$row_id[[.x]], paste0("_", ., "_"), .)))
+      seq_len(nrow(df_italic)),
+      ~ expr(mutate_at(gt::vars(!!!syms(df_italic$column[[.x]])),
+                       ~ifelse(row_number() %in% !!df_italic$row_numbers[[.x]],
+                               paste0("_", ., "_"), .)))
     )
 
   # fmt (part 2) ---------------------------------------------------------------
-  df_fmt <- table_header %>%
-    filter(map_lgl(.data$fmt_fun, ~!is.null(.x)))
-
-  tibble_calls[["fmt"]] <- map(
-    seq_len(nrow(df_fmt)),
-    ~ expr(mutate_at(vars(!!!syms(df_fmt$column[[.x]])), !!df_fmt$fmt_fun[[.x]]))
-  )
-
-  # converting all cols to character...
-  # this is important for some output types, e.g. as_flex_table, so missing don't
-  # display as NA
-  cols_to_keep <-
-    dplyr::filter(table_header, .data$hide == FALSE) %>%
-    pull(.data$column)
-
   tibble_calls[["fmt"]] <-
-    c(tibble_calls[["fmt"]], list(expr(mutate_at(vars(!!!syms(cols_to_keep)), as.character))))
+    list(expr(mutate_at(vars(!!!syms(.cols_to_show(x))), as.character))) %>%
+    c(map(
+      seq_len(nrow(x$table_styling$fmt_fun)),
+      ~expr((!!expr(!!eval(parse_expr("gtsummary:::.apply_fmt_fun"))))(
+        columns = !!x$table_styling$fmt_fun$column[[.x]],
+        row_numbers = !!x$table_styling$fmt_fun$row_numbers[[.x]],
+        fmt_fun = !!x$table_styling$fmt_fun$fmt_fun[[.x]],
+        update_from = !!x$table_body
+      ))
+    ))
 
   # cols_hide ------------------------------------------------------------------
   # cols_to_keep object created above in fmt section
-  tibble_calls[["cols_hide"]] <- expr(dplyr::select(any_of("groupname_col"), !!!syms(cols_to_keep)))
+  tibble_calls[["cols_hide"]] <-
+    expr(dplyr::select(any_of("groupname_col"), !!!syms(.cols_to_show(x))))
 
   # cols_label -----------------------------------------------------------------
   if (col_labels) {
     df_col_labels <-
-      dplyr::filter(table_header, .data$hide == FALSE)
+      dplyr::filter(x$table_styling$header, .data$hide == FALSE)
 
     tibble_calls[["cols_label"]] <-
       expr(rlang::set_names(!!df_col_labels$label))
   }
 
   tibble_calls
+}
+
+.apply_fmt_fun <- function(data, columns, row_numbers, fmt_fun, update_from) {
+  data[row_numbers, columns, drop = FALSE] <-
+    update_from[row_numbers, columns, drop = FALSE] %>%
+    purrr::map_dfc(~fmt_fun(.x))
+
+  data
 }

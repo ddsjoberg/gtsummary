@@ -1,6 +1,4 @@
-context("test-inline_text")
-testthat::skip_on_cran()
-
+skip_on_cran()
 
 # inline_text.tbl_summary tests --------------
 

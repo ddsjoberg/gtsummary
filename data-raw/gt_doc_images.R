@@ -22,7 +22,7 @@ list.files(here::here("man", "figures")) %>%
 # cycling over each help file, and saving gt images
 set_gtsummary_theme(list("pkgwide-lgl:quiet" = TRUE))
 for (f in gt_functions) {
-  usethis::ui_done("Working on {f}")
+  cli::cli_alert_success("Working on {f}")
 
   # run code from example
   utils::example(topic = f, package = "gtsummary", character.only = TRUE, give.lines = FALSE, echo = FALSE)
@@ -55,7 +55,10 @@ for (f in gt_functions) {
                                  path = here::here("man", "figures", stringr::str_glue("{example_chr}.png")))
 
       # shrink image
-      webshot::shrink(here::here("man", "figures", stringr::str_glue("{example_chr}.png")))
+      tryCatch(
+        webshot::shrink(here::here("man", "figures", stringr::str_glue("{example_chr}.png"))),
+        error = function(e) return(invisible())
+      )
       return(invisible())
     }
   )

@@ -26,7 +26,8 @@ tbl_summary(
 \item{by}{A column name (quoted or unquoted) in \code{data}.
 Summary statistics will be calculated separately for each level of the \code{by}
 variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
-are calculated using all observations.}
+are calculated using all observations. To stratify a table by two or more
+variables, use \code{tbl_strata()}}
 
 \item{label}{List of formulas specifying variables labels,
 e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}.  If a

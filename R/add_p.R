@@ -225,26 +225,26 @@ footnote_add_p <- function(meta_data) {
 # function to merge p-values to tbl
 add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
                                  meta_data, pvalue_fun,
-                                 estimate_fun = style_sigfig,
+                                 estimate_fun = NULL,
                                  conf.level = 0.95,
                                  adj.vars = NULL) {
 
   x <-
     # merging in p-value to table_body
     modify_table_body(
-    x,
-    left_join,
-    meta_data %>%
-      select(.data$variable, .data$test_result) %>%
-      mutate(df_result = map(.data$test_result, pluck, "df_result"),
-             row_type = "label") %>%
-      unnest(.data$df_result) %>%
-      select(-any_of("method")),
-    by = c("variable", "row_type")
-  ) %>%
+      x,
+      left_join,
+      meta_data %>%
+        select(.data$variable, .data$test_result) %>%
+        mutate(df_result = map(.data$test_result, pluck, "df_result"),
+               row_type = "label") %>%
+        unnest(.data$df_result) %>%
+        select(-any_of("method")),
+      by = c("variable", "row_type")
+    ) %>%
     # adding print instructions for p-value column
-    modify_table_header(
-      any_of("p.value"),
+    modify_table_styling(
+      columns = any_of("p.value"),
       label = paste0("**", translate_text("p-value"), "**"),
       hide = FALSE,
       fmt_fun = pvalue_fun,
@@ -255,30 +255,56 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
   if (lgl_add_p == FALSE) {
     x <- x %>%
       # adding print instructions for estimate
-      modify_table_header(
-        any_of("estimate"),
+      modify_table_styling(
+        columns = any_of("estimate"),
         label = ifelse(is.null(adj.vars),
                        paste0("**", translate_text("Difference"), "**"),
                        paste0("**", translate_text("Adjusted Difference"), "**")),
         hide = FALSE,
-        fmt_fun = estimate_fun,
+        fmt_fun = switch(is_function(estimate_fun), estimate_fun),
         footnote = footnote_add_p(meta_data)
       )
+
+    # add row formatting for difference and CI
+    if (is.list(estimate_fun)) {
+      x$table_styling$fmt_fun <-
+        x$table_styling$fmt_fun %>%
+        bind_rows(
+          estimate_fun %>%
+            tibble::enframe("variable", "fmt_fun") %>%
+            mutate(
+              column =
+                c("estimate", "conf.low", "conf.high") %>%
+                intersect(names(x$table_body)) %>%
+                list(),
+              rows = glue(".data$variable == '{variable}'") %>% as.character()
+            ) %>%
+            select(.data$column, .data$rows, .data$fmt_fun) %>%
+            unnest(cols = .data$column)
+        )
+    }
+
 
     # adding formatted CI column
     if (all(c("conf.low", "conf.high") %in% names(x$table_body)) &&
         !"ci" %in% names(x$table_body)) {
       x <- x %>%
         modify_table_body(
-          mutate,
-          ci = case_when(
-            !is.na(.data$conf.low) | !is.na(.data$conf.high) ~
-              glue("{estimate_fun(conf.low)}, {estimate_fun(conf.high)}")
-          )
+          ~.x %>%
+            mutate(
+              ci = pmap_chr(
+                list(variable, conf.low, conf.high),
+                ~case_when(
+                  !is.na(..2) | !is.na(..3) ~
+                    paste(do.call(estimate_fun[[..1]], list(..2)),
+                          do.call(estimate_fun[[..1]], list(..3)), sep = ", ")
+                )
+              )
+            )
         ) %>%
         modify_table_body(dplyr::relocate, .data$ci, .before = "conf.low") %>%
         # adding print instructions for estimates
-        modify_table_header(
+        modify_table_styling(
           any_of("ci"),
           label = paste0("**", conf.level * 100, "% ", translate_text("CI"), "**"),
           hide = FALSE,
@@ -366,22 +392,22 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 
   # updating footnote
   test_name <- x$meta_data$stat_test_lbl %>% discard(is.na)
-  x$table_header <-
-    x$table_header %>%
-    mutate(
-      footnote = ifelse(.data$column == "p.value",
-                        test_name, .data$footnote)
+  x <-
+    modify_table_styling(
+      x,
+      columns = "p.value",
+      footnote = test_name
     )
-
 
   if (source_note == TRUE) {
     #  report p-value as a source_note
     # hiding p-value from output
-    x$table_header <-
-      x$table_header %>%
-      mutate(
-        hide = ifelse(.data$column == "p.value", TRUE, .data$hide),
-        footnote = ifelse(.data$column == "p.value", NA_character_, .data$footnote),
+    x <-
+      modify_table_styling(
+        x,
+        columns = "p.value",
+        footnote = NA_character_,
+        hide = TRUE
       )
 
     x$list_output$source_note <-
@@ -529,6 +555,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 
 #' Adds p-values to svysummary tables
 #'
+#' \lifecycle{experimental}
 #' Adds p-values to tables created by `tbl_svysummary` by comparing values across groups.
 #'
 #' @param x Object with class `tbl_svysummary` from the [tbl_svysummary] function

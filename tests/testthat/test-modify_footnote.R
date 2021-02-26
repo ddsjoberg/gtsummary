@@ -1,5 +1,4 @@
-context("test-modify_footnote")
-testthat::skip_on_cran()
+skip_on_cran()
 
 test_that("modify_footnote works", {
   tbl_summary <-
@@ -12,6 +11,15 @@ test_that("modify_footnote works", {
       modify_footnote(
         update = starts_with("stat_") ~
           "median (IQR) for continuous variables; n (%) categorical variables"
+      ),
+    NA
+  )
+
+  expect_error(
+    tbl_summary %>%
+      modify_footnote(
+        update = starts_with("stat_") ~ "Row footnote!",
+        rows = variable == "age"
       ),
     NA
   )
@@ -38,7 +46,8 @@ test_that("modify_footnote works", {
   expect_true(
     tbl_summary %>%
       modify_footnote(everything() ~ NA) %>%
-      purrr::pluck("table_header", "footnote") %>%
+      purrr::pluck("table_styling", "header"
+                   , "footnote") %>%
       is.na() %>%
       all()
   )

@@ -91,6 +91,7 @@ a few models that use \link[=tbl_regression_methods]{modifications}.
 \itemize{
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
+\item \code{"gam"}: Uses the internal tidier \code{tidy_gam()} to print both parametric and smooth terms.
 \item \code{"lmerMod"}, \code{"glmerMod"}, \code{"glmmTMB"}, \code{"glmmadmb"}, \code{"stanreg"}: These mixed effects
 models use \code{broom.mixed::tidy(x, effects = "fixed")}. Specify \code{tidy_fun = broom.mixed::tidy}
 to print the random components.
@@ -151,7 +152,6 @@ See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_re
 
 Other tbl_regression tools: 
 \code{\link{add_global_p}()},
-\code{\link{add_nevent.tbl_regression}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{combine_terms}()},

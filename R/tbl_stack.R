@@ -97,71 +97,85 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
   # stacking tables ------------------------------------------------------------
   # the table_body and call_list will be updated with the tbl_stack values
   results <- list()
-  if (is.null(group_header)) {
-    results$table_body <-
-      map_dfr(tbls, ~pluck(.x, "table_body"))
-  }
-  else if (!is.null(group_header)) {
-    # adding grouping column
-    results$table_body <-
-      purrr::map2_dfr(
-        tbls, seq_along(tbls),
-        ~pluck(.x, "table_body") %>% mutate(groupname_col = group_header[.y])
-      ) %>%
-      select(.data$groupname_col, everything()) %>%
-      group_by(.data$groupname_col)
-  }
+  results$table_body <-
+    purrr::map2_dfr(
+      tbls, seq_along(tbls),
+      function(tbl, id) {
+        # adding a table ID and group header
+        table_body <- pluck(tbl, "table_body") %>% mutate(tbl_id = id)
+        if (!is.null(group_header))
+          table_body <-
+            table_body %>%
+            mutate(groupname_col = group_header[id])
 
-  # creating table header ------------------------------------------------------
+        table_body %>% select(any_of(c("groupname_col", "tbl_id")), everything())
+      }
+    )
+
+  # creating table styling -----------------------------------------------------
   # print message if column headers, footnotes, etc. are different among tbls
   if (identical(quiet, FALSE)) print_stack_differences(tbls)
 
-  results$table_header <-
-    map_dfr(tbls, ~pluck(.x, "table_header")) %>%
+  results$table_styling$header <-
+    map_dfr(tbls, ~pluck(.x, "table_styling", "header")) %>%
     group_by(.data$column) %>%
     filter(dplyr::row_number() == 1) %>%
-    ungroup() %>%
-    table_header_fill_missing(table_body = results$table_body)
+    ungroup()
+
+  # cycle over each of the styling tibbles and stack them in reverse order -----
+  for (style_type in c("footnote", "footnote_abbrev", "fmt_fun", "text_format", "fmt_missing")) {
+    results$table_styling[[style_type]] <-
+      map_dfr(
+        rev(seq_along(tbls)),
+        function(i) {
+          df <- tbls[[i]]$table_styling[[style_type]]
+          if ("rows" %in% names(df)) {
+            df <-
+              df %>%
+              mutate(
+                rows = ifelse(is.na(.data$rows), .data$rows,
+                              glue("tbl_id == {i} & ( {rows} )") %>% as.character())
+              )
+          }
+          df %>%
+            mutate_at(vars(any_of(c("column", "rows", "text_interpret",
+                                    "footnote", "format_type", "symbol"))), as.character)
+        }
+      )
+  }
 
   # adding label for grouping variable, if present -----------------------------
-  if ("groupname_col" %in% names(results$table_body)) {
-    results <- modify_header(
+  class(results) <- c("tbl_stack", "gtsummary")
+  results <-
+    modify_table_styling(
       results,
-      groupname_col = get_theme_element("tbl_stack-str:group_header", default = "**Group**")
+      any_of("groupname_col"),
+      label = get_theme_element("tbl_stack-str:group_header", default = "**Group**"),
+      align = "left",
+      hide = FALSE
     )
-    # making groups column left aligned (if printed with non-gt printer)
-    results$table_header <-
-      results$table_header %>%
-      mutate(align = ifelse(.data$column == "groupname_col", "left", .data$align))
-
-  }
 
   # returning results ----------------------------------------------------------
   results$call_list <- list(tbl_stack = match.call())
   results$tbls <- tbls
 
-  class(results) <- c("tbl_stack", "gtsummary")
   results
 }
 
-# function prints changes to column labels, footnotes, and spanning headers
+# function prints changes to column labels and spanning headers
 print_stack_differences <- function(tbls) {
   tbl_differences <-
     purrr::map2_dfr(
       tbls, seq_len(length(tbls)),
-      ~pluck(.x, "table_header") %>%
+      ~pluck(.x, "table_styling", "header") %>%
         mutate(..tbl_id.. = .y)
     ) %>%
-    select(.data$..tbl_id.., .data$column, .data$label, .data$footnote,
-           .data$footnote_abbrev, .data$spanning_header) %>%
-    tidyr::pivot_longer(cols = c(.data$label, .data$footnote, .data$footnote_abbrev,
-                                 .data$spanning_header)) %>%
+    select(.data$..tbl_id.., .data$column, .data$label, .data$spanning_header) %>%
+    tidyr::pivot_longer(cols = c(.data$label, .data$spanning_header)) %>%
     group_by(.data$column, .data$name) %>%
     mutate(
       new_value = .data$value[1],
       name_fmt = case_when(name == "label" ~ "Column header",
-                           name == "footnote" ~ "Column footnote",
-                           name == "footnote_abbrev" ~ "Column abbreviation footnote",
                            name == "spanning_header" ~ "Spanning column header")
     ) %>%
     filter(.data$new_value != .data$value) %>%
@@ -169,17 +183,16 @@ print_stack_differences <- function(tbls) {
     arrange(.data$name != "label", .data$name_fmt, .data$..tbl_id..)
 
   if (nrow(tbl_differences) > 0) {
-    paste("When tables are stacked,",
-          "attributes from the first table are used.",
-          "Use {ui_code('quiet = TRUE')} to supress this message.") %>%
+    paste("Column headers among stacked tables differ. Headers from the first table are used.",
+          "Use {.code quiet = TRUE} to supress this message.") %>%
       stringr::str_wrap() %>%
-      usethis::ui_info()
+      cli_alert_info()
 
     # purrr::pwalk(
     #   list(tbl_differences$name_fmt, tbl_differences$..tbl_id..,
     #        tbl_differences$column, tbl_differences$value, tbl_differences$new_value),
     #   function(name_fmt, ..tbl_id.., column, value, new_value)
-    #     ui_done("{name_fmt}, table {..tbl_id..} ({column}): {ui_field(value)} ---> {ui_field(new_value)}")
+    #     cli_alert_success("{name_fmt}, table {..tbl_id..} ({column}): {.field {value}} ---> {.field {new_value}}")
     # )
   }
 

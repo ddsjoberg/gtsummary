@@ -52,10 +52,16 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   # checking flextable installation --------------------------------------------
   assert_package("flextable", "as_flex_table()")
 
+  # running pre-conversion function, if present --------------------------------
+  x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
+
+  # converting row specifications to row numbers, and removing old cmds --------
+  x <- .clean_table_styling(x)
+
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
-    x$table_header <-
-      x$table_header %>%
+    x$table_styling$header <-
+      x$table_styling$header %>%
       mutate_at(
         vars(.data$label, .data$spanning_header),
         ~str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
@@ -63,7 +69,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   }
 
   # creating list of flextable calls -------------------------------------------
-  flextable_calls <- table_header_to_flextable_calls(x = x)
+  flextable_calls <- table_styling_to_flextable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds")
@@ -99,12 +105,12 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-# creating flextable calls from table_header -----------------------------------
-table_header_to_flextable_calls <- function(x, ...) {
+# creating flextable calls from table_styling ----------------------------------
+table_styling_to_flextable_calls <- function(x, ...) {
 
   # adding id number for columns not hidden
-  table_header <-
-    .clean_table_header(x$table_header) %>%
+  x$table_styling$header <-
+    x$table_styling$header %>%
     group_by(.data$hide) %>%
     mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
     ungroup()
@@ -112,18 +118,18 @@ table_header_to_flextable_calls <- function(x, ...) {
   # tibble ---------------------------------------------------------------------
   # flextable doesn't use the markdown language `__` or `**`
   # to bold and italicize text, so removing them here
-  flextable_calls <-
-    as_tibble(x, return_calls = TRUE,
-              include = -c("cols_label", "tab_style_bold", "tab_style_italic"))
+  flextable_calls <- table_styling_to_tibble_calls(x, col_labels =  FALSE)
+  flextable_calls$tab_style_bold <- flextable_calls$tab_style_italic <- NULL
 
   # flextable ------------------------------------------------------------------
   flextable_calls[["flextable"]] <- expr(flextable::flextable())
 
   # set_header_labels ----------------------------------------------------------
   col_labels <-
-    table_header %>%
+    x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
-    {set_names(as.list(.[["label"]]), .[["column"]])}
+    select(.data$column, .data$label) %>%
+    tibble::deframe()
 
   flextable_calls[["set_header_labels"]] <- expr(
     flextable::set_header_labels(!!!col_labels)
@@ -138,11 +144,11 @@ table_header_to_flextable_calls <- function(x, ...) {
 
   # add_header_row -------------------------------------------------------------
   # this is the spanning rows
-  any_spanning_header <- sum(!is.na(table_header$spanning_header)) > 0
+  any_spanning_header <- any(!is.na(x$table_styling$header$spanning_header))
   if (any_spanning_header == FALSE) flextable_calls[["add_header_row"]] <- list()
   else {
     df_header0 <-
-      table_header %>%
+      x$table_styling$header %>%
       filter(.data$hide == FALSE) %>%
       select(.data$spanning_header) %>%
       mutate(spanning_header = ifelse(is.na(.data$spanning_header),
@@ -175,7 +181,7 @@ table_header_to_flextable_calls <- function(x, ...) {
 
   # align ----------------------------------------------------------------------
   df_align <-
-    table_header %>%
+    x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
     select(.data$id, .data$align) %>%
     group_by(.data$align) %>%
@@ -189,19 +195,19 @@ table_header_to_flextable_calls <- function(x, ...) {
 
   # padding --------------------------------------------------------------------
   df_padding <-
-    table_header %>%
-    filter(!is.na(.data$indent)) %>%
-    select(.data$id, .data$column, .data$indent) %>%
-    mutate(
-      i_index = map(
-        .data$indent,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
-      )
+    x$table_styling$header %>%
+    select(.data$id, .data$column) %>%
+    inner_join(
+      x$table_styling$text_format %>%
+        filter(.data$format_type == "indent"),
+      by = "column"
     )
 
-  flextable_calls[["padding"]] <- map2(
-    df_padding$id, df_padding$i_index,
-    ~expr(flextable::padding(i = !!.y, j = !!.x, padding.left = 15))
+  flextable_calls[["padding"]] <- map(
+    seq_len(nrow(df_padding)),
+    ~expr(flextable::padding(i = !!df_padding$row_numbers[[.x]],
+                             j = !!df_padding$id[[.x]],
+                             padding.left = 15))
   )
 
   # fontsize -------------------------------------------------------------------
@@ -213,102 +219,90 @@ table_header_to_flextable_calls <- function(x, ...) {
   flextable_calls[["autofit"]] <- expr(flextable::autofit())
 
   # footnote -------------------------------------------------------------------
-  i_index <- ifelse(any_spanning_header == TRUE, 2L, 1L)
-
-  footnote_abbrev <-
-    table_header %>%
-    select(.data$id, .data$footnote_abbrev) %>%
-    filter(!is.na(.data$footnote_abbrev)) %>%
-    group_by(.data$footnote_abbrev) %>%
-    nest() %>%
-    ungroup() %>%
-    mutate(footnote = paste(.data$footnote_abbrev, collapse = ", ")) %>%
-    unnest(cols = .data$data) %>%
-    select(-.data$footnote_abbrev) %>%
-    group_by(.data$footnote) %>%
-    nest() %>%
-    ungroup()
+  header_i_index <- ifelse(any_spanning_header == TRUE, 2L, 1L)
 
   df_footnote <-
-    table_header %>%
-    select(.data$id, .data$footnote) %>%
-    filter(!is.na(.data$footnote)) %>%
-    group_by(.data$footnote) %>%
-    nest() %>%
-    ungroup() %>%
-    bind_rows(footnote_abbrev) %>%
-    mutate(
-      j_index = map(.data$data, ~.x$id),
-      min_id = purrr::map_int(.data$j_index,~min(.x))
-    ) %>%
-    arrange(.data$min_id) %>%
-    mutate(row_number = dplyr::row_number())
+    .number_footnotes(x) %>%
+    inner_join(x$table_styling$header %>%
+                 select(.data$column, column_id = .data$id),
+               by = "column") %>%
+    mutate(row_numbers = ifelse(.data$tab_location == "header",
+                                header_i_index,
+                                .data$row_numbers)) %>%
+    select(.data$footnote_id, .data$footnote, .data$tab_location,
+           .data$row_numbers, .data$column_id) %>%
+    nest(location_ids = c(.data$row_numbers, .data$column_id)) %>%
+    mutate(row_numbers = map(.data$location_ids, ~pluck(.x, "row_numbers") %>% unique()),
+           column_id = map(.data$location_ids, ~pluck(.x, "column_id") %>% unique()))
 
-  flextable_calls[["footnote"]] <- pmap(
-    list(df_footnote$j_index, df_footnote$footnote, df_footnote$row_number),
-    ~expr(
-      flextable::footnote(
-        i = !!i_index, j = !!..1,
-        value = flextable::as_paragraph(!!..2),
-        part = "header", ref_symbols = !!..3
-      )
-    )
-  )
-
-  # fmt_missing_emdash ---------------------------------------------------------
-  df_na_emdash <-
-    table_header %>%
-    filter(!is.na(.data$missing_emdash)) %>%
-    select(.data$id, .data$column, .data$missing_emdash) %>%
-    mutate(
-      i_index = map(
-        .data$missing_emdash,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
-      )
-    )
-
-  flextable_calls[["fmt_missing_emdash"]] <-
-    map2(
-      df_na_emdash$i_index, df_na_emdash$id,
+  flextable_calls[["footnote"]] <-
+    map(
+      seq_len(nrow(df_footnote)),
       ~expr(
-        flextable::colformat_char(j = !!.y, i = !!.x,
-                                  na_str = !!get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014"))
+        flextable::footnote(
+          i = !!df_footnote$row_numbers[[.x]],
+          j = !!df_footnote$column_id[[.x]],
+          value = flextable::as_paragraph(!!df_footnote$footnote[[.x]]),
+          part = !!df_footnote$tab_location[[.x]],
+          ref_symbols = !!df_footnote$footnote_id[[.x]]
         )
+      )
+    )
+
+  # fmt_missing ----------------------------------------------------------------
+  df_fmt_missing <-
+    x$table_styling$fmt_missing %>%
+    inner_join(x$table_styling$header %>%
+                 select(.data$column, column_id = .data$id),
+               by = "column") %>%
+    select(.data$symbol, .data$row_numbers, .data$column_id) %>%
+    nest(location_ids = c(.data$row_numbers, .data$column_id)) %>%
+    mutate(row_numbers = map(.data$location_ids, ~pluck(.x, "row_numbers") %>% unique()),
+           column_id = map(.data$location_ids, ~pluck(.x, "column_id") %>% unique()))
+
+  flextable_calls[["fmt_missing"]] <-
+    map(
+      seq_len(nrow(df_fmt_missing)),
+      ~expr(
+        flextable::colformat_char(i = !!df_fmt_missing$row_numbers[[.x]],
+                                  j = !!df_fmt_missing$column_id[[.x]],
+                                  na_str = !!df_fmt_missing$symbol[[.x]])
+      )
     )
 
   # bold -----------------------------------------------------------------------
   df_bold <-
-    table_header %>%
-    filter(!is.na(.data$bold)) %>%
-    select(.data$id, .data$column, .data$bold) %>%
-    mutate(
-      i_index = map(
-        .data$bold,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
-      )
-    )
+    x$table_styling$text_format %>%
+    filter(.data$format_type == "bold") %>%
+    inner_join(x$table_styling$header %>%
+                 select(.data$column, column_id = .data$id),
+               by = "column") %>%
+    select(.data$format_type, .data$row_numbers, .data$column_id)
 
-  flextable_calls[["bold"]] <- map2(
-    df_bold$id, df_bold$i_index,
-    ~expr(flextable::bold(i = !!.y, j = !!.x, part = "body"))
-  )
+  flextable_calls[["bold"]] <-
+    map(
+      seq_len(nrow(df_bold)),
+      ~expr(flextable::bold(i = !!df_bold$row_numbers[[.x]],
+                            j = !!df_bold$column_id[[.x]],
+                            part = "body"))
+    )
 
   # italic ---------------------------------------------------------------------
   df_italic <-
-    table_header %>%
-    filter(!is.na(.data$italic)) %>%
-    select(.data$id, .data$column, .data$italic) %>%
-    mutate(
-      i_index = map(
-        .data$italic,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
-      )
-    )
+    x$table_styling$text_format %>%
+    filter(.data$format_type == "italic") %>%
+    inner_join(x$table_styling$header %>%
+                 select(.data$column, column_id = .data$id),
+               by = "column") %>%
+    select(.data$format_type, .data$row_numbers, .data$column_id)
 
-  flextable_calls[["italic"]] <- map2(
-    df_italic$id, df_italic$i_index,
-    ~expr(flextable::italic(i = !!.y, j = !!.x, part = "body"))
-  )
+  flextable_calls[["italic"]] <-
+    map(
+      seq_len(nrow(df_italic)),
+      ~expr(flextable::italic(i = !!df_italic$row_numbers[[.x]],
+                              j = !!df_italic$column_id[[.x]],
+                              part = "body"))
+    )
 
   # source note ----------------------------------------------------------------
   # in flextable, this is just a footnote associated without column or symbol

@@ -1,5 +1,4 @@
-context("test-add_nevent")
-testthat::skip_on_cran()
+skip_on_cran()
 
 library(survival)
 fit_cox <- coxph(Surv(time, status) ~ sex, lung)
@@ -111,5 +110,48 @@ test_that("add_nevent.tbl_surfit", {
   expect_error(
     add_nevent(tbl_survfit),
     NA
+  )
+})
+
+# add_nevent.tbl_regression ---------------------------------------------------------
+test_that("add_nevent.tbl_regression", {
+  tbl <-
+    glm(response ~ grade + age, trial, family = binomial) %>%
+    tbl_regression()
+
+  expect_error(
+    tbl %>% add_nevent(), NA
+  )
+
+  expect_error(
+    tbl %>% add_nevent(location = "level"), NA
+  )
+
+  expect_error(
+    tbl %>% add_nevent(location = c("label", "level")), NA
+  )
+})
+
+# add_nevent.tbl_uvregression ---------------------------------------------------------
+test_that("add_nevent.tbl_regression", {
+  tbl <-
+    trial %>%
+    select(response, age, grade) %>%
+    tbl_uvregression(
+      y = response,
+      method = glm,
+      method.args = list(family = binomial)
+    )
+
+  expect_error(
+    tbl %>% add_nevent(), NA
+  )
+
+  expect_error(
+    tbl %>% add_nevent(location = "level"), NA
+  )
+
+  expect_error(
+    tbl %>% add_nevent(location = c("label", "level")), NA
   )
 })

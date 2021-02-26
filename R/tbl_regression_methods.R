@@ -29,16 +29,16 @@ tbl_regression.mira <- function(x, tidy_fun = pool_and_tidy_mice, ...) {
 #' @export
 #' @rdname tbl_regression_methods
 tbl_regression.mipo <- function(x, ...) {
-  paste("Please pass the 'mice' model to {ui_code('tbl_regression()')} before ",
-        "models have been combined with {ui_code('mice::pool()')}.",
-        "The default tidier, {ui_code('pool_and_tidy_mice()')}, ","
+  paste("Please pass the 'mice' model to {.code tbl_regression()} before ",
+        "models have been combined with {.code mice::pool()}.",
+        "The default tidier, {.code pool_and_tidy_mice()}, ","
         will both pool and tidy the regression model.") %>%
     stringr::str_wrap() %>%
-    usethis::ui_oops()
+    cli_alert_danger()
   paste("\n\nmice::mice(trial, m = 2) %>%",
         "with(lm(age ~ marker + grade)) %>%",
-        "tbl_regression()", sep = "\n") %>%
-    usethis::ui_code_block()
+        "tbl_regression()", sep = "\n  ") %>%
+    cli_code()
 }
 
 #' @export
@@ -67,6 +67,12 @@ tbl_regression.stanreg <- tbl_regression.lmerMod
 
 #' @export
 #' @rdname tbl_regression_methods
+tbl_regression.gam <- function(x, tidy_fun = tidy_gam, ...) {
+  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
+}
+
+#' @export
+#' @rdname tbl_regression_methods
 tbl_regression.multinom <- function(x, ...) {
   result <- tbl_regression.default(x = x, ...)
 
@@ -76,17 +82,16 @@ tbl_regression.multinom <- function(x, ...) {
     mutate(groupname_col = .data$y.level) %>%
     select(.data$groupname_col, everything()) %>%
     group_by(.data$groupname_col)
-  result$table_header <-
-    table_header_fill_missing(result$table_header, result$table_body)
+  result <- .update_table_styling(result)
 
   # warning about multi-nomial models
   paste("Multinomial models have a different underlying structure than",
         "the models gtsummary was designed for.",
         "Other gtsummary functions designed to work with",
-        "{usethis::ui_field('tbl_regression')} objects may yield unexpected",
+        "{.field tbl_regression} objects may yield unexpected",
         "results.") %>%
     str_wrap() %>%
-    usethis::ui_info()
+    cli_alert_info()
 
   result
 }

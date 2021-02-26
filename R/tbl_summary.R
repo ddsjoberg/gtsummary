@@ -9,7 +9,8 @@
 #' @param by A column name (quoted or unquoted) in `data`.
 #' Summary statistics will be calculated separately for each level of the `by`
 #' variable (e.g. `by = trt`). If `NULL`, summary statistics
-#' are calculated using all observations.
+#' are calculated using all observations. To stratify a table by two or more
+#' variables, use `tbl_strata()`
 #' @param label List of formulas specifying variables labels,
 #' e.g. `list(age ~ "Age", stage ~ "Path T Stage")`.  If a
 #' variable's label is not specified here, the label attribute
@@ -299,49 +300,41 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     select(.data$variable, .data$var_type, .data$var_class, .data$var_label, everything())
 
   # table of column headers ----------------------------------------------------
-  table_header <-
-    tibble(column = names(table_body)) %>%
-    table_header_fill_missing()
+  x <-
+    .create_gtsummary_object(
+      table_body = table_body,
+      meta_data = meta_data,
+      inputs = tbl_summary_inputs,
+      N = nrow(data),
+      call_list = list(tbl_summary = match.call()),
+      by = by,
+      df_by = df_by(data, by)
+    )
 
   # adding stat footnote (unless there are continuous2 vars)
   if (!"continuous2" %in% meta_data$summary_type) {
-    table_header <-
-      table_header %>%
-      mutate(
-        # adding footnote of statistics on display (unless theme indicates a no print)
-        footnote = ifelse(
-          startsWith(.data$column, "stat_"),
-          footnote_stat_label(meta_data),
-          .data$footnote
-        )
+    x <-
+      modify_table_styling(
+        x,
+        columns = starts_with("stat_"),
+        footnote = footnote_stat_label(meta_data)
       )
   }
 
   # returning all results in a list --------------------------------------------
-  results <- list(
-    table_body = table_body,
-    table_header = table_header,
-    meta_data = meta_data,
-    inputs = tbl_summary_inputs,
-    N = nrow(data),
-    call_list = list(tbl_summary = match.call())
-  )
-  results$by <- by
-  results$df_by <- df_by(data, by)
-
   # assigning a class of tbl_summary (for special printing in Rmarkdown)
-  class(results) <- c("tbl_summary", "gtsummary")
+  class(x) <- c("tbl_summary", class(x))
 
   # adding headers
   if (is.null(by)) {
-    results <- modify_header(
-      results,
+    x <- modify_header(
+      x,
       stat_0 = "**N = {style_number(N)}**",
       label = paste0("**", translate_text("Characteristic"), "**")
     )
   } else {
-    results <- modify_header(
-      results,
+    x <- modify_header(
+      x,
       update = list(
         all_stat_cols(FALSE) ~ "**{level}**, N = {style_number(n)}",
         label ~ paste0("**", translate_text("Characteristic"), "**")
@@ -349,7 +342,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     )
   }
 
-  return(results)
+  # returning tbl_summary table
+  x
 }
 
 

@@ -149,7 +149,8 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
         partial(style_sigfig, digits = 2),
       times = getOption("gtsummary.tbl_survfit.times.estimate_fun") %||%
         partial(style_percent, symbol = TRUE)
-    )
+    ) %>%
+    gts_mapper("tbl_survfit(estimate_fun=)")
 
   # will return call, and all object passed to in tbl_summary call -------------
   # the object func_inputs is a list of every object passed to the function
@@ -191,38 +192,39 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
       rlang::inform()
   }
 
-  # table_header ---------------------------------------------------------------
+  # table_body -----------------------------------------------------------------
   table_body <-
     meta_data %>%
     select(.data$var_label, .data$table_body) %>%
     unnest(.data$table_body) %>%
     select(.data$variable, .data$var_label, everything())
-  table_header <-
-    tibble(column = names(table_body)) %>%
-    table_header_fill_missing()
 
   # finishing up ---------------------------------------------------------------
   # constructing final result
-  results <- list(
-    table_body = table_body,
-    table_header = table_header,
-    meta_data = meta_data,
-    inputs = tbl_survfit_inputs,
-    call_list = list(tbl_survfit = match.call())
-  )
+  x <-
+    .create_gtsummary_object(
+      table_body = table_body,
+      meta_data = meta_data,
+      inputs = tbl_survfit_inputs
+    )
 
   # applying labels
-  lbls <- as.list(unique(meta_data$df_stats[[1]]$col_label)) %>% set_names(unique(meta_data$df_stats[[1]]$col_name))
-  results <-
-    expr(modify_header(results, label = !!paste0("**", translate_text("Characteristic"), "**"), !!!lbls)) %>%
+  lbls <-
+    meta_data$df_stats[[1]] %>%
+    select(.data$col_name, .data$col_label) %>%
+    distinct() %>%
+    tibble::deframe() %>%
+    as.list()
+
+  x <-
+    expr(modify_header(x, label = !!paste0("**", translate_text("Characteristic"), "**"), !!!lbls)) %>%
     eval()
 
   # exporting results ----------------------------------------------------------
-  results$inputs <- tbl_survfit_inputs
-  results$call_list = list(tbl_survfit = match.call())
-  class(results) <- c("tbl_survfit", "gtsummary")
+  x$call_list <- list(tbl_survfit = match.call())
+  class(x) <- c("tbl_survfit", "gtsummary")
 
-  results
+  x
 }
 
 #' @export
@@ -398,6 +400,8 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
   # adding time 0 to data frame
   tidy <-
     tidy %>%
+    # making strata a fct to preserve ordering
+    mutate_at(vars(!!!strata), ~factor(., levels = unique(.))) %>%
     # if CI is missing, and SE is 0, making the CIs the estimate
     mutate_at(vars(.data$conf.high, .data$conf.low),
               ~ifelse(is.na(.) & .data$std.error == 0, .data$estimate, .)) %>%
@@ -411,8 +415,6 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
                conf.high = ifelse(multi_state, 0, 1))
     ) %>%
     ungroup()
-
-
 
   # getting requested estimates
   df_stat <-

@@ -37,10 +37,16 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = TRUE) {
   assert_package("huxtable", "as_hux_table()")
 
+  # running pre-conversion function, if present --------------------------------
+  x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
+
+  # converting row specifications to row numbers, and removing old cmds --------
+  x <- .clean_table_styling(x)
+
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
-    x$table_header <-
-      x$table_header %>%
+    x$table_styling$header <-
+      x$table_styling$header %>%
       mutate_at(
         vars(.data$label, .data$spanning_header),
         ~str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
@@ -48,7 +54,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
   }
 
   # creating list of huxtable calls -------------------------------------------
-  huxtable_calls <- table_header_to_huxtable_calls(x = x)
+  huxtable_calls <- table_styling_to_huxtable_calls(x = x)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_hux_table.gtsummary-lst:addl_cmds")
@@ -83,12 +89,11 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-# creating huxtable calls from table_header ------------------------------------
-table_header_to_huxtable_calls <- function(x, ...) {
-
+# creating huxtable calls from table_styling -----------------------------------
+table_styling_to_huxtable_calls <- function(x, ...) {
   # adding id number for columns not hidden
-  table_header <-
-    .clean_table_header(x$table_header) %>%
+  x$table_styling$header <-
+    x$table_styling$header %>%
     group_by(.data$hide) %>%
     mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
     ungroup()
@@ -96,9 +101,8 @@ table_header_to_huxtable_calls <- function(x, ...) {
   # tibble ---------------------------------------------------------------------
   # huxtable doesn't use the markdown language `__` or `**`
   # to bold and italicize text, so removing them here
-  huxtable_calls <-
-    as_tibble(x, return_calls = TRUE,
-              include = -c("cols_label", "tab_style_bold", "tab_style_italic"))
+  huxtable_calls <- table_styling_to_tibble_calls(x, col_labels =  FALSE)
+  huxtable_calls$tab_style_bold <- huxtable_calls$tab_style_italic <- NULL
 
   huxtable_calls[["huxtable"]] <- expr(huxtable::as_huxtable(add_colnames = FALSE))
 
@@ -111,62 +115,42 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   # padding --------------------------------------------------------------------
   df_padding <-
-    table_header %>%
-    filter(!is.na(.data$indent)) %>%
-    select(.data$id, .data$column, .data$indent) %>%
-    mutate(
-      i_index = map(
-        .data$indent,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
-      )
+    x$table_styling$header %>%
+    select(.data$id, .data$column) %>%
+    inner_join(
+      x$table_styling$text_format %>%
+        filter(.data$format_type == "indent"),
+      by = "column"
     )
 
-  huxtable_calls[["set_left_padding"]] <- map2(
-    df_padding$id, df_padding$i_index,
-    ~expr(huxtable::set_left_padding(row = !!.y, col = !!.x, value = 15))
-  )
+  huxtable_calls[["set_left_padding"]] <-
+    map(
+      seq_len(nrow(df_padding)),
+      ~expr(huxtable::set_left_padding(row = !!df_padding$row_numbers[[.x]],
+                                       col = !!df_padding$id[[.x]],
+                                       value = 15))
+    )
 
   # footnote -------------------------------------------------------------------
-  footnote_abbrev <-
-    table_header %>%
-    select(.data$id, .data$footnote_abbrev) %>%
-    filter(!is.na(.data$footnote_abbrev)) %>%
-    group_by(.data$footnote_abbrev) %>%
-    nest() %>%
-    ungroup() %>%
-    mutate(footnote = paste(.data$footnote_abbrev, collapse = ", ")) %>%
-    unnest(cols = .data$data) %>%
-    select(-.data$footnote_abbrev) %>%
-    group_by(.data$footnote) %>%
-    nest() %>%
-    ungroup()
+  vct_footnote <-
+    .number_footnotes(x) %>%
+    pull(.data$footnote) %>%
+    unique()
+  border <- rep_len(0, length(vct_footnote))
+  border[1] <- 0.8
 
-  df_footnote <-
-    table_header %>%
-    select(.data$id, .data$footnote) %>%
-    filter(!is.na(.data$footnote)) %>%
-    group_by(.data$footnote) %>%
-    nest() %>%
-    ungroup() %>%
-    bind_rows(footnote_abbrev) %>%
-    mutate(
-      j_index = map(.data$data, ~.x$id),
-      min_id = purrr::map_int(.data$j_index,~min(.x))
-    ) %>%
-    arrange(.data$min_id) %>%
-    mutate(row_number = dplyr::row_number())
-
-  borders <- rep(0, length(df_footnote$footnote))
-  if (length(df_footnote$footnote) > 0) borders[1] <- 0.8
-  huxtable_calls[["add_footnote"]] <- map2(
-    df_footnote$footnote, borders,
-    ~expr(
-      huxtable::add_footnote(
-        text = !!.x,
-        border = !!.y
+  if (length(vct_footnote) > 0) {
+    huxtable_calls[["add_footnote"]] <-
+      map2(
+        vct_footnote, border,
+        ~expr(
+          huxtable::add_footnote(
+            text = !!.x,
+            border = !!.y
+          )
+        )
       )
-    )
-  )
+  }
 
   # source note ----------------------------------------------------------------
   if (!is.null(x$list_output$source_note)) {
@@ -179,72 +163,78 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   # bold -----------------------------------------------------------------------
   df_bold <-
-    table_header %>%
-    filter(!is.na(.data$bold)) %>%
-    select(.data$id, .data$column, .data$bold) %>%
-    mutate(
-      i_index = map(
-        .data$bold,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
-      )
-    )
+    x$table_styling$text_format %>%
+    filter(.data$format_type == "bold") %>%
+    inner_join(x$table_styling$header %>%
+                 select(.data$column, column_id = .data$id),
+               by = "column") %>%
+    select(.data$format_type, .data$row_numbers, .data$column_id)
 
-  huxtable_calls[["set_bold"]] <- map2(
-    df_bold$id, df_bold$i_index,
-    ~expr(huxtable::set_bold(row = !!.y, col = !!.x, value = TRUE))
-  )
+  huxtable_calls[["set_bold"]] <-
+    map(
+      seq_len(nrow(df_bold)),
+      ~expr(huxtable::set_bold(row = !!df_bold$row_numbers[[.x]],
+                               col = !!df_bold$column_id[[.x]],
+                               value = TRUE))
+    )
 
   # italic ---------------------------------------------------------------------
   df_italic <-
-    table_header %>%
-    filter(!is.na(.data$italic)) %>%
-    select(.data$id, .data$column, .data$italic) %>%
-    mutate(
-      i_index = map(
-        .data$italic,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
-      )
-    )
+    x$table_styling$text_format %>%
+    filter(.data$format_type == "italic") %>%
+    inner_join(x$table_styling$header %>%
+                 select(.data$column, column_id = .data$id),
+               by = "column") %>%
+    select(.data$format_type, .data$row_numbers, .data$column_id)
 
-  huxtable_calls[["set_italic"]] <- map2(
-    df_italic$id, df_italic$i_index,
-    ~expr(huxtable::set_italic(row = !!.y, col = !!.x, value = TRUE))
-  )
+  huxtable_calls[["set_italic"]] <-
+    map(
+      seq_len(nrow(df_italic)),
+      ~expr(huxtable::set_italic(row = !!df_italic$row_numbers[[.x]],
+                               col = !!df_italic$column_id[[.x]],
+                               value = TRUE))
+    )
 
   # set_na_string -------------------------------------------------------
-  df_na_emdash <-
-    table_header %>%
-    filter(!is.na(.data$missing_emdash)) %>%
-    select(.data$id, .data$column, .data$missing_emdash) %>%
-    mutate(
-      i_index = map(
-        .data$missing_emdash,
-        ~rlang::eval_tidy(rlang::parse_expr(.x), x$table_body) %>% which()
+  df_fmt_missing <-
+    x$table_styling$fmt_missing %>%
+    inner_join(x$table_styling$header %>%
+                 select(.data$column, column_id = .data$id),
+               by = "column") %>%
+    select(.data$symbol, .data$row_numbers, .data$column_id) %>%
+    nest(location_ids = c(.data$row_numbers, .data$column_id)) %>%
+    mutate(row_numbers = map(.data$location_ids, ~pluck(.x, "row_numbers") %>% unique()),
+           column_id = map(.data$location_ids, ~pluck(.x, "column_id") %>% unique()))
+
+
+  huxtable_calls[["fmt_missing"]] <-
+    map(
+      seq_len(nrow(df_fmt_missing)),
+      ~expr(
+        huxtable::set_na_string(row = !!df_fmt_missing$row_numbers[[.x]],
+                                col = !!df_fmt_missing$column_id[[.x]],
+                                value = !!df_fmt_missing$symbol[[.x]])
       )
     )
 
-  huxtable_calls[["set_na_string"]] <- map2(df_na_emdash$i_index, df_na_emdash$id,
-    ~expr(
-      huxtable::set_na_string(row = !!.x, col = !!.y,
-                              value = !!get_theme_element("tbl_regression-str:ref_row_text",
-                                                          default = "\U2014"))
-    )
-  )
+
 
   # insert_row ----------------------------------------------------------
   # we do this last so as to not mess up row indexes before
-  col_labels <- table_header %>%
+  col_labels <-
+    x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
-    {set_names(as.list(.[["label"]]), .[["column"]])}
+    select(.data$column, .data$label) %>%
+    tibble::deframe()
 
   huxtable_calls[["insert_row"]] <- list()
 
   huxtable_calls[["insert_row"]] <- append(huxtable_calls[["insert_row"]],
     expr(huxtable::insert_row(after = 0, !!!col_labels)))
 
-  any_spanning_header <- sum(!is.na(table_header$spanning_header)) > 0
+  any_spanning_header <- sum(!is.na(x$table_styling$header$spanning_header)) > 0
   if (any_spanning_header) {
-    header_content <- table_header$spanning_header[table_header$hide == FALSE]
+    header_content <- x$table_styling$header$spanning_header[x$table_styling$header$hide == FALSE]
     huxtable_calls[["insert_row"]] <- append(huxtable_calls[["insert_row"]],
       expr(huxtable::insert_row(after = 0, !!! header_content)))
 
@@ -268,7 +258,7 @@ table_header_to_huxtable_calls <- function(x, ...) {
 
   # align ----------------------------------------------------------------------
   df_align <-
-    table_header %>%
+    x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
     select(.data$id, .data$align) %>%
     group_by(.data$align) %>%
