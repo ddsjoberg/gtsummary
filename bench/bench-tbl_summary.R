@@ -5,7 +5,7 @@ library(rmarkdown)
 # setup code
 big_trial <- purrr::map_dfr(seq_len(5000), ~trial)
 
-bm <- bench::mark(
+bench::mark(
   # simple summary
   simple = tbl_summary(trial),
 
