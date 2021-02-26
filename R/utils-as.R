@@ -109,7 +109,9 @@
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
+      row_numbers =
+        switch(nrow(.) == 0, integer(0)) %||%
+        .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
@@ -128,7 +130,9 @@
     filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
+      row_numbers =
+        switch(nrow(.) == 0, integer(0)) %||%
+        .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
@@ -152,6 +156,7 @@
     rowwise() %>%
     mutate(
       row_numbers =
+        switch(nrow(.) == 0, integer(0)) %||%
         .rows_expr_to_row_numbers(x$table_body, .data$rows,
                                   return_when_null = seq_len(nrow(x$table_body))) %>% list()
     ) %>%
@@ -178,7 +183,9 @@
     df_clean %>%
     rowwise() %>%
     mutate(
-      row_numbers = .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
+      row_numbers =
+        switch(nrow(.) == 0, integer(0)) %||%
+        .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
       tab_location = ifelse(identical(row_numbers, NA), "header", "body")
     ) %>%
     select(-.data$rows) %>%

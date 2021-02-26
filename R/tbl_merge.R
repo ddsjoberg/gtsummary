@@ -210,7 +210,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
             filter(!(.data$column %in% c("label", "variable", "var_label", "row_type") & i != 1)) %>%
             rowwise() %>%
             mutate(
-              rows = .rename_variables_in_expression(.data$rows, i, tbls[[i]]$table_styling$header$column),
+              rows =
+                switch(nrow(.) == 0, list()) %||%
+                .rename_variables_in_expression(.data$rows, i, tbls[[i]]) %>% list(),
               column = ifelse(
                 .data$column %in% c("label", "variable", "var_label", "row_type") & i == 1,
                 .data$column,
@@ -226,23 +228,36 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   x
 }
 
-.rename_variables_in_expression <- function(expr_char, id, columns) {
-  if (identical(expr_char, character()) || identical(expr_char, NA_character_)) return(expr_char)
-  # convert str exp to proper expression
-  expr <- parse_expr(expr_char)
+.rename_variables_in_expression <- function(rows, id, tbl) {
+  # if NULL, return rows expression unmodified
+  rows_evaluated <- rlang::eval_tidy(rows, data = tbl$table_body)
+  if (is.null(rows_evaluated)) return(rows)
+
+  # convert rows to proper expression
+  expr <- switch(inherits(rows, "quosure"), rlang::f_rhs(rows)) %||% rows
 
   # get all variable names in expression to be renamed
+  columns <- tbl$table_styling$header$column
   var_list <-
     expr(~!!expr) %>% eval() %>% all.vars() %>%
     setdiff(c("label", "variable", "var_label", "row_type")) %>%
     intersect(columns)
-  if (identical(var_list, character())) return(expr_char)
+
+  # if no variables to rename, return rows unaltered
+  if (identical(var_list, character())) return(rows)
 
   # creating arguments list for `substitute()`
   substitute_args <- paste0(var_list, "_", id) %>% map(~expr(as.name(!!.x))) %>% set_names(var_list)
 
-  expr(do.call("substitute", list(expr, list(!!!substitute_args)))) %>%
-    eval() %>%
-    rlang::expr_text()
+  # renaming columns in expression
+  expr_renamed <- expr(do.call("substitute", list(expr, list(!!!substitute_args)))) %>% eval()
+
+  # if original rows was a quosure, convert it back to one
+  if (inherits(rows, "quosure")) {
+    expr_renamed <-
+      rlang::quo(!!expr_renamed) %>% structure(.Environment = attr(rows, ".Environment"))
+  }
+
+  expr_renamed
 }
 
