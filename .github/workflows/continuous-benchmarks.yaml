@@ -43,6 +43,11 @@ jobs:
           install.packages("remotes")
           remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
           remotes::install_github("r-lib/bench")
+          install.packages("gert")
+          install.packages("dplyr")
+          install.packages("ggplot2")
+          install.packages("plotly")
+          install.packages("gtsummary")
         shell: Rscript {0}
 
       - name: Install package

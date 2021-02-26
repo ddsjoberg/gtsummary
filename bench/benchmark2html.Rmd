@@ -1,0 +1,93 @@
+---
+title: '{gtsummary} benchmark'
+author: "Gustavo Zapata Wainberg & Daniel Sjoberg"
+output: html_document
+---
+
+
+Updated: `r format(Sys.Date(), "%B %d %Y")`  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(gert)
+library(dplyr)
+# library(stringr)
+library(ggplot2)
+library(bench) # requires dev version!
+library(plotly)
+
+bench::cb_fetch(remote = "upstream")
+
+# Get the data with previous benchmarks
+stored_benchmarks <- bench::cb_read()
+
+# commitInfo <- gert::git_commit_info() # Current commit (?).
+# commitInfo$id # ID of current commit for current brach
+
+# This retrieves hashes for all the commits which have a tag (just releases (?))
+# taglists <- gert::git_tag_list()
+
+# How to get a tash for a specific version
+# hash136 <- taglists[str_detect(taglists$name, "1.3.6"), "commit"]
+
+# Keep a list with just the benchmark outputs
+benchmarks_outputs <- stored_benchmarks[["benchmarks"]]
+
+# In order to bind and identify all dataframes within benchmark_outputs
+# the list needs to be named, so I'm naming it with the hashs
+# Then this argument will be used bind rows
+commit_hash <- stored_benchmarks[["commit_hash"]]
+
+# Name list elements
+names(benchmarks_outputs) <- commit_hash
+
+# bind rows and add .id
+benchmarks_df <- dplyr::bind_rows(benchmarks_outputs, .id = "hash")
+```
+
+<!-- This css stuff is just to enable rmarkdown to use a wider area of screen -->
+
+<style type="text/css">
+.main-container {
+  max-width: 1800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+## Execution times
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplotly(
+  benchmarks_df  %>% 
+           ggplot(aes(x = time, y = mean))+
+           geom_smooth()+
+           geom_point(aes(color = hash))+
+           facet_wrap(vars(name), 
+                      nrow = length(unique(benchmarks_df$name)), 
+                      scales = "free_y", 
+                      switch = "y")+
+           theme_minimal()+
+           theme(legend.position='none')+
+           labs(title = "Mean execution time for each function (time per iteration in seconds)",
+                subtitle = "seconds", # Plotly doesn't understand subtitles
+                y = "",
+                x = ""),
+         width = 900
+)
+
+```
+
+  
+The functions used for the benchmark are:
+
+  `simple = tbl_summary(trial)`  
+  
+  `complex = tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n()`
+
+  `big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = "no") %>% add_p()` 
+  (NOTE: `big_trial` is a 5000-fold copy of `gtsummary::trial`)
