@@ -1,6 +1,5 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 <!-- badges: start -->
 
 [![Codecov test
@@ -11,7 +10,7 @@ status](https://github.com/ddsjoberg/gtsummary/workflows/R-CMD-check/badge.svg)]
 status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 <!-- badges: end -->
 
 ## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
@@ -22,7 +21,7 @@ programming language. The {gtsummary} package summarizes data sets,
 regression models, and more, using sensible defaults with highly
 customizable capabilities.
 
-  - [**Summarize data frames or
+-   [**Summarize data frames or
     tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
     easily in **R**. Perfect for presenting descriptive statistics,
     comparing group **demographics** (e.g creating a **Table 1** for
@@ -31,7 +30,7 @@ customizable capabilities.
     appropriate descriptive statistics, and also includes amount of
     missingness in each variable.
 
-  - [**Summarize regression
+-   [**Summarize regression
     models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
     in R and include reference rows for categorical variables. Common
     regression models, such as logistic regression and Cox proportional
@@ -39,7 +38,7 @@ customizable capabilities.
     pre-filled with appropriate column headers (i.e. Odds Ratio and
     Hazard Ratio).
 
-  - [**Customize gtsummary
+-   [**Customize gtsummary
     tables**](http://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions)
     using a growing list of formatting/styling functions.
     **[Bold](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
@@ -54,18 +53,18 @@ customizable capabilities.
     or
     **[stack](http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)**
     tables to present results side by side… there are so many
-    possibilities to create the table of your dreams\!
+    possibilities to create the table of your dreams!
 
-  - **[Report statistics
+-   **[Report statistics
     inline](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text)**
     from summary tables and regression summary tables in **R markdown**.
-    Make your reports completely reproducible\!
+    Make your reports completely reproducible!
 
 By leveraging [{broom}](https://broom.tidymodels.org/),
 [{gt}](https://gt.rstudio.com/), and
 [{labelled}](http://larmarange.github.io/labelled/) packages,
 {gtsummary} creates beautifully formatted, ready-to-share summary and
-result tables in a single line of R code\!
+result tables in a single line of R code!
 
 Check out the examples below, review the
 [vignettes](http://www.danieldsjoberg.com/gtsummary/articles/) for a
@@ -157,7 +156,6 @@ You can also present side-by-side regression model results using
 
 ``` r
 library(survival)
-#> Warning: package 'survival' was built under R version 4.0.3
 
 # build survival model table
 t2 <-
@@ -197,14 +195,17 @@ Please note that the {gtsummary} project is released with a [Contributor
 Code of
 Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms. A big
-thank you to all contributors\!  
+thank you to all contributors!  
 [@ablack3](https://github.com/ablack3),
 [@aghaynes](https://github.com/aghaynes),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
 [@alexis-catherine](https://github.com/alexis-catherine),
 [@anaavu](https://github.com/anaavu),
 [@angelgar](https://github.com/angelgar),
+[@arbet003](https://github.com/arbet003),
+[@arnmayer](https://github.com/arnmayer),
 [@asshah4](https://github.com/asshah4),
+[@awcm0n](https://github.com/awcm0n),
 [@barthelmes](https://github.com/barthelmes),
 [@benediktclaus](https://github.com/benediktclaus),
 [@calebasaraba](https://github.com/calebasaraba),
@@ -219,9 +220,12 @@ thank you to all contributors\!
 [@denis-or](https://github.com/denis-or),
 [@djbirke](https://github.com/djbirke),
 [@emilyvertosick](https://github.com/emilyvertosick),
+[@ercbk](https://github.com/ercbk),
+[@gjones1219](https://github.com/gjones1219),
 [@gorkang](https://github.com/gorkang),
 [@GuiMarthe](https://github.com/GuiMarthe),
 [@hughjonesd](https://github.com/hughjonesd),
+[@IndrajeetPatil](https://github.com/IndrajeetPatil),
 [@IsadoraBM](https://github.com/IsadoraBM),
 [@j-tamad](https://github.com/j-tamad),
 [@jalavery](https://github.com/jalavery),
@@ -233,6 +237,7 @@ thank you to all contributors\!
 [@jflynn264](https://github.com/jflynn264),
 [@jjallaire](https://github.com/jjallaire),
 [@joelgautschi](https://github.com/joelgautschi),
+[@JonGretar](https://github.com/JonGretar),
 [@juseer](https://github.com/juseer),
 [@jwilliman](https://github.com/jwilliman),
 [@karissawhiting](https://github.com/karissawhiting),
@@ -241,6 +246,7 @@ thank you to all contributors\!
 [@larmarange](https://github.com/larmarange),
 [@leejasme](https://github.com/leejasme),
 [@ltin1214](https://github.com/ltin1214),
+[@maia-sh](https://github.com/maia-sh),
 [@margarethannum](https://github.com/margarethannum),
 [@Marsus1972](https://github.com/Marsus1972),
 [@matthieu-faron](https://github.com/matthieu-faron),
@@ -252,6 +258,7 @@ thank you to all contributors\!
 [@oranwutang](https://github.com/oranwutang),
 [@Pascal-Schmidt](https://github.com/Pascal-Schmidt),
 [@proshano](https://github.com/proshano),
+[@raphidoc](https://github.com/raphidoc),
 [@ryzhu75](https://github.com/ryzhu75),
 [@sammo3182](https://github.com/sammo3182),
 [@sbalci](https://github.com/sbalci),
@@ -259,9 +266,12 @@ thank you to all contributors\!
 [@slb2240](https://github.com/slb2240),
 [@slobaugh](https://github.com/slobaugh),
 [@storopoli](https://github.com/storopoli),
+[@TarJae](https://github.com/TarJae),
 [@tjmeyers](https://github.com/tjmeyers),
 [@tormodb](https://github.com/tormodb),
 [@UAB-BST-680](https://github.com/UAB-BST-680),
 [@Uriahf](https://github.com/Uriahf),
-[@zabore](https://github.com/zabore), and
-[@zeyunlu](https://github.com/zeyunlu)
+[@zabore](https://github.com/zabore),
+[@zachariae](https://github.com/zachariae),
+[@zeyunlu](https://github.com/zeyunlu), and
+[@zongell-star](https://github.com/zongell-star)
