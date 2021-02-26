@@ -52,7 +52,7 @@
       filter(!is.na(.data[[column]])) %>%
       set_names(c("column", "rows")) %>%
       mutate(
-        rows = map(rows, parse_expr),
+        rows = map(.data$rows, parse_expr),
         format_type = .env$column,
         undo_text_format = FALSE
       ) %>%
@@ -65,7 +65,7 @@
       filter(!is.na(.data[[column]])) %>%
       set_names(c("column", "rows")) %>%
       mutate(
-        rows = map(rows, parse_expr),
+        rows = map(.data$rows, parse_expr),
         symbol = get_theme_element("tbl_regression-str:ref_row_text",
                                         default = "\U2014")
       )
@@ -75,7 +75,7 @@
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%
       filter(!map_lgl(.data[[column]], is.null)) %>%
-      mutate(rows = expr(NULL))  %>%
+      mutate(rows = list(expr(NULL)))  %>%
       select(all_of(c("column", "rows", .env$column)))
   }
 
@@ -186,7 +186,7 @@
       row_numbers =
         switch(nrow(.) == 0, integer(0)) %||%
         .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
-      tab_location = ifelse(identical(row_numbers, NA), "header", "body")
+      tab_location = ifelse(identical(.data$row_numbers, NA), "header", "body")
     ) %>%
     select(-.data$rows) %>%
     unnest(cols = .data$row_numbers) %>%
