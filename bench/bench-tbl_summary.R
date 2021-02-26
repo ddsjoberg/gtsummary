@@ -24,12 +24,13 @@ bm <- bench::mark(
   min_iterations = 10
 )
 
-pr <- cb_fetch(remote = "upstream")
+cb_fetch(remote = "upstream")
 
 #Esto te lee todos los benchmark que hay en master
 benchmarks_previos <- cb_read()
-informacion <- gert::git_commit_info()
-informacion$id #este es el commit actual (entiendo que del que esta subido, no del que estas subiendo)
+# commitInfo <- gert::git_commit_info() # Current commit (?).
+
+# commitInfo$id # ID of current commit (guess that for current file)
 taglists <- gert::git_tag_list()
 taglists
 hash136 <- taglists[str_detect(taglists$name, "1.3.6"), "commit"]
