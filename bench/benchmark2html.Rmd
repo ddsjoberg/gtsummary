@@ -70,7 +70,7 @@ ggplotly(
            facet_wrap(vars(name), 
                       nrow = length(unique(benchmarks_df$name)), 
                       scales = "free_y", 
-                      switch = "y")+
+                      strip.position = "right")+ # Plotly doesn't understand this
            theme_minimal()+
            theme(legend.position='none')+
            labs(title = "Mean execution time for each function (time per iteration in seconds)",
