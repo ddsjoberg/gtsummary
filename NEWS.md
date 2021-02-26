@@ -1,3 +1,5 @@
+# gtsummary (development version)
+
 # gtsummary 1.3.7
 
 * No changes. Resubmitting to resolve CRAN quirk.
