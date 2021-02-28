@@ -12,15 +12,30 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(gert)
 library(dplyr)
-# library(stringr)
+library(stringr)
 library(ggplot2)
 library(bench) # requires dev version!
 library(plotly)
+library(purrr)
 
 bench::cb_fetch(remote = "upstream")
 
 # Get the data with previous benchmarks
 stored_benchmarks <- bench::cb_read()
+
+# TO REVIEW, THROWS AN ERROR: 
+# removing duplicate checks within a single HASH (not sure why they are there)
+# TODO: Learn why there are duplicates and ensure we're picking the correct one.
+# My theory is that there are multiple when I was running the commands
+# locally, then pushed to GH where the benchmarks were run again.
+# stored_benchmarks$benchmarks <-
+#   stored_benchmarks$benchmarks %>%
+#   map(
+#     ~arrange(.x, file, name, time) %>%
+#       group_by(file, name) %>%
+#       slice(n()) %>%
+#       ungroup()
+#   )
 
 # commitInfo <- gert::git_commit_info() # Current commit (?).
 # commitInfo$id # ID of current commit for current brach
@@ -65,7 +80,6 @@ benchmarks_df <- dplyr::bind_rows(benchmarks_outputs, .id = "hash")
 ggplotly(
   benchmarks_df  %>% 
            ggplot(aes(x = time, y = mean))+
-           geom_smooth()+
            geom_point(aes(color = hash))+
            facet_wrap(vars(name), 
                       nrow = length(unique(benchmarks_df$name)), 
@@ -73,6 +87,25 @@ ggplotly(
                       strip.position = "right")+ # Plotly doesn't understand this
            theme_minimal()+
            theme(legend.position='none')+
+           labs(title = "Mean execution time for each function (time per iteration in seconds)",
+                subtitle = "seconds", # Plotly doesn't understand subtitles
+                y = "",
+                x = ""),
+         width = 900
+)
+
+ggplotly(
+  benchmarks_df  %>% 
+    mutate(hash_abr = stringr::str_sub(string = hash, start = 1, end = 8)) %>% 
+           ggplot(aes(x = hash_abr, y = mean))+
+           geom_point(aes(color = time))+
+           facet_wrap(vars(name), 
+                      nrow = length(unique(benchmarks_df$name)), 
+                      scales = "free_y", 
+                      strip.position = "right")+ # Plotly doesn't understand this
+           theme_minimal()+
+           theme(legend.position='none',
+                 axis.text.x = element_text(angle = 45, vjust = 1, hjust=0))+
            labs(title = "Mean execution time for each function (time per iteration in seconds)",
                 subtitle = "seconds", # Plotly doesn't understand subtitles
                 y = "",
