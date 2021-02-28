@@ -10,7 +10,9 @@
 #'
 #' @param x gtsummary object
 #' @param columns vector or selector of columns in `x$table_body`
-#' @param rows predicate string expression to select rows. `rows = NA` often indicates all rows.
+#' @param rows predicate expression to select rows in `x$table_body`.
+#' Can be used to style footnote, formatting functions, missing symbols,
+#' and text formatting. Default is `NULL`. See details below.
 #' @param label string of column label(s)
 #' @param hide logical indicating whether to hide column from output
 #' @param align string indicating alignment of column, must be one of
@@ -55,12 +57,15 @@ modify_table_styling <- function(x,columns,
                              choices = c("bold", "italic", "indent"),
                              several.ok = TRUE)
   rows <- enquo(rows)
-  if (!quo_is_null(rows) && !is.logical(eval_tidy(rows, data = x$table_body))) {
+  rows_eval_error <-
+    tryCatch(
+      eval_tidy(rows, data = x$table_body) %>%
+      {!is.null(.) && !is.logical(.)},
+      error = function(e) TRUE
+    )
+  if (rows_eval_error) {
     abort("The `rows=` predicate expression must result in logical vector when evaluated with `x$table_body`")
   }
-  # converting rows expression to string
-  rows <- quo_text(rows, width = 500L) %>% {switch(. != "NULL", .)}
-
 
   # update table_styling -------------------------------------------------------
   x <- .update_table_styling(x)
@@ -123,7 +128,7 @@ modify_table_styling <- function(x,columns,
         x$table_styling$footnote,
         tibble(
           column = columns,
-          rows = rows %||% NA_character_,
+          rows = list(rows),
           text_interpret = text_interpret,
           footnote = footnote
         )
@@ -137,7 +142,7 @@ modify_table_styling <- function(x,columns,
         x$table_styling$footnote_abbrev,
         tibble(
           column = columns,
-          rows = rows %||% NA_character_,
+          rows = list(rows),
           text_interpret = text_interpret,
           footnote = footnote_abbrev
         )
@@ -152,7 +157,7 @@ modify_table_styling <- function(x,columns,
         x$table_styling$fmt_fun,
         tibble(
           column = columns,
-          rows = rows %||% NA_character_,
+          rows = list(rows),
           fmt_fun = fmt_fun
         )
       )
@@ -163,7 +168,7 @@ modify_table_styling <- function(x,columns,
     x$table_styling$text_format <-
       list(
         column = columns,
-        rows = rows,
+        rows = list(rows),
         format_type = text_format,
         undo_text_format = undo_text_format
       ) %>%
@@ -176,7 +181,7 @@ modify_table_styling <- function(x,columns,
     x$table_styling$fmt_missing <-
       list(
         column = columns,
-        rows = rows,
+        rows = list(rows),
         symbol = missing_symbol
       ) %>%
       purrr::cross_df() %>%
@@ -186,5 +191,3 @@ modify_table_styling <- function(x,columns,
   # return x -------------------------------------------------------------------
   x
 }
-
-

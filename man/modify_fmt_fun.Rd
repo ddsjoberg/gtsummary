@@ -14,7 +14,8 @@ formatting function.
 The LHS specifies the column(s) to be updated,
 and the RHS is the updated formatting function.}
 
-\item{rows}{predicate string expression to select rows. \code{rows = NA} often indicates all rows.}
+\item{rows}{predicate expression to select rows in \code{x$table_body}. Default
+is \code{NULL}, which applies the formatting function to the entire column.}
 }
 \description{
 \lifecycle{experimental}

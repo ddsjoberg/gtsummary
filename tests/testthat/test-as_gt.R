@@ -6,7 +6,7 @@ test_that("tbl_summary", {
 
   expect_error(
     tbl_summary(trial[c("trt", "age")]) %>%
-      modify_footnote(label ~ "test footnote", rows = variable == "age") %>%
+      modify_table_styling(columns = label, footnote =  "test footnote", rows = variable == "age") %>%
       as_gt(),
     NA
   )
