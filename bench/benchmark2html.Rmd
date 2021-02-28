@@ -18,24 +18,29 @@ library(bench) # requires dev version!
 library(plotly)
 library(purrr)
 
-bench::cb_fetch(remote = "upstream")
+tryCatch(bench::cb_fetch(remote = "origin"), error = function(e) invisible(NULL))
+tryCatch(bench::cb_fetch(remote = "upstream"), error = function(e) invisible(NULL))
 
 # Get the data with previous benchmarks
 stored_benchmarks <- bench::cb_read()
 
-# TO REVIEW, THROWS AN ERROR: 
+# TO REVIEW, THROWS AN ERROR: DS udpated 2021-02-28
 # removing duplicate checks within a single HASH (not sure why they are there)
 # TODO: Learn why there are duplicates and ensure we're picking the correct one.
 # My theory is that there are multiple when I was running the commands
 # locally, then pushed to GH where the benchmarks were run again.
-# stored_benchmarks$benchmarks <-
-#   stored_benchmarks$benchmarks %>%
-#   map(
-#     ~arrange(.x, file, name, time) %>%
-#       group_by(file, name) %>%
-#       slice(n()) %>%
-#       ungroup()
-#   )
+stored_benchmarks <-
+  stored_benchmarks %>%
+  rowwise() %>%
+  filter(nrow(benchmarks) > 0) %>% # removing empty results (why are there so many empty results?)
+  mutate(
+    benchmarks = 
+      arrange(benchmarks, file, name, time) %>%
+      group_by(file, name) %>%
+      slice(n()) %>%
+      ungroup() %>%
+      list()
+  )
 
 # commitInfo <- gert::git_commit_info() # Current commit (?).
 # commitInfo$id # ID of current commit for current brach
