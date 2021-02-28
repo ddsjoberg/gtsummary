@@ -26,7 +26,9 @@ modify_table_styling(
 
 \item{columns}{vector or selector of columns in \code{x$table_body}}
 
-\item{rows}{predicate expression to select rows. Default is \code{NULL}.}
+\item{rows}{predicate expression to select rows in \code{x$table_body}.
+Can be used to style footnote, formatting functions, missing symbols,
+and text formatting. Default is \code{NULL}. See details below.}
 
 \item{label}{string of column label(s)}
 

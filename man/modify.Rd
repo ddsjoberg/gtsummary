@@ -22,7 +22,6 @@ modify_footnote(
   x,
   update = NULL,
   abbreviation = FALSE,
-  rows = NULL,
   text_interpret = c("md", "html"),
   quiet = NULL
 )
@@ -59,8 +58,6 @@ e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an al
 \item{stat_by}{DEPRECATED, use \code{update = all_stat_cols() ~ "<label>"} instead.}
 
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.}
-
-\item{rows}{predicate expression to select rows. Default is \code{NULL}.}
 
 \item{caption}{a string of the table caption/title}
 }

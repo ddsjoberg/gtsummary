@@ -10,7 +10,9 @@
 #'
 #' @param x gtsummary object
 #' @param columns vector or selector of columns in `x$table_body`
-#' @param rows predicate expression to select rows. Default is `NULL`.
+#' @param rows predicate expression to select rows in `x$table_body`.
+#' Can be used to style footnote, formatting functions, missing symbols,
+#' and text formatting. Default is `NULL`. See details below.
 #' @param label string of column label(s)
 #' @param hide logical indicating whether to hide column from output
 #' @param align string indicating alignment of column, must be one of
