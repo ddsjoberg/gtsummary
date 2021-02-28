@@ -129,16 +129,14 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
         rev(seq_along(tbls)),
         function(i) {
           df <- tbls[[i]]$table_styling[[style_type]]
-          if ("rows" %in% names(df)) {
-            df <-
-              df %>%
-              mutate(
-                rows = ifelse(is.na(.data$rows), .data$rows,
-                              glue("tbl_id == {i} & ( {rows} )") %>% as.character())
-              )
+          if ("rows" %in% names(df) && nrow(df) > 0) {
+            # adding tbl_id to the rows specifications,
+            # e.g. data$tbl_id == 1L & .data$row_type != "label"
+            df$rows <-
+              map(df$rows, ~add_tbl_id_to_quo(.x, tbls[[i]]$table_body, i))
           }
           df %>%
-            mutate_at(vars(any_of(c("column", "rows", "text_interpret",
+            mutate_at(vars(any_of(c("column", "text_interpret",
                                     "footnote", "format_type", "symbol"))), as.character)
         }
       )
@@ -197,4 +195,18 @@ print_stack_differences <- function(tbls) {
   }
 
   return(invisible())
+}
+
+add_tbl_id_to_quo <- function(x, table_body, tbl_id) {
+  if (eval_tidy(x, data = table_body) %>% is.null()) return(x)
+
+  # if quosure, add tbl_id
+  if (inherits(x, "quosure"))
+    return(
+      rlang::quo(.data$tbl_id == !!tbl_id & (!!rlang::f_rhs(x))) %>%
+        structure(.Environment = attr(x, ".Environment"))
+    )
+
+  # if expression, add tbl_id
+  expr(.data$tbl_id == !!tbl_id & (!!x))
 }

@@ -8,6 +8,8 @@
 #' formatting function.
 #' The LHS specifies the column(s) to be updated,
 #' and the RHS is the updated formatting function.
+#' @param rows predicate expression to select rows in `x$table_body`. Default
+#' is `NULL`, which applies the formatting function to the entire column.
 #' @inheritParams modify_table_styling
 #'
 #' @export

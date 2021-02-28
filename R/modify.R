@@ -169,7 +169,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
 
 #' @name modify
 #' @export
-modify_footnote <- function(x, update = NULL, abbreviation = FALSE, rows = NULL,
+modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
                             text_interpret = c("md", "html"), quiet = NULL) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
@@ -215,7 +215,6 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, rows = NULL,
       modify_table_styling(
         x,
         columns = names(update),
-        rows = {{ rows }},
         footnote = unlist(update),
         text_interpret = text_interpret
       )
@@ -225,7 +224,6 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE, rows = NULL,
       modify_table_styling(
         x,
         columns = names(update),
-        rows = {{ rows }},
         footnote_abbrev = unlist(update),
         text_interpret = text_interpret
       )

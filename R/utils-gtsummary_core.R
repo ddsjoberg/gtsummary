@@ -34,18 +34,18 @@
     )
 
   x$table_styling$footnote <-
-    tibble(column = character(), rows = character(),
+    tibble(column = character(), rows = list(),
            text_interpret = character(), footnote = character())
   x$table_styling$footnote_abbrev <-
-    tibble(column = character(), rows = character(),
+    tibble(column = character(), rows = list(),
            text_interpret = character(), footnote = character())
   x$table_styling$text_format <-
-    tibble(column = "label", rows = "row_type != 'label'",
+    tibble(column = "label", rows = list(rlang::expr(.data$row_type != 'label')),
            format_type = "indent", undo_text_format = FALSE)
   x$table_styling$fmt_missing <-
-    tibble(column = character(), rows = character(), symbol = character())
+    tibble(column = character(), rows = list(), symbol = character())
   x$table_styling$fmt_fun <-
-    tibble(column = character(), rows = character(), fmt_fun = list())
+    tibble(column = character(), rows = list(), fmt_fun = list())
 
   # adding other objects to list -----------------------------------------------
   x <- c(x, list(...))

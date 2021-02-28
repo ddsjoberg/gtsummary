@@ -272,13 +272,15 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
         bind_rows(
           estimate_fun %>%
             tibble::enframe("variable", "fmt_fun") %>%
+            rowwise() %>%
             mutate(
               column =
                 c("estimate", "conf.low", "conf.high") %>%
                 intersect(names(x$table_body)) %>%
                 list(),
-              rows = glue(".data$variable == '{variable}'") %>% as.character()
+              rows = glue(".data$variable == '{variable}'") %>% rlang::parse_expr() %>% list()
             ) %>%
+            ungroup() %>%
             select(.data$column, .data$rows, .data$fmt_fun) %>%
             unnest(cols = .data$column)
         )
