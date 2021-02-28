@@ -1,23 +1,18 @@
 ---
 title: '{gtsummary} benchmark'
 author: "Gustavo Zapata Wainberg & Daniel Sjoberg"
+date: "`r format(Sys.Date(), format = '%B %d, %Y')`"
 output: html_document
 ---
 
-
-Updated: `r format(Sys.Date(), "%B %d %Y")`  
-
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
 
-library(gert)
 library(dplyr)
-library(stringr)
 library(ggplot2)
-library(bench) # requires dev version!
-library(plotly)
-library(purrr)
+```
 
+```{r bench}
 tryCatch(bench::cb_fetch(remote = "origin"), error = function(e) invisible(NULL))
 tryCatch(bench::cb_fetch(remote = "upstream"), error = function(e) invisible(NULL))
 
@@ -49,7 +44,7 @@ stored_benchmarks <-
 # taglists <- gert::git_tag_list()
 
 # How to get a tash for a specific version
-# hash136 <- taglists[str_detect(taglists$name, "1.3.6"), "commit"]
+# hash136 <- taglists[stringr::str_detect(taglists$name, "1.3.6"), "commit"]
 
 # Keep a list with just the benchmark outputs
 benchmarks_outputs <- stored_benchmarks[["benchmarks"]]
@@ -78,12 +73,9 @@ benchmarks_df <- dplyr::bind_rows(benchmarks_outputs, .id = "hash")
 
 ## Execution times
 
-
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-
-ggplotly(
-  benchmarks_df  %>% 
+```{r plot}
+plotly::ggplotly(
+  benchmarks_df %>% 
            ggplot(aes(x = time, y = mean))+
            geom_point(aes(color = hash))+
            facet_wrap(vars(name), 
@@ -99,8 +91,8 @@ ggplotly(
          width = 900
 )
 
-ggplotly(
-  benchmarks_df  %>% 
+plotly::ggplotly(
+  benchmarks_df %>% 
     mutate(hash_abr = stringr::str_sub(string = hash, start = 1, end = 8)) %>% 
            ggplot(aes(x = hash_abr, y = mean))+
            geom_point(aes(color = time))+
