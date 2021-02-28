@@ -929,7 +929,7 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
     set_names(variable_by_chr)
 
   # calculating stats for each var and by level
-  fns_names_expr <- map(fns_names_chr, rlang::sym) # converting chars to expressions
+  fns <- map(fns_names_chr, ~rlang::sym(.) %>% eval()) %>% set_names(fns_names_chr)
   df_stats <-
     data  %>%
     mutate_at(vars(any_of("by")),
@@ -939,7 +939,8 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
     ) %>%
     stats::na.omit() %>%
     dplyr::group_by_at(switch(!is.null(by), "by"), .drop = FALSE) %>%
-    dplyr::summarise_at(vars(.data$variable), tibble::lst(!!!fns_names_expr)) %>%
+    safe_summarise_at(variable = variable, fns = fns) %>%
+    # dplyr::summarise_at(vars(.data$variable), tibble::lst(!!!fns_names_expr)) %>%
     mutate(variable = .env$variable) %>%
     select(any_of(c("by", "variable")), everything())
 
@@ -973,6 +974,23 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
   # returning final object
   return
 }
+
+safe_summarise_at <- function(data, variable, fns) {
+  tryCatch(
+    dplyr::summarise_at(data, vars(.data$variable), fns),
+    error = function(e) {
+      # replace p[0:100] stats with `quantile`
+      fns_names <- stringr::str_replace(names(fns), "^p\\d+$", "quantile") %>% unique()
+      paste("There was an error calculating the summary statistics",
+            "for {.val {variable}}. Is this variable's class",
+            "supported by {.code {fns_names}}?") %>%
+        cli::cli_alert_danger()
+
+      abort(e)
+    }
+  )
+}
+
 
 # extracting_function_calls_from_stat_display ---------------------
 extracting_function_calls_from_stat_display <- function(stat_display, variable) {
