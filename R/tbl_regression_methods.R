@@ -67,6 +67,10 @@ tbl_regression.stanreg <- tbl_regression.lmerMod
 
 #' @export
 #' @rdname tbl_regression_methods
+tbl_regression.brmsfit <- tbl_regression.lmerMod
+
+#' @export
+#' @rdname tbl_regression_methods
 tbl_regression.gam <- function(x, tidy_fun = tidy_gam, ...) {
   tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
 }
