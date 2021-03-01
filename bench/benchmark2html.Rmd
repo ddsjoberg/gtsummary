@@ -95,8 +95,8 @@ plotly::ggplotly(
 
 plotly::ggplotly(
   benchmarks_df %>% 
-    mutate(hash_abr = stringr::str_sub(string = hash, start = 1, end = 8)) %>% 
-           ggplot(aes(x = hash_abr, y = mean))+
+    # mutate(hash_abr = stringr::str_sub(string = hash, start = 1, end = 8)) %>% 
+           ggplot(aes(x = hash, y = mean))+
            geom_point(aes(color = time))+
            facet_wrap(vars(name), 
                       nrow = length(unique(benchmarks_df$name)), 
