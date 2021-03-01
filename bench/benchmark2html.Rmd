@@ -12,12 +12,12 @@ library(dplyr)
 library(ggplot2)
 ```
 
-```{r bench}
-
-
+```{r bench_fetch}
 
 bench::cb_fetch()
+```
 
+```{r bench_read}
 # Get the data with previous benchmarks
 stored_benchmarks <- bench::cb_read()
 ```
@@ -29,20 +29,19 @@ stored_benchmarks <- bench::cb_read()
 # My theory is that there are multiple when I was running the commands
 # locally, then pushed to GH where the benchmarks were run again.
 
-# TO REVIEW: Some part of the code gives error: "Error: Error in strsplit(x$parent_hashes, " ") : non-character argument" 
-# while trying to knit from the github actions (not while runnning locally)
-# stored_benchmarks <-
-#   stored_benchmarks %>%
-#   rowwise() %>%
-#   filter(nrow(benchmarks) > 0) %>% # removing empty results (why are there so many empty results?)
-#   mutate(
-#     benchmarks = 
-#       arrange(benchmarks, file, name, time) %>%
-#       group_by(file, name) %>%
-#       slice(n()) %>%
-#       ungroup() %>%
-#       list()
-#   )
+
+stored_benchmarks <-
+  stored_benchmarks %>%
+  rowwise() %>%
+  filter(nrow(benchmarks) > 0) %>% # removing empty results (why are there so many empty results?)
+  mutate(
+    benchmarks =
+      arrange(benchmarks, file, name, time) %>%
+      group_by(file, name) %>%
+      slice(n()) %>%
+      ungroup() %>%
+      list()
+  )
 
 # commitInfo <- gert::git_commit_info() # Current commit (?).
 # commitInfo$id # ID of current commit for current brach
@@ -100,8 +99,8 @@ plotly::ggplotly(
 
 plotly::ggplotly(
   benchmarks_df %>% 
-    # mutate(hash_abr = stringr::str_sub(string = hash, start = 1, end = 8)) %>% 
-           ggplot(aes(x = hash, y = mean))+
+    mutate(hash_abr = stringr::str_sub(string = hash, start = 1, end = 8)) %>%
+           ggplot(aes(x = hash_abr, y = mean))+
            geom_point(aes(color = time))+
            facet_wrap(vars(name), 
                       nrow = length(unique(benchmarks_df$name)), 
