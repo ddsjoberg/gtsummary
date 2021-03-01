@@ -1,7 +1,7 @@
 library(gtsummary, warn.conflicts = FALSE)
 library(bench)
-library(rmarkdown)
-library(here)
+# library(rmarkdown)
+# library(here)
 
 # setup code
 big_trial <- purrr::map_dfr(seq_len(5000), ~trial)

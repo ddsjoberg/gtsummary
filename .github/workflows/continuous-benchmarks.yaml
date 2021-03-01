@@ -44,8 +44,10 @@ jobs:
          install.packages("remotes")
          remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
          remotes::install_github("r-lib/bench")
-         pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
+         pkgs <- c("gert")
          install.packages(pkgs, repos = c(CRAN = "https://cran.rstudio.com"))
+         # pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
+         # install.packages(pkgs, repos = c(CRAN = "https://cran.rstudio.com"))
        shell: Rscript {0}
 
      - name: Install package
@@ -66,8 +68,8 @@ jobs:
        run: Rscript -e 'bench::cb_push()'
        # run: Rscript -e 'bench::cb_push("https://github.com/ddsjoberg/gtsummary")'
 
-     - name: Build RMD REPORT
-       run: Rscript -e 'rmarkdown::render(input = here("bench/benchmark2html.Rmd"), output_file = here("bench/benchmark2html.html"),  clean = T)'
+     # - name: Build RMD REPORT
+     #   run: Rscript -e 'rmarkdown::render(input = here("bench/benchmark2html.Rmd"), output_file = here("bench/benchmark2html.html"),  clean = T)'
 
      - name: Commit files
        run: |
