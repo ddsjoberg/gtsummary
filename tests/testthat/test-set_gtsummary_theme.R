@@ -26,10 +26,6 @@ test_that("setting themes", {
     NA)
 
   expect_error(
-    theme_gtsummary_mean_sd(),
-    NA)
-
-  expect_error(
     theme_gtsummary_compact(),
     NA)
 
@@ -38,7 +34,17 @@ test_that("setting themes", {
     NA)
 
   expect_error(
-    tbl_summary(trial, by = trt) %>% add_p() %>% add_stat_label(),
+    tbl <- tbl_summary(trial, by = trt) %>% add_p() %>% add_stat_label(),
+    NA)
+
+  expect_equal(
+    tbl$table_styling$footnote %>% dplyr::filter(column == "p.value") %>% purrr::pluck("footnote"),
+    "test de Wilcoxon-Mann-Whitney; test du khi-deux d'indépendance",
+    ignore_attr = TRUE
+  )
+
+  expect_error(
+    theme_gtsummary_mean_sd(),
     NA)
 
   expect_error(
