@@ -54,7 +54,7 @@ jobs:
        run: R CMD INSTALL .
 
      - name: Fetch existing benchmarks
-       run: Rscript -e 'bench::cb_fetch("https://github.com/ddsjoberg/gtsummary")'
+       run: Rscript -e 'bench::cb_fetch()'
 
      - name: Run benchmarks
        run: |
