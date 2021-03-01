@@ -16,7 +16,7 @@ library(ggplot2)
 # tryCatch(bench::cb_fetch(remote = "origin"), error = function(e) invisible(NULL))
 # tryCatch(bench::cb_fetch(remote = "upstream"), error = function(e) invisible(NULL))
 
-bench::cb_fetch("https://github.com/ddsjoberg/gtsummary")
+bench::cb_fetch()
 
 # Get the data with previous benchmarks
 stored_benchmarks <- bench::cb_read()
