@@ -63,7 +63,8 @@ jobs:
        run: git notes --ref benchmarks show
 
      - name: Push benchmarks
-       run: Rscript -e 'bench::cb_push("https://github.com/ddsjoberg/gtsummary")'
+       run: Rscript -e 'bench::cb_push()'
+       # run: Rscript -e 'bench::cb_push("https://github.com/ddsjoberg/gtsummary")'
 
      - name: Build RMD REPORT
        run: Rscript -e 'rmarkdown::render(input = here("bench/benchmark2html.Rmd"), output_file = here("bench/benchmark2html.html"),  clean = T)'
