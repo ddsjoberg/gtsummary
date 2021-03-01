@@ -99,14 +99,14 @@ jobs:
           Rscript -e "install.packages(c('remotes'))" -e "remotes::install_deps(dependencies = TRUE)"
           R CMD INSTALL .
           
-      - name: Install packages
+      - name: Install packages dependencies
         run: |
-        #install.packages("remotes")
-        remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
-        remotes::install_github("r-lib/bench")
-        pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
-        install.packages(pkgs, repos = c(CRAN = "https://cran.rstudio.com"))
-        shell: Rscript {0}    
+         install.packages("remotes")
+         remotes::install_deps(dependencies = c("Depends", "Imports"))
+         remotes::install_github("r-lib/bench")
+         pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
+         install.packages(pkgs, repos = c(CRAN = "https://cran.rstudio.com"))
+        shell: Rscript {0}
       
       - name: Fetch existing benchmarks
         run: Rscript -e 'bench::cb_fetch()'
