@@ -212,11 +212,14 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
 # function to create text for footnote
 footnote_add_p <- function(meta_data) {
   if (!"test_result" %in% names(meta_data)) return(NA_character_)
+  language <- get_theme_element("pkgwide-str:language", default = "en")
+
   footnotes <-
     meta_data$test_result %>%
     map_chr(~pluck(., "df_result", "method") %||% NA_character_) %>%
     stats::na.omit() %>%
-    unique()
+    unique() %>%
+    map_chr(~translate_text(.x, language))
 
   if (length(footnotes) > 0) return(paste(footnotes, collapse = "; "))
   else return(NA_character_)
