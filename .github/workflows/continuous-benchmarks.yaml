@@ -109,7 +109,7 @@ jobs:
         shell: Rscript {0}
       
       - name: Fetch existing benchmarks
-        run: Rscript -e 'bench::cb_fetch()'
+        run: Rscript -e 'bench::cb_fetch(remote = "upstream")'
 
       - name: Run benchmarks
         run: Rscript -e 'bench::cb_run()'
