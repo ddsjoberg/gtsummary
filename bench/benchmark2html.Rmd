@@ -13,8 +13,8 @@ library(ggplot2)
 ```
 
 ```{r bench}
-# tryCatch(bench::cb_fetch(remote = "origin"), error = function(e) invisible(NULL))
-# tryCatch(bench::cb_fetch(remote = "upstream"), error = function(e) invisible(NULL))
+
+
 
 bench::cb_fetch()
 
@@ -26,18 +26,21 @@ stored_benchmarks <- bench::cb_read()
 # TODO: Learn why there are duplicates and ensure we're picking the correct one.
 # My theory is that there are multiple when I was running the commands
 # locally, then pushed to GH where the benchmarks were run again.
-stored_benchmarks <-
-  stored_benchmarks %>%
-  rowwise() %>%
-  filter(nrow(benchmarks) > 0) %>% # removing empty results (why are there so many empty results?)
-  mutate(
-    benchmarks = 
-      arrange(benchmarks, file, name, time) %>%
-      group_by(file, name) %>%
-      slice(n()) %>%
-      ungroup() %>%
-      list()
-  )
+
+# TO REVIEW: Some part of the code gives error: "Error: Error in strsplit(x$parent_hashes, " ") : non-character argument" 
+# while trying to knit from the github actions (not while runnning locally)
+# stored_benchmarks <-
+#   stored_benchmarks %>%
+#   rowwise() %>%
+#   filter(nrow(benchmarks) > 0) %>% # removing empty results (why are there so many empty results?)
+#   mutate(
+#     benchmarks = 
+#       arrange(benchmarks, file, name, time) %>%
+#       group_by(file, name) %>%
+#       slice(n()) %>%
+#       ungroup() %>%
+#       list()
+#   )
 
 # commitInfo <- gert::git_commit_info() # Current commit (?).
 # commitInfo$id # ID of current commit for current brach
