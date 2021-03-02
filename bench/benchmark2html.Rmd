@@ -3,6 +3,8 @@ title: '{gtsummary} benchmark'
 author: "Gustavo Zapata Wainberg & Daniel Sjoberg"
 date: "`r format(Sys.Date(), format = '%B %d, %Y')`"
 output: html_document
+params:
+  stored_benchmarks: stored_benchmarks
 ---
 
 ```{r setup, include=FALSE}
@@ -14,12 +16,12 @@ library(ggplot2)
 
 ```{r bench_fetch, echo=TRUE, message=TRUE, warning=TRUE}
 
-bench::cb_fetch()
+# bench::cb_fetch()
 ```
 
 ```{r bench_read}
 # Get the data with previous benchmarks
-stored_benchmarks <- bench::cb_read()
+# stored_benchmarks <- stored_benchmarks = stored_benchmarks
 ```
 
 ```{r data wrangling}
