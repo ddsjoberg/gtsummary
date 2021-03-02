@@ -544,3 +544,55 @@ test_that("tbl_summary() continuous vars with cat summary vars only", {
                ignore_attr = TRUE)
 
 })
+
+test_that("tbl_summary() works with date and date/time", {
+  df_date <-
+    data.frame(
+      dates = as.Date("2021-02-20") + 1:10,
+      times = as.POSIXct("2021-02-20 20:31:33 EST") + 1:10,
+      group = 1:10 %% 2
+    )
+
+  expect_error(
+    tbl1 <- df_date %>% tbl_summary(),
+    NA
+  )
+
+  expect_equal(
+    tbl1 %>% as_tibble() %>% select(last_col()) %>% dplyr::pull(),
+    c("2021-02-21 to 2021-03-02", "2021-02-20 20:31:34 to 2021-02-20 20:31:43", "5 (50%)")
+  )
+
+  month_year <- function(x) format(x, "%B %Y")
+  expect_error(
+    tbl1 <- df_date %>% select(-group) %>% tbl_summary(type = everything() ~ "continuous", digits = everything() ~ month_year),
+    NA
+  )
+
+  expect_equal(
+    tbl1 %>% as_tibble() %>% select(last_col()) %>% dplyr::pull(),
+    c("February 2021 to March 2021", "February 2021 to February 2021")
+  )
+
+  expect_error(
+    tbl1 <- df_date %>% tbl_summary(by = group, type = everything() ~ "continuous", digits = everything() ~ month_year),
+    NA
+  )
+
+  expect_error(
+    tbl2 <- df_date %>% tbl_summary(by = group),
+    NA
+  )
+})
+
+
+test_that("unobserved levels can be dichotomously summarized", {
+  expect_equal(
+    trial %>%
+      dplyr::transmute(trt = forcats::fct_expand(trt, 'Drug C')) %>%
+      tbl_summary(value = trt ~ "Drug C") %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull(stat_0),
+    "0 (0%)"
+  )
+})

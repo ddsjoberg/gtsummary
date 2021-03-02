@@ -147,11 +147,6 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # checking input data --------------------------------------------------------
   tbl_summary_data_checks(data$variables)
 
-  # removing ordered class from factor by variables ----------------------------
-  if (!is.null(by) && inherits(data$variables[[by]], "ordered") && inherits(data$variables[[by]], "factor")) {
-    data$variables[[by]] <- factor(data$variables[[by]], ordered = FALSE)
-  }
-
   # if by is numeric, convert into a factor -------------------------------
   if (!is.null(by) && is.numeric(data$variables[[by]])) {
     data$variables[[by]] <- factor(data$variables[[by]], ordered = FALSE)
@@ -181,18 +176,17 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_inputs <- as.list(environment())
   tbl_summary_inputs$exclude <- NULL # should not be exported
 
-  # removing variables with unsupported variable types from data ---------------
-  classes_expected <- c("character", "factor", "numeric", "logical", "integer", "difftime")
-  data$variables <- removing_variables_with_unsupported_types(data$variables, include, classes_expected)
-
   # checking function inputs ---------------------------------------------------
   tbl_summary_input_checks(
     data$variables, by, label, type, value, statistic,
     digits, missing, missing_text, sort
   )
 
+  # removing variables not selected for summary --------------------------------
+  data$variables <- select(data$variables, !!include)
+
   # generate meta_data --------------------------------------------------------
-  meta_data <- generate_metadata(data$variables, value, by, classes_expected, type, label, statistic, digits, percent, sort, survey = data)
+  meta_data <- generate_metadata(data$variables, value, by, type, label, statistic, digits, percent, sort, survey = data)
 
   # calculating summary statistics ---------------------------------------------
   table_body <-
@@ -208,12 +202,11 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
             df_stats = df_stats, missing = missing, missing_text = missing_text
           )
         }
-      ),
-      var_class = map_chr(.data$class, pluck, 1)
+      )
     ) %>%
-    select(var_type = .data$summary_type, .data$var_class, .data$var_label, .data$tbl_stats) %>%
+    select(var_type = .data$summary_type, .data$var_label, .data$tbl_stats) %>%
     unnest(.data$tbl_stats) %>%
-    select(.data$variable, .data$var_type, .data$var_class, .data$var_label, everything())
+    select(.data$variable, .data$var_type, .data$var_label, everything())
 
   # table of column headers ----------------------------------------------------
   x <-
@@ -267,11 +260,11 @@ is_survey <- function(data) {
 }
 
 # summarize_categorical for survey design --------------------------------------
-summarize_categorical_survey <- function(data, variable, by, class,
+summarize_categorical_survey <- function(data, variable, by,
                                          dichotomous_value, sort, percent, stat_display) {
   df_stats <-
     summarize_categorical(data = data$variables, variable = variable, by = by,
-                          class = class, dichotomous_value = dichotomous_value,
+                          dichotomous_value = dichotomous_value,
                           sort = sort, percent = percent, stat_display = stat_display) %>%
     rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p)
 
@@ -412,12 +405,10 @@ compute_survey_stat <- function(data, variable, by, f) {
     args$quantiles <- .5
   }
   if (f == "min") {
-    fun <- survey::svyquantile
-    args$quantiles <- 0
+    fun <- svymin
   }
   if (f == "max") {
-    fun <- survey::svyquantile
-    args$quantiles <- 1
+    fun <- svymax
   }
   if (f %in% paste0("p", 0:100)) {
     fun <- survey::svyquantile
@@ -453,7 +444,7 @@ compute_survey_stat <- function(data, variable, by, f) {
 # df_stats_fun_survey -----------------------------------------------------------
 # this function creates df_stats in the tbl_svysummary meta data table
 # and includes the number of missing values
-df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value, sort,
+df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
                                 stat_display, digits, data, by, percent) {
   # first table are the standard stats
   t1 <- switch(
@@ -465,12 +456,12 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
                                                 by = by, stat_display = stat_display,
                                                 digits = digits, summary_type = summary_type),
     "categorical" = summarize_categorical_survey(data = data, variable = variable,
-                                                 by = by, class = class,
+                                                 by = by,
                                                  dichotomous_value = dichotomous_value,
                                                  sort = sort, percent = percent,
                                                  stat_display = stat_display),
     "dichotomous" = summarize_categorical_survey(data = data, variable = variable,
-                                                 by = by, class = class,
+                                                 by = by,
                                                  dichotomous_value = dichotomous_value,
                                                  sort = sort, percent = percent,
                                                  stat_display = stat_display)
@@ -483,7 +474,7 @@ df_stats_fun_survey <- function(summary_type, variable, class, dichotomous_value
 
   t2 <- summarize_categorical_survey(data = data_is_na,
                                      variable = variable,
-                                     by = by, class = "logical",
+                                     by = by,
                                      dichotomous_value = TRUE,
                                      sort = "alphanumeric", percent = "column",
                                      stat_display = "{n}") %>%
@@ -525,7 +516,7 @@ calculate_missing_row_survey <- function(data, variable, by, missing_text) {
   # passing the T/F variable through the functions to format as we do in
   # the tbl_summary output
   summarize_categorical_survey(
-    data = data, variable = variable, by = by, class = "logical",
+    data = data, variable = variable, by = by,
     dichotomous_value = TRUE, sort = "alphanumeric", percent = "column",
     stat_display = "{n}"
   ) %>%
@@ -563,4 +554,15 @@ c_form <- function(left = NULL, right = 1) {
                      all.vars(x$call$strata),
                      all.vars(x$call$fpc),
                      all.vars(x$call$weights))))
+}
+
+# Min and Max Values for survey design
+svymin <- function(x, design, na.rm = FALSE, ...) {
+  x <- all.vars(x)
+  min(design$variables[[x]], na.rm = na.rm)
+}
+
+svymax <- function(x, design, na.rm = FALSE, ...) {
+  x <- all.vars(x)
+  max(design$variables[[x]], na.rm = na.rm)
 }

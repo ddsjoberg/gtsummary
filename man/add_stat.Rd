@@ -95,7 +95,7 @@ p-value formatting functions, such as \code{bold_p()} or \code{add_q()}.
 }
 
 \examples{
-library(dplyr); library(stringr)
+library(dplyr, warn.conflicts = FALSE); library(stringr)
 # Example 1 ----------------------------------
 # fn returns t-test pvalue
 my_ttest <- function(data, variable, by, ...) {

@@ -466,3 +466,52 @@ test_that("tbl_summary(digits=) tests with fn inputs", {
   )
 })
 
+
+test_that("tbl_svysummary() works with date and date/time", {
+  df_date <-
+    data.frame(
+      dates = as.Date("2021-02-20") + 1:10,
+      times = as.POSIXct("2021-02-20 20:31:33 EST") + 1:10,
+      group = 1:10 %% 2
+    ) %>%
+    {survey::svydesign(~1, data = ., weights = ~1)}
+
+  expect_error(
+    tbl1 <- df_date %>% tbl_svysummary(),
+    NA
+  )
+
+  expect_equal(
+    tbl1 %>% as_tibble() %>% select(last_col()) %>% dplyr::pull(),
+    c("2021-02-21 to 2021-03-02", "2021-02-20 20:31:34 to 2021-02-20 20:31:43", "5 (50%)")
+  )
+
+  month_year <- function(x) format(x, "%B %Y")
+  expect_error(
+    tbl1 <- df_date  %>% tbl_svysummary(type = everything() ~ "continuous", digits = everything() ~ month_year, include = -group),
+    NA
+  )
+
+  expect_equal(
+    tbl1 %>% as_tibble() %>% select(last_col()) %>% dplyr::pull(),
+    c("February 2021 to March 2021", "February 2021 to February 2021")
+  )
+
+  numeric_to_month_year <- function(x) as.Date(x, origin = "1970-01-01") %>% format("%B %Y")
+  numeric_to_month_year2 <- function(x) as.POSIXct(x, origin = "1970-01-01 00:00:00") %>% format("%B %Y")
+  expect_error(
+    tbl1 <-
+      df_date %>%
+      tbl_svysummary(by = group,
+                     type = everything() ~ "continuous",
+                     digits = list(dates ~ numeric_to_month_year,
+                                   times ~ numeric_to_month_year2)),
+    NA
+  )
+
+  expect_error(
+    tbl2 <- df_date %>% tbl_svysummary(by = group),
+    NA
+  )
+})
+

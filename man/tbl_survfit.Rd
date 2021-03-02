@@ -125,6 +125,7 @@ tbl_survfit_ex3 <-
 
 # Example 4 Competing Events Example ---------
 # adding a competing event for death (cancer vs other causes)
+set.seed(1123)
 library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
 trial2 <- trial \%>\%
   mutate(

@@ -121,6 +121,7 @@ tidy_standardize_ex2 <-
 
 # Example 3 ----------------------------------
 # Multiple Imputation using the mice package
+set.seed(1123)
 pool_and_tidy_mice_ex3 <-
   suppressWarnings(mice::mice(trial, m = 2)) \%>\%
   with(lm(age ~ marker + grade)) \%>\%
