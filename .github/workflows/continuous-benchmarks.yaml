@@ -67,7 +67,7 @@ jobs:
        # run: Rscript -e 'bench::cb_push("https://github.com/ddsjoberg/gtsummary")'
 
      - name: Build RMD REPORT
-       run: Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+       run: Rscript -e 'bench::cb_fetch(https://github.com/oranwutang/gtsummary); stored_benchmarks <- bench::cb_read(https://github.com/oranwutang/gtsummary); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
 
 
      # - name: Build RMD REPORT
