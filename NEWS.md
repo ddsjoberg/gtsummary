@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* `tbl_summary()` now accepts any class as input, previously only non-date base classes were accepted. For non-base R classes, the summary type must be specified using `tbl_summary(type=)`. The default summary statistic for dates/times is the minimum and maximum. (#488)
+
+* Improved handling of ordered factors as the `by=` variable (#569, #540)
+
+* Bug fix when displaying an unobserved level of a factor variable dichotomously in `tbl_summary()`. (#780)
+
 * Icelandic language translations added.
 
 * Bug fix where `add_p()` test footnote was not being translated.
