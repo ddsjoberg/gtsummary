@@ -556,7 +556,7 @@ c_form <- function(left = NULL, right = 1) {
                      all.vars(x$call$weights))))
 }
 
-#' Min and Max Values for survey design
+# Min and Max Values for survey design
 svymin <- function(x, design, na.rm = FALSE, ...) {
   x <- all.vars(x)
   min(design$variables[[x]], na.rm = na.rm)
