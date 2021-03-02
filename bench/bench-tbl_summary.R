@@ -5,7 +5,7 @@ library(bench)
 
 # setup code
 big_trial <- purrr::map_dfr(seq_len(5000), ~trial)
-
+bench::cb_fetch()
 bench::mark(
   # simple summary
   simple = tbl_summary(trial),
@@ -17,8 +17,17 @@ bench::mark(
   #big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = "no") %>% add_p(),
 
   check = FALSE,
-  min_iterations = 30
+  min_iterations = 5
 )
+
+bench::cb_fetch()
+bench::cb_push()
+
+
+stored_benchmarks <- bench::cb_read()
+rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"),
+                  output_file = here::here("bench/benchmark2html.html"),
+                  clean = T, params = list(stored_benchmarks = stored_benchmarks))
 
 # The next call was added to the benchmark yaml file, if it works, it can be deleted form this script
 # rmarkdown::render(input = here("bench/benchmark2html.Rmd"), # IMPORTANT: Relative paths doesn't work maybe solvable with {here}
