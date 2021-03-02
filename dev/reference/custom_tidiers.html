@@ -99,7 +99,7 @@ and tbl_uvregression() to obtain modified results. See examples below." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9001</span>
       </span>
     </div>
 
@@ -306,6 +306,7 @@ the model parameters before attempting to use the tidier with <code><a href='tbl
 
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># Multiple Imputation using the mice package</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1123</span><span class='op'>)</span>
 <span class='va'>pool_and_tidy_mice_ex3</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span><span class='op'>(</span><span class='fu'>mice</span><span class='fu'>::</span><span class='fu'><a href='https://amices.org/mice/reference/mice.html'>mice</a></span><span class='op'>(</span><span class='va'>trial</span>, m <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>marker</span> <span class='op'>+</span> <span class='va'>grade</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>

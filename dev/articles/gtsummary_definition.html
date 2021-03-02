@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9001</span>
       </span>
     </div>
 
@@ -158,17 +158,17 @@
 <p>The <code>.$table_body</code> object is the data frame that will ultimately be printed as the output. The table must include columns <code>"label"</code>, <code>"row_type"</code>, and <code>"variable"</code>. The <code>"label"</code> column is printed, and the other two are hidden from the final output.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl_summary_ex</span><span class="op">$</span><span class="va">table_body</span>
-<span class="co">#&gt; # A tibble: 8 x 8</span>
-<span class="co">#&gt;   variable var_type   var_class var_label   row_type label     stat_1   stat_2  </span>
-<span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;   </span>
-<span class="co">#&gt; 1 age      continuous numeric   Age         label    Age       46 (37,… 48 (39,…</span>
-<span class="co">#&gt; 2 age      continuous numeric   Age         missing  Unknown   7        4       </span>
-<span class="co">#&gt; 3 grade    categoric… factor    Grade       label    Grade     &lt;NA&gt;     &lt;NA&gt;    </span>
-<span class="co">#&gt; 4 grade    categoric… factor    Grade       level    I         35 (36%) 33 (32%)</span>
-<span class="co">#&gt; 5 grade    categoric… factor    Grade       level    II        32 (33%) 36 (35%)</span>
-<span class="co">#&gt; 6 grade    categoric… factor    Grade       level    III       31 (32%) 33 (32%)</span>
-<span class="co">#&gt; 7 response dichotomo… integer   Tumor Resp… label    Tumor Re… 28 (29%) 33 (34%)</span>
-<span class="co">#&gt; 8 response dichotomo… integer   Tumor Resp… missing  Unknown   3        4</span></code></pre></div>
+<span class="co">#&gt; # A tibble: 8 x 7</span>
+<span class="co">#&gt;   variable var_type    var_label     row_type label        stat_1     stat_2    </span>
+<span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;     </span>
+<span class="co">#&gt; 1 age      continuous  Age           label    Age          46 (37, 5… 48 (39, 5…</span>
+<span class="co">#&gt; 2 age      continuous  Age           missing  Unknown      7          4         </span>
+<span class="co">#&gt; 3 grade    categorical Grade         label    Grade        &lt;NA&gt;       &lt;NA&gt;      </span>
+<span class="co">#&gt; 4 grade    categorical Grade         level    I            35 (36%)   33 (32%)  </span>
+<span class="co">#&gt; 5 grade    categorical Grade         level    II           32 (33%)   36 (35%)  </span>
+<span class="co">#&gt; 6 grade    categorical Grade         level    III          31 (32%)   33 (32%)  </span>
+<span class="co">#&gt; 7 response dichotomous Tumor Respon… label    Tumor Respo… 28 (29%)   33 (34%)  </span>
+<span class="co">#&gt; 8 response dichotomous Tumor Respon… missing  Unknown      3          4</span></code></pre></div>
 </div>
 <div id="table_styling" class="section level4">
 <h4 class="hasAnchor">

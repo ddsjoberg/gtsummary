@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9001</span>
       </span>
     </div>
 
@@ -176,6 +176,9 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p><code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> now accepts any class as input, previously only non-date base classes were accepted. For non-base R classes, the summary type must be specified using <code><a href="../reference/tbl_summary.html">tbl_summary(type=)</a></code>. The default summary statistic for dates/times is the minimum and maximum. (<a href='https://github.com/ddsjoberg/gtsummary/issues/488'>#488</a>)</p></li>
+<li><p>Improved handling of ordered factors as the <code>by=</code> variable (<a href='https://github.com/ddsjoberg/gtsummary/issues/569'>#569</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/540'>#540</a>)</p></li>
+<li><p>Bug fix when displaying an unobserved level of a factor variable dichotomously in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/780'>#780</a>)</p></li>
 <li><p>Icelandic language translations added.</p></li>
 <li><p>Bug fix where <code><a href="../reference/add_p.html">add_p()</a></code> test footnote was not being translated.</p></li>
 <li><p>The broom tidier for GAMs does not include an <code>exponentiate=</code> argument. This argument, however, was still being passed within gtsummary. The custom GAM tidier has been updated to respect the exponentiation request.</p></li>
