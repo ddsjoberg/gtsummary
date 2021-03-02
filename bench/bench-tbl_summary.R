@@ -5,7 +5,7 @@ library(bench)
 
 # setup code
 big_trial <- purrr::map_dfr(seq_len(5000), ~trial)
-bench::cb_fetch()
+bench::cb_fetch("https://github.com/oranwutang/gtsummary/")
 bench::mark(
   # simple summary
   simple = tbl_summary(trial),
@@ -20,11 +20,11 @@ bench::mark(
   min_iterations = 5
 )
 
-bench::cb_fetch()
-bench::cb_push()
+bench::cb_fetch("https://github.com/oranwutang/gtsummary/")
+bench::cb_push("https://github.com/oranwutang/gtsummary/")
 
 
-stored_benchmarks <- bench::cb_read()
+stored_benchmarks <- bench::cb_read("https://github.com/oranwutang/gtsummary/")
 rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"),
                   output_file = here::here("bench/benchmark2html.html"),
                   clean = T, params = list(stored_benchmarks = stored_benchmarks))
