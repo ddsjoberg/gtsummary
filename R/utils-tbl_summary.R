@@ -467,6 +467,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
                                      digits, missing, missing_text, sort) {
   # data -----------------------------------------------------------------------
   tbl_summary_data_checks(data)
+  check_haven_labelled(data)
 
   # by -------------------------------------------------------------------------
   if (!is.null(by) && !by %in% names(data)) {
@@ -1357,4 +1358,24 @@ meta_data_to_var_info <- function(meta_data) {
 # simple function to evaluate the RHS of a formula in the formula's environment
 eval_rhs <- function(x) {
   rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
+}
+
+check_haven_labelled <- function(data) {
+  # extract data frame
+  data <- switch(is_survey(data), data$variables) %||% data
+
+  if (purrr::some(data, ~inherits(., "haven_labelled"))) {
+    cnvt_funs <-
+      c("haven::as_factor()", "labelled::to_factor()", "labelled::unlabelled()", "unclass()")
+    hyperlinks <-
+      c("https://haven.tidyverse.org/articles/semantics.html",
+        "https://larmarange.github.io/labelled/articles/intro_labelled.html#unlabelled")
+
+    paste("Columns with class {.field haven_labelled} were detected.",
+          "This is an intermediate datastructure not meant for analysis.",
+          "Convert columns with {.code {cnvt_funs}}.",
+          "Failure to convert may have unintended consequences.") %>%
+    cli::cli_alert_info()
+    cli::cli_ul(hyperlinks)
+  }
 }
