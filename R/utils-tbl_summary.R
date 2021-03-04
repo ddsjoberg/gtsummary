@@ -1380,6 +1380,7 @@ check_haven_labelled <- function(data) {
     paste("Column(s) {.field {haven_labelled_vars}} are class {.val haven_labelled}.",
           "This is an intermediate datastructure not meant for analysis.",
           "Convert columns with {.code {cnvt_funs}}.",
+          "{.val haven_labelled} value labels are ignored when columns are not converted.",
           "Failure to convert may have unintended consequences or result in error.") %>%
     cli::cli_alert_info()
     cli::cli_ul(hyperlinks)
