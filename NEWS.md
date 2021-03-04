@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added default support for `brmsfit` model in `tbl_regression()` with new method function. (#751)
+
 * Improved error messaging when there is a problem constructing one of the univariate regression models in `tbl_uvregression()`.
 
 * Improved handling and messaging to users when columns with `"haven_labelled"` class are passed to gtsummary functions. (#805)
