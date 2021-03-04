@@ -277,6 +277,13 @@ test_that("tbl_uvregression throw error with odd variable names in `data=`", {
   )
 })
 
+test_that("tbl_uvregression throw error with bad arguments in model function", {
+  expect_error(
+    trial %>%
+      tbl_uvregression(method = glm, y = response, method.args = list(not_an_argument = letters))
+  )
+})
+
 test_that("tbl_uvregression works with survey object", {
   svy <- survey::svydesign(ids = ~1, data = trial, weights = ~1)
 

@@ -352,23 +352,21 @@ generate_metadata <- function(data, value, by, type, label,
 
   # updating type --------------------------------------------------------------
   # updating type of user supplied one
-  if (!is.null(type)) {
-    # converting tidyselect formula lists to named lists
-    type <- .formula_list_to_named_list(x = type,
-                                        data = data,
-                                        var_info = meta_data_to_var_info(meta_data) ,
-                                        arg_name = "type")
+  # converting tidyselect formula lists to named lists
+  type <- .formula_list_to_named_list(x = type,
+                                      data = data,
+                                      var_info = meta_data_to_var_info(meta_data) ,
+                                      arg_name = "type")
 
-    # updating meta data object with new types
-    meta_data <-
-      meta_data %>%
-      mutate(
-        summary_type = assign_summary_type(
-          data = data, variable = .data$variable,
-          summary_type = type, value = value, check_assignment = TRUE
-        )
+  # updating meta data object with new types
+  meta_data <-
+    meta_data %>%
+    mutate(
+      summary_type = assign_summary_type(
+        data = data, variable = .data$variable,
+        summary_type = type, value = value, check_assignment = TRUE
       )
-  }
+    )
 
   # converting tidyselect formula lists to named lists -------------------------
   label <- .formula_list_to_named_list(x = label,
