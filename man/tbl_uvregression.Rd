@@ -136,7 +136,7 @@ a few models that use \link[=tbl_regression_methods]{modifications}.
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 \item \code{"gam"}: Uses the internal tidier \code{tidy_gam()} to print both parametric and smooth terms.
-\item \code{"lmerMod"}, \code{"glmerMod"}, \code{"glmmTMB"}, \code{"glmmadmb"}, \code{"stanreg"}: These mixed effects
+\item \code{"lmerMod"}, \code{"glmerMod"}, \code{"glmmTMB"}, \code{"glmmadmb"}, \code{"stanreg"}, \code{"brmsfit"}: These mixed effects
 models use \code{broom.mixed::tidy(x, effects = "fixed")}. Specify \code{tidy_fun = broom.mixed::tidy}
 to print the random components.
 }
