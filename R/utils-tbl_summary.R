@@ -159,7 +159,7 @@ assign_summary_type <- function(data, variable, summary_type, value,
                                 # types are NOT checked on the first pass at guessing the type
                                 check_assignment = FALSE) {
   # base classes that can be summarized as continuous
-  base_numeric_classes <- c("numeric", "integer", "difftime", "Date", "POSIXt")
+  base_numeric_classes <- c("numeric", "integer", "difftime", "Date", "POSIXt", "double")
 
   # assigning the summary type for each variable -------------------------------
   assigned_summary_type <-
@@ -236,7 +236,7 @@ assign_summary_type <- function(data, variable, summary_type, value,
     )
 
   # checking for variables that were not assigned a summary type
-  if ((check_assignment == TRUE || is.null(summary_type)) && sum(is.na(assigned_summary_type))) {
+  if (check_assignment == TRUE && sum(is.na(assigned_summary_type))) {
     vars_with_no_type <- variable[is.na(assigned_summary_type)]
     glue("Assign summary types for variables ",
          "{quoted_list(vars_with_no_type)} (e.g. 'continuous', 'categorical', or 'continuous'). ",
@@ -467,6 +467,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
                                      digits, missing, missing_text, sort) {
   # data -----------------------------------------------------------------------
   tbl_summary_data_checks(data)
+  check_haven_labelled(data)
 
   # by -------------------------------------------------------------------------
   if (!is.null(by) && !by %in% names(data)) {
@@ -1357,4 +1358,32 @@ meta_data_to_var_info <- function(meta_data) {
 # simple function to evaluate the RHS of a formula in the formula's environment
 eval_rhs <- function(x) {
   rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
+}
+
+check_haven_labelled <- function(data) {
+  # extract data frame
+  data <- switch(is_survey(data), data$variables) %||% data
+
+  if (purrr::some(data, ~inherits(., "haven_labelled"))) {
+    # list of columns with haven_labelled
+    haven_labelled_vars <-
+      purrr::map_lgl(data, ~inherits(.x, "haven_labelled")) %>%
+      keep(identity) %>%
+      names()
+
+    cnvt_funs <-
+      c("haven::as_factor()", "labelled::to_factor()", "labelled::unlabelled()", "unclass()")
+    hyperlinks <-
+      c("https://haven.tidyverse.org/articles/semantics.html",
+        "https://larmarange.github.io/labelled/articles/intro_labelled.html#unlabelled")
+
+    paste("Column(s) {.field {haven_labelled_vars}} are class {.val haven_labelled}.",
+          "This is an intermediate datastructure not meant for analysis.",
+          "Convert columns with {.code {cnvt_funs}}.",
+          "{.val haven_labelled} value labels are ignored when columns are not converted.",
+          "Failure to convert may have unintended consequences or result in error.") %>%
+    cli::cli_alert_info()
+    cli::cli_ul(hyperlinks)
+  }
+  return(invisible(NULL))
 }

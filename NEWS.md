@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Improved handling and messaging to users when columns with `"haven_labelled"` class are passed to gtsummary functions. (#805)
+
 * `tbl_summary()` now accepts any class as input, previously only non-date base classes were accepted. For non-base R classes, the summary type must be specified using `tbl_summary(type=)`. The default summary statistic for dates/times is the minimum and maximum. (#488)
 
 * Improved handling of ordered factors as the `by=` variable (#569, #540)

@@ -113,6 +113,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   if (!is.data.frame(data) && !is_survey(data)) {
     stop("`data` argument must be a data frame or survey object.", call. = FALSE)
   }
+  check_haven_labelled(data)
 
   # setting defaults -----------------------------------------------------------
   pvalue_fun <-
