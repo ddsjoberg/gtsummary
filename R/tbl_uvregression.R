@@ -361,7 +361,7 @@ safe_model_construction <- function(formula, method, data, method.args) {
       paste("There was an error constructing model {.code {call_chr}}",
             "See error below.") %>%
         cli_alert_danger()
-      abort(e)
+      abort(as.character(e))
     }
   )
 }
