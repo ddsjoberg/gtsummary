@@ -270,17 +270,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
       formula_chr = glue(formula),
       model = map(
         .data$formula_chr,
-        function(.x) {
-          call_list1 <- # defining formula and data call (or formula and design)
-            switch(is.data.frame(data),
-                   list(method, formula = as.formula(.x), data = data)) %||%
-            list(method, formula = as.formula(.x), design = data)
-
-          call_list1 %>%
-          c(as.list(method.args)[-1]) %>%
-          as.call() %>%
-          eval()
-        }
+        ~safe_model_construction(.x, method, data, method.args)
       ),
       # removing backticks
       y = switch(is.null(.env$y), all_vars) %||% y,
@@ -351,3 +341,28 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   results
 }
 
+# function to safely build and evaluate model, with nicer error messaging
+safe_model_construction <- function(formula, method, data, method.args) {
+  # defining formula and data call (or formula and design)
+  call_list <-
+    switch(is.data.frame(data),
+           list(method, formula = as.formula(formula), data = data)) %||%
+    list(method, formula = as.formula(formula), design = data) %>%
+    c(as.list(method.args)[-1])
+
+  # evaluate model
+  tryCatch(
+    as.call(call_list) %>% eval(),
+    error = function(e) {
+      # construct call to show in error message
+      if (is_survey(data)) call_list$design <- expr(.)
+      else call_list$data <- expr(.)
+      call_chr <- call_list %>% as.call() %>% rlang::expr_text()
+
+      paste("There was an error constructing model {.code {call_chr}}",
+            "See error below.") %>%
+        cli_alert_danger()
+      abort(as.character(e))
+    }
+  )
+}
