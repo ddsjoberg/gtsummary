@@ -197,11 +197,11 @@ a data frame as its first argument can be stratified.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>a data frame</p></td>
+      <td><p>a data frame or survey object</p></td>
     </tr>
     <tr>
       <th>strata</th>
-      <td><p>character vector or tidy-selector of columns in data to</p></td>
+      <td><p>character vector or tidy-selector of columns in data to stratify results by</p></td>
     </tr>
     <tr>
       <th>.tbl_fun</th>
@@ -216,7 +216,7 @@ The stratified data frame is passed to this function.</p></td>
     <tr>
       <th>.sep</th>
       <td><p>when more than one stratifying variable is passed, this string is
-used to separate the levels. Default is <code>", "</code></p></td>
+used to separate the levels in the spanning header. Default is <code>", "</code></p></td>
     </tr>
     <tr>
       <th>.combine_with</th>
