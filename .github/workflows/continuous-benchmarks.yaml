@@ -61,7 +61,7 @@ jobs:
           Rscript -e "remotes::install_github("r-lib/bench")"
           R CMD INSTALL .
 
-     - name: Install dependencies
+     - name: Install dependencies packages
        run: |
          install.packages("remotes")
          remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
