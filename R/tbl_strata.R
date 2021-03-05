@@ -9,9 +9,9 @@
 #' If a formula, e.g. `~ .x %>% tbl_summary() %>% add_p()`, it is converted to a function.
 #' The stratified data frame is passed to this function.
 #' @param ... Additional arguments passed on to the `.tbl_fun` function.
-#' @param strata character vector or tidy-selector of columns in data to
+#' @param strata character vector or tidy-selector of columns in data to stratify results by
 #' @param .sep when more than one stratifying variable is passed, this string is
-#' used to separate the levels. Default is `", "`
+#' used to separate the levels in the spanning header. Default is `", "`
 #' @param .combine_with One of `c("tbl_merge", "tbl_stack")`. Names the function
 #' used to combine the stratified tables.
 #'
