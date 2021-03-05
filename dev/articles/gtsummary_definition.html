@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9005</span>
       </span>
     </div>
 
@@ -412,7 +412,7 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <a href="#table_styling-1" class="anchor"></a>table_styling</h3>
 <p>There are a few internal {gtsummary} functions to assist in constructing and modifying a <code>.$table_header</code> data frame.</p>
 <ol style="list-style-type: decimal">
-<li><p><code><a href="../reference/.create_gtsummary_object.html">.create_gtsummary_object(table_body)</a></code> After a user creates a <code>table_body</code>, pass it to this function and the skeleton of a gtsummary object is created and returned (including the full <code>table_styling</code> list of tables).</p></li>
+<li><p><code>.create_gtsummary_object(table_body)</code> After a user creates a <code>table_body</code>, pass it to this function and the skeleton of a gtsummary object is created and returned (including the full <code>table_styling</code> list of tables).</p></li>
 <li><p><code>.update_table_styling()</code> After columns are added or removed from <code>table_body</code>, run this function to update <code>.$table_styling</code> to include or remove styling instructions for the columns. FYI the default styling for each new column is to hide it.</p></li>
 <li><p><code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code> This exported function modifies the printing instructions for a single column or groups of columns.</p></li>
 <li><p><code><a href="../reference/modify_table_body.html">modify_table_body()</a></code> This exported function helps users make changes to <code>.$table_body</code>. The function runs <code>.update_table_styling()</code> internally to maintain internal validity with the printing instructions.</p></li>
