@@ -8,10 +8,11 @@
 #' formatting function.
 #' The LHS specifies the column(s) to be updated,
 #' and the RHS is the updated formatting function.
-#' @param rows predicate expression to select rows in `x$table_body`. Default
-#' is `NULL`, which applies the formatting function to the entire column.
+#' @param rows predicate expression to select rows in `x$table_body`.
+#' Default is `NULL`. See details below.
 #' @inheritParams modify_table_styling
 #'
+#' @inheritSection modify_table_styling rows argument
 #' @export
 #' @examples
 #' # Example 1 ----------------------------------
@@ -28,6 +29,7 @@
 #' \if{html}{Example 1}
 #'
 #' \if{html}{\figure{modify_fmt_fun_ex1.png}{options: width=45\%}}
+
 modify_fmt_fun <- function(x, update, rows = NULL) {
   # converting update arg to a tidyselect list ---------------------------------
   update <-
