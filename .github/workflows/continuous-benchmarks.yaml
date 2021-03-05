@@ -61,48 +61,48 @@ jobs:
           Rscript -e "remotes::install_github("r-lib/bench")"
           R CMD INSTALL .
 
-     - name: Install dependencies packages
-       run: |
+      - name: Install dependencies packages
+        run: |
          install.packages("remotes")
          remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
          remotes::install_github("r-lib/bench")
          pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
          install.packages(pkgs, repos = c(CRAN = "https://cran.rstudio.com"))
-       shell: Rscript {0}
+        shell: Rscript {0}
 
-     - name: Install package
-       run: R CMD INSTALL .
+      - name: Install package
+        run: R CMD INSTALL .
 
-     - name: Fetch existing benchmarks
-       run: Rscript -e 'bench::cb_fetch()'
+      - name: Fetch existing benchmarks
+        run: Rscript -e 'bench::cb_fetch()'
 
-     - name: Run benchmarks
-       run: |
-         # git config --local user.email "actions@github.com"
-         # git config --local user.name "GitHub Actions"
-         Rscript -e 'bench::cb_run()'
+      - name: Run benchmarks
+        run: |
+          # git config --local user.email "actions@github.com"
+          # git config --local user.name "GitHub Actions"
+          Rscript -e 'bench::cb_run()'
 
-     - name: Show benchmarks
-       run: git notes --ref benchmarks show
+      - name: Show benchmarks
+        run: git notes --ref benchmarks show
 
-     - name: Push benchmarks
-       run: Rscript -e 'bench::cb_push()'
-       # run: Rscript -e 'bench::cb_push("https://github.com/ddsjoberg/gtsummary")'
+      - name: Push benchmarks
+        run: Rscript -e 'bench::cb_push()'
+        # run: Rscript -e 'bench::cb_push("https://github.com/ddsjoberg/gtsummary")'
 
-     - name: Build RMD REPORT
-       run: |
-         # git config --local user.email "actions@github.com"
-         # git config --local user.name "GitHub Actions"
-         # Rscript -e 'bench::cb_fetch("https://github.com/oranwutang/gtsummary/"); stored_benchmarks <- bench::cb_read("https://github.com/oranwutang/gtsummary/"); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
-         # Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
-         Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
-     - name: Commit files
-       run: |
-         git config --global user.email "ghau@example.com"
-         git config --global user.name "GitHub Actions User"
-         git add --all
-         git commit -am "benchmark commit"
-         git push
+      - name: Build RMD REPORT
+        run: |
+          # git config --local user.email "actions@github.com"
+          # git config --local user.name "GitHub Actions"
+          # Rscript -e 'bench::cb_fetch("https://github.com/oranwutang/gtsummary/"); stored_benchmarks <- bench::cb_read("https://github.com/oranwutang/gtsummary/"); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+          # Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+          Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+      - name: Commit files
+        run: |
+          git config --global user.email "ghau@example.com"
+          git config --global user.name "GitHub Actions User"
+          git add --all
+          git commit -am "benchmark commit"
+          git push
 
 # Trying with a copy of the recent version of benchmark workflow from the bench package itself.
 # It seems that there's no need to set up a user.
