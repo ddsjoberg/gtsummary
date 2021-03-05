@@ -66,7 +66,7 @@ jobs:
          install.packages("remotes")
          remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
          # remotes::install_github("r-lib/bench")
-         install_github("oranwutang/bench")
+         remotes::install_github("oranwutang/bench")
          pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
          install.packages(pkgs, repos = c(CRAN = "https://cran.rstudio.com"))
         shell: Rscript {0}
