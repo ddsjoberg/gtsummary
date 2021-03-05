@@ -266,7 +266,7 @@ trial %>%
   tbl_strata(
     strata = grade, 
     ~.x %>%
-      tbl_summary(by = trt) %>%
+      tbl_summary(by = trt, missing = "no") %>%
       modify_header(all_stat_cols() ~ "**{level}**")
   )
 ```
