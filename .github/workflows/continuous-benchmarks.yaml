@@ -95,14 +95,14 @@ jobs:
         run: Rscript -e 'bench::cb_push()'
         # run: Rscript -e 'bench::cb_push("https://github.com/ddsjoberg/gtsummary")'
 
-      # - name: Build RMD REPORT
-      #   run: |
-      #     # git config --local user.email "actions@github.com"
-      #     # git config --local user.name "GitHub Actions"
-      #     # Rscript -e 'bench::cb_fetch("https://github.com/oranwutang/gtsummary/"); stored_benchmarks <- bench::cb_read("https://github.com/oranwutang/gtsummary/"); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
-      #     # Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
-      #     # Rscript -e 'bench::cb_fetch("https://github.com/oranwutang/gtsummary/"); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
-      #     # Rscript -e 'bench::cb_read()'
+      - name: Build RMD REPORT
+        run: |
+          # git config --local user.email "actions@github.com"
+          # git config --local user.name "GitHub Actions"
+          # Rscript -e 'bench::cb_fetch("https://github.com/oranwutang/gtsummary/"); stored_benchmarks <- bench::cb_read("https://github.com/oranwutang/gtsummary/"); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+          Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+          # Rscript -e 'bench::cb_fetch("https://github.com/oranwutang/gtsummary/"); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+          # Rscript -e 'bench::cb_read()'
       - name: Commit files
         run: |
           git config --global user.email "ghau@example.com"
