@@ -31,19 +31,19 @@ library(ggplot2)
 # My theory is that there are multiple when I was running the commands
 # locally, then pushed to GH where the benchmarks were run again.
 
-
-stored_benchmarks <-
-  stored_benchmarks %>%
-  rowwise() %>%
-  filter(nrow(benchmarks) > 0) %>% # removing empty results (why are there so many empty results?)
-  mutate(
-    benchmarks =
-      arrange(benchmarks, file, name, time) %>%
-      group_by(file, name) %>%
-      slice(n()) %>%
-      ungroup() %>%
-      list()
-  )
+#Commenting this temporaly, then it shoud be restored
+# stored_benchmarks <-
+#   stored_benchmarks %>%
+#   rowwise() %>%
+#   filter(nrow(benchmarks) > 0) %>% # removing empty results (why are there so many empty results?)
+#   mutate(
+#     benchmarks =
+#       arrange(benchmarks, file, name, time) %>%
+#       group_by(file, name) %>%
+#       slice(n()) %>%
+#       ungroup() %>%
+#       list()
+#   )
 
 # commitInfo <- gert::git_commit_info() # Current commit (?).
 # commitInfo$id # ID of current commit for current brach
