@@ -2,7 +2,7 @@
 % Please edit documentation in R/modify_table_styling.R
 \name{modify_table_styling}
 \alias{modify_table_styling}
-\title{Modify table_styling}
+\title{Modify Table Styling}
 \usage{
 modify_table_styling(
   x,
@@ -60,13 +60,32 @@ and italic styling when \code{TRUE}}
 \description{
 This is a function meant for advanced users to gain
 more control over the characteristics of the resulting
-gtsummary table.
+gtsummary table by directly modifying \code{.$table_styling}
 }
 \details{
 Review the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
 vignette for information on \code{.$table_styling} objects.
 }
+\section{rows argument}{
+
+The rows argument accepts a predicate expression that is used to specify
+rows to apply formatting. The expression must evaluate to a logical when
+evaluated in \code{x$table_body}. For example, to apply formatting to the age rows
+pass \code{rows = variable == "age"}. A vector of row numbers is NOT acceptable.
+
+A couple of things to note when using the \verb{rows=} argument.
+\enumerate{
+\item You can use saved objects to create the predicate argument, e.g.
+\code{rows = variable == letters[1]}.
+\item The saved object cannot share a name with a column in \code{x$table_body}.
+The reason for this is that in \code{tbl_merge()} the columns are renamed,
+and the renaming process cannot disambiguate the \code{variable} column from
+an external object named \code{variable} in the following expression
+\code{rows = .data$variable = .env$variable}.
+}
+}
+
 \seealso{
 \code{modify_table_body()}
 
