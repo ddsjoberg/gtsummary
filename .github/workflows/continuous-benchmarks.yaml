@@ -61,6 +61,11 @@ jobs:
           Rscript -e "remotes::install_github('r-lib/bench')"
           R CMD INSTALL .
 
+      - name: Install Pandoc
+        uses: r-lib/actions/setup-pandoc@9598b8eeb6d88de7d76d580d84443542bbfdffce
+        with:
+          pandoc-version: 2.11.1.1
+
       - name: Install dependencies packages
         run: |
          install.packages("remotes")
