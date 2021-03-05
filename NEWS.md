@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updates to the table gallery vignette reflecting changes in the package. (#775)
+
 * Added default support for `brmsfit` model in `tbl_regression()` with new method function. (#751)
 
 * Improved error messaging when there is a problem constructing one of the univariate regression models in `tbl_uvregression()`.

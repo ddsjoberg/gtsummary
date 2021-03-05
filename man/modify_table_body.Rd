@@ -2,7 +2,7 @@
 % Please edit documentation in R/modify_table_body.R
 \name{modify_table_body}
 \alias{modify_table_body}
-\title{Modify table_body}
+\title{Modify Table Body}
 \usage{
 modify_table_body(x, fun, ...)
 }

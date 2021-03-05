@@ -21,6 +21,7 @@
 #' @param footnote string with text for column footnote
 #' @param spanning_header string with text for spanning header
 #' @export
+#' @keywords internal
 
 modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NULL,
                                 missing_emdash = NULL, indent = NULL,
