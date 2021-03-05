@@ -1,44 +1,64 @@
-on:
- push:
- pull_request:
+# on:
+#  push:
+#  pull_request:
+#
+# name: Continuous Benchmarks
+#
+# jobs:
+#  benchmark:
+#    runs-on: ubuntu-16.04
+#    steps:
+#      - name: Checkout repo
+#        uses: actions/checkout@master
+#
+#      - name: Setup R
+#        uses: r-lib/actions/setup-r@master
+#        with:
+#          r-version: 'release'
+#
+#      - name: Query dependencies
+#        run: |
+#          install.packages('remotes')
+#          saveRDS(remotes::dev_package_deps(dependencies = c("Depends", "Imports")), ".github/bench_depends.Rds", version = 2)
+#          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+#        shell: Rscript {0}
+#
+#      - name: Cache R packages
+#        uses: actions/cache@v1
+#        with:
+#          path: ${{ env.R_LIBS_USER }}
+#          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/bench_depends.Rds') }}
+#          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+#
+#      - name: Install system dependencies
+#        if: runner.os == 'Linux'
+#        env:
+#          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
+#        run: |
+#          Rscript -e "install.packages('remotes')"
+#          Rscript -e "remotes::install_github('r-hub/sysreqs')"
+#          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+#          sudo -s eval "$sysreqs"
+
+on: push
 
 name: Continuous Benchmarks
 
 jobs:
- benchmark:
-   runs-on: ubuntu-16.04
-   steps:
-     - name: Checkout repo
-       uses: actions/checkout@master
+  build:
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@master
 
-     - name: Setup R
-       uses: r-lib/actions/setup-r@master
-       with:
-         r-version: 'release'
+      - name: Setup R
+        uses: r-lib/actions/setup-r@master
 
-     - name: Query dependencies
-       run: |
-         install.packages('remotes')
-         saveRDS(remotes::dev_package_deps(dependencies = c("Depends", "Imports")), ".github/bench_depends.Rds", version = 2)
-         writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-       shell: Rscript {0}
+      - name: Install dependencies
+        run: |
+          Rscript -e "install.packages(c('remotes'))" -e "remotes::install_deps(dependencies = TRUE)"
+          R CMD INSTALL .
 
-     - name: Cache R packages
-       uses: actions/cache@v1
-       with:
-         path: ${{ env.R_LIBS_USER }}
-         key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/bench_depends.Rds') }}
-         restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
-     - name: Install system dependencies
-       if: runner.os == 'Linux'
-       env:
-         RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
-       run: |
-         Rscript -e "install.packages('remotes')"
-         Rscript -e "remotes::install_github('r-hub/sysreqs')"
-         sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
-         sudo -s eval "$sysreqs"
      - name: Install dependencies
        run: |
          install.packages("remotes")
@@ -56,8 +76,8 @@ jobs:
 
      - name: Run benchmarks
        run: |
-         git config --local user.email "actions@github.com"
-         git config --local user.name "GitHub Actions"
+         # git config --local user.email "actions@github.com"
+         # git config --local user.name "GitHub Actions"
          Rscript -e 'bench::cb_run()'
 
      - name: Show benchmarks
@@ -72,7 +92,8 @@ jobs:
          # git config --local user.email "actions@github.com"
          # git config --local user.name "GitHub Actions"
          # Rscript -e 'bench::cb_fetch("https://github.com/oranwutang/gtsummary/"); stored_benchmarks <- bench::cb_read("https://github.com/oranwutang/gtsummary/"); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
-         Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+         # Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+         Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
      - name: Commit files
        run: |
          git config --global user.email "ghau@example.com"
