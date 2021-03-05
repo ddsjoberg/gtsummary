@@ -58,7 +58,7 @@ jobs:
         run: |
           Rscript -e "install.packages(c('remotes'))"
           Rscript -e "remotes::install_deps(dependencies = TRUE)"
-          Rscript -e "remotes::install_github("r-lib/bench")"
+          Rscript -e "remotes::install_github('r-lib/bench')"
           R CMD INSTALL .
 
       - name: Install dependencies packages
