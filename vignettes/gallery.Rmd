@@ -22,7 +22,7 @@ Gallery showing various tables possible with the {gtsummary} package.  If you ha
 
 ```{r setup, message = FALSE, warning=FALSE}
 library(gtsummary); library(gt); library(survival)
-library(dplyr); library(stringr); library(purrr); library(forcats)
+library(dplyr); library(stringr); library(purrr); library(forcats); library(tidyr)
 ```
 
 ---
@@ -218,6 +218,42 @@ tbl_merge(list(t1, t2)) %>%
   modify_footnote(everything() ~ NA_character_) %>%
   modify_spanning_header(everything() ~ NA_character_)
 ```
+
+---
+<a id="cross_tab_continuous"></a>
+
+It's often needed to summarize a continuous by two categorical variables.
+One way to do this is with `tbl_strata()`, and another with the code below.
+
+```{r}
+trial %>%
+  # nest data within tumor grade
+  select(trt, grade, marker) %>%
+  arrange(grade) %>%
+  mutate(grade = as.character(grade)) %>%
+  nest(data = -grade) %>%
+  # build tbl_summary within each grade
+  rowwise() %>%
+  mutate(
+    tbl = 
+      data %>%
+      tbl_summary(
+        by = trt,
+        label = list(marker = grade), # use the grade level as the label
+        missing = "no"
+      ) %>%
+      modify_header(list(
+        label ~ "**Tumor Grade**",
+        all_stat_cols() ~ "**{level}**"
+      )) %>%
+      list()
+  ) %>%
+  # stack tbl_summary tables to create final tbl
+  pull(tbl) %>%
+  tbl_stack() %>%
+  modify_spanning_header(all_stat_cols() ~ "**Treatment Assignment**")
+```
+
 
 ---
 
