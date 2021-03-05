@@ -254,6 +254,22 @@ trial %>%
   modify_spanning_header(all_stat_cols() ~ "**Treatment Assignment**")
 ```
 
+---
+<a id="tbl_strata"></a>
+
+Build a summary table stratified by more than one variable.
+
+```{r}
+trial %>%
+  select(trt, grade, age, stage) %>%
+  mutate(grade = paste("Grade", grade)) %>%
+  tbl_strata(
+    strata = grade, 
+    ~.x %>%
+      tbl_summary(by = trt) %>%
+      modify_header(all_stat_cols() ~ "**{level}**")
+  )
+```
 
 ---
 
