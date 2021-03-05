@@ -5,7 +5,7 @@ library(bench)
 
 # setup code
 big_trial <- purrr::map_dfr(seq_len(5000), ~trial)
-bench::cb_fetch("https://github.com/oranwutang/gtsummary/")
+# bench::cb_fetch("https://github.com/oranwutang/gtsummary/")
 # bench::cb_fetch()
 bench::mark(
   # simple summary
