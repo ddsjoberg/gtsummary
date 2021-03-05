@@ -4,7 +4,7 @@
 #' Build a stratified gtsummary table. Any gtsummary table that accepts
 #' a data frame as its first argument can be stratified.
 #'
-#' @param data a data frame
+#' @param data a data frame or survey object
 #' @param .tbl_fun A function or formula. If a _function_, it is used as is.
 #' If a formula, e.g. `~ .x %>% tbl_summary() %>% add_p()`, it is converted to a function.
 #' The stratified data frame is passed to this function.
@@ -51,17 +51,22 @@
 
 tbl_strata <- function(data, strata, .tbl_fun, ..., .sep = ", ", .combine_with = c("tbl_merge", "tbl_stack")) {
   # checking inputs ------------------------------------------------------------
-  if (!is.data.frame(data)) abort("`data=` must be a data frame.")
+  if (!is.data.frame(data) && !is_survey(data))
+    abort("`data=` must be a data frame or survey object.")
   .combine_with <- match.arg(.combine_with)
 
   # selecting stratum ----------------------------------------------------------
-  strata <- select(data, {{ strata }}) %>% names()
+  strata <-
+    select(
+      switch(is_survey(data), data$variables) %||% data, # select from data frame
+      {{ strata }}
+    ) %>%
+    names()
   new_strata_names <- as.list(strata) %>% set_names(paste0("strata_", seq_len(length(strata))))
 
   # nesting data and building tbl objects --------------------------------------
   df_tbls <-
-    data %>%
-    nest(data = -all_of(strata)) %>%
+    nest_df_and_svy(data, strata) %>%
     arrange(!!!syms(strata)) %>%
     rename(!!!syms(new_strata_names)) %>%
     mutate(
@@ -84,4 +89,21 @@ tbl_strata <- function(data, strata, .tbl_fun, ..., .sep = ", ", .combine_with =
   tbl$df_strata <- df_tbls %>% select(starts_with("strata_"), .data$header)
   class(tbl) <- c("tbl_strata", .combine_with, "gtsummary")
   tbl
+}
+
+nest_df_and_svy <- function(data, strata) {
+  # if data frame, return nested tibble
+  if (is.data.frame(data)) return(nest(data, data = -all_of(.env$strata)))
+
+  if (length(strata) > 1)
+    abort("survey objects allow for a single stratifying variable.")
+
+  # if survey object, construct a nested tibble
+  tibble(strata_var = pluck(data, "variables", strata) %>% unique()) %>%
+    rowwise() %>%
+    mutate(
+      data = data[data$variables[[.env$strata]] %in% strata_var, ] %>% list()
+    ) %>%
+    ungroup() %>%
+    set_names(c(strata, "data"))
 }
