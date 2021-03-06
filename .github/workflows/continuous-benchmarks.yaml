@@ -92,18 +92,18 @@ jobs:
       - name: Push benchmarks
         run: Rscript -e 'bench::cb_push()'
 
-      - name: Build RMD REPORT
-        run: |
-          git checkout benchmark3
-          # Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
-          Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
-      - name: Commit files
-        run: |
-          git config --global user.email "ghau@example.com"
-          git config --global user.name "GitHub Actions User"
-          git add --all
-          git commit -am "benchmark commit"
-          git push
+      # - name: Build RMD REPORT
+      #   run: |
+      #     git checkout benchmark3
+      #     # Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+      #     Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+      # - name: Commit files
+      #   run: |
+      #     git config --global user.email "ghau@example.com"
+      #     git config --global user.name "GitHub Actions User"
+      #     git add --all
+      #     git commit -am "benchmark commit"
+      #     git push
 # Trying with a copy of the recent version of benchmark workflow from the bench package itself.
 # It seems that there's no need to set up a user.
 # Tha aim of this is to test if benchmarks can be run from any fork.

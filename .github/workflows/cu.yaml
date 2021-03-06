@@ -30,8 +30,7 @@ jobs:
          remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
          # remotes::install_github("r-lib/bench")
          remotes::install_github("oranwutang/bench")
-         # pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
-         pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "dplyr", "purrr", "stringr")
+         pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
          install.packages(pkgs, repos = c(CRAN = "https://cran.rstudio.com"))
         shell: Rscript {0}
 
@@ -40,8 +39,9 @@ jobs:
 
       - name: Build RMD REPORT
         run: |
-          # Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
-          Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+          Rscript -e bench::cb_fetch()
+          Rscript -e stored_benchmarks <- bench::cb_read()
+          Rscript -e rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))
 
       - name: Commit files
         run: |
