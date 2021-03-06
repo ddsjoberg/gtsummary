@@ -92,7 +92,10 @@ jobs:
         run: git notes --ref benchmarks show
 
       - name: Push benchmarks
-        run: Rscript -e 'bench::cb_push()'
+        run: Rscript -e 'bench::cb_push'
+
+      - name: Show benchmarks by cbread
+        run: Rscript -e 'head(bench::cb_read())'
 
       - name: Build RMD REPORT
         run: |
