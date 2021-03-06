@@ -43,11 +43,8 @@ jobs:
 
       - name: Build RMD REPORT P2
         run: |
-         Rscript -e 'stored_benchmarks <- bench::cb_read()'
-
-      - name: Build RMD REPORT P3
-        run: |
-         Rscript -e 'rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+         stored_benchmarks <- bench::cb_read()
+         rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))
 
       - name: Commit files
         run: |
