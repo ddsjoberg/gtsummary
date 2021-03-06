@@ -1,0 +1,55 @@
+on: push
+
+name: BuildRMD
+
+jobs:
+  build:
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@master
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@master
+
+      - name: Install dependencies
+        run: |
+          Rscript -e "install.packages(c('remotes'))"
+          Rscript -e "remotes::install_deps(dependencies = TRUE)"
+          Rscript -e "remotes::install_github('r-lib/bench')"
+          R CMD INSTALL .
+
+      - name: Install Pandoc
+        uses: r-lib/actions/setup-pandoc@9598b8eeb6d88de7d76d580d84443542bbfdffce
+        with:
+          pandoc-version: 2.11.1.1
+
+      - name: Install dependencies packages
+        run: |
+         install.packages("remotes")
+         remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
+         # remotes::install_github("r-lib/bench")
+         remotes::install_github("oranwutang/bench")
+         # pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
+         pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "dplyr", "purrr", "stringr")
+         install.packages(pkgs, repos = c(CRAN = "https://cran.rstudio.com"))
+        shell: Rscript {0}
+
+      - name: Install package
+        run: R CMD INSTALL .
+
+      - name: Build RMD REPORT
+        run: |
+          git checkout benchmark3
+          # Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+          Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+
+      - name: Commit files
+        run: |
+          git config --global user.email "ghau@example.com"
+          git config --global user.name "GitHub Actions User"
+          git add --all
+          git commit -am "benchmark commit"
+          git push
+
+
