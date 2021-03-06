@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added messaging when table caption requested for a gt table when using a version of gt that does not support captions.
+
 * Updates to the table gallery vignette reflecting changes in the package. (#775)
 
 * Added default support for `brmsfit` model in `tbl_regression()` with new method function. (#751)
