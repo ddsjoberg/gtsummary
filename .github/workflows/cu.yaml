@@ -1,6 +1,48 @@
+# on:
+#  push:
+#  pull_request:
+#
+# name: Continuous Benchmarks
+#
+# jobs:
+#  benchmark:
+#    runs-on: ubuntu-16.04
+#    steps:
+#      - name: Checkout repo
+#        uses: actions/checkout@master
+#
+#      - name: Setup R
+#        uses: r-lib/actions/setup-r@master
+#        with:
+#          r-version: 'release'
+#
+#      - name: Query dependencies
+#        run: |
+#          install.packages('remotes')
+#          saveRDS(remotes::dev_package_deps(dependencies = c("Depends", "Imports")), ".github/bench_depends.Rds", version = 2)
+#          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+#        shell: Rscript {0}
+#
+#      - name: Cache R packages
+#        uses: actions/cache@v1
+#        with:
+#          path: ${{ env.R_LIBS_USER }}
+#          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/bench_depends.Rds') }}
+#          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+#
+#      - name: Install system dependencies
+#        if: runner.os == 'Linux'
+#        env:
+#          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
+#        run: |
+#          Rscript -e "install.packages('remotes')"
+#          Rscript -e "remotes::install_github('r-hub/sysreqs')"
+#          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+#          sudo -s eval "$sysreqs"
+
 on: push
 
-name: BuildRMD
+name: Continuous Benchmarks
 
 jobs:
   build:
@@ -16,9 +58,8 @@ jobs:
         run: |
           Rscript -e "install.packages(c('remotes'))"
           Rscript -e "remotes::install_deps(dependencies = TRUE)"
-          # Rscript -e "remotes::install_github('r-lib/bench')"
+          Rscript -e "remotes::install_github('r-lib/bench')"
           R CMD INSTALL .
-
       - name: Install Pandoc
         uses: r-lib/actions/setup-pandoc@9598b8eeb6d88de7d76d580d84443542bbfdffce
         with:
@@ -26,7 +67,7 @@ jobs:
 
       - name: Install dependencies packages
         run: |
-         # install.packages("remotes")
+         install.packages("remotes")
          remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
          # remotes::install_github("r-lib/bench")
          remotes::install_github("oranwutang/bench")
@@ -37,9 +78,24 @@ jobs:
       - name: Install package
         run: R CMD INSTALL .
 
-      - name: Build RMD REPORT P2
+      - name: Fetch existing benchmarks
+        run: Rscript -e 'bench::cb_fetch()'
+
+      - name: Run benchmarks
         run: |
-          # Rscript -e 'stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
+          # git config --local user.email "actions@github.com"
+          # git config --local user.name "GitHub Actions"
+          # Rscript -e 'bench::cb_run()'
+      - name: Show benchmarks
+        run: git notes --ref benchmarks show
+
+      - name: Push benchmarks
+          # run: Rscript -e 'bench::cb_push()'
+
+      - name: Build RMD REPORT
+        run: |
+          git checkout benchmark3
+          # Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
           Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
       - name: Commit files
         run: |
@@ -48,5 +104,57 @@ jobs:
           git add --all
           git commit -am "benchmark commit"
           git push
+# Trying with a copy of the recent version of benchmark workflow from the bench package itself.
+# It seems that there's no need to set up a user.
+# Tha aim of this is to test if benchmarks can be run from any fork.
 
-
+# on: push
+#
+# name: Continuous Benchmarks
+#
+# jobs:
+#   build:
+#     runs-on: macOS-latest
+#     steps:
+#       - name: Checkout repo
+#         uses: actions/checkout@master
+#
+#       - name: Setup R
+#         uses: r-lib/actions/setup-r@master
+#
+#       - name: Install dependencies
+#         run: |
+#           Rscript -e "install.packages(c('remotes'))" -e "remotes::install_deps(dependencies = TRUE)"
+#           R CMD INSTALL .
+#
+#       - name: Install packages dependencies
+#         run: |
+#          install.packages("remotes")
+#          remotes::install_deps(dependencies = c("Depends", "Imports"))
+#          remotes::install_github("r-lib/bench")
+#          pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
+#          install.packages(pkgs, repos = c(CRAN = "https://cran.rstudio.com"))
+#         shell: Rscript {0}
+#
+#       - name: Fetch existing benchmarks
+#         run: Rscript -e 'bench::cb_fetch("https://github.com/ddsjoberg/gtsummary")'
+#
+#       - name: Run benchmarks
+#         run: Rscript -e 'bench::cb_run()'
+#
+#       - name: Show benchmarks
+#         run: git notes --ref benchmarks show
+#
+#       - name: Push benchmarks
+#         run: Rscript -e 'bench::cb_push("https://github.com/ddsjoberg/gtsummary")'
+#
+#       - name: Build RMD REPORT`
+#         run: Rscript -e 'rmarkdown::render(input = here("bench/benchmark2html.Rmd"), output_file = here("bench/benchmark2html.html"),  clean = T)'
+#
+#       - name: Commit files
+#         run: |
+#           git config --global user.email "ghau@example.com"
+#           git config --global user.name "GitHub Actions User"
+#           git add --all
+#           git commit -am "benchmark commit"
+#           git push
