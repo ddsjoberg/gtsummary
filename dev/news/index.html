@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9006</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Added messaging when table caption requested for a gt table when using a version of gt that does not support captions.</p></li>
 <li><p>Updates to the table gallery vignette reflecting changes in the package. (<a href='https://github.com/ddsjoberg/gtsummary/issues/775'>#775</a>)</p></li>
 <li><p>Added default support for <code>brmsfit</code> model in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> with new method function. (<a href='https://github.com/ddsjoberg/gtsummary/issues/751'>#751</a>)</p></li>
 <li><p>Improved error messaging when there is a problem constructing one of the univariate regression models in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>.</p></li>
@@ -434,7 +435,7 @@
 <h3 class="hasAnchor">
 <a href="#breaking-changes-1" class="anchor"></a>Breaking Changes</h3>
 <ul>
-<li><p>All <code><a href="https://rdrr.io/pkg/lifecycle/man/deprecate_soft.html">lifecycle::deprecate_warn()</a></code> have been upgraded to <code><a href="https://rdrr.io/pkg/lifecycle/man/deprecate_soft.html">lifecycle::deprecate_stop()</a></code> for &lt;= v1.2.0 (released Aug 2019)</p></li>
+<li><p>All <code><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html">lifecycle::deprecate_warn()</a></code> have been upgraded to <code><a href="https://lifecycle.r-lib.org/reference/deprecate_soft.html">lifecycle::deprecate_stop()</a></code> for &lt;= v1.2.0 (released Aug 2019)</p></li>
 <li><p>Removing <code><a href="../reference/deprecated.html">as_flextable()</a></code> and replacing with <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> due to a name conflict with <code><a href="https://davidgohel.github.io/flextable/reference/as_flextable.html">flextable::as_flextable</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/462'>#462</a>)</p></li>
 </ul>
 </div>
