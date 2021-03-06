@@ -14,16 +14,6 @@ library(dplyr)
 library(ggplot2)
 ```
 
-```{r bench_fetch, echo=TRUE, message=TRUE, warning=TRUE}
-
-# bench::cb_fetch()
-```
-
-```{r bench_read}
-# Get the data with previous benchmarks
-# stored_benchmarks <- stored_benchmarks = stored_benchmarks
-```
-
 ```{r data wrangling}
 # TO REVIEW, THROWS AN ERROR: DS udpated 2021-02-28
 # removing duplicate checks within a single HASH (not sure why they are there)
@@ -95,7 +85,8 @@ plotly::ggplotly(
            labs(title = "Mean execution time for each function (time per iteration in seconds)",
                 subtitle = "seconds", # Plotly doesn't understand subtitles
                 y = "",
-                x = ""),
+                x = "")+
+           ggsave("plot1.png", device = "png"),
          width = 900
 )
 
@@ -114,7 +105,8 @@ plotly::ggplotly(
            labs(title = "Mean execution time for each function (time per iteration in seconds)",
                 subtitle = "seconds", # Plotly doesn't understand subtitles
                 y = "",
-                x = ""),
+                x = "")+
+           ggsave("plot1.png", device = "png"),
          width = 900
 )
 
