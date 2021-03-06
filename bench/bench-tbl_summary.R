@@ -1,12 +1,9 @@
 library(gtsummary, warn.conflicts = FALSE)
 library(bench)
-# library(rmarkdown)
-# library(here)
 
 # setup code
 big_trial <- purrr::map_dfr(seq_len(5000), ~trial)
-# bench::cb_fetch("https://github.com/oranwutang/gtsummary/")
-# bench::cb_fetch()
+
 bench::mark(
   # simple summary
   simple = tbl_summary(trial),
@@ -20,8 +17,3 @@ bench::mark(
   check = FALSE,
   min_iterations = 5
 )
-
-# The next call was added to the benchmark yaml file, if it works, it can be deleted form this script
-# rmarkdown::render(input = here("bench/benchmark2html.Rmd"), # IMPORTANT: Relative paths doesn't work maybe solvable with {here}
-#                  output_file = here("bench/benchmark2html.html"),  # IMPORTANT: Relative paths doesn't work maybe solvable with {here}
-#                  clean = T)
