@@ -16,7 +16,7 @@ jobs:
         run: |
           Rscript -e "install.packages(c('remotes'))"
           Rscript -e "remotes::install_deps(dependencies = TRUE)"
-          Rscript -e "remotes::install_github('r-lib/bench')"
+          # Rscript -e "remotes::install_github('r-lib/bench')"
           R CMD INSTALL .
 
       - name: Install Pandoc
@@ -26,7 +26,7 @@ jobs:
 
       - name: Install dependencies packages
         run: |
-         install.packages("remotes")
+         # install.packages("remotes")
          remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
          # remotes::install_github("r-lib/bench")
          remotes::install_github("oranwutang/bench")
@@ -40,7 +40,6 @@ jobs:
 
       - name: Build RMD REPORT
         run: |
-          git checkout benchmark3
           # Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(here::here("bench")); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
           Rscript -e 'bench::cb_fetch(); stored_benchmarks <- bench::cb_read(); rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"), output_file = here::here("bench/benchmark2html.html"),  clean = T, params = list(stored_benchmarks = stored_benchmarks))'
 

@@ -73,7 +73,7 @@ jobs:
          # remotes::install_github("r-lib/bench")
          remotes::install_github("oranwutang/bench")
          # pkgs <- c("here", "ggplot2", "plotly", "rmarkdown", "gtsummary", "dplyr", "gert", "purrr", "stringr")
-         pkgs <- c("here", "gtsummary", "dplyr", "purr")
+         pkgs <- c("gtsummary", "dplyr", "purr")
          install.packages(pkgs, repos = c(CRAN = "https://cran.rstudio.com"))
         shell: Rscript {0}
 
