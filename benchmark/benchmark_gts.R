@@ -12,7 +12,7 @@ library(here)
 .libPaths(new = here::here("benchmark/lib/github"))
 # .libPaths(new = "lib/spanish_translation")
 
-install.packages(pkgs = "gtsummary", lib = "/Users/runner/work/gtsummary/benchmark/lib/cran/", dependencies = c("Depends", "Imports"))
+install.packages(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"), dependencies = c("Depends", "Imports"))
 remotes::install_github("https://github.com/ddsjoberg/gtsummary",
                         lib ="benchmark/lib/github",
                         dependencies = c("Depends", "Imports"))
@@ -50,49 +50,49 @@ remotes::install_github("https://github.com/ddsjoberg/gtsummary",
 # install.packages("tidyverse", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
 # install.packages("forcats", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
 # install.packages("labeling", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("gt", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
+# install.packages("gt", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
 # install.packages("microbenchmark", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
 
-install.packages("dplyr", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("rlang", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("vctrs", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("R6", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("generics", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("glue", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("lifecycle", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("magrittr", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("tibble", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("ellipsis", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("pillar", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("crayon", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("pkgconfig", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("tidyselect", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("purrr", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("huxtable", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("assertthat", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("knitr", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("xfun", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("stringr", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("stringi", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("tidyr", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("Rcpp", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("ggplot2", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("withr", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("tidyverse", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("forcats", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("labeling", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("gt", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-install.packages("microbenchmark", lib=c("benchmark/lib/cran", "benchmark/lib/github"))
+install.packages("dplyr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("rlang", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("vctrs", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("R6", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("generics", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("glue", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("lifecycle", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("magrittr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("tibble", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("ellipsis", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("pillar", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("crayon", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("pkgconfig", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("tidyselect", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("purrr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("huxtable", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("assertthat", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("knitr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("xfun", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("stringr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("stringi", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("tidyr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("Rcpp", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("ggplot2", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("withr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("tidyverse", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("forcats", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("labeling", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("gt", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+install.packages("microbenchmark", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
 
 # After installing all of the required libraries,
 # the script should be run from here:
 
 # Loading libraries ----
-library(magrittr, lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-library(dplyr, lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-library(ggplot2, lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-library(forcats, lib=c("benchmark/lib/cran", "benchmark/lib/github"))
-library(microbenchmark, lib=c("benchmark/lib/cran", "benchmark/lib/github"))
+library(magrittr, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+library(dplyr, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+library(ggplot2, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+library(forcats, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+library(microbenchmark, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
 
 # Set how many times the benchmark will try each function:----
 
@@ -100,7 +100,7 @@ bm_times <- 5
 
 # Benchmark CRAN version ----
 detach("package:gtsummary", unload=TRUE)
-library(gtsummary, lib.loc = "benchmark/lib/cran/")
+library(gtsummary, lib.loc = here::here("benchmark/lib/cran/"))
 gt_ver <- as.character(packageVersion("gtsummary"))
 
 bm_gtsummary <- microbenchmark(
@@ -114,7 +114,7 @@ benchmark_data <- data.frame(bm_gtsummary$expr, bm_gtsummary$time, gt_ver)
 
 # Benchmark github version ----
 detach("package:gtsummary", unload=TRUE)
-library(gtsummary, lib.loc = "benchmark/lib/github/")
+library(gtsummary, lib.loc = here::here("benchmark/lib/github/"))
 gt_ver <- as.character(packageVersion("gtsummary"))
 
 bm_gtsummary <- microbenchmark(
