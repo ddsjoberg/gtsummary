@@ -12,7 +12,7 @@ library(here)
 .libPaths(new = here::here("benchmark/lib/github"))
 # .libPaths(new = "lib/spanish_translation")
 
-install.packages(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"), dependencies = c("Depends", "Imports"))
+install.packages(pkgs = "gtsummary", lib = "/Users/runner/work/gtsummary/benchmark/lib/cran/", dependencies = c("Depends", "Imports"))
 remotes::install_github("https://github.com/ddsjoberg/gtsummary",
                         lib ="benchmark/lib/github",
                         dependencies = c("Depends", "Imports"))
