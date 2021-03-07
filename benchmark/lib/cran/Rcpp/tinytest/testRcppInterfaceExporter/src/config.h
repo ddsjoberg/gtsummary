@@ -1,1 +1,0 @@
-#define RCPP_USE_UNWIND_PROTECT
