@@ -51,6 +51,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@master
 
+      - name: show directories
+        run: |
+          cd /Users/runner/work/gtsummary/gtsummary/benchmark
+          ls
+
       - name: Setup R
         uses: r-lib/actions/setup-r@master
 
@@ -65,10 +70,6 @@ jobs:
       #   with:
       #     pandoc-version: 2.11.1.1
 
-      - name: show directories
-        run: |
-          cd /Users/runner/work/gtsummary
-          ls
 
       - name: Run BM Script
         run: |
