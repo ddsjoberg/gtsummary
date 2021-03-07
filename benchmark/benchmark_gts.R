@@ -99,7 +99,7 @@ library(microbenchmark, lib=c(here::here("benchmark/lib/cran"), here::here("benc
 bm_times <- 5
 
 # Benchmark CRAN version ----
-detach("package:gtsummary", unload=TRUE)
+# detach("package:gtsummary", unload=TRUE)
 library(gtsummary, lib.loc = here::here("benchmark/lib/cran/"))
 gt_ver <- as.character(packageVersion("gtsummary"))
 
