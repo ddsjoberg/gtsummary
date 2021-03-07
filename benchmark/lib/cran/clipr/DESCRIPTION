@@ -1,0 +1,45 @@
+Type: Package
+Package: clipr
+Title: Read and Write from the System Clipboard
+Version: 0.7.1
+Authors@R: 
+    c(person(given = "Matthew",
+             family = "Lincoln",
+             role = c("aut", "cre"),
+             email = "matthew.d.lincoln@gmail.com",
+             comment = c(ORCID = "0000-0002-4387-3384")),
+      person(given = "Louis",
+             family = "Maddox",
+             role = "ctb"),
+      person(given = "Steve",
+             family = "Simpson",
+             role = "ctb"),
+      person(given = "Jennifer",
+             family = "Bryan",
+             role = "ctb"))
+Description: Simple utility functions to read from and write to
+    the Windows, OS X, and X11 clipboards.
+License: GPL-3
+URL: https://github.com/mdlincoln/clipr
+BugReports: https://github.com/mdlincoln/clipr/issues
+Imports: utils
+Suggests: covr, knitr, rmarkdown, rstudioapi (>= 0.5), testthat (>=
+        2.0.0)
+VignetteBuilder: knitr
+Encoding: UTF-8
+Language: en-US
+LazyData: TRUE
+RoxygenNote: 7.1.1
+SystemRequirements: xclip (https://github.com/astrand/xclip) or xsel
+        (http://www.vergenet.net/~conrad/software/xsel/) for accessing
+        the X11 clipboard
+NeedsCompilation: no
+Packaged: 2020-10-08 13:13:31 UTC; mlincoln
+Author: Matthew Lincoln [aut, cre] (<https://orcid.org/0000-0002-4387-3384>),
+  Louis Maddox [ctb],
+  Steve Simpson [ctb],
+  Jennifer Bryan [ctb]
+Maintainer: Matthew Lincoln <matthew.d.lincoln@gmail.com>
+Repository: CRAN
+Date/Publication: 2020-10-08 14:00:05 UTC
+Built: R 4.0.2; ; 2020-10-09 10:22:21 UTC; unix

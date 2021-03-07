@@ -1,0 +1,33 @@
+Package: digest
+Author: Dirk Eddelbuettel <edd@debian.org> with contributions 
+ by Antoine Lucas, Jarek Tuszynski, Henrik Bengtsson, Simon Urbanek,
+ Mario Frasca, Bryan Lewis, Murray Stokely, Hannes Muehleisen,
+ Duncan Murdoch, Jim Hester, Wush Wu, Qiang Kou, Thierry Onkelinx, 
+ Michel Lang, Viliam Simko, Kurt Hornik, Radford Neal, Kendon Bell,
+ Matthew de Queljoe, Ion Suruceanu, Bill Denney, Dirk Schumacher,
+ and Winston Chang.
+Version: 0.6.27
+Date: 2020-10-20
+Maintainer: Dirk Eddelbuettel <edd@debian.org>
+Title: Create Compact Hash Digests of R Objects
+Description: Implementation of a function 'digest()' for the creation of hash
+ digests of arbitrary R objects (using the 'md5', 'sha-1', 'sha-256', 'crc32',
+ 'xxhash', 'murmurhash', 'spookyhash' and 'blake3' algorithms) permitting easy
+ comparison of R language objects, as well as functions such as'hmac()' to
+ create hash-based message authentication code. Please note that this package
+ is not meant to be deployed for cryptographic purposes for which more
+ comprehensive (and widely tested) libraries such as 'OpenSSL' should be
+ used.
+URL: http://dirk.eddelbuettel.com/code/digest.html
+BugReports: https://github.com/eddelbuettel/digest/issues
+Depends: R (>= 3.3.0)
+Imports: utils
+License: GPL (>= 2)
+Suggests: tinytest, knitr, rmarkdown, minidown
+VignetteBuilder: knitr
+NeedsCompilation: yes
+Packaged: 2020-10-20 13:03:32 UTC; edd
+Repository: CRAN
+Date/Publication: 2020-10-24 22:10:06 UTC
+Built: R 4.0.2; x86_64-apple-darwin17.0; 2020-10-25 10:22:37 UTC; unix
+Archs: digest.so.dSYM

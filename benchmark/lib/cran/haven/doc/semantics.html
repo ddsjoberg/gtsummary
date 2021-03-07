@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Conversion semantics</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Conversion semantics</h1>
+
+
+
+<p>There are some differences between the way that R, SAS, SPSS, and Stata represented labelled data and missing values. While SAS, SPSS, and Stata share some obvious similarities, R is little different. This vignette explores the differences, and shows you how haven bridges the gap.</p>
+<div id="value-labels" class="section level2">
+<h2>Value labels</h2>
+<p>Base R has one data type that effectively maintains a mapping between integers and character labels: the factor. This however, is not the primary use of factors: they are instead designed to automatically generate useful contrasts for linear models. Factors differ from the labelled values provided by the other tools in important ways:</p>
+<ul>
+<li><p>SPSS and SAS can label numeric and character values, not just integer values.</p></li>
+<li><p>The value do not need to be exhaustive. It is common to label the special missing values (e.g. <code>.D</code> = did not respond, <code>.N</code> = not applicable), while leaving other values as is.</p></li>
+</ul>
+<p>Value labels in SAS are a little different again. In SAS, labels are just special case of general formats. Formats include currencies and dates, but user-defined just assigns labels to individual values (including special missings value). Formats have names and existing independently of the variables they are associated with. You create a named format with <code>PROC FORMAT</code> and then associated with variables in a <code>DATA</code> step (the names of character formats thealways start with <code>$</code>).</p>
+<div id="labelled" class="section level3">
+<h3><code>labelled()</code></h3>
+<p>To allow you to import labelled vectors into R, haven provides the S3 labelled class, created with <code>labelled()</code>. This class allows you to associated arbitrary labels with numeric or character vectors:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>x1 &lt;-<span class="st"> </span><span class="kw">labelled</span>(</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), </span>
+<span id="cb1-3"><a href="#cb1-3"></a>  <span class="kw">c</span>(<span class="dt">Good =</span> <span class="dv">1</span>, <span class="dt">Bad =</span> <span class="dv">5</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>x1</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt; &lt;labelled&lt;integer&gt;[5]&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt; [1] 4 2 3 5 1</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt; </span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt; Labels:</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt;  value label</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt;      1  Good</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt;      5   Bad</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a>x2 &lt;-<span class="st"> </span><span class="kw">labelled</span>(</span>
+<span id="cb1-15"><a href="#cb1-15"></a>  <span class="kw">c</span>(<span class="st">&quot;M&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>), </span>
+<span id="cb1-16"><a href="#cb1-16"></a>  <span class="kw">c</span>(<span class="dt">Male =</span> <span class="st">&quot;M&quot;</span>, <span class="dt">Female =</span> <span class="st">&quot;F&quot;</span>)</span>
+<span id="cb1-17"><a href="#cb1-17"></a>)</span>
+<span id="cb1-18"><a href="#cb1-18"></a>x2</span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="co">#&gt; &lt;labelled&lt;character&gt;[5]&gt;</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="co">#&gt; [1] M F F F M</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="co">#&gt; </span></span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="co">#&gt; Labels:</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="co">#&gt;  value  label</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a><span class="co">#&gt;      M   Male</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="co">#&gt;      F Female</span></span></code></pre></div>
+<p>The goal of haven is not to provide a labelled vector that you can use everywhere in your analysis. The goal is to provide an intermediate datastructure that you can convert into a regular R data frame. You can do this by either converting to a factor or stripping the labels:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">as_factor</span>(x1)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; [1] 4    2    3    Bad  Good</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; Levels: Good 2 3 4 Bad</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">zap_labels</span>(x1)</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; [1] 4 2 3 5 1</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="kw">as_factor</span>(x2)</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; [1] Male   Female Female Female Male  </span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; Levels: Female Male</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="kw">zap_labels</span>(x2)</span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; [1] &quot;M&quot; &quot;F&quot; &quot;F&quot; &quot;F&quot; &quot;M&quot;</span></span></code></pre></div>
+<p>See the documentation for <code>as_factor()</code> for more options to control exactly what the factor uses for levels.</p>
+<p>Both <code>as_factor()</code> and <code>zap_labels()</code> have data frame methods if you want to apply the same strategy to every column in a data frame:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>df &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">data_frame</span>(x1, x2, <span class="dt">z =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; Warning: `data_frame()` is deprecated as of tibble 1.1.0.</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; Please use `tibble()` instead.</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; This warning is displayed once every 8 hours.</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; Call `lifecycle::last_warnings()` to see where this warning was generated.</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>df</span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt;          x1 x2             z</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt;   &lt;int+lbl&gt; &lt;chr+lbl&gt;  &lt;int&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; 1  4        M [Male]       1</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; 2  2        F [Female]     2</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; 3  3        F [Female]     3</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt; 4  5 [Bad]  F [Female]     4</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt; 5  1 [Good] M [Male]       5</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="kw">zap_labels</span>(df)</span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt;      x1 x2        z</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;int&gt;</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt; 1     4 M         1</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co">#&gt; 2     2 F         2</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="co">#&gt; 3     3 F         3</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">#&gt; 4     5 F         4</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co">#&gt; 5     1 M         5</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a><span class="kw">as_factor</span>(df)</span>
+<span id="cb3-26"><a href="#cb3-26"></a><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a><span class="co">#&gt;   x1    x2         z</span></span>
+<span id="cb3-28"><a href="#cb3-28"></a><span class="co">#&gt;   &lt;fct&gt; &lt;fct&gt;  &lt;int&gt;</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="co">#&gt; 1 4     Male       1</span></span>
+<span id="cb3-30"><a href="#cb3-30"></a><span class="co">#&gt; 2 2     Female     2</span></span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="co">#&gt; 3 3     Female     3</span></span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="co">#&gt; 4 Bad   Female     4</span></span>
+<span id="cb3-33"><a href="#cb3-33"></a><span class="co">#&gt; 5 Good  Male       5</span></span></code></pre></div>
+</div>
+</div>
+<div id="missing-values" class="section level2">
+<h2>Missing values</h2>
+<p>All three tools provide a global “system missing value” which is displayed as <code>.</code>. This is roughly equivalent to R’s <code>NA</code>, although neither Stata nor SAS propagate missingness in numeric comparisons: SAS treats the missing value as the smallest possible number (i.e. <code>-inf</code>), and Stata treats it as the largest possible number (i.e. <code>inf</code>).</p>
+<p>Each tool also provides a mechanism for recording multiple types of missingness:</p>
+<ul>
+<li><p>Stata has “extended” missing values, <code>.A</code> through <code>.Z</code>.</p></li>
+<li><p>SAS has “special” missing values, <code>.A</code> through <code>.Z</code> plus <code>._</code>.</p></li>
+<li><p>SPSS has per-column “user” missing values. Each column can declare up to three distinct values or a range of values (plus one distinct value) that should be treated as missing.</p></li>
+</ul>
+<p>Stata and SAS only support tagged missing values for numeric columns. SPSS supports up to three distinct values for character columns. Generally, operations involving a user-missing type return a system missing value.</p>
+<p>Haven models these missing values in two different ways:</p>
+<ul>
+<li><p>For SAS and Stata, haven provides “tagged” missing values which extend R’s regular <code>NA</code> to add a single character label.</p></li>
+<li><p>For SPSS, haven provides a subclass of <code>labelled</code> that also provides user defined values and ranges.</p></li>
+</ul>
+<div id="tagged-missing-values" class="section level3">
+<h3>Tagged missing values</h3>
+<p>To support Stata’s extended and SAS’s special missing value, haven implements a tagged NA. It does this by taking advantage of the internal structure of a floating point NA. That allows these values to behave identical to NA in regular R operations, while still preserving the value of the tag.</p>
+<p>The R interface for creating with tagged NAs is a little clunky because generally they’ll be created by haven for you. But you can create your own with <code>tagged_na()</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="kw">tagged_na</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;z&quot;</span>), <span class="dv">3</span><span class="op">:</span><span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>x</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; [1]  1  2  3 NA NA  3  2  1</span></span></code></pre></div>
+<p>Note these tagged NAs behave identically to regular NAs, even when printing. To see their tags, use <code>print_tagged_na()</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">print_tagged_na</span>(x)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; [1]     1     2     3 NA(a) NA(z)     3     2     1</span></span></code></pre></div>
+<p>To test if a value is a tagged NA, use <code>is_tagged_na()</code>, and to extract the value of the tag, use <code>na_tag()</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">is_tagged_na</span>(x)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; [1] FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="kw">is_tagged_na</span>(x, <span class="st">&quot;a&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; [1] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">na_tag</span>(x)</span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; [1] NA  NA  NA  &quot;a&quot; &quot;z&quot; NA  NA  NA</span></span></code></pre></div>
+<p>My expectation is that tagged missings are most often used in conjuction with labels (described below), so labelled vectors print the tags for you, and <code>as_factor()</code> knows how to relabel:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>y &lt;-<span class="st"> </span><span class="kw">labelled</span>(x, <span class="kw">c</span>(<span class="st">&quot;Not home&quot;</span> =<span class="st"> </span><span class="kw">tagged_na</span>(<span class="st">&quot;a&quot;</span>), <span class="st">&quot;Refused&quot;</span> =<span class="st"> </span><span class="kw">tagged_na</span>(<span class="st">&quot;z&quot;</span>)))</span>
+<span id="cb7-2"><a href="#cb7-2"></a>y</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt; &lt;labelled&lt;double&gt;[8]&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; [1]     1     2     3 NA(a) NA(z)     3     2     1</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; </span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; Labels:</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt;  value    label</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt;  NA(a) Not home</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt;  NA(z)  Refused</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="kw">as_factor</span>(y)</span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt; [1] 1        2        3        Not home Refused  3        2        1       </span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt; Levels: 1 2 3 Not home Refused</span></span></code></pre></div>
+</div>
+<div id="user-defined-missing-values" class="section level3">
+<h3>User defined missing values</h3>
+<p>SPSS’s user-defined values work differently to SAS and Stata. Each column can have either up to three distinct values that are considered as missing, or a range. Haven provides <code>labelled_spss()</code> as a subclass of <code>labelled()</code> to model these additional user-defined missings.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>x1 &lt;-<span class="st"> </span><span class="kw">labelled_spss</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">99</span>), <span class="kw">c</span>(<span class="dt">Missing =</span> <span class="dv">99</span>), <span class="dt">na_value =</span> <span class="dv">99</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>x2 &lt;-<span class="st"> </span><span class="kw">labelled_spss</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">99</span>), <span class="kw">c</span>(<span class="dt">Missing =</span> <span class="dv">99</span>), <span class="dt">na_range =</span> <span class="kw">c</span>(<span class="dv">90</span>, <span class="ot">Inf</span>))</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a>x1</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; &lt;labelled_spss&lt;double&gt;[11]&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 99</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; Missing values: 99</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; </span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; Labels:</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt;  value   label</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt;     99 Missing</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>x2</span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt; &lt;labelled_spss&lt;double&gt;[11]&gt;</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 99</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; Missing range:  [90, Inf]</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt; </span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="co">#&gt; Labels:</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="co">#&gt;  value   label</span></span>
+<span id="cb8-19"><a href="#cb8-19"></a><span class="co">#&gt;     99 Missing</span></span></code></pre></div>
+<p>These objects are somewhat dangerous to work with in R because most R functions don’t know those values are missing:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">mean</span>(x1)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; [1] 14</span></span></code></pre></div>
+<p>Because of that danger, the default behaviour of <code>read_spss()</code> is to return regular labelled objects where user-defined missing values have been converted to <code>NA</code>s. To get <code>read_spss()</code> to return <code>labelled_spss()</code> objects, you’ll need to set <code>user_na = TRUE</code>.</p>
+<p>I’ve defined an <code>is.na()</code> method so you can find them yourself:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">is.na</span>(x1)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE</span></span></code></pre></div>
+<p>And the presence of that method does mean many functions with an <code>na.rm</code> argument will work correctly:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">mean</span>(x1, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt; [1] 14</span></span></code></pre></div>
+<p>But generally you should either convert to a factor, convert to regular missing vaues, or strip the all the labels:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">as_factor</span>(x1)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt;  [1] 1       2       3       4       5       6       7       8       9      </span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt; [10] 10      Missing</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt; Levels: 1 2 3 4 5 6 7 8 9 10 Missing</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="kw">zap_missing</span>(x1)</span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 NA</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; attr(,&quot;labels&quot;)</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt; Missing </span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt;      99 </span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co">#&gt; attr(,&quot;class&quot;)</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="co">#&gt; [1] &quot;haven_labelled&quot;</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="kw">zap_labels</span>(x1)</span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 NA</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

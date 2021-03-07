@@ -1,0 +1,42 @@
+Package: isoband
+Title: Generate Isolines and Isobands from Regularly Spaced Elevation
+        Grids
+Version: 0.2.4
+Authors@R: 
+    c(person(given = "Claus O.",
+             family = "Wilke",
+             role = c("aut", "cre"),
+             email = "wilke@austin.utexas.edu",
+             comment = c(ORCID = "0000-0002-7470-9261")),
+      person(given = "Thomas Lin",
+             family = "Pedersen",
+             role = "aut",
+             email = "thomasp85@gmail.com",
+             comment = c(ORCID = "0000-0002-5147-4711")),
+      person(given = "testthat and Catch authors",
+             role = "ctb",
+             comment = "testthat C++ testing code"))
+Description: A fast C++ implementation to generate contour lines (isolines) and
+  contour polygons (isobands) from regularly spaced grids containing elevation data.
+URL: https://github.com/wilkelab/isoband
+BugReports: https://github.com/wilkelab/isoband/issues
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: grid, utils
+RoxygenNote: 7.1.1
+Config/testthat/edition: 3
+Suggests: covr, ggplot2, knitr, magick, microbenchmark, rmarkdown, sf,
+        testthat, xml2
+SystemRequirements: C++11
+VignetteBuilder: knitr
+NeedsCompilation: yes
+Packaged: 2021-03-02 23:14:17 UTC; clauswilke
+Author: Claus O. Wilke [aut, cre] (<https://orcid.org/0000-0002-7470-9261>),
+  Thomas Lin Pedersen [aut] (<https://orcid.org/0000-0002-5147-4711>),
+  testthat and Catch authors [ctb] (testthat C++ testing code)
+Maintainer: Claus O. Wilke <wilke@austin.utexas.edu>
+Repository: CRAN
+Date/Publication: 2021-03-03 17:10:20 UTC
+Built: R 4.0.2; x86_64-apple-darwin17.0; 2021-03-04 11:22:57 UTC; unix
+Archs: isoband.so.dSYM

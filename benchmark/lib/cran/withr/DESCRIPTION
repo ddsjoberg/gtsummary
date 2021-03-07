@@ -1,0 +1,67 @@
+Package: withr
+Title: Run Code 'With' Temporarily Modified Global State
+Version: 2.4.1
+Authors@R: 
+    c(person(given = "Jim",
+             family = "Hester",
+             role = c("aut", "cre"),
+             email = "jim.hester@rstudio.com"),
+      person(given = "Kirill",
+             family = "Müller",
+             role = "aut",
+             email = "krlmlr+r@mailbox.org"),
+      person(given = "Kevin",
+             family = "Ushey",
+             role = "aut",
+             email = "kevinushey@gmail.com"),
+      person(given = "Hadley",
+             family = "Wickham",
+             role = "aut",
+             email = "hadley@rstudio.com"),
+      person(given = "Winston",
+             family = "Chang",
+             role = "aut"),
+      person(given = "Jennifer",
+             family = "Bryan",
+             role = "ctb"),
+      person(given = "Richard",
+             family = "Cotton",
+             role = "ctb"),
+      person(given = "RStudio",
+             role = "cph"))
+Description: A set of functions to run code 'with' safely and
+    temporarily modified global state. Many of these functions were
+    originally a part of the 'devtools' package, this provides a simple
+    package with limited dependencies to provide access to these
+    functions.
+License: MIT + file LICENSE
+URL: https://withr.r-lib.org, https://github.com/r-lib/withr#readme
+BugReports: https://github.com/r-lib/withr/issues
+Depends: R (>= 3.2.0)
+Imports: graphics, grDevices, stats
+Suggests: covr, DBI, knitr, lattice, methods, rmarkdown, RSQLite,
+        testthat (>= 2.1.0)
+VignetteBuilder: knitr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Collate: 'local_.R' 'with_.R' 'collate.R' 'compat-defer.R'
+        'connection.R' 'db.R' 'defer.R' 'wrap.R' 'devices.R' 'dir.R'
+        'env.R' 'file.R' 'libpaths.R' 'locale.R' 'makevars.R'
+        'namespace.R' 'options.R' 'par.R' 'path.R' 'rng.R' 'seed.R'
+        'sink.R' 'tempfile.R' 'timezone.R' 'torture.R' 'utils.R'
+        'with.R'
+NeedsCompilation: no
+Packaged: 2021-01-26 14:29:58 UTC; jhester
+Author: Jim Hester [aut, cre],
+  Kirill Müller [aut],
+  Kevin Ushey [aut],
+  Hadley Wickham [aut],
+  Winston Chang [aut],
+  Jennifer Bryan [ctb],
+  Richard Cotton [ctb],
+  RStudio [cph]
+Maintainer: Jim Hester <jim.hester@rstudio.com>
+Repository: CRAN
+Date/Publication: 2021-01-26 16:20:02 UTC
+Built: R 4.0.2; ; 2021-01-27 11:22:38 UTC; unix

@@ -1,0 +1,64 @@
+Package: readr
+Title: Read Rectangular Text Data
+Version: 1.4.0
+Authors@R: 
+    c(person(given = "Hadley",
+             family = "Wickham",
+             role = "aut",
+             email = "hadley@rstudio.com"),
+      person(given = "Jim",
+             family = "Hester",
+             role = c("aut", "cre"),
+             email = "james.hester@rstudio.com"),
+      person(given = "Romain",
+             family = "Francois",
+             role = "ctb"),
+      person(given = "R Core Team",
+             role = "ctb",
+             comment = "Date time code adapted from R"),
+      person(given = "RStudio",
+             role = c("cph", "fnd")),
+      person(given = "Jukka",
+             family = "Jylänki",
+             role = c("ctb", "cph"),
+             comment = "grisu3 implementation"),
+      person(given = "Mikkel",
+             family = "Jørgensen",
+             role = c("ctb", "cph"),
+             comment = "grisu3 implementation"))
+Description: The goal of 'readr' is to provide a fast and
+    friendly way to read rectangular data (like 'csv', 'tsv', and 'fwf').
+    It is designed to flexibly parse many types of data found in the wild,
+    while still cleanly failing when data unexpectedly changes.
+License: GPL (>= 2) | file LICENSE
+URL: https://readr.tidyverse.org, https://github.com/tidyverse/readr
+BugReports: https://github.com/tidyverse/readr/issues
+Depends: R (>= 3.1)
+Imports: cli, clipr, crayon, hms (>= 0.4.1), methods, rlang, R6,
+        tibble, utils, lifecycle
+Suggests: covr, curl, dplyr, knitr, rmarkdown, spelling, stringi,
+        testthat, xml2
+LinkingTo: BH, cpp11
+VignetteBuilder: knitr
+Config/Needs/website: pkgdown, tidyverse/tidytemplate
+Config/testthat/edition: 3
+Config/testthat/parallel: false
+Encoding: UTF-8
+Language: en-US
+RoxygenNote: 7.1.1
+SystemRequirements: C++11
+RdMacros: lifecycle
+NeedsCompilation: yes
+Packaged: 2020-10-01 15:34:22 UTC; jhester
+Author: Hadley Wickham [aut],
+  Jim Hester [aut, cre],
+  Romain Francois [ctb],
+  R Core Team [ctb] (Date time code adapted from R),
+  RStudio [cph, fnd],
+  Jukka Jylänki [ctb, cph] (grisu3 implementation),
+  Mikkel Jørgensen [ctb, cph] (grisu3 implementation)
+Maintainer: Jim Hester <james.hester@rstudio.com>
+Repository: CRAN
+Date/Publication: 2020-10-05 08:50:03 UTC
+Built: R 4.0.2; x86_64-apple-darwin17.0; 2020-10-06 10:46:28 UTC; unix
+Archs: readr.so.dSYM
