@@ -59,8 +59,11 @@ jobs:
           mkdir cran
           cd /Users/runner/work/gtsummary/gtsummary/benchmark/lib
           mkdir github
+          # cd /Users/runner/work/gtsummary/gtsummary/benchmark/lib
+          # mkdir current_branch
           cd /Users/runner/work/gtsummary/gtsummary/benchmark/lib
           ls
+
 
       - name: Setup R
         uses: r-lib/actions/setup-r@master
@@ -83,7 +86,7 @@ jobs:
         shell: Rscript {0}
 
       # - name: Install package
-      #   run: R CMD INSTALL .
+      #   run: R CMD INSTALL . --preclean --library=here::here(benchmark/current_branch)
 
 
 
@@ -97,8 +100,10 @@ jobs:
         run: |
           git config --global user.email "ghau@example.com"
           git config --global user.name "GitHub Actions User"
-          git add --all
-          git commit -am "benchmark commit"
+          git add /Users/runner/work/gtsummary/gtsummary/benchmark/benchmark.csv
+          git add /Users/runner/work/gtsummary/gtsummary/benchmark/benchmark.png
+          git add /Users/runner/work/gtsummary/gtsummary/benchmark/benchmark_jitter.png
+          git commit -am "continous benchmark autocommit"
           git push
 # Trying with a copy of the recent version of benchmark workflow from the bench package itself.
 # It seems that there's no need to set up a user.

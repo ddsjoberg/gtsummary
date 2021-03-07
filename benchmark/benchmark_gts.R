@@ -10,9 +10,12 @@ library(here)
 
 .libPaths(new = here::here("benchmark/lib/cran"))
 .libPaths(new = here::here("benchmark/lib/github"))
-# .libPaths(new = "lib/spanish_translation")
+.libPaths(new = here::here("benchmark/lib/current_branch"))
 
+# Install gtsummary-CRAN version
 install.packages(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"), dependencies = c("Depends", "Imports"))
+
+# Install gtsummary-devel version
 remotes::install_github("https://github.com/ddsjoberg/gtsummary",
                         lib ="benchmark/lib/github",
                         dependencies = c("Depends", "Imports"))
@@ -20,38 +23,11 @@ remotes::install_github("https://github.com/ddsjoberg/gtsummary",
 #                         lib ="lib/spanish_translation", force = TRUE, build = FALSE)
 # .libPaths(new = "lib/spanish_translation")
 
-# Installing packages dependencies manually to each library
+# Install gtsummary-current commit version to the standard lib
+# system("R CMD INSTALL . --library=/Users/runner/work/gtsummary/gtsummary/benchmark/lib/current_branch", ignore.stdout = FALSE)
+devtools::install(dependencies = c("Depends", "Imports"))
 
-# install.packages("dplyr", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("rlang", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("vctrs", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("R6", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("generics", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("glue", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("lifecycle", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("magrittr", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("tibble", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("ellipsis", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("pillar", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("crayon", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("pkgconfig", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("tidyselect", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("purrr", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("huxtable", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("assertthat", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("knitr", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("xfun", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("stringr", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("stringi", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("tidyr", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("Rcpp", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("ggplot2", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("withr", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("tidyverse", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("forcats", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("labeling", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
-# install.packages("gt", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("microbenchmark", lib=c("benchmark/lib/cran", "benchmark/lib/github", "lib/spanish_translation"))
+# Installing packages dependencies manually to each library
 
 install.packages("dplyr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
 install.packages("rlang", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
@@ -84,6 +60,14 @@ install.packages("labeling", lib=c(here::here("benchmark/lib/cran"), here::here(
 install.packages("gt", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
 install.packages("microbenchmark", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
 
+install.packages("dplyr")
+install.packages("magrittr")
+install.packages("ggplot2")
+install.packages("forcats")
+install.packages("gt")
+install.packages("microbenchmark")
+
+
 # After installing all of the required libraries,
 # the script should be run from here:
 
@@ -93,6 +77,12 @@ library(dplyr, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib
 library(ggplot2, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
 library(forcats, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
 library(microbenchmark, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
+
+library(magrittr)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(microbenchmark)
 
 # Set how many times the benchmark will try each function:----
 
@@ -126,36 +116,23 @@ bm_gtsummary <- microbenchmark(
 benchmark_result <- rbind(benchmark_result,summary(bm_gtsummary) %>% mutate("gtsummary version"=gt_ver))
 benchmark_data <- rbind(benchmark_data, data.frame(bm_gtsummary$expr, bm_gtsummary$time, gt_ver))
 
-# # Benchmark spanish_translation version w/o theme ----
-# detach("package:gtsummary", unload=TRUE)
+# Benchmark gtsummary current_commit ----
+detach("package:gtsummary", unload=TRUE)
 # library(gtsummary, lib.loc = "lib/spanish_translation/")
-# gt_ver <- as.character(packageVersion("gtsummary"))
-#
-# gt_ver <- paste0(gt_ver, "_no_theme")
-#
-# bm_gtsummary <- microbenchmark(
-#   trial %>%
-#     select(trt, age, grade, response) %>%
-#     tbl_summary(by = trt) %>%
-#     add_p(), times = bm_times, unit = "s")
-#
-# benchmark_result <- rbind(benchmark_result,summary(bm_gtsummary) %>% mutate("gtsummary version"=gt_ver))
-# benchmark_data <- rbind(benchmark_data, data.frame(bm_gtsummary$expr, bm_gtsummary$time, gt_ver))
-#
-# # Benchmark spanish_translation version with spanish theme ----
-# detach("package:gtsummary", unload=TRUE)
-# library(gtsummary, lib.loc = "lib/spanish_translation/")
-# gt_ver <- as.character(packageVersion("gtsummary"))
-#
-# gt_ver <- paste0(gt_ver, "_es_theme")
-#
-# set_gtsummary_theme(theme_gtsummary_language("es"))
-#
-# bm_gtsummary <- microbenchmark(
-#   trial %>%
-#     select(trt, age, grade, response) %>%
-#     tbl_summary(by = trt) %>%
-#     add_p(), times = bm_times, unit = "s")
+library(gtsummary)
+gt_ver <- as.character(packageVersion("gtsummary"))
+
+gt_ver <- paste0(gt_ver, "current_commit")
+
+bm_gtsummary <- microbenchmark(
+  trial %>%
+    select(trt, age, grade, response) %>%
+    tbl_summary(by = trt) %>%
+    add_p(), times = bm_times, unit = "s")
+
+benchmark_result <- rbind(benchmark_result,summary(bm_gtsummary) %>% mutate("gtsummary version"=gt_ver))
+benchmark_data <- rbind(benchmark_data, data.frame(bm_gtsummary$expr, bm_gtsummary$time, gt_ver))
+
 
 # benchmark_result contains the summary for each test,
 # benchmark_data contains the raw data for each test
