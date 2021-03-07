@@ -65,6 +65,11 @@ jobs:
       #   with:
       #     pandoc-version: 2.11.1.1
 
+      - name: show directories
+        run: |
+          cd /Users/runner/work/gtsummary
+          ls
+
       - name: Run BM Script
         run: |
           source("benchmark/benchmark_gts.R")
