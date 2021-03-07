@@ -54,6 +54,12 @@ jobs:
       - name: show directories
         run: |
           cd /Users/runner/work/gtsummary/gtsummary/benchmark
+          mkdir lib
+          cd lib
+          mkdir cran
+          cd /Users/runner/work/gtsummary/gtsummary/benchmark/lib
+          mkdir github
+          cd /Users/runner/work/gtsummary/gtsummary/benchmark/lib
           ls
 
       - name: Setup R
