@@ -137,9 +137,6 @@ benchmark_data <- rbind(benchmark_data, data.frame(bm_gtsummary$expr, bm_gtsumma
 # benchmark_result contains the summary for each test,
 # benchmark_data contains the raw data for each test
 
-benchmark_result <- rbind(benchmark_result,summary(bm_gtsummary) %>% mutate("gtsummary version"=gt_ver))
-benchmark_data <- rbind(benchmark_data, data.frame(bm_gtsummary$expr, bm_gtsummary$time, gt_ver))
-
 benchmark_data$gt_ver <- as.factor(benchmark_data$gt_ver)
 
 # levels(benchmark_data$gt_ver) <- c("1.3.1", "1.3.2", "1.3.0.9019_no_theme", "1.3.0.9019_es_theme")
@@ -150,7 +147,7 @@ benchmark_data %>% ggplot(aes(as.factor(gt_ver), bm_gtsummary.time/1e9))+
   labs(y="seconds", title = "Time to run:\n trial %>%
     select(trt, age, grade, response) %>%
     tbl_summary(by = trt) %>%
-    add_p() ", subtitle=paste0(bm_times, "runs"), x="gtsummary version")+ggsave(here::here("benchmark/benchmark.png"))
+    add_p() ", subtitle=paste0(bm_times, " runs"), x="gtsummary version")+ggsave(here::here("benchmark/benchmark.png"))
 
 write.csv2(benchmark_data, file = here::here("benchmark/benchmark.csv"), row.names = FALSE, fileEncoding = "UTF-8")
 
@@ -162,7 +159,7 @@ benchmark_data %>% ggplot(aes(color=gt_ver, x=gt_ver, y=bm_gtsummary.time/1e9))+
   labs(y="seconds", title = "Time to run:\n trial %>%
     select(trt, age, grade, response) %>%
     tbl_summary(by = trt) %>%
-    add_p() ", subtitle=paste0(bm_times, "runs"), x="gtsummary version",
+    add_p() ", subtitle=paste0(bm_times, " runs"), x="gtsummary version",
     caption="--- Global median")+ggsave(here::here("benchmark/benchmark_jitter.png"))
 
 
