@@ -1,0 +1,70 @@
+{gtsummary} benchmark
+================
+Gustavo Zapata Wainberg & Daniel Sjoberg
+March 08, 2021
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- This css stuff is just to enable rmarkdown to use a wider area of screen -->
+<!-- <style type="text/css"> -->
+<!-- .main-container { -->
+<!--   max-width: 1800px; -->
+<!--   margin-left: auto; -->
+<!--   margin-right: auto; -->
+<!-- } -->
+<!-- </style> -->
+
+## Execution times
+
+<img src="/Users/runner/work/gtsummary/gtsummary/benchmark/benchmark.png" width="60%" />
+
+<img src="/Users/runner/work/gtsummary/gtsummary/benchmark/benchmark_jitter.png" width="60%" />
+
+``` r
+
+# plotly::ggplotly(
+#   benchmarks_df %>% 
+#            ggplot(aes(x = time, y = mean))+
+#            geom_point(aes(color = hash))+
+#            facet_wrap(vars(name), 
+#                       nrow = length(unique(benchmarks_df$name)), 
+#                       scales = "free_y", 
+#                       strip.position = "right")+ # Plotly doesn't understand this
+#            theme_minimal()+
+#            theme(legend.position='none')+
+#            labs(title = "Mean execution time for each function (time per iteration in seconds)",
+#                 subtitle = "seconds", # Plotly doesn't understand subtitles
+#                 y = "",
+#                 x = "")+
+#            ggsave("plot1.png", device = "png", width = 12, units = "cm"),
+#          width = 900
+# )
+# 
+# plotly::ggplotly(
+#   benchmarks_df %>% 
+#     mutate(hash_abr = stringr::str_sub(string = hash, start = 1, end = 8)) %>%
+#            ggplot(aes(x = hash_abr, y = mean))+
+#            geom_point(aes(color = time))+
+#            facet_wrap(vars(name), 
+#                       nrow = length(unique(benchmarks_df$name)), 
+#                       scales = "free_y", 
+#                       strip.position = "right")+ # Plotly doesn't understand this
+#            theme_minimal()+
+#            theme(legend.position='none',
+#                  axis.text.x = element_text(angle = 45, vjust = 1, hjust=0))+
+#            labs(title = "Mean execution time for each function (time per iteration in seconds)",
+#                 subtitle = "seconds", # Plotly doesn't understand subtitles
+#                 y = "",
+#                 x = "")+
+#            ggsave("plot2.png", device = "png", width = 12, units = "cm"),
+#          width = 900
+# )
+```
+
+The functions used for the benchmark are:
+
+`simple = tbl_summary(trial)`
+
+`complex = tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n()`
+
+`big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = "no") %>% add_p()`
+(NOTE: `big_trial` is a 5000-fold copy of `gtsummary::trial`)
