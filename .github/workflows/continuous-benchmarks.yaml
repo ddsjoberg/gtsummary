@@ -42,7 +42,7 @@ jobs:
 
       - name: Build RMD REPORT
         run: |
-          Rscript -e 'install.packages(c("rmarkdown", "here", "knitr")); rmarkdown::render(input = here::here("bench/README.Rmd"), output_file = here::here("bench/README.md"),  clean = T)'
+          Rscript -e 'install.packages(c("rmarkdown", "here", "knitr")); rmarkdown::render(input = here::here("benchmark/README.Rmd"), output_file = here::here("benchmark/README.md"),  clean = T)'
 
       - name: Commit files
         run: |
