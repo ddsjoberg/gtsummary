@@ -101,7 +101,7 @@ for details." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9007</span>
       </span>
     </div>
 
@@ -188,7 +188,7 @@ for details.</p>
     </div>
 
     <pre class="usage"><span class='fu'>theme_gtsummary_journal</span><span class='op'>(</span>
-  journal <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"jama"</span>, <span class='st'>"nejm"</span>, <span class='st'>"lancet"</span><span class='op'>)</span>,
+  journal <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"jama"</span>, <span class='st'>"lancet"</span>, <span class='st'>"nejm"</span>, <span class='st'>"qjecon"</span><span class='op'>)</span>,
   set_theme <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span>
 
@@ -223,8 +223,9 @@ for details.</p>
       <th>journal</th>
       <td><p>String indicating the journal theme to follow.</p><ul>
 <li><p><code>"jama"</code> Journal of the American Medical Association</p></li>
-<li><p><code>"nejm"</code> New England Journal of Medicine</p></li>
 <li><p><code>"lancet"</code> The Lancet</p></li>
+<li><p><code>"nejm"</code> New England Journal of Medicine</p></li>
+<li><p><code>"qjecon"</code> The Quarterly Journal of Economics: Under Development</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -235,7 +236,7 @@ When <code>FALSE</code> the named list of theme elements is returned invisibly</
     <tr>
       <th>print_engine</th>
       <td><p>String indicating the print method. Must be one of
-<code>"gt"</code>, <code>"kable"</code>, <code>"kable_extra"</code>, <code>"flextable"</code>, <code>"tibble"</code>#' @export</p></td>
+<code>"gt"</code>, <code>"kable"</code>, <code>"kable_extra"</code>, <code>"flextable"</code>, <code>"tibble"</code></p></td>
     </tr>
     <tr>
       <th>language</th>
@@ -286,8 +287,9 @@ will default to an en dash</p></td>
 <ul>
 <li><p><code>theme_gtsummary_journal(journal=)</code></p><ul>
 <li><p><code>"jama"</code> The Journal of the American Medical Association</p></li>
-<li><p><code>"nejm"</code> The New England Journal of Medicine</p></li>
 <li><p><code>"lancet"</code> The Lancet</p></li>
+<li><p><code>"nejm"</code> The New England Journal of Medicine</p></li>
+<li><p><code>"qjecon"</code> The Quarterly Journal of Economics: Under Development</p></li>
 </ul></li>
 <li><p><code>theme_gtsummary_compact()</code></p><ul>
 <li><p>tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding</p></li>
