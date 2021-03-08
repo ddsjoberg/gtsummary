@@ -15,9 +15,9 @@ March 08, 2021
 
 ## Execution times
 
-<img src="/Users/runner/work/gtsummary/gtsummary/benchmark/benchmark.png" width="60%" />
+<img src="benchmark.png" width="60%" />
 
-<img src="/Users/runner/work/gtsummary/gtsummary/benchmark/benchmark_jitter.png" width="60%" />
+<img src="benchmark_jitter.png" width="60%" />
 
 ``` r
 
