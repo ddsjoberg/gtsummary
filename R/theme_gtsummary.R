@@ -11,8 +11,9 @@
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
 #'   - `"jama"` The Journal of the American Medical Association
-#'   - `"nejm"` The New England Journal of Medicine
 #'   - `"lancet"` The Lancet
+#'   - `"nejm"` The New England Journal of Medicine
+#'   - `"qjecon"` The Quarterly Journal of Economics: Under Development
 #' - `theme_gtsummary_compact()`
 #'   - tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding
 #' - `theme_gtsummary_printer(print_engine=)`
@@ -63,9 +64,10 @@ NULL
 #' @export
 #' @param journal String indicating the journal theme to follow.
 #'  - `"jama"` Journal of the American Medical Association
-#'  - `"nejm"` New England Journal of Medicine
 #'  - `"lancet"` The Lancet
-theme_gtsummary_journal <- function(journal = c("jama", "nejm", "lancet"), set_theme = TRUE) {
+#'  - `"nejm"` New England Journal of Medicine
+#'  - `"qjecon"` The Quarterly Journal of Economics: Under Development
+theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjecon"), set_theme = TRUE) {
   journal <- match.arg(journal)
   if (journal == "jama") {
     lst_theme <-
@@ -103,6 +105,21 @@ theme_gtsummary_journal <- function(journal = c("jama", "nejm", "lancet"), set_t
         "style_number-arg:decimal.mark" = special_char$interpunct,
         "style_number-arg:big.mark" = "\U2009",
         "pkgwide-str:ci.sep" = " to "
+      )
+  }
+  else if (journal == "qjecon") {
+    lst_theme <-
+      list(
+        "pkgwide-str:theme_name" = "The Quareterly Journal of Economics",
+        "tbl_summary-fn:percent_fun" = function(x) style_number(x, digits = 1, scale = 100),
+        "pkgwide-fun:pre_conversion" =  function(x) {
+          # use significance stars (if not already applied)
+          if (inherits(x, c("tbl_regression", "tbl_uvregression")) &&
+                       !"add_significance_stars" %in% names(x$call_list)) {
+            x <- add_significance_stars(x)
+          }
+          x
+        }
       )
   }
 
@@ -162,7 +179,8 @@ theme_gtsummary_compact <- function(set_theme = TRUE){
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @param print_engine String indicating the print method. Must be one of
-#' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"tibble"`#' @export
+#' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"tibble"`
+#' @export
 theme_gtsummary_printer <- function(
   print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
   set_theme = TRUE) {
@@ -177,8 +195,8 @@ theme_gtsummary_printer <- function(
 #' @rdname theme_gtsummary
 #' @param language String indicating language. Must be one of `"de"` (German),
 #' `"en"` (English), `"es"` (Spanish), `"fr"` (French), `"gu"` (Gujarati),
-#' `"hi"` (Hindi), `"is"` (Icelandic),`"ja"` (Japanese), `"mr"` (Marathi), 
-#' `"pt"` (Portuguese), `"se"` (Swedish), `"zh-c,n"` (Chinese Simplified), 
+#' `"hi"` (Hindi), `"is"` (Icelandic),`"ja"` (Japanese), `"mr"` (Marathi),
+#' `"pt"` (Portuguese), `"se"` (Swedish), `"zh-c,n"` (Chinese Simplified),
 #' `"zh-tw"` (Chinese Traditional)
 #'
 #' If a language is missing a translation for a word or phrase, please feel free

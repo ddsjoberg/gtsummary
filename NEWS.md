@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added _The Quarterly Journal of Economics_ to `theme_gtsummary_journal()`. This journal theme will be updated again after the gt package updates `cols_merge()` with a rows argument and allows for line breaks within cell.
+
 * Added messaging when table caption requested for a gt table when using a version of gt that does not support captions.
 
 * Updates to the table gallery vignette reflecting changes in the package. (#775)
