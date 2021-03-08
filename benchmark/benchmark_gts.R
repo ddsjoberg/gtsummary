@@ -17,24 +17,25 @@ library(here)
 # .libPaths(new = here::here("benchmark/lib/current_branch"))
 
 # Install gtsummary-CRAN version
-install.packages(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"), dependencies = c("Depends", "Imports"))
+install.packages(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"), dependencies = c("Depends", "Imports"),
+                 quiet = TRUE)
 
 # Install gtsummary-devel version
 remotes::install_github("https://github.com/ddsjoberg/gtsummary",
                         lib ="benchmark/lib/github",
-                        dependencies = c("Depends", "Imports"))
+                        dependencies = c("Depends", "Imports"), quiet = TRUE)
 
 # Install gtsummary-current commit version to the standard lib
 # system("R CMD INSTALL . --library=/Users/runner/work/gtsummary/gtsummary/benchmark/lib/current_branch", ignore.stdout = FALSE)
-devtools::install(dependencies = c("Depends", "Imports"))
+devtools::install(dependencies = c("Depends", "Imports"), quiet = TRUE)
 
-install.packages("dplyr")
-install.packages("magrittr")
-install.packages("ggplot2")
-install.packages("forcats")
-install.packages("gt")
-install.packages("microbenchmark")
-install.packages("rmarkdown")
+install.packages("dplyr",quiet = TRUE)
+install.packages("magrittr",quiet = TRUE)
+install.packages("ggplot2",quiet = TRUE)
+install.packages("forcats",quiet = TRUE)
+install.packages("gt",quiet = TRUE)
+install.packages("microbenchmark",quiet = TRUE)
+install.packages("rmarkdown",quiet = TRUE)
 library(magrittr)
 library(dplyr)
 library(ggplot2)
@@ -43,7 +44,7 @@ library(microbenchmark)
 
 
 # Set how many times the benchmark will try each function:----
-bm_times <- 30
+bm_times <- 15
 
 
 
@@ -54,7 +55,7 @@ gt_ver <- as.character(packageVersion("gtsummary"))
 
 # Define the size of dataframe for big_data tests:----
 # Note: this function must remain here, after the first loading of gtsummary
-big_trial = purrr::map_dfr(seq_len(5000), ~trial)
+big_trial = purrr::map_dfr(seq_len(500), ~trial)
 
 bm_gtsummary <- microbenchmark(
   simple= tbl_summary(trial),
@@ -132,9 +133,9 @@ benchmark_data %>%
 # Save data:----
 write.csv2(benchmark_data, file = here::here("benchmark/benchmark.csv"), row.names = FALSE, fileEncoding = "UTF-8")
 
-rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"),
-                  output_file = here::here("bench/benchmark2html.html"),
-                  clean = T)
+# rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"),
+#                   output_file = here::here("bench/benchmark2html.html"),
+#                   clean = T)
 
 # benchmark_data %>% ggplot(aes(fill=gt_ver, x=bm_gtsummary.time/1e9))+
 #   geom_density(alpha=0.3)+
