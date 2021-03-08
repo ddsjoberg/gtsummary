@@ -4,13 +4,7 @@
 install.packages("remotes", dependencies = c("Depends", "Imports") )
 install.packages("devtools", dependencies = c("Depends", "Imports"))
 install.packages("here", dependencies = c("Depends", "Imports"))
-install.packages("dplyr")
-install.packages("magrittr")
-install.packages("ggplot2")
-install.packages("forcats")
-install.packages("gt")
-install.packages("microbenchmark")
-install.packages("rmarkdown")
+
 
 library(remotes)
 library(devtools)
@@ -20,7 +14,7 @@ library(here)
 
 .libPaths(new = here::here("benchmark/lib/cran"))
 .libPaths(new = here::here("benchmark/lib/github"))
-.libPaths(new = here::here("benchmark/lib/current_branch"))
+# .libPaths(new = here::here("benchmark/lib/current_branch"))
 
 # Install gtsummary-CRAN version
 install.packages(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"), dependencies = c("Depends", "Imports"))
@@ -34,11 +28,19 @@ remotes::install_github("https://github.com/ddsjoberg/gtsummary",
 # system("R CMD INSTALL . --library=/Users/runner/work/gtsummary/gtsummary/benchmark/lib/current_branch", ignore.stdout = FALSE)
 devtools::install(dependencies = c("Depends", "Imports"))
 
+install.packages("dplyr")
+install.packages("magrittr")
+install.packages("ggplot2")
+install.packages("forcats")
+install.packages("gt")
+install.packages("microbenchmark")
+install.packages("rmarkdown")
 library(magrittr)
 library(dplyr)
 library(ggplot2)
 library(forcats)
 library(microbenchmark)
+
 
 # Set how many times the benchmark will try each function:----
 bm_times <- 30
