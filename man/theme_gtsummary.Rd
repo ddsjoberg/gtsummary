@@ -11,7 +11,7 @@
 \title{Available gtsummary themes}
 \usage{
 theme_gtsummary_journal(
-  journal = c("jama", "nejm", "lancet"),
+  journal = c("jama", "lancet", "nejm", "qjecon"),
   set_theme = TRUE
 )
 
@@ -43,15 +43,16 @@ theme_gtsummary_mean_sd(set_theme = TRUE)
 \item{journal}{String indicating the journal theme to follow.
 \itemize{
 \item \code{"jama"} Journal of the American Medical Association
-\item \code{"nejm"} New England Journal of Medicine
 \item \code{"lancet"} The Lancet
+\item \code{"nejm"} New England Journal of Medicine
+\item \code{"qjecon"} The Quarterly Journal of Economics: Under Development
 }}
 
 \item{set_theme}{Logical indicating whether to set the theme. Default is \code{TRUE}.
 When \code{FALSE} the named list of theme elements is returned invisibly}
 
 \item{print_engine}{String indicating the print method. Must be one of
-\code{"gt"}, \code{"kable"}, \code{"kable_extra"}, \code{"flextable"}, \code{"tibble"}#' @export}
+\code{"gt"}, \code{"kable"}, \code{"kable_extra"}, \code{"flextable"}, \code{"tibble"}}
 
 \item{language}{String indicating language. Must be one of \code{"de"} (German),
 \code{"en"} (English), \code{"es"} (Spanish), \code{"fr"} (French), \code{"gu"} (Gujarati),
@@ -95,8 +96,9 @@ for details.
 \item \code{theme_gtsummary_journal(journal=)}
 \itemize{
 \item \code{"jama"} The Journal of the American Medical Association
-\item \code{"nejm"} The New England Journal of Medicine
 \item \code{"lancet"} The Lancet
+\item \code{"nejm"} The New England Journal of Medicine
+\item \code{"qjecon"} The Quarterly Journal of Economics: Under Development
 }
 \item \code{theme_gtsummary_compact()}
 \itemize{
