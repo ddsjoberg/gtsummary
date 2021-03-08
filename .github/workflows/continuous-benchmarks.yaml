@@ -40,9 +40,9 @@ jobs:
           source("benchmark/benchmark_gts.R")
         shell: Rscript {0}
 
-       # - name: Build RMD REPORT
-       #   run: |
-           #Rscript -e 'rmarkdown::render(input = here::here("bench/README.Rmd"), output_file = here::here("bench/README.md"),  clean = T)'
+      - name: Build RMD REPORT
+        run: |
+          Rscript -e 'rmarkdown::render(input = here::here("bench/README.Rmd"), output_file = here::here("bench/README.md"),  clean = T)'
 
       - name: Commit files
         run: |
