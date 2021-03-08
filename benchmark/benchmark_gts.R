@@ -44,7 +44,7 @@ library(microbenchmark)
 
 
 # Set how many times the benchmark will try each function:----
-bm_times <- 30
+bm_times <- 10
 
 
 
