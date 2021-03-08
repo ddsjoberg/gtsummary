@@ -45,13 +45,16 @@ library(microbenchmark)
 # Set how many times the benchmark will try each function:----
 bm_times <- 30
 
-# Define the size of dataframe for big_data tests:----
-big_trial = purrr::map_dfr(seq_len(5000), ~trial)
+
 
 # Benchmark CRAN version ----
 # detach("package:gtsummary", unload=TRUE)
 library(gtsummary, lib.loc = here::here("benchmark/lib/cran/"))
 gt_ver <- as.character(packageVersion("gtsummary"))
+
+# Define the size of dataframe for big_data tests:----
+# Note: this function must remain here, after the first loading of gtsummary
+big_trial = purrr::map_dfr(seq_len(5000), ~trial)
 
 bm_gtsummary <- microbenchmark(
   simple= tbl_summary(trial),
@@ -129,9 +132,9 @@ benchmark_data %>%
 # Save data:----
 write.csv2(benchmark_data, file = here::here("benchmark/benchmark.csv"), row.names = FALSE, fileEncoding = "UTF-8")
 
-# rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"),
-#                   output_file = here::here("bench/benchmark2html.html"),
-#                   clean = T, params = list(stored_benchmarks = stored_benchmarks))
+rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"),
+                  output_file = here::here("bench/benchmark2html.html"),
+                  clean = T)
 
 # benchmark_data %>% ggplot(aes(fill=gt_ver, x=bm_gtsummary.time/1e9))+
 #   geom_density(alpha=0.3)+
