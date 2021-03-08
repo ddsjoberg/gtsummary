@@ -1,11 +1,21 @@
 # NOTE:Subfolders for libs must be created manually beforehand!
+# They are created from the yaml file section "Create required directories"
 
 install.packages("remotes", dependencies = c("Depends", "Imports") )
 install.packages("devtools", dependencies = c("Depends", "Imports"))
 install.packages("here", dependencies = c("Depends", "Imports"))
+install.packages("dplyr")
+install.packages("magrittr")
+install.packages("ggplot2")
+install.packages("forcats")
+install.packages("gt")
+install.packages("microbenchmark")
+install.packages("rmarkdown")
+
 library(remotes)
 library(devtools)
 library(here)
+
 # Installing different versions of the gtsummary package ----
 
 .libPaths(new = here::here("benchmark/lib/cran"))
@@ -19,64 +29,10 @@ install.packages(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"), de
 remotes::install_github("https://github.com/ddsjoberg/gtsummary",
                         lib ="benchmark/lib/github",
                         dependencies = c("Depends", "Imports"))
-# remotes::install_github(repo="oranwutang/gtsummary@spanish_translation",
-#                         lib ="lib/spanish_translation", force = TRUE, build = FALSE)
-# .libPaths(new = "lib/spanish_translation")
 
 # Install gtsummary-current commit version to the standard lib
 # system("R CMD INSTALL . --library=/Users/runner/work/gtsummary/gtsummary/benchmark/lib/current_branch", ignore.stdout = FALSE)
 devtools::install(dependencies = c("Depends", "Imports"))
-
-# Installing packages dependencies manually to each library
-
-# install.packages("dplyr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("rlang", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("vctrs", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("R6", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("generics", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("glue", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("lifecycle", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("magrittr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("tibble", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("ellipsis", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("pillar", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("crayon", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("pkgconfig", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("tidyselect", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("purrr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("huxtable", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("assertthat", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("knitr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("xfun", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("stringr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("stringi", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("tidyr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("Rcpp", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("ggplot2", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("withr", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("tidyverse", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("forcats", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("labeling", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("gt", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# install.packages("microbenchmark", lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-
-install.packages("dplyr")
-install.packages("magrittr")
-install.packages("ggplot2")
-install.packages("forcats")
-install.packages("gt")
-install.packages("microbenchmark")
-
-
-# After installing all of the required libraries,
-# the script should be run from here:
-
-# Loading libraries ----
-# library(magrittr, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# library(dplyr, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# library(ggplot2, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# library(forcats, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
-# library(microbenchmark, lib=c(here::here("benchmark/lib/cran"), here::here("benchmark/lib/github")))
 
 library(magrittr)
 library(dplyr)
@@ -85,8 +41,10 @@ library(forcats)
 library(microbenchmark)
 
 # Set how many times the benchmark will try each function:----
-
 bm_times <- 30
+
+# Define the size of dataframe for big_data tests:----
+big_trial = purrr::map_dfr(seq_len(5000), ~trial)
 
 # Benchmark CRAN version ----
 # detach("package:gtsummary", unload=TRUE)
@@ -94,10 +52,15 @@ library(gtsummary, lib.loc = here::here("benchmark/lib/cran/"))
 gt_ver <- as.character(packageVersion("gtsummary"))
 
 bm_gtsummary <- microbenchmark(
-  trial %>%
-    select(trt, age, grade, response) %>%
-    tbl_summary(by = trt) %>%
-    add_p(), times = bm_times, unit = "s")
+  simple= tbl_summary(trial),
+  complex=tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n(),
+  big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = "no") %>% add_p(),
+  times = bm_times, unit = "s")
+# bm_gtsummary <- microbenchmark(
+#   trial %>%
+#     select(trt, age, grade, response) %>%
+#     tbl_summary(by = trt) %>%
+#     add_p(), times = bm_times, unit = "s")
 
 benchmark_result <- summary(bm_gtsummary) %>% mutate("gtsummary version"=gt_ver)
 benchmark_data <- data.frame(bm_gtsummary$expr, bm_gtsummary$time, gt_ver)
@@ -108,60 +71,65 @@ library(gtsummary, lib.loc = here::here("benchmark/lib/github/"))
 gt_ver <- as.character(packageVersion("gtsummary"))
 
 bm_gtsummary <- microbenchmark(
-  trial %>%
-    select(trt, age, grade, response) %>%
-    tbl_summary(by = trt) %>%
-    add_p(), times = bm_times, unit = "s")
+  simple= tbl_summary(trial),
+  complex=tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n(),
+  big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = "no") %>% add_p(),
+  times = bm_times, unit = "s")
 
 benchmark_result <- rbind(benchmark_result,summary(bm_gtsummary) %>% mutate("gtsummary version"=gt_ver))
 benchmark_data <- rbind(benchmark_data, data.frame(bm_gtsummary$expr, bm_gtsummary$time, gt_ver))
 
 # Benchmark gtsummary current_commit ----
 detach("package:gtsummary", unload=TRUE)
-# library(gtsummary, lib.loc = "lib/spanish_translation/")
 library(gtsummary)
-gt_ver <- as.character(packageVersion("gtsummary"))
 
+gt_ver <- as.character(packageVersion("gtsummary"))
 gt_ver <- paste0(gt_ver, "current_commit")
 
 bm_gtsummary <- microbenchmark(
-  trial %>%
-    select(trt, age, grade, response) %>%
-    tbl_summary(by = trt) %>%
-    add_p(), times = bm_times, unit = "s")
+  simple= tbl_summary(trial),
+  complex=tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n(),
+  big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = "no") %>% add_p(),
+  times = bm_times, unit = "s")
 
 benchmark_result <- rbind(benchmark_result,summary(bm_gtsummary) %>% mutate("gtsummary version"=gt_ver))
 benchmark_data <- rbind(benchmark_data, data.frame(bm_gtsummary$expr, bm_gtsummary$time, gt_ver))
 
-
+# Of note:
 # benchmark_result contains the summary for each test,
 # benchmark_data contains the raw data for each test
 
+# Plots:----
 benchmark_data$gt_ver <- as.factor(benchmark_data$gt_ver)
 
-# levels(benchmark_data$gt_ver) <- c("1.3.1", "1.3.2", "1.3.0.9019_no_theme", "1.3.0.9019_es_theme")
-
-benchmark_data %>% ggplot(aes(as.factor(gt_ver), bm_gtsummary.time/1e9))+
+benchmark_data %>%
+  ggplot(aes(x=as.factor(gt_ver), y=bm_gtsummary.time/1e9))+
+  facet_wrap(vars(bm_gtsummary.expr), nrow = 3)+
   geom_boxplot()+
   theme_minimal()+
-  labs(y="seconds", title = "Time to run:\n trial %>%
-    select(trt, age, grade, response) %>%
-    tbl_summary(by = trt) %>%
-    add_p() ", subtitle=paste0(bm_times, " runs"), x="gtsummary version")+ggsave(here::here("benchmark/benchmark.png"))
+  labs(y="seconds", title = "Time to run each function",
+       subtitle=paste0(bm_times, " runs"),
+       x="gtsummary version")+
+  ggsave(here::here("benchmark/benchmark.png"))
 
-write.csv2(benchmark_data, file = here::here("benchmark/benchmark.csv"), row.names = FALSE, fileEncoding = "UTF-8")
-
-
-benchmark_data %>% ggplot(aes(color=gt_ver, x=gt_ver, y=bm_gtsummary.time/1e9))+
+benchmark_data %>%
+  ggplot(aes(color=gt_ver, x=gt_ver, y=bm_gtsummary.time/1e9))+
+  facet_wrap(vars(bm_gtsummary.expr), nrow = 3)+
   geom_jitter(alpha=0.3)+
   geom_hline(yintercept = median(benchmark_data$bm_gtsummary.time/1e9), linetype=2, color = "red")+
   theme_minimal()+
-  labs(y="seconds", title = "Time to run:\n trial %>%
-    select(trt, age, grade, response) %>%
-    tbl_summary(by = trt) %>%
-    add_p() ", subtitle=paste0(bm_times, " runs"), x="gtsummary version",
-    caption="--- Global median")+ggsave(here::here("benchmark/benchmark_jitter.png"))
+  labs(y="seconds", title = "Time to run each function",
+       subtitle=paste0(bm_times, " runs"),
+       x="gtsummary version",
+       caption="--- Global median")+
+  ggsave(here::here("benchmark/benchmark_jitter.png"))
 
+# Save data:----
+write.csv2(benchmark_data, file = here::here("benchmark/benchmark.csv"), row.names = FALSE, fileEncoding = "UTF-8")
+
+# rmarkdown::render(input = here::here("bench/benchmark2html.Rmd"),
+#                   output_file = here::here("bench/benchmark2html.html"),
+#                   clean = T, params = list(stored_benchmarks = stored_benchmarks))
 
 # benchmark_data %>% ggplot(aes(fill=gt_ver, x=bm_gtsummary.time/1e9))+
 #   geom_density(alpha=0.3)+
