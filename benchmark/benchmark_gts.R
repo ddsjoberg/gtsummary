@@ -55,7 +55,7 @@ gt_ver <- as.character(packageVersion("gtsummary"))
 
 # Define the size of dataframe for big_data tests:----
 # Note: this function must remain here, after the first loading of gtsummary
-big_trial <- purrr::map_dfr(seq_len(1000), ~trial)
+big_trial <- purrr::map_dfr(seq_len(10), ~trial)
 
 bm_gtsummary <- microbenchmark(
   simple= tbl_summary(trial),
@@ -110,9 +110,11 @@ benchmark_data$gt_ver <- as.factor(benchmark_data$gt_ver)
 
 benchmark_data %>%
   ggplot(aes(x=as.factor(gt_ver), y=bm_gtsummary.time/1e9))+
-  facet_wrap(vars(bm_gtsummary.expr), scales = "free")+
+  facet_wrap(vars(bm_gtsummary.expr))+
   geom_boxplot()+
   theme_minimal()+
+ theme(legend.position='none',
+                  axis.text.x = element_text(angle = 45, vjust = 1, hjust=0))+
   labs(y="seconds", title = "Time to run each function",
        subtitle=paste0(bm_times, " runs"),
        x="gtsummary version")+
@@ -120,10 +122,12 @@ benchmark_data %>%
 
 benchmark_data %>%
   ggplot(aes(color=gt_ver, x=gt_ver, y=bm_gtsummary.time/1e9))+
-  facet_wrap(vars(bm_gtsummary.expr), scales = "free")+
+  facet_wrap(vars(bm_gtsummary.expr))+
   geom_jitter(alpha=0.3)+
   geom_hline(yintercept = median(benchmark_data$bm_gtsummary.time/1e9), linetype=2, color = "red")+
   theme_minimal()+
+  theme(legend.position='none',
+                  axis.text.x = element_text(angle = 45, vjust = 1, hjust=0))+
   labs(y="seconds", title = "Time to run each function",
        subtitle=paste0(bm_times, " runs"),
        x="gtsummary version",
