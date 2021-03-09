@@ -44,7 +44,7 @@ library(microbenchmark)
 
 
 # Set how many times the benchmark will try each function:----
-bm_times <- 30
+bm_times <- 10
 
 
 
@@ -55,7 +55,7 @@ gt_ver <- as.character(packageVersion("gtsummary"))
 
 # Define the size of dataframe for big_data tests:----
 # Note: this function must remain here, after the first loading of gtsummary
-big_trial <- purrr::map_dfr(seq_len(10), ~trial)
+big_trial <- purrr::map_dfr(seq_len(100), ~trial)
 
 bm_gtsummary <- microbenchmark(
   simple= tbl_summary(trial),
@@ -114,7 +114,7 @@ benchmark_data %>%
   geom_boxplot()+
   theme_minimal()+
  theme(legend.position='none',
-                  axis.text.x = element_text(angle = 45, vjust = 1, hjust=0))+
+                  axis.text.x = element_text(angle = 45, vjust = 0, hjust=0))+
   labs(y="seconds", title = "Time to run each function",
        subtitle=paste0(bm_times, " runs"),
        x="gtsummary version")+
@@ -127,7 +127,7 @@ benchmark_data %>%
   geom_hline(yintercept = median(benchmark_data$bm_gtsummary.time/1e9), linetype=2, color = "red")+
   theme_minimal()+
   theme(legend.position='none',
-                  axis.text.x = element_text(angle = 45, vjust = 1, hjust=0))+
+                  axis.text.x = element_text(angle = 45, vjust = 0, hjust=0))+
   labs(y="seconds", title = "Time to run each function",
        subtitle=paste0(bm_times, " runs"),
        x="gtsummary version",
