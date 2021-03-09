@@ -1,7 +1,7 @@
 {gtsummary} benchmark
 ================
 Gustavo Zapata Wainberg & Daniel Sjoberg
-March 08, 2021
+March 09, 2021
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- This css stuff is just to enable rmarkdown to use a wider area of screen -->
@@ -18,47 +18,6 @@ March 08, 2021
 <img src="benchmark.png" width="60%" />
 
 <img src="benchmark_jitter.png" width="60%" />
-
-``` r
-
-# plotly::ggplotly(
-#   benchmarks_df %>% 
-#            ggplot(aes(x = time, y = mean))+
-#            geom_point(aes(color = hash))+
-#            facet_wrap(vars(name), 
-#                       nrow = length(unique(benchmarks_df$name)), 
-#                       scales = "free_y", 
-#                       strip.position = "right")+ # Plotly doesn't understand this
-#            theme_minimal()+
-#            theme(legend.position='none')+
-#            labs(title = "Mean execution time for each function (time per iteration in seconds)",
-#                 subtitle = "seconds", # Plotly doesn't understand subtitles
-#                 y = "",
-#                 x = "")+
-#            ggsave("plot1.png", device = "png", width = 12, units = "cm"),
-#          width = 900
-# )
-# 
-# plotly::ggplotly(
-#   benchmarks_df %>% 
-#     mutate(hash_abr = stringr::str_sub(string = hash, start = 1, end = 8)) %>%
-#            ggplot(aes(x = hash_abr, y = mean))+
-#            geom_point(aes(color = time))+
-#            facet_wrap(vars(name), 
-#                       nrow = length(unique(benchmarks_df$name)), 
-#                       scales = "free_y", 
-#                       strip.position = "right")+ # Plotly doesn't understand this
-#            theme_minimal()+
-#            theme(legend.position='none',
-#                  axis.text.x = element_text(angle = 45, vjust = 1, hjust=0))+
-#            labs(title = "Mean execution time for each function (time per iteration in seconds)",
-#                 subtitle = "seconds", # Plotly doesn't understand subtitles
-#                 y = "",
-#                 x = "")+
-#            ggsave("plot2.png", device = "png", width = 12, units = "cm"),
-#          width = 900
-# )
-```
 
 The functions used for the benchmark are:
 
