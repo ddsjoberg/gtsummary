@@ -33,9 +33,7 @@ install.packages("dplyr",quiet = TRUE)
 install.packages("magrittr",quiet = TRUE)
 install.packages("ggplot2",quiet = TRUE)
 install.packages("forcats",quiet = TRUE)
-# install.packages("gt",quiet = TRUE)
 install.packages("microbenchmark",quiet = TRUE)
-# install.packages("rmarkdown",quiet = TRUE)
 library(magrittr)
 library(dplyr)
 library(ggplot2)
@@ -44,9 +42,7 @@ library(microbenchmark)
 
 
 # Set how many times the benchmark will try each function:----
-bm_times <- 10
-
-
+bm_times <- 30
 
 # Benchmark CRAN version ----
 # detach("package:gtsummary", unload=TRUE)
@@ -62,11 +58,6 @@ bm_gtsummary <- microbenchmark(
   complex=tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n(),
   big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = "no") %>% add_p(),
   times = bm_times, unit = "s")
-# bm_gtsummary <- microbenchmark(
-#   trial %>%
-#     select(trt, age, grade, response) %>%
-#     tbl_summary(by = trt) %>%
-#     add_p(), times = bm_times, unit = "s")
 
 benchmark_result <- summary(bm_gtsummary) %>% mutate("gtsummary version"=gt_ver)
 benchmark_data <- data.frame(bm_gtsummary$expr, bm_gtsummary$time, gt_ver)
@@ -124,14 +115,13 @@ benchmark_data %>%
   ggplot(aes(color=gt_ver, x=gt_ver, y=bm_gtsummary.time/1e9))+
   facet_wrap(vars(bm_gtsummary.expr))+
   geom_jitter(alpha=0.3)+
-  geom_hline(yintercept = median(benchmark_data$bm_gtsummary.time/1e9), linetype=2, color = "red")+
+  # geom_hline(yintercept = median(benchmark_data$bm_gtsummary.time/1e9), linetype=2, color = "red")+
   theme_minimal()+
   theme(legend.position='none',
                   axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))+
   labs(y="seconds", title = "Time to run each function",
        subtitle=paste0(bm_times, " runs"),
-       x="",
-       caption="--- Global median")+
+       x="")+
   ggsave(here::here("benchmark/benchmark_jitter.png"))
 
 # Save data:----
