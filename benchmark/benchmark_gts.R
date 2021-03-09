@@ -117,7 +117,7 @@ benchmark_data %>%
                   axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
   labs(y="seconds", title = "Time to run each function",
        subtitle=paste0(bm_times, " runs"),
-       x="gtsummary version")+
+       x="")+
   ggsave(here::here("benchmark/benchmark.png"))
 
 benchmark_data %>%
@@ -130,7 +130,7 @@ benchmark_data %>%
                   axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
   labs(y="seconds", title = "Time to run each function",
        subtitle=paste0(bm_times, " runs"),
-       x="gtsummary version",
+       x="",
        caption="--- Global median")+
   ggsave(here::here("benchmark/benchmark_jitter.png"))
 
