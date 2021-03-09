@@ -114,7 +114,7 @@ benchmark_data %>%
   geom_boxplot()+
   theme_minimal()+
  theme(legend.position='none',
-                  axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+                  axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))+
   labs(y="seconds", title = "Time to run each function",
        subtitle=paste0(bm_times, " runs"),
        x="")+
@@ -127,7 +127,7 @@ benchmark_data %>%
   geom_hline(yintercept = median(benchmark_data$bm_gtsummary.time/1e9), linetype=2, color = "red")+
   theme_minimal()+
   theme(legend.position='none',
-                  axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))+
+                  axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))+
   labs(y="seconds", title = "Time to run each function",
        subtitle=paste0(bm_times, " runs"),
        x="",
