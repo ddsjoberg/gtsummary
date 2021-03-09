@@ -33,7 +33,7 @@ install.packages("dplyr",quiet = TRUE)
 install.packages("magrittr",quiet = TRUE)
 install.packages("ggplot2",quiet = TRUE)
 install.packages("forcats",quiet = TRUE)
-install.packages("gt",quiet = TRUE)
+# install.packages("gt",quiet = TRUE)
 install.packages("microbenchmark",quiet = TRUE)
 install.packages("rmarkdown",quiet = TRUE)
 library(magrittr)
@@ -55,7 +55,7 @@ gt_ver <- as.character(packageVersion("gtsummary"))
 
 # Define the size of dataframe for big_data tests:----
 # Note: this function must remain here, after the first loading of gtsummary
-big_trial <- purrr::map_dfr(seq_len(100), ~trial)
+big_trial <- purrr::map_dfr(seq_len(10), ~trial)
 
 bm_gtsummary <- microbenchmark(
   simple= tbl_summary(trial),
