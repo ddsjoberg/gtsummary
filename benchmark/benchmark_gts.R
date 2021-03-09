@@ -44,7 +44,7 @@ library(microbenchmark)
 
 
 # Set how many times the benchmark will try each function:----
-bm_times <- 5
+bm_times <- 30
 
 
 
@@ -55,7 +55,7 @@ gt_ver <- as.character(packageVersion("gtsummary"))
 
 # Define the size of dataframe for big_data tests:----
 # Note: this function must remain here, after the first loading of gtsummary
-big_trial = purrr::map_dfr(seq_len(10), ~trial)
+big_trial <- purrr::map_dfr(seq_len(1000), ~trial)
 
 bm_gtsummary <- microbenchmark(
   simple= tbl_summary(trial),
