@@ -15,9 +15,9 @@ March 09, 2021
 
 ## Execution times
 
-<img src="benchmark.png" width="100%" />
+<img src="benchmark.png" width="80%" />
 
-<img src="benchmark_jitter.png" width="100%" />
+<img src="benchmark_jitter.png" width="80%" />
 
 The functions used for the benchmark are:
 
