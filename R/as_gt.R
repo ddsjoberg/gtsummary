@@ -138,10 +138,12 @@ table_styling_to_gt_calls <- function(x, ...) {
       expr(gt::gt(data = x$table_body, groupname_col = !!groupname_col,
                   caption = !!caption, !!!list(...)))
   }
-  else
+  else {
+    if (!is.null(x$list_output$caption))
+      inform("Captions are not supported in this version of the {gt} package.")
     gt_calls[["gt"]] <-
     expr(gt::gt(data = x$table_body,  groupname_col = !!groupname_col, !!!list(...)))
-
+}
   # fmt_missing ----------------------------------------------------------------
   gt_calls[["fmt_missing"]] <-
     expr(

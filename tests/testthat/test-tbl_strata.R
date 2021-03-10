@@ -99,4 +99,16 @@ test_that("no errors with standard use", {
       ),
     NA
   )
+
+  expect_error(
+    survey::svydesign(~1, data = trial, weights = ~1) %>%
+      tbl_strata(
+        strata = grade,
+        ~tbl_svysummary(.x, by = trt, include = c(stage, trt), percent = "cell") %>%
+          modify_header(all_stat_cols() ~ "**{level}**"),
+        .combine_with = "tbl_stack"
+      )
+      ,
+    NA
+  )
 })

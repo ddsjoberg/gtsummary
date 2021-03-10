@@ -14,9 +14,9 @@ tbl_strata(
 )
 }
 \arguments{
-\item{data}{a data frame}
+\item{data}{a data frame or survey object}
 
-\item{strata}{character vector or tidy-selector of columns in data to}
+\item{strata}{character vector or tidy-selector of columns in data to stratify results by}
 
 \item{.tbl_fun}{A function or formula. If a \emph{function}, it is used as is.
 If a formula, e.g. \code{~ .x \%>\% tbl_summary() \%>\% add_p()}, it is converted to a function.
@@ -25,7 +25,7 @@ The stratified data frame is passed to this function.}
 \item{...}{Additional arguments passed on to the \code{.tbl_fun} function.}
 
 \item{.sep}{when more than one stratifying variable is passed, this string is
-used to separate the levels. Default is \code{", "}}
+used to separate the levels in the spanning header. Default is \code{", "}}
 
 \item{.combine_with}{One of \code{c("tbl_merge", "tbl_stack")}. Names the function
 used to combine the stratified tables.}

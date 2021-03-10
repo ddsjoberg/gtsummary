@@ -1,4 +1,4 @@
-#' Modify table_body
+#' Modify Table Body
 #'
 #' @description
 #' \lifecycle{experimental}
