@@ -24,9 +24,12 @@ remotes::install_github("https://github.com/ddsjoberg/gtsummary",
                         lib ="benchmark/lib/github",
                         dependencies = c("Depends", "Imports"), quiet = TRUE)
 
+#These print() functions are just for debugging, can be deleted
+print(paste0("Here starts ~CMD install ", Sys.time()))
 # Install gtsummary-current commit version to the standard lib
 # system("R CMD INSTALL . --library=/Users/runner/work/gtsummary/gtsummary/benchmark/lib/current_branch", ignore.stdout = FALSE)
 devtools::install(dependencies = c("Depends", "Imports"), quiet = TRUE)
+print(paste0("Here finishes ~CMD install ", Sys.time()))
 
 install.packages("dplyr",quiet = TRUE)
 install.packages("magrittr",quiet = TRUE)
@@ -41,9 +44,9 @@ library(microbenchmark)
 bm_times <- 10
 
 #The functions to be tested:
-functions_list <- list(simple= "tbl_summary(trial)",
-                       complex="tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n()",
-                       big_data = "big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = 'no') %>% add_p()")
+functions_list <- alist(simple= tbl_summary(trial),
+                        complex=tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n(),
+                        big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = 'no') %>% add_p())
 
 # Benchmark CRAN version ----
 # detach("package:gtsummary", unload=TRUE)
@@ -56,7 +59,8 @@ big_trial <- purrr::map_dfr(seq_len(10), ~trial)
 
 bm_gtsummary <- microbenchmark(
   list=functions_list,
-  times = bm_times, unit = "s")
+  times = bm_times,
+  unit = "s")
 
 benchmark_result <- summary(bm_gtsummary) %>% mutate("gtsummary version"=gt_ver)
 benchmark_data <- data.frame(bm_gtsummary$expr, bm_gtsummary$time, gt_ver)
@@ -95,9 +99,8 @@ benchmark_data <- rbind(benchmark_data, data.frame(bm_gtsummary$expr, bm_gtsumma
 benchmark_data$gt_ver <- as.factor(benchmark_data$gt_ver)
 
 benchmark_data %>%
-  # ggplot(aes(x=as.factor(gt_ver), y=bm_gtsummary.time/1e9))+
-  ggplot(aes(x=as.factor(gt_ver), y=bm_gtsummary.time))+
-  facet_wrap(vars(bm_gtsummary.expr), scales = "free_y")+
+  ggplot(aes(x=as.factor(gt_ver), y=bm_gtsummary.time/1e9))+
+  facet_wrap(vars(bm_gtsummary.expr))+
   geom_boxplot()+
   theme_minimal()+
  theme(legend.position='none',
@@ -109,7 +112,7 @@ benchmark_data %>%
 
 benchmark_data %>%
   ggplot(aes(color=gt_ver, x=gt_ver, y=bm_gtsummary.time/1e9))+
-  facet_wrap(vars(bm_gtsummary.expr), scales = "free_y")+
+  facet_wrap(vars(bm_gtsummary.expr))+
   geom_jitter(alpha=0.3)+
   theme_minimal()+
   theme(legend.position='none',
