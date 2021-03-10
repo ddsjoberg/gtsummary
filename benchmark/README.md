@@ -1,7 +1,7 @@
 {gtsummary} benchmark
 ================
 Gustavo Zapata Wainberg & Daniel Sjoberg
-March 09, 2021
+March 10, 2021
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- This css stuff is just to enable rmarkdown to use a wider area of screen -->
