@@ -50,6 +50,8 @@ functions_list <- alist(simple= tbl_summary(trial),
                         complex=tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n(),
                         big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = 'no') %>% add_p())
 
+print(.libPaths())
+
 # Benchmark CRAN version ----
 # detach("package:gtsummary", unload=TRUE)
 library(gtsummary, lib.loc = here::here("benchmark/lib/cran/"))
