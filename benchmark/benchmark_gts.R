@@ -31,12 +31,10 @@ devtools::install(dependencies = c("Depends", "Imports"), quiet = TRUE)
 install.packages("dplyr",quiet = TRUE)
 install.packages("magrittr",quiet = TRUE)
 install.packages("ggplot2",quiet = TRUE)
-# install.packages("forcats",quiet = TRUE)
 install.packages("microbenchmark",quiet = TRUE)
 library(magrittr)
 library(dplyr)
 library(ggplot2)
-# library(forcats)
 library(microbenchmark)
 
 # Set how many times the benchmark will try each function:----
@@ -97,8 +95,9 @@ benchmark_data <- rbind(benchmark_data, data.frame(bm_gtsummary$expr, bm_gtsumma
 benchmark_data$gt_ver <- as.factor(benchmark_data$gt_ver)
 
 benchmark_data %>%
-  ggplot(aes(x=as.factor(gt_ver), y=bm_gtsummary.time/1e9))+
-  facet_wrap(vars(bm_gtsummary.expr))+
+  # ggplot(aes(x=as.factor(gt_ver), y=bm_gtsummary.time/1e9))+
+  ggplot(aes(x=as.factor(gt_ver), y=bm_gtsummary.time))+
+  facet_wrap(vars(bm_gtsummary.expr), scales = "free_y")+
   geom_boxplot()+
   theme_minimal()+
  theme(legend.position='none',
@@ -110,7 +109,7 @@ benchmark_data %>%
 
 benchmark_data %>%
   ggplot(aes(color=gt_ver, x=gt_ver, y=bm_gtsummary.time/1e9))+
-  facet_wrap(vars(bm_gtsummary.expr))+
+  facet_wrap(vars(bm_gtsummary.expr), scales = "free_y")+
   geom_jitter(alpha=0.3)+
   theme_minimal()+
   theme(legend.position='none',
