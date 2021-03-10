@@ -24,12 +24,14 @@ remotes::install_github("https://github.com/ddsjoberg/gtsummary",
                         lib ="benchmark/lib/github",
                         dependencies = c("Depends", "Imports"), quiet = TRUE)
 
-#These print() functions are just for debugging, can be deleted
-print(paste0("Here starts ~CMD install ", Sys.time()))
+#These print() functions are just for debugging within GA workflow, can be deleted
+print(paste0("Here starts current commit installation ", Sys.time()))
+
 # Install gtsummary-current commit version to the standard lib
 # system("R CMD INSTALL . --library=/Users/runner/work/gtsummary/gtsummary/benchmark/lib/current_branch", ignore.stdout = FALSE)
 devtools::install(dependencies = c("Depends", "Imports"), quiet = TRUE)
-print(paste0("Here finishes ~CMD install ", Sys.time()))
+
+print(paste0("Here finishes current commit installation", Sys.time()))
 
 install.packages("dplyr",quiet = TRUE)
 install.packages("magrittr",quiet = TRUE)
@@ -41,7 +43,7 @@ library(ggplot2)
 library(microbenchmark)
 
 # Set how many times the benchmark will try each function:----
-bm_times <- 10
+bm_times <- 20
 
 #The functions to be tested:
 functions_list <- alist(simple= tbl_summary(trial),
@@ -55,7 +57,7 @@ gt_ver <- as.character(packageVersion("gtsummary"))
 
 # Define the size of dataframe for big_data tests:----
 # Note: this function must remain here, after the first loading of gtsummary
-big_trial <- purrr::map_dfr(seq_len(10), ~trial)
+big_trial <- purrr::map_dfr(seq_len(100), ~trial)
 
 bm_gtsummary <- microbenchmark(
   list=functions_list,
@@ -113,7 +115,7 @@ benchmark_data %>%
 benchmark_data %>%
   ggplot(aes(color=gt_ver, x=gt_ver, y=bm_gtsummary.time/1e9))+
   facet_wrap(vars(bm_gtsummary.expr))+
-  geom_jitter(alpha=0.3)+
+  geom_jitter(alpha=0.4)+
   theme_minimal()+
   theme(legend.position='none',
         axis.text.x = element_text(angle = 45, vjust = 0.8, hjust=1))+
@@ -124,6 +126,10 @@ benchmark_data %>%
 
 # Save data:----
 write.csv2(benchmark_data, file = here::here("benchmark/benchmark.csv"),
+           row.names = FALSE,
+           fileEncoding = "UTF-8")
+
+write.csv2(benchmark_result, file = here::here("benchmark/benchmark_summary.csv"),
            row.names = FALSE,
            fileEncoding = "UTF-8")
 
