@@ -56,8 +56,8 @@ library(gtsummary, lib.loc = here::here("benchmark/lib/cran/"))
 gt_ver <- as.character(packageVersion("gtsummary"))
 
 # Define the size of dataframe for big_data tests:----
-# Note: this function must remain here, after the first loading of gtsummary
-big_trial <- purrr::map_dfr(seq_len(100), ~trial)
+# THe following function must remain here, after the first loading of gtsummary
+big_trial <- purrr::map_dfr(seq_len(5000), ~trial)
 
 bm_gtsummary <- microbenchmark(
   list=functions_list,
