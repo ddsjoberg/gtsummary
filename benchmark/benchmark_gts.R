@@ -43,7 +43,7 @@ library(ggplot2)
 library(microbenchmark)
 
 # Set how many times the benchmark will try each function:----
-bm_times <- 20
+bm_times <- 10
 
 #The functions to be tested:
 functions_list <- alist(simple= tbl_summary(trial),
@@ -59,7 +59,7 @@ gt_ver <- as.character(packageVersion("gtsummary"))
 
 # Define the size of dataframe for big_data tests:----
 # THe following function must remain here, after the first loading of gtsummary
-big_trial <- purrr::map_dfr(seq_len(100), ~trial)
+big_trial <- purrr::map_dfr(seq_len(10), ~trial)
 
 bm_gtsummary <- microbenchmark(
   list=functions_list,
