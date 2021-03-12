@@ -3,7 +3,6 @@
 
 install.packages(c("devtools", "here"), dependencies = c("Depends", "Imports"))
 
-# library(remotes)
 library(devtools)
 library(here)
 
@@ -32,8 +31,9 @@ devtools::install(dependencies = c("Depends", "Imports"), quiet = TRUE, quick = 
 
 print(paste0("Here finishes current commit installation", Sys.time()))
 
-install.packages(c("dplyr", "magrittr", "ggplot2", "microbenchmark"),
-                 quiet = TRUE, dependencies = c("Depends", "Imports"))
+devtools::install_cran(c("dplyr", "magrittr", "ggplot2", "microbenchmark"),
+                 quiet = TRUE, dependencies = c("Depends", "Imports"),
+                 build_manual = FALSE, build_vignettes = FALSE)
 
 library(magrittr)
 library(dplyr)
