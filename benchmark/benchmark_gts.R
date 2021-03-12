@@ -57,7 +57,7 @@ gt_ver <- as.character(packageVersion("gtsummary"))
 
 # Define the size of dataframe for big_data tests:----
 # The following function must remain here, after the first loading of gtsummary
-big_trial <- purrr::map_dfr(seq_len(10), ~trial)
+big_trial <- purrr::map_dfr(seq_len(100), ~trial)
 
 bm_gtsummary <- microbenchmark(
   list=functions_list,
