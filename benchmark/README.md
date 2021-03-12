@@ -1,6 +1,5 @@
 {gtsummary} benchmark
 ================
-Gustavo Zapata Wainberg & Daniel Sjoberg
 March 12, 2021
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
