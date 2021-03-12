@@ -41,7 +41,7 @@ library(ggplot2)
 library(microbenchmark)
 
 # Set how many times the benchmark will try each function:----
-bm_times <- 10
+bm_times <- 30
 
 # The functions to be tested:
 functions_list <- alist(simple= tbl_summary(trial),
