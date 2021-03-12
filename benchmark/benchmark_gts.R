@@ -1,9 +1,7 @@
 # NOTE:Subfolders for libs must be created manually beforehand!
 # They are created from the yaml file section "Create required directories"
 
-install.packages("remotes", dependencies = c("Depends", "Imports") )
-install.packages("devtools", dependencies = c("Depends", "Imports"))
-install.packages("here", dependencies = c("Depends", "Imports"))
+install.packages(c("remotes", "devtools", "here"), dependencies = c("Depends", "Imports"))
 
 library(remotes)
 library(devtools)
@@ -16,27 +14,27 @@ library(here)
 .libPaths(new = here::here("benchmark/lib/github"))
 
 # Install gtsummary-CRAN version
-install.packages(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"), dependencies = c("Depends", "Imports"),
+install.packages(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"),
+                 dependencies = c("Depends", "Imports"),
                  quiet = TRUE)
 
 # Install gtsummary-devel version
 remotes::install_github("https://github.com/ddsjoberg/gtsummary",
                         lib ="benchmark/lib/github",
-                        dependencies = c("Depends", "Imports"), quiet = TRUE)
+                        dependencies = c("Depends", "Imports"), quiet = TRUE, build_manual = FALSE,
+                        build_vignettes = FALSE)
 
 #These print() functions are just for debugging within GA workflow, can be deleted
 print(paste0("Here starts current commit installation ", Sys.time()))
 
 # Install gtsummary-current commit version to the standard lib
-# system("R CMD INSTALL . --library=/Users/runner/work/gtsummary/gtsummary/benchmark/lib/current_branch", ignore.stdout = FALSE)
 devtools::install(dependencies = c("Depends", "Imports"), quiet = TRUE, quick = TRUE)
 
 print(paste0("Here finishes current commit installation", Sys.time()))
 
-install.packages("dplyr",quiet = TRUE)
-install.packages("magrittr",quiet = TRUE)
-install.packages("ggplot2",quiet = TRUE)
-install.packages("microbenchmark",quiet = TRUE)
+install.packages(c("dplyr", "magrittr", "ggplot2", "microbenchmark"),
+                 quiet = TRUE, dependencies = c("Depends", "Imports"))
+
 library(magrittr)
 library(dplyr)
 library(ggplot2)
@@ -45,12 +43,12 @@ library(microbenchmark)
 # Set how many times the benchmark will try each function:----
 bm_times <- 10
 
-#The functions to be tested:
+# The functions to be tested:
 functions_list <- alist(simple= tbl_summary(trial),
-                        complex=tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n(),
-                        big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = 'no') %>% add_p())
-
-print(.libPaths())
+                        complex=tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>%
+                          add_q(quiet = TRUE) %>% add_n(),
+                        big_data = big_trial %>% select(age, grade, trt) %>%
+                          tbl_summary(by = trt, missing = 'no') %>% add_p())
 
 # Benchmark CRAN version ----
 # detach("package:gtsummary", unload=TRUE)
@@ -58,7 +56,7 @@ library(gtsummary, lib.loc = here::here("benchmark/lib/cran/"))
 gt_ver <- as.character(packageVersion("gtsummary"))
 
 # Define the size of dataframe for big_data tests:----
-# THe following function must remain here, after the first loading of gtsummary
+# The following function must remain here, after the first loading of gtsummary
 big_trial <- purrr::map_dfr(seq_len(10), ~trial)
 
 bm_gtsummary <- microbenchmark(
@@ -86,7 +84,7 @@ detach("package:gtsummary", unload=TRUE)
 library(gtsummary)
 
 gt_ver <- as.character(packageVersion("gtsummary"))
-gt_ver <- paste0(gt_ver, "current_commit")
+gt_ver <- paste0(gt_ver, "_current_commit")
 
 bm_gtsummary <- microbenchmark(
   list=functions_list,
