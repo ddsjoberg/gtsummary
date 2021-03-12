@@ -29,7 +29,7 @@ print(paste0("Here starts current commit installation ", Sys.time()))
 
 # Install gtsummary-current commit version to the standard lib
 # system("R CMD INSTALL . --library=/Users/runner/work/gtsummary/gtsummary/benchmark/lib/current_branch", ignore.stdout = FALSE)
-devtools::install(dependencies = c("Depends", "Imports"), quiet = TRUE)
+devtools::install(dependencies = c("Depends", "Imports"), quiet = TRUE, quick = TRUE)
 
 print(paste0("Here finishes current commit installation", Sys.time()))
 
