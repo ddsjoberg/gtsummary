@@ -1,9 +1,9 @@
 # NOTE:Subfolders for libs must be created manually beforehand!
 # They are created from the yaml file section "Create required directories"
 
-install.packages(c("remotes", "devtools", "here"), dependencies = c("Depends", "Imports"))
+install.packages(c("devtools", "here"), dependencies = c("Depends", "Imports"))
 
-library(remotes)
+# library(remotes)
 library(devtools)
 library(here)
 
@@ -14,12 +14,12 @@ library(here)
 .libPaths(new = here::here("benchmark/lib/github"))
 
 # Install gtsummary-CRAN version
-install.packages(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"),
+devtools::install_cran(pkgs = "gtsummary", lib = here::here("benchmark/lib/cran/"),
                  dependencies = c("Depends", "Imports"),
-                 quiet = TRUE)
+                 quiet = TRUE, build_manual = FALSE, build_vignettes = FALSE)
 
 # Install gtsummary-devel version
-remotes::install_github("https://github.com/ddsjoberg/gtsummary",
+devtools::install_github("https://github.com/ddsjoberg/gtsummary",
                         lib ="benchmark/lib/github",
                         dependencies = c("Depends", "Imports"), quiet = TRUE, build_manual = FALSE,
                         build_vignettes = FALSE)
