@@ -138,22 +138,3 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
   # return gtsummary object ----------------------------------------------------
   x
 }
-
-# default statistic labels
-df_default_glance_labels <-
-  tibble::tribble(
-    ~statistic_name, ~label,
-    "r.squared", "R\U00B2",
-    "adj.r.squared", "Adjusted R\U00B2",
-    "p.value", "p-value",
-    "logLik", "log-likelihood",
-    "statistic", "Statistic",
-    "df.residual", "Residual df",
-    "null.deviance", "Null deviance",
-    "df.null", "Null df",
-    "nevent", "N events",
-    "concordance", "c-index",
-    "std.error.concordance", "c-index SE"
-  )
-
-
