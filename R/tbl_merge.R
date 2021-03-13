@@ -176,8 +176,10 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # renaming columns in stylings and updating ----------------------------------
   x <- .create_gtsummary_object(table_body = table_body,
                                 tbls = tbls,
+                                list_output = tbls[[1]]$list_output,
                                 call_list = list(tbl_merge = match.call()))
   x <- .tbl_merge_update_table_styling(x, tbls)
+
 
   # returning results
   class(x) <- c("tbl_merge", class(x))

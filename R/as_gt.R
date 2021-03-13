@@ -299,6 +299,17 @@ table_styling_to_gt_calls <- function(x, ...) {
     setdiff(.cols_to_show(x)) %>%
     {expr(gt::cols_hide(columns = gt::vars(!!!syms(.))))}
 
+  # horizontal_line ------------------------------------------------------------
+  if (!is.null(x$list_output$horizontal_line_above)) {
+    gt_calls[["horizontal_line"]] <-
+      expr(
+        gt::tab_style(
+          style = gt::cell_borders(sides = "top"),
+          locations = gt::cells_body(rows = !!x$list_output$horizontal_line_above)
+        )
+      )
+  }
+
   # return list of gt expressions
   gt_calls
 }

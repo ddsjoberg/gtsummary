@@ -48,7 +48,8 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
     )
 
   # add instructions to print horizontal line ----------------------------------
-  x$list_output$horizontal_line_below <- nrow(tbl$table_body)
+  x$list_output$horizontal_line_above <-
+    expr(.data$row_type == "glance_statistic" & .data$variable %in% !!df_glance$variable[1])
 
   language <- get_theme_element("pkgwide-str:language", default = "en")
 
@@ -113,12 +114,15 @@ df_default_glance_labels <-
     "r.squared", "R\U00B2",
     "adj.r.squared", "Adjusted R\U00B2",
     "p.value", "p-value",
-    "logLik", "log-likelihood",
+    "logLik", "Log-likelihood",
     "statistic", "Statistic",
     "df.residual", "Residual df",
     "null.deviance", "Null deviance",
     "df.null", "Null df",
     "nevent", "N events",
     "concordance", "c-index",
-    "std.error.concordance", "c-index SE"
+    "std.error.concordance", "c-index SE",
+    "nobs", "No. Obs.",
+    "deviance", "Deviance",
+    "sigma", "Sigma"
   )
