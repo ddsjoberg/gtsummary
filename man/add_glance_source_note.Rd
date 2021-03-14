@@ -47,7 +47,7 @@ When there is no default, the label is the column name from \code{broom::glance(
    r.squared \tab R² \cr
    adj.r.squared \tab Adjusted R² \cr
    p.value \tab p-value \cr
-   logLik \tab log-likelihood \cr
+   logLik \tab Log-likelihood \cr
    statistic \tab Statistic \cr
    df.residual \tab Residual df \cr
    null.deviance \tab Null deviance \cr
@@ -55,6 +55,9 @@ When there is no default, the label is the column name from \code{broom::glance(
    nevent \tab N events \cr
    concordance \tab c-index \cr
    std.error.concordance \tab c-index SE \cr
+   nobs \tab No. Obs. \cr
+   deviance \tab Deviance \cr
+   sigma \tab Sigma \cr
 }
 }
 

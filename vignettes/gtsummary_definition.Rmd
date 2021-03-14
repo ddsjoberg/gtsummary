@@ -57,7 +57,7 @@ tbl_summary_ex$table_body
 #### table_styling
 
 The `.$table_styling` object is a list of data frames containing information about how `.$table_body` is printed, formatted, and styled.  
-The list contains the following data frames `header`, `footnote`, `footnote_abbrev`, `fmt_fun`, `text_format`, and `fmt_missing`. 
+The list contains the following data frames `header`, `footnote`, `footnote_abbrev`, `fmt_fun`, `text_format`, `fmt_missing` and the following objects `source_note`, `caption`, `horizontal_line_above`.
 
 **`header`**
 
@@ -145,6 +145,19 @@ tibble::tribble(
   knitr::kable() 
 ``` 
 
+**`source_note`**
+
+String that is made a table source note.
+The attribute `"text_interpret"` is either `c("md", "html")`.
+
+**`caption`**
+
+String that is made into the table caption.
+The attribute `"text_interpret"` is either `c("md", "html")`.
+
+**`horizontal_line_above`**
+
+Expression identifying a row where a horizontal line is placed above in the table.
 
 Example from `tbl_regression()`
 

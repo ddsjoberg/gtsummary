@@ -72,10 +72,6 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
 
   # creating list of gt calls --------------------------------------------------
   gt_calls <- table_styling_to_gt_calls(x = x, ...)
-  # adding other calls from x$list_output$source_note
-  if (!is.null(x$list_output$source_note)) {
-    gt_calls[["tab_source_note"]] <- expr(gt::tab_source_note(source_note = !!x$list_output$source_note))
-  }
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_gt-lst:addl_cmds")
@@ -132,14 +128,14 @@ table_styling_to_gt_calls <- function(x, ...) {
 
   # gt -------------------------------------------------------------------------
   groupname_col <- switch("groupname_col" %in% x$table_styling$header$column, "groupname_col")
-  if (!is.null(x$list_output$caption) && "caption" %in% names(as.list(gt::gt))) {
-    caption <- rlang::call2(attr(x$list_output$caption, "text_interpret"), x$list_output$caption)
+  if (!is.null(x$table_styling$caption) && "caption" %in% names(as.list(gt::gt))) {
+    caption <- rlang::call2(attr(x$table_styling$caption, "text_interpret"), x$table_styling$caption)
     gt_calls[["gt"]] <-
       expr(gt::gt(data = x$table_body, groupname_col = !!groupname_col,
                   caption = !!caption, !!!list(...)))
   }
   else {
-    if (!is.null(x$list_output$caption))
+    if (!is.null(x$table_styling$caption))
       inform("Captions are not supported in this version of the {gt} package.")
     gt_calls[["gt"]] <-
     expr(gt::gt(data = x$table_body,  groupname_col = !!groupname_col, !!!list(...)))
@@ -293,22 +289,30 @@ table_styling_to_gt_calls <- function(x, ...) {
                              label = gt::md(!!df_spanning_header$spanning_header[[.x]])))
     )
 
+  # horizontal_line ------------------------------------------------------------
+  if (!is.null(x$table_styling$horizontal_line_above)) {
+    gt_calls[["horizontal_line"]] <-
+      expr(
+        gt::tab_style(
+          style = gt::cell_borders(sides = "top"),
+          locations = gt::cells_body(rows = !!x$table_styling$horizontal_line_above)
+        )
+      )
+  }
+
+  # tab_source_note  -----------------------------------------------------------
+  # adding other calls from x$table_styling$source_note
+  if (!is.null(x$table_styling$source_note)) {
+    source_note <-
+      rlang::call2(attr(x$table_styling$source_note, "text_interpret"), x$table_styling$source_note)
+    gt_calls[["tab_source_note"]] <- expr(gt::tab_source_note(source_note = !!source_note))
+  }
+
   # cols_hide ------------------------------------------------------------------
   gt_calls[["cols_hide"]] <-
     names(x$table_body) %>%
     setdiff(.cols_to_show(x)) %>%
     {expr(gt::cols_hide(columns = gt::vars(!!!syms(.))))}
-
-  # horizontal_line ------------------------------------------------------------
-  if (!is.null(x$list_output$horizontal_line_above)) {
-    gt_calls[["horizontal_line"]] <-
-      expr(
-        gt::tab_style(
-          style = gt::cell_borders(sides = "top"),
-          locations = gt::cells_body(rows = !!x$list_output$horizontal_line_above)
-        )
-      )
-  }
 
   # return list of gt expressions
   gt_calls

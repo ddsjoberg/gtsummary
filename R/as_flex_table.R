@@ -136,9 +136,9 @@ table_styling_to_flextable_calls <- function(x, ...) {
   )
 
   # set_caption ----------------------------------------------------------------
-  if (!is.null(x$list_output$caption)) {
+  if (!is.null(x$table_styling$caption)) {
     flextable_calls[["set_caption"]] <- expr(
-      flextable::set_caption(caption = !!x$list_output$caption)
+      flextable::set_caption(caption = !!x$table_styling$caption)
     )
   }
 
@@ -306,10 +306,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   # source note ----------------------------------------------------------------
   # in flextable, this is just a footnote associated without column or symbol
-  if (!is.null(x$list_output$source_note)) {
+  if (!is.null(x$table_styling$source_note)) {
     flextable_calls[["source_note"]] <-
       expr(
-        flextable::footnote(value = flextable::as_paragraph(!!x$list_output$source_note), ref_symbols = "")
+        flextable::footnote(value = flextable::as_paragraph(!!x$table_styling$source_note), ref_symbols = "")
       )
   }
 

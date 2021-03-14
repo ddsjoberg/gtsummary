@@ -9,15 +9,19 @@ add_glance_statistics(
   include = everything(),
   label = NULL,
   fmt_fun = NULL,
+  location = c("table", "source_note"),
   glance_fun = broom::glance,
-  ...
+  sep1 = " = ",
+  sep2 = "; ",
+  text_interpret = c("md", "html")
 )
 }
 \arguments{
 \item{x}{'tbl_regression' object}
 
 \item{include}{list of statistics to include in output. Must be column
-names of the tibble returned by \code{broom::glance()}}
+names of the tibble returned by \code{broom::glance()}. The include argument
+can also be used to specify the order the statistics appear in the table.}
 
 \item{label}{List of formulas specifying statistic labels,
 e.g. \code{list(r.squared ~ "R2", p.value ~ "P")}}
@@ -26,10 +30,22 @@ e.g. \code{list(r.squared ~ "R2", p.value ~ "P")}}
 is a function to format/round the statistics. The default is
 \code{style_sigfig(x, digits = 3)}}
 
+\item{location}{Location to place statistics.
+Must be one of \code{c("table", "source_note")}}
+
 \item{glance_fun}{function that returns model statistics. Default is
 \code{broom::glance()}. Custom functions must return a single row tibble.}
 
-\item{...}{Additional arguments passed to \verb{glance_fun=}}
+\item{sep1}{Used when \code{location = "source_note"}.
+Separator between statistic name and statistic.
+Default is \code{" = "}, e.g. \code{"R2 = 0.456"}}
+
+\item{sep2}{Used when \code{location = "source_note"}.
+Separator between statistics. Default is \code{"; "}}
+
+\item{text_interpret}{Used when \code{location = "source_note"}.
+String indicates whether text will be interpreted with
+\code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 }
 \value{
 gtsummary table

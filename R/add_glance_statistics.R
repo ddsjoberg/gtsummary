@@ -12,9 +12,18 @@
 #' @param fmt_fun List of formulas where the LHS is a statistic and the RHS
 #' is a function to format/round the statistics. The default is
 #' `style_sigfig(x, digits = 3)`
+#' @param location Location to place statistics.
+#' Must be one of `c("table", "source_note")`
 #' @param glance_fun function that returns model statistics. Default is
 #' `broom::glance()`. Custom functions must return a single row tibble.
-#' @param ... Additional arguments passed to `glance_fun=`
+#' @param sep1 Used when `location = "source_note"`.
+#' Separator between statistic name and statistic.
+#' Default is `" = "`, e.g. `"R2 = 0.456"`
+#' @param sep2 Used when `location = "source_note"`.
+#' Separator between statistics. Default is `"; "`
+#' @param text_interpret Used when `location = "source_note"`.
+#' String indicates whether text will be interpreted with
+#' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
 #'
 #' @return gtsummary table
 #' @export
@@ -22,14 +31,19 @@
 #' @examples
 #' # add example
 add_glance_statistics <- function(x, include = everything(), label = NULL,
-                                  fmt_fun = NULL, glance_fun = broom::glance, ...) {
+                                  fmt_fun = NULL, location = c("table", "source_note"),
+                                  glance_fun = broom::glance,
+                                  sep1 = " = ", sep2 = "; ",
+                                  text_interpret = c("md", "html")) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "tbl_regression"))
     stop("`x=` must be class 'tbl_regression'")
   glance_fun <- gts_mapper(glance_fun, "add_glance_statistics(glance_fun=)")
+  location <- match.arg(location)
+  text_interpret <- match.arg(text_interpret)
 
   # prepping glance table ------------------------------------------------------
-  df_glance_orig <- glance_fun(x$model_obj, ...)
+  df_glance_orig <- glance_fun(x$model_obj)
   include <- broom.helpers::.select_to_varnames({{ include }}, data = df_glance_orig)
   df_glance_orig <- df_glance_orig %>% select(all_of(include))
 
@@ -45,6 +59,7 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
   else df_label <- tibble::tibble(variable = character(), label = character())
 
   # prepping data frame to be appended to `x$table_body` -----------------------
+  language <- get_theme_element("pkgwide-str:language", default = "en")
   df_glance <-
     df_glance_orig %>%
     tidyr::pivot_longer(cols = everything(),
@@ -52,6 +67,7 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
                         values_to = "estimate") %>%
     # adding default labels
     left_join(df_default_glance_labels, by = c("variable" = "statistic_name")) %>%
+    mutate(label = map_chr(.data$label, ~translate_text(.x, language = language))) %>%
     # updating table with user-specified labels
     dplyr::rows_update(df_label, by = "variable") %>%
     mutate(
@@ -60,19 +76,7 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
       var_label = .data$label
     )
 
-  # add instructions to print horizontal line ----------------------------------
-  x$list_output$horizontal_line_above <-
-    expr(.data$row_type == "glance_statistic" & .data$variable %in% !!df_glance$variable[1])
-
-  language <- get_theme_element("pkgwide-str:language", default = "en")
-
-  # updating regression gtsummary object ---------------------------------------
-  # appending stats to table_body
-  x$table_body <-
-    x$table_body %>%
-    bind_rows(df_glance)
-
-  # adding fmt_fun instructions
+  # parsing fmt_fun instructions -----------------------------------------------
   fmt_fun <-
     .formula_list_to_named_list(
       x = fmt_fun,
@@ -94,6 +98,32 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
         by = "glance_statistic"
       )
   }
+
+  # return stats as source note, if requested ----------------------------------
+  if (location == "source_note") {
+    x$table_styling$source_note <-
+      df_glance %>%
+      left_join(df_fmt_fun, by = c("variable" = "glance_statistic")) %>%
+      rowwise() %>%
+      mutate(
+        fmt_stat = do.call(fmt_fun, list(estimate)) %>%
+          {paste0(.data$label, sep1, .)}
+      ) %>%
+      pull(.data$fmt_stat) %>%
+      paste(collapse = sep2)
+    attr(x$table_styling$source_note, "text_interpret") <- text_interpret
+    return(x)
+  }
+
+  # add instructions to print horizontal line ----------------------------------
+  x$table_styling$horizontal_line_above <-
+    expr(.data$row_type == "glance_statistic" & .data$variable %in% !!df_glance$variable[1])
+
+  # updating regression gtsummary object ---------------------------------------
+  # appending stats to table_body
+  x$table_body <-
+    x$table_body %>%
+    bind_rows(df_glance)
 
   # creating modify_fmt_fun calls, and running them
   df_modify_fmt_fun <-

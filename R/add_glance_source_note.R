@@ -126,7 +126,7 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     )
 
   # constructing source note ---------------------------------------------------
-  x$list_output$source_note <-
+  x$table_styling$source_note <-
     df_results %>%
     mutate(
       statistic_fmt = map2_chr(.data$fmt_fun, .data$statistic, ~.x(.y)),
@@ -134,6 +134,7 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     ) %>%
     pull(.data$statistic_label) %>%
     paste(collapse = sep2)
+  attr(x$table_styling$source_note, "text_interpret") <- "md"
 
   # return gtsummary object ----------------------------------------------------
   x
