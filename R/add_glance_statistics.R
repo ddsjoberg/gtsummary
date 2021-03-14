@@ -5,7 +5,8 @@
 #'
 #' @param x 'tbl_regression' object
 #' @param include list of statistics to include in output. Must be column
-#' names of the tibble returned by `broom::glance()`
+#' names of the tibble returned by `broom::glance()`. The include argument
+#' can also be used to specify the order the statistics appear in the table.
 #' @param label List of formulas specifying statistic labels,
 #' e.g. `list(r.squared ~ "R2", p.value ~ "P")`
 #' @param fmt_fun List of formulas where the LHS is a statistic and the RHS
@@ -27,20 +28,32 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
     stop("`x=` must be class 'tbl_regression'")
   glance_fun <- gts_mapper(glance_fun, "add_glance_statistics(glance_fun=)")
 
-  # prepping table -------------------------------------------------------------
+  # prepping glance table ------------------------------------------------------
   df_glance_orig <- glance_fun(x$model_obj, ...)
   include <- broom.helpers::.select_to_varnames({{ include }}, data = df_glance_orig)
   df_glance_orig <- df_glance_orig %>% select(all_of(include))
 
+  # adding user-specified labels -----------------------------------------------
+  label <-
+    .formula_list_to_named_list(
+      x = label,
+      data = df_glance_orig,
+      arg_name = "label"
+    )
+
+  if (!is.null(label)) df_label <- unlist(label) %>% tibble::enframe("variable", "label")
+  else df_label <- tibble::tibble(variable = character(), label = character())
+
+  # prepping data frame to be appended to `x$table_body` -----------------------
   df_glance <-
     df_glance_orig %>%
     tidyr::pivot_longer(cols = everything(),
                         names_to = "variable",
                         values_to = "estimate") %>%
-    left_join(
-      df_default_glance_labels,
-      by = c("variable" = "statistic_name")
-    ) %>%
+    # adding default labels
+    left_join(df_default_glance_labels, by = c("variable" = "statistic_name")) %>%
+    # updating table with user-specified labels
+    dplyr::rows_update(df_label, by = "variable") %>%
     mutate(
       label = dplyr::coalesce(.data$label, .data$variable),
       row_type = "glance_statistic",
@@ -94,12 +107,12 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
   # evaluating modify_fmt_fun calls on gtsumary object
   x <-
     map2(df_modify_fmt_fun$fmt_fun, df_modify_fmt_fun$glance_statistic,
-       ~expr(
-         modify_fmt_fun(
-           update = list(estimate ~ !!.x),
-           rows = .data$row_type == "glance_statistic" & .data$variable %in% !!.y
-         )
-       )) %>%
+         ~expr(
+           modify_fmt_fun(
+             update = list(estimate ~ !!.x),
+             rows = .data$row_type == "glance_statistic" & .data$variable %in% !!.y
+           )
+         )) %>%
     reduce(function(x, y) expr(!!x %>% !!y), .init = expr(x)) %>%
     eval()
 
