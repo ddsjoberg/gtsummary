@@ -54,6 +54,20 @@ gtsummary table
 \lifecycle{experimental}
 Add model statistics returned from \code{broom::glance()}
 }
+\section{Example Output}{
+
+\if{html}{Example 1}
+
+\if{html}{\figure{add_glance_statistics_ex1.png}{options: width=64\%}}
+}
+
 \examples{
-# add example
+# Example 1 ----------------------------------
+add_glance_statistics_ex1 <-
+  lm(age ~ marker + grade, trial) \%>\%
+  tbl_regression() \%>\%
+  add_glance_statistics(
+    label = list(sigma ~ "\U03C3"),
+    include = c(r.squared, AIC, sigma)
+  )
 }

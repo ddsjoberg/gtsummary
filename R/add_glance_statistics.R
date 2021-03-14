@@ -29,7 +29,18 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' # Example 1 ----------------------------------
+#' add_glance_statistics_ex1 <-
+#'   lm(age ~ marker + grade, trial) %>%
+#'   tbl_regression() %>%
+#'   add_glance_statistics(
+#'     label = list(sigma ~ "\U03C3"),
+#'     include = c(r.squared, AIC, sigma)
+#'   )
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{add_glance_statistics_ex1.png}{options: width=64\%}}
 add_glance_statistics <- function(x, include = everything(), label = NULL,
                                   fmt_fun = NULL, location = c("table", "source_note"),
                                   glance_fun = broom::glance,

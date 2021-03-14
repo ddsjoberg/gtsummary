@@ -44,6 +44,9 @@
 add_glance_source_note <- function(x, include = everything(), label = NULL,
                                    fmt_fun = NULL, glance_fun = broom::glance,
                                    sep1 = " = ", sep2 = "; ", ...) {
+  lifecycle::deprecate_warn("1.4.0", "gtsummary::add_glance_source_note()",
+                            "add_glance_statistics()",
+                            details = "Add `location = 'source_note'` argument")
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "tbl_regression"))
     stop("`x=` must be class 'tbl_regression'")
