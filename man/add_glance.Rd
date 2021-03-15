@@ -22,8 +22,7 @@ add_glance_source_note(
   glance_fun = broom::glance,
   text_interpret = c("md", "html"),
   sep1 = " = ",
-  sep2 = "; ",
-  ...
+  sep2 = "; "
 )
 }
 \arguments{
@@ -58,8 +57,8 @@ gtsummary table
 \description{
 \lifecycle{experimental}
 Add model statistics returned from \code{broom::glance()}. Statistics can either
-be appended to the table (\code{add_glance_table}), or added as a
-table source note (\code{add_glance_source_note}).
+be appended to the table (\code{add_glance_table()}), or added as a
+table source note (\code{add_glance_source_note()}).
 }
 \section{Default Labels}{
 

@@ -114,7 +114,7 @@ add_glance_table <- function(x, include = everything(), label = NULL,
 add_glance_source_note <- function(x, include = everything(), label = NULL,
                                    fmt_fun = NULL, glance_fun = broom::glance,
                                    text_interpret = c("md", "html"),
-                                   sep1 = " = ", sep2 = "; ", ...) {
+                                   sep1 = " = ", sep2 = "; ") {
   # prepare glance statistics and formatting functions -------------------------
   lst_prep_glance <-
     .prep_glance_statistics(x = x, include = {{ include }},
