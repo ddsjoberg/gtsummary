@@ -2,7 +2,8 @@
 #'
 #' \lifecycle{experimental}
 #' Add model statistics returned from `broom::glance()`. Statistics can either
-#' be appended to the table, or added as a table source note.
+#' be appended to the table (`add_glance_table`), or added as a
+#' table source note (`add_glance_source_note`).
 #'
 #' @param x 'tbl_regression' object
 #' @param include list of statistics to include in output. Must be column
@@ -13,60 +14,135 @@
 #' @param fmt_fun List of formulas where the LHS is a statistic and the RHS
 #' is a function to format/round the statistics. The default is
 #' `style_sigfig(x, digits = 3)`
-#' @param location Location to place statistics.
-#' Must be one of `c("table", "source_note")`
 #' @param glance_fun function that returns model statistics. Default is
 #' `broom::glance()`. Custom functions must return a single row tibble.
-#' @param sep1 Used when `location = "source_note"`.
-#' Separator between statistic name and statistic.
+#' @param sep1 Separator between statistic name and statistic.
 #' Default is `" = "`, e.g. `"R2 = 0.456"`
-#' @param sep2 Used when `location = "source_note"`.
-#' Separator between statistics. Default is `"; "`
-#' @param text_interpret Used when `location = "source_note"`.
-#' String indicates whether source note text will be interpreted with
+#' @param sep2 Separator between statistics. Default is `"; "`
+#' @param text_interpret String indicates whether source note text
+#' will be interpreted with
 #' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
 #'
 #' @return gtsummary table
-#' @export
+#' @name add_glance
 #'
+#' @section Default Labels:
+#' The following statistics have set default labels when printed.
+#' When there is no default, the column name from `broom::glance()` is printed.
+#'
+#' ```{r, echo = FALSE}
+#' df_default_glance_labels %>%
+#'   select(`Statistic Name` = statistic_name, `Default Label` = label) %>%
+#'   knitr::kable()
+#' ```
 #' @examples
 #' mod <- lm(age ~ marker + grade, trial) %>% tbl_regression()
 #'
 #' # Example 1 ----------------------------------
-#' add_glance_statistics_ex1 <-
+#' add_glance_ex1 <-
 #'   mod %>%
-#'   add_glance_statistics(
+#'   add_glance_table(
 #'     label = list(sigma ~ "\U03C3"),
 #'     include = c(r.squared, AIC, sigma)
 #'   )
 #'
 #' # Example 2 ----------------------------------
-#' add_glance_statistics_ex2 <-
+#' add_glance_ex2 <-
 #'   mod %>%
-#'   add_glance_statistics(
+#'   add_glance_source_note(
 #'     label = list(sigma ~ "\U03C3"),
-#'     include = c(r.squared, AIC, sigma),
-#'     location = "source_note"
+#'     include = c(r.squared, AIC, sigma)
 #'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_glance_statistics_ex1.png}{options: width=35\%}}
+#' \if{html}{\figure{add_glance_ex1.png}{options: width=35\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_glance_statistics_ex2.png}{options: width=35\%}}
-add_glance_statistics <- function(x, include = everything(), label = NULL,
-                                  fmt_fun = NULL, location = c("table", "source_note"),
-                                  glance_fun = broom::glance,
-                                  sep1 = " = ", sep2 = "; ",
-                                  text_interpret = c("md", "html")) {
+#' \if{html}{\figure{add_glance_ex2.png}{options: width=35\%}}
+NULL
+
+#' @export
+#' @rdname add_glance
+add_glance_table <- function(x, include = everything(), label = NULL,
+                                fmt_fun = NULL, glance_fun = broom::glance) {
+
+  # prepare glance statistics and formatting functions -------------------------
+  lst_prep_glance <-
+    .prep_glance_statistics(x = x, include = {{ include }},
+                            label = label, fmt_fun = fmt_fun,
+                            glance_fun = glance_fun)
+
+  # add instructions to print horizontal line ----------------------------------
+  x$table_styling$horizontal_line_above <-
+    expr(.data$row_type == "glance_statistic" & .data$variable %in% !!lst_prep_glance$df_glance$variable[1])
+
+  # updating regression gtsummary object ---------------------------------------
+  # appending stats to table_body
+  x$table_body <-
+    x$table_body %>%
+    bind_rows(lst_prep_glance$df_glance)
+
+  # creating modify_fmt_fun calls, and running them
+  df_modify_fmt_fun <-
+    lst_prep_glance$df_fmt_fun %>%
+    nest(glance_statistic = .data$glance_statistic) %>%
+    rowwise() %>%
+    mutate(
+      glance_statistic = unlist(.data$glance_statistic) %>% unname() %>% list(),
+    )
+
+  # evaluating modify_fmt_fun calls on gtsumary object
+  x <-
+    map2(df_modify_fmt_fun$fmt_fun, df_modify_fmt_fun$glance_statistic,
+         ~expr(
+           modify_fmt_fun(
+             update = list(estimate ~ !!.x),
+             rows = .data$row_type == "glance_statistic" & .data$variable %in% !!.y
+           )
+         )) %>%
+    reduce(function(x, y) expr(!!x %>% !!y), .init = expr(x)) %>%
+    eval()
+
+  # returning gtsummary table --------------------------------------------------
+  x
+}
+
+#' @export
+#' @rdname add_glance
+add_glance_source_note <- function(x, include = everything(), label = NULL,
+                                   fmt_fun = NULL, glance_fun = broom::glance,
+                                   text_interpret = c("md", "html"),
+                                   sep1 = " = ", sep2 = "; ", ...) {
+  # prepare glance statistics and formatting functions -------------------------
+  lst_prep_glance <-
+    .prep_glance_statistics(x = x, include = {{ include }},
+                          label = label, fmt_fun = fmt_fun,
+                          glance_fun = glance_fun)
+
+  # compile stats into source note ---------------------------------------------
+  x$table_styling$source_note <-
+    lst_prep_glance$df_glance %>%
+    left_join(lst_prep_glance$df_fmt_fun, by = c("variable" = "glance_statistic")) %>%
+    rowwise() %>%
+    mutate(
+      fmt_stat = do.call(fmt_fun, list(estimate)) %>%
+        {paste0(.data$label, sep1, .)}
+    ) %>%
+    pull(.data$fmt_stat) %>%
+    paste(collapse = sep2)
+  attr(x$table_styling$source_note, "text_interpret") <- match.arg(text_interpret)
+
+  # returning gtsummary table --------------------------------------------------
+  x
+}
+
+.prep_glance_statistics <- function(x, include, label, fmt_fun, glance_fun) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "tbl_regression"))
     stop("`x=` must be class 'tbl_regression'")
-  glance_fun <- gts_mapper(glance_fun, "add_glance_statistics(glance_fun=)")
-  location <- match.arg(location)
-  text_interpret <- match.arg(text_interpret)
+  glance_fun <- gts_mapper(glance_fun, "glance_fun=")
 
   # prepping glance table ------------------------------------------------------
   df_glance_orig <- glance_fun(x$model_obj)
@@ -128,55 +204,8 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
       )
   }
 
-  # return stats as source note, if requested ----------------------------------
-  if (location == "source_note") {
-    x$table_styling$source_note <-
-      df_glance %>%
-      left_join(df_fmt_fun, by = c("variable" = "glance_statistic")) %>%
-      rowwise() %>%
-      mutate(
-        fmt_stat = do.call(fmt_fun, list(estimate)) %>%
-          {paste0(.data$label, sep1, .)}
-      ) %>%
-      pull(.data$fmt_stat) %>%
-      paste(collapse = sep2)
-    attr(x$table_styling$source_note, "text_interpret") <- text_interpret
-    return(x)
-  }
-
-  # add instructions to print horizontal line ----------------------------------
-  x$table_styling$horizontal_line_above <-
-    expr(.data$row_type == "glance_statistic" & .data$variable %in% !!df_glance$variable[1])
-
-  # updating regression gtsummary object ---------------------------------------
-  # appending stats to table_body
-  x$table_body <-
-    x$table_body %>%
-    bind_rows(df_glance)
-
-  # creating modify_fmt_fun calls, and running them
-  df_modify_fmt_fun <-
-    df_fmt_fun %>%
-    nest(glance_statistic = .data$glance_statistic) %>%
-    rowwise() %>%
-    mutate(
-      glance_statistic = unlist(.data$glance_statistic) %>% unname() %>% list(),
-    )
-
-  # evaluating modify_fmt_fun calls on gtsumary object
-  x <-
-    map2(df_modify_fmt_fun$fmt_fun, df_modify_fmt_fun$glance_statistic,
-         ~expr(
-           modify_fmt_fun(
-             update = list(estimate ~ !!.x),
-             rows = .data$row_type == "glance_statistic" & .data$variable %in% !!.y
-           )
-         )) %>%
-    reduce(function(x, y) expr(!!x %>% !!y), .init = expr(x)) %>%
-    eval()
-
-  # returning gtsummary table --------------------------------------------------
-  x
+  # return objects needed to finalize glance stats
+  list(df_glance = df_glance, df_fmt_fun = df_fmt_fun)
 }
 
 # default statistic labels
