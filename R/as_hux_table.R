@@ -200,7 +200,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
     row_number <-
       eval_tidy(x$table_styling$horizontal_line_above, data = x$table_body) %>%
       which()
-    huxtable_calls[["horizontal_line_above"]] <-
+    huxtable_calls[["horizontal_line"]] <-
       expr(
         huxtable::set_top_border(row = !!row_number, value = 0.4)
       )

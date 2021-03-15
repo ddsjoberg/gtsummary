@@ -339,7 +339,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
     row_number <-
       eval_tidy(x$table_styling$horizontal_line_above, data = x$table_body) %>%
       which()
-    flextable_calls[["horizontal_line_above"]] <-
+    flextable_calls[["horizontal_line"]] <-
       expr(
         flextable::border(
           i = !!row_number,
