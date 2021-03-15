@@ -1,7 +1,8 @@
 #' Add Model Statistics
 #'
 #' \lifecycle{experimental}
-#' Add model statistics returned from `broom::glance()`
+#' Add model statistics returned from `broom::glance()`. Statistics can either
+#' be appended to the table, or added as a table source note.
 #'
 #' @param x 'tbl_regression' object
 #' @param include list of statistics to include in output. Must be column
@@ -22,25 +23,39 @@
 #' @param sep2 Used when `location = "source_note"`.
 #' Separator between statistics. Default is `"; "`
 #' @param text_interpret Used when `location = "source_note"`.
-#' String indicates whether text will be interpreted with
+#' String indicates whether source note text will be interpreted with
 #' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
 #'
 #' @return gtsummary table
 #' @export
 #'
 #' @examples
+#' mod <- lm(age ~ marker + grade, trial) %>% tbl_regression()
+#'
 #' # Example 1 ----------------------------------
 #' add_glance_statistics_ex1 <-
-#'   lm(age ~ marker + grade, trial) %>%
-#'   tbl_regression() %>%
+#'   mod %>%
 #'   add_glance_statistics(
 #'     label = list(sigma ~ "\U03C3"),
 #'     include = c(r.squared, AIC, sigma)
 #'   )
+#'
+#' # Example 2 ----------------------------------
+#' add_glance_statistics_ex2 <-
+#'   mod %>%
+#'   add_glance_statistics(
+#'     label = list(sigma ~ "\U03C3"),
+#'     include = c(r.squared, AIC, sigma),
+#'     location = "source_note"
+#'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_glance_statistics_ex1.png}{options: width=64\%}}
+#' \if{html}{\figure{add_glance_statistics_ex1.png}{options: width=35\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{add_glance_statistics_ex2.png}{options: width=35\%}}
 add_glance_statistics <- function(x, include = everything(), label = NULL,
                                   fmt_fun = NULL, location = c("table", "source_note"),
                                   glance_fun = broom::glance,
@@ -55,7 +70,7 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
 
   # prepping glance table ------------------------------------------------------
   df_glance_orig <- glance_fun(x$model_obj)
-  include <- broom.helpers::.select_to_varnames({{ include }}, data = df_glance_orig)
+  include <- .select_to_varnames({{ include }}, data = df_glance_orig)
   df_glance_orig <- df_glance_orig %>% select(all_of(include))
 
   # adding user-specified labels -----------------------------------------------
@@ -66,8 +81,10 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
       arg_name = "label"
     )
 
-  if (!is.null(label)) df_label <- unlist(label) %>% tibble::enframe("variable", "label")
-  else df_label <- tibble::tibble(variable = character(), label = character())
+  df_label <-
+    switch(!is.null(label), enframe(unlist(label), "variable", "label")) %||%
+    tibble(variable = character(), label = character())
+
 
   # prepping data frame to be appended to `x$table_body` -----------------------
   language <- get_theme_element("pkgwide-str:language", default = "en")
@@ -78,11 +95,12 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
                         values_to = "estimate") %>%
     # adding default labels
     left_join(df_default_glance_labels, by = c("variable" = "statistic_name")) %>%
-    mutate(label = map_chr(.data$label, ~translate_text(.x, language = language))) %>%
+    mutate(label = map2_chr(.data$label, .data$variable,
+                            ~dplyr::coalesce(.x, .y) %>%
+                              translate_text(language = language))) %>%
     # updating table with user-specified labels
     dplyr::rows_update(df_label, by = "variable") %>%
     mutate(
-      label = dplyr::coalesce(.data$label, .data$variable),
       row_type = "glance_statistic",
       var_label = .data$label
     )
@@ -105,7 +123,7 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
     df_fmt_fun <-
       df_fmt_fun %>%
       dplyr::rows_update(
-        tibble::enframe(fmt_fun, name = "glance_statistic", value = "fmt_fun"),
+        enframe(fmt_fun, name = "glance_statistic", value = "fmt_fun"),
         by = "glance_statistic"
       )
   }
@@ -163,7 +181,7 @@ add_glance_statistics <- function(x, include = everything(), label = NULL,
 
 # default statistic labels
 df_default_glance_labels <-
-  tibble::tribble(
+  tribble(
     ~statistic_name, ~label,
     "r.squared", "R\U00B2",
     "adj.r.squared", "Adjusted R\U00B2",

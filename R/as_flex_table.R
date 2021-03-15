@@ -334,6 +334,21 @@ table_styling_to_flextable_calls <- function(x, ...) {
       )
     )
 
+  # horizontal_line_above ------------------------------------------------------
+  if (!is.null(x$table_styling$horizontal_line_above)) {
+    row_number <-
+      eval_tidy(x$table_styling$horizontal_line_above, data = x$table_body) %>%
+      which()
+    flextable_calls[["horizontal_line_above"]] <-
+      expr(
+        flextable::border(
+          i = !!row_number,
+          border.top = officer::fp_border(width = 1),
+          part = "body"
+        )
+      )
+  }
+
   # padding for header ---------------------------------------------------------
   # setting all header rows to the same padding
   flextable_calls[["padding_header"]] <-

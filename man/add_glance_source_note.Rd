@@ -36,7 +36,7 @@ Default is \code{" = "}, e.g. \code{"R2 = 0.456"}}
 \item{...}{additional arguments passed to \code{broom::glance()}}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{deprecated}
 Add the statistics returned in \code{broom::glance()} as a table source note.
 }
 \section{Default Labels}{

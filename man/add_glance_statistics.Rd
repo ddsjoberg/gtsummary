@@ -44,7 +44,7 @@ Default is \code{" = "}, e.g. \code{"R2 = 0.456"}}
 Separator between statistics. Default is \code{"; "}}
 
 \item{text_interpret}{Used when \code{location = "source_note"}.
-String indicates whether text will be interpreted with
+String indicates whether source note text will be interpreted with
 \code{\link[gt:md]{gt::md()}} or \code{\link[gt:html]{gt::html()}}. Must be \code{"md"} (default) or \code{"html"}.}
 }
 \value{
@@ -52,22 +52,37 @@ gtsummary table
 }
 \description{
 \lifecycle{experimental}
-Add model statistics returned from \code{broom::glance()}
+Add model statistics returned from \code{broom::glance()}. Statistics can either
+be appended to the table, or added as a table source note.
 }
 \section{Example Output}{
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_glance_statistics_ex1.png}{options: width=64\%}}
+\if{html}{\figure{add_glance_statistics_ex1.png}{options: width=35\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{add_glance_statistics_ex2.png}{options: width=35\%}}
 }
 
 \examples{
+mod <- lm(age ~ marker + grade, trial) \%>\% tbl_regression()
+
 # Example 1 ----------------------------------
 add_glance_statistics_ex1 <-
-  lm(age ~ marker + grade, trial) \%>\%
-  tbl_regression() \%>\%
+  mod \%>\%
   add_glance_statistics(
     label = list(sigma ~ "\U03C3"),
     include = c(r.squared, AIC, sigma)
+  )
+
+# Example 2 ----------------------------------
+add_glance_statistics_ex2 <-
+  mod \%>\%
+  add_glance_statistics(
+    label = list(sigma ~ "\U03C3"),
+    include = c(r.squared, AIC, sigma),
+    location = "source_note"
   )
 }

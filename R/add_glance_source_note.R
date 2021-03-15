@@ -1,6 +1,6 @@
 #' Add glance statistics
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{deprecated}
 #' Add the statistics returned in `broom::glance()` as a table source note.
 #'
 #' @param x 'tbl_regression' object
