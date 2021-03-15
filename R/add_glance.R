@@ -2,8 +2,8 @@
 #'
 #' \lifecycle{experimental}
 #' Add model statistics returned from `broom::glance()`. Statistics can either
-#' be appended to the table (`add_glance_table`), or added as a
-#' table source note (`add_glance_source_note`).
+#' be appended to the table (`add_glance_table()`), or added as a
+#' table source note (`add_glance_source_note()`).
 #'
 #' @param x 'tbl_regression' object
 #' @param include list of statistics to include in output. Must be column
