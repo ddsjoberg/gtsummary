@@ -195,6 +195,17 @@ table_styling_to_huxtable_calls <- function(x, ...) {
                                value = TRUE))
     )
 
+  # horizontal_line_above ------------------------------------------------------
+  if (!is.null(x$table_styling$horizontal_line_above)) {
+    row_number <-
+      eval_tidy(x$table_styling$horizontal_line_above, data = x$table_body) %>%
+      which()
+    huxtable_calls[["horizontal_line_above"]] <-
+      expr(
+        huxtable::set_top_border(row = !!row_number, value = 0.4)
+      )
+  }
+
   # set_na_string -------------------------------------------------------
   df_fmt_missing <-
     x$table_styling$fmt_missing %>%
