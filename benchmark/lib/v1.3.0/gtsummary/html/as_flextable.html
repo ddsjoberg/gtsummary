@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Convert gtsummary object to a flextable object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for as_flextable {gtsummary}"><tr><td>as_flextable {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert gtsummary object to a flextable object</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+Function converts a gtsummary object to a flextable object.
+A user can use this function if they wish to add customized formatting
+available via the flextable functions. The flextable output is particularly
+useful when combined with R markdown with Word output, since the gt package
+does not support Word.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+as_flextable(x, ...)
+
+## S3 method for class 'gtsummary'
+as_flextable(
+  x,
+  include = everything(),
+  return_calls = FALSE,
+  strip_md_bold = TRUE,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object created by a function from the gtsummary package
+(e.g. <a href="tbl_summary.html">tbl_summary</a> or <a href="tbl_regression.html">tbl_regression</a>)</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Not used</p>
+</td></tr>
+<tr valign="top"><td><code>include</code></td>
+<td>
+<p>Commands to include in output. Input may be a vector of
+quoted or unquoted names. tidyselect and gtsummary select helper
+functions are also accepted.
+Default is <code>everything()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>return_calls</code></td>
+<td>
+<p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
+as a list of expressions.</p>
+</td></tr>
+<tr valign="top"><td><code>strip_md_bold</code></td>
+<td>
+<p>When TRUE, all double asterisk (markdown language for
+bold weight) in column labels and spanning headers are removed.
+Default is TRUE</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A flextable object
+</p>
+
+
+<h3>Details</h3>
+
+<p>The <code>as_flextable()</code> takes the data frame that will be printed and converts
+it to a flextable and formats the table with the following flextable functions.
+</p>
+
+<ol>
+<li> <p><code><a href="../../flextable/html/flextable.html">flextable::flextable()</a></code>
+</p>
+</li>
+<li> <p><code><a href="../../flextable/html/set_header_labels.html">flextable::set_header_labels()</a></code> to set column labels
+</p>
+</li>
+<li> <p><code><a href="../../flextable/html/add_header_row.html">flextable::add_header_row()</a></code>, if applicable, to set spanning column header
+</p>
+</li>
+<li> <p><code><a href="../../flextable/html/align.html">flextable::align()</a></code> to set column alignment
+</p>
+</li>
+<li> <p><code><a href="../../flextable/html/padding.html">flextable::padding()</a></code> to indent variable levels
+</p>
+</li>
+<li> <p><code><a href="../../flextable/html/autofit.html">flextable::autofit()</a></code> to estimate the column widths
+</p>
+</li>
+<li> <p><code><a href="../../flextable/html/footnote.html">flextable::footnote()</a></code> to add table footnotes and source notes
+</p>
+</li>
+<li> <p><code><a href="../../flextable/html/bold.html">flextable::bold()</a></code> to bold cells in data frame
+</p>
+</li>
+<li> <p><code><a href="../../flextable/html/italic.html">flextable::italic()</a></code> to italicize cells in data frame
+</p>
+</li></ol>
+
+<p>Any one of these commands may be omitted using the <code style="white-space: pre;">include=</code> argument.
+</p>
+<p>Pro tip: Use the <code><a href="../../flextable/html/width.html">flextable::width()</a></code> function for exacting control over
+column width after calling <code><a href="as_flextable.html">as_flextable()</a></code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other gtsummary output types: 
+<code><a href="as_gt.html">as_gt</a>()</code>,
+<code><a href="as_kable_extra.html">as_kable_extra</a>()</code>,
+<code><a href="as_kable.html">as_kable</a>()</code>,
+<code><a href="as_tibble.gtsummary.html">as_tibble.gtsummary</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+trial %&gt;%
+  dplyr::select(trt, age, grade) %&gt;%
+  tbl_summary(by = trt) %&gt;%
+  add_p() %&gt;%
+  as_flextable()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.3.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

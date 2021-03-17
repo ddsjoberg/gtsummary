@@ -103,19 +103,31 @@ table_styling_to_kable_extra_calls <- function(x, ...) {
 
   # add_header_above -----------------------------------------------------------
   if (any(!is.na(x$table_styling$header$spanning_header))) {
-    header0 <- x$table_styling$header %>%
+    df_header0 <-
+      x$table_styling$header %>%
       filter(.data$hide == FALSE) %>%
       select(.data$spanning_header) %>%
       mutate(spanning_header = ifelse(is.na(.data$spanning_header),
-                                      " ",
-                                      .data$spanning_header)) %>%
-      group_by(.data$spanning_header) %>%
-      dplyr::summarise(n = n()) %>%
+                                      " ", .data$spanning_header),
+             spanning_header_id = dplyr::row_number())
+    # assigning an ID for each spanning header group
+    for (i in seq(2, nrow(df_header0))) {
+      if(df_header0$spanning_header[i] == df_header0$spanning_header[i-1]) {
+        df_header0$spanning_header_id[i] <- df_header0$spanning_header_id[i-1]
+      }
+    }
+
+    df_header <-
+      df_header0 %>%
+      group_by(.data$spanning_header_id) %>%
+      mutate(width = n()) %>%
+      distinct() %>%
       ungroup()
-    header <- header0$n %>% set_names(header0$spanning_header)
+
+    header <- df_header$width %>% set_names(df_header$spanning_header)
 
     kable_extra_calls[["add_header_above"]] <-
-      expr(kableExtra::add_header_above(!!header))
+      expr(kableExtra::add_header_above(header = !!header))
   }
 
   # footnote -------------------------------------------------------------------

@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Extract class of variable</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for assign_class {gtsummary}"><tr><td>assign_class {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Extract class of variable</h2>
+
+<h3>Description</h3>
+
+<p>Some packages append non-base classes to data frame columns, e.g.
+if data is labeled with the <code>Hmisc</code> package the class of a string will
+be <code>c("labelled", "character")</code> rather than <code>c("character")</code> only.  This
+simple function extracts the base R class.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+assign_class(data, variable)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data frame</p>
+</td></tr>
+<tr valign="top"><td><code>variable</code></td>
+<td>
+<p>string vector of column names from data</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.0.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

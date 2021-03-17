@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Convert tidyselect to variable list</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tidyselect_to_list {gtsummary}"><tr><td>tidyselect_to_list {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert tidyselect to variable list</h2>
+
+<h3>Description</h3>
+
+<p>Functions takes a list of tidyselect formulas, e.g. <code>list(starts_with("age") ~ "continuous")</code>,
+and returns a named list, e.g. <code>list(age = "continuous")</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tidyselect_to_list(.data, x, .meta_data = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>.data</code></td>
+<td>
+<p>data with variables to select from</p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>list of tidyselect formulas</p>
+</td></tr>
+<tr valign="top"><td><code>.meta_data</code></td>
+<td>
+<p>meta data from tbl_summary. Default is NULL</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.1.1 <a href="00Index.html">Index</a>]</div>
+</body></html>
