@@ -30,12 +30,9 @@ jobs:
 
       - name: Install dependencies
         run: |
+          install.packages(c('devtools', 'here', 'gert', 'usethis', 'lubridate', 'readr', 'ggplot2', 'rmarkdown', 'knitr'))
           remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
         shell: Rscript {0}
-
-      - name: Install Other Dependencies
-        run: |
-          Rscript -e "install.packages(c('devtools', 'here', 'gert', 'usethis', 'lubridate', 'readr', 'ggplot2', 'rmarkdown', 'knitr'))"
 
       - name: Install Pandoc
         uses: r-lib/actions/setup-pandoc@9598b8eeb6d88de7d76d580d84443542bbfdffce
