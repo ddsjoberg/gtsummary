@@ -1,14 +1,11 @@
-{gtsummary} benchmark
-================
-March 17, 2021
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-## Execution times
+Execution times
+---------------
 
 **`tbl_sumary()`**
 
-<img src="README_files/figure-gfm/unnamed-chunk-1-1.png" width="100%" />
+<img src="/Users/runner/work/gtsummary/gtsummary/benchmark/README_files/figure-markdown_strict/unnamed-chunk-1-1.png" width="100%" />
 
 The functions used for the benchmark are:
 
