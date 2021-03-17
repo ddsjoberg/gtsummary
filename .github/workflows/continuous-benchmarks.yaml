@@ -16,7 +16,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          Rscript -e "install.packages(c('devtools', 'here', 'gert', 'purrr', 'usethis', 'lubridate', 'readr', 'forcats', 'ggplot2', 'rmarkdown', 'knitr'))"
+          Rscript -e "install.packages(c('devtools', 'dplyr', 'here', 'gert', 'purrr', 'usethis', 'lubridate', 'readr', 'forcats', 'ggplot2', 'rmarkdown', 'knitr'))"
 
       - name: Install Pandoc
         uses: r-lib/actions/setup-pandoc@9598b8eeb6d88de7d76d580d84443542bbfdffce
