@@ -39,9 +39,9 @@ big_trial <- purrr::map_dfr(seq_len(100), ~gtsummary::trial)
 # The functions to be tested:
 functions_list <-
   alist(
-    simple= tbl_summary(trial),
-    complex=tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q(quiet = TRUE) %>% add_n(),
-    big_data = big_trial %>% select(age, grade, trt) %>% tbl_summary(by = trt, missing = 'no') %>% add_p()
+    simple = tbl_summary(trial),
+    complex = tbl_summary(trial, by = trt) %>% add_overall() %>% add_p() %>% add_q() %>% add_n(),
+    big_data = big_trial %>% dplyr::select(age, grade, trt) %>% tbl_summary(by = trt, missing = 'no') %>% add_p()
   )
 
 # run benchmark on current version ---------------------------------------------
@@ -90,6 +90,7 @@ for (gtversion in c(df_tags$name, "master")) {
       }
     )
   }
+  else usethis::ui_done("    No need to update")
 
   detach("package:gtsummary", unload = TRUE)
 }
