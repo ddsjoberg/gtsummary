@@ -64,7 +64,7 @@ for (gtversion in c(df_tags$name, "master")) {
 
   # only run benchmark if old version is more than 60 days old -----------------
   output_filename_ext <- file.path("benchmark", "results", paste0("benchmark_", gtversion, ".csv"))
-  output_filename = here::here(output_filename_ext)
+  output_filename <- here::here(output_filename_ext)
 
   days_since_last_update <-
     gert::git_ls() %>%
@@ -73,8 +73,8 @@ for (gtversion in c(df_tags$name, "master")) {
     lubridate::as_date() %>%
     lubridate::interval(Sys.Date()) / lubridate::ddays()
 
-  if (!file.exists(output_filename) || (days_since_last_update < 45 && runif(1) < 0.2)) {
-    usethis::ui_done("Working on {usethis::ui_value(gtversion)}")
+  usethis::ui_done("Working on {usethis::ui_value(gtversion)}")
+  if (!file.exists(output_filename) || (days_since_last_update > 45 && runif(1) < 0.2)) {
     tryCatch(
       microbenchmark::microbenchmark(
         list = functions_list,
@@ -82,7 +82,7 @@ for (gtversion in c(df_tags$name, "master")) {
         unit = "s"
       ) %>%
         summary() %>%
-        dplyr::mutate(version = "current") %>%
+        dplyr::mutate(version = gtversion) %>%
         write.csv(file = output_filename),
       error = function(e) {
         usethis::ui_oops("    Failed to benchmark")
