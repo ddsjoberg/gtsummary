@@ -1,7 +1,8 @@
 library(magrittr)
+library(ggplot2)
 
 # install previous releases of gtsummary ---------------------------------------
-df_tags <- gert::git_tag_list()
+df_tags <- gert::git_tag_list() %>% dplyr::arrange(name)
 
 # install version to folder if not already installed
 purrr::walk(
@@ -87,6 +88,7 @@ for (gtversion in c(df_tags$name, "master")) {
       error = function(e) {
         usethis::ui_oops("    Failed to benchmark")
         message(as.character(e))
+        unlink(output_filename) # delete file if one exists
       }
     )
   }
@@ -96,9 +98,28 @@ for (gtversion in c(df_tags$name, "master")) {
 }
 
 
+# import benchmark results -----------------------------------------------------
+df_results <-
+  list.files(here::here("benchmark", "results"), full.names = TRUE) %>%
+  purrr::map_dfr(readr::read_csv) %>%
+  dplyr::mutate(
+    version =
+      factor(version, levels = c(df_tags$name, "master", "current")) %>%
+      forcats::fct_drop()
+  ) %>%
+  dplyr::select(version, expr, median, lq, uq)
 
-
-
+# plot results -----------------------------------------------------------------
+df_results %>%
+  ggplot(aes(x = version, y = median, group = 1)) +
+  geom_point() +
+  geom_ribbon(aes(ymin = lq, ymax = uq), alpha = 0.3) +
+  facet_wrap(vars(expr), ncol = 1, scales = "free_y") +
+  labs(
+    y = "seconds",
+    x = " ",
+    titel = "tbl_summary()"
+  )
 
 
 
