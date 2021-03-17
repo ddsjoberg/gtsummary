@@ -1,22 +1,14 @@
 {gtsummary} benchmark
 ================
-March 16, 2021
+March 17, 2021
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<!-- This css stuff is just to enable rmarkdown to use a wider area of screen -->
-<!-- <style type="text/css"> -->
-<!-- .main-container { -->
-<!--   max-width: 1800px; -->
-<!--   margin-left: auto; -->
-<!--   margin-right: auto; -->
-<!-- } -->
-<!-- </style> -->
 
 ## Execution times
 
-<img src="benchmark.png" width="80%" />
+**`tbl_sumary()`**
 
-<img src="benchmark_jitter.png" width="80%" />
+<img src="README_files/figure-gfm/unnamed-chunk-1-1.png" width="100%" />
 
 The functions used for the benchmark are:
 

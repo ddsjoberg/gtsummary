@@ -25,7 +25,7 @@ jobs:
 
       - name: Build RMD REPORT
         run: |
-          Rscript -e 'rmarkdown::render(input = here::here("benchmark/README.Rmd"), output_file = here::here("benchmark/README.md"),  clean = TRUE)'
+          Rscript -e 'rmarkdown::render(input = here::here("benchmark/README.Rmd"), output_file = here::here("benchmark/README.md"),  clean = TRUE, output_format = "md_document")'
 
       - name: Commit files
         run: |

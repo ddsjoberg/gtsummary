@@ -47,7 +47,6 @@ functions_list <-
 
 # run benchmark on current version ---------------------------------------------
 library(gtsummary)
-set_gtsummary_theme(list("pkgwide-lgl:quiet" = TRUE))
 
 microbenchmark::microbenchmark(
   list = functions_list,
@@ -60,11 +59,13 @@ microbenchmark::microbenchmark(
 
 detach("package:gtsummary", unload = TRUE)
 
+
 # run benchmark for other versions ---------------------------------------------
 for (gtversion in c(df_tags$name, "master")) {
+  # load previous version of gtsummary
   library(gtsummary, lib.loc = here::here("benchmark", "lib", gtversion))
 
-  # only run benchmark if old version is more than 60 days old -----------------
+  # only run benchmark if old version is more than 45 days old -----------------
   output_filename_ext <- file.path("benchmark", "results", paste0("benchmark_", gtversion, ".csv"))
   output_filename <- here::here(output_filename_ext)
 
@@ -76,7 +77,10 @@ for (gtversion in c(df_tags$name, "master")) {
     lubridate::interval(Sys.Date()) / lubridate::ddays()
 
   usethis::ui_done("Working on {usethis::ui_value(gtversion)}")
+  # old benchmark results updates have random compenent so all versions don't
+  # udpate on the same day...they take a long time to run....
   if (!file.exists(output_filename) || (days_since_last_update > 45 && runif(1) < 0.2)) {
+    # using tryCatch as some old versions will just fail because the code is out of date
     tryCatch(
       microbenchmark::microbenchmark(
         list = functions_list,
@@ -120,4 +124,5 @@ gg_bench_tbl_summary <-
   labs(
     y = "seconds",
     x = " "
-  )
+  ) +
+  theme(axis.text.x = element_text(angle = 90))
