@@ -14,9 +14,28 @@ jobs:
       - name: Setup R
         uses: r-lib/actions/setup-r@master
 
+      - name: Query dependencies
+        run: |
+          install.packages('remotes')
+          saveRDS(remotes::dev_package_deps(dependencies = c("Depends", "Imports")), ".github/bench_depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
+      - name: Cache R packages
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/bench_depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+
       - name: Install dependencies
         run: |
-          Rscript -e "install.packages(c('devtools', 'dplyr', 'here', 'gert', 'purrr', 'usethis', 'lubridate', 'readr', 'forcats', 'ggplot2', 'rmarkdown', 'knitr'))"
+          remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
+        shell: Rscript {0}
+
+      - name: Install Other Dependencies
+        run: |
+          Rscript -e "install.packages(c('devtools', 'here', 'gert', 'usethis', 'lubridate', 'readr', 'ggplot2', 'rmarkdown', 'knitr'))"
 
       - name: Install Pandoc
         uses: r-lib/actions/setup-pandoc@9598b8eeb6d88de7d76d580d84443542bbfdffce
