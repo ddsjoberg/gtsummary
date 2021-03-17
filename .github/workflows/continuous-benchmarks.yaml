@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages(c('devtools', 'here', 'gert', 'usethis', 'lubridate', 'readr', 'ggplot2', 'rmarkdown', 'knitr'))
+          install.packages(c('devtools', 'microbenchmark', 'here', 'gert', 'usethis', 'lubridate', 'readr', 'ggplot2', 'rmarkdown', 'knitr'))
           remotes::install_deps(dependencies = c("Depends", "Imports")) # don't need suggests to run most fns
         shell: Rscript {0}
 
