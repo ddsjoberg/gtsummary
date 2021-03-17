@@ -74,6 +74,7 @@ for (gtversion in c(df_tags$name, "master")) {
     lubridate::interval(Sys.Date()) / lubridate::ddays()
 
   usethis::ui_done("Working on {usethis::ui_value(gtversion)}")
+  browser()
   if (!file.exists(output_filename) || (days_since_last_update > 45 && runif(1) < 0.2)) {
     tryCatch(
       microbenchmark::microbenchmark(
