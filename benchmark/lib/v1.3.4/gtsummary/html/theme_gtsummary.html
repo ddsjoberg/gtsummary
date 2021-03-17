@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Available gtsummary themes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for theme_gtsummary {gtsummary}"><tr><td>theme_gtsummary {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Available gtsummary themes</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+The following themes are available to use within the gtsummary package.
+Use the <code><a href="set_gtsummary_theme.html">set_gtsummary_theme()</a></code> function to set a theme.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+theme_gtsummary_journal(journal = c("jama", "lancet"), set_theme = TRUE)
+
+theme_gtsummary_compact(set_theme = TRUE)
+
+theme_gtsummary_printer(
+  print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
+  set_theme = TRUE
+)
+
+theme_gtsummary_language(
+  language = c("de", "en", "es", "fr", "gu", "hi", "ja", "mr", "pt", "se", "zh-cn",
+    "zh-tw"),
+  decimal.mark = NULL,
+  big.mark = NULL,
+  iqr.sep = NULL,
+  ci.sep = NULL,
+  set_theme = TRUE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>journal</code></td>
+<td>
+<p>String indicating the journal theme to follow.
+</p>
+
+<ul>
+<li> <p><code>"jama"</code> Journal of the American Medical Association
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>set_theme</code></td>
+<td>
+<p>Logical indicating whether to set the theme. Default is <code>TRUE</code>.
+When <code>FALSE</code> the named list of theme elements is returned invisibly.</p>
+</td></tr>
+<tr valign="top"><td><code>print_engine</code></td>
+<td>
+<p>String indicating the print engine. Default is <code>"gt"</code></p>
+</td></tr>
+<tr valign="top"><td><code>language</code></td>
+<td>
+<p>String indicating language. Must be one of
+</p>
+
+<ul>
+<li> <p><code>"de"</code> (German)
+</p>
+</li>
+<li> <p><code>"en"</code> (English)
+</p>
+</li>
+<li> <p><code>"es"</code> (Spanish)
+</p>
+</li>
+<li> <p><code>"fr"</code> (French)
+</p>
+</li>
+<li> <p><code>"gu"</code> (Gujarati)
+</p>
+</li>
+<li> <p><code>"hi"</code> (Hindi)
+</p>
+</li>
+<li> <p><code>"ja"</code> (Japanese)
+</p>
+</li>
+<li> <p><code>"mr"</code> (Marathi)
+</p>
+</li>
+<li> <p><code>"pt"</code> (Portuguese)
+</p>
+</li>
+<li> <p><code>"se"</code> (Swedish)
+</p>
+</li>
+<li> <p><code>"zh-cn"</code> Chinese (Simplified)
+</p>
+</li>
+<li> <p><code>"zh-tw"</code> Chinese (Traditional)
+</p>
+</li></ul>
+
+<p>If a language is missing a translation for a word or phrase, please feel free
+to reach out on <a href="https://github.com/ddsjoberg/gtsummary/issues">GitHub</a>
+with the translated text!</p>
+</td></tr>
+<tr valign="top"><td><code>decimal.mark</code></td>
+<td>
+<p>The character to be used to indicate the numeric decimal point.
+Default is <code>"."</code>  or <code>getOption("OutDec")</code></p>
+</td></tr>
+<tr valign="top"><td><code>big.mark</code></td>
+<td>
+<p>Character used between every 3 digits to separate
+hundreds/thousands/millions/etc.
+Default is <code>","</code>, except when <code>decimal.mark = ","</code> when the default is a space.</p>
+</td></tr>
+<tr valign="top"><td><code>iqr.sep</code></td>
+<td>
+<p>string indicating separator for the default IQR in <code>tbl_summary()</code>.
+If <code style="white-space: pre;">decimal.mark=</code> is NULL, <code style="white-space: pre;">iqr.sep=</code> is <code>", "</code>. The comma
+separator, however, can look odd when <code>decimal.mark = ","</code>. In this case the argument
+will default to an en dash</p>
+</td></tr>
+<tr valign="top"><td><code>ci.sep</code></td>
+<td>
+<p>string indicating separator for confidence intervals.
+If <code style="white-space: pre;">decimal.mark=</code> is NULL, <code style="white-space: pre;">ci.sep=</code> is <code>", "</code>. The comma
+separator, however, can look odd when <code>decimal.mark = ","</code>. In this case the argument
+will default to an en dash</p>
+</td></tr>
+</table>
+
+
+<h3>Themes</h3>
+
+
+<ul>
+<li> <p><code>theme_gtsummary_journal(journal=)</code>
+</p>
+
+<ul>
+<li> <p><code>"jama"</code>
+</p>
+
+<ul>
+<li><p> sets theme to align with the JAMA reporting guidelines
+</p>
+</li>
+<li><p> large p-values are rounded to two decimal places
+</p>
+</li>
+<li><p> in <code>tbl_summary()</code> the IQR is separated with a dash, rather than comma
+</p>
+</li>
+<li><p> in <code>tbl_summary()</code> the percent symbol is not printed next to percentages
+</p>
+</li></ul>
+
+</li>
+<li> <p><code>"lancet"</code>
+</p>
+
+<ul>
+<li><p> sets theme to align with the The Lancet reporting guidelines
+</p>
+</li>
+<li><p> large p-values are rounded to two decimal places
+</p>
+</li>
+<li><p> in <code>tbl_summary()</code> the IQR is separated with a dash, rather than comma
+</p>
+</li>
+<li><p> confidence intervals are separated with <code style="white-space: pre;">4.5 to 7.8</code>, rather than a comma
+</p>
+</li></ul>
+
+</li></ul>
+
+</li>
+<li> <p><code>theme_gtsummary_compact()</code>
+</p>
+
+<ul>
+<li><p> tables printed with gt or flextable will be compact with smaller font size and reduced cell padding
+</p>
+</li></ul>
+
+</li>
+<li> <p><code>theme_gtsummary_printer(print_engine=)</code>
+</p>
+
+<ul>
+<li> <p><code>"gt"</code> sets the gt package as the default print engine
+</p>
+</li>
+<li> <p><code>"kable"</code> sets the <code>knitr::kable()</code> function as the default print engine
+</p>
+</li>
+<li> <p><code>"flextable"</code> sets the flextable package as the default print engine
+</p>
+</li>
+<li> <p><code>"kable_extra"</code> sets the kableExtra package as the default print engine
+</p>
+</li></ul>
+
+</li></ul>
+
+<p>Use <code>reset_gtsummary_theme()</code> to restore the default settings
+</p>
+<p>Review the <a href="http://www.danieldsjoberg.com/gtsummary/articles/themes.html">themes vignette</a>
+to create your own themes.
+</p>
+
+
+<h3>Example Output</h3>
+
+<p>Example
+</p>
+<p><img src="../help/figures/set_gtsummary_theme_ex1.png" width=70% />
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="set_gtsummary_theme.html">set_gtsummary_theme()</a></code>
+</p>
+<p><a href="http://www.danieldsjoberg.com/gtsummary/articles/themes.html">Themes vignette</a>
+</p>
+<p><code>set_gtsummary_theme()</code>, <code>reset_gtsummary_theme()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Setting JAMA theme for gtsummary
+theme_gtsummary_journal("jama")
+# Themes can be combined by including more than one
+theme_gtsummary_compact()
+
+set_gtsummary_theme_ex1 &lt;-
+  trial %&gt;%
+  dplyr::select(age, grade, trt) %&gt;%
+  tbl_summary(by = trt) %&gt;%
+  add_stat_label() %&gt;%
+  as_gt()
+
+# reset gtsummary themes
+reset_gtsummary_theme()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.3.4 <a href="00Index.html">Index</a>]</div>
+</body></html>

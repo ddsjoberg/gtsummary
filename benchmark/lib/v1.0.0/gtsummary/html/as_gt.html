@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Convert to gt_tbl object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for as_gt {gtsummary}"><tr><td>as_gt {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert to gt_tbl object</h2>
+
+<h3>Description</h3>
+
+<p>Function converts object to a gt_tbl object.  This function is used in the
+background when the results are printed or knit.  A user can use this function
+if they wish to add customized formatting available via the
+<a href="https://gt.rstudio.com/index.html">gt package</a>.  Review the
+<a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html">tbl_summary vignette</a>
+or
+<a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html">tbl_regression vignette</a>
+for detailed examples in the 'Advanced Customization' section.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+as_gt(x, omit = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>object created by a function from the gtsummary package
+(e.g. <code><a href="tbl_summary.html">tbl_summary</a></code> or <code><a href="tbl_regression.html">tbl_regression</a></code>)</p>
+</td></tr>
+<tr valign="top"><td><code>omit</code></td>
+<td>
+<p>vector of gt commands to omit. Default is <code>NULL</code></p>
+</td></tr>
+</table>
+
+
+<h3>Example Output</h3>
+
+<p><img src="../help/figures/as_gt_ex.png" width=50% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="tbl_summary.html">tbl_summary</a> <a href="tbl_regression.html">tbl_regression</a> <a href="tbl_uvregression.html">tbl_uvregression</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+as_gt_ex &lt;-
+  trial %&gt;%
+  tbl_summary(by = "trt") %&gt;%
+  as_gt()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.0.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
