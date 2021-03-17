@@ -1,6 +1,8 @@
-on: push
+on:
+  push:
+  pull_request:
 
-name: Continuous Benchmarks GTS
+name: Continuous Benchmark
 
 jobs:
   build:
@@ -9,23 +11,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@master
 
-      - name: Create required directories
-        run: |
-          cd /Users/runner/work/gtsummary/gtsummary/benchmark
-          mkdir lib
-          cd lib
-          mkdir cran
-          cd /Users/runner/work/gtsummary/gtsummary/benchmark/lib
-          mkdir github
-          cd /Users/runner/work/gtsummary/gtsummary/benchmark/lib
-          ls
-
       - name: Setup R
         uses: r-lib/actions/setup-r@master
 
       - name: Install dependencies
         run: |
-          Rscript -e "install.packages(c('remotes'))"
+          Rscript -e "install.packages(c('devtools', 'here', 'gert', 'purrr', 'usethis', 'lubridate'))"
 
       - name: Install Pandoc
         uses: r-lib/actions/setup-pandoc@9598b8eeb6d88de7d76d580d84443542bbfdffce
@@ -37,18 +28,15 @@ jobs:
           source("benchmark/benchmark_gts.R")
         shell: Rscript {0}
 
-      - name: Build RMD REPORT
-        run: |
-          Rscript -e 'install.packages(c("rmarkdown", "here", "knitr")); rmarkdown::render(input = here::here("benchmark/README.Rmd"), output_file = here::here("benchmark/README.md"),  clean = T)'
+      # - name: Build RMD REPORT
+      #   run: |
+      #     Rscript -e 'install.packages(c("rmarkdown", "knitr"))'
+      #             -e 'rmarkdown::render(input = here::here("benchmark/README.Rmd"), output_file = here::here("benchmark/README.md"),  clean = T)'
 
       - name: Commit files
         run: |
           git config --global user.email "ghau@example.com"
           git config --global user.name "GitHub Actions User"
-          git add /Users/runner/work/gtsummary/gtsummary/benchmark/benchmark.csv
-          git add /Users/runner/work/gtsummary/gtsummary/benchmark/benchmark.png
-          git add /Users/runner/work/gtsummary/gtsummary/benchmark/benchmark_jitter.png
-          git add /Users/runner/work/gtsummary/gtsummary/benchmark/README.md
-          git add /Users/runner/work/gtsummary/gtsummary/benchmark/benchmark_summary.csv
+          git add --all
           git commit -am "continous benchmark autocommit"
           git push
