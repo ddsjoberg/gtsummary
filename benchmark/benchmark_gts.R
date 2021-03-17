@@ -74,6 +74,7 @@ for (gtversion in c(df_tags$name, "master")) {
     lubridate::interval(Sys.Date()) / lubridate::ddays()
 
   if (!file.exists(output_filename) || (days_since_last_update < 45 && runif(1) < 0.2)) {
+    usethis::ui_done("Working on {usethis::ui_value(gtversion)}")
     tryCatch(
       microbenchmark::microbenchmark(
         list = functions_list,
@@ -82,7 +83,11 @@ for (gtversion in c(df_tags$name, "master")) {
       ) %>%
         summary() %>%
         dplyr::mutate(version = "current") %>%
-        write.csv(file = output_filename)
+        write.csv(file = output_filename),
+      error = function(e) {
+        usethis::ui_oops("    Failed to benchmark")
+        message(as.character(e))
+      }
     )
   }
 
