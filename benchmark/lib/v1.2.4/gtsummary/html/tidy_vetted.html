@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Vetted tidy models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tidy_vetted {gtsummary}"><tr><td>tidy_vetted {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Vetted tidy models</h2>
+
+<h3>Description</h3>
+
+<p>Below is a list of models vetted for use
+in <a href="tbl_regression.html">tbl_regression</a> and <a href="tbl_uvregression.html">tbl_uvregression</a>.  If a model is passed to these
+functions and the model is not listed below and  a <code>tidy()</code> function is
+not specified in the <code style="white-space: pre;">tidy_fun=</code> argument, the model object will be passed
+to <a href="../../broom/html/tidy.html">broom::tidy</a>.
+</p>
+
+<ul>
+<li><p><a href="../../stats/html/lm.html">stats::lm</a>
+</p>
+</li>
+<li><p><a href="../../stats/html/glm.html">stats::glm</a>
+</p>
+</li>
+<li><p><a href="../../survival/html/coxph.html">survival::coxph</a>
+</p>
+</li>
+<li><p><a href="../../survival/html/survreg.html">survival::survreg</a>
+</p>
+</li>
+<li><p><a href="../../lme4/html/glmer.html">lme4::glmer</a>
+</p>
+</li>
+<li><p><a href="../../lme4/html/lmer.html">lme4::lmer</a>
+</p>
+</li>
+<li><p><a href="../../geepack/html/geeglm.html">geepack::geeglm</a>
+</p>
+</li></ul>
+
+
+
+<h3>model support</h3>
+
+<p>If <a href="../../broom/html/tidy.html">broom::tidy</a> or <a href="../../broom.mixed/html/tidy.html">broom.mixed::tidy</a> support a class of model not listed
+above, please submit a <a href="https://github.com/ddsjoberg/gtsummary/issues">GitHub Issue</a>.
+The model can be added to the list of vetted models and unit tests will be
+put in place to ensure continued support for the model.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.2.4 <a href="00Index.html">Index</a>]</div>
+</body></html>

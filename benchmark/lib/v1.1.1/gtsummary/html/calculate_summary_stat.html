@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: This function takes in the meta data table, and calls the...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for calculate_summary_stat {gtsummary}"><tr><td>calculate_summary_stat {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>This function takes in the meta data table, and calls the appropriate summarize function.</h2>
+
+<h3>Description</h3>
+
+<p>This function takes in the meta data table, and calls the appropriate summarize function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+calculate_summary_stat(data, variable, by, summary_type, dichotomous_value,
+  var_label, stat_display, digits, class, missing, missing_text, sort,
+  row_percent)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>Data frame</p>
+</td></tr>
+<tr valign="top"><td><code>variable</code></td>
+<td>
+<p>Character variable name in <code>data</code> that will be tabulated</p>
+</td></tr>
+<tr valign="top"><td><code>by</code></td>
+<td>
+<p>Character variable name in<code>data</code> that Summary statistics for
+<code>variable</code> are stratified</p>
+</td></tr>
+<tr valign="top"><td><code>summary_type</code></td>
+<td>
+<p>A list that includes specified summary types.</p>
+</td></tr>
+<tr valign="top"><td><code>dichotomous_value</code></td>
+<td>
+<p>If the output is dichotomous, then this is the value</p>
+</td></tr>
+<tr valign="top"><td><code>var_label</code></td>
+<td>
+<p>String label</p>
+</td></tr>
+<tr valign="top"><td><code>stat_display</code></td>
+<td>
+<p>String that specifies the format of the displayed statistics.
+The syntax follows <code>glue::glue()</code> inputs with n, N, and p as input options.
+of the variable that will be displayed.</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>integer indicating the number of decimal places to be used.</p>
+</td></tr>
+<tr valign="top"><td><code>class</code></td>
+<td>
+<p>variable class.  If class is NA, then all values are NA, and no
+summary statistics will be calculated.</p>
+</td></tr>
+<tr valign="top"><td><code>missing</code></td>
+<td>
+<p>whether to include NA values in the table. <code>missing</code> controls
+if the table includes counts of NA values: the allowed values correspond to
+never (&quot;no&quot;), only if the count is positive (&quot;ifany&quot;) and even for
+zero counts (&quot;always&quot;). Default is &quot;ifany&quot;.</p>
+</td></tr>
+<tr valign="top"><td><code>missing_text</code></td>
+<td>
+<p>String to display for count of missing observations.</p>
+</td></tr>
+<tr valign="top"><td><code>sort</code></td>
+<td>
+<p>string indicating whether to sort categorical
+variables by 'alphanumeric' or 'frequency'</p>
+</td></tr>
+<tr valign="top"><td><code>row_percent</code></td>
+<td>
+<p>Logical value indicating whether to calculate
+percentages within column to across rows</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.1.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

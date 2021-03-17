@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Calculates and formats summary statistics for continuous data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for summarize_continuous {gtsummary}"><tr><td>summarize_continuous {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Calculates and formats summary statistics for continuous data</h2>
+
+<h3>Description</h3>
+
+<p>Calculates and formats summary statistics for continuous data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+summarize_continuous(data, variable, by, digits, var_label, stat_display,
+  missing, missing_text)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data frame</p>
+</td></tr>
+<tr valign="top"><td><code>variable</code></td>
+<td>
+<p>Character variable name in <code>data</code> that will be tabulated</p>
+</td></tr>
+<tr valign="top"><td><code>by</code></td>
+<td>
+<p>Character variable name in <code>data</code> that Summary statistics for
+<code>variable</code> are stratified</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>vector of integers (or single integer) indicating the number
+of decimal places to be used for rounding.</p>
+</td></tr>
+<tr valign="top"><td><code>var_label</code></td>
+<td>
+<p>string label</p>
+</td></tr>
+<tr valign="top"><td><code>stat_display</code></td>
+<td>
+<p>String that specifies the format of the displayed statistics.
+The syntax follows <code><a href="../../glue/html/glue.html">glue</a></code> inputs with n, N, and p as input options.</p>
+</td></tr>
+<tr valign="top"><td><code>missing</code></td>
+<td>
+<p>whether to include <code>NA</code> values in the table. <code>missing</code> controls
+if the table includes counts of <code>NA</code> values: the allowed values correspond to
+never (<code>"no"</code>), only if the count is positive (<code>"ifany"</code>) and even for
+zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>missing_text</code></td>
+<td>
+<p>String to display for count of missing observations.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>formatted summary statistics in a tibble.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.0.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
