@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create a table of summary statistics</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tbl_summary {gtsummary}"><tr><td>tbl_summary {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create a table of summary statistics</h2>
+
+<h3>Description</h3>
+
+<p>The <code>tbl_summary</code> function calculates descriptive statistics for
+continuous, categorical, and dichotomous variables.  Review the
+<a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html">tbl_summary vignette</a>
+for detailed examples.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tbl_summary(data, by = NULL, label = NULL, type = NULL,
+  value = NULL, statistic = NULL, digits = NULL, group = NULL,
+  missing = c("ifany", "always", "no"), missing_text = "Unknown",
+  sort = NULL, row_percent = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data frame</p>
+</td></tr>
+<tr valign="top"><td><code>by</code></td>
+<td>
+<p>a character vector specifying a column in data.
+Summary statistics will be calculated separately for each level of the <code>by</code> variable.
+If <code>NULL</code>, summary statistics
+are calculated using all observations.</p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>named list of variable labels,
+e.g. <code>list(age = "Age, yrs", ptstage = "Path T Stage")</code>.  If <code>NULL</code>, the function
+will take the label attribute (<code>attr(data$age, "label")</code>).  If
+attribute label is <code>NULL</code>, the variable name will be used.</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>named list that includes specified summary types.  Accepted values
+are <code>c("continuous", "categorical", "dichotomous")</code>,
+e.g. <code>type = list(age = "continuous", female = "dichotomous")</code>.
+If type not specified for a variable, the function
+will default to an appropriate summary type.  See below for details.</p>
+</td></tr>
+<tr valign="top"><td><code>value</code></td>
+<td>
+<p>named list that specifies the value to display for dichotomous
+variables.  See below for details.</p>
+</td></tr>
+<tr valign="top"><td><code>statistic</code></td>
+<td>
+<p>named list of the type of statistics to return for each variable
+or variable class.  The default is
+<code>list(..continuous.. = "{median} ({p25}, {p75})", ..categorical.. = "{n} ({p}%)")</code>.
+See below for details.</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>named list of integers indicating the number of decimal
+places to round continuous summary statistics. Names of the list can be any
+continuous variable in 'data', or <code>"..continuous"</code> to apply rounding to all
+variables.  If not specified, <code>tbl_summary</code> does its best to guess an
+appropriate level to round statistics.  To round statistics to different
+levels, supply a vector rather than an integer.  For example, if the
+statistic being calculated is <code>"{mean} ({sd})"</code> and you want the mean rounded
+to 1 decimal place, and the SD to 2 use <code>digits = list(age = c(1, 2))</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>group</code></td>
+<td>
+<p>character vector of an ID or grouping variable.  Summary statistics
+will not be printed for this column. The column may be used in <a href="add_comparison.html">add_comparison</a> to
+calculate p-values with correlated data. Default is <code>NULL</code></p>
+</td></tr>
+<tr valign="top"><td><code>missing</code></td>
+<td>
+<p>indicates whether to include counts of <code>NA</code> values in the table.
+allowed values are
+never (<code>"no"</code>), only if the count is positive (<code>"ifany"</code>) and even for
+zero counts (<code>"always"</code>). Default is <code>"ifany"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>missing_text</code></td>
+<td>
+<p>String to display for count of missing observations.
+Default is <code>"Unknown"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>sort</code></td>
+<td>
+<p>named list indicating the type of sorting to perform. Default is NULL.
+Options are 'frequency' where results are sorted in
+descending order of frequency and 'alphanumeric'</p>
+</td></tr>
+<tr valign="top"><td><code>row_percent</code></td>
+<td>
+<p>logical value indicating whether to calculate
+percentages within column to across rows.  Default is to calculate
+percentages within columns: <code>row_percent = FALSE</code></p>
+</td></tr>
+</table>
+
+
+<h3>statistic argument</h3>
+
+<p>The statistic argument specifies the statistics presented in the table. The
+input is a named list where the names correspond the column names from the
+input 'data' and the elements specify the statistic to report. For example,
+<code>statistic = list(age = "{mean} ({sd})")</code> would report the mean and
+standard deviation for age. A statistic name that appears between curly brackets
+will be replaced with the numeric statistic (see <a href="../../glue/html/glue.html">glue::glue</a>).
+</p>
+<p>For categorical variables the following statistics are available to display.
+</p>
+
+<ul>
+<li> <p><code>{n}</code> frequency
+</p>
+</li>
+<li> <p><code>{N}</code> denominator, or cohort size
+</p>
+</li>
+<li> <p><code>{p}</code> percent formatted by <a href="style_percent.html">style_percent</a>
+</p>
+</li></ul>
+
+<p>For continuous variables the following statistics are available to display.
+</p>
+
+<ul>
+<li> <p><code>{median}</code> median
+</p>
+</li>
+<li> <p><code>{mean}</code> mean
+</p>
+</li>
+<li> <p><code>{sd}</code> standard deviation
+</p>
+</li>
+<li> <p><code>{var}</code> variance
+</p>
+</li>
+<li> <p><code>{min}</code> minimum
+</p>
+</li>
+<li> <p><code>{max}</code> maximum
+</p>
+</li>
+<li> <p><code>{p##}</code> any integer percentile, where <code>##</code> is an integer from 0 to 100
+</p>
+</li>
+<li> <p><code>{foo}</code> any function of the form <code>foo(x)</code> is accepted where <code>x</code> is a numeric vector
+</p>
+</li></ul>
+
+<p>If all continuous or categorical variables will be summarized with the same
+statistics, the <code>..continuous..</code> and <code>..categorical..</code> shortcuts can be used
+in place of the individual column names.  Dichotomous variables are summarized
+as categorical variables.
+</p>
+
+
+<h3>type argument</h3>
+
+<p>tbl_summary displays summary statistics for three types of data:
+continuous, categorical, and dichotomous. If the type is not specified,
+tbl_summary will do its best to guess the type.  Dichotomous variables
+are categorical variables that are displayed on a single row in the
+output table, rather than one row per level of the variable.
+Variables coded as TRUE/FALSE, 0/1, or yes/no are assumed to be dichotomous,
+and the TRUE, 1, and yes rows
+will be displayed.  Otherwise, the value to display must be specified in
+the <code>value</code> argument, e.g. <code>value = list(varname = "level to show")</code>
+</p>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/tbl_summary_ex1.png" width=31% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/tbl_summary_ex2.png" width=45% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tbl_summary tools: <code><a href="add_comparison.html">add_comparison</a></code>,
+<code><a href="add_n.html">add_n</a></code>, <code><a href="add_overall.html">add_overall</a></code>,
+<code><a href="add_q.tbl_summary.html">add_q.tbl_summary</a></code>,
+<code><a href="add_stat_label.html">add_stat_label</a></code>,
+<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="cols_label_summary.html">cols_label_summary</a></code>,
+<code><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+tbl_summary_ex1 &lt;-
+  trial %&gt;%
+  dplyr::select(age, grade, response) %&gt;%
+  tbl_summary()
+
+tbl_summary_ex2 &lt;-
+  trial %&gt;%
+  dplyr::select(age, grade, response, trt) %&gt;%
+  tbl_summary(
+    by = "trt",
+    label = list(age = "Patient Age")
+  )
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.0.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
