@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("car"))
 
 library(Hmisc)
 mod1 <- lm(age ~ marker + I(marker^2) + stage,

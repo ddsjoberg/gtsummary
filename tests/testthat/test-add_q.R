@@ -21,6 +21,7 @@ test_that("expect error if no p value in table 1", {
 
 
 test_that("no errors/warnings with standard use after tbl_uvregression() and add_global_p()", {
+  skip_if_not(requireNamespace("car"))
   uni_reg <- trial %>%
     tbl_uvregression(
       method = lm,
