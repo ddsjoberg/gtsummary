@@ -16,9 +16,9 @@ to \code{broom::tidy} or \code{broom.mixed::tidy}.
 \item{\link[survival:coxph]{survival::coxph}}
 \item{\link[survival:clogit]{survival::clogit}}
 \item{\link[survival:survreg]{survival::survreg}}
-\item{\link[lme4:glmer]{lme4::glmer}}
-\item{\link[lme4:lmer]{lme4::lmer}}
-\item{\link[geepack:geeglm]{geepack::geeglm}}
+\item{\code{lme4::glmer}}
+\item{\code{lme4::lmer}}
+\item{\code{geepack::geeglm}}
 }
 }
 \section{model support}{
