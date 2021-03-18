@@ -203,17 +203,17 @@ Adds p-values to tables created by <code>tbl_svysummary</code> by comparing valu
       <td><p>List of formulas specifying statistical tests to perform,
 e.g. <code><a href='https://rdrr.io/r/base/list.html'>list(all_continuous() ~ "svy.t.test", all_categorical() ~ "svy.wald.test")</a></code>.
 Options include</p><ul>
-<li><p><code>"svy.t.test"</code> for a t-test adapted to complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyttest.html'>survey::svyttest</a>),</p></li>
-<li><p><code>"svy.wilcox.test"</code> for a Wilcoxon rank-sum test for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
-<li><p><code>"svy.kruskal.test"</code> for a Kruskal-Wallis rank-sum test for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
-<li><p><code>"svy.vanderwaerden.test"</code> for a van der Waerden's normal-scores test for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
-<li><p><code>"svy.median.test"</code> for a Mood's test for the median for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
-<li><p><code>"svy.chisq.test"</code> for a Chi-squared test with Rao &amp; Scott's second-order correction (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
-<li><p><code>"svy.adj.chisq.test"</code> for a Chi-squared test adjusted by a design effect estimate (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
-<li><p><code>"svy.wald.test"</code> for a Wald test of independence for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
-<li><p><code>"svy.adj.wald.test"</code> for an adjusted Wald test of independence for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
-<li><p><code>"svy.lincom.test"</code> for a test of independence using the exact asymptotic distribution for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
-<li><p><code>"svy.saddlepoint.test"</code> for a test of independence using a saddlepoint approximation for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
+<li><p><code>"svy.t.test"</code> for a t-test adapted to complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svyttest.html'>survey::svyttest</a></code>),</p></li>
+<li><p><code>"svy.wilcox.test"</code> for a Wilcoxon rank-sum test for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a></code>),</p></li>
+<li><p><code>"svy.kruskal.test"</code> for a Kruskal-Wallis rank-sum test for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a></code>),</p></li>
+<li><p><code>"svy.vanderwaerden.test"</code> for a van der Waerden's normal-scores test for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a></code>),</p></li>
+<li><p><code>"svy.median.test"</code> for a Mood's test for the median for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a></code>),</p></li>
+<li><p><code>"svy.chisq.test"</code> for a Chi-squared test with Rao &amp; Scott's second-order correction (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
+<li><p><code>"svy.adj.chisq.test"</code> for a Chi-squared test adjusted by a design effect estimate (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
+<li><p><code>"svy.wald.test"</code> for a Wald test of independence for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
+<li><p><code>"svy.adj.wald.test"</code> for an adjusted Wald test of independence for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
+<li><p><code>"svy.lincom.test"</code> for a test of independence using the exact asymptotic distribution for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
+<li><p><code>"svy.saddlepoint.test"</code> for a test of independence using a saddlepoint approximation for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
 </ul>
 
 <p>Tests default to <code>"svy.wilcox.test"</code> for continuous variables and <code>"svy.chisq.test"</code>
