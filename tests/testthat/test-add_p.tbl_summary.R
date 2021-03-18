@@ -43,6 +43,11 @@ test_that("add_p creates output without error/warning", {
     NA
   )
 
+})
+
+test_that("add_p & lme4", {
+  skip_if_not(require("lme4"))
+  skip_if_not(require("broom.mixed"))
   expect_message(
     tbl_summary(trial, by = trt) %>%
       add_p(test = everything() ~ "lme4", group = response),
@@ -90,12 +95,6 @@ test_that("add_p creates output without error/warning for continuous2", {
     tbl_summary(trial, by = trt, include = -response, type = all_continuous() ~ "continuous2") %>%
       add_p(group = response),
     NA
-  )
-
-  expect_message(
-    tbl_summary(trial, by = trt, type = all_continuous() ~ "continuous2") %>%
-      add_p(test = everything() ~ "lme4", group = response),
-    NULL
   )
 })
 
@@ -183,6 +182,15 @@ test_that("Wilcoxon and Kruskal-Wallis p-values match ", {
 })
 
 
+trial_group <- trial %>% group_by(trt) %>% mutate(id = row_number()) %>% ungroup()
+trial_group_wide <-
+  trial_group %>%
+  filter(trt == "Drug A") %>%
+  full_join(
+    trial_group %>%
+      filter(trt == "Drug B"),
+    by = "id"
+  )
 
 test_that("p-values are replicated within tbl_summary()", {
   tbl_test.args <-
@@ -287,20 +295,9 @@ test_that("p-values are replicated within tbl_summary()", {
     mcnemar.test(trial[["response"]], as.factor(trial[["trt"]]), correct = FALSE)$p.value
   )
 
-  trial_group <- trial %>% group_by(trt) %>% mutate(id = row_number()) %>% ungroup()
-  trial_group_wide <-
-    trial_group %>%
-    filter(trt == "Drug A") %>%
-    full_join(
-      trial_group %>%
-        filter(trt == "Drug B"),
-      by = "id"
-    )
-
   tbl_groups <-
     trial_group %>%
     select(trt, id,
-           age_lme4 = age,
            grade_lme4 = grade,
            age_paired.t.test = age,
            age_paired.t.test_dots = age,
@@ -308,8 +305,7 @@ test_that("p-values are replicated within tbl_summary()", {
            age_paired.wilcox.test_dots = age) %>%
     tbl_summary(by = trt, missing = "no", include = -id) %>%
     add_p(
-      test = list(contains("lme4") ~ "lme4",
-                  contains("paired.t.test") ~ "paired.t.test",
+      test = list(contains("paired.t.test") ~ "paired.t.test",
                   contains("paired.wilcox.test") ~ "paired.wilcox.test"),
       test.args = list(age_paired.t.test_dots ~ list(mu = 1),
                        age_paired.wilcox.test_dots ~ list(mu = 1)),
@@ -335,6 +331,21 @@ test_that("p-values are replicated within tbl_summary()", {
     filter(tbl_groups$meta_data, variable == "age_paired.wilcox.test_dots")$p.value,
     wilcox.test(trial_group_wide[["age.x"]], trial_group_wide[["age.y"]], paired = TRUE, mu = 1)$p.value
   )
+})
+
+test_that("Groups arg and lme4", {
+  skip_if_not(require("lme4"))
+  skip_if_not(require("broom.mixed"))
+
+  tbl_groups <-
+    trial_group %>%
+    select(trt, id,
+           age_lme4 = age) %>%
+    tbl_summary(by = trt, missing = "no", include = -id) %>%
+    add_p(
+      test = list(contains("lme4") ~ "lme4"),
+      group = "id"
+    )
 
   expect_equal(
     filter(tbl_groups$meta_data, variable == "age_lme4")$p.value,
@@ -343,3 +354,4 @@ test_that("p-values are replicated within tbl_summary()", {
       pluck("Pr(>Chisq)", 2)
   )
 })
+

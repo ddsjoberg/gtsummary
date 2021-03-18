@@ -42,25 +42,25 @@ does not support Word.
 The \code{as_flex_table()} functions converts the gtsummary object to a flextable,
 and prints it with the following styling functions.
 \enumerate{
-\item \code{\link[flextable:flextable]{flextable::flextable()}}
-\item \code{\link[flextable:set_header_labels]{flextable::set_header_labels()}} to set column labels
-\item \code{\link[flextable:add_header_row]{flextable::add_header_row()}}, if applicable, to set spanning column header
-\item \code{\link[flextable:align]{flextable::align()}} to set column alignment
-\item \code{\link[flextable:padding]{flextable::padding()}} to indent variable levels
-\item \code{\link[flextable:fontsize]{flextable::fontsize()}} to set font size
-\item \code{\link[flextable:autofit]{flextable::autofit()}} to estimate the column widths
-\item \code{\link[flextable:footnote]{flextable::footnote()}} to add table footnotes and source notes
-\item \code{\link[flextable:bold]{flextable::bold()}} to bold cells in data frame
-\item \code{\link[flextable:italic]{flextable::italic()}} to italicize cells in data frame
-\item \code{\link[flextable:border]{flextable::border()}} to set all border widths to 1
-\item \code{\link[flextable:padding]{flextable::padding()}} to set consistent header padding
-\item \code{\link[flextable:valign]{flextable::valign()}} to ensure label column is top-left justified
+\item \code{flextable::flextable()}
+\item \code{flextable::set_header_labels()} to set column labels
+\item \code{flextable::add_header_row()}, if applicable, to set spanning column header
+\item \code{flextable::align()} to set column alignment
+\item \code{flextable::padding()} to indent variable levels
+\item \code{flextable::fontsize()} to set font size
+\item \code{flextable::autofit()} to estimate the column widths
+\item \code{flextable::footnote()} to add table footnotes and source notes
+\item \code{flextable::bold()} to bold cells in data frame
+\item \code{flextable::italic()} to italicize cells in data frame
+\item \code{flextable::border()} to set all border widths to 1
+\item \code{flextable::padding()} to set consistent header padding
+\item \code{flextable::valign()} to ensure label column is top-left justified
 }
 
 Any one of these commands may be omitted using the \verb{include=} argument.
 
-Pro tip: Use the \code{\link[flextable:width]{flextable::width()}} function for exacting control over
-column width after calling \code{\link[=as_flex_table]{as_flex_table()}}.
+Pro tip: Use the \code{flextable::width()} function for exacting control over
+column width after calling \code{as_flex_table()}.
 }
 
 \section{Example Output}{

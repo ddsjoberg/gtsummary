@@ -568,17 +568,17 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #' @param test List of formulas specifying statistical tests to perform,
 #' e.g. \code{list(all_continuous() ~ "svy.t.test", all_categorical() ~ "svy.wald.test")}.
 #' Options include
-#' * `"svy.t.test"` for a t-test adapted to complex survey samples (cf. [survey::svyttest]),
-#' * `"svy.wilcox.test"` for a Wilcoxon rank-sum test for complex survey samples (cf. [survey::svyranktest]),
-#' * `"svy.kruskal.test"` for a Kruskal-Wallis rank-sum test for complex survey samples (cf. [survey::svyranktest]),
-#' * `"svy.vanderwaerden.test"` for a van der Waerden's normal-scores test for complex survey samples (cf. [survey::svyranktest]),
-#' * `"svy.median.test"` for a Mood's test for the median for complex survey samples (cf. [survey::svyranktest]),
-#' * `"svy.chisq.test"` for a Chi-squared test with Rao & Scott's second-order correction (cf. [survey::svychisq]),
-#' * `"svy.adj.chisq.test"` for a Chi-squared test adjusted by a design effect estimate (cf. [survey::svychisq]),
-#' * `"svy.wald.test"` for a Wald test of independence for complex survey samples (cf. [survey::svychisq]),
-#' * `"svy.adj.wald.test"` for an adjusted Wald test of independence for complex survey samples (cf. [survey::svychisq]),
-#' * `"svy.lincom.test"` for a test of independence using the exact asymptotic distribution for complex survey samples (cf. [survey::svychisq]),
-#' * `"svy.saddlepoint.test"` for a test of independence using a saddlepoint approximation for complex survey samples (cf. [survey::svychisq]),
+#' * `"svy.t.test"` for a t-test adapted to complex survey samples (cf. `survey::svyttest`),
+#' * `"svy.wilcox.test"` for a Wilcoxon rank-sum test for complex survey samples (cf. `survey::svyranktest`),
+#' * `"svy.kruskal.test"` for a Kruskal-Wallis rank-sum test for complex survey samples (cf. `survey::svyranktest`),
+#' * `"svy.vanderwaerden.test"` for a van der Waerden's normal-scores test for complex survey samples (cf. `survey::svyranktest`),
+#' * `"svy.median.test"` for a Mood's test for the median for complex survey samples (cf. `survey::svyranktest`),
+#' * `"svy.chisq.test"` for a Chi-squared test with Rao & Scott's second-order correction (cf. `survey::svychisq`),
+#' * `"svy.adj.chisq.test"` for a Chi-squared test adjusted by a design effect estimate (cf. `survey::svychisq`),
+#' * `"svy.wald.test"` for a Wald test of independence for complex survey samples (cf. `survey::svychisq`),
+#' * `"svy.adj.wald.test"` for an adjusted Wald test of independence for complex survey samples (cf. `survey::svychisq`),
+#' * `"svy.lincom.test"` for a test of independence using the exact asymptotic distribution for complex survey samples (cf. `survey::svychisq`),
+#' * `"svy.saddlepoint.test"` for a test of independence using a saddlepoint approximation for complex survey samples (cf. `survey::svychisq`),
 #'
 #' Tests default to `"svy.wilcox.test"` for continuous variables and `"svy.chisq.test"`
 #' for categorical variables.

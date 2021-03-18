@@ -61,6 +61,7 @@ test_that("no errors/warnings with standard use in tbl_uvregression()", {
 
 
 test_that("no errors/warnings with use in tbl_uvregression() with add_global_p()", {
+  skip_if_not(requireNamespace("car"))
   fmt_uni_reg_global_p <- trial %>%
     tbl_uvregression(
       method = lm,

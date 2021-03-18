@@ -31,7 +31,7 @@ frame includes the outcome variable(s) and the independent variables.
 Survey design objects are also accepted.}
 
 \item{method}{Regression method (e.g. \link{lm}, \link{glm}, \link[survival:coxph]{survival::coxph},
-\link[survey:svyglm]{survey::svyglm}, and more).}
+\code{survey::svyglm}, and more).}
 
 \item{y}{Model outcome (e.g. \code{y = recurrence} or \code{y = Surv(time, recur)}).
 All other column in \code{data} will be regressed on \code{y}.
