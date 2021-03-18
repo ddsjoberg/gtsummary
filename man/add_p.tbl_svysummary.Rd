@@ -20,17 +20,17 @@
 e.g. \code{list(all_continuous() ~ "svy.t.test", all_categorical() ~ "svy.wald.test")}.
 Options include
 \itemize{
-\item \code{"svy.t.test"} for a t-test adapted to complex survey samples (cf. \link[survey:svyttest]{survey::svyttest}),
-\item \code{"svy.wilcox.test"} for a Wilcoxon rank-sum test for complex survey samples (cf. \link[survey:svyranktest]{survey::svyranktest}),
-\item \code{"svy.kruskal.test"} for a Kruskal-Wallis rank-sum test for complex survey samples (cf. \link[survey:svyranktest]{survey::svyranktest}),
-\item \code{"svy.vanderwaerden.test"} for a van der Waerden's normal-scores test for complex survey samples (cf. \link[survey:svyranktest]{survey::svyranktest}),
-\item \code{"svy.median.test"} for a Mood's test for the median for complex survey samples (cf. \link[survey:svyranktest]{survey::svyranktest}),
-\item \code{"svy.chisq.test"} for a Chi-squared test with Rao & Scott's second-order correction (cf. \link[survey:svychisq]{survey::svychisq}),
-\item \code{"svy.adj.chisq.test"} for a Chi-squared test adjusted by a design effect estimate (cf. \link[survey:svychisq]{survey::svychisq}),
-\item \code{"svy.wald.test"} for a Wald test of independence for complex survey samples (cf. \link[survey:svychisq]{survey::svychisq}),
-\item \code{"svy.adj.wald.test"} for an adjusted Wald test of independence for complex survey samples (cf. \link[survey:svychisq]{survey::svychisq}),
-\item \code{"svy.lincom.test"} for a test of independence using the exact asymptotic distribution for complex survey samples (cf. \link[survey:svychisq]{survey::svychisq}),
-\item \code{"svy.saddlepoint.test"} for a test of independence using a saddlepoint approximation for complex survey samples (cf. \link[survey:svychisq]{survey::svychisq}),
+\item \code{"svy.t.test"} for a t-test adapted to complex survey samples (cf. \code{survey::svyttest}),
+\item \code{"svy.wilcox.test"} for a Wilcoxon rank-sum test for complex survey samples (cf. \code{survey::svyranktest}),
+\item \code{"svy.kruskal.test"} for a Kruskal-Wallis rank-sum test for complex survey samples (cf. \code{survey::svyranktest}),
+\item \code{"svy.vanderwaerden.test"} for a van der Waerden's normal-scores test for complex survey samples (cf. \code{survey::svyranktest}),
+\item \code{"svy.median.test"} for a Mood's test for the median for complex survey samples (cf. \code{survey::svyranktest}),
+\item \code{"svy.chisq.test"} for a Chi-squared test with Rao & Scott's second-order correction (cf. \code{survey::svychisq}),
+\item \code{"svy.adj.chisq.test"} for a Chi-squared test adjusted by a design effect estimate (cf. \code{survey::svychisq}),
+\item \code{"svy.wald.test"} for a Wald test of independence for complex survey samples (cf. \code{survey::svychisq}),
+\item \code{"svy.adj.wald.test"} for an adjusted Wald test of independence for complex survey samples (cf. \code{survey::svychisq}),
+\item \code{"svy.lincom.test"} for a test of independence using the exact asymptotic distribution for complex survey samples (cf. \code{survey::svychisq}),
+\item \code{"svy.saddlepoint.test"} for a test of independence using a saddlepoint approximation for complex survey samples (cf. \code{survey::svychisq}),
 }
 
 Tests default to \code{"svy.wilcox.test"} for continuous variables and \code{"svy.chisq.test"}

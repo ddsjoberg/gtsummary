@@ -10,7 +10,7 @@ add_vif(x, statistic = NULL, estimate_fun = NULL)
 \item{x}{\code{'tbl_regression'} object}
 
 \item{statistic}{\code{"VIF"} (variance inflation factors, for models with no categorical terms) or one of/combination of \code{"GVIF"} (generalized variance inflation factors), \code{"aGVIF"} 'adjusted GVIF, i.e. \verb{GVIF^[1/(2*df)]} and/or \code{"df"} (degrees of freedom).
-See \code{\link[car:vif]{car::vif()}} for details.}
+See \code{car::vif()} for details.}
 
 \item{estimate_fun}{Default is \code{\link[=style_sigfig]{style_sigfig()}}.}
 }

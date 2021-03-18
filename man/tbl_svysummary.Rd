@@ -20,7 +20,7 @@ tbl_svysummary(
 )
 }
 \arguments{
-\item{data}{A survey object created with created with \code{\link[survey:svydesign]{survey::svydesign()}}}
+\item{data}{A survey object created with created with \code{survey::svydesign()}}
 
 \item{by}{A column name (quoted or unquoted) in \code{data}.
 Summary statistics will be calculated separately for each level of the \code{by}
