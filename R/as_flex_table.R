@@ -9,24 +9,24 @@
 #' @section Details:
 #' The `as_flex_table()` functions converts the gtsummary object to a flextable,
 #' and prints it with the following styling functions.
-#' 1. [flextable::flextable()]
-#' 1. [flextable::set_header_labels()] to set column labels
-#' 1. [flextable::add_header_row()], if applicable, to set spanning column header
-#' 1. [flextable::align()] to set column alignment
-#' 1. [flextable::padding()] to indent variable levels
-#' 1. [flextable::fontsize()] to set font size
-#' 1. [flextable::autofit()] to estimate the column widths
-#' 1. [flextable::footnote()] to add table footnotes and source notes
-#' 1. [flextable::bold()] to bold cells in data frame
-#' 1. [flextable::italic()] to italicize cells in data frame
-#' 1. [flextable::border()] to set all border widths to 1
-#' 1. [flextable::padding()] to set consistent header padding
-#' 1. [flextable::valign()] to ensure label column is top-left justified
+#' 1. `flextable::flextable()`
+#' 1. `flextable::set_header_labels()` to set column labels
+#' 1. `flextable::add_header_row()`, if applicable, to set spanning column header
+#' 1. `flextable::align()` to set column alignment
+#' 1. `flextable::padding()` to indent variable levels
+#' 1. `flextable::fontsize()` to set font size
+#' 1. `flextable::autofit()` to estimate the column widths
+#' 1. `flextable::footnote()` to add table footnotes and source notes
+#' 1. `flextable::bold()` to bold cells in data frame
+#' 1. `flextable::italic()` to italicize cells in data frame
+#' 1. `flextable::border()` to set all border widths to 1
+#' 1. `flextable::padding()` to set consistent header padding
+#' 1. `flextable::valign()` to ensure label column is top-left justified
 #'
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
-#' Pro tip: Use the [flextable::width()] function for exacting control over
-#' column width after calling [as_flex_table()].
+#' Pro tip: Use the `flextable::width()` function for exacting control over
+#' column width after calling `as_flex_table()`.
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
 #' @param strip_md_bold When TRUE, all double asterisk (markdown language for

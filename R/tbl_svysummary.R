@@ -5,7 +5,7 @@
 #' continuous, categorical, and dichotomous variables taking into account survey weights and design.
 #' It is similar to [tbl_summary()].
 #'
-#' @param data A survey object created with created with [survey::svydesign()]
+#' @param data A survey object created with created with `survey::svydesign()`
 #' @inheritParams tbl_summary
 #'
 #' @inheritSection tbl_summary type argument

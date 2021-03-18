@@ -7,22 +7,24 @@
 #'
 #' @param x `'tbl_regression'` object
 #' @param statistic `"VIF"` (variance inflation factors, for models with no categorical terms) or one of/combination of `"GVIF"` (generalized variance inflation factors), `"aGVIF"` 'adjusted GVIF, i.e. `GVIF^[1/(2*df)]` and/or `"df"` (degrees of freedom).
-#' See [`car::vif()`] for details.
+#' See `car::vif()` for details.
 #' @param estimate_fun Default is [`style_sigfig()`].
 #' @export
 #'
 #' @examples
 #' # Example 1 ----------------------------------
-#' add_vif_ex1 <-
-#'   lm(age ~ grade + marker, trial) %>%
-#'   tbl_regression() %>%
-#'   add_vif()
+#' if (requireNamespace("car"))
+#'   add_vif_ex1 <-
+#'     lm(age ~ grade + marker, trial) %>%
+#'     tbl_regression() %>%
+#'     add_vif()
 #'
 #' # Example 2 ----------------------------------
-#' add_vif_ex2 <-
-#'   lm(age ~ grade + marker, trial) %>%
-#'   tbl_regression() %>%
-#'   add_vif(c("aGVIF", "df"))
+#' if (requireNamespace("car"))
+#'   add_vif_ex2 <-
+#'     lm(age ~ grade + marker, trial) %>%
+#'     tbl_regression() %>%
+#'     add_vif(c("aGVIF", "df"))
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

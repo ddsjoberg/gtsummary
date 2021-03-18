@@ -27,6 +27,9 @@ gt_compact_fun <- function(x) {
                   source_notes.padding = gt::px(1),
                   row_group.padding = gt::px(1))
 }
+
+# exit if car package not installed (added to pass Cmd Checks on old R versions)
+if (!requireNamespace("car")) knitr::knit_exit()
 ```
 
 ## Introduction
