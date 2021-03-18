@@ -161,7 +161,7 @@ test_that("no errors/warnings with competing events", {
 
   # output is identical in tbl_survfit and summary
   summod <- summary(cr_2, times = c(12,24))
-  outcome_index <- which("death from cancer" %in% summod$states)
+  outcome_index <- which(summod$states %in% "death from cancer")
 
   summod1b <- data.frame(strata = summod$strata,Time = summod$time,
                          cancerdeath = summod$pstate[,outcome_index])
