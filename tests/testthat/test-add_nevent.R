@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("lme4"))
 
 library(survival)
 fit_cox <- coxph(Surv(time, status) ~ sex, lung)

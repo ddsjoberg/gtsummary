@@ -33,6 +33,7 @@ skip_on_cran()
 # vetted models checks take a long time--only perform on CI checks
 skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 skip_if_not(requireNamespace("car"))
+skip_if_not(requireNamespace("lme4"))
 library(dplyr)
 library(survival)
 
