@@ -107,24 +107,27 @@ mod <- lm(age ~ marker + grade, trial)
 tbl_stnd <- tbl_regression(mod, tidy_fun = tidy_standardize)
 tbl <- tbl_regression(mod)
 
-tidy_standardize_ex1 <-
-  tbl_merge(
-    list(tbl_stnd, tbl),
-    tab_spanner = c("**Standardized Model**", "**Original Model**")
-  )
+if (requireNamespace("effectsize"))
+  tidy_standardize_ex1 <-
+    tbl_merge(
+      list(tbl_stnd, tbl),
+      tab_spanner = c("**Standardized Model**", "**Original Model**")
+    )
 
 # Example 2 ----------------------------------
 # use "posthoc" method for coef calculation
-tidy_standardize_ex2 <-
-  tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
+if (requireNamespace("parameters"))
+  tidy_standardize_ex2 <-
+    tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
 
 
 # Example 3 ----------------------------------
 # Multiple Imputation using the mice package
 set.seed(1123)
-pool_and_tidy_mice_ex3 <-
-  suppressWarnings(mice::mice(trial, m = 2)) \%>\%
-  with(lm(age ~ marker + grade)) \%>\%
-  tbl_regression() # mice method called that uses `pool_and_tidy_mice()` as tidier
+if (requireNamespace("mice"))
+  pool_and_tidy_mice_ex3 <-
+    suppressWarnings(mice::mice(trial, m = 2)) \%>\%
+    with(lm(age ~ marker + grade)) \%>\%
+    tbl_regression() # mice method called that uses `pool_and_tidy_mice()` as tidier
 
 }

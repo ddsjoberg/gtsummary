@@ -31,12 +31,12 @@ add_global_p(x, ...)
 \item{x}{Object with class \code{tbl_regression} from the
 \link{tbl_regression} function}
 
-\item{...}{Additional arguments to be passed to \link[car:Anova]{car::Anova}}
+\item{...}{Additional arguments to be passed to \code{car::Anova}}
 
 \item{include}{Variables to calculate global p-value for. Input may be a vector of
 quoted or unquoted variable names. Default is \code{everything()}}
 
-\item{type}{Type argument passed to \link[car:Anova]{car::Anova}. Default is \code{"III"}}
+\item{type}{Type argument passed to \code{car::Anova}. Default is \code{"III"}}
 
 \item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
@@ -64,21 +64,23 @@ Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 
 \examples{
 # Example 1 ----------------------------------
-tbl_lm_global_ex1 <-
-  lm(marker ~ age + grade, trial) \%>\%
-  tbl_regression() \%>\%
-  add_global_p()
+if (requireNamespace("car"))
+  tbl_lm_global_ex1 <-
+    lm(marker ~ age + grade, trial) \%>\%
+    tbl_regression() \%>\%
+    add_global_p()
 
 # Example 2 ----------------------------------
-tbl_uv_global_ex2 <-
-  trial[c("response", "trt", "age", "grade")] \%>\%
-  tbl_uvregression(
-    method = glm,
-    y = response,
-    method.args = list(family = binomial),
-    exponentiate = TRUE
-  ) \%>\%
-  add_global_p()
+if (requireNamespace("car"))
+  tbl_uv_global_ex2 <-
+    trial[c("response", "trt", "age", "grade")] \%>\%
+    tbl_uvregression(
+      method = glm,
+      y = response,
+      method.args = list(family = binomial),
+      exponentiate = TRUE
+    ) \%>\%
+    add_global_p()
 
 }
 \seealso{

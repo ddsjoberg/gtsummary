@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("lme4"))
 library(survival)
 library(lme4)
 
@@ -22,6 +23,8 @@ test_that("lm: no errors/warnings with standard use", {
 })
 
 test_that("geeglm: no errors/warnings with standard use", {
+  skip_if_not(requireNamespace("geepack"))
+
   expect_error(
     tbl_uvregression(
       na.omit(trial),

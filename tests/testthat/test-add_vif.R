@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("car"))
 
 test_that("no errors/warnings with standard", {
   expect_error(

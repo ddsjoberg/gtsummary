@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("lme4"))
 
 test_that("add_glance_source_note: no errors/warnings with standard use", {
 

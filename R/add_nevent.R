@@ -3,8 +3,8 @@
 #' Adds a column of the number of events to tables created with
 #' [tbl_regression] or [tbl_uvregression].  Supported
 #' model types are among GLMs with binomial distribution family (e.g.
-#' [stats::glm], [lme4::glmer], and
-#' [geepack::geeglm]) and Cox
+#' [stats::glm], `lme4::glmer`, and
+#' `geepack::geeglm`) and Cox
 #' Proportion Hazards regression models ([survival::coxph]).
 #'
 #' @param x `tbl_regression` or `tbl_uvregression` object

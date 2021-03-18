@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("car"))
 
 test_that("no errors/warnings with standard use after tbl_regression", {
   mod1 <- lm(hp ~ factor(cyl) + mpg + factor(am), mtcars)

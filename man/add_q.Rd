@@ -47,16 +47,17 @@ add_q_ex1 <-
   add_q()
 
 # Example 2 ----------------------------------
-add_q_ex2 <-
-  trial[c("trt", "age", "grade", "response")] \%>\%
-  tbl_uvregression(
-    y = response,
-    method = glm,
-    method.args = list(family = binomial),
-    exponentiate = TRUE
-  ) \%>\%
-  add_global_p() \%>\%
-  add_q()
+if (requireNamespace("car"))
+  add_q_ex2 <-
+    trial[c("trt", "age", "grade", "response")] \%>\%
+    tbl_uvregression(
+      y = response,
+      method = glm,
+      method.args = list(family = binomial),
+      exponentiate = TRUE
+    ) \%>\%
+    add_global_p() \%>\%
+    add_q()
 }
 \seealso{
 Other tbl_summary tools: 

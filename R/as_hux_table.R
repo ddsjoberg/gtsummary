@@ -9,14 +9,14 @@
 #' The `as_hux_table()` takes the data frame that will be printed, converts
 #' it to a huxtable and formats the table with the following huxtable functions:
 #'
-#' 1. [huxtable::huxtable()]
-#' 1. [huxtable::insert_row()] to insert header rows
-#' 1. [huxtable::align()] to set column alignment
-#' 1. [huxtable::set_left_padding()] to indent variable levels
-#' 1. [huxtable::add_footnote()] to add table footnotes and source notes
-#' 1. [huxtable::set_bold()] to bold cells
-#' 1. [huxtable::set_italic()] to italicize cells
-#' 1. [huxtable::set_na_string()] to use an em-dash for missing numbers
+#' 1. `huxtable::huxtable()`
+#' 1. `huxtable::insert_row()` to insert header rows
+#' 1. `huxtable::align()` to set column alignment
+#' 1. `huxtable::set_left_padding()` to indent variable levels
+#' 1. `huxtable::add_footnote()` to add table footnotes and source notes
+#' 1. `huxtable::set_bold()` to bold cells
+#' 1. `huxtable::set_italic()` to italicize cells
+#' 1. `huxtable::set_na_string()` to use an em-dash for missing numbers
 #'
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
