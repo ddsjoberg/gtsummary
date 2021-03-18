@@ -294,7 +294,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     gt_calls[["horizontal_line"]] <-
       expr(
         gt::tab_style(
-          style = gt::cell_borders(sides = "top"),
+          style = gt::cell_borders(sides = "top", color = "#D3D3D3", weight = gt::px(2)),
           locations = gt::cells_body(rows = !!x$table_styling$horizontal_line_above)
         )
       )
