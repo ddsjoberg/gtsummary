@@ -102,7 +102,7 @@ nest_df_and_svy <- function(data, strata) {
   tibble(strata_var = pluck(data, "variables", strata) %>% unique()) %>%
     rowwise() %>%
     mutate(
-      data = data[data$variables[[.env$strata]] %in% strata_var, ] %>% list()
+      data = data[data$variables[[.env$strata]] %in% .data$strata_var, ] %>% list()
     ) %>%
     ungroup() %>%
     set_names(c(strata, "data"))
