@@ -31,7 +31,7 @@ plot.tbl_regression <- function(x,
   df_coefs <- x$table_body
   if (isTRUE(remove_header_rows))
     df_coefs <- df_coefs %>% filter(!.data$header_row %in% TRUE)
-  if (isTRUE(remove_header_rows))
+  if (isTRUE(remove_reference_rows))
     df_coefs <- df_coefs %>% filter(!.data$reference_row %in% TRUE)
 
   df_coefs %>%
