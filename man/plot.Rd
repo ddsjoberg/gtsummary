@@ -25,6 +25,10 @@ for categorical variables. Default is \code{FALSE}.}
 a ggplot
 }
 \description{
+The \code{plot()} function extracts \code{x$table_body} and passes the it to
+\code{GGally::ggcoef_plot()} along with a formatting options.
+}
+\details{
 \lifecycle{experimental}
 }
 \examples{

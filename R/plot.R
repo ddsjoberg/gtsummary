@@ -1,5 +1,8 @@
 #' Plot Regression Coefficients
 #'
+#' The `plot()` function extracts `x$table_body` and passes the it to
+#' `GGally::ggcoef_plot()` along with a formatting options.
+#'
 #' \lifecycle{experimental}
 #' @param x 'tbl_regression' or 'tbl_uvregression' object
 #' @param remove_header_rows logical indicating whether to remove header rows
