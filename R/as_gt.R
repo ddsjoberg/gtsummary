@@ -167,7 +167,11 @@ table_styling_to_gt_calls <- function(x, ...) {
       seq_len(nrow(df_cols_align)),
       ~ expr(gt::cols_align(columns = gt::vars(!!!syms(df_cols_align$cols[[.x]])),
                             align = !!df_cols_align$align[[.x]]))
-    )
+    ) %>%
+    c(list(expr(gt::tab_style(
+      style = "vertical-align:top",
+      locations = gt::cells_body(columns = any_of("label"))
+    ))))
 
   # indent ---------------------------------------------------------------------
   df_indent <- x$table_styling$text_format %>% filter(.data$format_type == "indent")
