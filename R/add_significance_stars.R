@@ -16,14 +16,14 @@
 #' @export
 #'
 #' @section Future Updates:
-#' There are planned updates to the implementation of this function once
-#' `gt::cols_merge()` gains a `rows=` argument. For the majority of users,
-#' this change will be go unnoticed. However, if additional modifications are
-#' undertaken with `as_gt() %>% <...>`, the update could break existing code.
-#' In the current implementation the column of regression coefficients is
-#' replaced with a character version including stars. After the change,
-#' the column will remain numeric before it is passed to `gt::gt()`.
-#'
+#' There are planned updates to the implementation of this function
+#' with respect to the `pattern=` argument. For the majority of users,
+#' the planned change will be go unnoticed.
+#' Currently, this function replaces the numeric estimate column, with a
+#' formatted character column following the `pattern=` argument.
+#' Once `gt::cols_merge()` gains the `rows=` argument, the
+#' implementation will be updated to use it in the background, keeping
+#' all numeric columns numeric.
 #'
 #' @examples
 #' tbl <-
