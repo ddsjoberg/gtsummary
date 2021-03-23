@@ -36,13 +36,13 @@ Add significance stars to estimates with small p-values
 \section{Future Updates}{
 
 There are planned updates to the implementation of this function
-with respect to the \verb{pattern=} argument. For the majority of users,
-the planned change will be go unnoticed.
+with respect to the \verb{pattern=} argument.
 Currently, this function replaces the numeric estimate column, with a
 formatted character column following the \verb{pattern=} argument.
 Once \code{gt::cols_merge()} gains the \verb{rows=} argument, the
 implementation will be updated to use it in the background, keeping
-all numeric columns numeric.
+all numeric columns numeric. For the vast majority of users,
+the planned change will be go unnoticed.
 }
 
 \section{Example Output}{
