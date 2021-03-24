@@ -1,0 +1,98 @@
+<html>
+
+<head>
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Huxtable themes}
+%\VignetteEncoding{UTF-8}
+-->
+<title>Huxtable themes</title>
+
+<!--begin.rcode, echo = FALSE
+library(huxtable)
+data(jams)
+jams$Sugar <- c("Sugar content", "40%", "35%", "50%")
+end.rcode-->
+
+<style type="text/css">
+.container {
+ display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(30ch, 1fr));
+  column-gap: 8ch;
+  row-gap: 3em;
+  margin-bottom: 3em;
+}
+
+.container div {
+  background: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  border-radius: 10px;
+}
+
+h1 {
+  margin-top: 1em;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+h2 {
+  text-align: center;
+  font-size: 14pt;
+}
+
+body {
+  font-family: sans-serif;
+  width: 90%;
+  margin: auto;
+  background: #E8E8E8;
+}
+
+.huxtable td {
+  font-size: 11pt;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Huxtable themes</h1>
+
+ <div class="container">
+ <div>
+<h2><pre>jams</pre></h2>
+<!--begin.rcode, results = "asis", echo = FALSE
+cat(to_html(jams))
+end.rcode-->
+</div>
+
+<!--begin.rcode, results = "asis", echo = FALSE
+
+themes <- paste0("theme_", c(
+  "plain",
+  "basic",
+  "compact",
+  "striped",
+  "article",
+  "bright",
+  "grey",
+  "blue",
+  "orange",
+  "green",
+  "mondrian"
+))
+
+for (th in themes) {
+  cat("<div>\n")
+  cat("<h2><pre>", th, "</pre></h2>\n", sep = "")
+  th_fn <- get(th, pos = "package:huxtable")
+  cat(to_html(th_fn(jams)))
+  cat("</div>\n\n")
+}
+end.rcode-->
+
+</div>
+
+
+</body>
+</html>
