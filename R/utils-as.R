@@ -242,13 +242,17 @@
 
 .table_styling_cols_merge <- function(x) {
   # if no merging, return x unaltered
-  if (is.null(x$table_styling$cols_merge)) return(x)
-
-  # check
+  x$table_styling$cols_merge <- # keeping the most recently passed merge instructions
+    x$table_styling$cols_merge %>%
+    group_by(.data$column) %>%
+    filter(dplyr::row_number() == dplyr::n(), !is.na(.data$pattern)) %>%
+    ungroup()
+  if (nrow(x$table_styling$cols_merge) == 0) return(x)
 
   # get version of object with no merge styling to use in `as_tibble.gtsummary()`
   x_no_merging <- x
-  x_no_merging$table_styling$cols_merge <- NULL
+  x_no_merging$table_styling$cols_merge <-
+    filter(x_no_merging$table_styling$cols_merge, FALSE)
 
   # apply merging for each for in the cols_merge data frame
   for (i in seq_len(nrow(x$table_styling$cols_merge))) {

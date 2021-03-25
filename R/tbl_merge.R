@@ -201,7 +201,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     ) %>%
     purrr::reduce(dplyr::rows_update, by = "column", .init = x$table_styling$header)
 
-  for (style_type in c("footnote", "footnote_abbrev", "fmt_fun", "text_format", "fmt_missing")) {
+  for (style_type in c("footnote", "footnote_abbrev", "fmt_fun", "text_format", "fmt_missing", "cols_merge")) {
     x$table_styling[[style_type]] <-
       map_dfr(
         seq_along(tbls),
