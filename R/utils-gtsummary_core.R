@@ -48,6 +48,8 @@
     tibble(column = character(), rows = list(), symbol = character())
   x$table_styling$fmt_fun <-
     tibble(column = character(), rows = list(), fmt_fun = list())
+  x$table_styling$cols_merge <-
+    tibble(column = character(), rows = list(), pattern = character())
 
   # adding other objects to list -----------------------------------------------
   x <- c(x, list(...))
