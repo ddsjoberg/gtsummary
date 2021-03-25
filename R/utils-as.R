@@ -239,3 +239,66 @@
     select(.data$footnote_id, .data$footnote, .data$column,
            .data$tab_location, .data$row_numbers)
 }
+
+.table_styling_cols_merge <- function(x) {
+  if (nrow(x$table_styling$cols_merge) == 0) return(x)
+
+  # combining rows spec for same (this is all because of tbl_stack!)
+  x$table_styling$cols_merge <-
+    x$table_styling$cols_merge %>%
+    tidyr::nest(rows = .data$rows) %>%
+    mutate(rows = map(.data$rows, ~.x$rows %>% unlist()))
+  x$table_styling$cols_merge$rows <-
+    map(
+      x$table_styling$cols_merge$rows,
+      ~.x %>% purrr::reduce(function(.x1, .y1) expr(!!.x1 | !!.y1))
+    )
+
+  if (x$table_styling$cols_merge$column %>% duplicated() %>% any())
+    abort("Error merging columns due to misspecification.")
+
+  # get version of object with no merge styling to use in `as_tibble.gtsummary()`
+  x_no_merging <- x
+  x_no_merging$table_styling$cols_merge <-
+    filter(x_no_merging$table_styling$cols_merge, FALSE)
+
+  # apply merging for each for in the cols_merge data frame
+  for (i in seq_len(nrow(x$table_styling$cols_merge))) {
+    # create merged column
+    df_merged_column <-
+      x_no_merging %>%
+      modify_column_unhide(everything()) %>%
+      as_tibble(col_labels = FALSE)
+    merged_column <-
+      expr(
+        ifelse(
+          !!!x$table_styling$cols_merge$rows[i],
+          glue::glue(!!x$table_styling$cols_merge$pattern[i]) %>% as.character(),
+          NA_character_
+        )
+      ) %>%
+      rlang::eval_tidy(data = df_merged_column)
+
+    # updating gtsummary object with merged columns
+    x <-
+      x %>%
+      # replacing fmt_fun with `as.character`
+      modify_fmt_fun(list(as.character) %>% set_names(x$table_styling$cols_merge$column[i])) %>%
+      # replacing column with character version
+      modify_table_body(
+        ~.x %>% mutate(!!x$table_styling$cols_merge$column[i] := .env$merged_column)
+      ) %>%
+      # updating hidden column status
+      modify_column_hide(
+        columns =
+          stringr::str_extract_all(x$table_styling$cols_merge$pattern[i], "\\{.*?\\}") %>%
+          map(stringr::str_remove_all, pattern = fixed("}")) %>%
+          map(stringr::str_remove_all, pattern = fixed("{")) %>%
+          unlist() %>%
+          setdiff(x$table_styling$cols_merge$column[i])
+      )
+  }
+
+  # return merged gtsummary table ----------------------------------------------
+  x
+}

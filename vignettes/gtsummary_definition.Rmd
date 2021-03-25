@@ -67,7 +67,7 @@ The table contains styling information that applies to entire column or the colu
 ```{r, echo=FALSE}
 tibble::tribble(
   ~Column, ~Description,
-  "column", "Column name from table_body",
+  "column", "Column name from `.$table_body`",
   "hide", "Logical indicating whether the column is hidden in the output",
   "align", "Specifies the alignment/justification of the column, e.g. 'center' or 'left'",
   "label", "Label that will be displayed (if column is displayed in output)",
@@ -88,7 +88,7 @@ A footnote of `NA_character_` deletes an existing footnote.
 ```{r, echo=FALSE}
 tibble::tribble(
   ~Column, ~Description,
-  "column", "Column name from table_body",
+  "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`, `NA` indicates to add footnote to header",
   "footnote", "string containing footnote to add to column/row"
 ) %>%
@@ -104,7 +104,7 @@ Updates/changes to styling functions are appended to the bottom of the tibble.
 ```{r, echo=FALSE}
 tibble::tribble(
   ~Column, ~Description,
-  "column", "Column name from table_body",
+  "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`",
   "fmt_fun", "list of formatting/styling functions"
 ) %>%
@@ -120,7 +120,7 @@ Updates/changes to styling functions are appended to the bottom of the tibble.
 ```{r, echo=FALSE}
 tibble::tribble(
   ~Column, ~Description,
-  "column", "Column name from table_body",
+  "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`",
   "format_type", "one of `c('bold', 'italic', 'indent')`",
   "undo_text_format", "logical indicating where the formatting indicated should be undone/removed."
@@ -138,9 +138,25 @@ Updates/changes to styling functions are appended to the bottom of the tibble.
 ```{r, echo=FALSE}
 tibble::tribble(
   ~Column, ~Description,
-  "column", "Column name from table_body",
+  "column", "Column name from `.$table_body`",
   "rows", "expression selecting rows in `.$table_body`",
   "symbol", "string to replace missing values with, e.g. an em-dash"
+) %>%
+  knitr::kable() 
+``` 
+
+**`cols_merge`**
+
+This object is _experimental_ and may change in the future.
+This tibble gives instructions for merging columns into a single column.
+The implementation in `as_gt()` will be updated after `gt::cols_label()` gains a `rows=` argument.
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~Column, ~Description,
+  "column", "Column name from `.$table_body`",
+  "rows", "expression selecting rows in `.$table_body`",
+  "pattern", "glue pattern directing how to combine/merge columns. The merged columns will replace the column indicated in 'column'."
 ) %>%
   knitr::kable() 
 ``` 

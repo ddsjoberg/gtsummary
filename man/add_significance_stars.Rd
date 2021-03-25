@@ -6,6 +6,7 @@
 \usage{
 add_significance_stars(
   x,
+  pattern = "{estimate}{stars}",
   thresholds = c(0.001, 0.01, 0.05),
   hide_ci = TRUE,
   hide_p = TRUE,
@@ -14,6 +15,11 @@ add_significance_stars(
 }
 \arguments{
 \item{x}{a \code{'tbl_regression'} or \code{'tbl_uvregression'} object}
+
+\item{pattern}{glue-syntax string indicating what to display in formatted column.
+Default is \code{"{estimate}{stars}"}. Other common patterns are
+\code{"{estimate}{stars} ({conf.low}, {conf.high})"} and
+\code{"{estimate} ({conf.low} to {conf.high}){stars}"}}
 
 \item{thresholds}{thresholds for significance stars. Default is \code{c(0.001, 0.01, 0.05)}}
 
@@ -27,18 +33,62 @@ add_significance_stars(
 \lifecycle{experimental}
 Add significance stars to estimates with small p-values
 }
+\section{Future Updates}{
+
+There are planned updates to the implementation of this function
+with respect to the \verb{pattern=} argument.
+Currently, this function replaces the numeric estimate column, with a
+formatted character column following \verb{pattern=}.
+Once \code{gt::cols_merge()} gains the \verb{rows=} argument the
+implementation will be updated to use it, which will keep
+numeric columns numeric. For the \emph{vast majority} of users,
+\emph{the planned change will be go unnoticed}.
+}
+
 \section{Example Output}{
 
 \if{html}{Example 1}
 
 \if{html}{\figure{add_significance_stars_ex1.png}{options: width=45\%}}
+
+\if{html}{Example 2}
+
+\if{html}{\figure{add_significance_stars_ex2.png}{options: width=35\%}}
+
+\if{html}{Example 3}
+
+\if{html}{\figure{add_significance_stars_ex3.png}{options: width=30\%}}
 }
 
 \examples{
+tbl <-
+  lm(time ~ ph.ecog + sex, survival::lung) \%>\%
+  tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
+
 # Example 1 ----------------------------------
 add_significance_stars_ex1 <-
-  lm(time ~ sex + ph.ecog, survival::lung) \%>\%
-  tbl_regression() \%>\%
+  tbl \%>\%
   add_significance_stars(hide_ci = FALSE, hide_p = FALSE)
+
+# Example 2 ----------------------------------
+add_significance_stars_ex2 <-
+  tbl \%>\%
+  add_significance_stars(
+    pattern = "{estimate} ({conf.low}, {conf.high}){stars}",
+    hide_ci = TRUE, hide_se = TRUE
+  ) \%>\%
+  modify_header(estimate ~ "**Beta (95\% CI)**") \%>\%
+  modify_footnote(estimate ~ "CI = Confidence Interval", abbreviation = TRUE)
+
+# Example 3 ----------------------------------
+# Use <br> to put a line break between beta and SE in HTML output
+add_significance_stars_ex3 <-
+  tbl \%>\%
+  add_significance_stars(
+    hide_se = TRUE,
+    pattern = "{estimate}{stars}<br>({std.error})"
+  ) \%>\%
+  modify_header(estimate ~ "**Beta (SE)**") \%>\%
+  modify_footnote(estimate ~ "SE = Standard Error", abbreviation = TRUE)
 
 }
