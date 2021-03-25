@@ -107,7 +107,7 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
         rlang::expr_deparse()
     ) %>%
     purrr::reduce(.f = ~paste(.x, .y, sep = ", ")) %>%
-    {paste0("dplyr::case_when(", ., ")")} %>%
+    {paste0("dplyr::case_when(is.na(p.value) ~ '', ", ., ")")} %>%
     rlang::parse_expr()
 
   x <- modify_table_body(x, ~.x %>% dplyr::mutate(stars = !!expr_stars_case_when))
