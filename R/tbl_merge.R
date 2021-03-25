@@ -206,21 +206,63 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
       map_dfr(
         seq_along(tbls),
         function(i) {
-          tbls[[i]]$table_styling[[style_type]] %>%
-            filter(!(.data$column %in% c("label", "variable", "var_label", "row_type") & i != 1)) %>%
-            rowwise() %>%
-            mutate(
-              rows =
-                switch(nrow(.) == 0, list()) %||%
-                .rename_variables_in_expression(.data$rows, i, tbls[[i]]) %>% list(),
-              column = ifelse(
-                .data$column %in% c("label", "variable", "var_label", "row_type") & i == 1,
-                .data$column,
-                paste0(.data$column, "_", i)
-              ) %>%
-                as.character()
+          style_updated <- tbls[[i]]$table_styling[[style_type]]
+
+          # return if there are no rows
+          if (!is.data.frame(style_updated) || nrow(style_updated) == 0)
+            return(style_updated)
+
+          # renaming column variable
+          style_updated$column <-
+            ifelse(
+              style_updated$column %in% c("label", "variable", "var_label", "row_type") & i == 1,
+              style_updated$column,
+              paste0(style_updated$column, "_", i)
             ) %>%
-            ungroup()
+            as.character()
+
+          # updating column names in rows expr/quo
+          if ("rows" %in% names(style_updated)) {
+            style_updated$rows <-
+              map(
+                style_updated$rows,
+                ~.rename_variables_in_expression(.x, i, tbls[[i]])
+              )
+          }
+
+          # updating column names in pattern string
+          if ("pattern" %in% names(style_updated)) {
+            style_updated$pattern <-
+              map_chr(
+                style_updated$pattern,
+                ~.rename_variables_in_pattern(.x, i, tbls[[i]])
+              )
+          }
+
+
+
+          # style_updated <-
+          #   tbls[[i]]$table_styling[[style_type]] %>%
+          #   filter(!(.data$column %in% c("label", "variable", "var_label", "row_type") & i != 1)) %>%
+          #   rowwise() %>%
+          #   mutate(
+          #     rows =
+          #       switch(nrow(.) == 0, list()) %||%
+          #       .rename_variables_in_expression(.data$rows, i, tbls[[i]]) %>% list(),
+          #     column = ifelse(
+          #       .data$column %in% c("label", "variable", "var_label", "row_type") & i == 1,
+          #       .data$column,
+          #       paste0(.data$column, "_", i)
+          #     ) %>%
+          #       as.character()
+          #   ) %>%
+          #   ungroup()
+
+          # if ("pattern" %in% names(style_updated)) {
+          #   style_updated$pattern <-
+          #     .rename_variables_in_pattern(style_updated$pattern, i, tbls[[i]])
+          # }
+          style_updated
         }
       )
   }
@@ -259,5 +301,32 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   }
 
   expr_renamed
+}
+
+.rename_variables_in_pattern <- function(pattern, id, tbl) {
+  # get all variable names in expression to be renamed
+  columns <- tbl$table_styling$header$column
+  var_list <-
+    stringr::str_extract_all(pattern, "\\{.*?\\}") %>%
+    map(stringr::str_remove_all, pattern = fixed("}")) %>%
+    map(stringr::str_remove_all, pattern = fixed("{")) %>%
+    unlist() %>%
+    setdiff(c("label", "variable", "var_label", "row_type")) %>%
+    intersect(columns)
+
+  # if no variables to rename, return rows unaltered
+  if (identical(var_list, character())) return(pattern)
+
+  # replace variables with new names in pattern string.
+  for (v in var_list) {
+    pattern <-
+      stringr::str_replace_all(
+        string = pattern,
+        pattern = fixed(paste0("{", v, "}")),
+        replacement = fixed(paste0("{", v, "_", id, "}"))
+      )
+  }
+
+  pattern
 }
 

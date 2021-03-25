@@ -241,13 +241,21 @@
 }
 
 .table_styling_cols_merge <- function(x) {
-  # if no merging, return x unaltered
-  x$table_styling$cols_merge <- # keeping the most recently passed merge instructions
-    x$table_styling$cols_merge %>%
-    group_by(.data$column) %>%
-    filter(dplyr::row_number() == dplyr::n(), !is.na(.data$pattern)) %>%
-    ungroup()
   if (nrow(x$table_styling$cols_merge) == 0) return(x)
+
+  # combining rows spec for same (this is all because of tbl_stack!)
+  x$table_styling$cols_merge <-
+    x$table_styling$cols_merge %>%
+    tidyr::nest(rows = .data$rows) %>%
+    mutate(rows = map(.data$rows, ~.x$rows %>% unlist()))
+  x$table_styling$cols_merge$rows <-
+    map(
+      x$table_styling$cols_merge$rows,
+      ~.x %>% purrr::reduce(function(.x1, .y1) expr(!!.x1 | !!.y1))
+    )
+
+  if (x$table_styling$cols_merge$column %>% duplicated() %>% any())
+    abort("Error merging columns due to misspecification.")
 
   # get version of object with no merge styling to use in `as_tibble.gtsummary()`
   x_no_merging <- x

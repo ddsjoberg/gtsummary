@@ -17,9 +17,20 @@ test_that("works as expected without error", {
   )
 
   expect_error(
-    tbl1 %>%
+    tbl_stars <-
+      tbl1 %>%
       add_significance_stars(hide_ci = FALSE, hide_p = FALSE),
     NA
+  )
+
+  expect_error(
+    tbl_merge(list(tbl_stars, tbl_stars)),
+    NA
+  )
+
+  expect_equal(
+    tbl_stack(list(tbl_stars, tbl_stars)) %>% as_tibble(col_labels = FALSE) %>% pull(estimate),
+    c("52", "-58**", "52", "-58**")
   )
 
   expect_error(
