@@ -67,6 +67,10 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
+  # merging column specified in `x$table_styling$cols_merge` -------------------
+  # UPDATE THIS WHEN `gt::cols_merge(rows=)` argument is added!
+  x <- .table_styling_cols_merge(x)
+
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .clean_table_styling(x)
 
@@ -171,7 +175,11 @@ table_styling_to_gt_calls <- function(x, ...) {
       seq_len(nrow(df_cols_align)),
       ~ expr(gt::cols_align(columns = gt::vars(!!!syms(df_cols_align$cols[[.x]])),
                             align = !!df_cols_align$align[[.x]]))
-    )
+    ) %>%
+    c(list(expr(gt::tab_style(
+      style = "vertical-align:top",
+      locations = gt::cells_body(columns = any_of("label"))
+    ))))
 
   # indent ---------------------------------------------------------------------
   df_indent <- x$table_styling$text_format %>% filter(.data$format_type == "indent")
