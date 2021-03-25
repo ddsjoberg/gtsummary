@@ -240,7 +240,7 @@
            .data$tab_location, .data$row_numbers)
 }
 
-.update_with_cols_merge <- function(x) {
+.table_styling_cols_merge <- function(x) {
   # if no merging, return x unaltered
   if (is.null(x$table_styling$cols_merge)) return(x)
 
@@ -251,21 +251,21 @@
   x_no_merging$table_styling$cols_merge <- NULL
 
   # apply merging for each for in the cols_merge data frame
-  for (i in seq_len(nrow(x_no_merging$table_styling$cols_merge))) {
+  for (i in seq_len(nrow(x$table_styling$cols_merge))) {
     # create merged column
-    merged_column <-
+    df_merged_column <-
       x_no_merging %>%
       modify_column_unhide(everything()) %>%
-      as_tibble(col_labels = FALSE) %>%
-      mutate(
-        ..merged_column.. =
-          ifelse(
-            !!x$table_styling$cols_merge$rows[i],
-            glue(x$table_styling$cols_merge$pattern[i]) %>% as.character(),
-            NA_character_
-          )
+      as_tibble(col_labels = FALSE)
+    merged_column <-
+      expr(
+        ifelse(
+          !!!x$table_styling$cols_merge$rows[i],
+          glue::glue(!!x$table_styling$cols_merge$pattern[i]) %>% as.character(),
+          NA_character_
+        )
       ) %>%
-      dplyr::pull(.data$..merged_column..)
+      rlang::eval_tidy(data = df_merged_column)
 
     # updating gtsummary object with merged columns
     x <-
@@ -274,7 +274,7 @@
       modify_fmt_fun(list(as.character) %>% set_names(x$table_styling$cols_merge$column[i])) %>%
       # replacing column with character version
       modify_table_body(
-        ~.x %>% mutate(x$table_styling$cols_merge$column[i] := .env$..new_estimate_column..)
+        ~.x %>% mutate(!!x$table_styling$cols_merge$column[i] := .env$merged_column)
       ) %>%
       # updating hidden column status
       modify_column_hide(
@@ -287,6 +287,6 @@
       )
   }
 
-  # return merged gtsummary table
+  # return merged gtsummary table ----------------------------------------------
   x
 }
