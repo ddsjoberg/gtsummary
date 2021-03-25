@@ -189,7 +189,8 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <tbody>
 <tr class="odd">
 <td align="left">column</td>
-<td align="left">Column name from table_body</td>
+<td align="left">Column name from <code>.$table_body</code>
+</td>
 </tr>
 <tr class="even">
 <td align="left">hide</td>
@@ -233,7 +234,8 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <tbody>
 <tr class="odd">
 <td align="left">column</td>
-<td align="left">Column name from table_body</td>
+<td align="left">Column name from <code>.$table_body</code>
+</td>
 </tr>
 <tr class="even">
 <td align="left">rows</td>
@@ -255,7 +257,8 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <tbody>
 <tr class="odd">
 <td align="left">column</td>
-<td align="left">Column name from table_body</td>
+<td align="left">Column name from <code>.$table_body</code>
+</td>
 </tr>
 <tr class="even">
 <td align="left">rows</td>
@@ -282,7 +285,8 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <tbody>
 <tr class="odd">
 <td align="left">column</td>
-<td align="left">Column name from table_body</td>
+<td align="left">Column name from <code>.$table_body</code>
+</td>
 </tr>
 <tr class="even">
 <td align="left">rows</td>
@@ -310,7 +314,8 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <tbody>
 <tr class="odd">
 <td align="left">column</td>
-<td align="left">Column name from table_body</td>
+<td align="left">Column name from <code>.$table_body</code>
+</td>
 </tr>
 <tr class="even">
 <td align="left">rows</td>
@@ -320,6 +325,34 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <tr class="odd">
 <td align="left">symbol</td>
 <td align="left">string to replace missing values with, e.g. an em-dash</td>
+</tr>
+</tbody>
+</table>
+<p><strong><code>cols_merge</code></strong></p>
+<p>This object is <em>experimental</em> and may change in the future. This tibble gives instructions for merging columns into a single column. The implementation in <code><a href="../reference/as_gt.html">as_gt()</a></code> will be updated after <code><a href="https://rdrr.io/pkg/gt/man/cols_label.html">gt::cols_label()</a></code> gains a <code>rows=</code> argument.</p>
+<table class="table">
+<colgroup>
+<col width="6%">
+<col width="93%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Column</th>
+<th align="left">Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left">column</td>
+<td align="left">Column name from <code>.$table_body</code>
+</td>
+</tr>
+<tr class="even">
+<td align="left">rows</td>
+<td align="left">expression selecting rows in <code>.$table_body</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left">pattern</td>
+<td align="left">glue pattern directing how to combine/merge columns. The merged columns will replace the column indicated in ‘column’.</td>
 </tr>
 </tbody>
 </table>
@@ -383,7 +416,11 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <span class="co">#&gt;  7 p.value     &lt;quosure&gt; &lt;fn&gt;      </span>
 <span class="co">#&gt;  8 std.error   &lt;quosure&gt; &lt;prrr_fn_&gt;</span>
 <span class="co">#&gt;  9 statistic   &lt;quosure&gt; &lt;prrr_fn_&gt;</span>
-<span class="co">#&gt; 10 var_nlevels &lt;quosure&gt; &lt;prrr_fn_&gt;</span></code></pre></div>
+<span class="co">#&gt; 10 var_nlevels &lt;quosure&gt; &lt;prrr_fn_&gt;</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $cols_merge</span>
+<span class="co">#&gt; # A tibble: 0 x 3</span>
+<span class="co">#&gt; # … with 3 variables: column &lt;chr&gt;, rows &lt;list&gt;, pattern &lt;chr&gt;</span></code></pre></div>
 </div>
 </div>
 <div id="constructing-a-gtsummary-object" class="section level2">
