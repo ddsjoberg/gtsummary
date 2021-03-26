@@ -93,6 +93,28 @@ theme_gtsummary_journal <- function(journal = c("jama", "jama_psychiatry", "lanc
         "add_stat_label-arg:location" = "row",
         "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
         "tbl_summary-str:categorical_stat" = "{n} ({p})",
+        "tbl_regression-fn:addnl-fn-to-run" = function(x) {
+          new_header_text <-
+            paste0(
+              x$table_styling$header %>% filter(.data$column == "estimate") %>% pull(.data$label),
+              " **(", style_number(x$inputs$conf.level, scale = 100), "% CI)**"
+            )
+
+          x %>%
+            # merge estimate and CI into one cell
+            modify_cols_merge(
+              rows = !!expr(.data$variable %in% !!x$table_body$variable &
+                              !is.na(.data$estimate) &
+                              !.data$reference_row %in% TRUE),
+              pattern = "{estimate} ({conf.low}, {conf.high})"
+            ) %>%
+            # hide ci column
+            modify_column_hide(any_of("ci")) %>%
+            # update column header
+            modify_header(list(estimate = new_header_text)) %>%
+            # add CI abbreviation footnote
+            modify_footnote(estimate ~ "CI = Confidence Interval", abbreviation = TRUE)
+        }
       )
   }
   else if (journal == "nejm") {

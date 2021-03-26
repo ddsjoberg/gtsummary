@@ -246,6 +246,11 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
       pvalue_fun = pvalue_fun,
       conf.level = conf.level)
 
+  # running any additional mods ------------------------------------------------
+  x <-
+    get_theme_element("tbl_regression-fn:addnl-fn-to-run", default = identity) %>%
+    do.call(list(x))
+
   # return results -------------------------------------------------------------
   x
 }
