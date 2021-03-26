@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwiched between two blank spanning headers.
+
 * Adding coefficient `plot()` methods for `tbl_regression()` and `tbl_uvregression()`
 
 * Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwhiched between two blank spanning headers.

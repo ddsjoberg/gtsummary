@@ -142,6 +142,13 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
       )
   }
 
+  # take the first non-NULL element from tbls[[.]]
+  for (style_type in c("caption", "source_note", "horizontal_line_above")) {
+    results$table_styling[[style_type]] <-
+      map(seq_along(tbls), ~pluck(tbls, .x, "table_styling", style_type)) %>%
+      purrr::reduce(.f = `%||%`)
+  }
+
   # adding label for grouping variable, if present -----------------------------
   class(results) <- c("tbl_stack", "gtsummary")
   results <-

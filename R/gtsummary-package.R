@@ -6,7 +6,7 @@
 #' imap_dfr imap_lgl map2_chr pmap_lgl pmap_chr pmap_dbl compact keep discard
 #' every some pluck flatten negate partial cross_df reduce
 #' @importFrom tidyr nest unnest complete spread
-#' @importFrom tibble tibble as_tibble
+#' @importFrom tibble tibble tribble as_tibble enframe deframe
 #' @importFrom rlang .data .env %||% set_names sym syms parse_expr expr exprs
 #' call2 := inform abort is_function is_string enexpr inject is_empty
 #' quo_is_null enquo eval_tidy quo_text

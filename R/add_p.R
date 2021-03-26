@@ -416,7 +416,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
         hide = TRUE
       )
 
-    x$list_output$source_note <-
+    x$table_styling$source_note <-
       paste(test_name, pvalue_fun(discard(x$meta_data$p.value, is.na)), sep = ", ")
   }
 

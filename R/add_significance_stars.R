@@ -130,7 +130,9 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
   x <-
     modify_cols_merge(
       x = x,
-      rows = expr(.data$variable %in% !!model_variables & !is.na(.data$estimate)),
+      rows = expr(.data$variable %in% !!model_variables &
+                    !is.na(.data$estimate) &
+                    !.data$reference_row %in% TRUE),
       pattern = pattern
     )
 

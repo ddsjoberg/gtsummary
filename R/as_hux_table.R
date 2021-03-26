@@ -110,9 +110,9 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   huxtable_calls[["huxtable"]] <- expr(huxtable::as_huxtable(add_colnames = FALSE))
 
   # set_caption ----------------------------------------------------------------
-  if (!is.null(x$list_output$caption)) {
+  if (!is.null(x$table_styling$caption)) {
     huxtable_calls[["set_caption"]] <- expr(
-      huxtable::set_caption(value = !!x$list_output$caption)
+      huxtable::set_caption(value = !!x$table_styling$caption)
     )
   }
 
@@ -156,10 +156,10 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   }
 
   # source note ----------------------------------------------------------------
-  if (!is.null(x$list_output$source_note)) {
+  if (!is.null(x$table_styling$source_note)) {
     huxtable_calls[["add_footnote"]] <- append(huxtable_calls[["add_footnote"]],
       expr(
-        huxtable::add_footnote(text = !!x$list_output$source_note)
+        huxtable::add_footnote(text = !!x$table_styling$source_note)
       )
     )
   }
@@ -197,6 +197,17 @@ table_styling_to_huxtable_calls <- function(x, ...) {
                                col = !!df_italic$column_id[[.x]],
                                value = TRUE))
     )
+
+  # horizontal_line_above ------------------------------------------------------
+  if (!is.null(x$table_styling$horizontal_line_above)) {
+    row_number <-
+      eval_tidy(x$table_styling$horizontal_line_above, data = x$table_body) %>%
+      which()
+    huxtable_calls[["horizontal_line"]] <-
+      expr(
+        huxtable::set_top_border(row = !!row_number, value = 0.4)
+      )
+  }
 
   # set_na_string -------------------------------------------------------
   df_fmt_missing <-

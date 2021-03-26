@@ -42,7 +42,7 @@
     tibble(column = character(), rows = list(),
            text_interpret = character(), footnote = character())
   x$table_styling$text_format <-
-    tibble(column = "label", rows = list(rlang::expr(.data$row_type != 'label')),
+    tibble(column = "label", rows = list(rlang::expr(.data$row_type %in% c('level', 'missing'))),
            format_type = "indent", undo_text_format = FALSE)
   x$table_styling$fmt_missing <-
     tibble(column = character(), rows = list(), symbol = character())
