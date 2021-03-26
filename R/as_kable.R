@@ -106,9 +106,9 @@ table_styling_to_kable_calls <- function(x, ...) {
   df_col_labels <-
     dplyr::filter(x$table_styling$header, .data$hide == FALSE)
 
-  if (!is.null(x$list_output$caption))
+  if (!is.null(x$table_styling$caption))
     kable_calls[["kable"]] <-
-    expr(knitr::kable(caption = !!x$list_output$caption, col.names = !!df_col_labels$label, !!!dots))
+    expr(knitr::kable(caption = !!x$table_styling$caption, col.names = !!df_col_labels$label, !!!dots))
   else
     kable_calls[["kable"]] <-
     expr(knitr::kable(col.names = !!df_col_labels$label, !!!dots))

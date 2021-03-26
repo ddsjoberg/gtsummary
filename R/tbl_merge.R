@@ -177,6 +177,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   x <- .create_gtsummary_object(table_body = table_body,
                                 tbls = tbls,
                                 call_list = list(tbl_merge = match.call()))
+
   x <- .tbl_merge_update_table_styling(x, tbls)
 
   # returning results
@@ -265,6 +266,26 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
           style_updated
         }
       )
+  }
+
+  # take the first non-NULL element from tbls[[.]]
+  for (style_type in c("caption", "source_note")) {
+    x$table_styling[[style_type]] <-
+      map(seq_along(tbls), ~pluck(tbls, .x, "table_styling", style_type)) %>%
+      purrr::reduce(.f = `%||%`)
+  }
+
+  # # rename variables in expressions, and take first non-NULL element
+  for (style_type in "horizontal_line_above") {
+    x$table_styling[[style_type]] <-
+      map(
+        seq_along(tbls),
+        ~.rename_variables_in_expression(
+          rows = pluck(tbls, .x, "table_styling", style_type),
+          id = .x,
+          tbl = tbls[[.x]])
+      )%>%
+      purrr::reduce(.f = `%||%`)
   }
 
   x

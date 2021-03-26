@@ -301,8 +301,8 @@ modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
     as.character()
 
   # adding caption to gtsummary object ----------------------------------------
-  x$list_output$caption <- caption
-  attr(x$list_output$caption, "text_interpret") <- text_interpret
+  x$table_styling$caption <- caption
+  attr(x$table_styling$caption, "text_interpret") <- text_interpret
 
   # returning updated object ---------------------------------------------------
   x

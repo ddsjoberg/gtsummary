@@ -274,7 +274,7 @@
         ifelse(
           !!!x$table_styling$cols_merge$rows[i],
           glue::glue(!!x$table_styling$cols_merge$pattern[i]) %>% as.character(),
-          NA_character_
+          !!rlang::sym(x$table_styling$cols_merge$column[i])
         )
       ) %>%
       rlang::eval_tidy(data = df_merged_column)
