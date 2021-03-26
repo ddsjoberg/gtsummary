@@ -35,6 +35,17 @@
 #'   select(`Statistic Name` = statistic_name, `Default Label` = label) %>%
 #'   knitr::kable()
 #' ```
+#'
+#' @section Tips:
+#' When combining `add_significance_stars()` with `tbl_merge()`, the
+#' ordering of the model terms and the glance statistics may become jumbled.
+#' To re-order the rows with glance statistics on bottom, use the script below:
+#'
+#' ```r
+#' tbl_merge(list(tbl1, tbl2)) %>%
+#'   modify_table_body(~.x %>% arrange(row_type == "glance_statistic"))
+#' ````
+#'
 #' @examples
 #' mod <- lm(age ~ marker + grade, trial) %>% tbl_regression()
 #'
