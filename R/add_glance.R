@@ -37,7 +37,7 @@
 #' ```
 #'
 #' @section Tips:
-#' When combining `add_significance_stars()` with `tbl_merge()`, the
+#' When combining `add_glance()` with `tbl_merge()`, the
 #' ordering of the model terms and the glance statistics may become jumbled.
 #' To re-order the rows with glance statistics on bottom, use the script below:
 #'
