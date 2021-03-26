@@ -67,7 +67,7 @@ NULL
 #'  - `"lancet"` The Lancet
 #'  - `"nejm"` New England Journal of Medicine
 #'  - `"qjecon"` The Quarterly Journal of Economics: Under Development
-theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjecon"), set_theme = TRUE) {
+theme_gtsummary_journal <- function(journal = c("jama", "jama_psychiatry", "lancet", "nejm", "qjecon"), set_theme = TRUE) {
   journal <- match.arg(journal)
   if (journal == "jama") {
     lst_theme <-
@@ -80,6 +80,19 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "add_stat_label-arg:location" = "row",
         "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
         "tbl_summary-str:categorical_stat" = "{n} ({p})"
+      )
+  }
+  else if (journal == "jama_psychiatry") {
+    lst_theme <-
+      list(
+        "pkgwide-str:theme_name" = "JAMA Psychiatry",
+        "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
+        "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
+        "style_number-arg:decimal.mark" = ".",
+        "style_number-arg:big.mark" = ",",
+        "add_stat_label-arg:location" = "row",
+        "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
+        "tbl_summary-str:categorical_stat" = "{n} ({p})",
       )
   }
   else if (journal == "nejm") {

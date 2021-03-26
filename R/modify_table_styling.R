@@ -206,3 +206,29 @@ modify_table_styling <- function(x,columns,
   # return x -------------------------------------------------------------------
   x
 }
+
+
+# this is an experimental function to merge columns
+modify_cols_merge <- function(x, rows, pattern) {
+  rows <- enquo(rows)
+  column <-
+    str_extract_all(pattern, "\\{.*?\\}") %>%
+    map(str_remove_all, pattern = fixed("}")) %>%
+    map(str_remove_all, pattern = fixed("{")) %>%
+    unlist() %>%
+    purrr::pluck(1)
+
+  x$table_styling$cols_merge <-
+    x$table_styling$cols_merge %>%
+    # remove previous merging for specified column
+    filter(!.data$column %in% .env$column) %>%
+    # append new merge instructions
+    bind_rows(
+      tibble(column = column,
+             rows = list(row),
+             pattern = pattern)
+    )
+
+  # return gtsummary table
+  x
+}

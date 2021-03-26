@@ -11,7 +11,7 @@
 \title{Available gtsummary themes}
 \usage{
 theme_gtsummary_journal(
-  journal = c("jama", "lancet", "nejm", "qjecon"),
+  journal = c("jama", "jama_psychiatry", "lancet", "nejm", "qjecon"),
   set_theme = TRUE
 )
 
