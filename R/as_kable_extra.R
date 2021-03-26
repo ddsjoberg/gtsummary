@@ -133,6 +133,18 @@ table_styling_to_kable_extra_calls <- function(x, ...) {
       expr(kableExtra::add_header_above(header = !!header))
   }
 
+  # horizontal_line_above ------------------------------------------------------
+  if (!is.null(x$table_styling$horizontal_line_above)) {
+    row_number <-
+      eval_tidy(x$table_styling$horizontal_line_above, data = x$table_body) %>%
+      which()
+    row_number <- row_number - 1
+    kable_extra_calls[["horizontal_line"]] <-
+      expr(
+        kableExtra::row_spec(row = !!row_number, hline_after = TRUE)
+      )
+  }
+
   # footnote -------------------------------------------------------------------
   vct_footnote <-
     .number_footnotes(x) %>%
