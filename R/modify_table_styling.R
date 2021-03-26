@@ -225,7 +225,7 @@ modify_cols_merge <- function(x, rows, pattern) {
     # append new merge instructions
     bind_rows(
       tibble(column = column,
-             rows = list(row),
+             rows = list(rows),
              pattern = pattern)
     )
 
