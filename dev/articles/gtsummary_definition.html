@@ -47,7 +47,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9010</span>
       </span>
     </div>
 
@@ -174,7 +174,7 @@
 <h4 class="hasAnchor">
 <a href="#table_styling" class="anchor"></a>table_styling</h4>
 <p>The <code>.$table_styling</code> object is a list of data frames containing information about how <code>.$table_body</code> is printed, formatted, and styled.<br>
-The list contains the following data frames <code>header</code>, <code>footnote</code>, <code>footnote_abbrev</code>, <code>fmt_fun</code>, <code>text_format</code>, and <code>fmt_missing</code>.</p>
+The list contains the following data frames <code>header</code>, <code>footnote</code>, <code>footnote_abbrev</code>, <code>fmt_fun</code>, <code>text_format</code>, <code>fmt_missing</code> and the following objects <code>source_note</code>, <code>caption</code>, <code>horizontal_line_above</code>.</p>
 <p><strong><code>header</code></strong></p>
 <p>The <code>header</code> table has the following columns and is one row per column found in <code>.$table_body</code>. The table contains styling information that applies to entire column or the columns headers.</p>
 <table class="table">
@@ -356,6 +356,12 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 </tr>
 </tbody>
 </table>
+<p><strong><code>source_note</code></strong></p>
+<p>String that is made a table source note. The attribute <code>"text_interpret"</code> is either <code><a href="https://rdrr.io/r/base/c.html">c("md", "html")</a></code>.</p>
+<p><strong><code>caption</code></strong></p>
+<p>String that is made into the table caption. The attribute <code>"text_interpret"</code> is either <code><a href="https://rdrr.io/r/base/c.html">c("md", "html")</a></code>.</p>
+<p><strong><code>horizontal_line_above</code></strong></p>
+<p>Expression identifying a row where a horizontal line is placed above in the table.</p>
 <p>Example from <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl_regression_ex</span><span class="op">$</span><span class="va">table_styling</span>
