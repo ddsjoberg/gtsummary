@@ -189,13 +189,35 @@ vignette for details.
 <a href="http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
 <img src="man/figures/gt_output_formats.PNG" width="55%" /> </a>
 
+## Save Individual Tables
+
+{gtsummary} tables can also be saved directly to file as an image, RTF,
+LaTeX, and Word file.
+
+``` r
+tbl %>%
+  as_gt() %>%
+  gt::gtsave(filename = ".") # use extensions .html .tex .ltx .rtf
+```
+
+For a Word file, use
+
+``` r
+tbl %>%
+  as_flex_table() %>%
+  flextable::save_as_docx()
+```
+
 ## Contributing
+
+Big thank you to [@jeffreybears](https://www.jeffreybears.com/) for the
+hex sticker!
 
 Please note that the {gtsummary} project is released with a [Contributor
 Code of
 Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
-By contributing to this project, you agree to abide by its terms. A big
-thank you to all contributors!  
+By contributing to this project, you agree to abide by its terms. Thank
+you to all contributors!  
 [@ablack3](https://github.com/ablack3),
 [@aghaynes](https://github.com/aghaynes),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
@@ -225,6 +247,7 @@ thank you to all contributors!
 [@gorkang](https://github.com/gorkang),
 [@GuiMarthe](https://github.com/GuiMarthe),
 [@hughjonesd](https://github.com/hughjonesd),
+[@iaingallagher](https://github.com/iaingallagher),
 [@IndrajeetPatil](https://github.com/IndrajeetPatil),
 [@IsadoraBM](https://github.com/IsadoraBM),
 [@j-tamad](https://github.com/j-tamad),
@@ -246,6 +269,7 @@ thank you to all contributors!
 [@larmarange](https://github.com/larmarange),
 [@leejasme](https://github.com/leejasme),
 [@ltin1214](https://github.com/ltin1214),
+[@lucavd](https://github.com/lucavd),
 [@maia-sh](https://github.com/maia-sh),
 [@margarethannum](https://github.com/margarethannum),
 [@Marsus1972](https://github.com/Marsus1972),
@@ -265,13 +289,15 @@ thank you to all contributors!
 [@simonpcouch](https://github.com/simonpcouch),
 [@slb2240](https://github.com/slb2240),
 [@slobaugh](https://github.com/slobaugh),
+[@StaffanBetner](https://github.com/StaffanBetner),
 [@storopoli](https://github.com/storopoli),
 [@TarJae](https://github.com/TarJae),
 [@tjmeyers](https://github.com/tjmeyers),
 [@tormodb](https://github.com/tormodb),
 [@UAB-BST-680](https://github.com/UAB-BST-680),
-[@Uriahf](https://github.com/Uriahf),
+[@uriahf](https://github.com/uriahf),
 [@zabore](https://github.com/zabore),
 [@zachariae](https://github.com/zachariae),
-[@zeyunlu](https://github.com/zeyunlu), and
+[@zeyunlu](https://github.com/zeyunlu),
+[@zlkrvsm](https://github.com/zlkrvsm), and
 [@zongell-star](https://github.com/zongell-star)

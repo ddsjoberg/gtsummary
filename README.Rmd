@@ -190,8 +190,28 @@ knitr::include_graphics("man/figures/gt_output_formats.PNG")
 ```
 </a>
 
+## Save Individual Tables
+
+{gtsummary} tables can also be saved directly to file as an image, RTF, LaTeX, and Word file.
+
+```r
+tbl %>%
+  as_gt() %>%
+  gt::gtsave(filename = ".") # use extensions .html .tex .ltx .rtf
+```
+
+For a Word file, use
+
+```r
+tbl %>%
+  as_flex_table() %>%
+  flextable::save_as_docx()
+```
+
 ## Contributing
 
-Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms. A big thank you to all contributors!  
-`r usethis::use_tidy_thanks("ddsjoberg/gtsummary", from = "1970-01-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`
+Big thank you to [&#x0040;jeffreybears](https://www.jeffreybears.com/) for the hex sticker!
+
+Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms. Thank you to all contributors!  
+`r usethis::use_tidy_thanks("ddsjoberg/gtsummary", from = "2018-01-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`
 
