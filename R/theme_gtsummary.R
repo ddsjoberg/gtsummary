@@ -11,9 +11,10 @@
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
 #'   - `"jama"` The Journal of the American Medical Association
+#'   - `"jama_psychiatry"` Journal of the American Medical Association - Psychiatry
 #'   - `"lancet"` The Lancet
 #'   - `"nejm"` The New England Journal of Medicine
-#'   - `"qjecon"` The Quarterly Journal of Economics: Under Development
+#'   - `"qjecon"` The Quarterly Journal of Economics: _Under Development_
 #' - `theme_gtsummary_compact()`
 #'   - tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding
 #' - `theme_gtsummary_printer(print_engine=)`
@@ -64,6 +65,7 @@ NULL
 #' @export
 #' @param journal String indicating the journal theme to follow.
 #'  - `"jama"` Journal of the American Medical Association
+#'  - `"jama_psychiatry"` Journal of the American Medical Association - Psychiatry
 #'  - `"lancet"` The Lancet
 #'  - `"nejm"` New England Journal of Medicine
 #'  - `"qjecon"` The Quarterly Journal of Economics: Under Development
@@ -147,18 +149,25 @@ theme_gtsummary_journal <- function(journal = c("jama", "jama_psychiatry", "lanc
       list(
         "pkgwide-str:theme_name" = "The Quareterly Journal of Economics",
         "tbl_summary-fn:percent_fun" = function(x) style_number(x, digits = 1, scale = 100),
-        "pkgwide-fun:pre_conversion" =  function(x) {
-          # use significance stars (if not already applied)
-          if (inherits(x, c("tbl_regression", "tbl_uvregression")) &&
-                       !"add_significance_stars" %in% names(x$call_list)) {
-            x <- add_significance_stars(x)
-          }
-          x
+        "tbl_regression-fn:addnl-fn-to-run" = function(x) {
+          new_header_text <-
+            paste(
+              x$table_styling$header %>% filter(.data$column == "estimate") %>% pull(.data$label),
+              "**(SE)**"
+            )
+
+          x %>%
+            add_significance_stars(
+              pattern = "{estimate}{stars} ({std.error})",
+              hide_se = TRUE
+            ) %>%
+            # update column header
+            modify_header(list(estimate = new_header_text)) %>%
+            # add CI abbreviation footnote
+            modify_footnote(estimate ~ "SE = Standard Error", abbreviation = TRUE)
         }
       )
   }
-
-
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
   return(invisible(lst_theme))

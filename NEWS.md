@@ -8,7 +8,7 @@
 
 * Adding coefficient `plot()` methods for `tbl_regression()` and `tbl_uvregression()`
 
-* Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwhiched between two blank spanning headers.
+* Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwiched between two blank spanning headers.
 
 * Added _The Quarterly Journal of Economics_ to `theme_gtsummary_journal()`. This journal theme will be updated again after the gt package updates `cols_merge()` with a rows argument and allows for line breaks within cell.
 
