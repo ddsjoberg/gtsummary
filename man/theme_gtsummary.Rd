@@ -100,7 +100,7 @@ for details.
 \item \code{"jama_psychiatry"} Journal of the American Medical Association - Psychiatry
 \item \code{"lancet"} The Lancet
 \item \code{"nejm"} The New England Journal of Medicine
-\item \code{"qjecon"} The Quarterly Journal of Economics: Under Development
+\item \code{"qjecon"} The Quarterly Journal of Economics: \emph{Under Development}
 }
 \item \code{theme_gtsummary_compact()}
 \itemize{
