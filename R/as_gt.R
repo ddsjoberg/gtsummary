@@ -171,11 +171,7 @@ table_styling_to_gt_calls <- function(x, ...) {
       seq_len(nrow(df_cols_align)),
       ~ expr(gt::cols_align(columns = gt::vars(!!!syms(df_cols_align$cols[[.x]])),
                             align = !!df_cols_align$align[[.x]]))
-    ) %>%
-    c(list(expr(gt::tab_style(
-      style = "vertical-align:top",
-      locations = gt::cells_body(columns = any_of("label"))
-    ))))
+    )
 
   # indent ---------------------------------------------------------------------
   df_indent <- x$table_styling$text_format %>% filter(.data$format_type == "indent")
@@ -295,6 +291,14 @@ table_styling_to_gt_calls <- function(x, ...) {
       seq_len(nrow(df_spanning_header)),
       ~ expr(gt::tab_spanner(columns = gt::vars(!!!syms(df_spanning_header$cols[[.x]])),
                              label = gt::md(!!df_spanning_header$spanning_header[[.x]])))
+    )
+
+  # cols_valign ----------------------------------------------------------------
+  gt_calls[["cols_valign"]] <-
+    list(
+      expr(gt::tab_style(
+        style = "vertical-align:top",
+        locations = gt::cells_body(columns = any_of("label"))))
     )
 
   # horizontal_line ------------------------------------------------------------
