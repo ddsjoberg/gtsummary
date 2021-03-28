@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `"jama_psychiatry"` theme to `theme_gtsummary_journal()` (#789)
+
 * Added new function `add_glance_table()` as a companion to `add_glance_source_note()`.
 
 * Updated` tbl_merge()` and `tbl_stack()` to capture the first source note and caption in the merged/stacked tables. Previously, any captions and source notes were lost. 
