@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9011</span>
       </span>
     </div>
 
@@ -176,11 +176,12 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Added <code>"jama_psychiatry"</code> theme to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_journal()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/789'>#789</a>)</p></li>
 <li><p>Added new function <code><a href="../reference/add_glance.html">add_glance_table()</a></code> as a companion to <code><a href="../reference/add_glance.html">add_glance_source_note()</a></code>.</p></li>
 <li><p>Updated<code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> and <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> to capture the first source note and caption in the merged/stacked tables. Previously, any captions and source notes were lost.</p></li>
 <li><p>Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwiched between two blank spanning headers.</p></li>
 <li><p>Adding coefficient <code><a href="../reference/plot.html">plot()</a></code> methods for <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code></p></li>
-<li><p>Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwhiched between two blank spanning headers.</p></li>
+<li><p>Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwiched between two blank spanning headers.</p></li>
 <li><p>Added <em>The Quarterly Journal of Economics</em> to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_journal()</a></code>. This journal theme will be updated again after the gt package updates <code><a href="https://rdrr.io/pkg/gt/man/cols_merge.html">cols_merge()</a></code> with a rows argument and allows for line breaks within cell.</p></li>
 <li><p>Added messaging when table caption requested for a gt table when using a version of gt that does not support captions.</p></li>
 <li><p>Updates to the table gallery vignette reflecting changes in the package. (<a href='https://github.com/ddsjoberg/gtsummary/issues/775'>#775</a>)</p></li>
