@@ -76,6 +76,32 @@ test_that("setting themes", {
   expect_error(tbl_theme <- tbl_summary(trial[c("trt", "age")]), NA)
   expect_equal(tbl_theme$meta_data$stat_display,
                list("{n} / {N} ({p}%)", c("{median} ({p25} - {p75})", "{mean} ({sd})")))
+
+
+  theme_gtsummary_journal("jama_psychiatry")
+
+  expect_equal(
+    lm(age ~ grade, trial) %>%
+      tbl_regression() %>%
+      as_tibble(col_labels = FALSE) %>%
+      purrr::pluck("estimate"),
+    c(NA, NA, "1.4 (-3.6, 6.4)", "2.0 (-3.1, 7.0)")
+  )
+
+  reset_gtsummary_theme()
+  list("tbl_regression-str:coef_header" =
+         rlang::expr(ifelse(exponentiate == TRUE, "exp(coef)", "coef"))) %>%
+    set_gtsummary_theme()
+
+  expect_equal(
+    lm(age ~ grade, trial) %>%
+      tbl_regression() %>%
+      as_tibble(col_labels = TRUE) %>%
+      names() %>%
+      purrr::pluck(2),
+    "**coef**"
+  )
+
   reset_gtsummary_theme()
 })
 

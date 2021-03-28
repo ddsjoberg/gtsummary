@@ -184,8 +184,16 @@ chr_w_backtick <- function(x) map_chr(x, ~rlang::sym(.) %>% deparse(backtick = T
 .estimate_column_labels <- function(x) {
   language <- get_theme_element("pkgwide-str:language", default = "en")
 
+
   result <- list()
   result$label <- unique(x$table_body$coefficients_label)
+
+  if (result$label %in% c("Beta", "exp(Beta)")) {
+    exponentiate <- x$inputs$exponentiate
+    result$label <- get_theme_element("tbl_regression-str:coef_header",
+                                      default = result$label)
+  }
+
   result$footnote <-
     case_when(
       result$label %in% c("OR", "log(OR)") ~ "OR = Odds Ratio",

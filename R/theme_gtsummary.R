@@ -11,9 +11,10 @@
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
 #'   - `"jama"` The Journal of the American Medical Association
+#'   - `"jama_psychiatry"` Journal of the American Medical Association - Psychiatry
 #'   - `"lancet"` The Lancet
 #'   - `"nejm"` The New England Journal of Medicine
-#'   - `"qjecon"` The Quarterly Journal of Economics: Under Development
+#'   - `"qjecon"` The Quarterly Journal of Economics: _Under Development_
 #' - `theme_gtsummary_compact()`
 #'   - tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding
 #' - `theme_gtsummary_printer(print_engine=)`
@@ -64,10 +65,11 @@ NULL
 #' @export
 #' @param journal String indicating the journal theme to follow.
 #'  - `"jama"` Journal of the American Medical Association
+#'  - `"jama_psychiatry"` Journal of the American Medical Association - Psychiatry
 #'  - `"lancet"` The Lancet
 #'  - `"nejm"` New England Journal of Medicine
 #'  - `"qjecon"` The Quarterly Journal of Economics: Under Development
-theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjecon"), set_theme = TRUE) {
+theme_gtsummary_journal <- function(journal = c("jama", "jama_psychiatry", "lancet", "nejm", "qjecon"), set_theme = TRUE) {
   journal <- match.arg(journal)
   if (journal == "jama") {
     lst_theme <-
@@ -80,6 +82,41 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "add_stat_label-arg:location" = "row",
         "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
         "tbl_summary-str:categorical_stat" = "{n} ({p})"
+      )
+  }
+  else if (journal == "jama_psychiatry") {
+    lst_theme <-
+      list(
+        "pkgwide-str:theme_name" = "JAMA Psychiatry",
+        "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
+        "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
+        "style_number-arg:decimal.mark" = ".",
+        "style_number-arg:big.mark" = ",",
+        "add_stat_label-arg:location" = "row",
+        "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
+        "tbl_summary-str:categorical_stat" = "{n} ({p})",
+        "tbl_regression-fn:addnl-fn-to-run" = function(x) {
+          new_header_text <-
+            paste0(
+              x$table_styling$header %>% filter(.data$column == "estimate") %>% pull(.data$label),
+              " **(", style_number(x$inputs$conf.level, scale = 100), "% CI)**"
+            )
+
+          x %>%
+            # merge estimate and CI into one cell
+            modify_cols_merge(
+              rows = !!expr(.data$variable %in% !!x$table_body$variable &
+                              !is.na(.data$estimate) &
+                              !.data$reference_row %in% TRUE),
+              pattern = "{estimate} ({conf.low}, {conf.high})"
+            ) %>%
+            # hide ci column
+            modify_column_hide(any_of("ci")) %>%
+            # update column header
+            modify_header(list(estimate = new_header_text)) %>%
+            # add CI abbreviation footnote
+            modify_footnote(estimate ~ "CI = Confidence Interval", abbreviation = TRUE)
+        }
       )
   }
   else if (journal == "nejm") {
@@ -112,18 +149,25 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
       list(
         "pkgwide-str:theme_name" = "The Quareterly Journal of Economics",
         "tbl_summary-fn:percent_fun" = function(x) style_number(x, digits = 1, scale = 100),
-        "pkgwide-fun:pre_conversion" =  function(x) {
-          # use significance stars (if not already applied)
-          if (inherits(x, c("tbl_regression", "tbl_uvregression")) &&
-                       !"add_significance_stars" %in% names(x$call_list)) {
-            x <- add_significance_stars(x)
-          }
-          x
+        "tbl_regression-fn:addnl-fn-to-run" = function(x) {
+          new_header_text <-
+            paste(
+              x$table_styling$header %>% filter(.data$column == "estimate") %>% pull(.data$label),
+              "**(SE)**"
+            )
+
+          x %>%
+            add_significance_stars(
+              pattern = "{estimate}{stars} ({std.error})",
+              hide_se = TRUE
+            ) %>%
+            # update column header
+            modify_header(list(estimate = new_header_text)) %>%
+            # add CI abbreviation footnote
+            modify_footnote(estimate ~ "SE = Standard Error", abbreviation = TRUE)
         }
       )
   }
-
-
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
   return(invisible(lst_theme))

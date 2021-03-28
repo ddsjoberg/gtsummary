@@ -84,7 +84,7 @@ When there is no default, the column name from \code{broom::glance()} is printed
 
 \section{Tips}{
 
-When combining \code{add_glance()} with \code{tbl_merge()}, the
+When combining \code{add_glance_table()} with \code{tbl_merge()}, the
 ordering of the model terms and the glance statistics may become jumbled.
 To re-order the rows with glance statistics on bottom, use the script below:\if{html}{\out{<div class="r">}}\preformatted{tbl_merge(list(tbl1, tbl2)) \%>\%
   modify_table_body(~.x \%>\% arrange(row_type == "glance_statistic"))
