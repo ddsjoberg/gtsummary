@@ -258,9 +258,12 @@
     abort("Error merging columns due to misspecification.")
 
   # get version of object with no merge styling to use in `as_tibble.gtsummary()`
+  # also removing text formatting (otherwise, it'll be double applied later)
   x_no_merging <- x
   x_no_merging$table_styling$cols_merge <-
     filter(x_no_merging$table_styling$cols_merge, FALSE)
+  x_no_merging$table_styling$text_format <-
+    filter(x_no_merging$table_styling$text_format, FALSE)
 
   # apply merging for each for in the cols_merge data frame
   for (i in seq_len(nrow(x$table_styling$cols_merge))) {
