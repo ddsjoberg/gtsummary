@@ -418,6 +418,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 
     x$table_styling$source_note <-
       paste(test_name, pvalue_fun(discard(x$meta_data$p.value, is.na)), sep = ", ")
+    attr(x$table_styling$source_note, "text_interpret") <- "md"
   }
 
   # return tbl_cross
