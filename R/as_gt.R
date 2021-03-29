@@ -293,14 +293,6 @@ table_styling_to_gt_calls <- function(x, ...) {
                              label = gt::md(!!df_spanning_header$spanning_header[[.x]])))
     )
 
-  # cols_valign ----------------------------------------------------------------
-  gt_calls[["cols_valign"]] <-
-    list(
-      expr(gt::tab_style(
-        style = "vertical-align:top",
-        locations = gt::cells_body(columns = any_of("label"))))
-    )
-
   # horizontal_line ------------------------------------------------------------
   if (!is.null(x$table_styling$horizontal_line_above)) {
     gt_calls[["horizontal_line"]] <-
