@@ -4,7 +4,7 @@
 
 * Added new function `add_glance_table()` as a companion to `add_glance_source_note()`. Function adds model statistics, such as R-squared, to the bottom of the model summary table.
 
-* Added new function `tbl_strata()`. The function aids prepares gtsummary tables stratified by another variable (more more) (#679)
+* Added new function `tbl_strata()`. The function aids prepares gtsummary tables stratified by one or more variables (#679)
 
 * Adding coefficient `plot()` methods for `tbl_regression()` and `tbl_uvregression()`. Function creates a forest plot of model coefficients via `GGally::ggcoef_plot()`.
 
