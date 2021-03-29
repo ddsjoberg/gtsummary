@@ -1,0 +1,113 @@
+---
+title: "{gtsummary} Tutorial"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+gtsummary::theme_gtsummary_compact()
+```
+
+## Introduction
+
+The {gtsummary} package provides an elegant and flexible way to create publication-ready analytical and summary tables using the **R** programming language.
+The {gtsummary} package summarizes data sets, regression models, and more, using sensible defaults with highly customizable capabilities.
+
+* [**Summarize data frames or tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) easily in **R**. Perfect for presenting descriptive statistics, comparing group **demographics** (e.g creating a **Table 1** for medical journals),  and more. Automatically detects continuous, categorical, and dichotomous variables in your data set, calculates appropriate descriptive statistics, and also includes amount of missingness in each variable.
+
+* [**Summarize regression models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) in R and include reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio and Hazard Ratio). 
+
+* [**Customize gtsummary tables**](http://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions) using a growing list of formatting/styling functions. **[Bold](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)** labels, **[italicize](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)** levels, **[add p-value](http://www.danieldsjoberg.com/gtsummary/reference/add_p.html)** to summary tables, **[style](http://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)** the statistics however you choose, **[merge](http://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)** or **[stack](http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)** tables to present results side by side... there are so many possibilities to create the table of your dreams! 
+
+* **[Report statistics inline](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text)** from summary tables and regression summary tables in **R markdown**. Make your reports completely reproducible!
+
+By leveraging [{broom}](https://broom.tidymodels.org/), [{gt}](https://gt.rstudio.com/), and [{labelled}](http://larmarange.github.io/labelled/) packages, {gtsummary} creates beautifully formatted, ready-to-share summary and result tables in a single line of R code!  
+
+## Data Frame Summaries
+
+**Summarize data frames or tibbles**
+
+The `tbl_summary()` function calculates **descriptive statistics** for continuous, categorical, and dichotomous variables in **R**, and presents the results in a **beautiful, customizable summary table** ready for publication (for example, Table 1 or demographic tables).
+
+This tutorial will walk a reader through the `tbl_summary()` function, and the various functions available to modify and make additions to an existing table summary object.
+
+### Basic Usage
+
+The default output from `tbl_summary()` is meant to be **publication ready**. 
+
+Let's start by creating a table of summary statistics from the `trial` data set.
+The `tbl_summary()` function can take, at minimum, a data frame as the only input, and returns descriptive statistics for each column in the data frame.
+
+
+```{r}
+library(gtsummary)
+
+trial %>% 
+  select(age, grade, trt) %>%
+  tbl_summary()
+```
+
+
+### Exercise 
+
+*Here's a simple exercise with an empty code chunk provided for entering the answer.*
+
+Write the R code required to add two plus two:
+
+```{r two-plus-two, exercise=TRUE}
+
+```
+
+### Exercise with Code
+
+*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
+
+Now write a function that adds any two numbers and then call it:
+
+```{r add-function, exercise=TRUE, exercise.lines = 5}
+add <- function() {
+  
+}
+```
+
+## Topic 2
+
+### Exercise with Hint
+
+*Here's an exercise where the chunk is pre-evaulated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
+
+Modify the following code to limit the number of rows printed to 5:
+
+```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
+mtcars
+```
+
+```{r print-limit-hint}
+head(mtcars)
+```
+
+### Quiz
+
+*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
+
+Some questions to verify that you understand the purposes of various base and recommended R packages:
+
+```{r quiz, echo = FALSE}
+quiz(
+  question("Which package contains functions for installing other R packages?",
+    answer("base"),
+    answer("tools"),
+    answer("utils", correct = TRUE),
+    answer("codetools")
+  ),
+  question("Which of the R packages listed below are used to create plots?",
+    answer("lattice", correct = TRUE),
+    answer("tools"),
+    answer("stats"),
+    answer("grid", correct = TRUE)
+  )
+)
+```
+
