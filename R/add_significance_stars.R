@@ -53,7 +53,10 @@
 #'     pattern = "{estimate}{stars}<br>({std.error})"
 #'   ) %>%
 #'   modify_header(estimate ~ "**Beta (SE)**") %>%
-#'   modify_footnote(estimate ~ "SE = Standard Error", abbreviation = TRUE)
+#'   modify_footnote(estimate ~ "SE = Standard Error", abbreviation = TRUE) %>%
+#'   as_gt() %>%
+#'   gt::tab_style(style = "vertical-align:top",
+#'                 locations = gt::cells_body(columns = vars(label)))
 #'
 #' @section Example Output:
 #' \if{html}{Example 1}
