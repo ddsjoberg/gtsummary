@@ -1,82 +1,86 @@
 # gtsummary (development version)
 
-* Added `"jama_psychiatry"` theme to `theme_gtsummary_journal()` (#789)
+### New Functions
 
-* Added new function `add_glance_table()` as a companion to `add_glance_source_note()`.
+* Added new function `add_glance_table()` as a companion to `add_glance_source_note()`. Function adds model statistics, such as R-squared, to the bottom of the model summary table.
 
-* Updated` tbl_merge()` and `tbl_stack()` to capture the first source note and caption in the merged/stacked tables. Previously, any captions and source notes were lost. 
+* Added new function `tbl_strata()`. The function aids prepares gtsummary tables stratified by another variable (more more) (#679)
 
-* Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwiched between two blank spanning headers.
+* Adding coefficient `plot()` methods for `tbl_regression()` and `tbl_uvregression()`. Function creates a forest plot of model coefficients via `GGally::ggcoef_plot()`.
 
-* Adding coefficient `plot()` methods for `tbl_regression()` and `tbl_uvregression()`
-
-* Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwiched between two blank spanning headers.
-
-* Added _The Quarterly Journal of Economics_ to `theme_gtsummary_journal()`. This journal theme will be updated again after the gt package updates `cols_merge()` with a rows argument and allows for line breaks within cell.
-
-* Added messaging when table caption requested for a gt table when using a version of gt that does not support captions.
-
-* Updates to the table gallery vignette reflecting changes in the package. (#775)
-
-* Added default support for `brmsfit` model in `tbl_regression()` with new method function. (#751)
-
-* Improved error messaging when there is a problem constructing one of the univariate regression models in `tbl_uvregression()`.
-
-* Improved handling and messaging to users when columns with `"haven_labelled"` class are passed to gtsummary functions. (#805)
-
-* `tbl_summary()` now accepts any class as input, previously only non-date base classes were accepted. For non-base R classes, the summary type must be specified using `tbl_summary(type=)`. The default summary statistic for dates/times is the minimum and maximum. (#488)
-
-* Improved handling of ordered factors as the `by=` variable (#569, #540)
-
-* Bug fix when displaying an unobserved level of a factor variable dichotomously in `tbl_summary()`. (#780)
-
-* Icelandic language translations added.
-
-* Bug fix where `add_p()` test footnote was not being translated.
-
-* The broom tidier for GAMs does not include an `exponentiate=` argument. This argument, however, was still being passed within gtsummary. The custom GAM tidier has been updated to respect the exponentiation request.
-
-* Preserve ordering for factor variables in tbl_survfit(). (#764)
-
-* Removed {usethis} package dependency and replaced with {cli}. (#768)
-
-* Added variable-specific formatting to `add_difference(estimate_fun=)` allowing a single table to show, for example, mean and rate differences that are formatted/rounded differently.
-
-* The `add_stat()` function may now return multiple columns of new statistics. Some arguments have been deprecated in the update. (#746)
-
-* Added theme element `"pkgwide-fun:pre_conversion"`. The function specified here will be executed on the gtsummary object before it is printed or converted with the `as_gt()`, `as_flex_table()`, etc functions. (#773)
-
-* Added new function `add_significance_stars()` adding significance star indicators to significant estimates, and an explanatory footnote.
-
-* Print infrastructure has been updated to allow for both row and column specification when formatting data or table styling. The `x$table_header` object has been replaced with a more general `x$table_styling`. Review the updated vignette `"gtsummary_definition.Rmd"` for details. The `x$table_body` is no longer grouped after `tbl_stack()`; rather, the grouping variable is specified in `gt::gt(groupname_col=)`
-
-* New function introduced,  `modify_table_styling()`, to update printing instructions of tables. `modify_table_header()` is now deprecated. 
+* Added new function `add_significance_stars()` adding star indicators to significant estimates, and an explanatory footnote.
 
 * New function `modify_fmt_fun()` has been introduced to help update the functions that format numeric columns and rows in `.x$table_body`.
 
+* New function introduced,  `modify_table_styling()`, to update printing instructions of tables. This function replaces `modify_table_header()`, which is now soft deprecated. 
+
+* Added function `add_vif()` to include variance inflation factors in `tbl_regression()` output. (#717)
+
+### New Functionality
+
+* Print infrastructure has been updated to allow for both row and column specification when formatting data or table styling. The `x$table_header` object has been replaced with a more general `x$table_styling`. Review the updated vignette `"gtsummary_definition.Rmd"` for details. The `x$table_body` is no longer grouped after `tbl_stack()`; rather, the grouping variable is specified in `gt::gt(groupname_col=)`
+
+* `tbl_summary()` now accepts any class as input, previously only non-date base classes were accepted. For non-base R classes, the summary type must be specified using `tbl_summary(type=)`. The default summary statistic for dates/times is the minimum and maximum. (#488)
+
+* The `add_stat()` function may now return multiple columns of new statistics. Some arguments have been deprecated in the update. (#746)
+
+* `tbl_uvregression()` now accepts both data frames and survey design objects as input. (#742)
+
+* Added a custom tidier for `mgcv::gam()` models (`tidy_gam()`) and a method function (`tbl_regression.gam()`) that uses the new tidier by default. (#745)
+
 * Functions `modify_footnote()` and `modify_spanning_header()` now include the `text_interpret=` argument indicating whether to use `gt::md()` or `gt::html()` to format text. Default is `gt::md()`.
 
-* The `modify_footnote()` function now has a rows argument and can place footnotes in the body of a table.
+* Added/updated functions `add_n()` and `add_nevent()` to work with `tbl_regression` and `tbl_uvregression` objects. Each function now has an argument to place Ns on the label or level rows. (#744)
+
+* Added `"jama_psychiatry"` theme to `theme_gtsummary_journal()` (#789)
+
+* Added _The Quarterly Journal of Economics_ to `theme_gtsummary_journal()`. This journal theme will be updated again after the gt package updates `cols_merge()` with a rows argument and allows for line breaks within cell.
+
+* Added default support for `brmsfit` model in `tbl_regression()` with new method function. (#751)
+
+* Icelandic language translations added for `theme_gtsummary_language("is")`.
+
+* Added theme element `"pkgwide-fun:pre_conversion"`. The function specified here will be executed on the gtsummary object before it is printed or converted with the `as_gt()`, `as_flex_table()`, etc functions. (#773)
 
 * The `modify_table_body(fun=)` argument has been generalized to accept formula short notation.
 
-* `tbl_survival()` has moved from questioning to deprecated. This function maintains the old `x$table_header` format (instead of the more flexible `x$table_styling`). The `"level_label"` column was renamed to `"groupname_col"` and the `x$table_body` is no longer grouped with `group_by(level_label)` 
+### Other Updates
 
-* Added new function `tbl_strata()`. The function aids in a preparing a gtsummary table stratified by a variable (#679)
+* Updated` tbl_merge()` and `tbl_stack()` to capture the first source note and caption in the merged/stacked tables. Previously, any captions and source notes were lost. 
+
+* Added messaging when table caption requested via `modify_caption()` for a gt table when using a version of gt that does not support captions.
+
+* Updates to the table gallery vignette reflecting changes in the package. (#775)
+
+* Improved error messaging when there is a problem constructing one of the univariate regression models in `tbl_uvregression()`.
+
+* Added variable-specific formatting to `add_difference(estimate_fun=)` allowing a single table to show, for example, mean and rate differences that are formatted/rounded differently.
+
+* Improved handling and messaging to users when columns with `"haven_labelled"` class are passed to gtsummary functions. (#805)
+
+* The broom tidier for GAMs does not include an `exponentiate=` argument. This argument, however, was still being passed within gtsummary. The custom GAM tidier has been updated to respect the exponentiation request.
+
+* Improved handling of ordered factors as the `by=` variable (#569, #540)
+
+* Removed {usethis} package dependency and replaced with {cli}. (#768)
 
 * Added the survey-adapted t-test to `theme_gtsummary_mean_sd()` for continuous variables in `add_p.tbl_svysummary()` (#758)
 
 * Allowing for tidyverse shortcut notation in `tbl_survfit(estimate_fun=)` specification, e.g. `tbl_survfit(estimate_fun= ~style_sigfig(.x * 100))` (#761)
 
-* Added/updated functions `add_n()` and `add_nevent()` to work with `tbl_regression` and `tbl_uvregression` objects. Each function now has an argument to place Ns on the label or level rows. (#744)
+### Bug Fixes
 
-* Bug fix for column ordering when spanning columns added with `tbl_merge()`
+* Preserve ordering for factor variables in `tbl_survfit()`. (#764)
 
-* Added a custom tidier for `mgcv::gam()` models (`tidy_gam()`) and a method function (`tbl_regression.gam()`) that uses the new tidier by default. (#745)
+* Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwiched between two blank spanning headers.
 
-* `tbl_uvregression()` now accepts both data frames and survey design objects as input. (#742)
+* Bug fix when displaying an unobserved level of a factor variable dichotomously in `tbl_summary()`. (#780)
 
-* Added function `add_vif()` to include variance inflation factors in `tbl_regression()` output. (#717)
+* Bug fix in `add_p()` where test name footnote was not being translated with `theme_gtsummary_language()`.
+
+### Breaking Changes
+
+* `tbl_survival()` has moved from questioning to deprecated. This function maintains the old `x$table_header` format (instead of the more flexible `x$table_styling`). The `"level_label"` column was renamed to `"groupname_col"` and the `x$table_body` is no longer grouped with `group_by(level_label)` 
 
 # gtsummary 1.3.7
 
