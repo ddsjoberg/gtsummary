@@ -20,11 +20,9 @@ tbl_cross(
 \arguments{
 \item{data}{A data frame}
 
-\item{row}{A column name in data to be used for columns
-of cross table.}
+\item{row}{A column name in \verb{data=} to be used for the rows of cross table.}
 
-\item{col}{A column name in data to be used for rows
-of cross table.}
+\item{col}{A column name in \verb{data=} to be used for the columns of cross table.}
 
 \item{label}{List of formulas specifying variables labels,
 e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}.  If a

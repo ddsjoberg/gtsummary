@@ -4,10 +4,8 @@
 #' The function creates a cross table of two categorical variables.
 #'
 #' @param data A data frame
-#' @param row A column name in data to be used for columns
-#' of cross table.
-#' @param col A column name in data to be used for rows
-#' of cross table.
+#' @param row A column name in `data=` to be used for the rows of cross table.
+#' @param col A column name in `data=` to be used for the columns of cross table.
 #' @param statistic A string with the statistic name in curly brackets to
 #' be replaced with the numeric statistic (see glue::glue).
 #' The default is `{n}`. If percent argument is `"column"`, `"row"`, or `"cell"`,
