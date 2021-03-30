@@ -62,6 +62,25 @@
 # this fn updates `table_styling` list to match `table_body`
 .update_table_styling <- function(x) {
 
+  # vector of columns deleted in update
+  deleted_columns <-
+    x$table_styling$header$column %>%
+    setdiff(names(x$table_body))
+
+  # if a column was deleted, omit all styling instructions for that column -----
+  if (!is_empty(deleted_columns)) {
+    for (styling_element in names(x$table_styling)) {
+      # if element is a tibble with a column called 'column'
+      if (is.data.frame(x$table_styling[[styling_element]]) &&
+          "column" %in% names(x$table_styling[[styling_element]])) {
+        x$table_styling[[styling_element]] <-
+          x$table_styling[[styling_element]] %>%
+          filter(!.data$column %in% deleted_columns)
+      }
+    }
+  }
+
+  # update styling header table with new variables -----------------------------
   x$table_styling$header <-
     tibble(
       column = names(x$table_body),
@@ -77,5 +96,6 @@
       by = "column"
     )
 
+  # return x -------------------------------------------------------------------
   x
 }
