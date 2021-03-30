@@ -221,7 +221,8 @@ tbl_merge(list(t1, t2)) %>%
 <a id="cross_tab_continuous"></a>
 
 It's often needed to summarize a continuous by two categorical variables.
-One way to do this is with `tbl_strata()`, and another with the code below.
+The code below has been wrapped into a single-line solution in 
+[`bstfun::tbl_2way_summary(trial, grade, trt, marker)`](http://www.danieldsjoberg.com/bstfun/dev/reference/tbl_2way_summary.html)
 
 ```{r}
 trial %>%
@@ -236,7 +237,7 @@ trial %>%
       data %>%
       # build summary table, and use the grade level as the label
       tbl_summary(by = trt, label = list(marker = as.character(grade)), missing = "no") %>%
-      modify_header(list(label ~ "**Tumor Grade**", all_stat_cols() ~ "**{level}**")) %>%
+      modify_header(list(label ~ "**Tumor Grade**", all_stat_cols() ~ "{level}")) %>%
       list()
   ) %>%
   # stack tbl_summary tables to create final tbl
