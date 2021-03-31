@@ -7,6 +7,7 @@
 \alias{theme_gtsummary_printer}
 \alias{theme_gtsummary_language}
 \alias{theme_gtsummary_continuous2}
+\alias{theme_gtsummary_eda}
 \alias{theme_gtsummary_mean_sd}
 \title{Available gtsummary themes}
 \usage{
@@ -36,6 +37,8 @@ theme_gtsummary_continuous2(
   statistic = "{median} ({p25, {p75})",
   set_theme = TRUE
 )
+
+theme_gtsummary_eda(set_theme = TRUE)
 
 theme_gtsummary_mean_sd(set_theme = TRUE)
 }

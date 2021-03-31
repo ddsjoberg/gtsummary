@@ -27,6 +27,9 @@
 #' - `theme_gtsummary_continuous2()`
 #'   - Set all continuous variables to summary type `"continuous2"` by default
 #'   - Use the `statistic=` argument to set the default continuous variable summary statistics
+#' - `theme_gtsummary_eda()`
+#'   - Set all continuous variables to summary type `"continuous2"` by default
+#'   - In `tbl_summary()` show the median, mean, IQR, SD, and Range by default
 #' - `theme_gtsummary_mean_sd()`
 #'   - Set default summary statistics to mean and standard deviation in `tbl_summary()`
 #'   - Set default continuous tests in `add_p.tbl_summary()` to t-tests and ANOVA
@@ -298,6 +301,21 @@ theme_gtsummary_continuous2 <- function(statistic = "{median} ({p25, {p75})", se
   lst_theme <- list(
     "tbl_summary-str:default_con_type" = "continuous2",
     "tbl_summary-str:continuous_stat" = statistic
+  )
+
+  if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
+  return(invisible(lst_theme))
+}
+
+# ------------------------------------------------------------------------------
+#' @rdname theme_gtsummary
+#' @export
+theme_gtsummary_eda <- function(set_theme = TRUE) {
+
+  lst_theme <- list(
+    "tbl_summary-str:default_con_type" = "continuous2",
+    "tbl_summary-str:continuous_stat" =
+      c("{median} ({p25}, {p75})", "{mean} ({sd})", "{min}, {max}")
     )
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
