@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Remove rows by type — remove_row_type • gtsummary</title>
+<title>Common Sources of Error with tbl_survfit() — tbl_survfit_errors • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,36 @@
 
 
 
-<meta property="og:title" content="Remove rows by type — remove_row_type" />
-<meta property="og:description" content="Removes either the header, reference, or missing rows from a gtsummary table." />
+<meta property="og:title" content="Common Sources of Error with tbl_survfit() — tbl_survfit_errors" />
+<meta property="og:description" content="When functions add_n() and add_p() are run after tbl_survfit(),
+the original call to survival::survfit()
+is extracted and the formula= and data= arguments are used to calculate
+the N or p-value.
+When the values of the formula= and data= are unavailable, the functions
+cannot execute. Below are some tips to modify your code to ensure all functions
+run without issue.
+Let tbl_survfit() construct the survival::survfit() for you by passing
+a data frame to tbl_survfit(). The survfit model will be constructed
+in a manner ensuring the formula and data are available.
+This only works if you have a stratified model.
+Instead of the following linesurvfit(Surv(ttdeath, death) ~ trt, trial) %&amp;gt;%
+  tbl_survfit(times = c(12, 24))
+
+Use this codetrial %&amp;gt;%
+  select(ttdeath, death, trt) %&amp;gt;%
+  tbl_survfit(y = Surv(ttdeath, death), times = c(12, 24))
+
+Construct an expression of the survival::survfit() before evaluating it.
+Ensure the formula and data are available in the call by using the tidyvsere
+bang-bang operator, !!.
+Use this codeformula_arg &amp;lt;- Surv(ttdeath, death) ~ 1
+data_arg &amp;lt;- trial
+rlang::expr(survfit(!!formula_arg, !!data_arg)) %&amp;gt;%
+  eval() %&amp;gt;%
+  tbl_survfit(times = c(12, 24))
+
+
+" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -168,58 +196,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Remove rows by type</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/remove_row_type.R'><code>R/remove_row_type.R</code></a></small>
-    <div class="hidden name"><code>remove_row_type.Rd</code></div>
+    <h1>Common Sources of Error with <code>tbl_survfit()</code></h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/tbl_survfit_errors.R'><code>R/tbl_survfit_errors.R</code></a></small>
+    <div class="hidden name"><code>tbl_survfit_errors.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Removes either the header, reference, or missing rows from a gtsummary table.</p>
+    <p>When functions <code><a href='add_n.html'>add_n()</a></code> and <code><a href='add_p.html'>add_p()</a></code> are run after <code><a href='tbl_survfit.html'>tbl_survfit()</a></code>,
+the original call to <code><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survival::survfit()</a></code>
+is extracted and the <code>formula=</code> and <code>data=</code> arguments are used to calculate
+the N or p-value.</p>
+<p>When the values of the <code>formula=</code> and <code>data=</code> are unavailable, the functions
+cannot execute. Below are some tips to modify your code to ensure all functions
+run without issue.</p><ol>
+<li><p>Let <code><a href='tbl_survfit.html'>tbl_survfit()</a></code> construct the <code><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survival::survfit()</a></code> for you by passing
+a data frame to <code><a href='tbl_survfit.html'>tbl_survfit()</a></code>. The survfit model will be constructed
+in a manner ensuring the formula and data are available.
+This only works if you have a stratified model.</p>
+<p>Instead of the following line<div class="r"></p><pre><span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span><span class='op'>(</span>times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span>
+</pre><p></div></p>
+<p>Use this code<div class="r"></p><pre><span class='va'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span>, times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span>
+</pre><p></div></p></li>
+<li><p>Construct an expression of the <code><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survival::survfit()</a></code> before evaluating it.
+Ensure the formula and data are available in the call by using the tidyvsere
+bang-bang operator, <code>!!</code>.</p>
+<p>Use this code<div class="r"></p><pre><span class='va'>formula_arg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>
+<span class='va'>data_arg</span> <span class='op'>&lt;-</span> <span class='va'>trial</span>
+<span class='fu'>rlang</span><span class='fu'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/nse-defuse.html'>expr</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='op'>!</span><span class='op'>!</span><span class='va'>formula_arg</span>, <span class='op'>!</span><span class='op'>!</span><span class='va'>data_arg</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/eval.html'>eval</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span><span class='op'>(</span>times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span>
+</pre><p></div></p></li>
+</ol>
+
     </div>
 
-    <pre class="usage"><span class='fu'>remove_row_type</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  variables <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
-  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"header"</span>, <span class='st'>"reference"</span>, <span class='st'>"missing"</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>gtsummary object</p></td>
-    </tr>
-    <tr>
-      <th>variables</th>
-      <td><p>variables to to remove rows from. Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code></p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>type of row to remove. Must be one of
-<code><a href='https://rdrr.io/r/base/c.html'>c("header", "reference", "missing")</a></code></p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
-    
-
-<p>Example 1</p>
-<p><img src='figures/remove_row_type_ex1.png' width=60% /></p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>, warn.conflicts <span class='op'>=</span> <span class='cn'>FALSE</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>remove_row_type_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>
-    age60 <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>&lt;</span> <span class='fl'>60</span> <span class='op'>~</span> <span class='st'>"&lt;60"</span>, <span class='va'>age</span> <span class='op'>&gt;=</span> <span class='fl'>60</span> <span class='op'>~</span> <span class='st'>"60+"</span><span class='op'>)</span>
-  <span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>remove_row_type</span><span class='op'>(</span><span class='va'>age60</span>, type <span class='op'>=</span> <span class='st'>"header"</span><span class='op'>)</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
