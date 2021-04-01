@@ -539,6 +539,20 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
       arg_name = "test.args"
     )
 
+  # checking the formula and data from survfit object are available
+  purrr::walk(
+      x$meta_data$survfit,
+      function(suvfit) {
+        #extracting survfit call
+        survfit_call <- suvfit$call %>% as.list()
+        # index of formula and data
+        call_index <- names(survfit_call) %in% c("formula", "data") %>% which()
+        # converting call into a model.frame call
+        rlang::call2(rlang::expr(stats::model.frame), !!!survfit_call[call_index]) %>%
+          safe_survfit_eval()
+      }
+  )
+
   x$meta_data <-
     meta_data %>%
     mutate(

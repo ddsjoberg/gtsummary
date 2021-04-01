@@ -70,6 +70,8 @@
 
 ### Bug Fixes
 
+* The `label=` argument for unstratified models was being ignored in `tbl_survfit()` (#842)
+
 * Preserve ordering for factor variables in `tbl_survfit()`. (#764)
 
 * Bug fix for spanning headers with kableExtra output. The spanning header was misplaced when the header text was sandwiched between two blank spanning headers.
