@@ -68,6 +68,8 @@
 
 * Allowing for tidyverse shortcut notation in `tbl_survfit(estimate_fun=)` specification, e.g. `tbl_survfit(estimate_fun= ~style_sigfig(.x * 100))` (#761)
 
+* The JAMA journal theme has been updated to merge the coefficient and confidence interval columns.
+
 ### Bug Fixes
 
 * The `label=` argument for unstratified models was being ignored in `tbl_survfit()` (#842)
@@ -83,6 +85,8 @@
 ### Breaking Changes
 
 * `tbl_survival()` has moved from questioning to deprecated. This function maintains the old `x$table_header` format (instead of the more flexible `x$table_styling`). The `"level_label"` column was renamed to `"groupname_col"` and the `x$table_body` is no longer grouped with `group_by(level_label)` 
+
+* The back-end implementation of `add_stat_label(location = "row")` has been updated. The function now merges columns `"label"` and `"stat_label"` instead of modifying the `"label"` column directly. This _could_ be a breaking change if users had manually updated results, for example, from a `tbl_regression()` table to merge with `tbl_summary()` using `tbl_merge()` 
 
 * The function `add_stat_label()` no longer auto-switches `location = "column"` requests to `"row"` in the presence of `"continuous2"` variables.
 
