@@ -54,3 +54,20 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
   expect_error(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
   expect_warning(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
 })
+
+test_that("add_stat_label() with tbl_merge()", {
+  tbl0 <-
+    trial %>%
+    select(age, response, trt) %>%
+    tbl_summary(by = trt, missing = "no")
+
+  expect_error(
+    tbl1 <- tbl_merge(list(tbl0, tbl0)),
+    NA
+  )
+
+  expect_equal(
+    as_tibble(tbl1, col_labels = FALSE) %>% dplyr::pull(label),
+    c("Age, Median (IQR)", "Tumor Response, n (%)")
+  )
+})
