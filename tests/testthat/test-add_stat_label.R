@@ -59,7 +59,8 @@ test_that("add_stat_label() with tbl_merge()", {
   tbl0 <-
     trial %>%
     select(age, response, trt) %>%
-    tbl_summary(by = trt, missing = "no")
+    tbl_summary(by = trt, missing = "no") %>%
+    add_stat_label()
 
   expect_error(
     tbl1 <- tbl_merge(list(tbl0, tbl0)),
