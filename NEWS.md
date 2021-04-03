@@ -32,8 +32,6 @@
 
 * Added/updated functions `add_n()` and `add_nevent()` to work with `tbl_regression` and `tbl_uvregression` objects. Each function now has an argument to place Ns on the label or level rows. (#744)
 
-* Added `"jama_psychiatry"` theme to `theme_gtsummary_journal()` (#789)
-
 * Added _The Quarterly Journal of Economics_ to `theme_gtsummary_journal()`. This journal theme will be updated again after the gt package updates `cols_merge()` with a rows argument and allows for line breaks within cell.
 
 * Added default support for `brmsfit` model in `tbl_regression()` with new method function. (#751)
