@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9016</span>
       </span>
     </div>
 
@@ -199,7 +199,6 @@
 <li><p>Added a custom tidier for <code><a href="https://rdrr.io/pkg/mgcv/man/gam.html">mgcv::gam()</a></code> models (<code><a href="../reference/custom_tidiers.html">tidy_gam()</a></code>) and a method function (<code><a href="../reference/tbl_regression_methods.html">tbl_regression.gam()</a></code>) that uses the new tidier by default. (<a href='https://github.com/ddsjoberg/gtsummary/issues/745'>#745</a>)</p></li>
 <li><p>Functions <code><a href="../reference/modify.html">modify_footnote()</a></code> and <code><a href="../reference/modify.html">modify_spanning_header()</a></code> now include the <code>text_interpret=</code> argument indicating whether to use <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code> or <code><a href="https://rdrr.io/pkg/gt/man/html.html">gt::html()</a></code> to format text. Default is <code><a href="https://rdrr.io/pkg/gt/man/md.html">gt::md()</a></code>.</p></li>
 <li><p>Added/updated functions <code><a href="../reference/add_n.html">add_n()</a></code> and <code><a href="../reference/add_nevent.html">add_nevent()</a></code> to work with <code>tbl_regression</code> and <code>tbl_uvregression</code> objects. Each function now has an argument to place Ns on the label or level rows. (<a href='https://github.com/ddsjoberg/gtsummary/issues/744'>#744</a>)</p></li>
-<li><p>Added <code>"jama_psychiatry"</code> theme to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_journal()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/789'>#789</a>)</p></li>
 <li><p>Added <em>The Quarterly Journal of Economics</em> to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_journal()</a></code>. This journal theme will be updated again after the gt package updates <code><a href="https://rdrr.io/pkg/gt/man/cols_merge.html">cols_merge()</a></code> with a rows argument and allows for line breaks within cell.</p></li>
 <li><p>Added default support for <code>brmsfit</code> model in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> with new method function. (<a href='https://github.com/ddsjoberg/gtsummary/issues/751'>#751</a>)</p></li>
 <li><p>Icelandic language translations added for <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_language("is")</a></code>.</p></li>
@@ -222,6 +221,7 @@
 <li><p>Removed {usethis} package dependency and replaced with {cli}. (<a href='https://github.com/ddsjoberg/gtsummary/issues/768'>#768</a>)</p></li>
 <li><p>Added the survey-adapted t-test to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_mean_sd()</a></code> for continuous variables in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/758'>#758</a>)</p></li>
 <li><p>Allowing for tidyverse shortcut notation in <code><a href="../reference/tbl_survfit.html">tbl_survfit(estimate_fun=)</a></code> specification, e.g. <code><a href="../reference/tbl_survfit.html">tbl_survfit(estimate_fun= ~style_sigfig(.x * 100))</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/761'>#761</a>)</p></li>
+<li><p>The JAMA journal theme has been updated to merge the coefficient and confidence interval columns.</p></li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
@@ -239,9 +239,9 @@
 <h3 class="hasAnchor">
 <a href="#breaking-changes" class="anchor"></a>Breaking Changes</h3>
 <ul>
-<li>
-<code><a href="../reference/tbl_survival.html">tbl_survival()</a></code> has moved from questioning to deprecated. This function maintains the old <code>x$table_header</code> format (instead of the more flexible <code>x$table_styling</code>). The <code>"level_label"</code> column was renamed to <code>"groupname_col"</code> and the <code>x$table_body</code> is no longer grouped with <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by(level_label)</a></code>
-</li>
+<li><p><code><a href="../reference/tbl_survival.html">tbl_survival()</a></code> has moved from questioning to deprecated. This function maintains the old <code>x$table_header</code> format (instead of the more flexible <code>x$table_styling</code>). The <code>"level_label"</code> column was renamed to <code>"groupname_col"</code> and the <code>x$table_body</code> is no longer grouped with <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by(level_label)</a></code></p></li>
+<li><p>The back-end implementation of <code><a href="../reference/add_stat_label.html">add_stat_label(location = "row")</a></code> has been updated. The function now merges columns <code>"label"</code> and <code>"stat_label"</code> instead of modifying the <code>"label"</code> column directly. This <em>could</em> be a breaking change if users had manually updated results, for example, from a <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> table to merge with <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> using <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code></p></li>
+<li><p>The function <code><a href="../reference/add_stat_label.html">add_stat_label()</a></code> no longer auto-switches <code>location = "column"</code> requests to <code>"row"</code> in the presence of <code>"continuous2"</code> variables.</p></li>
 </ul>
 </div>
 </div>
