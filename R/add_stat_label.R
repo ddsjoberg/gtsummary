@@ -3,6 +3,29 @@
 #' Adds labels describing the summary statistics presented for
 #' each variable in the [tbl_summary] / [tbl_svysummary] table.
 #'
+#' @section Tips:
+#'
+#' When using `add_stat_label(location='row')` with subsequent `tbl_merge()`,
+#' it's important to have somewhat of an understanding of the underlying
+#' structure of the gtsummary table.
+#' `add_stat_label(location='row')` works by adding a new column called
+#' `"stat_label"` to `x$table_body`. The `"label"` and `"stat_label"`
+#' columns are merged when the gtsummary table is printed.
+#' The `tbl_merge()` function merges on the `"label"` column (among others),
+#' which is typically the first column you see in a gtsummary table.
+#' Therefore, when you want to merge a table that has run `add_stat_label(location='row')`
+#' you need to match the `"label"` column values before the `"stat_column"`
+#' is merged with it.
+#'
+#' For example, the following two tables merge properly
+#'
+#' ```r
+#' tbl1 <- trial %>% select(age, grade) %>% tbl_summary() %>% add_stat_label()
+#' tbl2 <- lm(marker ~ age + grade, trial) %>% tbl_regression()
+#'
+#' tbl_merge(list(tbl1, tbl2))
+#' ```
+#'
 #' @param x Object with class `tbl_summary` from the [tbl_summary] function
 #' or with class `tbl_svysummary` from the [tbl_svysummary] function
 #' @param location location where statistic label will be included.
@@ -59,7 +82,7 @@
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{add_stat_label_ex3.png}{options: width=60\%}}
+#' \if{html}{\figure{add_stat_label_ex3.png}{options: width=45\%}}
 
 add_stat_label <- function(x, location = NULL, label = NULL) {
   # checking inputs ------------------------------------------------------------
@@ -67,115 +90,101 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
     stop("`x=` must be class `tbl_summary` or `tbl_svysummary`", call. = FALSE)
   }
 
+  # if `add_stat_label()` already run, return unmodified -----------------------
+  if ("add_stat_label" %in% names(x$call_list)) {
+    cli_alert_info("{.code add_stat_label()} has previously been applied. Returning {.field gtsummary} table unaltered.")
+    return(x)
+  }
+
   # setting defaults -----------------------------------------------------------
   location <- location %||%
     get_theme_element("add_stat_label-arg:location") %>%
     match.arg(choices = c("row", "column"))
 
-  # no column stat label with continuous2 variables ----------------------------
-  if (location == "column" && "continuous2" %in% x$meta_data$summary_type) {
-    paste("add_stat_label: Cannot combine `location = \"column\"` with multi-line summaries",
-          "of continuous variables, e.g. summary types \"continuous2\".",
-          "Updating argument value to `location = \"row\"`") %>%
-      str_wrap() %>%
-      inform()
-    location <- "row"
-  }
-
   # processing statistics label ------------------------------------------------
-  # stat_label default
-  stat_label <- as.list(x$meta_data$stat_label) %>% set_names(x$meta_data$variable)
   # converting input to named list
-  if (!is_survey(x$inputs$data))
-    label <-
-      .formula_list_to_named_list(
-        x = label,
-        data = x$inputs$data[x$meta_data$variable],
-        var_info = meta_data_to_var_info(x$meta_data),
-        arg_name = "label"
-      )
-  else
-    label <-
-      .formula_list_to_named_list(
-        x = label,
-        data = x$inputs$data$variables[x$meta_data$variable],
-        var_info = meta_data_to_var_info(x$meta_data),
-        arg_name = "label"
-      )
+  label <-
+    .formula_list_to_named_list(
+      x = label,
+      data =
+        switch(!is_survey(x$inputs$data),
+               x$inputs$data[x$meta_data$variable]) %||%
+        x$inputs$data$variables[x$meta_data$variable],
+      var_info = meta_data_to_var_info(x$meta_data),
+      arg_name = "label"
+    )
 
-  # updating the default values with values in label
-  stat_label <- imap(stat_label, ~label[[.y]] %||% .x)
-
-  # adding some meta data needed for merging with table_body (i.e. the row_type)
-  meta_data_stat_label <-
+  # stat_label column
+  df_stat_label <-
     x$meta_data %>%
-    select(c("variable", "summary_type")) %>%
-    left_join(
-      imap_dfr(stat_label, ~tibble(stat_label = .x, variable = .y)),
-      by = "variable"
+    filter(!.data$summary_type %in% "continuous2") %>%
+    select(.data$variable, .data$stat_label) %>%
+    tibble::deframe() %>%
+    # updating the default values with values in label
+    purrr::imap_chr(~label[[.y]] %||% .x) %>%
+    tibble::enframe("variable", "stat_label")
+
+  # adding stat_label to `.$table_body`
+  x <-
+    x %>%
+    modify_table_body(
+      ~.x %>%
+        left_join(df_stat_label, by = "variable") %>%
+        dplyr::relocate(.data$stat_label, .after = .data$label) %>%
+        mutate(
+          # adding in "n" for missing rows, and header
+          stat_label = case_when(.data$row_type == "missing" ~ "n",
+                                 TRUE ~ .data$stat_label),
+          # setting some rows to NA depending on output type
+          stat_label =
+            switch(
+              location,
+              "row" = ifelse(.data$row_type %in% "label", .data$stat_label, NA),
+              "column" =
+                ifelse(
+                  .data$row_type %in% "label" & .data$var_type %in% "categorical",
+                  NA, .data$stat_label)
+            )
+        )
     ) %>%
+    # removing stat label footnote
+    modify_footnote(all_stat_cols() ~ NA_character_)
+
+  # updating `continuous2` stat labels if they exist ---------------------------
+  df_con2_update <-
+    x$meta_data %>%
+    filter(.data$summary_type %in% "continuous2") %>%
+    select(.data$variable, .data$summary_type, .data$stat_label)  %>%
     mutate(
-      row_type = switch(
-        location,
-        "row" = ifelse(.data$summary_type == "continuous2", "level", "label"),
-        "column" = ifelse(.data$summary_type == "categorical", "level", "label")
-      )
+      stat_label = map2(.data$stat_label, .data$variable, ~label[[.y]] %||% .x),
+      row_type = "level"
     ) %>%
-    select(c("variable", "row_type", "stat_label"))
+    tidyr::unnest(.data$stat_label) %>%
+    dplyr::rename(var_type = .data$summary_type, label = .data$stat_label)
+  rows_to_update <-
+    x$table_body$variable %in% unique(df_con2_update$variable) &
+    x$table_body$var_type %in% "continuous2" &
+    x$table_body$row_type %in% "level"
+  if (nrow(df_con2_update) != sum(rows_to_update))
+    abort("`label=` dimensions do not match for type `continuous2` variables.")
+  x$table_body$label[which(rows_to_update)] <- df_con2_update$label
 
-  # merging in new labels to table_body
-  meta_data_row_types <-
-    select(meta_data_stat_label, .data$variable, .data$row_type) %>%
-    distinct()
-
-  x$table_body$stat_label <- NA_character_
-  for(i in seq_len(nrow(meta_data_row_types))) {
-    x$table_body$stat_label[
-      x$table_body$variable == meta_data_row_types$variable[i] &
-        x$table_body$row_type == meta_data_row_types$row_type[i]] <-
-      filter(meta_data_stat_label, .data$variable == meta_data_row_types$variable[i])$stat_label
-  }
-
-  #  updating the label, if stat label is on variable label row
+  # if adding stat labels to row, then adding merge instructions ---------------
   if (location == "row") {
-    x$table_body <-
-      x$table_body %>%
-      left_join(x$meta_data %>% select(.data$variable, .data$summary_type),
-                by = "variable") %>%
-      mutate(
-        label = case_when(
-          .data$summary_type == "continuous2" & .data$row_type == "level" ~ stat_label,
-          .data$summary_type != "continuous2" & .data$row_type == "label" ~ as.character(glue("{label}, {stat_label}")),
-          TRUE ~ .data$label
-        )
-      ) %>%
-      select(-.data$stat_label, -.data$summary_type)
+    x <-
+      modify_cols_merge(
+        x,
+        rows = !is.na(.data$stat_label),
+        pattern = "{label}, {stat_label}"
+      )
   }
-  # adding label for unknown if stat label column
+  # unhiding column if requested -----------------------------------------------
   else if (location == "column") {
-    x$table_body <-
-      x$table_body %>%
-      mutate(
-        # adding in "n" for missing rows, and header
-        stat_label = case_when(
-          .data$row_type == "missing" ~ "n",
-          TRUE ~ .data$stat_label
-        )
-      ) %>%
-      select(any_of(c("variable", "row_type", "label", "stat_label")), everything())
-
-    # adding new column to table_styling
-    x <- .update_table_styling(x)
-
-    # updating header
-    x <- modify_header(x, stat_label = paste0("**", translate_text("Statistic"), "**"))
+    x <- modify_header(x, stat_label ~ paste0("**", translate_text("Statistic"), "**"))
   }
 
-  # removing stat label footnote
-  x <- modify_footnote(x, all_stat_cols() ~ NA_character_)
-
-  # keeping track of all functions previously run
+  # keeping track of all functions previously run ------------------------------
   x$call_list <- c(x$call_list, list(add_stat_label = match.call()))
 
-  return(x)
+  x
 }

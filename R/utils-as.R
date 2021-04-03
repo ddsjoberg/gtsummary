@@ -243,16 +243,11 @@
 .table_styling_cols_merge <- function(x) {
   if (nrow(x$table_styling$cols_merge) == 0) return(x)
 
-  # combining rows spec for same (this is all because of tbl_stack!)
   x$table_styling$cols_merge <-
     x$table_styling$cols_merge %>%
-    tidyr::nest(rows = .data$rows) %>%
-    mutate(rows = map(.data$rows, ~.x$rows %>% unlist()))
-  x$table_styling$cols_merge$rows <-
-    map(
-      x$table_styling$cols_merge$rows,
-      ~.x %>% purrr::reduce(function(.x1, .y1) expr(!!.x1 | !!.y1))
-    )
+    group_by(.data$column) %>%
+    filter(dplyr::row_number() == dplyr::n(), !is.na(.data$pattern)) %>%
+    ungroup()
 
   if (x$table_styling$cols_merge$column %>% duplicated() %>% any())
     abort("Error merging columns due to misspecification.")

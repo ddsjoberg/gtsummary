@@ -51,7 +51,7 @@ set_gtsummary_theme <- function(x) {
 
   # print name of theme if present ---------------------------------------------
   if (!is.null(x$`pkgwide-str:theme_name`))
-    rlang::inform(glue("Setting `{x$`pkgwide-str:theme_name`}` theme"))
+    rlang::inform(glue("Setting theme `{x$`pkgwide-str:theme_name`}`"))
 
   # adding theme elements to environment ---------------------------------------
   rlang::env_bind(.env = env_gtsummary_theme, !!!x)

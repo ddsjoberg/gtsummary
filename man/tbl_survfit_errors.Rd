@@ -27,7 +27,7 @@ Use this code\if{html}{\out{<div class="r">}}\preformatted{trial \%>\%
   tbl_survfit(y = Surv(ttdeath, death), times = c(12, 24))
 }\if{html}{\out{</div>}}
 \item Construct an expression of the \code{survival::survfit()} before evaluating it.
-Ensure the formula and data are available in the call by using the tidyvsere
+Ensure the formula and data are available in the call by using the tidyverse
 bang-bang operator, \verb{!!}.
 
 Use this code\if{html}{\out{<div class="r">}}\preformatted{formula_arg <- Surv(ttdeath, death) ~ 1

@@ -10,27 +10,28 @@
 #' When `FALSE` the named list of theme elements is returned invisibly
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
-#'   - `"jama"` The Journal of the American Medical Association
-#'   - `"jama_psychiatry"` Journal of the American Medical Association - Psychiatry
-#'   - `"lancet"` The Lancet
-#'   - `"nejm"` The New England Journal of Medicine
-#'   - `"qjecon"` The Quarterly Journal of Economics: _Under Development_
+#'   - `"jama"` _The Journal of the American Medical Association_
+#'       - Round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
+#'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR; run `add_stat_label()`
+#'       - `tbl_regression()`/`tbl_uvregression()` show coefficient and CI in same column
+#'   - `"lancet"` _The Lancet_
+#'       - Use mid-point as decimal separator; round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
+#'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
+#'   - `"nejm"` _The New England Journal of Medicine_
+#'       - Round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
+#'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
+#'   - `"qjecon"` _The Quarterly Journal of Economics_ ___Under Development___
+#'       - `tbl_summary()` all percetnages rounded to one decimal place
+#'       - `tbl_regression()`/`tbl_uvregression()` add significance stars with `add_significance_stars()`; hides CI and p-value from output and adds column for SE
 #' - `theme_gtsummary_compact()`
 #'   - tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding
 #' - `theme_gtsummary_printer(print_engine=)`
-#'   - `"gt"` sets the gt package as the default print engine
-#'   - `"flextable"` sets the flextable package as the default print engine
-#'   - `"huxtable"` sets the huxtable package as the default print engine
-#'   - `"kable"` sets the `knitr::kable()` function as the default print engine
-#'   - `"kable_extra"` sets the kableExtra package as the default print engine
-#'   - `"tibble"` returns output as tibble
+#'   - Use this theme to permanently change the default printer.
 #' - `theme_gtsummary_continuous2()`
 #'   - Set all continuous variables to summary type `"continuous2"` by default
-#'   - Use the `statistic=` argument to set the default continuous variable summary statistics
 #' - `theme_gtsummary_mean_sd()`
 #'   - Set default summary statistics to mean and standard deviation in `tbl_summary()`
-#'   - Set default continuous tests in `add_p.tbl_summary()` to t-tests and ANOVA
-#'   - Set default continuous test in `add_p.tbl_svysummary()` to survey adapted t-test
+#'   - Set default continuous tests in `add_p()` to t-test and ANOVA
 #'
 #' Use `reset_gtsummary_theme()` to restore the default settings
 #'
@@ -46,7 +47,6 @@
 #'   trial %>%
 #'   select(age, grade, trt) %>%
 #'   tbl_summary(by = trt) %>%
-#'   add_stat_label() %>%
 #'   as_gt()
 #'
 #' # reset gtsummary themes
@@ -54,7 +54,7 @@
 #' @section Example Output:
 #' \if{html}{Example}
 #'
-#' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=70\%}}
+#' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=60\%}}
 #' @name theme_gtsummary
 #' @seealso [Themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html)
 #' @seealso [set_gtsummary_theme()], [reset_gtsummary_theme()]
@@ -63,13 +63,9 @@ NULL
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @export
-#' @param journal String indicating the journal theme to follow.
-#'  - `"jama"` Journal of the American Medical Association
-#'  - `"jama_psychiatry"` Journal of the American Medical Association - Psychiatry
-#'  - `"lancet"` The Lancet
-#'  - `"nejm"` New England Journal of Medicine
-#'  - `"qjecon"` The Quarterly Journal of Economics: Under Development
-theme_gtsummary_journal <- function(journal = c("jama", "jama_psychiatry", "lancet", "nejm", "qjecon"), set_theme = TRUE) {
+#' @param journal String indicating the journal theme to follow. One of
+#' `c("jama", "lancet", "nejm", "qjecon")`. Details below.
+theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjecon"), set_theme = TRUE) {
   journal <- match.arg(journal)
   if (journal == "jama") {
     lst_theme <-
@@ -77,24 +73,15 @@ theme_gtsummary_journal <- function(journal = c("jama", "jama_psychiatry", "lanc
         "pkgwide-str:theme_name" = "JAMA",
         "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
         "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
-        "style_number-arg:decimal.mark" = ".",
-        "style_number-arg:big.mark" = ",",
-        "add_stat_label-arg:location" = "row",
-        "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
-        "tbl_summary-str:categorical_stat" = "{n} ({p})"
-      )
-  }
-  else if (journal == "jama_psychiatry") {
-    lst_theme <-
-      list(
-        "pkgwide-str:theme_name" = "JAMA Psychiatry",
-        "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
-        "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
+        "pkgwide-str:ci.sep" = " to ",
         "style_number-arg:decimal.mark" = ".",
         "style_number-arg:big.mark" = ",",
         "add_stat_label-arg:location" = "row",
         "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
         "tbl_summary-str:categorical_stat" = "{n} ({p})",
+        "tbl_summary-fn:addnl-fn-to-run" = function(x) {
+          add_stat_label(x)
+        },
         "tbl_regression-fn:addnl-fn-to-run" = function(x) {
           new_header_text <-
             paste0(
@@ -108,7 +95,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "jama_psychiatry", "lanc
               rows = !!expr(.data$variable %in% !!x$table_body$variable &
                               !is.na(.data$estimate) &
                               !.data$reference_row %in% TRUE),
-              pattern = "{estimate} ({conf.low}, {conf.high})"
+              pattern = "{estimate} ({conf.low} to {conf.high})"
             ) %>%
             # hide ci column
             modify_column_hide(any_of("ci")) %>%
