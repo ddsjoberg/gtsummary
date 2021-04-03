@@ -205,7 +205,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   for (style_type in c("footnote", "footnote_abbrev", "fmt_fun", "text_format", "fmt_missing", "cols_merge")) {
     x$table_styling[[style_type]] <-
       map_dfr(
-        seq_along(tbls),
+        rev(seq_along(tbls)),
         function(i) {
           style_updated <- tbls[[i]]$table_styling[[style_type]]
 
@@ -216,7 +216,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
           # renaming column variable
           style_updated$column <-
             ifelse(
-              style_updated$column %in% c("label", "variable", "var_label", "row_type") & i == 1,
+              style_updated$column %in% c("label", "variable", "var_label", "row_type"),
               style_updated$column,
               paste0(style_updated$column, "_", i)
             ) %>%

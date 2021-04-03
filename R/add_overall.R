@@ -60,9 +60,7 @@ add_overall_merge <- function(x, overall, last, col_label) {
                  select(overall, c("row_type", "variable", "label")) %>% as_tibble())) {
     paste(
       "An error occured in `add_overall()`, and overall statistics cannot be merged.",
-      "Has the variable label changed since the original call of `tbl_summary()` or",
-      "`tbl_svysummary()`, for example, via `add_stat_label()`?",
-      "If so, run `add_overall()` before the variable label is updated.") %>%
+      "Has the variable label changed since the original call of `tbl_summary()`?") %>%
       stringr::str_wrap() %>%
       stop(call. = FALSE)
   }

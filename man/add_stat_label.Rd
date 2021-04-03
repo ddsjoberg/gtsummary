@@ -24,6 +24,28 @@ A \code{tbl_summary} or \code{tbl_svysummary} object
 Adds labels describing the summary statistics presented for
 each variable in the \link{tbl_summary} / \link{tbl_svysummary} table.
 }
+\section{Tips}{
+
+
+When using \code{add_stat_label(location='row')} with subsequent \code{tbl_merge()},
+it's important to have somewhat of an understanding of the underlying
+structure of the gtsummary table.
+\code{add_stat_label(location='row')} works by adding a new column called
+\code{"stat_label"} to \code{x$table_body}. The \code{"label"} and \code{"stat_label"}
+columns are merged when the gtsummary table is printed.
+The \code{tbl_merge()} function merges on the \code{"label"} column (among others),
+which is typically the first column you see in a gtsummary table.
+Therefore, when you want to merge a table that has run \code{add_stat_label(location='row')}
+you need to match the \code{"label"} column values before the \code{"stat_column"}
+is merged with it.
+
+For example, the following two tables merge properly\if{html}{\out{<div class="r">}}\preformatted{tbl1 <- trial \%>\% select(age, grade) \%>\% tbl_summary() \%>\% add_stat_label()
+tbl2 <- lm(marker ~ age + grade, trial) \%>\% tbl_regression()
+
+tbl_merge(list(tbl1, tbl2))
+}\if{html}{\out{</div>}}
+}
+
 \section{Example Output}{
 
 \if{html}{Example 1}
@@ -36,7 +58,7 @@ each variable in the \link{tbl_summary} / \link{tbl_svysummary} table.
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_stat_label_ex3.png}{options: width=60\%}}
+\if{html}{\figure{add_stat_label_ex3.png}{options: width=45\%}}
 }
 
 \examples{

@@ -29,7 +29,7 @@
 #'     ```
 #'
 #' 2. Construct an expression of the `survival::survfit()` before evaluating it.
-#' Ensure the formula and data are available in the call by using the tidyvsere
+#' Ensure the formula and data are available in the call by using the tidyverse
 #' bang-bang operator, `!!`.
 #'
 #'     Use this code

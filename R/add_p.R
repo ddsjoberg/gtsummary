@@ -294,6 +294,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
     # adding formatted CI column
     if (all(c("conf.low", "conf.high") %in% names(x$table_body)) &&
         !"ci" %in% names(x$table_body)) {
+      ci.sep <- get_theme_element("pkgwide-str:ci.sep", default = ", ")
       x <- x %>%
         modify_table_body(
           ~.x %>%
@@ -303,7 +304,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
                 ~case_when(
                   !is.na(..2) | !is.na(..3) ~
                     paste(do.call(estimate_fun[[..1]], list(..2)),
-                          do.call(estimate_fun[[..1]], list(..3)), sep = ", ")
+                          do.call(estimate_fun[[..1]], list(..3)), sep = ci.sep)
                 )
               )
             )

@@ -250,7 +250,13 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
     )
   }
 
-  return(x)
+  # running any additional mods ------------------------------------------------
+  x <-
+    get_theme_element("tbl_svysummary-fn:addnl-fn-to-run", default = identity) %>%
+    do.call(list(x))
+
+  # returning tbl_svysummary table ---------------------------------------------
+  x
 }
 
 #' Test if data is a survey object

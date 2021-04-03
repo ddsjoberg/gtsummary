@@ -99,6 +99,8 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
 
 test_that("errors produced when expected", {
   expect_error(mtcars %>% select(am, mpg) %>% tbl_summary() %>% add_overall(), "*")
-  expect_error(mtcars %>% select(am, mpg) %>% tbl_summary(by = am) %>%
-                 add_stat_label() %>% add_overall(), "*")
+
+  tbl <- trial[c("age", "trt")] %>% tbl_summary(by = trt)
+  tbl$table_body$label[1] <- "Agggge, Years"
+  expect_error(tbl %>% add_overall(), "*")
 })
