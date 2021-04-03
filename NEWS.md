@@ -84,6 +84,8 @@
 
 * `tbl_survival()` has moved from questioning to deprecated. This function maintains the old `x$table_header` format (instead of the more flexible `x$table_styling`). The `"level_label"` column was renamed to `"groupname_col"` and the `x$table_body` is no longer grouped with `group_by(level_label)` 
 
+* The function `add_stat_label()` no longer auto-switches `location = "column"` requests to `"row"` in the presence of `"continuous2"` variables.
+
 # gtsummary 1.3.7
 
 * No changes. Resubmitting to resolve CRAN quirk.

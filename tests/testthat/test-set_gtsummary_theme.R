@@ -78,14 +78,14 @@ test_that("setting themes", {
                list("{n} / {N} ({p}%)", c("{median} ({p25} - {p75})", "{mean} ({sd})")))
 
 
-  theme_gtsummary_journal("jama_psychiatry")
+  theme_gtsummary_journal("jama")
 
   expect_equal(
     lm(age ~ grade, trial) %>%
       tbl_regression() %>%
       as_tibble(col_labels = FALSE) %>%
       purrr::pluck("estimate"),
-    c(NA, NA, "1.4 (-3.6, 6.4)", "2.0 (-3.1, 7.0)")
+    c(NA, NA, "1.4 (-3.6 to 6.4)", "2.0 (-3.1 to 7.0)")
   )
 
   reset_gtsummary_theme()

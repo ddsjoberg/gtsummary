@@ -142,6 +142,19 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
       )
   }
 
+  # combining rows spec for same column
+  if (nrow(results$table_styling$cols_merge) > 0) {
+    results$table_styling$cols_merge <-
+      results$table_styling$cols_merge %>%
+      tidyr::nest(rows = .data$rows) %>%
+      mutate(rows = map(.data$rows, ~.x$rows %>% unlist()))
+    results$table_styling$cols_merge$rows <-
+      map(
+        results$table_styling$cols_merge$rows,
+        ~.x %>% purrr::reduce(function(.x1, .y1) expr(!!.x1 | !!.y1))
+      )
+  }
+
   # take the first non-NULL element from tbls[[.]]
   for (style_type in c("caption", "source_note", "horizontal_line_above")) {
     results$table_styling[[style_type]] <-

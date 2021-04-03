@@ -325,7 +325,12 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     )
   }
 
-  # returning tbl_summary table
+  # running any additional mods ------------------------------------------------
+  x <-
+    get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) %>%
+    do.call(list(x))
+
+  # returning tbl_summary table ------------------------------------------------
   x
 }
 
