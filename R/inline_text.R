@@ -15,6 +15,119 @@ inline_text <- function(x, ...) {
 
 #' Report statistics from summary tables inline
 #'
+#' @param x gtsummary object
+#' @param variable Variable name of statistic to present
+#' @param level Level of the variable to display for categorical variables.
+#' Default is `NULL`
+#' @param column Column name to return from `x$table_body`.
+#' @param pattern String indicating the statistics to return.
+#' Uses [glue::glue] formatting. Default is `NULL`
+#' @export
+#' @name inline_text.gtsummary
+
+inline_text.gtsummary <- function(x, variable,
+                                  level = NULL, column = NULL, pattern = NULL) {
+  # convert gtsummary object to tibble -----------------------------------------
+  # removing merging and other styling
+  x$table_styling$cols_merge <- filter(x$table_styling$cols_merge, FALSE)
+  x$table_styling$text_format <- filter(x$table_styling$text_format, FALSE)
+  # keeping all columns
+  x$table_styling$header$hide <- FALSE
+
+  df_gtsummary <- as_tibble(x, col_labels = FALSE)
+
+  # variable selection ---------------------------------------------------------
+  variable <-
+    .select_to_varnames({{ variable }},
+                        var_info = x$table_body,
+                        arg_name = "variable",
+                        select_single = TRUE)
+
+  df_gtsummary <- filter(df_gtsummary, .data$variable %in% .env$variable)
+
+  # level selection ------------------------------------------------------------
+  level <- rlang::enquo(level)
+  level_is_null <- tryCatch(is.null(eval_tidy(level)), error = function(e) FALSE)
+
+  # if level not provided, keep the first row
+  if (level_is_null) df_gtsummary <- filter(df_gtsummary, dplyr::row_number() == 1)
+  # if there is a level, drop first label row, keeping the levels only
+  else {
+    df_gtsummary <- filter(df_gtsummary, dplyr::row_number() > 1)
+    level <-
+      .select_to_varnames(!!level,
+                          var_info = df_gtsummary$label,
+                          arg_name = "level",
+                          select_single = TRUE)
+    df_gtsummary <- filter(df_gtsummary, .data$label %in% .env$level)
+  }
+
+  # assert we've selected one line of table ------------------------------------
+  if (nrow(df_gtsummary) != 1L) abort("Criteria must select exactly one row.")
+
+  # cell/pattern selection -----------------------------------------------------
+  column <- rlang::enquo(column)
+  column_is_null <- tryCatch(is.null(eval_tidy(column)), error = function(e) FALSE)
+  if (!column_is_null)
+    column <-
+    .select_to_varnames(!!column,
+                        data = df_gtsummary,
+                        arg_name = "column",
+                        select_single = TRUE)
+
+  # check pattern argument input
+  if (!is.null(pattern) && !rlang::is_string(pattern))
+    abort("`pattern=` argument must be a string.")
+
+  # if column selected and not pattern, return column
+  if (!column_is_null && is.null(pattern))
+    return(dplyr::pull(df_gtsummary, all_of(column)))
+
+  # if no column and pattern, return pattern
+  if (column_is_null && !is.null(pattern))
+    return(glue::glue_data(df_gtsummary, pattern))
+
+  # if both column and pattern, grab column stats from meta_data$df_stats
+  if (!column_is_null && !is.null(pattern)) {
+    if (is.null(x$meta_data) || !"df_stats" %in% names(x$meta_data))
+      paste("When both `column=` and `pattern=` are specified, the gtsummary",
+            "object must have a `x$meta_data` table with column 'df_stats'") %>%
+      abort()
+    meta_data <- filter(x$meta_data, .data$variable %in% .env$variable)
+
+    df_formatted_stat <-
+      df_stats_to_tbl(
+        data = x$inputs$data, variable = variable,
+        summary_type = meta_data$summary_type, by = x$by,
+        var_label = meta_data$var_label, stat_display = pattern,
+        df_stats = meta_data$df_stats[[1]] %>% mutate(stat_display = .env$pattern),
+        missing = "no", missing_text = "Unknown"
+      )
+
+    # if level not provided, keep the first row
+    if (level_is_null) df_formatted_stat <- filter(df_formatted_stat, dplyr::row_number() == 1)
+    # if there is a level, drop first label row, keeping the levels only
+    else {
+      df_formatted_stat <- filter(df_formatted_stat, dplyr::row_number() > 1)
+      df_formatted_stat <- filter(df_formatted_stat, .data$label %in% .env$level)
+    }
+
+    if (!column %in% names(df_formatted_stat))
+      paste("When both `column=` and `pattern=` are specified, the column",
+            "must be one of", quoted_list(unique(df_stats$by))) %>%
+      abort()
+
+    return(df_formatted_stat[[column]])
+  }
+
+  # must select column or pattern
+  if (column_is_null && is.null(pattern))
+    abort("Both `column=` and `pattern=` cannot be NULL")
+}
+
+
+#' Report statistics from summary tables inline
+#'
 #' Extracts and returns statistics from a `tbl_summary` object for
 #' inline reporting in an R markdown document. Detailed examples in the
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
@@ -38,50 +151,24 @@ inline_text <- function(x, ...) {
 #'
 #' inline_text(t1, variable = grade, level = "I", column = "Drug A", pattern = "{n}/{N} ({p})%")
 #' inline_text(t1, variable = grade, column = "p.value")
-inline_text.tbl_summary <-
-  function(x, variable, column = NULL, level = NULL, pattern = NULL,
-           pvalue_fun = NULL, ...) {
-    # setting defaults ---------------------------------------------------------
-    pvalue_fun <-
-      pvalue_fun %||%
-      get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
-      (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
-      gts_mapper("inline_text(pvalue_fun=)")
+inline_text.tbl_summary <- function(x, variable, column = NULL, level = NULL,
+                                    pattern = NULL, pvalue_fun = NULL, ...) {
+  # setting defaults ---------------------------------------------------------
+  pvalue_fun <-
+    pvalue_fun %||%
+    get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
+    (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
+    gts_mapper("inline_text(pvalue_fun=)")
+  x <- modify_fmt_fun(x, any_of("p.value") ~ pvalue_fun)
 
-    # create rlang::enquo() inputs ---------------------------------------------
-    variable <- rlang::enquo(variable)
-    column <- rlang::enquo(column)
-    level <- rlang::enquo(level)
+  # create rlang::enquo() inputs ---------------------------------------------
+  variable <- rlang::enquo(variable)
+  column <- rlang::enquo(column)
+  level <- rlang::enquo(level)
 
-    # checking variable input --------------------------------------------------
-    variable <-
-      .select_to_varnames(
-        select = !!variable,
-        data = switch(class(x[1]),
-                      "tbl_summary" = x$inputs$data,
-                      "tbl_cross" = x$inputs$data,
-                      "tbl_svysummary" = x$inputs$data$variables),
-        var_info = x$table_body,
-        arg_name = "variable",
-        select_single = TRUE
-      )
-
-    # selecting variable row from meta_data
-    meta_data <- x$meta_data %>%
-      filter(.data$variable == !!variable)
-
-    # setting defaults ---------------------------------------------------------
-    pattern_arg_null <- is.null(pattern)
-    pattern <- pattern %||% pluck(meta_data$stat_display, 1, 1)
-    # selecting default column, if column is NULL
-    if (rlang::quo_is_null(column) && is.null(x$by)) {
-      column <- rlang::quo("stat_0")
-    }
-    else if (rlang::quo_is_null(column) && !is.null(x$by)) {
-      stop("Must specify `column` argument.", call. = FALSE)
-    }
-
-    # checking column ----------------------------------------------------------
+  # checking column ----------------------------------------------------------
+  column_is_null <- tryCatch(is.null(eval_tidy(column)), error = function(e) FALSE)
+  if (!column_is_null) {
     # the following code converts the column input to a column name in x$table_body
     col_lookup_table <- tibble(
       input = names(x$table_body),
@@ -105,60 +192,23 @@ inline_text.tbl_summary <-
         select_single = TRUE
       )
 
-    column <- col_lookup_table %>%
+    column <-
+      col_lookup_table %>%
       filter(.data$input == !!column) %>%
       slice(1) %>%
       pull(.data$column_name)
-
-
-    # select value from table --------------------------------------------------
-    # if user passed a pattern AND column is stat_0, stat_1, etc, then replacing
-    # table_body object with rebuilt version using pattern
-    if (pattern_arg_null == FALSE && startsWith(column, "stat_")) {
-      result <-
-        df_stats_to_tbl(
-          data = x$inputs$data, variable = variable,
-          summary_type = meta_data$summary_type, by = x$by,
-          var_label = meta_data$var_label, stat_display = pattern,
-          df_stats = meta_data$df_stats[[1]] %>% mutate(stat_display = .env$pattern),
-          missing = "no", missing_text = "Unknown"
-        )
-    }
-    else {
-      result <-
-        x$table_body %>%
-        filter(.data$variable == !!variable)
-    }
-
-    # select variable level ----------------------------------------------------
-    if (rlang::quo_is_null(level)) {
-      result <- result %>% slice(1)
-    }
-    else {
-      level <-
-        .select_to_varnames(
-          select = !!level,
-          var_info = filter(result, .data$row_type != "label")$label,
-          arg_name = "level",
-          select_single = TRUE
-        )
-
-      result <-
-        result %>%
-        filter(.data$label == !!level)
-    }
-
-    # select column ------------------------------------------------------------
-    result <- result %>% pull(column)
-
-    # return statistic ---------------------------------------------------------
-    if (column %in% c("p.value", "q.value")) {
-      return(pvalue_fun(result))
-    }
-
-    result
   }
+  else if (column_is_null && is.null(x$by)) column <- "stat_0"
 
+  # call generic inline_text() function ----------------------------------------
+  inline_text.gtsummary(
+    x = x,
+    variable = !!variable,
+    level = !!level,
+    column = column,
+    pattern = pattern
+  )
+}
 
 #' @name inline_text.tbl_summary
 #' @export
@@ -187,13 +237,12 @@ inline_text.tbl_svysummary <- inline_text.tbl_summary
 #' Default is `function(x) style_pvalue(x, prepend_p = TRUE)`
 #'
 #' @section pattern argument:
-#' The following items are available to print.  Use `print(x$table_body)` to
+#' The following items (and more) are available to print.  Use `print(x$table_body)` to
 #' print the table the estimates are extracted from.
 #' \itemize{
 #'   \item `{estimate}` coefficient estimate formatted with 'estimate_fun'
 #'   \item `{conf.low}` lower limit of confidence interval formatted with 'estimate_fun'
 #'   \item `{conf.high}` upper limit of confidence interval formatted with 'estimate_fun'
-#'   \item `{ci}` confidence interval formatted with x$estimate_fun
 #'   \item `{p.value}` p-value formatted with 'pvalue_fun'
 #'   \item `{N}` number of observations in model
 #'   \item `{label}` variable/variable level label
@@ -220,75 +269,23 @@ inline_text.tbl_regression <-
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
       (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
       gts_mapper("inline_text(pvalue_fun=)")
+    x <- modify_fmt_fun(x, any_of("p.value") ~ pvalue_fun)
 
-    # setting quos -------------------------------------------------------------
-    variable <- rlang::enquo(variable)
-    level <- rlang::enquo(level)
-
-    # setting defaults ---------------------------------------------------------
-    estimate_fun <- estimate_fun %||%
-      (filter(x$table_styling$fmt_fun, .data$column == "estimate") %>%
-         dplyr::slice_tail() %>% pluck("fmt_fun", 1)) %>%
-      gts_mapper("inline_text(estimate_fun=)")
-
-    # table_body preformatting -------------------------------------------------
-    # this is only being performed for tbl_uvregression benefit
-    # getting N on every row of the table
-    n_vars <- names(x$table_body) %>% intersect(c("N", "nevent"))
-    x$table_body <-
-      left_join(
-        x$table_body %>% select(-n_vars),
-        x$table_body %>% filter(.data$row_type == "label") %>% select(c("variable", n_vars)) %>% distinct(),
-        by = "variable"
-      )
-
-    # select variable ----------------------------------------------------------
-    variable <-
-      .select_to_varnames(
-        select = !!variable,
-        data = NULL,
-        var_info = x$table_body,
-        arg_name = "variable",
-        select_single = TRUE
-      )
-
-    # grabbing rows matching variable
-    filter_expr <-
-      result <-
-      x$table_body %>%
-      filter(.data$variable ==  !!variable)
-
-    # select variable level ----------------------------------------------------
-    if (rlang::quo_is_null(level)) {
-      result <- result %>% slice(1)
+    if (!is.null(estimate_fun)) {
+      estimate_fun <- estimate_fun %>% gts_mapper("inline_text(estimate_fun=)")
+      x <- modify_fmt_fun(x, any_of(c("estimate", "conf.low", "conf.high")) ~ estimate_fun)
     }
-    else {
-      level <-
-        .select_to_varnames(
-          select = !!level,
-          var_info = filter(result, .data$row_type != "label")$label,
-          arg_name = "level",
-          select_single = TRUE
-        )
+    x <-
+      modify_table_body(x, ~.x %>% mutate(conf.level = x$inputs$conf.level)) %>%
+      modify_fmt_fun(conf.level ~ as.numeric)
 
-      result <-
-        result %>%
-        filter(.data$label == !!level)
-    }
-
-    # calculating statistic ----------------------------------------------------
-    pvalue_cols <- names(result) %>% intersect(c("p.value", "q.value"))
-    result <-
-      result %>%
-      mutate_at(vars(one_of(c("estimate", "conf.low", "conf.high"))), estimate_fun) %>%
-      mutate_at(vars(one_of(pvalue_cols)), pvalue_fun) %>%
-      mutate(
-        conf.level = x$inputs$conf.level,
-        stat = glue(pattern)
-      ) %>%
-      pull("stat")
-
-    result
+    # call generic inline_text() function ----------------------------------------
+    inline_text.gtsummary(
+      x = x,
+      variable = {{ variable }},
+      level = {{ level }},
+      pattern = pattern
+    )
   }
 
 

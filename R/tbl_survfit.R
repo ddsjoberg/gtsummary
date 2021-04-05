@@ -312,7 +312,17 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
                                  var_label = ..4)
         )
       ),
-      # table_body -----------------------------------------------------------------
+      # add fmt_fun as attr ----------------------------------------------------
+      df_stats = map(
+        .data$df_stats,
+        function(df_stats) {
+          for(v in c("estimate", "conf.low", "conf.high")) {
+            if (v %in% names(df_stats)) attr(df_stats[[v]], "fmt_fun") <- estimate_fun
+          }
+          df_stats
+        }
+      ),
+      # table_body -------------------------------------------------------------
       table_body = map2(
         .data$df_stats, .data$var_label,
         function(df_stats, var_label) {

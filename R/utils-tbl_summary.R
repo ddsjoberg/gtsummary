@@ -1138,7 +1138,8 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
   # styling the statistics -----------------------------------------------------
   df_stats_original <- df_stats
   for (v in (names(df_stats) %>% setdiff(c("by", "variable", "variable_levels", "stat_display")))) {
-    df_stats[[v]] <- df_stats[[v]] %>% attr(df_stats[[v]], "fmt_fun")()
+    if (is.function(attr(df_stats[[v]], "fmt_fun")))
+      df_stats[[v]] <- df_stats[[v]] %>% attr(df_stats[[v]], "fmt_fun")()
   }
 
   # calculating the statistic to be displayed in the cell in the table.
