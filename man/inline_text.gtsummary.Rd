@@ -4,7 +4,7 @@
 \alias{inline_text.gtsummary}
 \title{Report statistics from summary tables inline}
 \usage{
-\method{inline_text}{gtsummary}(x, variable, level = NULL, column = NULL, pattern = NULL)
+\method{inline_text}{gtsummary}(x, variable, level = NULL, column = NULL, pattern = NULL, ...)
 }
 \arguments{
 \item{x}{gtsummary object}
@@ -18,6 +18,8 @@ Default is \code{NULL}}
 
 \item{pattern}{String indicating the statistics to return.
 Uses \link[glue:glue]{glue::glue} formatting. Default is \code{NULL}}
+
+\item{...}{Not used}
 }
 \description{
 Report statistics from summary tables inline

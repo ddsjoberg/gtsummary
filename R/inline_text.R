@@ -22,11 +22,12 @@ inline_text <- function(x, ...) {
 #' @param column Column name to return from `x$table_body`.
 #' @param pattern String indicating the statistics to return.
 #' Uses [glue::glue] formatting. Default is `NULL`
+#' @param ... Not used
 #' @export
 #' @name inline_text.gtsummary
 
 inline_text.gtsummary <- function(x, variable,
-                                  level = NULL, column = NULL, pattern = NULL) {
+                                  level = NULL, column = NULL, pattern = NULL, ...) {
   # convert gtsummary object to tibble -----------------------------------------
   # removing merging and other styling
   x$table_styling$cols_merge <- filter(x$table_styling$cols_merge, FALSE)
@@ -500,8 +501,10 @@ inline_text.tbl_survival <-
 #' @param pattern String indicating the statistics to return.
 #' @param level Level of the variable to display for categorical variables.
 #' Can also specify the 'Unknown' row.  Default is `NULL`
+#' @param estimate_fun Function to round and format estimate and confidence limits.
+#' Default is the same function used in `tbl_survfit()`
 #' @inheritParams tbl_regression
-#' @param ... tbl_survfit used
+#' @param ... Not used
 #' @family tbl_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
