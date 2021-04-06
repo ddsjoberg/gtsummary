@@ -537,7 +537,6 @@ inline_text.tbl_survfit <-
            estimate_fun = x$inputs$estimate_fun, pvalue_fun = NULL, ...) {
     # quoting inputs -------------------------------------------------------------
     variable <- rlang::enquo(variable)
-    level <- rlang::enquo(level)
     column <- rlang::enquo(column)
 
     # setting defaults ---------------------------------------------------------
@@ -546,8 +545,23 @@ inline_text.tbl_survfit <-
       get_theme_element("pkgwide-fn:prependpvalue_fun") %||%
       (function(x) style_pvalue(x, prepend_p = TRUE)) %>%
       gts_mapper("inline_text(pvalue_fun=)")
-    estimate_fun <- estimate_fun %>%
+    estimate_fun <-
+      estimate_fun %>%
       gts_mapper("inline_text(estimate_fun=)")
+
+    # applying formatting functions --------------------------------------------
+    x <- modify_fmt_fun(x, any_of("p.value") ~ pvalue_fun)
+    x$meta_data$df_stats <-
+      x$meta_data$df_stats %>%
+      purrr::map(
+        function(.x) {
+          for (v in names(.x)) {
+            if (v %in% c("estimate", "conf.high", "conf.low"))
+              attr(.x[[v]], "fmt_fun") <- estimate_fun
+          }
+          .x
+        }
+      )
 
     # checking inputs ----------------------------------------------------------
     if (c(!is.null(time), !is.null(prob), !rlang::quo_is_null(column)) %>% sum() != 1) {
@@ -567,47 +581,60 @@ inline_text.tbl_survfit <-
     }
     column <- x$table_body %>% select({{ column }}) %>% names()
 
-    # selecting variable -------------------------------------------------------
-    variable <- .select_to_varnames(select = !!variable, var_info = x$meta_data)
-    if (length(variable) == 0)
-      variable <- .select_to_varnames(select = 1, var_info = x$meta_data)
+    # select variable
+    variable_is_null <- tryCatch(is.null(eval_tidy(variable)), error = function(e) FALSE)
+    if (variable_is_null) variable <- x$table_body$variable[1]
 
-    # selecting level ----------------------------------------------------------
-    level <- .select_to_varnames(select = !!level,
-                                 var_info = filter(x$table_body, .data$variable == .env$variable) %>%
-                                   dplyr::pull(.data$label))
-    if (length(level) == 0)
-      level <- .select_to_varnames(select = 1,
-                                   var_info = filter(x$table_body, .data$variable == .env$variable) %>%
-                                     dplyr::pull(.data$label))
+    # call generic inline_text() function ----------------------------------------
+    inline_text.gtsummary(
+      x = x,
+      variable = !!variable,
+      level = {{ level }},
+      column = column,
+      pattern = pattern
+    )
 
-    # if pattern specified, then construct the stat to display
-    if (!is.null(pattern)) {
-      stat_cols <- select(x$meta_data, .data$df_stats) %>% unnest(cols = .data$df_stats) %>% pull(.data$col_name) %>% unique()
-      if (!column %in% stat_cols)
-        glue("When `pattern=` specified, column must be one of {quoted_list(stat_cols)}") %>%
-        abort()
-
-      result <-
-        dplyr::filter(x$meta_data, .data$variable == .env$variable) %>%
-        pull(.data$df_stats) %>%
-        purrr::flatten_dfc() %>%
-        filter(.data$col_name %in% .env$column, .data$label %in% .env$level) %>%
-        mutate_at(vars(.data$estimate, .data$conf.high, .data$conf.low), estimate_fun) %>%
-        mutate(stat = glue(.env$pattern) %>% as.character()) %>%
-        pull(.data$stat)
-    }
-    # if not pattern, then return cell from table_body
-    else {
-      result <-
-        x$table_body %>%
-        filter(.data$variable == .env$variable, .data$label == .env$level) %>%
-        pull(all_of(column))
-
-      if (column == "p.value") result <- pvalue_fun(result)
-    }
-
-    result
+    # # selecting variable -------------------------------------------------------
+    # variable <- .select_to_varnames(select = !!variable, var_info = x$meta_data)
+    # if (length(variable) == 0)
+    #   variable <- .select_to_varnames(select = 1, var_info = x$meta_data)
+    #
+    # # selecting level ----------------------------------------------------------
+    # level <- .select_to_varnames(select = !!level,
+    #                              var_info = filter(x$table_body, .data$variable == .env$variable) %>%
+    #                                dplyr::pull(.data$label))
+    # if (length(level) == 0)
+    #   level <- .select_to_varnames(select = 1,
+    #                                var_info = filter(x$table_body, .data$variable == .env$variable) %>%
+    #                                  dplyr::pull(.data$label))
+    #
+    # # if pattern specified, then construct the stat to display
+    # if (!is.null(pattern)) {
+    #   stat_cols <- select(x$meta_data, .data$df_stats) %>% unnest(cols = .data$df_stats) %>% pull(.data$col_name) %>% unique()
+    #   if (!column %in% stat_cols)
+    #     glue("When `pattern=` specified, column must be one of {quoted_list(stat_cols)}") %>%
+    #     abort()
+    #
+    #   result <-
+    #     dplyr::filter(x$meta_data, .data$variable == .env$variable) %>%
+    #     pull(.data$df_stats) %>%
+    #     purrr::flatten_dfc() %>%
+    #     filter(.data$col_name %in% .env$column, .data$label %in% .env$level) %>%
+    #     mutate_at(vars(.data$estimate, .data$conf.high, .data$conf.low), estimate_fun) %>%
+    #     mutate(stat = glue(.env$pattern) %>% as.character()) %>%
+    #     pull(.data$stat)
+    # }
+    # # if not pattern, then return cell from table_body
+    # else {
+    #   result <-
+    #     x$table_body %>%
+    #     filter(.data$variable == .env$variable, .data$label == .env$level) %>%
+    #     pull(all_of(column))
+    #
+    #   if (column == "p.value") result <- pvalue_fun(result)
+    # }
+    #
+    # result
 }
 
 
