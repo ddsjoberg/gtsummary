@@ -332,6 +332,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 
 #' Report statistics from survival summary tables inline
 #'
+#' \lifecycle{deprecated}
 # 'Extracts and returns statistics from a table created by [tbl_survival]
 #' for inline reporting in an R markdown document.
 #'
