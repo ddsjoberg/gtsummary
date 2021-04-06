@@ -451,7 +451,7 @@ compute_survey_stat <- function(data, variable, by, f) {
 # this function creates df_stats in the tbl_svysummary meta data table
 # and includes the number of missing values
 df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
-                                stat_display, digits, data, by, percent) {
+                                stat_display, digits, data, by, percent, var_label) {
   # first table are the standard stats
   t1 <- switch(
     summary_type,
@@ -499,6 +499,19 @@ df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
   # returning table will all stats
   merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
   return <- left_join(t1, t2, by = merge_vars)
+
+  # adding variables
+  if ("by" %in% names(return)) {
+    return$label <- return$by
+    return <-
+      return %>%
+      left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
+      rename(col_name = .data$by_col)
+  }
+  else {
+    return$label <- var_label
+    return$col_name <- "stat_0"
+  }
 
   return <- adding_formatting_as_attr(
     df_stats = return, data = data, variable = variable,

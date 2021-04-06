@@ -1088,7 +1088,7 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
     purrr::imap_dfc(
       df_stats,
       function(column, colname) {
-        if (colname %in% c("by", "variable", "variable_levels", "stat_display"))
+        if (colname %in% c("by", "variable", "variable_levels", "stat_display", "label", "col_name"))
           return(column)
 
         # if the fmt function is already defined, then add it as attribute
@@ -1271,7 +1271,7 @@ calculate_missing_row <- function(data, variable, by, missing_text) {
 # this function creates df_stats in the tbl_summary meta data table
 # and includes the number of missing values
 df_stats_fun <- function(summary_type, variable, dichotomous_value, sort,
-                         stat_display, data, by, percent, digits) {
+                         stat_display, data, by, percent, digits, var_label) {
   # first table are the standard stats
   t1 <- switch(
     summary_type,
@@ -1308,6 +1308,19 @@ df_stats_fun <- function(summary_type, variable, dichotomous_value, sort,
   # returning table will all stats
   merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
   return <- left_join(t1, t2, by = merge_vars)
+
+  # adding variables
+  if ("by" %in% names(return)) {
+    return$label <- return$by
+    return <-
+      return %>%
+      left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
+      rename(col_name = .data$by_col)
+  }
+  else {
+    return$label <- var_label
+    return$col_name <- "stat_0"
+  }
 
   # adding formatting function as attr to summary statistics columns
   return <- adding_formatting_as_attr(
