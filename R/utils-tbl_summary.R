@@ -1309,13 +1309,17 @@ df_stats_fun <- function(summary_type, variable, dichotomous_value, sort,
   merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
   return <- left_join(t1, t2, by = merge_vars)
 
-  # adding variables
+  # adding variables needed for inlin_text()
   if ("by" %in% names(return)) {
     return$label <- return$by
     return <-
       return %>%
       left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
       rename(col_name = .data$by_col)
+  }
+  else if ("variable_levels" %in% names(return)) {
+    return$label <- as.character(return$variable_levels)
+    return$col_name <- "stat_0"
   }
   else {
     return$label <- var_label

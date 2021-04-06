@@ -85,39 +85,40 @@ inline_text.gtsummary <- function(x, variable,
 
   # if no column and pattern, return pattern
   if (column_is_null && !is.null(pattern))
-    return(glue::glue_data(df_gtsummary, pattern))
+    return(glue::glue_data(df_gtsummary, pattern)  %>% as.character())
 
   # if both column and pattern, grab column stats from meta_data$df_stats
   if (!column_is_null && !is.null(pattern)) {
-    if (is.null(x$meta_data) || !"df_stats" %in% names(x$meta_data))
+    if (is.null(x$meta_data) || !"df_stats" %in% names(x$meta_data) ||
+        !all(c("label", "col_name") %in% names(x$meta_data$df_stats[[1]])))
       paste("When both `column=` and `pattern=` are specified, the gtsummary",
-            "object must have a `x$meta_data` table with column 'df_stats'") %>%
+            "object must have a `x$meta_data` table with column 'df_stats',",
+            "and the 'df_stats' data frame must have columns 'label' and 'col_name'.") %>%
       abort()
-    meta_data <- filter(x$meta_data, .data$variable %in% .env$variable)
 
-    df_formatted_stat <-
-      df_stats_to_tbl(
-        data = x$inputs$data, variable = variable,
-        summary_type = meta_data$summary_type, by = x$by,
-        var_label = meta_data$var_label, stat_display = pattern,
-        df_stats = meta_data$df_stats[[1]] %>% mutate(stat_display = .env$pattern),
-        missing = "no", missing_text = "Unknown"
-      )
+    # selecting df_stats for the variable selected
+    df_stats <-
+      x$meta_data %>%
+      filter(.data$variable %in% .env$variable) %>%
+      purrr::pluck("df_stats", 1)
 
-    # if level not provided, keep the first row
-    if (level_is_null) df_formatted_stat <- filter(df_formatted_stat, dplyr::row_number() == 1)
-    # if there is a level, drop first label row, keeping the levels only
-    else {
-      df_formatted_stat <- filter(df_formatted_stat, dplyr::row_number() > 1)
-      df_formatted_stat <- filter(df_formatted_stat, .data$label %in% .env$level)
-    }
-
-    if (!column %in% names(df_formatted_stat))
+    # subetting df_stats to the column selected
+    if (!column %in% df_stats$col_name)
       paste("When both `column=` and `pattern=` are specified, the column",
-            "must be one of", quoted_list(unique(df_stats$by))) %>%
+            "must be one of", quoted_list(unique(df_stats$col_name))) %>%
       abort()
+    df_stats <-
+      df_stats %>%
+      filter(.data$col_name %in% .env$column)
 
-    return(df_formatted_stat[[column]])
+    # keeping the level if specified
+    if (!level_is_null) df_stats <- filter(df_stats, .data$label %in% .env$level)
+
+    # apply formatting functions
+    lst_stats <- .apply_attr_fmt_fun(df_stats)
+
+    # return statistic
+    return(glue::glue_data(lst_stats, pattern) %>% as.character())
   }
 
   # must select column or pattern
@@ -125,6 +126,16 @@ inline_text.gtsummary <- function(x, variable,
     abort("Both `column=` and `pattern=` cannot be NULL")
 }
 
+# function to apply the fmt_fun attr in df_stats
+.apply_attr_fmt_fun <- function(x) {
+  map(
+    x,
+    function(.x) {
+      if (!is.null(attr(.x, "fmt_fun"))) return(unname(do.call(attr(.x, "fmt_fun"), list(.x))))
+      return(.x)
+    }
+  )
+}
 
 #' Report statistics from summary tables inline
 #'
