@@ -610,48 +610,6 @@ inline_text.tbl_survfit <-
       column = column,
       pattern = pattern
     )
-
-    # # selecting variable -------------------------------------------------------
-    # variable <- .select_to_varnames(select = !!variable, var_info = x$meta_data)
-    # if (length(variable) == 0)
-    #   variable <- .select_to_varnames(select = 1, var_info = x$meta_data)
-    #
-    # # selecting level ----------------------------------------------------------
-    # level <- .select_to_varnames(select = !!level,
-    #                              var_info = filter(x$table_body, .data$variable == .env$variable) %>%
-    #                                dplyr::pull(.data$label))
-    # if (length(level) == 0)
-    #   level <- .select_to_varnames(select = 1,
-    #                                var_info = filter(x$table_body, .data$variable == .env$variable) %>%
-    #                                  dplyr::pull(.data$label))
-    #
-    # # if pattern specified, then construct the stat to display
-    # if (!is.null(pattern)) {
-    #   stat_cols <- select(x$meta_data, .data$df_stats) %>% unnest(cols = .data$df_stats) %>% pull(.data$col_name) %>% unique()
-    #   if (!column %in% stat_cols)
-    #     glue("When `pattern=` specified, column must be one of {quoted_list(stat_cols)}") %>%
-    #     abort()
-    #
-    #   result <-
-    #     dplyr::filter(x$meta_data, .data$variable == .env$variable) %>%
-    #     pull(.data$df_stats) %>%
-    #     purrr::flatten_dfc() %>%
-    #     filter(.data$col_name %in% .env$column, .data$label %in% .env$level) %>%
-    #     mutate_at(vars(.data$estimate, .data$conf.high, .data$conf.low), estimate_fun) %>%
-    #     mutate(stat = glue(.env$pattern) %>% as.character()) %>%
-    #     pull(.data$stat)
-    # }
-    # # if not pattern, then return cell from table_body
-    # else {
-    #   result <-
-    #     x$table_body %>%
-    #     filter(.data$variable == .env$variable, .data$label == .env$level) %>%
-    #     pull(all_of(column))
-    #
-    #   if (column == "p.value") result <- pvalue_fun(result)
-    # }
-    #
-    # result
 }
 
 
@@ -682,7 +640,7 @@ inline_text.tbl_survfit <-
 
 inline_text.tbl_cross <-
   function(x, col_level = NULL, row_level = NULL,
-           pvalue_fun = NULL, ...) {
+           pvalue_fun = NULL, pattern = NULL, ...) {
 
     # check arguments ----------------------------------------------------------
     if (is.null(col_level) | (is.null(row_level) & !identical("p.value", col_level))) {
@@ -754,7 +712,8 @@ inline_text.tbl_cross <-
     # evaluating inline_text for tbl_summary -----------------------------------
     expr(
       inline_text.tbl_summary(x, variable = !!variable, level = !!row_level,
-                              column = {{ col_level }}, pvalue_fun = !!pvalue_fun)
+                              column = {{ col_level }}, pvalue_fun = !!pvalue_fun,
+                              pattern = !!pattern)
     ) %>%
       eval()
   }
