@@ -93,7 +93,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
           estimate_footnote <-
             x$table_styling$footnote_abbrev %>%
             filter(.data$column %in% "estimate") %>%
-            filter(dplyr::row_number() == dplyr::n()) %>%
+            filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) %>%
             dplyr::pull(.data$footnote) %>%
             c("CI = Confidence Interval") %>%
             paste(collapse = ", ")
