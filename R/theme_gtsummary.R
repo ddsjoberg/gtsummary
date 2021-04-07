@@ -234,9 +234,9 @@ theme_gtsummary_printer <- function(
 #' @rdname theme_gtsummary
 #' @param language String indicating language. Must be one of `"de"` (German),
 #' `"en"` (English), `"es"` (Spanish), `"fr"` (French), `"gu"` (Gujarati),
-#' `"hi"` (Hindi), `"is"` (Icelandic),`"ja"` (Japanese), `"mr"` (Marathi),
-#' `"pt"` (Portuguese), `"se"` (Swedish), `"zh-c,n"` (Chinese Simplified),
-#' `"zh-tw"` (Chinese Traditional)
+#' `"hi"` (Hindi), `"is"` (Icelandic),`"ja"` (Japanese), `"kr"` (Korean),
+#' `"mr"` (Marathi), `"pt"` (Portuguese), `"se"` (Swedish),
+#' `"zh-c,n"` (Chinese Simplified), `"zh-tw"` (Chinese Traditional)
 #'
 #' If a language is missing a translation for a word or phrase, please feel free
 #' to reach out on [GitHub](https://github.com/ddsjoberg/gtsummary/issues)
@@ -252,7 +252,7 @@ theme_gtsummary_printer <- function(
 #' @inheritParams style_number
 #' @export
 theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "gu", "hi", "is", "ja",
-                                                  "mr", "pt", "se", "zh-cn", "zh-tw"),
+                                                  "kr", "mr", "pt", "se", "zh-cn", "zh-tw"),
                                      decimal.mark = NULL, big.mark = NULL,
                                      iqr.sep = NULL,
                                      ci.sep = NULL,
