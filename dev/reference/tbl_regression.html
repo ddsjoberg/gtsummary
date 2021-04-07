@@ -362,9 +362,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 <span class='va'>tbl_regression_ex3</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span><span class='op'>(</span><span class='va'>am</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>gear</span><span class='op'>)</span>, <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>tbl_regression</span><span class='op'>(</span>exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'broom.mixed':</span>
-#&gt; <span class='message'>  method      from </span>
-#&gt; <span class='message'>  tidy.gamlss broom</span></div><div class='input'>
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
