@@ -89,6 +89,14 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
               " **(", style_number(x$inputs$conf.level, scale = 100), "% CI)**"
             )
 
+          # adding CI footnote to any existing abbreviation footnote, e.g. for OR, HR, etc.
+          estimate_footnote <-
+            x$table_styling$footnote_abbrev %>%
+            filter(.data$column %in% "estimate") %>%
+            filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) %>%
+            dplyr::pull(.data$footnote) %>%
+            c("CI = Confidence Interval") %>%
+            paste(collapse = ", ")
           x %>%
             # merge estimate and CI into one cell
             modify_cols_merge(
@@ -102,7 +110,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             # update column header
             modify_header(list(estimate = new_header_text)) %>%
             # add CI abbreviation footnote
-            modify_footnote(estimate ~ "CI = Confidence Interval", abbreviation = TRUE)
+            modify_footnote(estimate ~ estimate_footnote, abbreviation = TRUE)
         }
       )
   }
@@ -226,9 +234,9 @@ theme_gtsummary_printer <- function(
 #' @rdname theme_gtsummary
 #' @param language String indicating language. Must be one of `"de"` (German),
 #' `"en"` (English), `"es"` (Spanish), `"fr"` (French), `"gu"` (Gujarati),
-#' `"hi"` (Hindi), `"is"` (Icelandic),`"ja"` (Japanese), `"mr"` (Marathi),
-#' `"pt"` (Portuguese), `"se"` (Swedish), `"zh-c,n"` (Chinese Simplified),
-#' `"zh-tw"` (Chinese Traditional)
+#' `"hi"` (Hindi), `"is"` (Icelandic),`"ja"` (Japanese), `"kr"` (Korean),
+#' `"mr"` (Marathi), `"pt"` (Portuguese), `"se"` (Swedish),
+#' `"zh-c,n"` (Chinese Simplified), `"zh-tw"` (Chinese Traditional)
 #'
 #' If a language is missing a translation for a word or phrase, please feel free
 #' to reach out on [GitHub](https://github.com/ddsjoberg/gtsummary/issues)
@@ -244,7 +252,7 @@ theme_gtsummary_printer <- function(
 #' @inheritParams style_number
 #' @export
 theme_gtsummary_language <- function(language = c("de", "en", "es", "fr", "gu", "hi", "is", "ja",
-                                                  "mr", "pt", "se", "zh-cn", "zh-tw"),
+                                                  "kr", "mr", "pt", "se", "zh-cn", "zh-tw"),
                                      decimal.mark = NULL, big.mark = NULL,
                                      iqr.sep = NULL,
                                      ci.sep = NULL,
