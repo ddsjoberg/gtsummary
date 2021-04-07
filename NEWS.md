@@ -36,7 +36,7 @@
 
 * Added default support for `brmsfit` model in `tbl_regression()` with new method function. (#751)
 
-* Icelandic language translations added for `theme_gtsummary_language("is")`.
+* Korean and Icelandic language translations added for `theme_gtsummary_language()`.
 
 * Added theme element `"pkgwide-fun:pre_conversion"`. The function specified here will be executed on the gtsummary object before it is printed or converted with the `as_gt()`, `as_flex_table()`, etc functions. (#773)
 
