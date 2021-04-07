@@ -228,7 +228,7 @@ add_n.tbl_survfit <- function(x, ...) {
         tibble(
           variable = variable,
           row_type = "label",
-          N = eval(model.frame_call) %>% nrow()
+          N = safe_survfit_eval(model.frame_call) %>% nrow()
         )
       }
     ) %>%
@@ -253,7 +253,6 @@ add_n.tbl_survfit <- function(x, ...) {
 
   x
 }
-
 
 #' Add N to regression table
 #'

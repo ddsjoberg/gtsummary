@@ -11,7 +11,7 @@
 \title{Available gtsummary themes}
 \usage{
 theme_gtsummary_journal(
-  journal = c("jama", "jama_psychiatry", "lancet", "nejm", "qjecon"),
+  journal = c("jama", "lancet", "nejm", "qjecon"),
   set_theme = TRUE
 )
 
@@ -23,7 +23,7 @@ theme_gtsummary_printer(
 )
 
 theme_gtsummary_language(
-  language = c("de", "en", "es", "fr", "gu", "hi", "is", "ja", "mr", "pt", "se",
+  language = c("de", "en", "es", "fr", "gu", "hi", "is", "ja", "kr", "mr", "pt", "se",
     "zh-cn", "zh-tw"),
   decimal.mark = NULL,
   big.mark = NULL,
@@ -40,14 +40,8 @@ theme_gtsummary_continuous2(
 theme_gtsummary_mean_sd(set_theme = TRUE)
 }
 \arguments{
-\item{journal}{String indicating the journal theme to follow.
-\itemize{
-\item \code{"jama"} Journal of the American Medical Association
-\item \code{"jama_psychiatry"} Journal of the American Medical Association - Psychiatry
-\item \code{"lancet"} The Lancet
-\item \code{"nejm"} New England Journal of Medicine
-\item \code{"qjecon"} The Quarterly Journal of Economics: Under Development
-}}
+\item{journal}{String indicating the journal theme to follow. One of
+\code{c("jama", "lancet", "nejm", "qjecon")}. Details below.}
 
 \item{set_theme}{Logical indicating whether to set the theme. Default is \code{TRUE}.
 When \code{FALSE} the named list of theme elements is returned invisibly}
@@ -57,9 +51,9 @@ When \code{FALSE} the named list of theme elements is returned invisibly}
 
 \item{language}{String indicating language. Must be one of \code{"de"} (German),
 \code{"en"} (English), \code{"es"} (Spanish), \code{"fr"} (French), \code{"gu"} (Gujarati),
-\code{"hi"} (Hindi), \code{"is"} (Icelandic),\code{"ja"} (Japanese), \code{"mr"} (Marathi),
-\code{"pt"} (Portuguese), \code{"se"} (Swedish), \code{"zh-c,n"} (Chinese Simplified),
-\code{"zh-tw"} (Chinese Traditional)
+\code{"hi"} (Hindi), \code{"is"} (Icelandic),\code{"ja"} (Japanese), \code{"kr"} (Korean),
+\code{"mr"} (Marathi), \code{"pt"} (Portuguese), \code{"se"} (Swedish),
+\code{"zh-c,n"} (Chinese Simplified), \code{"zh-tw"} (Chinese Traditional)
 
 If a language is missing a translation for a word or phrase, please feel free
 to reach out on \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub}
@@ -96,11 +90,27 @@ for details.
 \itemize{
 \item \code{theme_gtsummary_journal(journal=)}
 \itemize{
-\item \code{"jama"} The Journal of the American Medical Association
-\item \code{"jama_psychiatry"} Journal of the American Medical Association - Psychiatry
-\item \code{"lancet"} The Lancet
-\item \code{"nejm"} The New England Journal of Medicine
-\item \code{"qjecon"} The Quarterly Journal of Economics: \emph{Under Development}
+\item \code{"jama"} \emph{The Journal of the American Medical Association}
+\itemize{
+\item Round large p-values to 2 decimal places; separate confidence intervals with \code{"ll to ul"}.
+\item \code{tbl_summary()} Doesn't show percent symbol; use em-dash to separate IQR; run \code{add_stat_label()}
+\item \code{tbl_regression()}/\code{tbl_uvregression()} show coefficient and CI in same column
+}
+\item \code{"lancet"} \emph{The Lancet}
+\itemize{
+\item Use mid-point as decimal separator; round large p-values to 2 decimal places; separate confidence intervals with \code{"ll to ul"}.
+\item \code{tbl_summary()} Doesn't show percent symbol; use em-dash to separate IQR
+}
+\item \code{"nejm"} \emph{The New England Journal of Medicine}
+\itemize{
+\item Round large p-values to 2 decimal places; separate confidence intervals with \code{"ll to ul"}.
+\item \code{tbl_summary()} Doesn't show percent symbol; use em-dash to separate IQR
+}
+\item \code{"qjecon"} \emph{The Quarterly Journal of Economics} \emph{\strong{Under Development}}
+\itemize{
+\item \code{tbl_summary()} all percetnages rounded to one decimal place
+\item \code{tbl_regression()}/\code{tbl_uvregression()} add significance stars with \code{add_significance_stars()}; hides CI and p-value from output and adds column for SE
+}
 }
 \item \code{theme_gtsummary_compact()}
 \itemize{
@@ -108,23 +118,16 @@ for details.
 }
 \item \code{theme_gtsummary_printer(print_engine=)}
 \itemize{
-\item \code{"gt"} sets the gt package as the default print engine
-\item \code{"flextable"} sets the flextable package as the default print engine
-\item \code{"huxtable"} sets the huxtable package as the default print engine
-\item \code{"kable"} sets the \code{knitr::kable()} function as the default print engine
-\item \code{"kable_extra"} sets the kableExtra package as the default print engine
-\item \code{"tibble"} returns output as tibble
+\item Use this theme to permanently change the default printer.
 }
 \item \code{theme_gtsummary_continuous2()}
 \itemize{
 \item Set all continuous variables to summary type \code{"continuous2"} by default
-\item Use the \verb{statistic=} argument to set the default continuous variable summary statistics
 }
 \item \code{theme_gtsummary_mean_sd()}
 \itemize{
 \item Set default summary statistics to mean and standard deviation in \code{tbl_summary()}
-\item Set default continuous tests in \code{add_p.tbl_summary()} to t-tests and ANOVA
-\item Set default continuous test in \code{add_p.tbl_svysummary()} to survey adapted t-test
+\item Set default continuous tests in \code{add_p()} to t-test and ANOVA
 }
 }
 
@@ -138,7 +141,7 @@ to create your own themes.
 
 \if{html}{Example}
 
-\if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=70\%}}
+\if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=60\%}}
 }
 
 \examples{
@@ -151,7 +154,6 @@ set_gtsummary_theme_ex1 <-
   trial \%>\%
   select(age, grade, trt) \%>\%
   tbl_summary(by = trt) \%>\%
-  add_stat_label() \%>\%
   as_gt()
 
 # reset gtsummary themes
