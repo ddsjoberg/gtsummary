@@ -61,7 +61,9 @@ inline_text.gtsummary <- function(x, variable,
   level <- rlang::enquo(level)
   level_is_null <- tryCatch(is.null(eval_tidy(level)), error = function(e) FALSE)
   if (!level_is_null && "" %in% df_gtsummary$label)
-    inform("There is a blank level, which may cause issues selecting the specified value.")
+    paste("There is a blank level, which may cause issues selecting",
+          "the specified value. Blank levels cannot be selected.") %>%
+    inform()
 
   # if level not provided, keep the first row
   if (level_is_null) df_gtsummary <- filter(df_gtsummary, dplyr::row_number() == 1)
