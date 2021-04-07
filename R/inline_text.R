@@ -640,7 +640,7 @@ inline_text.tbl_survfit <-
 
 inline_text.tbl_cross <-
   function(x, col_level = NULL, row_level = NULL,
-           pvalue_fun = NULL, pattern = NULL, ...) {
+           pvalue_fun = NULL, ...) {
 
     # check arguments ----------------------------------------------------------
     if (is.null(col_level) | (is.null(row_level) & !identical("p.value", col_level))) {
@@ -712,8 +712,7 @@ inline_text.tbl_cross <-
     # evaluating inline_text for tbl_summary -----------------------------------
     expr(
       inline_text.tbl_summary(x, variable = !!variable, level = !!row_level,
-                              column = {{ col_level }}, pvalue_fun = !!pvalue_fun,
-                              pattern = !!pattern)
+                              column = {{ col_level }}, pvalue_fun = !!pvalue_fun)
     ) %>%
       eval()
   }

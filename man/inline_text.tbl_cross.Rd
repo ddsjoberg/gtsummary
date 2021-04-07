@@ -4,14 +4,7 @@
 \alias{inline_text.tbl_cross}
 \title{Report statistics from cross table inline}
 \usage{
-\method{inline_text}{tbl_cross}(
-  x,
-  col_level = NULL,
-  row_level = NULL,
-  pvalue_fun = NULL,
-  pattern = NULL,
-  ...
-)
+\method{inline_text}{tbl_cross}(x, col_level = NULL, row_level = NULL, pvalue_fun = NULL, ...)
 }
 \arguments{
 \item{x}{a \code{tbl_cross} object}
@@ -28,9 +21,6 @@ The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
-
-\item{pattern}{String indicating the statistics to return.
-Uses \link[glue:glue]{glue::glue} formatting. Default is pattern shown in \code{tbl_summary()} output}
 
 \item{...}{Not used}
 }
