@@ -25,6 +25,17 @@ inline_text <- function(x, ...) {
 #' @param ... Not used
 #' @export
 #' @name inline_text.gtsummary
+#'
+#' @section column + pattern:
+#'
+#' Some gtsummary tables report multiple statistics in a single cell,
+#' e.g. `"{mean} ({sd})"` in `tbl_summary()` or `tbl_svysummary()`.
+#' We often need to report just the mean or the SD, and that can be accomplished
+#' by using both the `column=` and `pattern=` arguments. When both of these
+#' arguments are specified, the column argument selects the column to report
+#' statistics from, and the pattern argument specifies which statistics to report,
+#' e.g. `inline_text(x, column = "stat_1", pattern = "{mean}")` reports just the
+#' mean from a `tbl_summary()`.
 
 inline_text.gtsummary <- function(x, variable,
                                   level = NULL, column = NULL, pattern = NULL, ...) {

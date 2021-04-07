@@ -24,3 +24,16 @@ Uses \link[glue:glue]{glue::glue} formatting. Default is \code{NULL}}
 \description{
 Report statistics from summary tables inline
 }
+\section{column + pattern}{
+
+
+Some gtsummary tables report multiple statistics in a single cell,
+e.g. \code{"{mean} ({sd})"} in \code{tbl_summary()} or \code{tbl_svysummary()}.
+We often need to report just the mean or the SD, and that can be accomplished
+by using both the \verb{column=} and \verb{pattern=} arguments. When both of these
+arguments are specified, the column argument selects the column to report
+statistics from, and the pattern argument specifies which statistics to report,
+e.g. \code{inline_text(x, column = "stat_1", pattern = "{mean}")} reports just the
+mean from a \code{tbl_summary()}.
+}
+
