@@ -89,6 +89,14 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
               " **(", style_number(x$inputs$conf.level, scale = 100), "% CI)**"
             )
 
+          # adding CI footnote to any existing abbreviation footnote, e.g. for OR, HR, etc.
+          estimate_footnote <-
+            x$table_styling$footnote_abbrev %>%
+            filter(.data$column %in% "estimate") %>%
+            filter(dplyr::row_number() == dplyr::n()) %>%
+            dplyr::pull(.data$footnote) %>%
+            c("CI = Confidence Interval") %>%
+            paste(collapse = ", ")
           x %>%
             # merge estimate and CI into one cell
             modify_cols_merge(
@@ -102,7 +110,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             # update column header
             modify_header(list(estimate = new_header_text)) %>%
             # add CI abbreviation footnote
-            modify_footnote(estimate ~ "CI = Confidence Interval", abbreviation = TRUE)
+            modify_footnote(estimate ~ estimate_footnote, abbreviation = TRUE)
         }
       )
   }
