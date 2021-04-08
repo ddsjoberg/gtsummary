@@ -111,7 +111,11 @@
     mutate(
       row_numbers =
         switch(nrow(.) == 0, integer(0)) %||%
-        .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
+        .rows_expr_to_row_numbers(
+          x$table_body, .data$rows,
+          return_when_null = seq_len(nrow(x$table_body))
+        ) %>%
+        list(),
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
