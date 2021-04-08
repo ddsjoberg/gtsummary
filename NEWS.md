@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added a generic function inline_text.gtsummary() that can report results from any gtsummary table. (#398)
+
+* Updated other inline_text() functions to wrap inline_text.gtsummary()
+
 ### New Functions
 
 * Added new function `add_glance_table()` as a companion to `add_glance_source_note()`. Function adds model statistics, such as R-squared, to the bottom of the model summary table.
