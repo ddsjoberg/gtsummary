@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Report statistics from cross table inline — inline_text.tbl_cross • gtsummary</title>
+<title>Report statistics from summary tables inline — inline_text.gtsummary • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,12 +52,8 @@
 
 
 
-<meta property="og:title" content="Report statistics from cross table inline — inline_text.tbl_cross" />
-<meta property="og:description" content="
-
-Extracts and returns statistics from a tbl_cross object for
-inline reporting in an R markdown document. Detailed examples in the
-inline_text vignette" />
+<meta property="og:title" content="Report statistics from summary tables inline — inline_text.gtsummary" />
+<meta property="og:description" content="Report statistics from summary tables inline" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -172,47 +168,42 @@ inline_text vignette" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Report statistics from cross table inline</h1>
+    <h1>Report statistics from summary tables inline</h1>
     <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/inline_text.R'><code>R/inline_text.R</code></a></small>
-    <div class="hidden name"><code>inline_text.tbl_cross.Rd</code></div>
+    <div class="hidden name"><code>inline_text.gtsummary.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
-
-Extracts and returns statistics from a <code>tbl_cross</code> object for
-inline reporting in an R markdown document. Detailed examples in the
-<a href='http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html'>inline_text vignette</a></p>
+    <p>Report statistics from summary tables inline</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_cross</span>
-<span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>x</span>, col_level <span class='op'>=</span> <span class='cn'>NULL</span>, row_level <span class='op'>=</span> <span class='cn'>NULL</span>, pvalue_fun <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for gtsummary</span>
+<span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>variable</span>, level <span class='op'>=</span> <span class='cn'>NULL</span>, column <span class='op'>=</span> <span class='cn'>NULL</span>, pattern <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a <code>tbl_cross</code> object</p></td>
+      <td><p>gtsummary object</p></td>
     </tr>
     <tr>
-      <th>col_level</th>
-      <td><p>Level of the column variable to display. Default is <code>NULL</code>
-Can also specify "<code>p.value</code>" for the p-value and "<code>stat_0</code>" for Total column.</p></td>
+      <th>variable</th>
+      <td><p>Variable name of statistic to present</p></td>
     </tr>
     <tr>
-      <th>row_level</th>
-      <td><p>Level of the row variable to display.
-Can also specify the 'Unknown' row. Default is <code>NULL</code></p></td>
+      <th>level</th>
+      <td><p>Level of the variable to display for categorical variables.
+Default is <code>NULL</code></p></td>
     </tr>
     <tr>
-      <th>pvalue_fun</th>
-      <td><p>Function to round and format p-values.
-Default is <a href='style_pvalue.html'>style_pvalue</a>.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+      <th>column</th>
+      <td><p>Column name to return from <code>x$table_body</code>.</p></td>
+    </tr>
+    <tr>
+      <th>pattern</th>
+      <td><p>String indicating the statistics to return.
+Uses <a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> formatting. Default is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -220,24 +211,20 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="column-pattern"><a class="anchor" href="#column-pattern"></a>column + pattern</h2>
 
-    <p>A string reporting results from a gtsummary table</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    
 
-    <div class='dont-index'><p>Other tbl_cross tools: 
-<code><a href='add_p.tbl_cross.html'>add_p.tbl_cross</a>()</code>,
-<code><a href='tbl_cross.html'>tbl_cross</a>()</code></p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>tbl_cross</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='tbl_cross.html'>tbl_cross</a></span><span class='op'>(</span><span class='va'>trial</span>, row <span class='op'>=</span> <span class='va'>trt</span>, col <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span>
+<p>Some gtsummary tables report multiple statistics in a single cell,
+e.g. <code>"{mean} ({sd})"</code> in <code><a href='tbl_summary.html'>tbl_summary()</a></code> or <code><a href='tbl_svysummary.html'>tbl_svysummary()</a></code>.
+We often need to report just the mean or the SD, and that can be accomplished
+by using both the <code>column=</code> and <code>pattern=</code> arguments. When both of these
+arguments are specified, the column argument selects the column to report
+statistics from, and the pattern argument specifies which statistics to report,
+e.g. <code><a href='inline_text.html'>inline_text(x, column = "stat_1", pattern = "{mean}")</a></code> reports just the
+mean from a <code><a href='tbl_summary.html'>tbl_summary()</a></code>.</p>
 
-<span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>tbl_cross</span>, row_level <span class='op'>=</span> <span class='st'>"Drug A"</span>, col_level <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "28"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>tbl_cross</span>, row_level <span class='op'>=</span> <span class='st'>"Total"</span>, col_level <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "61"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>tbl_cross</span>, col_level <span class='op'>=</span> <span class='st'>"p.value"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "p=0.7"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

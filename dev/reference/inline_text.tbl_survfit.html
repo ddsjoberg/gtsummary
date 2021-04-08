@@ -100,7 +100,7 @@ inline_text vignette" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9018</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9019</span>
       </span>
     </div>
 
@@ -234,9 +234,8 @@ Columns may be selected with <code>time=</code> or <code>prob=</code> as well.</
     </tr>
     <tr>
       <th>estimate_fun</th>
-      <td><p>Function to round and format coefficient estimates.
-Default is <a href='style_sigfig.html'>style_sigfig</a> when the coefficients are not transformed, and
-<a href='style_ratio.html'>style_ratio</a> when the coefficients have been exponentiated.</p></td>
+      <td><p>Function to round and format estimate and confidence limits.
+Default is the same function used in <code><a href='tbl_survfit.html'>tbl_survfit()</a></code></p></td>
     </tr>
     <tr>
       <th>pvalue_fun</th>
@@ -249,7 +248,7 @@ and return a string that is the rounded/formatted p-value (e.g.
     </tr>
     <tr>
       <th>...</th>
-      <td><p>tbl_survfit used</p></td>
+      <td><p>Not used</p></td>
     </tr>
     </table>
 
