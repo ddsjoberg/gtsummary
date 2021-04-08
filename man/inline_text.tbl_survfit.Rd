@@ -34,9 +34,8 @@ Can also specify the 'Unknown' row.  Default is \code{NULL}}
 \item{column}{column to print from \code{x$table_body}.
 Columns may be selected with \verb{time=} or \verb{prob=} as well.}
 
-\item{estimate_fun}{Function to round and format coefficient estimates.
-Default is \link{style_sigfig} when the coefficients are not transformed, and
-\link{style_ratio} when the coefficients have been exponentiated.}
+\item{estimate_fun}{Function to round and format estimate and confidence limits.
+Default is the same function used in \code{tbl_survfit()}}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.
@@ -45,7 +44,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{...}{tbl_survfit used}
+\item{...}{Not used}
 }
 \value{
 A string reporting results from a gtsummary table

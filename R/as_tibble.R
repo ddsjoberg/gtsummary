@@ -131,8 +131,7 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
 
   # fmt (part 2) ---------------------------------------------------------------
   tibble_calls[["fmt"]] <-
-    list(expr(mutate_at(vars(!!!syms(.cols_to_show(x))), as.character))) %>%
-    c(map(
+    map(
       seq_len(nrow(x$table_styling$fmt_fun)),
       ~expr((!!expr(!!eval(parse_expr("gtsummary:::.apply_fmt_fun"))))(
         columns = !!x$table_styling$fmt_fun$column[[.x]],
@@ -140,7 +139,7 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
         fmt_fun = !!x$table_styling$fmt_fun$fmt_fun[[.x]],
         update_from = !!x$table_body
       ))
-    ))
+    )
 
   # cols_hide ------------------------------------------------------------------
   # cols_to_keep object created above in fmt section
@@ -160,9 +159,19 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
 }
 
 .apply_fmt_fun <- function(data, columns, row_numbers, fmt_fun, update_from) {
-  data[row_numbers, columns, drop = FALSE] <-
+  # apply formatting functions
+  df_updated <-
     update_from[row_numbers, columns, drop = FALSE] %>%
     purrr::map_dfc(~fmt_fun(.x))
+
+  # convert underlying column to character if updated col is character
+  for (v in columns) {
+    if (is.character(df_updated[[v]]) && !is.character(data[[v]]))
+      data[[v]] <- as.character(data[[v]])
+  }
+
+  # udpate data and return
+  data[row_numbers, columns, drop = FALSE] <- df_updated
 
   data
 }

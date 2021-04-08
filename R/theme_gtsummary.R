@@ -21,7 +21,7 @@
 #'       - Round large p-values to 2 decimal places; separate confidence intervals with `"ll to ul"`.
 #'       - `tbl_summary()` Doesn't show percent symbol; use em-dash to separate IQR
 #'   - `"qjecon"` _The Quarterly Journal of Economics_ ___Under Development___
-#'       - `tbl_summary()` all percetnages rounded to one decimal place
+#'       - `tbl_summary()` all percentages rounded to one decimal place
 #'       - `tbl_regression()`/`tbl_uvregression()` add significance stars with `add_significance_stars()`; hides CI and p-value from output and adds column for SE
 #' - `theme_gtsummary_compact()`
 #'   - tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding
