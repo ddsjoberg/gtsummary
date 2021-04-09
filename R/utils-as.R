@@ -103,7 +103,7 @@
 .clean_table_styling <- function(x) {
   if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
 
-  # text_format ----------------------
+  # text_format ----------------------------------------------------------------
   x$table_styling$text_format <-
     x$table_styling$text_format %>%
     filter(.data$column %in% .cols_to_show(x)) %>%
@@ -111,7 +111,11 @@
     mutate(
       row_numbers =
         switch(nrow(.) == 0, integer(0)) %||%
-        .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
+        .rows_expr_to_row_numbers(
+          x$table_body, .data$rows,
+          return_when_null = seq_len(nrow(x$table_body))
+        ) %>%
+        list(),
     ) %>%
     select(-.data$rows) %>%
     unnest(.data$row_numbers) %>%
@@ -124,7 +128,7 @@
     select(.data$column, .data$row_numbers, everything()) %>%
     ungroup()
 
-  # fmt_missing ------------------------------
+  # fmt_missing ----------------------------------------------------------------
   x$table_styling$fmt_missing <-
     x$table_styling$fmt_missing %>%
     filter(.data$column %in% .cols_to_show(x)) %>%
@@ -141,18 +145,18 @@
     select(.data$column, .data$row_numbers, .data$symbol) %>%
     ungroup()
 
-  # footnote ---------------------------------
+  # footnote -------------------------------------------------------------------
   x$table_styling$footnote <-
     .clean_table_styling_footnote(x, "footnote")
 
-  # footnote_abbrev ---------------------------------
+  # footnote_abbrev ------------------------------------------------------------
   x$table_styling$footnote_abbrev <-
     .clean_table_styling_footnote(x, "footnote_abbrev")
 
-  # fmt_fun --------------------------------------
+  # fmt_fun --------------------------------------------------------------------
   x$table_styling$fmt_fun <-
     x$table_styling$fmt_fun %>%
-    filter(.data$column %in% .cols_to_show(x)) %>%
+    # filter(.data$column %in% .cols_to_show(x)) %>%
     rowwise() %>%
     mutate(
       row_numbers =
@@ -167,6 +171,23 @@
     ungroup() %>%
     nest(row_numbers = .data$row_numbers) %>%
     mutate(row_numbers = map(.data$row_numbers, ~unlist(.x) %>% unname()))
+
+  # cols_merge -----------------------------------------------------------------
+  x$table_styling$cols_merge <-
+    x$table_styling$cols_merge %>%
+    group_by(.data$column) %>%
+    filter(dplyr::row_number() == dplyr::n(), !is.na(.data$pattern)) %>%
+    rowwise() %>%
+    mutate(
+      row_numbers =
+        switch(nrow(.) == 0, integer(0)) %||%
+        .rows_expr_to_row_numbers(
+          x$table_body, .data$rows,
+          return_when_null = seq_len(nrow(x$table_body))
+        ) %>%
+        list(),
+    ) %>%
+    select(-.data$rows, rows = .data$row_numbers)
 
   x
 }
@@ -242,60 +263,21 @@
 
 .table_styling_cols_merge <- function(x) {
   if (nrow(x$table_styling$cols_merge) == 0) return(x)
+  x_cleaned <- .clean_table_styling(x)
+  if (nrow(x_cleaned$table_styling$cols_merge) == 0) return(x)
 
+  # replacing numeric columns with formatted/character,merged columns
+  merging_columns <- x_cleaned$table_styling$cols_merge$column
+  df_merged <- as_tibble(x, include = c("tibble", "fmt", "cols_merge"))
+  x$table_body[merging_columns] <- df_merged[merging_columns]
+
+  # removing merging instructions ----------------------------------------------
   x$table_styling$cols_merge <-
     x$table_styling$cols_merge %>%
-    group_by(.data$column) %>%
-    filter(dplyr::row_number() == dplyr::n(), !is.na(.data$pattern)) %>%
-    ungroup()
+    filter(FALSE)
 
-  if (x$table_styling$cols_merge$column %>% duplicated() %>% any())
-    abort("Error merging columns due to misspecification.")
-
-  # get version of object with no merge styling to use in `as_tibble.gtsummary()`
-  # also removing text formatting (otherwise, it'll be double applied later)
-  x_no_merging <- x
-  x_no_merging$table_styling$cols_merge <-
-    filter(x_no_merging$table_styling$cols_merge, FALSE)
-  x_no_merging$table_styling$text_format <-
-    filter(x_no_merging$table_styling$text_format, FALSE)
-
-  # apply merging for each for in the cols_merge data frame
-  for (i in seq_len(nrow(x$table_styling$cols_merge))) {
-    # create merged column
-    df_merged_column <-
-      x_no_merging %>%
-      modify_column_unhide(everything()) %>%
-      as_tibble(col_labels = FALSE)
-    merged_column <-
-      expr(
-        ifelse(
-          !!!x$table_styling$cols_merge$rows[i],
-          glue::glue(!!x$table_styling$cols_merge$pattern[i]) %>% as.character(),
-          !!rlang::sym(x$table_styling$cols_merge$column[i])
-        )
-      ) %>%
-      rlang::eval_tidy(data = df_merged_column)
-
-    # updating gtsummary object with merged columns
-    x <-
-      x %>%
-      # replacing fmt_fun with `as.character`
-      modify_fmt_fun(list(as.character) %>% set_names(x$table_styling$cols_merge$column[i])) %>%
-      # replacing column with character version
-      modify_table_body(
-        ~.x %>% mutate(!!x$table_styling$cols_merge$column[i] := .env$merged_column)
-      ) %>%
-      # updating hidden column status
-      modify_column_hide(
-        columns =
-          stringr::str_extract_all(x$table_styling$cols_merge$pattern[i], "\\{.*?\\}") %>%
-          map(stringr::str_remove_all, pattern = fixed("}")) %>%
-          map(stringr::str_remove_all, pattern = fixed("{")) %>%
-          unlist() %>%
-          setdiff(x$table_styling$cols_merge$column[i])
-      )
-  }
+  # replacing formatting functions for merged columns --------------------------
+  x <- modify_fmt_fun(x, update = inject(!!merging_columns ~ as.character))
 
   # return merged gtsummary table ----------------------------------------------
   x

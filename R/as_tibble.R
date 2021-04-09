@@ -39,9 +39,6 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
-  # merging column specified in `x$table_styling$cols_merge` -------------------
-  x <- .table_styling_cols_merge(x)
-
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .clean_table_styling(x)
 
@@ -107,6 +104,22 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
   # (e.g. `bold_p()`) this holds its place for when it is finally run
   tibble_calls[["fmt"]] <- list()
 
+  # cols_merge -----------------------------------------------------------------
+  tibble_calls[["cols_merge"]] <-
+    map(
+      seq_len(nrow(x$table_styling$cols_merge)),
+      ~expr(
+        mutate(
+          !!x$table_styling$cols_merge$column[.x] :=
+            ifelse(
+              dplyr::row_number() %in% !!x$table_styling$cols_merge$rows[[.x]],
+              glue::glue(!!x$table_styling$cols_merge$pattern[.x]) %>% as.character(),
+              !!rlang::sym(x$table_styling$cols_merge$column[.x])
+            )
+        )
+      )
+    )
+
   # tab_style_bold -------------------------------------------------------------
   df_bold <- x$table_styling$text_format %>% filter(.data$format_type == "bold")
 
@@ -131,8 +144,7 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
 
   # fmt (part 2) ---------------------------------------------------------------
   tibble_calls[["fmt"]] <-
-    list(expr(mutate_at(vars(!!!syms(.cols_to_show(x))), as.character))) %>%
-    c(map(
+    map(
       seq_len(nrow(x$table_styling$fmt_fun)),
       ~expr((!!expr(!!eval(parse_expr("gtsummary:::.apply_fmt_fun"))))(
         columns = !!x$table_styling$fmt_fun$column[[.x]],
@@ -140,7 +152,7 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
         fmt_fun = !!x$table_styling$fmt_fun$fmt_fun[[.x]],
         update_from = !!x$table_body
       ))
-    ))
+    )
 
   # cols_hide ------------------------------------------------------------------
   # cols_to_keep object created above in fmt section
@@ -160,9 +172,19 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
 }
 
 .apply_fmt_fun <- function(data, columns, row_numbers, fmt_fun, update_from) {
-  data[row_numbers, columns, drop = FALSE] <-
+  # apply formatting functions
+  df_updated <-
     update_from[row_numbers, columns, drop = FALSE] %>%
     purrr::map_dfc(~fmt_fun(.x))
+
+  # convert underlying column to character if updated col is character
+  for (v in columns) {
+    if (is.character(df_updated[[v]]) && !is.character(data[[v]]))
+      data[[v]] <- as.character(data[[v]])
+  }
+
+  # udpate data and return
+  data[row_numbers, columns, drop = FALSE] <- df_updated
 
   data
 }

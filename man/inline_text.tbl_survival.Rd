@@ -41,6 +41,7 @@ which is a string. Default is x$estimate_fun}
 A string reporting results from a gtsummary table
 }
 \description{
+\lifecycle{deprecated}
 for inline reporting in an R markdown document.
 }
 \section{pattern argument}{
