@@ -51,7 +51,7 @@ test_that("works as expected without error", {
   )
 })
 
-test_that("errors with bad inputs", {
+test_that("errors/messages with bad inputs", {
   expect_error(
     tbl1 %>% add_significance_stars(thresholds = c(0.0000001, 0.55, 0.9, 1.1))
   )
@@ -70,5 +70,9 @@ test_that("errors with bad inputs", {
 
   expect_error(
     tbl1 %>% add_significance_stars(pattern = "no columns selected")
+  )
+
+  expect_message(
+    tbl1 %>% add_significance_stars(pattern = "{estimate}")
   )
 })

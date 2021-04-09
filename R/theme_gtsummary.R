@@ -103,10 +103,11 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
               paste(collapse = ", ")
             x %>%
               # merge estimate and CI into one cell
-              modify_cols_merge(
+              modify_table_styling(
+                columns = "estimate",
                 rows = !!expr(.data$variable %in% !!x$table_body$variable &
                                 !is.na(.data$estimate)),
-                pattern = "{estimate} ({conf.low} to {conf.high})"
+                cols_merge_pattern = "{estimate} ({conf.low} to {conf.high})"
               ) %>%
               # hide ci column
               modify_column_hide(any_of("ci")) %>%
@@ -137,11 +138,12 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
               paste(collapse = ", ")
             x %>%
               # merge estimate and CI into one cell
-              modify_cols_merge(
+              modify_table_styling(
+                columns = "estimate",
                 rows = !!expr(.data$variable %in% !!x$table_body$variable &
                                 !is.na(.data$estimate) &
                                 !.data$reference_row %in% TRUE),
-                pattern = "{estimate} ({conf.low} to {conf.high})"
+                cols_merge_pattern = "{estimate} ({conf.low} to {conf.high})"
               ) %>%
               # hide ci column
               modify_column_hide(any_of("ci")) %>%
