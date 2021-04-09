@@ -98,7 +98,7 @@ gtsummary table by directly modifying .$table_styling" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9020</span>
       </span>
     </div>
 
@@ -195,7 +195,8 @@ gtsummary table by directly modifying <code>.$table_styling</code></p>
   fmt_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
   text_format <span class='op'>=</span> <span class='cn'>NULL</span>,
   undo_text_format <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  text_interpret <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"md"</span>, <span class='st'>"html"</span><span class='op'>)</span>
+  text_interpret <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"md"</span>, <span class='st'>"html"</span><span class='op'>)</span>,
+  cols_merge_pattern <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -264,6 +265,13 @@ and italic styling when <code>TRUE</code></p></td>
       <th>text_interpret</th>
       <td><p>string, must be one of <code>"md"</code> or <code>"html"</code></p></td>
     </tr>
+    <tr>
+      <th>cols_merge_pattern</th>
+      <td><p>glue-syntax string indicating how to merge
+columns in <code>x$table_body</code>. For example, to construct a confidence interval
+use <code>"{conf.low}, {conf.high}"</code>. The first column listed in the pattern
+string must match the single column name passed in <code>columns=</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -289,6 +297,18 @@ an external object named <code>variable</code> in the following expression
 <code>rows = .data$variable = .env$variable</code>.</p></li>
 </ol>
 
+    <h2 class="hasAnchor" id="cols-merge-pattern-argument"><a class="anchor" href="#cols-merge-pattern-argument"></a>cols_merge_pattern argument</h2>
+
+    
+
+
+<p>There are planned updates to the implementation of column merging.
+Currently, this function replaces the numeric column with a
+formatted character column following <code>cols_merge_pattern=</code>.
+Once <code><a href='https://rdrr.io/pkg/gt/man/cols_merge.html'>gt::cols_merge()</a></code> gains the <code>rows=</code> argument the
+implementation will be updated to use it, which will keep
+numeric columns numeric. For the <em>vast majority</em> of users,
+<em>the planned change will be go unnoticed</em>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='modify_table_body.html'>modify_table_body()</a></code></p>

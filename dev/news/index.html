@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9020</span>
       </span>
     </div>
 
@@ -175,21 +175,18 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
-<ul>
-<li><p>Added a generic function inline_text.gtsummary() that can report results from any gtsummary table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/398'>#398</a>)</p></li>
-<li><p>Updated other inline_text() functions to wrap inline_text.gtsummary()</p></li>
-</ul>
 <div id="new-functions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-functions" class="anchor"></a>New Functions</h3>
 <ul>
 <li><p>Added new function <code><a href="../reference/add_glance.html">add_glance_table()</a></code> as a companion to <code><a href="../reference/add_glance.html">add_glance_source_note()</a></code>. Function adds model statistics, such as R-squared, to the bottom of the model summary table.</p></li>
+<li><p>Added new function <code><a href="../reference/add_significance_stars.html">add_significance_stars()</a></code> adding star indicators to significant estimates, and an explanatory footnote.</p></li>
 <li><p>Added new function <code><a href="../reference/tbl_strata.html">tbl_strata()</a></code>. The function aids prepares gtsummary tables stratified by one or more variables (<a href='https://github.com/ddsjoberg/gtsummary/issues/679'>#679</a>)</p></li>
 <li><p>Adding coefficient <code><a href="../reference/plot.html">plot()</a></code> methods for <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. Function creates a forest plot of model coefficients via <code><a href="https://ggobi.github.io/ggally/reference/ggcoef_model.html">GGally::ggcoef_plot()</a></code>.</p></li>
-<li><p>Added new function <code><a href="../reference/add_significance_stars.html">add_significance_stars()</a></code> adding star indicators to significant estimates, and an explanatory footnote.</p></li>
 <li><p>New function <code><a href="../reference/modify_fmt_fun.html">modify_fmt_fun()</a></code> has been introduced to help update the functions that format numeric columns and rows in <code>.x$table_body</code>.</p></li>
 <li><p>New function introduced, <code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code>, to update printing instructions of tables. This function replaces <code><a href="../reference/modify_table_header.html">modify_table_header()</a></code>, which is now soft deprecated.</p></li>
 <li><p>Added function <code><a href="../reference/add_vif.html">add_vif()</a></code> to include variance inflation factors in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> output. (<a href='https://github.com/ddsjoberg/gtsummary/issues/717'>#717</a>)</p></li>
+<li><p>Added a generic function inline_text.gtsummary() that can report results from any gtsummary table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/398'>#398</a>)</p></li>
 </ul>
 </div>
 <div id="new-functionality" class="section level3">
@@ -206,6 +203,7 @@
 <li><p>Added <em>The Quarterly Journal of Economics</em> to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_journal()</a></code>. This journal theme will be updated again after the gt package updates <code><a href="https://rdrr.io/pkg/gt/man/cols_merge.html">cols_merge()</a></code> with a rows argument and allows for line breaks within cell.</p></li>
 <li><p>Added default support for <code>brmsfit</code> model in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> with new method function. (<a href='https://github.com/ddsjoberg/gtsummary/issues/751'>#751</a>)</p></li>
 <li><p>Korean and Icelandic language translations added for <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_language()</a></code>.</p></li>
+<li><p>Ability to merge two or more columns with <code><a href="../reference/modify_table_styling.html">modify_table_styling(cols_merge_pattern=)</a></code> argument.</p></li>
 <li><p>Added theme element <code>"pkgwide-fun:pre_conversion"</code>. The function specified here will be executed on the gtsummary object before it is printed or converted with the <code><a href="../reference/as_gt.html">as_gt()</a></code>, <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code>, etc functions. (<a href='https://github.com/ddsjoberg/gtsummary/issues/773'>#773</a>)</p></li>
 <li><p>The <code><a href="../reference/modify_table_body.html">modify_table_body(fun=)</a></code> argument has been generalized to accept formula short notation.</p></li>
 </ul>
@@ -226,6 +224,7 @@
 <li><p>Added the survey-adapted t-test to <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_mean_sd()</a></code> for continuous variables in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/758'>#758</a>)</p></li>
 <li><p>Allowing for tidyverse shortcut notation in <code><a href="../reference/tbl_survfit.html">tbl_survfit(estimate_fun=)</a></code> specification, e.g. <code><a href="../reference/tbl_survfit.html">tbl_survfit(estimate_fun= ~style_sigfig(.x * 100))</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/761'>#761</a>)</p></li>
 <li><p>The JAMA journal theme has been updated to merge the coefficient and confidence interval columns.</p></li>
+<li><p>Updated other inline_text() functions to wrap inline_text.gtsummary()</p></li>
 </ul>
 </div>
 <div id="bug-fixes" class="section level3">
