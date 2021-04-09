@@ -277,13 +277,7 @@
     filter(FALSE)
 
   # replacing formatting functions for merged columns --------------------------
-  x <-
-    modify_fmt_fun(
-      x,
-      update =
-        rep_len(list(as.character), length(merging_columns)) %>%
-        set_names(merging_columns)
-    )
+  x <- modify_fmt_fun(x, update = inject(!!merging_columns ~ as.character))
 
   # return merged gtsummary table ----------------------------------------------
   x
