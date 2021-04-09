@@ -39,9 +39,6 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
-  # merging column specified in `x$table_styling$cols_merge` -------------------
-  x <- .table_styling_cols_merge(x)
-
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .clean_table_styling(x)
 
@@ -106,6 +103,22 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
   # but the bolding and italic code needs to executed on pre-formatted data
   # (e.g. `bold_p()`) this holds its place for when it is finally run
   tibble_calls[["fmt"]] <- list()
+
+  # cols_merge -----------------------------------------------------------------
+  tibble_calls[["cols_merge"]] <-
+    map(
+      seq_len(nrow(x$table_styling$cols_merge)),
+      ~expr(
+        mutate(
+          !!x$table_styling$cols_merge$column[.x] :=
+            ifelse(
+              dplyr::row_number() %in% !!x$table_styling$cols_merge$rows[[.x]],
+              glue::glue(!!x$table_styling$cols_merge$pattern[.x]) %>% as.character(),
+              !!rlang::sym(x$table_styling$cols_merge$column[.x])
+            )
+        )
+      )
+    )
 
   # tab_style_bold -------------------------------------------------------------
   df_bold <- x$table_styling$text_format %>% filter(.data$format_type == "bold")

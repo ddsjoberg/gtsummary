@@ -172,10 +172,11 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   # if adding stat labels to row, then adding merge instructions ---------------
   if (location == "row") {
     x <-
-      modify_cols_merge(
+      modify_table_styling(
         x,
+        columns = "label",
         rows = !is.na(.data$stat_label),
-        pattern = "{label}, {stat_label}"
+        cols_merge_pattern = "{label}, {stat_label}"
       )
   }
   # unhiding column if requested -----------------------------------------------
