@@ -49,9 +49,6 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
-  # merging column specified in `x$table_styling$cols_merge` -------------------
-  x <- .table_styling_cols_merge(x)
-
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .clean_table_styling(x)
 

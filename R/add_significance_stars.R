@@ -89,6 +89,9 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
     unlist()
   if (isTRUE(is_empty(pattern_cols)))
     abort("`pattern=` must be a string using glue syntax to select columns.")
+  if (!"stars" %in% pattern_cols) {
+    inform("`pattern=` argument does not contain '{stars}' column, and no stars will be added.")
+  }
 
   # adding footnote ------------------------------------------------------------
   p_footnote <-
@@ -131,12 +134,13 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
     unique()
 
   x <-
-    modify_cols_merge(
+    modify_table_styling(
       x = x,
+      columns = pattern_cols[1],
       rows = !!expr(.data$variable %in% !!model_variables &
-                    !is.na(.data$estimate) &
-                    !.data$reference_row %in% TRUE),
-      pattern = pattern
+                      !is.na(.data$estimate) &
+                      !.data$reference_row %in% TRUE),
+      cols_merge_pattern = pattern
     )
 
   # return x -------------------------------------------------------------------

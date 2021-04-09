@@ -18,7 +18,8 @@ modify_table_styling(
   fmt_fun = NULL,
   text_format = NULL,
   undo_text_format = FALSE,
-  text_interpret = c("md", "html")
+  text_interpret = c("md", "html"),
+  cols_merge_pattern = NULL
 )
 }
 \arguments{
@@ -56,6 +57,11 @@ Must be one of \code{c("bold", "italic", "indent")}}
 and italic styling when \code{TRUE}}
 
 \item{text_interpret}{string, must be one of \code{"md"} or \code{"html"}}
+
+\item{cols_merge_pattern}{glue-syntax string indicating how to merge
+columns in \code{x$table_body}. For example, to construct a confidence interval
+use \code{"{conf.low}, {conf.high}"}. The first column listed in the pattern
+string must match the single column name passed in \verb{columns=}.}
 }
 \description{
 This is a function meant for advanced users to gain
@@ -84,6 +90,18 @@ and the renaming process cannot disambiguate the \code{variable} column from
 an external object named \code{variable} in the following expression
 \code{rows = .data$variable = .env$variable}.
 }
+}
+
+\section{cols_merge_pattern argument}{
+
+
+There are planned updates to the implementation of column merging.
+Currently, this function replaces the numeric column with a
+formatted character column following \verb{cols_merge_pattern=}.
+Once \code{gt::cols_merge()} gains the \verb{rows=} argument the
+implementation will be updated to use it, which will keep
+numeric columns numeric. For the \emph{vast majority} of users,
+\emph{the planned change will be go unnoticed}.
 }
 
 \seealso{
