@@ -82,35 +82,76 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "tbl_summary-fn:addnl-fn-to-run" = function(x) {
           add_stat_label(x)
         },
-        "tbl_regression-fn:addnl-fn-to-run" = function(x) {
-          new_header_text <-
-            paste0(
-              x$table_styling$header %>% filter(.data$column == "estimate") %>% pull(.data$label),
-              " **(", style_number(x$inputs$conf.level, scale = 100), "% CI)**"
-            )
+        "add_difference-fn:addnl-fn-to-run" = function(x) {
+          # merging coef and CI columns, if error, returning x unaltered
+          tryCatch({
+            new_header_text <-
+              paste0(
+                x$table_styling$header %>% filter(.data$column == "estimate") %>% pull(.data$label),
+                " **(**",
+                x$table_styling$header %>% filter(.data$column == "ci") %>% pull(.data$label),
+                "**)**"
+              )
 
-          # adding CI footnote to any existing abbreviation footnote, e.g. for OR, HR, etc.
-          estimate_footnote <-
-            x$table_styling$footnote_abbrev %>%
-            filter(.data$column %in% "estimate") %>%
-            filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) %>%
-            dplyr::pull(.data$footnote) %>%
-            c("CI = Confidence Interval") %>%
-            paste(collapse = ", ")
-          x %>%
-            # merge estimate and CI into one cell
-            modify_cols_merge(
-              rows = !!expr(.data$variable %in% !!x$table_body$variable &
-                              !is.na(.data$estimate) &
-                              !.data$reference_row %in% TRUE),
-              pattern = "{estimate} ({conf.low} to {conf.high})"
-            ) %>%
-            # hide ci column
-            modify_column_hide(any_of("ci")) %>%
-            # update column header
-            modify_header(list(estimate = new_header_text)) %>%
-            # add CI abbreviation footnote
-            modify_footnote(estimate ~ estimate_footnote, abbreviation = TRUE)
+            # adding CI footnote to any existing abbreviation footnote, e.g. for OR, HR, etc.
+            estimate_footnote <-
+              x$table_styling$footnote_abbrev %>%
+              filter(.data$column %in% "estimate") %>%
+              filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) %>%
+              dplyr::pull(.data$footnote) %>%
+              c("CI = Confidence Interval") %>%
+              paste(collapse = ", ")
+            x %>%
+              # merge estimate and CI into one cell
+              modify_cols_merge(
+                rows = !!expr(.data$variable %in% !!x$table_body$variable &
+                                !is.na(.data$estimate)),
+                pattern = "{estimate} ({conf.low} to {conf.high})"
+              ) %>%
+              # hide ci column
+              modify_column_hide(any_of("ci")) %>%
+              # update column header
+              modify_header(list(estimate = new_header_text)) %>%
+              # add CI abbreviation footnote
+              modify_footnote(estimate ~ estimate_footnote, abbreviation = TRUE)
+          },
+          error = function(e) x
+          )
+        },
+        "tbl_regression-fn:addnl-fn-to-run" = function(x) {
+          # merging coef and CI columns, if error, returning x unaltered
+          tryCatch({
+            new_header_text <-
+              paste0(
+                x$table_styling$header %>% filter(.data$column == "estimate") %>% pull(.data$label),
+                " **(", style_number(x$inputs$conf.level, scale = 100), "% CI)**"
+              )
+
+            # adding CI footnote to any existing abbreviation footnote, e.g. for OR, HR, etc.
+            estimate_footnote <-
+              x$table_styling$footnote_abbrev %>%
+              filter(.data$column %in% "estimate") %>%
+              filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) %>%
+              dplyr::pull(.data$footnote) %>%
+              c("CI = Confidence Interval") %>%
+              paste(collapse = ", ")
+            x %>%
+              # merge estimate and CI into one cell
+              modify_cols_merge(
+                rows = !!expr(.data$variable %in% !!x$table_body$variable &
+                                !is.na(.data$estimate) &
+                                !.data$reference_row %in% TRUE),
+                pattern = "{estimate} ({conf.low} to {conf.high})"
+              ) %>%
+              # hide ci column
+              modify_column_hide(any_of("ci")) %>%
+              # update column header
+              modify_header(list(estimate = new_header_text)) %>%
+              # add CI abbreviation footnote
+              modify_footnote(estimate ~ estimate_footnote, abbreviation = TRUE)
+          },
+          error = function(e) x
+          )
         }
       )
   }
