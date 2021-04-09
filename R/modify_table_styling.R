@@ -241,15 +241,15 @@ modify_cols_merge <- function(x, column, rows, pattern) {
     map(str_remove_all, pattern = fixed("{")) %>%
     unlist()
 
-  if (!all(all_columns %in% x$table_styling$header$column)) {
+  if (!is.na(pattern) && !all(all_columns %in% x$table_styling$header$column)) {
     paste("All columns specified in `cols_merge_pattern=`",
-          "must be preesnt in `x$table_body`") %>%
+          "must be present in `x$table_body`") %>%
       abort()
   }
 
-  if (!identical(column, all_columns[1])) {
+  if (!is.na(pattern) && !identical(column, all_columns[1])) {
     paste("A single column must be passed when using `cols_merge_pattern=`,",
-          "and that column must the first to appear in the pattern argument.") %>%
+          "and that column must be the first to appear in the pattern argument.") %>%
     abort()
   }
 
