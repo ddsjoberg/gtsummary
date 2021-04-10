@@ -28,7 +28,7 @@
 
 * `tbl_uvregression()` now accepts both data frames and survey design objects as input. (#742)
 
-* In the default `tidy_fun = broom::tidy` fails, `parameters::model_parameters()` attempts to tidy the model, if {parameters} is installed. (#854)
+* If the default `tidy_fun = broom::tidy` fails, `parameters::model_parameters()` attempts to tidy the model, if {parameters} is installed. (#854)
 
 * Added a custom tidier for `mgcv::gam()` models (`tidy_gam()`) and a method function (`tbl_regression.gam()`) that uses the new tidier by default. (#745)
 
