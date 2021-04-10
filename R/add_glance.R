@@ -1,6 +1,5 @@
 #' Add Model Statistics
 #'
-#' \lifecycle{experimental}
 #' Add model statistics returned from `broom::glance()`. Statistics can either
 #' be appended to the table (`add_glance_table()`), or added as a
 #' table source note (`add_glance_source_note()`).

@@ -1,7 +1,7 @@
 #' Modify Table Body
 #'
 #' @description
-#' \lifecycle{experimental}
+#' \lifecycle{maturing}
 #' Function is for advanced manipulation of gtsummary tables.
 #' It allow users to modify the `.$table_body` data frame included
 #' in each gtsummary object.
@@ -45,6 +45,7 @@
 #'
 #' \if{html}{\figure{modify_table_body_ex1.png}{options: width=65\%}}
 #' @export
+#' @family Advanced modifiers
 modify_table_body <- function(x, fun, ...) {
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
 

@@ -6,7 +6,7 @@
 #' @author Daniel D. Sjoberg
 #' @seealso [inline_text.tbl_summary], [inline_text.tbl_svysummary],
 #' [inline_text.tbl_regression], [inline_text.tbl_uvregression],
-#' [inline_text.tbl_survfit], [inline_text.tbl_cross],
+#' [inline_text.tbl_survfit], [inline_text.tbl_cross], [inline_text.gtsummary]
 #'
 #' @export
 inline_text <- function(x, ...) {

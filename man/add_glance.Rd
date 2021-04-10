@@ -55,7 +55,6 @@ Default is \code{" = "}, e.g. \code{"R2 = 0.456"}}
 gtsummary table
 }
 \description{
-\lifecycle{experimental}
 Add model statistics returned from \code{broom::glance()}. Statistics can either
 be appended to the table (\code{add_glance_table()}), or added as a
 table source note (\code{add_glance_source_note()}).

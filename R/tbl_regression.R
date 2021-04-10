@@ -56,8 +56,9 @@
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
 #' @param tidy_fun Option to specify a particular tidier function if the
-#' model is not a [vetted model][vetted_models] or you need to implement a
-#' custom method. Default is `NULL`
+#' model. Default is to use `broom::tidy`, but if an error occurs
+#' then tidying of the model is attempted with `parameters::model_parameters()`,
+#' if installed.
 #' @param add_estimate_to_reference_rows add a reference value. Default is FALSE
 #' @param ... Not used
 #' @param exclude DEPRECATED
@@ -109,7 +110,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
                                    include = everything(), show_single_row = NULL,
                                    conf.level = NULL, intercept = FALSE,
                                    estimate_fun = NULL, pvalue_fun = NULL,
-                                   tidy_fun = broom::tidy,
+                                   tidy_fun = NULL,
                                    add_estimate_to_reference_rows = FALSE,
                                    show_yesno = NULL, exclude = NULL, ...) {
   # deprecated arguments -------------------------------------------------------
@@ -134,6 +135,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   }
 
   # setting defaults -----------------------------------------------------------
+  tidy_fun <- tidy_fun %||% broom.helpers::tidy_with_broom_or_parameters
   pvalue_fun <-
     pvalue_fun %||%
     get_theme_element("tbl_regression-arg:pvalue_fun") %||%

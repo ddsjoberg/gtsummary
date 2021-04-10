@@ -1,7 +1,7 @@
 #' Modify Formatting Functions
 #'
 #' \lifecycle{experimental}
-#' Use this function to update the way numeric columns/row in `.$table_body`
+#' Use this function to update the way numeric columns and rows of `.$table_body`
 #' are formatted
 #'
 #' @param update list of formulas or a single formula specifying the updated
@@ -13,6 +13,7 @@
 #' @inheritParams modify_table_styling
 #'
 #' @inheritSection modify_table_styling rows argument
+#' @family Advanced modifiers
 #' @export
 #' @examples
 #' # Example 1 ----------------------------------

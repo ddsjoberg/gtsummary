@@ -55,7 +55,6 @@ to round and format differences. Default is
 Function to round and format difference. Default is \code{\link[=style_sigfig]{style_sigfig()}}}
 }
 \description{
-\lifecycle{experimental}
 Add the difference between two groups (typically mean difference),
 along with the difference confidence interval and p-value.
 }

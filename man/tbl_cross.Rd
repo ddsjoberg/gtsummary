@@ -57,7 +57,6 @@ Default is \code{"Unknown"}.}
 A \code{tbl_cross} object
 }
 \description{
-\lifecycle{experimental}
 The function creates a cross table of two categorical variables.
 }
 \section{Example Output}{

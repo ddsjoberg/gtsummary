@@ -1,6 +1,5 @@
 #' Add a custom statistic column
 #'
-#' \lifecycle{experimental}
 #' The function allows a user to add a new column (or columns) of statistics to an
 #' existing `tbl_summary` or `tbl_svysummary` object.
 #'
