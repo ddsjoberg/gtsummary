@@ -1,6 +1,5 @@
 #' Create a cross table of summary statistics
 #'
-#' \lifecycle{experimental}
 #' The function creates a cross table of two categorical variables.
 #'
 #' @param data A data frame

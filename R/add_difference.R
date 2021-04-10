@@ -1,6 +1,5 @@
 #' Add difference between groups
 #'
-#' \lifecycle{experimental}
 #' Add the difference between two groups (typically mean difference),
 #' along with the difference confidence interval and p-value.
 #'
