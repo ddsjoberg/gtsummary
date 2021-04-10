@@ -5,7 +5,8 @@
 #'
 #' @inheritParams modify_table_styling
 #'
-#' @export
+#' @name modify_column_hide
+#' @family Advanced modifiers
 #' @examples
 #' # Example 1 ----------------------------------
 #' # hide 95% CI, and replace with standard error
@@ -19,6 +20,10 @@
 #' \if{html}{Example 1}
 #'
 #' \if{html}{\figure{modify_column_hide_ex1.png}{options: width=45\%}}
+NULL
+
+#' @rdname modify_column_hide
+#' @export
 modify_column_hide <- function(x, columns) {
   modify_table_styling(
     x = x,
@@ -27,7 +32,7 @@ modify_column_hide <- function(x, columns) {
   )
 }
 
-#' @name modify_column_hide
+#' @rdname modify_column_hide
 #' @export
 modify_column_unhide <- function(x, columns) {
   modify_table_styling(
