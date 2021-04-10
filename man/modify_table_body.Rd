@@ -16,7 +16,7 @@ it is converted to a function. The argument passed to \verb{fun=} is \code{x$tab
 \item{...}{Additional arguments passed on to the mapped function}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{maturing}
 Function is for advanced manipulation of gtsummary tables.
 It allow users to modify the \code{.$table_body} data frame included
 in each gtsummary object.

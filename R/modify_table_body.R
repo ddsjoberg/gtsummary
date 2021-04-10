@@ -1,7 +1,7 @@
 #' Modify Table Body
 #'
 #' @description
-#' \lifecycle{experimental}
+#' \lifecycle{maturing}
 #' Function is for advanced manipulation of gtsummary tables.
 #' It allow users to modify the `.$table_body` data frame included
 #' in each gtsummary object.
