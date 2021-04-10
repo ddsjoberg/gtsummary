@@ -32,6 +32,9 @@
 #' - `theme_gtsummary_mean_sd()`
 #'   - Set default summary statistics to mean and standard deviation in `tbl_summary()`
 #'   - Set default continuous tests in `add_p()` to t-test and ANOVA
+#' - `theme_gtsummary_eda()`
+#'   - Set all continuous variables to summary type `"continuous2"` by default
+#'   - In `tbl_summary()` show the median, mean, IQR, SD, and Range by default
 #'
 #' Use `reset_gtsummary_theme()` to restore the default settings
 #'
@@ -353,6 +356,23 @@ theme_gtsummary_mean_sd <- function(set_theme = TRUE) {
     "add_p.tbl_summary-attr:test.continuous_by2" = "t.test",
     "add_p.tbl_summary-attr:test.continuous" = "aov",
     "add_p.tbl_svysummary-attr:test.continuous" = "svy.t.test"
+  )
+
+  if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
+  return(invisible(lst_theme))
+}
+
+# ------------------------------------------------------------------------------
+#' @rdname theme_gtsummary
+#' @export
+theme_gtsummary_eda <- function(set_theme = TRUE) {
+
+  lst_theme <- list(
+    "pkgwide-str:theme_name" = "Exploratory Data Analysis",
+    "tbl_summary-str:default_con_type" = "continuous2",
+    "tbl_summary-str:continuous_stat" =
+      c("{median} ({p25}, {p75})", "{mean} ({sd})", "{min}, {max}"),
+    "tbl_summary-fn:percent_fun" = function(x) style_percent(x, digits = 1)
   )
 
   if (set_theme == TRUE) set_gtsummary_theme(lst_theme)
