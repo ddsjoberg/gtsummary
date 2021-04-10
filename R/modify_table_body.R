@@ -45,6 +45,7 @@
 #'
 #' \if{html}{\figure{modify_table_body_ex1.png}{options: width=65\%}}
 #' @export
+#' @family Advanced modifiers
 modify_table_body <- function(x, fun, ...) {
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
 

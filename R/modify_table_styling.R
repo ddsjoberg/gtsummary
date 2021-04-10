@@ -37,6 +37,7 @@
 #' @seealso `modify_table_body()`
 #' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #' @export
+#' @family Advanced modifiers
 #'
 #' @section rows argument:
 #' The rows argument accepts a predicate expression that is used to specify
@@ -221,10 +222,10 @@ modify_table_styling <- function(x,columns,
 
   # cols_merge_pattern ---------------------------------------------------------
   if (!is.null(cols_merge_pattern)) {
-    x <- modify_cols_merge(x,
-                           column = columns,
-                           rows = !!rows,
-                           pattern = cols_merge_pattern)
+    x <- .modify_cols_merge(x,
+                            column = columns,
+                            rows = !!rows,
+                            pattern = cols_merge_pattern)
   }
 
   # return x -------------------------------------------------------------------
@@ -233,7 +234,7 @@ modify_table_styling <- function(x,columns,
 
 
 # function to add merging columns instructions
-modify_cols_merge <- function(x, column, rows, pattern) {
+.modify_cols_merge <- function(x, column, rows, pattern) {
   rows <- enquo(rows)
   all_columns <-
     str_extract_all(pattern, "\\{.*?\\}") %>%
