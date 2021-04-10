@@ -1,6 +1,5 @@
 #' Add difference between groups
 #'
-#' \lifecycle{experimental}
 #' Add the difference between two groups (typically mean difference),
 #' along with the difference confidence interval and p-value.
 #'
@@ -219,13 +218,22 @@ add_difference <- function(x, test = NULL, group = NULL,
     {left_join(x$meta_data, ., by = "variable")}
 
   x$call_list <- c(x$call_list, list(add_p = match.call()))
-  add_p_merge_p_values(x = x,
-                       lgl_add_p = FALSE,
-                       meta_data = x$meta_data,
-                       pvalue_fun = pvalue_fun,
-                       estimate_fun = estimate_fun,
-                       conf.level = conf.level,
-                       adj.vars = adj.vars)
+  x <-
+    add_p_merge_p_values(x = x,
+                         lgl_add_p = FALSE,
+                         meta_data = x$meta_data,
+                         pvalue_fun = pvalue_fun,
+                         estimate_fun = estimate_fun,
+                         conf.level = conf.level,
+                         adj.vars = adj.vars)
+
+  # running any additional mods ------------------------------------------------
+  x <-
+    get_theme_element("add_difference-fn:addnl-fn-to-run", default = identity) %>%
+    do.call(list(x))
+
+  # return results -------------------------------------------------------------
+  x
 }
 
 

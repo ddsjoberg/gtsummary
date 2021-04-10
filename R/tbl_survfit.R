@@ -296,21 +296,23 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
     mutate(
       df_stats = pmap(
         # calculating estimates ------------------------------------------------
-        list(.data$survfit, .data$variable, .data$tidy),
+        list(.data$survfit, .data$variable, .data$tidy, .data$var_label),
         ~ switch(
           estimate_type,
           "times" = survfit_time(..1, variable = ..2, times = inputs$times,
                                  label_header = inputs$label_header,
                                  conf.level = inputs$conf.level,
                                  reverse = inputs$reverse,
-                                 quiet = inputs$quiet, tidy = ..3),
+                                 quiet = inputs$quiet, tidy = ..3,
+                                 var_label = ..4),
           "probs" = survfit_prob(..1, variable = ..2, probs = inputs$probs,
                                  label_header = inputs$label_header,
                                  conf.level = inputs$conf.level,
-                                 quiet = inputs$quiet, tidy = ..3)
+                                 quiet = inputs$quiet, tidy = ..3,
+                                 var_label = ..4)
         )
       ),
-      # table_body -----------------------------------------------------------------
+      # table_body -------------------------------------------------------------
       table_body = map2(
         .data$df_stats, .data$var_label,
         function(df_stats, var_label) {
@@ -346,7 +348,8 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
 }
 
 # calculates and prepares survival quantile estimates for tbl
-survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet, tidy) {
+survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet,
+                         tidy, var_label) {
 
   strata <- intersect("strata", names(tidy)) %>% list() %>% compact()
 
@@ -365,7 +368,7 @@ survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet, ti
     # creating labels
     mutate(
       variable = .env$variable,
-      label = switch(length(.env$strata) == 0, translate_text("Overall")) %||%
+      label = switch(length(.env$strata) == 0, var_label) %||%
         # take everything to the right of the first '='
         str_sub(strata, str_locate(strata, fixed("="))[1] + 1),
       col_label = .env$label_header %||%
@@ -384,7 +387,7 @@ survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet, ti
 
 # calculates and prepares n-year survival estimates for tbl
 survfit_time <- function(x, variable, times, label_header, conf.level,
-                         reverse, quiet, tidy) {
+                         reverse, quiet, tidy, var_label) {
 
   strata <- intersect("strata", names(tidy)) %>% list() %>% compact()
   multi_state <- inherits(x, "survfitms")
@@ -450,7 +453,7 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
               ~ifelse(.data$time > .data$time_max, NA_real_, .)) %>%
     mutate(
       variable = .env$variable,
-      label = switch(length(.env$strata) == 0, translate_text("Overall")) %||%
+      label = switch(length(.env$strata) == 0, var_label) %||%
         # take everything to the right of the first '='
         str_sub(strata, str_locate(strata, fixed("="))[1] + 1),
       col_label = .env$label_header %||% paste0("**", translate_text("Time"), " {time}**") %>% glue() %>% as.character()
@@ -502,7 +505,7 @@ survfit_to_label <- function(survfit_list, varlist, stratified, label) {
     list(survfit_list, varlist, seq_along(survfit_list), stratified),
     function(x, v, i, stratified) {
       if (!is.null(label[[v]])) return(label[[v]])
-      if (stratified == FALSE) return("Overall")
+      if (stratified == FALSE) return(translate_text("Overall"))
 
       # try to extra label from data (if exists)
       data <- x$call %>% as.list() %>% pluck("data")
@@ -519,3 +522,17 @@ survfit_to_label <- function(survfit_list, varlist, stratified, label) {
   )
 }
 
+safe_survfit_eval <- function(x) {
+  tryCatch(
+    eval(x),
+    error = function(e) {
+      paste("There was an error executing {.code add_n()} or {.code add_p()}.",
+            "The error may be a due to the construction of the original",
+            "{.code survival::survfit()} object.",
+            "Please visit this help file for a possible solution:",
+            "{.code ?tbl_survfit_errors}") %>%
+        cli_alert_danger()
+      e
+    }
+  )
+}

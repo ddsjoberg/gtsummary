@@ -1,6 +1,5 @@
 #' Create a table of summary statistics from a survey object
 #'
-#' \lifecycle{experimental}
 #' The `tbl_svysummary` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables taking into account survey weights and design.
 #' It is similar to [tbl_summary()].
@@ -250,7 +249,13 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
     )
   }
 
-  return(x)
+  # running any additional mods ------------------------------------------------
+  x <-
+    get_theme_element("tbl_svysummary-fn:addnl-fn-to-run", default = identity) %>%
+    do.call(list(x))
+
+  # returning tbl_svysummary table ---------------------------------------------
+  x
 }
 
 #' Test if data is a survey object
@@ -445,7 +450,7 @@ compute_survey_stat <- function(data, variable, by, f) {
 # this function creates df_stats in the tbl_svysummary meta data table
 # and includes the number of missing values
 df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
-                                stat_display, digits, data, by, percent) {
+                                stat_display, digits, data, by, percent, var_label) {
   # first table are the standard stats
   t1 <- switch(
     summary_type,
@@ -493,6 +498,23 @@ df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
   # returning table will all stats
   merge_vars <- switch(!is.null(by), c("by", "variable")) %||% "variable"
   return <- left_join(t1, t2, by = merge_vars)
+
+  # adding variables needed for inlin_text()
+  if ("by" %in% names(return)) {
+    return$label <- return$by
+    return <-
+      return %>%
+      left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
+      rename(col_name = .data$by_col)
+  }
+  else if ("variable_levels" %in% names(return)) {
+    return$label <- as.character(return$variable_levels)
+    return$col_name <- "stat_0"
+  }
+  else {
+    return$label <- var_label
+    return$col_name <- "stat_0"
+  }
 
   return <- adding_formatting_as_attr(
     df_stats = return, data = data, variable = variable,

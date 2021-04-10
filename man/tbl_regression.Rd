@@ -17,7 +17,7 @@ tbl_regression(x, ...)
   intercept = FALSE,
   estimate_fun = NULL,
   pvalue_fun = NULL,
-  tidy_fun = broom::tidy,
+  tidy_fun = NULL,
   add_estimate_to_reference_rows = FALSE,
   show_yesno = NULL,
   exclude = NULL,
@@ -62,8 +62,9 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{tidy_fun}{Option to specify a particular tidier function if the
-model is not a \link[=vetted_models]{vetted model} or you need to implement a
-custom method. Default is \code{NULL}}
+model. Default is to use \code{broom::tidy}, but if an error occurs
+then tidying of the model is attempted with \code{parameters::model_parameters()},
+if installed.}
 
 \item{add_estimate_to_reference_rows}{add a reference value. Default is FALSE}
 

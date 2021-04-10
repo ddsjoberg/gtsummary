@@ -44,6 +44,7 @@ tbl_regression,tbl_regression-arg:pvalue_fun ,TRUE,,
 tbl_regression,tbl_regression-arg:add_estimate_to_reference_rows,TRUE,,
 tbl_regression,tbl_regression-arg:tidy_fun ,TRUE,,
 tbl_stack,tbl_stack-str:group_header,FALSE,"string indicating the group column header used in `as_tibble()`, `as_flex_table()`, etc. where row headers are not supported; default is `""**Group**""`","""**Group Status**"""
+tbl_summary,tbl_summary-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `tbl_summary()` call,bold_labels
 tbl_summary,tbl_summary-fn:N_fun,FALSE,function to style integers. Currently questioning...THIS MAY BE REMOVED IN A FUTURE RELEASE. Use `style_number-arg:big.mark` and `style_number-arg:decimal.mark` instead.,"function(x) sprintf(""%.0f"", x)"
 tbl_summary,tbl_summary-fn:percent_fun,FALSE,function to style percentages; default is `style_percent`,function(x) style_percent(x)
 tbl_summary,tbl_summary-str:categorical_stat,FALSE,"glue string defining the default categorical and dichotomous summary statistics to display; default is `""{n} ({p}%)""`. Also sets default statistic for `tbl_svysummary()`","""{n} / {N} ({p}%)"""
@@ -59,6 +60,7 @@ tbl_summary,tbl_summary-arg:statistic,TRUE,,
 tbl_summary,tbl_summary-arg:type,TRUE,,
 tbl_summary,tbl_summary-arg:value,TRUE,,
 tbl_survfit,tbl_survfit-arg:statistic,TRUE,,
+tbl_svysummary,tbl_svysummary-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `tbl_svysummary()` call,bold_labels
 tbl_svysummary,tbl_svysummary-arg:digits,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:label,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:missing,TRUE,,
@@ -68,3 +70,4 @@ tbl_svysummary,tbl_svysummary-arg:sort,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:statistic,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:type,TRUE,,
 tbl_svysummary,tbl_svysummary-arg:value,TRUE,,
+add_difference,add_difference-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `add_difference()` call,bold_labels

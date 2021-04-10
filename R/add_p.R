@@ -294,6 +294,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
     # adding formatted CI column
     if (all(c("conf.low", "conf.high") %in% names(x$table_body)) &&
         !"ci" %in% names(x$table_body)) {
+      ci.sep <- get_theme_element("pkgwide-str:ci.sep", default = ", ")
       x <- x %>%
         modify_table_body(
           ~.x %>%
@@ -303,7 +304,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
                 ~case_when(
                   !is.na(..2) | !is.na(..3) ~
                     paste(do.call(estimate_fun[[..1]], list(..2)),
-                          do.call(estimate_fun[[..1]], list(..3)), sep = ", ")
+                          do.call(estimate_fun[[..1]], list(..3)), sep = ci.sep)
                 )
               )
             )
@@ -539,6 +540,20 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
       arg_name = "test.args"
     )
 
+  # checking the formula and data from survfit object are available
+  purrr::walk(
+      x$meta_data$survfit,
+      function(suvfit) {
+        #extracting survfit call
+        survfit_call <- suvfit$call %>% as.list()
+        # index of formula and data
+        call_index <- names(survfit_call) %in% c("formula", "data") %>% which()
+        # converting call into a model.frame call
+        rlang::call2(rlang::expr(stats::model.frame), !!!survfit_call[call_index]) %>%
+          safe_survfit_eval()
+      }
+  )
+
   x$meta_data <-
     meta_data %>%
     mutate(
@@ -562,7 +577,6 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 
 #' Adds p-values to svysummary tables
 #'
-#' \lifecycle{experimental}
 #' Adds p-values to tables created by `tbl_svysummary` by comparing values across groups.
 #'
 #' @param x Object with class `tbl_svysummary` from the [tbl_svysummary] function

@@ -29,10 +29,15 @@
 #' @param missing_symbol string indicating how missing values are formatted.
 #' @param undo_text_format rarely used. Logical that undoes the indent, bold,
 #' and italic styling when `TRUE`
+#' @param cols_merge_pattern glue-syntax string indicating how to merge
+#' columns in `x$table_body`. For example, to construct a confidence interval
+#' use `"{conf.low}, {conf.high}"`. The first column listed in the pattern
+#' string must match the single column name passed in `columns=`.
 #'
 #' @seealso `modify_table_body()`
 #' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #' @export
+#' @family Advanced modifiers
 #'
 #' @section rows argument:
 #' The rows argument accepts a predicate expression that is used to specify
@@ -48,6 +53,17 @@
 #' and the renaming process cannot disambiguate the `variable` column from
 #' an external object named `variable` in the following expression
 #' `rows = .data$variable = .env$variable`.
+#'
+#' @section cols_merge_pattern argument:
+#'
+#' There are planned updates to the implementation of column merging.
+#' Currently, this function replaces the numeric column with a
+#' formatted character column following `cols_merge_pattern=`.
+#' Once `gt::cols_merge()` gains the `rows=` argument the
+#' implementation will be updated to use it, which will keep
+#' numeric columns numeric. For the _vast majority_ of users,
+#' _the planned change will be go unnoticed_.
+
 
 modify_table_styling <- function(x,columns,
                                  rows = NULL,
@@ -61,7 +77,8 @@ modify_table_styling <- function(x,columns,
                                  fmt_fun = NULL,
                                  text_format = NULL,
                                  undo_text_format = FALSE,
-                                 text_interpret = c("md", "html")
+                                 text_interpret = c("md", "html"),
+                                 cols_merge_pattern = NULL
                                  ) {
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
@@ -203,20 +220,39 @@ modify_table_styling <- function(x,columns,
       {bind_rows(x$table_styling$fmt_missing, .)}
   }
 
+  # cols_merge_pattern ---------------------------------------------------------
+  if (!is.null(cols_merge_pattern)) {
+    x <- .modify_cols_merge(x,
+                            column = columns,
+                            rows = !!rows,
+                            pattern = cols_merge_pattern)
+  }
+
   # return x -------------------------------------------------------------------
   x
 }
 
 
-# this is an experimental function to merge columns
-modify_cols_merge <- function(x, rows, pattern) {
+# function to add merging columns instructions
+.modify_cols_merge <- function(x, column, rows, pattern) {
   rows <- enquo(rows)
-  column <-
+  all_columns <-
     str_extract_all(pattern, "\\{.*?\\}") %>%
     map(str_remove_all, pattern = fixed("}")) %>%
     map(str_remove_all, pattern = fixed("{")) %>%
-    unlist() %>%
-    purrr::pluck(1)
+    unlist()
+
+  if (!is.na(pattern) && !all(all_columns %in% x$table_styling$header$column)) {
+    paste("All columns specified in `cols_merge_pattern=`",
+          "must be present in `x$table_body`") %>%
+      abort()
+  }
+
+  if (!is.na(pattern) && !identical(column, all_columns[1])) {
+    paste("A single column must be passed when using `cols_merge_pattern=`,",
+          "and that column must be the first to appear in the pattern argument.") %>%
+    abort()
+  }
 
   x$table_styling$cols_merge <-
     x$table_styling$cols_merge %>%
@@ -228,6 +264,9 @@ modify_cols_merge <- function(x, rows, pattern) {
              rows = list(rows),
              pattern = pattern)
     )
+
+  # hiding all but the first column
+  x <- modify_column_hide(x, columns = all_columns[-1])
 
   # return gtsummary table
   x

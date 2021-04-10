@@ -35,3 +35,10 @@ modify_column_hide_ex1 <-
   modify_column_unhide(columns = std.error)
 
 }
+\seealso{
+Other Advanced modifiers: 
+\code{\link{modify_fmt_fun}()},
+\code{\link{modify_table_body}()},
+\code{\link{modify_table_styling}()}
+}
+\concept{Advanced modifiers}

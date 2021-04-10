@@ -4,17 +4,19 @@
 
 * Added new function `add_glance_table()` as a companion to `add_glance_source_note()`. Function adds model statistics, such as R-squared, to the bottom of the model summary table.
 
+* Added new function `add_significance_stars()` adding star indicators to significant estimates, and an explanatory footnote.
+
 * Added new function `tbl_strata()`. The function aids prepares gtsummary tables stratified by one or more variables (#679)
 
 * Adding coefficient `plot()` methods for `tbl_regression()` and `tbl_uvregression()`. Function creates a forest plot of model coefficients via `GGally::ggcoef_plot()`.
-
-* Added new function `add_significance_stars()` adding star indicators to significant estimates, and an explanatory footnote.
 
 * New function `modify_fmt_fun()` has been introduced to help update the functions that format numeric columns and rows in `.x$table_body`.
 
 * New function introduced,  `modify_table_styling()`, to update printing instructions of tables. This function replaces `modify_table_header()`, which is now soft deprecated. 
 
 * Added function `add_vif()` to include variance inflation factors in `tbl_regression()` output. (#717)
+
+* Added a generic function inline_text.gtsummary() that can report results from any gtsummary table. (#398)
 
 ### New Functionality
 
@@ -26,19 +28,21 @@
 
 * `tbl_uvregression()` now accepts both data frames and survey design objects as input. (#742)
 
+* If the default `tidy_fun = broom::tidy` fails, `parameters::model_parameters()` attempts to tidy the model, if {parameters} is installed. (#854)
+
 * Added a custom tidier for `mgcv::gam()` models (`tidy_gam()`) and a method function (`tbl_regression.gam()`) that uses the new tidier by default. (#745)
 
 * Functions `modify_footnote()` and `modify_spanning_header()` now include the `text_interpret=` argument indicating whether to use `gt::md()` or `gt::html()` to format text. Default is `gt::md()`.
 
 * Added/updated functions `add_n()` and `add_nevent()` to work with `tbl_regression` and `tbl_uvregression` objects. Each function now has an argument to place Ns on the label or level rows. (#744)
 
-* Added `"jama_psychiatry"` theme to `theme_gtsummary_journal()` (#789)
-
 * Added _The Quarterly Journal of Economics_ to `theme_gtsummary_journal()`. This journal theme will be updated again after the gt package updates `cols_merge()` with a rows argument and allows for line breaks within cell.
 
 * Added default support for `brmsfit` model in `tbl_regression()` with new method function. (#751)
 
-* Icelandic language translations added for `theme_gtsummary_language("is")`.
+* Korean and Icelandic language translations added for `theme_gtsummary_language()`.
+
+* Ability to merge two or more columns with `modify_table_styling(cols_merge_pattern=)` argument.
 
 * Added theme element `"pkgwide-fun:pre_conversion"`. The function specified here will be executed on the gtsummary object before it is printed or converted with the `as_gt()`, `as_flex_table()`, etc functions. (#773)
 
@@ -68,7 +72,13 @@
 
 * Allowing for tidyverse shortcut notation in `tbl_survfit(estimate_fun=)` specification, e.g. `tbl_survfit(estimate_fun= ~style_sigfig(.x * 100))` (#761)
 
+* The JAMA journal theme has been updated to merge the coefficient and confidence interval columns.
+
+* Updated other inline_text() functions to wrap inline_text.gtsummary()
+
 ### Bug Fixes
+
+* The `label=` argument for unstratified models was being ignored in `tbl_survfit()` (#842)
 
 * Preserve ordering for factor variables in `tbl_survfit()`. (#764)
 
@@ -81,6 +91,10 @@
 ### Breaking Changes
 
 * `tbl_survival()` has moved from questioning to deprecated. This function maintains the old `x$table_header` format (instead of the more flexible `x$table_styling`). The `"level_label"` column was renamed to `"groupname_col"` and the `x$table_body` is no longer grouped with `group_by(level_label)` 
+
+* The back-end implementation of `add_stat_label(location = "row")` has been updated. The function now merges columns `"label"` and `"stat_label"` instead of modifying the `"label"` column directly. This _could_ be a breaking change if users had manually updated results, for example, from a `tbl_regression()` table to merge with `tbl_summary()` using `tbl_merge()` 
+
+* The function `add_stat_label()` no longer auto-switches `location = "column"` requests to `"row"` in the presence of `"continuous2"` variables.
 
 # gtsummary 1.3.7
 

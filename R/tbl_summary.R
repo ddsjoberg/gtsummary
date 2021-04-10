@@ -325,7 +325,12 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     )
   }
 
-  # returning tbl_summary table
+  # running any additional mods ------------------------------------------------
+  x <-
+    get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) %>%
+    do.call(list(x))
+
+  # returning tbl_summary table ------------------------------------------------
   x
 }
 
@@ -406,12 +411,13 @@ generate_metadata <- function(data, value, by, type, label,
       df_stats = pmap(
         list(.data$summary_type, .data$variable,
              .data$dichotomous_value,
-             .data$sort, .data$stat_display),
+             .data$sort, .data$stat_display, .data$var_label),
         ~ df_stats_function(summary_type = ..1, variable = ..2,
                             dichotomous_value = ..3,
                             sort = ..4, stat_display = ..5,
                             data = data_for_df_stats, by = by,
-                            percent = percent, digits = digits)
+                            percent = percent, digits = digits,
+                            var_label = ..6)
       )
     )
 

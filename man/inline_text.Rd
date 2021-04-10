@@ -20,7 +20,7 @@ Report statistics from gtsummary tables inline
 \seealso{
 \link{inline_text.tbl_summary}, \link{inline_text.tbl_svysummary},
 \link{inline_text.tbl_regression}, \link{inline_text.tbl_uvregression},
-\link{inline_text.tbl_survfit}, \link{inline_text.tbl_cross},
+\link{inline_text.tbl_survfit}, \link{inline_text.tbl_cross}, \link{inline_text.gtsummary}
 }
 \author{
 Daniel D. Sjoberg
