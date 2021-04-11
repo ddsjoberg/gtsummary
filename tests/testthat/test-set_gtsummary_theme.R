@@ -119,8 +119,31 @@ test_that("setting themes", {
       purrr::pluck(2),
     "**coef**"
   )
+  reset_gtsummary_theme()
+
+
+  theme_gtsummary_journal("qjecon")
+  expect_equal(
+    lm(age ~ grade, trial) %>%
+      tbl_regression() %>%
+      as_tibble(col_labels = FALSE) %>%
+      pull(estimate),
+    c(NA, NA, "1.4\n(2.54)", "2.0\n(2.55)")
+  )
 
   reset_gtsummary_theme()
+  theme_gtsummary_eda()
+  expect_error(
+    tbl <-
+      trial %>%
+      select(age) %>%
+      tbl_summary() %>%
+      as_tibble(col_labels = FALSE),
+    NA
+  )
+  expect_equal(tbl$label, c("Age", "Median (IQR)", "Mean (SD)", "Range", "Unknown"))
+  expect_equal(tbl$stat_0, c(NA, "47 (38, 57)", "47 (14)", "6, 83", "11"))
+
 })
 
 reset_gtsummary_theme()
