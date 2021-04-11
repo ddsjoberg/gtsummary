@@ -72,7 +72,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
 
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.5",
       "gtsummary::add_p(exclude = )",
       "add_p(include = )",
@@ -109,15 +109,6 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       var_info = x$table_body,
       arg_name = "include"
     )
-  exclude <-
-    .select_to_varnames(
-      select = {{ exclude }},
-      data = select(x$inputs$data, any_of(x$meta_data$variable)),
-      var_info = x$table_body,
-      arg_name = "exclude"
-    )
-  # Getting p-values only for included variables
-  include <- include %>% setdiff(exclude)
 
   # group argument -------------------------------------------------------------
   if (!is.null(group) && group %in% x$meta_data$variable) {

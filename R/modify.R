@@ -120,11 +120,16 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     ) %>%
     c(list(...)) # adding the ... to the update list
   if (!is.null(stat_by)) {
-    # will mark this DEPRECATED, but won't print a deprecation note until later
-    # lifecycle::deprecate_warn(
-    #   "1.3.6",
-    #   "gtsummary::modify_header(stat_by=)",
-    #   details = glue("Use {ui_code(rlang::expr(modify_header(update =  all_stat_cols(FALSE) ~ !!stat_by)) %>% deparse(width.cutoff = 500L))} instead."))
+    # choose selector type
+    selector_code <- switch("stat_0" %in% names(x$table_body), expr(all_stat_cols(FALSE))) %||% expr(all_stat_cols())
+    lifecycle::deprecate_warn(
+      "1.3.6",
+      "gtsummary::modify_header(stat_by=)",
+      details =
+        paste("Use `{rlang::expr(modify_header(update =  !!selector_code",
+              "~ !!stat_by)) %>% deparse(width.cutoff = 500L)}` instead.") %>%
+        glue()
+    )
     update <-
       c(update,
         .formula_list_to_named_list(x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),

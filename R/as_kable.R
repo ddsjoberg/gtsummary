@@ -34,7 +34,7 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
                      exclude = NULL, ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.5",
       "gtsummary::as_kable(exclude = )",
       "as_kable(include = )",
@@ -64,19 +64,11 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
       var_info = names(kable_calls),
       arg_name = "include"
     )
-  exclude <-
-    .select_to_varnames(
-      select = {{ exclude }},
-      var_info = names(kable_calls),
-      arg_name = "exclude"
-    )
 
   # making list of commands to include -----------------------------------------
   # this ensures list is in the same order as names(x$kable_calls)
   include <- names(kable_calls) %>% intersect(include)
-
   # user cannot exclude the first 'kable' command
-  include <- include %>% setdiff(exclude)
   include <- "tibble" %>% union(include)
 
   # taking each kable function call, concatenating them with %>% separating them

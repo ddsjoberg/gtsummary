@@ -60,11 +60,10 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
                                         keep = FALSE, quiet = NULL, ..., terms = NULL) {
   # deprecated arguments -------------------------------------------------------
   if (!is.null(terms)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.5", "gtsummary::add_global_p.tbl_regression(terms = )",
       "add_global_p.tbl_regression(include = )"
     )
-    include <- terms
   }
 
   # setting defaults -----------------------------------------------------------
