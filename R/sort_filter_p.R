@@ -36,6 +36,7 @@ NULL
 #' @export
 #' @rdname sort_filter_p
 sort_p <- function(x, q = FALSE) {
+  updated_call_list <- c(x$call_list, list(sort_p = match.call()))
   # checking inputs ------------------------------------------------------------
   # checking class of x
   if (!inherits(x, "gtsummary")) {
@@ -68,14 +69,14 @@ sort_p <- function(x, q = FALSE) {
     ungroup()
 
   # returning results ----------------------------------------------------------
-  x$call_list <- c(x$call_list, list(sort_p = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }
 
 #' @export
 #' @rdname sort_filter_p
 filter_p <- function(x, q = FALSE, t = 0.05) {
+  updated_call_list <- c(x$call_list, list(filter_p = match.call()))
   # checking inputs ------------------------------------------------------------
   # checking class of x
   if (!inherits(x, "gtsummary")) {
@@ -108,7 +109,6 @@ filter_p <- function(x, q = FALSE, t = 0.05) {
     ungroup()
 
   # returning results ----------------------------------------------------------
-  x$call_list <- c(x$call_list, list(filter_p = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }

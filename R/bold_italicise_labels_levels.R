@@ -24,6 +24,7 @@ NULL
 #' @describeIn bold_italicize_labels_levels Bold labels in gtsummary tables
 #' @export
 bold_labels <- function(x) {
+  updated_call_list <- c(x$call_list, list(bold_labels = match.call()))
   # input checks ---------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
@@ -38,7 +39,7 @@ bold_labels <- function(x) {
       text_format = "bold"
     )
 
-  x$call_list <- c(x$call_list, list(bold_labels = match.call()))
+  x$call_list <- updated_call_list
 
   x
 }
@@ -46,6 +47,7 @@ bold_labels <- function(x) {
 #' @describeIn bold_italicize_labels_levels Bold levels in gtsummary tables
 #' @export
 bold_levels <- function(x) {
+  updated_call_list <- c(x$call_list, list(bold_levels = match.call()))
   # input checks ---------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
@@ -60,7 +62,7 @@ bold_levels <- function(x) {
       text_format = "bold"
     )
 
-  x$call_list <- c(x$call_list, list(bold_levels = match.call()))
+  x$call_list <- updated_call_list
 
   x
 }
@@ -69,6 +71,7 @@ bold_levels <- function(x) {
 #' @describeIn bold_italicize_labels_levels Italicize labels in gtsummary tables
 #' @export
 italicize_labels <- function(x) {
+  updated_call_list <- c(x$call_list, list(italicize_labels = match.call()))
   # input checks ---------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
@@ -83,7 +86,7 @@ italicize_labels <- function(x) {
       text_format = "italic"
     )
 
-  x$call_list <- c(x$call_list, list(italicize_labels = match.call()))
+  x$call_list <- updated_call_list
 
   x
 }
@@ -92,6 +95,7 @@ italicize_labels <- function(x) {
 #' @describeIn bold_italicize_labels_levels Italicize levels in gtsummary tables
 #' @export
 italicize_levels <- function(x) {
+  updated_call_list <- c(x$call_list, list(italicize_levels = match.call()))
   # input checks ---------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
@@ -106,7 +110,7 @@ italicize_levels <- function(x) {
       text_format = "italic"
     )
 
-  x$call_list <- c(x$call_list, list(italicize_levels = match.call()))
+  x$call_list <- updated_call_list
 
   x
 }

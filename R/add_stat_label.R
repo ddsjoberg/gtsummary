@@ -85,6 +85,7 @@
 #' \if{html}{\figure{add_stat_label_ex3.png}{options: width=45\%}}
 
 add_stat_label <- function(x, location = NULL, label = NULL) {
+  updated_call_list <- c(x$call_list, list(add_stat_label = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!(inherits(x, "tbl_summary") | inherits(x, "tbl_svysummary"))) {
     stop("`x=` must be class `tbl_summary` or `tbl_svysummary`", call. = FALSE)
@@ -185,7 +186,7 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   }
 
   # keeping track of all functions previously run ------------------------------
-  x$call_list <- c(x$call_list, list(add_stat_label = match.call()))
+  x$call_list <- updated_call_list
 
   x
 }

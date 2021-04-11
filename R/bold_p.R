@@ -32,10 +32,11 @@
 #' \if{html}{\figure{bold_p_ex2.png}{options: width=50\%}}
 
 bold_p <- function(x, t = 0.05, q = FALSE) {
+  updated_call_list <- c(x$call_list, list(bold_p = match.call()))
   # checking inputs ------------------------------------------------------------
   # checking class of x
   if (!inherits(x, "gtsummary")) {
-    stop("`x=` must be a gtsummary obejct.", call. = FALSE)
+    stop("`x=` must be a gtsummary object.", call. = FALSE)
   }
 
   # checking input table has a p.value column
@@ -65,7 +66,6 @@ bold_p <- function(x, t = 0.05, q = FALSE) {
     )
 
   # returning results ----------------------------------------------------------
-  x$call_list <- c(x$call_list, list(bold_p = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }

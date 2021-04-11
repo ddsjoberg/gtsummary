@@ -28,6 +28,7 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
                                 text_interpret = NULL, bold = NULL, italic = NULL,
                                 fmt_fun = NULL, footnote_abbrev = NULL,
                                 footnote = NULL, spanning_header = NULL) {
+  updated_call_list <- c(x$call_list, list(modify_table_header = match.call()))
   # checking inputs ------------------------------------------------------------
   lifecycle::deprecate_warn(
     "1.4.0", "gtsummary::modify_table_header()", "modify_table_styling()")
@@ -47,14 +48,18 @@ modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NU
   # if no columns selected, returning unaltered
   if (is.null(column)) return(x)
 
-  .convert_header_call_to_styling_call(
-    x = x, column = column, label = label, hide = hide, align = align,
-    missing_emdash = missing_emdash, indent = indent,
-    text_interpret = text_interpret, bold = bold, italic = italic,
-    fmt_fun = fmt_fun, footnote_abbrev = footnote_abbrev,
-    footnote = footnote, spanning_header = spanning_header,
-    call = match.call(), env = rlang::caller_env()
-  )
+  x <-
+    .convert_header_call_to_styling_call(
+      x = x, column = column, label = label, hide = hide, align = align,
+      missing_emdash = missing_emdash, indent = indent,
+      text_interpret = text_interpret, bold = bold, italic = italic,
+      fmt_fun = fmt_fun, footnote_abbrev = footnote_abbrev,
+      footnote = footnote, spanning_header = spanning_header,
+      call = match.call(), env = rlang::caller_env()
+    )
+
+  x$call_list <- updated_call_list
+  x
 }
 
 .convert_header_call_to_styling_call <- function(x, column, label, hide, align,

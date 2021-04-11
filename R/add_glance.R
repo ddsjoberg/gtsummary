@@ -77,6 +77,7 @@ NULL
 #' @rdname add_glance
 add_glance_table <- function(x, include = everything(), label = NULL,
                                 fmt_fun = NULL, glance_fun = broom::glance) {
+  updated_call_list <- c(x$call_list, list(add_glance_table = match.call()))
 
   # prepare glance statistics and formatting functions -------------------------
   lst_prep_glance <-
@@ -116,6 +117,7 @@ add_glance_table <- function(x, include = everything(), label = NULL,
     eval()
 
   # returning gtsummary table --------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 
@@ -125,6 +127,7 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
                                    fmt_fun = NULL, glance_fun = broom::glance,
                                    text_interpret = c("md", "html"),
                                    sep1 = " = ", sep2 = "; ") {
+  updated_call_list <- c(x$call_list, list(add_glance_source_note = match.call()))
   # prepare glance statistics and formatting functions -------------------------
   lst_prep_glance <-
     .prep_glance_statistics(x = x, include = {{ include }},
@@ -145,6 +148,7 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
   attr(x$table_styling$source_note, "text_interpret") <- match.arg(text_interpret)
 
   # returning gtsummary table --------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 

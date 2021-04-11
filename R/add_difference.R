@@ -57,6 +57,7 @@ add_difference <- function(x, test = NULL, group = NULL,
                            conf.level = 0.95, include = everything(),
                            pvalue_fun = NULL, estimate_fun = NULL) {
   # checking inputs ------------------------------------------------------------
+  updated_call_list <- c(x$call_list, list(add_difference = match.call()))
   if (!inherits(x, "tbl_summary"))
     stop("`x=` must be class 'tbl_summary'")
   if (is.null(x$by) || nrow(x$df_by) != 2)
@@ -217,7 +218,6 @@ add_difference <- function(x, test = NULL, group = NULL,
     select(.data$variable, .data$test_result) %>%
     {left_join(x$meta_data, ., by = "variable")}
 
-  x$call_list <- c(x$call_list, list(add_p = match.call()))
   x <-
     add_p_merge_p_values(x = x,
                          lgl_add_p = FALSE,
@@ -226,6 +226,7 @@ add_difference <- function(x, test = NULL, group = NULL,
                          estimate_fun = estimate_fun,
                          conf.level = conf.level,
                          adj.vars = adj.vars)
+  x$call_list <- updated_call_list
 
   # running any additional mods ------------------------------------------------
   x <-
