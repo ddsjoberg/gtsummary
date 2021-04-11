@@ -48,6 +48,8 @@
 
 * The `modify_table_body(fun=)` argument has been generalized to accept formula short notation.
 
+* Added exploratory data analysis theme that shows more details by default, `theme_gtsummary_eda()`.
+
 ### Other Updates
 
 * Updated` tbl_merge()` and `tbl_stack()` to capture the first source note and caption in the merged/stacked tables. Previously, any captions and source notes were lost. 
