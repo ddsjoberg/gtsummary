@@ -34,6 +34,7 @@
 #' \if{html}{\figure{add_vif_ex2.png}{options: width=45\%}}
 #'
 add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
+  updated_call_list <- c(x$call_list, list(add_vif = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "tbl_regression"))
     stop("`x=` must be class 'tbl_regression'")
@@ -84,6 +85,9 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
           hide = FALSE
         )
     }
+
+  # add call list and return x
+  x$call_list <- updated_call_list
   x
 }
 

@@ -62,15 +62,13 @@ tab_style_bold_levels <- function(...) {
 #' @rdname deprecated
 #' @export
 tbl_summary_ <- function(...) {
-  lifecycle::deprecate_warn("1.2.5", "gtsummary::tbl_summary_()", "tbl_summary()")
-  tbl_summary(...)
+  lifecycle::deprecate_stop("1.2.5", "gtsummary::tbl_summary_()", "tbl_summary()")
 }
 
 #' @rdname deprecated
 #' @export
 add_p_ <- function(...) {
-  lifecycle::deprecate_warn("1.2.5", "gtsummary::add_p_()", "add_p()")
-  add_p(...)
+  lifecycle::deprecate_stop("1.2.5", "gtsummary::add_p_()", "add_p()")
 }
 
 # v1.3.3 (2020-08-11) ----------------------------------------------------------
@@ -99,7 +97,7 @@ as_flextable <- function(...) {
 #' @rdname deprecated
 #' @export
 all_numeric <- function() {
-  lifecycle::deprecate_stop(
+  lifecycle::deprecate_warn(
     "1.3.6", "gtsummary::all_numeric()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -116,7 +114,7 @@ all_numeric <- function() {
 #' @rdname deprecated
 #' @export
 all_character <- function() {
-  lifecycle::deprecate_stop(
+  lifecycle::deprecate_warn(
     "1.3.6", "gtsummary::all_character()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -132,7 +130,7 @@ all_character <- function() {
 #' @rdname deprecated
 #' @export
 all_integer <- function() {
-  lifecycle::deprecate_stop(
+  lifecycle::deprecate_warn(
     "1.3.6", "gtsummary::all_integer()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -148,7 +146,7 @@ all_integer <- function() {
 #' @rdname deprecated
 #' @export
 all_double <- function() {
-  lifecycle::deprecate_stop(
+  lifecycle::deprecate_warn(
     "1.3.6", "gtsummary::all_double()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -164,7 +162,7 @@ all_double <- function() {
 #' @rdname deprecated
 #' @export
 all_logical <- function() {
-  lifecycle::deprecate_stop(
+  lifecycle::deprecate_warn(
     "1.3.6", "gtsummary::all_logical()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",

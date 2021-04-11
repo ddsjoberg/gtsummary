@@ -39,7 +39,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
                   exclude = NULL, omit = NULL) {
   # making list of commands to include -----------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.5",
       "gtsummary::as_gt(exclude = )",
       "as_gt(include = )",
@@ -96,15 +96,6 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
       var_info = names(gt_calls),
       arg_name = "include"
     )
-  exclude <-
-    .select_to_varnames(
-      select = {{ exclude }},
-      var_info = names(gt_calls),
-      arg_name = "exclude"
-    )
-
-  # this ensures list is in the same order as names(x$gt_calls)
-  include <- names(gt_calls) %>% intersect(include)
 
   # user cannot omit the first 'gt' command
   include <- include %>% setdiff(exclude)

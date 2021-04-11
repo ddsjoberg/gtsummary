@@ -15,7 +15,7 @@
 #' str_split str_detect str_remove str_replace_all str_wrap str_sub str_locate
 #' @importFrom broom.helpers .formula_list_to_named_list .select_to_varnames
 #' .generic_selector
-#' @importFrom cli cli_alert_info cli_alert_info cli_alert_danger cli_code cli_ul
+#' @importFrom cli cli_alert_info cli_alert_danger cli_code cli_ul
 #' @importFrom gt md html
 #' @keywords internal
 "_PACKAGE"

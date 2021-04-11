@@ -37,6 +37,7 @@ new statistics on the label row.}
 \item{new_col_name}{DEPRECATED.}
 }
 \description{
+\lifecycle{maturing}
 The function allows a user to add a new column (or columns) of statistics to an
 existing \code{tbl_summary} or \code{tbl_svysummary} object.
 }

@@ -25,19 +25,29 @@ NULL
 #' @rdname modify_column_hide
 #' @export
 modify_column_hide <- function(x, columns) {
-  modify_table_styling(
-    x = x,
-    columns = {{ columns }},
-    hide = TRUE
-  )
+  updated_call_list <- c(x$call_list, list(modify_column_hide = match.call()))
+  x <-
+    modify_table_styling(
+      x = x,
+      columns = {{ columns }},
+      hide = TRUE
+    )
+
+  x$call_list <- updated_call_list
+  x
 }
 
 #' @rdname modify_column_hide
 #' @export
 modify_column_unhide <- function(x, columns) {
-  modify_table_styling(
-    x = x,
-    columns = {{ columns }},
-    hide = FALSE
-  )
+  updated_call_list <- c(x$call_list, list(modify_column_unhide = match.call()))
+  x <-
+    modify_table_styling(
+      x = x,
+      columns = {{ columns }},
+      hide = FALSE
+    )
+
+  x$call_list <- updated_call_list
+  x
 }

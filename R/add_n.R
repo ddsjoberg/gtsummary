@@ -56,6 +56,7 @@ add_n <- function(x, ...) {
 
 add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
                               last = FALSE, missing = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_n = match.call()))
   # checking that input is class tbl_summary
   if (!(inherits(x, "tbl_summary") | inherits(x, "tbl_svysummary")))
     stop("`x` must be class 'tbl_summary' or 'tbl_svysummary'")
@@ -138,10 +139,9 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
   }
 
   # adding indicator to output that add_n was run on this data
-  x$call_list <- c(x$call_list, list(add_n = match.call()))
-
+  x$call_list <- updated_call_list
   # returning tbl_summary object
-  return(x)
+  x
 }
 
 stat_to_label <- function(x) {
@@ -209,6 +209,7 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 #' \if{html}{\figure{add_n.tbl_survfit_ex1.png}{options: width=64\%}}
 
 add_n.tbl_survfit <- function(x, ...) {
+  updated_call_list <- c(x$call_list, list(add_n = match.call()))
 
   # adding N to the table_body -------------------------------------------------
   x$table_body <-
@@ -249,8 +250,7 @@ add_n.tbl_survfit <- function(x, ...) {
     )
 
   # adding indicator to output that add_n was run on this data
-  x$call_list <- c(x$call_list, list(add_n = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }
 
@@ -295,6 +295,7 @@ NULL
 #' @rdname add_n_regression
 #' @export
 add_n.tbl_regression <- function(x, location = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_n = match.call()))
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
   if ("level" %in% location && !"n_obs" %in% x$table_styling$header$column)
@@ -311,7 +312,8 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
     x$table_body$stat_n <- ifelse(x$table_body$row_type == "level",
                                   x$table_body$n_obs %>% as.integer(),
                                   x$table_body$stat_n)
-  x %>%
+  x <-
+    x %>%
     modify_table_body(
       mutate,
       stat_n =
@@ -328,6 +330,9 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
       .after = .data$label
     ) %>%
     modify_header(stat_n ~ "**N**")
+
+  x$call_list <- updated_call_list
+  x
 }
 
 #' @export

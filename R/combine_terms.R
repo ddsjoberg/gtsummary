@@ -41,6 +41,7 @@
 #' \if{html}{\figure{combine_terms_ex1.png}{options: width=45\%}}
 
 combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(combine_terms = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
@@ -179,7 +180,6 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     select(-.data$collapse_row)
 
   # returning updated tbl object -----------------------------------------------
-  x$call_list <- c(x$call_list, list(combine_terms = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }

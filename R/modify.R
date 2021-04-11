@@ -107,6 +107,7 @@ NULL
 #' @export
 modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
                           quiet = NULL, ..., stat_by = NULL) {
+  updated_call_list <- c(x$call_list, list(modify_header = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
   text_interpret <- match.arg(text_interpret)
@@ -120,11 +121,16 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     ) %>%
     c(list(...)) # adding the ... to the update list
   if (!is.null(stat_by)) {
-    # will mark this DEPRECATED, but won't print a deprecation note until later
-    # lifecycle::deprecate_warn(
-    #   "1.3.6",
-    #   "gtsummary::modify_header(stat_by=)",
-    #   details = glue("Use {ui_code(rlang::expr(modify_header(update =  all_stat_cols(FALSE) ~ !!stat_by)) %>% deparse(width.cutoff = 500L))} instead."))
+    # choose selector type
+    selector_code <- switch("stat_0" %in% names(x$table_body), expr(all_stat_cols(FALSE))) %||% expr(all_stat_cols())
+    lifecycle::deprecate_warn(
+      "1.3.6",
+      "gtsummary::modify_header(stat_by=)",
+      details =
+        paste("Use `{rlang::expr(modify_header(update =  !!selector_code",
+              "~ !!stat_by)) %>% deparse(width.cutoff = 500L)}` instead.") %>%
+        glue()
+    )
     update <-
       c(update,
         .formula_list_to_named_list(x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),
@@ -164,6 +170,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     )
 
   # returning gtsummary object -------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 
@@ -171,6 +178,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
 #' @export
 modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
                             text_interpret = c("md", "html"), quiet = NULL) {
+  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
@@ -230,6 +238,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
   }
 
   # returning gtsummary object -------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 
@@ -237,6 +246,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
 #' @export
 modify_spanning_header <- function(x, update = NULL,
                                    text_interpret = c("md", "html"), quiet = NULL) {
+  updated_call_list <- c(x$call_list, list(modify_spanning_header = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
@@ -282,12 +292,14 @@ modify_spanning_header <- function(x, update = NULL,
     )
 
   # return updated gtsummary object --------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 
 #' @name modify
 #' @export
 modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
+  updated_call_list <- c(x$call_list, list(modify_caption = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) abort("`x=` must be class 'gtsummary'.")
   if (!rlang::is_string(caption)) abort("`caption=` must be a string.")
@@ -305,6 +317,7 @@ modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
   attr(x$table_styling$caption, "text_interpret") <- text_interpret
 
   # returning updated object ---------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 

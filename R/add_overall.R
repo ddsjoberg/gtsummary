@@ -27,6 +27,7 @@ add_overall <- function(x, last, col_label) {
 #' @rdname add_overall
 #' @export
 add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL) {
+  updated_call_list <- c(x$call_list, list(add_overall = match.call()))
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
     stop(
@@ -49,7 +50,10 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL) {
     do.call(tbl_summary, x_copy$inputs) %>%
     pluck("table_body")
 
-  add_overall_merge(x, overall, last, col_label)
+  x <- add_overall_merge(x, overall, last, col_label)
+
+  x$call_list <- updated_call_list
+  x
 }
 
 
@@ -102,6 +106,7 @@ add_overall_merge <- function(x, overall, last, col_label) {
 #' @rdname add_overall
 #' @export
 add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL) {
+  updated_call_list <- c(x$call_list, list(add_overall = match.call()))
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
     stop(
@@ -124,5 +129,8 @@ add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL) {
     do.call(tbl_svysummary, x_copy$inputs) %>%
     pluck("table_body")
 
-  add_overall_merge(x, overall, last, col_label)
+  x <- add_overall_merge(x, overall, last, col_label)
+
+  x$call_list <- updated_call_list
+  x
 }

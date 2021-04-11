@@ -112,7 +112,7 @@ for details.
 \item \code{"qjecon"} \emph{The Quarterly Journal of Economics} \emph{\strong{Under Development}}
 \itemize{
 \item \code{tbl_summary()} all percentages rounded to one decimal place
-\item \code{tbl_regression()}/\code{tbl_uvregression()} add significance stars with \code{add_significance_stars()}; hides CI and p-value from output and adds column for SE
+\item \code{tbl_regression()}/\code{tbl_uvregression()} add significance stars with \code{add_significance_stars()}; hides CI and p-value from output
 }
 }
 \item \code{theme_gtsummary_compact()}
