@@ -45,6 +45,7 @@
 #' \if{html}{\figure{add_q_ex2.png}{options: width=60\%}}
 
 add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
+  updated_call_list <- c(x$call_list, list(add_q = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
@@ -102,7 +103,7 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
 
   # return final object --------------------------------------------------------
   # adding call
-  x$call_list <- c(x$call_list, list(add_q = match.call()))
+  x$call_list <- updated_call_list
 
   x
 }

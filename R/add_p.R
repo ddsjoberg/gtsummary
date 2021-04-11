@@ -69,10 +69,11 @@ add_p <- function(x, ...) {
 add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
                   group = NULL, include = everything(), test.args = NULL,
                   exclude = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_p = match.call()))
 
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.5",
       "gtsummary::add_p(exclude = )",
       "add_p(include = )",
@@ -109,15 +110,6 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       var_info = x$table_body,
       arg_name = "include"
     )
-  exclude <-
-    .select_to_varnames(
-      select = {{ exclude }},
-      data = select(x$inputs$data, any_of(x$meta_data$variable)),
-      var_info = x$table_body,
-      arg_name = "exclude"
-    )
-  # Getting p-values only for included variables
-  include <- include %>% setdiff(exclude)
 
   # group argument -------------------------------------------------------------
   if (!is.null(group) && group %in% x$meta_data$variable) {
@@ -205,7 +197,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
     {left_join(x$meta_data, ., by = "variable")}
 
-  x$call_list <- c(x$call_list, list(add_p = match.call()))
+  x$call_list <- updated_call_list
   add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }
 
@@ -367,6 +359,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 #' \if{html}{\figure{add_p_cross_ex2.png}{options: width=45\%}}
 add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
                             source_note = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_p = match.call()))
   # setting defaults -----------------------------------------------------------
   test <- test %||% get_theme_element("add_p.tbl_cross-arg:test")
   source_note <- source_note %||%
@@ -423,7 +416,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
   }
 
   # return tbl_cross
-  x[["call_list"]] <- list(x[["call_list"]], add_p = match.call())
+  x$call_list <- updated_call_list
   x
 }
 
@@ -483,6 +476,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
                               pvalue_fun = style_pvalue,
                               include = everything(), quiet = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_p = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
@@ -570,7 +564,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
     select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
     {left_join(x$meta_data, ., by = "variable")}
 
-  x$call_list <- c(x$call_list, list(add_p = match.call()))
+  x$call_list <- updated_call_list
   add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }
 
@@ -645,6 +639,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 
 add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
                                  include = everything(), test.args = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_p = match.call()))
   # checking for survey package ------------------------------------------------
   assert_package("survey", "add_p.tbl_svysummary()")
 
@@ -746,6 +741,6 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
     select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
     {left_join(x$meta_data, ., by = "variable")}
 
-  x$call_list <- c(x$call_list, list(add_p = match.call()))
+  x$call_list <- updated_call_list
   add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }

@@ -51,6 +51,7 @@ NULL
 #' @rdname add_nevent_regression
 #' @export
 add_nevent.tbl_regression <- function(x, location = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_nevent = match.call()))
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
   if ("level" %in% location && !"n_event" %in% x$table_styling$header$column)
@@ -67,7 +68,8 @@ add_nevent.tbl_regression <- function(x, location = NULL, ...) {
     x$table_body$stat_nevent <- ifelse(x$table_body$row_type == "level",
                                        x$table_body$n_event %>% as.integer(),
                                        x$table_body$stat_nevent)
-  x %>%
+  x <-
+    x %>%
     modify_table_body(
       mutate,
       stat_nevent =
@@ -84,6 +86,10 @@ add_nevent.tbl_regression <- function(x, location = NULL, ...) {
       .before = .data$estimate
     ) %>%
     modify_header(stat_nevent ~ "**Event N**")
+
+  # add call list and return x
+  x$call_list <- updated_call_list
+  x
 }
 
 #' @export
@@ -117,6 +123,7 @@ add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 #' \if{html}{\figure{add_nevent.tbl_survfit_ex1.png}{options: width=64\%}}
 
 add_nevent.tbl_survfit <- function(x, ...) {
+  updated_call_list <- c(x$call_list, list(add_nevent = match.call()))
 
   # checking survfit is a standard (not multi-state)
   if (!purrr::every(x$meta_data$survfit, ~identical(class(.x), "survfit"))) {
@@ -153,7 +160,6 @@ add_nevent.tbl_survfit <- function(x, ...) {
     )
 
   # adding indicator to output that add_n was run on this data
-  x$call_list <- c(x$call_list, list(add_nevent = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }

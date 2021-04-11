@@ -1,5 +1,6 @@
 #' Add a custom statistic column
 #'
+#' \lifecycle{maturing}
 #' The function allows a user to add a new column (or columns) of statistics to an
 #' existing `tbl_summary` or `tbl_svysummary` object.
 #'
@@ -123,6 +124,7 @@
 
 add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
                      footnote = NULL, new_col_name = NULL) {
+  updated_call_list <- c(x$call_list, list(add_stat = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, c("tbl_summary", "tbl_svysummary"))) {
     abort("Argument `x=` must be of class 'tbl_summary' or 'tbl_svysummary'")
@@ -247,6 +249,7 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
     )
 
   # return tbl_summary object --------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 

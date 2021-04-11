@@ -25,6 +25,7 @@
 #' \if{html}{\figure{remove_row_type_ex1.png}{options: width=60\%}}
 remove_row_type <- function(x, variables = everything(),
                             type = c("header", "reference", "missing")) {
+  updated_call_list <- c(x$call_list, list(remove_row_type = match.call()))
   # check inputs ---------------------------------------------------------------
   if (!inherits(x, "gtsummary")) abort("Argument `x=` must be class 'gtsummary'")
   type <- match.arg(type)
@@ -60,5 +61,9 @@ remove_row_type <- function(x, variables = everything(),
   # combined expression
   final_expr <- expr(!(.data$variable %in% .env$variables & !!lst_expr[["expr"]]))
   # removing rows, and returning updated gtsummary object
-  modify_table_body(x, dplyr::filter, !!final_expr)
+  x <- modify_table_body(x, dplyr::filter, !!final_expr)
+
+  # return gtsummary object ----------------------------------------------------
+  x$call_list <- updated_call_list
+  x
 }

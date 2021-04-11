@@ -32,6 +32,7 @@
 #' \if{html}{\figure{modify_fmt_fun_ex1.png}{options: width=45\%}}
 
 modify_fmt_fun <- function(x, update, rows = NULL) {
+  updated_call_list <- c(x$call_list, list(modify_column_unhide = match.call()))
   # converting update arg to a tidyselect list ---------------------------------
   update <-
     .formula_list_to_named_list(
@@ -41,10 +42,14 @@ modify_fmt_fun <- function(x, update, rows = NULL) {
     )
 
   # updating formatting functions ----------------------------------------------
-  modify_table_styling(
-    x = x,
-    columns = names(update),
-    rows = {{ rows }},
-    fmt_fun = update
-  )
+  x <-
+    modify_table_styling(
+      x = x,
+      columns = names(update),
+      rows = {{ rows }},
+      fmt_fun = update
+    )
+
+  x$call_list <- updated_call_list
+  x
 }

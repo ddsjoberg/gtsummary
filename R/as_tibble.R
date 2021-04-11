@@ -24,7 +24,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                 return_calls = FALSE, exclude = NULL,  ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.5",
       "gtsummary::as_tibble(exclude = )",
       "as_tibble(include = )",
@@ -52,19 +52,11 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
       var_info = names(tibble_calls),
       arg_name = "include"
     )
-  exclude <-
-    .select_to_varnames(
-      select = {{ exclude }},
-      var_info = names(tibble_calls),
-      arg_name = "exclude"
-    )
 
   # making list of commands to include -----------------------------------------
   # this ensures list is in the same order as names(x$kable_calls)
   include <- names(tibble_calls) %>% intersect(include)
-
   # user cannot exclude the first 'tibble' command
-  include <- include %>% setdiff(exclude)
   include <- "tibble" %>% union(include)
 
   # return calls, if requested -------------------------------------------------

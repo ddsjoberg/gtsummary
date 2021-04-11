@@ -65,7 +65,8 @@
 #' _the planned change will be go unnoticed_.
 
 
-modify_table_styling <- function(x,columns,
+modify_table_styling <- function(x,
+                                 columns,
                                  rows = NULL,
                                  label = NULL,
                                  spanning_header = NULL,
@@ -80,6 +81,7 @@ modify_table_styling <- function(x,columns,
                                  text_interpret = c("md", "html"),
                                  cols_merge_pattern = NULL
                                  ) {
+  updated_call_list <- c(x$call_list, list(modify_table_styling = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
   if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
@@ -229,6 +231,7 @@ modify_table_styling <- function(x,columns,
   }
 
   # return x -------------------------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 
