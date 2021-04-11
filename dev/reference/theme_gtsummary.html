@@ -101,7 +101,7 @@ for details." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9022</span>
       </span>
     </div>
 
@@ -214,7 +214,9 @@ for details.</p>
   set_theme <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span>
 
-<span class='fu'>theme_gtsummary_mean_sd</span><span class='op'>(</span>set_theme <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+<span class='fu'>theme_gtsummary_mean_sd</span><span class='op'>(</span>set_theme <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='fu'>theme_gtsummary_eda</span><span class='op'>(</span>set_theme <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -312,6 +314,10 @@ will default to an en dash</p></td>
 <li><p><code>theme_gtsummary_mean_sd()</code></p><ul>
 <li><p>Set default summary statistics to mean and standard deviation in <code><a href='tbl_summary.html'>tbl_summary()</a></code></p></li>
 <li><p>Set default continuous tests in <code><a href='add_p.html'>add_p()</a></code> to t-test and ANOVA</p></li>
+</ul></li>
+<li><p><code>theme_gtsummary_eda()</code></p><ul>
+<li><p>Set all continuous variables to summary type <code>"continuous2"</code> by default</p></li>
+<li><p>In <code><a href='tbl_summary.html'>tbl_summary()</a></code> show the median, mean, IQR, SD, and Range by default</p></li>
 </ul></li>
 </ul>
 
