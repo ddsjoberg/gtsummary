@@ -4,7 +4,7 @@
 
 * Added new function `add_glance_table()` as a companion to `add_glance_source_note()`. Function adds model statistics, such as R-squared, to the bottom of the model summary table.
 
-* Added new function `add_significance_stars()` adding star indicators to significant estimates, and an explanatory footnote.
+* Added new function `add_significance_stars()` adding star indicators to significant estimates and an explanatory footnote.
 
 * Added new function `tbl_strata()`. The function aids prepares gtsummary tables stratified by one or more variables (#679)
 
@@ -16,13 +16,13 @@
 
 * Added function `add_vif()` to include variance inflation factors in `tbl_regression()` output. (#717)
 
-* Added a generic function inline_text.gtsummary() that can report results from any gtsummary table. (#398)
+* Added a generic function `inline_text.gtsummary()` that can report results from any gtsummary table. (#398)
 
 ### New Functionality
 
 * Print infrastructure has been updated to allow for both row and column specification when formatting data or table styling. The `x$table_header` object has been replaced with a more general `x$table_styling`. Review the updated vignette `"gtsummary_definition.Rmd"` for details. The `x$table_body` is no longer grouped after `tbl_stack()`; rather, the grouping variable is specified in `gt::gt(groupname_col=)`
 
-* `tbl_summary()` now accepts any class as input, previously only non-date base classes were accepted. For non-base R classes, the summary type must be specified using `tbl_summary(type=)`. The default summary statistic for dates/times is the minimum and maximum. (#488)
+* `tbl_summary()` now accepts any class as input. Previously only non-date base classes were accepted. For non-base R classes, the summary type must be specified using `tbl_summary(type=)`. The default summary statistic for dates/times is the minimum and maximum. (#488)
 
 * The `add_stat()` function may now return multiple columns of new statistics. Some arguments have been deprecated in the update. (#746)
 
@@ -32,13 +32,13 @@
 
 * Added a custom tidier for `mgcv::gam()` models (`tidy_gam()`) and a method function (`tbl_regression.gam()`) that uses the new tidier by default. (#745)
 
+* Added default support for `brmsfit` model in `tbl_regression()` with new method function. (#751)
+
 * Functions `modify_footnote()` and `modify_spanning_header()` now include the `text_interpret=` argument indicating whether to use `gt::md()` or `gt::html()` to format text. Default is `gt::md()`.
 
 * Added/updated functions `add_n()` and `add_nevent()` to work with `tbl_regression` and `tbl_uvregression` objects. Each function now has an argument to place Ns on the label or level rows. (#744)
 
 * Added _The Quarterly Journal of Economics_ to `theme_gtsummary_journal()`. This journal theme will be updated again after the gt package updates `cols_merge()` with a rows argument and allows for line breaks within cell.
-
-* Added default support for `brmsfit` model in `tbl_regression()` with new method function. (#751)
 
 * Korean and Icelandic language translations added for `theme_gtsummary_language()`.
 
@@ -46,7 +46,7 @@
 
 * Added theme element `"pkgwide-fun:pre_conversion"`. The function specified here will be executed on the gtsummary object before it is printed or converted with the `as_gt()`, `as_flex_table()`, etc functions. (#773)
 
-* The `modify_table_body(fun=)` argument has been generalized to accept formula short notation.
+* The `modify_table_body(fun=)` argument has been generalized to accept formula shortcut notation.
 
 * Added exploratory data analysis theme that shows more details by default, `theme_gtsummary_eda()`.
 
@@ -64,8 +64,6 @@
 
 * Improved handling and messaging to users when columns with `"haven_labelled"` class are passed to gtsummary functions. (#805)
 
-* The broom tidier for GAMs does not include an `exponentiate=` argument. This argument, however, was still being passed within gtsummary. The custom GAM tidier has been updated to respect the exponentiation request.
-
 * Improved handling of ordered factors as the `by=` variable (#569, #540)
 
 * Removed {usethis} package dependency and replaced with {cli}. (#768)
@@ -76,7 +74,7 @@
 
 * The JAMA journal theme has been updated to merge the coefficient and confidence interval columns.
 
-* Updated other inline_text() functions to wrap inline_text.gtsummary()
+* Updated other `inline_text()` functions to wrap `inline_text.gtsummary()`
 
 ### Bug Fixes
 
