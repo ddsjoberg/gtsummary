@@ -52,7 +52,8 @@
 #'
 #' @export
 #' @examples
-#' library(dplyr, warn.conflicts = FALSE); library(stringr)
+#' library(dplyr, warn.conflicts = FALSE)
+#' library(stringr)
 #' # Example 1 ----------------------------------
 #' # fn returns t-test pvalue
 #' my_ttest <- function(data, variable, by, ...) {
@@ -65,8 +66,10 @@
 #'   tbl_summary(by = trt, missing = "no") %>%
 #'   add_stat(fns = everything() ~ my_ttest) %>%
 #'   modify_header(
-#'     list(add_stat_1 ~ "**p-value**",
-#'          all_stat_cols() ~ "**{level}**")
+#'     list(
+#'       add_stat_1 ~ "**p-value**",
+#'       all_stat_cols() ~ "**{level}**"
+#'     )
 #'   )
 #'
 #' # Example 2 ----------------------------------
@@ -101,14 +104,17 @@
 #'   tbl_summary(by = trt, missing = "no") %>%
 #'   add_stat(fns = everything() ~ my_ttest3) %>%
 #'   modify_header(
-#'     list(statistic ~ "**t-statistic**",
-#'          p.value ~ "**p-value**")
+#'     list(
+#'       statistic ~ "**t-statistic**",
+#'       p.value ~ "**p-value**"
+#'     )
 #'   ) %>%
 #'   modify_fmt_fun(
-#'     list(statistic ~ style_sigfig,
-#'          p.value ~ style_pvalue)
+#'     list(
+#'       statistic ~ style_sigfig,
+#'       p.value ~ style_pvalue
+#'     )
 #'   )
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -131,47 +137,60 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
   }
 
   if (!is.null(fmt_fun)) {
-    lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(fmt_fun=)",
-                              "modify_fmt_fun()", "Argument has been ignored.")
+    lifecycle::deprecate_warn(
+      "1.4.0", "gtsummary::add_stat(fmt_fun=)",
+      "modify_fmt_fun()", "Argument has been ignored."
+    )
   }
   if (!is.null(header)) {
-    lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(header=)",
-                              "modify_header()", "Argument has been ignored.")
+    lifecycle::deprecate_warn(
+      "1.4.0", "gtsummary::add_stat(header=)",
+      "modify_header()", "Argument has been ignored."
+    )
   }
   if (!is.null(footnote)) {
-    lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(footnote=)",
-                              "modify_footnote()", "Argument has been ignored.")
+    lifecycle::deprecate_warn(
+      "1.4.0", "gtsummary::add_stat(footnote=)",
+      "modify_footnote()", "Argument has been ignored."
+    )
   }
   if (!is.null(new_col_name)) {
     lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(new_col_name=)",
-                              details = "Argument has been ignored.")
+      details = "Argument has been ignored."
+    )
   }
 
   # convert to named lists -----------------------------------------------------
   if (rlang::is_string(location)) {
     lifecycle::deprecate_warn(
       "1.4.0",
-      "gtsummary::add_stat(location = 'must be a formula list, e.g. `everything() ~ \"label\"`,')")
+      "gtsummary::add_stat(location = 'must be a formula list, e.g. `everything() ~ \"label\"`,')"
+    )
     location <- inject(everything() ~ !!location)
   }
   location <- .formula_list_to_named_list(
     x = location,
     data = switch(class(x)[1],
-                  "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
-                  "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))) ,
+      "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
+      "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
+    ),
     var_info = x$table_body,
     arg_name = "location"
   )
-  imap(location,
-       ~switch(!is_string(.x) || !.x %in% c("label", "level", "missing"),
-                abort("RHS of `location=` formulas must be one of 'label', 'level', or 'missing'")))
+  imap(
+    location,
+    ~ switch(!is_string(.x) || !.x %in% c("label", "level", "missing"),
+      abort("RHS of `location=` formulas must be one of 'label', 'level', or 'missing'")
+    )
+  )
 
   fns <-
     .formula_list_to_named_list(
       x = fns,
       data = switch(class(x)[1],
-                    "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
-                    "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))) ,
+        "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
+        "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
+      ),
       var_info = x$table_body,
       arg_name = "fns"
     )
@@ -181,46 +200,56 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
     select(x$table_body, dplyr::matches("^add_stat_\\d*[1-9]\\d*$")) %>%
     names() %>%
     length() %>%
-    {paste0("add_stat_", . + 1)}
+    {
+      paste0("add_stat_", . + 1)
+    }
 
   # calculating statistics -----------------------------------------------------
   df_new_stat <-
     tibble(variable = names(fns)) %>%
     left_join(x$meta_data %>% select(.data$variable, .data$summary_type),
-              by = "variable") %>%
+      by = "variable"
+    ) %>%
     mutate(
-      row_type = map_chr(.data$variable, ~location[[.x]] %||% "label"),
+      row_type = map_chr(.data$variable, ~ location[[.x]] %||% "label"),
       label = map2(
         .data$variable, .data$row_type,
-        ~filter(x$table_body, .data$variable == .x, .data$row_type == .y)$label
+        ~ filter(x$table_body, .data$variable == .x, .data$row_type == .y)$label
       )
     ) %>%
     mutate(
-      df_add_stats = purrr::imap(fns, ~eval_fn_safe(tbl = x, variable = .y, fn = .x))
+      df_add_stats = purrr::imap(fns, ~ eval_fn_safe(tbl = x, variable = .y, fn = .x))
     ) %>%
     select(-.data$summary_type)
 
   # converting returned statistics to a tibble if not already ------------------
   df_new_stat$df_add_stats <-
     df_new_stat$df_add_stats %>%
-    map(~switch(is.data.frame(.x), .x) %||% tibble(!!stat_col_name := .x))
+    map(~ switch(is.data.frame(.x),
+      .x
+    ) %||% tibble(!!stat_col_name := .x))
 
   # check dims of calculated statistics ----------------------------------------
   purrr::pwalk(
     list(df_new_stat$variable, df_new_stat$label, df_new_stat$df_add_stats),
     function(variable, label, df_add_stats) {
-      if (nrow(df_add_stats) != length(label))
-        glue("Dimension of '{variable}' and the added statistic do not match. ",
-             "Expecting statistic/data frame to be length/no. rows {length(label)}.") %>%
-        abort()
+      if (nrow(df_add_stats) != length(label)) {
+        glue(
+          "Dimension of '{variable}' and the added statistic do not match. ",
+          "Expecting statistic/data frame to be length/no. rows {length(label)}."
+        ) %>%
+          abort()
+      }
     }
   )
 
   # check new column names do not exist in `x$table_body`
   new_col_names <- bind_rows(df_new_stat$df_add_stats) %>% names()
   if (any(new_col_names %in% names(x$table_body))) {
-    paste("Cannot add new column that already exist in gtsummary table:",
-          "{.field {quoted_list(new_col_names %in% intersect(names(x$table_body)))}}") %>%
+    paste(
+      "Cannot add new column that already exist in gtsummary table:",
+      "{.field {quoted_list(new_col_names %in% intersect(names(x$table_body)))}}"
+    ) %>%
       abort()
   }
 
@@ -255,34 +284,35 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
 
 
 eval_fn_safe <- function(variable, tbl, fn) {
-
   tryCatch(
-    withCallingHandlers({
-      # initializing to NA
-      stat <- NA_real_
-      stat <- rlang::call2(
-        fn,
-        data = tbl$inputs$data,
-        variable = variable,
-        by = tbl$inputs$by,
-        tbl = tbl
-      ) %>%
-        eval()
-    },
-    # printing warning and errors as message
-    warning = function(w) {
-      message(glue(
-        "There was an warning for variable '{variable}':\n ", as.character(w)
-      ))
-      invokeRestart("muffleWarning")
-    }
+    withCallingHandlers(
+      {
+        # initializing to NA
+        stat <- NA_real_
+        stat <- rlang::call2(
+          fn,
+          data = tbl$inputs$data,
+          variable = variable,
+          by = tbl$inputs$by,
+          tbl = tbl
+        ) %>%
+          eval()
+      },
+      # printing warning and errors as message
+      warning = function(w) {
+        message(glue(
+          "There was an warning for variable '{variable}':\n ", as.character(w)
+        ))
+        invokeRestart("muffleWarning")
+      }
     ),
     error = function(e) {
       message(glue(
         "There was an error for variable '{variable}':\n", as.character(e)
       ))
       return(NA_real_)
-    })
+    }
+  )
 
   stat
 }

@@ -70,7 +70,6 @@
 #'     statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
 #'   ) %>%
 #'   add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -109,8 +108,9 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
       x = label,
       data =
         switch(!is_survey(x$inputs$data),
-               x$inputs$data[x$meta_data$variable]) %||%
-        x$inputs$data$variables[x$meta_data$variable],
+          x$inputs$data[x$meta_data$variable]
+        ) %||%
+          x$inputs$data$variables[x$meta_data$variable],
       var_info = meta_data_to_var_info(x$meta_data),
       arg_name = "label"
     )
@@ -122,29 +122,31 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
     select(.data$variable, .data$stat_label) %>%
     tibble::deframe() %>%
     # updating the default values with values in label
-    purrr::imap_chr(~label[[.y]] %||% .x) %>%
+    purrr::imap_chr(~ label[[.y]] %||% .x) %>%
     tibble::enframe("variable", "stat_label")
 
   # adding stat_label to `.$table_body`
   x <-
     x %>%
     modify_table_body(
-      ~.x %>%
+      ~ .x %>%
         left_join(df_stat_label, by = "variable") %>%
         dplyr::relocate(.data$stat_label, .after = .data$label) %>%
         mutate(
           # adding in "n" for missing rows, and header
-          stat_label = case_when(.data$row_type == "missing" ~ "n",
-                                 TRUE ~ .data$stat_label),
+          stat_label = case_when(
+            .data$row_type == "missing" ~ "n",
+            TRUE ~ .data$stat_label
+          ),
           # setting some rows to NA depending on output type
           stat_label =
-            switch(
-              location,
+            switch(location,
               "row" = ifelse(.data$row_type %in% "label", .data$stat_label, NA),
               "column" =
                 ifelse(
                   .data$row_type %in% "label" & .data$var_type %in% "categorical",
-                  NA, .data$stat_label)
+                  NA, .data$stat_label
+                )
             )
         )
     ) %>%
@@ -155,19 +157,20 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   df_con2_update <-
     x$meta_data %>%
     filter(.data$summary_type %in% "continuous2") %>%
-    select(.data$variable, .data$summary_type, .data$stat_label)  %>%
+    select(.data$variable, .data$summary_type, .data$stat_label) %>%
     mutate(
-      stat_label = map2(.data$stat_label, .data$variable, ~label[[.y]] %||% .x),
+      stat_label = map2(.data$stat_label, .data$variable, ~ label[[.y]] %||% .x),
       row_type = "level"
     ) %>%
     tidyr::unnest(.data$stat_label) %>%
     dplyr::rename(var_type = .data$summary_type, label = .data$stat_label)
   rows_to_update <-
     x$table_body$variable %in% unique(df_con2_update$variable) &
-    x$table_body$var_type %in% "continuous2" &
-    x$table_body$row_type %in% "level"
-  if (nrow(df_con2_update) != sum(rows_to_update))
+      x$table_body$var_type %in% "continuous2" &
+      x$table_body$row_type %in% "level"
+  if (nrow(df_con2_update) != sum(rows_to_update)) {
     abort("`label=` dimensions do not match for type `continuous2` variables.")
+  }
   x$table_body$label[which(rows_to_update)] <- df_con2_update$label
 
   # if adding stat labels to row, then adding merge instructions ---------------

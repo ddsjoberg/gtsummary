@@ -26,14 +26,16 @@
 #' modify_table_body_ex1 <-
 #'   trial %>%
 #'   select(response, age, marker) %>%
-#'   tbl_uvregression(y = response,
-#'                    method = glm,
-#'                    method.args = list(family = binomial),
-#'                    exponentiate = TRUE,
-#'                    hide_n = TRUE) %>%
+#'   tbl_uvregression(
+#'     y = response,
+#'     method = glm,
+#'     method.args = list(family = binomial),
+#'     exponentiate = TRUE,
+#'     hide_n = TRUE
+#'   ) %>%
 #'   # adding number of non-events to table
 #'   modify_table_body(
-#'     ~.x %>%
+#'     ~ .x %>%
 #'       dplyr::mutate(N_nonevent = N_obs - N_event) %>%
 #'       dplyr::relocate(c(N_event, N_nonevent), .before = estimate)
 #'   ) %>%
@@ -62,7 +64,3 @@ modify_table_body <- function(x, fun, ...) {
   x$call_list <- updated_call_list
   x
 }
-
-
-
-

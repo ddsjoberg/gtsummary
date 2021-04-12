@@ -35,8 +35,10 @@ test_that("works as expected without error", {
 
   expect_error(
     tbl1 %>%
-      add_significance_stars(thresholds = c(0.0000001, 0.55, 0.9, 1),
-                             hide_p = FALSE),
+      add_significance_stars(
+        thresholds = c(0.0000001, 0.55, 0.9, 1),
+        hide_p = FALSE
+      ),
     NA
   )
 

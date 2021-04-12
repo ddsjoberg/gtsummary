@@ -202,21 +202,26 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   type <- type %||% get_theme_element("tbl_summary-arg:type")
   value <- value %||% get_theme_element("tbl_summary-arg:value")
   missing <- missing %||% get_theme_element("tbl_summary-arg:missing",
-                                            default = "ifany")
+    default = "ifany"
+  )
   missing_text <- missing_text %||%
     get_theme_element("tbl_summary-arg:missing_text",
-                      default = translate_text("Unknown"))
+      default = translate_text("Unknown")
+    )
   sort <- sort %||% get_theme_element("tbl_summary-arg:sort")
   percent <- percent %||% get_theme_element("tbl_summary-arg:percent",
-                                            default = "column")
+    default = "column"
+  )
   # ungrouping data ------------------------------------------------------------
   data <- data %>% ungroup()
 
   # converting bare arguments to string ----------------------------------------
-  by <- .select_to_varnames(select = {{ by }},
-                            data = data,
-                            arg_name = "by",
-                            select_single = TRUE)
+  by <- .select_to_varnames(
+    select = {{ by }},
+    data = data,
+    arg_name = "by",
+    select_single = TRUE
+  )
 
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing, choices = c("ifany", "always", "no"))
@@ -257,18 +262,22 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   )
 
   # generate meta_data --------------------------------------------------------
-  meta_data <- generate_metadata(data = data %>% select(all_of(include)),
-                                 value = value, by = by,
-                                 type = type, label = label, statistic =  statistic,
-                                 digits = digits, percent = percent, sort = sort)
+  meta_data <- generate_metadata(
+    data = data %>% select(all_of(include)),
+    value = value, by = by,
+    type = type, label = label, statistic = statistic,
+    digits = digits, percent = percent, sort = sort
+  )
 
   # calculating summary statistics ---------------------------------------------
   table_body <-
     meta_data %>%
     mutate(
       tbl_stats = pmap(
-        list(.data$summary_type, .data$variable,
-             .data$var_label, .data$stat_display, .data$df_stats),
+        list(
+          .data$summary_type, .data$variable,
+          .data$var_label, .data$stat_display, .data$df_stats
+        ),
         function(summary_type, variable, var_label, stat_display, df_stats) {
           df_stats_to_tbl(
             data = data, variable = variable, summary_type = summary_type, by = by,
@@ -358,10 +367,12 @@ generate_metadata <- function(data, value, by, type, label,
   # updating type --------------------------------------------------------------
   # updating type of user supplied one
   # converting tidyselect formula lists to named lists
-  type <- .formula_list_to_named_list(x = type,
-                                      data = data,
-                                      var_info = meta_data_to_var_info(meta_data) ,
-                                      arg_name = "type")
+  type <- .formula_list_to_named_list(
+    x = type,
+    data = data,
+    var_info = meta_data_to_var_info(meta_data),
+    arg_name = "type"
+  )
 
   # updating meta data object with new types
   meta_data <-
@@ -374,22 +385,30 @@ generate_metadata <- function(data, value, by, type, label,
     )
 
   # converting tidyselect formula lists to named lists -------------------------
-  label <- .formula_list_to_named_list(x = label,
-                                       data = data,
-                                       var_info = meta_data_to_var_info(meta_data) ,
-                                       arg_name = "label")
-  statistic <- .formula_list_to_named_list(x = statistic,
-                                           data = data,
-                                           var_info = meta_data_to_var_info(meta_data) ,
-                                           arg_name = "statistic")
-  digits <- .formula_list_to_named_list(x = digits,
-                                        data = data,
-                                        var_info = meta_data_to_var_info(meta_data) ,
-                                        arg_name = "digits")
-  sort <- .formula_list_to_named_list(x = sort,
-                                      data = data,
-                                      var_info = meta_data_to_var_info(meta_data) ,
-                                      arg_name = "sort")
+  label <- .formula_list_to_named_list(
+    x = label,
+    data = data,
+    var_info = meta_data_to_var_info(meta_data),
+    arg_name = "label"
+  )
+  statistic <- .formula_list_to_named_list(
+    x = statistic,
+    data = data,
+    var_info = meta_data_to_var_info(meta_data),
+    arg_name = "statistic"
+  )
+  digits <- .formula_list_to_named_list(
+    x = digits,
+    data = data,
+    var_info = meta_data_to_var_info(meta_data),
+    arg_name = "digits"
+  )
+  sort <- .formula_list_to_named_list(
+    x = sort,
+    data = data,
+    var_info = meta_data_to_var_info(meta_data),
+    arg_name = "sort"
+  )
 
   # assigning variable characteristics -----------------------------------------
   if (is.null(survey)) {
@@ -409,15 +428,19 @@ generate_metadata <- function(data, value, by, type, label,
       stat_label = stat_label_match(.data$stat_display),
       sort = assign_sort(.data$variable, .data$summary_type, sort),
       df_stats = pmap(
-        list(.data$summary_type, .data$variable,
-             .data$dichotomous_value,
-             .data$sort, .data$stat_display, .data$var_label),
-        ~ df_stats_function(summary_type = ..1, variable = ..2,
-                            dichotomous_value = ..3,
-                            sort = ..4, stat_display = ..5,
-                            data = data_for_df_stats, by = by,
-                            percent = percent, digits = digits,
-                            var_label = ..6)
+        list(
+          .data$summary_type, .data$variable,
+          .data$dichotomous_value,
+          .data$sort, .data$stat_display, .data$var_label
+        ),
+        ~ df_stats_function(
+          summary_type = ..1, variable = ..2,
+          dichotomous_value = ..3,
+          sort = ..4, stat_display = ..5,
+          data = data_for_df_stats, by = by,
+          percent = percent, digits = digits,
+          var_label = ..6
+        )
       )
     )
 

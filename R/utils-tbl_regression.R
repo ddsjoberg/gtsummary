@@ -16,7 +16,9 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 
   # keeping the first arg listed if duplicated (first is the user-specified one)
   tidy_plus_plus_args <-
-    tidy_plus_plus_args[names(tidy_plus_plus_args) %>% {!duplicated(.)}]
+    tidy_plus_plus_args[names(tidy_plus_plus_args) %>% {
+      !duplicated(.)
+    }]
 
   # tidying up the tidy data frame with `broom.helpers::tidy_plus_plus()`
   df_tidy <-
@@ -36,11 +38,13 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       )
     ) %>%
     rlang::eval_tidy() %>%
-    {dplyr::bind_cols(
-      .,
-      attributes(.)[names(attributes(.)) %in% c("N_obs", "N_event", "coefficients_type", "coefficients_label")] %>%
-        tibble::as_tibble()
-    )} %>%
+    {
+      dplyr::bind_cols(
+        .,
+        attributes(.)[names(attributes(.)) %in% c("N_obs", "N_event", "coefficients_type", "coefficients_label")] %>%
+          tibble::as_tibble()
+      )
+    } %>%
     mutate(
       row_type = ifelse(.data$header_row | is.na(.data$header_row), "label", "level")
     )
@@ -52,17 +56,19 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 
   df_tidy %>%
     select(
-      any_of(c("variable", "var_label", "var_type",
-               "reference_row", "row_type", "header_row", "N_obs", "N_event", "N",
-               "coefficients_type", "coefficients_label", "label")),
+      any_of(c(
+        "variable", "var_label", "var_type",
+        "reference_row", "row_type", "header_row", "N_obs", "N_event", "N",
+        "coefficients_type", "coefficients_label", "label"
+      )),
       everything()
     )
 }
 .tbl_regression_default_table_header <- function(x, exponentiate,
-                                                tidy_columns_to_report,
-                                                estimate_fun,
-                                                pvalue_fun,
-                                                conf.level) {
+                                                 tidy_columns_to_report,
+                                                 estimate_fun,
+                                                 pvalue_fun,
+                                                 conf.level) {
   # label ----------------------------------------------------------------------
   x <-
     modify_table_styling(
@@ -94,7 +100,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     modify_table_styling(
       x,
       columns = any_of("N"),
-      label = glue("**{translate_text('N')}**")  %>% as.character(),
+      label = glue("**{translate_text('N')}**") %>% as.character(),
       fmt_fun = style_number
     ) %>%
     modify_table_styling(
@@ -119,8 +125,9 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 
   x <-
     modify_table_styling(x,
-                         columns = any_of(c("conf.low", "conf.high")),
-                         fmt_fun = estimate_fun)
+      columns = any_of(c("conf.low", "conf.high")),
+      fmt_fun = estimate_fun
+    )
 
   # p.value --------------------------------------------------------------------
   x <- modify_table_styling(
@@ -167,9 +174,13 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     modify_table_styling(
       x,
       columns =
-        vars(where(is.numeric),
-             -any_of(c("estimate", "conf.low", "conf.high", "p.value", "std.error", "statistic",
-                       "N", "N_obs", "N_event", "n_obs", "n_event"))),
+        vars(
+          where(is.numeric),
+          -any_of(c(
+            "estimate", "conf.low", "conf.high", "p.value", "std.error", "statistic",
+            "N", "N_obs", "N_event", "n_obs", "n_event"
+          ))
+        ),
       fmt_fun = purrr::partial(style_sigfig, digits = 3)
     )
 
@@ -177,7 +188,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 }
 
 
-chr_w_backtick <- function(x) map_chr(x, ~rlang::sym(.) %>% deparse(backtick = TRUE))
+chr_w_backtick <- function(x) map_chr(x, ~ rlang::sym(.) %>% deparse(backtick = TRUE))
 # > chr_w_backtick("var with spaces")
 # [1] "`var with spaces`"
 
@@ -191,7 +202,8 @@ chr_w_backtick <- function(x) map_chr(x, ~rlang::sym(.) %>% deparse(backtick = T
   if (result$label %in% c("Beta", "exp(Beta)")) {
     exponentiate <- x$inputs$exponentiate
     result$label <- get_theme_element("tbl_regression-str:coef_header",
-                                      default = result$label)
+      default = result$label
+    )
   }
 
   result$footnote <-
@@ -202,7 +214,11 @@ chr_w_backtick <- function(x) map_chr(x, ~rlang::sym(.) %>% deparse(backtick = T
       result$label %in% c("IRR", "log(IRR)") ~ "IRR = Incidence Rate Ratio"
     ) %>%
     translate_text(language) %>%
-    {switch(!is.na(.), .)}
+    {
+      switch(!is.na(.),
+        .
+      )
+    }
   result$label <- translate_text(result$label, language)
   result
 }

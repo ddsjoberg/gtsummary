@@ -72,8 +72,10 @@ and a second test of the \emph{G-rho} family.\if{html}{\out{<div class="r">}}\pr
 library(survival)
 
 gts_survfit <-
-  list(survfit(Surv(ttdeath, death) ~ grade, trial),
-       survfit(Surv(ttdeath, death) ~ trt, trial)) \%>\%
+  list(
+    survfit(Surv(ttdeath, death) ~ grade, trial),
+    survfit(Surv(ttdeath, death) ~ trt, trial)
+  ) \%>\%
   tbl_survfit(times = c(12, 24))
 
 # Example 1 ----------------------------------

@@ -19,14 +19,15 @@
 #' @export
 #' @examples
 #' # Example 1 ----------------------------------
-#' if (requireNamespace("car"))
+#' if (requireNamespace("car")) {
 #'   tbl_lm_global_ex1 <-
 #'     lm(marker ~ age + grade, trial) %>%
 #'     tbl_regression() %>%
 #'     add_global_p()
+#' }
 #'
 #' # Example 2 ----------------------------------
-#' if (requireNamespace("car"))
+#' if (requireNamespace("car")) {
 #'   tbl_uv_global_ex2 <-
 #'     trial[c("response", "trt", "age", "grade")] %>%
 #'     tbl_uvregression(
@@ -36,7 +37,7 @@
 #'       exponentiate = TRUE
 #'     ) %>%
 #'     add_global_p()
-#'
+#' }
 #' @family tbl_uvregression tools
 #' @family tbl_regression tools
 #' @section Example Output:
@@ -81,8 +82,9 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
 
   # if no terms are provided, stop and return x
   if (length(include) == 0) {
-    if (quiet == FALSE)
+    if (quiet == FALSE) {
       inform("No terms were selected, and no global p-values were added to the table.")
+    }
     return(x)
   }
 
@@ -100,9 +102,11 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
       rlang::expr(car::Anova(x$model_obj, type = !!type, !!!list(...))) %>%
       deparse()
 
-    paste("add_global_p: Global p-values for variable(s)",
-          glue("`add_global_p(include = {deparse(include) %>% paste(collapse = '')})`"),
-          glue("were calculated with")) %>%
+    paste(
+      "add_global_p: Global p-values for variable(s)",
+      glue("`add_global_p(include = {deparse(include) %>% paste(collapse = '')})`"),
+      glue("were calculated with")
+    ) %>%
       stringr::str_wrap() %>%
       paste(glue("`{expr_car}`"), sep = "\n  ") %>%
       rlang::inform()
@@ -132,7 +136,8 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
     tibble::rownames_to_column(var = "variable") %>%
     mutate(variable = broom.helpers::.clean_backticks(.data$variable)) %>%
     filter(.data$variable %in% !!include) %>%
-    select(c("variable", starts_with("Pr(>"))) %>% # selecting the pvalue column
+    select(c("variable", starts_with("Pr(>"))) %>%
+    # selecting the pvalue column
     set_names(c("variable", "p.value_global")) %>%
     mutate(row_type = "label")
 
@@ -203,9 +208,11 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
       rlang::expr(car::Anova(mod = x$model_obj, type = !!type, !!!list(...))) %>%
       deparse()
 
-    paste("add_global_p: Global p-values for variable(s)",
-          glue("`add_global_p(include = {deparse(include) %>% paste(collapse = '')})`"),
-          glue("were calculated with")) %>%
+    paste(
+      "add_global_p: Global p-values for variable(s)",
+      glue("`add_global_p(include = {deparse(include) %>% paste(collapse = '')})`"),
+      glue("were calculated with")
+    ) %>%
       stringr::str_wrap() %>%
       paste(glue("`{expr_car}`"), sep = "\n  ") %>%
       rlang::inform()
@@ -220,7 +227,8 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
           {
             car_Anova <-
               rlang::call2(
-                car::Anova, mod = x[["model_obj"]], type = type, !!!dots
+                car::Anova,
+                mod = x[["model_obj"]], type = type, !!!dots
               ) %>%
               rlang::eval_tidy()
           },
@@ -243,7 +251,8 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
           filter(.data$variable == y) %>%
           select(c(
             "variable", starts_with("Pr(>")
-          )) %>% # selecting the pvalue column
+          )) %>%
+          # selecting the pvalue column
           set_names(c("variable", "p.value_global"))
       }
     ) %>%
@@ -289,7 +298,7 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
       x$table_body %>%
       mutate(
         p.value = if_else(.data$variable %in% !!include & .data$row_type == "level",
-                          NA_real_, .data$p.value
+          NA_real_, .data$p.value
         )
       )
   }

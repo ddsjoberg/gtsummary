@@ -76,14 +76,16 @@ NULL
 #' @export
 #' @rdname add_glance
 add_glance_table <- function(x, include = everything(), label = NULL,
-                                fmt_fun = NULL, glance_fun = broom::glance) {
+                             fmt_fun = NULL, glance_fun = broom::glance) {
   updated_call_list <- c(x$call_list, list(add_glance_table = match.call()))
 
   # prepare glance statistics and formatting functions -------------------------
   lst_prep_glance <-
-    .prep_glance_statistics(x = x, include = {{ include }},
-                            label = label, fmt_fun = fmt_fun,
-                            glance_fun = glance_fun)
+    .prep_glance_statistics(
+      x = x, include = {{ include }},
+      label = label, fmt_fun = fmt_fun,
+      glance_fun = glance_fun
+    )
 
   # add instructions to print horizontal line ----------------------------------
   x$table_styling$horizontal_line_above <-
@@ -106,13 +108,15 @@ add_glance_table <- function(x, include = everything(), label = NULL,
 
   # evaluating modify_fmt_fun calls on gtsumary object
   x <-
-    map2(df_modify_fmt_fun$fmt_fun, df_modify_fmt_fun$glance_statistic,
-         ~expr(
-           modify_fmt_fun(
-             update = list(estimate ~ !!.x),
-             rows = .data$row_type == "glance_statistic" & .data$variable %in% !!.y
-           )
-         )) %>%
+    map2(
+      df_modify_fmt_fun$fmt_fun, df_modify_fmt_fun$glance_statistic,
+      ~ expr(
+        modify_fmt_fun(
+          update = list(estimate ~ !!.x),
+          rows = .data$row_type == "glance_statistic" & .data$variable %in% !!.y
+        )
+      )
+    ) %>%
     reduce(function(x, y) expr(!!x %>% !!y), .init = expr(x)) %>%
     eval()
 
@@ -130,9 +134,11 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
   updated_call_list <- c(x$call_list, list(add_glance_source_note = match.call()))
   # prepare glance statistics and formatting functions -------------------------
   lst_prep_glance <-
-    .prep_glance_statistics(x = x, include = {{ include }},
-                          label = label, fmt_fun = fmt_fun,
-                          glance_fun = glance_fun)
+    .prep_glance_statistics(
+      x = x, include = {{ include }},
+      label = label, fmt_fun = fmt_fun,
+      glance_fun = glance_fun
+    )
 
   # compile stats into source note ---------------------------------------------
   x$table_styling$source_note <-
@@ -140,8 +146,9 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     left_join(lst_prep_glance$df_fmt_fun, by = c("variable" = "glance_statistic")) %>%
     rowwise() %>%
     mutate(
-      fmt_stat = do.call(fmt_fun, list(.data$estimate)) %>%
-        {paste0(.data$label, sep1, .)}
+      fmt_stat = do.call(fmt_fun, list(.data$estimate)) %>% {
+        paste0(.data$label, sep1, .)
+      }
     ) %>%
     pull(.data$fmt_stat) %>%
     paste(collapse = sep2)
@@ -154,8 +161,9 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
 
 .prep_glance_statistics <- function(x, include, label, fmt_fun, glance_fun) {
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "tbl_regression"))
+  if (!inherits(x, "tbl_regression")) {
     stop("`x=` must be class 'tbl_regression'")
+  }
   glance_fun <- gts_mapper(glance_fun, "glance_fun=")
 
   # prepping glance table ------------------------------------------------------
@@ -172,7 +180,9 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     )
 
   df_label <-
-    switch(!is.null(label), enframe(unlist(label), "variable", "label")) %||%
+    switch(!is.null(label),
+      enframe(unlist(label), "variable", "label")
+    ) %||%
     tibble(variable = character(), label = character())
 
 
@@ -180,14 +190,18 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
   language <- get_theme_element("pkgwide-str:language", default = "en")
   df_glance <-
     df_glance_orig %>%
-    tidyr::pivot_longer(cols = everything(),
-                        names_to = "variable",
-                        values_to = "estimate") %>%
+    tidyr::pivot_longer(
+      cols = everything(),
+      names_to = "variable",
+      values_to = "estimate"
+    ) %>%
     # adding default labels
     left_join(df_default_glance_labels, by = c("variable" = "statistic_name")) %>%
-    mutate(label = map2_chr(.data$label, .data$variable,
-                            ~dplyr::coalesce(.x, .y) %>%
-                              translate_text(language = language))) %>%
+    mutate(label = map2_chr(
+      .data$label, .data$variable,
+      ~ dplyr::coalesce(.x, .y) %>%
+        translate_text(language = language)
+    )) %>%
     # updating table with user-specified labels
     dplyr::rows_update(df_label, by = "variable") %>%
     mutate(

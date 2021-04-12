@@ -3,27 +3,33 @@ skip_on_cran()
 test_that("checks for rows arg", {
   expect_error(
     tbl_summary(trial[c("trt", "age")]) %>%
-      modify_table_styling(columns = label,
-                           footnote =  "test footnote",
-                           rows = variable == "age"),
+      modify_table_styling(
+        columns = label,
+        footnote = "test footnote",
+        rows = variable == "age"
+      ),
     NA
   )
 
   footnote_variable <- "age"
   expect_error(
     tbl_summary(trial[c("trt", "age")]) %>%
-      modify_table_styling(columns = label,
-                           footnote =  "test footnote",
-                           rows = variable == footnote_variable),
+      modify_table_styling(
+        columns = label,
+        footnote = "test footnote",
+        rows = variable == footnote_variable
+      ),
     NA
   )
 
   null_value <- NULL
   expect_error(
     tbl_summary(trial[c("trt", "age")]) %>%
-      modify_table_styling(columns = label,
-                           footnote =  "test footnote",
-                           rows = null_value),
+      modify_table_styling(
+        columns = label,
+        footnote = "test footnote",
+        rows = null_value
+      ),
     NA
   )
 
@@ -63,7 +69,7 @@ test_that("checks for rows arg", {
   )
   expect_equal(
     as_tibble(tbl2, col_labels = FALSE) %>% pull(stat_2),
-    c("48 (39, 56)", "33 (34%)" )
+    c("48 (39, 56)", "33 (34%)")
   )
 
   expect_error(
@@ -81,5 +87,4 @@ test_that("checks for rows arg", {
         cols_merge_pattern = "{not_a_column}"
       )
   )
-
 })

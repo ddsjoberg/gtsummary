@@ -119,8 +119,10 @@ tbl_survfit_ex2 <- tbl_survfit(
 # Example 3 ----------------------------------
 # Pass a list of survfit() objects
 tbl_survfit_ex3 <-
-  list(survfit(Surv(ttdeath, death) ~ 1, trial),
-       survfit(Surv(ttdeath, death) ~ trt, trial)) \%>\%
+  list(
+    survfit(Surv(ttdeath, death) ~ 1, trial),
+    survfit(Surv(ttdeath, death) ~ trt, trial)
+  ) \%>\%
   tbl_survfit(times = c(12, 24))
 
 # Example 4 Competing Events Example ---------
@@ -129,12 +131,12 @@ set.seed(1123)
 library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
 trial2 <- trial \%>\%
   mutate(
-  death_cr = case_when(
-    death == 0 ~ "censor",
-    runif(n()) < 0.5 ~ "death from cancer",
-    TRUE ~ "death other causes"
-  ) \%>\% factor()
-)
+    death_cr = case_when(
+      death == 0 ~ "censor",
+      runif(n()) < 0.5 ~ "death from cancer",
+      TRUE ~ "death other causes"
+    ) \%>\% factor()
+  )
 
 survfit_cr_ex4 <-
   survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) \%>\%

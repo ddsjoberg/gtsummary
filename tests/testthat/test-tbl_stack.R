@@ -78,5 +78,4 @@ test_that("Stacking tbl_summary objects", {
     tbl_stack(lst_summary, group_header = c("Group 1", "Group 2")),
     NA
   )
-
 })
