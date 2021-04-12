@@ -24,7 +24,7 @@
 #'   add_q()
 #'
 #' # Example 2 ----------------------------------
-#' if (requireNamespace("car"))
+#' if (requireNamespace("car")) {
 #'   add_q_ex2 <-
 #'     trial[c("trt", "age", "grade", "response")] %>%
 #'     tbl_uvregression(
@@ -35,6 +35,7 @@
 #'     ) %>%
 #'     add_global_p() %>%
 #'     add_q()
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -58,7 +59,8 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
   # checking input table has a p.value column
   if (!"p.value" %in% names(x$table_body)) {
     stop("There is no p-value column. `x$table_body` must have a column called 'p.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # setting defaults from gtsummary theme --------------------------------------
@@ -80,8 +82,9 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
   expr_p.adjust <-
     rlang::expr(stats::p.adjust(x$table_body$p.value, method = !!method)) %>%
     deparse()
-  if (quiet == FALSE)
+  if (quiet == FALSE) {
     rlang::inform(glue("add_q: Adjusting p-values with\n`{expr_p.adjust}`"))
+  }
 
   x$table_body$q.value <- x$table_body$p.value %>% stats::p.adjust(method = method)
 

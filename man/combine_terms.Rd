@@ -53,7 +53,6 @@ combine_terms_ex1 <-
     label = "Marker (non-linear terms)",
     test = "LRT"
   )
-
 }
 \seealso{
 Other tbl_regression tools: 

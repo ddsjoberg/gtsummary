@@ -95,7 +95,8 @@ p-value formatting functions, such as \code{bold_p()} or \code{add_q()}.
 }
 
 \examples{
-library(dplyr, warn.conflicts = FALSE); library(stringr)
+library(dplyr, warn.conflicts = FALSE)
+library(stringr)
 # Example 1 ----------------------------------
 # fn returns t-test pvalue
 my_ttest <- function(data, variable, by, ...) {
@@ -108,8 +109,10 @@ add_stat_ex1 <-
   tbl_summary(by = trt, missing = "no") \%>\%
   add_stat(fns = everything() ~ my_ttest) \%>\%
   modify_header(
-    list(add_stat_1 ~ "**p-value**",
-         all_stat_cols() ~ "**{level}**")
+    list(
+      add_stat_1 ~ "**p-value**",
+      all_stat_cols() ~ "**{level}**"
+    )
   )
 
 # Example 2 ----------------------------------
@@ -144,12 +147,15 @@ add_stat_ex3 <-
   tbl_summary(by = trt, missing = "no") \%>\%
   add_stat(fns = everything() ~ my_ttest3) \%>\%
   modify_header(
-    list(statistic ~ "**t-statistic**",
-         p.value ~ "**p-value**")
+    list(
+      statistic ~ "**t-statistic**",
+      p.value ~ "**p-value**"
+    )
   ) \%>\%
   modify_fmt_fun(
-    list(statistic ~ style_sigfig,
-         p.value ~ style_pvalue)
+    list(
+      statistic ~ style_sigfig,
+      p.value ~ style_pvalue
+    )
   )
-
 }

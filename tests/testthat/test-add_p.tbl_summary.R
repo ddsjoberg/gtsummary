@@ -42,7 +42,6 @@ test_that("add_p creates output without error/warning", {
       add_p(group = response),
     NA
   )
-
 })
 
 test_that("add_p & lme4", {
@@ -174,15 +173,22 @@ test_that("add_p with custom p-value function", {
 })
 
 test_that("Wilcoxon and Kruskal-Wallis p-values match ", {
-  t1 <- trial[c("trt", "age", "marker")] %>% tbl_summary(by = trt) %>% add_p(test = all_continuous() ~ wilcox.test)
-  t2 <- trial[c("trt", "age", "marker")] %>% tbl_summary(by = trt) %>% add_p(test = all_continuous() ~ kruskal.test)
+  t1 <- trial[c("trt", "age", "marker")] %>%
+    tbl_summary(by = trt) %>%
+    add_p(test = all_continuous() ~ wilcox.test)
+  t2 <- trial[c("trt", "age", "marker")] %>%
+    tbl_summary(by = trt) %>%
+    add_p(test = all_continuous() ~ kruskal.test)
   expect_true(
     all(t1$meta_data$p.value - t2$meta_data$p.value < 0.001)
   )
 })
 
 
-trial_group <- trial %>% group_by(trt) %>% mutate(id = row_number()) %>% ungroup()
+trial_group <- trial %>%
+  group_by(trt) %>%
+  mutate(id = row_number()) %>%
+  ungroup()
 trial_group_wide <-
   trial_group %>%
   filter(trt == "Drug A") %>%
@@ -196,36 +202,39 @@ test_that("p-values are replicated within tbl_summary()", {
   tbl_test.args <-
     trial %>%
     select(trt,
-           var_t.test = age,
-           var_t.test_dots = age,
-           var_kruskal.test = age,
-           var_wilcox.test = age,
-           var_wilcox.test_dots = age,
-           var_aov = age,
-           var_chisq.test = response,
-           var_chisq.test_dots = response,
-           var_chisq.test.no.correct = response,
-           var_fisher.test = response,
-           var_fisher.test_dots = response,
-           var_mcnemar.test = response,
-           var_mcnemar.test_dots = response,
-           ) %>%
+      var_t.test = age,
+      var_t.test_dots = age,
+      var_kruskal.test = age,
+      var_wilcox.test = age,
+      var_wilcox.test_dots = age,
+      var_aov = age,
+      var_chisq.test = response,
+      var_chisq.test_dots = response,
+      var_chisq.test.no.correct = response,
+      var_fisher.test = response,
+      var_fisher.test_dots = response,
+      var_mcnemar.test = response,
+      var_mcnemar.test_dots = response,
+    ) %>%
     tbl_summary(by = trt, missing = "no") %>%
     add_p(
-      test = list(contains("t.test") ~ t.test,
-                  contains("kruskal.test") ~ kruskal.test,
-                  contains("wilcox.test") ~ wilcox.test,
-                  contains("aov") ~ aov,
-                  contains("chisq.test") ~ chisq.test,
-                  contains("chisq.test.no.correct") ~ "chisq.test.no.correct",
-                  contains("fisher.test") ~ fisher.test,
-                  contains("mcnemar.test") ~ mcnemar.test
-                  ),
-      test.args = list(var_t.test_dots = list(var.equal = TRUE),
-                       var_wilcox.test_dots = list(correct = FALSE),
-                       var_chisq.test_dots = list(correct = FALSE),
-                       var_fisher.test_dots = list(alternative = "greater"),
-                       var_mcnemar.test_dots = list(correct = FALSE))
+      test = list(
+        contains("t.test") ~ t.test,
+        contains("kruskal.test") ~ kruskal.test,
+        contains("wilcox.test") ~ wilcox.test,
+        contains("aov") ~ aov,
+        contains("chisq.test") ~ chisq.test,
+        contains("chisq.test.no.correct") ~ "chisq.test.no.correct",
+        contains("fisher.test") ~ fisher.test,
+        contains("mcnemar.test") ~ mcnemar.test
+      ),
+      test.args = list(
+        var_t.test_dots = list(var.equal = TRUE),
+        var_wilcox.test_dots = list(correct = FALSE),
+        var_chisq.test_dots = list(correct = FALSE),
+        var_fisher.test_dots = list(alternative = "greater"),
+        var_mcnemar.test_dots = list(correct = FALSE)
+      )
     )
 
   expect_equal(
@@ -298,17 +307,22 @@ test_that("p-values are replicated within tbl_summary()", {
   tbl_groups <-
     trial_group %>%
     select(trt, id,
-           grade_lme4 = grade,
-           age_paired.t.test = age,
-           age_paired.t.test_dots = age,
-           age_paired.wilcox.test = age,
-           age_paired.wilcox.test_dots = age) %>%
+      grade_lme4 = grade,
+      age_paired.t.test = age,
+      age_paired.t.test_dots = age,
+      age_paired.wilcox.test = age,
+      age_paired.wilcox.test_dots = age
+    ) %>%
     tbl_summary(by = trt, missing = "no", include = -id) %>%
     add_p(
-      test = list(contains("paired.t.test") ~ "paired.t.test",
-                  contains("paired.wilcox.test") ~ "paired.wilcox.test"),
-      test.args = list(age_paired.t.test_dots ~ list(mu = 1),
-                       age_paired.wilcox.test_dots ~ list(mu = 1)),
+      test = list(
+        contains("paired.t.test") ~ "paired.t.test",
+        contains("paired.wilcox.test") ~ "paired.wilcox.test"
+      ),
+      test.args = list(
+        age_paired.t.test_dots ~ list(mu = 1),
+        age_paired.wilcox.test_dots ~ list(mu = 1)
+      ),
       group = "id"
     )
 
@@ -340,7 +354,8 @@ test_that("Groups arg and lme4", {
   tbl_groups <-
     trial_group %>%
     select(trt, id,
-           age_lme4 = age) %>%
+      age_lme4 = age
+    ) %>%
     tbl_summary(by = trt, missing = "no", include = -id) %>%
     add_p(
       test = list(contains("lme4") ~ "lme4"),
@@ -349,9 +364,8 @@ test_that("Groups arg and lme4", {
 
   expect_equal(
     filter(tbl_groups$meta_data, variable == "age_lme4")$p.value,
-    lme4::glmer(factor(trt) ~ (1|id), tidyr::drop_na(trial_group, trt, age, id), family = binomial) %>%
-      anova(lme4::glmer(factor(trt) ~ age + (1|id), tidyr::drop_na(trial_group, trt, age, id), family = binomial)) %>%
+    lme4::glmer(factor(trt) ~ (1 | id), tidyr::drop_na(trial_group, trt, age, id), family = binomial) %>%
+      anova(lme4::glmer(factor(trt) ~ age + (1 | id), tidyr::drop_na(trial_group, trt, age, id), family = binomial)) %>%
       pluck("Pr(>Chisq)", 2)
   )
 })
-

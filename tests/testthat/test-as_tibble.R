@@ -37,11 +37,11 @@ test_that("as_tibble works with standard use", {
 
 
 test_that("as_tibble works with bold_p()", {
-  bold_p_data = data.frame(
-    x = c(rep("YES",10), rep("NO",10)),
-    y = c(rep("YES",9), rep("NO", 11)),
-    a = c(rep(c(rep("YES",5), rep("NO",5)))),
-    b = c(rep("YES",4), rep("NO", 16))
+  bold_p_data <- data.frame(
+    x = c(rep("YES", 10), rep("NO", 10)),
+    y = c(rep("YES", 9), rep("NO", 11)),
+    a = c(rep(c(rep("YES", 5), rep("NO", 5)))),
+    b = c(rep("YES", 4), rep("NO", 16))
   )
 
   # checking that the low pvalue is bolded, and the other two are not

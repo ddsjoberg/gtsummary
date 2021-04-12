@@ -53,11 +53,10 @@ test_that("no errors/warnings with tbl_regression.gam", {
 
   expect_error(
     mod %>%
-      tbl_regression(exponentiate = TRUE,
-                     label = `s(marker,age)` ~ "Smoothed marker/age"),
+      tbl_regression(
+        exponentiate = TRUE,
+        label = `s(marker,age)` ~ "Smoothed marker/age"
+      ),
     NA
   )
 })
-
-
-

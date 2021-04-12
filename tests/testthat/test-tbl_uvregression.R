@@ -6,20 +6,20 @@ library(lme4)
 
 test_that("lm: no errors/warnings with standard use", {
   expect_error(mtcars %>%
-                 tbl_uvregression(
-                   method = lm,
-                   y = mpg
-                 ), NA)
+    tbl_uvregression(
+      method = lm,
+      y = mpg
+    ), NA)
   expect_error(mtcars %>%
-                 tbl_uvregression(
-                   method = lm,
-                   y = "mpg"
-                 ), NA)
+    tbl_uvregression(
+      method = lm,
+      y = "mpg"
+    ), NA)
   expect_warning(mtcars %>%
-                   tbl_uvregression(
-                     method = lm,
-                     y = mpg
-                   ), NA)
+    tbl_uvregression(
+      method = lm,
+      y = mpg
+    ), NA)
 })
 
 test_that("geeglm: no errors/warnings with standard use", {
@@ -35,7 +35,8 @@ test_that("geeglm: no errors/warnings with standard use", {
         corstr = "exchangeable"
       ),
       include = -response
-    ), NA)
+    ), NA
+  )
   expect_warning(
     tbl_uvregression(
       na.omit(trial),
@@ -46,22 +47,23 @@ test_that("geeglm: no errors/warnings with standard use", {
         corstr = "exchangeable"
       ),
       include = -response
-    ), NA)
+    ), NA
+  )
 })
 
 test_that("lm specifying tidy_fun: no errors/warnings with standard use", {
   expect_error(mtcars %>%
-                 tbl_uvregression(
-                   method = lm,
-                   y = mpg,
-                   tidy_fun = broom::tidy
-                 ), NA)
+    tbl_uvregression(
+      method = lm,
+      y = mpg,
+      tidy_fun = broom::tidy
+    ), NA)
   expect_warning(mtcars %>%
-                   tbl_uvregression(
-                     method = lm,
-                     y = mpg,
-                     tidy_fun = broom::tidy
-                   ), NA)
+    tbl_uvregression(
+      method = lm,
+      y = mpg,
+      tidy_fun = broom::tidy
+    ), NA)
 })
 
 test_that("coxph: no errors/warnings with standard use", {
@@ -263,8 +265,8 @@ test_that("tbl_uvregression estimate_fun and pvalue_fun respected", {
     data = lung %>% select(age, inst),
     method = lm,
     y = age,
-    pvalue_fun = ~style_pvalue(.x, digits = 3),
-    estimate_fun = ~style_number(.x, digits = 3)
+    pvalue_fun = ~ style_pvalue(.x, digits = 3),
+    estimate_fun = ~ style_number(.x, digits = 3)
   )
 
   expect_equal(

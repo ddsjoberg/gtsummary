@@ -23,9 +23,8 @@
 #'   tbl_regression() %>%
 #'   modify_fmt_fun(
 #'     update = p.value ~ function(x) style_pvalue(x, digits = 3),
-#'     rows = variable == 'grade'
+#'     rows = variable == "grade"
 #'   )
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

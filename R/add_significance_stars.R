@@ -55,9 +55,10 @@
 #'   modify_header(estimate ~ "**Beta (SE)**") %>%
 #'   modify_footnote(estimate ~ "SE = Standard Error", abbreviation = TRUE) %>%
 #'   as_gt() %>%
-#'   gt::tab_style(style = "vertical-align:top",
-#'                 locations = gt::cells_body(columns = vars(label)))
-#'
+#'   gt::tab_style(
+#'     style = "vertical-align:top",
+#'     locations = gt::cells_body(columns = vars(label))
+#'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -76,11 +77,13 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
                                    hide_ci = TRUE, hide_p = TRUE, hide_se = FALSE) {
   updated_call_list <- c(x$call_list, list(add_significance_stars = match.call()))
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "tbl_regression") && !inherits(x, "tbl_uvregression"))
+  if (!inherits(x, "tbl_regression") && !inherits(x, "tbl_uvregression")) {
     abort("x=` must be a 'tbl_regression' or 'tbl_uvregression' object.")
+  }
   thresholds <- sort(thresholds, decreasing = TRUE) %>% unique()
-  if (any(!dplyr::between(thresholds, 0L, 1L)))
+  if (any(!dplyr::between(thresholds, 0L, 1L))) {
     abort("All thresholds must be between 0 and 1.")
+  }
 
   if (!is_string(pattern)) abort("`pattern=` must be a string.")
   pattern_cols <-
@@ -88,8 +91,9 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
     map(str_remove_all, pattern = fixed("}")) %>%
     map(str_remove_all, pattern = fixed("{")) %>%
     unlist()
-  if (isTRUE(is_empty(pattern_cols)))
+  if (isTRUE(is_empty(pattern_cols))) {
     abort("`pattern=` must be a string using glue syntax to select columns.")
+  }
   if (!"stars" %in% pattern_cols) {
     inform("`pattern=` argument does not contain '{stars}' column, and no stars will be added.")
   }
@@ -97,7 +101,7 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
   # adding footnote ------------------------------------------------------------
   p_footnote <-
     paste0(
-      purrr::imap_chr(thresholds, ~rep_len("*", .y) %>% paste(collapse = "")),
+      purrr::imap_chr(thresholds, ~ rep_len("*", .y) %>% paste(collapse = "")),
       "p<",
       thresholds
     ) %>%
@@ -110,14 +114,16 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
   expr_stars_case_when <-
     map2(
       thresholds, seq_along(thresholds),
-      ~expr(!is.na(estimate) & p.value >= !!.x ~ !!paste(rep_len("*", .y - 1), collapse = "")) %>%
+      ~ expr(!is.na(estimate) & p.value >= !!.x ~ !!paste(rep_len("*", .y - 1), collapse = "")) %>%
         rlang::expr_deparse()
     ) %>%
-    purrr::reduce(.f = ~paste(.x, .y, sep = ", ")) %>%
-    {paste0("dplyr::case_when(is.na(p.value) ~ '', ", ., ")")} %>%
+    purrr::reduce(.f = ~ paste(.x, .y, sep = ", ")) %>%
+    {
+      paste0("dplyr::case_when(is.na(p.value) ~ '', ", ., ")")
+    } %>%
     rlang::parse_expr()
 
-  x <- modify_table_body(x, ~.x %>% dplyr::mutate(stars = !!expr_stars_case_when))
+  x <- modify_table_body(x, ~ .x %>% dplyr::mutate(stars = !!expr_stars_case_when))
 
   # updating hidden column status ----------------------------------------------
   x <-
@@ -130,7 +136,8 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
   # adding `cols_merge` to table styling ---------------------------------------
   model_variables <-
     x$table_body %>%
-    filter(!is.na(.data$coefficients_type)) %>% # keep obs from regression model
+    filter(!is.na(.data$coefficients_type)) %>%
+    # keep obs from regression model
     dplyr::pull(.data$variable) %>%
     unique()
 
@@ -139,8 +146,8 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
       x = x,
       columns = pattern_cols[1],
       rows = !!expr(.data$variable %in% !!model_variables &
-                      !is.na(.data$estimate) &
-                      !.data$reference_row %in% TRUE),
+        !is.na(.data$estimate) &
+        !.data$reference_row %in% TRUE),
       cols_merge_pattern = pattern
     )
 

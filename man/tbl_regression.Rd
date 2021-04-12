@@ -146,7 +146,6 @@ suppressMessages(library(lme4))
 tbl_regression_ex3 <-
   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE)
-
 }
 \seealso{
 See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples

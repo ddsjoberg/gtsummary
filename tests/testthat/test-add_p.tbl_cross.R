@@ -21,4 +21,3 @@ test_that("add_p.tbl_cross", {
     NA
   )
 })
-

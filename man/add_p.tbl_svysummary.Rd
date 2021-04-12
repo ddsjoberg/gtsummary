@@ -96,8 +96,10 @@ add_p_svysummary_ex2 <-
 add_p_svysummary_ex3 <-
   tbl_svysummary(d_clust, by = both, include = c(cname, api00, api99, both)) \%>\%
   add_p(
-    test = list(all_continuous() ~ "svy.t.test",
-                all_categorical() ~ "svy.wald.test")
+    test = list(
+      all_continuous() ~ "svy.t.test",
+      all_categorical() ~ "svy.wald.test"
+    )
   )
 }
 \seealso{

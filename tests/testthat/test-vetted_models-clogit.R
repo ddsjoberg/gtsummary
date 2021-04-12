@@ -31,9 +31,11 @@ library(survival)
 test_that("vetted_models clogit()", {
   # building models to check
   mod_clogit_lin <- clogit(response ~ age + trt + grade + strata(stage),
-                           data = trial)
+    data = trial
+  )
   mod_clogit_int <- clogit(response ~ age + trt * grade + strata(stage),
-                           data = trial)
+    data = trial
+  )
   # 1.  Runs as expected with standard use
   #       - without errors, warnings, messages
   expect_error(

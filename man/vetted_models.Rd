@@ -53,8 +53,9 @@ my_tidy <- function(x, exponentiate = FALSE, conf.level = 0.95, ...) {
         rlang::set_names(c("conf.low", "conf.high"))
     )
   # exponentiating, if requested
-  if (exponentiate == TRUE)
+  if (exponentiate == TRUE) {
     tidy <- dplyr::mutate_at(vars(estimate, conf.low, conf.high), exp)
+  }
   tidy
 }
 

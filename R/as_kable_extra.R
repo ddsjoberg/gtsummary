@@ -17,7 +17,6 @@
 #'   trial %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_kable_extra()
-
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
                            strip_md_bold = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
@@ -35,10 +34,12 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
       x$table_styling$header %>%
       mutate(
         label = str_replace_all(
-          .data$label, pattern = fixed("**"), replacement = fixed("")
+          .data$label,
+          pattern = fixed("**"), replacement = fixed("")
         ),
         spanning_header = str_replace_all(
-          .data$spanning_header, pattern = fixed("**"), replacement = fixed("")
+          .data$spanning_header,
+          pattern = fixed("**"), replacement = fixed("")
         )
       )
   }
@@ -52,10 +53,14 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
   kable_extra_calls <-
     purrr::reduce(
       .x = seq_along(insert_expr_after),
-      .f = function(x, y) add_expr_after(calls = x,
-                                         add_after = names(insert_expr_after[y]),
-                                         expr = insert_expr_after[[y]],
-                                         new_name = paste0("user_added", y)),
+      .f = function(x, y) {
+        add_expr_after(
+          calls = x,
+          add_after = names(insert_expr_after[y]),
+          expr = insert_expr_after[[y]],
+          new_name = paste0("user_added", y)
+        )
+      },
       .init = kable_extra_calls
     )
 
@@ -74,7 +79,9 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
   include <- "tibble" %>% union(include)
 
   # return calls, if requested -------------------------------------------------
-  if (return_calls == TRUE) return(kable_extra_calls)
+  if (return_calls == TRUE) {
+    return(kable_extra_calls)
+  }
 
   # taking each kable function call, concatenating them with %>% separating them
   kable_extra_calls[include] %>%
@@ -107,13 +114,16 @@ table_styling_to_kable_extra_calls <- function(x, ...) {
       x$table_styling$header %>%
       filter(.data$hide == FALSE) %>%
       select(.data$spanning_header) %>%
-      mutate(spanning_header = ifelse(is.na(.data$spanning_header),
-                                      " ", .data$spanning_header),
-             spanning_header_id = dplyr::row_number())
+      mutate(
+        spanning_header = ifelse(is.na(.data$spanning_header),
+          " ", .data$spanning_header
+        ),
+        spanning_header_id = dplyr::row_number()
+      )
     # assigning an ID for each spanning header group
     for (i in seq(2, nrow(df_header0))) {
-      if(df_header0$spanning_header[i] == df_header0$spanning_header[i-1]) {
-        df_header0$spanning_header_id[i] <- df_header0$spanning_header_id[i-1]
+      if (df_header0$spanning_header[i] == df_header0$spanning_header[i - 1]) {
+        df_header0$spanning_header_id[i] <- df_header0$spanning_header_id[i - 1]
       }
     }
 
@@ -148,10 +158,10 @@ table_styling_to_kable_extra_calls <- function(x, ...) {
     pull(.data$footnote) %>%
     unique()
 
-  if(length(vct_footnote > 0))
+  if (length(vct_footnote > 0)) {
     kable_extra_calls[["footnote"]] <-
-    expr(kableExtra::footnote(number = !!vct_footnote))
+      expr(kableExtra::footnote(number = !!vct_footnote))
+  }
 
   kable_extra_calls
 }
-

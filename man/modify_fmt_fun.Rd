@@ -56,9 +56,8 @@ modify_fmt_fun_ex1 <-
   tbl_regression() \%>\%
   modify_fmt_fun(
     update = p.value ~ function(x) style_pvalue(x, digits = 3),
-    rows = variable == 'grade'
+    rows = variable == "grade"
   )
-
 }
 \seealso{
 Other Advanced modifiers: 

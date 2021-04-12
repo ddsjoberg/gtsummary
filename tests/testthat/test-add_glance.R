@@ -6,13 +6,13 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
     lm(age ~ marker + grade, trial) %>%
     tbl_regression()
   tbl2 <-
-    lme4::lmer(age ~ marker + (1|grade), trial) %>%
+    lme4::lmer(age ~ marker + (1 | grade), trial) %>%
     tbl_regression()
 
   expect_error(
     tbl1 %>%
       add_glance_source_note(
-        label = list(df  ~ "Degrees of Freedom", sigma ~ "\U03C3"),
+        label = list(df ~ "Degrees of Freedom", sigma ~ "\U03C3"),
         fmt_fun = df ~ style_number,
         include = c(r.squared, AIC, sigma, df)
       ),
@@ -30,7 +30,7 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
   expect_error(
     tbl1 %>%
       add_glance_table(
-        label = list(df  ~ "Degrees of Freedom", sigma ~ "\U03C3"),
+        label = list(df ~ "Degrees of Freedom", sigma ~ "\U03C3"),
         fmt_fun = df ~ style_number,
         include = c(r.squared, AIC, sigma, df)
       ),

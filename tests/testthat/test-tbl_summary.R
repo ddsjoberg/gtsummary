@@ -68,7 +68,7 @@ test_that("tbl_summary works in character inputs for `by=`", {
   expect_error(
     purrr::map(
       c("trt", "grade", "stage"),
-      ~tbl_summary(trial, by = .x)
+      ~ tbl_summary(trial, by = .x)
     ),
     NA
   )
@@ -269,14 +269,13 @@ test_that("tbl_summary-all_categorical() use with `type=`", {
   expect_true(
     !"dichotomous" %in%
       (tbl_summary(trial, type = all_dichotomous() ~ "categorical") %>%
-         purrr::pluck("meta_data") %>%
-         dplyr::pull(summary_type))
+        purrr::pluck("meta_data") %>%
+        dplyr::pull(summary_type))
   )
 })
 
 
 test_that("tbl_summary-difftime does not cause error", {
-
   expect_error(
     dplyr::storms %>%
       dplyr::mutate(
@@ -292,7 +291,7 @@ test_that("tbl_summary-difftime does not cause error", {
 test_that("tbl_summary-all missing data does not cause error", {
   df_missing <-
     tibble(
-      my_by_var = c(1,1,2,2),
+      my_by_var = c(1, 1, 2, 2),
       fct = rep(NA, 4) %>% factor(levels = c("lion", "tiger", "bear")),
       lgl = NA,
       chr = NA_character_,
@@ -389,7 +388,7 @@ test_that("tbl_summary-no error when by variable is ordered factor", {
   expect_error(
     trial %>%
       dplyr::mutate(grade = as.ordered(grade)) %>%
-      tbl_summary(by=grade),
+      tbl_summary(by = grade),
     NA
   )
 })
@@ -407,8 +406,10 @@ test_that("tbl_summary-works with ordered factors", {
   expect_error(
     trial %>%
       select(response, trt) %>%
-      dplyr::mutate_at(vars(response, trt),
-                       ~factor(., ordered = TRUE)) %>%
+      dplyr::mutate_at(
+        vars(response, trt),
+        ~ factor(., ordered = TRUE)
+      ) %>%
       tbl_summary(by = trt),
     NA
   )
@@ -417,7 +418,7 @@ test_that("tbl_summary-works with ordered factors", {
 
 test_that("tbl_summary-complex environments check", {
   no_fun <- function() {
-    grade_level = "I"
+    grade_level <- "I"
     trial %>%
       dplyr::select(grade) %>%
       tbl_summary(
@@ -432,7 +433,7 @@ test_that("tbl_summary-complex environments check", {
   )
 
   no_fun2 <- function() {
-    label_var = "grade"
+    label_var <- "grade"
     trial %>%
       tbl_summary(
         label = label_var ~ "Grade, oof",
@@ -448,8 +449,10 @@ test_that("tbl_summary-complex environments check", {
 
 test_that("tbl_summary creates output without error/warning for continuous2 (no by var)", {
   expect_error(
-    purrr::map(list(mtcars, iris), ~ tbl_summary(.x, type = all_continuous() ~ "continuous2",
-                                                 sort = list(all_categorical() ~ "frequency"))),
+    purrr::map(list(mtcars, iris), ~ tbl_summary(.x,
+      type = all_continuous() ~ "continuous2",
+      sort = list(all_categorical() ~ "frequency")
+    )),
     NA
   )
   expect_warning(
@@ -500,32 +503,33 @@ test_that("tbl_summary(digits=) tests with fn inputs", {
 
   # checking the display is correct
   expect_equal(
-    tbl_digits$table_body %>% filter(variable =="age") %>% pull(stat_0),
+    tbl_digits$table_body %>% filter(variable == "age") %>% pull(stat_0),
     with(trial, glue("{format(mean(age, na.rm = TRUE), digits = 2, scientific = TRUE)}")) %>% as.character(),
     ignore_attr = TRUE
   )
 
   expect_equal(
-    tbl_digits$table_body %>% filter(variable =="marker") %>% pull(stat_0),
-    with(trial, glue("{round(mean(marker, na.rm = TRUE))} ",
-                     "{round(sd(marker, na.rm = TRUE), 2)} ",
-                     "{sprintf(length(marker),  fmt = '%#.1f')} ",
-                     "{sprintf(sum(!is.na(marker)) / length(marker) * 100,  fmt = '%#.2f')}%")) %>% as.character(),
+    tbl_digits$table_body %>% filter(variable == "marker") %>% pull(stat_0),
+    with(trial, glue(
+      "{round(mean(marker, na.rm = TRUE))} ",
+      "{round(sd(marker, na.rm = TRUE), 2)} ",
+      "{sprintf(length(marker),  fmt = '%#.1f')} ",
+      "{sprintf(sum(!is.na(marker)) / length(marker) * 100,  fmt = '%#.2f')}%"
+    )) %>% as.character(),
     ignore_attr = TRUE
   )
 
   expect_equal(
-    tbl_digits$table_body %>% filter(variable =="grade") %>% pull(stat_0) %>% purrr::keep(~!is.na(.)),
+    tbl_digits$table_body %>% filter(variable == "grade") %>% pull(stat_0) %>% purrr::keep(~ !is.na(.)),
     c("68.0 (34.0%)", "68.0 (34.0%)", "64.0 (32.0%)"),
     ignore_attr = TRUE
   )
 
   expect_equal(
-    tbl_digits$table_body %>% filter(variable =="response") %>% pull(stat_0) %>% purrr::keep(~!is.na(.)),
+    tbl_digits$table_body %>% filter(variable == "response") %>% pull(stat_0) %>% purrr::keep(~ !is.na(.)),
     "61 193.0 31.61% 200.0 96.5000%",
     ignore_attr = TRUE
   )
-
 })
 
 
@@ -541,8 +545,8 @@ test_that("tbl_summary() continuous vars with cat summary vars only", {
     NA
   )
   expect_equal(tbl2$meta_data$df_stats %>% pluck(1, "N_obs"), c(98, 102),
-               ignore_attr = TRUE)
-
+    ignore_attr = TRUE
+  )
 })
 
 test_that("tbl_summary() works with date and date/time", {
@@ -589,7 +593,7 @@ test_that("tbl_summary() works with date and date/time", {
 test_that("unobserved levels can be dichotomously summarized", {
   expect_equal(
     trial %>%
-      dplyr::transmute(trt = forcats::fct_expand(trt, 'Drug C')) %>%
+      dplyr::transmute(trt = forcats::fct_expand(trt, "Drug C")) %>%
       tbl_summary(value = trt ~ "Drug C") %>%
       as_tibble(col_labels = FALSE) %>%
       dplyr::pull(stat_0),

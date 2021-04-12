@@ -18,8 +18,8 @@ assert_package <- function(pkg, fn, version = NULL) {
   }
 
   if (!is.null(version) &&
-      (!requireNamespace(pkg, quietly = TRUE) ||
-       (requireNamespace(pkg, quietly = TRUE) && utils::packageVersion(pkg) < version))) {
+    (!requireNamespace(pkg, quietly = TRUE) ||
+      (requireNamespace(pkg, quietly = TRUE) && utils::packageVersion(pkg) < version))) {
     cli_alert_danger("The {.val {pkg}} package {.field v{version}} or greater is required for function {.code {fn}}.")
     cli_ul("Install/update {.val {pkg}} with the code below.")
     cli_code(glue('install.packages("{pkg}")'))
@@ -61,9 +61,11 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
 gts_mapper <- function(x, context) {
   # checking input, and giving informative error msg
   if (!rlang::is_function(x) && !rlang::is_formula(x)) {
-    paste("Expecting a function in argument `{context}`,\n",
-          "e.g. `fun = function(x) style_pvalue(x, digits = 2)`, or\n",
-          "`fun = ~style_pvalue(., digits = 2)`") %>%
+    paste(
+      "Expecting a function in argument `{context}`,\n",
+      "e.g. `fun = function(x) style_pvalue(x, digits = 2)`, or\n",
+      "`fun = ~style_pvalue(., digits = 2)`"
+    ) %>%
       stringr::str_glue()
     rlang::abort()
   }

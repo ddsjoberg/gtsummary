@@ -18,7 +18,9 @@
 #' @author Daniel D. Sjoberg
 .get_add_p_test_fun <- function(class, test, env = NULL, parent_fun = "add_p") {
   # if no test, then return NULL
-  if (is.null(test)) return(NULL)
+  if (is.null(test)) {
+    return(NULL)
+  }
 
   # keep class of tests
   df <-
@@ -35,40 +37,52 @@
     df <-
       df %>%
       # now select test object equivalent to the passed function
-      filter(map_lgl(.data$test_fun, ~identical(eval(.x), test)))
+      filter(map_lgl(.data$test_fun, ~ identical(eval(.x), test)))
   }
 
   # return info from df if internal test selected
   if (nrow(df) == 1) {
-    if (parent_fun == "add_p" && df$add_p == FALSE)
-      glue("You've selected test '{df$test_name}', which does not ",
-           "return p-values. See `?tests` for details.") %>%
-      rlang::inform()
-    if (parent_fun == "add_difference" && df$add_difference == FALSE)
-      glue("You've selected test '{df$test_name}', which does not ",
-           "return a difference. See `?tests` for details.") %>%
-      rlang::inform()
+    if (parent_fun == "add_p" && df$add_p == FALSE) {
+      glue(
+        "You've selected test '{df$test_name}', which does not ",
+        "return p-values. See `?tests` for details."
+      ) %>%
+        rlang::inform()
+    }
+    if (parent_fun == "add_difference" && df$add_difference == FALSE) {
+      glue(
+        "You've selected test '{df$test_name}', which does not ",
+        "return a difference. See `?tests` for details."
+      ) %>%
+        rlang::inform()
+    }
 
     return(
       df %>%
         select(any_of(c("test_name", "fun_to_run", "accept_dots"))) %>%
-        mutate_at(vars(.data$fun_to_run), ~map(.x, eval)) %>%
+        mutate_at(vars(.data$fun_to_run), ~ map(.x, eval)) %>%
         as.list() %>%
         purrr::flatten()
     )
   }
-  if (rlang::is_string(test) && nrow(df) == 0)
+  if (rlang::is_string(test) && nrow(df) == 0) {
     return(
-      list(test_name = "user-defined",
-           fun_to_run = rlang::parse_expr(test) %>% rlang::eval_tidy(env = env),
-           accept_dots = FALSE)
+      list(
+        test_name = "user-defined",
+        fun_to_run = rlang::parse_expr(test) %>% rlang::eval_tidy(env = env),
+        accept_dots = FALSE
+      )
     )
-  if (rlang::is_function(test) && nrow(df) == 0)
+  }
+  if (rlang::is_function(test) && nrow(df) == 0) {
     return(
-      list(test_name = "user-defined",
-           fun_to_run = test,
-           accept_dots = FALSE)
+      list(
+        test_name = "user-defined",
+        fun_to_run = test,
+        accept_dots = FALSE
+      )
     )
+  }
   abort("Something went wrong in the test selection....")
 }
 
@@ -86,7 +100,9 @@
                                 type = NULL, test.args = NULL, conf.level = 0.95,
                                 adj.vars = NULL, tbl = NULL) {
   # if x is NULL, return NULL
-  if (is.null(x)) return(NULL)
+  if (is.null(x)) {
+    return(NULL)
+  }
 
   # calculating test function
   test_fun_result <-
@@ -94,10 +110,12 @@
       withCallingHandlers(
         {
           # calculating p-value
-          do.call(x$fun_to_run, list(data = data, variable = variable, by = by,
-                                     group = group, type = type, test.args = test.args,
-                                     conf.level = conf.level, tbl = tbl,
-                                     adj.vars =  adj.vars))
+          do.call(x$fun_to_run, list(
+            data = data, variable = variable, by = by,
+            group = group, type = type, test.args = test.args,
+            conf.level = conf.level, tbl = tbl,
+            adj.vars = adj.vars
+          ))
         },
         # printing warning and errors as message
         warning = function(w) {
@@ -122,23 +140,28 @@
     )
 
   # saving test function results into list 'x'
-  if (is.data.frame(test_fun_result))
+  if (is.data.frame(test_fun_result)) {
     x$df_result <- test_fun_result
-  # these list inputs were deprecated and deleted from documentation in v1.3.6
+  } # these list inputs were deprecated and deleted from documentation in v1.3.6
   else if (is.list(test_fun_result) &&
-           setequal(names(test_fun_result), c("p", "test")))
+    setequal(names(test_fun_result), c("p", "test"))) {
     x$df_result <-
-    tibble::as_tibble(test_fun_result) %>%
-    dplyr::rename(p.value = .data$p, method = .data$test)
-  else if (rlang::is_scalar_double(test_fun_result))
+      tibble::as_tibble(test_fun_result) %>%
+      dplyr::rename(p.value = .data$p, method = .data$test)
+  } else if (rlang::is_scalar_double(test_fun_result)) {
     x$df_result <- tibble(p.value = test_fun_result, method = NA_character_)
-  else if (is.null(test_fun_result))
+  } else if (is.null(test_fun_result)) {
     x$df_result <- tibble(p.value = NA_real_, method = NA_character_)
+  }
 
   x$df_result <- x$df_result %>%
-    select(any_of(c("estimate", "std.error", "statistic", "parameter",
-                    "conf.low", "conf.high", "p.value", "method")),
-           everything())
+    select(
+      any_of(c(
+        "estimate", "std.error", "statistic", "parameter",
+        "conf.low", "conf.high", "p.value", "method"
+      )),
+      everything()
+    )
   x
 }
 
@@ -157,10 +180,14 @@
 #' @keywords internal
 .assign_test_tbl_summary <- function(data, variable, summary_type, by, group, test) {
   # if user supplied a test, use that test -------------------------------------
-  if (!is.null(test[[variable]])) return(test[[variable]])
+  if (!is.null(test[[variable]])) {
+    return(test[[variable]])
+  }
 
   # if all obs are missing, return NULL ----------------------------------------
-  if (length(data[[variable]]) == sum(is.na(data[[variable]]))) return(NULL)
+  if (length(data[[variable]]) == sum(is.na(data[[variable]]))) {
+    return(NULL)
+  }
 
   # if no test supplied, setting defaults --------------------------------------
   # if by var has 3 or more levels, return error...no default test.
@@ -239,10 +266,14 @@
 #' @keywords internal
 .assign_test_tbl_svysummary <- function(data, variable, summary_type, by, test) {
   # if user supplied a test, use that test -------------------------------------
-  if (!is.null(test[[variable]])) return(test[[variable]])
+  if (!is.null(test[[variable]])) {
+    return(test[[variable]])
+  }
 
   # if all obs are missing, return NULL ----------------------------------------
-  if (length(data$variables[[variable]]) == sum(is.na(data$variables[[variable]]))) return(NULL)
+  if (length(data$variables[[variable]]) == sum(is.na(data$variables[[variable]]))) {
+    return(NULL)
+  }
 
   # for continuous data, default to non-parametric tests
   if (summary_type %in% c("continuous", "continuous2")) {
@@ -261,16 +292,28 @@
 
 .assign_test_add_diff <- function(data, variable, summary_type, by, group, test, adj.vars) {
   # if user supplied a test, use that test -------------------------------------
-  if (!is.null(test[[variable]])) return(test[[variable]])
+  if (!is.null(test[[variable]])) {
+    return(test[[variable]])
+  }
 
-  if (summary_type %in% c("continuous", "continuous2") && is.null(group) && is.null(adj.vars)) return("t.test")
-  if (summary_type %in% c("continuous", "continuous2") && is.null(group)) return("ancova")
-  if (summary_type %in% "dichotomous" && is.null(group) && is.null(adj.vars)) return("prop.test")
+  if (summary_type %in% c("continuous", "continuous2") && is.null(group) && is.null(adj.vars)) {
+    return("t.test")
+  }
+  if (summary_type %in% c("continuous", "continuous2") && is.null(group)) {
+    return("ancova")
+  }
+  if (summary_type %in% "dichotomous" && is.null(group) && is.null(adj.vars)) {
+    return("prop.test")
+  }
 
-  if (summary_type %in% c("continuous", "continuous2") && !is.null(group)) return("ancova_lme4")
+  if (summary_type %in% c("continuous", "continuous2") && !is.null(group)) {
+    return("ancova_lme4")
+  }
 
-  glue("There is no default test for variable '{variable}'. Please specify method in `test=` ",
-       "or exclude it with `include = -c({variable})`") %>%
+  glue(
+    "There is no default test for variable '{variable}'. Please specify method in `test=` ",
+    "or exclude it with `include = -c({variable})`"
+  ) %>%
     stringr::str_wrap() %>%
     stop(call. = FALSE)
 }

@@ -31,9 +31,11 @@ library(dplyr)
 test_that("vetted_models glmer()", {
   # building models to check
   mod_glmer_lin <- lme4::glmer(response ~ age + trt + grade + (1 | death),
-                               data = trial, family = binomial)
+    data = trial, family = binomial
+  )
   mod_glmer_int <- lme4::glmer(response ~ age + trt * grade + (1 | death),
-                               data = trial, family = binomial)
+    data = trial, family = binomial
+  )
   # 1.  Runs as expected with standard use
   #       - without errors, warnings, messages
   expect_error(

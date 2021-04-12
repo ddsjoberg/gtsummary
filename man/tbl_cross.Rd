@@ -81,7 +81,6 @@ tbl_cross_ex2 <-
   trial \%>\%
   tbl_cross(row = stage, col = trt, percent = "cell") \%>\%
   add_p()
-
 }
 \seealso{
 Other tbl_cross tools: 

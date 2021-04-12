@@ -66,7 +66,7 @@ test_that("no errors/warnings with standard use wit continuous2", {
 
 test_that("no errors/warnings with standard use for tbl_svysummary", {
   t <- trial %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt)
 
   expect_error(t %>% add_n(), NA)
@@ -77,7 +77,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
 
   t <- Titanic %>%
     as.data.frame() %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ Freq) %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~Freq) %>%
     tbl_svysummary(by = Survived)
 
   expect_error(t %>% add_n(
@@ -92,7 +92,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
 
 test_that("no errors/warnings with standard use for tbl_svysummary with continuous2", {
   t <- trial %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2")
 
   expect_error(t %>% add_n(), NA)
@@ -103,7 +103,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
 
   t <- Titanic %>%
     as.data.frame() %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ Freq) %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~Freq) %>%
     tbl_svysummary(by = Survived, type = all_continuous() ~ "continuous2")
 
   expect_error(t %>% add_n(
@@ -178,5 +178,3 @@ test_that("add_n.tbl_regression", {
     tbl %>% add_n(location = c("label", "level")), NA
   )
 })
-
-

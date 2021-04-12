@@ -40,9 +40,9 @@
 #'   tbl_strata(
 #'     strata = grade,
 #'     .tbl_fun =
-#'       ~.x %>%
-#'       tbl_summary(by = trt, missing = "no") %>%
-#'       add_n()
+#'       ~ .x %>%
+#'         tbl_summary(by = trt, missing = "no") %>%
+#'         add_n()
 #'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -51,14 +51,17 @@
 
 tbl_strata <- function(data, strata, .tbl_fun, ..., .sep = ", ", .combine_with = c("tbl_merge", "tbl_stack")) {
   # checking inputs ------------------------------------------------------------
-  if (!is.data.frame(data) && !is_survey(data))
+  if (!is.data.frame(data) && !is_survey(data)) {
     abort("`data=` must be a data frame or survey object.")
+  }
   .combine_with <- match.arg(.combine_with)
 
   # selecting stratum ----------------------------------------------------------
   strata <-
     select(
-      switch(is_survey(data), data$variables) %||% data, # select from data frame
+      switch(is_survey(data),
+        data$variables
+      ) %||% data, # select from data frame
       {{ strata }}
     ) %>%
     names()
@@ -75,15 +78,17 @@ tbl_strata <- function(data, strata, .tbl_fun, ..., .sep = ", ", .combine_with =
     rowwise() %>%
     mutate(
       header =
-        paste(!!!syms(names(new_strata_names)), sep = .sep) %>%
-        {ifelse(.env$.combine_with == "tbl_merge", paste0("**", ., "**"), .)}
+        paste(!!!syms(names(new_strata_names)), sep = .sep) %>% {
+          ifelse(.env$.combine_with == "tbl_merge", paste0("**", ., "**"), .)
+        }
     )
 
   # combining tbls -------------------------------------------------------------
-  if (.combine_with == "tbl_merge")
+  if (.combine_with == "tbl_merge") {
     tbl <- tbl_merge(tbls = df_tbls$tbl, tab_spanner = df_tbls$header)
-  else if (.combine_with == "tbl_stack")
+  } else if (.combine_with == "tbl_stack") {
     tbl <- tbl_stack(tbls = df_tbls$tbl, group_header = df_tbls$header)
+  }
 
   # return tbl -----------------------------------------------------------------
   tbl$df_strata <- df_tbls %>% select(starts_with("strata_"), .data$header)
@@ -93,10 +98,13 @@ tbl_strata <- function(data, strata, .tbl_fun, ..., .sep = ", ", .combine_with =
 
 nest_df_and_svy <- function(data, strata) {
   # if data frame, return nested tibble
-  if (is.data.frame(data)) return(nest(data, data = -all_of(.env$strata)))
+  if (is.data.frame(data)) {
+    return(nest(data, data = -all_of(.env$strata)))
+  }
 
-  if (length(strata) > 1)
+  if (length(strata) > 1) {
     abort("survey objects allow for a single stratifying variable.")
+  }
 
   # if survey object, construct a nested tibble
   tibble(strata_var = pluck(data, "variables", strata) %>% unique()) %>%

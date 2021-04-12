@@ -31,37 +31,49 @@ library(dplyr)
 test_that("vetted_models geeglm()", {
   # building models to check
   mod_geeglm_lin <- geepack::geeglm(marker ~ age + trt + grade,
-                                    data = na.omit(trial), id = death)
+    data = na.omit(trial), id = death
+  )
   mod_geeglm_int <- geepack::geeglm(marker ~ age + trt * grade,
-                                    data = na.omit(trial), id = death)
+    data = na.omit(trial), id = death
+  )
   mod_geeglm_log <- geepack::geeglm(response ~ age + trt + grade,
-                                    data = na.omit(trial), family = binomial,
-                                    id = death)
+    data = na.omit(trial), family = binomial,
+    id = death
+  )
   # 1.  Runs as expected with standard use
   #       - without errors, warnings, messages
   expect_error(
     tbl_geeglm_lin <- tbl_regression(mod_geeglm_lin,
-                                     label = list(age ~ "Age",
-                                                  trt ~ "Chemotherapy Treatment",
-                                                  grade ~ "Grade")), NA
+      label = list(
+        age ~ "Age",
+        trt ~ "Chemotherapy Treatment",
+        grade ~ "Grade"
+      )
+    ), NA
   )
   expect_warning(
     tbl_geeglm_lin, NA
   )
   expect_error(
     tbl_geeglm_int <- tbl_regression(mod_geeglm_int,
-                                     label = list(age ~ "Age",
-                                                  trt ~ "Chemotherapy Treatment",
-                                                  grade ~ "Grade")), NA
+      label = list(
+        age ~ "Age",
+        trt ~ "Chemotherapy Treatment",
+        grade ~ "Grade"
+      )
+    ), NA
   )
   expect_warning(
     tbl_geeglm_int, NA
   )
   expect_error(
     tbl_geeglm_log <- tbl_regression(mod_geeglm_log,
-                                     label = list(age ~ "Age",
-                                                  trt ~ "Chemotherapy Treatment",
-                                                  grade ~ "Grade")), NA
+      label = list(
+        age ~ "Age",
+        trt ~ "Chemotherapy Treatment",
+        grade ~ "Grade"
+      )
+    ), NA
   )
   expect_warning(
     tbl_geeglm_log, NA
@@ -173,7 +185,9 @@ test_that("vetted_models geeglm()", {
   expect_equal(
     tbl_geeglm_log3$table_body %>% filter(variable == "trt") %>% pull(p.value),
     update(mod_geeglm_log, formula. = . ~ . - trt) %>%
-      {anova(mod_geeglm_log, .)} %>%
+      {
+        anova(mod_geeglm_log, .)
+      } %>%
       as.data.frame() %>%
       pull(`P(>|Chi|)`),
     ignore_attr = TRUE
@@ -186,8 +200,10 @@ test_that("vetted_models geeglm()", {
       tbl_uvregression(
         y = response,
         method = geepack::geeglm,
-        method.args = list(family = binomial,
-                           id = death),
+        method.args = list(
+          family = binomial,
+          id = death
+        ),
         include = -death
       ),
     NA
@@ -197,8 +213,10 @@ test_that("vetted_models geeglm()", {
       tbl_uvregression(
         y = response,
         method = geepack::geeglm,
-        method.args = list(family = binomial,
-                           id = death),
+        method.args = list(
+          family = binomial,
+          id = death
+        ),
         include = -death
       ),
     NA

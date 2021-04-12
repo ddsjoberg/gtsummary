@@ -79,22 +79,26 @@ modify_table_styling <- function(x,
                                  text_format = NULL,
                                  undo_text_format = FALSE,
                                  text_interpret = c("md", "html"),
-                                 cols_merge_pattern = NULL
-                                 ) {
+                                 cols_merge_pattern = NULL) {
   updated_call_list <- c(x$call_list, list(modify_table_styling = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
   if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
-  text_interpret <- match.arg(text_interpret) %>% {paste0("gt::", .)}
-  if (!is.null(text_format))
+  text_interpret <- match.arg(text_interpret) %>% {
+    paste0("gt::", .)
+  }
+  if (!is.null(text_format)) {
     text_format <- match.arg(text_format,
-                             choices = c("bold", "italic", "indent"),
-                             several.ok = TRUE)
+      choices = c("bold", "italic", "indent"),
+      several.ok = TRUE
+    )
+  }
   rows <- enquo(rows)
   rows_eval_error <-
     tryCatch(
-      eval_tidy(rows, data = x$table_body) %>%
-      {!is.null(.) && !is.logical(.)},
+      eval_tidy(rows, data = x$table_body) %>% {
+        !is.null(.) && !is.logical(.)
+      },
       error = function(e) TRUE
     )
   if (rows_eval_error) {
@@ -113,7 +117,9 @@ modify_table_styling <- function(x,
     )
 
   # if no columns selected, returning unaltered
-  if (is.null(columns)) return(x)
+  if (is.null(columns)) {
+    return(x)
+  }
 
   # label ----------------------------------------------------------------------
   if (!is.null(label)) {
@@ -207,7 +213,9 @@ modify_table_styling <- function(x,
         undo_text_format = undo_text_format
       ) %>%
       purrr::cross_df() %>%
-      {bind_rows(x$table_styling$text_format, .)}
+      {
+        bind_rows(x$table_styling$text_format, .)
+      }
   }
 
   # missing_symbol -------------------------------------------------------------
@@ -219,15 +227,18 @@ modify_table_styling <- function(x,
         symbol = missing_symbol
       ) %>%
       purrr::cross_df() %>%
-      {bind_rows(x$table_styling$fmt_missing, .)}
+      {
+        bind_rows(x$table_styling$fmt_missing, .)
+      }
   }
 
   # cols_merge_pattern ---------------------------------------------------------
   if (!is.null(cols_merge_pattern)) {
     x <- .modify_cols_merge(x,
-                            column = columns,
-                            rows = !!rows,
-                            pattern = cols_merge_pattern)
+      column = columns,
+      rows = !!rows,
+      pattern = cols_merge_pattern
+    )
   }
 
   # return x -------------------------------------------------------------------
@@ -246,15 +257,19 @@ modify_table_styling <- function(x,
     unlist()
 
   if (!is.na(pattern) && !all(all_columns %in% x$table_styling$header$column)) {
-    paste("All columns specified in `cols_merge_pattern=`",
-          "must be present in `x$table_body`") %>%
+    paste(
+      "All columns specified in `cols_merge_pattern=`",
+      "must be present in `x$table_body`"
+    ) %>%
       abort()
   }
 
   if (!is.na(pattern) && !identical(column, all_columns[1])) {
-    paste("A single column must be passed when using `cols_merge_pattern=`,",
-          "and that column must be the first to appear in the pattern argument.") %>%
-    abort()
+    paste(
+      "A single column must be passed when using `cols_merge_pattern=`,",
+      "and that column must be the first to appear in the pattern argument."
+    ) %>%
+      abort()
   }
 
   x$table_styling$cols_merge <-
@@ -263,9 +278,11 @@ modify_table_styling <- function(x,
     filter(!.data$column %in% .env$column) %>%
     # append new merge instructions
     bind_rows(
-      tibble(column = column,
-             rows = list(rows),
-             pattern = pattern)
+      tibble(
+        column = column,
+        rows = list(rows),
+        pattern = pattern
+      )
     )
 
   # hiding all but the first column

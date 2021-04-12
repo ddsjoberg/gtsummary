@@ -33,7 +33,7 @@ test_that("no errors/warnings with standard use for continuous2", {
 
 test_that("no errors/warnings with standard use for tbl_svysummary", {
   tbl <- trial %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt)
 
   expect_error(tbl %>% add_stat_label(), NA)
@@ -45,7 +45,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
 
 test_that("no errors/warnings with standard use for tbl_svysummary with continuous2", {
   tbl <- trial %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2")
 
   expect_error(tbl %>% add_stat_label(), NA)

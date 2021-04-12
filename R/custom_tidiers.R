@@ -44,29 +44,31 @@
 #' tbl_stnd <- tbl_regression(mod, tidy_fun = tidy_standardize)
 #' tbl <- tbl_regression(mod)
 #'
-#' if (requireNamespace("effectsize"))
+#' if (requireNamespace("effectsize")) {
 #'   tidy_standardize_ex1 <-
 #'     tbl_merge(
 #'       list(tbl_stnd, tbl),
 #'       tab_spanner = c("**Standardized Model**", "**Original Model**")
 #'     )
+#' }
 #'
 #' # Example 2 ----------------------------------
 #' # use "posthoc" method for coef calculation
-#' if (requireNamespace("parameters"))
+#' if (requireNamespace("parameters")) {
 #'   tidy_standardize_ex2 <-
 #'     tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
+#' }
 #'
 #'
 #' # Example 3 ----------------------------------
 #' # Multiple Imputation using the mice package
 #' set.seed(1123)
-#' if (requireNamespace("mice"))
+#' if (requireNamespace("mice")) {
 #'   pool_and_tidy_mice_ex3 <-
 #'     suppressWarnings(mice::mice(trial, m = 2)) %>%
 #'     with(lm(age ~ marker + grade)) %>%
-#'     tbl_regression() # mice method called that uses `pool_and_tidy_mice()` as tidier
-#'
+#'     tbl_regression()
+#' } # mice method called that uses `pool_and_tidy_mice()` as tidier
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -89,8 +91,9 @@ tidy_standardize <- function(x, exponentiate = FALSE,
 
   # calculating standardize coefs
   std_coef_expr <- expr(effectsize::standardize_parameters(model = x, ci = !!conf.level, !!!dots))
-  if (quiet == FALSE)
+  if (quiet == FALSE) {
     inform(glue("tidy_standardize(): Estimating standardized coefs with\n  `{deparse(std_coef_expr, width.cutoff = 500L)}`"))
+  }
   std_coef <-
     expr(effectsize::standardize_parameters(model = !!x, ci = !!conf.level, !!!dots)) %>%
     eval()
@@ -98,8 +101,10 @@ tidy_standardize <- function(x, exponentiate = FALSE,
   # converting output to broom::tidy format
   tidy <-
     as_tibble(std_coef) %>%
-    select(term = .data$Parameter, estimate = .data$Std_Coefficient,
-           conf.low = .data$CI_low, conf.high = .data$CI_high)
+    select(
+      term = .data$Parameter, estimate = .data$Std_Coefficient,
+      conf.low = .data$CI_low, conf.high = .data$CI_high
+    )
 
   # exponentiate, if requested
   if (exponentiate) {
@@ -122,8 +127,9 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
 
   # calculating bootstrapped coefs
   boot_coef_expr <- expr(parameters::bootstrap_parameters(model = x, ci = !!conf.level, test = "p", !!!dots))
-  if (quiet == FALSE)
+  if (quiet == FALSE) {
     inform(glue("tidy_bootstrap(): Estimating bootstrapped coefs with\n  `{deparse(boot_coef_expr, width.cutoff = 500L)}`"))
+  }
   boot_coef <-
     expr(parameters::bootstrap_parameters(model = !!x, ci = !!conf.level, test = "p", !!!dots)) %>%
     eval()
@@ -131,8 +137,10 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
   # converting output to broom::tidy format
   tidy <-
     as_tibble(boot_coef) %>%
-    select(term = .data$Parameter, estimate = .data$Coefficient,
-           conf.low = .data$CI_low, conf.high = .data$CI_high, p.value = .data$p)
+    select(
+      term = .data$Parameter, estimate = .data$Coefficient,
+      conf.low = .data$CI_low, conf.high = .data$CI_high, p.value = .data$p
+    )
 
   # exponentiate, if requested
   if (exponentiate) {
@@ -149,14 +157,15 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
 #' @export
 pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
   assert_package("mice", "pool_and_tidy_mice()", version = "3.10.0")
-  if(!inherits(x, "mira")) stop("Object `x=` must be of class 'mira'.", call. = FALSE)
+  if (!inherits(x, "mira")) stop("Object `x=` must be of class 'mira'.", call. = FALSE)
 
   dots <- list(...)
 
   # printing code that will run
   mice_expr <- expr(mice::pool(x, !!!pool.args) %>% mice::tidy(!!!dots))
-  if (quiet == FALSE)
+  if (quiet == FALSE) {
     inform(glue("pool_and_tidy_mice(): Tidying mice model with\n  `{deparse(mice_expr, width.cutoff = 500L)}`"))
+  }
 
   # evaluating tidy expression
   expr(mice::pool(!!x, !!!pool.args) %>% mice::tidy(!!!dots)) %>% eval()
@@ -166,13 +175,16 @@ pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
 #' @export
 tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...) {
   broom::tidy(x,
-              conf.int = conf.int,
-              conf.level = conf.level,
-              parametric = TRUE,  ...) %>%
+    conf.int = conf.int,
+    conf.level = conf.level,
+    parametric = TRUE, ...
+  ) %>%
     # exponentiate coefs (GAM tidier does not have an `exponentiate=` argument)
     dplyr::mutate_at(
       vars(any_of(c("estimate", "conf.low", "conf.high"))),
-      ~switch(exponentiate == TRUE, exp(.)) %||% .
+      ~ switch(exponentiate == TRUE,
+        exp(.)
+      ) %||% .
     ) %>%
     dplyr::mutate(parametric = TRUE) %>%
     dplyr::bind_rows(

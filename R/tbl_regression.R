@@ -86,7 +86,6 @@
 #' tbl_regression_ex3 <-
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -162,7 +161,8 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   # checking estimate_fun and pvalue_fun are functions
   if (!purrr::every(list(estimate_fun, pvalue_fun, tidy_fun %||% pvalue_fun), is.function)) {
     stop("Inputs `estimate_fun`, `pvalue_fun`, `tidy_fun` must be functions.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   include <- rlang::enquo(include)
@@ -173,16 +173,18 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   func_inputs <- as.list(environment())
 
   table_body <-
-    tidy_prep(x, tidy_fun = tidy_fun, exponentiate = exponentiate,
-              conf.level = conf.level, intercept = intercept,
-              label = label, show_single_row = !!show_single_row,
-              include = !!include,
-              add_estimate_to_reference_rows = add_estimate_to_reference_rows)
+    tidy_prep(x,
+      tidy_fun = tidy_fun, exponentiate = exponentiate,
+      conf.level = conf.level, intercept = intercept,
+      label = label, show_single_row = !!show_single_row,
+      include = !!include,
+      add_estimate_to_reference_rows = add_estimate_to_reference_rows
+    )
 
   # saving evaluated `label`, `show_single_row`, and `include` -----------------
   func_inputs$label <-
     .formula_list_to_named_list(
-      x =  label,
+      x = label,
       var_info = table_body,
       arg_name = "label"
     )
@@ -222,7 +224,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
       table_body = table_body,
       N = pluck(table_body, "N_obs", 1),
       n = pluck(table_body, "N_obs", 1), # i want to remove this eventually
-      N_event = pluck(table_body, "N_event", 1),      model_obj = x,
+      N_event = pluck(table_body, "N_event", 1), model_obj = x,
       inputs = func_inputs,
       call_list = list(tbl_regression = match.call())
     ) %>%
@@ -234,7 +236,8 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   # setting column headers, and print instructions
   tidy_columns_to_report <-
     get_theme_element("tbl_regression-chr:tidy_columns",
-                      default = c("conf.low", "conf.high", "p.value")) %>%
+      default = c("conf.low", "conf.high", "p.value")
+    ) %>%
     union("estimate") %>%
     intersect(names(table_body))
 
@@ -246,7 +249,8 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
       tidy_columns_to_report = tidy_columns_to_report,
       estimate_fun = estimate_fun,
       pvalue_fun = pvalue_fun,
-      conf.level = conf.level)
+      conf.level = conf.level
+    )
 
   # running any additional mods ------------------------------------------------
   x <-

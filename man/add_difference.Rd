@@ -74,11 +74,15 @@ along with the difference confidence interval and p-value.
 add_difference_ex1 <-
   trial \%>\%
   select(trt, age, marker, response, death) \%>\%
-  tbl_summary(by = trt,
-              statistic =
-                list(all_continuous() ~ "{mean} ({sd})",
-                     all_dichotomous() ~ "{p}\%"),
-              missing = "no") \%>\%
+  tbl_summary(
+    by = trt,
+    statistic =
+      list(
+        all_continuous() ~ "{mean} ({sd})",
+        all_dichotomous() ~ "{p}\%"
+      ),
+    missing = "no"
+  ) \%>\%
   add_n() \%>\%
   add_difference()
 

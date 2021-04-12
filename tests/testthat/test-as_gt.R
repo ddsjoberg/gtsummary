@@ -5,11 +5,10 @@ test_that("tbl_summary", {
 
   expect_error(
     tbl_summary(trial[c("trt", "age")]) %>%
-      modify_table_styling(columns = label, footnote =  "test footnote", rows = variable == "age") %>%
+      modify_table_styling(columns = label, footnote = "test footnote", rows = variable == "age") %>%
       as_gt(),
     NA
   )
-
 })
 
 test_that("tbl_summary", {
@@ -30,4 +29,3 @@ test_that("tbl_survfit", {
 
   expect_error(tbl_survfit(fit1, times = c(12, 24), label_header = "**{time} Months**") %>% as_gt(), NA)
 })
-

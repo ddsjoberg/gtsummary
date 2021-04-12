@@ -32,11 +32,12 @@ The \code{plot()} function extracts \code{x$table_body} and passes the it to
 \lifecycle{experimental}
 }
 \examples{
-if (requireNamespace("GGally"))
+if (requireNamespace("GGally")) {
   glm(response ~ marker + grade, trial, family = binomial) \%>\%
     tbl_regression(
       add_estimate_to_reference_rows = TRUE,
       exponentiate = TRUE
     ) \%>\%
     plot()
+}
 }

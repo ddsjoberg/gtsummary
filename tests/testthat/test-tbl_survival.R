@@ -23,17 +23,17 @@ test_that("no errors/warnings with stratified variable", {
   # using with `modify_table_header()`
   expect_error(
     tbl1 %>%
-    modify_table_header(
-      column = estimate,
-      label = "**NEW LABEL**",
-      fmt_fun = function(x) style_number(100 * x),
-      footnote = "test footnote",
-      footnote_abbrev = "SE = Standard Error",
-      align = "left",
-      missing_emdash = "variable == 'trt'",
-      bold = "row_type == 'label'",
-      italic = "row_type != 'label'",
-    ),
+      modify_table_header(
+        column = estimate,
+        label = "**NEW LABEL**",
+        fmt_fun = function(x) style_number(100 * x),
+        footnote = "test footnote",
+        footnote_abbrev = "SE = Standard Error",
+        align = "left",
+        missing_emdash = "variable == 'trt'",
+        bold = "row_type == 'label'",
+        italic = "row_type != 'label'",
+      ),
     NA
   )
 })
@@ -56,4 +56,3 @@ test_that("no errors/warnings with no stratified variable", {
     NA
   )
 })
-

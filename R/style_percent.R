@@ -17,12 +17,13 @@
 #' style_percent(percent_vals)
 #' style_percent(percent_vals, symbol = TRUE, digits = 1)
 style_percent <- function(x, symbol = FALSE, digits = 0, big.mark = NULL, decimal.mark = NULL, ...) {
-
   y <- dplyr::case_when(
     x * 100 >= 10 ~ style_number(x * 100, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
     x * 100 >= 10^(-(digits + 1)) ~ style_number(x * 100, digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...),
-    x > 0 ~ paste0("<", style_number(x = 10^(-(digits + 1)), digits = digits + 1, big.mark = big.mark,
-                                     decimal.mark = decimal.mark, ...)),
+    x > 0 ~ paste0("<", style_number(
+      x = 10^(-(digits + 1)), digits = digits + 1, big.mark = big.mark,
+      decimal.mark = decimal.mark, ...
+    )),
     x == 0 ~ "0"
   )
 

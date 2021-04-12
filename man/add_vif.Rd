@@ -32,16 +32,18 @@ Function uses \code{car::vif()} to calculate the VIF.
 
 \examples{
 # Example 1 ----------------------------------
-if (requireNamespace("car"))
+if (requireNamespace("car")) {
   add_vif_ex1 <-
     lm(age ~ grade + marker, trial) \%>\%
     tbl_regression() \%>\%
     add_vif()
+}
 
 # Example 2 ----------------------------------
-if (requireNamespace("car"))
+if (requireNamespace("car")) {
   add_vif_ex2 <-
     lm(age ~ grade + marker, trial) \%>\%
     tbl_regression() \%>\%
     add_vif(c("aGVIF", "df"))
+}
 }

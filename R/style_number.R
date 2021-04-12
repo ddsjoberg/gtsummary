@@ -24,12 +24,14 @@ style_number <- function(x, digits = 0, big.mark = NULL, decimal.mark = NULL,
   decimal.mark <-
     decimal.mark %||%
     get_theme_element("style_number-arg:decimal.mark",
-                      default = getOption("OutDec", default = "."))
+      default = getOption("OutDec", default = ".")
+    )
   big.mark <-
     big.mark %||%
     get_theme_element("style_number-arg:big.mark",
-                      # if decimal is a comma, then making big.mark a thin space, otherwise a comma
-                      default = ifelse(identical(decimal.mark, ","), "\U2009", ","))
+      # if decimal is a comma, then making big.mark a thin space, otherwise a comma
+      default = ifelse(identical(decimal.mark, ","), "\U2009", ",")
+    )
 
   digits <- rep(digits, length.out = length(x))
 
@@ -38,8 +40,10 @@ style_number <- function(x, digits = 0, big.mark = NULL, decimal.mark = NULL,
       x, digits,
       function(.x, .y) {
         round(.x * scale, digits = .y) %>%
-        format(big.mark = big.mark, decimal.mark = decimal.mark, nsmall = .y,
-               scientific = FALSE, trim = TRUE, ...)
+          format(
+            big.mark = big.mark, decimal.mark = decimal.mark, nsmall = .y,
+            scientific = FALSE, trim = TRUE, ...
+          )
       }
     )
   ret[is.na(x)] <- NA_character_

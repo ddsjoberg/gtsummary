@@ -47,7 +47,7 @@ add_q_ex1 <-
   add_q()
 
 # Example 2 ----------------------------------
-if (requireNamespace("car"))
+if (requireNamespace("car")) {
   add_q_ex2 <-
     trial[c("trt", "age", "grade", "response")] \%>\%
     tbl_uvregression(
@@ -58,6 +58,7 @@ if (requireNamespace("car"))
     ) \%>\%
     add_global_p() \%>\%
     add_q()
+}
 }
 \seealso{
 Other tbl_summary tools: 

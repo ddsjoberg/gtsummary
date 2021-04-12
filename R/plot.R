@@ -15,13 +15,14 @@
 #' @name plot
 #'
 #' @examples
-#' if (requireNamespace("GGally"))
+#' if (requireNamespace("GGally")) {
 #'   glm(response ~ marker + grade, trial, family = binomial) %>%
 #'     tbl_regression(
 #'       add_estimate_to_reference_rows = TRUE,
 #'       exponentiate = TRUE
 #'     ) %>%
 #'     plot()
+#' }
 NULL
 
 #' @rdname plot
@@ -32,10 +33,12 @@ plot.tbl_regression <- function(x,
   assert_package("GGally", fn = "plot.tbl_regression()", version = "2.1.0")
 
   df_coefs <- x$table_body
-  if (isTRUE(remove_header_rows))
+  if (isTRUE(remove_header_rows)) {
     df_coefs <- df_coefs %>% filter(!.data$header_row %in% TRUE)
-  if (isTRUE(remove_reference_rows))
+  }
+  if (isTRUE(remove_reference_rows)) {
     df_coefs <- df_coefs %>% filter(!.data$reference_row %in% TRUE)
+  }
 
   df_coefs %>%
     GGally::ggcoef_plot(exponentiate = x$inputs$exponentiate, ...)

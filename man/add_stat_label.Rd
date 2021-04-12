@@ -93,7 +93,6 @@ add_stat_label_ex3 <-
     statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
   ) \%>\%
   add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
-
 }
 \seealso{
 Other tbl_summary tools: 

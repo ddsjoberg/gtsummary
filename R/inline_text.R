@@ -51,30 +51,36 @@ inline_text.gtsummary <- function(x, variable,
   # variable selection ---------------------------------------------------------
   variable <-
     .select_to_varnames({{ variable }},
-                        var_info = x$table_body,
-                        arg_name = "variable",
-                        select_single = TRUE)
+      var_info = x$table_body,
+      arg_name = "variable",
+      select_single = TRUE
+    )
 
   df_gtsummary <- filter(df_gtsummary, .data$variable %in% .env$variable)
 
   # level selection ------------------------------------------------------------
   level <- rlang::enquo(level)
   level_is_null <- tryCatch(is.null(eval_tidy(level)), error = function(e) FALSE)
-  if (!level_is_null && "" %in% df_gtsummary$label)
-    paste("There is a blank level, which may cause issues selecting",
-          "the specified value. Blank levels cannot be selected.") %>%
-    inform()
+  if (!level_is_null && "" %in% df_gtsummary$label) {
+    paste(
+      "There is a blank level, which may cause issues selecting",
+      "the specified value. Blank levels cannot be selected."
+    ) %>%
+      inform()
+  }
 
   # if level not provided, keep the first row
-  if (level_is_null) df_gtsummary <- filter(df_gtsummary, dplyr::row_number() == 1)
-  # if there is a level, drop first label row, keeping the levels only
+  if (level_is_null) {
+    df_gtsummary <- filter(df_gtsummary, dplyr::row_number() == 1)
+  } # if there is a level, drop first label row, keeping the levels only
   else {
     df_gtsummary <- filter(df_gtsummary, dplyr::row_number() > 1)
     level <-
       .select_to_varnames(!!level,
-                          var_info = df_gtsummary$label,
-                          arg_name = "level",
-                          select_single = TRUE)
+        var_info = df_gtsummary$label,
+        arg_name = "level",
+        select_single = TRUE
+      )
     df_gtsummary <- filter(df_gtsummary, .data$label %in% .env$level)
   }
 
@@ -84,33 +90,41 @@ inline_text.gtsummary <- function(x, variable,
   # cell/pattern selection -----------------------------------------------------
   column <- rlang::enquo(column)
   column_is_null <- tryCatch(is.null(eval_tidy(column)), error = function(e) FALSE)
-  if (!column_is_null)
+  if (!column_is_null) {
     column <-
-    .select_to_varnames(!!column,
-                        data = df_gtsummary,
-                        arg_name = "column",
-                        select_single = TRUE)
+      .select_to_varnames(!!column,
+        data = df_gtsummary,
+        arg_name = "column",
+        select_single = TRUE
+      )
+  }
 
   # check pattern argument input
-  if (!is.null(pattern) && !rlang::is_string(pattern))
+  if (!is.null(pattern) && !rlang::is_string(pattern)) {
     abort("`pattern=` argument must be a string.")
+  }
 
   # if column selected and not pattern, return column
-  if (!column_is_null && is.null(pattern))
+  if (!column_is_null && is.null(pattern)) {
     return(dplyr::pull(df_gtsummary, all_of(column)))
+  }
 
   # if no column and pattern, return pattern
-  if (column_is_null && !is.null(pattern))
-    return(glue::glue_data(df_gtsummary, pattern)  %>% as.character())
+  if (column_is_null && !is.null(pattern)) {
+    return(glue::glue_data(df_gtsummary, pattern) %>% as.character())
+  }
 
   # if both column and pattern, grab column stats from meta_data$df_stats
   if (!column_is_null && !is.null(pattern)) {
     if (is.null(x$meta_data) || !"df_stats" %in% names(x$meta_data) ||
-        !all(c("label", "col_name") %in% names(x$meta_data$df_stats[[1]])))
-      paste("When both `column=` and `pattern=` are specified, the gtsummary",
-            "object must have a `x$meta_data` table with column 'df_stats',",
-            "and the 'df_stats' data frame must have columns 'label' and 'col_name'.") %>%
-      abort()
+      !all(c("label", "col_name") %in% names(x$meta_data$df_stats[[1]]))) {
+      paste(
+        "When both `column=` and `pattern=` are specified, the gtsummary",
+        "object must have a `x$meta_data` table with column 'df_stats',",
+        "and the 'df_stats' data frame must have columns 'label' and 'col_name'."
+      ) %>%
+        abort()
+    }
 
     # selecting df_stats for the variable selected
     df_stats <-
@@ -119,10 +133,13 @@ inline_text.gtsummary <- function(x, variable,
       purrr::pluck("df_stats", 1)
 
     # subetting df_stats to the column selected
-    if (!column %in% df_stats$col_name)
-      paste("When both `column=` and `pattern=` are specified, the column",
-            "must be one of", quoted_list(unique(df_stats$col_name))) %>%
-      abort()
+    if (!column %in% df_stats$col_name) {
+      paste(
+        "When both `column=` and `pattern=` are specified, the column",
+        "must be one of", quoted_list(unique(df_stats$col_name))
+      ) %>%
+        abort()
+    }
     df_stats <-
       df_stats %>%
       filter(.data$col_name %in% .env$column)
@@ -138,8 +155,9 @@ inline_text.gtsummary <- function(x, variable,
   }
 
   # must select column or pattern
-  if (column_is_null && is.null(pattern))
+  if (column_is_null && is.null(pattern)) {
     abort("Both `column=` and `pattern=` cannot be NULL")
+  }
 }
 
 # function to apply the fmt_fun attr in df_stats
@@ -147,7 +165,9 @@ inline_text.gtsummary <- function(x, variable,
   map(
     x,
     function(.x) {
-      if (!is.null(attr(.x, "fmt_fun"))) return(unname(do.call(attr(.x, "fmt_fun"), list(.x))))
+      if (!is.null(attr(.x, "fmt_fun"))) {
+        return(unname(do.call(attr(.x, "fmt_fun"), list(.x))))
+      }
       return(.x)
     }
   )
@@ -174,7 +194,9 @@ inline_text.gtsummary <- function(x, variable,
 #' @export
 #' @return A string reporting results from a gtsummary table
 #' @examples
-#' t1 <- trial[c("trt", "grade")] %>% tbl_summary(by = trt) %>% add_p()
+#' t1 <- trial[c("trt", "grade")] %>%
+#'   tbl_summary(by = trt) %>%
+#'   add_p()
 #'
 #' inline_text(t1, variable = grade, level = "I", column = "Drug A", pattern = "{n}/{N} ({p})%")
 #' inline_text(t1, variable = grade, column = "p.value")
@@ -303,7 +325,7 @@ inline_text.tbl_regression <-
       x <- modify_fmt_fun(x, any_of(c("estimate", "conf.low", "conf.high")) ~ estimate_fun)
     }
     x <-
-      modify_table_body(x, ~.x %>% mutate(conf.level = x$inputs$conf.level)) %>%
+      modify_table_body(x, ~ .x %>% mutate(conf.level = x$inputs$conf.level)) %>%
       modify_fmt_fun(conf.level ~ as.numeric)
 
     # call generic inline_text() function ----------------------------------------
@@ -406,13 +428,14 @@ inline_text.tbl_survival <-
     if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
 
     # setting defaults ---------------------------------------------------------
-    if (is.null(estimate_fun))
+    if (is.null(estimate_fun)) {
       estimate_fun <-
         x$table_styling$fmt_fun %>%
         filter(.data$column == "estimate") %>%
         dplyr::slice_tail() %>%
         pull("fmt_fun") %>%
         purrr::pluck(1)
+    }
 
     # input checks -------------------------------------------------------------
     if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
@@ -575,8 +598,9 @@ inline_text.tbl_survfit <-
       purrr::map(
         function(.x) {
           for (v in names(.x)) {
-            if (v %in% c("estimate", "conf.high", "conf.low"))
+            if (v %in% c("estimate", "conf.high", "conf.low")) {
               attr(.x[[v]], "fmt_fun") <- estimate_fun
+            }
           }
           .x
         }
@@ -589,16 +613,24 @@ inline_text.tbl_survfit <-
 
     # selecting column ---------------------------------------------------------
     if (!is.null(time)) {
-      if (!time %in% x$inputs$times)
+      if (!time %in% x$inputs$times) {
         glue("`time=` must be one of {quoted_list(x$inputs$times)}") %>% abort()
-      column <- which(x$inputs$times %in% time) %>% {paste0("stat_", .)}
+      }
+      column <- which(x$inputs$times %in% time) %>% {
+        paste0("stat_", .)
+      }
     }
     if (!is.null(prob)) {
-      if (!prob %in% x$inputs$probs)
+      if (!prob %in% x$inputs$probs) {
         glue("`prob=` must be one of {quoted_list(x$inputs$probs)}") %>% abort()
-      column <- which(x$inputs$probs %in% prob) %>% {paste0("stat_", .)}
+      }
+      column <- which(x$inputs$probs %in% prob) %>% {
+        paste0("stat_", .)
+      }
     }
-    column <- x$table_body %>% select({{ column }}) %>% names()
+    column <- x$table_body %>%
+      select({{ column }}) %>%
+      names()
 
     # select variable
     variable_is_null <- tryCatch(is.null(eval_tidy(variable)), error = function(e) FALSE)
@@ -612,7 +644,7 @@ inline_text.tbl_survfit <-
       column = column,
       pattern = pattern
     )
-}
+  }
 
 
 #' Report statistics from cross table inline
@@ -639,7 +671,6 @@ inline_text.tbl_survfit <-
 #' inline_text(tbl_cross, row_level = "Drug A", col_level = "1")
 #' inline_text(tbl_cross, row_level = "Total", col_level = "1")
 #' inline_text(tbl_cross, col_level = "p.value")
-
 inline_text.tbl_cross <-
   function(x, col_level = NULL, row_level = NULL,
            pvalue_fun = NULL, ...) {
@@ -671,7 +702,9 @@ inline_text.tbl_cross <-
       variable <- "..total.."
       row_level <- NULL
     }
-    else variable <- x$inputs$row
+    else {
+      variable <- x$inputs$row
+    }
 
     # col_level ----------------------------------------------------------------
     col_lookup_table <-
@@ -713,8 +746,10 @@ inline_text.tbl_cross <-
 
     # evaluating inline_text for tbl_summary -----------------------------------
     expr(
-      inline_text.tbl_summary(x, variable = !!variable, level = !!row_level,
-                              column = {{ col_level }}, pvalue_fun = !!pvalue_fun)
+      inline_text.tbl_summary(x,
+        variable = !!variable, level = !!row_level,
+        column = {{ col_level }}, pvalue_fun = !!pvalue_fun
+      )
     ) %>%
       eval()
   }

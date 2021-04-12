@@ -26,16 +26,26 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
       case_when(
         x > 1 ~ NA_character_,
         x < 0 ~ NA_character_,
-        x > 0.9 ~ paste0(">", style_number(x = 0.9, digits = 1, big.mark = big.mark,
-                                            decimal.mark = decimal.mark, ...)),
-        round(x, 1) >= 0.2 ~ style_number(x, digits = 1, big.mark = big.mark,
-                                          decimal.mark = decimal.mark, ...),
-        round(x, 2) >= 0.1 ~ style_number(x, digits = 2, big.mark = big.mark,
-                                          decimal.mark = decimal.mark, ...),
-        x >= 0.001 ~ style_number(x, digits = 3, big.mark = big.mark,
-                                  decimal.mark = decimal.mark, ...),
-        x < 0.001 ~ paste0("<", style_number(x = 0.001, digits = 3, big.mark = big.mark,
-                                             decimal.mark = decimal.mark, ...))
+        x > 0.9 ~ paste0(">", style_number(
+          x = 0.9, digits = 1, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        )),
+        round(x, 1) >= 0.2 ~ style_number(x,
+          digits = 1, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        ),
+        round(x, 2) >= 0.1 ~ style_number(x,
+          digits = 2, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        ),
+        x >= 0.001 ~ style_number(x,
+          digits = 3, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        ),
+        x < 0.001 ~ paste0("<", style_number(
+          x = 0.001, digits = 3, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        ))
       )
   }
   # rounding large p-values to 2 digits
@@ -44,14 +54,22 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
       case_when(
         x > 1 ~ NA_character_,
         x < 0 ~ NA_character_,
-        x > 0.99 ~ paste0(">", style_number(x = 0.99, digits = 2, big.mark = big.mark,
-                                            decimal.mark = decimal.mark, ...)),
-        round(x, 2) >= 0.1 ~ style_number(x, digits = 2, big.mark = big.mark,
-                                          decimal.mark = decimal.mark, ...),
-        x >= 0.001 ~ style_number(x, digits = 3, big.mark = big.mark,
-                                  decimal.mark = decimal.mark, ...),
-        x < 0.001 ~ paste0("<", style_number(x = 0.001, digits = 3, big.mark = big.mark,
-                                             decimal.mark = decimal.mark, ...))
+        x > 0.99 ~ paste0(">", style_number(
+          x = 0.99, digits = 2, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        )),
+        round(x, 2) >= 0.1 ~ style_number(x,
+          digits = 2, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        ),
+        x >= 0.001 ~ style_number(x,
+          digits = 3, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        ),
+        x < 0.001 ~ paste0("<", style_number(
+          x = 0.001, digits = 3, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        ))
       )
   }
 
@@ -61,12 +79,18 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
       case_when(
         x > 1 ~ NA_character_,
         x < 0 ~ NA_character_,
-        x > 0.999 ~ paste0(">", style_number(x = 0.999, digits = 3, big.mark = big.mark,
-                                            decimal.mark = decimal.mark, ...)),
-        x >= 0.001 ~ style_number(x, digits = 3, big.mark = big.mark,
-                                  decimal.mark = decimal.mark, ...),
-        x < 0.001 ~ paste0("<", style_number(x = 0.001, digits = 3, big.mark = big.mark,
-                                             decimal.mark = decimal.mark, ...))
+        x > 0.999 ~ paste0(">", style_number(
+          x = 0.999, digits = 3, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        )),
+        x >= 0.001 ~ style_number(x,
+          digits = 3, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        ),
+        x < 0.001 ~ paste0("<", style_number(
+          x = 0.001, digits = 3, big.mark = big.mark,
+          decimal.mark = decimal.mark, ...
+        ))
       )
   }
   else {

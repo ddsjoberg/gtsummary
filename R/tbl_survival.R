@@ -44,9 +44,11 @@ NULL
 #' @rdname tbl_survival
 #' @export
 tbl_survival <- function(x, ...) {
-  lifecycle::deprecate_warn(when = "1.4.0",
-                            what = "gtsummary::tbl_survival()",
-                            with = "tbl_survfit()")
+  lifecycle::deprecate_warn(
+    when = "1.4.0",
+    what = "gtsummary::tbl_survival()",
+    with = "tbl_survfit()"
+  )
   UseMethod("tbl_survival")
 }
 
@@ -67,8 +69,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   estimate_fun <-
     estimate_fun %||%
     getOption("gtsummary.tbl_survival.estimate_fun") %||%
-    switch(
-      is.null(times) + 1,
+    switch(is.null(times) + 1,
       partial(style_percent, symbol = TRUE),
       partial(style_sigfig, digits = 3)
     )
@@ -95,8 +96,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
   # assigning a function to formating estimates and conf.high and conf.low
   estimate_fun <-
     estimate_fun %||%
-    switch(
-      is.null(times) + 1,
+    switch(is.null(times) + 1,
       partial(style_percent, symbol = TRUE),
       partial(style_sigfig, digits = 3)
     )
@@ -186,7 +186,9 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
     )
 
   # creating object to return
-  level_label <- intersect("level_label", names(table_body)) %>% list() %>% compact()
+  level_label <- intersect("level_label", names(table_body)) %>%
+    list() %>%
+    compact()
   result <- list()
   result[["table_body"]] <- table_body %>% group_by(!!!syms(level_label))
   result[["table_header"]] <- table_header
@@ -418,7 +420,8 @@ table_header_fill_missing <- function(table_header, table_body = NULL) {
   # results in logical vector indicating which cells to indent in table_body
   if (!"indent" %in% names(table_header)) {
     table_header$indent <- ifelse(table_header$column == "label",
-                                  "row_type != 'label'", NA_character_)
+      "row_type != 'label'", NA_character_
+    )
   }
 
   # text_interpret -------------------------------------------------------------
