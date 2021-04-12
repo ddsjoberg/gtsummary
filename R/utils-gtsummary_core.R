@@ -36,14 +36,20 @@
     )
 
   x$table_styling$footnote <-
-    tibble(column = character(), rows = list(),
-           text_interpret = character(), footnote = character())
+    tibble(
+      column = character(), rows = list(),
+      text_interpret = character(), footnote = character()
+    )
   x$table_styling$footnote_abbrev <-
-    tibble(column = character(), rows = list(),
-           text_interpret = character(), footnote = character())
+    tibble(
+      column = character(), rows = list(),
+      text_interpret = character(), footnote = character()
+    )
   x$table_styling$text_format <-
-    tibble(column = "label", rows = list(rlang::expr(.data$row_type %in% c('level', 'missing'))),
-           format_type = "indent", undo_text_format = FALSE)
+    tibble(
+      column = "label", rows = list(rlang::expr(.data$row_type %in% c("level", "missing"))),
+      format_type = "indent", undo_text_format = FALSE
+    )
   x$table_styling$fmt_missing <-
     tibble(column = character(), rows = list(), symbol = character())
   x$table_styling$fmt_fun <-
@@ -72,7 +78,7 @@
     for (styling_element in names(x$table_styling)) {
       # if element is a tibble with a column called 'column'
       if (is.data.frame(x$table_styling[[styling_element]]) &&
-          "column" %in% names(x$table_styling[[styling_element]])) {
+        "column" %in% names(x$table_styling[[styling_element]])) {
         x$table_styling[[styling_element]] <-
           x$table_styling[[styling_element]] %>%
           filter(!.data$column %in% deleted_columns)

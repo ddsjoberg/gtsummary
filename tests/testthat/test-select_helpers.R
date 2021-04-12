@@ -47,16 +47,19 @@ test_that("test-select helpers", {
       )
     ) %>%
       purrr::pluck("meta_data") %>%
-      {.$summary_type == .$var_label} %>%
+      {
+        .$summary_type == .$var_label
+      } %>%
       all()
   )
 
-  stage_variable = "stage"
+  stage_variable <- "stage"
   expect_equal(
     purrr::map_chr(
       c("trt", "grade", stage_variable),
-      ~tbl_summary(trial, by = .x) %>%
-        purrr::pluck("by")),
+      ~ tbl_summary(trial, by = .x) %>%
+        purrr::pluck("by")
+    ),
     c("trt", "grade", stage_variable)
   )
 
@@ -78,8 +81,10 @@ test_that("test-select helpers", {
 
   expect_error(
     tbl_summary(trial, by = trt, include = c(stage, grade, trt)) %>%
-      add_p(test = everything() ~ "fisher.test",
-            test.args = all_tests("fisher.test") ~ list(simulate.p.value = TRUE)),
+      add_p(
+        test = everything() ~ "fisher.test",
+        test.args = all_tests("fisher.test") ~ list(simulate.p.value = TRUE)
+      ),
     NA
   )
 

@@ -31,36 +31,48 @@ library(dplyr)
 test_that("vetted_models glm()", {
   # building models to check
   mod_glm_lin <- glm(marker ~ age + trt + grade,
-                     data = trial)
+    data = trial
+  )
   mod_glm_int <- glm(marker ~ age + trt * grade,
-                     data = trial)
+    data = trial
+  )
   mod_glm_log <- glm(response ~ age + trt + grade,
-                     data = trial, family = binomial)
+    data = trial, family = binomial
+  )
   # 1.  Runs as expected with standard use
   #       - without errors, warnings, messages
   expect_error(
     tbl_glm_lin <- tbl_regression(mod_glm_lin,
-                                  label = list(age ~ "Age",
-                                               trt ~ "Chemotherapy Treatment",
-                                               grade ~ "Grade")), NA
+      label = list(
+        age ~ "Age",
+        trt ~ "Chemotherapy Treatment",
+        grade ~ "Grade"
+      )
+    ), NA
   )
   expect_warning(
     tbl_glm_lin, NA
   )
   expect_error(
     tbl_glm_int <- tbl_regression(mod_glm_int,
-                                  label = list(age ~ "Age",
-                                               trt ~ "Chemotherapy Treatment",
-                                               grade ~ "Grade")), NA
+      label = list(
+        age ~ "Age",
+        trt ~ "Chemotherapy Treatment",
+        grade ~ "Grade"
+      )
+    ), NA
   )
   expect_warning(
     tbl_glm_int, NA
   )
   expect_error(
     tbl_glm_log <- tbl_regression(mod_glm_log,
-                                  label = list(age ~ "Age",
-                                               trt ~ "Chemotherapy Treatment",
-                                               grade ~ "Grade")), NA
+      label = list(
+        age ~ "Age",
+        trt ~ "Chemotherapy Treatment",
+        grade ~ "Grade"
+      )
+    ), NA
   )
   expect_warning(
     tbl_glm_log, NA
@@ -173,7 +185,9 @@ test_that("vetted_models glm()", {
   expect_equal(
     tbl_glm_log3$table_body %>% filter(variable == "trt") %>% pull(p.value),
     update(mod_glm_log, formula. = . ~ . - trt) %>%
-      {anova(mod_glm_log, ., test = "LRT")} %>%
+      {
+        anova(mod_glm_log, ., test = "LRT")
+      } %>%
       as.data.frame() %>%
       slice(n()) %>%
       pull(`Pr(>Chi)`),
@@ -201,4 +215,3 @@ test_that("vetted_models glm()", {
     NA
   )
 })
-

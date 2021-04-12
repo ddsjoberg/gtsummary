@@ -57,7 +57,9 @@ inline reporting in an R markdown document. Detailed examples in the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \examples{
-t1 <- trial[c("trt", "grade")] \%>\% tbl_summary(by = trt) \%>\% add_p()
+t1 <- trial[c("trt", "grade")] \%>\%
+  tbl_summary(by = trt) \%>\%
+  add_p()
 
 inline_text(t1, variable = grade, level = "I", column = "Drug A", pattern = "{n}/{N} ({p})\%")
 inline_text(t1, variable = grade, column = "p.value")

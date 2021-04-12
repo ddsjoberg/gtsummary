@@ -24,8 +24,12 @@
 style_sigfig <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
   # calculating the number of digits to round number
   d <- paste0("round(abs(x), digits = ", digits - digits:1 + 1, ") < 10^",
-              digits - digits:1, " ~ ", digits:1, collapse = ", ") %>%
-    {paste0("case_when(", . ,", TRUE ~ 0)")} %>%
+    digits - digits:1, " ~ ", digits:1,
+    collapse = ", "
+  ) %>%
+    {
+      paste0("case_when(", ., ", TRUE ~ 0)")
+    } %>%
     # converting strings into expressions to run
     parse(text = .) %>%
     eval()

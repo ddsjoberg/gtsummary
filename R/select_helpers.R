@@ -39,22 +39,25 @@ NULL
 #' @rdname select_helpers
 #' @export
 all_continuous <- function(continuous2 = TRUE) {
-  if (continuous2 == TRUE)
+  if (continuous2 == TRUE) {
     return(broom.helpers::all_continuous())
-  else
+  } else {
     return(
       .generic_selector("variable", "var_type",
-                        .data$var_type %in% "continuous",
-                        fun_name = "all_continuous")
+        .data$var_type %in% "continuous",
+        fun_name = "all_continuous"
+      )
     )
+  }
 }
 
 #' @rdname select_helpers
 #' @export
 all_continuous2 <- function() {
   .generic_selector("variable", "var_type",
-                    .data$var_type %in% "continuous2",
-                    fun_name = "all_continuous")
+    .data$var_type %in% "continuous2",
+    fun_name = "all_continuous"
+  )
 }
 
 #' @rdname select_helpers
@@ -69,35 +72,40 @@ all_dichotomous <- broom.helpers::all_dichotomous
 #' @export
 all_tests <- function(tests = NULL) {
   if (is.null(tests) || !is.character(tests) || any(!tests %in% df_add_p_tests$test_name)) {
-    paste("The `tests=` argument must be one or more of the following:",
-          paste(shQuote(df_add_p_tests$test_name), collapse = ", ")) %>%
+    paste(
+      "The `tests=` argument must be one or more of the following:",
+      paste(shQuote(df_add_p_tests$test_name), collapse = ", ")
+    ) %>%
       stop(call. = FALSE)
   }
 
   .generic_selector("variable", "test_name",
-                    .data$test_name %in% .env$tests,
-                    fun_name = "all_tests")
+    .data$test_name %in% .env$tests,
+    fun_name = "all_tests"
+  )
 }
 
 #' @rdname select_helpers
 #' @export
 all_stat_cols <- function(stat_0 = TRUE) {
   # finds stat_0, stat_1, stat_2, etc.
-  if (stat_0 == TRUE)
+  if (stat_0 == TRUE) {
     return(
       union(
         dplyr::matches("^stat_\\d+$"),
         dplyr::matches("^stat_\\d+_.*$")
       )
-                )
+    )
+  }
   # finds stat_1, stat_2, etc.
-  if (stat_0 == FALSE)
+  if (stat_0 == FALSE) {
     return(
       union(
         dplyr::matches("^stat_\\d*[1-9]\\d*$"),
         dplyr::matches("^stat_\\d*[1-9]\\d*_.*$")
       )
     )
+  }
 }
 
 #' @rdname select_helpers
@@ -111,4 +119,3 @@ all_intercepts <- broom.helpers::all_intercepts
 #' @rdname select_helpers
 #' @export
 all_contrasts <- broom.helpers::all_contrasts
-

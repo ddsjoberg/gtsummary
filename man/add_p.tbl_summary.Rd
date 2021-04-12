@@ -79,7 +79,7 @@ add_p_ex1 <-
 
 # Example 2 ----------------------------------
 add_p_ex2 <-
-trial \%>\%
+  trial \%>\%
   select(trt, age, marker) \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
   add_p(

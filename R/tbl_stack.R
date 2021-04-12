@@ -82,7 +82,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
   }
 
   # checking all inputs are class gtsummary
-  if (!purrr::every(tbls, ~inherits(.x, "gtsummary"))) {
+  if (!purrr::every(tbls, ~ inherits(.x, "gtsummary"))) {
     stop("All objects in 'tbls' must be class 'gtsummary'", call. = FALSE)
   }
 
@@ -103,10 +103,11 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
       function(tbl, id) {
         # adding a table ID and group header
         table_body <- pluck(tbl, "table_body") %>% mutate(tbl_id = id)
-        if (!is.null(group_header))
+        if (!is.null(group_header)) {
           table_body <-
             table_body %>%
             mutate(groupname_col = group_header[id])
+        }
 
         table_body %>% select(any_of(c("groupname_col", "tbl_id")), everything())
       }
@@ -117,7 +118,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
   if (identical(quiet, FALSE)) print_stack_differences(tbls)
 
   results$table_styling$header <-
-    map_dfr(tbls, ~pluck(.x, "table_styling", "header")) %>%
+    map_dfr(tbls, ~ pluck(.x, "table_styling", "header")) %>%
     group_by(.data$column) %>%
     filter(dplyr::row_number() == 1) %>%
     ungroup()
@@ -133,11 +134,13 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
             # adding tbl_id to the rows specifications,
             # e.g. data$tbl_id == 1L & .data$row_type != "label"
             df$rows <-
-              map(df$rows, ~add_tbl_id_to_quo(.x, tbls[[i]]$table_body, i))
+              map(df$rows, ~ add_tbl_id_to_quo(.x, tbls[[i]]$table_body, i))
           }
           df %>%
-            mutate_at(vars(any_of(c("column", "text_interpret",
-                                    "footnote", "format_type", "symbol"))), as.character)
+            mutate_at(vars(any_of(c(
+              "column", "text_interpret",
+              "footnote", "format_type", "symbol"
+            ))), as.character)
         }
       )
   }
@@ -147,18 +150,18 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
     results$table_styling$cols_merge <-
       results$table_styling$cols_merge %>%
       tidyr::nest(rows = .data$rows) %>%
-      mutate(rows = map(.data$rows, ~.x$rows %>% unlist()))
+      mutate(rows = map(.data$rows, ~ .x$rows %>% unlist()))
     results$table_styling$cols_merge$rows <-
       map(
         results$table_styling$cols_merge$rows,
-        ~.x %>% purrr::reduce(function(.x1, .y1) expr(!!.x1 | !!.y1))
+        ~ .x %>% purrr::reduce(function(.x1, .y1) expr(!!.x1 | !!.y1))
       )
   }
 
   # take the first non-NULL element from tbls[[.]]
   for (style_type in c("caption", "source_note", "horizontal_line_above")) {
     results$table_styling[[style_type]] <-
-      map(seq_along(tbls), ~pluck(tbls, .x, "table_styling", style_type)) %>%
+      map(seq_along(tbls), ~ pluck(tbls, .x, "table_styling", style_type)) %>%
       purrr::reduce(.f = `%||%`)
   }
 
@@ -185,7 +188,7 @@ print_stack_differences <- function(tbls) {
   tbl_differences <-
     purrr::map2_dfr(
       tbls, seq_len(length(tbls)),
-      ~pluck(.x, "table_styling", "header") %>%
+      ~ pluck(.x, "table_styling", "header") %>%
         mutate(..tbl_id.. = .y)
     ) %>%
     select(.data$..tbl_id.., .data$column, .data$label, .data$spanning_header) %>%
@@ -193,16 +196,20 @@ print_stack_differences <- function(tbls) {
     group_by(.data$column, .data$name) %>%
     mutate(
       new_value = .data$value[1],
-      name_fmt = case_when(name == "label" ~ "Column header",
-                           name == "spanning_header" ~ "Spanning column header")
+      name_fmt = case_when(
+        name == "label" ~ "Column header",
+        name == "spanning_header" ~ "Spanning column header"
+      )
     ) %>%
     filter(.data$new_value != .data$value) %>%
     ungroup() %>%
     arrange(.data$name != "label", .data$name_fmt, .data$..tbl_id..)
 
   if (nrow(tbl_differences) > 0) {
-    paste("Column headers among stacked tables differ. Headers from the first table are used.",
-          "Use {.code quiet = TRUE} to supress this message.") %>%
+    paste(
+      "Column headers among stacked tables differ. Headers from the first table are used.",
+      "Use {.code quiet = TRUE} to supress this message."
+    ) %>%
       stringr::str_wrap() %>%
       cli_alert_info()
 
@@ -218,14 +225,17 @@ print_stack_differences <- function(tbls) {
 }
 
 add_tbl_id_to_quo <- function(x, table_body, tbl_id) {
-  if (eval_tidy(x, data = table_body) %>% is.null()) return(x)
+  if (eval_tidy(x, data = table_body) %>% is.null()) {
+    return(x)
+  }
 
   # if quosure, add tbl_id
-  if (inherits(x, "quosure"))
+  if (inherits(x, "quosure")) {
     return(
       rlang::quo(.data$tbl_id == !!tbl_id & (!!rlang::f_rhs(x))) %>%
         structure(.Environment = attr(x, ".Environment"))
     )
+  }
 
   # if expression, add tbl_id
   expr(.data$tbl_id == !!tbl_id & (!!x))
