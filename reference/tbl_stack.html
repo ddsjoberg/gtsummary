@@ -99,7 +99,7 @@ retained from the first passed gtsummary object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -241,7 +241,6 @@ the length of <code>tbls=</code></p></td>
 <code><a href='tbl_svysummary.html'>tbl_svysummary</a>()</code></p>
 <p>Other tbl_regression tools: 
 <code><a href='add_global_p.html'>add_global_p</a>()</code>,
-<code><a href='add_nevent.tbl_regression.html'>add_nevent.tbl_regression</a>()</code>,
 <code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='combine_terms.html'>combine_terms</a>()</code>,
@@ -251,7 +250,6 @@ the length of <code>tbls=</code></p></td>
 <code><a href='tbl_regression.html'>tbl_regression</a>()</code></p>
 <p>Other tbl_uvregression tools: 
 <code><a href='add_global_p.html'>add_global_p</a>()</code>,
-<code><a href='add_nevent.tbl_uvregression.html'>add_nevent.tbl_uvregression</a>()</code>,
 <code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
@@ -313,8 +311,8 @@ the length of <code>tbls=</code></p></td>
 <span class='va'>row2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tbl_merge.html'>tbl_merge</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>t2</span>, <span class='va'>t4</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>tbl_stack_ex2</span> <span class='op'>&lt;-</span>
   <span class='fu'>tbl_stack</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>row1</span>, <span class='va'>row2</span><span class='op'>)</span>, group_header <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Unadjusted Analysis"</span>, <span class='st'>"Adjusted Analysis"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='color: #BBBB00;'>ℹ</span><span> When tables are stacked, attributes from the first table are used. Use</span>
-#&gt; <span class='message'>  </span><span style='color: #555555;'>`quiet = TRUE`</span><span> to supress this message.</span></div></span></pre>
+</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span><span> Column headers among stacked tables differ. Headers from the first table are</span>
+#&gt; <span class='message'>used. Use </span><span style='color: #262626;background-color: #DADADA;'>`quiet = TRUE`</span><span> to supress this message.</span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -326,7 +324,7 @@ the length of <code>tbls=</code></p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

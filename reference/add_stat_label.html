@@ -97,7 +97,7 @@ each variable in the tbl_summary / tbl_svysummary table." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -205,6 +205,27 @@ label, e.g. <code>label = all_categorical() ~ "No. (%)"</code></p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A <code>tbl_summary</code> or <code>tbl_svysummary</code> object</p>
+    <h2 class="hasAnchor" id="tips"><a class="anchor" href="#tips"></a>Tips</h2>
+
+    
+
+
+<p>When using <code>add_stat_label(location='row')</code> with subsequent <code><a href='tbl_merge.html'>tbl_merge()</a></code>,
+it's important to have somewhat of an understanding of the underlying
+structure of the gtsummary table.
+<code>add_stat_label(location='row')</code> works by adding a new column called
+<code>"stat_label"</code> to <code>x$table_body</code>. The <code>"label"</code> and <code>"stat_label"</code>
+columns are merged when the gtsummary table is printed.
+The <code><a href='tbl_merge.html'>tbl_merge()</a></code> function merges on the <code>"label"</code> column (among others),
+which is typically the first column you see in a gtsummary table.
+Therefore, when you want to merge a table that has run <code>add_stat_label(location='row')</code>
+you need to match the <code>"label"</code> column values before the <code>"stat_column"</code>
+is merged with it.</p>
+<p>For example, the following two tables merge properly<div class="r"></p><pre><span class='va'>tbl1</span> <span class='op'>&lt;-</span> <span class='va'>trial</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>add_stat_label</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>tbl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>marker</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='fu'><a href='tbl_merge.html'>tbl_merge</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>tbl1</span>, <span class='va'>tbl2</span><span class='op'>)</span><span class='op'>)</span>
+</pre><p></div></p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -214,7 +235,7 @@ label, e.g. <code>label = all_categorical() ~ "No. (%)"</code></p></td>
 <p>Example 2</p>
 <p><img src='figures/add_stat_label_ex2.png' width=60% /></p>
 <p>Example 3</p>
-<p><img src='figures/add_stat_label_ex3.png' width=60% /></p>
+<p><img src='figures/add_stat_label_ex3.png' width=45% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary tools: 
@@ -274,7 +295,6 @@ label, e.g. <code>label = all_categorical() ~ "No. (%)"</code></p></td>
     statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"{mean} ({sd})"</span>, <span class='st'>"{min} - {max}"</span><span class='op'>)</span>,
   <span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>add_stat_label</span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>age</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Mean (SD)"</span>, <span class='st'>"Min - Max"</span><span class='op'>)</span><span class='op'>)</span>
-
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -287,7 +307,7 @@ label, e.g. <code>label = all_categorical() ~ "No. (%)"</code></p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

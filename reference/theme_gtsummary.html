@@ -101,7 +101,7 @@ for details." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -179,7 +179,7 @@ for details." />
     </div>
 
     <div class="ref-description">
-    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
 
 The following themes are available to use within the gtsummary package.
 Print theme elements with <code>theme_gtsummary_journal(set_theme = FALSE) %&gt;% print()</code>.
@@ -188,7 +188,7 @@ for details.</p>
     </div>
 
     <pre class="usage"><span class='fu'>theme_gtsummary_journal</span><span class='op'>(</span>
-  journal <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"jama"</span>, <span class='st'>"nejm"</span>, <span class='st'>"lancet"</span><span class='op'>)</span>,
+  journal <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"jama"</span>, <span class='st'>"lancet"</span>, <span class='st'>"nejm"</span>, <span class='st'>"qjecon"</span><span class='op'>)</span>,
   set_theme <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span>
 
@@ -200,8 +200,8 @@ for details.</p>
 <span class='op'>)</span>
 
 <span class='fu'>theme_gtsummary_language</span><span class='op'>(</span>
-  language <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"de"</span>, <span class='st'>"en"</span>, <span class='st'>"es"</span>, <span class='st'>"fr"</span>, <span class='st'>"gu"</span>, <span class='st'>"hi"</span>, <span class='st'>"ja"</span>, <span class='st'>"mr"</span>, <span class='st'>"pt"</span>, <span class='st'>"se"</span>, <span class='st'>"zh-cn"</span>,
-    <span class='st'>"zh-tw"</span><span class='op'>)</span>,
+  language <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"de"</span>, <span class='st'>"en"</span>, <span class='st'>"es"</span>, <span class='st'>"fr"</span>, <span class='st'>"gu"</span>, <span class='st'>"hi"</span>, <span class='st'>"is"</span>, <span class='st'>"ja"</span>, <span class='st'>"kr"</span>, <span class='st'>"mr"</span>, <span class='st'>"pt"</span>, <span class='st'>"se"</span>,
+    <span class='st'>"zh-cn"</span>, <span class='st'>"zh-tw"</span><span class='op'>)</span>,
   decimal.mark <span class='op'>=</span> <span class='cn'>NULL</span>,
   big.mark <span class='op'>=</span> <span class='cn'>NULL</span>,
   iqr.sep <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -214,18 +214,17 @@ for details.</p>
   set_theme <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span>
 
-<span class='fu'>theme_gtsummary_mean_sd</span><span class='op'>(</span>set_theme <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+<span class='fu'>theme_gtsummary_mean_sd</span><span class='op'>(</span>set_theme <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='fu'>theme_gtsummary_eda</span><span class='op'>(</span>set_theme <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>journal</th>
-      <td><p>String indicating the journal theme to follow.</p><ul>
-<li><p><code>"jama"</code> Journal of the American Medical Association</p></li>
-<li><p><code>"nejm"</code> New England Journal of Medicine</p></li>
-<li><p><code>"lancet"</code> The Lancet</p></li>
-</ul></td>
+      <td><p>String indicating the journal theme to follow. One of
+<code><a href='https://rdrr.io/r/base/c.html'>c("jama", "lancet", "nejm", "qjecon")</a></code>. Details below.</p></td>
     </tr>
     <tr>
       <th>set_theme</th>
@@ -235,14 +234,15 @@ When <code>FALSE</code> the named list of theme elements is returned invisibly</
     <tr>
       <th>print_engine</th>
       <td><p>String indicating the print method. Must be one of
-<code>"gt"</code>, <code>"kable"</code>, <code>"kable_extra"</code>, <code>"flextable"</code>, <code>"tibble"</code>#' @export</p></td>
+<code>"gt"</code>, <code>"kable"</code>, <code>"kable_extra"</code>, <code>"flextable"</code>, <code>"tibble"</code></p></td>
     </tr>
     <tr>
       <th>language</th>
       <td><p>String indicating language. Must be one of <code>"de"</code> (German),
 <code>"en"</code> (English), <code>"es"</code> (Spanish), <code>"fr"</code> (French), <code>"gu"</code> (Gujarati),
-<code>"hi"</code> (Hindi), <code>"ja"</code> (Japanese), <code>"mr"</code> (Marathi), <code>"pt"</code> (Portuguese),
-<code>"se"</code> (Swedish), <code>"zh-cn"</code> (Chinese Simplified), <code>"zh-tw"</code> (Chinese Traditional)</p>
+<code>"hi"</code> (Hindi), <code>"is"</code> (Icelandic),<code>"ja"</code> (Japanese), <code>"kr"</code> (Korean),
+<code>"mr"</code> (Marathi), <code>"pt"</code> (Portuguese), <code>"se"</code> (Swedish),
+<code>"zh-c,n"</code> (Chinese Simplified), <code>"zh-tw"</code> (Chinese Traditional)</p>
 <p>If a language is missing a translation for a word or phrase, please feel free
 to reach out on <a href='https://github.com/ddsjoberg/gtsummary/issues'>GitHub</a>
 with the translated text!</p></td>
@@ -284,28 +284,40 @@ will default to an en dash</p></td>
 
 <ul>
 <li><p><code>theme_gtsummary_journal(journal=)</code></p><ul>
-<li><p><code>"jama"</code> The Journal of the American Medical Association</p></li>
-<li><p><code>"nejm"</code> The New England Journal of Medicine</p></li>
-<li><p><code>"lancet"</code> The Lancet</p></li>
+<li><p><code>"jama"</code> <em>The Journal of the American Medical Association</em></p><ul>
+<li><p>Round large p-values to 2 decimal places; separate confidence intervals with <code>"ll to ul"</code>.</p></li>
+<li><p><code><a href='tbl_summary.html'>tbl_summary()</a></code> Doesn't show percent symbol; use em-dash to separate IQR; run <code><a href='add_stat_label.html'>add_stat_label()</a></code></p></li>
+<li><p><code><a href='tbl_regression.html'>tbl_regression()</a></code>/<code><a href='tbl_uvregression.html'>tbl_uvregression()</a></code> show coefficient and CI in same column</p></li>
+</ul></li>
+<li><p><code>"lancet"</code> <em>The Lancet</em></p><ul>
+<li><p>Use mid-point as decimal separator; round large p-values to 2 decimal places; separate confidence intervals with <code>"ll to ul"</code>.</p></li>
+<li><p><code><a href='tbl_summary.html'>tbl_summary()</a></code> Doesn't show percent symbol; use em-dash to separate IQR</p></li>
+</ul></li>
+<li><p><code>"nejm"</code> <em>The New England Journal of Medicine</em></p><ul>
+<li><p>Round large p-values to 2 decimal places; separate confidence intervals with <code>"ll to ul"</code>.</p></li>
+<li><p><code><a href='tbl_summary.html'>tbl_summary()</a></code> Doesn't show percent symbol; use em-dash to separate IQR</p></li>
+</ul></li>
+<li><p><code>"qjecon"</code> <em>The Quarterly Journal of Economics</em> <em><strong>Under Development</strong></em></p><ul>
+<li><p><code><a href='tbl_summary.html'>tbl_summary()</a></code> all percentages rounded to one decimal place</p></li>
+<li><p><code><a href='tbl_regression.html'>tbl_regression()</a></code>/<code><a href='tbl_uvregression.html'>tbl_uvregression()</a></code> add significance stars with <code><a href='add_significance_stars.html'>add_significance_stars()</a></code>; hides CI and p-value from output</p></li>
+</ul></li>
 </ul></li>
 <li><p><code>theme_gtsummary_compact()</code></p><ul>
 <li><p>tables printed with gt, flextable, kableExtra, or huxtable will be compact with smaller font size and reduced cell padding</p></li>
 </ul></li>
 <li><p><code>theme_gtsummary_printer(print_engine=)</code></p><ul>
-<li><p><code>"gt"</code> sets the gt package as the default print engine</p></li>
-<li><p><code>"flextable"</code> sets the flextable package as the default print engine</p></li>
-<li><p><code>"huxtable"</code> sets the huxtable package as the default print engine</p></li>
-<li><p><code>"kable"</code> sets the <code><a href='https://rdrr.io/pkg/knitr/man/kable.html'>knitr::kable()</a></code> function as the default print engine</p></li>
-<li><p><code>"kable_extra"</code> sets the kableExtra package as the default print engine</p></li>
-<li><p><code>"tibble"</code> returns output as tibble</p></li>
+<li><p>Use this theme to permanently change the default printer.</p></li>
 </ul></li>
 <li><p><code>theme_gtsummary_continuous2()</code></p><ul>
 <li><p>Set all continuous variables to summary type <code>"continuous2"</code> by default</p></li>
-<li><p>Use the <code>statistic=</code> argument to set the default continuous variable summary statistics</p></li>
 </ul></li>
 <li><p><code>theme_gtsummary_mean_sd()</code></p><ul>
 <li><p>Set default summary statistics to mean and standard deviation in <code><a href='tbl_summary.html'>tbl_summary()</a></code></p></li>
-<li><p>Set default tests in <code><a href='add_p.tbl_summary.html'>add_p.tbl_summary()</a></code> to t-tests and ANOVA</p></li>
+<li><p>Set default continuous tests in <code><a href='add_p.html'>add_p()</a></code> to t-test and ANOVA</p></li>
+</ul></li>
+<li><p><code>theme_gtsummary_eda()</code></p><ul>
+<li><p>Set all continuous variables to summary type <code>"continuous2"</code> by default</p></li>
+<li><p>In <code><a href='tbl_summary.html'>tbl_summary()</a></code> show the median, mean, IQR, SD, and Range by default</p></li>
 </ul></li>
 </ul>
 
@@ -317,7 +329,7 @@ to create your own themes.</p>
     
 
 <p>Example</p>
-<p><img src='figures/set_gtsummary_theme_ex1.png' width=70% /></p>
+<p><img src='figures/set_gtsummary_theme_ex1.png' width=60% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='http://www.danieldsjoberg.com/gtsummary/articles/themes.html'>Themes vignette</a></p>
@@ -326,14 +338,13 @@ to create your own themes.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Setting JAMA theme for gtsummary</span>
 <span class='fu'>theme_gtsummary_journal</span><span class='op'>(</span><span class='st'>"jama"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Setting `JAMA` theme</span></div><div class='input'><span class='co'># Themes can be combined by including more than one</span>
+</div><div class='output co'>#&gt; <span class='message'>Setting theme `JAMA`</span></div><div class='input'><span class='co'># Themes can be combined by including more than one</span>
 <span class='fu'>theme_gtsummary_compact</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Setting `Compact` theme</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Setting theme `Compact`</span></div><div class='input'>
 <span class='va'>set_gtsummary_theme_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_stat_label.html'>add_stat_label</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='as_gt.html'>as_gt</a></span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># reset gtsummary themes</span>
@@ -350,7 +361,7 @@ to create your own themes.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

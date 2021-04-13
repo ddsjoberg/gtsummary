@@ -100,7 +100,7 @@ formatted summary of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -178,31 +178,99 @@ formatted summary of the results" />
     </div>
 
     <div class="ref-description">
-    <p><a href='https://www.tidyverse.org/lifecycle/#questioning'><img src='figures/lifecycle-questioning.svg' alt='Questioning lifecycle'></a>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a>
 
 Please use <a href='tbl_survfit.html'>tbl_survfit</a>.
 Function takes a <code>survfit</code> object as an argument, and provides a
 formatted summary of the results</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_survival</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tbl_survival</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for survfit</span>
+<span class='fu'>tbl_survival</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  times <span class='op'>=</span> <span class='cn'>NULL</span>,
+  probs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  label <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>probs</span><span class='op'>)</span>, <span class='st'>"{time}"</span>, <span class='st'>"{prob*100}%"</span><span class='op'>)</span>,
+  level_label <span class='op'>=</span> <span class='st'>"{level}, N = {n}"</span>,
+  header_label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  header_estimate <span class='op'>=</span> <span class='cn'>NULL</span>,
+  failure <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  missing <span class='op'>=</span> <span class='st'>"-"</span>,
+  estimate_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A survfit object</p></td>
+      <td><p>A survfit object with a no stratification
+(e.g. <code><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit(Surv(ttdeath, death) ~ 1, trial)</a></code>), or a single stratifying
+variable (e.g. <code><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit(Surv(ttdeath, death) ~ trt, trial)</a></code>)</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed to other methods</p></td>
+      <td><p>Not used</p></td>
+    </tr>
+    <tr>
+      <th>times</th>
+      <td><p>Numeric vector of times for which to return survival probabilities.</p></td>
+    </tr>
+    <tr>
+      <th>probs</th>
+      <td><p>Numeric vector of probabilities with values in (0,1)
+specifying the survival quantiles to return</p></td>
+    </tr>
+    <tr>
+      <th>label</th>
+      <td><p>String defining the label shown for the time or prob column.
+Default is <code>"{time}"</code> or <code>"{prob*100}%"</code>.  The input uses <a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> notation to
+convert the string into a label.  A common label may be <code>"{time} Months"</code>, which
+would resolve to "6 Months" or "12 Months" depending on specified <code>times</code>.</p></td>
+    </tr>
+    <tr>
+      <th>level_label</th>
+      <td><p>Used when survival results are stratified.
+It is a string defining the label shown.  The input uses
+<a href='https://glue.tidyverse.org/reference/glue.html'>glue::glue</a> notation to convert the string into a label.
+The default is <code>"{level}, N = {n}"</code>.  Other information available to
+call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code>, <code>'{n.event.strata}'</code>, and
+<code>'{strata}'</code>. See below for details.</p></td>
+    </tr>
+    <tr>
+      <th>header_label</th>
+      <td><p>String to be displayed as column header.
+Default is <code>'**Time**'</code> when <code>time</code> is specified, and
+<code>'**Quantile**'</code> when <code>probs</code> is specified.</p></td>
+    </tr>
+    <tr>
+      <th>header_estimate</th>
+      <td><p>String to be displayed as column header of the Kaplan-Meier
+estimate.  Default is <code>'**Probability**'</code> when <code>time</code> is specified, and
+<code>'**Time**'</code> when <code>probs</code> is specified.</p></td>
+    </tr>
+    <tr>
+      <th>failure</th>
+      <td><p>Calculate failure probabilities rather than survival probabilities.
+Default is <code>FALSE</code>.  Does NOT apply to survival quantile requests</p></td>
+    </tr>
+    <tr>
+      <th>missing</th>
+      <td><p>String indicating what to replace missing confidence
+limits with in output.  Default is <code>missing = "-"</code></p></td>
+    </tr>
+    <tr>
+      <th>estimate_fun</th>
+      <td><p>Function used to format the estimate and confidence
+limits. The default is <code><a href='style_percent.html'>style_percent(x, symbol = TRUE)</a></code> for survival
+probabilities, and
+<code><a href='style_sigfig.html'>style_sigfig(x, digits = 3)</a></code> for time estimates.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><a href='tbl_survival.survfit.html'>tbl_survival.survfit</a></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -215,7 +283,7 @@ formatted summary of the results</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

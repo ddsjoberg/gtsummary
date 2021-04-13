@@ -96,7 +96,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -199,17 +199,17 @@
       <td><p>List of formulas specifying statistical tests to perform,
 e.g. <code><a href='https://rdrr.io/r/base/list.html'>list(all_continuous() ~ "svy.t.test", all_categorical() ~ "svy.wald.test")</a></code>.
 Options include</p><ul>
-<li><p><code>"svy.t.test"</code> for a t-test adapted to complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyttest.html'>survey::svyttest</a>),</p></li>
-<li><p><code>"svy.wilcox.test"</code> for a Wilcoxon rank-sum test for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
-<li><p><code>"svy.kruskal.test"</code> for a Kruskal-Wallis rank-sum test for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
-<li><p><code>"svy.vanderwaerden.test"</code> for a van der Waerden's normal-scores test for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
-<li><p><code>"svy.median.test"</code> for a Mood's test for the median for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a>),</p></li>
-<li><p><code>"svy.chisq.test"</code> for a Chi-squared test with Rao &amp; Scott's second-order correction (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
-<li><p><code>"svy.adj.chisq.test"</code> for a Chi-squared test adjusted by a design effect estimate (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
-<li><p><code>"svy.wald.test"</code> for a Wald test of independence for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
-<li><p><code>"svy.adj.wald.test"</code> for an adjusted Wald test of independence for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
-<li><p><code>"svy.lincom.test"</code> for a test of independence using the exact asymptotic distribution for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
-<li><p><code>"svy.saddlepoint.test"</code> for a test of independence using a saddlepoint approximation for complex survey samples (cf. <a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a>),</p></li>
+<li><p><code>"svy.t.test"</code> for a t-test adapted to complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svyttest.html'>survey::svyttest</a></code>),</p></li>
+<li><p><code>"svy.wilcox.test"</code> for a Wilcoxon rank-sum test for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a></code>),</p></li>
+<li><p><code>"svy.kruskal.test"</code> for a Kruskal-Wallis rank-sum test for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a></code>),</p></li>
+<li><p><code>"svy.vanderwaerden.test"</code> for a van der Waerden's normal-scores test for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a></code>),</p></li>
+<li><p><code>"svy.median.test"</code> for a Mood's test for the median for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svyranktest.html'>survey::svyranktest</a></code>),</p></li>
+<li><p><code>"svy.chisq.test"</code> for a Chi-squared test with Rao &amp; Scott's second-order correction (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
+<li><p><code>"svy.adj.chisq.test"</code> for a Chi-squared test adjusted by a design effect estimate (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
+<li><p><code>"svy.wald.test"</code> for a Wald test of independence for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
+<li><p><code>"svy.adj.wald.test"</code> for an adjusted Wald test of independence for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
+<li><p><code>"svy.lincom.test"</code> for a test of independence using the exact asymptotic distribution for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
+<li><p><code>"svy.saddlepoint.test"</code> for a test of independence using a saddlepoint approximation for complex survey samples (cf. <code><a href='https://rdrr.io/pkg/survey/man/svychisq.html'>survey::svychisq</a></code>),</p></li>
 </ul>
 
 <p>Tests default to <code>"svy.wilcox.test"</code> for continuous variables and <code>"svy.chisq.test"</code>
@@ -292,8 +292,10 @@ use <code>test.args = all_tests("t.test") ~ list(var.equal = TRUE)</code></p></t
 <span class='va'>add_p_svysummary_ex3</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='tbl_svysummary.html'>tbl_svysummary</a></span><span class='op'>(</span><span class='va'>d_clust</span>, by <span class='op'>=</span> <span class='va'>both</span>, include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>cname</span>, <span class='va'>api00</span>, <span class='va'>api99</span>, <span class='va'>both</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span>
-    test <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"svy.t.test"</span>,
-                <span class='fu'><a href='select_helpers.html'>all_categorical</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"svy.wald.test"</span><span class='op'>)</span>
+    test <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"svy.t.test"</span>,
+      <span class='fu'><a href='select_helpers.html'>all_categorical</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"svy.wald.test"</span>
+    <span class='op'>)</span>
   <span class='op'>)</span>
 </div></pre>
   </div>
@@ -307,7 +309,7 @@ use <code>test.args = all_tests("t.test") ~ list(var.equal = TRUE)</code></p></t
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

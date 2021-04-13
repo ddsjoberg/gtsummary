@@ -53,9 +53,7 @@
 
 
 <meta property="og:title" content="Create a table of summary statistics from a survey object — tbl_svysummary" />
-<meta property="og:description" content="
-
-The tbl_svysummary function calculates descriptive statistics for
+<meta property="og:description" content="The tbl_svysummary function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables taking into account survey weights and design.
 It is similar to tbl_summary()." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
@@ -100,7 +98,7 @@ It is similar to tbl_summary()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -178,9 +176,7 @@ It is similar to tbl_summary()." />
     </div>
 
     <div class="ref-description">
-    <p><a href='https://www.tidyverse.org/lifecycle/#experimental'><img src='figures/lifecycle-experimental.svg' alt='Experimental lifecycle'></a>
-
-The <code>tbl_svysummary</code> function calculates descriptive statistics for
+    <p>The <code>tbl_svysummary</code> function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables taking into account survey weights and design.
 It is similar to <code><a href='tbl_summary.html'>tbl_summary()</a></code>.</p>
     </div>
@@ -197,7 +193,7 @@ It is similar to <code><a href='tbl_summary.html'>tbl_summary()</a></code>.</p>
   missing_text <span class='op'>=</span> <span class='cn'>NULL</span>,
   sort <span class='op'>=</span> <span class='cn'>NULL</span>,
   percent <span class='op'>=</span> <span class='cn'>NULL</span>,
-  include <span class='op'>=</span> <span class='cn'>NULL</span>
+  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -212,7 +208,8 @@ It is similar to <code><a href='tbl_summary.html'>tbl_summary()</a></code>.</p>
       <td><p>A column name (quoted or unquoted) in <code>data</code>.
 Summary statistics will be calculated separately for each level of the <code>by</code>
 variable (e.g. <code>by = trt</code>). If <code>NULL</code>, summary statistics
-are calculated using all observations.</p></td>
+are calculated using all observations. To stratify a table by two or more
+variables, use <code><a href='tbl_strata.html'>tbl_strata()</a></code></p></td>
     </tr>
     <tr>
       <th>label</th>
@@ -418,7 +415,7 @@ of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

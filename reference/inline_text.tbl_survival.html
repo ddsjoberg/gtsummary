@@ -53,7 +53,9 @@
 
 
 <meta property="og:title" content="Report statistics from survival summary tables inline — inline_text.tbl_survival" />
-<meta property="og:description" content="for inline reporting in an R markdown document." />
+<meta property="og:description" content="
+
+for inline reporting in an R markdown document." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -96,7 +98,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -174,7 +176,9 @@
     </div>
 
     <div class="ref-description">
-    <p>for inline reporting in an R markdown document.</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#deprecated'><img src='figures/lifecycle-deprecated.svg' alt='[Deprecated]' /></a>
+
+for inline reporting in an R markdown document.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_survival</span>
@@ -252,10 +256,6 @@ print the table the estimates are extracted from.</p><ul>
 <li><p><code>{groupname}</code> label_level from original <code><a href='tbl_survival.html'>tbl_survival()</a></code> call</p></li>
 </ul>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other tbl_survival tools: 
-<code><a href='tbl_survival.survfit.html'>tbl_survival.survfit</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Karissa Whiting</p>
@@ -265,12 +265,13 @@ print the table the estimates are extracted from.</p><ul>
 <span class='va'>surv_table</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span><span class='op'>(</span>times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; <span class='warning'>Warning: `tbl_survival()` was deprecated in gtsummary 1.4.0.</span>
+#&gt; <span class='warning'>Please use `tbl_survfit()` instead.</span></div><div class='input'>
 <span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>surv_table</span>,
   strata <span class='op'>=</span> <span class='st'>"Drug A"</span>,
   time <span class='op'>=</span> <span class='fl'>12</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt; 91% (95% CI 85%, 97%)</div></pre>
+</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span><span> Updating </span><span style='color: #00BB00;'>gtsummary</span><span> object from </span><span style='color: #262626;background-color: #DADADA;'>`x$table_header`</span><span> to </span><span style='color: #262626;background-color: #DADADA;'>`x$table_styling`</span><span> introduced in </span><span style='color: #0000BB;'>v1.4.0</span><span>.</span></div><div class='output co'>#&gt; 91% (95% CI 85%, 97%)</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -282,7 +283,7 @@ print the table the estimates are extracted from.</p><ul>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

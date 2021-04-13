@@ -99,7 +99,7 @@ Those methods are listed below." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
       </span>
     </div>
 
@@ -232,6 +232,16 @@ Those methods are listed below.</p>
   <span class='va'>...</span>
 <span class='op'>)</span>
 
+<span class='co'># S3 method for brmsfit</span>
+<span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  tidy_fun <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span> <span class='fu'>broom.mixed</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, effects <span class='op'>=</span> <span class='st'>"fixed"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='co'># S3 method for gam</span>
+<span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>x</span>, tidy_fun <span class='op'>=</span> <span class='va'>tidy_gam</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='co'># S3 method for multinom</span>
 <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
@@ -245,8 +255,9 @@ Those methods are listed below.</p>
     <tr>
       <th>tidy_fun</th>
       <td><p>Option to specify a particular tidier function if the
-model is not a <a href='vetted_models.html'>vetted model</a> or you need to implement a
-custom method. Default is <code>NULL</code></p></td>
+model. Default is to use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy</a></code>, but if an error occurs
+then tidying of the model is attempted with <code><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>parameters::model_parameters()</a></code>,
+if installed.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -264,7 +275,8 @@ to perform the initial tidying of the model object. There are, however,
 a few models that use modifications.</p><ul>
 <li><p><code>"survreg"</code>: The scale parameter is removed, <code>broom::tidy(x) %&gt;% dplyr::filter(term != "Log(scale)")</code></p></li>
 <li><p><code>"multinom"</code>: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)</p></li>
-<li><p><code>"lmerMod"</code>, <code>"glmerMod"</code>, <code>"glmmTMB"</code>, <code>"glmmadmb"</code>, <code>"stanreg"</code>: These mixed effects
+<li><p><code>"gam"</code>: Uses the internal tidier <code><a href='custom_tidiers.html'>tidy_gam()</a></code> to print both parametric and smooth terms.</p></li>
+<li><p><code>"lmerMod"</code>, <code>"glmerMod"</code>, <code>"glmmTMB"</code>, <code>"glmmadmb"</code>, <code>"stanreg"</code>, <code>"brmsfit"</code>: These mixed effects
 models use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy(x, effects = "fixed")</a></code>. Specify <code>tidy_fun = broom.mixed::tidy</code>
 to print the random components.</p></li>
 </ul>
@@ -281,7 +293,7 @@ to print the random components.</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
