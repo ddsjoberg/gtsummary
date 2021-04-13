@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("fmt_fun works", {
   expect_error(
     tbl1 <-

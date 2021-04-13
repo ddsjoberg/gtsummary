@@ -26,6 +26,16 @@ gt_compact_fun <- function(x) {
 }
 ```
 
+```{r, echo = FALSE, results = 'asis'}
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+  msg <- 
+    paste("View this vignette on the",
+          "[package website](http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html).")
+  cat(msg)
+  knitr::knit_exit()
+}
+```
+
 ## Introduction
 
 **Reproducible reports** are an important part of good practices.  We often need to report the **results from a table** in the text of an R markdown report.
