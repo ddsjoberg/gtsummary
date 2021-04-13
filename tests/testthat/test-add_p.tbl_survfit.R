@@ -1,3 +1,4 @@
+skip_on_cran()
 # test-add_p.tbl_survfit -------------------------------------------------------
 
 library(survival)

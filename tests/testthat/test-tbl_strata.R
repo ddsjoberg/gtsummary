@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("no errors with standard use", {
   expect_error(
     trial %>%

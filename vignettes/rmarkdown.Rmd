@@ -17,6 +17,16 @@ knitr::opts_chunk$set(
 library(gt)
 ```
 
+```{r, echo = FALSE, results = 'asis'}
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+  msg <- 
+    paste("View this vignette on the",
+          "[package website](http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html).")
+  cat(msg)
+  knitr::knit_exit()
+}
+```
+
 The **{gtsummary}** package was written to be a companion to the **{gt}** package from RStudio.
 But not all output types are supported by the **{gt}** package.
 Therefore, we have made it possible to print **{gtsummary}** tables with various engines.
