@@ -97,7 +97,7 @@ along with the difference confidence interval and p-value." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9022</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.0.9000</span>
       </span>
     </div>
 
@@ -265,11 +265,15 @@ Function to round and format difference. Default is <code><a href='style_sigfig.
 <span class='va'>add_difference_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span>, <span class='va'>response</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>,
-              statistic <span class='op'>=</span>
-                <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
-                     <span class='fu'><a href='select_helpers.html'>all_dichotomous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span><span class='op'>)</span>,
-              missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>
+    by <span class='op'>=</span> <span class='va'>trt</span>,
+    statistic <span class='op'>=</span>
+      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+        <span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
+        <span class='fu'><a href='select_helpers.html'>all_dichotomous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span>
+      <span class='op'>)</span>,
+    missing <span class='op'>=</span> <span class='st'>"no"</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='add_n.html'>add_n</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>add_difference</span><span class='op'>(</span><span class='op'>)</span>
 

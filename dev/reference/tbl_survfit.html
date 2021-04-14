@@ -99,7 +99,7 @@ formatted summary table of the results" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.3.7.9022</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.0.9000</span>
       </span>
     </div>
 
@@ -331,8 +331,10 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># Pass a list of survfit() objects</span>
 <span class='va'>tbl_survfit_ex3</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>trial</span><span class='op'>)</span>,
-       <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>, <span class='va'>trial</span><span class='op'>)</span>,
+    <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>tbl_survfit</span><span class='op'>(</span>times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'># Example 4 Competing Events Example ---------</span>
@@ -341,12 +343,12 @@ Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>, warn.conflicts <span class='op'>=</span> <span class='cn'>FALSE</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='va'>trial2</span> <span class='op'>&lt;-</span> <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>
-  death_cr <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span>
-    <span class='va'>death</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"censor"</span>,
-    <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>&lt;</span> <span class='fl'>0.5</span> <span class='op'>~</span> <span class='st'>"death from cancer"</span>,
-    <span class='cn'>TRUE</span> <span class='op'>~</span> <span class='st'>"death other causes"</span>
-  <span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span>
+    death_cr <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span>
+      <span class='va'>death</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"censor"</span>,
+      <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>&lt;</span> <span class='fl'>0.5</span> <span class='op'>~</span> <span class='st'>"death from cancer"</span>,
+      <span class='cn'>TRUE</span> <span class='op'>~</span> <span class='st'>"death other causes"</span>
+    <span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='va'>survfit_cr_ex4</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death_cr</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>grade</span>, data <span class='op'>=</span> <span class='va'>trial2</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
