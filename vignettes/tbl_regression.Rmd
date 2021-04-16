@@ -32,16 +32,6 @@ gt_compact_fun <- function(x) {
 if (!requireNamespace("car")) knitr::knit_exit()
 ```
 
-```{r, echo = FALSE, results = 'asis'}
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
-  msg <- 
-    paste("View this vignette on the",
-          "[package website](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html).")
-  cat(msg)
-  knitr::knit_exit()
-}
-```
-
 ## Introduction
 
 The [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) function takes a **regression model object** in **R** and returns a **formatted table of regression model results** that is publication-ready.
