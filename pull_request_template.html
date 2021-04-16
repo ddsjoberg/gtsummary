@@ -175,7 +175,7 @@
 <p><strong>If there is an GitHub issue associated with this pull request, please provide link.</strong></p>
 <hr>
 <p>Checklist for PR reviewer</p>
-<ul>
+<ul class="task-list">
 <li>
 <input type="checkbox" disabled>
 PR branch has pulled the most recent updates from master branch. Ensure the pull request branch and your local version match and both have the latest updates from the master branch.</li>
@@ -199,16 +199,16 @@ Code coverage is suitable for any new functions/features. Review coverage with <
 <input type="checkbox" disabled>
 R CMD Check runs without errors, warnings, and notes</li>
 <li>
-<input type="checkbox" disabled><code>usethis::use_spell_check()</code> runs with no spelling errors in documentation</li>
+<input type="checkbox" disabled><code><a href="https://usethis.r-lib.org/reference/use_spell_check.html">usethis::use_spell_check()</a></code> runs with no spelling errors in documentation</li>
 </ul>
 <p>When the branch is ready to be merged into master:</p>
-<ul>
+<ul class="task-list">
 <li>
 <input type="checkbox" disabled>
 Update NEWS.md with the changes from this pull request under the heading “<code># gtsummary (development version)</code>”. If there is an issue associated with the pull request, reference it in parantheses at the end update (see <code>NEWS.md</code> for examples).</li>
 <li>
 <input type="checkbox" disabled>
-Increment the version number using <code>usethis::use_version(which = "dev")</code>
+Increment the version number using <code><a href="https://usethis.r-lib.org/reference/use_version.html">usethis::use_version(which = "dev")</a></code>
 </li>
 <li>
 <input type="checkbox" disabled>
@@ -216,7 +216,7 @@ Run <code>codemetar::write_codemeta()</code>
 </li>
 <li>
 <input type="checkbox" disabled>
-Run <code>usethis::use_spell_check()</code> again</li>
+Run <code><a href="https://usethis.r-lib.org/reference/use_spell_check.html">usethis::use_spell_check()</a></code> again</li>
 <li>
 <input type="checkbox" disabled>
 Approve Pull Request</li>
