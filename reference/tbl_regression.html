@@ -302,7 +302,7 @@ a few models that use <a href='tbl_regression_methods.html'>modifications</a>.</
 <li><p><code>"multinom"</code>: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)</p></li>
 <li><p><code>"gam"</code>: Uses the internal tidier <code><a href='custom_tidiers.html'>tidy_gam()</a></code> to print both parametric and smooth terms.</p></li>
 <li><p><code>"lmerMod"</code>, <code>"glmerMod"</code>, <code>"glmmTMB"</code>, <code>"glmmadmb"</code>, <code>"stanreg"</code>, <code>"brmsfit"</code>: These mixed effects
-models use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy(x, effects = "fixed")</a></code>. Specify <code>tidy_fun = broom.mixed::tidy</code>
+models use <code>broom.mixed::tidy(x, effects = "fixed")</code>. Specify <code>tidy_fun = broom.mixed::tidy</code>
 to print the random components.</p></li>
 </ul>
 
@@ -363,7 +363,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 <span class='va'>tbl_regression_ex3</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/glmer.html'>glmer</a></span><span class='op'>(</span><span class='va'>am</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>gear</span><span class='op'>)</span>, <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>tbl_regression</span><span class='op'>(</span>exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div></pre>
+</div><div class='output co'>#&gt; <span class='message'><span style='color: #BB0000;'>x</span><span> The </span><span style='color: #0000BB;'>'broom.mixed'</span><span> package is required for function </span><span style='color: #C6C6C6;background-color: #262626;'>`tbl_regression.lmerMod()`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>* Install </span><span style='color: #0000BB;'>'broom.mixed'</span><span> with the code below.</span></div><div class='output co'>#&gt; <span class='message'>install.packages("broom.mixed")</span></div><div class='output co'>#&gt; <span class='error'>Error: Install required package</span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
