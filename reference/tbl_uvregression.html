@@ -359,7 +359,7 @@ a few models that use <a href='tbl_regression_methods.html'>modifications</a>.</
 <li><p><code>"multinom"</code>: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)</p></li>
 <li><p><code>"gam"</code>: Uses the internal tidier <code><a href='custom_tidiers.html'>tidy_gam()</a></code> to print both parametric and smooth terms.</p></li>
 <li><p><code>"lmerMod"</code>, <code>"glmerMod"</code>, <code>"glmmTMB"</code>, <code>"glmmadmb"</code>, <code>"stanreg"</code>, <code>"brmsfit"</code>: These mixed effects
-models use <code>broom.mixed::tidy(x, effects = "fixed")</code>. Specify <code>tidy_fun = broom.mixed::tidy</code>
+models use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy(x, effects = "fixed")</a></code>. Specify <code>tidy_fun = broom.mixed::tidy</code>
 to print the random components.</p></li>
 </ul>
 
