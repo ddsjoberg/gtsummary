@@ -102,6 +102,7 @@ Example basic table:
 
 ``` r
 library(gtsummary)
+#> #Uighur
 # make dataset with a few variables to summarize
 trial2 <- trial %>% select(age, grade, response, trt)
 
