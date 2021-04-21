@@ -12,6 +12,7 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  warning = FALSE,
   comment = "#>"
 )
 gt_compact_fun <- function(x) {
@@ -23,16 +24,6 @@ gt_compact_fun <- function(x) {
                   footnotes.padding = gt::px(1),
                   source_notes.padding = gt::px(1),
                   row_group.padding = gt::px(1))
-}
-```
-
-```{r, echo = FALSE, results = 'asis'}
-if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
-  msg <- 
-    paste("View this vignette on the",
-          "[package website](http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html).")
-  cat(msg)
-  knitr::knit_exit()
 }
 ```
 
