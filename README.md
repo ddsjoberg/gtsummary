@@ -56,7 +56,7 @@ customizable capabilities.
     possibilities to create the table of your dreams!
 
 -   **[Report statistics
-    inline](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text)**
+    inline](http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)**
     from summary tables and regression summary tables in **R markdown**.
     Make your reports completely reproducible!
 
@@ -102,7 +102,6 @@ Example basic table:
 
 ``` r
 library(gtsummary)
-#> #Uighur
 # make dataset with a few variables to summarize
 trial2 <- trial %>% select(age, grade, response, trt)
 
