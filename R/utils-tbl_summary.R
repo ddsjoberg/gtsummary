@@ -1035,8 +1035,10 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
 }
 
 safe_summarise_at <- function(data, variable, fns) {
-  tryCatch(
-    dplyr::summarise_at(data, vars(.data$variable), fns),
+  tryCatch({
+    data$variable <- unclass(data$variable)
+    dplyr::summarise_at(data, vars(.data$variable), fns)
+    },
     error = function(e) {
       # replace p[0:100] stats with `quantile`
       fns_names <- stringr::str_replace(names(fns), "^p\\d+$", "quantile") %>% unique()
