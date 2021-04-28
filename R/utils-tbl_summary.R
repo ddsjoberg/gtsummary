@@ -1036,8 +1036,10 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
 
 safe_summarise_at <- function(data, variable, fns) {
   tryCatch({
-    data$variable <- unclass(data$variable)
-    dplyr::summarise_at(data, vars(.data$variable), fns)
+    # ref for all this nonsense stackoverflow.com/questions/67291199
+    dplyr::summarise_at(data,
+                        vars(.data$variable),
+                        map(fns, function(.x) rlang::inject(function(x) .keep_attr(x, .f = !!.x))))
     },
     error = function(e) {
       # replace p[0:100] stats with `quantile`
@@ -1052,6 +1054,13 @@ safe_summarise_at <- function(data, variable, fns) {
       abort(e)
     }
   )
+}
+
+.keep_attr <- function(x, .f) {
+  x_att <- attributes(x)
+  res <- .f(x)
+  attributes(res) <- x_att
+  res
 }
 
 

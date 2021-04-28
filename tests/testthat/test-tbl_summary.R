@@ -58,7 +58,7 @@ test_that("tbl_summary works in character inputs for `by=`", {
   my_by_variable <- "trt"
 
   expect_error(
-    tbl_summary(trial, by = my_by_variable),
+    tbl_summary(trial, by = all_of(my_by_variable)),
     NA
   )
   expect_error(
@@ -624,7 +624,7 @@ test_that("Hmisc labelled data don't error", {
     )
 
   # Add label to CD4 count, using Hmisc package
-  Hmisc::label(data$cd4_count) <- "CD4 count"
+  Hmisc::label(hmisc_data$cd4_count) <- "CD4 count"
 
   expect_equal(
     hmisc_data %>%
