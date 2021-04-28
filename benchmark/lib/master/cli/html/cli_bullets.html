@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: List of items</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_bullets {cli}"><tr><td>cli_bullets {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>List of items</h2>
+
+<h3>Description</h3>
+
+<p>It is often useful to print out a list of items, tasks a function or
+package performs, or a list of notes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_bullets(text, id = NULL, class = NULL, .envir = parent.frame())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>Character vector of items. See details below on how names
+are interpreted.</p>
+</td></tr>
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>Optional od of the <code>div.memo</code> element, can be used in themes.</p>
+</td></tr>
+<tr valign="top"><td><code>class</code></td>
+<td>
+<p>Optional additional class(es) for the <code>div.memo</code> element.</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Environment to evaluate the glue expressions in.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Items may be formatted differently, e.g. they can have a prefix symbol.
+Formatting is specified by the names of <code>text</code>, and can be themed.
+cli creates a <code>div</code> element of class <code>memo</code> for the whole memo. Each
+item is another <code>div</code> element of class <code style="white-space: pre;">memo-item-&lt;name&gt;</code>, where
+<code style="white-space: pre;">&lt;name&gt;</code> is the name of the entry in <code>text</code>. Entries in <code>text</code> without
+a name create a <code>div</code> element of class <code>memo-item-empty</code>, and if the
+name is a single space character, the class is <code>memo-item-space</code>.
+</p>
+<p>The builtin theme defines the following item types:
+</p>
+
+<ul>
+<li><p> No name: Item without a prefix.
+</p>
+</li>
+<li> <p><code style="white-space: pre;"></code>: Indented item.
+</p>
+</li>
+<li> <p><code>*</code>: Item with a bullet.
+</p>
+</li>
+<li> <p><code>&gt;</code>: Item with an arrow or pointer.
+</p>
+</li>
+<li> <p><code>v</code>: Item with a green &quot;tick&quot; symbol, like <code><a href="cli_alert.html">cli_alert_success()</a></code>.
+</p>
+</li>
+<li> <p><code>x</code>: Item with a ref cross, like <code><a href="cli_alert.html">cli_alert_danger()</a></code>.
+</p>
+</li>
+<li> <p><code>!</code>: Item with a yellow exclamation mark, like <code><a href="cli_alert.html">cli_alert_warning()</a></code>.
+</p>
+</li>
+<li> <p><code>i</code>: Info item, like <code><a href="cli_alert.html">cli_alert_info()</a></code>.
+</p>
+</li></ul>
+
+<p>You can define new item type by simply defining theming for the
+corresponding <code style="white-space: pre;">memo-item-&lt;name&gt;</code> classes.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cli_bullets(c(
+        "noindent",
+  " " = "indent",
+  "*" = "bullet",
+  "&gt;" = "arrow",
+  "v" = "success",
+  "x" = "danger",
+  "!" = "warning",
+  "i" = "info"
+))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

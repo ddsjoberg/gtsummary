@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: CLI themes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for themes {cli}"><tr><td>themes {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>CLI themes</h2>
+
+<h3>Description</h3>
+
+<p>CLI elements can be styled via a CSS-like language of selectors and
+properties. Only a small subset of CSS3 is supported, and
+a lot visual properties cannot be implemented on a terminal, so these
+will be ignored as well.
+</p>
+
+
+<h3>Adding themes</h3>
+
+<p>The style of an element is calculated from themes from four sources.
+These form a stack, and the themes on the top of the stack take
+precedence, over themes in the bottom.
+</p>
+
+<ol>
+<li><p> The cli package has a built-in theme. This is always active.
+See <code><a href="builtin_theme.html">builtin_theme()</a></code>.
+</p>
+</li>
+<li><p> When an app object is created via <code><a href="start_app.html">start_app()</a></code>, the caller can
+specify a theme, that is added to theme stack. If no theme is
+specified for <code><a href="start_app.html">start_app()</a></code>, the content of the <code>cli.theme</code> option
+is used. Removed when the corresponding app stops.
+</p>
+</li>
+<li><p> The user may speficy a theme in the <code>cli.user_theme</code> option. This
+is added to the stack <em>after</em> the app's theme (step 2.), so it can
+override its settings. Removed when the app that added it stops.
+</p>
+</li>
+<li><p> Themes specified explicitly in <code><a href="cli_div.html">cli_div()</a></code> elements. These are
+removed from the theme stack, when the corresponding <code><a href="cli_div.html">cli_div()</a></code>
+elements are closed.
+</p>
+</li></ol>
+
+
+
+<h3>Writing themes</h3>
+
+<p>A theme is a named list of lists. The name of each entry is a CSS
+selector. Only a subset of CSS is supported:
+</p>
+
+<ul>
+<li><p> Type selectors, e.g. <code>input</code> selects all <code style="white-space: pre;">&lt;input&gt;</code> elements.
+</p>
+</li>
+<li><p> Class selectors, e.g. <code>.index</code> selects any element that has a class
+of &quot;index&quot;.
+</p>
+</li>
+<li><p> ID selector. <code style="white-space: pre;">#toc</code> will match the element that has the ID &quot;toc&quot;.
+</p>
+</li>
+<li><p> The descendant combinator, i.e. the space, that selects nodes
+that are descendants of the first element. E.g. <code style="white-space: pre;">div span</code> will match
+all <code style="white-space: pre;">&lt;span&gt;</code> elements that are inside a <code style="white-space: pre;">&lt;div&gt;</code> element.
+</p>
+</li></ul>
+
+<p>The content of a theme list entry is another named list, where the
+names are CSS properties, e.g. <code>color</code>, or <code>font-weight</code> or
+<code>margin-left</code>, and the list entries themselves define the values of
+the properties. See <code><a href="builtin_theme.html">builtin_theme()</a></code> and <code><a href="simple_theme.html">simple_theme()</a></code> for examples.
+</p>
+
+
+<h3>Formatter callbacks</h3>
+
+<p>For flexibility, themes may also define formatter functions, with
+property name <code>fmt</code>. These will be called once the other styles are
+applied to an element. They are only called on elements that produce
+output, i.e. <em>not</em> on container elements.
+</p>
+
+
+<h3>Supported properties</h3>
+
+<p>Right now only a limited set of properties are supported. These include
+left, right, top and bottom margins, background and foreground colors,
+bold and italic fonts, underlined text. The <code>before</code> and <code>after</code>
+properties are supported to insert text before and after the
+content of the element.
+</p>
+<p>The current list of properties:
+</p>
+
+<ul>
+<li> <p><code>after</code>: A string literal to insert after the element. It can also be
+a function that returns a string literal. Supported by all inline
+elements, list items, alerts and rules.
+</p>
+</li>
+<li> <p><code>background-color</code>: An R color name, or HTML hexadecimal color.
+It can be applied to most elements (inline elements, rules, text,
+etc.), but the background of containers is not colored properly
+currently.
+</p>
+</li>
+<li> <p><code>before</code>: A string literal to insert before the element. It can also be
+a function that returns a string literal. Supported by all inline
+elements, list items, alerts and rules.
+</p>
+</li>
+<li> <p><code>class-map</code>: Its value can be a named list, and it specifies how
+R (S3) class names are mapped to cli class names. E.g.
+<code>list(fs_path = "file")</code> specifies that <code>fs_path</code> objects (from the fs
+package) should always print as <code>.file</code> objects in cli.
+</p>
+</li>
+<li> <p><code>color</code>: Text color, an R color name or a HTML hexadecimal color. It
+can be applied to most elements that are printed.
+</p>
+</li>
+<li> <p><code>collapse</code>: Specifies how to collapse a vector, before applying
+styling. If a character string, then that is used as the separator.
+If a function, then it is called, with the vector as the only
+argument.
+</p>
+</li>
+<li> <p><code>digits</code>: Number of digits after the decimal point for numeric inline
+element of class <code>.val</code>.
+</p>
+</li>
+<li> <p><code>fmt</code>: Generic formatter function that takes an input text and returns
+formatted text. Can be applied to most elements. If colors are in use,
+the input text provided to <code>fmt</code> already includes ANSI sequences.
+</p>
+</li>
+<li> <p><code>font-style</code>: If <code>"italic"</code> then the text is printed as cursive.
+</p>
+</li>
+<li> <p><code>font-weight</code>: If <code>"bold"</code>, then the text is printed in boldface.
+</p>
+</li>
+<li> <p><code>line-type</code>: Line type for <code><a href="cli_rule.html">cli_rule()</a></code>.
+</p>
+</li>
+<li> <p><code>list-style-type</code>: String literal or functions that returns a string
+literal, to be used as a list item marker in un-ordered lists.
+</p>
+</li>
+<li> <p><code>margin-bottom</code>, <code>margin-left</code>, <code>margin-right</code>, <code>margin-top</code>: Margins.
+</p>
+</li>
+<li> <p><code>padding-left</code>, <code>padding-right</code>: This is currently used the same way
+as the margins, but this might change later.
+</p>
+</li>
+<li> <p><code>start</code>: Integer number, the first element in an ordered list.
+</p>
+</li>
+<li> <p><code>string_quote</code>: Quoting character for inline elements of class <code>.val</code>.
+</p>
+</li>
+<li> <p><code>text-decoration</code>: If <code>"underline"</code>, then underlined text is created.
+</p>
+</li>
+<li> <p><code>text-exdent</code>: Amound of indentation from the second line of wrapped
+text.
+</p>
+</li>
+<li> <p><code>transform</code>: A function to call on glue substitutions, before
+collapsing them. Note that <code>transform</code> is applied prior to
+implementing color via ANSI sequences.
+</p>
+</li>
+<li> <p><code>vec_last</code>: The last separator when collapsing vectors.
+</p>
+</li>
+<li> <p><code>vec_sep</code>: The separator to use when collapsing vectors.
+</p>
+</li>
+<li> <p><code>vec_trunc</code>: Vectors longer than this will be truncated. Defaults to
+100.
+</p>
+</li></ul>
+
+<p>More properties might be added later. If you think that a property is
+not applied properly to an element, please open an issue about it in
+the cli issue tracker.
+</p>
+
+
+<h3>Examples</h3>
+
+<p>Color of headings, that are only active in paragraphs with an
+'output' class:</p>
+<pre>list(
+  "par.output h1" = list("background-color" = "red", color = "#e0e0e0"),
+  "par.output h2" = list("background-color" = "orange", color = "#e0e0e0"),
+  "par.output h3" = list("background-color" = "blue", color = "#e0e0e0")
+)
+</pre>
+<p>Create a custom alert type:</p>
+<pre>list(
+  ".alert-start" = list(before = symbol$play),
+  ".alert-stop"  = list(before = symbol$stop)
+)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

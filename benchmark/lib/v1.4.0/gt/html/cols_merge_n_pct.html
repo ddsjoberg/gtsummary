@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Merge two columns to combine counts and percentages</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cols_merge_n_pct {gt}"><tr><td>cols_merge_n_pct {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Merge two columns to combine counts and percentages</h2>
+
+<h3>Description</h3>
+
+<p>The <code>cols_merge_n_pct()</code> function is a specialized variant of the
+<code><a href="cols_merge.html">cols_merge()</a></code> function. It operates by taking two columns that constitute
+both a count (<code>col_n</code>) and a fraction of the total population (<code>col_pct</code>) and
+merges them into a single column. What results is a column containing both
+counts and their associated percentages (e.g., <code style="white-space: pre;">12 (23.2%)</code>). The column
+specified in <code>col_pct</code> is dropped from the output table.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cols_merge_n_pct(data, col_n, col_pct, autohide = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>col_n</code></td>
+<td>
+<p>A column that contains values for the count component.</p>
+</td></tr>
+<tr valign="top"><td><code>col_pct</code></td>
+<td>
+<p>A column that contains values for the percentage component.
+This column should be formatted such that percentages are displayed (e.g.,
+with <code>fmt_percent()</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>autohide</code></td>
+<td>
+<p>An option to automatically hide the column specified as
+<code>col_pct</code>. Any columns with their state changed to hidden will behave
+the same as before, they just won't be displayed in the finalized table.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This function could be somewhat replicated using <code><a href="cols_merge.html">cols_merge()</a></code>, however,
+<code>cols_merge_n_pct()</code> employs the following specialized semantics for <code>NA</code>
+and zero-value handling:
+</p>
+
+<ol>
+<li> <p><code>NA</code>s in <code>col_n</code> result in missing values for the merged
+column (e.g., <code>NA</code> + <code style="white-space: pre;">10.2%</code> = <code>NA</code>)
+</p>
+</li>
+<li> <p><code>NA</code>s in <code>col_pct</code> (but not <code>col_n</code>) result in
+base values only for the merged column (e.g., <code>13</code> + <code>NA</code> = <code>13</code>)
+</p>
+</li>
+<li> <p><code>NA</code>s both <code>col_n</code> and <code>col_pct</code> result in
+missing values for the merged column (e.g., <code>NA</code> + <code>NA</code> = <code>NA</code>)
+</p>
+</li>
+<li><p> If a zero (<code>0</code>) value is in <code>col_n</code> then the formatted output will be
+<code>"0"</code> (i.e., no percentage will be shown)
+</p>
+</li></ol>
+
+<p>Any resulting <code>NA</code> values in the <code>col_n</code> column following the merge
+operation can be easily formatted using the <code><a href="fmt_missing.html">fmt_missing()</a></code> function.
+Separate calls of <code><a href="fmt_missing.html">fmt_missing()</a></code> can be used for the <code>col_n</code> and
+<code>col_pct</code> columns for finer control of the replacement values. It is the
+responsibility of the user to ensure that values are correct in both the
+<code>col_n</code> and <code>col_pct</code> columns (this function neither generates nor
+recalculates values in either). Formatting of each column can be done
+independently in separate <code><a href="fmt_number.html">fmt_number()</a></code> and <code><a href="fmt_percent.html">fmt_percent()</a></code> calls.
+</p>
+<p>This function is part of a set of four column-merging functions. The other
+two are the general <code><a href="cols_merge.html">cols_merge()</a></code> function and the specialized
+<code><a href="cols_merge_uncert.html">cols_merge_uncert()</a></code> and <code><a href="cols_merge_range.html">cols_merge_range()</a></code> functions. These functions
+operate similarly, where the non-target columns can be optionally hidden from
+the output table through the <code>hide_columns</code> or <code>autohide</code> options.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_cols_merge_n_pct_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>4-11
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Modify Columns: 
+<code><a href="cols_align.html">cols_align</a>()</code>,
+<code><a href="cols_hide.html">cols_hide</a>()</code>,
+<code><a href="cols_label.html">cols_label</a>()</code>,
+<code><a href="cols_merge_range.html">cols_merge_range</a>()</code>,
+<code><a href="cols_merge_uncert.html">cols_merge_uncert</a>()</code>,
+<code><a href="cols_merge.html">cols_merge</a>()</code>,
+<code><a href="cols_move_to_end.html">cols_move_to_end</a>()</code>,
+<code><a href="cols_move_to_start.html">cols_move_to_start</a>()</code>,
+<code><a href="cols_move.html">cols_move</a>()</code>,
+<code><a href="cols_unhide.html">cols_unhide</a>()</code>,
+<code><a href="cols_width.html">cols_width</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `pizzaplace` to create a gt table
+# that displays the counts and percentages
+# of the top 3 pizzas sold by pizza
+# category in 2015; the `cols_merge_n_pct()`
+# function is used to merge the `n` and
+# `frac` columns (and the `frac` column is
+# formatted using `fmt_percent()`)
+tab_1 &lt;-
+  pizzaplace %&gt;%
+  dplyr::group_by(name, type, price) %&gt;%
+  dplyr::summarize(
+    n = dplyr::n(),
+    frac = n/nrow(.),
+    .groups = "drop"
+  ) %&gt;%
+  dplyr::arrange(type, dplyr::desc(n)) %&gt;%
+  dplyr::group_by(type) %&gt;%
+  dplyr::slice_head(n = 3) %&gt;%
+  gt(
+    rowname_col = "name",
+    groupname_col = "type"
+  ) %&gt;%
+  fmt_currency(price) %&gt;%
+  fmt_percent(frac) %&gt;%
+  cols_merge_n_pct(
+    col_n = n,
+    col_pct = frac
+  ) %&gt;%
+  cols_label(
+    n = md("*N* (%)"),
+    price = "Price"
+  ) %&gt;%
+  tab_style(
+    style = cell_text(font = "monospace"),
+    locations = cells_stub()
+  ) %&gt;%
+  tab_stubhead(md("Cat. and  \nPizza Code")) %&gt;%
+  tab_header(title = "Top 3 Pizzas Sold by Category in 2015") %&gt;%
+  tab_options(table.width = px(512))
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

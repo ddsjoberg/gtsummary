@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Test cli output with testthat</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for test_that_cli {cli}"><tr><td>test_that_cli {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Test cli output with testthat</h2>
+
+<h3>Description</h3>
+
+<p>Use this function in your testthat test files, to test cli output.
+It requires testthat edition 3, and works best with snapshot tests.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+test_that_cli(desc, code, configs = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>desc</code></td>
+<td>
+<p>Test description, passed to <code><a href="../../testthat/html/test_that.html">testthat::test_that()</a></code>, after
+appending the name of the cli configuration to it.</p>
+</td></tr>
+<tr valign="top"><td><code>code</code></td>
+<td>
+<p>Test code, it is modified to set up the cli config, and
+then passed to <code><a href="../../testthat/html/test_that.html">testthat::test_that()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>configs</code></td>
+<td>
+<p>cli configurations to test <code>code</code> with. The default is
+<code>NULL</code>, which includes all possible configurations. It can also be a
+character vector, to restrict the tests to some configurations only.
+See available configurations below.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>test_that_cli()</code> calls <code><a href="../../testthat/html/test_that.html">testthat::test_that()</a></code> multiple times, with
+different cli configurations. This makes it simple to test cli output
+with and without ANSI colors, with and without Unicode characters.
+</p>
+<p>Currently available configurations:
+</p>
+
+<ul>
+<li> <p><code>plain</code>: no ANSI colors, ASCII characters only.
+</p>
+</li>
+<li> <p><code>ansi</code>: ANSI colors, ASCII characters only.
+</p>
+</li>
+<li> <p><code>unicode</code>: no ANSI colors, Unicode characters.
+</p>
+</li>
+<li> <p><code>fancy</code>; ANSI colors, Unicode characters.
+</p>
+</li></ul>
+
+<p>See examples below and in cli's own tests, e.g. in
+https://github.com/cran/cli/blob/master/tests/testthat
+and the corresponding snapshots at
+https://github.com/cran/cli/tree/master/tests/testthat/_snaps
+</p>
+
+
+<h4>Importtant note regarding Windows</h4>
+
+<p>Because of base R's limitation to record Unicode characters on Windows,
+we suggest that you record your snapshots on Unix, or you restrict
+your tests to ASCII configurations.
+</p>
+<p>Unicode tests on Windows are automatically skipped by testthat
+currently.
+</p>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+# testthat cannot record or compare snapshots when you run these
+# examples interactively, so you might want to copy them into a test
+# file
+
+# Default configurations
+cli::test_that_cli("success", {
+  expect_snapshot({
+    cli::cli_alert_success("wow")
+  })
+})
+
+# Only use two configurations, because this output does not have colors
+cli::test_that_cli(configs = c("plain", "unicode"), "cat_bullet", {
+  expect_snapshot({
+    cli::cat_bullet(letters[1:5])
+  })
+})
+
+# You often need to evaluate all cli calls of a test case in the same
+# environment. Use `local()` to do that:
+cli::test_that_cli("theming", {
+  expect_snapshot(local({
+    cli::cli_div(theme = list(".alert" = list(before = "!!! ")))
+    cli::cli_alert("wow")
+  }))
+})
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

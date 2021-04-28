@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: CLI inline markup</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for inline-markup {cli}"><tr><td>inline-markup {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>CLI inline markup</h2>
+
+<h3>Description</h3>
+
+<p>CLI inline markup
+</p>
+
+
+<h3>Command substitution</h3>
+
+<p>All text emitted by cli supports glue interpolation. Expressions
+enclosed by braces will be evaluated as R code. See <code><a href="../../glue/html/glue.html">glue::glue()</a></code> for
+details.
+</p>
+<p>In addition to regular glue interpolation, cli can also add classes
+to parts of the text, and these classes can be used in themes. For
+example</p>
+<pre>cli_text("This is {.emph important}.")
+</pre>
+<p>adds a class to the &quot;important&quot; word, class &quot;emph&quot;. Note that in this
+case the string within the braces is usually not a valid R expression.
+If you want to mix classes with interpolation, add another pair of
+braces:</p>
+<pre>adjective &lt;- "great"
+cli_text("This is {.emph {adjective}}.")
+</pre>
+<p>An inline class will always create a <code>span</code> element internally. So in
+themes, you can use the <code>span.emph</code> CSS selector to change how inline
+text is emphasized:</p>
+<pre>cli_div(theme = list(span.emph = list(color = "red")))
+adjective &lt;- "nice and red"
+cli_text("This is {.emph {adjective}}.")
+</pre>
+
+
+<h3>Classes</h3>
+
+<p>The default theme defines the following inline classes:
+</p>
+
+<ul>
+<li> <p><code>arg</code> for a function argument.
+</p>
+</li>
+<li> <p><code>cls</code> for an S3, S4, R6 or other class name.
+</p>
+</li>
+<li> <p><code>code</code> for a piece of code.
+</p>
+</li>
+<li> <p><code>email</code> for an email address.
+</p>
+</li>
+<li> <p><code>emph</code> for emphasized text.
+</p>
+</li>
+<li> <p><code>envvar</code> for the name of an environment variable.
+</p>
+</li>
+<li> <p><code>field</code> for a generic field, e.g. in a named list.
+</p>
+</li>
+<li> <p><code>file</code> for a file name.
+</p>
+</li>
+<li> <p><code>fun</code> for a function name.
+</p>
+</li>
+<li> <p><code>key</code> for a keyboard key.
+</p>
+</li>
+<li> <p><code>path</code> for a path (essentially the same as <code>file</code>).
+</p>
+</li>
+<li> <p><code>pkg</code> for a package name.
+</p>
+</li>
+<li> <p><code>strong</code> for strong importance.
+</p>
+</li>
+<li> <p><code>url</code> for a URL.
+</p>
+</li>
+<li> <p><code>var</code> for a variable name.
+</p>
+</li>
+<li> <p><code>val</code> for a generic &quot;value&quot;.
+</p>
+</li></ul>
+
+<p>See examples below.
+</p>
+<p>You can simply add new classes by defining them in the theme, and then
+using them, see the example below.
+</p>
+
+
+<h4>Highlighting weird-looking values</h4>
+
+<p>Often it is useful to highlight a weird file or path name, e.g. one
+that starts or ends with space characters. The built-in theme does this
+for <code>.file</code>, <code>.path</code> and <code>.email</code> by default. You can highlight
+any string inline by adding the <code>.q</code> class to it.
+</p>
+<p>The current highlighting algorithm
+</p>
+
+<ul>
+<li><p> adds single quotes to the string if it does not start or end with an
+alphanumeric character, underscore, dot or forward slash.
+</p>
+</li>
+<li><p> Highlights the background colors of leading and trailing spaces on
+terminals that support ANSI colors.
+</p>
+</li></ul>
+
+
+
+
+<h3>Collapsing inline vectors</h3>
+
+<p>When cli performs inline text formatting, it automatically collapses
+glue substitutions, after formatting. This is handy to create lists of
+files, packages, etc.
+</p>
+<p>By default cli truncates long vectors. The truncation limit is by default
+one hundred elements, but you can change it with the <code>vec_trunc</code> style.
+</p>
+<p>See examples below.
+</p>
+
+
+<h3>Formatting values</h3>
+
+<p>The <code>val</code> inline class formats values. By default (c.f. the built-in
+theme), it calls the <code><a href="cli_format.html">cli_format()</a></code> generic function, with the current
+style as the argument. See <code><a href="cli_format.html">cli_format()</a></code> for examples.
+</p>
+
+
+<h3>Escaping <code style="white-space: pre;">{</code> and <code style="white-space: pre;">}</code></h3>
+
+<p>It might happen that you want to pass a string to <code style="white-space: pre;">cli_*</code> functions,
+and you do <em>not</em> want command substitution in that string, because it
+might contain <code style="white-space: pre;">{</code> and <code style="white-space: pre;">}</code> characters. The simplest solution for this is
+to refer to the string from a template:</p>
+<pre>msg &lt;- "Error in if (ncol(dat$y)) {: argument is of length zero"
+cli_alert_warning("{msg}")
+</pre>
+<p>If you want to explicitly escape <code style="white-space: pre;">{</code> and <code style="white-space: pre;">}</code> characters, just double
+them:</p>
+<pre>cli_alert_warning("A warning with {{ braces }}")
+</pre>
+<p>See also examples below.
+</p>
+
+
+<h3>Pluralization</h3>
+
+<p>All cli commands that emit text support pluralization. Some examples:</p>
+<pre>cli_alert_info("Found {ndirs} diretor{?y/ies} and {nfiles} file{?s}.")
+cli_text("Will install {length(pkgs)} package{?s}: {.pkg {pkgs}}")
+</pre>
+<p>See <a href="pluralization.html">pluralization</a> for details.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Some inline markup examples
+cli_ul()
+cli_li("{.emph Emphasized} text")
+cli_li("{.strong Strong} importance")
+cli_li("A piece of code: {.code sum(a) / length(a)}")
+cli_li("A package name: {.pkg cli}")
+cli_li("A function name: {.fn cli_text}")
+cli_li("A keyboard key: press {.kbd ENTER}")
+cli_li("A file name: {.file /usr/bin/env}")
+cli_li("An email address: {.email bugs.bunny@acme.com}")
+cli_li("A URL: {.url https://acme.com}")
+cli_li("An environment variable: {.envvar R_LIBS}")
+cli_end()
+
+## Adding a new class
+cli_div(theme = list(
+  span.myclass = list(color = "lightgrey"),
+  "span.myclass" = list(before = "["),
+  "span.myclass" = list(after = "]")))
+cli_text("This is {.myclass in brackets}.")
+cli_end()
+
+## Collapsing
+pkgs &lt;- c("pkg1", "pkg2", "pkg3")
+cli_text("Packages: {pkgs}.")
+cli_text("Packages: {.pkg {pkgs}}")
+
+## Custom truncation, style set via cli_vec
+nms &lt;- cli_vec(names(mtcars), list(vec_trunc = 5))
+cli_text("Column names: {nms}.")
+
+## Classes are collapsed differently by default
+x &lt;- Sys.time()
+cli_text("Hey {.var x} has class {.cls {class(x)}}")
+
+## Escaping
+msg &lt;- "Error in if (ncol(dat$y)) {: argument is of length zero"
+cli_alert_warning("{msg}")
+
+cli_alert_warning("A warning with {{ braces }}")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

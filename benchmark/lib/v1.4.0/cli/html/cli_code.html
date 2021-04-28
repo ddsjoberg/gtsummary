@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: A block of code</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_code {cli}"><tr><td>cli_code {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>A block of code</h2>
+
+<h3>Description</h3>
+
+<p>A helper function that creates a <code>div</code> with class <code>code</code> and then calls
+<code>cli_verbatim()</code> to output code lines. The builtin theme formats these
+containers specially. In particular, it adds syntax highlighting to
+valid R code.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_code(
+  lines = NULL,
+  ...,
+  language = "R",
+  .auto_close = TRUE,
+  .envir = environment()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>lines</code></td>
+<td>
+<p>Chracter vector, each line will be a line of code, and
+newline charactes also create new lines. Note that <em>no</em> glue
+substitution is performed on the code.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>More character vectors, they are appended to <code>lines</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>language</code></td>
+<td>
+<p>Programming language. This is also added as a class,
+in addition to <code>code</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>.auto_close</code></td>
+<td>
+<p>Passed to <code>cli_div()</code> when creating the container of
+the code. By default the code container is closed after emitting
+<code>lines</code> and <code>...</code> via <code>cli_verbatim()</code>. You can keep that container
+open with <code>.auto_close</code> and/or <code>.envir</code>, and then calling
+<code>cli_verbatim()</code> to add (more) code. Note that the code will be
+formatted and syntax highlighted separately for each <code>cli_verbatim()</code>
+call.</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Passed to <code>cli_div()</code> when creating the container of the
+code.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The id of the container that contains the code.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cli_code(format(cli::cli_blockquote))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

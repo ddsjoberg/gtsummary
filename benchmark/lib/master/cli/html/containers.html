@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: CLI containers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for containers {cli}"><tr><td>containers {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>CLI containers</h2>
+
+<h3>Description</h3>
+
+<p>Container elements may contain other elements. Currently the following
+commands create container elements: <code><a href="cli_div.html">cli_div()</a></code>, <code><a href="cli_par.html">cli_par()</a></code>, the list
+elements: <code><a href="cli_ul.html">cli_ul()</a></code>, <code><a href="cli_ol.html">cli_ol()</a></code>, <code><a href="cli_dl.html">cli_dl()</a></code>, and list items are
+containers as well: <code><a href="cli_li.html">cli_li()</a></code>.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Container elements need to be closed with <code><a href="cli_end.html">cli_end()</a></code>. For convenience,
+they have an <code>.auto_close</code> argument, which instructs the container
+element to be closed automatically when the function that created it
+terminates (either regularly, or with an error).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## div with custom theme
+d &lt;- cli_div(theme = list(h1 = list(color = "blue",
+                                    "font-weight" = "bold")))
+cli_h1("Custom title")
+cli_end(d)
+
+## Close automatically
+div &lt;- function() {
+  cli_div(class = "tmp", theme = list(.tmp = list(color = "yellow")))
+  cli_text("This is yellow")
+}
+div()
+cli_text("This is not yellow any more")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

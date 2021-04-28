@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add a source note citation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tab_source_note {gt}"><tr><td>tab_source_note {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add a source note citation</h2>
+
+<h3>Description</h3>
+
+<p>Add a source note to the footer part of the <strong>gt</strong> table. A source note is
+useful for citing the data included in the table. Several can be added to the
+footer, simply use multiple calls of <code>tab_source_note()</code> and they will be
+inserted in the order provided. We can use Markdown formatting for the note,
+or, if the table is intended for HTML output, we can include HTML formatting.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tab_source_note(data, source_note)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>source_note</code></td>
+<td>
+<p>Text to be used in the source note. We can optionally use
+the <code><a href="md.html">md()</a></code> and <code><a href="html.html">html()</a></code> functions to style the text as Markdown or to
+retain HTML elements in the text.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_tab_source_note_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>2-7
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Create or Modify Parts: 
+<code><a href="tab_footnote.html">tab_footnote</a>()</code>,
+<code><a href="tab_header.html">tab_header</a>()</code>,
+<code><a href="tab_options.html">tab_options</a>()</code>,
+<code><a href="tab_row_group.html">tab_row_group</a>()</code>,
+<code><a href="tab_spanner_delim.html">tab_spanner_delim</a>()</code>,
+<code><a href="tab_spanner.html">tab_spanner</a>()</code>,
+<code><a href="tab_stubhead.html">tab_stubhead</a>()</code>,
+<code><a href="tab_style.html">tab_style</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `gtcars` to create a gt table;
+# add a source note to the table
+# footer that cites the data source
+tab_1 &lt;-
+  gtcars %&gt;%
+  dplyr::select(mfr, model, msrp) %&gt;%
+  dplyr::slice(1:5) %&gt;%
+  gt() %&gt;%
+  tab_source_note(
+    source_note = "From edmunds.com"
+  )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

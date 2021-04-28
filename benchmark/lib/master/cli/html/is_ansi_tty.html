@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Detect if a stream support ANSI escape characters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for is_ansi_tty {cli}"><tr><td>is_ansi_tty {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Detect if a stream support ANSI escape characters</h2>
+
+<h3>Description</h3>
+
+<p>We check that all of the following hold:
+</p>
+
+<ul>
+<li><p> The stream is a terminal.
+</p>
+</li>
+<li><p> The platform is Unix.
+</p>
+</li>
+<li><p> R is not running inside R.app (the macOS GUI).
+</p>
+</li>
+<li><p> R is not running inside RStudio.
+</p>
+</li>
+<li><p> R is not running inside Emacs.
+</p>
+</li>
+<li><p> The terminal is not &quot;dumb&quot;.
+</p>
+</li>
+<li> <p><code>stream</code> is either the standard output or the standard error stream.
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+is_ansi_tty(stream = "auto")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>stream</code></td>
+<td>
+<p>The stream to inspect or manipulate, an R connection
+object. It can also be a string, one of <code>"auto"</code>, <code>"message"</code>,
+<code>"stdout"</code>, <code>"stderr"</code>. <code>"auto"</code> will select <code>stdout()</code> if the session is
+interactive and there are no sinks, otherwise it will select <code>stderr()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code>TRUE</code> or <code>FALSE</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other terminal capabilities: 
+<code><a href="is_dynamic_tty.html">is_dynamic_tty</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+is_ansi_tty()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

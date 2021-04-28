@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: String templating with pluralization</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for pluralize {cli}"><tr><td>pluralize {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>String templating with pluralization</h2>
+
+<h3>Description</h3>
+
+<p><code>pluralize()</code> is similar to <code><a href="../../glue/html/glue.html">glue::glue()</a></code>, with two differences:
+</p>
+
+<ul>
+<li><p> It supports cli's <a href="pluralization.html">pluralization</a> syntax, using <code style="white-space: pre;">{?}</code> markers.
+</p>
+</li>
+<li><p> It collapses substituted vectors into a comma separated string.
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+pluralize(
+  ...,
+  .envir = parent.frame(),
+  .transformer = glue::identity_transformer
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>..., .envir, .transformer</code></td>
+<td>
+<p>All arguments are passed to <code><a href="../../glue/html/glue.html">glue::glue()</a></code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>See <a href="pluralization.html">pluralization</a> and some examples below.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other pluralization: 
+<code><a href="pluralization-helpers.html">no</a>()</code>,
+<code><a href="pluralization.html">pluralization</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Regular plurals
+nfile &lt;- 0; pluralize("Found {nfile} file{?s}.")
+nfile &lt;- 1; pluralize("Found {nfile} file{?s}.")
+nfile &lt;- 2; pluralize("Found {nfile} file{?s}.")
+
+# Irregular plurals
+ndir &lt;- 1; pluralize("Found {ndir} director{?y/ies}.")
+ndir &lt;- 5; pluralize("Found {ndir} director{?y/ies}.")
+
+# Use 'no' instead of zero
+nfile &lt;- 0; pluralize("Found {no(nfile)} file{?s}.")
+nfile &lt;- 1; pluralize("Found {no(nfile)} file{?s}.")
+nfile &lt;- 2; pluralize("Found {no(nfile)} file{?s}.")
+
+# Use the length of character vectors
+pkgs &lt;- "pkg1"
+pluralize("Will remove the {pkgs} package{?s}.")
+pkgs &lt;- c("pkg1", "pkg2", "pkg3")
+pluralize("Will remove the {pkgs} package{?s}.")
+
+pkgs &lt;- character()
+pluralize("Will remove {?no/the/the} {pkgs} package{?s}.")
+pkgs &lt;- c("pkg1", "pkg2", "pkg3")
+pluralize("Will remove {?no/the/the} {pkgs} package{?s}.")
+
+# Multiple quantities
+nfiles &lt;- 3; ndirs &lt;- 1
+pluralize("Found {nfiles} file{?s} and {ndirs} director{?y/ies}")
+
+# Explicit quantities
+nupd &lt;- 3; ntotal &lt;- 10
+cli_text("{nupd}/{ntotal} {qty(nupd)} file{?s} {?needs/need} updates")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

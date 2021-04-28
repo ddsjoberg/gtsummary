@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: CLI alerts</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_alert {cli}"><tr><td>cli_alert {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>CLI alerts</h2>
+
+<h3>Description</h3>
+
+<p>Alerts are typically short status messages.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_alert(text, id = NULL, class = NULL, wrap = FALSE, .envir = parent.frame())
+
+cli_alert_success(
+  text,
+  id = NULL,
+  class = NULL,
+  wrap = FALSE,
+  .envir = parent.frame()
+)
+
+cli_alert_danger(
+  text,
+  id = NULL,
+  class = NULL,
+  wrap = FALSE,
+  .envir = parent.frame()
+)
+
+cli_alert_warning(
+  text,
+  id = NULL,
+  class = NULL,
+  wrap = FALSE,
+  .envir = parent.frame()
+)
+
+cli_alert_info(
+  text,
+  id = NULL,
+  class = NULL,
+  wrap = FALSE,
+  .envir = parent.frame()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>Text of the alert.</p>
+</td></tr>
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>Id of the alert element. Can be used in themes.</p>
+</td></tr>
+<tr valign="top"><td><code>class</code></td>
+<td>
+<p>Class of the alert element. Can be used in themes.</p>
+</td></tr>
+<tr valign="top"><td><code>wrap</code></td>
+<td>
+<p>Whether to auto-wrap the text of the alert.</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Environment to evaluate the glue expressions in.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+cli_alert("Cannot lock package library.")
+cli_alert_success("Package {.pkg cli} installed successfully.")
+cli_alert_danger("Could not download {.pkg cli}.")
+cli_alert_warning("Internet seems to be unreacheable.")
+cli_alert_info("Downloaded 1.45MiB of data")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
