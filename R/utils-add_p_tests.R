@@ -27,7 +27,7 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
 
 add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
   .superfluous_args(variable, ...)
-  expr(stats::wilcox.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
+  expr(stats::wilcox.test(as.numeric(!!rlang::sym(variable)) ~ as.factor(!!rlang::sym(by)),
     data = !!data, !!!test.args
   )) %>%
     eval() %>%
