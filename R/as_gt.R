@@ -155,7 +155,7 @@ table_styling_to_gt_calls <- function(x, ...) {
       map(
         seq_len(nrow(x$table_styling$fmt_missing)),
         ~ expr(gt::fmt_missing(
-          columns = gt::vars(!!!syms(x$table_styling$fmt_missing$column[[.x]])),
+          columns = !!x$table_styling$fmt_missing$column[[.x]],
           rows = !!x$table_styling$fmt_missing$row_numbers[[.x]],
           missing_text = !!x$table_styling$fmt_missing$symbol[[.x]]
         ))
@@ -174,7 +174,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     map(
       seq_len(nrow(df_cols_align)),
       ~ expr(gt::cols_align(
-        columns = gt::vars(!!!syms(df_cols_align$cols[[.x]])),
+        columns = !!df_cols_align$cols[[.x]],
         align = !!df_cols_align$align[[.x]]
       ))
     )
@@ -187,7 +187,7 @@ table_styling_to_gt_calls <- function(x, ...) {
       ~ expr(gt::tab_style(
         style = gt::cell_text(indent = gt::px(10), align = "left"),
         locations = gt::cells_body(
-          columns = gt::vars(!!!syms(df_indent$column[[.x]])),
+          columns = !!df_indent$column[[.x]],
           rows = !!df_indent$row_numbers[[.x]]
         )
       ))
@@ -198,7 +198,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     map(
       seq_len(nrow(x$table_styling$fmt_fun)),
       ~ expr(gt::fmt(
-        columns = gt::vars(!!sym(x$table_styling$fmt_fun$column[[.x]])),
+        columns = !!x$table_styling$fmt_fun$column[[.x]],
         rows = !!x$table_styling$fmt_fun$row_numbers[[.x]],
         fns = !!x$table_styling$fmt_fun$fmt_fun[[.x]]
       ))
@@ -212,7 +212,7 @@ table_styling_to_gt_calls <- function(x, ...) {
       ~ expr(gt::tab_style(
         style = gt::cell_text(weight = "bold"),
         locations = gt::cells_body(
-          columns = gt::vars(!!sym(df_bold$column[[.x]])),
+          columns = !!df_bold$column[[.x]],
           rows = !!df_bold$row_numbers[[.x]]
         )
       ))
@@ -226,7 +226,7 @@ table_styling_to_gt_calls <- function(x, ...) {
       ~ expr(gt::tab_style(
         style = gt::cell_text(style = "italic"),
         locations = gt::cells_body(
-          columns = gt::vars(!!sym(df_italic$column[[.x]])),
+          columns = !!df_italic$column[[.x]],
           rows = !!df_italic$row_numbers[[.x]]
         )
       ))
@@ -281,7 +281,7 @@ table_styling_to_gt_calls <- function(x, ...) {
             return(expr(
               gt::tab_footnote(
                 footnote = !!footnote,
-                locations = gt::cells_column_labels(columns = vars(!!!syms(columns)))
+                locations = gt::cells_column_labels(columns = !!columns)
               )
             ))
           }
@@ -289,7 +289,7 @@ table_styling_to_gt_calls <- function(x, ...) {
             return(expr(
               gt::tab_footnote(
                 footnote = !!footnote,
-                locations = gt::cells_body(columns = vars(!!!syms(columns)), rows = !!rows)
+                locations = gt::cells_body(columns = !!columns, rows = !!rows)
               )
             ))
           }
@@ -316,7 +316,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     map(
       seq_len(nrow(df_spanning_header)),
       ~ expr(gt::tab_spanner(
-        columns = gt::vars(!!!syms(df_spanning_header$cols[[.x]])),
+        columns = !!df_spanning_header$cols[[.x]],
         label = gt::md(!!df_spanning_header$spanning_header[[.x]])
       ))
     )
@@ -345,7 +345,7 @@ table_styling_to_gt_calls <- function(x, ...) {
     names(x$table_body) %>%
     setdiff(.cols_to_show(x)) %>%
     {
-      expr(gt::cols_hide(columns = gt::vars(!!!syms(.))))
+      expr(gt::cols_hide(columns = !!.))
     }
 
   # return list of gt expressions
