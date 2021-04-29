@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Bug fix for Hmisc labelled data with tbl_summary() (#876 )
+* Variables are converted to numeric before being passed to `wilcox.test()` in `add_p()`. This avoids an error when a date difference is passed. (#880)
+
+* Bug fix for {Hmisc} labeled data with `tbl_summary()` (#876)
 
 # gtsummary 1.4.0
 
