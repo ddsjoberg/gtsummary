@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: ANSI colored text</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ansi-styles {cli}"><tr><td>ansi-styles {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>ANSI colored text</h2>
+
+<h3>Description</h3>
+
+<p>cli has a number of functions to color and style text at the command
+line. They provide a mode modern interface than the crayon package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+bg_black(...)
+
+bg_blue(...)
+
+bg_cyan(...)
+
+bg_green(...)
+
+bg_magenta(...)
+
+bg_red(...)
+
+bg_white(...)
+
+bg_yellow(...)
+
+bg_none(...)
+
+col_black(...)
+
+col_blue(...)
+
+col_cyan(...)
+
+col_green(...)
+
+col_magenta(...)
+
+col_red(...)
+
+col_white(...)
+
+col_yellow(...)
+
+col_grey(...)
+
+col_silver(...)
+
+col_none(...)
+
+style_dim(...)
+
+style_blurred(...)
+
+style_bold(...)
+
+style_hidden(...)
+
+style_inverse(...)
+
+style_italic(...)
+
+style_reset(...)
+
+style_strikethrough(...)
+
+style_underline(...)
+
+style_no_bold(...)
+
+style_no_blurred(...)
+
+style_no_dim(...)
+
+style_no_italic(...)
+
+style_no_underline(...)
+
+style_no_inverse(...)
+
+style_no_hidden(...)
+
+style_no_strikethrough(...)
+
+style_no_color(...)
+
+style_no_bg_color(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Character strings, they will be pasted together with
+<code>paste0()</code>, before applying the style function.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The <code style="white-space: pre;">col_*</code> functions change the (foreground) color to the text.
+These are the eight original ANSI colors. Note that in some terminals,
+they might actually look differently, as terminals have their own
+settings for how to show them. <code>col_none()</code> is the default color, this
+is useful in a substring of a colored string.
+</p>
+<p>The <code style="white-space: pre;">bg_*</code> functions change the background color of the text.
+These are the eight original ANSI background colors. These, too, can
+vary in appearence, depending on terminal settings. <code>bg_none()</code> the
+the default background color, this is useful in a substring of a
+background-colored string.
+</p>
+<p>The <code style="white-space: pre;">style_*</code> functions apply other styling to the text. The currently
+supported styling funtions are:
+</p>
+
+<ul>
+<li> <p><code>style_reset()</code> to remove any style, including color,
+</p>
+</li>
+<li> <p><code>style_bold()</code> for boldface / strong text, although some terminals
+show a bright, high intensity text instead,
+</p>
+</li>
+<li> <p><code>style_dim()</code> (or <code>style_blurred()</code> reduced intensity text.
+</p>
+</li>
+<li> <p><code>style_italic()</code> (not widely supported).
+</p>
+</li>
+<li> <p><code>style_underline()</code>,
+</p>
+</li>
+<li> <p><code>style_inverse()</code>,
+</p>
+</li>
+<li> <p><code>style_hidden()</code>,
+</p>
+</li>
+<li> <p><code>style_strikethrough()</code> (not widely supported).
+</p>
+</li></ul>
+
+<p>The style functions take any number of character vectors as arguments,
+and they concatenate them using <code>paste0()</code> before adding the style.
+</p>
+<p>Styles can also be nested, and then inner style takes precedence, see
+examples below.
+</p>
+<p>Sometimes you want to revert back to the default text color, in the
+middle of colored text, or you want to have a normal font in the middle
+of italic text. You can use the <code style="white-space: pre;">style_no_*</code> functions for this. Every
+<code style="white-space: pre;">style_*()</code> function has a <code style="white-space: pre;">style_no_*()</code> pair, which defends its
+argument from taking on the style. See examples below.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An ANSI string (class <code>ansi_string</code>), that contains ANSI
+sequences, if the current platform supports them. You can simply
+use <code>cat()</code> to print them to the terminal.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other ANSI styling: 
+<code><a href="combine_ansi_styles.html">combine_ansi_styles</a>()</code>,
+<code><a href="make_ansi_style.html">make_ansi_style</a>()</code>,
+<code><a href="num_ansi_colors.html">num_ansi_colors</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+col_blue("Hello ", "world!")
+cat(col_blue("Hello ", "world!"))
+
+cat("... to highlight the", col_red("search term"),
+    "in a block of text\n")
+
+## Style stack properly
+cat(col_green(
+ "I am a green line ",
+ col_blue(style_underline(style_bold("with a blue substring"))),
+ " that becomes green again!"
+))
+
+error &lt;- combine_ansi_styles("red", "bold")
+warn &lt;- combine_ansi_styles("magenta", "underline")
+note &lt;- col_cyan
+cat(error("Error: subscript out of bounds!\n"))
+cat(warn("Warning: shorter argument was recycled.\n"))
+cat(note("Note: no such directory.\n"))
+
+# style_no_* functions, note that the color is not removed
+style_italic(col_green(paste0(
+  "italic before, ",
+  style_no_italic("normal here, "),
+  "italic after"
+)))
+
+# avoiding  color for substring
+style_italic(col_red(paste(
+  "red before",
+  col_none("not red between"),
+  "red after"
+)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

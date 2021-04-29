@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Determine the width of the console</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for console_width {cli}"><tr><td>console_width {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Determine the width of the console</h2>
+
+<h3>Description</h3>
+
+<p>It uses the <code>cli.width</code> option, if set. Otherwise it tries to
+determine the size of the terminal or console window.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+console_width()
+</pre>
+
+
+<h3>Details</h3>
+
+<p>These are the exact rules:
+</p>
+
+<ul>
+<li><p> If the <code>cli.width</code> option is set to a positive integer, it is used.
+</p>
+</li>
+<li><p> If the <code>cli.width</code> option is set, but it is not a positive integer,
+and error is thrown.
+</p>
+</li></ul>
+
+<p>Then we try to determine the size of the terminal or console window:
+</p>
+
+<ul>
+<li><p> If we are not in RStudio, or we are in an RStudio temrinal,
+then we try to use the <code>ps::ps_tty_size()</code> function to query the
+terminal size. This might fail if ps is not installed or R is not
+running in a terminal, but failures are ignored.
+</p>
+</li>
+<li><p> If we are in the RStudio build pane, then the <code>RSTUDIO_CONSOLE_WIDTH</code>
+environment variable is used. If the build pane is resized, then this
+environment variable is not accurate any more, and the output might
+get garbled.
+</p>
+</li>
+<li><p> We are <em>not</em> using the <code>RSTUDIO_CONSOLE_WIDTH</code> environment variable
+if we are in the RStudio console.
+</p>
+</li></ul>
+
+<p>If we cannot determine the size of the terminal or console window, then
+we use the <code>width</code> option. If the <code>width</code> option is not set, then
+we return 80L.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Integer scalar, the console with, in number of characters.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+console_width()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -58,7 +58,7 @@ test_that("tbl_summary works in character inputs for `by=`", {
   my_by_variable <- "trt"
 
   expect_error(
-    tbl_summary(trial, by = my_by_variable),
+    tbl_summary(trial, by = all_of(my_by_variable)),
     NA
   )
   expect_error(
@@ -599,4 +599,39 @@ test_that("unobserved levels can be dichotomously summarized", {
       dplyr::pull(stat_0),
     "0 (0%)"
   )
+})
+
+test_that("Hmisc labelled data don't error", {
+  skip_if_not_installed("Hmisc")
+  hmisc_data <-
+    structure(
+      list(
+        cd4_count = c(
+          30, 97, 210, NA, 358, 242, 126,
+          792, 6, 145, 22, 150, 43, 23, 39, 953, 357, 427, 367, 239, 72,
+          61, 61, 438, 392, 1092, 245, 326, 42, 135, 199, 158, 17, NA,
+          287, 187, 252, 477, 157, NA, NA, 362, NA, 183, 885, 109, 321,
+          286, 142, 797
+        ),
+        unsuccessful = c(
+          0, 0, 0, 1, 0, 0, 1, 1, 0, 1,
+          1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0,
+          0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 0
+        )
+      ),
+      row.names = c(NA, 50L),
+      class = "data.frame"
+    )
+
+  # Add label to CD4 count, using Hmisc package
+  Hmisc::label(hmisc_data$cd4_count) <- "CD4 count"
+
+  expect_equal(
+    hmisc_data %>%
+      tbl_summary(by = unsuccessful, missing = "no") %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull("stat_1"),
+    "210 (135, 358)"
+  )
+
 })

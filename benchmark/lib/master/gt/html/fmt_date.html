@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Format values as dates</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for fmt_date {gt}"><tr><td>fmt_date {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Format values as dates</h2>
+
+<h3>Description</h3>
+
+<p>Format input date values that are either of the <code>Date</code> type, or, are
+character-based and expressed according to the ISO 8601 date format
+(<code>YYYY-MM-DD</code>). Once the appropriate data cells are targeted with <code>columns</code>
+(and, optionally, <code>rows</code>), we can simply apply a preset date style to format
+the dates. The following date styles are available for simpler formatting of
+ISO dates (all using the input date of <code>2000-02-29</code> in the example output
+dates):
+</p>
+
+<ol>
+<li><p> iso: <code>2000-02-29</code>
+</p>
+</li>
+<li><p> wday_month_day_year: <code style="white-space: pre;">Tuesday, February 29, 2000</code>
+</p>
+</li>
+<li><p> wd_m_day_year: <code style="white-space: pre;">Tue, Feb 29, 2000</code>
+</p>
+</li>
+<li><p> wday_day_month_year: <code style="white-space: pre;">Tuesday 29 February 2000</code>
+</p>
+</li>
+<li><p> month_day_year: <code style="white-space: pre;">February 29, 2000</code>
+</p>
+</li>
+<li><p> m_day_year: <code style="white-space: pre;">Feb 29, 2000</code>
+</p>
+</li>
+<li><p> day_m_year: <code style="white-space: pre;">29 Feb 2000</code>
+</p>
+</li>
+<li><p> day_month_year: <code style="white-space: pre;">29 February 2000</code>
+</p>
+</li>
+<li><p> day_month: <code style="white-space: pre;">29 February</code>
+</p>
+</li>
+<li><p> year: <code>2000</code>
+</p>
+</li>
+<li><p> month: <code>February</code>
+</p>
+</li>
+<li><p> day: <code>29</code>
+</p>
+</li>
+<li><p> year.mn.day: <code>2000/02/29</code>
+</p>
+</li>
+<li><p> y.mn.day: <code>0/02/29</code>
+</p>
+</li></ol>
+
+<p>We can use the <code><a href="info_date_style.html">info_date_style()</a></code> function for a useful reference on all of
+the possible inputs to <code>date_style</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+fmt_date(data, columns, rows = everything(), date_style = 2)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>The columns to format. Can either be a series of column names
+provided in <code><a href="../../base/html/c.html">c()</a></code>, a vector of column indices, or a helper function
+focused on selections. The select helper functions are: <code><a href="reexports.html">starts_with()</a></code>,
+<code><a href="reexports.html">ends_with()</a></code>, <code><a href="reexports.html">contains()</a></code>, <code><a href="reexports.html">matches()</a></code>, <code><a href="reexports.html">one_of()</a></code>, <code><a href="reexports.html">num_range()</a></code>, and
+<code><a href="reexports.html">everything()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>rows</code></td>
+<td>
+<p>Optional rows to format. Providing either <code><a href="reexports.html">everything()</a></code> (the
+default) or <code>TRUE</code> results in all rows in <code>columns</code> being formatted. Can
+either be a vector of row captions provided in <code><a href="../../base/html/c.html">c()</a></code>, a vector of row
+indices, or a helper function focused on selections. The select helper
+functions are: <code><a href="reexports.html">starts_with()</a></code>, <code><a href="reexports.html">ends_with()</a></code>, <code><a href="reexports.html">contains()</a></code>, <code><a href="reexports.html">matches()</a></code>,
+<code><a href="reexports.html">one_of()</a></code>, <code><a href="reexports.html">num_range()</a></code>, and <code><a href="reexports.html">everything()</a></code>. We can also use expressions
+to filter down to the rows we need (e.g.,
+<code style="white-space: pre;">[colname_1] &gt; 100 &amp; [colname_2] &lt; 50</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>date_style</code></td>
+<td>
+<p>The date style to use. Supply a number (from <code>1</code> to <code>14</code>)
+that corresponds to the preferred date style. Use <code><a href="info_date_style.html">info_date_style()</a></code> to
+see the different numbered and named date presets.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Targeting of values is done through <code>columns</code> and additionally by <code>rows</code> (if
+nothing is provided for <code>rows</code> then entire columns are selected). A number of
+helper functions exist to make targeting more effective. Conditional
+formatting is possible by providing a conditional expression to the <code>rows</code>
+argument. See the Arguments section for more information on this.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_fmt_date_1.png" width=100% />
+</p>
+<p><img src="../help/figures/man_fmt_date_2.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>3-5
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Format Data: 
+<code><a href="data_color.html">data_color</a>()</code>,
+<code><a href="fmt_currency.html">fmt_currency</a>()</code>,
+<code><a href="fmt_datetime.html">fmt_datetime</a>()</code>,
+<code><a href="fmt_markdown.html">fmt_markdown</a>()</code>,
+<code><a href="fmt_missing.html">fmt_missing</a>()</code>,
+<code><a href="fmt_number.html">fmt_number</a>()</code>,
+<code><a href="fmt_passthrough.html">fmt_passthrough</a>()</code>,
+<code><a href="fmt_percent.html">fmt_percent</a>()</code>,
+<code><a href="fmt_scientific.html">fmt_scientific</a>()</code>,
+<code><a href="fmt_time.html">fmt_time</a>()</code>,
+<code><a href="fmt.html">fmt</a>()</code>,
+<code><a href="text_transform.html">text_transform</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `exibble` to create a gt table;
+# keep only the `date` and `time` columns;
+# format the `date` column to have
+# dates formatted as `month_day_year`
+# (date style `5`)
+tab_1 &lt;-
+  exibble %&gt;%
+  dplyr::select(date, time) %&gt;%
+  gt() %&gt;%
+  fmt_date(
+    columns = date,
+    date_style = 5
+  )
+
+# Use `exibble` to create a gt table;
+# keep only the `date` and `time` columns;
+# format the `date` column to have mixed
+# date formats (dates after April will
+# be different than the others)
+tab_2 &lt;-
+  exibble %&gt;%
+  dplyr::select(date, time) %&gt;%
+  gt() %&gt;%
+  fmt_date(
+    columns = date,
+    rows =
+      as.Date(date) &gt; as.Date("2015-04-01"),
+    date_style = 6
+  ) %&gt;%
+  fmt_date(
+    columns = date,
+    rows =
+      as.Date(date) &lt;= as.Date("2015-04-01"),
+    date_style = 7
+  )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

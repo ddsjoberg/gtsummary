@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: The built-in CLI theme</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for builtin_theme {cli}"><tr><td>builtin_theme {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>The built-in CLI theme</h2>
+
+<h3>Description</h3>
+
+<p>This theme is always active, and it is at the bottom of the theme
+stack. See <a href="themes.html">themes</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+builtin_theme(dark = getOption("cli_theme_dark", "auto"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>dark</code></td>
+<td>
+<p>Whether to use a dark theme. The <code>cli_theme_dark</code> option
+can be used to request a dark theme explicitly. If this is not set,
+or set to <code>"auto"</code>, then cli tries to detect a dark theme, this
+works in recent RStudio versions and in iTerm on macOS.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A named list, a CLI theme.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="themes.html">themes</a>, <code><a href="simple_theme.html">simple_theme()</a></code>.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

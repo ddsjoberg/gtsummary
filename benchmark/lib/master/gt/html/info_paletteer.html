@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: View a table with info on color palettes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for info_paletteer {gt}"><tr><td>info_paletteer {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>View a table with info on color palettes</h2>
+
+<h3>Description</h3>
+
+<p>While the <code><a href="data_color.html">data_color()</a></code> function allows us to flexibly color data cells in
+our <strong>gt</strong> table, the harder part of this process is discovering and
+choosing color palettes that are suitable for the table output. We can make
+this process much easier in two ways: (1) by using the <strong>paletteer</strong>
+package, which makes a wide range of palettes from various R packages readily
+available, and (2) calling the <code>info_paletteer()</code> function to give us an
+information table that serves as a quick reference for all of the discrete
+color palettes available in <strong>paletteer</strong>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+info_paletteer(color_pkgs = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>color_pkgs</code></td>
+<td>
+<p>A vector of color packages that determines which sets of
+palettes should be displayed in the information table. If this is
+<code>NULL</code> (the default) then all of the discrete palettes from all of the
+color packages represented in <strong>paletteer</strong> will be displayed.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The palettes displayed are organized by package and by palette name. These
+values are required when obtaining a palette (as a vector of hexadecimal
+colors), from the the <code>paletteer::paletteer_d()</code> function. Once we are
+familiar with the names of the color palette packages (e.g.,
+<strong>RColorBrewer</strong>, <strong>ggthemes</strong>, <strong>wesanderson</strong>), we can narrow down
+the content of this information table by supplying a vector of such package
+names to <code>color_pkgs</code>.
+</p>
+<p>Colors from the following color packages (all supported by <strong>paletteer</strong>)
+are shown by default with <code>info_paletteer()</code>:
+</p>
+
+<ul>
+<li> <p><strong>awtools</strong>, 5 palettes
+</p>
+</li>
+<li> <p><strong>dichromat</strong>, 17 palettes
+</p>
+</li>
+<li> <p><strong>dutchmasters</strong>, 6 palettes
+</p>
+</li>
+<li> <p><strong>ggpomological</strong>, 2 palettes
+</p>
+</li>
+<li> <p><strong>ggsci</strong>, 42 palettes
+</p>
+</li>
+<li> <p><strong>ggthemes</strong>, 31 palettes
+</p>
+</li>
+<li> <p><strong>ghibli</strong>, 27 palettes
+</p>
+</li>
+<li> <p><strong>grDevices</strong>, 1 palette
+</p>
+</li>
+<li> <p><strong>jcolors</strong>, 13 palettes
+</p>
+</li>
+<li> <p><strong>LaCroixColoR</strong>, 21 palettes
+</p>
+</li>
+<li> <p><strong>NineteenEightyR</strong>, 12 palettes
+</p>
+</li>
+<li> <p><strong>nord</strong>, 16 palettes
+</p>
+</li>
+<li> <p><strong>ochRe</strong>, 16 palettes
+</p>
+</li>
+<li> <p><strong>palettetown</strong>, 389 palettes
+</p>
+</li>
+<li> <p><strong>pals</strong>, 8 palettes
+</p>
+</li>
+<li> <p><strong>Polychrome</strong>, 7 palettes
+</p>
+</li>
+<li> <p><strong>quickpalette</strong>, 17 palettes
+</p>
+</li>
+<li> <p><strong>rcartocolor</strong>, 34 palettes
+</p>
+</li>
+<li> <p><strong>RColorBrewer</strong>, 35 palettes
+</p>
+</li>
+<li> <p><strong>Redmonder</strong>, 41 palettes
+</p>
+</li>
+<li> <p><strong>wesanderson</strong>, 19 palettes
+</p>
+</li>
+<li> <p><strong>yarrr</strong>, 21 palettes
+</p>
+</li></ul>
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_info_paletteer_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>10-5
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Information Functions: 
+<code><a href="info_currencies.html">info_currencies</a>()</code>,
+<code><a href="info_date_style.html">info_date_style</a>()</code>,
+<code><a href="info_google_fonts.html">info_google_fonts</a>()</code>,
+<code><a href="info_locales.html">info_locales</a>()</code>,
+<code><a href="info_time_style.html">info_time_style</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Get a table of info on just the
+# `ggthemes` color palette (easily
+# accessible from the paletteer pkg)
+tab_1 &lt;-
+  info_paletteer(
+    color_pkgs = "ggthemes")
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

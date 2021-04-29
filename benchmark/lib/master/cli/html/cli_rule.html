@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: CLI horizontal rule</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_rule {cli}"><tr><td>cli_rule {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>CLI horizontal rule</h2>
+
+<h3>Description</h3>
+
+<p>It can be used to separate parts of the output. The line style of the
+rule can be changed via the the <code>line-type</code> property. Possible values
+are:
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_rule(
+  left = "",
+  center = "",
+  right = "",
+  id = NULL,
+  .envir = parent.frame()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>left</code></td>
+<td>
+<p>Label to show on the left. It interferes with the <code>center</code>
+label, only at most one of them can be present.</p>
+</td></tr>
+<tr valign="top"><td><code>center</code></td>
+<td>
+<p>Label to show at the center. It interferes  with the
+<code>left</code> and <code>right</code> labels.</p>
+</td></tr>
+<tr valign="top"><td><code>right</code></td>
+<td>
+<p>Label to show on the right. It interferes with the <code>center</code>
+label, only at most one of them can be present.</p>
+</td></tr>
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>Element id, a string. If <code>NULL</code>, then a new id is generated
+and returned.</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Environment to evaluate the glue expressions in.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+
+<ul>
+<li> <p><code>"single"</code>: (same as <code>1</code>), a single line,
+</p>
+</li>
+<li> <p><code>"double"</code>: (same as <code>2</code>), a double line,
+</p>
+</li>
+<li> <p><code>"bar1"</code>, <code>"bar2"</code>, <code>"bar3"</code>, etc., <code>"bar8"</code> uses varying height bars.
+</p>
+</li></ul>
+
+<p>Colors and background colors can similarly changed via a theme, see
+examples below.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cli_rule()
+cli_text(packageDescription("cli")$Description)
+cli_rule()
+
+# Theming
+d &lt;- cli_div(theme = list(rule = list(
+  color = "blue",
+  "background-color" = "darkgrey",
+  "line-type" = "double")))
+cli_rule("Left", right = "Right")
+cli_end(d)
+
+# Interpolation
+cli_rule(left = "One plus one is {1+1}")
+cli_rule(left = "Package {.pkg mypackage}")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

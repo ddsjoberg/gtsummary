@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Format a value for printing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_format {cli}"><tr><td>cli_format {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Format a value for printing</h2>
+
+<h3>Description</h3>
+
+<p>This function can be used directly, or via the <code style="white-space: pre;">{.val ...}</code> inline
+style. <code style="white-space: pre;">{.val {expr}}</code> calls <code>cli_format()</code> automatically on the value
+of <code>expr</code>, before styling and collapsing it.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_format(x, style = NULL, ...)
+
+## Default S3 method:
+cli_format(x, style = NULL, ...)
+
+## S3 method for class 'character'
+cli_format(x, style = NULL, ...)
+
+## S3 method for class 'numeric'
+cli_format(x, style = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>The object to format.</p>
+</td></tr>
+<tr valign="top"><td><code>style</code></td>
+<td>
+<p>List of formatting options, see the individual methods
+for the style options they support.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional arguments for methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>It is possible to define new S3 methods for <code>cli_format</code> and then
+these will be used automatically for <code style="white-space: pre;">{.val ...}</code> expressions.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="cli_vec.html">cli_vec()</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+things &lt;- c(rep("this", 3), "that")
+cli_format(things)
+cli_text("{.val {things}}")
+
+nums &lt;- 1:5 / 7
+cli_format(nums, style = list(digits = 2))
+cli_text("{.val {nums}}")
+divid &lt;- cli_div(theme = list(.val = list(digits = 3)))
+cli_text("{.val {nums}}")
+cli_end(divid)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

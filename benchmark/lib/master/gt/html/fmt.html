@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Set a column format with a formatter function</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for fmt {gt}"><tr><td>fmt {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Set a column format with a formatter function</h2>
+
+<h3>Description</h3>
+
+<p>The <code>fmt()</code> function provides greater control in formatting raw data values
+than any of the specialized <code style="white-space: pre;">fmt_*()</code> functions that are available in
+<strong>gt</strong>. Along with the <code>columns</code> and <code>rows</code> arguments that provide some
+precision in targeting data cells, the <code>fns</code> argument allows you to define
+one or more functions for manipulating the raw data.
+If providing a single function to <code>fns</code>, the recommended format is in the
+form: <code>fns = function(x) ...</code>. This single function will format the targeted
+data cells the same way regardless of the output format (e.g., HTML, LaTeX,
+RTF).
+If you require formatting of <code>x</code> that depends on the output format, a list of
+functions can be provided for the <code>html</code>, <code>latex</code>, and <code>default</code> contexts.
+This can be in the form of <code>fns = list(html = function(x) ..., latex = function(x) ..., default = function(x) ...)</code>. In this multiple-function case,
+we recommended including the <code>default</code> function as a fallback if all contexts
+aren't provided.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+fmt(data, columns = everything(), rows = everything(), fns)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>The columns to format. Can either be a series of column names
+provided in <code><a href="../../base/html/c.html">c()</a></code>, a vector of column indices, or a helper function
+focused on selections. The select helper functions are: <code><a href="reexports.html">starts_with()</a></code>,
+<code><a href="reexports.html">ends_with()</a></code>, <code><a href="reexports.html">contains()</a></code>, <code><a href="reexports.html">matches()</a></code>, <code><a href="reexports.html">one_of()</a></code>, <code><a href="reexports.html">num_range()</a></code>, and
+<code><a href="reexports.html">everything()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>rows</code></td>
+<td>
+<p>Optional rows to format. Providing either <code><a href="reexports.html">everything()</a></code> (the
+default) or <code>TRUE</code> results in all rows in <code>columns</code> being formatted. Can
+either be a vector of row captions provided in <code><a href="../../base/html/c.html">c()</a></code>, a vector of row
+indices, or a helper function focused on selections. The select helper
+functions are: <code><a href="reexports.html">starts_with()</a></code>, <code><a href="reexports.html">ends_with()</a></code>, <code><a href="reexports.html">contains()</a></code>, <code><a href="reexports.html">matches()</a></code>,
+<code><a href="reexports.html">one_of()</a></code>, <code><a href="reexports.html">num_range()</a></code>, and <code><a href="reexports.html">everything()</a></code>. We can also use expressions
+to filter down to the rows we need (e.g.,
+<code style="white-space: pre;">[colname_1] &gt; 100 &amp; [colname_2] &lt; 50</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>fns</code></td>
+<td>
+<p>Either a single formatting function or a named list of functions.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>As with all of the <code style="white-space: pre;">fmt_*()</code> functions, targeting of values is done through
+<code>columns</code> and additionally by <code>rows</code> (if nothing is provided for <code>rows</code> then
+entire columns are selected). A number of helper functions exist to make
+targeting more effective. Conditional formatting is possible by providing a
+conditional expression to the <code>rows</code> argument. See the Arguments section for
+more information on this.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_fmt_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>3-11
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Format Data: 
+<code><a href="data_color.html">data_color</a>()</code>,
+<code><a href="fmt_currency.html">fmt_currency</a>()</code>,
+<code><a href="fmt_datetime.html">fmt_datetime</a>()</code>,
+<code><a href="fmt_date.html">fmt_date</a>()</code>,
+<code><a href="fmt_markdown.html">fmt_markdown</a>()</code>,
+<code><a href="fmt_missing.html">fmt_missing</a>()</code>,
+<code><a href="fmt_number.html">fmt_number</a>()</code>,
+<code><a href="fmt_passthrough.html">fmt_passthrough</a>()</code>,
+<code><a href="fmt_percent.html">fmt_percent</a>()</code>,
+<code><a href="fmt_scientific.html">fmt_scientific</a>()</code>,
+<code><a href="fmt_time.html">fmt_time</a>()</code>,
+<code><a href="text_transform.html">text_transform</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `exibble` to create a gt table;
+# format the numeric values in the `num`
+# column with a function supplied to
+# the `fns` argument
+tab_1 &lt;-
+  exibble %&gt;%
+  dplyr::select(-row, -group) %&gt;%
+  gt() %&gt;%
+  fmt(
+    columns = num,
+    fns = function(x) {
+      paste0("'", x * 1000, "'")
+    }
+  )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

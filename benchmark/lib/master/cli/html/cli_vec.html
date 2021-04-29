@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add custom cli style to a vector</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_vec {cli}"><tr><td>cli_vec {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add custom cli style to a vector</h2>
+
+<h3>Description</h3>
+
+<p>Add custom cli style to a vector
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_vec(x, style = list())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Vector that will be collapsed by cli.</p>
+</td></tr>
+<tr valign="top"><td><code>style</code></td>
+<td>
+<p>Style to apply to the vector. It is used as a theme on
+a <code>span</code> element that is created for the vector. You can set <code>vec_sep</code>
+and <code>vec_last</code> to modify the <code>sep</code> and <code>last</code> arguments of
+<code><a href="../../glue/html/glue_collapse.html">glue::glue_collapse()</a></code>. See an example below.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>You can use this function to change the default parameters of
+<code><a href="../../glue/html/glue_collapse.html">glue::glue_collapse()</a></code>, see an example below.
+</p>
+<p>The style is added as an attribute, so operations that remove
+attributes will remove the style as well.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="cli_format.html">cli_format()</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+v &lt;- cli_vec(
+  c("foo", "bar", "foobar"),
+  style = list(vec_sep = " &amp; ", vec_last = " &amp; ")
+)
+cli_text("My list: {v}.")
+
+# custom truncation
+x &lt;- cli_vec(names(mtcars), list(vec_trunc = 3))
+cli_text("Column names: {x}.")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

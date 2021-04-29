@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create a new ANSI style</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for make_ansi_style {cli}"><tr><td>make_ansi_style {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create a new ANSI style</h2>
+
+<h3>Description</h3>
+
+<p>Create a function that can be used to add ANSI styles to text.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+make_ansi_style(..., bg = FALSE, grey = FALSE, colors = num_ansi_colors())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>The style to create. See details and examples below.</p>
+</td></tr>
+<tr valign="top"><td><code>bg</code></td>
+<td>
+<p>Whether the color applies to the background.</p>
+</td></tr>
+<tr valign="top"><td><code>grey</code></td>
+<td>
+<p>Whether to specifically create a grey color.
+This flag is included, because ANSI 256 has a finer color scale
+for greys, then the usual 0:5 scale for red, green and blue components.
+It is only used for RGB color specifications (either numerically
+or via a hexa string), and it is ignored on eigth color ANSI
+terminals.</p>
+</td></tr>
+<tr valign="top"><td><code>colors</code></td>
+<td>
+<p>Number of colors, detected automatically
+by default.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The <code>...</code> style argument can be any of the following:
+</p>
+
+<ul>
+<li><p> A cli ANSI style function of class <code>ansi_style</code>. This is returned
+as is, without looking at the other arguments.
+</p>
+</li>
+<li><p> An R color name, see <code><a href="../../grDevices/html/colors.html">grDevices::colors()</a></code>.
+</p>
+</li>
+<li><p> A 6- or 8-digit hexa color string, e.g. <code style="white-space: pre;">#ff0000</code> means
+red. Transparency (alpha channel) values are ignored.
+</p>
+</li>
+<li><p> A one-column matrix with three rows for the red, green
+and blue channels, as returned by <code><a href="../../grDevices/html/col2rgb.html">grDevices::col2rgb()</a></code>.
+</p>
+</li></ul>
+
+<p><code>make_ansi_style()</code> detects the number of colors to use
+automatically (this can be overridden using the <code>colors</code>
+argument). If the number of colors is less than 256 (detected or given),
+then it falls back to the color in the ANSI eight color mode that
+is closest to the specified (RGB or R) color.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A function that can be used to color (style) strings.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other ANSI styling: 
+<code><a href="ansi-styles.html">ansi-styles</a></code>,
+<code><a href="combine_ansi_styles.html">combine_ansi_styles</a>()</code>,
+<code><a href="num_ansi_colors.html">num_ansi_colors</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+make_ansi_style("orange")
+make_ansi_style("#123456")
+make_ansi_style("orange", bg = TRUE)
+
+orange &lt;- make_ansi_style("orange")
+orange("foobar")
+cat(orange("foobar"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

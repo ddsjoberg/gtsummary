@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Merge data from two or more columns to a single column</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cols_merge {gt}"><tr><td>cols_merge {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Merge data from two or more columns to a single column</h2>
+
+<h3>Description</h3>
+
+<p>This function takes input from two or more columns and allows the contents to
+be merged them into a single column, using a pattern that specifies the
+formatting. We can specify which columns to merge together in the <code>columns</code>
+argument. The string-combining pattern is given in the <code>pattern</code> argument.
+The first column in the <code>columns</code> series operates as the target column (i.e.,
+will undergo mutation) whereas all following <code>columns</code> will be untouched.
+There is the option to hide the non-target columns (i.e., second and
+subsequent columns given in <code>columns</code>).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cols_merge(
+  data,
+  columns,
+  hide_columns = columns[-1],
+  pattern = paste0("{", seq_along(columns), "}", collapse = " ")
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>The columns that will participate in the merging process. The
+first column name provided will be the target column (i.e., undergo
+mutation) and the other columns will serve to provide input.</p>
+</td></tr>
+<tr valign="top"><td><code>hide_columns</code></td>
+<td>
+<p>Any column names provided here will have their state
+changed to <code>hidden</code> (via internal use of <code><a href="cols_hide.html">cols_hide()</a></code> if they aren't
+already hidden. This is convenient if the shared purpose of these specified
+columns is only to provide string input to the target column. To suppress
+any hiding of columns, <code>FALSE</code> can be used here.</p>
+</td></tr>
+<tr valign="top"><td><code>pattern</code></td>
+<td>
+<p>A formatting pattern that specifies the arrangement of the
+<code>column</code> values and any string literals. We need to use column numbers
+(corresponding to the position of columns provided in <code>columns</code>) within the
+pattern. These indices are to be placed in curly braces (e.g., <code>{1}</code>). All
+characters outside of braces are taken to be string literals.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>There are three other column-merging functions that offer specialized
+behavior that is optimized for common table tasks: <code><a href="cols_merge_range.html">cols_merge_range()</a></code>,
+<code><a href="cols_merge_uncert.html">cols_merge_uncert()</a></code>, and <code><a href="cols_merge_n_pct.html">cols_merge_n_pct()</a></code>. These functions operate
+similarly, where the non-target columns can be optionally hidden from the
+output table through the <code>autohide</code> option.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_cols_merge_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>4-12
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Modify Columns: 
+<code><a href="cols_align.html">cols_align</a>()</code>,
+<code><a href="cols_hide.html">cols_hide</a>()</code>,
+<code><a href="cols_label.html">cols_label</a>()</code>,
+<code><a href="cols_merge_n_pct.html">cols_merge_n_pct</a>()</code>,
+<code><a href="cols_merge_range.html">cols_merge_range</a>()</code>,
+<code><a href="cols_merge_uncert.html">cols_merge_uncert</a>()</code>,
+<code><a href="cols_move_to_end.html">cols_move_to_end</a>()</code>,
+<code><a href="cols_move_to_start.html">cols_move_to_start</a>()</code>,
+<code><a href="cols_move.html">cols_move</a>()</code>,
+<code><a href="cols_unhide.html">cols_unhide</a>()</code>,
+<code><a href="cols_width.html">cols_width</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `sp500` to create a gt table;
+# merge the `open` &amp; `close` columns
+# together, and, the `low` &amp; `high`
+# columns (putting an em dash between
+# both); rename the columns
+tab_1 &lt;-
+  sp500 %&gt;%
+  dplyr::slice(50:55) %&gt;%
+  dplyr::select(-volume, -adj_close) %&gt;%
+  gt() %&gt;%
+  cols_merge(
+    columns = c(open, close),
+    pattern = "{1}&amp;mdash;{2}"
+  ) %&gt;%
+  cols_merge(
+    columns = c(low, high),
+    pattern = "{1}&amp;mdash;{2}"
+  ) %&gt;%
+  cols_label(
+    open = "open/close",
+    low = "low/high"
+  )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

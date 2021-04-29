@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Helper for defining custom text styles for table cells</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cell_text {gt}"><tr><td>cell_text {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Helper for defining custom text styles for table cells</h2>
+
+<h3>Description</h3>
+
+<p>This helper function is to be used with the <code><a href="tab_style.html">tab_style()</a></code> function, which
+itself allows for the setting of custom styles to one or more cells. We can
+also define several styles within a single call of <code>cell_text()</code> and
+<code><a href="tab_style.html">tab_style()</a></code> will reliably apply those styles to the targeted element.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cell_text(
+  color = NULL,
+  font = NULL,
+  size = NULL,
+  align = NULL,
+  v_align = NULL,
+  style = NULL,
+  weight = NULL,
+  stretch = NULL,
+  indent = NULL,
+  decorate = NULL,
+  transform = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>color</code></td>
+<td>
+<p>The text color.</p>
+</td></tr>
+<tr valign="top"><td><code>font</code></td>
+<td>
+<p>The font or collection of fonts (subsequent font names are) used
+as fallbacks.</p>
+</td></tr>
+<tr valign="top"><td><code>size</code></td>
+<td>
+<p>The size of the font. Can be provided as a number that is assumed
+to represent <code>px</code> values (or could be wrapped in the <code><a href="px.html">px()</a></code>) helper
+function. We can also use one of the following absolute size keywords:
+<code>"xx-small"</code>, <code>"x-small"</code>, <code>"small"</code>, <code>"medium"</code>, <code>"large"</code>, <code>"x-large"</code>,
+or <code>"xx-large"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>align</code></td>
+<td>
+<p>The text alignment. Can be one of either <code>"center"</code>, <code>"left"</code>,
+<code>"right"</code>, or <code>"justify"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>v_align</code></td>
+<td>
+<p>The vertical alignment of the text in the cell. Options are
+<code>"middle"</code>, <code>"top"</code>, or <code>"bottom"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>style</code></td>
+<td>
+<p>The text style. Can be one of either <code>"normal"</code>, <code>"italic"</code>, or
+<code>"oblique"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>weight</code></td>
+<td>
+<p>The weight of the font. Can be a text-based keyword such as
+<code>"normal"</code>, <code>"bold"</code>, <code>"lighter"</code>, <code>"bolder"</code>, or, a numeric value between
+<code>1</code> and <code>1000</code>, inclusive. Note that only variable fonts may support the
+numeric mapping of weight.</p>
+</td></tr>
+<tr valign="top"><td><code>stretch</code></td>
+<td>
+<p>Allows for text to either be condensed or expanded. We can use
+one of the following text-based keywords to describe the degree of
+condensation/expansion: <code>"ultra-condensed"</code>, <code>"extra-condensed"</code>,
+<code>"condensed"</code>, <code>"semi-condensed"</code>, <code>"normal"</code>, <code>"semi-expanded"</code>,
+<code>"expanded"</code>, <code>"extra-expanded"</code>, or <code>"ultra-expanded"</code>. Alternatively, we
+can supply percentage values from <code style="white-space: pre;">0\%</code> to <code style="white-space: pre;">200\%</code>, inclusive. Negative
+percentage values are not allowed.</p>
+</td></tr>
+<tr valign="top"><td><code>indent</code></td>
+<td>
+<p>The indentation of the text. Can be provided as a number that
+is assumed to represent <code>px</code> values (or could be wrapped in the <code><a href="px.html">px()</a></code>)
+helper function. Alternatively, this can be given as a percentage (easily
+constructed with <code><a href="pct.html">pct()</a></code>).</p>
+</td></tr>
+<tr valign="top"><td><code>decorate</code></td>
+<td>
+<p>allows for text decoration effect to be applied. Here, we can
+use <code>"overline"</code>, <code>"line-through"</code>, or <code>"underline"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>transform</code></td>
+<td>
+<p>Allows for the transformation of text. Options are
+<code>"uppercase"</code>, <code>"lowercase"</code>, or <code>"capitalize"</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A list object of class <code>cell_styles</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_cell_text_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>7-19
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Helper Functions: 
+<code><a href="adjust_luminance.html">adjust_luminance</a>()</code>,
+<code><a href="cell_borders.html">cell_borders</a>()</code>,
+<code><a href="cell_fill.html">cell_fill</a>()</code>,
+<code><a href="cells_body.html">cells_body</a>()</code>,
+<code><a href="cells_column_labels.html">cells_column_labels</a>()</code>,
+<code><a href="cells_column_spanners.html">cells_column_spanners</a>()</code>,
+<code><a href="cells_footnotes.html">cells_footnotes</a>()</code>,
+<code><a href="cells_grand_summary.html">cells_grand_summary</a>()</code>,
+<code><a href="cells_row_groups.html">cells_row_groups</a>()</code>,
+<code><a href="cells_source_notes.html">cells_source_notes</a>()</code>,
+<code><a href="cells_stub_grand_summary.html">cells_stub_grand_summary</a>()</code>,
+<code><a href="cells_stub_summary.html">cells_stub_summary</a>()</code>,
+<code><a href="cells_stubhead.html">cells_stubhead</a>()</code>,
+<code><a href="cells_stub.html">cells_stub</a>()</code>,
+<code><a href="cells_summary.html">cells_summary</a>()</code>,
+<code><a href="cells_title.html">cells_title</a>()</code>,
+<code><a href="currency.html">currency</a>()</code>,
+<code><a href="default_fonts.html">default_fonts</a>()</code>,
+<code><a href="escape_latex.html">escape_latex</a>()</code>,
+<code><a href="google_font.html">google_font</a>()</code>,
+<code><a href="gt_latex_dependencies.html">gt_latex_dependencies</a>()</code>,
+<code><a href="html.html">html</a>()</code>,
+<code><a href="md.html">md</a>()</code>,
+<code><a href="pct.html">pct</a>()</code>,
+<code><a href="px.html">px</a>()</code>,
+<code><a href="random_id.html">random_id</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `exibble` to create a gt table;
+# add styles with `tab_style()` and
+# the `cell_text()` helper function
+tab_1 &lt;-
+  exibble %&gt;%
+  dplyr::select(num, currency) %&gt;%
+  gt() %&gt;%
+  fmt_number(
+    columns = c(num, currency),
+    decimals = 1
+  ) %&gt;%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_body(
+      columns = num,
+      rows = num &gt;= 5000)
+  ) %&gt;%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(
+      columns = currency,
+      rows = currency &lt; 100
+    )
+  )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

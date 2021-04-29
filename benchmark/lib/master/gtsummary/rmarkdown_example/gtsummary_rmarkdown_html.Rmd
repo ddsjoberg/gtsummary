@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
 ```
 
 ```{r libraries, message=FALSE}
@@ -27,11 +27,11 @@ patient_characteristics <-
 patient_characteristics
 ```
 
-With HTML ouput, you can include complex tables with footnotes, indendtation, and spanning table headers.
+With HTML output, you can include complex tables with footnotes, indentation, and spanning table headers.
 
 ```{r}
 # Side-by-side Regression Models
-# logistic regresssion model
+# logistic regression model
 t1 <-
   glm(response ~ trt + grade + age, trial, family = binomial) %>%
   tbl_regression(exponentiate = TRUE)

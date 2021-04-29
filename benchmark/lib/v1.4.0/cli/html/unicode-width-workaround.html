@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Working around the bad Unicode character widths</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for unicode-width-workaround {cli}"><tr><td>unicode-width-workaround {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Working around the bad Unicode character widths</h2>
+
+<h3>Description</h3>
+
+<p>R 3.6.2 and also the coming 3.6.3 and 4.0.0 versions use the Unicode 8
+standard to calculate the display width of Unicode characters.
+Unfortunately the widths of most emojis are incorrect in this standard,
+and width 1 is reported instead of the correct 2 value.
+</p>
+
+
+<h3>Details</h3>
+
+<p>cli implements a workaround for this. The package contains a table that
+contains all Unicode ranges that have wide characters (display width 2).
+</p>
+<p>On first use of one of the workaround wrappers (in <code>ansi_nchar()</code>, etc.)
+we check what the current version of R thinks about the width of these
+characters, and then create a regex that matches the ones that R
+is wrong about (<code>re_bad_char_width</code>).
+</p>
+<p>Then we use this regex to duplicate all of the problematic characters
+in the input string to the wrapper function, before calling the real
+string manupulation function (char, strwrap) etc. At end we undo the
+duplication before we return the result.
+</p>
+<p>This workaround is fine for <code>nchar()</code> and <code>strwrap()</code>, and consequently
+<code>ansi_align()</code> and <code>ansi_strtrim()</code> as well.
+</p>
+<p>The rest of the <code style="white-space: pre;">ansi_*()</code> functions work on characters, and do not
+deal with character width.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
