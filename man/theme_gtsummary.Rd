@@ -8,6 +8,7 @@
 \alias{theme_gtsummary_language}
 \alias{theme_gtsummary_continuous2}
 \alias{theme_gtsummary_mean_sd}
+\alias{theme_gtsummary_eda}
 \title{Available gtsummary themes}
 \usage{
 theme_gtsummary_journal(
@@ -38,6 +39,8 @@ theme_gtsummary_continuous2(
 )
 
 theme_gtsummary_mean_sd(set_theme = TRUE)
+
+theme_gtsummary_eda(set_theme = TRUE)
 }
 \arguments{
 \item{journal}{String indicating the journal theme to follow. One of
@@ -109,7 +112,7 @@ for details.
 \item \code{"qjecon"} \emph{The Quarterly Journal of Economics} \emph{\strong{Under Development}}
 \itemize{
 \item \code{tbl_summary()} all percentages rounded to one decimal place
-\item \code{tbl_regression()}/\code{tbl_uvregression()} add significance stars with \code{add_significance_stars()}; hides CI and p-value from output and adds column for SE
+\item \code{tbl_regression()}/\code{tbl_uvregression()} add significance stars with \code{add_significance_stars()}; hides CI and p-value from output
 }
 }
 \item \code{theme_gtsummary_compact()}
@@ -128,6 +131,11 @@ for details.
 \itemize{
 \item Set default summary statistics to mean and standard deviation in \code{tbl_summary()}
 \item Set default continuous tests in \code{add_p()} to t-test and ANOVA
+}
+\item \code{theme_gtsummary_eda()}
+\itemize{
+\item Set all continuous variables to summary type \code{"continuous2"} by default
+\item In \code{tbl_summary()} show the median, mean, IQR, SD, and Range by default
 }
 }
 

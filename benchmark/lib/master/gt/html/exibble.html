@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: A toy example tibble for testing with gt: exibble</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for exibble {gt}"><tr><td>exibble {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>A toy example tibble for testing with gt: exibble</h2>
+
+<h3>Description</h3>
+
+<p>This tibble contains data of a few different classes, which makes it
+well-suited for quick experimentation with the functions in this package. It
+contains only eight rows with numeric, character, and factor columns. The
+last 4 rows contain <code>NA</code> values in the majority of this tibble's columns (1
+missing value per column). The <code>date</code>, <code>time</code>, and <code>datetime</code> columns are
+character-based dates/times in the familiar ISO 8601 format. The <code>row</code> and
+<code>group</code> columns provide for unique rownames and two groups (<code>grp_a</code> and
+<code>grp_b</code>) for experimenting with the <code><a href="gt.html">gt()</a></code> function's <code>rowname_col</code> and
+<code>groupname_col</code> arguments.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+exibble
+</pre>
+
+
+<h3>Format</h3>
+
+<p>A tibble with 8 rows and 9 variables:
+</p>
+
+<dl>
+<dt>num</dt><dd><p>a numeric column ordered with increasingly larger values</p>
+</dd>
+<dt>char</dt><dd><p>a character column composed of names of fruits from <code>a</code> to
+<code>h</code></p>
+</dd>
+<dt>fctr</dt><dd><p>a factor column with numbers from 1 to 8, written out</p>
+</dd>
+<dt>date, time, datetime</dt><dd><p>character columns with dates, times, and
+datetimes</p>
+</dd>
+<dt>currency</dt><dd><p>a numeric column that is useful for testing currency-based
+formatting</p>
+</dd>
+<dt>row</dt><dd><p>a character column in the format <code>row_X</code> which can be
+useful for testing with row captions in a table stub</p>
+</dd>
+<dt>group</dt><dd><p>a character column with four <code>grp_a</code> values and four
+<code>grp_b</code> values which can be useful for testing tables that contain
+row groups</p>
+</dd>
+</dl>
+
+
+
+<h3>Function ID</h3>
+
+<p>11-6
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Datasets: 
+<code><a href="countrypops.html">countrypops</a></code>,
+<code><a href="gtcars.html">gtcars</a></code>,
+<code><a href="pizzaplace.html">pizzaplace</a></code>,
+<code><a href="sp500.html">sp500</a></code>,
+<code><a href="sza.html">sza</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Here is a glimpse at the data
+# available in `exibble`
+dplyr::glimpse(exibble)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

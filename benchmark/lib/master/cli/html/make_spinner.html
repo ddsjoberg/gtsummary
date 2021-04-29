@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create a spinner</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for make_spinner {cli}"><tr><td>make_spinner {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create a spinner</h2>
+
+<h3>Description</h3>
+
+<p>Create a spinner
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+make_spinner(
+  which = NULL,
+  stream = "auto",
+  template = "{spin}",
+  static = c("dots", "print", "print_line", "silent")
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>which</code></td>
+<td>
+<p>The name of the chosen spinner. The default depends on
+whether the platform supports Unicode.</p>
+</td></tr>
+<tr valign="top"><td><code>stream</code></td>
+<td>
+<p>The stream to use for the spinner. Typically this is
+standard error, or maybe the standard output stream.
+It can also be a string, one of <code>"auto"</code>, <code>"message"</code>, <code>"stdout"</code>,
+<code>"stderr"</code>. <code>"auto"</code> will select <code>stdout()</code> if the session is
+interactive and there are no sinks, otherwise it will select
+<code>stderr()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>template</code></td>
+<td>
+<p>A template string, that will contain the spinner. The
+spinner itself will be substituted for <code>{spin}</code>. See example below.</p>
+</td></tr>
+<tr valign="top"><td><code>static</code></td>
+<td>
+<p>What to do if the terminal does not support dynamic
+displays:
+</p>
+
+<ul>
+<li> <p><code>"dots"</code>: show a dot for each <code style="white-space: pre;">$spin()</code> call.
+</p>
+</li>
+<li> <p><code>"print"</code>: just print the frames of the spinner, one after another.
+</p>
+</li>
+<li> <p><code>"print_line"</code>: print the frames of the spinner, each on its own line.
+</p>
+</li>
+<li> <p><code>"silent"</code> do not print anything, just the <code>template</code>.
+</p>
+</li></ul>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A <code>cli_spinner</code> object, which is a list of functions. See
+its methods below.
+</p>
+<p><code>cli_spinner</code> methods:
+</p>
+
+<ul>
+<li> <p><code style="white-space: pre;">$spin()</code>: output the next frame of the spinner.
+</p>
+</li>
+<li> <p><code style="white-space: pre;">$finish()</code>: terminate the spinner. Depending on terminal capabilities
+this removes the spinner from the screen. Spinners can be reused,
+you can start calling the <code style="white-space: pre;">$spin()</code> method again.
+</p>
+</li></ul>
+
+<p>All methods return the spinner object itself, invisibly.
+</p>
+<p>The spinner is automatically throttled to its ideal update frequency.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>## Default spinner
+sp1 &lt;- make_spinner()
+fun_with_spinner &lt;- function() {
+  lapply(1:100, function(x) { sp1$spin(); Sys.sleep(0.05) })
+  sp1$finish()
+}
+ansi_with_hidden_cursor(fun_with_spinner())
+
+## Spinner with a template
+sp2 &lt;- make_spinner(template = "Computing {spin}")
+fun_with_spinner2 &lt;- function() {
+  lapply(1:100, function(x) { sp2$spin(); Sys.sleep(0.05) })
+  sp2$finish()
+}
+ansi_with_hidden_cursor(fun_with_spinner2())
+
+## Custom spinner
+sp3 &lt;- make_spinner("simpleDotsScrolling", template = "Downloading {spin}")
+fun_with_spinner3 &lt;- function() {
+  lapply(1:100, function(x) { sp3$spin(); Sys.sleep(0.05) })
+  sp3$finish()
+}
+ansi_with_hidden_cursor(fun_with_spinner3())
+</pre>
+
+
+<h3>See Also</h3>
+
+<p>Other spinners: 
+<code><a href="demo_spinners.html">demo_spinners</a>()</code>,
+<code><a href="get_spinner.html">get_spinner</a>()</code>,
+<code><a href="list_spinners.html">list_spinners</a>()</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

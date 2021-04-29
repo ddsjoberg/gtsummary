@@ -65,8 +65,10 @@
 #' # updating column headers, footnote, and table caption
 #' modify_ex1 <- tbl %>%
 #'   modify_header(
-#'     update = list(label ~ "**Variable**",
-#'                   p.value ~ "**P**")
+#'     update = list(
+#'       label ~ "**Variable**",
+#'       p.value ~ "**P**"
+#'     )
 #'   ) %>%
 #'   modify_footnote(
 #'     update = all_stat_cols() ~ "median (IQR) for Age; n (%) for Grade"
@@ -87,7 +89,6 @@
 #'   glm(response ~ age + grade, trial, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
 #'   modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE)
-#'
 #' @return Updated gtsummary object
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -107,6 +108,7 @@ NULL
 #' @export
 modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
                           quiet = NULL, ..., stat_by = NULL) {
+  updated_call_list <- c(x$call_list, list(modify_header = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
   text_interpret <- match.arg(text_interpret)
@@ -120,31 +122,47 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     ) %>%
     c(list(...)) # adding the ... to the update list
   if (!is.null(stat_by)) {
-    # will mark this DEPRECATED, but won't print a deprecation note until later
-    # lifecycle::deprecate_warn(
-    #   "1.3.6",
-    #   "gtsummary::modify_header(stat_by=)",
-    #   details = glue("Use {ui_code(rlang::expr(modify_header(update =  all_stat_cols(FALSE) ~ !!stat_by)) %>% deparse(width.cutoff = 500L))} instead."))
+    # choose selector type
+    selector_code <- switch("stat_0" %in% names(x$table_body),
+      expr(all_stat_cols(FALSE))
+    ) %||% expr(all_stat_cols())
+    lifecycle::deprecate_warn(
+      "1.3.6",
+      "gtsummary::modify_header(stat_by=)",
+      details =
+        paste(
+          "Use `{rlang::expr(modify_header(update =  !!selector_code",
+          "~ !!stat_by)) %>% deparse(width.cutoff = 500L)}` instead."
+        ) %>%
+          glue()
+    )
     update <-
-      c(update,
-        .formula_list_to_named_list(x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),
-                                    var_info = x$table_styling$header$column,
-                                    arg_name = "update"))
+      c(
+        update,
+        .formula_list_to_named_list(
+          x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),
+          var_info = x$table_styling$header$column,
+          arg_name = "update"
+        )
+      )
   }
   if (identical(list(), update)) update <- NULL
 
   # if no columns selected, print helpful message
   if (is.null(update) && is.null(stat_by) && identical(quiet, FALSE)) .modify_no_selected_vars(x)
-  if (is.null(update) && is.null(stat_by)) return(x)
-  if (purrr::map_lgl(update, ~!rlang::is_string(.)) %>% any())
+  if (is.null(update) && is.null(stat_by)) {
+    return(x)
+  }
+  if (purrr::map_lgl(update, ~ !rlang::is_string(.)) %>% any()) {
     stop("All labels must be strings of length one.")
+  }
 
   # evaluating update with glue ------------------------------------------------
   df_info_tibble <- .info_tibble(x)
   update <-
     update %>%
     imap(
-      ~expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
+      ~ expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
         eval_tidy(
           data = df_info_tibble %>%
             filter(column %in% .y) %>%
@@ -164,6 +182,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     )
 
   # returning gtsummary object -------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 
@@ -171,6 +190,7 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
 #' @export
 modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
                             text_interpret = c("md", "html"), quiet = NULL) {
+  updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
@@ -190,7 +210,9 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
     )
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
-  if (is.null(update)) return(x)
+  if (is.null(update)) {
+    return(x)
+  }
 
   # updating footnote ----------------------------------------------------------
   footnote_column_name <- ifelse(abbreviation == TRUE, "footnote_abbrev", "footnote")
@@ -200,7 +222,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
   update <-
     update %>%
     imap(
-      ~expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
+      ~ expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
         eval_tidy(
           data = df_info_tibble %>%
             filter(column %in% .y) %>%
@@ -230,6 +252,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
   }
 
   # returning gtsummary object -------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 
@@ -237,6 +260,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
 #' @export
 modify_spanning_header <- function(x, update = NULL,
                                    text_interpret = c("md", "html"), quiet = NULL) {
+  updated_call_list <- c(x$call_list, list(modify_spanning_header = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
@@ -257,14 +281,16 @@ modify_spanning_header <- function(x, update = NULL,
 
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
-  if (is.null(update)) return(x)
+  if (is.null(update)) {
+    return(x)
+  }
 
   # updating spanning header ---------------------------------------------------
   df_info_tibble <- .info_tibble(x)
   update <-
     update %>%
     imap(
-      ~expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
+      ~ expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
         eval_tidy(
           data = df_info_tibble %>%
             filter(column %in% .y) %>%
@@ -282,12 +308,14 @@ modify_spanning_header <- function(x, update = NULL,
     )
 
   # return updated gtsummary object --------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 
 #' @name modify
 #' @export
 modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
+  updated_call_list <- c(x$call_list, list(modify_caption = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) abort("`x=` must be class 'gtsummary'.")
   if (!rlang::is_string(caption)) abort("`caption=` must be a string.")
@@ -305,6 +333,7 @@ modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
   attr(x$table_styling$caption, "text_interpret") <- text_interpret
 
   # returning updated object ---------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
 
@@ -315,8 +344,9 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # checking input -------------------------------------------------------------
-  if (!inherits(x, "gtsummary"))
+  if (!inherits(x, "gtsummary")) {
     stop("Pass a 'gtsummary' object in `x=` to print current column names and headers.")
+  }
 
   df_cols <- x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
@@ -328,7 +358,9 @@ show_header_names <- function(x = NULL, quiet = NULL) {
     block <- mutate(df_cols, formula = glue("  {column} ~ {shQuote(label)}")) %>%
       pull(.data$formula) %>%
       paste0("", collapse = ",\n") %>%
-      {glue("modify_header(update = list(\n{.}\n))")}
+      {
+        glue("modify_header(update = list(\n{.}\n))")
+      }
 
     cli_code(block)
 
@@ -341,8 +373,10 @@ show_header_names <- function(x = NULL, quiet = NULL) {
 
 # prints a helpful message when no columns were selected in the modify functions
 .modify_no_selected_vars <- function(x) {
-  paste("No columns were selected.",
-        "Use {.code quiet = TRUE} to supress these messages.") %>%
+  paste(
+    "No columns were selected.",
+    "Use {.code quiet = TRUE} to supress these messages."
+  ) %>%
     stringr::str_wrap() %>%
     cli_alert_info()
 
@@ -373,14 +407,16 @@ show_header_names <- function(x = NULL, quiet = NULL) {
         select(.data$column) %>%
         full_join(
           x$df_by %>%
-            select(any_of(c("N",  "N_unweighted"))) %>%
+            select(any_of(c("N", "N_unweighted"))) %>%
             distinct(),
           by = character()
         ) %>%
         left_join(
           x$df_by %>%
-            select(column = .data$by_col, level = .data$by_chr,
-                   any_of(c("n", "p", "n_unweighted", "p_unweighted"))),
+            select(
+              column = .data$by_col, level = .data$by_chr,
+              any_of(c("n", "p", "n_unweighted", "p_unweighted"))
+            ),
           by = "column"
         )
     )
@@ -390,16 +426,18 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   df_new_cols <- x[names(x) %in% c("N", "N_event", "n")] %>% tibble::as_tibble()
 
   # if no new cols, return without adding anything
-  if (ncol(df_new_cols) == 0) return(x$table_styling$header %>% select(.data$column))
+  if (ncol(df_new_cols) == 0) {
+    return(x$table_styling$header %>% select(.data$column))
+  }
 
   # adding n as a synonym of N if not already present
   # in V1.3.6, all documentation about {n} being supported was removed. This can be removed eventually
-  if (!"n" %in% names(df_new_cols) && "N" %in% names(df_new_cols))
+  if (!"n" %in% names(df_new_cols) && "N" %in% names(df_new_cols)) {
     df_new_cols <- mutate(df_new_cols, n = .data$N)
+  }
 
   # returning tibble with new vars added
   x$table_styling$header %>%
     select(.data$column) %>%
     bind_cols(df_new_cols)
 }
-

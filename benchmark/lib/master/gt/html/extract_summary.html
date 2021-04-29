@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Extract a summary list from a *gt* object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for extract_summary {gt}"><tr><td>extract_summary {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Extract a summary list from a <strong>gt</strong> object</h2>
+
+<h3>Description</h3>
+
+<p>Get a list of summary row data frames from a <code>gt_tbl</code> object where summary
+rows were added via the <code><a href="summary_rows.html">summary_rows()</a></code> function. The output data frames
+contain the <code>group_id</code> and <code>rowname</code> columns, whereby <code>rowname</code> contains
+descriptive stub labels for the summary rows.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+extract_summary(data)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A list of data frames containing summary data.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_extract_summary_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>13-5
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Export Functions: 
+<code><a href="as_latex.html">as_latex</a>()</code>,
+<code><a href="as_raw_html.html">as_raw_html</a>()</code>,
+<code><a href="as_rtf.html">as_rtf</a>()</code>,
+<code><a href="gtsave.html">gtsave</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `sp500` to create a gt table with
+# row groups; create summary rows by row
+# group (`min`, `max`, `avg`) and then
+# extract the summary rows as a list
+# object
+summary_extracted &lt;-
+  sp500 %&gt;%
+  dplyr::filter(
+    date &gt;= "2015-01-05" &amp;
+      date &lt;="2015-01-30"
+  ) %&gt;%
+  dplyr::arrange(date) %&gt;%
+  dplyr::mutate(
+    week = paste0(
+      "W", strftime(date, format = "%V"))
+  ) %&gt;%
+  dplyr::select(-adj_close, -volume) %&gt;%
+  gt(
+    rowname_col = "date",
+    groupname_col = "week"
+  ) %&gt;%
+  summary_rows(
+    groups = TRUE,
+    columns = c(open, high, low, close),
+    fns = list(
+      min = ~min(.),
+      max = ~max(.),
+      avg = ~mean(.)),
+    formatter = fmt_number,
+    use_seps = FALSE
+  ) %&gt;%
+  extract_summary()
+
+# Use the summary list to make a new
+# gt table; the key thing is to use
+# `dplyr::bind_rows()` and then pass the
+# tibble to `gt()`
+tab_1 &lt;-
+  summary_extracted %&gt;%
+  unlist(recursive = FALSE) %&gt;%
+  dplyr::bind_rows() %&gt;%
+  gt()
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

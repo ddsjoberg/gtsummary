@@ -56,7 +56,7 @@ customizable capabilities.
     possibilities to create the table of your dreams!
 
 -   **[Report statistics
-    inline](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#inline_text)**
+    inline](http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)**
     from summary tables and regression summary tables in **R markdown**.
     Make your reports completely reproducible!
 
@@ -221,6 +221,7 @@ you to all contributors!
 [@ablack3](https://github.com/ablack3),
 [@aghaynes](https://github.com/aghaynes),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
+[@albertostefanelli](https://github.com/albertostefanelli),
 [@alexis-catherine](https://github.com/alexis-catherine),
 [@anaavu](https://github.com/anaavu),
 [@angelgar](https://github.com/angelgar),
@@ -229,6 +230,7 @@ you to all contributors!
 [@asshah4](https://github.com/asshah4),
 [@awcm0n](https://github.com/awcm0n),
 [@barthelmes](https://github.com/barthelmes),
+[@BeauMeche](https://github.com/BeauMeche),
 [@benediktclaus](https://github.com/benediktclaus),
 [@calebasaraba](https://github.com/calebasaraba),
 [@CarolineXGao](https://github.com/CarolineXGao),

@@ -21,10 +21,10 @@
 #' # without column labels
 #' as_tibble(tbl, col_labels = FALSE)
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
-                                return_calls = FALSE, exclude = NULL,  ...) {
+                                return_calls = FALSE, exclude = NULL, ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.2.5",
       "gtsummary::as_tibble(exclude = )",
       "as_tibble(include = )",
@@ -52,23 +52,17 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
       var_info = names(tibble_calls),
       arg_name = "include"
     )
-  exclude <-
-    .select_to_varnames(
-      select = {{ exclude }},
-      var_info = names(tibble_calls),
-      arg_name = "exclude"
-    )
 
   # making list of commands to include -----------------------------------------
   # this ensures list is in the same order as names(x$kable_calls)
   include <- names(tibble_calls) %>% intersect(include)
-
   # user cannot exclude the first 'tibble' command
-  include <- include %>% setdiff(exclude)
   include <- "tibble" %>% union(include)
 
   # return calls, if requested -------------------------------------------------
-  if (return_calls == TRUE) return(tibble_calls[include])
+  if (return_calls == TRUE) {
+    return(tibble_calls[include])
+  }
 
   # taking each gt function call, concatenating them with %>% separating them
   tibble_calls[include] %>%
@@ -82,7 +76,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 }
 
 
-table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
+table_styling_to_tibble_calls <- function(x, col_labels = TRUE) {
   tibble_calls <- list()
 
   # tibble ---------------------------------------------------------------------
@@ -108,7 +102,7 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
   tibble_calls[["cols_merge"]] <-
     map(
       seq_len(nrow(x$table_styling$cols_merge)),
-      ~expr(
+      ~ expr(
         mutate(
           !!x$table_styling$cols_merge$column[.x] :=
             ifelse(
@@ -126,9 +120,12 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
   tibble_calls[["tab_style_bold"]] <-
     map(
       seq_len(nrow(df_bold)),
-      ~ expr(mutate_at(gt::vars(!!!syms(df_bold$column[[.x]])),
-                       ~ifelse(row_number() %in% !!df_bold$row_numbers[[.x]],
-                               paste0("__", ., "__"), .)))
+      ~ expr(mutate_at(
+        gt::vars(!!!syms(df_bold$column[[.x]])),
+        ~ ifelse(row_number() %in% !!df_bold$row_numbers[[.x]],
+          paste0("__", ., "__"), .
+        )
+      ))
     )
 
   # tab_style_italic -------------------------------------------------------------
@@ -137,16 +134,19 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
   tibble_calls[["tab_style_italic"]] <-
     map(
       seq_len(nrow(df_italic)),
-      ~ expr(mutate_at(gt::vars(!!!syms(df_italic$column[[.x]])),
-                       ~ifelse(row_number() %in% !!df_italic$row_numbers[[.x]],
-                               paste0("_", ., "_"), .)))
+      ~ expr(mutate_at(
+        gt::vars(!!!syms(df_italic$column[[.x]])),
+        ~ ifelse(row_number() %in% !!df_italic$row_numbers[[.x]],
+          paste0("_", ., "_"), .
+        )
+      ))
     )
 
   # fmt (part 2) ---------------------------------------------------------------
   tibble_calls[["fmt"]] <-
     map(
       seq_len(nrow(x$table_styling$fmt_fun)),
-      ~expr((!!expr(!!eval(parse_expr("gtsummary:::.apply_fmt_fun"))))(
+      ~ expr((!!expr(!!eval(parse_expr("gtsummary:::.apply_fmt_fun"))))(
         columns = !!x$table_styling$fmt_fun$column[[.x]],
         row_numbers = !!x$table_styling$fmt_fun$row_numbers[[.x]],
         fmt_fun = !!x$table_styling$fmt_fun$fmt_fun[[.x]],
@@ -175,12 +175,13 @@ table_styling_to_tibble_calls <- function(x, col_labels =  TRUE) {
   # apply formatting functions
   df_updated <-
     update_from[row_numbers, columns, drop = FALSE] %>%
-    purrr::map_dfc(~fmt_fun(.x))
+    purrr::map_dfc(~ fmt_fun(.x))
 
   # convert underlying column to character if updated col is character
   for (v in columns) {
-    if (is.character(df_updated[[v]]) && !is.character(data[[v]]))
+    if (is.character(df_updated[[v]]) && !is.character(data[[v]])) {
       data[[v]] <- as.character(data[[v]])
+    }
   }
 
   # udpate data and return

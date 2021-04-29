@@ -236,8 +236,10 @@ test_that("inline_text.tbl_survfit", {
 
   expect_error(
     tbl1_pattern <-
-      inline_text(tbl1, time = 24, level = "Drug A",
-                pattern = "{estimate}", estimate_fun = ~style_percent(., digits = 3, symbol = TRUE)),
+      inline_text(tbl1,
+        time = 24, level = "Drug A",
+        pattern = "{estimate}", estimate_fun = ~ style_percent(., digits = 3, symbol = TRUE)
+      ),
     NA
   )
   expect_equal(tbl1_pattern, "46.939%")
@@ -250,7 +252,6 @@ test_that("inline_text.tbl_survfit", {
     inline_text(tbl2, prob = 0.5),
     NA
   )
-
 })
 
 # inline_text.tbl_cross tests --------------
@@ -298,13 +299,13 @@ test_that("inline_text.tbl_cross- expect error args aren't present", {
 
 # inline_text.tbl_svysummary tests --------------
 test_inline1 <- trial %>%
-  survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+  survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
   tbl_svysummary()
 test_inline2 <- trial %>%
-  survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+  survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
   tbl_svysummary(by = trt)
 test_inline2b <- trial %>%
-  survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+  survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
   tbl_svysummary(by = trt) %>%
   add_p()
 
@@ -385,7 +386,7 @@ test_that("inline_text.tbl_svysummary: no errors with empty string selection", {
     trial %>%
       select(grade) %>%
       mutate(grade = ifelse(grade == "I", "", as.character(grade))) %>%
-      survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+      survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
       tbl_svysummary() %>%
       inline_text(variable = grade, level = "III"),
     NA

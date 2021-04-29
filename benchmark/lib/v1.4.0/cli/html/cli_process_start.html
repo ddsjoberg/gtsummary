@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Indicate the start and termination of some computation in the...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_process_start {cli}"><tr><td>cli_process_start {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Indicate the start and termination of some computation in the status bar</h2>
+
+<h3>Description</h3>
+
+<p>Typically you call <code>cli_process_start()</code> to start the process, and then
+<code>cli_process_done()</code> when it is done. If an error happens before
+<code>cli_process_done()</code> is called, then cli automatically shows the message
+for unsuccessful termination.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_process_start(
+  msg,
+  msg_done = paste(msg, "... done"),
+  msg_failed = paste(msg, "... failed"),
+  on_exit = c("failed", "done"),
+  msg_class = "alert-info",
+  done_class = "alert-success",
+  failed_class = "alert-danger",
+  .auto_close = TRUE,
+  .envir = parent.frame()
+)
+
+cli_process_done(
+  id = NULL,
+  msg_done = NULL,
+  .envir = parent.frame(),
+  done_class = "alert-success"
+)
+
+cli_process_failed(
+  id = NULL,
+  msg = NULL,
+  msg_failed = NULL,
+  .envir = parent.frame(),
+  failed_class = "alert-danger"
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>msg</code></td>
+<td>
+<p>The message to show to indicate the start of the process or
+computation. It will be collapsed into a single string, and the first
+line is kept and cut to <code><a href="console_width.html">console_width()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>msg_done</code></td>
+<td>
+<p>The message to use for successful termination.</p>
+</td></tr>
+<tr valign="top"><td><code>msg_failed</code></td>
+<td>
+<p>The message to use for unsuccessful termination.</p>
+</td></tr>
+<tr valign="top"><td><code>on_exit</code></td>
+<td>
+<p>Whether this process should fail or terminate
+successfully when the calling function (or the environment in <code>.envir</code>)
+exits.</p>
+</td></tr>
+<tr valign="top"><td><code>msg_class</code></td>
+<td>
+<p>The style class to add to the message. Use an empty
+string to suppress styling.</p>
+</td></tr>
+<tr valign="top"><td><code>done_class</code></td>
+<td>
+<p>The style class to add to the successful termination
+message. Use an empty string to suppress styling.a</p>
+</td></tr>
+<tr valign="top"><td><code>failed_class</code></td>
+<td>
+<p>The style class to add to the unsuccessful
+termination message. Use an empty string to suppress styling.a</p>
+</td></tr>
+<tr valign="top"><td><code>.auto_close</code></td>
+<td>
+<p>Whether to clear the status bar when the calling
+function finishes (or ‘.envir’ is removed from the stack, if
+specified).</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Environment to evaluate the glue expressions in. It is
+also used to auto-clear the status bar if <code>.auto_close</code> is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>Id of the status bar container to clear. If <code>id</code> is not the id
+of the current status bar (because it was overwritten by another
+status bar container), then the status bar is not cleared. If <code>NULL</code>
+(the default) then the status bar is always cleared.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If you handle the errors of the process or computation, then you can do
+the opposite: call <code>cli_process_start()</code> with <code>on_exit = "done"</code>, and
+in the error handler call <code>cli_process_failed()</code>. cli will automatically
+call <code>cli_process_done()</code> on successful termination, when the calling
+function finishes.
+</p>
+<p>See examples below.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Id of the status bar container.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other status bar: 
+<code><a href="cli_status_clear.html">cli_status_clear</a>()</code>,
+<code><a href="cli_status_update.html">cli_status_update</a>()</code>,
+<code><a href="cli_status.html">cli_status</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+## Failure by default
+fun &lt;- function() {
+  cli_process_start("Calculating")
+  if (interactive()) Sys.sleep(1)
+  if (runif(1) &lt; 0.5) stop("Failed")
+  cli_process_done()
+}
+tryCatch(fun(), error = function(err) err)
+
+## Success by default
+fun2 &lt;- function() {
+  cli_process_start("Calculating", on_exit = "done")
+  tryCatch({
+    if (interactive()) Sys.sleep(1)
+    if (runif(1) &lt; 0.5) stop("Failed")
+  }, error = function(err) cli_process_failed())
+}
+fun2()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

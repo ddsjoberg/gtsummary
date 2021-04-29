@@ -34,13 +34,13 @@
 #'     label = "Marker (non-linear terms)",
 #'     test = "LRT"
 #'   )
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
 #' \if{html}{\figure{combine_terms_ex1.png}{options: width=45\%}}
 
 combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(combine_terms = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
@@ -49,7 +49,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     stop("`x` input must be class `tbl_regression`", call. = FALSE)
   }
 
-  if(!is.null(label) && !rlang::is_string(label)) {
+  if (!is.null(label) && !rlang::is_string(label)) {
     stop(paste(
       "`label` argument must be a string of length one."
     ), call. = FALSE)
@@ -61,20 +61,25 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     deparse() %>%
     paste(collapse = "") %>%
     stringr::str_squish()
-  if (quiet == FALSE)
+  if (quiet == FALSE) {
     rlang::inform(glue("combine_terms: Creating a reduced model with\n  `reduced_model <- {expr_update}`"))
+  }
   reduced_model <- stats::update(x$model_obj, formula. = formula_update)
-  tryCatch({
-    expr_anova <-
-      rlang::expr(stats::anova(x$model_obj, reduced_model, !!!list(...))) %>%
-      deparse() %>%
-      paste(collapse = "")  %>%
-      stringr::str_squish()
-    if (quiet == FALSE)
-      rlang::inform(glue("combine_terms: Calculating p-value comparing full and reduced models with\n",
-                       "  `{expr_anova}`"))
+  tryCatch(
+    {
+      expr_anova <-
+        rlang::expr(stats::anova(x$model_obj, reduced_model, !!!list(...))) %>%
+        deparse() %>%
+        paste(collapse = "") %>%
+        stringr::str_squish()
+      if (quiet == FALSE) {
+        rlang::inform(glue(
+          "combine_terms: Calculating p-value comparing full and reduced models with\n",
+          "  `{expr_anova}`"
+        ))
+      }
 
-    anova <- stats::anova(x$model_obj, reduced_model, ...)
+      anova <- stats::anova(x$model_obj, reduced_model, ...)
     },
     error = function(e) {
       err_msg <-
@@ -88,10 +93,11 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
           as.character(e)
         )
       stop(err_msg, call. = FALSE)
-    })
+    }
+  )
   # extracting p-value from anova object ---------------------------------------
   df_anova <- as_tibble(anova) %>%
-    select(starts_with("Pr(>"),  starts_with("P(>"))
+    select(starts_with("Pr(>"), starts_with("P(>"))
   # if no column was selected, print error
   if (ncol(df_anova) == 0) {
     stop(paste(
@@ -147,8 +153,10 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     x$table_body %>%
     left_join(
       new_model_tbl$table_body %>%
-        select(.data$variable, .data$var_type, .data$reference_row,
-               .data$row_type, .data$label) %>%
+        select(
+          .data$variable, .data$var_type, .data$reference_row,
+          .data$row_type, .data$label
+        ) %>%
         mutate(collapse_row = FALSE),
       by = c("variable", "var_type", "row_type", "reference_row", "label")
     ) %>%
@@ -156,10 +164,12 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     mutate(collapse_row = ifelse(is.na(.data$collapse_row), TRUE, .data$collapse_row)) %>%
     group_by(.data$collapse_row) %>%
     filter(.data$collapse_row == FALSE |
-             (dplyr::row_number() == 1 & .data$collapse_row == TRUE)) %>%
+      (dplyr::row_number() == 1 & .data$collapse_row == TRUE)) %>%
     # updating column values for collapsed rows
-    mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high, .data$ci),
-              ~ifelse(.data$collapse_row == TRUE, NA, .)) %>%
+    mutate_at(
+      vars(.data$estimate, .data$conf.low, .data$conf.high, .data$ci),
+      ~ ifelse(.data$collapse_row == TRUE, NA, .)
+    ) %>%
     mutate(
       p.value = ifelse(.data$collapse_row == TRUE, !!anova_p, .data$p.value),
       row_type = ifelse(.data$collapse_row == TRUE, "label", .data$row_type)
@@ -167,7 +177,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     ungroup()
 
   # adding variable label, if specified ----------------------------------------
-  if(!is.null(label)) {
+  if (!is.null(label)) {
     table_body <-
       table_body %>%
       mutate(label = ifelse(.data$collapse_row == TRUE, !!label, .data$label))
@@ -179,7 +189,6 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     select(-.data$collapse_row)
 
   # returning updated tbl object -----------------------------------------------
-  x$call_list <- c(x$call_list, list(combine_terms = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }

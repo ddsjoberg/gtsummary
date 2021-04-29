@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Draw a sparkline bar graph with unicode block characters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for spark_bar {cli}"><tr><td>spark_bar {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Draw a sparkline bar graph with unicode block characters</h2>
+
+<h3>Description</h3>
+
+<p>Rendered using <a href="https://en.wikipedia.org/wiki/Block_Elements">block elements</a>.
+In most common fixed width fonts these are rendered wider than regular
+characters which means they are not suitable if you need precise alignment.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+spark_bar(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A numeric vector between 0 and 1</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>You might want to avoid sparklines on non-UTF-8 systems, because they
+do not look good. You can use <code><a href="is_utf8_output.html">is_utf8_output()</a></code> to test for support
+for them.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="spark_line.html">spark_line()</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- seq(0, 1, length = 6)
+spark_bar(x)
+spark_bar(sample(x))
+
+spark_bar(seq(0, 1, length = 8))
+
+# NAs are left out
+spark_bar(c(0, NA, 0.5, NA, 1))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

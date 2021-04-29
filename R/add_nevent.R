@@ -32,7 +32,6 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #'     method.args = list(family = binomial),
 #'   ) %>%
 #'   add_nevent()
-#
 #' # Example 2 ----------------------------------
 #' add_nevent.tbl_regression_ex2 <-
 #'   glm(response ~ age + grade, trial, family = binomial) %>%
@@ -51,23 +50,31 @@ NULL
 #' @rdname add_nevent_regression
 #' @export
 add_nevent.tbl_regression <- function(x, location = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_nevent = match.call()))
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
-  if ("level" %in% location && !"n_event" %in% x$table_styling$header$column)
+  if ("level" %in% location && !"n_event" %in% x$table_styling$header$column) {
     abort("Reporting event N on level rows is not available for this model type.")
-  if ("label" %in% location && !"N_event" %in% x$table_styling$header$column)
+  }
+  if ("label" %in% location && !"N_event" %in% x$table_styling$header$column) {
     abort("Reporting event N on label rows is not available for this model type.")
+  }
 
   x$table_body$stat_nevent <- NA_integer_
-  if ("N_event" %in% names(x$table_body))
+  if ("N_event" %in% names(x$table_body)) {
     x$table_body$stat_nevent <- ifelse(x$table_body$row_type == "label",
-                                       x$table_body$N_event %>% as.integer(),
-                                       x$table_body$stat_nevent)
-  if ("n_event" %in% names(x$table_body))
+      x$table_body$N_event %>% as.integer(),
+      x$table_body$stat_nevent
+    )
+  }
+  if ("n_event" %in% names(x$table_body)) {
     x$table_body$stat_nevent <- ifelse(x$table_body$row_type == "level",
-                                       x$table_body$n_event %>% as.integer(),
-                                       x$table_body$stat_nevent)
-  x %>%
+      x$table_body$n_event %>% as.integer(),
+      x$table_body$stat_nevent
+    )
+  }
+  x <-
+    x %>%
     modify_table_body(
       mutate,
       stat_nevent =
@@ -84,6 +91,10 @@ add_nevent.tbl_regression <- function(x, location = NULL, ...) {
       .before = .data$estimate
     ) %>%
     modify_header(stat_nevent ~ "**Event N**")
+
+  # add call list and return x
+  x$call_list <- updated_call_list
+  x
 }
 
 #' @export
@@ -117,11 +128,14 @@ add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 #' \if{html}{\figure{add_nevent.tbl_survfit_ex1.png}{options: width=64\%}}
 
 add_nevent.tbl_survfit <- function(x, ...) {
+  updated_call_list <- c(x$call_list, list(add_nevent = match.call()))
 
   # checking survfit is a standard (not multi-state)
-  if (!purrr::every(x$meta_data$survfit, ~identical(class(.x), "survfit"))) {
-    paste("Each of the `survfit()` objects must have class 'survfit' only.",
-          "Multi-state models are not supported by this function.") %>%
+  if (!purrr::every(x$meta_data$survfit, ~ identical(class(.x), "survfit"))) {
+    paste(
+      "Each of the `survfit()` objects must have class 'survfit' only.",
+      "Multi-state models are not supported by this function."
+    ) %>%
       stringr::str_wrap() %>%
       stop(call. = FALSE)
   }
@@ -136,10 +150,12 @@ add_nevent.tbl_survfit <- function(x, ...) {
         row_type = "label"
       )
     ) %>%
-    {left_join(
-      x$table_body, .,
-      by = c("variable", "row_type")
-    )} %>%
+    {
+      left_join(
+        x$table_body, .,
+        by = c("variable", "row_type")
+      )
+    } %>%
     select(any_of(c("variable", "row_type", "label", "N", "nevent")), everything())
 
   # adding N to table_styling and assigning header label -----------------------
@@ -153,7 +169,6 @@ add_nevent.tbl_survfit <- function(x, ...) {
     )
 
   # adding indicator to output that add_n was run on this data
-  x$call_list <- c(x$call_list, list(add_nevent = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }

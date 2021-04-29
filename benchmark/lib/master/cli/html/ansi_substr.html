@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Substring(s) of an ANSI colored string</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ansi_substr {cli}"><tr><td>ansi_substr {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Substring(s) of an ANSI colored string</h2>
+
+<h3>Description</h3>
+
+<p>This is a color-aware counterpart of <code><a href="../../base/html/substr.html">base::substr()</a></code>.
+It works exactly like the original, but keeps the colors
+in the substrings. The ANSI escape sequences are ignored when
+calculating the positions within the string.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ansi_substr(x, start, stop)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Character vector, potentially ANSI styled, or a vector to
+coarced to character.</p>
+</td></tr>
+<tr valign="top"><td><code>start</code></td>
+<td>
+<p>Starting index or indices, recycled to match the length
+of <code>x</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>stop</code></td>
+<td>
+<p>Ending index or indices, recycled to match the length
+of <code>x</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Character vector of the same length as <code>x</code>, containing
+the requested substrings. ANSI styles are retained.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other ANSI string operations: 
+<code><a href="ansi_align.html">ansi_align</a>()</code>,
+<code><a href="ansi_columns.html">ansi_columns</a>()</code>,
+<code><a href="ansi_nchar.html">ansi_nchar</a>()</code>,
+<code><a href="ansi_strsplit.html">ansi_strsplit</a>()</code>,
+<code><a href="ansi_strtrim.html">ansi_strtrim</a>()</code>,
+<code><a href="ansi_strwrap.html">ansi_strwrap</a>()</code>,
+<code><a href="ansi_substring.html">ansi_substring</a>()</code>,
+<code><a href="ansi_toupper.html">ansi_toupper</a>()</code>,
+<code><a href="ansi_trimws.html">ansi_trimws</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+str &lt;- paste(
+  col_red("red"),
+  "default",
+  col_green("green")
+)
+
+cat(str, "\n")
+cat(ansi_substr(str, 1, 5), "\n")
+cat(ansi_substr(str, 1, 15), "\n")
+cat(ansi_substr(str, 3, 7), "\n")
+
+substr(ansi_strip(str), 1, 5)
+substr(ansi_strip(str), 1, 15)
+substr(ansi_strip(str), 3, 7)
+
+str2 &lt;- paste(
+  "another",
+  col_red("multi-", style_underline("style")),
+  "text"
+)
+
+cat(str2, "\n")
+cat(ansi_substr(c(str, str2), c(3,5), c(7, 18)), sep = "\n")
+substr(ansi_strip(c(str, str2)), c(3,5), c(7, 18))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

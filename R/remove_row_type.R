@@ -25,6 +25,7 @@
 #' \if{html}{\figure{remove_row_type_ex1.png}{options: width=60\%}}
 remove_row_type <- function(x, variables = everything(),
                             type = c("header", "reference", "missing")) {
+  updated_call_list <- c(x$call_list, list(remove_row_type = match.call()))
   # check inputs ---------------------------------------------------------------
   if (!inherits(x, "gtsummary")) abort("Argument `x=` must be class 'gtsummary'")
   type <- match.arg(type)
@@ -33,32 +34,49 @@ remove_row_type <- function(x, variables = everything(),
   variables <-
     .select_to_varnames(
       {{ variables }},
-      data = switch(class(x)[1], "tbl_svysummary" = x$inputs$data$variables) %||%
+      data = switch(class(x)[1],
+        "tbl_svysummary" = x$inputs$data$variables
+      ) %||%
         x$inputs$data,
       var_info = x$table_body,
-      arg_name = "variables")
+      arg_name = "variables"
+    )
 
   # expression for selecting the appropriate rows ------------------------------
-  if (type == "reference")
-    lst_expr <- list(variables = "reference_row",
-                     expr = expr(.data$reference_row %in% TRUE))
-  else if (type == "header" && inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_survfit")))
-    lst_expr <- list(variables = c("var_type", "row_type"),
-                     expr = expr(.data$var_type == "categorical" & .data$row_type == "label"))
-  else if (type == "header")
-    lst_expr <- list(variables = "header_row",
-                     expr = expr(.data$header_row %in% TRUE))
-  else if (type == "missing")
-    lst_expr <- list(variables = "row_type",
-                     expr = expr(.data$row_type == "missing"))
+  if (type == "reference") {
+    lst_expr <- list(
+      variables = "reference_row",
+      expr = expr(.data$reference_row %in% TRUE)
+    )
+  } else if (type == "header" && inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_survfit"))) {
+    lst_expr <- list(
+      variables = c("var_type", "row_type"),
+      expr = expr(.data$var_type == "categorical" & .data$row_type == "label")
+    )
+  } else if (type == "header") {
+    lst_expr <- list(
+      variables = "header_row",
+      expr = expr(.data$header_row %in% TRUE)
+    )
+  } else if (type == "missing") {
+    lst_expr <- list(
+      variables = "row_type",
+      expr = expr(.data$row_type == "missing")
+    )
+  }
 
-  if (!all(lst_expr[["variables"]] %in% names(x$table_body)))
+  if (!all(lst_expr[["variables"]] %in% names(x$table_body))) {
     glue("Cannot select '{type}' rows in this gtsummary table.") %>%
-    abort()
+      abort()
+  }
 
   # removing selected rows -----------------------------------------------------
   # combined expression
   final_expr <- expr(!(.data$variable %in% .env$variables & !!lst_expr[["expr"]]))
   # removing rows, and returning updated gtsummary object
-  modify_table_body(x, dplyr::filter, !!final_expr)
+  x <- modify_table_body(x, dplyr::filter, !!final_expr)
+
+  # return gtsummary object ----------------------------------------------------
+  x$call_list <- updated_call_list
+  x
 }

@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Unhide one or more columns</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cols_unhide {gt}"><tr><td>cols_unhide {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Unhide one or more columns</h2>
+
+<h3>Description</h3>
+
+<p>The <code>cols_unhide()</code> function allows us to take one or more hidden columns
+(usually made so via the <code><a href="cols_hide.html">cols_hide()</a></code> function) and make them visible
+in the final output table. This may be important in cases where the user
+obtains a <code>gt_tbl</code> object with hidden columns and there is motivation to
+reveal one or more of those.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cols_unhide(data, columns)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>The column names to unhide from the output display table.
+Values provided that do not correspond to column names will be disregarded.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The hiding and unhiding of columns is internally a rendering directive, so,
+all columns that are 'hidden' are still accessible and useful in any
+expression provided to a <code>rows</code> argument. The <code>cols_unhide()</code> function
+quietly changes the visible state of a column (much like the <code><a href="cols_hide.html">cols_hide()</a></code>
+function) and doesn't yield warnings or messages when changing the state of
+already-visible columns.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_cols_unhide_1.png" width=100% />
+</p>
+<p><img src="../help/figures/man_cols_unhide_2.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>4-8
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="cols_hide.html">cols_hide()</a></code> to perform the inverse operation.
+</p>
+<p>Other Modify Columns: 
+<code><a href="cols_align.html">cols_align</a>()</code>,
+<code><a href="cols_hide.html">cols_hide</a>()</code>,
+<code><a href="cols_label.html">cols_label</a>()</code>,
+<code><a href="cols_merge_n_pct.html">cols_merge_n_pct</a>()</code>,
+<code><a href="cols_merge_range.html">cols_merge_range</a>()</code>,
+<code><a href="cols_merge_uncert.html">cols_merge_uncert</a>()</code>,
+<code><a href="cols_merge.html">cols_merge</a>()</code>,
+<code><a href="cols_move_to_end.html">cols_move_to_end</a>()</code>,
+<code><a href="cols_move_to_start.html">cols_move_to_start</a>()</code>,
+<code><a href="cols_move.html">cols_move</a>()</code>,
+<code><a href="cols_width.html">cols_width</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `countrypops` to create a gt table;
+# Hide the columns `country_code_2` and
+# `country_code_3`
+tab_1 &lt;-
+  countrypops %&gt;%
+  dplyr::filter(country_name == "Mongolia") %&gt;%
+  tail(5) %&gt;%
+  gt() %&gt;%
+  cols_hide(
+    columns = c(
+      country_code_2,
+      country_code_3
+     )
+  )
+
+# If the `tab_1` object is provided without
+# the code or source data to regenerate it, and,
+# the user wants to reveal otherwise hidden
+# columns then the `cols_unhide()` function
+# becomes useful
+tab_2 &lt;-
+  tab_1 %&gt;%
+  cols_unhide(columns = country_code_2)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

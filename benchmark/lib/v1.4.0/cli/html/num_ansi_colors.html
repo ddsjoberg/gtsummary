@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Detect the number of ANSI colors to use</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for num_ansi_colors {cli}"><tr><td>num_ansi_colors {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Detect the number of ANSI colors to use</h2>
+
+<h3>Description</h3>
+
+<p>Certain Unix and Windows terminals, and also certain R GUIs, e.g.
+RStudio, support styling terminal output using special control
+sequences (ANSI sequences).
+</p>
+<p><code>num_ansi_colors()</code> detects if the current R session supports ANSI
+sequences, and if it does how many colors are supported.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+num_ansi_colors(stream = "auto")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>stream</code></td>
+<td>
+<p>The stream that will be used for output, an R connection
+object. It can also be a string, one of <code>"auto"</code>, <code>"message"</code>,
+<code>"stdout"</code>, <code>"stderr"</code>. <code>"auto"</code> will select <code>stdout()</code> if the session is
+interactive and there are no sinks, otherwise it will select <code>stderr()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The detection mechanism is quite involved and it is designed to work
+out of the box on most systems. If it does not work on your system,
+please report a bug. Setting options and environment variables to turn
+on ANSI support is error prone, because they are inherited in other
+environments, e.g. knitr, that might not have ANSI support.
+</p>
+<p>If you want to <em>turn off</em> ANSI colors, set the <code>NO_COLOR</code> environment
+variable to a non-empty value.
+</p>
+<p>The exact detection mechanism is as follows:
+</p>
+
+<ol>
+<li><p> If the <code>cli.num_colors</code> options is set, that is returned.
+</p>
+</li>
+<li><p> If the <code>R_CLI_NUM_COLORS</code> env var is set to a non-empty value,
+then it is used.
+</p>
+</li>
+<li><p> If the <code>crayon.enabled</code> option is set to <code>FALSE</code>, 1L is returned.
+(This is for compatibility with code that uses the crayon package.)
+</p>
+</li>
+<li><p> If the <code>crayon.enabled</code> option is set to <code>TRUE</code> and the
+<code>crayon.colors</code> option is not set, then 8L is returned.
+</p>
+</li>
+<li><p> If the <code>crayon.enabled</code> option is set to <code>TRUE</code> and the
+<code>crayon.colors</code> option is also set, then the latter is returned.
+(This is for compatibility with code that uses the crayon package.)
+</p>
+</li>
+<li><p> If the <code>NO_COLOR</code> environment variable is set, then 1L is returned.
+</p>
+</li>
+<li><p> If we are in knitr, then 1L is returned, to turn off colors in
+<code>.Rmd</code> chunks.
+</p>
+</li>
+<li><p> If <code>stream</code> is <code>stderr()</code> and there is an active sink for it, then
+1L is returned.
+</p>
+</li>
+<li><p> If R is running inside RGui on Windows, or R.app on macOS, then we
+return 1L.
+</p>
+</li>
+<li><p> If R is running inside RStudio, with color support, then the
+appropriate number of colors is returned, usually 256L.
+</p>
+</li>
+<li><p> If R is running on Windows, inside an Emacs version that is recent
+enough to support ANSI colors, then 8L is returned. (On Windows,
+Emacs has <code>isatty(stdout()) == FALSE</code>, so we need to check for this
+here before dealing with terminals.)
+</p>
+</li>
+<li><p> If <code>stream</code> is not a terminal, then 1L is returned.
+</p>
+</li>
+<li><p> If R is running on Unix, inside an Emacs version that is recent
+enough to support ANSI colors, then 8L is returned.
+</p>
+</li>
+<li><p> If <code>stream</code> is not the standard output or error, then 1L is returned.
+</p>
+</li>
+<li><p> If we are on Windows, under ComEmu or cmder, or ANSICON is loaded,
+then 8L is returned.
+</p>
+</li>
+<li><p> Otherwise if we are on Windows, return 1L.
+</p>
+</li>
+<li><p> Otherwise we are on Unix and try to run <code style="white-space: pre;">tput colors</code> to determine
+the number of colors. If this succeeds, we return its return value,
+except if the <code>TERM</code> environment variable is <code>xterm</code> and <code>tput</code>
+returned 8L, we return 256L, because xterm compatible terminals
+tend to support 256 colors.
+</p>
+</li>
+<li><p> If <code style="white-space: pre;">tput colors</code> fails, we try to guess. If <code>COLORTERM</code> is set
+to any value, we return 8L.
+</p>
+</li>
+<li><p> If <code>TERM</code> is set to <code>dumb</code>, we return 1L.
+</p>
+</li>
+<li><p> If <code>TERM</code> starts with <code>screen</code>, <code>xterm</code>, or <code>vt100</code>, we return 8L.
+</p>
+</li>
+<li><p> If <code>TERM</code> contains <code>color</code>, <code>ansi</code>, <code>cygwin</code> or <code>linux</code>, we return 8L.
+</p>
+</li>
+<li><p> Otherwise we return 1L.
+</p>
+</li></ol>
+
+
+
+<h3>Value</h3>
+
+<p>Integer, the number of ANSI colors the current R session
+supports for <code>stream</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other ANSI styling: 
+<code><a href="ansi-styles.html">ansi-styles</a></code>,
+<code><a href="combine_ansi_styles.html">combine_ansi_styles</a>()</code>,
+<code><a href="make_ansi_style.html">make_ansi_style</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+num_ansi_colors()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

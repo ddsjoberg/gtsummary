@@ -27,6 +27,7 @@ add_overall <- function(x, last, col_label) {
 #' @rdname add_overall
 #' @export
 add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL) {
+  updated_call_list <- c(x$call_list, list(add_overall = match.call()))
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
     stop(
@@ -49,18 +50,24 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL) {
     do.call(tbl_summary, x_copy$inputs) %>%
     pluck("table_body")
 
-  add_overall_merge(x, overall, last, col_label)
+  x <- add_overall_merge(x, overall, last, col_label)
+
+  x$call_list <- updated_call_list
+  x
 }
 
 
 add_overall_merge <- function(x, overall, last, col_label) {
   # checking the original tbl_summary and the added overall,
   # are the same before binding (excluding headers)
-  if (!identical(select(x$table_body, c("row_type", "variable", "label")),
-                 select(overall, c("row_type", "variable", "label")) %>% as_tibble())) {
+  if (!identical(
+    select(x$table_body, c("row_type", "variable", "label")),
+    select(overall, c("row_type", "variable", "label")) %>% as_tibble()
+  )) {
     paste(
       "An error occured in `add_overall()`, and overall statistics cannot be merged.",
-      "Has the variable label changed since the original call of `tbl_summary()`?") %>%
+      "Has the variable label changed since the original call of `tbl_summary()`?"
+    ) %>%
       stringr::str_wrap() %>%
       stop(call. = FALSE)
   }
@@ -92,7 +99,7 @@ add_overall_merge <- function(x, overall, last, col_label) {
     modify_header(
       stat_0 =
         col_label %||%
-        paste0("**", translate_text("Overall"), "**, N = {style_number(N)}"),
+          paste0("**", translate_text("Overall"), "**, N = {style_number(N)}"),
     )
 
   x
@@ -102,6 +109,7 @@ add_overall_merge <- function(x, overall, last, col_label) {
 #' @rdname add_overall
 #' @export
 add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL) {
+  updated_call_list <- c(x$call_list, list(add_overall = match.call()))
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
     stop(
@@ -124,5 +132,8 @@ add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL) {
     do.call(tbl_svysummary, x_copy$inputs) %>%
     pluck("table_body")
 
-  add_overall_merge(x, overall, last, col_label)
+  x <- add_overall_merge(x, overall, last, col_label)
+
+  x$call_list <- updated_call_list
+  x
 }

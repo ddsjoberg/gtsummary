@@ -56,9 +56,11 @@ add_n <- function(x, ...) {
 
 add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
                               last = FALSE, missing = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_n = match.call()))
   # checking that input is class tbl_summary
-  if (!(inherits(x, "tbl_summary") | inherits(x, "tbl_svysummary")))
+  if (!(inherits(x, "tbl_summary") | inherits(x, "tbl_svysummary"))) {
     stop("`x` must be class 'tbl_summary' or 'tbl_svysummary'")
+  }
 
   # DEPRECATED specifying statistic via missing argument -----------------------
   if (!is.null(missing)) {
@@ -75,11 +77,13 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
     map_dfr(
       function(.x) {
         df_stats <-
-          select(.x, any_of(c("variable", "by", "N_obs", "N_miss", "N_nonmiss", "p_miss",
-                              "p_nonmiss", "N_obs_unweighted", "N_miss_unweighted",
-                              "N_nonmiss_unweighted", "p_miss_unweighted",
-                              "p_nonmiss_unweighted"))) %>%
-          distinct()  %>%
+          select(.x, any_of(c(
+            "variable", "by", "N_obs", "N_miss", "N_nonmiss", "p_miss",
+            "p_nonmiss", "N_obs_unweighted", "N_miss_unweighted",
+            "N_nonmiss_unweighted", "p_miss_unweighted",
+            "p_nonmiss_unweighted"
+          ))) %>%
+          distinct() %>%
           # summing counts within by variable within by levels
           dplyr::group_by_at(c("variable", "by") %>% intersect(names(.))) %>%
           mutate_at(vars(-any_of(c("variable", "by"))), sum) %>%
@@ -87,14 +91,18 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
           distinct()
 
         # correcting percentages -----------------------------------------------
-        if ("p_miss" %in% names(df_stats))
+        if ("p_miss" %in% names(df_stats)) {
           p_nonmiss <- mutate(df_stats, p_miss = .data$N_miss / .data$N_obs)
-        if ("p_miss" %in% names(df_stats))
+        }
+        if ("p_miss" %in% names(df_stats)) {
           df_stats <- mutate(df_stats, p_nonmiss = .data$N_nonmiss / .data$N_obs)
-        if ("p_miss_unweighted" %in% names(df_stats))
+        }
+        if ("p_miss_unweighted" %in% names(df_stats)) {
           df_stats <- mutate(df_stats, p_miss_unweighted = .data$N_miss_unweighted / .data$N_obs_unweighted)
-        if ("p_nonmiss_unweighted" %in% names(df_stats))
+        }
+        if ("p_nonmiss_unweighted" %in% names(df_stats)) {
           df_stats <- mutate(df_stats, p_nonmiss_unweighted = .data$N_nonmiss_unweighted / .data$N_obs_unweighted)
+        }
 
         # styling the statistics -----------------------------------------------
         for (v in (names(df_stats) %>% setdiff("variable"))) {
@@ -138,10 +146,9 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
   }
 
   # adding indicator to output that add_n was run on this data
-  x$call_list <- c(x$call_list, list(add_n = match.call()))
-
+  x$call_list <- updated_call_list
   # returning tbl_summary object
-  return(x)
+  x
 }
 
 stat_to_label <- function(x) {
@@ -166,7 +173,7 @@ stat_to_label <- function(x) {
       "{p_miss_unweighted}", "% Missing (unweighted)",
       "{p_nonmiss_unweighted}", "% not Missing (unweighted)"
     ) %>%
-    mutate(name = map_chr(.data$name, ~translate_text(.x, language)))
+    mutate(name = map_chr(.data$name, ~ translate_text(.x, language)))
 
   for (i in seq_len(nrow(df_statistic_names))) {
     x <- stringr::str_replace_all(
@@ -209,6 +216,7 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 #' \if{html}{\figure{add_n.tbl_survfit_ex1.png}{options: width=64\%}}
 
 add_n.tbl_survfit <- function(x, ...) {
+  updated_call_list <- c(x$call_list, list(add_n = match.call()))
 
   # adding N to the table_body -------------------------------------------------
   x$table_body <-
@@ -216,7 +224,7 @@ add_n.tbl_survfit <- function(x, ...) {
       x$meta_data$survfit,
       x$meta_data$variable,
       function(suvfit, variable) {
-        #extracting survfit call
+        # extracting survfit call
         survfit_call <- suvfit$call %>% as.list()
         # index of formula and data
         call_index <- names(survfit_call) %in% c("formula", "data") %>% which()
@@ -232,10 +240,12 @@ add_n.tbl_survfit <- function(x, ...) {
         )
       }
     ) %>%
-    {left_join(
-      x$table_body, .,
-      by = c("variable", "row_type")
-    )} %>%
+    {
+      left_join(
+        x$table_body, .,
+        by = c("variable", "row_type")
+      )
+    } %>%
     select(any_of(c("variable", "row_type", "label", "N")), everything())
 
   # adding styling data for N column -------------------------------------------
@@ -249,8 +259,7 @@ add_n.tbl_survfit <- function(x, ...) {
     )
 
   # adding indicator to output that add_n was run on this data
-  x$call_list <- c(x$call_list, list(add_n = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }
 
@@ -295,23 +304,31 @@ NULL
 #' @rdname add_n_regression
 #' @export
 add_n.tbl_regression <- function(x, location = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_n = match.call()))
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
-  if ("level" %in% location && !"n_obs" %in% x$table_styling$header$column)
+  if ("level" %in% location && !"n_obs" %in% x$table_styling$header$column) {
     abort("Reporting N on level rows is not available for this model type.")
-  if ("label" %in% location && !"N_obs" %in% x$table_styling$header$column)
+  }
+  if ("label" %in% location && !"N_obs" %in% x$table_styling$header$column) {
     abort("Reporting N on label rows is not available for this model type.")
+  }
 
   x$table_body$stat_n <- NA_integer_
-  if ("N_obs" %in% names(x$table_body))
+  if ("N_obs" %in% names(x$table_body)) {
     x$table_body$stat_n <- ifelse(x$table_body$row_type == "label",
-                                  x$table_body$N_obs %>% as.integer(),
-                                  x$table_body$stat_n)
-  if ("n_obs" %in% names(x$table_body))
+      x$table_body$N_obs %>% as.integer(),
+      x$table_body$stat_n
+    )
+  }
+  if ("n_obs" %in% names(x$table_body)) {
     x$table_body$stat_n <- ifelse(x$table_body$row_type == "level",
-                                  x$table_body$n_obs %>% as.integer(),
-                                  x$table_body$stat_n)
-  x %>%
+      x$table_body$n_obs %>% as.integer(),
+      x$table_body$stat_n
+    )
+  }
+  x <-
+    x %>%
     modify_table_body(
       mutate,
       stat_n =
@@ -328,6 +345,9 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
       .after = .data$label
     ) %>%
     modify_header(stat_n ~ "**N**")
+
+  x$call_list <- updated_call_list
+  x
 }
 
 #' @export

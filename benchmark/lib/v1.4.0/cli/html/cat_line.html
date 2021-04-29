@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: 'cat()' helpers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cat_line {cli}"><tr><td>cat_line {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2><code>cat()</code> helpers</h2>
+
+<h3>Description</h3>
+
+<p>These helpers provide useful wrappers around <code><a href="../../base/html/cat.html">cat()</a></code>: most importantly
+they all set <code>sep = ""</code>, and <code>cat_line()</code> automatically adds a newline.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cat_line(..., col = NULL, background_col = NULL, file = stdout())
+
+cat_bullet(
+  ...,
+  col = NULL,
+  background_col = NULL,
+  bullet = "bullet",
+  bullet_col = NULL,
+  file = stdout()
+)
+
+cat_boxx(..., file = stdout())
+
+cat_rule(..., file = stdout())
+
+cat_print(x, file = "")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>For <code>cat_line()</code> and <code>cat_bullet()</code>, paste'd together with
+<code>collapse = "\n"</code>. For <code>cat_rule()</code> and <code>cat_boxx()</code> passed on to
+<code><a href="rule.html">rule()</a></code> and <code><a href="boxx.html">boxx()</a></code> respectively.</p>
+</td></tr>
+<tr valign="top"><td><code>col, background_col, bullet_col</code></td>
+<td>
+<p>Colours for text, background, and
+bullets respectively.</p>
+</td></tr>
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>Output destination. Defaults to standard output.</p>
+</td></tr>
+<tr valign="top"><td><code>bullet</code></td>
+<td>
+<p>Name of bullet character. Indexes into <a href="symbol.html">symbol</a></p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>An object to print.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+cat_line("This is ", "a ", "line of text.", col = "red")
+cat_bullet(letters[1:5])
+cat_bullet(letters[1:5], bullet = "tick", bullet_col = "green")
+cat_rule()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -131,8 +131,10 @@ show_header_names(tbl)
 # updating column headers, footnote, and table caption
 modify_ex1 <- tbl \%>\%
   modify_header(
-    update = list(label ~ "**Variable**",
-                  p.value ~ "**P**")
+    update = list(
+      label ~ "**Variable**",
+      p.value ~ "**P**"
+    )
   ) \%>\%
   modify_footnote(
     update = all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade"
@@ -153,7 +155,6 @@ modify_ex3 <-
   glm(response ~ age + grade, trial, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE) \%>\%
   modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE)
-
 }
 \seealso{
 Other tbl_summary tools: 

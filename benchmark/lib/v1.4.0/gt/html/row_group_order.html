@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Modify the ordering of any row groups</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for row_group_order {gt}"><tr><td>row_group_order {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Modify the ordering of any row groups</h2>
+
+<h3>Description</h3>
+
+<p>We can modify the display order of any row groups in a <strong>gt</strong> object with the
+<code>row_group_order()</code> function. The <code>groups</code> argument takes a vector of row
+group ID values. After this function is invoked, the row groups will adhere
+to this revised ordering. It isn't necessary to provide all row ID values in
+<code>groups</code>, rather, what is provided will assume the specified ordering at the
+top of the table and the remaining row groups will follow in their original
+ordering.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+row_group_order(data, groups)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>groups</code></td>
+<td>
+<p>A character vector of row group ID values corresponding to the
+revised ordering. While this vector must contain valid group ID values, it
+is not required to have all of the row group IDs within it; any omitted
+values will be added to the end while preserving the original ordering.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_row_group_order_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>5-1
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `exibble` to create a gt table
+# with a stub and with row groups;
+# modify the order of the row groups
+# with `row_group_order()`, specifying
+# the new ordering in `groups`
+tab_1 &lt;-
+  exibble %&gt;%
+  dplyr::select(char, currency, row, group) %&gt;%
+    gt(
+      rowname_col = "row",
+      groupname_col = "group"
+    ) %&gt;%
+    row_group_order(
+      groups = c("grp_b", "grp_a")
+    )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

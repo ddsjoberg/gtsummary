@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Output a *gt* object as RTF</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for as_rtf {gt}"><tr><td>as_rtf {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Output a <strong>gt</strong> object as RTF</h2>
+
+<h3>Description</h3>
+
+<p>Get the RTF content from a <code>gt_tbl</code> object as as a single-element character
+vector. This object can be used with <code>writeLines()</code> to generate a valid .rtf
+file that can be opened by RTF readers.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+as_rtf(data)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a table object that is created using the <code>gt()</code> function.</p>
+</td></tr>
+</table>
+
+
+<h3>Function ID</h3>
+
+<p>13-4
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Export Functions: 
+<code><a href="as_latex.html">as_latex</a>()</code>,
+<code><a href="as_raw_html.html">as_raw_html</a>()</code>,
+<code><a href="extract_summary.html">extract_summary</a>()</code>,
+<code><a href="gtsave.html">gtsave</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `gtcars` to create a gt table;
+# add a header and then export as
+# RTF code
+tab_rtf &lt;-
+  gtcars %&gt;%
+  dplyr::select(mfr, model) %&gt;%
+  dplyr::slice(1:2) %&gt;%
+  gt() %&gt;%
+  tab_header(
+    title = md("Data listing from **gtcars**"),
+    subtitle = md("`gtcars` is an R dataset")
+  ) %&gt;%
+  as_rtf()
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

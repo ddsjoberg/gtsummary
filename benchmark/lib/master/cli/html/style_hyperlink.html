@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Terminal Hyperlinks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for style_hyperlink {cli}"><tr><td>style_hyperlink {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Terminal Hyperlinks</h2>
+
+<h3>Description</h3>
+
+<p>Terminal Hyperlinks
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+style_hyperlink(text, url)
+
+ansi_has_hyperlink_support()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>Text to show. <code>text</code> and <code>url</code> are recycled to match their
+length, via a <code>paste0()</code> call.</p>
+</td></tr>
+<tr valign="top"><td><code>url</code></td>
+<td>
+<p>URL to link to.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>ansi_hyperlink()</code> creates an ANSI hyperlink.
+</p>
+<p><code>ansi_has_hyperlink_support()</code> checks if the current <code>stdout()</code>
+supports hyperlinks.
+</p>
+<p>See also
+<a href="https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda">https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda</a>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Styled <code>ansi_string</code> for <code>style_hyperlink()</code>.
+Logical scalar for <code>ansi_has_hyperlink_support()</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cat("This is an", style_hyperlink("R", "https://r-project.org"), "link.\n")
+ansi_has_hyperlink_support()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

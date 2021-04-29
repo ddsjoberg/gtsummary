@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: List the currently active themes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_list_themes {cli}"><tr><td>cli_list_themes {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>List the currently active themes</h2>
+
+<h3>Description</h3>
+
+<p>If there is no active app, then it calls <code><a href="start_app.html">start_app()</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_list_themes()
+</pre>
+
+
+<h3>Value</h3>
+
+<p>A list of data frames with the active themes.
+Each data frame row is a style that applies to selected CLI tree nodes.
+Each data frame has columns:
+</p>
+
+<ul>
+<li> <p><code>selector</code>: The original CSS-like selector string. See <a href="themes.html">themes</a>.
+</p>
+</li>
+<li> <p><code>parsed</code>: The parsed selector, as used by cli for matching to nodes.
+</p>
+</li>
+<li> <p><code>style</code>: The original style.
+</p>
+</li>
+<li> <p><code>cnt</code>: The id of the container the style is currently applied to, or
+<code>NA</code> if the style is not used.
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p>themes
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

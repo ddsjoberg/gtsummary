@@ -75,7 +75,7 @@ test_that("tbl_svysummary works in character inputs for `by=`", {
   expect_error(
     purrr::map(
       c("Survived", "Class", "Sex", "Age"),
-      ~tbl_svysummary(d, by = .x)
+      ~ tbl_svysummary(d, by = .x)
     ),
     NA
   )
@@ -84,11 +84,11 @@ test_that("tbl_svysummary works in character inputs for `by=`", {
 
 test_that("tbl_svysummary returns errors with bad inputs", {
   expect_error(
-    tbl_svysummary(survey::svydesign(ids = ~ 1, data = tibble(), weights = ~ 1)),
+    tbl_svysummary(survey::svydesign(ids = ~1, data = tibble(), weights = ~1)),
     NULL
   )
   expect_error(
-    tbl_svysummary(survey::svydesign(ids = ~ 1, data = tibble(t = integer()), weights = ~ 1)),
+    tbl_svysummary(survey::svydesign(ids = ~1, data = tibble(t = integer()), weights = ~1)),
     NULL
   )
   expect_error(
@@ -263,7 +263,7 @@ test_that("tbl_svysummary-order of output columns", {
           )
       ) %>%
       select(grade, grade_str) %>%
-      survey::svydesign(data = ., ids = ~1, weights =  ~1) %>%
+      survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
       tbl_svysummary(by = grade_str) %>%
       purrr::pluck("table_body") %>%
       names() %>% {
@@ -277,23 +277,22 @@ test_that("tbl_svysummary-all_categorical() use with `type=`", {
   # no variables should be dichotomous
   expect_true(
     !"dichotomous" %in%
-      (survey::svydesign(data = trial, ids = ~ 1, weights = ~ 1) %>%
-         tbl_svysummary(type = all_dichotomous() ~ "categorical") %>%
-         purrr::pluck("meta_data") %>%
-         dplyr::pull(summary_type))
+      (survey::svydesign(data = trial, ids = ~1, weights = ~1) %>%
+        tbl_svysummary(type = all_dichotomous() ~ "categorical") %>%
+        purrr::pluck("meta_data") %>%
+        dplyr::pull(summary_type))
   )
 })
 
 
 test_that("tbl_svysummary-difftime does not cause error", {
-
   expect_error(
     dplyr::storms %>%
       dplyr::mutate(
         date = ISOdate(year, month, day),
         date_diff = difftime(dplyr::lag(date, 5), date, units = "days")
       ) %>%
-      survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+      survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
       tbl_svysummary(),
     NA
   )
@@ -303,14 +302,14 @@ test_that("tbl_svysummary-difftime does not cause error", {
 test_that("tbl_svysummary-all missing data does not cause error", {
   design_missing <-
     tibble(
-      my_by_var = c(1,1,2,2),
+      my_by_var = c(1, 1, 2, 2),
       fct = rep(NA, 4) %>% factor(levels = c("lion", "tiger", "bear")),
       lgl = NA,
       chr = NA_character_,
       int = NA_integer_,
       dbl = NA_real_
     ) %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1)
+    survey::svydesign(data = ., ids = ~1, weights = ~1)
 
   expect_error(
     all_missing_no_by <- tbl_svysummary(design_missing, include = -my_by_var),
@@ -376,7 +375,7 @@ test_that("tbl_svysummary-all missing data does not cause error", {
       trial %>%
       mutate(response2 = factor(response) %>% forcats::fct_explicit_na()) %>%
       filter(!is.na(response)) %>%
-      survey::svydesign(data = ., ids = ~ 1, weights = ~ 1) %>%
+      survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
       tbl_svysummary(by = response2),
     NA
   )
@@ -409,7 +408,7 @@ test_that("tbl_svysummary-no error when by variable is ordered factor", {
 })
 
 test_that("tbl_svysummary-provides similar results than tbl_summary for simple weights", {
-  t1 <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~ Freq) %>%
+  t1 <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
     tbl_svysummary()
   t2 <- as.data.frame(Titanic) %>%
     tidyr::uncount(Freq) %>%
@@ -418,7 +417,7 @@ test_that("tbl_svysummary-provides similar results than tbl_summary for simple w
   expect_equal(t1$table_styling, t2$table_styling)
 
   statistic <- list(all_continuous() ~ "{mean}", all_categorical() ~ "{n} ({p}%)")
-  t1 <- survey::svydesign(~1, data = trial, weights = ~ 1) %>%
+  t1 <- survey::svydesign(~1, data = trial, weights = ~1) %>%
     tbl_svysummary(by = trt, statistic = statistic)
   t2 <- trial %>%
     tbl_summary(by = trt, statistic = statistic)
@@ -427,23 +426,25 @@ test_that("tbl_svysummary-provides similar results than tbl_summary for simple w
 })
 
 test_that("tbl_svysummary-calculates unweighted N with continuous variables and {N_obs_unweighted}", {
+  t1 <- as_tibble(Titanic) %>%
+    mutate(age = round(as.numeric(list(runif(1, min = 5, max = 100))))) %>%
+    ungroup() %>%
+    survey::svydesign(data = ., ids = ~1, weights = ~n) %>%
+    tbl_svysummary(
+      by = Sex,
+      statistic = list(all_continuous() ~ "{N_obs_unweighted}")
+    )
 
-t1 <- as_tibble(Titanic) %>%
-  mutate(age = round(as.numeric(list(runif(1, min = 5, max = 100))))) %>%
-  ungroup() %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ n) %>%
-    tbl_svysummary(by = Sex,
-                 statistic = list(all_continuous() ~ "{N_obs_unweighted}"))
-
-expect_equal(t1$meta_data$df_stats[[1]] %>%
-               pull('N_obs_unweighted') %>%
-               dplyr::first(),
-             as_tibble(Titanic) %>%
-               group_by(Sex) %>%
-               count() %>%
-               pull(n) %>%
-               dplyr::first())
-
+  expect_equal(
+    t1$meta_data$df_stats[[1]] %>%
+      pull("N_obs_unweighted") %>%
+      dplyr::first(),
+    as_tibble(Titanic) %>%
+      group_by(Sex) %>%
+      count() %>%
+      pull(n) %>%
+      dplyr::first()
+  )
 })
 
 
@@ -453,15 +454,17 @@ test_that("tbl_summary(digits=) tests with fn inputs", {
   expect_error(
     tbl_digits <-
       survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) %>%
-      tbl_svysummary(statistic = all_continuous() ~ "{min} {max}",
-                     digits = all_continuous() ~ style_sigfig,
-                     include = c(emer)),
+      tbl_svysummary(
+        statistic = all_continuous() ~ "{min} {max}",
+        digits = all_continuous() ~ style_sigfig,
+        include = c(emer)
+      ),
     NA
   )
 
   # checking the display is correct
   expect_equal(
-    tbl_digits$table_body %>% filter(variable =="emer") %>% pull(stat_0),
+    tbl_digits$table_body %>% filter(variable == "emer") %>% pull(stat_0),
     "0.00 49"
   )
 })
@@ -473,8 +476,9 @@ test_that("tbl_svysummary() works with date and date/time", {
       dates = as.Date("2021-02-20") + 1:10,
       times = as.POSIXct("2021-02-20 20:31:33 EST") + 1:10,
       group = 1:10 %% 2
-    ) %>%
-    {survey::svydesign(~1, data = ., weights = ~1)}
+    ) %>% {
+      survey::svydesign(~1, data = ., weights = ~1)
+    }
 
   expect_error(
     tbl1 <- df_date %>% tbl_svysummary(),
@@ -488,7 +492,7 @@ test_that("tbl_svysummary() works with date and date/time", {
 
   month_year <- function(x) format(x, "%B %Y")
   expect_error(
-    tbl1 <- df_date  %>% tbl_svysummary(type = everything() ~ "continuous", digits = everything() ~ month_year, include = -group),
+    tbl1 <- df_date %>% tbl_svysummary(type = everything() ~ "continuous", digits = everything() ~ month_year, include = -group),
     NA
   )
 
@@ -502,10 +506,14 @@ test_that("tbl_svysummary() works with date and date/time", {
   expect_error(
     tbl1 <-
       df_date %>%
-      tbl_svysummary(by = group,
-                     type = everything() ~ "continuous",
-                     digits = list(dates ~ numeric_to_month_year,
-                                   times ~ numeric_to_month_year2)),
+      tbl_svysummary(
+        by = group,
+        type = everything() ~ "continuous",
+        digits = list(
+          dates ~ numeric_to_month_year,
+          times ~ numeric_to_month_year2
+        )
+      ),
     NA
   )
 
@@ -514,4 +522,3 @@ test_that("tbl_svysummary() works with date and date/time", {
     NA
   )
 })
-

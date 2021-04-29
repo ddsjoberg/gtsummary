@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Parse a CSS3-like selector</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for parse_selector {cli}"><tr><td>parse_selector {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Parse a CSS3-like selector</h2>
+
+<h3>Description</h3>
+
+<p>This is the rather small subset of CSS3 that is supported:
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+parse_selector(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>CSS3-like selector string.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Selectors:
+</p>
+
+<ul>
+<li><p> Type selectors, e.g. <code>input</code> selects all <code style="white-space: pre;">&lt;input&gt;</code> elements.
+</p>
+</li>
+<li><p> Class selectors, e.g. <code>.index</code> selects any element that has a class
+of &quot;index&quot;.
+</p>
+</li>
+<li><p> ID selector. <code style="white-space: pre;">#toc</code> will match the element that has the ID &quot;toc&quot;.
+</p>
+</li></ul>
+
+<p>Combinators:
+</p>
+
+<ul>
+<li><p> Descendant combinator, i.e. the space, that combinator selects nodes
+that are descendants of the first element. E.g. <code style="white-space: pre;">div span</code> will match
+all <code style="white-space: pre;">&lt;span&gt;</code> elements that are inside a <code style="white-space: pre;">&lt;div&gt;</code> element.
+</p>
+</li></ul>
+
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

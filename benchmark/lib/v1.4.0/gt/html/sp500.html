@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Daily S&amp;P 500 Index data from 1950 to 2015</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sp500 {gt}"><tr><td>sp500 {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Daily S&amp;P 500 Index data from 1950 to 2015</h2>
+
+<h3>Description</h3>
+
+<p>This dataset provides daily price indicators for the S&amp;P 500 index from the
+beginning of 1950 to the end of 2015. The index includes 500 leading
+companies and captures about 80\
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+sp500
+</pre>
+
+
+<h3>Format</h3>
+
+<p>A tibble with 16607 rows and 7 variables:
+</p>
+
+<dl>
+<dt>date</dt><dd><p>The date expressed as <code>Date</code> values</p>
+</dd>
+<dt>open, high, low, close</dt><dd><p>The day's opening, high, low, and closing
+prices in USD; the <code>close</code> price is adjusted for splits</p>
+</dd>
+<dt>volume</dt><dd><p>the number of trades for the given <code>date</code></p>
+</dd>
+<dt>adj_close</dt><dd><p>The close price adjusted for both dividends and splits</p>
+</dd>
+</dl>
+
+
+
+<h3>Function ID</h3>
+
+<p>11-4
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Datasets: 
+<code><a href="countrypops.html">countrypops</a></code>,
+<code><a href="exibble.html">exibble</a></code>,
+<code><a href="gtcars.html">gtcars</a></code>,
+<code><a href="pizzaplace.html">pizzaplace</a></code>,
+<code><a href="sza.html">sza</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Here is a glimpse at the data
+# available in `sp500`
+dplyr::glimpse(sp500)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

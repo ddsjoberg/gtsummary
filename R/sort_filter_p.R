@@ -36,6 +36,7 @@ NULL
 #' @export
 #' @rdname sort_filter_p
 sort_p <- function(x, q = FALSE) {
+  updated_call_list <- c(x$call_list, list(sort_p = match.call()))
   # checking inputs ------------------------------------------------------------
   # checking class of x
   if (!inherits(x, "gtsummary")) {
@@ -45,13 +46,15 @@ sort_p <- function(x, q = FALSE) {
   # checking input table has a p.value column
   if (q == FALSE && !"p.value" %in% names(x$table_body)) {
     stop("There is no p-value column. `x$table_body` must have a column called 'p.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # checking input table has a q.value column
   if (q == TRUE && !"q.value" %in% names(x$table_body)) {
     stop("There is no q-value column. `x$table_body` must have a column called 'q.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # update table_body ---------------------------------------------------------
@@ -68,14 +71,14 @@ sort_p <- function(x, q = FALSE) {
     ungroup()
 
   # returning results ----------------------------------------------------------
-  x$call_list <- c(x$call_list, list(sort_p = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }
 
 #' @export
 #' @rdname sort_filter_p
 filter_p <- function(x, q = FALSE, t = 0.05) {
+  updated_call_list <- c(x$call_list, list(filter_p = match.call()))
   # checking inputs ------------------------------------------------------------
   # checking class of x
   if (!inherits(x, "gtsummary")) {
@@ -85,13 +88,15 @@ filter_p <- function(x, q = FALSE, t = 0.05) {
   # checking input table has a p.value column
   if (q == FALSE && !"p.value" %in% names(x$table_body)) {
     stop("There is no p-value column. `x$table_body` must have a column called 'p.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # checking input table has a q.value column
   if (q == TRUE && !"q.value" %in% names(x$table_body)) {
     stop("There is no q-value column. `x$table_body` must have a column called 'q.value'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   # update table_body ---------------------------------------------------------
@@ -108,7 +113,6 @@ filter_p <- function(x, q = FALSE, t = 0.05) {
     ungroup()
 
   # returning results ----------------------------------------------------------
-  x$call_list <- c(x$call_list, list(filter_p = match.call()))
-
+  x$call_list <- updated_call_list
   x
 }

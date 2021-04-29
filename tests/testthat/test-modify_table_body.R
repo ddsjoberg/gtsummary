@@ -23,12 +23,12 @@ test_that("modify_table_body with standard use", {
   )
 
   expect_equal(
-    t1,
+    t1[["table_body"]],
     tbl0 %>%
       modify_table_body(
-        ~mutate(.x, n_nonevent = N - nevent) %>% dplyr::relocate(n_nonevent, .before = nevent)
-      )  %>%
-      modify_header(n_nonevent = "**Control N**", nevent = "**Case N**")
+        ~ mutate(.x, n_nonevent = N - nevent) %>% dplyr::relocate(n_nonevent, .before = nevent)
+      ) %>%
+      modify_header(n_nonevent = "**Control N**", nevent = "**Case N**") %>%
+      purrr::pluck("table_body")
   )
-
 })

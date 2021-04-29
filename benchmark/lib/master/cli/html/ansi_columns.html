@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Format a character vector in multiple columns</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ansi_columns {cli}"><tr><td>ansi_columns {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Format a character vector in multiple columns</h2>
+
+<h3>Description</h3>
+
+<p>This function helps with multi-column output of ANSI styles strings.
+It works well together with <code><a href="boxx.html">boxx()</a></code>, see the example below.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ansi_columns(
+  text,
+  width = console_width(),
+  sep = " ",
+  fill = c("rows", "cols"),
+  max_cols = 4,
+  align = c("left", "center", "right"),
+  type = "width",
+  ellipsis = symbol$ellipsis
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>Character vector to format. Each element will formatted
+as a cell of a table.</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>Width of the screen.</p>
+</td></tr>
+<tr valign="top"><td><code>sep</code></td>
+<td>
+<p>Separator between the columns. It may have ANSI styles.</p>
+</td></tr>
+<tr valign="top"><td><code>fill</code></td>
+<td>
+<p>Whether to fill the columns row-wise or column-wise.</p>
+</td></tr>
+<tr valign="top"><td><code>max_cols</code></td>
+<td>
+<p>Maximum number of columns to use. Will not use more,
+even if there is space for it.</p>
+</td></tr>
+<tr valign="top"><td><code>align</code></td>
+<td>
+<p>Alignment within the columns.</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>Passed to <code><a href="ansi_nchar.html">ansi_nchar()</a></code> and <code><a href="ansi_align.html">ansi_align()</a></code>. Most probably
+you want the default, <code>"width"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>ellipsis</code></td>
+<td>
+<p>The string to append to truncated strings. Supply an
+empty string if you don't want a marker.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If a string does not fit into the specified <code>width</code>, it will be
+truncated using <code><a href="ansi_strtrim.html">ansi_strtrim()</a></code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>ANSI string vector.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other ANSI string operations: 
+<code><a href="ansi_align.html">ansi_align</a>()</code>,
+<code><a href="ansi_nchar.html">ansi_nchar</a>()</code>,
+<code><a href="ansi_strsplit.html">ansi_strsplit</a>()</code>,
+<code><a href="ansi_strtrim.html">ansi_strtrim</a>()</code>,
+<code><a href="ansi_strwrap.html">ansi_strwrap</a>()</code>,
+<code><a href="ansi_substring.html">ansi_substring</a>()</code>,
+<code><a href="ansi_substr.html">ansi_substr</a>()</code>,
+<code><a href="ansi_toupper.html">ansi_toupper</a>()</code>,
+<code><a href="ansi_trimws.html">ansi_trimws</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+fmt &lt;- ansi_columns(
+  paste(col_red("foo"), 1:10),
+  width = 50,
+  fill = "rows",
+  max_cols=10,
+  align = "center",
+  sep = "   "
+)
+fmt
+ansi_nchar(fmt, type = "width")
+boxx(fmt, padding = c(0,1,0,1), header = col_green("foobar"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

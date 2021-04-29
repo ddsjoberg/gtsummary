@@ -33,7 +33,6 @@
 #'   trial %>%
 #'   tbl_cross(row = stage, col = trt, percent = "cell") %>%
 #'   add_p()
-#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -57,7 +56,7 @@ tbl_cross <- function(data,
   # checking data input --------------------------------------------------------
   if (!is.data.frame(data) || nrow(data) == 0 || ncol(data) < 2) {
     stop("`data=` argument must be a data frame with at least one row and two columns.",
-         call. = FALSE
+      call. = FALSE
     )
   }
 
@@ -84,8 +83,9 @@ tbl_cross <- function(data,
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing)
   percent <- match.arg(percent)
-  if (!is.null(margin))
+  if (!is.null(margin)) {
     margin <- match.arg(margin, several.ok = TRUE)
+  }
 
   # if no col AND no row provided, default to first two columns of data --------
   if (is.null(row) && is.null(col)) {
@@ -99,7 +99,7 @@ tbl_cross <- function(data,
   # if only one of col/row provided, error
   if (sum(is.null(row), is.null(col)) == 1) {
     stop("Please specify which columns to use for both `col=` and `row=` arguments",
-         call. = FALSE
+      call. = FALSE
     )
   }
   if ("..total.." %in% c(row, col)) {
@@ -136,8 +136,7 @@ tbl_cross <- function(data,
     mutate_at(vars(row, col), as.factor) %>%
     mutate_at(
       vars(row, col),
-      ~ switch(
-        missing,
+      ~ switch(missing,
         "no" = .,
         "ifany" = forcats::fct_explicit_na(., missing_text),
         "always" = forcats::fct_explicit_na(., missing_text) %>%
@@ -161,7 +160,7 @@ tbl_cross <- function(data,
       percent = ifelse(percent == "none", "cell", percent),
       label = new_label,
       missing_text = missing_text,
-      type = list('categorical') %>% rlang::set_names(row)
+      type = list("categorical") %>% rlang::set_names(row)
     ) %>%
     bold_labels() %>%
     modify_header(all_stat_cols(FALSE) ~ "{level}") %>%

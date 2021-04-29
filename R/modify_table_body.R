@@ -26,14 +26,16 @@
 #' modify_table_body_ex1 <-
 #'   trial %>%
 #'   select(response, age, marker) %>%
-#'   tbl_uvregression(y = response,
-#'                    method = glm,
-#'                    method.args = list(family = binomial),
-#'                    exponentiate = TRUE,
-#'                    hide_n = TRUE) %>%
+#'   tbl_uvregression(
+#'     y = response,
+#'     method = glm,
+#'     method.args = list(family = binomial),
+#'     exponentiate = TRUE,
+#'     hide_n = TRUE
+#'   ) %>%
 #'   # adding number of non-events to table
 #'   modify_table_body(
-#'     ~.x %>%
+#'     ~ .x %>%
 #'       dplyr::mutate(N_nonevent = N_obs - N_event) %>%
 #'       dplyr::relocate(c(N_event, N_nonevent), .before = estimate)
 #'   ) %>%
@@ -48,6 +50,7 @@
 #' @family Advanced modifiers
 modify_table_body <- function(x, fun, ...) {
   if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
+  updated_call_list <- c(x$call_list, list(modify_table_body = match.call()))
 
   # execute function on x$table_body -------------------------------------------
   x$table_body <-
@@ -58,9 +61,6 @@ modify_table_body <- function(x, fun, ...) {
   x <- .update_table_styling(x)
 
   # return gtsummary object ----------------------------------------------------
+  x$call_list <- updated_call_list
   x
 }
-
-
-
-

@@ -67,9 +67,9 @@ tbl_strata_ex1 <-
   tbl_strata(
     strata = grade,
     .tbl_fun =
-      ~.x \%>\%
-      tbl_summary(by = trt, missing = "no") \%>\%
-      add_n()
+      ~ .x \%>\%
+        tbl_summary(by = trt, missing = "no") \%>\%
+        add_n()
   )
 }
 \author{
