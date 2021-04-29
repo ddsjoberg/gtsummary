@@ -195,7 +195,8 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
   }
 
   # calculate p-value
-  expr(stats::wilcox.test(data_wide[[2]], data_wide[[3]], paired = TRUE, !!!test.args)) %>%
+  expr(stats::wilcox.test(as.numeric(data_wide[[2]]), as.numeric(data_wide[[3]]),
+                          paired = TRUE, !!!test.args)) %>%
     eval() %>%
     broom::tidy()
 }
