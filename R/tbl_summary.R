@@ -192,8 +192,24 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
                         missing = NULL, missing_text = NULL, sort = NULL,
                         percent = NULL, include = everything(), group = NULL) {
+  # ungrouping data ------------------------------------------------------------
+  data <- data %>% ungroup()
+
   # eval -----------------------------------------------------------------------
-  include <- select(data, {{ include }}) %>% names()
+  by <-
+    .select_to_varnames(
+      select = {{ by }},
+      data = data,
+      arg_name = "by",
+      select_single = TRUE
+    )
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      data = data,
+      arg_name = "include"
+    ) %>%
+    union(by) # include by variable by default
 
   # setting defaults from gtsummary theme --------------------------------------
   label <- label %||% get_theme_element("tbl_summary-arg:label")
@@ -201,26 +217,16 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   digits <- digits %||% get_theme_element("tbl_summary-arg:digits")
   type <- type %||% get_theme_element("tbl_summary-arg:type")
   value <- value %||% get_theme_element("tbl_summary-arg:value")
-  missing <- missing %||% get_theme_element("tbl_summary-arg:missing",
-    default = "ifany"
-  )
-  missing_text <- missing_text %||%
+  missing <-
+    missing %||%
+    get_theme_element("tbl_summary-arg:missing", default = "ifany")
+  missing_text <-
+    missing_text %||%
     get_theme_element("tbl_summary-arg:missing_text",
-      default = translate_text("Unknown")
-    )
+                      default = translate_text("Unknown"))
   sort <- sort %||% get_theme_element("tbl_summary-arg:sort")
   percent <- percent %||% get_theme_element("tbl_summary-arg:percent",
     default = "column"
-  )
-  # ungrouping data ------------------------------------------------------------
-  data <- data %>% ungroup()
-
-  # converting bare arguments to string ----------------------------------------
-  by <- .select_to_varnames(
-    select = {{ by }},
-    data = data,
-    arg_name = "by",
-    select_single = TRUE
   )
 
   # matching arguments ---------------------------------------------------------

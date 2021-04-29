@@ -42,10 +42,6 @@ test_that("input check", {
     NULL
   )
   expect_error(
-    tbl_summary(trial, by = trt, include = -trt),
-    NULL
-  )
-  expect_error(
     tbl_summary(trial, type = is.character),
     NULL
   )
