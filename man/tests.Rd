@@ -17,7 +17,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{"t.test"} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \cr
    \code{"aov"} \tab One-way ANOVA \tab \code{aov(variable ~ as.factor(by), data = data) \%>\% summary()} \cr
    \code{"kruskal.test"} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \cr
-   \code{"wilcox.test"} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(variable ~ as.factor(by), data = data, ...)} \cr
+   \code{"wilcox.test"} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(as.numeric(variable) ~ as.factor(by), data = data, ...)} \cr
    \code{"chisq.test"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)} \cr
    \code{"chisq.test.no.correct"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \cr
    \code{"fisher.test"} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), conf.level = 0.95, ...)} \cr
