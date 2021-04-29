@@ -176,7 +176,8 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
-<li>Bug fix for Hmisc labelled data with tbl_summary() (<a href='https://github.com/ddsjoberg/gtsummary/issues/876'>#876</a> )</li>
+<li><p>Variables are converted to numeric before being passed to <code><a href="https://rdrr.io/r/stats/wilcox.test.html">wilcox.test()</a></code> in <code><a href="../reference/add_p.html">add_p()</a></code>. This avoids an error when a date difference is passed. (<a href='https://github.com/ddsjoberg/gtsummary/issues/880'>#880</a>)</p></li>
+<li><p>Bug fix for {Hmisc} labeled data with <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/876'>#876</a>)</p></li>
 </ul>
 </div>
     <div id="gtsummary-140" class="section level1">
