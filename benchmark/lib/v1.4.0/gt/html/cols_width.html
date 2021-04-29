@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Set the widths of columns</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cols_width {gt}"><tr><td>cols_width {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Set the widths of columns</h2>
+
+<h3>Description</h3>
+
+<p>Manual specifications of column widths can be performed using the
+<code>cols_width()</code> function. We choose which columns get specific widths. This
+can be in units of pixels (easily set by use of the <code><a href="px.html">px()</a></code> helper function),
+or, as percentages (where the <code><a href="pct.html">pct()</a></code> helper function is useful). Width
+assignments are supplied in <code>...</code> through two-sided formulas, where the
+left-hand side defines the target columns and the right-hand side is a single
+dimension.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cols_width(data, ..., .list = list2(...))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Expressions for the assignment of column widths for the table
+columns in <code>data</code>. Two-sided formulas (e.g, <code style="white-space: pre;">&lt;LHS&gt; ~ &lt;RHS&gt;</code>) can be used,
+where the left-hand side corresponds to selections of columns and the
+right-hand side evaluates to single-length character values in the form
+<code style="white-space: pre;">{##}px</code> (i.e., pixel dimensions); the <code><a href="px.html">px()</a></code> helper function is best used
+for this purpose. Column names should be enclosed in <code><a href="../../base/html/c.html">c()</a></code>. The
+column-based select helpers <code><a href="reexports.html">starts_with()</a></code>, <code><a href="reexports.html">ends_with()</a></code>, <code><a href="reexports.html">contains()</a></code>,
+<code><a href="reexports.html">matches()</a></code>, <code><a href="reexports.html">one_of()</a></code>, and <code><a href="reexports.html">everything()</a></code> can be used in the LHS.
+Subsequent expressions that operate on the columns assigned previously will
+result in overwriting column width values (both in the same <code>cols_width()</code>
+call and across separate calls). All other columns can be assigned a
+default width value by using <code>TRUE</code> or <code>everything()</code> on the left-hand
+side.</p>
+</td></tr>
+<tr valign="top"><td><code>.list</code></td>
+<td>
+<p>Allows for the use of a list as an input alternative to <code>...</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Column widths can be set as absolute or relative values (with px and
+percentage values). Those columns not specified are treated as having
+variable width. The sizing behavior for column widths depends on the
+combination of value types, and, whether a table width has been set (which
+could, itself, be expressed as an absolute or relative value). Widths for the
+table and its container can be individually modified with the <code>table.width</code>
+and <code>container.width</code> arguments within <code><a href="tab_options.html">tab_options()</a></code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_cols_width_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>4-2
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Modify Columns: 
+<code><a href="cols_align.html">cols_align</a>()</code>,
+<code><a href="cols_hide.html">cols_hide</a>()</code>,
+<code><a href="cols_label.html">cols_label</a>()</code>,
+<code><a href="cols_merge_n_pct.html">cols_merge_n_pct</a>()</code>,
+<code><a href="cols_merge_range.html">cols_merge_range</a>()</code>,
+<code><a href="cols_merge_uncert.html">cols_merge_uncert</a>()</code>,
+<code><a href="cols_merge.html">cols_merge</a>()</code>,
+<code><a href="cols_move_to_end.html">cols_move_to_end</a>()</code>,
+<code><a href="cols_move_to_start.html">cols_move_to_start</a>()</code>,
+<code><a href="cols_move.html">cols_move</a>()</code>,
+<code><a href="cols_unhide.html">cols_unhide</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `exibble` to create a gt table;
+# with named arguments in `...`, we
+# can specify the exact widths for
+# table columns (using `everything()`
+# or `TRUE` at the end will capture
+# all remaining columns)
+tab_1 &lt;-
+  exibble %&gt;%
+  dplyr::select(
+    num, char, date,
+    datetime, row
+  ) %&gt;%
+  gt() %&gt;%
+  cols_width(
+    num ~ px(150),
+    ends_with("r") ~ px(100),
+    starts_with("date") ~ px(200),
+    everything() ~ px(60)
+  )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

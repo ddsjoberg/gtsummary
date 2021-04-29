@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Detect whether a stream supports \\r (Carriage return)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for is_dynamic_tty {cli}"><tr><td>is_dynamic_tty {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Detect whether a stream supports <code style="white-space: pre;">\\r</code> (Carriage return)</h2>
+
+<h3>Description</h3>
+
+<p>In a terminal, <code style="white-space: pre;">\\r</code> moves the cursor to the first position of the
+same line. It is also supported by most R IDEs. <code style="white-space: pre;">\\r</code> is typically
+used to achive a more dynamic, less cluttered user interface, e.g.
+to create progress bars.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+is_dynamic_tty(stream = "auto")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>stream</code></td>
+<td>
+<p>The stream to inspect or manipulate, an R connection
+object. It can also be a string, one of <code>"auto"</code>, <code>"message"</code>,
+<code>"stdout"</code>, <code>"stderr"</code>. <code>"auto"</code> will select <code>stdout()</code> if the session is
+interactive and there are no sinks, otherwise it will select <code>stderr()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If the output is directed to a file, then <code style="white-space: pre;">\\r</code> characters are typically
+unwanted. This function detects if <code style="white-space: pre;">\\r</code> can be used for the given
+stream or not.
+</p>
+<p>The detection mechanism is as follows:
+</p>
+
+<ol>
+<li><p> If the <code>cli.dynamic</code> option is set to <code>TRUE</code>, <code>TRUE</code> is returned.
+</p>
+</li>
+<li><p> If the <code>cli.dynamic</code> option is set to anything else, <code>FALSE</code> is
+returned.
+</p>
+</li>
+<li><p> If the <code>R_CLI_DYNAMIC</code> environment variable is not empty and set to
+the string <code>"true"</code>, <code>"TRUE"</code> or <code>"True"</code>, <code>TRUE</code> is returned.
+</p>
+</li>
+<li><p> If <code>R_CLI_DYNAMIC</code> is not empty and set to anything else, <code>FALSE</code> is
+returned.
+</p>
+</li>
+<li><p> If the stream is a terminal, then <code>TRUE</code> is returned.
+</p>
+</li>
+<li><p> If the stream is the standard output or error within RStudio,
+the macOS R app, or RKWard IDE, <code>TRUE</code> is returned.
+</p>
+</li>
+<li><p> Otherwise <code>FALSE</code> is returned.
+</p>
+</li></ol>
+
+
+
+<h3>See Also</h3>
+
+<p>Other terminal capabilities: 
+<code><a href="is_ansi_tty.html">is_ansi_tty</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+is_dynamic_tty()
+is_dynamic_tty(stdout())
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

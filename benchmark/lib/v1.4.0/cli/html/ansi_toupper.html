@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: ANSI character translation and case folding</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ansi_toupper {cli}"><tr><td>ansi_toupper {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>ANSI character translation and case folding</h2>
+
+<h3>Description</h3>
+
+<p>There functions are similar to <code><a href="../../base/html/chartr.html">toupper()</a></code>, <code><a href="../../base/html/chartr.html">tolower()</a></code> and
+<code><a href="../../base/html/chartr.html">chartr()</a></code>, but they keep the ANSI colors of the string.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ansi_toupper(x)
+
+ansi_tolower(x)
+
+ansi_chartr(old, new, x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Input string. May have ANSI colors and styles.</p>
+</td></tr>
+<tr valign="top"><td><code>old</code></td>
+<td>
+<p>a character string specifying the characters to be
+translated.  If a character vector of length 2 or more is supplied,
+the first element is used with a warning.</p>
+</td></tr>
+<tr valign="top"><td><code>new</code></td>
+<td>
+<p>a character string specifying the translations. If a
+character vector of length 2 or more is supplied, the first element
+is used with a warning.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Character vector of the same length as <code>x</code>, containing
+the translated strings. ANSI styles are retained.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other ANSI string operations: 
+<code><a href="ansi_align.html">ansi_align</a>()</code>,
+<code><a href="ansi_columns.html">ansi_columns</a>()</code>,
+<code><a href="ansi_nchar.html">ansi_nchar</a>()</code>,
+<code><a href="ansi_strsplit.html">ansi_strsplit</a>()</code>,
+<code><a href="ansi_strtrim.html">ansi_strtrim</a>()</code>,
+<code><a href="ansi_strwrap.html">ansi_strwrap</a>()</code>,
+<code><a href="ansi_substring.html">ansi_substring</a>()</code>,
+<code><a href="ansi_substr.html">ansi_substr</a>()</code>,
+<code><a href="ansi_trimws.html">ansi_trimws</a>()</code>
+</p>
+<p>Other ANSI string operations: 
+<code><a href="ansi_align.html">ansi_align</a>()</code>,
+<code><a href="ansi_columns.html">ansi_columns</a>()</code>,
+<code><a href="ansi_nchar.html">ansi_nchar</a>()</code>,
+<code><a href="ansi_strsplit.html">ansi_strsplit</a>()</code>,
+<code><a href="ansi_strtrim.html">ansi_strtrim</a>()</code>,
+<code><a href="ansi_strwrap.html">ansi_strwrap</a>()</code>,
+<code><a href="ansi_substring.html">ansi_substring</a>()</code>,
+<code><a href="ansi_substr.html">ansi_substr</a>()</code>,
+<code><a href="ansi_trimws.html">ansi_trimws</a>()</code>
+</p>
+<p>Other ANSI string operations: 
+<code><a href="ansi_align.html">ansi_align</a>()</code>,
+<code><a href="ansi_columns.html">ansi_columns</a>()</code>,
+<code><a href="ansi_nchar.html">ansi_nchar</a>()</code>,
+<code><a href="ansi_strsplit.html">ansi_strsplit</a>()</code>,
+<code><a href="ansi_strtrim.html">ansi_strtrim</a>()</code>,
+<code><a href="ansi_strwrap.html">ansi_strwrap</a>()</code>,
+<code><a href="ansi_substring.html">ansi_substring</a>()</code>,
+<code><a href="ansi_substr.html">ansi_substr</a>()</code>,
+<code><a href="ansi_trimws.html">ansi_trimws</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ansi_toupper(col_red("Uppercase"))
+
+ansi_tolower(col_red("LowerCase"))
+
+x &lt;- paste0(col_green("MiXeD"), col_red(" cAsE 123"))
+ansi_chartr("iXs", "why", x)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

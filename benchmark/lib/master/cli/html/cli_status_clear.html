@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Clear the status bar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_status_clear {cli}"><tr><td>cli_status_clear {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Clear the status bar</h2>
+
+<h3>Description</h3>
+
+<p>Clear the status bar
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_status_clear(
+  id = NULL,
+  result = c("clear", "done", "failed"),
+  msg_done = NULL,
+  msg_failed = NULL,
+  .envir = parent.frame()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>Id of the status bar container to clear. If <code>id</code> is not the id
+of the current status bar (because it was overwritten by another
+status bar container), then the status bar is not cleared. If <code>NULL</code>
+(the default) then the status bar is always cleared.</p>
+</td></tr>
+<tr valign="top"><td><code>result</code></td>
+<td>
+<p>Whether to show a message for success or failure or just
+clear the status bar.</p>
+</td></tr>
+<tr valign="top"><td><code>msg_done</code></td>
+<td>
+<p>If not <code>NULL</code>, then the message to use for successful
+process termination. This overrides the message given when the status
+bar was created.</p>
+</td></tr>
+<tr valign="top"><td><code>msg_failed</code></td>
+<td>
+<p>If not <code>NULL</code>, then the message to use for failed
+process termination. This overrides the message give when the status
+bar was created.</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Environment to evaluate the glue expressions in. It is
+also used to auto-clear the status bar if <code>.auto_close</code> is <code>TRUE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p>Other status bar: 
+<code><a href="cli_process_start.html">cli_process_start</a>()</code>,
+<code><a href="cli_status_update.html">cli_status_update</a>()</code>,
+<code><a href="cli_status.html">cli_status</a>()</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

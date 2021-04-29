@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Update the status bar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_status {cli}"><tr><td>cli_status {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Update the status bar</h2>
+
+<h3>Description</h3>
+
+<p>The status bar is the last line of the terminal. cli apps can use this
+to show status information, progress bars, etc. The status bar is kept
+intact by all semantic cli output.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_status(
+  msg,
+  msg_done = paste(msg, "... done"),
+  msg_failed = paste(msg, "... failed"),
+  .keep = FALSE,
+  .auto_close = TRUE,
+  .envir = parent.frame(),
+  .auto_result = c("clear", "done", "failed")
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>msg</code></td>
+<td>
+<p>The text to show, a character vector. It will be
+collapsed into a single string, and the first line is kept and cut to
+<code><a href="console_width.html">console_width()</a></code>. The message is often associated with the start of
+a calculation.</p>
+</td></tr>
+<tr valign="top"><td><code>msg_done</code></td>
+<td>
+<p>The message to use when the message is cleared, when
+the calculation finishes successfully. If <code>.auto_close</code> is <code>TRUE</code>
+and <code>.auto_result</code> is <code>"done"</code>, then this is printed automatically
+when the calling function (or <code>.envir</code>) finishes.</p>
+</td></tr>
+<tr valign="top"><td><code>msg_failed</code></td>
+<td>
+<p>The message to use when the message is cleared, when
+the calculation finishes unsuccessfully. If <code>.auto_close</code> is <code>TRUE</code>
+and <code>.auto_result</code> is <code>"failed"</code>, then this is printed automatically
+when the calling function (or <code>.envir</code>) finishes.</p>
+</td></tr>
+<tr valign="top"><td><code>.keep</code></td>
+<td>
+<p>What to do when this status bar is cleared. If <code>TRUE</code> then
+the content of this status bar is kept, as regular cli output (the
+screen is scrolled up if needed). If <code>FALSE</code>, then this status bar
+is deleted.</p>
+</td></tr>
+<tr valign="top"><td><code>.auto_close</code></td>
+<td>
+<p>Whether to clear the status bar when the calling
+function finishes (or ‘.envir’ is removed from the stack, if
+specified).</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Environment to evaluate the glue expressions in. It is
+also used to auto-clear the status bar if <code>.auto_close</code> is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>.auto_result</code></td>
+<td>
+<p>What to do when auto-closing the status bar.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Use <code><a href="cli_status_clear.html">cli_status_clear()</a></code> to clear the status bar.
+</p>
+<p>Often status messages are associated with processes. E.g. the app starts
+downloading a large file, so it sets the status bar accordingly. Once the
+download is done (or has failed), the app typically updates the status bar
+again. cli automates much of this, via the <code>msg_done</code>, <code>msg_failed</code>, and
+<code>.auto_result</code> arguments. See examples below.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The id of the new status bar container element, invisibly.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="cli_process_start.html">cli_process_start()</a></code> for a higher level interface to the
+status bar, that adds automatic styling.
+</p>
+<p>Other status bar: 
+<code><a href="cli_process_start.html">cli_process_start</a>()</code>,
+<code><a href="cli_status_clear.html">cli_status_clear</a>()</code>,
+<code><a href="cli_status_update.html">cli_status_update</a>()</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: CLI block quote</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_blockquote {cli}"><tr><td>cli_blockquote {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>CLI block quote</h2>
+
+<h3>Description</h3>
+
+<p>A section that is quoted from another source. It is typically indented.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_blockquote(
+  quote,
+  citation = NULL,
+  id = NULL,
+  class = NULL,
+  .envir = parent.frame()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>quote</code></td>
+<td>
+<p>Text of the quotation.</p>
+</td></tr>
+<tr valign="top"><td><code>citation</code></td>
+<td>
+<p>Source of the quotation, typically a link or the name
+of a person.</p>
+</td></tr>
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>Element id, a string. If <code>NULL</code>, then a new id is generated
+and returned.</p>
+</td></tr>
+<tr valign="top"><td><code>class</code></td>
+<td>
+<p>Class name, sting. Can be used in themes.</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Environment to evaluate the glue expressions in. It is
+also used to auto-close the container if <code>.auto_close</code> is <code>TRUE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+cli_blockquote(cli:::lorem_ipsum(), citation = "Nobody, ever")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

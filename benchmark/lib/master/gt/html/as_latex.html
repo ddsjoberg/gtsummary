@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Output a gt object as LaTeX</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for as_latex {gt}"><tr><td>as_latex {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Output a gt object as LaTeX</h2>
+
+<h3>Description</h3>
+
+<p>Get the LaTeX content from a <code>gt_tbl</code> object as a <code>knit_asis</code> object. This
+object contains the LaTeX code and attributes that serve as LaTeX
+dependencies (i.e., the LaTeX packages required for the table). Using
+<code>as.character()</code> on the created object will result in a single-element vector
+containing the LaTeX code.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+as_latex(data)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+</table>
+
+
+<h3>Function ID</h3>
+
+<p>13-3
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Export Functions: 
+<code><a href="as_raw_html.html">as_raw_html</a>()</code>,
+<code><a href="as_rtf.html">as_rtf</a>()</code>,
+<code><a href="extract_summary.html">extract_summary</a>()</code>,
+<code><a href="gtsave.html">gtsave</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `gtcars` to create a gt table;
+# add a header and then export as
+# an object with LaTeX code
+tab_latex &lt;-
+  gtcars %&gt;%
+  dplyr::select(mfr, model, msrp) %&gt;%
+  dplyr::slice(1:5) %&gt;%
+  gt() %&gt;%
+  tab_header(
+    title = md("Data listing from **gtcars**"),
+    subtitle = md("`gtcars` is an R dataset")
+  ) %&gt;%
+  as_latex()
+
+# `tab_latex` is a `knit_asis` object,
+# which makes it easy to include in
+# R Markdown documents that are knit to
+# PDF; we can use `as.character()` to
+# get just the LaTeX code as a single-
+# element vector
+tab_latex %&gt;%
+  as.character() %&gt;%
+  cat()
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

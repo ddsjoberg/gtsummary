@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Twice hourly solar zenith angles by month &amp; latitude</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sza {gt}"><tr><td>sza {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Twice hourly solar zenith angles by month &amp; latitude</h2>
+
+<h3>Description</h3>
+
+<p>This dataset contains solar zenith angles (in degrees, with the range of
+0-90) every half hour from 04:00 to 12:00, true solar time. This set of
+values is calculated on the first of every month for 4 different northern
+hemisphere latitudes. For determination of afternoon values, the presented
+tabulated values are symmetric about noon.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+sza
+</pre>
+
+
+<h3>Format</h3>
+
+<p>A tibble with 816 rows and 4 variables:
+</p>
+
+<dl>
+<dt>latitude</dt><dd><p>The latitude in decimal degrees for the observations</p>
+</dd>
+<dt>month</dt><dd><p>The measurement month; all calculations where conducted
+for the first day of each month</p>
+</dd>
+<dt>tst</dt><dd><p>The true solar time at the given <code>latitude</code> and date
+(first of <code>month</code>) for which the solar zenith angle is calculated</p>
+</dd>
+<dt>sza</dt><dd><p>The solar zenith angle in degrees, where <code>NA</code>s
+indicate that sunrise hadn't yet occurred by the <code>tst</code> value</p>
+</dd>
+</dl>
+
+
+
+<h3>Details</h3>
+
+<p>The solar zenith angle (SZA) is one measure that helps to describe the sun's
+path across the sky. It's defined as the angle of the sun relative to a line
+perpendicular to the earth's surface. It is useful to calculate the SZA in
+relation to the true solar time. True solar time relates to the position of
+the sun with respect to the observer, which is different depending on the
+exact longitude. For example, two hours before the sun crosses the meridian
+(the highest point it would reach that day) corresponds to a true solar time
+of 10 a.m. The SZA has a strong dependence on the observer's latitude. For
+example, at a latitude of 50 degrees N at the start of January, the noontime
+SZA is 73.0 but a different observer at 20 degrees N would measure the
+noontime SZA to be 43.0 degrees.
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>11-2
+</p>
+
+
+<h3>Source</h3>
+
+<p>Calculated Actinic Fluxes (290 - 700 nm) for Air Pollution
+Photochemistry Applications (Peterson, 1976), available at:
+<a href="https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=9100JA26.txt">https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=9100JA26.txt</a>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Datasets: 
+<code><a href="countrypops.html">countrypops</a></code>,
+<code><a href="exibble.html">exibble</a></code>,
+<code><a href="gtcars.html">gtcars</a></code>,
+<code><a href="pizzaplace.html">pizzaplace</a></code>,
+<code><a href="sp500.html">sp500</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Here is a glimpse at the data
+# available in `sza`
+dplyr::glimpse(sza)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

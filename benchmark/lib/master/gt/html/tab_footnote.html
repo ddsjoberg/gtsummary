@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add a table footnote</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tab_footnote {gt}"><tr><td>tab_footnote {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add a table footnote</h2>
+
+<h3>Description</h3>
+
+<p>The <code>tab_footnote()</code> function can make it a painless process to add a
+footnote to a <strong>gt</strong> table. There are two components to a footnote: (1) a
+footnote mark that is attached to the targeted cell text, and (2) the
+footnote text (that starts with the corresponding footnote mark) that is
+placed in the table's footer area. Each call of <code>tab_footnote()</code> will add a
+different note, and one or more cells can be targeted via the location helper
+functions (e.g., <code><a href="cells_body.html">cells_body()</a></code>, <code><a href="cells_column_labels.html">cells_column_labels()</a></code>, etc.).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tab_footnote(data, footnote, locations)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>footnote</code></td>
+<td>
+<p>The text to be used in the footnote. We can optionally use
+the <code><a href="md.html">md()</a></code> and <code><a href="html.html">html()</a></code> functions to style the text as Markdown or to
+retain HTML elements in the footnote text.</p>
+</td></tr>
+<tr valign="top"><td><code>locations</code></td>
+<td>
+<p>The cell or set of cells to be associated with the footnote.
+Supplying any of the <code style="white-space: pre;">cells_*()</code> helper functions is a useful way to target
+the location cells that are associated with the footnote text. These helper
+functions are: <code><a href="cells_title.html">cells_title()</a></code>, <code><a href="cells_stubhead.html">cells_stubhead()</a></code>,
+<code><a href="cells_column_spanners.html">cells_column_spanners()</a></code>, <code><a href="cells_column_labels.html">cells_column_labels()</a></code>, <code><a href="cells_row_groups.html">cells_row_groups()</a></code>,
+<code><a href="cells_stub.html">cells_stub()</a></code>, <code><a href="cells_body.html">cells_body()</a></code>, <code><a href="cells_summary.html">cells_summary()</a></code>, <code><a href="cells_grand_summary.html">cells_grand_summary()</a></code>,
+<code><a href="cells_stub_summary.html">cells_stub_summary()</a></code>, and <code><a href="cells_stub_grand_summary.html">cells_stub_grand_summary()</a></code>. Additionally, we
+can enclose several <code style="white-space: pre;">cells_*()</code> calls within a <code>list()</code> if we wish to link
+the footnote text to different types of locations (e.g., body cells, row
+group labels, the table title, etc.).</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The formatting of the footnotes can be controlled through the use of various
+parameters in the <code><a href="tab_options.html">tab_options()</a></code> function:
+</p>
+
+<ul>
+<li> <p><code>footnotes.sep</code>: allows for a choice of the separator between
+consecutive footnotes in the table footer. By default, this is set to a
+linebreak.
+</p>
+</li>
+<li> <p><code>footnotes.marks</code>: the set of sequential characters or numbers used
+to identify the footnotes.
+</p>
+</li>
+<li> <p><code>footnotes.font.size</code>: the size of the font used in the footnote
+section.
+</p>
+</li>
+<li> <p><code>footnotes.padding</code>: the amount of padding to apply between the
+footnote and source note sections in the table footer.
+</p>
+</li></ul>
+
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_tab_footnote_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>2-6
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Create or Modify Parts: 
+<code><a href="tab_header.html">tab_header</a>()</code>,
+<code><a href="tab_options.html">tab_options</a>()</code>,
+<code><a href="tab_row_group.html">tab_row_group</a>()</code>,
+<code><a href="tab_source_note.html">tab_source_note</a>()</code>,
+<code><a href="tab_spanner_delim.html">tab_spanner_delim</a>()</code>,
+<code><a href="tab_spanner.html">tab_spanner</a>()</code>,
+<code><a href="tab_stubhead.html">tab_stubhead</a>()</code>,
+<code><a href="tab_style.html">tab_style</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `sza` to create a gt table; color
+# the `sza` column using the `data_color()`
+# function, then, add a footnote to the
+# `sza` column label explaining what the
+# color scale signifies
+tab_1 &lt;-
+  sza %&gt;%
+  dplyr::filter(
+    latitude == 20 &amp;
+      month == "jan" &amp;
+      !is.na(sza)
+  ) %&gt;%
+  dplyr::select(-latitude, -month) %&gt;%
+  gt() %&gt;%
+  data_color(
+    columns = sza,
+    colors = scales::col_numeric(
+      palette = c("white", "yellow", "navyblue"),
+      domain = c(0, 90)
+    )
+  ) %&gt;%
+  tab_footnote(
+    footnote = "Color indicates height of sun.",
+    locations = cells_column_labels(
+      columns = sza
+    )
+  )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

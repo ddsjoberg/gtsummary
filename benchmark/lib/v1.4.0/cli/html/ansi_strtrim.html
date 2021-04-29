@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Truncate an ANSI string</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ansi_strtrim {cli}"><tr><td>ansi_strtrim {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Truncate an ANSI string</h2>
+
+<h3>Description</h3>
+
+<p>This function is similar to <code><a href="../../base/html/strtrim.html">base::strtrim()</a></code>, but works correcntly with
+ANSI styled strings. It also adds <code>...</code> (or the corresponding Unicode
+character if Unicode characters are allowed) to the end of truncated
+strings.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ansi_strtrim(x, width = console_width(), ellipsis = symbol$ellipsis)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Character vector of ANSI strings.</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>The width to truncate to.</p>
+</td></tr>
+<tr valign="top"><td><code>ellipsis</code></td>
+<td>
+<p>The string to append to truncated strings. Supply an
+empty string if you don't want a marker.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p>Other ANSI string operations: 
+<code><a href="ansi_align.html">ansi_align</a>()</code>,
+<code><a href="ansi_columns.html">ansi_columns</a>()</code>,
+<code><a href="ansi_nchar.html">ansi_nchar</a>()</code>,
+<code><a href="ansi_strsplit.html">ansi_strsplit</a>()</code>,
+<code><a href="ansi_strwrap.html">ansi_strwrap</a>()</code>,
+<code><a href="ansi_substring.html">ansi_substring</a>()</code>,
+<code><a href="ansi_substr.html">ansi_substr</a>()</code>,
+<code><a href="ansi_toupper.html">ansi_toupper</a>()</code>,
+<code><a href="ansi_trimws.html">ansi_trimws</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+text &lt;- cli::col_red(cli:::lorem_ipsum())
+ansi_strtrim(c(text, "foobar"), 40)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

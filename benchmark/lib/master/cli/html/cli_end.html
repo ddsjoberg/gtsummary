@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Close a CLI container</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_end {cli}"><tr><td>cli_end {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Close a CLI container</h2>
+
+<h3>Description</h3>
+
+<p>Close a CLI container
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_end(id = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>Id of the container to close. If missing, the current
+container is closed, if any.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+## If id is omitted
+cli_par()
+cli_text("First paragraph")
+cli_end()
+cli_par()
+cli_text("Second paragraph")
+cli_end()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

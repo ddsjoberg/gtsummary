@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Update the status bar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_status_update {cli}"><tr><td>cli_status_update {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Update the status bar</h2>
+
+<h3>Description</h3>
+
+<p>Update the status bar
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_status_update(
+  id = NULL,
+  msg = NULL,
+  msg_done = NULL,
+  msg_failed = NULL,
+  .envir = parent.frame()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>Id of the status bar to update. Defaults to the current
+status bar container.</p>
+</td></tr>
+<tr valign="top"><td><code>msg</code></td>
+<td>
+<p>Text to update the status bar with. <code>NULL</code> if you don't want
+to change it.</p>
+</td></tr>
+<tr valign="top"><td><code>msg_done</code></td>
+<td>
+<p>Updated &quot;done&quot; message. <code>NULL</code> if you don't want to
+change it.</p>
+</td></tr>
+<tr valign="top"><td><code>msg_failed</code></td>
+<td>
+<p>Updated &quot;failed&quot; message. <code>NULL</code> if you don't want to
+change it.</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Environment to evaluate the glue expressions in.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Id of the status bar container.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other status bar: 
+<code><a href="cli_process_start.html">cli_process_start</a>()</code>,
+<code><a href="cli_status_clear.html">cli_status_clear</a>()</code>,
+<code><a href="cli_status.html">cli_status</a>()</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

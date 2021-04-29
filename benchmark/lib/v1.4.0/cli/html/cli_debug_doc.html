@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Debug cli internals</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_debug_doc {cli}"><tr><td>cli_debug_doc {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Debug cli internals</h2>
+
+<h3>Description</h3>
+
+<p>Return the current state of a clie app. It includes the currencly
+open tags, their ids, classes and their computed styles.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_debug_doc(app = default_app() %||% start_app())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>app</code></td>
+<td>
+<p>The cli app to debug. Defaults to the current app.
+if there is no app, then it creates one by calling <code><a href="start_app.html">start_app()</a></code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The returned data frame has a print method, and if you want to create
+a plain data frame from it, index it with an empty bracket:
+<code>cli_debug_doc()[]</code>.
+</p>
+<p>To see all currently active themes, use <code>app$themes</code>, e.g. for the
+default app: <code>default_app()$themes</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Data frame with columns: <code>tag</code>, <code>id</code>, <code>class</code> (space separated),
+theme (id of the theme the element added), <code>styles</code> (computed styles
+for the element).
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="cli_sitrep.html">cli_sitrep()</a></code>. To debug containers, you can set the
+<code>CLI-DEBUG_BAD_END</code> environment variable to <code>true</code>, and then cli will
+warn when it cannot find the specified container to close (or any
+contained at all).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+cli_debug_doc()
+
+olid &lt;- cli_ol()
+cli_li()
+cli_debug_doc()
+cli_debug_doc()[]
+
+cli_end(olid)
+cli_debug_doc()
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

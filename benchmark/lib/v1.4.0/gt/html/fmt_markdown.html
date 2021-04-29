@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Format Markdown text</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for fmt_markdown {gt}"><tr><td>fmt_markdown {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Format Markdown text</h2>
+
+<h3>Description</h3>
+
+<p>Any Markdown-formatted text in the incoming cells will be transformed to the
+appropriate output type during render when using <code>fmt_markdown()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+fmt_markdown(data, columns, rows = everything())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>The columns to format. Can either be a series of column names
+provided in <code><a href="../../base/html/c.html">c()</a></code>, a vector of column indices, or a helper function
+focused on selections. The select helper functions are: <code><a href="reexports.html">starts_with()</a></code>,
+<code><a href="reexports.html">ends_with()</a></code>, <code><a href="reexports.html">contains()</a></code>, <code><a href="reexports.html">matches()</a></code>, <code><a href="reexports.html">one_of()</a></code>, <code><a href="reexports.html">num_range()</a></code>, and
+<code><a href="reexports.html">everything()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>rows</code></td>
+<td>
+<p>Optional rows to format. Providing either <code><a href="reexports.html">everything()</a></code> (the
+default) or <code>TRUE</code> results in all rows in <code>columns</code> being formatted. Can
+either be a vector of row captions provided in <code><a href="../../base/html/c.html">c()</a></code>, a vector of row
+indices, or a helper function focused on selections. The select helper
+functions are: <code><a href="reexports.html">starts_with()</a></code>, <code><a href="reexports.html">ends_with()</a></code>, <code><a href="reexports.html">contains()</a></code>, <code><a href="reexports.html">matches()</a></code>,
+<code><a href="reexports.html">one_of()</a></code>, <code><a href="reexports.html">num_range()</a></code>, and <code><a href="reexports.html">everything()</a></code>. We can also use expressions
+to filter down to the rows we need (e.g.,
+<code style="white-space: pre;">[colname_1] &gt; 100 &amp; [colname_2] &lt; 50</code>).</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Targeting of values is done through <code>columns</code> and additionally by <code>rows</code> (if
+nothing is provided for <code>rows</code> then entire columns are selected). A number of
+helper functions exist to make targeting more effective. Conditional
+formatting is possible by providing a conditional expression to the <code>rows</code>
+argument. See the Arguments section for more information on this.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_fmt_markdown_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>3-8
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Format Data: 
+<code><a href="data_color.html">data_color</a>()</code>,
+<code><a href="fmt_currency.html">fmt_currency</a>()</code>,
+<code><a href="fmt_datetime.html">fmt_datetime</a>()</code>,
+<code><a href="fmt_date.html">fmt_date</a>()</code>,
+<code><a href="fmt_missing.html">fmt_missing</a>()</code>,
+<code><a href="fmt_number.html">fmt_number</a>()</code>,
+<code><a href="fmt_passthrough.html">fmt_passthrough</a>()</code>,
+<code><a href="fmt_percent.html">fmt_percent</a>()</code>,
+<code><a href="fmt_scientific.html">fmt_scientific</a>()</code>,
+<code><a href="fmt_time.html">fmt_time</a>()</code>,
+<code><a href="fmt.html">fmt</a>()</code>,
+<code><a href="text_transform.html">text_transform</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Create a few Markdown-based
+# text snippets
+text_1a &lt;- "
+### This is Markdown.
+
+Markdown’s syntax is comprised entirely of
+punctuation characters, which punctuation
+characters have been carefully chosen so as
+to look like what they mean... assuming
+you’ve ever used email.
+"
+
+text_1b &lt;- "
+Info on Markdown syntax can be found
+[here](https://daringfireball.net/projects/markdown/).
+"
+
+text_2a &lt;- "
+The **gt** package has these datasets:
+
+ - `countrypops`
+ - `sza`
+ - `gtcars`
+ - `sp500`
+ - `pizzaplace`
+ - `exibble`
+"
+
+text_2b &lt;- "
+There's a quick reference [here](https://commonmark.org/help/).
+"
+
+# Arrange the text snippets as a tibble
+# using the `dplyr::tribble()` function;
+# then, create a gt table and format
+# all columns with `fmt_markdown()`
+tab_1 &lt;-
+  dplyr::tribble(
+    ~Markdown, ~md,
+    text_1a,   text_2a,
+    text_1b,   text_2b,
+  ) %&gt;%
+    gt() %&gt;%
+    fmt_markdown(columns = everything()) %&gt;%
+    tab_options(table.width = px(400))
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

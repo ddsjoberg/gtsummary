@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Option to define a custom font for the table</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for opt_table_font {gt}"><tr><td>opt_table_font {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Option to define a custom font for the table</h2>
+
+<h3>Description</h3>
+
+<p>The <code>opt_table_font()</code> function makes it possible to define a custom font for
+the entire <strong>gt</strong> table. The standard fallback fonts are still set by default
+but the font defined here will take precedence. You could still have
+different fonts in select locations in the table, and for that you would need
+to use <code><a href="tab_style.html">tab_style()</a></code> in conjunction with the <code><a href="cell_text.html">cell_text()</a></code> helper function.
+</p>
+<p>We have the option to supply either a system font for the <code>font_name</code>, or, a
+font available at the Google Fonts service by use of the <code><a href="google_font.html">google_font()</a></code>
+helper function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+opt_table_font(data, font, weight = NULL, style = NULL, add = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>font</code></td>
+<td>
+<p>Either the name of a font available in the user system or a call
+to <code><a href="google_font.html">google_font()</a></code>, which has a large selection of typefaces.</p>
+</td></tr>
+<tr valign="top"><td><code>weight</code></td>
+<td>
+<p>The weight of the font. Can be a text-based keyword such as
+<code>"normal"</code>, <code>"bold"</code>, <code>"lighter"</code>, <code>"bolder"</code>, or, a numeric value between
+<code>1</code> and <code>1000</code>, inclusive. Note that only variable fonts may support the
+numeric mapping of weight.</p>
+</td></tr>
+<tr valign="top"><td><code>style</code></td>
+<td>
+<p>The text style. Can be one of either <code>"normal"</code>, <code>"italic"</code>, or
+<code>"oblique"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>add</code></td>
+<td>
+<p>Should this font be added to the front of the already-defined
+fonts for the table? By default, this is <code>TRUE</code> and is recommended since
+the list serves as fallbacks when certain fonts are not available.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_opt_table_font_1.png" width=100% />
+</p>
+<p><img src="../help/figures/man_opt_table_font_2.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>9-7
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Table Option Functions: 
+<code><a href="opt_align_table_header.html">opt_align_table_header</a>()</code>,
+<code><a href="opt_all_caps.html">opt_all_caps</a>()</code>,
+<code><a href="opt_css.html">opt_css</a>()</code>,
+<code><a href="opt_footnote_marks.html">opt_footnote_marks</a>()</code>,
+<code><a href="opt_row_striping.html">opt_row_striping</a>()</code>,
+<code><a href="opt_table_lines.html">opt_table_lines</a>()</code>,
+<code><a href="opt_table_outline.html">opt_table_outline</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (interactive()) {
+
+# Use `sp500` to create a small gt table,
+# using `fmt_currency()` to provide a
+# dollar sign for the first row of monetary
+# values; then, set a larger font size for
+# the table and use the 'Merriweather' font
+# (from Google Fonts, via `google_font()`)
+# with two font fallbacks ('Cochin' and the
+# catchall 'Serif' group)
+tab_1 &lt;-
+  sp500 %&gt;%
+  dplyr::slice(1:10) %&gt;%
+  dplyr::select(-volume, -adj_close) %&gt;%
+  gt() %&gt;%
+  fmt_currency(
+    columns = 2:5,
+    rows = 1,
+    currency = "USD",
+    use_seps = FALSE
+  ) %&gt;%
+  tab_options(table.font.size = px(18)) %&gt;%
+  opt_table_font(
+    font = list(
+      google_font(name = "Merriweather"),
+      "Cochin", "Serif"
+    )
+  )
+
+# Use `sza` to create an eleven-row table;
+# within `opt_table_font()`, set up a
+# preferred list of sans-serif fonts that
+# are commonly available in macOS (using
+# part of the `default_fonts()` vector as
+# a fallback)
+# and Windows 10
+tab_2 &lt;-
+  sza %&gt;%
+  dplyr::filter(
+    latitude == 20 &amp;
+      month == "jan" &amp;
+      !is.na(sza)
+  ) %&gt;%
+  dplyr::select(-latitude, -month) %&gt;%
+  gt() %&gt;%
+  opt_table_font(
+    font = c(
+      "Helvetica Neue", "Segoe UI",
+      default_fonts()[-c(1:3)]
+    )
+  ) %&gt;%
+  opt_all_caps()
+
+}
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create a format method for an object using cli tools</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_format_method {cli}"><tr><td>cli_format_method {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create a format method for an object using cli tools</h2>
+
+<h3>Description</h3>
+
+<p>This method can be typically used in <code>format()</code> S3 methods. Then the
+<code>print()</code> method of the class can be easily defined in terms of such a
+<code>format()</code> method. See examples below.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_format_method(expr, theme = getOption("cli.theme"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>expr</code></td>
+<td>
+<p>Expression that calls <code style="white-space: pre;">cli_*</code> methods, <code><a href="../../base/html/cat.html">base::cat()</a></code> or
+<code><a href="../../base/html/print.html">base::print()</a></code> to format an object's printout.</p>
+</td></tr>
+<tr valign="top"><td><code>theme</code></td>
+<td>
+<p>Theme to use for the formatting.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Character vector, one element for each line of the printout.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+# Let's create format and print methods for a new S3 class that
+# represents the an installed R package: `r_package`
+
+# An `r_package` will contain the DESCRIPTION metadata of the package
+# and also its installation path.
+new_r_package &lt;- function(pkg) {
+  tryCatch(
+    desc &lt;- packageDescription(pkg),
+    warning = function(e) stop("Cannot find R package `", pkg, "`")
+  )
+  file &lt;- dirname(attr(desc, "file"))
+  if (basename(file) != pkg) file &lt;- dirname(file)
+  structure(
+    list(desc = unclass(desc), lib = dirname(file)),
+    class = "r_package"
+  )
+}
+
+format.r_package &lt;- function(x, ...) {
+  cli_format_method({
+    cli_h1("{.pkg {x$desc$Package}} {cli::symbol$line} {x$desc$Title}")
+    cli_text("{x$desc$Description}")
+    cli_ul(c(
+      "Version: {x$desc$Version}",
+      if (!is.null(x$desc$Maintainer)) "Maintainer: {x$desc$Maintainer}",
+      "License: {x$desc$License}"
+    ))
+    if (!is.na(x$desc$URL)) cli_text("See more at {.url {x$desc$URL}}")
+  })
+}
+
+# Now the print method is easy:
+print.r_package &lt;- function(x, ...) {
+  cat(format(x, ...), sep = "\n")
+}
+
+# Try it out
+new_r_package("cli")
+
+# The formatting of the output depends on the current theme:
+opt &lt;- options(cli.theme = simple_theme())
+print(new_r_package("cli"))
+options(opt)  # &lt;- restore theme
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

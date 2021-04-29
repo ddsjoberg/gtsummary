@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Format an error, warning or diagnostic message</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for format_error {cli}"><tr><td>format_error {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Format an error, warning or diagnostic message</h2>
+
+<h3>Description</h3>
+
+<p>You can then throw this message with <code><a href="../../base/html/stop.html">stop()</a></code> or <code>rlang::abort()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+format_error(message, .envir = parent.frame())
+
+format_warning(message, .envir = parent.frame())
+
+format_message(message, .envir = parent.frame())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>message</code></td>
+<td>
+<p>It is formatted via a call to <code><a href="cli_bullets.html">cli_bullets()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Environment to evaluate the glue expressions in.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The messages can use inline styling, pluralization and glue
+substitutions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+n &lt;- "boo"
+stop(format_error(c(
+        "{.var n} must be a numeric vector",
+  "x" = "You've supplied a {.cls {class(n)}} vector."
+)))
+
+len &lt;- 26
+idx &lt;- 100
+stop(format_error(c(
+        "Must index an existing element:",
+  "i" = "There {?is/are} {len} element{?s}.",
+  "x" = "You've tried to subset element {idx}."
+)))
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

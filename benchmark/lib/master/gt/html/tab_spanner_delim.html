@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create column labels and spanners via delimited names</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tab_spanner_delim {gt}"><tr><td>tab_spanner_delim {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create column labels and spanners via delimited names</h2>
+
+<h3>Description</h3>
+
+<p>This function will split selected delimited column names such that the first
+components (LHS) are promoted to being spanner column labels, and the
+secondary components (RHS) will become the column labels. Please note that
+reference to individual columns must continue to be the column names from the
+input table data (which are unique by necessity).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tab_spanner_delim(
+  data,
+  delim,
+  columns = everything(),
+  gather = TRUE,
+  split = c("last", "first")
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>delim</code></td>
+<td>
+<p>The delimiter to use to split an input column name. The
+delimiter supplied will be autoescaped for the internal splitting
+procedure. The first component of the split will become the spanner column
+label (and its ID value, used for styling or for the addition of footnotes
+in those locations) and the second component will be the column label.</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>An optional vector of column names that this operation should
+be limited to. The default is to consider all columns in the table.</p>
+</td></tr>
+<tr valign="top"><td><code>gather</code></td>
+<td>
+<p>An option to move the specified <code>columns</code> such that they are
+unified under the spanner column label. Ordering of the moved-into-place
+columns will be preserved in all cases. By default, this is set to <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>split</code></td>
+<td>
+<p>Should the delimiter splitting occur at the <code>"last"</code> instance of
+<code>delim</code> or the <code>"first"</code>? By default column name splitting happens at the
+last instance of the delimiter. This relevant only in the case that column
+names included in <code>columns</code> have multiple instances of the <code>delim</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If we look to the column names in the <code>iris</code> dataset as an example of how
+<code>tab_spanner_delim()</code> might be useful, we find the names <code>Sepal.Length</code>,
+<code>Sepal.Width</code>, <code>Petal.Length</code>, <code>Petal.Width</code>. From this naming system, it's
+easy to see that the <code>Sepal</code> and <code>Petal</code> can group together the repeated
+common <code>Length</code> and <code>Width</code> values. In your own datasets, we can avoid a
+lengthy relabeling with <code><a href="cols_label.html">cols_label()</a></code> if column names can be fashioned
+beforehand to contain both the spanner column label and the column label. An
+additional advantage is that the column names in the input table data remain
+unique even though there may eventually be repeated column labels in the
+rendered output table).
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_tab_spanner_delim_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>2-3
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Create or Modify Parts: 
+<code><a href="tab_footnote.html">tab_footnote</a>()</code>,
+<code><a href="tab_header.html">tab_header</a>()</code>,
+<code><a href="tab_options.html">tab_options</a>()</code>,
+<code><a href="tab_row_group.html">tab_row_group</a>()</code>,
+<code><a href="tab_source_note.html">tab_source_note</a>()</code>,
+<code><a href="tab_spanner.html">tab_spanner</a>()</code>,
+<code><a href="tab_stubhead.html">tab_stubhead</a>()</code>,
+<code><a href="tab_style.html">tab_style</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `iris` to create a gt table; split
+# any columns that are dot-separated
+# between column spanner labels (first
+# part) and column labels (second part)
+tab_1 &lt;-
+  iris %&gt;%
+  dplyr::group_by(Species) %&gt;%
+  dplyr::slice(1:4) %&gt;%
+  gt() %&gt;%
+  tab_spanner_delim(delim = ".")
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

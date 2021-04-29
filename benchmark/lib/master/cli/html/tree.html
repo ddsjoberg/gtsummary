@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Draw a tree</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tree {cli}"><tr><td>tree {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Draw a tree</h2>
+
+<h3>Description</h3>
+
+<p>Draw a tree using box drawing characters. Unicode characters are
+used if available. (Set the <code>cli.unicode</code> option if auto-detection
+fails.)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tree(
+  data,
+  root = data[[1]][[1]],
+  style = NULL,
+  width = console_width(),
+  trim = FALSE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>Data frame that contains the tree structure.
+The first column is an id, and the second column is a list column,
+that contains the ids of the child nodes. The optional third column
+may contain the text to print to annotate the node.</p>
+</td></tr>
+<tr valign="top"><td><code>root</code></td>
+<td>
+<p>The name of the root node.</p>
+</td></tr>
+<tr valign="top"><td><code>style</code></td>
+<td>
+<p>Optional box style list.</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>Maximum width of the output. Defaults to the <code>width</code>
+option, see <code><a href="../../base/html/options.html">base::options()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>trim</code></td>
+<td>
+<p>Whether to avoid traversing the same nodes multiple times.
+If <code>TRUE</code> and <code>data</code> has a <code>trimmed</code> column, then that is used for
+printing repeated noded.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>A node might appear multiple times in the tree, or might not appear
+at all.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Character vector, the lines of the tree drawing.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data &lt;- data.frame(
+  stringsAsFactors = FALSE,
+  package = c("processx", "backports", "assertthat", "Matrix",
+    "magrittr", "rprojroot", "clisymbols", "prettyunits", "withr",
+    "desc", "igraph", "R6", "crayon", "debugme", "digest", "irlba",
+    "rcmdcheck", "callr", "pkgconfig", "lattice"),
+  dependencies = I(list(
+    c("assertthat", "crayon", "debugme", "R6"), character(0),
+    character(0), "lattice", character(0), "backports", character(0),
+    c("magrittr", "assertthat"), character(0),
+    c("assertthat", "R6", "crayon", "rprojroot"),
+    c("irlba", "magrittr", "Matrix", "pkgconfig"), character(0),
+    character(0), "crayon", character(0), "Matrix",
+    c("callr", "clisymbols", "crayon", "desc", "digest", "prettyunits",
+      "R6", "rprojroot", "withr"),
+    c("processx", "R6"), character(0), character(0)
+  ))
+)
+tree(data)
+tree(data, root = "rcmdcheck")
+
+# Colored nodes
+data$label &lt;- paste(data$package,
+  style_dim(paste0("(", c("2.0.0.1", "1.1.1", "0.2.0", "1.2-11",
+    "1.5", "1.2", "1.2.0", "1.0.2", "2.0.0", "1.1.1.9000", "1.1.2",
+    "2.2.2", "1.3.4", "1.0.2", "0.6.12", "2.2.1", "1.2.1.9002",
+    "1.0.0.9000", "2.0.1", "0.20-35"), ")"))
+  )
+roots &lt;- ! data$package %in% unlist(data$dependencies)
+data$label[roots] &lt;- col_cyan(style_italic(data$label[roots]))
+tree(data)
+tree(data, root = "rcmdcheck")
+
+# Trimming
+pkgdeps &lt;- list(
+  "dplyr@0.8.3" = c("assertthat@0.2.1", "glue@1.3.1", "magrittr@1.5",
+    "R6@2.4.0", "Rcpp@1.0.2", "rlang@0.4.0", "tibble@2.1.3",
+    "tidyselect@0.2.5"),
+  "assertthat@0.2.1" = character(),
+  "glue@1.3.1" = character(),
+  "magrittr@1.5" = character(),
+  "pkgconfig@2.0.3" = character(),
+  "R6@2.4.0" = character(),
+  "Rcpp@1.0.2" = character(),
+  "rlang@0.4.0" = character(),
+  "tibble@2.1.3" = c("cli@1.1.0", "crayon@1.3.4", "fansi@0.4.0",
+     "pillar@1.4.2", "pkgconfig@2.0.3", "rlang@0.4.0"),
+  "cli@1.1.0" = c("assertthat@0.2.1", "crayon@1.3.4"),
+  "crayon@1.3.4" = character(),
+  "fansi@0.4.0" = character(),
+  "pillar@1.4.2" = c("cli@1.1.0", "crayon@1.3.4", "fansi@0.4.0",
+     "rlang@0.4.0", "utf8@1.1.4", "vctrs@0.2.0"),
+  "utf8@1.1.4" = character(),
+  "vctrs@0.2.0" = c("backports@1.1.5", "ellipsis@0.3.0",
+     "digest@0.6.21", "glue@1.3.1", "rlang@0.4.0", "zeallot@0.1.0"),
+  "backports@1.1.5" = character(),
+  "ellipsis@0.3.0" = c("rlang@0.4.0"),
+  "digest@0.6.21" = character(),
+  "glue@1.3.1" = character(),
+  "zeallot@0.1.0" = character(),
+  "tidyselect@0.2.5" = c("glue@1.3.1", "purrr@1.3.1", "rlang@0.4.0",
+     "Rcpp@1.0.2"),
+  "purrr@0.3.3" = c("magrittr@1.5", "rlang@0.4.0")
+)
+
+pkgs &lt;- data.frame(
+  stringsAsFactors = FALSE,
+  name = names(pkgdeps),
+  deps = I(unname(pkgdeps))
+)
+
+tree(pkgs)
+tree(pkgs, trim = TRUE)
+
+# Mark the trimmed nodes
+pkgs$label &lt;- pkgs$name
+pkgs$trimmed &lt;- paste(pkgs$name, " (trimmed)")
+tree(pkgs, trim = TRUE)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

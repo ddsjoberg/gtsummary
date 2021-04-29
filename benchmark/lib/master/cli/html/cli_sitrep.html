@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: cli situation report</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_sitrep {cli}"><tr><td>cli_sitrep {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>cli situation report</h2>
+
+<h3>Description</h3>
+
+<p>Contains currenty:
+</p>
+
+<ul>
+<li> <p><code>cli_unicode_option</code>: whether the <code>cli.unicode</code> option is set and its
+value. See <code><a href="is_utf8_output.html">is_utf8_output()</a></code>.
+</p>
+</li>
+<li> <p><code>symbol_charset</code>: the selected character set for <a href="symbol.html">symbol</a>, UTF-8,
+Windows, or ASCII.
+</p>
+</li>
+<li> <p><code>console_utf8</code>: whether the console supports UTF-8. See
+<code><a href="../../base/html/l10n_info.html">base::l10n_info()</a></code>.
+</p>
+</li>
+<li> <p><code>latex_active</code>: whether we are inside knitr, creating a LaTeX
+document.
+</p>
+</li>
+<li> <p><code>num_colors</code>: number of ANSI colors. See <code><a href="num_ansi_colors.html">num_ansi_colors()</a></code>.
+</p>
+</li>
+<li> <p><code>console_with</code>: detected console width.
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_sitrep()
+</pre>
+
+
+<h3>Value</h3>
+
+<p>Named list with entries listed above. It has a <code>cli_sitrep</code>
+class, with a <code>print()</code> and <code>format()</code> method.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cli_sitrep()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
