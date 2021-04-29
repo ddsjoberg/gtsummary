@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Bug fix for Hmisc labelled data with tbl_summary() (#876 )
+* The `tbl_summary(by=)` variable is now added to `include=` by default (#871)
+
+* Bug fix for {Hmisc} labeled data with `tbl_summary()` (#876)
 
 # gtsummary 1.4.0
 
