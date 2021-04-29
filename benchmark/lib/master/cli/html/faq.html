@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Frequently Asked Questions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for faq {cli}"><tr><td>faq {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Frequently Asked Questions</h2>
+
+<h3>Description</h3>
+
+<p>Frequently Asked Questions
+</p>
+
+
+<h3>Details</h3>
+
+
+
+<h4>My platform supports ANSI colors, why does cli not use them?</h4>
+
+<p>It is probably a mistake in cli’s ANSI support detection algorithm.
+Please open an issue at <a href="https://github.com/r-lib/cli/issues">https://github.com/r-lib/cli/issues</a> and don’t
+forget to tell us the details of your platform and terminal or GUI.
+</p>
+
+
+
+<h4>How do I turn off ANSI colors and styles?</h4>
+
+<p>Set the <code>NO_COLOR</code> environment variable to a non-empty value. You can do
+this in your <code>.Renviron</code> file (use <code>usethis::edit_r_environ()</code>).
+</p>
+<p>If you want to do this for testthat tests, then consider using the 3rd
+edition on testthat, which does turn off ANSI styling automatically
+inside <code>test_that()</code>.
+</p>
+
+
+
+<h4>cli does not show the output before <code>file.choose()</code></h4>
+
+<p>Try calling <code>flush.console()</code> to flush the console, before
+<code>file.choose()</code>. If flushing does not work and you are in RStudio, then
+it is probably this RStudio bug:
+<a href="https://github.com/rstudio/rstudio/issues/8040">https://github.com/rstudio/rstudio/issues/8040</a> See more details at
+<a href="https://github.com/r-lib/cli/issues/151">https://github.com/r-lib/cli/issues/151</a>
+</p>
+
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

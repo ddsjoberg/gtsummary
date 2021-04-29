@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Compose multiple cli functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli {cli}"><tr><td>cli {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Compose multiple cli functions</h2>
+
+<h3>Description</h3>
+
+<p><code>cli()</code> will record all <code style="white-space: pre;">cli_*</code> calls in <code>expr</code>, and emit them together
+in a single message. This is useful if you want to built a larger
+piece of output from multiple <code style="white-space: pre;">cli_*</code> calls.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli(expr)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>expr</code></td>
+<td>
+<p>Expression that contains <code style="white-space: pre;">cli_*</code> calls. Their output is
+collected and sent as a single message.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Use this function to build a more complex piece of CLI that would not
+make sense to show in pieces.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Nothing.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cli({
+  cli_h1("Title")
+  cli_h2("Subtitle")
+  cli_ul(c("this", "that", "end"))
+})
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

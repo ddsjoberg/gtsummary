@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Start, stop, query the default cli application</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for start_app {cli}"><tr><td>start_app {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Start, stop, query the default cli application</h2>
+
+<h3>Description</h3>
+
+<p><code>start_app</code> creates an app, and places it on the top of the app stack.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+start_app(
+  theme = getOption("cli.theme"),
+  output = c("auto", "message", "stdout", "stderr"),
+  .auto_close = TRUE,
+  .envir = parent.frame()
+)
+
+stop_app(app = NULL)
+
+default_app()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>theme</code></td>
+<td>
+<p>Theme to use.</p>
+</td></tr>
+<tr valign="top"><td><code>output</code></td>
+<td>
+<p>How to print the output.</p>
+</td></tr>
+<tr valign="top"><td><code>.auto_close</code></td>
+<td>
+<p>Whether to stop the app, when the calling frame
+is destroyed.</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>The environment to use, instead of the calling frame,
+to trigger the stop of the app.</p>
+</td></tr>
+<tr valign="top"><td><code>app</code></td>
+<td>
+<p>App to stop. If <code>NULL</code>, the current default app is stopped.
+Otherwise we find the supplied app in the app stack, and remote it,
+together with all the apps above it.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>stop_app</code> removes the top app, or multiple apps from the app stack.
+</p>
+<p><code>default_app</code> returns the default app, the one on the top of the stack.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>start_app</code> returns the new app, <code>default_app</code> returns the default app.
+<code>stop_app</code> does not return anything.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

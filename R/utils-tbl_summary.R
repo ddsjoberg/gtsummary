@@ -1035,8 +1035,19 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
 }
 
 safe_summarise_at <- function(data, variable, fns) {
-  tryCatch(
-    dplyr::summarise_at(data, vars(.data$variable), fns),
+  tryCatch({
+    # ref for all this `.keep_attr()` nonsense stackoverflow.com/questions/67291199
+    dplyr::summarise_at(data,
+                        vars(.data$variable),
+                        map(
+                          fns,
+                          function(.x) {
+                            if (identical(.x, stats::median))
+                              return(rlang::inject(function(x) .keep_attr(x, .f = !!.x)))
+                            else return(.x)
+                          }
+                        ))
+    },
     error = function(e) {
       # replace p[0:100] stats with `quantile`
       fns_names <- stringr::str_replace(names(fns), "^p\\d+$", "quantile") %>% unique()
@@ -1050,6 +1061,13 @@ safe_summarise_at <- function(data, variable, fns) {
       abort(e)
     }
   )
+}
+
+.keep_attr <- function(x, .f) {
+  x_att <- attributes(x)
+  res <- .f(x)
+  attributes(res) <- x_att
+  res
 }
 
 

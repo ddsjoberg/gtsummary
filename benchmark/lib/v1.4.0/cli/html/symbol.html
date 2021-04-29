@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Various handy symbols to use in a command line UI</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for symbol {cli}"><tr><td>symbol {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Various handy symbols to use in a command line UI</h2>
+
+<h3>Description</h3>
+
+<p>Various handy symbols to use in a command line UI
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+symbol
+
+list_symbols()
+</pre>
+
+
+<h3>Format</h3>
+
+<p>A named list, see <code>names(symbol)</code> for all sign names.
+</p>
+
+
+<h3>Details</h3>
+
+<p>On Windows they have a fallback to less fancy symbols.
+</p>
+<p><code>list_symbols()</code> prints a table with all symbols to the screen.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cat(symbol$tick, " SUCCESS\n", symbol$cross, " FAILURE\n", sep = "")
+
+## All symbols
+cat(paste(format(names(symbol), width = 20),
+  unlist(symbol)), sep = "\n")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

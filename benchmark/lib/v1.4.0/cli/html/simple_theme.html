@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: A simple CLI theme</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for simple_theme {cli}"><tr><td>simple_theme {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>A simple CLI theme</h2>
+
+<h3>Description</h3>
+
+<p>Note that this is in addition to the builtin theme. To use this theme,
+you can set it as the <code>cli.theme</code> option:
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+simple_theme(dark = getOption("cli_theme_dark", "auto"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>dark</code></td>
+<td>
+<p>Whether the theme should be optiomized for a dark
+background. If <code>"auto"</code>, then cli will try to detect this.
+Detection usually works in recent RStudio versions, and in iTerm
+on macOS, but not on other platforms.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<pre>options(cli.theme = cli::simple_theme())
+</pre>
+<p>and then CLI apps started after this will use it as the default theme.
+You can also use it temporarily, in a div element:</p>
+<pre>cli_div(theme = cli::simple_theme())
+</pre>
+
+
+<h3>See Also</h3>
+
+<p><a href="themes.html">themes</a>, <code><a href="builtin_theme.html">builtin_theme()</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cli_div(theme = cli::simple_theme())
+
+cli_h1("Heading 1")
+cli_h2("Heading 2")
+cli_h3("Heading 3")
+
+cli_alert_danger("Danger alert")
+cli_alert_warning("Warning alert")
+cli_alert_info("Info alert")
+cli_alert_success("Success alert")
+cli_alert("Alert for starting a process or computation",
+  class = "alert-start")
+
+cli_text("Packages and versions: {.pkg cli} {.version 1.0.0}.")
+cli_text("Time intervals: {.timestamp 3.4s}")
+
+cli_text("{.emph Emphasis} and  {.strong strong emphasis}")
+
+cli_text("This is a piece of code: {.code sum(x) / length(x)}")
+cli_text("Function names: {.fn cli::simple_theme}")
+
+cli_text("Files: {.file /usr/bin/env}")
+cli_text("URLs: {.url https://r-project.org}")
+
+cli_h2("Longer code chunk")
+cli_par(class = "code R")
+cli_verbatim(
+  '# window functions are useful for grouped mutates',
+  'mtcars %&gt;%',
+  '  group_by(cyl) %&gt;%',
+  '  mutate(rank = min_rank(desc(mpg)))')
+cli_end()
+
+cli_h2("Even longer code chunk")
+cli_par(class = "code R")
+cli_verbatim(format(ls))
+cli_end()
+
+cli_end()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

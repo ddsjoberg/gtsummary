@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Match a selector node to a container</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for match_selector_node {cli}"><tr><td>match_selector_node {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Match a selector node to a container</h2>
+
+<h3>Description</h3>
+
+<p>Match a selector node to a container
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+match_selector_node(node, cnt)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>node</code></td>
+<td>
+<p>Selector node, as parsed by <code>parse_selector_node()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>cnt</code></td>
+<td>
+<p>Container node, has elements <code>tag</code>, <code>id</code>, <code>class</code>.
+</p>
+<p>The selector node matches the container, if all these hold:
+</p>
+
+<ul>
+<li><p> The id of the selector is missing or unique.
+</p>
+</li>
+<li><p> The tag of the selector is missing or unique.
+</p>
+</li>
+<li><p> The id of the container is missing or unique.
+</p>
+</li>
+<li><p> The tag of the container is unique.
+</p>
+</li>
+<li><p> If the selector specifies an id, it matches the id of the container.
+</p>
+</li>
+<li><p> If the selector specifies a tag, it matxhes the tag of the container.
+</p>
+</li>
+<li><p> If the selector specifies class names, the container has all these
+classes.
+</p>
+</li></ul>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Ordered CLI list</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cli_ol {cli}"><tr><td>cli_ol {cli}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Ordered CLI list</h2>
+
+<h3>Description</h3>
+
+<p>An ordered list is a container, see <a href="containers.html">containers</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cli_ol(
+  items = NULL,
+  id = NULL,
+  class = NULL,
+  .close = TRUE,
+  .auto_close = TRUE,
+  .envir = parent.frame()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>items</code></td>
+<td>
+<p>If not <code>NULL</code>, then a character vector. Each element of
+the vector will be one list item, and the list container will be
+closed by default (see the <code>.close</code> argument).</p>
+</td></tr>
+<tr valign="top"><td><code>id</code></td>
+<td>
+<p>Id of the list container. Can be used for closing it with
+<code><a href="cli_end.html">cli_end()</a></code> or in themes. If <code>NULL</code>, then an id is generated and
+returned invisibly.</p>
+</td></tr>
+<tr valign="top"><td><code>class</code></td>
+<td>
+<p>Class of the list container. Can be used in themes.</p>
+</td></tr>
+<tr valign="top"><td><code>.close</code></td>
+<td>
+<p>Whether to close the list container if the <code>items</code> were
+specified. If <code>FALSE</code> then new items can be added to the list.</p>
+</td></tr>
+<tr valign="top"><td><code>.auto_close</code></td>
+<td>
+<p>Whether to close the container, when the calling
+function finishes (or <code>.envir</code> is removed, if specified).</p>
+</td></tr>
+<tr valign="top"><td><code>.envir</code></td>
+<td>
+<p>Environment to evaluate the glue expressions in. It is
+also used to auto-close the container if <code>.auto_close</code> is <code>TRUE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The id of the new container element, invisibly.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Specifying the items at the beginning
+cli_ol(c("one", "two", "three"))
+
+## Adding items one by one
+cli_ol()
+cli_li("one")
+cli_li("two")
+cli_li("three")
+cli_end()
+
+## Nested lists
+cli_div(theme = list(ol = list("margin-left" = 2)))
+cli_ul()
+cli_li("one")
+cli_ol(c("foo", "bar", "foobar"))
+cli_li("two")
+cli_end()
+cli_end()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>cli</em> version 2.5.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

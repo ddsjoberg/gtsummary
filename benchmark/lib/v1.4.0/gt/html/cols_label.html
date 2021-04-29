@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Relabel one or more columns</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cols_label {gt}"><tr><td>cols_label {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Relabel one or more columns</h2>
+
+<h3>Description</h3>
+
+<p>Column labels can be modified from their default values (the names of the
+columns from the input table data). When you create a <strong>gt</strong> table object
+using <code><a href="gt.html">gt()</a></code>, column names effectively become the column labels. While this
+serves as a good first approximation, column names aren't often appealing as
+column labels in a <strong>gt</strong> output table. The <code>cols_label()</code> function
+provides the flexibility to relabel one or more columns and we even have the
+option to use the <code><a href="md.html">md()</a></code> or <code><a href="html.html">html()</a></code> helper functions for rendering column
+labels from Markdown or using HTML.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cols_label(data, ..., .list = list2(...))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>One or more named arguments of column names from the input <code>data</code>
+table along with their labels for display as the column labels. We can
+optionally wrap the column labels with <code><a href="md.html">md()</a></code> (to interpret text as
+Markdown) or <code><a href="html.html">html()</a></code> (to interpret text as HTML).</p>
+</td></tr>
+<tr valign="top"><td><code>.list</code></td>
+<td>
+<p>Allows for the use of a list as an input alternative to <code>...</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>It's important to note that while columns can be freely relabeled, we
+continue to refer to columns by their original column names. Column names in
+a tibble or data frame must be unique whereas column labels in <strong>gt</strong> have
+no requirement for uniqueness (which is useful for labeling columns as, say,
+measurement units that may be repeated several times&mdash;usually under
+different spanner column labels). Thus, we can still easily distinguish
+between columns in other <strong>gt</strong> function calls (e.g., in all of the
+<code style="white-space: pre;">fmt*()</code> functions) even though we may lose distinguishability in column
+labels once they have been relabeled.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_cols_label_1.png" width=100% />
+</p>
+<p><img src="../help/figures/man_cols_label_2.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>4-3
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Modify Columns: 
+<code><a href="cols_align.html">cols_align</a>()</code>,
+<code><a href="cols_hide.html">cols_hide</a>()</code>,
+<code><a href="cols_merge_n_pct.html">cols_merge_n_pct</a>()</code>,
+<code><a href="cols_merge_range.html">cols_merge_range</a>()</code>,
+<code><a href="cols_merge_uncert.html">cols_merge_uncert</a>()</code>,
+<code><a href="cols_merge.html">cols_merge</a>()</code>,
+<code><a href="cols_move_to_end.html">cols_move_to_end</a>()</code>,
+<code><a href="cols_move_to_start.html">cols_move_to_start</a>()</code>,
+<code><a href="cols_move.html">cols_move</a>()</code>,
+<code><a href="cols_unhide.html">cols_unhide</a>()</code>,
+<code><a href="cols_width.html">cols_width</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `countrypops` to create a gt table;
+# label all the table's columns to
+# present better
+tab_1 &lt;-
+  countrypops %&gt;%
+  dplyr::select(-contains("code")) %&gt;%
+  dplyr::filter(country_name == "Mongolia") %&gt;%
+  tail(5) %&gt;%
+  gt() %&gt;%
+  cols_label(
+    country_name = "Name",
+    year = "Year",
+    population = "Population"
+  )
+
+# Use `countrypops` to create a gt table;
+# label columns as before but make them
+# bold with markdown formatting
+tab_2 &lt;-
+  countrypops %&gt;%
+  dplyr::select(-contains("code")) %&gt;%
+  dplyr::filter(country_name == "Mongolia") %&gt;%
+  tail(5) %&gt;%
+  gt() %&gt;%
+  cols_label(
+    country_name = md("**Name**"),
+    year = md("**Year**"),
+    population = md("**Population**")
+  )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

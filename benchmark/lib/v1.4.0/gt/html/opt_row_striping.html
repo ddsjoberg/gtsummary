@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Option to add or remove row striping</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for opt_row_striping {gt}"><tr><td>opt_row_striping {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Option to add or remove row striping</h2>
+
+<h3>Description</h3>
+
+<p>By default, a <strong>gt</strong> table does not have row striping enabled. However, this
+function allows us to easily enable or disable striped rows in the table
+body. This function serves as a convenient shortcut for
+<code style="white-space: pre;">&lt;gt_tbl&gt; %&gt;% tab_options(row.striping.include_table_body = TRUE|FALSE)</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+opt_row_striping(data, row_striping = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A table object that is created using the <code><a href="gt.html">gt()</a></code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>row_striping</code></td>
+<td>
+<p>A logical value to indicate whether row striping should
+be added or removed.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>gt_tbl</code>.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_opt_row_striping_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>9-2
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Table Option Functions: 
+<code><a href="opt_align_table_header.html">opt_align_table_header</a>()</code>,
+<code><a href="opt_all_caps.html">opt_all_caps</a>()</code>,
+<code><a href="opt_css.html">opt_css</a>()</code>,
+<code><a href="opt_footnote_marks.html">opt_footnote_marks</a>()</code>,
+<code><a href="opt_table_font.html">opt_table_font</a>()</code>,
+<code><a href="opt_table_lines.html">opt_table_lines</a>()</code>,
+<code><a href="opt_table_outline.html">opt_table_outline</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Use `exibble` to create a gt table with
+# a number of table parts added; next, we
+# add row striping to every second row with
+# the `opt_row_striping()` function
+tab_1 &lt;-
+  exibble %&gt;%
+  gt(rowname_col = "row", groupname_col = "group") %&gt;%
+  summary_rows(
+    groups = "grp_a",
+    columns = c(num, currency),
+    fns = list(
+      min = ~min(., na.rm = TRUE),
+      max = ~max(., na.rm = TRUE)
+    )) %&gt;%
+  grand_summary_rows(
+    columns = currency,
+    fns = list(
+      total = ~sum(., na.rm = TRUE)
+    )) %&gt;%
+  tab_source_note(source_note = "This is a source note.") %&gt;%
+  tab_footnote(
+    footnote = "This is a footnote.",
+    locations = cells_body(columns = 1, rows = 1)
+  ) %&gt;%
+  tab_header(
+    title = "The title of the table",
+    subtitle = "The table's subtitle"
+  ) %&gt;%
+  opt_row_striping()
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix for Hmisc labelled data with tbl_summary() (#876 )
+
 # gtsummary 1.4.0
 
 ### New Functions

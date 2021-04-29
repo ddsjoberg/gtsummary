@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Helper function for adding a ggplot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggplot_image {gt}"><tr><td>ggplot_image {gt}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Helper function for adding a ggplot</h2>
+
+<h3>Description</h3>
+
+<p>We can add a <strong>ggplot2</strong> plot inside of a table with the help of the
+<code>ggplot_image()</code> function. The function provides a convenient way to generate
+an HTML fragment with a <code>ggplot</code> object. Because this function is currently
+HTML-based, it is only useful for HTML table output. To use this function
+inside of data cells, it is recommended that the <code><a href="text_transform.html">text_transform()</a></code> function
+is used. With that function, we can specify which data cells to target and
+then include a call to <code>ggplot_image()</code> within the required user-defined
+function (for the <code>fn</code> argument). If we want to include a plot in other
+places (e.g., in the header, within footnote text, etc.) we need to use
+<code>ggplot_image()</code> within the <code><a href="html.html">html()</a></code> helper function.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggplot_image(plot_object, height = 100, aspect_ratio = 1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>plot_object</code></td>
+<td>
+<p>A ggplot plot object.</p>
+</td></tr>
+<tr valign="top"><td><code>height</code></td>
+<td>
+<p>The absolute height (px) of the image in the table cell.</p>
+</td></tr>
+<tr valign="top"><td><code>aspect_ratio</code></td>
+<td>
+<p>The plot's final aspect ratio. Where the height of the
+plot is fixed using the <code>height</code> argument, the <code>aspect_ratio</code>
+will either compress (<code>aspect_ratio</code> &lt; <code>1.0</code>) or expand
+(<code>aspect_ratio</code> &gt; <code>1.0</code>) the plot horizontally. The default value
+of <code>1.0</code> will neither compress nor expand the plot.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>By itself, the function creates an HTML image tag with an image URI embedded
+within (a 100 dpi PNG). We can easily experiment with any <code>ggplot2</code> plot
+object, and using it within <code style="white-space: pre;">ggplot_image(plot_object = &lt;plot object&gt;</code>
+evaluates to:
+</p>
+<p><code style="white-space: pre;">&lt;img cid=&lt;random CID&gt; src=&lt;data URI&gt; style=\"height:100px;\"&gt;</code>
+</p>
+<p>where a height of <code style="white-space: pre;">100px</code> is a default height chosen to work well within the
+heights of most table rows. There is the option to modify the aspect ratio of
+the plot (the default <code>aspect_ratio</code> is <code>1.0</code>) and this is useful for
+elongating any given plot to fit better within the table construct.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A character object with an HTML fragment that can be placed inside of
+a cell.
+</p>
+
+
+<h3>Figures</h3>
+
+<p><img src="../help/figures/man_ggplot_image_1.png" width=100% />
+</p>
+
+
+<h3>Function ID</h3>
+
+<p>8-3
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Image Addition Functions: 
+<code><a href="local_image.html">local_image</a>()</code>,
+<code><a href="test_image.html">test_image</a>()</code>,
+<code><a href="web_image.html">web_image</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(ggplot2)
+
+# Create a ggplot plot
+plot_object &lt;-
+  ggplot(
+    data = gtcars,
+    aes(x = hp, y = trq,
+        size = msrp)) +
+  geom_point(color = "blue") +
+  theme(legend.position = "none")
+
+# Create a tibble that contains two
+# cells (where one is a placeholder for
+# an image), then, create a gt table;
+# use the `text_transform()` function
+# to insert the plot using by calling
+# `ggplot_object()` within the user-
+# defined function
+tab_1 &lt;-
+  dplyr::tibble(
+    text = "Here is a ggplot:",
+    ggplot = NA
+  ) %&gt;%
+  gt() %&gt;%
+  text_transform(
+    locations = cells_body(columns = ggplot),
+    fn = function(x) {
+      plot_object %&gt;%
+        ggplot_image(height = px(200))
+    }
+  )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gt</em> version 0.2.2 <a href="00Index.html">Index</a>]</div>
+</body></html>
