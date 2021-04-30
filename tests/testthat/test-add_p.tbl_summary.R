@@ -374,7 +374,7 @@ test_that("difftime works with wolcox", {
   expect_equal(
     trial %>%
       mutate(
-        time_diff = lubridate::as.difftime(age, units = "mins")
+        time_diff = as.difftime(age, units = "mins")
       ) %>%
       select(trt, time_diff) %>%
       tbl_summary(by=trt) %>%
