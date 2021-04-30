@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated default header when using `tbl_uvregression(x=)` to `"**Outcome**"` (#867)
+
 * The `tbl_summary(by=)` variable is now added to `include=` by default (#871)
 
 * Variables are converted to numeric before being passed to `wilcox.test()` in `add_p()`. This avoids an error when a date difference is passed. (#880)
