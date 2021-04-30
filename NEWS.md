@@ -1,10 +1,14 @@
 # gtsummary (development version)
 
+* Updated default header when using `tbl_uvregression(x=)` to `"**Outcome**"` (#867)
+
 * The `tbl_summary(by=)` variable is now added to `include=` by default (#871)
 
 * Variables are converted to numeric before being passed to `wilcox.test()` in `add_p()`. This avoids an error when a date difference is passed. (#880)
 
 * Bug fix for {Hmisc} labeled data with `tbl_summary()` (#876)
+
+* Updates to the default formatting functions in the `add_glance_*()` functions. P-values are now styled with `style_pvalue()` and No. Obs. and degrees of freedom with `style_number()` (#870)
 
 # gtsummary 1.4.0
 

@@ -369,3 +369,17 @@ test_that("Groups arg and lme4", {
       pluck("Pr(>Chisq)", 2)
   )
 })
+
+test_that("difftime works with wolcox", {
+  expect_equal(
+    trial %>%
+      mutate(
+        time_diff = as.difftime(age, units = "mins")
+      ) %>%
+      select(trt, time_diff) %>%
+      tbl_summary(by=trt) %>%
+      add_p() %>%
+      inline_text(variable = time_diff, column = "p.value"),
+    "p=0.7"
+  )
+})
