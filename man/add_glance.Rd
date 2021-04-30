@@ -36,8 +36,10 @@ can also be used to specify the order the statistics appear in the table.}
 e.g. \code{list(r.squared ~ "R2", p.value ~ "P")}}
 
 \item{fmt_fun}{List of formulas where the LHS is a statistic and the RHS
-is a function to format/round the statistics. The default is
-\code{style_sigfig(x, digits = 3)}}
+is a function to format/round the statistics. The default is to round
+the number of observations and degrees of freedom to the nearest integer,
+p-values are styled with \code{style_pvalue()} and the remaining statistics
+are styled with \code{style_sigfig(x, digits = 3)}}
 
 \item{glance_fun}{function that returns model statistics. Default is
 \code{broom::glance()}. Custom functions must return a single row tibble.}

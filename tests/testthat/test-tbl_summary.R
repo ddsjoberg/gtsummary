@@ -635,3 +635,11 @@ test_that("Hmisc labelled data don't error", {
   )
 
 })
+
+test_that("no error when by variable omitted from include", {
+  expect_error(
+    trial %>%
+      tbl_summary(by = trt, include  = age),
+    NA
+  )
+})

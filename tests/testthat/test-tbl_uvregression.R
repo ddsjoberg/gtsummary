@@ -158,6 +158,14 @@ test_that("tbl_uvregression x= argument tests", {
   )
 
   expect_equal(
+    ux_x %>%
+      as_tibble() %>%
+      names() %>%
+      purrr::pluck(1),
+    "**Outcome**"
+  )
+
+  expect_equal(
     ux_x$meta_data$label[1] %>% .[[1]],
     "PATIENT AGE"
   )
@@ -310,3 +318,4 @@ test_that("tbl_uvregression works with survey object", {
     survey::svyglm(response ~ age, design = svy, family = binomial) %>% broom::tidy()
   )
 })
+
