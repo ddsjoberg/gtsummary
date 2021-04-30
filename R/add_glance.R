@@ -229,7 +229,7 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
             return(fmt_fun[[.x]] %||% style_number)
           }
           if (.x %in% c("p.value")) {
-            return(fmt_fun[[.x]] %||% get_theme_element("pkgwide-fn:pvalue_fun", style_pvalue))
+            return(fmt_fun[[.x]] %||% x$inputs$pvalue_fun)
           }
           return(fmt_fun[[.x]] %||% purrr::partial(style_sigfig, digits = 3))
         }
