@@ -221,8 +221,10 @@ e.g. <code><a href='https://rdrr.io/r/base/list.html'>list(r.squared ~ "R2", p.v
     <tr>
       <th>fmt_fun</th>
       <td><p>List of formulas where the LHS is a statistic and the RHS
-is a function to format/round the statistics. The default is
-<code><a href='style_sigfig.html'>style_sigfig(x, digits = 3)</a></code></p></td>
+is a function to format/round the statistics. The default is to round
+the number of observations and degrees of freedom to the nearest integer,
+p-values are styled with <code><a href='style_pvalue.html'>style_pvalue()</a></code> and the remaining statistics
+are styled with <code><a href='style_sigfig.html'>style_sigfig(x, digits = 3)</a></code></p></td>
     </tr>
     <tr>
       <th>glance_fun</th>
