@@ -602,14 +602,19 @@ c_form <- function(left = NULL, right = 1) {
   if (is.data.frame(x)) {
     return(x)
   }
-  x$variables %>%
-    select(-any_of(c(
-      all.vars(x$call$id),
-      all.vars(x$call$probs),
-      all.vars(x$call$strata),
-      all.vars(x$call$fpc),
-      all.vars(x$call$weights)
-    )))
+  if (is.call(x$call)) {
+    x$variables %>%
+      select(-any_of(c(
+        all.vars(x$call$id),
+        all.vars(x$call$probs),
+        all.vars(x$call$strata),
+        all.vars(x$call$fpc),
+        all.vars(x$call$weights)
+      )))
+  } else {
+    x$variables
+  }
+
 }
 
 # Min and Max Values for survey design
