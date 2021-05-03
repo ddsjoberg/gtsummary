@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated `tbl_svysummary()` to be compatible with {srvyr} package (#886)
+
 * Updated default header when using `tbl_uvregression(x=)` to `"**Outcome**"` (#867)
 
 * The `tbl_summary(by=)` variable is now added to `include=` by default (#871)
