@@ -611,6 +611,12 @@ c_form <- function(left = NULL, right = 1) {
         all.vars(x$call$fpc),
         all.vars(x$call$weights)
       )))
+  } else if (!is.null(attr(x, "survey_vars"))) {
+    # "survey_vars" attribute is used by srvyr
+    x$variables %>%
+      select(-any_of(
+        attr(x, "survey_vars") %>% as.character() %>% unlist()
+      ))
   } else {
     x$variables
   }
