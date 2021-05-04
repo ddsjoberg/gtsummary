@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Bug fix in `add_p.tbl_summary()` for columns that are all `NA`. These variables no longer error; rather, a message is printed indicating the p-value is not possible to calculate. (#889)
+
+* Updated `tbl_svysummary()` to be compatible with {srvyr} package (#886)
+
 * Updated default header when using `tbl_uvregression(x=)` to `"**Outcome**"` (#867)
 
 * The `tbl_summary(by=)` variable is now added to `include=` by default (#871)

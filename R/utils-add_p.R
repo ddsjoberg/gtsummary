@@ -185,9 +185,9 @@
   }
 
   # if all obs are missing, return NULL ----------------------------------------
-  if (length(data[[variable]]) == sum(is.na(data[[variable]]))) {
-    return(NULL)
-  }
+  # if (length(data[[variable]]) == sum(is.na(data[[variable]]))) {
+  #   return(NULL)
+  # }
 
   # if no test supplied, setting defaults --------------------------------------
   # if by var has 3 or more levels, return error...no default test.
@@ -227,16 +227,18 @@
 
   # calculate expected counts to select between chisq and fisher
   min_exp <-
-    expand.grid(
-      table(data[[variable]]) / sum(!is.na(data[[variable]])),
-      table(data[[by]]) / sum(!is.na(data[[by]]))
-    ) %>%
-    mutate(
-      exp = .data$Var1 * .data$Var2 *
-        sum(!is.na(data[[variable]]) & !is.na(data[[by]]))
-    ) %>%
-    pull(exp) %>%
-    min()
+    suppressWarnings(
+      expand.grid(
+        table(data[[variable]]) / sum(!is.na(data[[variable]])),
+        table(data[[by]]) / sum(!is.na(data[[by]]))
+      ) %>%
+        mutate(
+          exp = .data$Var1 * .data$Var2 *
+            sum(!is.na(data[[variable]]) & !is.na(data[[by]]))
+        ) %>%
+        pull(exp) %>%
+        min()
+    )
 
   # if expected counts >= 5 for all cells, chisq, otherwise Fishers exact
   if (min_exp >= 5) {
@@ -268,11 +270,6 @@
   # if user supplied a test, use that test -------------------------------------
   if (!is.null(test[[variable]])) {
     return(test[[variable]])
-  }
-
-  # if all obs are missing, return NULL ----------------------------------------
-  if (length(data$variables[[variable]]) == sum(is.na(data$variables[[variable]]))) {
-    return(NULL)
   }
 
   # for continuous data, default to non-parametric tests
