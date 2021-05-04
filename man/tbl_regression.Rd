@@ -90,6 +90,10 @@ The default method for \code{tbl_regression()} model summary uses \code{broom::t
 to perform the initial tidying of the model object. There are, however,
 a few models that use \link[=tbl_regression_methods]{modifications}.
 \itemize{
+\item \code{"tidymodels"}: If the model was prepared within the tidymodels framework,
+the original model fit, \code{x$fit} is extracted and the original \verb{x=} argument
+is replaced with the model fit. This will typically go unnoticed, but if you've
+provided a custom tidier in \verb{tidy_fun=} the tidier will be applied to \code{x$fit}.
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 \item \code{"gam"}: Uses the internal tidier \code{tidy_gam()} to print both parametric and smooth terms.
