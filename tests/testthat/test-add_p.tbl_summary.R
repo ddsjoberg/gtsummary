@@ -383,3 +383,18 @@ test_that("difftime works with wolcox", {
     "p=0.7"
   )
 })
+
+test_that("no error with missing data", {
+  expect_message(
+    t1 <-
+      mtcars %>%
+      mutate(mpg = NA, hp = NA) %>%
+      select(mpg, hp, am) %>%
+      tbl_summary(by = "am", type = hp ~ "continuous") %>%
+      add_p()
+  )
+  expect_equal(
+    t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
+    rep_len(NA_character_, 4)
+  )
+})

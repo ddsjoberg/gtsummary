@@ -204,3 +204,18 @@ test_that("row formatting of differences and CIs work", {
     c("-4.6, 3.7", "-0.05, 0.44", "-18%, 9.9%", "-21%, 9.0%")
   )
 })
+
+test_that("no error with missing data", {
+  expect_message(
+    t1 <-
+      mtcars %>%
+      mutate(mpg = NA, hp = NA) %>%
+      select(mpg, hp, am) %>%
+      tbl_summary(by = "am", type = hp ~ "continuous", missing = 'no') %>%
+      add_difference()
+  )
+  expect_equal(
+    t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
+    rep_len(NA_character_, 2)
+  )
+})
