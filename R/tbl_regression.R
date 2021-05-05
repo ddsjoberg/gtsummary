@@ -13,10 +13,11 @@
 #' to perform the initial tidying of the model object. There are, however,
 #' a few models that use [modifications][tbl_regression_methods].
 #'
-#' - `"tidymodels"`: If the model was prepared within the tidymodels framework,
-#' the original model fit, `x$fit` is extracted and the original `x=` argument
+#' - `"parsnip/tidymodels"`: If the model was prepared using tidymodels/parsnip,
+#' the original model fit is extracted and the original `x=` argument
 #' is replaced with the model fit. This will typically go unnoticed, but if you've
-#' provided a custom tidier in `tidy_fun=` the tidier will be applied to `x$fit`.
+#' provided a custom tidier in `tidy_fun=` the tidier will be applied to the model
+#' fit object and not the tidymodels object.
 #' - `"survreg"`: The scale parameter is removed, `broom::tidy(x) %>% dplyr::filter(term != "Log(scale)")`
 #' - `"multinom"`: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 #' - `"gam"`: Uses the internal tidier `tidy_gam()` to print both parametric and smooth terms.

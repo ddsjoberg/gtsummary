@@ -21,6 +21,15 @@ tbl_regression.model_fit <- function(x, ...) {
 
 #' @export
 #' @rdname tbl_regression_methods
+tbl_regression.workflow <- function(x, ...) {
+  paste("Pass workflow objects to {.code tbl_regression()} with",
+        "{.code workflows::pull_workflow_fit(x) %>% tbl_regression()}") %>%
+  cli_alert_danger()
+  abort("Update syntax and re-run script.")
+}
+
+#' @export
+#' @rdname tbl_regression_methods
 tbl_regression.survreg <- function(x, tidy_fun = function(x, ...) broom::tidy(x, ...) %>% dplyr::filter(.data$term != "Log(scale)"), ...) {
   tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
 }
