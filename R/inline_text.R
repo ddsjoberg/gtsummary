@@ -63,7 +63,7 @@ inline_text.gtsummary <- function(x, variable,
       nrow(df_gtsummary %>% filter(.data$row_type %in% "label")) > 1)
     glue("Variable '{variable}' likely not unique in gtsummary table, and",
          "the cell(s) you wish to display may not be accessible.",
-         "This may occurs when gtsummary tables with repeated variable",
+         "This may occur when gtsummary tables with repeated variable",
          "names are combined using `tbl_stack()`.", .sep = " ") %>%
     stringr::str_wrap() %>%
     inform()
