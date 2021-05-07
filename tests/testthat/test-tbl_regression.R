@@ -205,7 +205,7 @@ test_that("Interaction modifications", {
   )
 })
 
-test_that("tidymodels/parsnip", {
+test_that("tidymodels/parsnip/workflows", {
   expect_equal(
     parsnip::linear_reg() %>%
       parsnip::set_engine('lm') %>%
@@ -216,5 +216,20 @@ test_that("tidymodels/parsnip", {
     lm(age ~ grade + stage, data = trial) %>%
       tbl_regression() %>%
       purrr::pluck("table_body")
+  )
+
+  expect_equal(
+    workflows::workflow() %>%
+      workflows::add_model(parsnip::logistic_reg() %>% parsnip::set_engine("glm")) %>%
+      workflows::add_formula(factor(response) ~ age + stage) %>%
+      parsnip::fit(data = trial) %>%
+      tbl_regression() %>%
+      as_tibble(col_labels = FALSE) %>%
+      select(estimate, ci),
+    glm(response ~ age + stage, data = trial, family = binomial) %>%
+      tbl_regression() %>%
+      as_tibble(col_labels = FALSE) %>%
+      select(estimate, ci) %>%
+      dplyr::filter(!is.na(estimate))
   )
 })
