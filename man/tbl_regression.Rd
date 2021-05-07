@@ -61,7 +61,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{tidy_fun}{Option to specify a particular tidier function if the
+\item{tidy_fun}{Option to specify a particular tidier function for the
 model. Default is to use \code{broom::tidy}, but if an error occurs
 then tidying of the model is attempted with \code{parameters::model_parameters()},
 if installed.}

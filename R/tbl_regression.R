@@ -60,7 +60,7 @@
 #' and return a string that is the rounded/formatted p-value (e.g.
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
-#' @param tidy_fun Option to specify a particular tidier function if the
+#' @param tidy_fun Option to specify a particular tidier function for the
 #' model. Default is to use `broom::tidy`, but if an error occurs
 #' then tidying of the model is attempted with `parameters::model_parameters()`,
 #' if installed.
