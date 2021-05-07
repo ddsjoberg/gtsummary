@@ -16,16 +16,18 @@ NULL
 #' @export
 #' @rdname tbl_regression_methods
 tbl_regression.model_fit <- function(x, ...) {
+  message("Extracting {parsnip} model fit with `tbl_regression(x = x$fit, ...)`")
   tbl_regression(x = x$fit, ...)
 }
 
 #' @export
 #' @rdname tbl_regression_methods
 tbl_regression.workflow <- function(x, ...) {
-  paste("Pass workflow objects to {.code tbl_regression()} with",
-        "{.code workflows::pull_workflow_fit(x) %>% tbl_regression()}") %>%
-  cli_alert_danger()
-  abort("Update syntax and re-run script.")
+  paste("Extracting {workflows} model fit with",
+        "`workflows::pull_workflow_fit(x) %>% tbl_regression(...)`") %>%
+  message()
+
+  tbl_regression(x = workflows::pull_workflow_fit(x), ...)
 }
 
 #' @export
