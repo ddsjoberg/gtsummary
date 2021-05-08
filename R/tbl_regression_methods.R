@@ -25,8 +25,10 @@ tbl_regression.model_fit <- function(x, ...) {
 tbl_regression.workflow <- function(x, ...) {
   if (isTRUE(!x$pre$actions$formula$blueprint$indicators %in% "none")) {
     paste("To take full advantage of model formatting, e.g. grouping categorical",
-          "variables, please add the following argument to the `workflows::add_model()` call:\n",
-          "`blueprint = hardhat::default_formula_blueprint(indicators = 'none')`") %>%
+          "variables, please add the following argument to the `workflows::add_model()` call:") %>%
+      stringr::str_wrap() %>%
+      paste("`blueprint = hardhat::default_formula_blueprint(indicators = 'none')`", sep = "\n") %>%
+      paste("\n") %>%
       rlang::inform()
   }
 
