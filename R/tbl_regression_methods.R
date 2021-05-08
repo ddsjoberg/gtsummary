@@ -23,6 +23,13 @@ tbl_regression.model_fit <- function(x, ...) {
 #' @export
 #' @rdname tbl_regression_methods
 tbl_regression.workflow <- function(x, ...) {
+  if (isTRUE(!x$pre$actions$formula$blueprint$indicators %in% "none")) {
+    paste("To take full advantage of model formatting, e.g. grouping categorical",
+          "variables, please add the following argument to the `workflows::add_model()` call:\n",
+          "`blueprint = hardhat::default_formula_blueprint(indicators = 'none')`") %>%
+      rlang::inform()
+  }
+
   paste("Extracting {workflows} model fit with",
         "`workflows::pull_workflow_fit(x) %>% tbl_regression(...)`") %>%
   message()
