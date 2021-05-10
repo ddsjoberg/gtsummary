@@ -58,6 +58,16 @@ inline_text.gtsummary <- function(x, variable,
 
   df_gtsummary <- filter(df_gtsummary, .data$variable %in% .env$variable)
 
+  # check if tbl contains duplicate variable names
+  if ("row_type" %in% names(df_gtsummary) &&
+      nrow(df_gtsummary %>% filter(.data$row_type %in% "label")) > 1)
+    glue("Variable '{variable}' likely not unique in gtsummary table, and",
+         "the cell(s) you wish to display may not be accessible.",
+         "This may occur when gtsummary tables with repeated variable",
+         "names are combined using `tbl_stack()`.", .sep = " ") %>%
+    stringr::str_wrap() %>%
+    inform()
+
   # level selection ------------------------------------------------------------
   level <- rlang::enquo(level)
   level_is_null <- tryCatch(is.null(eval_tidy(level)), error = function(e) FALSE)
