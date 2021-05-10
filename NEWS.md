@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Messaging update when `inline_text.gtsummary()` suspects a variable has been repeated in the gtsummary table. (#855)
+
 * Bug fix in `add_p.tbl_summary()` for columns that are all `NA`. These variables no longer error; rather, a message is printed indicating the p-value is not possible to calculate. (#889)
 
 * Updated `tbl_svysummary()` to be compatible with {srvyr} package (#886)

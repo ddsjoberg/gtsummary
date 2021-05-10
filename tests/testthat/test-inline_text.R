@@ -392,3 +392,13 @@ test_that("inline_text.tbl_svysummary: no errors with empty string selection", {
     NA
   )
 })
+
+test_that("check for messaging about duplicate variables", {
+  t1 <- lm(age ~ marker, trial) %>% tbl_regression()
+
+  expect_message(
+    tbl_stack(list(t1, t1)) %>%
+      inline_text(variable = marker, column = estimate)
+  )
+
+})
