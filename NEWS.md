@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Updated `tbl_regression()` to be compatible with models created with the {parsnip} package (#890, #647)
+* Updated `tbl_regression()` to be compatible with models created with the {parsnip} and {workflows} packages (#890, #647)
+
+* Messaging update when `inline_text.gtsummary()` suspects a variable has been repeated in the gtsummary table. (#855)
 
 * Bug fix in `add_p.tbl_summary()` for columns that are all `NA`. These variables no longer error; rather, a message is printed indicating the p-value is not possible to calculate. (#889)
 
