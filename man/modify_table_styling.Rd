@@ -51,7 +51,7 @@ and text formatting. Default is \code{NULL}. See details below.}
 columns/rows in \verb{columns=} and \verb{rows=}}
 
 \item{text_format}{string indicated which type of text formatting to apply to the rows and columns.
-Must be one of \code{c("bold", "italic", "indent")}}
+Must be one of \code{c("bold", "italic", "indent", "indent2")}}
 
 \item{undo_text_format}{rarely used. Logical that undoes the indent, bold,
 and italic styling when \code{TRUE}}

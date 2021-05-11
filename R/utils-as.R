@@ -30,6 +30,7 @@
     .convert_header_to_rows_one_column("footnote_abbrev") %>%
     .convert_header_to_rows_one_column("missing_emdash") %>%
     .convert_header_to_rows_one_column("indent") %>%
+    .convert_header_to_rows_one_column("indent2") %>%
     .convert_header_to_rows_one_column("bold") %>%
     .convert_header_to_rows_one_column("italic") %>%
     .convert_header_to_rows_one_column("fmt_fun")
@@ -52,7 +53,7 @@
       ) %>%
       select(all_of(c("column", "rows", "text_interpret", "footnote")))
   }
-  else if (column %in% c("indent", "bold", "italic")) {
+  else if (column %in% c("indent", "indent2", "bold", "italic")) {
     x$table_styling$text_format <-
       x$table_header %>%
       select(all_of(c("column", .env$column))) %>%
