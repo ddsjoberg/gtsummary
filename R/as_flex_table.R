@@ -222,6 +222,25 @@ table_styling_to_flextable_calls <- function(x, ...) {
     ))
   )
 
+  # padding2 -------------------------------------------------------------------
+  df_padding2 <-
+    x$table_styling$header %>%
+    select(.data$id, .data$column) %>%
+    inner_join(
+      x$table_styling$text_format %>%
+        filter(.data$format_type == "indent2"),
+      by = "column"
+    )
+
+  flextable_calls[["padding2"]] <- map(
+    seq_len(nrow(df_padding2)),
+    ~ expr(flextable::padding(
+      i = !!df_padding2$row_numbers[[.x]],
+      j = !!df_padding2$id[[.x]],
+      padding.left = 30
+    ))
+  )
+
   # fontsize -------------------------------------------------------------------
   flextable_calls[["fontsize"]] <- list(
     expr(flextable::fontsize(part = "header", size = 11))

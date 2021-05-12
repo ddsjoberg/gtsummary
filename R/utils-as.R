@@ -33,6 +33,7 @@
     .convert_header_to_rows_one_column("bold") %>%
     .convert_header_to_rows_one_column("italic") %>%
     .convert_header_to_rows_one_column("fmt_fun")
+  x$table_styling$cols_merge <- tibble(column = character(), rows = list(), pattern = character())
 
   x$table_header <- NULL
   x
@@ -293,7 +294,7 @@
 }
 
 .table_styling_cols_merge <- function(x) {
-  if (nrow(x$table_styling$cols_merge) == 0) {
+  if (is.null(x$table_styling$cols_merge) || nrow(x$table_styling$cols_merge) == 0) {
     return(x)
   }
   x_cleaned <- .clean_table_styling(x)

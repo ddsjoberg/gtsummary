@@ -61,3 +61,18 @@ test_that("tbl_merge/tbl_stack", {
   expect_error(as_hux_table(tbl_stack_ex1), NA)
   expect_warning(as_hux_table(tbl_stack_ex1), NA)
 })
+
+test_that("indent2", {
+  expect_error(
+    trial %>%
+      select(age) %>%
+      tbl_summary() %>%
+      modify_table_styling(
+        columns = label,
+        rows = variable == "age" & row_type != "label",
+        text_format = "indent2"
+      ) %>%
+      as_hux_table(),
+    NA
+  )
+})

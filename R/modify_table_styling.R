@@ -18,7 +18,8 @@
 #' @param align string indicating alignment of column, must be one of
 #' `c("left", "right", "center")`
 #' @param text_format string indicated which type of text formatting to apply to the rows and columns.
-#' Must be one of `c("bold", "italic", "indent")`
+#' Must be one of `c("bold", "italic", "indent", "indent2")`. Do not assign
+#' both `"indent"` and `"indent2"` to the same cell.
 #' @param text_interpret string, must be one of `"md"` or `"html"`
 #' @param fmt_fun function that formats the statistics in the
 #' columns/rows in `columns=` and `rows=`
@@ -89,7 +90,7 @@ modify_table_styling <- function(x,
   }
   if (!is.null(text_format)) {
     text_format <- match.arg(text_format,
-      choices = c("bold", "italic", "indent"),
+      choices = c("bold", "italic", "indent", "indent2"),
       several.ok = TRUE
     )
   }
