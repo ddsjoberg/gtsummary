@@ -108,6 +108,16 @@ table_styling_to_kable_extra_calls <- function(x, ...) {
       expr(kableExtra::add_indent(!!df_indent$row_numbers[[1]]))
   }
 
+  # add_indent2 -----------------------------------------------------------------
+  df_indent2 <-
+    x$table_styling$text_format %>%
+    filter(.data$format_type == "indent2", .data$column == "label")
+
+  if (nrow(df_indent2) > 0) {
+    kable_extra_calls[["add_indent2"]] <-
+      expr(kableExtra::add_indent(!!df_indent2$row_numbers[[1]], level_of_indent = 2))
+  }
+
   # add_header_above -----------------------------------------------------------
   if (any(!is.na(x$table_styling$header$spanning_header))) {
     df_header0 <-

@@ -29,3 +29,19 @@ test_that("tbl_survfit", {
 
   expect_error(tbl_survfit(fit1, times = c(12, 24), label_header = "**{time} Months**") %>% as_gt(), NA)
 })
+
+test_that("indent2", {
+  expect_error(
+    trial %>%
+      select(age) %>%
+      tbl_summary() %>%
+      modify_table_styling(
+        columns = label,
+        rows = variable == "age" & row_type != "label",
+        text_format = "indent2"
+      ) %>%
+      as_gt(),
+    NA
+  )
+})
+
