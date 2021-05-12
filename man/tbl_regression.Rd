@@ -61,7 +61,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{pvalue_fun = function(x) style_pvalue(x, digits = 2)} or equivalently,
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
-\item{tidy_fun}{Option to specify a particular tidier function if the
+\item{tidy_fun}{Option to specify a particular tidier function for the
 model. Default is to use \code{broom::tidy}, but if an error occurs
 then tidying of the model is attempted with \code{parameters::model_parameters()},
 if installed.}
@@ -90,6 +90,11 @@ The default method for \code{tbl_regression()} model summary uses \code{broom::t
 to perform the initial tidying of the model object. There are, however,
 a few models that use \link[=tbl_regression_methods]{modifications}.
 \itemize{
+\item \code{"parsnip/workflows"}: If the model was prepared using parsnip/workflows,
+the original model fit is extracted and the original \verb{x=} argument
+is replaced with the model fit. This will typically go unnoticed; however,if you've
+provided a custom tidier in \verb{tidy_fun=} the tidier will be applied to the model
+fit object and not the parsnip/workflows object.
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 \item \code{"gam"}: Uses the internal tidier \code{tidy_gam()} to print both parametric and smooth terms.
