@@ -193,6 +193,20 @@ table_styling_to_gt_calls <- function(x, ...) {
       ))
     )
 
+  # indent2 --------------------------------------------------------------------
+  df_indent2 <- x$table_styling$text_format %>% filter(.data$format_type == "indent2")
+  gt_calls[["tab_style_indent2"]] <-
+    map(
+      seq_len(nrow(df_indent2)),
+      ~ expr(gt::tab_style(
+        style = gt::cell_text(indent = gt::px(20), align = "left"),
+        locations = gt::cells_body(
+          columns = !!df_indent2$column[[.x]],
+          rows = !!df_indent2$row_numbers[[.x]]
+        )
+      ))
+    )
+
   # fmt ------------------------------------------------------------------------
   gt_calls[["fmt"]] <-
     map(

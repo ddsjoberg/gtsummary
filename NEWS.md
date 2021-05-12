@@ -2,6 +2,8 @@
 
 * Updated `tbl_regression()` to be compatible with models created with the {parsnip} and {workflows} packages (#890, #647)
 
+* Added the `modify_table_styling(text_format = "indent2")` option to double indent a row. (#864)
+
 * Messaging update when `inline_text.gtsummary()` suspects a variable has been repeated in the gtsummary table. (#855)
 
 * Bug fix in `add_p.tbl_summary()` for columns that are all `NA`. These variables no longer error; rather, a message is printed indicating the p-value is not possible to calculate. (#889)

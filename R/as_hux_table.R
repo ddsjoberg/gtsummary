@@ -139,6 +139,26 @@ table_styling_to_huxtable_calls <- function(x, ...) {
       ))
     )
 
+  # padding2 -------------------------------------------------------------------
+  df_padding2 <-
+    x$table_styling$header %>%
+    select(.data$id, .data$column) %>%
+    inner_join(
+      x$table_styling$text_format %>%
+        filter(.data$format_type == "indent2"),
+      by = "column"
+    )
+
+  huxtable_calls[["set_left_padding2"]] <-
+    map(
+      seq_len(nrow(df_padding2)),
+      ~ expr(huxtable::set_left_padding(
+        row = !!df_padding2$row_numbers[[.x]],
+        col = !!df_padding2$id[[.x]],
+        value = 30
+      ))
+    )
+
   # footnote -------------------------------------------------------------------
   vct_footnote <-
     .number_footnotes(x) %>%
