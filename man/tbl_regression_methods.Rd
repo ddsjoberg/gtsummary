@@ -2,6 +2,8 @@
 % Please edit documentation in R/tbl_regression_methods.R
 \name{tbl_regression_methods}
 \alias{tbl_regression_methods}
+\alias{tbl_regression.model_fit}
+\alias{tbl_regression.workflow}
 \alias{tbl_regression.survreg}
 \alias{tbl_regression.mira}
 \alias{tbl_regression.mipo}
@@ -15,6 +17,10 @@
 \alias{tbl_regression.multinom}
 \title{Methods for tbl_regression}
 \usage{
+\method{tbl_regression}{model_fit}(x, ...)
+
+\method{tbl_regression}{workflow}(x, ...)
+
 \method{tbl_regression}{survreg}(
   x,
   tidy_fun = function(x, ...) broom::tidy(x, ...) \%>\% dplyr::filter(.data$term !=
@@ -69,12 +75,12 @@
 \arguments{
 \item{x}{Regression model object}
 
-\item{tidy_fun}{Option to specify a particular tidier function if the
+\item{...}{arguments passed to \code{tbl_regression.default()}}
+
+\item{tidy_fun}{Option to specify a particular tidier function for the
 model. Default is to use \code{broom::tidy}, but if an error occurs
 then tidying of the model is attempted with \code{parameters::model_parameters()},
 if installed.}
-
-\item{...}{arguments passed to \code{tbl_regression.default()}}
 }
 \description{
 Most regression models are handled by \code{\link[=tbl_regression.default]{tbl_regression.default()}},
@@ -89,6 +95,11 @@ The default method for \code{tbl_regression()} model summary uses \code{broom::t
 to perform the initial tidying of the model object. There are, however,
 a few models that use \link[=tbl_regression_methods]{modifications}.
 \itemize{
+\item \code{"parsnip/workflows"}: If the model was prepared using parsnip/workflows,
+the original model fit is extracted and the original \verb{x=} argument
+is replaced with the model fit. This will typically go unnoticed; however,if you've
+provided a custom tidier in \verb{tidy_fun=} the tidier will be applied to the model
+fit object and not the parsnip/workflows object.
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 \item \code{"gam"}: Uses the internal tidier \code{tidy_gam()} to print both parametric and smooth terms.

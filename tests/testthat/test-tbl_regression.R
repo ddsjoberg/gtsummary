@@ -10,8 +10,8 @@ mod_lm <- lm(hp ~ am, data = mtcars)
 mod_survreg <- survreg(Surv(time, status) ~ age + ph.ecog, data = lung)
 mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
 mod_poisson <- glm(count ~ age + trt,
-  trial %>% dplyr::mutate(count = sample.int(20, size = nrow(trial), replace = TRUE)),
-  family = poisson
+                   trial %>% dplyr::mutate(count = sample.int(20, size = nrow(trial), replace = TRUE)),
+                   family = poisson
 )
 mod_lmer <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
 mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
@@ -163,8 +163,8 @@ test_that("Testing lme4 results", {
   # tbl_regerssion runs without error
   expect_error(
     tbl_lme4 <- tbl_regression(mod_glmer,
-      exponentiate = TRUE,
-      conf.level = 0.90
+                               exponentiate = TRUE,
+                               conf.level = 0.90
     ),
     NA
   )
@@ -202,5 +202,34 @@ test_that("Interaction modifications", {
     dplyr::filter(tbl_i$table_body, variable == "factor(response):marker") %>%
       nrow(),
     1L
+  )
+})
+
+test_that("tidymodels/parsnip/workflows", {
+  expect_equal(
+    parsnip::linear_reg() %>%
+      parsnip::set_engine('lm') %>%
+      parsnip::set_mode('regression') %>%
+      parsnip::fit(age ~ grade + stage, data = trial) %>%
+      tbl_regression() %>%
+      purrr::pluck("table_body"),
+    lm(age ~ grade + stage, data = trial) %>%
+      tbl_regression() %>%
+      purrr::pluck("table_body")
+  )
+
+  expect_equal(
+    workflows::workflow() %>%
+      workflows::add_model(parsnip::logistic_reg() %>% parsnip::set_engine("glm")) %>%
+      workflows::add_formula(factor(response) ~ age + stage) %>%
+      parsnip::fit(data = trial) %>%
+      tbl_regression() %>%
+      as_tibble(col_labels = FALSE) %>%
+      select(estimate, ci),
+    glm(response ~ age + stage, data = trial, family = binomial) %>%
+      tbl_regression() %>%
+      as_tibble(col_labels = FALSE) %>%
+      select(estimate, ci) %>%
+      dplyr::filter(!is.na(estimate))
   )
 })
