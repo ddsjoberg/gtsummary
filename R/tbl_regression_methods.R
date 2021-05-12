@@ -15,6 +15,32 @@ NULL
 
 #' @export
 #' @rdname tbl_regression_methods
+tbl_regression.model_fit <- function(x, ...) {
+  message("Extracting {parsnip} model fit with `tbl_regression(x = x$fit, ...)`")
+  tbl_regression(x = x$fit, ...)
+}
+
+#' @export
+#' @rdname tbl_regression_methods
+tbl_regression.workflow <- function(x, ...) {
+  if (isTRUE(!x$pre$actions$formula$blueprint$indicators %in% "none")) {
+    paste("To take full advantage of model formatting, e.g. grouping categorical",
+          "variables, please add the following argument to the `workflows::add_model()` call:") %>%
+      stringr::str_wrap() %>%
+      paste("`blueprint = hardhat::default_formula_blueprint(indicators = 'none')`", sep = "\n") %>%
+      paste("\n") %>%
+      rlang::inform()
+  }
+
+  paste("Extracting {workflows} model fit with",
+        "`workflows::pull_workflow_fit(x) %>% tbl_regression(...)`") %>%
+  message()
+
+  tbl_regression(x = workflows::pull_workflow_fit(x), ...)
+}
+
+#' @export
+#' @rdname tbl_regression_methods
 tbl_regression.survreg <- function(x, tidy_fun = function(x, ...) broom::tidy(x, ...) %>% dplyr::filter(.data$term != "Log(scale)"), ...) {
   tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
 }
