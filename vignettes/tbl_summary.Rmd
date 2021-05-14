@@ -208,6 +208,7 @@ tibble::tribble(
   "`modify_header()`",           "update column headers",   
   "`modify_footnote()`",         "update column footnote",   
   "`modify_spanning_header()`",  "update spanning headers",   
+  "`modify_caption()`",          "update table caption/title",   
   "`bold_labels()`",             "bold variable labels",  
   "`bold_levels()`",             "bold variable levels",  
   "`italicize_labels()`",        "italicize variable labels",  
@@ -232,6 +233,7 @@ trial2 %>%
   modify_footnote(
     all_stat_cols() ~ "Median (IQR) or Frequency (%)"
   ) %>%
+  modify_caption("**Table 1. Patient Characteristics**") %>%
   bold_labels()
 ```
 

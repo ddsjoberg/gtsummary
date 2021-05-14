@@ -47,7 +47,7 @@
 #'
 #' @section captions:
 #' Captions are assigned based on output type.
-#' - `gt::gt(caption=)`, available in gt version >0.2.2
+#' - `gt::gt(caption=)`
 #' - `flextable::set_caption(caption=)`
 #' - `huxtable::set_caption(value=)`
 #' - `knitr::kable(caption=)`
