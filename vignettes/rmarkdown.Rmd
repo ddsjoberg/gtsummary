@@ -85,15 +85,15 @@ list(
     )
   ) %>%
   gt() %>%
-  cols_move_to_start(columns = vars(link, fns)) %>%
-  cols_hide(columns = vars(printer)) %>%
+  cols_move_to_start(columns = c(link, fns)) %>%
+  cols_hide(columns = c(printer)) %>%
   cols_label(link = md("**Print Engine**"), 
              fns = md("**Function**"), 
              HTML = md("**HTML**"), PDF = md("**PDF**"), 
              RTF = md("**RTF**"), Word = md("**Word**")) %>%
-  fmt_markdown(columns = vars(fns, link)) %>%
+  fmt_markdown(columns = c(fns, link)) %>%
   data_color(
-    columns = vars(HTML, PDF, RTF, Word),
+    columns = c(HTML, PDF, RTF, Word),
     colors = scales::col_factor(
       palette = c("#bae1ff", "#ffb3ba", "#ffdfba", "#ffffba", "#baffc9"),
       domain = NULL,
@@ -102,7 +102,7 @@ list(
     alpha = 0.8
   ) %>%
   text_transform(
-    locations = cells_body(columns = vars(HTML, PDF, RTF, Word)),
+    locations = cells_body(columns = c(HTML, PDF, RTF, Word)),
     fn = function(x) {
       dplyr::case_when(
         x == 1 ~ local_image(filename = path_figure[[1]]),
@@ -113,9 +113,9 @@ list(
       )
     }
   ) %>%
-  cols_width(vars(HTML, PDF, RTF, Word) ~ px(60),
-             vars(link) ~ px(110),
-             vars(link, fns) ~ px(140))
+  cols_width(c(HTML, PDF, RTF, Word) ~ px(60),
+             c(link) ~ px(110),
+             c(link, fns) ~ px(140))
 ```
 
 <!-- Printing key for table of output types. -->
@@ -133,7 +133,7 @@ tibble::tibble(
   gt() %>%
   cols_label(figure = md("**Key**"), desc = "") %>%
   data_color(
-    columns = vars(figure),
+    columns = c(figure),
     colors = scales::col_factor(
       palette = c("#bae1ff", "#ffb3ba", "#ffdfba", "#ffffba", "#baffc9"),
       domain = NULL,
@@ -142,7 +142,7 @@ tibble::tibble(
     alpha = 0.8
   ) %>%
   text_transform(
-    locations = cells_body(columns = vars(figure)),
+    locations = cells_body(columns = c(figure)),
     fn = function(x) {
       dplyr::case_when(
         x == 1 ~ local_image(filename = path_figure[[1]], height = 20),

@@ -62,7 +62,7 @@ trial %>%
                     Class = class(.x),
                     Label = attr(.x, "label"))) %>%  gt::gt() %>%
   gt::tab_source_note("Includes mix of continuous, dichotomous, and categorical variables") %>%
-  gt::fmt_markdown(columns = vars(Variable)) %>%
+  gt::fmt_markdown(columns = Variable) %>%
   gt::cols_align("left") %>%
   gt_compact_fun()
 ```
@@ -133,7 +133,7 @@ tibble::tribble(
   "`include=`",     "list of variables to include in summary table"
 ) %>%
   gt::gt() %>%
-  gt::fmt_markdown(columns = vars(Argument)) %>%
+  gt::fmt_markdown(columns = Argument) %>%
   gt_compact_fun()
 ```
 
@@ -195,7 +195,7 @@ tibble::tribble(
   "`add_q()`",           "add a column of q values to control for multiple comparisons"
 ) %>%
   gt::gt() %>%
-  gt::fmt_markdown(columns = vars(Function)) %>%
+  gt::fmt_markdown(columns = Function) %>%
   gt_compact_fun()
 ```
 
@@ -216,7 +216,7 @@ tibble::tribble(
   "`bold_p()`",                  "bold significant p-values"
 ) %>%
   gt::gt() %>%
-  gt::fmt_markdown(columns = vars(Function)) %>%
+  gt::fmt_markdown(columns = Function) %>%
   gt_compact_fun()
 ```
 
