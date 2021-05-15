@@ -13,10 +13,11 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' tbl <-
-#'   trial %>%
-#'   tbl_summary(by = trt) %>%
-#'   as_kable_extra()
+#' if (require("kableExtra"))
+#'   tbl <-
+#'     trial %>%
+#'     tbl_summary(by = trt) %>%
+#'     as_kable_extra()
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
                            strip_md_bold = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
