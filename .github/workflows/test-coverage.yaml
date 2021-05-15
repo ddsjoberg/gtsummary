@@ -8,8 +8,8 @@ name: test-coverage
 
 jobs:
   test-coverage:
-    # runs-on: ubuntu-16.04
-    runs-on: macOS-latest # 2020-01-23 erring on lme4 installation
+    runs-on: ubuntu-16.04
+    # runs-on: macOS-latest # 2020-01-23 erring on lme4 installation
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
