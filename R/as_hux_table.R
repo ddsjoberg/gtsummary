@@ -26,11 +26,12 @@
 #' @family gtsummary output types
 #' @author David Hugh-Jones
 #' @examples
-#' trial %>%
-#'   dplyr::select(trt, age, grade) %>%
-#'   tbl_summary(by = trt) %>%
-#'   add_p() %>%
-#'   as_hux_table()
+#' if (require("huxtable"))
+#'   trial %>%
+#'     dplyr::select(trt, age, grade) %>%
+#'     tbl_summary(by = trt) %>%
+#'     add_p() %>%
+#'     as_hux_table()
 #' @export
 
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
