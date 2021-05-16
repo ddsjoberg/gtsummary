@@ -82,7 +82,7 @@ gt::gtsave(as_gt(table1), file = file.path(tempdir(), "temp.png"))
 
 ```{r out.width = "30%", echo = FALSE}
 # Have to do this workaround since the README needs markdown format for GitHub page but a different format for the website.
-if (pkgdown::in_pkgdown()) {
+if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
   table1
 } else {
   knitr::include_graphics("man/figures/README-tbl_summary_print_simple-1.png")
@@ -111,7 +111,7 @@ gt::gtsave(as_gt(table2), file = file.path(tempdir(), "temp.png"))
 
 
 ```{r out.width = "60%", echo = FALSE}
-if (pkgdown::in_pkgdown()) {
+if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
   table2
 } else {
   knitr::include_graphics("man/figures/README-tbl_summary_print_extra-1.png")
@@ -134,7 +134,7 @@ gt::gtsave(as_gt(t1), file = file.path(tempdir(), "temp.png"))
 
 
 ```{r out.width = "40%", echo = FALSE}
-if (pkgdown::in_pkgdown()) {
+if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
   t1
 } else {
   knitr::include_graphics("man/figures/README-tbl_regression_printa-1.png")
@@ -168,7 +168,7 @@ gt::gtsave(as_gt(tbl_merge_ex1), file = file.path(tempdir(), "temp.png"))
 
 
 ```{r out.width = "60%", echo = FALSE}
-if (pkgdown::in_pkgdown()) {
+if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
   t3
 } else {
   knitr::include_graphics("man/figures/README-tbl_merge_ex1-1.png")

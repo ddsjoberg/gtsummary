@@ -71,12 +71,13 @@ column width after calling \code{as_flex_table()}.
 }
 
 \examples{
-as_flex_table_ex1 <-
-  trial \%>\%
-  select(trt, age, grade) \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_p() \%>\%
-  as_flex_table()
+if (requireNamespace("flextable"))
+  as_flex_table_ex1 <-
+    trial \%>\%
+    select(trt, age, grade) \%>\%
+    tbl_summary(by = trt) \%>\%
+    add_p() \%>\%
+    as_flex_table()
 }
 \seealso{
 Other gtsummary output types: 
