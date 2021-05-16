@@ -131,7 +131,7 @@ tibble::tribble(
   "`{N}`",          "number of observations"  
 ) %>%
   gt::gt() %>%
-  gt::fmt_markdown(columns = vars(Parameter)) %>%
+  gt::fmt_markdown(columns = c(Parameter)) %>%
   gt_compact_fun()
 ```
 

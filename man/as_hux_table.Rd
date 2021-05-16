@@ -55,11 +55,12 @@ Any one of these commands may be omitted using the \verb{include=} argument.
 }
 
 \examples{
-trial \%>\%
-  dplyr::select(trt, age, grade) \%>\%
-  tbl_summary(by = trt) \%>\%
-  add_p() \%>\%
-  as_hux_table()
+if (requireNamespace("huxtable"))
+  trial \%>\%
+    dplyr::select(trt, age, grade) \%>\%
+    tbl_summary(by = trt) \%>\%
+    add_p() \%>\%
+    as_hux_table()
 }
 \seealso{
 Other gtsummary output types: 

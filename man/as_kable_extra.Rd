@@ -41,10 +41,11 @@ uses the standard markdown \verb{**} to bold headers, and they may need to be
 changed manually with kableExtra output.
 }
 \examples{
-tbl <-
-  trial \%>\%
-  tbl_summary(by = trt) \%>\%
-  as_kable_extra()
+if (requireNamespace("kableExtra"))
+  tbl <-
+    trial \%>\%
+    tbl_summary(by = trt) \%>\%
+    as_kable_extra()
 }
 \seealso{
 Other gtsummary output types: 

@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("flextable"))
 
 test_that("tbl_summary", {
   expect_error(tbl_summary(trial) %>% as_flex_table(), NA)

@@ -1,4 +1,8 @@
 skip_on_cran()
+skip_if_not(requireNamespace("flextable"))
+skip_if_not(requireNamespace("huxtable"))
+skip_if_not(requireNamespace("kableExtra"))
+
 
 test_that("no errors/warnings with all output types", {
   tbl <- trial %>%

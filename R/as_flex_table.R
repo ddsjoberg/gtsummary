@@ -37,12 +37,13 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' as_flex_table_ex1 <-
-#'   trial %>%
-#'   select(trt, age, grade) %>%
-#'   tbl_summary(by = trt) %>%
-#'   add_p() %>%
-#'   as_flex_table()
+#' if (requireNamespace("flextable"))
+#'   as_flex_table_ex1 <-
+#'     trial %>%
+#'     select(trt, age, grade) %>%
+#'     tbl_summary(by = trt) %>%
+#'     add_p() %>%
+#'     as_flex_table()
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
