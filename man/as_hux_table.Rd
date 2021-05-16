@@ -55,7 +55,7 @@ Any one of these commands may be omitted using the \verb{include=} argument.
 }
 
 \examples{
-if (require("huxtable"))
+if (requireNamespace("huxtable"))
   trial \%>\%
     dplyr::select(trt, age, grade) \%>\%
     tbl_summary(by = trt) \%>\%

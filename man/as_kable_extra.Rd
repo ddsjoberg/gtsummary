@@ -41,7 +41,7 @@ uses the standard markdown \verb{**} to bold headers, and they may need to be
 changed manually with kableExtra output.
 }
 \examples{
-if (require("kableExtra"))
+if (requireNamespace("kableExtra"))
   tbl <-
     trial \%>\%
     tbl_summary(by = trt) \%>\%

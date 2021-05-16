@@ -13,7 +13,7 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' if (require("kableExtra"))
+#' if (requireNamespace("kableExtra"))
 #'   tbl <-
 #'     trial %>%
 #'     tbl_summary(by = trt) %>%

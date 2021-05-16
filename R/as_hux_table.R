@@ -26,7 +26,7 @@
 #' @family gtsummary output types
 #' @author David Hugh-Jones
 #' @examples
-#' if (require("huxtable"))
+#' if (requireNamespace("huxtable"))
 #'   trial %>%
 #'     dplyr::select(trt, age, grade) %>%
 #'     tbl_summary(by = trt) %>%

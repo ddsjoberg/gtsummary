@@ -37,7 +37,7 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' if (require("flextable"))
+#' if (requireNamespace("flextable"))
 #'   as_flex_table_ex1 <-
 #'     trial %>%
 #'     select(trt, age, grade) %>%
