@@ -92,9 +92,9 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
 
         # correcting percentages -----------------------------------------------
         if ("p_miss" %in% names(df_stats)) {
-          p_nonmiss <- mutate(df_stats, p_miss = .data$N_miss / .data$N_obs)
+          df_stats <- mutate(df_stats, p_miss = .data$N_miss / .data$N_obs)
         }
-        if ("p_miss" %in% names(df_stats)) {
+        if ("p_nonmiss" %in% names(df_stats)) {
           df_stats <- mutate(df_stats, p_nonmiss = .data$N_nonmiss / .data$N_obs)
         }
         if ("p_miss_unweighted" %in% names(df_stats)) {
