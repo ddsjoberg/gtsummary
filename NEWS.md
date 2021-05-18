@@ -18,6 +18,8 @@
 
 * Bug fix for {Hmisc} labeled data with `tbl_summary()` (#876)
 
+* Bug fix in `add_n.tbl_summary()` to proportion missing in some cases. (#903)
+
 * Updates to the default formatting functions in the `add_glance_*()` functions. P-values are now styled with `style_pvalue()` and No. Obs. and degrees of freedom with `style_number()` (#870)
 
 # gtsummary 1.4.0
