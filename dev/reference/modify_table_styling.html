@@ -98,7 +98,7 @@ gtsummary table by directly modifying .$table_styling" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.0.9007</span>
       </span>
     </div>
 
@@ -254,7 +254,8 @@ columns/rows in <code>columns=</code> and <code>rows=</code></p></td>
     <tr>
       <th>text_format</th>
       <td><p>string indicated which type of text formatting to apply to the rows and columns.
-Must be one of <code><a href='https://rdrr.io/r/base/c.html'>c("bold", "italic", "indent")</a></code></p></td>
+Must be one of <code><a href='https://rdrr.io/r/base/c.html'>c("bold", "italic", "indent", "indent2")</a></code>. Do not assign
+both <code>"indent"</code> and <code>"indent2"</code> to the same cell.</p></td>
     </tr>
     <tr>
       <th>undo_text_format</th>
@@ -305,7 +306,7 @@ an external object named <code>variable</code> in the following expression
 <p>There are planned updates to the implementation of column merging.
 Currently, this function replaces the numeric column with a
 formatted character column following <code>cols_merge_pattern=</code>.
-Once <code><a href='https://rdrr.io/pkg/gt/man/cols_merge.html'>gt::cols_merge()</a></code> gains the <code>rows=</code> argument the
+Once <code><a href='https://gt.rstudio.com/reference/cols_merge.html'>gt::cols_merge()</a></code> gains the <code>rows=</code> argument the
 implementation will be updated to use it, which will keep
 numeric columns numeric. For the <em>vast majority</em> of users,
 <em>the planned change will be go unnoticed</em>.</p>
