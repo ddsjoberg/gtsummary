@@ -111,7 +111,7 @@ dichotomous variables appropriate for logistic regression with glm." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
       </span>
     </div>
 
@@ -279,7 +279,7 @@ functions. Default is <code><a href='https://tidyselect.r-lib.org/reference/ever
     </tr>
     <tr>
       <th>tidy_fun</th>
-      <td><p>Option to specify a particular tidier function if the
+      <td><p>Option to specify a particular tidier function for the
 model. Default is to use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy</a></code>, but if an error occurs
 then tidying of the model is attempted with <code><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>parameters::model_parameters()</a></code>,
 if installed.</p></td>
@@ -355,6 +355,11 @@ random intercept model, the formula may be <code>formula = "{y} ~ {x} + (1 | gea
 <p>The default method for <code><a href='tbl_regression.html'>tbl_regression()</a></code> model summary uses <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(x)</a></code>
 to perform the initial tidying of the model object. There are, however,
 a few models that use <a href='tbl_regression_methods.html'>modifications</a>.</p><ul>
+<li><p><code>"parsnip/workflows"</code>: If the model was prepared using parsnip/workflows,
+the original model fit is extracted and the original <code>x=</code> argument
+is replaced with the model fit. This will typically go unnoticed; however,if you've
+provided a custom tidier in <code>tidy_fun=</code> the tidier will be applied to the model
+fit object and not the parsnip/workflows object.</p></li>
 <li><p><code>"survreg"</code>: The scale parameter is removed, <code>broom::tidy(x) %&gt;% dplyr::filter(term != "Log(scale)")</code></p></li>
 <li><p><code>"multinom"</code>: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)</p></li>
 <li><p><code>"gam"</code>: Uses the internal tidier <code><a href='custom_tidiers.html'>tidy_gam()</a></code> to print both parametric and smooth terms.</p></li>

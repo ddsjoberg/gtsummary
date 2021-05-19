@@ -46,7 +46,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
 
       
 
-      </header><script src="gtsummary_definition_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><script src="gtsummary_definition_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Definition of a gtsummary Object</h1>
@@ -150,7 +150,7 @@
 <h2 class="hasAnchor">
 <a href="#structure-of-a-gtsummary-object" class="anchor"></a>Structure of a {gtsummary} object</h2>
 <p>Every {gtsummary} object is a list comprising of, at minimum, these elements:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>.<span class="sc">$</span>table_body    .<span class="sc">$</span>table_styling         </span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>.<span class="op">$</span>table_body    .<span class="op">$</span>table_styling         </span></code></pre></div>
 <div id="table_body" class="section level4">
 <h4 class="hasAnchor">
 <a href="#table_body" class="anchor"></a>table_body</h4>
@@ -160,14 +160,14 @@
 <span class="co">#&gt; # A tibble: 8 x 7</span>
 <span class="co">#&gt;   variable var_type    var_label     row_type label        stat_1     stat_2    </span>
 <span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;     </span>
-<span class="co">#&gt; 1 age      continuous  Age           label    Age          46 (37, 5~ 48 (39, 5~</span>
+<span class="co">#&gt; 1 age      continuous  Age           label    Age          46 (37, 5… 48 (39, 5…</span>
 <span class="co">#&gt; 2 age      continuous  Age           missing  Unknown      7          4         </span>
 <span class="co">#&gt; 3 grade    categorical Grade         label    Grade        &lt;NA&gt;       &lt;NA&gt;      </span>
 <span class="co">#&gt; 4 grade    categorical Grade         level    I            35 (36%)   33 (32%)  </span>
 <span class="co">#&gt; 5 grade    categorical Grade         level    II           32 (33%)   36 (35%)  </span>
 <span class="co">#&gt; 6 grade    categorical Grade         level    III          31 (32%)   33 (32%)  </span>
-<span class="co">#&gt; 7 response dichotomous Tumor Respon~ label    Tumor Respo~ 28 (29%)   33 (34%)  </span>
-<span class="co">#&gt; 8 response dichotomous Tumor Respon~ missing  Unknown      3          4</span></code></pre></div>
+<span class="co">#&gt; 7 response dichotomous Tumor Respon… label    Tumor Respo… 28 (29%)   33 (34%)  </span>
+<span class="co">#&gt; 8 response dichotomous Tumor Respon… missing  Unknown      3          4</span></code></pre></div>
 </div>
 <div id="table_styling" class="section level4">
 <h4 class="hasAnchor">
@@ -366,23 +366,23 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <code class="sourceCode R"><span class="va">tbl_regression_ex</span><span class="op">$</span><span class="va">table_styling</span>
 <span class="co">#&gt; $header</span>
 <span class="co">#&gt; # A tibble: 24 x 7</span>
-<span class="co">#&gt;    column   hide  align interpret_label label  interpret_spanni~ spanning_header</span>
+<span class="co">#&gt;    column   hide  align interpret_label label  interpret_spanni… spanning_header</span>
 <span class="co">#&gt;    &lt;chr&gt;    &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;           &lt;chr&gt;  &lt;chr&gt;             &lt;chr&gt;          </span>
-<span class="co">#&gt;  1 variable TRUE  cent~ gt::md          varia~ gt::md            &lt;NA&gt;           </span>
-<span class="co">#&gt;  2 var_lab~ TRUE  cent~ gt::md          var_l~ gt::md            &lt;NA&gt;           </span>
-<span class="co">#&gt;  3 var_type TRUE  cent~ gt::md          var_t~ gt::md            &lt;NA&gt;           </span>
-<span class="co">#&gt;  4 referen~ TRUE  cent~ gt::md          refer~ gt::md            &lt;NA&gt;           </span>
-<span class="co">#&gt;  5 row_type TRUE  cent~ gt::md          row_t~ gt::md            &lt;NA&gt;           </span>
-<span class="co">#&gt;  6 header_~ TRUE  cent~ gt::md          heade~ gt::md            &lt;NA&gt;           </span>
-<span class="co">#&gt;  7 N_obs    TRUE  cent~ gt::md          N_obs  gt::md            &lt;NA&gt;           </span>
-<span class="co">#&gt;  8 N        TRUE  cent~ gt::md          **N**  gt::md            &lt;NA&gt;           </span>
-<span class="co">#&gt;  9 coeffic~ TRUE  cent~ gt::md          coeff~ gt::md            &lt;NA&gt;           </span>
-<span class="co">#&gt; 10 coeffic~ TRUE  cent~ gt::md          coeff~ gt::md            &lt;NA&gt;           </span>
-<span class="co">#&gt; # ... with 14 more rows</span>
+<span class="co">#&gt;  1 variable TRUE  cent… gt::md          varia… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  2 var_lab… TRUE  cent… gt::md          var_l… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  3 var_type TRUE  cent… gt::md          var_t… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  4 referen… TRUE  cent… gt::md          refer… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  5 row_type TRUE  cent… gt::md          row_t… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  6 header_… TRUE  cent… gt::md          heade… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  7 N_obs    TRUE  cent… gt::md          N_obs  gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  8 N        TRUE  cent… gt::md          **N**  gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt;  9 coeffic… TRUE  cent… gt::md          coeff… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt; 10 coeffic… TRUE  cent… gt::md          coeff… gt::md            &lt;NA&gt;           </span>
+<span class="co">#&gt; # … with 14 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $footnote</span>
 <span class="co">#&gt; # A tibble: 0 x 4</span>
-<span class="co">#&gt; # ... with 4 variables: column &lt;chr&gt;, rows &lt;list&gt;, text_interpret &lt;chr&gt;,</span>
+<span class="co">#&gt; # … with 4 variables: column &lt;chr&gt;, rows &lt;list&gt;, text_interpret &lt;chr&gt;,</span>
 <span class="co">#&gt; #   footnote &lt;chr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $footnote_abbrev</span>
@@ -425,7 +425,7 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $cols_merge</span>
 <span class="co">#&gt; # A tibble: 0 x 3</span>
-<span class="co">#&gt; # ... with 3 variables: column &lt;chr&gt;, rows &lt;list&gt;, pattern &lt;chr&gt;</span></code></pre></div>
+<span class="co">#&gt; # … with 3 variables: column &lt;chr&gt;, rows &lt;list&gt;, pattern &lt;chr&gt;</span></code></pre></div>
 </div>
 </div>
 <div id="constructing-a-gtsummary-object" class="section level2">
