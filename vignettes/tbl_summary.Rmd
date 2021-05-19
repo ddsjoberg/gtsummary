@@ -29,6 +29,18 @@ gt_compact_fun <- function(x) {
 }
 ```
 
+```{r, echo = FALSE, results = 'asis'}
+# we do NOT want the vignette to build on CRAN...it's taking too long
+if (!identical(Sys.getenv("IN_PKGDOWN"), "true") && 
+    !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk")) {
+  msg <- 
+    paste("View this vignette on the",
+          "[package website](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html).")
+  cat(msg)
+  knitr::knit_exit()
+}
+```
+
 ## Introduction
 
 The `tbl_summary()` function calculates **descriptive statistics** for continuous, categorical, and dichotomous variables in **R**, and presents the results in a **beautiful, customizable summary table** ready for publication (for example, Table 1 or demographic tables).
