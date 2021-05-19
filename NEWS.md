@@ -1,3 +1,5 @@
+# gtsummary (development version)
+
 # gtsummary 1.4.1
 
 * Updated `tbl_regression()` to be compatible with models created with the {parsnip} and {workflows} packages (#890, #647)
