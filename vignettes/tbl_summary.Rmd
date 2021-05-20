@@ -32,7 +32,7 @@ gt_compact_fun <- function(x) {
 ```{r, echo = FALSE, results = 'asis'}
 # we do NOT want the vignette to build on CRAN...it's taking too long
 if (!identical(Sys.getenv("IN_PKGDOWN"), "true") && 
-    !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk")) {
+    !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
   msg <- 
     paste("View this vignette on the",
           "[package website](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html).")

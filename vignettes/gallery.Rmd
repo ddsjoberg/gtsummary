@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 ```{r, echo = FALSE, results = 'asis'}
 # we do NOT want the vignette to build on CRAN...it's taking too long
 if (!identical(Sys.getenv("IN_PKGDOWN"), "true") && 
-    !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk")) {
+    !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
   msg <- 
     paste("View this vignette on the",
           "[package website](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html).")
@@ -37,7 +37,7 @@ library(gtsummary); library(gt); library(survival)
 library(dplyr); library(stringr); library(purrr); library(forcats); library(tidyr)
 ```
 
----
+<hr>
 
 ## Summary Tables
 <a id="table-header"></a>
@@ -58,7 +58,7 @@ trial %>%
   modify_spanning_header(all_stat_cols() ~ "**Chemotherapy Treatment**")
 ```
 
----
+<hr>
 <a id="continuous2"></a>
 
 Show continuous summary statistics on multiple lines.
@@ -78,7 +78,7 @@ trial %>%
   italicize_levels()
 ```
 
----
+<hr>
 <a id="modify-pvalue"></a>
 
 Modify the function that formats the p-values, change variable labels, updating tumor response header, and add a correction for multiple testing.
@@ -95,7 +95,7 @@ trial %>%
   add_q()
 ```
 
----
+<hr>
 <a id="include-missing"></a>
 
 Include missing tumor response as column using `fct_explicit_na()`.
@@ -113,7 +113,7 @@ trial %>%
   )  
 ```
 
----
+<hr>
 <a id="add_difference"></a>
 
 Report treatment differences between two groups.
@@ -135,7 +135,7 @@ trial %>%
   modify_footnote(all_stat_cols() ~ NA)
 ```
 
----
+<hr>
 <a id="paired-test"></a>
 
 Paired t-test
@@ -162,7 +162,7 @@ trial_paired %>%
   add_p(test = marker ~ "paired.t.test", group = id)
 ```
 
----
+<hr>
 <a id="compare-to-ref"></a>
 
 Include p-values comparing all groups to a single reference group.
@@ -202,7 +202,7 @@ tbl_merge(list(t0, t1, t2)) %>%
   )
 ```
 
----
+<hr>
 <a id="mean-ci"></a>
 
 Add additional statistics as additional columns.
@@ -229,7 +229,7 @@ tbl_merge(list(t1, t2)) %>%
   modify_spanning_header(everything() ~ NA_character_)
 ```
 
----
+<hr>
 <a id="cross_tab_continuous"></a>
 
 It's often needed to summarize a continuous by two categorical variables.
@@ -258,7 +258,7 @@ trial %>%
   modify_spanning_header(all_stat_cols() ~ "**Treatment Assignment**")
 ```
 
----
+<hr>
 <a id="tbl_strata"></a>
 
 Build a summary table stratified by more than one variable.
@@ -275,7 +275,7 @@ trial %>%
   )
 ```
 
----
+<hr>
 
 ## Regression Tables
 <a id="add_nevent"></a>
@@ -293,7 +293,7 @@ trial %>%
   add_nevent()
 ```
 
----
+<hr>
 <a id="side-by-side"></a>
 
 Include two related models side-by-side with descriptive statistics.
@@ -320,7 +320,7 @@ tbl_merge(
 reset_gtsummary_theme()
 ```
 
----
+<hr>
 <a id="add_nevent-levels"></a>
 
 Include the number of events at each level of a categorical predictor.
@@ -337,7 +337,7 @@ trial %>%
   add_nevent(location = "level")
 ```
 
----
+<hr>
 <a id="tbl_uvregression-x"></a>
 
 Regression model where the covariate remains the same, and the outcome changes.
@@ -358,7 +358,7 @@ trial %>%
   modify_footnote(estimate ~ "Values larger than 0 indicate larger values in the Drug B group.")
 ```
 
----
+<hr>
 <a id="wald-ci"></a>
 
 Implement a custom tidier to report Wald confidence intervals.
@@ -378,7 +378,7 @@ lm(age ~ grade + marker, trial) %>%
   tbl_regression(tidy_fun = my_tidy)
 ```
 
----
+<hr>
 <a id="add_significance_stars"></a>
 
 Use significance stars on estimates with low p-values.
