@@ -238,13 +238,13 @@ add_tbl_id_to_quo <- function(x, table_body, tbl_id, tbl_id_colname) {
   # if quosure, add tbl_id
   if (inherits(x, "quosure")) {
     return(
-      rlang::quo(!!sym(paste0(tbl_id_colname)) == !!tbl_id & (!!rlang::f_rhs(x))) %>%
+      rlang::quo(!!sym(tbl_id_colname) == !!tbl_id & (!!rlang::f_rhs(x))) %>%
         structure(.Environment = attr(x, ".Environment"))
     )
   }
 
   # if expression, add tbl_id
-  expr(!!sym(paste0(tbl_id_colname)) == !!tbl_id & (!!x))
+  expr(!!sym(tbl_id_colname) == !!tbl_id & (!!x))
 }
 
 tbl_id_varname <- function(colnames) {
