@@ -24,8 +24,9 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
   if (digits == 1) {
     p_fmt <-
       case_when(
-        x > 1 ~ NA_character_,
-        x < 0 ~ NA_character_,
+        # allowing some leeway for numeric storage errors
+        x > 1 + 1e-15 ~ NA_character_,
+        x < 0 - 1e-15 ~ NA_character_,
         x > 0.9 ~ paste0(">", style_number(
           x = 0.9, digits = 1, big.mark = big.mark,
           decimal.mark = decimal.mark, ...
@@ -52,8 +53,8 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
   else if (digits == 2) {
     p_fmt <-
       case_when(
-        x > 1 ~ NA_character_,
-        x < 0 ~ NA_character_,
+        x > 1 + 1e-15 ~ NA_character_,
+        x < 0 - 1e-15 ~ NA_character_,
         x > 0.99 ~ paste0(">", style_number(
           x = 0.99, digits = 2, big.mark = big.mark,
           decimal.mark = decimal.mark, ...
@@ -77,8 +78,8 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
   else if (digits == 3) {
     p_fmt <-
       case_when(
-        x > 1 ~ NA_character_,
-        x < 0 ~ NA_character_,
+        x > 1 + 1e-15 ~ NA_character_,
+        x < 0 - 1e-15 ~ NA_character_,
         x > 0.999 ~ paste0(">", style_number(
           x = 0.999, digits = 3, big.mark = big.mark,
           decimal.mark = decimal.mark, ...
