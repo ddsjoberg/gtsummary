@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("kableExtra"))
 
 test_that("tbl_summary", {
   expect_error(tbl_summary(trial) %>% as_kable_extra(), NA)
@@ -59,4 +60,19 @@ test_that("tbl_merge/tbl_stack", {
   expect_warning(tbl_merge_ex1 %>% as_kable_extra(), NA)
   expect_error(tbl_stack_ex1 %>% as_kable_extra(), NA)
   expect_warning(tbl_stack_ex1 %>% as_kable_extra(), NA)
+})
+
+test_that("indent2", {
+  expect_error(
+    trial %>%
+      select(age) %>%
+      tbl_summary() %>%
+      modify_table_styling(
+        columns = label,
+        rows = variable == "age" & row_type != "label",
+        text_format = "indent2"
+      ) %>%
+      as_kable_extra(),
+    NA
+  )
 })

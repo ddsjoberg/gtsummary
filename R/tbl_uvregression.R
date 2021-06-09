@@ -362,6 +362,10 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   names(results$tbls) <- all_vars
   class(results) <- c("tbl_uvregression", "gtsummary")
 
+  # update column header if `x=` was used --------------------------------------
+  if (!is.null(x))
+    results <- modify_table_styling(results, columns = "label", label = "**Outcome**")
+
   # creating a meta_data table -------------------------------------------------
   # (this will be used in subsequent functions, eg add_global_p)
   results$meta_data <-

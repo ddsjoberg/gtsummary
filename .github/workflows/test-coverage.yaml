@@ -9,7 +9,7 @@ name: test-coverage
 jobs:
   test-coverage:
     runs-on: ubuntu-16.04
-    # runs-on: macOS-latest 2020-01-23 erring on lme4 installation
+    # runs-on: macOS-latest # 2020-01-23 erring on lme4 installation
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -35,6 +35,12 @@ jobs:
       - name: Install XQuartz on macOS
         if: runner.os == 'macOS'
         run: brew install xquartz --cask
+
+      - name: Install libcurl on Linux
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y libcurl4-openssl-dev
 
       - name: Query dependencies
         run: |

@@ -128,24 +128,20 @@ table_styling_to_gt_calls <- function(x, ...) {
   gt_calls <- list()
 
   # gt -------------------------------------------------------------------------
-  groupname_col <- switch("groupname_col" %in% x$table_styling$header$column,
-    "groupname_col"
-  )
-  if (!is.null(x$table_styling$caption) && "caption" %in% names(as.list(gt::gt))) {
-    caption <- rlang::call2(attr(x$table_styling$caption, "text_interpret"), x$table_styling$caption)
-    gt_calls[["gt"]] <-
-      expr(gt::gt(
-        data = x$table_body, groupname_col = !!groupname_col,
-        caption = !!caption, !!!list(...)
-      ))
-  }
-  else {
-    if (!is.null(x$table_styling$caption)) {
-      inform("Captions are not supported in this version of the {gt} package.")
-    }
-    gt_calls[["gt"]] <-
-      expr(gt::gt(data = x$table_body, groupname_col = !!groupname_col, !!!list(...)))
-  }
+  groupname_col <-
+    switch("groupname_col" %in% x$table_styling$header$column, "groupname_col")
+  caption <-
+    switch(!is.null(x$table_styling$caption),
+           rlang::call2(attr(x$table_styling$caption, "text_interpret"),
+                        x$table_styling$caption))
+  gt_calls[["gt"]] <-
+    expr(gt::gt(
+      data = x$table_body,
+      groupname_col = !!groupname_col,
+      caption = !!caption,
+      !!!list(...)
+    ))
+
   # fmt_missing ----------------------------------------------------------------
   gt_calls[["fmt_missing"]] <-
     expr(
@@ -189,6 +185,20 @@ table_styling_to_gt_calls <- function(x, ...) {
         locations = gt::cells_body(
           columns = !!df_indent$column[[.x]],
           rows = !!df_indent$row_numbers[[.x]]
+        )
+      ))
+    )
+
+  # indent2 --------------------------------------------------------------------
+  df_indent2 <- x$table_styling$text_format %>% filter(.data$format_type == "indent2")
+  gt_calls[["tab_style_indent2"]] <-
+    map(
+      seq_len(nrow(df_indent2)),
+      ~ expr(gt::tab_style(
+        style = gt::cell_text(indent = gt::px(20), align = "left"),
+        locations = gt::cells_body(
+          columns = !!df_indent2$column[[.x]],
+          rows = !!df_indent2$row_numbers[[.x]]
         )
       ))
     )

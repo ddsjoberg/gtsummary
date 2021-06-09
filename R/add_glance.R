@@ -11,8 +11,10 @@
 #' @param label List of formulas specifying statistic labels,
 #' e.g. `list(r.squared ~ "R2", p.value ~ "P")`
 #' @param fmt_fun List of formulas where the LHS is a statistic and the RHS
-#' is a function to format/round the statistics. The default is
-#' `style_sigfig(x, digits = 3)`
+#' is a function to format/round the statistics. The default is to round
+#' the number of observations and degrees of freedom to the nearest integer,
+#' p-values are styled with `style_pvalue()` and the remaining statistics
+#' are styled with `style_sigfig(x, digits = 3)`
 #' @param glance_fun function that returns model statistics. Default is
 #' `broom::glance()`. Custom functions must return a single row tibble.
 #' @param sep1 Separator between statistic name and statistic.
@@ -218,19 +220,21 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     )
 
   df_fmt_fun <-
-    tibble(
-      glance_statistic = df_glance$variable,
-      fmt_fun = list(purrr::partial(style_sigfig, digits = 3))
-    )
-
-  if (!is.null(fmt_fun)) {
-    df_fmt_fun <-
-      df_fmt_fun %>%
-      dplyr::rows_update(
-        enframe(fmt_fun, name = "glance_statistic", value = "fmt_fun"),
-        by = "glance_statistic"
+    tibble(glance_statistic = df_glance$variable) %>%
+    mutate(
+      fmt_fun = map(
+        .data$glance_statistic,
+        function(.x) {
+          if (.x %in% c("nobs", "df", "df.residual")) {
+            return(fmt_fun[[.x]] %||% style_number)
+          }
+          if (.x %in% c("p.value")) {
+            return(fmt_fun[[.x]] %||% x$inputs$pvalue_fun)
+          }
+          return(fmt_fun[[.x]] %||% purrr::partial(style_sigfig, digits = 3))
+        }
       )
-  }
+    )
 
   # return objects needed to finalize glance stats
   list(df_glance = df_glance, df_fmt_fun = df_fmt_fun)

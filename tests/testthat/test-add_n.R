@@ -61,6 +61,27 @@ test_that("no errors/warnings with standard use wit continuous2", {
     statistic = "{N}{n}{n_miss}{p}{p_miss}",
     footnote = TRUE
   ), NA)
+
+  expect_equal(
+    data.frame(x = c(1,2,NA, NA, NA, 1, 2, 1),
+               y = c(rep(0,4), rep(1,4))) %>%
+      tbl_summary(by = y) %>%
+      add_n(statistic = "{n_miss}/{N} = {p_miss}%") %>%
+      as_tibble(col_labels = FALSE) %>%
+      purrr::pluck("n", 1),
+    "3/8 = 38%"
+  )
+
+  expect_equal(
+    data.frame(x = c(1,2,NA, NA, NA, 1, 2, 1),
+               y = c(rep(0,4), rep(1,4))) %>%
+      select(x) %>%
+      tbl_summary() %>%
+      add_n(statistic = "{n_miss}/{N} = {p_miss}%") %>%
+      as_tibble(col_labels = FALSE) %>%
+      purrr::pluck("n", 1),
+    "3/8 = 38%"
+  )
 })
 
 

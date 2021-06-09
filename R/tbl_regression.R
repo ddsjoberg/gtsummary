@@ -13,6 +13,11 @@
 #' to perform the initial tidying of the model object. There are, however,
 #' a few models that use [modifications][tbl_regression_methods].
 #'
+#' - `"parsnip/workflows"`: If the model was prepared using parsnip/workflows,
+#' the original model fit is extracted and the original `x=` argument
+#' is replaced with the model fit. This will typically go unnoticed; however,if you've
+#' provided a custom tidier in `tidy_fun=` the tidier will be applied to the model
+#' fit object and not the parsnip/workflows object.
 #' - `"survreg"`: The scale parameter is removed, `broom::tidy(x) %>% dplyr::filter(term != "Log(scale)")`
 #' - `"multinom"`: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 #' - `"gam"`: Uses the internal tidier `tidy_gam()` to print both parametric and smooth terms.
@@ -55,7 +60,7 @@
 #' and return a string that is the rounded/formatted p-value (e.g.
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
-#' @param tidy_fun Option to specify a particular tidier function if the
+#' @param tidy_fun Option to specify a particular tidier function for the
 #' model. Default is to use `broom::tidy`, but if an error occurs
 #' then tidying of the model is attempted with `parameters::model_parameters()`,
 #' if installed.

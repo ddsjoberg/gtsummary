@@ -96,7 +96,7 @@ for the number of events (when applicable).
 
 Captions are assigned based on output type.
 \itemize{
-\item \code{gt::gt(caption=)}, available in gt version >0.2.2
+\item \code{gt::gt(caption=)}
 \item \code{flextable::set_caption(caption=)}
 \item \code{huxtable::set_caption(value=)}
 \item \code{knitr::kable(caption=)}

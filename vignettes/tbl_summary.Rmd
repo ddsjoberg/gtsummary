@@ -29,6 +29,18 @@ gt_compact_fun <- function(x) {
 }
 ```
 
+```{r, echo = FALSE, results = 'asis'}
+# we do NOT want the vignette to build on CRAN...it's taking too long
+if (!identical(Sys.getenv("IN_PKGDOWN"), "true") && 
+    !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
+  msg <- 
+    paste("View this vignette on the",
+          "[package website](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html).")
+  cat(msg)
+  knitr::knit_exit()
+}
+```
+
 ## Introduction
 
 The `tbl_summary()` function calculates **descriptive statistics** for continuous, categorical, and dichotomous variables in **R**, and presents the results in a **beautiful, customizable summary table** ready for publication (for example, Table 1 or demographic tables).
@@ -62,7 +74,7 @@ trial %>%
                     Class = class(.x),
                     Label = attr(.x, "label"))) %>%  gt::gt() %>%
   gt::tab_source_note("Includes mix of continuous, dichotomous, and categorical variables") %>%
-  gt::fmt_markdown(columns = vars(Variable)) %>%
+  gt::fmt_markdown(columns = Variable) %>%
   gt::cols_align("left") %>%
   gt_compact_fun()
 ```
@@ -133,7 +145,7 @@ tibble::tribble(
   "`include=`",     "list of variables to include in summary table"
 ) %>%
   gt::gt() %>%
-  gt::fmt_markdown(columns = vars(Argument)) %>%
+  gt::fmt_markdown(columns = Argument) %>%
   gt_compact_fun()
 ```
 
@@ -174,7 +186,7 @@ tibble::tribble(
 
 ```{r out.width = "80%", echo = FALSE, fig.align='center'}
 # print picture of slide if in packagedown so not included in CRAN
-if (pkgdown::in_pkgdown()) {
+if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
   knitr::include_graphics("https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/crayon_images/crayon-selectors.png")
 }
 ```
@@ -195,7 +207,7 @@ tibble::tribble(
   "`add_q()`",           "add a column of q values to control for multiple comparisons"
 ) %>%
   gt::gt() %>%
-  gt::fmt_markdown(columns = vars(Function)) %>%
+  gt::fmt_markdown(columns = Function) %>%
   gt_compact_fun()
 ```
 
@@ -208,6 +220,7 @@ tibble::tribble(
   "`modify_header()`",           "update column headers",   
   "`modify_footnote()`",         "update column footnote",   
   "`modify_spanning_header()`",  "update spanning headers",   
+  "`modify_caption()`",          "update table caption/title",   
   "`bold_labels()`",             "bold variable labels",  
   "`bold_levels()`",             "bold variable levels",  
   "`italicize_labels()`",        "italicize variable labels",  
@@ -215,7 +228,7 @@ tibble::tribble(
   "`bold_p()`",                  "bold significant p-values"
 ) %>%
   gt::gt() %>%
-  gt::fmt_markdown(columns = vars(Function)) %>%
+  gt::fmt_markdown(columns = Function) %>%
   gt_compact_fun()
 ```
 
@@ -232,6 +245,7 @@ trial2 %>%
   modify_footnote(
     all_stat_cols() ~ "Median (IQR) or Frequency (%)"
   ) %>%
+  modify_caption("**Table 1. Patient Characteristics**") %>%
   bold_labels()
 ```
 

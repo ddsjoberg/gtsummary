@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("flextable"))
 
 test_that("tbl_summary", {
   expect_error(tbl_summary(trial) %>% as_flex_table(), NA)
@@ -60,4 +61,19 @@ test_that("tbl_merge/tbl_stack", {
 
   expect_error(as_flex_table(tbl_merge_ex1), NA)
   expect_warning(as_flex_table(tbl_merge_ex1), NA)
+})
+
+test_that("indent2", {
+  expect_error(
+    trial %>%
+      select(age) %>%
+      tbl_summary() %>%
+      modify_table_styling(
+        columns = label,
+        rows = variable == "age" & row_type != "label",
+        text_format = "indent2"
+      ) %>%
+      as_flex_table(),
+    NA
+  )
 })

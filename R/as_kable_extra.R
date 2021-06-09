@@ -13,10 +13,11 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' tbl <-
-#'   trial %>%
-#'   tbl_summary(by = trt) %>%
-#'   as_kable_extra()
+#' if (requireNamespace("kableExtra"))
+#'   tbl <-
+#'     trial %>%
+#'     tbl_summary(by = trt) %>%
+#'     as_kable_extra()
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
                            strip_md_bold = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
@@ -106,6 +107,16 @@ table_styling_to_kable_extra_calls <- function(x, ...) {
   if (nrow(df_indent) > 0) {
     kable_extra_calls[["add_indent"]] <-
       expr(kableExtra::add_indent(!!df_indent$row_numbers[[1]]))
+  }
+
+  # add_indent2 -----------------------------------------------------------------
+  df_indent2 <-
+    x$table_styling$text_format %>%
+    filter(.data$format_type == "indent2", .data$column == "label")
+
+  if (nrow(df_indent2) > 0) {
+    kable_extra_calls[["add_indent2"]] <-
+      expr(kableExtra::add_indent(!!df_indent2$row_numbers[[1]], level_of_indent = 2))
   }
 
   # add_header_above -----------------------------------------------------------

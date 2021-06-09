@@ -37,12 +37,13 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
-#' as_flex_table_ex1 <-
-#'   trial %>%
-#'   select(trt, age, grade) %>%
-#'   tbl_summary(by = trt) %>%
-#'   add_p() %>%
-#'   as_flex_table()
+#' if (requireNamespace("flextable"))
+#'   as_flex_table_ex1 <-
+#'     trial %>%
+#'     select(trt, age, grade) %>%
+#'     tbl_summary(by = trt) %>%
+#'     add_p() %>%
+#'     as_flex_table()
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -219,6 +220,25 @@ table_styling_to_flextable_calls <- function(x, ...) {
       i = !!df_padding$row_numbers[[.x]],
       j = !!df_padding$id[[.x]],
       padding.left = 15
+    ))
+  )
+
+  # padding2 -------------------------------------------------------------------
+  df_padding2 <-
+    x$table_styling$header %>%
+    select(.data$id, .data$column) %>%
+    inner_join(
+      x$table_styling$text_format %>%
+        filter(.data$format_type == "indent2"),
+      by = "column"
+    )
+
+  flextable_calls[["padding2"]] <- map(
+    seq_len(nrow(df_padding2)),
+    ~ expr(flextable::padding(
+      i = !!df_padding2$row_numbers[[.x]],
+      j = !!df_padding2$id[[.x]],
+      padding.left = 30
     ))
   )
 

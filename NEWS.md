@@ -1,6 +1,30 @@
 # gtsummary (development version)
 
-* Bug fix for Hmisc labelled data with tbl_summary() (#876 )
+* Updated `style_pvalue` to format p-values slightly larger than 1 and slightly lower than 0 (due to imprecise numeric storage on machines). (#907)
+
+# gtsummary 1.4.1
+
+* Updated `tbl_regression()` to be compatible with models created with the {parsnip} and {workflows} packages (#890, #647)
+
+* Added the `modify_table_styling(text_format = "indent2")` option to double indent a row. (#864)
+
+* Messaging update when `inline_text.gtsummary()` suspects a variable has been repeated in the gtsummary table. (#855)
+
+* Bug fix in `add_p.tbl_summary()` for columns that are all `NA`. These variables no longer error; rather, a message is printed indicating the p-value is not possible to calculate. (#889)
+
+* Updated `tbl_svysummary()` to be compatible with {srvyr} package (#886)
+
+* Updated default header when using `tbl_uvregression(x=)` to `"**Outcome**"` (#867)
+
+* The `tbl_summary(by=)` variable is now added to `include=` by default (#871)
+
+* Variables are converted to numeric before being passed to `wilcox.test()` in `add_p()`. This avoids an error when a date difference is passed. (#880)
+
+* Bug fix for {Hmisc} labeled data with `tbl_summary()` (#876)
+
+* Bug fix in `add_n.tbl_summary()` to proportion missing in some cases. (#903)
+
+* Updates to the default formatting functions in the `add_glance_*()` functions. P-values are now styled with `style_pvalue()` and No. Obs. and degrees of freedom with `style_number()` (#870)
 
 # gtsummary 1.4.0
 

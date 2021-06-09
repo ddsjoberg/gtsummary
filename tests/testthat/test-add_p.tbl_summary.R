@@ -369,3 +369,32 @@ test_that("Groups arg and lme4", {
       pluck("Pr(>Chisq)", 2)
   )
 })
+
+test_that("difftime works with wolcox", {
+  expect_equal(
+    trial %>%
+      mutate(
+        time_diff = as.difftime(age, units = "mins")
+      ) %>%
+      select(trt, time_diff) %>%
+      tbl_summary(by=trt) %>%
+      add_p() %>%
+      inline_text(variable = time_diff, column = "p.value"),
+    "p=0.7"
+  )
+})
+
+test_that("no error with missing data", {
+  expect_message(
+    t1 <-
+      mtcars %>%
+      mutate(mpg = NA, hp = NA) %>%
+      select(mpg, hp, am) %>%
+      tbl_summary(by = "am", type = hp ~ "continuous") %>%
+      add_p()
+  )
+  expect_equal(
+    t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
+    rep_len(NA_character_, 4)
+  )
+})

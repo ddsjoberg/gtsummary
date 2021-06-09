@@ -27,7 +27,7 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
 
 add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
   .superfluous_args(variable, ...)
-  expr(stats::wilcox.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
+  expr(stats::wilcox.test(as.numeric(!!rlang::sym(variable)) ~ as.factor(!!rlang::sym(by)),
     data = !!data, !!!test.args
   )) %>%
     eval() %>%
@@ -195,7 +195,8 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
   }
 
   # calculate p-value
-  expr(stats::wilcox.test(data_wide[[2]], data_wide[[3]], paired = TRUE, !!!test.args)) %>%
+  expr(stats::wilcox.test(as.numeric(data_wide[[2]]), as.numeric(data_wide[[3]]),
+                          paired = TRUE, !!!test.args)) %>%
     eval() %>%
     broom::tidy()
 }

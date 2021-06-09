@@ -27,6 +27,18 @@ gt_compact_fun <- function(x) {
 }
 ```
 
+```{r, echo = FALSE, results = 'asis'}
+# we do NOT want the vignette to build on CRAN...it's taking too long
+if (!identical(Sys.getenv("IN_PKGDOWN"), "true") && 
+    !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
+  msg <- 
+    paste("View this vignette on the",
+          "[package website](http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html).")
+  cat(msg)
+  knitr::knit_exit()
+}
+```
+
 ## Introduction
 
 **Reproducible reports** are an important part of good practices.  We often need to report the **results from a table** in the text of an R markdown report.
@@ -131,7 +143,7 @@ tibble::tribble(
   "`{N}`",          "number of observations"  
 ) %>%
   gt::gt() %>%
-  gt::fmt_markdown(columns = vars(Parameter)) %>%
+  gt::fmt_markdown(columns = c(Parameter)) %>%
   gt_compact_fun()
 ```
 
