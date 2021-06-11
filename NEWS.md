@@ -2,7 +2,7 @@
 
 * Bug fix for `add_p.tbl_cross(pvalue_fun=)`; argument was being ignored.
 
-* Updated `style_pvalue` to format p-values slightly larger than 1 and slightly lower than 0 (due to imprecise numeric storage on machines). (#907)
+* Updated `style_pvalue` to format p-values slightly larger than 1 and slightly lower than 0 (due to imprecise numeric storage). (#907)
 
 # gtsummary 1.4.1
 
