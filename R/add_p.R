@@ -408,7 +408,14 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
   x_copy <- x
   # passing the data frame after missing values have been transformed to factor/observed levels
   x$inputs$data <- x$tbl_data
-  x <- expr(add_p.tbl_summary(x, test = !!input_test, include = -any_of("..total.."))) %>% eval()
+  x <-
+    expr(
+      add_p.tbl_summary(x,
+                        test = !!input_test,
+                        pvalue_fun = !!pvalue_fun,
+                        include = -any_of("..total.."))
+    ) %>%
+    eval()
   # replacing the input dataset with the original from the `tbl_cross()` call
   x$inputs$data <- x_copy$inputs$data
 
