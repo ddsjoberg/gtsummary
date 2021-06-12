@@ -763,3 +763,93 @@ inline_text.tbl_cross <-
     ) %>%
       eval()
   }
+
+
+
+
+
+
+
+
+
+
+df_stats_to_table_body <- function(x) {
+  browser()
+  # transpose stats to long format for table_body ------------------------------
+  df_raw_stats <-
+    purrr::pmap_dfr(
+      list(x$meta_data$df_stats, x$meta_data$var_label),
+      function(.x, .y) {
+        if ("variable_levels" %in% names(.x)) {
+          .x$row_type <- "level"
+          .x$label <- as.character(.x$variable_levels)
+        }
+        else {
+          .x$row_type <- "label"
+          .x$label <- as.character(.y)
+        }
+
+        .x %>%
+          select(-any_of(c("by", "stat_display", "variable_levels",
+                           "col_label",  "col_label"))) %>%
+          tidyr::pivot_wider(id_cols = any_of(c("variable", "label", "row_type")),
+                             names_from = col_name,
+                             names_glue = "raw_{col_name}_{.value}",
+                             values_from = -any_of(c("variable", "label", "row_type", "col_name")))  %>%
+          select(any_of(c("variable", "row_type", "label")), everything())
+      }
+    )
+
+  # prepare fmt_fun to be applied to the new columns ---------------------------
+  df_fmt_fun <-
+    x$meta_data$df_stats %>%
+    purrr::map_dfr(
+      function(df_stats) {
+        tibble(
+          colname =
+            names(df_stats) %>%
+            setdiff(c("variable", "by", "stat_display",
+                      "variable_levels", "label", "col_name"))
+        ) %>%
+          mutate(
+            variable = unique(df_stats$variable),
+            raw_colname = map(colname, ~paste("raw", unique(df_stats$col_name), .x, sep = "_")),
+            fmt_fun = map(colname, ~attr(df_stats[[.x]], "fmt_fun"))
+          ) %>%
+          unnest(raw_colname) %>%
+          select(-colname)
+      }
+    ) %>%
+    nest(raw_colname = raw_colname) %>%
+    rowwise() %>%
+    mutate(raw_colname = unlist(raw_colname) %>% unname() %>% list())
+
+  expr_fmt_fun <-
+    map(
+      seq_len(nrow(df_fmt_fun)),
+      ~expr(
+        modify_table_styling(
+          columns = !!df_fmt_fun$raw_colname[[.x]],
+          rows = variable %in% !!df_fmt_fun$variable[.x],
+          fmt_fun = !!df_fmt_fun$fmt_fun[[.x]]
+        )
+      )
+    )
+
+  # apply updates to gtsummary table -------------------------------------------
+  # merge in columns of raw stats
+  x <-
+    modify_table_body(
+      x,
+      ~left_join(
+        .x,
+        df_raw_stats,
+        by = c("variable", "row_type", "label")
+      )
+    )
+
+  # apply formatting functions to new columns
+  expr_fmt_fun %>%
+    purrr::reduce(function(x, y) expr(!!x %>% !!y), .init = expr(!!x)) %>%
+    eval()
+}
