@@ -771,16 +771,21 @@ inline_text.tbl_cross <-
 
 
 
-
-
 df_stats_to_table_body <- function(x) {
-  browser()
   # transpose stats to long format for table_body ------------------------------
   df_raw_stats <-
     purrr::pmap_dfr(
       list(x$meta_data$df_stats, x$meta_data$var_label),
       function(.x, .y) {
-        if ("variable_levels" %in% names(.x)) {
+        if (inherits(x, "tbl_survfit")) {
+          if (purrr::pluck(.x, "col_name", 1) == "stat_0") {
+            .x$row_type <- "label"
+          }
+          else {
+            .x$row_type <- "level"
+          }
+        }
+        else if ("variable_levels" %in% names(.x)) {
           .x$row_type <- "level"
           .x$label <- as.character(.x$variable_levels)
         }
@@ -789,9 +794,10 @@ df_stats_to_table_body <- function(x) {
           .x$label <- as.character(.y)
         }
 
+        # browser()
         .x %>%
           select(-any_of(c("by", "stat_display", "variable_levels",
-                           "col_label",  "col_label"))) %>%
+                           "col_label", "col_label", "strata"))) %>%
           tidyr::pivot_wider(id_cols = any_of(c("variable", "label", "row_type")),
                              names_from = col_name,
                              names_glue = "raw_{col_name}_{.value}",
@@ -808,21 +814,28 @@ df_stats_to_table_body <- function(x) {
         tibble(
           colname =
             names(df_stats) %>%
-            setdiff(c("variable", "by", "stat_display",
+            setdiff(c("variable", "by", "stat_display", "col_label", "strata",
                       "variable_levels", "label", "col_name"))
         ) %>%
           mutate(
             variable = unique(df_stats$variable),
             raw_colname = map(colname, ~paste("raw", unique(df_stats$col_name), .x, sep = "_")),
-            fmt_fun = map(colname, ~attr(df_stats[[.x]], "fmt_fun"))
+            fmt_fun =
+              map(
+                colname,
+                ~ attr(df_stats[[.x]], "fmt_fun") %||%
+                  x$inputs$estimate_fun %||%
+                  style_sigfig
+              )
           ) %>%
           unnest(raw_colname) %>%
           select(-colname)
       }
     ) %>%
     nest(raw_colname = raw_colname) %>%
-    rowwise() %>%
-    mutate(raw_colname = unlist(raw_colname) %>% unname() %>% list())
+    dplyr::rowwise() %>%
+    mutate(raw_colname = unlist(raw_colname) %>% unname() %>% list()) %>%
+    ungroup()
 
   expr_fmt_fun <-
     map(
