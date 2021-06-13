@@ -97,7 +97,10 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 
 table_styling_to_kable_extra_calls <- function(x, ...) {
   # getting kable calls
-  kable_extra_calls <- table_styling_to_kable_calls(x = x, ...)
+  kable_extra_calls <-
+    table_styling_to_kable_calls(x = x, ...) %>%
+    # kableExtra doesn't support makrdown bold/italics
+    purrr::list_modify(tab_style_bold = NULL, tab_style_italic = NULL)
 
   # add_indent -----------------------------------------------------------------
   df_indent <-
