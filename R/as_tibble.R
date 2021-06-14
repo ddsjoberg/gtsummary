@@ -87,7 +87,9 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE) {
     tibble_calls[["ungroup"]] <-
       list(
         expr(group_by(.data$groupname_col)),
-        expr(mutate(groupname_col = ifelse(dplyr::row_number() == 1, .data$groupname_col, NA))),
+        expr(mutate(groupname_col = ifelse(dplyr::row_number() == 1,
+                                           as.character(.data$groupname_col),
+                                           NA_character_))),
         expr(ungroup())
       )
   }
