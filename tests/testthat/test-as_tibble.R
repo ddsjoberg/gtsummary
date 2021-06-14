@@ -60,4 +60,13 @@ test_that("as_tibble works with bold_p()", {
     as_tibble(t2, col_labels = FALSE)$label,
     c("__Age__", "__Grade__", "_I_", "_II_", "_III_")
   )
+
+  t1 <- trial %>% select(age) %>% tbl_summary()
+  expect_equal(
+    list(t1, t1) %>%
+      tbl_stack(group_header = factor(c("tt", "yy"))) %>%
+      as_tibble(col_labels = FALSE) %>%
+      purrr::pluck("groupname_col"),
+    c("tt", NA, "yy", NA)
+  )
 })
