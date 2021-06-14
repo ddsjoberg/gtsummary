@@ -4,6 +4,10 @@
 
 * Updated `style_pvalue` to format p-values slightly larger than 1 and slightly lower than 0 (due to imprecise numeric storage). (#907)
 
+* Fix allowing for factor vectors to be passed in `tbl_stack(group_header=)`. (#908)
+
+* Updated arguments y= and x= in `tbl_uvregression()` to allow for non-standard names (#912)
+
 # gtsummary 1.4.1
 
 * Updated `tbl_regression()` to be compatible with models created with the {parsnip} and {workflows} packages (#890, #647)
