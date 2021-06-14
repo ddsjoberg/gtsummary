@@ -146,36 +146,32 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   x <- rlang::enexpr(x)
   y <- rlang::enexpr(y)
   x <-
-    tryCatch(
-      {
-        .select_to_varnames(
-          select = !!x,
-          data = switch(is.data.frame(data),
-            data
-          ) %||% .remove_survey_cols(data),
-          arg_name = "x"
-        )
-      },
-      error = function(e) {
-        rlang::expr_text(x)
-      }
-    )
+    switch(!is.null(x),
+           tryCatch({
+             .select_to_varnames(
+               select = !!x,
+               data = switch(is.data.frame(data), data) %||%
+                 .remove_survey_cols(data),
+               arg_name = "x"
+             ) %>%
+               rlang::sym()},
+             error = function(e) x
+           ) %>%
+             rlang::quo_text())
 
   y <-
-    tryCatch(
-      {
-        .select_to_varnames(
-          select = !!y,
-          data = switch(is.data.frame(data),
-            data
-          ) %||% .remove_survey_cols(data),
-          arg_name = "y"
-        )
-      },
-      error = function(e) {
-        rlang::expr_text(y)
-      }
-    )
+    switch(!is.null(y),
+           tryCatch({
+             .select_to_varnames(
+               select = !!y,
+               data = switch(is.data.frame(data), data) %||%
+                 .remove_survey_cols(data),
+               arg_name = "y"
+             ) %>%
+               rlang::sym()},
+             error = function(e) y
+           ) %>%
+             rlang::quo_text())
 
   # checking selections of x and y
   if (is.null(x) + is.null(y) != 1L) {
