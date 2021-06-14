@@ -15,9 +15,22 @@ test_that("add_p.tbl_cross", {
     NA
   )
   expect_error(
-    mtcars %>%
+    tbl <-
+      mtcars %>%
       tbl_cross(gear, carb) %>%
-      add_p(test = "fisher.test"),
+      add_p(test = "chisq.test",
+            pvalue_fun = ~ifelse(is.na(.), NA, format(., digits = 2, scientific = TRUE))),
     NA
+  )
+  expect_equal(
+    tbl %>%
+      as_tibble(col_labels = FALSE) %>%
+      slice(1) %>%
+      pull(p.value),
+    "8.6e-02"
+  )
+  expect_equal(
+    tbl$meta_data$stat_test_lbl[1],
+    "Pearson's Chi-squared test"
   )
 })
