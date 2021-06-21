@@ -100,8 +100,8 @@ table_styling_to_kable_extra_calls <- function(x, ...) {
     table_styling_to_kable_calls(x = x, ...)
 
   # deleting bold and italics settings
-  if(!is.null(kable_extra_calls$tab_style_bold) ||
-     !is.null(kable_extra_calls$tab_style_italic)){
+  if(!rlang::is_empty(kable_extra_calls$tab_style_bold) ||
+     !rlang::is_empty(kable_extra_calls$tab_style_italic)){
     message("gtsummary does not support bold or italics for kableExtra output.")
 
     # kableExtra doesn't support markdown bold/italics

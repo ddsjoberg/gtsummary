@@ -76,3 +76,37 @@ test_that("indent2", {
     NA
   )
 })
+
+
+test_that("kableExtra message",{
+  expect_message(
+    trial %>%
+      tbl_summary(by = 'trt') %>%
+      bold_labels() %>%
+      bold_levels() %>%
+      italicize_labels() %>%
+      italicize_levels() %>%
+      as_kable_extra()
+  )
+})
+
+test_that("kableExtra message italics",{
+  expect_message(
+    trial %>%
+      tbl_summary(by = 'trt') %>%
+      italicize_labels() %>%
+      italicize_levels() %>%
+      as_kable_extra()
+  )
+})
+
+
+test_that("kableExtra message bold",{
+  expect_message(
+    trial %>%
+      tbl_summary(by = 'trt') %>%
+      bold_labels() %>%
+      bold_levels() %>%
+      as_kable_extra()
+  )
+})
