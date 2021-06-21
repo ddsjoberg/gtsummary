@@ -97,9 +97,18 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 table_styling_to_kable_extra_calls <- function(x, ...) {
   # getting kable calls
   kable_extra_calls <-
-    table_styling_to_kable_calls(x = x, ...) %>%
-    # kableExtra doesn't support makrdown bold/italics
-    purrr::list_modify(tab_style_bold = NULL, tab_style_italic = NULL)
+    table_styling_to_kable_calls(x = x, ...)
+
+  # deleting bold and italics settings
+  if(!is.null(kable_extra_calls$tab_style_bold) ||
+     !is.null(kable_extra_calls$tab_style_italic)){
+    message("gtsummary does not support bold or italics for kableExtra output.")
+
+    # kableExtra doesn't support markdown bold/italics
+    kable_extra_calls <-
+      kable_extra_calls %>%
+      purrr::list_modify(tab_style_bold = NULL, tab_style_italic = NULL)
+  }
 
   # add_indent -----------------------------------------------------------------
   df_indent <-
