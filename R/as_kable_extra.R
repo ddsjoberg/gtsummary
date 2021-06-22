@@ -2,9 +2,8 @@
 #'
 #' Function converts a gtsummary object to a knitr_kable + kableExtra object.
 #' A user can use this function if they wish to add customized formatting
-#' available via [knitr::kable] and {kableExtra}. Note that {gtsummary}
-#' uses the standard markdown `**` to bold headers, and they may need to be
-#' changed manually with kableExtra output.
+#' available via [knitr::kable] and {kableExtra}. Bold
+#' and italic cells are not supported for {kableExtra} output via gtsummary.
 #'
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
@@ -97,7 +96,19 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 
 table_styling_to_kable_extra_calls <- function(x, ...) {
   # getting kable calls
-  kable_extra_calls <- table_styling_to_kable_calls(x = x, ...)
+  kable_extra_calls <-
+    table_styling_to_kable_calls(x = x, ...)
+
+  # deleting bold and italics settings
+  if(!rlang::is_empty(kable_extra_calls$tab_style_bold) ||
+     !rlang::is_empty(kable_extra_calls$tab_style_italic)){
+    message("gtsummary does not support bold or italics for kableExtra output.")
+
+    # kableExtra doesn't support markdown bold/italics
+    kable_extra_calls <-
+      kable_extra_calls %>%
+      purrr::list_modify(tab_style_bold = NULL, tab_style_italic = NULL)
+  }
 
   # add_indent -----------------------------------------------------------------
   df_indent <-
