@@ -99,7 +99,7 @@ to PDF via LaTeX, as well as HTML and Word." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.1.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.1.9006</span>
       </span>
     </div>
 
@@ -187,7 +187,7 @@ to PDF via LaTeX, as well as HTML and Word.</p>
   <span class='va'>x</span>,
   include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
   return_calls <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  strip_md_bold <span class='op'>=</span> <span class='cn'>TRUE</span>
+  strip_md_bold <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -213,8 +213,7 @@ as a list of expressions.</p></td>
     <tr>
       <th>strip_md_bold</th>
       <td><p>When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.
-Default is TRUE</p></td>
+bold weight) in column labels and spanning headers are removed.</p></td>
     </tr>
     </table>
 
@@ -229,12 +228,14 @@ Default is TRUE</p></td>
 it to a huxtable and formats the table with the following huxtable functions:</p><ol>
 <li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/huxtable.html'>huxtable::huxtable()</a></code></p></li>
 <li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/insert_column.html'>huxtable::insert_row()</a></code> to insert header rows</p></li>
-<li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/align.html'>huxtable::align()</a></code> to set column alignment</p></li>
 <li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/padding.html'>huxtable::set_left_padding()</a></code> to indent variable levels</p></li>
 <li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/add_footnote.html'>huxtable::add_footnote()</a></code> to add table footnotes and source notes</p></li>
 <li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/bold.html'>huxtable::set_bold()</a></code> to bold cells</p></li>
 <li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/bold.html'>huxtable::set_italic()</a></code> to italicize cells</p></li>
+<li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/borders.html'>huxtable::set_top_border()</a></code> add horizontal line (when indicated)</p></li>
 <li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/na_string.html'>huxtable::set_na_string()</a></code> to use an em-dash for missing numbers</p></li>
+<li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/markdown.html'>huxtable::set_markdown()</a></code> use markdown for header rows</p></li>
+<li><p><code><a href='https://hughjonesd.github.io/huxtable/reference/align.html'>huxtable::set_align()</a></code> to set column alignment</p></li>
 </ol>
 
 <p>Any one of these commands may be omitted using the <code>include=</code> argument.</p>
@@ -257,7 +258,7 @@ it to a huxtable and formats the table with the following huxtable functions:</p
     <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>as_hux_table</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: huxtable</span></div><div class='output co'>#&gt;           Characteristic   Drug A, N = 98   Drug B, N = 102   p-value  
+</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: huxtable</span></div><div class='output co'>#&gt;           <span style='font-weight: bold;'>Characteristic</span>   <span style='font-weight: bold;'>Drug A</span>, N = 98   <span style='font-weight: bold;'>Drug B</span>, N = 102   <span style='font-weight: bold;'>p-value</span>  
 #&gt;         ───────────────────────────────────────────────────────────────
 #&gt;           Age               46 (37, 59)       48 (39, 56)       0.7    
 #&gt;           Unknown                7                 4                   
