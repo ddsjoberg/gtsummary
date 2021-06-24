@@ -31,7 +31,6 @@
 #' @inheritParams as_tibble.gtsummary
 #' @param strip_md_bold When TRUE, all double asterisk (markdown language for
 #' bold weight) in column labels and spanning headers are removed.
-#' Default is TRUE
 #' @export
 #' @return A {flextable} object
 #' @family gtsummary output types
