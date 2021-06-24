@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Variables passed in the `tbl_svysummary(by=)` argument will now automatically be added to `include=`. (#925)
+
+* Bold and italic requests are now ignored for kableExtra output. These are carried out via markdown syntax, which is not supported by {kableExtra} (#917)
+
 * Bug fix for `add_p.tbl_cross(pvalue_fun=)`; argument was being ignored.
 
 * Updated `style_pvalue` to format p-values slightly larger than 1 and slightly lower than 0 (due to imprecise numeric storage). (#907)
