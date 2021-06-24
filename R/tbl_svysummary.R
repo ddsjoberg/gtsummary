@@ -95,10 +95,25 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   assert_package("survey", "tbl_svysummary()")
 
   # test if data is a survey object
-  if (!is_survey(data)) stop("'data' should be a survey object (see svydesign()).", call. = FALSE)
+  if (!is_survey(data))
+    stop("'data' should be a survey object (see svydesign()).", call. = FALSE)
 
-  # eval -----------------------------------------------------------------------
-  include <- select(.remove_survey_cols(data), {{ include }}) %>% names()
+  # converting bare arguments to string ----------------------------------------
+  by <-
+    .select_to_varnames(
+      select = {{ by }},
+      data = .remove_survey_cols(data),
+      arg_name = "by",
+      select_single = TRUE
+    )
+
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      data = .remove_survey_cols(data),
+      arg_name = "include"
+    ) %>%
+    union(by)
 
   # setting defaults from gtsummary theme --------------------------------------
   label <- label %||%
@@ -130,15 +145,6 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   percent <- percent %||%
     get_theme_element("tbl_svysummary-arg:percent") %||%
     get_theme_element("tbl_summary-arg:percent", default = "column")
-
-  # converting bare arguments to string ----------------------------------------
-  by <-
-    .select_to_varnames(
-      select = {{ by }},
-      data = data$variables,
-      arg_name = "by",
-      select_single = TRUE
-    )
 
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing, choices = c("ifany", "always", "no"))
