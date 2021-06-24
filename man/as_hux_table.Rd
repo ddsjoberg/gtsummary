@@ -8,7 +8,7 @@ as_hux_table(
   x,
   include = everything(),
   return_calls = FALSE,
-  strip_md_bold = TRUE
+  strip_md_bold = FALSE
 )
 }
 \arguments{
@@ -24,8 +24,7 @@ Default is \code{everything()}.}
 as a list of expressions.}
 
 \item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.
-Default is TRUE}
+bold weight) in column labels and spanning headers are removed.}
 }
 \value{
 A {huxtable} object
@@ -43,12 +42,14 @@ it to a huxtable and formats the table with the following huxtable functions:
 \enumerate{
 \item \code{huxtable::huxtable()}
 \item \code{huxtable::insert_row()} to insert header rows
-\item \code{huxtable::align()} to set column alignment
 \item \code{huxtable::set_left_padding()} to indent variable levels
 \item \code{huxtable::add_footnote()} to add table footnotes and source notes
 \item \code{huxtable::set_bold()} to bold cells
 \item \code{huxtable::set_italic()} to italicize cells
+\item \code{huxtable::set_top_border()} add horizontal line (when indicated)
 \item \code{huxtable::set_na_string()} to use an em-dash for missing numbers
+\item \code{huxtable::set_markdown()} use markdown for header rows
+\item \code{huxtable::set_align()} to set column alignment
 }
 
 Any one of these commands may be omitted using the \verb{include=} argument.

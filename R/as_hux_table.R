@@ -11,12 +11,14 @@
 #'
 #' 1. `huxtable::huxtable()`
 #' 1. `huxtable::insert_row()` to insert header rows
-#' 1. `huxtable::align()` to set column alignment
 #' 1. `huxtable::set_left_padding()` to indent variable levels
 #' 1. `huxtable::add_footnote()` to add table footnotes and source notes
 #' 1. `huxtable::set_bold()` to bold cells
 #' 1. `huxtable::set_italic()` to italicize cells
+#' 1. `huxtable::set_top_border()` add horizontal line (when indicated)
 #' 1. `huxtable::set_na_string()` to use an em-dash for missing numbers
+#' 1. `huxtable::set_markdown()` use markdown for header rows
+#' 1. `huxtable::set_align()` to set column alignment
 #'
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
@@ -35,7 +37,7 @@
 #' @export
 
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
-                         strip_md_bold = TRUE) {
+                         strip_md_bold = FALSE) {
   assert_package("huxtable", "as_hux_table()")
 
   # running pre-conversion function, if present --------------------------------
@@ -319,6 +321,13 @@ table_styling_to_huxtable_calls <- function(x, ...) {
       )
     )
   )
+
+  # set_markdown ---------------------------------------------------------------
+  header_rows <- switch(any_spanning_header, 1:2) %||% 1L
+  huxtable_calls[["set_markdown"]] <-
+    list(set_markdown = expr(huxtable::set_markdown(row = !!header_rows,
+                                                    col = huxtable::everywhere,
+                                                    value = TRUE)))
 
   # align ----------------------------------------------------------------------
   df_align <-

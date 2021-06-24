@@ -25,8 +25,7 @@ Default is \code{everything()}.}
 as a list of expressions.}
 
 \item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.
-Default is TRUE}
+bold weight) in column labels and spanning headers are removed.}
 
 \item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
 }
