@@ -75,6 +75,7 @@ Adds p-values to tables created by \code{tbl_svysummary} by comparing values acr
 }
 
 \examples{
+if (requireNamespace('survey')) {
 # Example 1 ----------------------------------
 # A simple weighted dataset
 add_p_svysummary_ex1 <-
@@ -101,6 +102,7 @@ add_p_svysummary_ex3 <-
       all_categorical() ~ "svy.wald.test"
     )
   )
+}
 }
 \seealso{
 Other tbl_svysummary tools: 
