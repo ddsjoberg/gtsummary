@@ -86,6 +86,8 @@ test_that("no errors/warnings with standard use wit continuous2", {
 
 
 test_that("no errors/warnings with standard use for tbl_svysummary", {
+  skip_if_not(requireNamespace("survey"))
+
   t <- trial %>%
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt)
@@ -112,6 +114,8 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
 })
 
 test_that("no errors/warnings with standard use for tbl_svysummary with continuous2", {
+  skip_if_not(requireNamespace("survey"))
+
   t <- trial %>%
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2")

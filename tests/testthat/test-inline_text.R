@@ -296,6 +296,7 @@ test_that("inline_text.tbl_cross- expect error args aren't present", {
   )
 })
 
+skip_if_not(requireNamespace("survey"))
 
 # inline_text.tbl_svysummary tests --------------
 test_inline1 <- trial %>%
