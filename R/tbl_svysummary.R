@@ -67,8 +67,6 @@
 #' @family tbl_svysummary tools
 #' @author Joseph Larmarange
 #' @examples
-#' if (requireNamespace('survey')) {
-#' # Example 1 ----------------------------------
 #' # A simple weighted dataset
 #' tbl_svysummary_ex1 <-
 #'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
@@ -80,7 +78,6 @@
 #' tbl_svysummary_ex2 <-
 #'   survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) %>%
 #'   tbl_svysummary(by = "both", include = c(cname, api00, api99, both))
-#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
