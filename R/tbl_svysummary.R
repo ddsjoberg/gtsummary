@@ -94,7 +94,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
                            missing = NULL, missing_text = NULL, sort = NULL,
                            percent = NULL, include = everything()) {
   # checking for survey package ------------------------------------------------
-  assert_package("survey", "tbl_svysummary()", version = "4.1")
+  assert_package("survey", "tbl_svysummary()")
 
   # test if data is a survey object
   if (!is_survey(data))
@@ -424,7 +424,7 @@ compute_survey_stat <- function(data, variable, by, f) {
     fun <- survey::svyvar
   }
   if (f == "median") {
-    fun <- survey::oldsvyquantile
+    fun <- svyquantile_version
     args$quantiles <- .5
   }
   if (f == "min") {
@@ -434,7 +434,7 @@ compute_survey_stat <- function(data, variable, by, f) {
     fun <- svymax
   }
   if (f %in% paste0("p", 0:100)) {
-    fun <- survey::oldsvyquantile
+    fun <- svyquantile_version
     args$quantiles <- as.numeric(stringr::str_replace(f, pattern = "^p", "")) / 100
   }
 
@@ -640,4 +640,18 @@ svymin <- function(x, design, na.rm = FALSE, ...) {
 svymax <- function(x, design, na.rm = FALSE, ...) {
   x <- all.vars(x)
   max(design$variables[[x]], na.rm = na.rm)
+}
+
+# function chooses which quantile function to sue based on the survey pkg version
+svyquantile_version <- function(...) {
+  fn <-
+    ifelse(
+      packageVersion("survey") >= "4.1",
+      "survey::oldsvyquantile",
+      "survey::svyquantile"
+    ) %>%
+    rlang::parse_expr() %>%
+    eval()
+
+  fn(...)
 }
