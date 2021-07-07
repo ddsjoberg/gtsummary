@@ -682,7 +682,7 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
                                  include = everything(), test.args = NULL, ...) {
   updated_call_list <- c(x$call_list, list(add_p = match.call()))
   # checking for survey package ------------------------------------------------
-  assert_package("survey", "add_p.tbl_svysummary()", version = "4.1")
+  assert_package("survey", "add_p.tbl_svysummary()")
 
   # setting defaults from gtsummary theme --------------------------------------
   test <- test %||%
