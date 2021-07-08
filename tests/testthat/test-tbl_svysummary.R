@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("survey"))
 
 d <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
 data(api, package = "survey")

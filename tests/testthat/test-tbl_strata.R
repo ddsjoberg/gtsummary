@@ -104,6 +104,7 @@ test_that("no errors with standard use", {
     NA
   )
 
+  skip_if_not(requireNamespace("survey"))
   expect_error(
     survey::svydesign(~1, data = trial, weights = ~1) %>%
       tbl_strata(
