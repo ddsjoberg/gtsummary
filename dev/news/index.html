@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.1.9006</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.1.9007</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Updates to make <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> compatible with {survey} package updates in v4.1 (<a href='https://github.com/ddsjoberg/gtsummary/issues/930'>#930</a>)</p></li>
 <li><p>The <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> function previously stripped markdown old syntax from column headers and spanning headers. The output now uses markdown syntax in the headers by default utilizing <code><a href="https://hughjonesd.github.io/huxtable/reference/markdown.html">huxtable::set_markdown()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/885'>#885</a>)</p></li>
 <li><p>Variables passed in the <code><a href="../reference/tbl_svysummary.html">tbl_svysummary(by=)</a></code> argument will now automatically be added to <code>include=</code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/925'>#925</a>)</p></li>
 <li><p>Bold and italic requests are now ignored for kableExtra output. These are carried out via markdown syntax, which is not supported by {kableExtra} (<a href='https://github.com/ddsjoberg/gtsummary/issues/917'>#917</a>)</p></li>
