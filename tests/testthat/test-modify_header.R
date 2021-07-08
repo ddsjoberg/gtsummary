@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("survey"))
 
 tbl_summary_noby <- trial %>% tbl_summary()
 tbl_summary_by <- trial %>% tbl_summary(by = trt)
