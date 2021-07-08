@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("survey"))
 
 strial <- trial %>%
   survey::svydesign(data = ., ids = ~1, weights = ~1)
