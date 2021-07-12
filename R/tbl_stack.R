@@ -140,7 +140,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
             # adding tbl_id to the rows specifications,
             # e.g. data$tbl_id == 1L & .data$row_type != "label"
             df$rows <-
-              map(df$rows, ~ add_tbl_id_to_quo(.x, tbls[[i]]$table_body, i, tbl_id_colname))
+              map(df$rows, ~ add_tbl_id_to_quo(.x, tbls[[i]]$table_body, i, tbl_id_colname, style_type))
           }
           df %>%
             mutate_at(vars(any_of(c(
@@ -230,9 +230,18 @@ print_stack_differences <- function(tbls) {
   return(invisible())
 }
 
-add_tbl_id_to_quo <- function(x, table_body, tbl_id, tbl_id_colname) {
-  # if NULL, add tbl_id condition
-  if (eval_tidy(x, data = table_body) %>% is.null()) {
+add_tbl_id_to_quo <- function(x, table_body, tbl_id, tbl_id_colname, style_type) {
+  # if NULL AND style_type is a type that adds header changes (i.e. footnote in header),
+  # then just return the NULL
+  # the requires the stacking to pick one of the header footnotes and use it
+  # the others will be discarded when printed.
+  row_is_null <- eval_tidy(x, data = table_body) %>% is.null()
+  if (row_is_null && style_type %in% c("footnote", "footnote_abbrev")) {
+    return(x)
+  }
+
+  # otherwise if NULL, add the tbl_id condition
+  if (row_is_null) {
     return(expr(!!sym(tbl_id_colname) == !!tbl_id))
   }
 
