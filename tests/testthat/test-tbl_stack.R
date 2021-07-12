@@ -78,4 +78,25 @@ test_that("Stacking tbl_summary objects", {
     tbl_stack(lst_summary, group_header = c("Group 1", "Group 2")),
     NA
   )
+
+  # complex row-specific formatting is maintained
+  tbl <-
+    trial %>%
+    select(age, response, trt) %>%
+    tbl_summary(
+      by = trt,
+      missing = "no"
+    ) %>%
+    add_difference()
+
+  expect_equal(
+    tbl_stack(
+      list(tbl,
+           tbl %>% modify_fmt_fun(p.value ~ purrr::partial(style_sigfig, digits = 3)))
+    ) %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull(p.value),
+    c("0.8", "0.6", "0.834", "0.637")
+  )
+
 })

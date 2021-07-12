@@ -643,7 +643,7 @@ svymax <- function(x, design, na.rm = FALSE, ...) {
 svyquantile_version <- function(...) {
   fn <-
     ifelse(
-      packageVersion("survey") >= "4.1",
+      utils::packageVersion("survey") >= "4.1",
       "survey::oldsvyquantile",
       "survey::svyquantile"
     ) %>%

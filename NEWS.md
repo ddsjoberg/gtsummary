@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Update to the internals of `tbl_stack()` to better handle when two or more stacked tables are then stacked again (#906)
+
 * Updates to make `tbl_svysummary()` compatible with {survey} package updates in v4.1 (#930)
 
 * The `as_hux_table()` function previously stripped markdown old syntax from column headers and spanning headers. The output now uses markdown syntax in the headers by default utilizing `huxtable::set_markdown()` (#885)
