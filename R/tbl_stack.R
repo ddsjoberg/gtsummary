@@ -231,8 +231,9 @@ print_stack_differences <- function(tbls) {
 }
 
 add_tbl_id_to_quo <- function(x, table_body, tbl_id, tbl_id_colname) {
+  # if NULL, add tbl_id condition
   if (eval_tidy(x, data = table_body) %>% is.null()) {
-    return(x)
+    return(expr(!!sym(tbl_id_colname) == !!tbl_id))
   }
 
   # if quosure, add tbl_id
