@@ -59,7 +59,7 @@ Other tbl_summary tools:
 \code{\link{add_stat_label}()},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
@@ -69,7 +69,7 @@ Other tbl_regression tools:
 \code{\link{add_q}()},
 \code{\link{combine_terms}()},
 \code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_regression}()},
 \code{\link{tbl_stack}()}
@@ -78,7 +78,7 @@ Other tbl_uvregression tools:
 \code{\link{add_global_p}()},
 \code{\link{add_q}()},
 \code{\link{inline_text.tbl_uvregression}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_uvregression}()}

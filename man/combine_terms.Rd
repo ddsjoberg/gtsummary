@@ -38,6 +38,7 @@ with a single row in the output table.  The p-value is calculated using
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 # Logistic Regression Example, LRT p-value
 combine_terms_ex1 <-
@@ -54,13 +55,14 @@ combine_terms_ex1 <-
     test = "LRT"
   )
 }
+}
 \seealso{
 Other tbl_regression tools: 
 \code{\link{add_global_p}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_regression}()},
 \code{\link{tbl_stack}()}
