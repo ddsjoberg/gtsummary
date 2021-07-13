@@ -12,7 +12,7 @@
 
 * Bug fix for `add_p.tbl_cross(pvalue_fun=)`; argument was being ignored.
 
-* Updated `style_pvalue` to format p-values slightly larger than 1 and slightly lower than 0 (due to imprecise numeric storage). (#907)
+* Updated `style_pvalue()` to format p-values slightly larger than 1 and slightly lower than 0 (due to imprecise numeric storage). (#907)
 
 * Fix allowing for factor vectors to be passed in `tbl_stack(group_header=)`. (#908)
 
