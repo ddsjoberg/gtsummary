@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.1.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9000</span>
       </span>
     </div>
 
@@ -175,6 +175,11 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
+</div>
+    <div id="gtsummary-142" class="section level1">
+<h1 class="page-header" data-toc-text="1.4.2">
+<a href="#gtsummary-142" class="anchor"></a>gtsummary 1.4.2<small> Unreleased </small>
+</h1>
 <ul>
 <li><p>Update to the internals of <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> to better handle when two or more stacked tables are then stacked again (<a href='https://github.com/ddsjoberg/gtsummary/issues/906'>#906</a>)</p></li>
 <li><p>Updates to make <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> compatible with {survey} package updates in v4.1 (<a href='https://github.com/ddsjoberg/gtsummary/issues/930'>#930</a>)</p></li>
@@ -182,7 +187,7 @@
 <li><p>Variables passed in the <code><a href="../reference/tbl_svysummary.html">tbl_svysummary(by=)</a></code> argument will now automatically be added to <code>include=</code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/925'>#925</a>)</p></li>
 <li><p>Bold and italic requests are now ignored for kableExtra output. These are carried out via markdown syntax, which is not supported by {kableExtra} (<a href='https://github.com/ddsjoberg/gtsummary/issues/917'>#917</a>)</p></li>
 <li><p>Bug fix for <code><a href="../reference/add_p.tbl_cross.html">add_p.tbl_cross(pvalue_fun=)</a></code>; argument was being ignored.</p></li>
-<li><p>Updated <code>style_pvalue</code> to format p-values slightly larger than 1 and slightly lower than 0 (due to imprecise numeric storage). (<a href='https://github.com/ddsjoberg/gtsummary/issues/907'>#907</a>)</p></li>
+<li><p>Updated <code><a href="../reference/style_pvalue.html">style_pvalue()</a></code> to format p-values slightly larger than 1 and slightly lower than 0 (due to imprecise numeric storage). (<a href='https://github.com/ddsjoberg/gtsummary/issues/907'>#907</a>)</p></li>
 <li><p>Fix allowing for factor vectors to be passed in <code><a href="../reference/tbl_stack.html">tbl_stack(group_header=)</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/908'>#908</a>)</p></li>
 <li><p>Updated arguments <code>y=</code> and <code>x=</code> in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> to allow for non-standard names (<a href='https://github.com/ddsjoberg/gtsummary/issues/912'>#912</a>)</p></li>
 </ul>
