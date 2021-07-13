@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 1.4.2
 
 * Update to the internals of `tbl_stack()` to better handle when two or more stacked tables are then stacked again (#906)
 
