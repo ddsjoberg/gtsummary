@@ -19,6 +19,7 @@
 #' @export
 #' @return A `tbl_stack` object
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' # stacking two tbl_regression objects
 #' t1 <-
@@ -62,6 +63,7 @@
 #' row2 <- tbl_merge(list(t2, t4))
 #' tbl_stack_ex2 <-
 #'   tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

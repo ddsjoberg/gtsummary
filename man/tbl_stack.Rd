@@ -36,6 +36,7 @@ retained from the first passed gtsummary object.
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 # stacking two tbl_regression objects
 t1 <-
@@ -79,6 +80,7 @@ row1 <- tbl_merge(list(t1, t3), tab_spanner = c("Tumor Response", "Death"))
 row2 <- tbl_merge(list(t2, t4))
 tbl_stack_ex2 <-
   tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
+}
 }
 \seealso{
 \link{tbl_merge}

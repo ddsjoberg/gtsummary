@@ -19,6 +19,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' # Logistic Regression Example, LRT p-value
 #' combine_terms_ex1 <-
@@ -34,6 +35,7 @@
 #'     label = "Marker (non-linear terms)",
 #'     test = "LRT"
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

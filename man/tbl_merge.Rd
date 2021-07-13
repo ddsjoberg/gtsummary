@@ -33,6 +33,7 @@ Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, \code{tbl_sta
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 # Side-by-side Regression Models
 library(survival)
@@ -67,6 +68,7 @@ t4 <-
 tbl_merge_ex2 <-
   tbl_merge(tbls = list(t3, t4)) \%>\%
   modify_spanning_header(everything() ~ NA_character_)
+}
 }
 \seealso{
 \link{tbl_stack}

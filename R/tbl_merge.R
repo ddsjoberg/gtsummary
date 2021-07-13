@@ -18,6 +18,7 @@
 #' @export
 #' @return A `tbl_merge` object
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' # Side-by-side Regression Models
 #' library(survival)
@@ -52,6 +53,7 @@
 #' tbl_merge_ex2 <-
 #'   tbl_merge(tbls = list(t3, t4)) %>%
 #'   modify_spanning_header(everything() ~ NA_character_)
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
