@@ -103,7 +103,7 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
@@ -113,7 +113,7 @@ Other tbl_svysummary tools:
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_svysummary}()},
 \code{\link{add_q}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_svysummary}()}

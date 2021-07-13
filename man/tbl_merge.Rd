@@ -33,6 +33,7 @@ Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, \code{tbl_sta
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 # Side-by-side Regression Models
 library(survival)
@@ -68,6 +69,7 @@ tbl_merge_ex2 <-
   tbl_merge(tbls = list(t3, t4)) \%>\%
   modify_spanning_header(everything() ~ NA_character_)
 }
+}
 \seealso{
 \link{tbl_stack}
 
@@ -77,7 +79,7 @@ Other tbl_regression tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{combine_terms}()},
 \code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_regression}()},
 \code{\link{tbl_stack}()}
 
@@ -86,7 +88,7 @@ Other tbl_uvregression tools:
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_uvregression}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_uvregression}()}
 
@@ -99,7 +101,7 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
 
@@ -107,7 +109,7 @@ Other tbl_survfit tools:
 \code{\link{add_n.tbl_survfit}()},
 \code{\link{add_nevent.tbl_survfit}()},
 \code{\link{add_p.tbl_survfit}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_survfit}()}
 
@@ -117,7 +119,7 @@ Other tbl_svysummary tools:
 \code{\link{add_p.tbl_svysummary}()},
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_svysummary}()}
 }

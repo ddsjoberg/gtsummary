@@ -36,6 +36,7 @@ retained from the first passed gtsummary object.
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 # stacking two tbl_regression objects
 t1 <-
@@ -80,6 +81,7 @@ row2 <- tbl_merge(list(t2, t4))
 tbl_stack_ex2 <-
   tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
 }
+}
 \seealso{
 \link{tbl_merge}
 
@@ -92,7 +94,7 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_summary}()}
 
@@ -102,7 +104,7 @@ Other tbl_svysummary tools:
 \code{\link{add_p.tbl_svysummary}()},
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_svysummary}()}
 
@@ -112,7 +114,7 @@ Other tbl_regression tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{combine_terms}()},
 \code{\link{inline_text.tbl_regression}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_regression}()}
 
@@ -121,7 +123,7 @@ Other tbl_uvregression tools:
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_uvregression}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_uvregression}()}
 
@@ -129,7 +131,7 @@ Other tbl_survfit tools:
 \code{\link{add_n.tbl_survfit}()},
 \code{\link{add_nevent.tbl_survfit}()},
 \code{\link{add_p.tbl_survfit}()},
-\code{\link{modify}()},
+\code{\link{modify}},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_survfit}()}
 }

@@ -38,6 +38,7 @@
 #' @rdname custom_tidiers
 #' @export
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' mod <- lm(age ~ marker + grade, trial)
 #'
@@ -59,7 +60,6 @@
 #'     tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
 #' }
 #'
-#'
 #' # Example 3 ----------------------------------
 #' # Multiple Imputation using the mice package
 #' set.seed(1123)
@@ -69,6 +69,7 @@
 #'     with(lm(age ~ marker + grade)) %>%
 #'     tbl_regression()
 #' } # mice method called that uses `pool_and_tidy_mice()` as tidier
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
