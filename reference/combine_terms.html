@@ -98,7 +98,7 @@ stats::anova()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
       </span>
     </div>
 
@@ -106,7 +106,7 @@ stats::anova()." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -147,7 +147,7 @@ stats::anova()." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ddsjoberg/gtsummary">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -238,7 +238,8 @@ function's <code>formula.=</code> argument</p></td>
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='co'># Example 1 ----------------------------------</span>
 <span class='co'># Logistic Regression Example, LRT p-value</span>
 <span class='va'>combine_terms_ex1</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span>
@@ -255,7 +256,8 @@ function's <code>formula.=</code> argument</p></td>
   <span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>combine_terms: Creating a reduced model with</span>
 #&gt; <span class='message'>`reduced_model &lt;- stats::update(x$model_obj, formula. = . ~ . - marker - I(marker^2))`</span></div><div class='output co'>#&gt; <span class='message'>combine_terms: Calculating p-value comparing full and reduced models with</span>
-#&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model, test = "LRT")`</span></div></pre>
+#&gt; <span class='message'>`stats::anova(x$model_obj, reduced_model, test = "LRT")`</span></div><div class='input'><span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

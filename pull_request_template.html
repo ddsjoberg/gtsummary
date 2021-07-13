@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
       </span>
     </div>
 
@@ -103,7 +103,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -144,7 +144,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ddsjoberg/gtsummary">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -175,7 +175,7 @@
 <p><strong>If there is an GitHub issue associated with this pull request, please provide link.</strong></p>
 <hr>
 <p>Checklist for PR reviewer</p>
-<ul class="task-list">
+<ul>
 <li>
 <input type="checkbox" disabled>
 PR branch has pulled the most recent updates from master branch. Ensure the pull request branch and your local version match and both have the latest updates from the master branch.</li>
@@ -199,16 +199,16 @@ Code coverage is suitable for any new functions/features. Review coverage with <
 <input type="checkbox" disabled>
 R CMD Check runs without errors, warnings, and notes</li>
 <li>
-<input type="checkbox" disabled><code><a href="https://usethis.r-lib.org/reference/use_spell_check.html">usethis::use_spell_check()</a></code> runs with no spelling errors in documentation</li>
+<input type="checkbox" disabled><code>usethis::use_spell_check()</code> runs with no spelling errors in documentation</li>
 </ul>
 <p>When the branch is ready to be merged into master:</p>
-<ul class="task-list">
+<ul>
 <li>
 <input type="checkbox" disabled>
 Update NEWS.md with the changes from this pull request under the heading “<code># gtsummary (development version)</code>”. If there is an issue associated with the pull request, reference it in parantheses at the end update (see <code>NEWS.md</code> for examples).</li>
 <li>
 <input type="checkbox" disabled>
-Increment the version number using <code><a href="https://usethis.r-lib.org/reference/use_version.html">usethis::use_version(which = "dev")</a></code>
+Increment the version number using <code>usethis::use_version(which = "dev")</code>
 </li>
 <li>
 <input type="checkbox" disabled>
@@ -216,7 +216,7 @@ Run <code>codemetar::write_codemeta()</code>
 </li>
 <li>
 <input type="checkbox" disabled>
-Run <code><a href="https://usethis.r-lib.org/reference/use_spell_check.html">usethis::use_spell_check()</a></code> again</li>
+Run <code>usethis::use_spell_check()</code> again</li>
 <li>
 <input type="checkbox" disabled>
 Approve Pull Request</li>

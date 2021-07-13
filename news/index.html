@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
       </span>
     </div>
 
@@ -103,7 +103,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -144,7 +144,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ddsjoberg/gtsummary">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -171,10 +171,21 @@
       <small>Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="gtsummary-development-version" class="section level1">
-<h1 class="page-header" data-toc-text="development version">
-<a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
+    <div id="gtsummary-142" class="section level1">
+<h1 class="page-header" data-toc-text="1.4.2">
+<a href="#gtsummary-142" class="anchor"></a>gtsummary 1.4.2<small> Unreleased </small>
 </h1>
+<ul>
+<li><p>Update to the internals of <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> to better handle when two or more stacked tables are then stacked again (<a href='https://github.com/ddsjoberg/gtsummary/issues/906'>#906</a>)</p></li>
+<li><p>Updates to make <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> compatible with {survey} package updates in v4.1 (<a href='https://github.com/ddsjoberg/gtsummary/issues/930'>#930</a>)</p></li>
+<li><p>The <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> function previously stripped markdown old syntax from column headers and spanning headers. The output now uses markdown syntax in the headers by default utilizing <code><a href="https://hughjonesd.github.io/huxtable/reference/markdown.html">huxtable::set_markdown()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/885'>#885</a>)</p></li>
+<li><p>Variables passed in the <code><a href="../reference/tbl_svysummary.html">tbl_svysummary(by=)</a></code> argument will now automatically be added to <code>include=</code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/925'>#925</a>)</p></li>
+<li><p>Bold and italic requests are now ignored for kableExtra output. These are carried out via markdown syntax, which is not supported by {kableExtra} (<a href='https://github.com/ddsjoberg/gtsummary/issues/917'>#917</a>)</p></li>
+<li><p>Bug fix for <code><a href="../reference/add_p.tbl_cross.html">add_p.tbl_cross(pvalue_fun=)</a></code>; argument was being ignored.</p></li>
+<li><p>Updated <code><a href="../reference/style_pvalue.html">style_pvalue()</a></code> to format p-values slightly larger than 1 and slightly lower than 0 (due to imprecise numeric storage). (<a href='https://github.com/ddsjoberg/gtsummary/issues/907'>#907</a>)</p></li>
+<li><p>Fix allowing for factor vectors to be passed in <code><a href="../reference/tbl_stack.html">tbl_stack(group_header=)</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/908'>#908</a>)</p></li>
+<li><p>Updated arguments <code>y=</code> and <code>x=</code> in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> to allow for non-standard names (<a href='https://github.com/ddsjoberg/gtsummary/issues/912'>#912</a>)</p></li>
+</ul>
 </div>
     <div id="gtsummary-141" class="section level1">
 <h1 class="page-header" data-toc-text="1.4.1">
@@ -653,18 +664,18 @@
 <ul>
 <li>
 <p>Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers. When passing a single variable, the <code><a href="https://dplyr.tidyverse.org/reference/vars.html">vars()</a></code> function wrapper is no longer required. (<a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>)</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> age <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="st">"age"</span> <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"trt"</span>) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">c</span>(age, trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(age, trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(<span class="fu">everything</span>(), <span class="sc">-</span>age, <span class="sc">-</span>trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>age_column <span class="ot">=</span> <span class="st">"age"</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> age_column <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(age_column) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">map</span>(<span class="fu">c</span>(<span class="st">"trt"</span>, <span class="st">"grade"</span>), <span class="sc">~</span><span class="fu">tbl_summary</span>(trial, <span class="at">by =</span> .x))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> age <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="st">"age"</span> <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">c</span>(<span class="st">"age"</span>, <span class="st">"trt"</span>) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">c</span>(age, trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">vars</span>(age, trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">vars</span>(<span class="kw">everything</span>(), <span class="op">-</span>age, <span class="op">-</span>trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a>age_column =<span class="st"> "age"</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> age_column <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">vars</span>(age_column) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a>purrr<span class="op">::</span><span class="kw">map</span>(<span class="kw">c</span>(<span class="st">"trt"</span>, <span class="st">"grade"</span>), <span class="op">~</span><span class="kw">tbl_summary</span>(trial, <span class="dt">by =</span> .x))</span></code></pre></div>
 </li>
 <li><p>Updated <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> to allow flexible tidyselect inputs and improved error messaging for arguments <code>x</code> and <code>y</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/249'>#249</a>)</p></li>
 <li><p>After the input updates in <a href='https://github.com/ddsjoberg/gtsummary/issues/250'>#250</a>, the <code>exclude=</code> argument appearing in <code><a href="../reference/add_p.html">add_p()</a></code>, <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>, <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, <code><a href="../reference/as_gt.html">as_gt()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, and <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code> was redundant. The <code>exclude=</code> argument is now deprecated. Use <code>include=</code> instead, with tidyselect syntax. (<a href='https://github.com/ddsjoberg/gtsummary/issues/331'>#331</a>)</p></li>
@@ -850,9 +861,9 @@
 <div id="new-functions-5" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-functions-5" class="anchor"></a>New Functions</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tbl_survival</span>()          <span class="fu">as_gt</span>()  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tbl_merge</span>()             <span class="fu">style_sigfig</span>()  </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_nevent</span>()            <span class="fu">gtsummary_logo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>    <span class="kw">tbl_survival</span>()          <span class="kw">as_gt</span>()  </span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="kw">tbl_merge</span>()             <span class="kw">style_sigfig</span>()  </span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="kw">add_nevent</span>()            <span class="kw">gtsummary_logo</span>()</span></code></pre></div>
 </div>
 </div>
     <div id="gtsummary-010" class="section level1">

@@ -99,7 +99,7 @@ retained from the first passed gtsummary object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
       </span>
     </div>
 
@@ -107,7 +107,7 @@ retained from the first passed gtsummary object." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home"></span>
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
@@ -148,7 +148,7 @@ retained from the first passed gtsummary object." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ddsjoberg/gtsummary">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -268,7 +268,8 @@ the length of <code>tbls=</code></p></td>
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='co'># Example 1 ----------------------------------</span>
 <span class='co'># stacking two tbl_regression objects</span>
 <span class='va'>t1</span> <span class='op'>&lt;-</span>
   <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>response</span> <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span>, family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
@@ -311,8 +312,9 @@ the length of <code>tbls=</code></p></td>
 <span class='va'>row2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tbl_merge.html'>tbl_merge</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>t2</span>, <span class='va'>t4</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>tbl_stack_ex2</span> <span class='op'>&lt;-</span>
   <span class='fu'>tbl_stack</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>row1</span>, <span class='va'>row2</span><span class='op'>)</span>, group_header <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Unadjusted Analysis"</span>, <span class='st'>"Adjusted Analysis"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>i</span><span> Column headers among stacked tables differ. Headers from the first table are</span>
-#&gt; <span class='message'>used. Use </span><span style='color: #C6C6C6;background-color: #262626;'>`quiet = TRUE`</span><span> to supress this message.</span></div></span></pre>
+</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Column headers among stacked tables differ. Headers from the first table are</span>
+#&gt; <span class='message'>used. Use <span style='color: #262626; background-color: #DADADA;'>`quiet = TRUE`</span> to supress this message.</span></div><div class='input'><span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
