@@ -101,6 +101,7 @@ the model parameters before attempting to use the tidier with \code{tbl_regressi
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 mod <- lm(age ~ marker + grade, trial)
 
@@ -122,7 +123,6 @@ if (requireNamespace("parameters")) {
     tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
 }
 
-
 # Example 3 ----------------------------------
 # Multiple Imputation using the mice package
 set.seed(1123)
@@ -132,4 +132,5 @@ if (requireNamespace("mice")) {
     with(lm(age ~ marker + grade)) \%>\%
     tbl_regression()
 } # mice method called that uses `pool_and_tidy_mice()` as tidier
+}
 }

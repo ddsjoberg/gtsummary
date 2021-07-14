@@ -38,6 +38,7 @@ with a single row in the output table.  The p-value is calculated using
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 # Logistic Regression Example, LRT p-value
 combine_terms_ex1 <-
@@ -53,6 +54,7 @@ combine_terms_ex1 <-
     label = "Marker (non-linear terms)",
     test = "LRT"
   )
+}
 }
 \seealso{
 Other tbl_regression tools: 
