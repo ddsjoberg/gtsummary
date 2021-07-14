@@ -408,6 +408,9 @@ survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet,
         "**{style_percent(prob, symbol = TRUE)} {translate_text('Percentile')}**" %>%
         glue() %>% as.character()
     )
+  if (length(strata) > 0) {
+    df_stat$variable_levels = df_stat$label
+  }
 
   # removing strata column if there are no stratum in survfit
   if (length(strata) == 0) df_stat <- select(df_stat, -.data$strata)
@@ -506,6 +509,9 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
       any_of(c("variable", "label", "strata", "col_name", "col_label")),
       everything(), -.data$time_max
     )
+  if (length(strata) > 0) {
+    df_stat$variable_levels = df_stat$label
+  }
 
   # converting to reverse probs, if requested
   if (reverse == TRUE) {

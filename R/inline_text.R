@@ -763,24 +763,10 @@ df_stats_to_table_body <- function(x) {
     purrr::pmap_dfr(
       list(x$meta_data$df_stats, x$meta_data$var_label),
       function(.x, .y) {
-        if (inherits(x, "tbl_survfit")) {
-          if (purrr::pluck(.x, "col_name", 1) == "stat_0") {
-            .x$row_type <- "label"
-          }
-          else {
-            .x$row_type <- "level"
-          }
-        }
-        else if ("variable_levels" %in% names(.x)) {
-          .x$row_type <- "level"
-          .x$label <- as.character(.x$variable_levels)
-        }
-        else {
-          .x$row_type <- "label"
-          .x$label <- as.character(.y)
-        }
+        browser()
+        .x$row_type <-
+          ifelse("variable_levels" %in% names(.x), "level", "label")
 
-        # browser()
         .x %>%
           select(-any_of(c("by", "stat_display", "variable_levels",
                            "col_label", "col_label", "strata"))) %>%
