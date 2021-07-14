@@ -19,6 +19,7 @@
 #' @export
 #' @return A `tbl_stack` object
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' # stacking two tbl_regression objects
 #' t1 <-
@@ -62,6 +63,7 @@
 #' row2 <- tbl_merge(list(t2, t4))
 #' tbl_stack_ex2 <-
 #'   tbl_stack(list(row1, row2), group_header = c("Unadjusted Analysis", "Adjusted Analysis"))
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -96,20 +98,26 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
 
   # stacking tables ------------------------------------------------------------
   # the table_body and call_list will be updated with the tbl_stack values
+  tbl_id_colname <-
+    purrr::map(tbls, ~pluck(.x, "table_body") %>% names()) %>%
+    unlist() %>%
+    unique() %>%
+    tbl_id_varname()
+
   results <- list()
   results$table_body <-
     purrr::map2_dfr(
       tbls, seq_along(tbls),
       function(tbl, id) {
         # adding a table ID and group header
-        table_body <- pluck(tbl, "table_body") %>% mutate(tbl_id = id)
+        table_body <- pluck(tbl, "table_body") %>% mutate(!!tbl_id_colname := id)
         if (!is.null(group_header)) {
           table_body <-
             table_body %>%
             mutate(groupname_col = group_header[id])
         }
 
-        table_body %>% select(any_of(c("groupname_col", "tbl_id")), everything())
+        table_body %>% select(any_of(c("groupname_col")), matches("^tbl_id\\d+$"), everything())
       }
     )
 
@@ -134,7 +142,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
             # adding tbl_id to the rows specifications,
             # e.g. data$tbl_id == 1L & .data$row_type != "label"
             df$rows <-
-              map(df$rows, ~ add_tbl_id_to_quo(.x, tbls[[i]]$table_body, i))
+              map(df$rows, ~ add_tbl_id_to_quo(.x, tbls[[i]]$table_body, i, tbl_id_colname, style_type))
           }
           df %>%
             mutate_at(vars(any_of(c(
@@ -224,19 +232,50 @@ print_stack_differences <- function(tbls) {
   return(invisible())
 }
 
-add_tbl_id_to_quo <- function(x, table_body, tbl_id) {
-  if (eval_tidy(x, data = table_body) %>% is.null()) {
+add_tbl_id_to_quo <- function(x, table_body, tbl_id, tbl_id_colname, style_type) {
+  # if NULL AND style_type is a type that adds header changes (i.e. footnote in header),
+  # then just return the NULL
+  # the requires the stacking to pick one of the header footnotes and use it
+  # the others will be discarded when printed.
+  row_is_null <- eval_tidy(x, data = table_body) %>% is.null()
+  if (row_is_null && style_type %in% c("footnote", "footnote_abbrev")) {
     return(x)
+  }
+
+  # otherwise if NULL, add the tbl_id condition
+  if (row_is_null) {
+    return(expr(!!sym(tbl_id_colname) == !!tbl_id))
   }
 
   # if quosure, add tbl_id
   if (inherits(x, "quosure")) {
     return(
-      rlang::quo(.data$tbl_id == !!tbl_id & (!!rlang::f_rhs(x))) %>%
+      rlang::quo(!!sym(tbl_id_colname) == !!tbl_id & (!!rlang::f_rhs(x))) %>%
         structure(.Environment = attr(x, ".Environment"))
     )
   }
 
   # if expression, add tbl_id
-  expr(.data$tbl_id == !!tbl_id & (!!x))
+  expr(!!sym(tbl_id_colname) == !!tbl_id & (!!x))
 }
+
+tbl_id_varname <- function(colnames) {
+  # get column names that begin with 'tbl_id##'
+  tbl_id_colnames <-
+    stringr::str_match(string = colnames, pattern = "^tbl_id\\d+$") %>%
+    as.vector() %>%
+    purrr::discard(is.na)
+
+  # return 'tbl_id1' if no columns found
+  if (is_empty(tbl_id_colnames)) return("tbl_id1")
+
+  # if there are other tbl_id columns, return the next in the sequence
+  tbl_max_id <-
+    stringr::str_replace(tbl_id_colnames, pattern = "^tbl_id", replacement = "") %>%
+    as.integer() %>%
+    max()
+
+  return(paste0("tbl_id", tbl_max_id + 1L))
+}
+
+
