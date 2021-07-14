@@ -187,7 +187,6 @@ of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \c
 }
 
 \examples{
-# Example 1 ----------------------------------
 # A simple weighted dataset
 tbl_svysummary_ex1 <-
   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%
