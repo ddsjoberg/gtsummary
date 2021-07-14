@@ -238,3 +238,28 @@ print.gtsummary <- function(x) {
     print()
 }
 ```
+
+## The `.$meta_data$df_stats` tibble
+
+Some {gtsummary} tables contain an internal object called `.$meta_data` containing a list column called `"df_stats"`.
+The column is a list of tibbles with each tibble containing the summary statistics presented in the final gtsummary table.
+While the statistics contained in each `"df_stats"` tibble can vary within a single gtsummary object, all the tibbles have a few common characteristics.
+
+Each tibble contain the following columns 
+```{r, echo = FALSE}
+tribble(
+  ~Column, ~Description,
+  "`variable`", "String of the variable name",
+  "`label`", "String matching the variable's values in `.$table_body$label`",
+  "`col_name`", "The column name the statistics appear under in `.$table_body`, e.g. `'stat_0'`, `'stat_1'`",
+  "`variable_levels`", "This column appears if and only if the variable being summarized has multiple levels. The column is equal to the variable's levels.",
+  "`<statistics>`", "Primarily, the tibble stores the summary statistics for each variable. For example, when the mean is requested in `tbl_summary()`, there will be a column called `'mean'`."
+)
+```
+
+The statistics columns each have an attribute called `"fmt_fun"` containing the formatting function that will be applied before the statistic is placed in `.$table_body`.
+
+
+
+
+

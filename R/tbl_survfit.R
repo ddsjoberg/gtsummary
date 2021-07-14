@@ -317,14 +317,16 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
             conf.level = inputs$conf.level,
             reverse = inputs$reverse,
             quiet = inputs$quiet, tidy = ..3,
-            var_label = ..4
+            var_label = ..4,
+            estimate_fun =  estimate_fun
           ),
           "probs" = survfit_prob(..1,
             variable = ..2, probs = inputs$probs,
             label_header = inputs$label_header,
             conf.level = inputs$conf.level,
             quiet = inputs$quiet, tidy = ..3,
-            var_label = ..4
+            var_label = ..4,
+            estimate_fun =  estimate_fun
           )
         )
       ),
@@ -375,7 +377,7 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
 
 # calculates and prepares survival quantile estimates for tbl
 survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet,
-                         tidy, var_label) {
+                         tidy, var_label, estimate_fun) {
   strata <- intersect("strata", names(tidy)) %>%
     list() %>%
     compact()
@@ -415,12 +417,17 @@ survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet,
   # removing strata column if there are no stratum in survfit
   if (length(strata) == 0) df_stat <- select(df_stat, -.data$strata)
 
+  # add fmt_fun attribute
+  for (column in c("estimate", "conf.low", "conf.high")) {
+    attr(df_stat[[column]], "fmt_fun") <- estimate_fun
+  }
+
   df_stat
 }
 
 # calculates and prepares n-year survival estimates for tbl
 survfit_time <- function(x, variable, times, label_header, conf.level,
-                         reverse, quiet, tidy, var_label) {
+                         reverse, quiet, tidy, var_label, estimate_fun) {
   strata <- intersect("strata", names(tidy)) %>%
     list() %>%
     compact()
@@ -519,6 +526,11 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
       df_stat %>%
       mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high), ~ 1 - .) %>%
       dplyr::rename(conf.low = .data$conf.high, conf.high = .data$conf.low)
+  }
+
+  # add fmt_fun attribute
+  for (column in c("estimate", "conf.low", "conf.high")) {
+    attr(df_stat[[column]], "fmt_fun") <- estimate_fun
   }
 
   df_stat
