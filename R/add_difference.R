@@ -91,8 +91,8 @@ add_difference <- function(x, test = NULL, group = NULL,
     )
 
   estimate_fun <-
-    .select_to_varnames(
-      select = {{ estimate_fun }},
+    .formula_list_to_named_list(
+      x = {{ estimate_fun }},
       data = select(x$inputs$data, any_of(x$meta_data$variable)),
       var_info = x$table_body,
       arg_name = "estimate_fun"
