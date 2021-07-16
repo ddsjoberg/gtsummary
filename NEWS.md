@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix for the `add_difference(estimate_fun=)` argument.
+
 # gtsummary 1.4.2
 
 * Update to the internals of `tbl_stack()` to better handle when two or more stacked tables are then stacked again (#906)
