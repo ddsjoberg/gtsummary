@@ -315,11 +315,11 @@ modify_spanning_header <- function(x, update = NULL,
 #' @name modify
 #' @export
 modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
-  updated_call_list <- c(x$call_list, list(modify_caption = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) abort("`x=` must be class 'gtsummary'.")
   if (!rlang::is_string(caption)) abort("`caption=` must be a string.")
   text_interpret <- match.arg(text_interpret)
+  updated_call_list <- c(x$call_list, list(modify_caption = match.call()))
 
   # first interpreting caption in case user passed glue args -----------------
   caption <-
