@@ -768,9 +768,9 @@ df_stats_to_table_body <- function(x) {
 
         .x %>%
           select(-any_of(c("by", "stat_display", "variable_levels",
-                           "col_label", "col_label", "strata"))) %>%
+                           "col_label", "strata"))) %>%
           tidyr::pivot_wider(id_cols = any_of(c("variable", "label", "row_type")),
-                             names_from = col_name,
+                             names_from = .data$col_name,
                              names_glue = "raw_{col_name}_{.value}",
                              values_from = -any_of(c("variable", "label", "row_type", "col_name")))  %>%
           select(any_of(c("variable", "row_type", "label")), everything())
@@ -790,22 +790,22 @@ df_stats_to_table_body <- function(x) {
         ) %>%
           mutate(
             variable = unique(df_stats$variable),
-            raw_colname = map(colname, ~paste("raw", unique(df_stats$col_name), .x, sep = "_")),
+            raw_colname = map(.data$colname, ~paste("raw", unique(df_stats$col_name), .x, sep = "_")),
             fmt_fun =
               map(
-                colname,
+                .data$colname,
                 ~ attr(df_stats[[.x]], "fmt_fun") %||%
                   x$inputs$estimate_fun %||%
                   style_sigfig
               )
           ) %>%
-          unnest(raw_colname) %>%
-          select(-colname)
+          unnest(.data$raw_colname) %>%
+          select(-.data$colname)
       }
     ) %>%
-    nest(raw_colname = raw_colname) %>%
+    nest(raw_colname = .data$raw_colname) %>%
     dplyr::rowwise() %>%
-    mutate(raw_colname = unlist(raw_colname) %>% unname() %>% list()) %>%
+    mutate(raw_colname = unlist(.data$raw_colname) %>% unname() %>% list()) %>%
     ungroup()
 
   expr_fmt_fun <-
