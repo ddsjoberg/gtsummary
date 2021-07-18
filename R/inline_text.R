@@ -763,7 +763,6 @@ df_stats_to_table_body <- function(x) {
     purrr::pmap_dfr(
       list(x$meta_data$df_stats, x$meta_data$var_label),
       function(.x, .y) {
-        browser()
         .x$row_type <-
           ifelse("variable_levels" %in% names(.x), "level", "label")
 
