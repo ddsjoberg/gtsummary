@@ -14,10 +14,7 @@
 #' on the variable level rows. The length of the vector of statistics returned from the
 #' `fns` function must match the dimension of levels. Default is to place the
 #' new statistics on the label row.
-#' @param fmt_fun DEPRECATED.
-#' @param header DEPRECATED.
-#' @param footnote DEPRECATED.
-#' @param new_col_name DEPRECATED.
+#' @param ... DEPRECATED
 #'
 #' @section Details:
 #'
@@ -128,37 +125,28 @@
 #'
 #' \if{html}{\figure{add_stat_ex3.png}{options: width=40\%}}
 
-add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
-                     footnote = NULL, new_col_name = NULL) {
+add_stat <- function(x, fns, location = NULL, ...) {
   updated_call_list <- c(x$call_list, list(add_stat = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, c("tbl_summary", "tbl_svysummary"))) {
     abort("Argument `x=` must be of class 'tbl_summary' or 'tbl_svysummary'")
   }
 
-  if (!is.null(fmt_fun)) {
-    lifecycle::deprecate_warn(
-      "1.4.0", "gtsummary::add_stat(fmt_fun=)",
-      "modify_fmt_fun()", "Argument has been ignored."
-    )
-  }
-  if (!is.null(header)) {
-    lifecycle::deprecate_warn(
-      "1.4.0", "gtsummary::add_stat(header=)",
-      "modify_header()", "Argument has been ignored."
-    )
-  }
-  if (!is.null(footnote)) {
-    lifecycle::deprecate_warn(
-      "1.4.0", "gtsummary::add_stat(footnote=)",
-      "modify_footnote()", "Argument has been ignored."
-    )
-  }
-  if (!is.null(new_col_name)) {
-    lifecycle::deprecate_warn("1.4.0", "gtsummary::add_stat(new_col_name=)",
-      details = "Argument has been ignored."
-    )
-  }
+  # deprecated arguments -------------------------------------------------------
+  dots <- rlang::dots_list(...)
+  dep_args <-
+    list(fmt_fun = list("gtsummary::add_stat(fmt_fun=)", "modify_fmt_fun()"),
+         header = list("gtsummary::add_stat(header=)", "modify_header()"),
+         footnote = list("gtsummary::add_stat(footnote=)", "modify_footnote()"),
+         new_col_name = list("gtsummary::add_stat(new_col_name=)", NULL))
+  purrr::iwalk(
+    dep_args,
+    function(.x, .y) {
+      if (!is.null(dots[[.y]]))
+        lifecycle::deprecate_warn(when = "1.4.0", what = .x[[1]], with = .x[[2]],
+                                  details = "Argument has been ignored.")
+    }
+  )
 
   # convert to named lists -----------------------------------------------------
   if (rlang::is_string(location)) {
@@ -171,8 +159,8 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
   location <- .formula_list_to_named_list(
     x = location,
     data = switch(class(x)[1],
-      "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
-      "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
+                  "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
+                  "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
     ),
     var_info = x$table_body,
     arg_name = "location"
@@ -180,7 +168,7 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
   imap(
     location,
     ~ switch(!is_string(.x) || !.x %in% c("label", "level", "missing"),
-      abort("RHS of `location=` formulas must be one of 'label', 'level', or 'missing'")
+             abort("RHS of `location=` formulas must be one of 'label', 'level', or 'missing'")
     )
   )
 
@@ -188,8 +176,8 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
     .formula_list_to_named_list(
       x = fns,
       data = switch(class(x)[1],
-        "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
-        "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
+                    "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
+                    "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
       ),
       var_info = x$table_body,
       arg_name = "fns"
@@ -208,7 +196,7 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
   df_new_stat <-
     tibble(variable = names(fns)) %>%
     left_join(x$meta_data %>% select(.data$variable, .data$summary_type),
-      by = "variable"
+              by = "variable"
     ) %>%
     mutate(
       row_type = map_chr(.data$variable, ~ location[[.x]] %||% "label"),
@@ -226,7 +214,7 @@ add_stat <- function(x, fns, location = NULL, fmt_fun = NULL, header = NULL,
   df_new_stat$df_add_stats <-
     df_new_stat$df_add_stats %>%
     map(~ switch(is.data.frame(.x),
-      .x
+                 .x
     ) %||% tibble(!!stat_col_name := .x))
 
   # check dims of calculated statistics ----------------------------------------
