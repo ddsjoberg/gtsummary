@@ -183,15 +183,7 @@ The function allows a user to add a new column (or columns) of statistics to an
 existing <code>tbl_summary</code> or <code>tbl_svysummary</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_stat</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  <span class='va'>fns</span>,
-  location <span class='op'>=</span> <span class='cn'>NULL</span>,
-  fmt_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
-  header <span class='op'>=</span> <span class='cn'>NULL</span>,
-  footnote <span class='op'>=</span> <span class='cn'>NULL</span>,
-  new_col_name <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>add_stat</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>fns</span>, location <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -216,20 +208,8 @@ on the variable level rows. The length of the vector of statistics returned from
 new statistics on the label row.</p></td>
     </tr>
     <tr>
-      <th>fmt_fun</th>
-      <td><p>DEPRECATED.</p></td>
-    </tr>
-    <tr>
-      <th>header</th>
-      <td><p>DEPRECATED.</p></td>
-    </tr>
-    <tr>
-      <th>footnote</th>
-      <td><p>DEPRECATED.</p></td>
-    </tr>
-    <tr>
-      <th>new_col_name</th>
-      <td><p>DEPRECATED.</p></td>
+      <th>...</th>
+      <td><p>DEPRECATED arguments.</p></td>
     </tr>
     </table>
 
