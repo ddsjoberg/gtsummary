@@ -4,15 +4,7 @@
 \alias{add_stat}
 \title{Add a custom statistic column}
 \usage{
-add_stat(
-  x,
-  fns,
-  location = NULL,
-  fmt_fun = NULL,
-  header = NULL,
-  footnote = NULL,
-  new_col_name = NULL
-)
+add_stat(x, fns, location = NULL, ...)
 }
 \arguments{
 \item{x}{\code{tbl_summary} or \code{tbl_svysummary} object}
@@ -28,13 +20,7 @@ on the variable level rows. The length of the vector of statistics returned from
 \code{fns} function must match the dimension of levels. Default is to place the
 new statistics on the label row.}
 
-\item{fmt_fun}{DEPRECATED.}
-
-\item{header}{DEPRECATED.}
-
-\item{footnote}{DEPRECATED.}
-
-\item{new_col_name}{DEPRECATED.}
+\item{...}{DEPRECATED arguments.}
 }
 \description{
 \lifecycle{maturing}
