@@ -2,6 +2,8 @@
 
 * Bug fix for the `add_difference(estimate_fun=)` argument.
 
+* Updated deprecated function `workflows::pull_workflow_fit(x)` to `workflows::extract_fit_parsnip(x)`.
+
 # gtsummary 1.4.2
 
 * Update to the internals of `tbl_stack()` to better handle when two or more stacked tables are then stacked again (#906)

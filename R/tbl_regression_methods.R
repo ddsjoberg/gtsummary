@@ -33,10 +33,10 @@ tbl_regression.workflow <- function(x, ...) {
   }
 
   paste("Extracting {workflows} model fit with",
-        "`workflows::pull_workflow_fit(x) %>% tbl_regression(...)`") %>%
+        "`workflows::extract_fit_parsnip(x) %>% tbl_regression(...)`") %>%
   message()
 
-  tbl_regression(x = workflows::pull_workflow_fit(x), ...)
+  tbl_regression(x = workflows::extract_fit_parsnip(x), ...)
 }
 
 #' @export
