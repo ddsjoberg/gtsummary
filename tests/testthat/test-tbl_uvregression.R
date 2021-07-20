@@ -299,6 +299,7 @@ test_that("tbl_uvregression throw error with bad arguments in model function", {
 })
 
 test_that("tbl_uvregression works with survey object", {
+  skip_if_not(requireNamespace("survey"))
   svy <- survey::svydesign(ids = ~1, data = trial, weights = ~1)
 
   expect_error(
