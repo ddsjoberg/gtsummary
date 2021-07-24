@@ -39,6 +39,26 @@ inline_text <- function(x, ...) {
 
 inline_text.gtsummary <- function(x, variable,
                                   level = NULL, column = NULL, pattern = NULL, ...) {
+  column <- rlang::enquo(column)
+  column_is_null <- tryCatch(is.null(eval_tidy(column)), error = function(e) FALSE)
+  level <- rlang::enquo(level)
+  level_is_null <- tryCatch(is.null(eval_tidy(level)), error = function(e) FALSE)
+
+  # adding raw stats if user will use them -------------------------------------
+  if (!is.null(pattern) && !column_is_null) {
+    if (is.null(x$meta_data) || !"df_stats" %in% names(x$meta_data) ||
+        !all(c("label", "col_name") %in% names(x$meta_data$df_stats[[1]]))) {
+      paste(
+        "When both `column=` and `pattern=` are specified, the gtsummary",
+        "object must have a `x$meta_data` table with column 'df_stats',",
+        "and the 'df_stats' data frame must have columns 'label' and 'col_name'."
+      ) %>%
+        abort()
+    }
+
+    x <- df_stats_to_table_body(x)
+  }
+
   # convert gtsummary object to tibble -----------------------------------------
   # removing merging and other styling
   x$table_styling$cols_merge <- filter(x$table_styling$cols_merge, FALSE)
@@ -69,8 +89,6 @@ inline_text.gtsummary <- function(x, variable,
     inform()
 
   # level selection ------------------------------------------------------------
-  level <- rlang::enquo(level)
-  level_is_null <- tryCatch(is.null(eval_tidy(level)), error = function(e) FALSE)
   if (!level_is_null && "" %in% df_gtsummary$label) {
     paste(
       "There is a blank level, which may cause issues selecting",
@@ -98,8 +116,6 @@ inline_text.gtsummary <- function(x, variable,
   if (nrow(df_gtsummary) != 1L) abort("Criteria must select exactly one row.")
 
   # cell/pattern selection -----------------------------------------------------
-  column <- rlang::enquo(column)
-  column_is_null <- tryCatch(is.null(eval_tidy(column)), error = function(e) FALSE)
   if (!column_is_null) {
     column <-
       .select_to_varnames(!!column,
@@ -119,49 +135,19 @@ inline_text.gtsummary <- function(x, variable,
     return(dplyr::pull(df_gtsummary, all_of(column)))
   }
 
-  # if no column and pattern, return pattern
-  if (column_is_null && !is.null(pattern)) {
-    return(glue::glue_data(df_gtsummary, pattern) %>% as.character())
+  # if using pattern and column name, rename the columns that comprise column name
+  if (!is.null(pattern) && !column_is_null) {
+    df_gtsummary <-
+      df_gtsummary %>%
+      dplyr::rename_with(
+        .fn = ~stringr::str_remove(., fixed(paste0("raw_", column, "_"))),
+        .cols = starts_with(paste0("raw_", column, "_"))
+      )
   }
 
-  # if both column and pattern, grab column stats from meta_data$df_stats
-  if (!column_is_null && !is.null(pattern)) {
-    if (is.null(x$meta_data) || !"df_stats" %in% names(x$meta_data) ||
-      !all(c("label", "col_name") %in% names(x$meta_data$df_stats[[1]]))) {
-      paste(
-        "When both `column=` and `pattern=` are specified, the gtsummary",
-        "object must have a `x$meta_data` table with column 'df_stats',",
-        "and the 'df_stats' data frame must have columns 'label' and 'col_name'."
-      ) %>%
-        abort()
-    }
-
-    # selecting df_stats for the variable selected
-    df_stats <-
-      x$meta_data %>%
-      filter(.data$variable %in% .env$variable) %>%
-      purrr::pluck("df_stats", 1)
-
-    # subetting df_stats to the column selected
-    if (!column %in% df_stats$col_name) {
-      paste(
-        "When both `column=` and `pattern=` are specified, the column",
-        "must be one of", quoted_list(unique(df_stats$col_name))
-      ) %>%
-        abort()
-    }
-    df_stats <-
-      df_stats %>%
-      filter(.data$col_name %in% .env$column)
-
-    # keeping the level if specified
-    if (!level_is_null) df_stats <- filter(df_stats, .data$label %in% .env$level)
-
-    # apply formatting functions
-    lst_stats <- .apply_attr_fmt_fun(df_stats)
-
-    # return statistic
-    return(glue::glue_data(lst_stats, pattern) %>% as.character())
+  # if no column and pattern, return pattern
+  if (!is.null(pattern)) {
+    return(glue::glue_data(df_gtsummary, pattern) %>% as.character())
   }
 
   # must select column or pattern
@@ -763,3 +749,91 @@ inline_text.tbl_cross <-
     ) %>%
       eval()
   }
+
+
+
+
+
+
+
+
+df_stats_to_table_body <- function(x) {
+  # transpose stats to long format for table_body ------------------------------
+  df_raw_stats <-
+    purrr::pmap_dfr(
+      list(x$meta_data$df_stats, x$meta_data$var_label),
+      function(.x, .y) {
+        .x$row_type <-
+          ifelse("variable_levels" %in% names(.x), "level", "label")
+
+        .x %>%
+          select(-any_of(c("by", "stat_display", "variable_levels",
+                           "col_label", "strata"))) %>%
+          tidyr::pivot_wider(id_cols = any_of(c("variable", "label", "row_type")),
+                             names_from = .data$col_name,
+                             names_glue = "raw_{col_name}_{.value}",
+                             values_from = -any_of(c("variable", "label", "row_type", "col_name")))  %>%
+          select(any_of(c("variable", "row_type", "label")), everything())
+      }
+    )
+
+  # prepare fmt_fun to be applied to the new columns ---------------------------
+  df_fmt_fun <-
+    x$meta_data$df_stats %>%
+    purrr::map_dfr(
+      function(df_stats) {
+        tibble(
+          colname =
+            names(df_stats) %>%
+            setdiff(c("variable", "by", "stat_display", "col_label", "strata",
+                      "variable_levels", "label", "col_name"))
+        ) %>%
+          mutate(
+            variable = unique(df_stats$variable),
+            raw_colname = map(.data$colname, ~paste("raw", unique(df_stats$col_name), .x, sep = "_")),
+            fmt_fun =
+              map(
+                .data$colname,
+                ~ attr(df_stats[[.x]], "fmt_fun") %||%
+                  x$inputs$estimate_fun %||%
+                  style_sigfig
+              )
+          ) %>%
+          unnest(.data$raw_colname) %>%
+          select(-.data$colname)
+      }
+    ) %>%
+    nest(raw_colname = .data$raw_colname) %>%
+    dplyr::rowwise() %>%
+    mutate(raw_colname = unlist(.data$raw_colname) %>% unname() %>% list()) %>%
+    ungroup()
+
+  expr_fmt_fun <-
+    map(
+      seq_len(nrow(df_fmt_fun)),
+      ~expr(
+        modify_table_styling(
+          columns = !!df_fmt_fun$raw_colname[[.x]],
+          rows = variable %in% !!df_fmt_fun$variable[.x],
+          fmt_fun = !!df_fmt_fun$fmt_fun[[.x]]
+        )
+      )
+    )
+
+  # apply updates to gtsummary table -------------------------------------------
+  # merge in columns of raw stats
+  x <-
+    modify_table_body(
+      x,
+      ~left_join(
+        .x,
+        df_raw_stats,
+        by = c("variable", "row_type", "label")
+      )
+    )
+
+  # apply formatting functions to new columns
+  expr_fmt_fun %>%
+    purrr::reduce(function(x, y) expr(!!x %>% !!y), .init = expr(!!x)) %>%
+    eval()
+}
