@@ -6,7 +6,9 @@ test_inline1 <- trial %>% tbl_summary()
 test_inline2 <- trial %>% tbl_summary(by = trt)
 test_inline2b <- trial %>%
   tbl_summary(by = trt) %>%
+  add_overall() %>%
   add_p()
+
 
 test_that("inline_text.tbl_summary: no by", {
   expect_error(
@@ -61,6 +63,9 @@ test_that("inline_text.tbl_summary: with by", {
     inline_text(test_inline2b, variable = "stage", column = "p.value"),
     NA
   )
+
+  # add_overall checks
+  # inline_text(test_inline2b, variable = "stage", column = "stat_1", pattern = "{n}")
 })
 
 
