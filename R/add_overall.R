@@ -113,17 +113,19 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
   x$meta_data$df_stats <-
     x$meta_data$variable %>%
     map(
-      ~bind_rows(
-        x$meta_data$df_stats[[.x %in% x$meta_data$variable]],
-        tbl_overall$meta_data$df_stats[[.x %in% tbl_overall$meta_data$variable]]
-      ) %>%
-        purrr::imap_dfc(
-          function(vec, colname) {
-            attributes(vec) <-
-              attributes(x$meta_data$df_stats[[.x %in% x$meta_data$variable]][[colname]])
-            vec
-          }
-        )
+      function(.x) {
+        bind_rows(
+          x$meta_data$df_stats[[which(x$meta_data$variable %in% .x)]],
+          tbl_overall$meta_data$df_stats[[which(tbl_overall$meta_data$variable  %in% .x)]]
+        ) %>%
+          purrr::imap_dfc(
+            function(vec, colname) {
+              attributes(vec) <-
+                attributes(x$meta_data$df_stats[[which(x$meta_data$variable  %in% .x)]][[colname]])
+              vec
+            }
+          )
+      }
     )
 
   # adding overall stat to the table_body data frame
