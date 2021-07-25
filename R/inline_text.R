@@ -139,9 +139,12 @@ inline_text.gtsummary <- function(x, variable,
   if (!is.null(pattern) && !column_is_null) {
     df_gtsummary <-
       df_gtsummary %>%
-      dplyr::rename_with(
-        .fn = ~stringr::str_remove(., fixed(paste0("raw_", column, "_"))),
-        .cols = starts_with(paste0("raw_", column, "_"))
+      bind_cols(
+        select(., starts_with(paste0("raw_", column, "_"))) %>%
+        dplyr::rename_with(
+          .fn = ~stringr::str_remove(., fixed(paste0("raw_", column, "_"))),
+          .cols = starts_with(paste0("raw_", column, "_"))
+        )
       )
   }
 
