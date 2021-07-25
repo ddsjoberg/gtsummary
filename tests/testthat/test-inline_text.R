@@ -39,14 +39,15 @@ test_that("inline_text.tbl_summary: no by", {
 })
 
 test_that("inline_text.tbl_summary: with by", {
-  expect_error(
+  expect_equal(
     inline_text(test_inline2, variable = "age", column = "Drug B"),
-    NA
+    "48 (39, 56)"
   )
   expect_warning(
     inline_text(test_inline2, variable = "age", column = "Drug B"),
     NA
   )
+
   expect_error(
     inline_text(test_inline2, variable = "stage", level = "T1", column = "Drug B"),
     NA
@@ -65,7 +66,22 @@ test_that("inline_text.tbl_summary: with by", {
   )
 
   # add_overall checks
-  # inline_text(test_inline2b, variable = "stage", column = "stat_1", pattern = "{n}")
+  expect_equal(
+    inline_text(test_inline2b, variable = "age", column = "stat_1", pattern = "{median}"),
+    "46"
+  )
+  expect_equal(
+    inline_text(test_inline2b, variable = "age", column = "stat_0", pattern = "{median}"),
+    "47"
+  )
+  expect_equal(
+    inline_text(test_inline2b, variable = "stage", level = "T1", column = "stat_0", pattern = "{n}"),
+    "53"
+  )
+  expect_equal(
+    inline_text(test_inline2b, variable = "stage", level = "T1", column = "stat_1", pattern = "{n}"),
+    "28"
+  )
 })
 
 
