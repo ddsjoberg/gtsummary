@@ -158,7 +158,7 @@
 <p>The <code>.$table_body</code> object is the data frame that will ultimately be printed as the output. The table must include columns <code>"label"</code>, <code>"row_type"</code>, and <code>"variable"</code>. The <code>"label"</code> column is printed, and the other two are hidden from the final output.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl_summary_ex</span><span class="op">$</span><span class="va">table_body</span>
-<span class="co">#&gt; # A tibble: 8 x 7</span>
+<span class="co">#&gt; # A tibble: 8 × 7</span>
 <span class="co">#&gt;   variable var_type    var_label     row_type label        stat_1     stat_2    </span>
 <span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;     </span>
 <span class="co">#&gt; 1 age      continuous  Age           label    Age          46 (37, 5… 48 (39, 5…</span>
@@ -366,7 +366,7 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tbl_regression_ex</span><span class="op">$</span><span class="va">table_styling</span>
 <span class="co">#&gt; $header</span>
-<span class="co">#&gt; # A tibble: 24 x 7</span>
+<span class="co">#&gt; # A tibble: 24 × 7</span>
 <span class="co">#&gt;    column   hide  align interpret_label label  interpret_spanni… spanning_header</span>
 <span class="co">#&gt;    &lt;chr&gt;    &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;           &lt;chr&gt;  &lt;chr&gt;             &lt;chr&gt;          </span>
 <span class="co">#&gt;  1 variable TRUE  cent… gt::md          varia… gt::md            &lt;NA&gt;           </span>
@@ -382,26 +382,26 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <span class="co">#&gt; # … with 14 more rows</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $footnote</span>
-<span class="co">#&gt; # A tibble: 0 x 4</span>
+<span class="co">#&gt; # A tibble: 0 × 4</span>
 <span class="co">#&gt; # … with 4 variables: column &lt;chr&gt;, rows &lt;list&gt;, text_interpret &lt;chr&gt;,</span>
 <span class="co">#&gt; #   footnote &lt;chr&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $footnote_abbrev</span>
-<span class="co">#&gt; # A tibble: 2 x 4</span>
+<span class="co">#&gt; # A tibble: 2 × 4</span>
 <span class="co">#&gt;   column    rows      text_interpret footnote                </span>
 <span class="co">#&gt;   &lt;chr&gt;     &lt;list&gt;    &lt;chr&gt;          &lt;chr&gt;                   </span>
 <span class="co">#&gt; 1 ci        &lt;quosure&gt; gt::md         CI = Confidence Interval</span>
 <span class="co">#&gt; 2 std.error &lt;quosure&gt; gt::md         SE = Standard Error     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $text_format</span>
-<span class="co">#&gt; # A tibble: 2 x 4</span>
+<span class="co">#&gt; # A tibble: 2 × 4</span>
 <span class="co">#&gt;   column  rows       format_type undo_text_format</span>
 <span class="co">#&gt;   &lt;chr&gt;   &lt;list&gt;     &lt;chr&gt;       &lt;lgl&gt;           </span>
 <span class="co">#&gt; 1 label   &lt;language&gt; indent      FALSE           </span>
 <span class="co">#&gt; 2 p.value &lt;quosure&gt;  bold        FALSE           </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $fmt_missing</span>
-<span class="co">#&gt; # A tibble: 4 x 3</span>
+<span class="co">#&gt; # A tibble: 4 × 3</span>
 <span class="co">#&gt;   column    rows      symbol</span>
 <span class="co">#&gt;   &lt;chr&gt;     &lt;list&gt;    &lt;chr&gt; </span>
 <span class="co">#&gt; 1 estimate  &lt;quosure&gt; —     </span>
@@ -410,7 +410,7 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <span class="co">#&gt; 4 statistic &lt;quosure&gt; —     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $fmt_fun</span>
-<span class="co">#&gt; # A tibble: 10 x 3</span>
+<span class="co">#&gt; # A tibble: 10 × 3</span>
 <span class="co">#&gt;    column      rows      fmt_fun   </span>
 <span class="co">#&gt;    &lt;chr&gt;       &lt;list&gt;    &lt;list&gt;    </span>
 <span class="co">#&gt;  1 estimate    &lt;quosure&gt; &lt;fn&gt;      </span>
@@ -425,7 +425,7 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <span class="co">#&gt; 10 var_nlevels &lt;quosure&gt; &lt;prrr_fn_&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $cols_merge</span>
-<span class="co">#&gt; # A tibble: 0 x 3</span>
+<span class="co">#&gt; # A tibble: 0 × 3</span>
 <span class="co">#&gt; # … with 3 variables: column &lt;chr&gt;, rows &lt;list&gt;, pattern &lt;chr&gt;</span></code></pre></div>
 </div>
 </div>
@@ -440,7 +440,7 @@ The list contains the following data frames <code>header</code>, <code>footnote<
 <code class="sourceCode R"><span class="va">tbl_regression_ex</span> <span class="op">%&gt;%</span>
   <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span><span class="op">(</span><span class="st">"table_body"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">row_type</span>, <span class="va">label</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 5 x 3</span>
+<span class="co">#&gt; # A tibble: 5 × 3</span>
 <span class="co">#&gt;   variable row_type label               </span>
 <span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;               </span>
 <span class="co">#&gt; 1 grade    label    Grade               </span>
