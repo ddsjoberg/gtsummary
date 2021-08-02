@@ -61,7 +61,7 @@ tbl_strata <- function(data, strata,
                        .stack_group_header = TRUE,
                        .quiet = NULL) {
   # setting defaults -----------------------------------------------------------
-  quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+  .quiet <- .quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # checking inputs ------------------------------------------------------------
   if (!is.data.frame(data) && !is_survey(data)) {
