@@ -180,5 +180,6 @@ cleanup_internals <- function(x) {
     ~ .x %>%
       dplyr::rename_with(~stringr::str_replace(., "^stat_0_", "stat_")) %>%
       select(-starts_with("tbl_id"), -starts_with("var_type_"))
-  )
+  ) %>%
+    purrr::list_modify(tbls = NULL)
 }
