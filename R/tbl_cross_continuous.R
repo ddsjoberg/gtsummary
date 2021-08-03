@@ -46,9 +46,16 @@ tbl_cross_continuous <- function(data,
                                  statistic = "{median} ({p25}, {p75})",
                                  label = NULL) {
   # evaluate inputs ------------------------------------------------------------
-  con <- .select_to_varnames(data = data, select = {{ con }}, select_single = TRUE)
-  rows <- .select_to_varnames(data = data, select = {{ rows }}, select_single = FALSE)
-  col <- .select_to_varnames(data = data, select = {{ col }}, select_single = TRUE)
+  con <- .select_to_varnames(data = data, select = {{ con }},
+                             select_single = TRUE, arg_name = "con")
+  rows <- .select_to_varnames(data = data, select = {{ rows }},
+                              select_single = FALSE, arg_name = "rows")
+  col <- .select_to_varnames(data = data, select = {{ col }},
+                             select_single = TRUE, arg_name = "col")
+  label <- .formula_list_to_named_list(label, data = data, arg_name = "label")
+
+  # saving function inputs -----------------------------------------------------
+  tbl_cross_continuous_inputs <- as.list(environment())
 
   # construct data list --------------------------------------------------------
   if (is.null(col))
@@ -81,10 +88,19 @@ tbl_cross_continuous <- function(data,
       {paste0("**", ., "**")}
     tbl <-
       tbl_merge(tbls) %>%
-      modify_spanning_header(all_stat_cols() ~ col_label)
+      modify_spanning_header(all_stat_cols() ~ col_label) %>%
+      # renaming var_type
+      modify_table_body(
+        ~.x %>%
+          mutate(var_type = .data$var_type_1, .after = .data$variable)
+      )
   }
   else
     tbl <- tbls[[1]]
+
+  # cleanup internal objects ---------------------------------------------------
+  class(tbl) <- c("tbl_cross_continuous", "gtsummary")
+  tbl <- cleanup_internals(tbl)
 
   # add footnote ---------------------------------------------------------------
   con_label <- label[[con]] %||% attr(data[[con]], "label") %||% con
@@ -92,7 +108,8 @@ tbl_cross_continuous <- function(data,
     modify_footnote(tbl, all_stat_cols() ~ glue("{con_label}: {stat_label_match(statistic)}"))
 
   # return tbl -----------------------------------------------------------------
-  class(tbl) <- c("tbl_cross_continuous", "gtsummary")
+  tbl[["call_list"]] <- list(tbl_cross_continuous = match.call())
+  tbl[["inputs"]] <- tbl_cross_continuous_inputs
   tbl
 }
 
@@ -125,11 +142,43 @@ make_rows <- function(data, con, row, row_label, statistic) {
         ) %>%
         {bind_rows(
           tibble::tibble(
-            variable = .env$row,
             row_type = "label",
             label = row_label
           ), .
         )} %>%
-        mutate(variable = .env$row)
+        mutate(variable = .env$row,
+               var_type = "categorical",
+               var_label = .env$row_label)
     )
+}
+
+cleanup_internals <- function(x) {
+  # replace in text_format styling ---------------------------------------------
+  x$table_styling$text_format <-
+    tibble(
+      column = "label",
+      rows = expr(.data$row_type %in% c("level", "missing")) %>% list(),
+      format_type = "indent",
+      undo_text_format = FALSE
+    )
+
+  # rename columns in table styling --------------------------------------------
+  for (styling in names(x$table_styling)) {
+    if (is.data.frame(x$table_styling[[styling]]) &&
+        "column" %in% names(x$table_styling[[styling]])) {
+      x$table_styling[[styling]] <-
+        x$table_styling[[styling]] %>%
+        mutate(
+          column = stringr::str_replace(.data$column, "^stat_0_", "stat_")
+        )
+    }
+  }
+
+  # rename columns in table body -----------------------------------------------
+  modify_table_body(
+    x,
+    ~ .x %>%
+      dplyr::rename_with(~stringr::str_replace(., "^stat_0_", "stat_")) %>%
+      select(-starts_with("tbl_id"), -starts_with("var_type_"))
+  )
 }
