@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updates to make the internal `df_stats` objects consistent across various gtsummary objects. Added internal function `df_stats_to_table_body` that adds the numeric df_stats tibble to `.$table_body`. The formatting functions are also added for the new columns to `.$table_styling$fmt_fun`. This function is now used in inline_text.gtsummary() to prepare the returned statistics (#921)
+
 * Bug fix for the `add_difference(estimate_fun=)` argument.
 
 * Updated deprecated function `workflows::pull_workflow_fit(x)` to `workflows::extract_fit_parsnip(x)`.

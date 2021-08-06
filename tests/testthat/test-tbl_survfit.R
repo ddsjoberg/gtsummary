@@ -170,7 +170,8 @@ test_that("no errors/warnings with competing events", {
 
   expect_equal(
     summod1b$cancerdeath,
-    summod2$meta_data$df_stats[[1]]$estimate
+    summod2$meta_data$df_stats[[1]]$estimate,
+    ignore_attr = TRUE
   )
 })
 

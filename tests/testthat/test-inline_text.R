@@ -213,19 +213,20 @@ tbl1 <-
   ) %>%
   add_p()
 
-tbl2 <- tbl_survfit(
-  fit2,
-  probs = 0.5
-)
+tbl2 <-
+  tbl_survfit(
+    fit2,
+    probs = 0.5
+  )
 
 test_that("inline_text.tbl_survfit", {
-  expect_error(
+  expect_equal(
     inline_text(tbl1, time = 24, level = "Drug A"),
-    NA
+    "47% (38%, 58%)"
   )
-  expect_warning(
-    inline_text(tbl1, time = 24, level = "Drug A"),
-    NA
+  expect_equal(
+    inline_text(tbl1, time = 24, level = "Drug A", pattern = "{estimate}"),
+    "47%"
   )
 
   expect_error(
@@ -236,9 +237,12 @@ test_that("inline_text.tbl_survfit", {
 
   expect_error(
     tbl1_pattern <-
-      inline_text(tbl1,
-        time = 24, level = "Drug A",
-        pattern = "{estimate}", estimate_fun = ~ style_percent(., digits = 3, symbol = TRUE)
+      inline_text(
+        tbl1,
+        time = 24,
+        level = "Drug A",
+        pattern = "{estimate}",
+        estimate_fun = ~ style_percent(., digits = 3, symbol = TRUE)
       ),
     NA
   )
@@ -248,9 +252,9 @@ test_that("inline_text.tbl_survfit", {
     inline_text(tbl2, prob = 0.5),
     NA
   )
-  expect_warning(
+  expect_equal(
     inline_text(tbl2, prob = 0.5),
-    NA
+    "22 (21, —)"
   )
 })
 

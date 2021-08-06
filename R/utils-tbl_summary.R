@@ -1425,21 +1425,23 @@ df_stats_fun <- function(summary_type, variable, dichotomous_value, sort,
   ) %||% "variable"
   return <- left_join(t1, t2, by = merge_vars)
 
-  # adding variables needed for inlin_text()
+  # adding underlying column name
   if ("by" %in% names(return)) {
-    return$label <- return$by
     return <-
       return %>%
       left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
       rename(col_name = .data$by_col)
   }
-  else if ("variable_levels" %in% names(return)) {
-    return$label <- as.character(return$variable_levels)
+  else {
     return$col_name <- "stat_0"
+  }
+
+  # adding label column
+  if ("variable_levels" %in% names(return)) {
+    return$label <- as.character(return$variable_levels)
   }
   else {
     return$label <- var_label
-    return$col_name <- "stat_0"
   }
 
   # adding formatting function as attr to summary statistics columns
