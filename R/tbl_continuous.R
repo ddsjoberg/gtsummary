@@ -2,9 +2,9 @@
 #'
 #' Summarize a continuous by categorical variables
 #'
-#' @param con Variable name of the continuous column to be summarized
-#' @param rows Vector of categorical variable names
-#' @param col Option name of single categorical variable. Default it `NULL`
+#' @param variable Variable name of the continuous column to be summarized
+#' @param include Vector of categorical variable names
+#' @param by Optional name of single categorical variable. Default it `NULL`
 #' @param statistic String specifying the continuous summary statistics to
 #' display.  The default is `"{median} ({p25}, {p75})"`. See
 #' `tbl_summary(statistic=)` argument for details.
@@ -15,65 +15,65 @@
 #'
 #' @examples
 #' # Example 1 ----------------------------------
-#' tbl_cross_continuous_ex1 <-
-#'   tbl_cross_continuous(
+#' tbl_continuous_ex1 <-
+#'   tbl_continuous(
 #'     data = trial,
-#'     con = age,
-#'     col = trt,
-#'     rows = grade
+#'     variable = age,
+#'     by = trt,
+#'     include = grade
 #'   )
 #'
 #' # Example 2 ----------------------------------
-#' tbl_cross_continuous_ex2 <-
-#'   tbl_cross_continuous(
+#' tbl_continuous_ex2 <-
+#'   tbl_continuous(
 #'     data = trial,
-#'     con = age,
-#'     rows = grade
+#'     variable = age,
+#'     include = c(trt, grade)
 #'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_cross_continuous_ex1.png}{options: width=38\%}}
+#' \if{html}{\figure{tbl_continuous_ex1.png}{options: width=38\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_cross_continuous_ex2.png}{options: width=35\%}}
+#' \if{html}{\figure{tbl_continuous_ex2.png}{options: width=35\%}}
 
-tbl_cross_continuous <- function(data,
-                                 con,
-                                 rows,
-                                 col = NULL,
-                                 statistic = "{median} ({p25}, {p75})",
-                                 label = NULL) {
+tbl_continuous <- function(data,
+                           variable,
+                           include,
+                           by = NULL,
+                           statistic = "{median} ({p25}, {p75})",
+                           label = NULL) {
   # evaluate inputs ------------------------------------------------------------
-  con <- .select_to_varnames(data = data, select = {{ con }},
-                             select_single = TRUE, arg_name = "con")
-  rows <- .select_to_varnames(data = data, select = {{ rows }},
-                              select_single = FALSE, arg_name = "rows")
-  col <- .select_to_varnames(data = data, select = {{ col }},
-                             select_single = TRUE, arg_name = "col")
+  variable <- .select_to_varnames(data = data, select = {{ variable }},
+                             select_single = TRUE, arg_name = "variable")
+  include <- .select_to_varnames(data = data, select = {{ include }},
+                              select_single = FALSE, arg_name = "include")
+  by <- .select_to_varnames(data = data, select = {{ by }},
+                             select_single = TRUE, arg_name = "by")
   label <- .formula_list_to_named_list(label, data = data, arg_name = "label")
 
   # saving function inputs -----------------------------------------------------
-  tbl_cross_continuous_inputs <- as.list(environment())
+  tbl_continuous_inputs <- as.list(environment())
 
   # construct data list --------------------------------------------------------
-  if (is.null(col))
+  if (is.null(by))
     data_list <- list(data) %>% set_names(paste0("**N = ", nrow(data), "**"))
   else
     data_list <-
     data %>%
-    tidyr::nest(data = -all_of(col)) %>%
-    arrange(.data[[col]]) %>%
+    tidyr::nest(data = -all_of(by)) %>%
+    arrange(.data[[by]]) %>%
     tibble::deframe()
 
   tbls <-
     data_list %>%
     imap(
       function(data, data_label) {
-        rows %>%
+        include %>%
           map(
-            ~make_rows(data = data, con = con, row = .x,
+            ~make_rows(data = data, con = variable, row = .x,
                        row_label = label[[.x]] %||% attr(data[[.x]], "label") %||% .x,
                        statistic = statistic)
           ) %>%
@@ -82,9 +82,9 @@ tbl_cross_continuous <- function(data,
       }
     )
 
-  if (!is.null(col)) {
+  if (!is.null(by)) {
     col_label <-
-      label[[col]] %||% attr(data[[col]], "label") %||% col %>%
+      label[[by]] %||% attr(data[[by]], "label") %||% by %>%
       {paste0("**", ., "**")}
     tbl <-
       tbl_merge(tbls) %>%
@@ -99,17 +99,17 @@ tbl_cross_continuous <- function(data,
     tbl <- tbls[[1]]
 
   # cleanup internal objects ---------------------------------------------------
-  class(tbl) <- c("tbl_cross_continuous", "gtsummary")
+  class(tbl) <- c("tbl_continuous", "gtsummary")
   tbl <- cleanup_internals(tbl)
 
   # add footnote ---------------------------------------------------------------
-  con_label <- label[[con]] %||% attr(data[[con]], "label") %||% con
+  con_label <- label[[variable]] %||% attr(data[[variable]], "label") %||% con
   tbl <-
     modify_footnote(tbl, all_stat_cols() ~ glue("{con_label}: {stat_label_match(statistic)}"))
 
   # return tbl -----------------------------------------------------------------
-  tbl[["call_list"]] <- list(tbl_cross_continuous = match.call())
-  tbl[["inputs"]] <- tbl_cross_continuous_inputs
+  tbl[["call_list"]] <- list(tbl_continuous = match.call())
+  tbl[["inputs"]] <- tbl_continuous_inputs
   tbl
 }
 
