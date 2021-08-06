@@ -11,6 +11,7 @@ status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.
 [![](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![DOI:10.32614/RJ-2021-053](https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg)](https://doi.org/10.32614/RJ-2021-053)
 <!-- badges: end -->
 
 ## gtsummary <a href='https://github.com/ddsjoberg/gtsummary'><img src='man/figures/logo.png' align="right" height="120" /></a>
@@ -102,7 +103,6 @@ Example basic table:
 
 ``` r
 library(gtsummary)
-#> #BlackLivesMatter
 # make dataset with a few variables to summarize
 trial2 <- trial %>% select(age, grade, response, trt)
 
