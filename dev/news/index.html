@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9003</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Updates to make the internal <code>df_stats</code> objects consistent across various gtsummary objects. Added internal function <code>df_stats_to_table_body</code> that adds the numeric df_stats tibble to <code>.$table_body</code>. The formatting functions are also added for the new columns to <code>.$table_styling$fmt_fun</code>. This function is now used in inline_text.gtsummary() to prepare the returned statistics (<a href='https://github.com/ddsjoberg/gtsummary/issues/921'>#921</a>)</p></li>
 <li><p>Bug fix for the <code><a href="../reference/add_difference.html">add_difference(estimate_fun=)</a></code> argument.</p></li>
 <li><p>Updated deprecated function <code><a href="https://workflows.tidymodels.org//reference/workflow-extractors.html">workflows::pull_workflow_fit(x)</a></code> to <code><a href="https://rdrr.io/pkg/hardhat/man/hardhat-extract.html">workflows::extract_fit_parsnip(x)</a></code>.</p></li>
 </ul>
@@ -894,7 +895,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href='http://www.jessicalavery.com/'>Jessica Lavery</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
