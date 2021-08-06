@@ -20,7 +20,7 @@ on the variable level rows. The length of the vector of statistics returned from
 \code{fns} function must match the dimension of levels. Default is to place the
 new statistics on the label row.}
 
-\item{...}{DEPRECATED arguments.}
+\item{...}{DEPRECATED}
 }
 \description{
 \lifecycle{maturing}
