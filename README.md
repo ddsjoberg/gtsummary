@@ -102,6 +102,7 @@ Example basic table:
 
 ``` r
 library(gtsummary)
+#> #BlackLivesMatter
 # make dataset with a few variables to summarize
 trial2 <- trial %>% select(age, grade, response, trt)
 
@@ -208,6 +209,31 @@ tbl %>%
   flextable::save_as_docx()
 ```
 
+## Cite gtsummary
+
+``` text
+> citation("gtsummary")
+
+To cite gtsummary in publications use:
+
+  Sjoberg DD, Whiting K, Curry M, Lavery JA, Larmarange J. Reproducible summary tables with the gtsummary package.
+  The R Journal 2021;13:570–80. https://doi.org/10.32614/RJ-2021-053.
+
+A BibTeX entry for LaTeX users is
+
+  @Article{gtsummary,
+    author = {Daniel D. Sjoberg and Karissa Whiting and Michael Curry and Jessica A. Lavery and Joseph Larmarange},
+    title = {Reproducible Summary Tables with the gtsummary Package},
+    journal = {{The R Journal}},
+    year = {2021},
+    url = {https://doi.org/10.32614/RJ-2021-053},
+    doi = {10.32614/RJ-2021-053},
+    volume = {13},
+    issue = {1},
+    pages = {570-580},
+  }
+```
+
 ## Contributing
 
 Big thank you to [@jeffreybears](https://www.jeffreybears.com/) for the
@@ -225,7 +251,6 @@ you to all contributors!
 [@alexis-catherine](https://github.com/alexis-catherine),
 [@anaavu](https://github.com/anaavu),
 [@andrader](https://github.com/andrader),
-[@anevaluator](https://github.com/anevaluator),
 [@angelgar](https://github.com/angelgar),
 [@arbet003](https://github.com/arbet003),
 [@arnmayer](https://github.com/arnmayer),
@@ -234,12 +259,14 @@ you to all contributors!
 [@barthelmes](https://github.com/barthelmes),
 [@BeauMeche](https://github.com/BeauMeche),
 [@benediktclaus](https://github.com/benediktclaus),
+[@bwiernik](https://github.com/bwiernik),
 [@calebasaraba](https://github.com/calebasaraba),
 [@CarolineXGao](https://github.com/CarolineXGao),
 [@Chris-M-P](https://github.com/Chris-M-P),
 [@chrisleitzinger](https://github.com/chrisleitzinger),
 [@clmawhorter](https://github.com/clmawhorter),
 [@CodieMonster](https://github.com/CodieMonster),
+[@coeus-analytics](https://github.com/coeus-analytics),
 [@coreysparks](https://github.com/coreysparks),
 [@ctlamb](https://github.com/ctlamb),
 [@davidgohel](https://github.com/davidgohel),
@@ -248,6 +275,7 @@ you to all contributors!
 [@ddsjoberg](https://github.com/ddsjoberg),
 [@DeFilippis](https://github.com/DeFilippis),
 [@denis-or](https://github.com/denis-or),
+[@dieuv0](https://github.com/dieuv0),
 [@djbirke](https://github.com/djbirke),
 [@eamoncaddigan](https://github.com/eamoncaddigan),
 [@ElfatihHasabo](https://github.com/ElfatihHasabo),
@@ -277,6 +305,7 @@ you to all contributors!
 [@karissawhiting](https://github.com/karissawhiting),
 [@khizzr](https://github.com/khizzr),
 [@kmdono02](https://github.com/kmdono02),
+[@kwakuduahc1](https://github.com/kwakuduahc1),
 [@larmarange](https://github.com/larmarange),
 [@leejasme](https://github.com/leejasme),
 [@loukesio](https://github.com/loukesio),
@@ -300,6 +329,7 @@ you to all contributors!
 [@sachijay](https://github.com/sachijay),
 [@sammo3182](https://github.com/sammo3182),
 [@sbalci](https://github.com/sbalci),
+[@ShixiangWang](https://github.com/ShixiangWang),
 [@simonpcouch](https://github.com/simonpcouch),
 [@slb2240](https://github.com/slb2240),
 [@slobaugh](https://github.com/slobaugh),
