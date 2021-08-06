@@ -75,7 +75,6 @@
 add_significance_stars <- function(x, pattern = "{estimate}{stars}",
                                    thresholds = c(0.001, 0.01, 0.05),
                                    hide_ci = TRUE, hide_p = TRUE, hide_se = FALSE) {
-  updated_call_list <- c(x$call_list, list(add_significance_stars = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "tbl_regression") && !inherits(x, "tbl_uvregression")) {
     abort("x=` must be a 'tbl_regression' or 'tbl_uvregression' object.")
@@ -97,6 +96,7 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
   if (!"stars" %in% pattern_cols) {
     inform("`pattern=` argument does not contain '{stars}' column, and no stars will be added.")
   }
+  updated_call_list <- c(x$call_list, list(add_significance_stars = match.call()))
 
   # adding footnote ------------------------------------------------------------
   p_footnote <-
