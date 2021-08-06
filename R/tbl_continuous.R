@@ -107,6 +107,10 @@ tbl_continuous <- function(data,
   tbl <-
     modify_footnote(tbl, all_stat_cols() ~ glue("{con_label}: {stat_label_match(statistic)}"))
 
+  # adding df_by ---------------------------------------------------------------
+  tbl$df_by <- df_by(data, by)
+  tbl$N <- nrow(data)
+
   # return tbl -----------------------------------------------------------------
   tbl[["call_list"]] <- list(tbl_continuous = match.call())
   tbl[["inputs"]] <- tbl_continuous_inputs

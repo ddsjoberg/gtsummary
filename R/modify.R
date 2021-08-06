@@ -401,7 +401,8 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   }
 
   # tbl_summary with by variable
-  if (inherits(x, c("tbl_summary", "tbl_svysummary")) && !is.null(x$df_by)) {
+  if (inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_continuous")) &&
+      !is.null(x$df_by)) {
     return(
       x$table_styling$header %>%
         select(.data$column) %>%
