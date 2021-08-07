@@ -9,8 +9,6 @@ status](https://github.com/ddsjoberg/gtsummary/workflows/R-CMD-check/badge.svg)]
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
-[![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![DOI:10.32614/RJ-2021-053](https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg)](https://doi.org/10.32614/RJ-2021-053)
 <!-- badges: end -->
 
@@ -211,18 +209,29 @@ tbl %>%
 
 ## Additional Resources
 
--   The best resource are the [gtsummary
-    vignettes](https://www.danieldsjoberg.com/gtsummary/articles/),
-    including the [table
-    gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)
-    with examples of gtsummary tables and variations on the tables.
+-   The best resources are the gtsummary vignettes: [table
+    gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html),
+    [`tbl_summary()`
+    tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html),
+    [`tbl_regression()`
+    tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html),
+    [`inline_text()`
+    tutorial](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html),
+    [gtsummary
+    themes](https://www.danieldsjoberg.com/gtsummary/articles/themes.html),
+    [gtsummary+R
+    markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html).
+
+-   The [RStudio Education
+    Blog](https://education.rstudio.com/blog/2020/07/gtsummary/)
+    includes a post with a brief introduction to the package.
+
 -   A [recording of a
     presentation](https://www.youtube.com/watch?v=tANo9E1SYJE) given to
     the Weill Cornell Biostatistics Department and the Memorial Sloan
     Kettering R Users Group.
--   The [RStudio Education
-    Blog](https://education.rstudio.com/blog/2020/07/gtsummary/)
-    includes a post with a brief introduction to the package.
+
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/tANo9E1SYJE" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Cite gtsummary
 
