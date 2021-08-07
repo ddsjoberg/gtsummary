@@ -1,6 +1,6 @@
-#' Continuous cross tabulation
+#' Summarize a continuous variable
 #'
-#' Summarize a continuous by categorical variables
+#' Summarize a continuous variable by one or more categorical variables
 #'
 #' @param variable Variable name of the continuous column to be summarized
 #' @param include Vector of categorical variable names
@@ -103,7 +103,7 @@ tbl_continuous <- function(data,
   tbl <- cleanup_internals(tbl)
 
   # add footnote ---------------------------------------------------------------
-  con_label <- label[[variable]] %||% attr(data[[variable]], "label") %||% con
+  con_label <- label[[variable]] %||% attr(data[[variable]], "label") %||% variable
   tbl <-
     modify_footnote(tbl, all_stat_cols() ~ glue("{con_label}: {stat_label_match(statistic)}"))
 

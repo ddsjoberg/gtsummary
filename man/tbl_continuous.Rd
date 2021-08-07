@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_continuous.R
 \name{tbl_continuous}
 \alias{tbl_continuous}
-\title{Continuous cross tabulation}
+\title{Summarize a continuous variable}
 \usage{
 tbl_continuous(
   data,
@@ -36,7 +36,7 @@ attribute label is \code{NULL}, the variable name will be used.}
 a gtsummary table
 }
 \description{
-Summarize a continuous by categorical variables
+Summarize a continuous variable by one or more categorical variables
 }
 \section{Example Output}{
 
@@ -64,6 +64,6 @@ tbl_continuous_ex2 <-
   tbl_continuous(
     data = trial,
     variable = age,
-    include = c(grade, trt)
+    include = c(trt, grade)
   )
 }
