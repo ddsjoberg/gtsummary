@@ -209,6 +209,21 @@ tbl %>%
   flextable::save_as_docx()
 ```
 
+## Additional Resources
+
+-   The best resource are the [gtsummary
+    vignettes](https://www.danieldsjoberg.com/gtsummary/articles/),
+    including the [table
+    gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)
+    with examples of gtsummary tables and variations on the tables.
+-   A [recording of a
+    presentation](https://www.youtube.com/watch?v=tANo9E1SYJE) given to
+    the Weill Cornell Biostatistics Department and the Memorial Sloan
+    Kettering R Users Group.
+-   The [RStudio Education
+    Blog](https://education.rstudio.com/blog/2020/07/gtsummary/)
+    includes a post with a brief introduction to the package.
+
 ## Cite gtsummary
 
 ``` text
