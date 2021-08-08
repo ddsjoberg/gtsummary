@@ -222,6 +222,10 @@ tbl %>%
     [gtsummary+R
     markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html).
 
+-   The R Journal Article [*Reproducible Summary Tables with the
+    gtsummary
+    Package*](https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/RJ-2021-053.pdf).
+
 -   The [RStudio Education
     Blog](https://education.rstudio.com/blog/2020/07/gtsummary/)
     includes a post with a brief introduction to the package.
