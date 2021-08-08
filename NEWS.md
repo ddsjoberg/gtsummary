@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Updated the `README` to include links to a recording of a gtsummary presentation and to the RStudio Education blog post.
+
+* Removed `maturing` lifecycle tag from `README`.
+
+* Added a `CITATION` file so users can now cite the R Journal manuscript using `citation("gtsummary")`.
+
 * Updates to make the internal `df_stats` objects consistent across various gtsummary objects. Added internal function `df_stats_to_table_body` that adds the numeric df_stats tibble to `.$table_body`. The formatting functions are also added for the new columns to `.$table_styling$fmt_fun`. This function is now used in inline_text.gtsummary() to prepare the returned statistics (#921)
 
 * Bug fix for the `add_difference(estimate_fun=)` argument.
