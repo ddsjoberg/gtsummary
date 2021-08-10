@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Updated `add_p.tbl_summary(test = . ~ "mcnemar.test", group  = id)` syntax to require the `group=` argument to align with the paired Wilcoxon ranksum-test and paired t-test syntax.
+* Updated `add_p.tbl_summary(test = . ~ "mcnemar.test", group  = id)` syntax to require the `group=` argument to align with the paired Wilcoxon rank-sum test and paired t-test syntax.
 
 * Updated the `README` to include links to a recording of a gtsummary presentation and to the RStudio Education blog post.
 
