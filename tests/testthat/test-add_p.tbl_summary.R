@@ -225,15 +225,13 @@ test_that("p-values are replicated within tbl_summary()", {
         contains("aov") ~ aov,
         contains("chisq.test") ~ chisq.test,
         contains("chisq.test.no.correct") ~ "chisq.test.no.correct",
-        contains("fisher.test") ~ fisher.test,
-        contains("mcnemar.test") ~ mcnemar.test
+        contains("fisher.test") ~ fisher.test
       ),
       test.args = list(
         var_t.test_dots = list(var.equal = TRUE),
         var_wilcox.test_dots = list(correct = FALSE),
         var_chisq.test_dots = list(correct = FALSE),
-        var_fisher.test_dots = list(alternative = "greater"),
-        var_mcnemar.test_dots = list(correct = FALSE)
+        var_fisher.test_dots = list(alternative = "greater")
       )
     )
 
@@ -294,20 +292,14 @@ test_that("p-values are replicated within tbl_summary()", {
     fisher.test(trial[["response"]], as.factor(trial[["trt"]]), alternative = "greater")$p.value
   )
 
-  expect_equal(
-    filter(tbl_test.args$meta_data, variable == "var_mcnemar.test")$p.value,
-    mcnemar.test(trial[["response"]], as.factor(trial[["trt"]]))$p.value
-  )
-
-  expect_equal(
-    filter(tbl_test.args$meta_data, variable == "var_mcnemar.test_dots")$p.value,
-    mcnemar.test(trial[["response"]], as.factor(trial[["trt"]]), correct = FALSE)$p.value
-  )
-
   tbl_groups <-
     trial_group %>%
-    select(trt, id,
+    select(
+      trt, id,
       grade_lme4 = grade,
+      grade_mcnemar.test = grade,
+      response_mcnemar.test = response,
+      response_mcnemar.test_dots = response,
       age_paired.t.test = age,
       age_paired.t.test_dots = age,
       age_paired.wilcox.test = age,
@@ -317,14 +309,32 @@ test_that("p-values are replicated within tbl_summary()", {
     add_p(
       test = list(
         contains("paired.t.test") ~ "paired.t.test",
+        contains("mcnemar.test") ~ "mcnemar.test",
         contains("paired.wilcox.test") ~ "paired.wilcox.test"
       ),
       test.args = list(
         age_paired.t.test_dots ~ list(mu = 1),
+        response_mcnemar.test_dots ~ list(correct  = FALSE),
         age_paired.wilcox.test_dots ~ list(mu = 1)
       ),
       group = "id"
     )
+
+  expect_equal(
+    filter(tbl_groups$meta_data, variable == "response_mcnemar.test_dots")$p.value,
+    mcnemar.test(trial_group_wide[["response.x"]], trial_group_wide[["response.y"]],
+                 correct  = FALSE)$p.value
+  )
+
+  expect_equal(
+    filter(tbl_groups$meta_data, variable == "response_mcnemar.test")$p.value,
+    mcnemar.test(trial_group_wide[["response.x"]], trial_group_wide[["response.y"]])$p.value
+  )
+
+  expect_equal(
+    filter(tbl_groups$meta_data, variable == "grade_mcnemar.test")$p.value,
+    mcnemar.test(trial_group_wide[["grade.x"]], trial_group_wide[["grade.y"]])$p.value
+  )
 
   expect_equal(
     filter(tbl_groups$meta_data, variable == "age_paired.t.test")$p.value,
