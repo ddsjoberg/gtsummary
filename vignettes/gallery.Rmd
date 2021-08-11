@@ -151,7 +151,7 @@ trial_paired <-
 
 # you must first delete incomplete pairs from the data, then you can build the table
 trial_paired %>%
-  # delete missing marker values
+  # delete missing values
   filter(complete.cases(.)) %>%
   # keep IDs with both measurements
   group_by(id) %>%
