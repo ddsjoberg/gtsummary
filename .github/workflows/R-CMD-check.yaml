@@ -51,6 +51,7 @@ jobs:
         run: |
           install.packages("remotes")
           remotes::install_github("r-lib/pak")
+          pak::pak_install_extra()
           saveRDS(pak::pkg_deps("local::.", dependencies = TRUE), ".github/r-depends.rds")
         shell: Rscript {0}
 
