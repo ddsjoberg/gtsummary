@@ -49,7 +49,8 @@ jobs:
 
       - name: Install pak and query dependencies
         run: |
-          install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/")
+          install.packages("remotes")
+          remotes::install_github("r-lib/pak")
           saveRDS(pak::pkg_deps("local::.", dependencies = TRUE), ".github/r-depends.rds")
         shell: Rscript {0}
 
