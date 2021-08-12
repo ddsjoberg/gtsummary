@@ -49,7 +49,7 @@ jobs:
 
       - name: Install pak and query dependencies
         run: |
-          install.packages("remotes")
+          install.packages(c("glue", "remotes"))
           remotes::install_github("r-lib/pak")
           pak::pak_install_extra()
           saveRDS(pak::pkg_deps("local::.", dependencies = TRUE), ".github/r-depends.rds")
