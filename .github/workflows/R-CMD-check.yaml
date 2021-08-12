@@ -49,10 +49,8 @@ jobs:
 
       - name: Install pak and query dependencies
         run: |
-          install.packages(c("glue", "remotes"))
-          remotes::install_github("r-lib/pak")
-          pak::pak_install_extra()
-          saveRDS(pak::pkg_deps("local::.", dependencies = TRUE), ".github/r-depends.rds")
+          install.packages("remotes")
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
         shell: Rscript {0}
 
       - name: Restore R package cache
