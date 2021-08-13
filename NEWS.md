@@ -1,5 +1,8 @@
 # gtsummary (development version)
 
+* Updated `add_overall()` to include the overall statistics in the df_stats tibbles saved in `.$meta_data.` This makes it possible to report any of the overall statistics using the `inline_text(pattern=)` argument.
+ ref: https://stackoverflow.com/questions/68502977
+ 
 * Updated the `README` to include links to a recording of a gtsummary presentation and to the RStudio Education blog post.
 
 * Removed `maturing` lifecycle tag from `README`.
