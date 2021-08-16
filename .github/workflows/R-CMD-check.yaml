@@ -49,7 +49,7 @@ jobs:
 
       - name: Install pak and query dependencies
         run: |
-          install.packages(c("remotes", "shiny", "broom.helpers"))
+          install.packages(c("remotes", "shiny", "broom.helpers", "pak"))
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
         shell: Rscript {0}
 
