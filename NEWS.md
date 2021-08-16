@@ -1,10 +1,11 @@
 # gtsummary (development version)
 
+* Updated `add_p.tbl_summary(test = . ~ "mcnemar.test", group  = id)` syntax to require the `group=` argument to align with the paired Wilcoxon rank-sum test and paired t-test syntax.
+
 * Now using `broom::tidy()` to prepare `aov()` test results in `add_p.tbl_summary()`, which adds additional columns to `.$table_body()` (#956)
 
-* Updated `add_overall()` to include the overall statistics in the df_stats tibbles saved in `.$meta_data.` This makes it possible to report any of the overall statistics using the `inline_text(pattern=)` argument.
- ref: https://stackoverflow.com/questions/68502977
- 
+* Updated `add_overall()` to include the overall statistics in the `df_stats` tibbles saved in `.$meta_data.` This makes it possible to report any of the overall statistics using the `inline_text(pattern=)` argument.
+
 * Updated the `README` to include links to a recording of a gtsummary presentation and to the RStudio Education blog post.
 
 * Removed `maturing` lifecycle tag from `README`.
