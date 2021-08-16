@@ -10,13 +10,13 @@ add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, 
 
 add_p_test_aov <- function(data, variable, by, ...) {
   .superfluous_args(variable, ...)
-  p.value <-
-    rlang::expr(stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data)) %>%
-    eval() %>%
-    summary() %>%
-    pluck(1, "Pr(>F)", 1)
 
-  tibble::tibble(p.value = p.value, method = "One-way ANOVA")
+  rlang::expr(stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data)) %>%
+    eval() %>%
+    broom::tidy() %>%
+    dplyr::mutate(method = "One-way ANOVA") %>%
+    select(-.data$term) %>%
+    dplyr::slice(1)
 }
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
