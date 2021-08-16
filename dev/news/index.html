@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9006</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Now using <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> to prepare <code><a href="https://rdrr.io/r/stats/aov.html">aov()</a></code> test results in <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code>, which adds additional columns to <code>.$table_body()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/956'>#956</a>)</p></li>
 <li><p>Updated <code><a href="../reference/add_overall.html">add_overall()</a></code> to include the overall statistics in the df_stats tibbles saved in <code>.$meta_data.</code> This makes it possible to report any of the overall statistics using the <code><a href="../reference/inline_text.html">inline_text(pattern=)</a></code> argument. ref: <a href="https://stackoverflow.com/questions/68502977" class="uri">https://stackoverflow.com/questions/68502977</a></p></li>
 <li><p>Updated the <code>README</code> to include links to a recording of a gtsummary presentation and to the RStudio Education blog post.</p></li>
 <li><p>Removed <code>maturing</code> lifecycle tag from <code>README</code>.</p></li>
