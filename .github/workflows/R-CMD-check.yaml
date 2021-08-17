@@ -95,8 +95,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          remotes::install_deps(dependencies = TRUE, repos = "https://cran.rstudio.com")
-          remotes::install_cran("rcmdcheck", repos = "https://cran.rstudio.com")
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
       - name: Session info
