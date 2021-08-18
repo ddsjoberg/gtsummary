@@ -44,6 +44,10 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get install pkg-config libnlopt-dev
 
+      - name: Install libcurl on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y libcurl-dev
+
       # this is here because of an issue installing the systemfonts package
       # can likely remove later (https://github.com/r-lib/systemfonts/issues/21)
       # Added by DS 2020-04-09
