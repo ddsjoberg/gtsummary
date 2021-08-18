@@ -10,13 +10,13 @@ add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, 
 
 add_p_test_aov <- function(data, variable, by, ...) {
   .superfluous_args(variable, ...)
-  p.value <-
-    rlang::expr(stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data)) %>%
-    eval() %>%
-    summary() %>%
-    pluck(1, "Pr(>F)", 1)
 
-  tibble::tibble(p.value = p.value, method = "One-way ANOVA")
+  rlang::expr(stats::aov(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data)) %>%
+    eval() %>%
+    broom::tidy() %>%
+    dplyr::mutate(method = "One-way ANOVA") %>%
+    select(-.data$term) %>%
+    dplyr::slice(1)
 }
 
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
@@ -66,19 +66,6 @@ add_p_test_fisher.test <- function(data, variable, by, test.args, conf.level = 0
     mutate(
       method = case_when(
         .data$method == "Fisher's Exact Test for Count Data" ~ "Fisher's exact test",
-        TRUE ~ .data$method
-      )
-    )
-}
-
-add_p_test_mcnemar.test <- function(data, variable, by, test.args = NULL, ...) {
-  .superfluous_args(variable, ...)
-  rlang::expr(stats::mcnemar.test(data[[variable]], data[[by]], !!!test.args)) %>%
-    eval() %>%
-    broom::tidy() %>%
-    mutate(
-      method = case_when(
-        .data$method == "McNemar's Chi-squared test with continuity correction" ~ "McNemar's Chi-squared test",
         TRUE ~ .data$method
       )
     )
@@ -158,6 +145,58 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
     paired = TRUE,
     conf.level = !!conf.level, !!!test.args
   )) %>%
+    eval() %>%
+    broom::tidy()
+}
+
+
+add_p_test_mcnemar.test <- function(data, variable, by, group = NULL,
+                                    test.args = NULL, ...) {
+  quiet <- FALSE # need to add support for quiet later
+  .superfluous_args(variable, ...)
+
+  # note about deprecated method without a `group=` argument
+  if (is.null(group)) {
+    lifecycle::deprecate_stop(
+      when = "1.5.0",
+      what = "gtsummary::add_p(group='cannot be NULL with `mcnemar.test()`')",
+      details =
+        paste(
+          "Follow the link for an example of the updated syntax",
+          "https://www.danieldsjoberg.com/gtsummary/articles/gallery.html#paired-test")
+    )
+  }
+
+  # checking inputs
+  if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2) {
+    stop("`by=` must have exactly 2 levels", call. = FALSE)
+  }
+  if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
+      pull(.data$..n..) %>% max(na.rm = TRUE) > 1) {
+    stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
+  }
+
+  # reshaping data
+  data_wide <-
+    tidyr::pivot_wider(data,
+                       id_cols = all_of(group),
+                       names_from = all_of(by),
+                       values_from = all_of(variable)
+    )
+
+  # message about missing data
+  if (quiet && any(is.na(data_wide[[2]]) + is.na(data_wide[[3]]) == 1)) {
+    glue(
+      "Note for variable '{variable}': Some observations included in the ",
+      "calculation of summary statistics ",
+      "were omitted from the p-value calculation due to unbalanced missingness ",
+      "within group."
+    ) %>%
+      rlang::inform()
+  }
+
+  # calculate p-value
+  rlang::expr(stats::mcnemar.test(data_wide[[2]], data_wide[[3]], !!!test.args)) %>%
     eval() %>%
     broom::tidy()
 }
