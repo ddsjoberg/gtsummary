@@ -46,7 +46,7 @@ jobs:
 
       - name: Install libcurl on Linux
         if: runner.os == 'Linux'
-        run: sudo apt-get install -y libcurl-dev
+        run: sudo apt-get install -y libcurl4-openssl-dev
 
       # this is here because of an issue installing the systemfonts package
       # can likely remove later (https://github.com/r-lib/systemfonts/issues/21)
