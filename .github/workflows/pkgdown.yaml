@@ -35,7 +35,7 @@ jobs:
 
       - name: Query dependencies
         run: |
-          install.packages('remotes')
+          install.packages('remotes', repos = "https://cran.rstudio.com")
           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
@@ -49,9 +49,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages("remotes")
-          remotes::install_deps(dependencies = TRUE)
-          install.packages("pkgdown")
+          install.packages("remotes", repos = "https://cran.rstudio.com")
+          remotes::install_deps(dependencies = TRUE, repos = "https://cran.rstudio.com")
+          install.packages("pkgdown", repos = "https://cran.rstudio.com")
         shell: Rscript {0}
 
       - name: Install package
