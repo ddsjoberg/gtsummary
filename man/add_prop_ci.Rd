@@ -6,17 +6,17 @@
 \usage{
 add_prop_ci(
   x,
-  pattern = "{conf.low}, {conf.high}",
+  pattern = "{conf.low}\%, {conf.high}\%",
   method = c("wilson", "exact", "asymptotic"),
   conf.level = 0.95,
-  ci_fun = function(x) style_percent(x, symbol = TRUE)
+  ci_fun = NULL
 )
 }
 \arguments{
 \item{x}{A \code{tbl_summary} object}
 
 \item{pattern}{String indicating how the confidence interval will be placed.
-Default is \code{"{conf.low}, {conf.high}"}}
+Default is \code{"{conf.low}\%, {conf.high}\%"}}
 
 \item{method}{Confidence interval method. Must be one of
 \code{c("wilson", "exact", "asymptotic")}. Default is \code{"wilson"}.
@@ -25,7 +25,8 @@ See \code{Hmisc::binconf(method=)} for details.}
 \item{conf.level}{Confidence level. Default is \code{0.95}}
 
 \item{ci_fun}{Function to style upper and lower bound of confidence
-interval. Default is \code{style_percent(x, symbol = TRUE)}.}
+interval. Default is the function that styled the proportion in the
+original \code{tbl_summary()} call.}
 }
 \value{
 gtsummary table
