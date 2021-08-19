@@ -46,6 +46,7 @@ Add a new column with the confidence intervals for proportions.
 }
 
 \examples{
+if (requireNamespace("Hmisc")) {
 # Example 1 ----------------------------------
 add_prop_ci_ex1 <-
   trial \%>\%
@@ -66,4 +67,5 @@ add_prop_ci_ex2 <-
       cols_merge_pattern = "{stat_0} ({ci})"
     ) \%>\%
     modify_footnote(everything() ~ NA)
+}
 }

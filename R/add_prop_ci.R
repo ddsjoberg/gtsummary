@@ -17,6 +17,7 @@
 #' @export
 #'
 #' @examples
+#' if (requireNamespace("Hmisc")) {
 #' # Example 1 ----------------------------------
 #' add_prop_ci_ex1 <-
 #'   trial %>%
@@ -37,6 +38,7 @@
 #'       cols_merge_pattern = "{stat_0} ({ci})"
 #'     ) %>%
 #'     modify_footnote(everything() ~ NA)
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
