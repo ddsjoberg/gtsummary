@@ -54,7 +54,6 @@ add_prop_ci <- function(x,
                         conf.level = 0.95,
                         ci_fun = NULL) {
   # resolving arguments --------------------------------------------------------
-  updated_call_list <- c(x$call_list, list(add_prop_ci = match.call()))
   method <- match.arg(method)
   if(!is.null(ci_fun)) ci_fun <- gts_mapper(ci_fun, "add_prop_ci(ci_fun=)")
 
@@ -62,12 +61,9 @@ add_prop_ci <- function(x,
   assert_package("Hmisc", fn = "add_prop_ci()")
   if (!inherits(x, "tbl_summary"))
     stop("`x=` must be class 'tbl_summary'", call. = FALSE)
-  if (!is.null(x$df_by))
-    stop("`add_prop_ci()` cannot be run after `tbl_summary()` with the `by=` argument", call. = FALSE)
-  if (!is.null(ci_fun) && !rlang::is_function(ci_fun))
-    stop("`ci_fun=` must be a function.", call. = FALSE)
   if (!rlang::is_string(pattern))
     stop("`pattern=` must be a string.", call. = FALSE)
+  updated_call_list <- c(x$call_list, list(add_prop_ci = match.call()))
 
   # adding new column with CI --------------------------------------------------
   x <-
@@ -80,8 +76,31 @@ add_prop_ci <- function(x,
                                                ci_fun = ci_fun),
       location = list(all_dichotomous() ~ "label", all_categorical(FALSE) ~ "level")
     ) %>%
-    modify_header(ci = paste0("**", conf.level*100, "% CI**")) %>%
-    modify_footnote(update = ci ~ "CI = Confidence Interval", abbreviation = TRUE)
+    # moving the CI cols to after the original stat cols (when `by=` variable present)
+    # also renaming CI columns
+    modify_table_body(
+      function(.x) {
+        cols_to_order <-
+          .x %>%
+          select(all_stat_cols(), matches("^stat_\\d+_prop_ci$")) %>%
+          names()
+
+        .x %>%
+          dplyr::relocate(all_of(sort(cols_to_order)),
+                          .before = all_of(sort(cols_to_order)[1])) %>%
+          dplyr::rename_with(
+            .fn = ~paste0(
+              "prop_ci_",
+              stringr::str_replace(., pattern = "_prop_ci$", replacement = "")),
+            .cols = matches("^stat_\\d+_prop_ci$")
+          )
+      }
+    ) %>%
+    # updating CI column headers and footnotes
+    modify_header(matches("^prop_ci_stat_\\d+$") ~ paste0("**", conf.level*100, "% CI**")) %>%
+    modify_footnote(
+      update = matches("^prop_ci_stat_\\d+$") ~ "CI = Confidence Interval",
+      abbreviation = TRUE)
 
   # return gtsummary table -----------------------------------------------------
   x$call_list <- updated_call_list
@@ -104,9 +123,16 @@ single_prop_ci <- function(variable, by, tbl, method, alpha, ci_fun, pattern, ..
         as.data.frame() %>%
         set_names(c("estimate", "conf.low", "conf.high")) %>%
         dplyr::mutate_all(ci_fun) %>%
-        glue::glue_data(pattern)
+        glue::glue_data(pattern) %>% as.character()
     ) %>%
-    select(.data$ci)
+    select(any_of(c("col_name", "variable_levels", "ci"))) %>%
+    tidyr::pivot_wider(
+      id_cols = any_of("variable_levels"),
+      values_from = .data$ci,
+      names_from = .data$col_name
+    ) %>%
+    select(all_stat_cols()) %>%
+    dplyr::rename_with(.fn = ~paste0(., "_prop_ci"))
 }
 
 
