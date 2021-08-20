@@ -1,3 +1,6 @@
+skip_on_cran()
+skip_if_not(requireNamespace("Hmisc"))
+
 test_that("add_prop_ci() works", {
   expect_error(
     tbl1 <-
