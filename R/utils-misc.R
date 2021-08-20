@@ -66,8 +66,8 @@ gts_mapper <- function(x, context) {
       "e.g. `fun = function(x) style_pvalue(x, digits = 2)`, or\n",
       "`fun = ~style_pvalue(., digits = 2)`"
     ) %>%
-      stringr::str_glue()
-    rlang::abort()
+      stringr::str_glue() %>%
+      rlang::abort()
   }
 
   purrr::as_mapper(x)
