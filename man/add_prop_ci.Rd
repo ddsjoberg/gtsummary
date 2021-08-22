@@ -19,8 +19,9 @@ add_prop_ci(
 Default is \code{"{conf.low}\%, {conf.high}\%"}}
 
 \item{method}{Confidence interval method. Must be one of
-\code{c("wilson", "exact", "asymptotic")}. Default is \code{"wilson"}.
-See \code{Hmisc::binconf(method=)} for details.}
+\code{c("wilson", "wilson.no.correct", "exact", "asymptotic")}. Default is \code{"wilson"}.
+Methods \code{c("wilson", "wilson.no.correct")} are calculated with \code{prop.test()},
+and \code{c("exact", "asymptotic")} with \code{Hmisc::binconf(method=)}.}
 
 \item{conf.level}{Confidence level. Default is \code{0.95}}
 
@@ -46,7 +47,6 @@ Add a new column with the confidence intervals for proportions.
 }
 
 \examples{
-if (requireNamespace("Hmisc")) {
 # Example 1 ----------------------------------
 add_prop_ci_ex1 <-
   trial \%>\%
@@ -67,5 +67,4 @@ add_prop_ci_ex2 <-
       cols_merge_pattern = "{stat_0} ({prop_ci_stat_0})"
     ) \%>\%
     modify_footnote(everything() ~ NA)
-}
 }

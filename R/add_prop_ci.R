@@ -6,8 +6,9 @@
 #' @param pattern String indicating how the confidence interval will be placed.
 #' Default is `"{conf.low}%, {conf.high}%"`
 #' @param method Confidence interval method. Must be one of
-#' `c("wilson", "exact", "asymptotic")`. Default is `"wilson"`.
-#' See `Hmisc::binconf(method=)` for details.
+#' `c("wilson", "wilson.no.correct", "exact", "asymptotic")`. Default is `"wilson"`.
+#' Methods `c("wilson", "wilson.no.correct")` are calculated with `prop.test()`,
+#' and `c("exact", "asymptotic")` with `Hmisc::binconf(method=)`.
 #' @param conf.level Confidence level. Default is `0.95`
 #' @param ci_fun Function to style upper and lower bound of confidence
 #' interval. Default is the function that styled the proportion in the
@@ -17,7 +18,6 @@
 #' @export
 #'
 #' @examples
-#' if (requireNamespace("Hmisc")) {
 #' # Example 1 ----------------------------------
 #' add_prop_ci_ex1 <-
 #'   trial %>%
@@ -38,7 +38,6 @@
 #'       cols_merge_pattern = "{stat_0} ({prop_ci_stat_0})"
 #'     ) %>%
 #'     modify_footnote(everything() ~ NA)
-#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -58,7 +57,6 @@ add_prop_ci <- function(x,
   if(!is.null(ci_fun)) ci_fun <- gts_mapper(ci_fun, "add_prop_ci(ci_fun=)")
 
   # checking inputs ------------------------------------------------------------
-  assert_package("Hmisc", fn = "add_prop_ci()")
   if (!inherits(x, "tbl_summary"))
     stop("`x=` must be class 'tbl_summary'", call. = FALSE)
   if (!rlang::is_string(pattern))
@@ -71,7 +69,7 @@ add_prop_ci <- function(x,
     add_stat(
       fns = all_categorical() ~ purrr::partial(single_prop_ci,
                                                method = method,
-                                               alpha = 1 - conf.level,
+                                               conf.level = conf.level,
                                                pattern = pattern,
                                                ci_fun = ci_fun),
       location = list(all_dichotomous() ~ "label", all_categorical(FALSE) ~ "level")
@@ -107,7 +105,7 @@ add_prop_ci <- function(x,
   x
 }
 
-single_prop_ci <- function(variable, by, tbl, method, alpha, ci_fun, pattern, ...) {
+single_prop_ci <- function(variable, by, tbl, method, conf.level, ci_fun, pattern, ...) {
   ci_fun <-
     ci_fun %||%
     attr(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]]$p, "fmt_fun")
@@ -118,12 +116,11 @@ single_prop_ci <- function(variable, by, tbl, method, alpha, ci_fun, pattern, ..
     dplyr::rowwise() %>%
     mutate(
       ci =
-        Hmisc::binconf(x = .data$n, n = .data$N,
-                       method = method, alpha = alpha) %>%
-        as.data.frame() %>%
-        set_names(c("estimate", "conf.low", "conf.high")) %>%
-        dplyr::mutate_all(ci_fun) %>%
-        glue::glue_data(pattern) %>% as.character()
+        calculate_prop_ci(x = .data$n, n = .data$N,
+                          pattern = pattern,
+                          method = method,
+                          conf.level = conf.level,
+                          ci_fun = ci_fun)
     ) %>%
     select(any_of(c("col_name", "variable_levels", "ci"))) %>%
     tidyr::pivot_wider(
@@ -135,5 +132,27 @@ single_prop_ci <- function(variable, by, tbl, method, alpha, ci_fun, pattern, ..
     dplyr::rename_with(.fn = ~paste0(., "_prop_ci"))
 }
 
+calculate_prop_ci <- function(x, n, pattern, method, conf.level, ci_fun) {
+  if (method %in% c("wilson", "wilson.no.correct")) {
+    df_ci <-
+      prop.test(x = x, n = n,
+              conf.level = conf.level,
+              correct = isTRUE(method == "wilson")) %>%
+      broom::tidy()
+  }
+  else if (method %in% c("exact", "asymptotic")) {
+    assert_package("Hmisc", fn = 'add_prop_ci(method = c("exact", "asymptotic"))')
+    df_ci <-
+      Hmisc::binconf(x = x, n = n,
+                   method = method, alpha = 1 - conf.level) %>%
+      as.data.frame() %>%
+      set_names(c("estimate", "conf.low", "conf.high"))
+  }
 
+  df_ci %>%
+    select(all_of(c("conf.low", "conf.high"))) %>%
+    dplyr::mutate_all(ci_fun) %>%
+    glue::glue_data(pattern) %>%
+    as.character()
+}
 
