@@ -139,9 +139,9 @@ single_prop_ci <- function(variable, by, tbl, method, conf.level, ci_fun, patter
 calculate_prop_ci <- function(x, n, pattern, method, conf.level, ci_fun) {
   if (method %in% c("wilson", "wilson.no.correct")) {
     df_ci <-
-      prop.test(x = x, n = n,
-                conf.level = conf.level,
-                correct = isTRUE(method == "wilson")) %>%
+      stats::prop.test(x = x, n = n,
+                       conf.level = conf.level,
+                       correct = isTRUE(method == "wilson")) %>%
       broom::tidy()
   }
   else if (method %in% c("exact", "asymptotic")) {
