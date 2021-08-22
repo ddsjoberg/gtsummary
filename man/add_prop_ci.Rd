@@ -2,9 +2,12 @@
 % Please edit documentation in R/add_prop_ci.R
 \name{add_prop_ci}
 \alias{add_prop_ci}
+\alias{add_prop_ci.tbl_summary}
 \title{Add Proportion CIs}
 \usage{
-add_prop_ci(
+add_prop_ci(x, ...)
+
+\method{add_prop_ci}{tbl_summary}(
   x,
   pattern = "{conf.low}\%, {conf.high}\%",
   method = c("wilson", "exact", "asymptotic"),

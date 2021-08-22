@@ -15,6 +15,7 @@
 #' original `tbl_summary()` call.
 #'
 #' @return gtsummary table
+#' @rdname add_prop_ci
 #' @export
 #'
 #' @examples
@@ -46,19 +47,22 @@
 #' \if{html}{Example 2}
 #'
 #' \if{html}{\figure{add_prop_ci_ex2.png}{options: width=45\%}}
+add_prop_ci <- function(x, ...) {
+  UseMethod("add_prop_ci")
+}
 
-add_prop_ci <- function(x,
-                        pattern = "{conf.low}%, {conf.high}%",
-                        method = c("wilson", "exact", "asymptotic"),
-                        conf.level = 0.95,
-                        ci_fun = NULL) {
+#' @rdname add_prop_ci
+#' @export
+add_prop_ci.tbl_summary <- function(x,
+                                    pattern = "{conf.low}%, {conf.high}%",
+                                    method = c("wilson", "exact", "asymptotic"),
+                                    conf.level = 0.95,
+                                    ci_fun = NULL) {
   # resolving arguments --------------------------------------------------------
   method <- match.arg(method)
   if(!is.null(ci_fun)) ci_fun <- gts_mapper(ci_fun, "add_prop_ci(ci_fun=)")
 
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "tbl_summary"))
-    stop("`x=` must be class 'tbl_summary'", call. = FALSE)
   if (!rlang::is_string(pattern))
     stop("`pattern=` must be a string.", call. = FALSE)
   updated_call_list <- c(x$call_list, list(add_prop_ci = match.call()))
@@ -136,15 +140,15 @@ calculate_prop_ci <- function(x, n, pattern, method, conf.level, ci_fun) {
   if (method %in% c("wilson", "wilson.no.correct")) {
     df_ci <-
       prop.test(x = x, n = n,
-              conf.level = conf.level,
-              correct = isTRUE(method == "wilson")) %>%
+                conf.level = conf.level,
+                correct = isTRUE(method == "wilson")) %>%
       broom::tidy()
   }
   else if (method %in% c("exact", "asymptotic")) {
     assert_package("Hmisc", fn = 'add_prop_ci(method = c("exact", "asymptotic"))')
     df_ci <-
       Hmisc::binconf(x = x, n = n,
-                   method = method, alpha = 1 - conf.level) %>%
+                     method = method, alpha = 1 - conf.level) %>%
       as.data.frame() %>%
       set_names(c("estimate", "conf.low", "conf.high"))
   }
