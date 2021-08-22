@@ -12,11 +12,14 @@ add_prop_ci(x, ...)
   pattern = "{conf.low}\%, {conf.high}\%",
   method = c("wilson", "exact", "asymptotic"),
   conf.level = 0.95,
-  ci_fun = NULL
+  ci_fun = NULL,
+  ...
 )
 }
 \arguments{
 \item{x}{A \code{tbl_summary} object}
+
+\item{...}{Not used}
 
 \item{pattern}{String indicating how the confidence interval will be placed.
 Default is \code{"{conf.low}\%, {conf.high}\%"}}

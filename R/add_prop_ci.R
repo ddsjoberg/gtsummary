@@ -13,6 +13,7 @@
 #' @param ci_fun Function to style upper and lower bound of confidence
 #' interval. Default is the function that styled the proportion in the
 #' original `tbl_summary()` call.
+#' @param ... Not used
 #'
 #' @return gtsummary table
 #' @rdname add_prop_ci
@@ -57,7 +58,7 @@ add_prop_ci.tbl_summary <- function(x,
                                     pattern = "{conf.low}%, {conf.high}%",
                                     method = c("wilson", "exact", "asymptotic"),
                                     conf.level = 0.95,
-                                    ci_fun = NULL) {
+                                    ci_fun = NULL, ...) {
   # resolving arguments --------------------------------------------------------
   method <- match.arg(method)
   if(!is.null(ci_fun)) ci_fun <- gts_mapper(ci_fun, "add_prop_ci(ci_fun=)")
