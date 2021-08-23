@@ -74,3 +74,19 @@ add_prop_ci_ex2 <-
     ) \%>\%
     modify_footnote(everything() ~ NA)
 }
+\seealso{
+Other tbl_summary tools: 
+\code{\link{add_n.tbl_summary}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_summary}()},
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{inline_text.tbl_survfit}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
+}
+\concept{tbl_summary tools}

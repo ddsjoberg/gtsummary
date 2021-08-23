@@ -19,6 +19,7 @@
 #' @rdname add_prop_ci
 #' @export
 #'
+#' @family tbl_summary tools
 #' @examples
 #' # Example 1 ----------------------------------
 #' add_prop_ci_ex1 <-
