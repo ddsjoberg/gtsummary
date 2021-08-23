@@ -23,7 +23,7 @@ tbl_regression.model_fit <- function(x, ...) {
 #' @export
 #' @rdname tbl_regression_methods
 tbl_regression.workflow <- function(x, ...) {
-  assert_package("workflows", "tbl_regression.workflow()", "0.2.3")
+  assert_package("workflows", "tbl_regression.workflow()")
 
   if (isTRUE(!x$pre$actions$formula$blueprint$indicators %in% "none")) {
     paste("To take full advantage of model formatting, e.g. grouping categorical",

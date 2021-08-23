@@ -9,7 +9,8 @@
 #' @noRd
 #' @keywords internal
 #' @author David Hugh-Jones
-assert_package <- function(pkg, fn, version = NULL) {
+assert_package <- function(pkg, fn) {
+  version <- get_min_version_required(pkg)
   if (is.null(version) && !requireNamespace(pkg, quietly = TRUE)) {
     cli_alert_danger("The {.val {pkg}} package is required for function {.code {fn}}.")
     cli_ul("Install {.val {pkg}} with the code below.")
@@ -25,6 +26,19 @@ assert_package <- function(pkg, fn, version = NULL) {
     cli_code(glue('install.packages("{pkg}")'))
     stop("Install required package", call. = FALSE)
   }
+}
+
+# get min version required for a Suggested package in gtsummary
+get_min_version_required <- function(pkg) {
+  utils::packageDescription("gtsummary", fields = "Suggests") %>%
+    stringr::str_remove_all("[\r\n]") %>%
+    stringr::str_split(pattern = fixed(",")) %>%
+    unlist() %>%
+    {.[stringr::word(.) == pkg]} %>%
+    stringr::word(start = 2, end = -1) %>%
+    stringr::str_remove_all(pattern = " ") %>%
+    stringr::str_remove_all(pattern = "^\\(>=|\\)$") %>%
+    {switch(!rlang::is_empty(.) && !is.na(.), .)}
 }
 
 # converts a character vector into a quotes list separated by a comma, eg 'a', 'b'

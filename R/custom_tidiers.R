@@ -123,7 +123,7 @@ tidy_standardize <- function(x, exponentiate = FALSE,
 tidy_bootstrap <- function(x, exponentiate = FALSE,
                            conf.level = 0.95,
                            conf.int = TRUE, ..., quiet = FALSE) {
-  assert_package("parameters", "tidy_bootstrap()", version = "0.6.0")
+  assert_package("parameters", "tidy_bootstrap()")
   dots <- list(...)
 
   # calculating bootstrapped coefs
@@ -157,7 +157,7 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
 #' @rdname custom_tidiers
 #' @export
 pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
-  assert_package("mice", "pool_and_tidy_mice()", version = "3.10.0")
+  assert_package("mice", "pool_and_tidy_mice()")
   if (!inherits(x, "mira")) stop("Object `x=` must be of class 'mira'.", call. = FALSE)
 
   dots <- list(...)
