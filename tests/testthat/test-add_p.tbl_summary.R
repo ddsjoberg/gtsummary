@@ -411,6 +411,14 @@ test_that("no error with missing data", {
 
 test_that("add_p can be run after add_difference", {
   expect_error(
+    trial %>%
+      select(age, trt) %>%
+      tbl_summary(by = trt) %>%
+      add_difference() %>%
+      add_p(all_continuous() ~ "t.test")
+  )
+
+  expect_error(
     tbl <-
       trial %>%
       select(age, trt) %>%
@@ -430,11 +438,11 @@ test_that("add_p can be run after add_difference", {
     tbl %>%
       unlist(),
     c(label = "Age",
-         stat_1 = "47.011",
-         stat_2 = "47.449",
-         estimate = "-0.03",
-         ci = "-0.32, 0.25",
-         p.value = "0.8")
+      stat_1 = "47.011",
+      stat_2 = "47.449",
+      estimate = "-0.03",
+      ci = "-0.32, 0.25",
+      p.value = "0.8")
   )
   expect_true(
     tbl %>%
