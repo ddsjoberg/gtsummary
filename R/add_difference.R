@@ -69,7 +69,7 @@ add_difference <- function(x, test = NULL, group = NULL,
     stop("'tbl_summary' object must have a `by=` value with exactly two levels")
   }
   if ("add_p" %in% names(x$call_list)) {
-    stop("`add_difference()` cannot be run after `add_p()`, and vice versa")
+    stop("`add_difference()` cannot be run after `add_p()`")
   }
   if (rlang::is_function(estimate_fun)) {
     lifecycle::deprecate_warn(
