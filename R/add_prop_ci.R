@@ -7,13 +7,17 @@
 #' Default is `"{conf.low}%, {conf.high}%"`
 #' @param method Confidence interval method. Must be one of
 #' `c("wilson", "wilson.no.correct", "exact", "asymptotic")`. Default is `"wilson"`.
-#' Methods `c("wilson", "wilson.no.correct")` are calculated with `prop.test()`,
-#' and `c("exact", "asymptotic")` with `Hmisc::binconf(method=)`.
+#' See details below.
 #' @param conf.level Confidence level. Default is `0.95`
 #' @param ci_fun Function to style upper and lower bound of confidence
 #' interval. Default is the function that styled the proportion in the
 #' original `tbl_summary()` call.
 #' @param ... Not used
+#'
+#' @section method argument:
+#' Methods `c("wilson", "wilson.no.correct")` are calculated with `prop.test()`.
+#' The default method, `"wilson"`, includes the Yates continuity correction.
+#' Methods `c("exact", "asymptotic")` are calculated with `Hmisc::binconf(method=)`.
 #'
 #' @return gtsummary table
 #' @rdname add_prop_ci
@@ -104,7 +108,7 @@ add_prop_ci.tbl_summary <- function(x,
     # updating CI column headers and footnotes
     modify_header(matches("^prop_ci_stat_\\d+$") ~ paste0("**", conf.level*100, "% CI**")) %>%
     modify_footnote(
-      update = matches("^prop_ci_stat_\\d+$") ~ "CI = Confidence Interval",
+      update = matches("^prop_ci_stat_\\d+$") ~ translate_text("CI = Confidence Interval"),
       abbreviation = TRUE)
 
   # return gtsummary table -----------------------------------------------------

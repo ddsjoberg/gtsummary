@@ -26,8 +26,7 @@ Default is \code{"{conf.low}\%, {conf.high}\%"}}
 
 \item{method}{Confidence interval method. Must be one of
 \code{c("wilson", "wilson.no.correct", "exact", "asymptotic")}. Default is \code{"wilson"}.
-Methods \code{c("wilson", "wilson.no.correct")} are calculated with \code{prop.test()},
-and \code{c("exact", "asymptotic")} with \code{Hmisc::binconf(method=)}.}
+See details below.}
 
 \item{conf.level}{Confidence level. Default is \code{0.95}}
 
@@ -41,6 +40,13 @@ gtsummary table
 \description{
 Add a new column with the confidence intervals for proportions.
 }
+\section{method argument}{
+
+Methods \code{c("wilson", "wilson.no.correct")} are calculated with \code{prop.test()}.
+The default method, \code{"wilson"}, includes the Yates continuity correction.
+Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf(method=)}.
+}
+
 \section{Example Output}{
 
 \if{html}{Example 1}
