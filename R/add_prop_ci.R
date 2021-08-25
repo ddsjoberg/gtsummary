@@ -57,7 +57,8 @@ add_prop_ci <- function(x, ...) {
 #' @export
 add_prop_ci.tbl_summary <- function(x,
                                     pattern = "{conf.low}%, {conf.high}%",
-                                    method = c("wilson", "exact", "asymptotic"),
+                                    method = c("wilson", "wilson.no.correct",
+                                               "exact", "asymptotic"),
                                     conf.level = 0.95,
                                     ci_fun = NULL, ...) {
   # resolving arguments --------------------------------------------------------
@@ -111,6 +112,7 @@ add_prop_ci.tbl_summary <- function(x,
   x
 }
 
+# function to add CI for one variable
 single_prop_ci <- function(variable, by, tbl, method, conf.level, ci_fun, pattern, ...) {
   ci_fun <-
     ci_fun %||%
@@ -139,6 +141,7 @@ single_prop_ci <- function(variable, by, tbl, method, conf.level, ci_fun, patter
 }
 
 calculate_prop_ci <- function(x, n, pattern, method, conf.level, ci_fun) {
+  # calculate CI
   if (method %in% c("wilson", "wilson.no.correct")) {
     df_ci <-
       stats::prop.test(x = x, n = n,
@@ -155,6 +158,7 @@ calculate_prop_ci <- function(x, n, pattern, method, conf.level, ci_fun) {
       set_names(c("estimate", "conf.low", "conf.high"))
   }
 
+  # round and format CI
   df_ci %>%
     select(all_of(c("conf.low", "conf.high"))) %>%
     dplyr::mutate_all(ci_fun) %>%

@@ -10,7 +10,7 @@ add_prop_ci(x, ...)
 \method{add_prop_ci}{tbl_summary}(
   x,
   pattern = "{conf.low}\%, {conf.high}\%",
-  method = c("wilson", "exact", "asymptotic"),
+  method = c("wilson", "wilson.no.correct", "exact", "asymptotic"),
   conf.level = 0.95,
   ci_fun = NULL,
   ...
