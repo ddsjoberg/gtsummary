@@ -339,6 +339,99 @@ add_p_test_cohens_d <- function(data, variable, by, conf.level = 0.95, test.args
     dplyr::mutate(method = "Cohen's D")
 }
 
+add_p_test_smd <- function(data, variable, by, tbl, type,
+                           conf.level = 0.95, ...) {
+  # formulas from https://support.sas.com/resources/papers/proceedings12/335-2012.pdf
+  # browser()
+  data <-
+    data %>%
+    select(all_of(c(variable, by))) %>%
+    filter(complete.cases(.))
+  if (unique(data[[by]]) %>% length() != 2L)
+    stop("SMD requires exactly two levels of `by=` variable", call. = FALSE)
+
+  if (type %in% c("continuous", "continuous2")) {
+    df_summary <-
+      data %>%
+      group_by(.data[[by]], .drop = FALSE) %>%
+      dplyr::summarise(mean = mean(.data[[variable]]),
+                       var = stats::var(.data[[variable]]),
+                       .groups = "drop") %>%
+      dplyr::arrange(.data[[by]])
+
+    df_result <-
+      tibble(
+        estimate =
+          (df_summary$mean[1] - df_summary$mean[2]) /
+          sqrt(
+            (df_summary$var[1] + df_summary$var[2]) / 2
+          )
+      )
+  }
+  else if (type %in% "dichotomous") {
+    df_summary <-
+      tbl$meta_data %>%
+      filter(.data$variable %in% .env$variable) %>%
+      purrr::pluck("df_stats", 1)
+
+    df_result <-
+      tibble(
+        estimate =
+          (df_summary$p[1] - df_summary$p[2]) /
+          sqrt(
+            (df_summary$p[1] * (1 - df_summary$p[1]) +
+               df_summary$p[2] * (1 - df_summary$p[2])) / 2
+          )
+      )
+  }
+  else if (type %in% "categorical") {
+    df_summary <-
+      tbl$meta_data %>%
+      filter(.data$variable %in% .env$variable) %>%
+      purrr::pluck("df_stats", 1)
+    if (any(is.na(df_summary$p)))
+      stop("No missing proportions allowed in SMD.", call. = FALSE)
+    lst_p <-
+      df_summary %>%
+      select(.data$by, .data$p) %>%
+      group_by(.data$by) %>%
+      filter(dplyr::row_number() > 1) %>%
+      dplyr::group_map(~.x[["p"]])
+    S <- matrix(, nrow = length(lst_p[[1]]), ncol = length(lst_p[[1]]))
+    for (k in seq_len(length(lst_p[[1]]))) {
+      for (l in seq_len(length(lst_p[[1]]))) {
+        if (k == l)
+          S[k, l] <-
+            (lst_p[[1]][k] * (1 - lst_p[[1]][k]) + lst_p[[2]][k] * (1 - lst_p[[2]][k])) / 2
+        else
+          S[k, l] <-
+            (lst_p[[1]][k] * lst_p[[1]][l] + lst_p[[2]][k] * lst_p[[2]][l]) / 2
+      }
+    }
+    df_result <-
+      tibble(
+        estimate =
+          (lst_p[[1]] - lst_p[[2]]) %*% solve(S) %*% (lst_p[[1]] - lst_p[[2]]) %>% c()
+      )
+  }
+
+  # calculating standard error
+  # product of Ns
+  n_prod <- data %>% group_by(.data[[by]]) %>% dplyr::group_map(~nrow(.)) %>% purrr::reduce(.f = `*`)
+  n_sum <- nrow(data)
+
+  df_result %>%
+    mutate(
+      std.error =
+        sqrt(
+          .env$n_sum / .env$n_prod + .data$estimate ^ 2 / (2 * n_sum)
+        ),
+      conf.low = .data$estimate + qnorm((1 - .env$conf.level) / 2) * .data$std.error,
+      conf.high = .data$estimate - qnorm((1 - .env$conf.level) / 2) * .data$std.error,
+      method = "Standardized Mean Difference"
+    )
+}
+
 # add_p.tbl_svysummary ---------------------------------------------------------
 add_p_test_svy.chisq.test <- function(data, variable, by, ...) {
   .superfluous_args(variable, ...)
