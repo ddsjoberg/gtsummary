@@ -25,6 +25,19 @@ gtsummary table
 Merge two or more columns in a gtsummary table.
 Use \code{show_header_names()} to print underlying column names.
 }
+\section{Details}{
+
+\enumerate{
+\item Calling this function merely records the instructions to merge columns.
+The actual merging occurs when the gtsummary table is printed or converted
+with a function like \code{as_gt()}.
+\item Because the column merging is delayed, it is recommended to perform
+major modifications to the table, such as those with \code{tbl_merge()} and
+\code{tbl_stack()}, before assigning merging instructions. Otherwise,
+unexpected formatting may occur in the final table.
+}
+}
+
 \section{Future Updates}{
 
 There are planned updates to the implementation of this function

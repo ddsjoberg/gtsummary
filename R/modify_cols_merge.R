@@ -8,6 +8,15 @@
 #' use `"{conf.low}, {conf.high}"`.
 #' @inheritParams modify_table_styling
 #'
+#' @section Details:
+#' 1. Calling this function merely records the instructions to merge columns.
+#' The actual merging occurs when the gtsummary table is printed or converted
+#' with a function like `as_gt()`.
+#' 2. Because the column merging is delayed, it is recommended to perform
+#' major modifications to the table, such as those with `tbl_merge()` and
+#' `tbl_stack()`, before assigning merging instructions. Otherwise,
+#' unexpected formatting may occur in the final table.
+#'
 #' @section Future Updates:
 #' There are planned updates to the implementation of this function
 #' with respect to the `pattern=` argument.
