@@ -96,7 +96,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9008</span>
       </span>
     </div>
 
@@ -272,10 +272,9 @@ Methods <code><a href='https://rdrr.io/r/base/c.html'>c("exact", "asymptotic")</
     <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_categorical</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span>,
                 missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'>add_prop_ci</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='modify_table_styling.html'>modify_table_styling</a></span><span class='op'>(</span>
-      columns <span class='op'>=</span> <span class='va'>stat_0</span>,
+    <span class='fu'><a href='modify_cols_merge.html'>modify_cols_merge</a></span><span class='op'>(</span>
       rows <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>prop_ci_stat_0</span><span class='op'>)</span>,
-      cols_merge_pattern <span class='op'>=</span> <span class='st'>"{stat_0} ({prop_ci_stat_0})"</span>
+      pattern <span class='op'>=</span> <span class='st'>"{stat_0} ({prop_ci_stat_0})"</span>
     <span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='cn'>NA</span><span class='op'>)</span>
 </div></pre>

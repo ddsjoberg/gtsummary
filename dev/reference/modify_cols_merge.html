@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adds p-values to summary tables — add_p.tbl_summary • gtsummary</title>
+<title>Modify Column Merging — modify_cols_merge • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,8 +52,11 @@
 
 
 
-<meta property="og:title" content="Adds p-values to summary tables — add_p.tbl_summary" />
-<meta property="og:description" content="Adds p-values to tables created by tbl_summary by comparing values across groups." />
+<meta property="og:title" content="Modify Column Merging — modify_cols_merge" />
+<meta property="og:description" content="
+
+Merge two or more columns in a gtsummary table.
+Use show_header_names() to print underlying column names." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -168,132 +171,105 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adds p-values to summary tables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_p.R'><code>R/add_p.R</code></a></small>
-    <div class="hidden name"><code>add_p.tbl_summary.Rd</code></div>
+    <h1>Modify Column Merging</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/modify_cols_merge.R'><code>R/modify_cols_merge.R</code></a></small>
+    <div class="hidden name"><code>modify_cols_merge.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Adds p-values to tables created by <code>tbl_summary</code> by comparing values across groups.</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
+
+Merge two or more columns in a gtsummary table.
+Use <code><a href='modify.html'>show_header_names()</a></code> to print underlying column names.</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_summary</span>
-<span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  test <span class='op'>=</span> <span class='cn'>NULL</span>,
-  pvalue_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
-  group <span class='op'>=</span> <span class='cn'>NULL</span>,
-  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
-  test.args <span class='op'>=</span> <span class='cn'>NULL</span>,
-  exclude <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>modify_cols_merge</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>pattern</span>, rows <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Object with class <code>tbl_summary</code> from the <a href='tbl_summary.html'>tbl_summary</a> function</p></td>
+      <td><p>gtsummary object</p></td>
     </tr>
     <tr>
-      <th>test</th>
-      <td><p>List of formulas specifying statistical tests to perform for each
-variable,
-e.g. <code><a href='https://rdrr.io/r/base/list.html'>list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")</a></code>.
-Common tests include <code>"t.test"</code>, <code>"aov"</code>, <code>"wilcox.test"</code>, <code>"kruskal.test"</code>,
-<code>"chisq.test"</code>, <code>"fisher.test"</code>, and <code>"lme4"</code> (for clustered data). See <a href='tests.html'>tests</a>
-for details, more tests, and instruction for implementing a custom test.</p>
-<p>Tests default to <code>"kruskal.test"</code> for continuous variables (<code>"wilcox.test"</code>
-when "<code>by</code>" variable has two levels), <code>"chisq.test.no.correct"</code> for
-categorical variables with all expected cell counts &gt;=5, and <code>"fisher.test"</code>
-for categorical variables with any expected cell count &lt;5.</p></td>
+      <th>pattern</th>
+      <td><p>glue syntax string indicating how to merge columns in
+<code>x$table_body</code>. For example, to construct a confidence interval
+use <code>"{conf.low}, {conf.high}"</code>.</p></td>
     </tr>
     <tr>
-      <th>pvalue_fun</th>
-      <td><p>Function to round and format p-values.
-Default is <a href='style_pvalue.html'>style_pvalue</a>.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
-    </tr>
-    <tr>
-      <th>group</th>
-      <td><p>Column name (unquoted or quoted) of an ID or grouping variable.
-The column can be used to calculate p-values with correlated data.
-Default is <code>NULL</code>. See <a href='tests.html'>tests</a> for methods that utilize the <code>group=</code> argument.</p></td>
-    </tr>
-    <tr>
-      <th>include</th>
-      <td><p>Variables to include in output. Input may be a vector of
-quoted variable names, unquoted variable names, or tidyselect select helper
-functions. Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>test.args</th>
-      <td><p>List of formulas containing additional arguments to pass to
-tests that accept arguments. For example, add an argument for all t-tests,
-use <code>test.args = all_tests("t.test") ~ list(var.equal = TRUE)</code></p></td>
-    </tr>
-    <tr>
-      <th>exclude</th>
-      <td><p>DEPRECATED</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Not used</p></td>
+      <th>rows</th>
+      <td><p>predicate expression to select rows in <code>x$table_body</code>.
+Can be used to style footnote, formatting functions, missing symbols,
+and text formatting. Default is <code>NULL</code>. See details below.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>tbl_summary</code> object</p>
+    <p>gtsummary table</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    
+
+<ol>
+<li><p>Calling this function merely records the instructions to merge columns.
+The actual merging occurs when the gtsummary table is printed or converted
+with a function like <code><a href='as_gt.html'>as_gt()</a></code>.</p></li>
+<li><p>Because the column merging is delayed, it is recommended to perform
+major modifications to the table, such as those with <code><a href='tbl_merge.html'>tbl_merge()</a></code> and
+<code><a href='tbl_stack.html'>tbl_stack()</a></code>, before assigning merging instructions. Otherwise,
+unexpected formatting may occur in the final table.</p></li>
+</ol>
+
+    <h2 class="hasAnchor" id="future-updates"><a class="anchor" href="#future-updates"></a>Future Updates</h2>
+
+    
+
+<p>There are planned updates to the implementation of this function
+with respect to the <code>pattern=</code> argument.
+Currently, this function replaces a numeric column with a
+formatted character column following <code>pattern=</code>.
+Once <code><a href='https://gt.rstudio.com/reference/cols_merge.html'>gt::cols_merge()</a></code> gains the <code>rows=</code> argument the
+implementation will be updated to use it, which will keep
+numeric columns numeric. For the <em>vast majority</em> of users,
+<em>the planned change will be go unnoticed</em>.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
 
 <p>Example 1</p>
-<p><img src='figures/add_p_ex1.png' width=60% /></p>
+<p><img src='figures/modify_cols_merge_ex1.png' width=65% /></p>
 <p>Example 2</p>
-<p><img src='figures/add_p_ex2.png' width=60% /></p>
+<p><img src='figures/modify_cols_merge_ex2.png' width=41% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>See tbl_summary <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>vignette</a> for detailed examples</p>
-<p>Other tbl_summary tools: 
-<code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_prop_ci.html'>add_prop_ci</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
-<code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Daniel D. Sjoberg, Emily C. Zabor</p>
+    <div class='dont-index'><p>Other Advanced modifiers: 
+<code><a href='modify_column_hide.html'>modify_column_hide</a>()</code>,
+<code><a href='modify_fmt_fun.html'>modify_fmt_fun</a>()</code>,
+<code><a href='modify_table_body.html'>modify_table_body</a>()</code>,
+<code><a href='modify_table_styling.html'>modify_table_styling</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='va'>add_p_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"trt"</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>modify_cols_merge_ex1</span> <span class='op'>&lt;-</span>
+  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>marker</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"t.test"</span>,
+        pvalue_fun <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='style_pvalue.html'>style_pvalue</a></span><span class='op'>(</span><span class='va'>.</span>, prepend_p <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='modify_fmt_fun.html'>modify_fmt_fun</a></span><span class='op'>(</span><span class='va'>statistic</span> <span class='op'>~</span> <span class='va'>style_sigfig</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>modify_cols_merge</span><span class='op'>(</span>pattern <span class='op'>=</span> <span class='st'>"t = {statistic}; {p.value}"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='modify.html'>modify_header</a></span><span class='op'>(</span><span class='va'>statistic</span> <span class='op'>~</span> <span class='st'>"**t-test**"</span><span class='op'>)</span>
 
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='va'>add_p_ex2</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span>
-    <span class='co'># perform t-test for all variables</span>
-    test <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"t.test"</span>,
-    <span class='co'># assume equal variance in the t-test</span>
-    test.args <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_tests</a></span><span class='op'>(</span><span class='st'>"t.test"</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>var.equal <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='va'>modify_cols_merge_ex2</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>marker</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>modify_cols_merge</span><span class='op'>(</span>
+    pattern <span class='op'>=</span> <span class='st'>"{estimate} ({ci})"</span>,
+    rows <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>estimate</span><span class='op'>)</span>
   <span class='op'>)</span>
 </div></pre>
   </div>
