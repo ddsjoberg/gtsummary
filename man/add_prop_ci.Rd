@@ -73,10 +73,9 @@ add_prop_ci_ex2 <-
     tbl_summary(statistic = all_categorical() ~ "{p}\%",
                 missing = "no") \%>\%
     add_prop_ci() \%>\%
-    modify_table_styling(
-      columns = stat_0,
+    modify_cols_merge(
       rows = !is.na(prop_ci_stat_0),
-      cols_merge_pattern = "{stat_0} ({prop_ci_stat_0})"
+      pattern = "{stat_0} ({prop_ci_stat_0})"
     ) \%>\%
     modify_footnote(everything() ~ NA)
 }
