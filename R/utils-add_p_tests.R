@@ -342,7 +342,6 @@ add_p_test_cohens_d <- function(data, variable, by, conf.level = 0.95, test.args
 add_p_test_smd <- function(data, variable, by, tbl, type,
                            conf.level = 0.95, ...) {
   # formulas from https://support.sas.com/resources/papers/proceedings12/335-2012.pdf
-  # browser()
   data <-
     data %>%
     select(all_of(c(variable, by))) %>%
