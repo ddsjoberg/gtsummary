@@ -302,6 +302,9 @@
   if (summary_type %in% "dichotomous" && is.null(group) && is.null(adj.vars)) {
     return("prop.test")
   }
+  if (summary_type %in% "categorical" && is.null(group) && is.null(adj.vars)) {
+    return("smd")
+  }
 
   if (summary_type %in% c("continuous", "continuous2") && !is.null(group)) {
     return("ancova_lme4")
