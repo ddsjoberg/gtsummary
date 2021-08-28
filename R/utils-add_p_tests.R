@@ -395,8 +395,8 @@ add_p_test_smd <- function(data, variable, by, tbl, type,
       select(.data$by, .data$p) %>%
       group_by(.data$by) %>%
       filter(dplyr::row_number() > 1) %>%
-      dplyr::group_map(~.x[["p"]])
-    S <- matrix(, nrow = length(lst_p[[1]]), ncol = length(lst_p[[1]]))
+      dplyr::group_map(~c(.x[["p"]]))
+    S <- matrix(nrow = length(lst_p[[1]]), ncol = length(lst_p[[1]]))
     for (k in seq_len(length(lst_p[[1]]))) {
       for (l in seq_len(length(lst_p[[1]]))) {
         if (k == l)
@@ -410,7 +410,9 @@ add_p_test_smd <- function(data, variable, by, tbl, type,
     df_result <-
       tibble(
         estimate =
-          (lst_p[[1]] - lst_p[[2]]) %*% solve(S) %*% (lst_p[[1]] - lst_p[[2]]) %>% c()
+          (lst_p[[1]] - lst_p[[2]]) %*% solve(S) %*% (lst_p[[1]] - lst_p[[2]]) %>%
+          sqrt() %>%
+          c()
       )
   }
 
