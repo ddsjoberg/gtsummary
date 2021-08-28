@@ -132,7 +132,7 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
   )
   global_p <-
     car_Anova %>%
-    broom::tidy() %>%
+    {suppressWarnings(broom::tidy(.))} %>%
     mutate(
       variable = broom.helpers::.clean_backticks(.data$term),
       row_type = "label"
@@ -245,7 +245,7 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
         )
 
         car_Anova %>%
-          broom::tidy() %>%
+          {suppressWarnings(broom::tidy(.))} %>%
           mutate(
             variable = broom.helpers::.clean_backticks(.data$term),
             row_type = "label"
