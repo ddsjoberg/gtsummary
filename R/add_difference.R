@@ -111,7 +111,7 @@ add_difference <- function(x, test = NULL, group = NULL,
       ~ estimate_fun[[.x]] %||%
         switch(
           x$meta_data[x$meta_data$variable %in% .x,]$summary_type %in% "dichotomous" &&
-            !isTRUE(test[[.x]] %in% "smd"),
+            !identical(test[[.x]], "smd"),
           function(x) ifelse(!is.na(x), paste0(style_sigfig(x * 100), "%"), NA_character_)
         ) %||%
         style_sigfig
