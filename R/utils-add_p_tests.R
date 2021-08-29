@@ -2,7 +2,7 @@
 add_p_test_t.test <- function(data, variable, by, test.args, conf.level = 0.95, ...) {
   .superfluous_args(variable, ...)
   expr(stats::t.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)),
-    data = !!data, conf.level = !!conf.level, !!!test.args
+                     data = !!data, conf.level = !!conf.level, !!!test.args
   )) %>%
     eval() %>%
     broom::tidy()
@@ -28,7 +28,7 @@ add_p_test_kruskal.test <- function(data, variable, by, ...) {
 add_p_test_wilcox.test <- function(data, variable, by, test.args, ...) {
   .superfluous_args(variable, ...)
   expr(stats::wilcox.test(as.numeric(!!rlang::sym(variable)) ~ as.factor(!!rlang::sym(by)),
-    data = !!data, !!!test.args
+                          data = !!data, !!!test.args
   )) %>%
     eval() %>%
     broom::tidy() %>%
@@ -96,10 +96,10 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 
   # building base and full models
   mod0 <- lme4::glmer(stats::as.formula(formula0),
-    data = data, family = stats::binomial
+                      data = data, family = stats::binomial
   )
   mod1 <- lme4::glmer(stats::as.formula(formula1),
-    data = data, family = stats::binomial
+                      data = data, family = stats::binomial
   )
 
   # returning p-value
@@ -116,16 +116,16 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   }
   if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-    pull(.data$..n..) %>% max(na.rm = TRUE) > 1) {
+      pull(.data$..n..) %>% max(na.rm = TRUE) > 1) {
     stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
   }
 
   # reshaping data
   data_wide <-
     tidyr::pivot_wider(data,
-      id_cols = all_of(group),
-      names_from = all_of(by),
-      values_from = all_of(variable)
+                       id_cols = all_of(group),
+                       names_from = all_of(by),
+                       values_from = all_of(variable)
     )
 
   # message about missing data
@@ -142,8 +142,8 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
 
   # calculate p-value
   expr(stats::t.test(data_wide[[2]], data_wide[[3]],
-    paired = TRUE,
-    conf.level = !!conf.level, !!!test.args
+                     paired = TRUE,
+                     conf.level = !!conf.level, !!!test.args
   )) %>%
     eval() %>%
     broom::tidy()
@@ -210,16 +210,16 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   }
   if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-    pull(.data$..n..) %>% max(na.rm = TRUE) > 1) {
+      pull(.data$..n..) %>% max(na.rm = TRUE) > 1) {
     stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
   }
 
   # reshaping data
   data_wide <-
     tidyr::pivot_wider(data,
-      id_cols = all_of(group),
-      names_from = all_of(by),
-      values_from = all_of(variable)
+                       id_cols = all_of(group),
+                       names_from = all_of(by),
+                       values_from = all_of(variable)
     )
 
   # message about missing data
@@ -254,7 +254,7 @@ add_p_test_prop.test <- function(tbl, variable, test.args = NULL, conf.level = 0
     mutate(
       method = case_when(
         .data$method == "2-sample test for equality of proportions with continuity correction" ~
-        "Two sample test for equality of proportions",
+          "Two sample test for equality of proportions",
         TRUE ~ .data$method
       )
     )
@@ -265,7 +265,7 @@ add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = 
   # reverse coding the 'by' variable
   data[[by]] <-
     switch(!is.factor(data[[by]]),
-      forcats::fct_rev(factor(data[[by]]))
+           forcats::fct_rev(factor(data[[by]]))
     ) %||%
     forcats::fct_rev(data[[by]])
 
@@ -299,7 +299,7 @@ add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95,
   # reverse coding the 'by' variable
   data[[by]] <-
     switch(!is.factor(data[[by]]),
-      forcats::fct_rev(factor(data[[by]]))
+           forcats::fct_rev(factor(data[[by]]))
     ) %||%
     forcats::fct_rev(data[[by]])
 
@@ -342,6 +342,7 @@ add_p_test_cohens_d <- function(data, variable, by, conf.level = 0.95, test.args
 add_p_test_smd <- function(data, variable, by, tbl, type,
                            conf.level = 0.95, ...) {
   # formulas from https://support.sas.com/resources/papers/proceedings12/335-2012.pdf
+  assert_package("smd")
   data <-
     data %>%
     select(all_of(c(variable, by))) %>%
@@ -349,84 +350,9 @@ add_p_test_smd <- function(data, variable, by, tbl, type,
   if (unique(data[[by]]) %>% length() != 2L)
     stop("SMD requires exactly two levels of `by=` variable", call. = FALSE)
 
-  if (type %in% c("continuous", "continuous2")) {
-    df_summary <-
-      data %>%
-      group_by(.data[[by]], .drop = FALSE) %>%
-      dplyr::summarise(mean = mean(.data[[variable]]),
-                       var = stats::var(.data[[variable]]),
-                       .groups = "drop") %>%
-      dplyr::arrange(.data[[by]])
-
-    df_result <-
-      tibble(
-        estimate =
-          (df_summary$mean[1] - df_summary$mean[2]) /
-          sqrt(
-            (df_summary$var[1] + df_summary$var[2]) / 2
-          )
-      )
-  }
-  else if (type %in% "dichotomous") {
-    df_summary <-
-      tbl$meta_data %>%
-      filter(.data$variable %in% .env$variable) %>%
-      purrr::pluck("df_stats", 1)
-
-    df_result <-
-      tibble(
-        estimate =
-          (df_summary$p[1] - df_summary$p[2]) /
-          sqrt(
-            (df_summary$p[1] * (1 - df_summary$p[1]) +
-               df_summary$p[2] * (1 - df_summary$p[2])) / 2
-          )
-      )
-  }
-  else if (type %in% "categorical") {
-    df_summary <-
-      tbl$meta_data %>%
-      filter(.data$variable %in% .env$variable) %>%
-      purrr::pluck("df_stats", 1)
-    if (any(is.na(df_summary$p)))
-      stop("No missing proportions allowed in SMD.", call. = FALSE)
-    lst_p <-
-      df_summary %>%
-      select(.data$by, .data$p) %>%
-      group_by(.data$by) %>%
-      filter(dplyr::row_number() > 1) %>%
-      dplyr::group_map(~c(.x[["p"]]))
-    S <- matrix(nrow = length(lst_p[[1]]), ncol = length(lst_p[[1]]))
-    for (k in seq_len(length(lst_p[[1]]))) {
-      for (l in seq_len(length(lst_p[[1]]))) {
-        if (k == l)
-          S[k, l] <-
-            (lst_p[[1]][k] * (1 - lst_p[[1]][k]) + lst_p[[2]][k] * (1 - lst_p[[2]][k])) / 2
-        else
-          S[k, l] <-
-            (lst_p[[1]][k] * lst_p[[1]][l] + lst_p[[2]][k] * lst_p[[2]][l]) / 2
-      }
-    }
-    df_result <-
-      tibble(
-        estimate =
-          (lst_p[[1]] - lst_p[[2]]) %*% solve(S) %*% (lst_p[[1]] - lst_p[[2]]) %>%
-          sqrt() %>%
-          c()
-      )
-  }
-
-  # calculating standard error
-  # product of Ns
-  n_prod <- data %>% group_by(.data[[by]]) %>% dplyr::group_map(~nrow(.)) %>% purrr::reduce(.f = `*`)
-  n_sum <- nrow(data)
-
-  df_result %>%
+  smd::smd(data[[variable]], data[[by]], std.error = TRUE) %>%
+    select(.data$estimate, .data$std.error) %>%
     mutate(
-      std.error =
-        sqrt(
-          .env$n_sum / .env$n_prod + .data$estimate ^ 2 / (2 * n_sum)
-        ),
       conf.low = .data$estimate + qnorm((1 - .env$conf.level) / 2) * .data$std.error,
       conf.high = .data$estimate - qnorm((1 - .env$conf.level) / 2) * .data$std.error,
       method = "Standardized Mean Difference"
@@ -562,12 +488,12 @@ add_p_tbl_survfit_survdiff <- function(data, variable, test.args, ...) {
     dplyr::mutate(
       method =
         switch(is.null(test.args$rho) || test.args$rho == 0,
-          "Log-rank test"
+               "Log-rank test"
         ) %||%
-          switch(test.args$rho == 1,
-            "Peto & Peto modification of Gehan-Wilcoxon test"
-          ) %||%
-          stringr::str_glue("G-rho (\U03C1 = {test.args$rho}) test")
+        switch(test.args$rho == 1,
+               "Peto & Peto modification of Gehan-Wilcoxon test"
+        ) %||%
+        stringr::str_glue("G-rho (\U03C1 = {test.args$rho}) test")
     )
 }
 
@@ -594,9 +520,9 @@ add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {
 
   # returning p-value
   method <- switch(test_type,
-    "log" = "Cox regression (LRT)",
-    "wald" = "Cox regression (Wald)",
-    "sc" = "Cox regression (Score)"
+                   "log" = "Cox regression (LRT)",
+                   "wald" = "Cox regression (Wald)",
+                   "sc" = "Cox regression (Score)"
   )
   broom::glance(coxph_result) %>%
     select(all_of(paste0(c("statistic.", "p.value."), test_type))) %>%
