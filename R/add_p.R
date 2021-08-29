@@ -131,8 +131,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
   }
   if ("add_difference" %in% names(x$call_list) &&
       "p.value" %in% names(x$table_body)) {
-    paste("`add_p()` cannot be run after `add_difference()` when there is a",
-          "'p.value' column already present") %>%
+    paste("`add_p()` cannot be run after `add_difference()` when a",
+          "'p.value' column is already present.") %>%
     stop(call. = FALSE)
   }
 
@@ -178,7 +178,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
   # adding test_name to table body so it can be used to select vars by the test
   x$table_body <-
     x$table_body %>%
-    select(-any_of("test_name")) %>%
+    select(-any_of(c("test_name", "test_result"))) %>%
     left_join(meta_data[c("variable", "test_name")], by = "variable") %>%
     select(.data$variable, .data$test_name, everything())
 
