@@ -340,22 +340,27 @@ add_p_test_cohens_d <- function(data, variable, by, conf.level = 0.95, test.args
 }
 
 add_p_test_smd <- function(data, variable, by, tbl, type,
-                           conf.level = 0.95, ...) {
+                           weight = NULL, conf.level = 0.95, ...) {
   # formulas from https://support.sas.com/resources/papers/proceedings12/335-2012.pdf
   assert_package("smd")
   data <-
     data %>%
-    select(all_of(c(variable, by))) %>%
+    select(all_of(c(variable, by, weight))) %>%
     filter(complete.cases(.))
   if (unique(data[[by]]) %>% length() != 2L)
     stop("SMD requires exactly two levels of `by=` variable", call. = FALSE)
 
-  smd::smd(data[[variable]], data[[by]], std.error = TRUE) %>%
+  smd::smd(x = data[[variable]],
+           g = data[[by]],
+           w = switch(!is.null(weight), data[[weight]]),
+           std.error = TRUE) %>%
     select(.data$estimate, .data$std.error) %>%
     mutate(
       conf.low = .data$estimate + qnorm((1 - .env$conf.level) / 2) * .data$std.error,
       conf.high = .data$estimate - qnorm((1 - .env$conf.level) / 2) * .data$std.error,
-      method = "Standardized Mean Difference"
+      method = ifelse(is.null(weight),
+                      "Standardized Mean Difference",
+                      "Weighted Standardized Mean Difference")
     )
 }
 

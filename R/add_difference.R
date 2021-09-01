@@ -7,6 +7,7 @@
 #' @inheritParams  add_p.tbl_summary
 #' @inheritParams tbl_regression
 #' @param adj.vars Variables to include in mean difference adjustment (e.g. in ANCOVA models)
+#' @param weight Variables to include for weighted calculations
 #' @param estimate_fun List of formulas specifying the formatting functions
 #' to round and format differences. Default is
 #' `list(all_continuous() ~ style_sigfig, all_categorical() ~ function(x) paste0(style_sigfig(x * 100), "%"))`
@@ -57,7 +58,7 @@
 #'
 #' \if{html}{\figure{add_difference_ex2.png}{options: width=60\%}}
 add_difference <- function(x, test = NULL, group = NULL,
-                           adj.vars = NULL, test.args = NULL,
+                           adj.vars = NULL, weight = NULL, test.args = NULL,
                            conf.level = 0.95, include = everything(),
                            pvalue_fun = NULL, estimate_fun = NULL) {
   # checking inputs ------------------------------------------------------------
@@ -125,6 +126,13 @@ add_difference <- function(x, test = NULL, group = NULL,
       var_info = x$table_body,
       arg_name = "adj.vars"
     )
+  weight <-
+    .select_to_varnames(
+      select = {{ weight }},
+      data = x$inputs$data,
+      var_info = x$table_body,
+      arg_name = "weight"
+    )
 
   pvalue_fun <-
     pvalue_fun %||%
@@ -177,7 +185,7 @@ add_difference <- function(x, test = NULL, group = NULL,
         function(variable, summary_type) {
           .assign_test_add_diff(
             data = x$inputs$data, variable = variable, summary_type = summary_type,
-            by = x$by, group = group, test = test, adj.vars = adj.vars
+            by = x$by, group = group, test = test, adj.vars = adj.vars, weight = weight
           )
         }
       ),
@@ -218,7 +226,8 @@ add_difference <- function(x, test = NULL, group = NULL,
             group = group, type = summary_type,
             test.args = test.args[[variable]],
             conf.level = conf.level, tbl = x,
-            adj.vars = adj.vars
+            adj.vars = adj.vars,
+            weight = weight
           )
         }
       )

@@ -98,7 +98,7 @@
 #' @noRd
 .run_add_p_test_fun <- function(x, data, variable, by = NULL, group = NULL,
                                 type = NULL, test.args = NULL, conf.level = 0.95,
-                                adj.vars = NULL, tbl = NULL) {
+                                adj.vars = NULL, weight = NULL, tbl = NULL) {
   # if x is NULL, return NULL
   if (is.null(x)) {
     return(NULL)
@@ -114,7 +114,8 @@
             data = data, variable = variable, by = by,
             group = group, type = type, test.args = test.args,
             conf.level = conf.level, tbl = tbl,
-            adj.vars = adj.vars
+            adj.vars = adj.vars,
+            weight = weight
           ))
         },
         # printing warning and errors as message
@@ -287,7 +288,8 @@
   }
 }
 
-.assign_test_add_diff <- function(data, variable, summary_type, by, group, test, adj.vars) {
+.assign_test_add_diff <- function(data, variable, summary_type, by, group, test,
+                                  adj.vars, weight = NULL) {
   # if user supplied a test, use that test -------------------------------------
   if (!is.null(test[[variable]])) {
     return(test[[variable]])
