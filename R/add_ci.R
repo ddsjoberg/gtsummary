@@ -41,7 +41,7 @@
 #'     add_ci() %>%
 #'     modify_cols_merge(
 #'       rows = !is.na(ci_stat_0),
-#'       statistic = "{stat_0} ({ci_stat_0})"
+#'       pattern = "{stat_0} ({ci_stat_0})"
 #'     ) %>%
 #'     modify_footnote(everything() ~ NA)
 #' @section Example Output:
@@ -77,12 +77,10 @@ add_ci.tbl_summary <- function(x,
     select(.data$variable, .data$summary_type) %>%
     tibble::deframe()
 
-  methods <- c("wilson", "wilson.no.correct",
-               "exact", "asymptotic")
   method <-
     .formula_list_to_named_list(
       x = list(all_categorical() ~ "wilson", all_continuous() ~ "t.test"),
-      var_info = x$meta_data[x$meta_data$variable %in% include,],
+      var_info = x$table_body[x$table_body$variable %in% include,],
       arg_name = "method"
     ) %>%
     purrr::update_list(
@@ -98,9 +96,9 @@ add_ci.tbl_summary <- function(x,
     rlang::set_names(include) %>%
     purrr::update_list(
       !!!.formula_list_to_named_list(
-        x = method,
-        var_info = x$meta_data[x$meta_data$variable %in% include,],
-        arg_name = "method"
+        x = ci_fun,
+        var_info = x$table_body[x$table_body$variable %in% include,],
+        arg_name = "ci_fun"
       )
     )
 
@@ -108,13 +106,13 @@ add_ci.tbl_summary <- function(x,
     .formula_list_to_named_list(
       x = list(all_categorical() ~ "{conf.low}%, {conf.high}%",
                all_continuous() ~ "{conf.low}, {conf.high}"),
-      var_info = x$meta_data[x$meta_data$variable %in% include,],
+      var_info = x$table_body[x$table_body$variable %in% include,],
       arg_name = "statistic"
     ) %>%
     purrr::update_list(
       !!!.formula_list_to_named_list(
         x = statistic,
-        var_info = x$meta_data[x$meta_data$variable %in% include,],
+        var_info = x$table_body[x$table_body$variable %in% include,],
         arg_name = "statistic"
       )
     )
@@ -147,7 +145,7 @@ add_ci.tbl_summary <- function(x,
           dplyr::rename_with(
             .fn = ~paste0(
               "ci_",
-              stringr::str_replace(., statistic = "_ci$", replacement = "")),
+              stringr::str_replace(., pattern = "_ci$", replacement = "")),
             .cols = matches("^stat_\\d+_ci$")
           )
       }
@@ -166,29 +164,64 @@ add_ci.tbl_summary <- function(x,
 # function to add CI for one variable
 single_ci <- function(variable, by, tbl, method, conf.level,
                       ci_fun, statistic, summary_type,...) {
-  tbl$meta_data %>%
-    filter(.data$variable %in% .env$variable) %>%
-    purrr::pluck("df_stats", 1) %>%
-    dplyr::rowwise() %>%
-    mutate(
-      ci =
-        case_when(
-          .env$summary_type[[variable]] %in% c("categorical", "dichotomous") ~
-            calculate_prop_ci(x = .data$n, n = .data$N,
-                              statistic = statistic[[variable]],
-                              method = method[[variable]],
-                              conf.level = conf.level,
-                              ci_fun = ci_fun[[variable]]),
-          .env$summary_type[[variable]] %in% c("continuous", "continuous2") ~
-            calculate_mean_ci(data = tbl$inputs$data,
-                              statistic = statistic[[variable]],
-                              method = method[[variable]],
-                              conf.level = conf.level,
-                              ci_fun = ci_fun[[variable]])
-        )
+  if (method[[variable]] %in% c("wilson", "wilson.no.correct",
+                                "exact", "asymptotic") &&
+      summary_type[[variable]] %in% c("categorical", "dichotomous")) {
+    df_single_ci <-
+      tbl$meta_data %>%
+      filter(.data$variable %in% .env$variable) %>%
+      purrr::pluck("df_stats", 1) %>%
+      dplyr::rowwise() %>%
+      mutate(
+        ci =
+          calculate_prop_ci(x = .data$n, n = .data$N,
+                                statistic = statistic[[variable]],
+                                method = method[[variable]],
+                                conf.level = conf.level,
+                                ci_fun = ci_fun[[variable]])
 
-    ) %>%
-    select(any_of(c("col_name", "variable_levels", "ci"))) %>%
+      )
+  }
+  else if (method[[variable]] %in% "t.test" &&
+           summary_type[[variable]] %in% c("continuous", "continuous2")) {
+    df_single_ci <-
+      tbl$inputs$data %>%
+      dplyr::group_by_at(tbl$by) %>%
+      tidyr::nest() %>%
+      dplyr::rowwise() %>%
+      mutate(
+        ci =
+          calculate_mean_ci(data = .data$data,
+                            variable = variable,
+                            statistic = statistic[[variable]],
+                            method = method[[variable]],
+                            conf.level = conf.level,
+                            ci_fun = ci_fun[[variable]])
+      )
+    if (is.null(tbl$by)) {
+      df_single_ci <-
+        df_single_ci %>%
+        mutate(col_name = "stat_0") %>%
+        select(any_of(c("col_name", "variable_levels", "ci")))
+    }
+    else {
+      df_single_ci <-
+        df_single_ci %>%
+        dplyr::rename(variable_levels = all_of(tbl$by)) %>%
+        left_join(
+          tbl$df_by %>% select(.data$by, col_name = .data$by_col),
+          by = c("variable_levels" = "by")
+        ) %>%
+        select(any_of(c("col_name", "variable_levels", "ci")))
+    }
+  }
+  else {
+    glue("Error with variable '{variable}'. Method '{method[[variable]]}' ",
+         "cannot be applied to summary type '{summary_type[[variable]]}'.") %>%
+    stop(call. = FALSE)
+  }
+
+  df_single_ci %>%
     tidyr::pivot_wider(
       id_cols = any_of("variable_levels"),
       values_from = .data$ci,
@@ -198,14 +231,20 @@ single_ci <- function(variable, by, tbl, method, conf.level,
     dplyr::rename_with(.fn = ~paste0(., "_ci"))
 }
 
-calculate_mean_ci <- function(data, variable, statistic, method, conf.level, ci_fun) {
-  method_fun <-
-    switch(
-      method,
-      "t.test" = stats::t.test,
-      "poisson.test" = stats::poisson.test
-    )
+calculate_mean_ci <- function(data, variable, statistic,
+                              method, conf.level, ci_fun) {
+  if (method %in% c("t.test")) {
+    df_ci <-
+      stats::t.test(data[[variable]], conf.level = conf.level) %>%
+      broom::tidy()
+  }
 
+  # round and format CI
+  df_ci %>%
+    select(all_of(c("conf.low", "conf.high"))) %>%
+    dplyr::mutate_all(ci_fun) %>%
+    glue::glue_data(statistic) %>%
+    as.character()
 }
 
 calculate_prop_ci <- function(x, n, statistic, method, conf.level, ci_fun) {
