@@ -18,7 +18,7 @@ test_that("add_ci() works", {
   )
   expect_equal(
     tbl1 %>% select(starts_with("ci_stat_")) %>% as.list(),
-    list(prop_ci_stat_1 = "21%, 40%", prop_ci_stat_2 = "25%, 44%")
+    list(ci_stat_1 = "21%, 40%", ci_stat_2 = "25%, 44%")
   )
 
 
