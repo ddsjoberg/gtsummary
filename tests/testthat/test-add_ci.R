@@ -5,8 +5,18 @@ test_that("add_ci() works", {
   expect_error(
     tbl1 <-
       trial %>%
+      select(response, age) %>%
+      tbl_summary(missing = "no") %>%
+      add_p() %>%
+      add_ci() %>%
+      as_tibble(col_labels = FALSE),
+    NA
+  )
+  expect_error(
+    tbl1 <-
+      trial %>%
       select(response, age, trt) %>%
-      tbl_summary(by= trt, missing = "no") %>%
+      tbl_summary(by = trt, missing = "no") %>%
       add_p() %>%
       add_ci() %>%
       as_tibble(col_labels = FALSE),
@@ -50,6 +60,11 @@ test_that("add_ci() throws errors with bad arguments", {
     trial %>%
     select(response, trt) %>%
     tbl_summary(missing = "no")
+
+  expect_error(
+    tbl0 %>%
+      add_ci(method = everything() ~ "t.test")
+  )
 
   expect_error(
     tbl0 %>%
