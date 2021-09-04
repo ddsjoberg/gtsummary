@@ -215,12 +215,12 @@ single_ci <- function(variable, by, tbl, method, conf.level,
     else {
       df_single_ci <-
         df_single_ci %>%
-        dplyr::rename(variable_levels = all_of(tbl$by)) %>%
+        dplyr::rename(by = all_of(tbl$by)) %>%
         left_join(
           tbl$df_by %>% select(.data$by, col_name = .data$by_col),
-          by = c("variable_levels" = "by")
+          by = "by"
         ) %>%
-        select(any_of(c("col_name", "variable_levels", "ci")))
+        select(any_of(c("by", "col_name", "ci")))
     }
   }
   else {

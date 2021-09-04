@@ -5,7 +5,7 @@ test_that("add_ci() works", {
   expect_error(
     tbl1 <-
       trial %>%
-      select(response, trt) %>%
+      select(response, age, trt) %>%
       tbl_summary(by= trt, missing = "no") %>%
       add_p() %>%
       add_ci() %>%
@@ -18,7 +18,8 @@ test_that("add_ci() works", {
   )
   expect_equal(
     tbl1 %>% select(starts_with("ci_stat_")) %>% as.list(),
-    list(ci_stat_1 = "21%, 40%", ci_stat_2 = "25%, 44%")
+    list(ci_stat_1 = c("21%, 40%", "44, 50"),
+         ci_stat_2 = c("25%, 44%", "45, 50"))
   )
 
 
