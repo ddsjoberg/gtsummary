@@ -22,18 +22,23 @@ add_ci(x, ...)
 
 \item{...}{Not used}
 
-\item{method}{Confidence interval method. Must be one of
-\code{c("wilson", "wilson.no.correct", "exact", "asymptotic")}. Default is \code{"wilson"}.
+\item{method}{Confidence interval method. Default is
+\code{list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")}.
+Must be one of
+\code{c("wilson", "wilson.no.correct", "exact", "asymptotic")} for categorical
+variables, and \code{"t.test"} for continuous variables.
 See details below.}
 
-\item{statistic}{String indicating how the confidence interval will be placed.
-Default is \code{"{conf.low}\%, {conf.high}\%"}}
+\item{include}{variables to include in the summary table. Default is \code{everything()}}
+
+\item{statistic}{Formula indicating how the confidence interval will be placed.
+Default is \code{list(all_categorical() ~ "{conf.low}\%, {conf.high}\%", all_continuous() ~ "{conf.low}, {conf.high}")}}
 
 \item{conf.level}{Confidence level. Default is \code{0.95}}
 
 \item{ci_fun}{Function to style upper and lower bound of confidence
-interval. Default is the function that styled the proportion in the
-original \code{tbl_summary()} call.}
+interval. Default is
+\code{list(all_categorical() ~ function(x) style_sigfig(x * 100), all_continuous() ~ style_sigfig)}.}
 }
 \value{
 gtsummary table

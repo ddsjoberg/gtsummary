@@ -3,16 +3,20 @@
 #' Add a new column with the confidence intervals for proportions.
 #'
 #' @param x A `tbl_summary` object
-#' @param statistic String indicating how the confidence interval will be placed.
-#' Default is `"{conf.low}%, {conf.high}%"`
-#' @param method Confidence interval method. Must be one of
-#' `c("wilson", "wilson.no.correct", "exact", "asymptotic")`. Default is `"wilson"`.
+#' @param statistic Formula indicating how the confidence interval will be placed.
+#' Default is `list(all_categorical() ~ "{conf.low}%, {conf.high}%", all_continuous() ~ "{conf.low}, {conf.high}")`
+#' @param method Confidence interval method. Default is
+#' `list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")`.
+#' Must be one of
+#' `c("wilson", "wilson.no.correct", "exact", "asymptotic")` for categorical
+#' variables, and `"t.test"` for continuous variables.
 #' See details below.
 #' @param conf.level Confidence level. Default is `0.95`
 #' @param ci_fun Function to style upper and lower bound of confidence
-#' interval. Default is the function that styled the proportion in the
-#' original `tbl_summary()` call.
+#' interval. Default is
+#' `list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100), all_continuous() ~ style_sigfig)`.
 #' @param ... Not used
+#' @inheritParams tbl_summary
 #'
 #' @section method argument:
 #' Methods `c("wilson", "wilson.no.correct")` are calculated with `prop.test()`.
@@ -92,12 +96,16 @@ add_ci.tbl_summary <- function(x,
     )
 
   ci_fun <-
-    rep_len(list(style_sigfig), length(include)) %>%
-    rlang::set_names(include) %>%
+    .formula_list_to_named_list(
+      x = list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100),
+               all_continuous() ~ style_sigfig),
+      var_info = x$table_body[x$table_body$variable %in% include,],
+      arg_name = "ci_fun"
+    ) %>%
     purrr::update_list(
       !!!.formula_list_to_named_list(
         x = ci_fun,
-        var_info = x$table_body[x$table_body$variable %in% include,],
+        var_info = x$meta_data[x$meta_data$variable %in% include,],
         arg_name = "ci_fun"
       )
     )
