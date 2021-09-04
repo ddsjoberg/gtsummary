@@ -111,6 +111,7 @@ numeric columns numeric. For the \emph{vast majority} of users,
 See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 
 Other Advanced modifiers: 
+\code{\link{modify_cols_merge}()},
 \code{\link{modify_column_hide}()},
 \code{\link{modify_fmt_fun}()},
 \code{\link{modify_table_body}()}
