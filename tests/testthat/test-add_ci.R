@@ -5,8 +5,8 @@ test_that("add_ci() works", {
   expect_error(
     tbl1 <-
       trial %>%
-      select(response, age) %>%
-      tbl_summary(missing = "no") %>%
+      select(response, age, trt) %>%
+      tbl_summary(by = trt, missing = "no") %>%
       add_p() %>%
       add_ci() %>%
       as_tibble(col_labels = FALSE),
