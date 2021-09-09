@@ -246,6 +246,7 @@ Other tbl_summary tools:
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
 \code{\link{modify}},
+\code{\link{tbl_custom_summary}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()}
 }
