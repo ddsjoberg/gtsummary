@@ -51,7 +51,7 @@ The most common way to specify \verb{test=} is by using a single string indicati
 the test name. However, if you need to specify different tests within the same
 table, the input in flexible using the list notation common throughout the
 gtsummary package. For example, the following code would call the log-rank test,
-and a second test of the \emph{G-rho} family.\if{html}{\out{<div class="r">}}\preformatted{... \%>\%
+and a second test of the \emph{G-rho} family.\if{html}{\out{<div class="sourceCode r">}}\preformatted{... \%>\%
   add_p(test = list(trt ~ "logrank", grade ~ "survdiff"),
         test.args = grade ~ list(rho = 0.5))
 }\if{html}{\out{</div>}}
