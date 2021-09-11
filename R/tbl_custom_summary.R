@@ -470,14 +470,6 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
     dplyr::filter(!is.na(.data$.variable))
 
   # calculating stats
-  # df_stats <- data %>%
-  #   dplyr::summarise(
-  #     variable = variable,
-  #     stat_fn(.data, full_data = data, variable = variable, by = by, type = summary_type, stat_display = stat_display),
-  #     .groups = "drop"
-  #   ) %>%
-  #   rename(any_of(c(by = ".by", variable_levels = ".variable")))
-
   df_stats <- data %>%
     dplyr::group_modify(
       stat_fn,
