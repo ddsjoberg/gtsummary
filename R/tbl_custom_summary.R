@@ -441,7 +441,7 @@ df_custom_stats_fun <- function(summary_type, variable, dichotomous_value, stat_
   return
 }
 
-# summarize_custom_continuous --------------------------------------------------
+# summarize_custom -------------------------------------------------------------
 
 summarize_custom <- function(data, stat_fn, variable, by, stat_display,
                              summary_type, dichotomous_value) {
@@ -470,13 +470,27 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
     dplyr::filter(!is.na(.data$.variable))
 
   # calculating stats
+  # df_stats <- data %>%
+  #   dplyr::summarise(
+  #     variable = variable,
+  #     stat_fn(.data, full_data = data, variable = variable, by = by, type = summary_type, stat_display = stat_display),
+  #     .groups = "drop"
+  #   ) %>%
+  #   rename(any_of(c(by = ".by", variable_levels = ".variable")))
+
   df_stats <- data %>%
-    dplyr::summarise(
+    dplyr::group_modify(
+      stat_fn,
+      full_data = data,
       variable = variable,
-      stat_fn(.data, full_data = data, variable = variable, by = by, type = summary_type, stat_display = stat_display),
-      .groups = "drop"
+      by = by,
+      type = summary_type,
+      stat_display = stat_display,
+      .keep = TRUE
     ) %>%
-    rename(any_of(c(by = ".by", variable_levels = ".variable")))
+    dplyr::mutate(variable = variable) %>%
+    dplyr::ungroup() %>%
+    dplyr::rename(any_of(c(by = ".by", variable_levels = ".variable")))
 
   # replacing by variable with original (non-factor version)
   if (!is.null(by)) {
