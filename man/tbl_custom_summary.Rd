@@ -102,6 +102,8 @@ calculation on
 if present
 - \verb{type=} is a string indicating the type of variable
 (continous, categorical, ...)
+- \verb{stat_display=} a string indicating the statistic to display (for the
+\code{statistic} argument, for that variable)
 
 The user-defined does not need to utilize each of these inputs. It's
 encouraged the user-defined function accept \code{...} as each of the arguments

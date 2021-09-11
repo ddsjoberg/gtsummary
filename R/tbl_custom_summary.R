@@ -34,6 +34,8 @@
 #'       if present
 #'     - `type=` is a string indicating the type of variable
 #'       (continous, categorical, ...)
+#'     - `stat_display=` a string indicating the statistic to display (for the
+#'       `statistic` argument, for that variable)
 #'
 #' The user-defined does not need to utilize each of these inputs. It's
 #' encouraged the user-defined function accept `...` as each of the arguments
@@ -358,13 +360,11 @@ generate_metadata_custom_summary <- function(data, stat_fns, include,
         list(
           .data$summary_type, .data$variable,
           .data$dichotomous_value,
-          # .data$sort, # not needed
           .data$stat_display, .data$var_label
         ),
         ~ df_stats_function(
           summary_type = ..1, variable = ..2,
           dichotomous_value = ..3,
-          #sort = ..4,
           stat_fn = stat_fns[[..2]], # passing the appropriate stat_fn
           stat_display = ..4,
           data = data_for_df_stats, by = by,
@@ -473,7 +473,7 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
   df_stats <- data %>%
     dplyr::summarise(
       variable = variable,
-      stat_fn(.data, full_data = data, variable = variable, by = by, type = summary_type),
+      stat_fn(.data, full_data = data, variable = variable, by = by, type = summary_type, stat_display = stat_display),
       .groups = "drop"
     ) %>%
     rename(any_of(c(by = ".by", variable_levels = ".variable")))
