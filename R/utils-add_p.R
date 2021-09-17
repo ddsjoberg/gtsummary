@@ -242,7 +242,7 @@
     )
 
   # if expected counts >= 5 for all cells, chisq, otherwise Fishers exact
-  if (min_exp >= 5) {
+  if (isTRUE(min_exp >= 5 || is.nan(min_exp))) {
     test_func <-
       get_theme_element("add_p.tbl_summary-attr:test.categorical") %||%
       getOption("gtsummary.add_p.test.categorical", default = "chisq.test.no.correct")
