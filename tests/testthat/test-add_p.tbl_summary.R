@@ -398,14 +398,14 @@ test_that("no error with missing data", {
   expect_message(
     t1 <-
       mtcars %>%
-      mutate(mpg = NA, hp = NA) %>%
-      select(mpg, hp, am) %>%
+      mutate(mpg = NA, hp = NA, has_banana = factor(NA, levels = c("Yes", "No"))) %>%
+      select(has_banana, mpg, hp, am) %>%
       tbl_summary(by = "am", type = hp ~ "continuous") %>%
       add_p()
   )
   expect_equal(
     t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
-    rep_len(NA_character_, 4)
+    rep_len(NA_character_, 8)
   )
 })
 
