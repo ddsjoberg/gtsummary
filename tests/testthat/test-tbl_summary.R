@@ -643,3 +643,20 @@ test_that("no error when by variable omitted from include", {
     NA
   )
 })
+
+test_that("no error with factor variable with all NA and no specifed levels", {
+  expect_error(
+    tbl <-
+      trial %>%
+      dplyr::mutate(
+        has_banana = factor(NA) # We don't know which patients have a banana
+      ) %>%
+      tbl_summary(by = trt, include = has_banana) %>%
+      as_tibble(col_labels = FALSE),
+    NA
+  )
+  expect_equal(
+    tbl$stat_1,
+    c("0 (NA%)", "98")
+  )
+})
