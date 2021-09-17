@@ -204,8 +204,13 @@ assign_summary_type <- function(data, variable, summary_type, value,
           if (inherits(data[[variable]], "character")) {
             return("dichotomous")
           }
-          if (inherits(data[[variable]], "factor")) {
+          if (inherits(data[[variable]], "factor") &&
+              !rlang::is_empty(attr(data[[variable]], "levels"))) {
             return("categorical")
+          }
+          if (inherits(data[[variable]], "factor") &&
+              rlang::is_empty(attr(data[[variable]], "levels"))) {
+            return("dichotomous")
           }
         }
 
