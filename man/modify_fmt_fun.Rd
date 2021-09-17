@@ -61,6 +61,7 @@ modify_fmt_fun_ex1 <-
 }
 \seealso{
 Other Advanced modifiers: 
+\code{\link{modify_cols_merge}()},
 \code{\link{modify_column_hide}()},
 \code{\link{modify_table_body}()},
 \code{\link{modify_table_styling}()}
