@@ -9,7 +9,6 @@ add_difference(
   test = NULL,
   group = NULL,
   adj.vars = NULL,
-  weight = NULL,
   test.args = NULL,
   conf.level = 0.95,
   include = everything(),
@@ -31,8 +30,6 @@ The column can be used to calculate p-values with correlated data.
 Default is \code{NULL}. See \link{tests} for methods that utilize the \verb{group=} argument.}
 
 \item{adj.vars}{Variables to include in mean difference adjustment (e.g. in ANCOVA models)}
-
-\item{weight}{Variables to include for weighted calculations}
 
 \item{test.args}{List of formulas containing additional arguments to pass to
 tests that accept arguments. For example, add an argument for all t-tests,

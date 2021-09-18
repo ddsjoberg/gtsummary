@@ -77,7 +77,7 @@
 #' ```
 #'
 #' A custom `add_difference()` is similar, and accepts arguments `conf.level=`
-#' `adj.vars=`, and `weight=` as well.
+#' and `adj.vars=` as well.
 #'
 #' ```r
 #' ttest_common_variance <- function(data, variable, by, conf.level, ...) {

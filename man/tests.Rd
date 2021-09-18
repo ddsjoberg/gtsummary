@@ -69,7 +69,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{"ancova"} \tab ANCOVA \tab mean difference \tab \code{lm(variable ~ by + adj.vars)} \cr
    \code{"ancova_lme4"} \tab ANCOVA with random intercept \tab mean difference \tab \verb{lme4::lmer(variable ~ by + adj.vars + (1 \\UFF5C group), data)} \cr
    \code{"cohens_d"} \tab Cohen's D \tab standardized mean difference \tab \code{effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)} \cr
-   \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x= data[[variable]], g = data[[by]], w = data[[weight]], std.error = TRUE)} \cr
+   \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x= data[[variable]], g = data[[by]], std.error = TRUE)} \cr
 }
 }
 
@@ -96,7 +96,7 @@ trial[c("age", "trt")] \%>\%
 }\if{html}{\out{</div>}}
 
 A custom \code{add_difference()} is similar, and accepts arguments \verb{conf.level=}
-\verb{adj.vars=}, and \verb{weight=} as well.\if{html}{\out{<div class="r">}}\preformatted{ttest_common_variance <- function(data, variable, by, conf.level, ...) \{
+and \verb{adj.vars=} as well.\if{html}{\out{<div class="r">}}\preformatted{ttest_common_variance <- function(data, variable, by, conf.level, ...) \{
   data <- data[c(variable, by)] \%>\% dplyr::filter(complete.cases(.))
   t.test(data[[variable]] ~ factor(data[[by]]), conf.level = conf.level, var.equal = TRUE) \%>\%
   broom::tidy()
