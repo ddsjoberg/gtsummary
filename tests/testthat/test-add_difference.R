@@ -219,3 +219,23 @@ test_that("no error with missing data", {
     rep_len(NA_character_, 2)
   )
 })
+
+test_that("add_difference() with smd", {
+  expect_error(
+    tbl <-
+      trial %>%
+      select(trt, age, response, grade) %>%
+      tbl_summary(by = trt, missing = "no") %>%
+      add_difference(test = everything() ~ "smd") %>%
+      as_tibble(col_labels = FALSE),
+    NA
+  )
+  expect_equal(
+    tbl$estimate[1:3],
+    c("-0.03", "-0.09", "0.07")
+  )
+  expect_equal(
+    tbl$ci[1:3],
+    c("-0.32, 0.25", "-0.37, 0.19", "-0.20, 0.35")
+  )
+})

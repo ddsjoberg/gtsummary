@@ -287,7 +287,8 @@
   }
 }
 
-.assign_test_add_diff <- function(data, variable, summary_type, by, group, test, adj.vars) {
+.assign_test_add_diff <- function(data, variable, summary_type, by, group, test,
+                                  adj.vars) {
   # if user supplied a test, use that test -------------------------------------
   if (!is.null(test[[variable]])) {
     return(test[[variable]])
@@ -301,6 +302,9 @@
   }
   if (summary_type %in% "dichotomous" && is.null(group) && is.null(adj.vars)) {
     return("prop.test")
+  }
+  if (summary_type %in% "categorical" && is.null(group) && is.null(adj.vars)) {
+    return("smd")
   }
 
   if (summary_type %in% c("continuous", "continuous2") && !is.null(group)) {
