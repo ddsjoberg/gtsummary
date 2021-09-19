@@ -160,19 +160,21 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     select(.data$variable, .data$summary_type) %>%
     filter(.data$variable %in% include) %>%
     mutate(
-      test = map2(
-        .data$variable, .data$summary_type,
-        function(variable, summary_type) {
-          .assign_test_tbl_summary(
-            data = x$inputs$data, variable = variable, summary_type = summary_type,
-            by = x$by, group = group, test = test
-          )
-        }
-      ),
-      test_info = map(
-        .data$test,
-        function(test) .get_add_p_test_fun("tbl_summary", test = test, env = caller_env)
-      ),
+      test =
+        map2(
+          .data$variable, .data$summary_type,
+          function(variable, summary_type) {
+            .assign_test_tbl_summary(
+              data = x$inputs$data, variable = variable, summary_type = summary_type,
+              by = x$by, group = group, test = test
+            )
+          }
+        ),
+      test_info =
+        map(
+          .data$test,
+          function(test) .get_add_p_test_fun("tbl_summary", test = test, env = caller_env)
+        ),
       test_name = map_chr(.data$test_info, ~ pluck(.x, "test_name"))
     )
   # adding test_name to table body so it can be used to select vars by the test
