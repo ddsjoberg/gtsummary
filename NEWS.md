@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added Standardized Mean Difference method to `add_difference()`, wrapping the {smd} package's calculations. (#966)
+
 * Fix in `tbl_summary()` when a factor variable is passed that is all NA with no specified levels. (#977)
 
 * Fix in `add_p.tbl_summary()` when a factor variable with all NA values is passed. (#977)

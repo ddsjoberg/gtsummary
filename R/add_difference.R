@@ -90,6 +90,14 @@ add_difference <- function(x, test = NULL, group = NULL,
       arg_name = "include"
     )
 
+  test <-
+    .formula_list_to_named_list(
+      x = test,
+      data = select(x$inputs$data, any_of(include)),
+      var_info = x$table_body,
+      arg_name = "test"
+    )
+
   estimate_fun <-
     .formula_list_to_named_list(
       x = {{ estimate_fun }},
@@ -101,12 +109,12 @@ add_difference <- function(x, test = NULL, group = NULL,
     x$meta_data$variable %>%
     map(
       ~ estimate_fun[[.x]] %||%
-        switch(x$meta_data %>%
-          filter(.data$variable %in% .x) %>%
-          pull(.data$summary_type) %in% c("continuous", "continuous2"),
-        style_sigfig
+        switch(
+          x$meta_data[x$meta_data$variable %in% .x,]$summary_type %in% "dichotomous" &&
+            !identical(test[[.x]], "smd"),
+          function(x) ifelse(!is.na(x), paste0(style_sigfig(x * 100), "%"), NA_character_)
         ) %||%
-        (function(x) ifelse(!is.na(x), paste0(style_sigfig(x * 100), "%"), NA_character_))
+        style_sigfig
     ) %>%
     set_names(x$meta_data$variable)
 
@@ -116,14 +124,6 @@ add_difference <- function(x, test = NULL, group = NULL,
       data = x$inputs$data,
       var_info = x$table_body,
       arg_name = "adj.vars"
-    )
-
-  test <-
-    .formula_list_to_named_list(
-      x = test,
-      data = select(x$inputs$data, any_of(include)),
-      var_info = x$table_body,
-      arg_name = "test"
     )
 
   pvalue_fun <-
@@ -142,22 +142,6 @@ add_difference <- function(x, test = NULL, group = NULL,
       select_single = TRUE
     )
 
-  # removing categorical variables
-  if ("categorical" %in% dplyr::filter(x$meta_data, .data$variable %in% include)$summary_type) {
-    cat_vars <-
-      dplyr::filter(
-        x$meta_data,
-        .data$variable %in% include,
-        .data$summary_type %in% "categorical"
-      ) %>%
-      dplyr::pull(.data$variable)
-    glue(
-      "Variable(s) {quoted_list(cat_vars)} are summary type 'categorical' ",
-      "and not compatible with `add_difference()`."
-    ) %>%
-      rlang::inform()
-    include <- include %>% setdiff(cat_vars)
-  }
   # checking for `tbl_summary(percent = c("cell", "row"))`, which don't apply
   if (!identical(x$inputs$percent, "column")) {
     bad_percent_vars <-
@@ -201,8 +185,8 @@ add_difference <- function(x, test = NULL, group = NULL,
         .data$test,
         function(test) {
           .get_add_p_test_fun("tbl_summary",
-            test = test,
-            env = caller_env, parent_fun = "add_difference"
+                              test = test,
+                              env = caller_env, parent_fun = "add_difference"
           )
         }
       ),
