@@ -40,7 +40,7 @@
 #' The user-defined does not need to utilize each of these inputs. It's
 #' encouraged the user-defined function accept `...` as each of the arguments
 #' *will* be passed to the function, even if not all inputs are utilized by
-#' the user's function, e.g. `foo(data, ..)`
+#' the user's function, e.g. `foo(data, ...)`
 #'
 #' One or two additional columns are added to `data` and `full_data`:
 #'     - ".variable", a copy of the current variable defined in `variable`

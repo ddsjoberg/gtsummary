@@ -108,7 +108,7 @@ if present
 The user-defined does not need to utilize each of these inputs. It's
 encouraged the user-defined function accept \code{...} as each of the arguments
 \emph{will} be passed to the function, even if not all inputs are utilized by
-the user's function, e.g. \code{foo(data, ..)}
+the user's function, e.g. \code{foo(data, ...)}
 
 One or two additional columns are added to \code{data} and \code{full_data}:
 - ".variable", a copy of the current variable defined in \code{variable}
