@@ -15,7 +15,10 @@ tbl_custom_summary(
   value = NULL,
   missing = NULL,
   missing_text = NULL,
-  include = everything()
+  include = everything(),
+  overall_row = FALSE,
+  overall_row_last = FALSE,
+  overall_row_label = NULL
 )
 }
 \arguments{
@@ -36,7 +39,7 @@ attribute label is \code{NULL}, the variable name will be used.}
 \item{stat_fns}{Formula or list of formulas specifying the function to be
 used to compute the statistics (see below for details and examples).}
 
-\item{statistic}{List of formulas specifying the \code{glue::glue()} pattern to
+\item{statistic}{List of formulas specifying the \code{\link[glue:glue]{glue::glue()}} pattern to
 display the statistics for each variable. The statistics should be returned
 by the functions specified in \code{stat_fns} (see below for details and
 examples).}
@@ -68,19 +71,31 @@ Allowed values are \code{"no"} (never display NA values),
 Default is \code{"Unknown"}.}
 
 \item{include}{variables to include in the summary table. Default is \code{everything()}}
+
+\item{overall_row}{Logical indicator to display an overall row. Default is
+\code{FALSE}. Use \code{\link[=add_overall]{add_overall()}} to add an overall column.}
+
+\item{overall_row_last}{Logical indicator to display overall row last in
+table. Default is \code{FALSE}, which will display overall row first.}
+
+\item{overall_row_label}{String indicating the overall row label. Default is
+\code{"Overall"}.}
 }
 \value{
 A \code{tbl_summary} object
 }
 \description{
+\lifecycle{experimental}
+}
+\details{
 The \code{tbl_custom_summary} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables.
-This function is similar to \code{tbl_summary()} but allows you to provide
+This function is similar to \code{\link[=tbl_summary]{tbl_summary()}} but allows you to provide
 a custom function in charge of computing the statistics (see Details).
 }
-\section{similarities with \code{tbl_summary()}}{
+\section{Similarities with \code{tbl_summary()}}{
 
-Please refer to the help file of \code{tbl_summary()} regarding the use of select
+Please refer to the help file of \code{\link[=tbl_summary]{tbl_summary()}} regarding the use of select
 helpers, and arguments as include, by, type, value, digits, missing and
 missing_text.
 }
@@ -92,13 +107,13 @@ the summary statistics. For example, \code{stat_fns = everything() ~ foo}.
 
 Each function may take the following arguments:
 \code{foo(data, full_data, variable, by, type, ...)}
-- \verb{data=} is the input data frame passed to \code{tbl_summary()}, subsetted
-according to the level of \code{by} or \code{variable} if any, excluding \code{NA}
-values of the current \code{variable}
-- \verb{full_data=} is the full input data frame passed to \code{tbl_summary()}
+- \verb{data=} is the input data frame passed to \code{tbl_custom_summary()},
+subsetted according to the level of \code{by} or \code{variable} if any,
+excluding \code{NA} values of the current \code{variable}
+- \verb{full_data=} is the full input data frame passed to \code{tbl_custom_summary()}
 - \verb{variable=} is a string indicating the variable to perform the
 calculation on
-- \verb{by=} is a string indicating the by variable from \verb{tbl_summary=},
+- \verb{by=} is a string indicating the by variable from \verb{tbl_custom_summary=},
 if present
 - \verb{type=} is a string indicating the type of variable
 (continous, categorical, ...)
@@ -108,13 +123,13 @@ if present
 The user-defined does not need to utilize each of these inputs. It's
 encouraged the user-defined function accept \code{...} as each of the arguments
 \emph{will} be passed to the function, even if not all inputs are utilized by
-the user's function, e.g. \code{foo(data, ...)}
+the user's function, e.g. \code{foo(data, ...)} (see examples).
 
 One or two additional columns are added to \code{data} and \code{full_data}:
 - ".variable", a copy of the current variable defined in \code{variable}
 - ".by", a copy of the by variable defined in \code{by}, if any
 
-The user-defined function should return a \code{dplyr::tible()} with one row and
+The user-defined function should return a one row \code{\link[dplyr:reexports]{dplyr::tibble()}} with
 one column per summary statistics (see examples).
 }
 
@@ -124,9 +139,9 @@ The statistic argument specifies the statistics presented in the table. The
 input is a list of formulas that specify the statistics to report. For example,
 \code{statistic = list(age ~ "{mean} ({sd})")}.
 A statistic name that appears between curly brackets
-will be replaced with the numeric statistic (see \link[glue:glue]{glue::glue}).
+will be replaced with the numeric statistic (see \code{\link[glue:glue]{glue::glue()}}).
 All the statistics indicated in the statistic argument should be returned
-by the functions defined in the stat_fns argument.
+by the functions defined in the \code{stat_fns} argument.
 
 When the summary type is \code{"continuous2"}, pass a vector of statistics. Each element
 of the vector will result in a separate row in the summary table.
@@ -145,6 +160,9 @@ to display.
 Note that for categorical variables, \code{{N_obs}}, \code{{N_miss}} and \code{{N_nonmiss}} refer
 to the total number, number missing and number non missing observations
 in the denominator, not at each level of the categorical variable.
+
+It is recommended to use \code{\link[=modify_footnote]{modify_footnote()}} to properly describe the
+displayed statistics (see examples).
 }
 
 \section{Example Output}{
@@ -158,7 +176,7 @@ in the denominator, not at each level of the categorical variable.
 # Example 1 ----------------------------------
 my_stats <- function(data, ...) {
   marker_sum = sum(data$marker, na.rm = TRUE)
-  mean_age = sum(data$age, na.rm = TRUE)
+  mean_age = mean(data$age, na.rm = TRUE)
   dplyr::tibble(
     marker_sum = marker_sum,
     mean_age = mean_age
@@ -201,4 +219,5 @@ Other tbl_summary tools:
 \author{
 Joseph Larmarange
 }
+\concept{tbl_custom_summary tools}
 \concept{tbl_summary tools}

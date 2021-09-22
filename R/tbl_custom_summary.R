@@ -1,27 +1,28 @@
 #' Create a table of summary statistics using a custom summary function
 #'
 #' \lifecycle{experimental}
+#'
 #' The `tbl_custom_summary` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.
-#' This function is similar to `tbl_summary()` but allows you to provide
+#' This function is similar to [tbl_summary()] but allows you to provide
 #' a custom function in charge of computing the statistics (see Details).
 #'
 #' @inheritParams tbl_summary
 #' @param stat_fns Formula or list of formulas specifying the function to be
 #' used to compute the statistics (see below for details and examples).
-#' @param statistic List of formulas specifying the `glue::glue()` pattern to
+#' @param statistic List of formulas specifying the [glue::glue()] pattern to
 #' display the statistics for each variable. The statistics should be returned
 #' by the functions specified in `stat_fns` (see below for details and
 #' examples).
 #' @param overall_row Logical indicator to display an overall row. Default is
-#' `FALSE`. Use `add_overall()` to add an overall column.
+#' `FALSE`. Use [add_overall()] to add an overall column.
 #' @param overall_row_last Logical indicator to display overall row last in
 #' table. Default is `FALSE`, which will display overall row first.
 #' @param overall_row_label String indicating the overall row label. Default is
-#' "`Overall`".
+#' `"Overall"`.
 #'
-#' @section similarities with `tbl_summary()`:
-#' Please refer to the help file of `tbl_summary()` regarding the use of select
+#' @section Similarities with `tbl_summary()`:
+#' Please refer to the help file of [tbl_summary()] regarding the use of select
 #' helpers, and arguments as include, by, type, value, digits, missing and
 #' missing_text.
 #'
@@ -31,13 +32,13 @@
 #'
 #' Each function may take the following arguments:
 #' `foo(data, full_data, variable, by, type, ...)`
-#'     - `data=` is the input data frame passed to `tbl_summary()`, subsetted
-#'       according to the level of `by` or `variable` if any, excluding `NA`
-#'       values of the current `variable`
-#'     - `full_data=` is the full input data frame passed to `tbl_summary()`
+#'     - `data=` is the input data frame passed to `tbl_custom_summary()`,
+#'       subsetted according to the level of `by` or `variable` if any,
+#'       excluding `NA` values of the current `variable`
+#'     - `full_data=` is the full input data frame passed to `tbl_custom_summary()`
 #'     - `variable=` is a string indicating the variable to perform the
 #'       calculation on
-#'     - `by=` is a string indicating the by variable from `tbl_summary=`,
+#'     - `by=` is a string indicating the by variable from `tbl_custom_summary=`,
 #'       if present
 #'     - `type=` is a string indicating the type of variable
 #'       (continous, categorical, ...)
@@ -47,13 +48,13 @@
 #' The user-defined does not need to utilize each of these inputs. It's
 #' encouraged the user-defined function accept `...` as each of the arguments
 #' *will* be passed to the function, even if not all inputs are utilized by
-#' the user's function, e.g. `foo(data, ...)`
+#' the user's function, e.g. `foo(data, ...)` (see examples).
 #'
 #' One or two additional columns are added to `data` and `full_data`:
 #'     - ".variable", a copy of the current variable defined in `variable`
 #'     - ".by", a copy of the by variable defined in `by`, if any
 #'
-#' The user-defined function should return a `dplyr::tible()` with one row and
+#' The user-defined function should return a one row [dplyr::tibble()] with
 #' one column per summary statistics (see examples).
 #'
 #' @section statistic argument:
@@ -61,9 +62,9 @@
 #' input is a list of formulas that specify the statistics to report. For example,
 #' `statistic = list(age ~ "{mean} ({sd})")`.
 #' A statistic name that appears between curly brackets
-#' will be replaced with the numeric statistic (see [glue::glue]).
+#' will be replaced with the numeric statistic (see [glue::glue()]).
 #' All the statistics indicated in the statistic argument should be returned
-#' by the functions defined in the stat_fns argument.
+#' by the functions defined in the `stat_fns` argument.
 #'
 #' When the summary type is `"continuous2"`, pass a vector of statistics. Each element
 #' of the vector will result in a separate row in the summary table.
@@ -83,16 +84,20 @@
 #' to the total number, number missing and number non missing observations
 #' in the denominator, not at each level of the categorical variable.
 #'
+#' It is recommended to use [modify_footnote()] to properly describe the
+#' displayed statistics (see examples).
+#'
 #' @export
 #' @return A `tbl_summary` object
 #' @family tbl_summary tools
+#' @family tbl_custom_summary tools
 #' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 #' @author Joseph Larmarange
 #' @examples
 #' # Example 1 ----------------------------------
 #' my_stats <- function(data, ...) {
 #'   marker_sum = sum(data$marker, na.rm = TRUE)
-#'   mean_age = sum(data$age, na.rm = TRUE)
+#'   mean_age = mean(data$age, na.rm = TRUE)
 #'   dplyr::tibble(
 #'     marker_sum = marker_sum,
 #'     mean_age = mean_age
