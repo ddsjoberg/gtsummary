@@ -23,7 +23,7 @@
 #' `prop.test(correct = c(TRUE, FALSE))`.
 #' The default method, `"wilson"`, includes the Yates continuity correction.
 #' Methods `c("exact", "asymptotic")` are calculated with `Hmisc::binconf(method=)`.
-#' COnfidence intervals for means are calcualted using `t.test()`.
+#' Confidence intervals for means are calculated using `t.test()`.
 #'
 #' @return gtsummary table
 #' @rdname add_ci

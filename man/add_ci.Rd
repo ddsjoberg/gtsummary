@@ -52,7 +52,7 @@ Methods \code{c("wilson", "wilson.no.correct")} are calculated with
 \code{prop.test(correct = c(TRUE, FALSE))}.
 The default method, \code{"wilson"}, includes the Yates continuity correction.
 Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf(method=)}.
-COnfidence intervals for means are calcualted using \code{t.test()}.
+Confidence intervals for means are calculated using \code{t.test()}.
 }
 
 \section{Example Output}{
