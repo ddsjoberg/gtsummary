@@ -109,15 +109,19 @@
 #' tbl_custom_summary_ex1 <-
 #'   trial %>%
 #'   tbl_custom_summary(
-#'     include = c("stage", "grade", "response"),
+#'     include = c("stage", "grade"),
 #'     by = "trt",
 #'     stat_fns = everything() ~ my_stats,
-#'     statistic = everything() ~ "A: {mean_age} - S: {marker_sum}"
+#'     statistic = everything() ~ "A: {mean_age} - S: {marker_sum}",
+#'     digits = everything() ~ c(1, 0),
+#'     overall_row = TRUE,
+#'     overall_row_label = "All stages & grades"
 #'   ) %>%
 #'   add_overall(last = TRUE) %>%
 #'   modify_footnote(
 #'     update = all_stat_cols() ~ "A: mean age - S: sum of marker"
-#'   )
+#'   ) %>%
+#'   bold_labels()
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
