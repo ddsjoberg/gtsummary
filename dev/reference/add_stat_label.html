@@ -97,7 +97,7 @@ each variable in the tbl_summary / tbl_svysummary table." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9011</span>
       </span>
     </div>
 
@@ -221,7 +221,7 @@ which is typically the first column you see in a gtsummary table.
 Therefore, when you want to merge a table that has run <code>add_stat_label(location='row')</code>
 you need to match the <code>"label"</code> column values before the <code>"stat_column"</code>
 is merged with it.</p>
-<p>For example, the following two tables merge properly<div class="r"></p><pre><span class='va'>tbl1</span> <span class='op'>&lt;-</span> <span class='va'>trial</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>add_stat_label</span><span class='op'>(</span><span class='op'>)</span>
+<p>For example, the following two tables merge properly<div class="sourceCode r"></p><pre><span class='va'>tbl1</span> <span class='op'>&lt;-</span> <span class='va'>trial</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>add_stat_label</span><span class='op'>(</span><span class='op'>)</span>
 <span class='va'>tbl2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>marker</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='fu'><a href='tbl_merge.html'>tbl_merge</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>tbl1</span>, <span class='va'>tbl2</span><span class='op'>)</span><span class='op'>)</span>
@@ -239,10 +239,10 @@ is merged with it.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary tools: 
+<code><a href='add_ci.html'>add_ci</a>()</code>,
 <code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
 <code><a href='add_overall.html'>add_overall</a>()</code>,
 <code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
-<code><a href='add_prop_ci.html'>add_prop_ci</a>()</code>,
 <code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
 <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,

@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9011</span>
       </span>
     </div>
 
@@ -180,7 +180,7 @@
 <li><p>Fix in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> when a factor variable is passed that is all NA with no specified levels. (<a href='https://github.com/ddsjoberg/gtsummary/issues/977'>#977</a>)</p></li>
 <li><p>Fix in <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> when a factor variable with all NA values is passed. (<a href='https://github.com/ddsjoberg/gtsummary/issues/977'>#977</a>)</p></li>
 <li><p>New function <code><a href="../reference/modify_cols_merge.html">modify_cols_merge()</a></code> that can merge two or more columns in a gtsummary table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/939'>#939</a>)</p></li>
-<li><p>Added new function <code><a href="../reference/add_prop_ci.html">add_prop_ci()</a></code> that adds a new column with the confidence interval for proportions reported in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. Cannot be used if <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> included a <code>by=</code> argument. (<a href='https://github.com/ddsjoberg/gtsummary/issues/868'>#868</a>)</p></li>
+<li><p>Added new function <code><a href="../reference/add_ci.html">add_ci()</a></code> that adds a new column with the confidence interval for proportions/means reported in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/868'>#868</a>)</p></li>
 <li><p>Updated <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary(test = . ~ "mcnemar.test", group  = id)</a></code> syntax to require the <code>group=</code> argument to align with the paired Wilcoxon rank-sum test and paired t-test syntax.</p></li>
 <li><p>Now using <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> to prepare <code><a href="https://rdrr.io/r/stats/aov.html">aov()</a></code> test results in <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code>, which adds additional columns to <code>.$table_body()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/956'>#956</a>)</p></li>
 <li><p>Updated <code><a href="../reference/add_overall.html">add_overall()</a></code> to include the overall statistics in the <code>df_stats</code> tibbles saved in <code>.$meta_data.</code> This makes it possible to report any of the overall statistics using the <code><a href="../reference/inline_text.html">inline_text(pattern=)</a></code> argument.</p></li>

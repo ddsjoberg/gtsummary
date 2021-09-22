@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add Variance Inflation Factor — add_vif • gtsummary</title>
+<title>Add Proportion CIs — add_ci • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,12 +52,8 @@
 
 
 
-<meta property="og:title" content="Add Variance Inflation Factor — add_vif" />
-<meta property="og:description" content="
-
-Add the variance inflation factor (VIF) or
-generalized VIF (GVIF) to the regression table.
-Function uses car::vif() to calculate the VIF." />
+<meta property="og:title" content="Add Proportion CIs — add_ci" />
+<meta property="og:description" content="Add a new column with the confidence intervals for proportions." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -172,64 +168,125 @@ Function uses car::vif() to calculate the VIF." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add Variance Inflation Factor</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_vif.R'><code>R/add_vif.R</code></a></small>
-    <div class="hidden name"><code>add_vif.Rd</code></div>
+    <h1>Add Proportion CIs</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_ci.R'><code>R/add_ci.R</code></a></small>
+    <div class="hidden name"><code>add_ci.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
-
-Add the variance inflation factor (VIF) or
-generalized VIF (GVIF) to the regression table.
-Function uses <code><a href='https://rdrr.io/pkg/car/man/vif.html'>car::vif()</a></code> to calculate the VIF.</p>
+    <p>Add a new column with the confidence intervals for proportions.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_vif</span><span class='op'>(</span><span class='va'>x</span>, statistic <span class='op'>=</span> <span class='cn'>NULL</span>, estimate_fun <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>add_ci</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for tbl_summary</span>
+<span class='fu'>add_ci</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  method <span class='op'>=</span> <span class='cn'>NULL</span>,
+  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
+  statistic <span class='op'>=</span> <span class='cn'>NULL</span>,
+  conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  style_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>'tbl_regression'</code> object</p></td>
+      <td><p>A <code>tbl_summary</code> object</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Not used</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>Confidence interval method. Default is
+<code><a href='https://rdrr.io/r/base/list.html'>list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")</a></code>.
+Must be one of
+<code><a href='https://rdrr.io/r/base/c.html'>c("wilson", "wilson.no.correct", "exact", "asymptotic")</a></code> for categorical
+variables, and <code>"t.test"</code> for continuous variables.
+See details below.</p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>variables to include in the summary table. Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code></p></td>
     </tr>
     <tr>
       <th>statistic</th>
-      <td><p><code>"VIF"</code> (variance inflation factors, for models with no categorical terms) or one of/combination of <code>"GVIF"</code> (generalized variance inflation factors), <code>"aGVIF"</code> 'adjusted GVIF, i.e. <code>GVIF^[1/(2*df)]</code> and/or <code>"df"</code> (degrees of freedom).
-See <code><a href='https://rdrr.io/pkg/car/man/vif.html'>car::vif()</a></code> for details.</p></td>
+      <td><p>Formula indicating how the confidence interval will be displayed.
+Default is <code><a href='https://rdrr.io/r/base/list.html'>list(all_categorical() ~ "{conf.low}%, {conf.high}%", all_continuous() ~ "{conf.low}, {conf.high}")</a></code></p></td>
     </tr>
     <tr>
-      <th>estimate_fun</th>
-      <td><p>Default is <code><a href='style_sigfig.html'>style_sigfig()</a></code>.</p></td>
+      <th>conf.level</th>
+      <td><p>Confidence level. Default is <code>0.95</code></p></td>
+    </tr>
+    <tr>
+      <th>style_fun</th>
+      <td><p>Function to style upper and lower bound of confidence
+interval. Default is
+<code><a href='https://rdrr.io/r/base/list.html'>list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100), all_continuous() ~ style_sigfig)</a></code>.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>gtsummary table</p>
+    <h2 class="hasAnchor" id="method-argument"><a class="anchor" href="#method-argument"></a>method argument</h2>
+
+    
+
+<p>Methods <code><a href='https://rdrr.io/r/base/c.html'>c("wilson", "wilson.no.correct")</a></code> are calculated with
+<code><a href='https://rdrr.io/r/stats/prop.test.html'>prop.test(correct = c(TRUE, FALSE))</a></code>.
+The default method, <code>"wilson"</code>, includes the Yates continuity correction.
+Methods <code><a href='https://rdrr.io/r/base/c.html'>c("exact", "asymptotic")</a></code> are calculated with <code><a href='https://rdrr.io/pkg/Hmisc/man/binconf.html'>Hmisc::binconf(method=)</a></code>.
+Confidence intervals for means are calculated using <code><a href='https://rdrr.io/r/stats/t.test.html'>t.test()</a></code>.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
 
 <p>Example 1</p>
-<p><img src='figures/add_vif_ex1.png' width=45% />
-Example 2</p>
-<p><img src='figures/add_vif_ex2.png' width=45% /></p>
+<p><img src='figures/add_ci_ex1.png' width=50% /></p>
+<p>Example 2</p>
+<p><img src='figures/add_ci_ex2.png' width=45% /></p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other tbl_summary tools: 
+<code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
+<code><a href='add_overall.html'>add_overall</a>()</code>,
+<code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
+<code><a href='add_q.html'>add_q</a>()</code>,
+<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
+<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
+<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
+<code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
+<code><a href='modify.html'>modify</a></code>,
+<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"car"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>add_vif_ex1</span> <span class='op'>&lt;-</span>
-    <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>grade</span> <span class='op'>+</span> <span class='va'>marker</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>add_vif</span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>}</span>
+<span class='va'>add_ci_ex1</span> <span class='op'>&lt;-</span>
+  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>response</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>add_ci</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"car"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>add_vif_ex2</span> <span class='op'>&lt;-</span>
-    <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>grade</span> <span class='op'>+</span> <span class='va'>marker</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>add_vif</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"aGVIF"</span>, <span class='st'>"df"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
+<span class='va'>add_ci_ex2</span> <span class='op'>&lt;-</span>
+  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_categorical</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span>,
+                missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>add_ci</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='modify_cols_merge.html'>modify_cols_merge</a></span><span class='op'>(</span>
+      rows <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>ci_stat_0</span><span class='op'>)</span>,
+      pattern <span class='op'>=</span> <span class='st'>"{stat_0} ({ci_stat_0})"</span>
+    <span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='cn'>NA</span><span class='op'>)</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

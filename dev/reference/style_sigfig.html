@@ -100,7 +100,7 @@ requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9011</span>
       </span>
     </div>
 
@@ -185,7 +185,14 @@ large numbers.  For example, if the number of significant digits
 requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>style_sigfig</span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>2</span>, big.mark <span class='op'>=</span> <span class='cn'>NULL</span>, decimal.mark <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>style_sigfig</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  digits <span class='op'>=</span> <span class='fl'>2</span>,
+  scale <span class='op'>=</span> <span class='fl'>1</span>,
+  big.mark <span class='op'>=</span> <span class='cn'>NULL</span>,
+  decimal.mark <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -198,6 +205,10 @@ requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2).</p>
       <th>digits</th>
       <td><p>Integer specifying the minimum number of significant
 digits to display</p></td>
+    </tr>
+    <tr>
+      <th>scale</th>
+      <td><p>A scaling factor: x will be multiplied by scale before formatting.</p></td>
     </tr>
     <tr>
       <th>big.mark</th>
