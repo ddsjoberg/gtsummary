@@ -13,6 +13,12 @@
 #' display the statistics for each variable. The statistics should be returned
 #' by the functions specified in `stat_fns` (see below for details and
 #' examples).
+#' @param overall_row Logical indicator to display an overall row. Default is
+#' `FALSE`. Use `add_overall()` to add an overall column.
+#' @param overall_row_last Logical indicator to display overall row last in
+#' table. Default is `FALSE`, which will display overall row first.
+#' @param overall_row_label String indicating the overall row label. Default is
+#' "`Overall`".
 #'
 #' @section similarities with `tbl_summary()`:
 #' Please refer to the help file of `tbl_summary()` regarding the use of select
@@ -118,7 +124,10 @@ tbl_custom_summary <- function(
                         stat_fns, statistic,
                         digits = NULL, type = NULL, value = NULL,
                         missing = NULL, missing_text = NULL,
-                        include = everything()
+                        include = everything(),
+                        overall_row = FALSE,
+                        overall_row_last = FALSE,
+                        overall_row_label = NULL
                         ) {
   # ungrouping data ------------------------------------------------------------
   data <- data %>% ungroup()
@@ -138,6 +147,17 @@ tbl_custom_summary <- function(
       arg_name = "include"
     ) %>%
     union(by) # include by variable by default
+
+  # adding overall row? --------------------------------------------------------
+  if (overall_row) {
+    if (is.null(overall_row_label))
+      overall_row_label <- translate_text("Overall")
+    data$.overall <- TRUE
+    attr(data$.overall, "label") <- overall_row_label
+
+    if (overall_row_last) include <- c(include, ".overall")
+    else include <- c(".overall", include)
+  }
 
   # setting defaults from gtsummary theme --------------------------------------
   # THEME ELEMENTS SHOULD BE ADDED FOR tbl_custom_summary
@@ -545,6 +565,9 @@ add_overall.tbl_custom_summary <- function(x, last = FALSE, col_label = NULL) {
 
   # replacing the function call by variable to NULL to get results overall
   x_copy$inputs[["by"]] <- NULL
+
+  # if overall row, already included in data
+  x_copy$inputs$overall_row <- FALSE
 
   # calculating stats overall, and adding header row
   tbl_overall <- do.call(tbl_custom_summary, x_copy$inputs)
