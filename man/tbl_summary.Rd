@@ -236,10 +236,10 @@ See \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl
 See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 
 Other tbl_summary tools: 
+\code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_summary}()},
-\code{\link{add_prop_ci}()},
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
 \code{\link{bold_italicize_labels_levels}},

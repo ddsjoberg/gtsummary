@@ -8,7 +8,7 @@
 
 * New function `modify_cols_merge()` that can merge two or more columns in a gtsummary table. (#939)
 
-* Added new function `add_prop_ci()` that adds a new column with the confidence interval for proportions reported in `tbl_summary()`. Cannot be used if `tbl_summary()` included a `by=` argument. (#868)
+* Added new function `add_ci()` that adds a new column with the confidence interval for proportions/means reported in `tbl_summary()`. (#868)
 
 * Updated `add_p.tbl_summary(test = . ~ "mcnemar.test", group  = id)` syntax to require the `group=` argument to align with the paired Wilcoxon rank-sum test and paired t-test syntax.
 

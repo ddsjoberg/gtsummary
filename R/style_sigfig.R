@@ -21,9 +21,9 @@
 #' @examples
 #' c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -132.345, NA, -0.001) %>%
 #'   style_sigfig()
-style_sigfig <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
+style_sigfig <- function(x, digits = 2, scale = 1, big.mark = NULL, decimal.mark = NULL, ...) {
   # calculating the number of digits to round number
-  d <- paste0("round(abs(x), digits = ", digits - digits:1 + 1, ") < 10^",
+  d <- paste0("round(abs(x * scale), digits = ", digits - digits:1 + 1, ") < 10^",
     digits - digits:1, " ~ ", digits:1,
     collapse = ", "
   ) %>%
@@ -35,5 +35,5 @@ style_sigfig <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ..
     eval()
 
   # formatting number
-  style_number(x, digits = d, big.mark = big.mark, decimal.mark = decimal.mark, ...)
+  style_number(x, digits = d, scale = scale, big.mark = big.mark, decimal.mark = decimal.mark, ...)
 }

@@ -62,10 +62,10 @@ if (requireNamespace("car")) {
 }
 \seealso{
 Other tbl_summary tools: 
+\code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_summary}()},
-\code{\link{add_prop_ci}()},
 \code{\link{add_stat_label}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},

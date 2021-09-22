@@ -84,7 +84,7 @@ statistical test. The \code{add_p()} and \code{add_comparison()} functions will 
 p-value, difference, confidence interval, and the test name used in the footnote.
 
 Example calculating a p-value from a t-test assuming a common variance
-between groups.\if{html}{\out{<div class="r">}}\preformatted{ttest_common_variance <- function(data, variable, by, ...) \{
+between groups.\if{html}{\out{<div class="sourceCode r">}}\preformatted{ttest_common_variance <- function(data, variable, by, ...) \{
   data <- data[c(variable, by)] \%>\% dplyr::filter(complete.cases(.))
   t.test(data[[variable]] ~ factor(data[[by]]), var.equal = TRUE) \%>\%
   broom::tidy()
@@ -96,7 +96,7 @@ trial[c("age", "trt")] \%>\%
 }\if{html}{\out{</div>}}
 
 A custom \code{add_difference()} is similar, and accepts arguments \verb{conf.level=}
-and \verb{adj.vars=} as well.\if{html}{\out{<div class="r">}}\preformatted{ttest_common_variance <- function(data, variable, by, conf.level, ...) \{
+and \verb{adj.vars=} as well.\if{html}{\out{<div class="sourceCode r">}}\preformatted{ttest_common_variance <- function(data, variable, by, conf.level, ...) \{
   data <- data[c(variable, by)] \%>\% dplyr::filter(complete.cases(.))
   t.test(data[[variable]] ~ factor(data[[by]]), conf.level = conf.level, var.equal = TRUE) \%>\%
   broom::tidy()

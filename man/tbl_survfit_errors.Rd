@@ -18,11 +18,11 @@ a data frame to \code{tbl_survfit()}. The survfit model will be constructed
 in a manner ensuring the formula and data are available.
 This only works if you have a stratified model.
 
-Instead of the following line\if{html}{\out{<div class="r">}}\preformatted{survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
+Instead of the following line\if{html}{\out{<div class="sourceCode r">}}\preformatted{survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
   tbl_survfit(times = c(12, 24))
 }\if{html}{\out{</div>}}
 
-Use this code\if{html}{\out{<div class="r">}}\preformatted{trial \%>\%
+Use this code\if{html}{\out{<div class="sourceCode r">}}\preformatted{trial \%>\%
   select(ttdeath, death, trt) \%>\%
   tbl_survfit(y = Surv(ttdeath, death), times = c(12, 24))
 }\if{html}{\out{</div>}}
@@ -30,7 +30,7 @@ Use this code\if{html}{\out{<div class="r">}}\preformatted{trial \%>\%
 Ensure the formula and data are available in the call by using the tidyverse
 bang-bang operator, \verb{!!}.
 
-Use this code\if{html}{\out{<div class="r">}}\preformatted{formula_arg <- Surv(ttdeath, death) ~ 1
+Use this code\if{html}{\out{<div class="sourceCode r">}}\preformatted{formula_arg <- Surv(ttdeath, death) ~ 1
 data_arg <- trial
 rlang::expr(survfit(!!formula_arg, !!data_arg)) \%>\%
   eval() \%>\%
