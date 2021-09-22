@@ -3,7 +3,7 @@
 #' Add a new column with the confidence intervals for proportions.
 #'
 #' @param x A `tbl_summary` object
-#' @param statistic Formula indicating how the confidence interval will be placed.
+#' @param statistic Formula indicating how the confidence interval will be displayed.
 #' Default is `list(all_categorical() ~ "{conf.low}%, {conf.high}%", all_continuous() ~ "{conf.low}, {conf.high}")`
 #' @param method Confidence interval method. Default is
 #' `list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")`.
@@ -12,16 +12,18 @@
 #' variables, and `"t.test"` for continuous variables.
 #' See details below.
 #' @param conf.level Confidence level. Default is `0.95`
-#' @param ci_fun Function to style upper and lower bound of confidence
+#' @param style_fun Function to style upper and lower bound of confidence
 #' interval. Default is
 #' `list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100), all_continuous() ~ style_sigfig)`.
 #' @param ... Not used
 #' @inheritParams tbl_summary
 #'
 #' @section method argument:
-#' Methods `c("wilson", "wilson.no.correct")` are calculated with `prop.test()`.
+#' Methods `c("wilson", "wilson.no.correct")` are calculated with
+#' `prop.test(correct = c(TRUE, FALSE))`.
 #' The default method, `"wilson"`, includes the Yates continuity correction.
 #' Methods `c("exact", "asymptotic")` are calculated with `Hmisc::binconf(method=)`.
+#' COnfidence intervals for means are calcualted using `t.test()`.
 #'
 #' @return gtsummary table
 #' @rdname add_ci
@@ -32,7 +34,7 @@
 #' # Example 1 ----------------------------------
 #' add_ci_ex1 <-
 #'   trial %>%
-#'   select(response, trt) %>%
+#'   select(age, response, trt) %>%
 #'   tbl_summary(missing = "no") %>%
 #'   add_ci()
 #'
@@ -67,7 +69,7 @@ add_ci.tbl_summary <- function(x,
                                include = everything(),
                                statistic = NULL,
                                conf.level = 0.95,
-                               ci_fun = NULL, ...) {
+                               style_fun = NULL, ...) {
   # resolving arguments --------------------------------------------------------
   include <-
     .select_to_varnames(
@@ -95,18 +97,18 @@ add_ci.tbl_summary <- function(x,
       )
     )
 
-  ci_fun <-
+  style_fun <-
     .formula_list_to_named_list(
       x = list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100),
                all_continuous() ~ style_sigfig),
       var_info = x$table_body[x$table_body$variable %in% include,],
-      arg_name = "ci_fun"
+      arg_name = "style_fun"
     ) %>%
     purrr::update_list(
       !!!.formula_list_to_named_list(
-        x = ci_fun,
+        x = style_fun,
         var_info = x$meta_data[x$meta_data$variable %in% include,],
-        arg_name = "ci_fun"
+        arg_name = "style_fun"
       )
     )
 
@@ -134,7 +136,7 @@ add_ci.tbl_summary <- function(x,
                                           method = method,
                                           conf.level = conf.level,
                                           statistic = statistic,
-                                          ci_fun = ci_fun,
+                                          style_fun = style_fun,
                                           summary_type = summary_type),
       location = list(everything() ~ "label", all_categorical(FALSE) ~ "level")
     ) %>%
@@ -171,7 +173,7 @@ add_ci.tbl_summary <- function(x,
 
 # function to add CI for one variable
 single_ci <- function(variable, by, tbl, method, conf.level,
-                      ci_fun, statistic, summary_type,...) {
+                      style_fun, statistic, summary_type,...) {
   if (method[[variable]] %in% c("wilson", "wilson.no.correct",
                                 "exact", "asymptotic") &&
       summary_type[[variable]] %in% c("categorical", "dichotomous")) {
@@ -186,7 +188,7 @@ single_ci <- function(variable, by, tbl, method, conf.level,
                                 statistic = statistic[[variable]],
                                 method = method[[variable]],
                                 conf.level = conf.level,
-                                ci_fun = ci_fun[[variable]])
+                                style_fun = style_fun[[variable]])
 
       )
   }
@@ -195,7 +197,7 @@ single_ci <- function(variable, by, tbl, method, conf.level,
     df_single_ci <-
       tbl$inputs$data %>%
       dplyr::group_by_at(tbl$by) %>%
-      tidyr::nest() %>%
+      tidyr::nest(data = -all_of(tbl$by)) %>%
       dplyr::rowwise() %>%
       mutate(
         ci =
@@ -204,7 +206,7 @@ single_ci <- function(variable, by, tbl, method, conf.level,
                             statistic = statistic[[variable]],
                             method = method[[variable]],
                             conf.level = conf.level,
-                            ci_fun = ci_fun[[variable]])
+                            style_fun = style_fun[[variable]])
       )
     if (is.null(tbl$by)) {
       df_single_ci <-
@@ -240,7 +242,7 @@ single_ci <- function(variable, by, tbl, method, conf.level,
 }
 
 calculate_mean_ci <- function(data, variable, statistic,
-                              method, conf.level, ci_fun) {
+                              method, conf.level, style_fun) {
   if (method %in% c("t.test")) {
     df_ci <-
       stats::t.test(data[[variable]], conf.level = conf.level) %>%
@@ -250,12 +252,12 @@ calculate_mean_ci <- function(data, variable, statistic,
   # round and format CI
   df_ci %>%
     select(all_of(c("conf.low", "conf.high"))) %>%
-    dplyr::mutate_all(ci_fun) %>%
+    dplyr::mutate_all(style_fun) %>%
     glue::glue_data(statistic) %>%
     as.character()
 }
 
-calculate_prop_ci <- function(x, n, statistic, method, conf.level, ci_fun) {
+calculate_prop_ci <- function(x, n, statistic, method, conf.level, style_fun) {
   # calculate CI
   if (method %in% c("wilson", "wilson.no.correct")) {
     df_ci <-
@@ -276,7 +278,7 @@ calculate_prop_ci <- function(x, n, statistic, method, conf.level, ci_fun) {
   # round and format CI
   df_ci %>%
     select(all_of(c("conf.low", "conf.high"))) %>%
-    dplyr::mutate_all(ci_fun) %>%
+    dplyr::mutate_all(style_fun) %>%
     glue::glue_data(statistic) %>%
     as.character()
 }

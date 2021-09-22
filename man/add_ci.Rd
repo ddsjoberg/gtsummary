@@ -13,7 +13,7 @@ add_ci(x, ...)
   include = everything(),
   statistic = NULL,
   conf.level = 0.95,
-  ci_fun = NULL,
+  style_fun = NULL,
   ...
 )
 }
@@ -31,14 +31,14 @@ See details below.}
 
 \item{include}{variables to include in the summary table. Default is \code{everything()}}
 
-\item{statistic}{Formula indicating how the confidence interval will be placed.
+\item{statistic}{Formula indicating how the confidence interval will be displayed.
 Default is \code{list(all_categorical() ~ "{conf.low}\%, {conf.high}\%", all_continuous() ~ "{conf.low}, {conf.high}")}}
 
 \item{conf.level}{Confidence level. Default is \code{0.95}}
 
-\item{ci_fun}{Function to style upper and lower bound of confidence
+\item{style_fun}{Function to style upper and lower bound of confidence
 interval. Default is
-\code{list(all_categorical() ~ function(x) style_sigfig(x * 100), all_continuous() ~ style_sigfig)}.}
+\code{list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100), all_continuous() ~ style_sigfig)}.}
 }
 \value{
 gtsummary table
@@ -48,9 +48,11 @@ Add a new column with the confidence intervals for proportions.
 }
 \section{method argument}{
 
-Methods \code{c("wilson", "wilson.no.correct")} are calculated with \code{prop.test()}.
+Methods \code{c("wilson", "wilson.no.correct")} are calculated with
+\code{prop.test(correct = c(TRUE, FALSE))}.
 The default method, \code{"wilson"}, includes the Yates continuity correction.
 Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf(method=)}.
+COnfidence intervals for means are calcualted using \code{t.test()}.
 }
 
 \section{Example Output}{
@@ -68,7 +70,7 @@ Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf
 # Example 1 ----------------------------------
 add_ci_ex1 <-
   trial \%>\%
-  select(response, trt) \%>\%
+  select(age, response, trt) \%>\%
   tbl_summary(missing = "no") \%>\%
   add_ci()
 

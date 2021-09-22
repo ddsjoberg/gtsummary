@@ -69,7 +69,7 @@ test_that("add_ci() throws errors with bad arguments", {
   expect_error(
     tbl0 %>%
       add_ci(
-        ci_fun = letters
+        style_fun = letters
       )
   )
   expect_error(
