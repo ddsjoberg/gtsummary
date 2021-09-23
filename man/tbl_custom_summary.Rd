@@ -86,8 +86,6 @@ A \code{tbl_custom_summary} and \code{tbl_summary} object
 }
 \description{
 \lifecycle{experimental}
-}
-\details{
 The \code{tbl_custom_summary()} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables.
 This function is similar to \code{\link[=tbl_summary]{tbl_summary()}} but allows you to provide
@@ -211,6 +209,10 @@ tbl_custom_summary_ex1 <-
     update = all_stat_cols() ~ "A: mean age - S: sum of marker"
   ) \%>\%
   bold_labels()
+}
+\seealso{
+Other tbl_custom_summary tools: 
+\code{\link{continuous_summary}()}
 }
 \author{
 Joseph Larmarange
