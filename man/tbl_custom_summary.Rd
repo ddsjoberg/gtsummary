@@ -73,7 +73,8 @@ Default is \code{"Unknown"}.}
 A \code{tbl_summary} object
 }
 \description{
-The \code{tbl_custom_summary} function calculates descriptive statistics for
+\lifecycle{experimental}
+The \code{tbl_custom_summary()} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables.
 This function is similar to \code{tbl_summary()} but allows you to provide
 a custom function in charge of computing the statistics (see Details).
@@ -92,7 +93,7 @@ the summary statistics. For example, \code{stat_fns = everything() ~ foo}.
 
 Each function may take the following arguments:
 \code{foo(data, full_data, variable, by, type, ...)}
-- \verb{data=} is the input data frame passed to \code{tbl_summary()}, subsetted
+- \verb{data=} is the input data frame passed to \code{tbl_summary()}, subset
 according to the level of \code{by} or \code{variable} if any, excluding \code{NA}
 values of the current \code{variable}
 - \verb{full_data=} is the full input data frame passed to \code{tbl_summary()}
@@ -101,7 +102,7 @@ calculation on
 - \verb{by=} is a string indicating the by variable from \verb{tbl_summary=},
 if present
 - \verb{type=} is a string indicating the type of variable
-(continous, categorical, ...)
+(continuous, categorical, ...)
 - \verb{stat_display=} a string indicating the statistic to display (for the
 \code{statistic} argument, for that variable)
 
@@ -184,10 +185,10 @@ tbl_custom_summary_ex1 <-
 See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 
 Other tbl_summary tools: 
+\code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_summary}()},
-\code{\link{add_prop_ci}()},
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
 \code{\link{bold_italicize_labels_levels}},
