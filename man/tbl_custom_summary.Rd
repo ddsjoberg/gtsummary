@@ -70,7 +70,7 @@ Default is \code{"Unknown"}.}
 \item{include}{variables to include in the summary table. Default is \code{everything()}}
 }
 \value{
-A \code{tbl_summary} object
+A \code{tbl_custom_summary} object
 }
 \description{
 \lifecycle{experimental}
@@ -181,25 +181,6 @@ tbl_custom_summary_ex1 <-
     update = all_stat_cols() ~ "A: mean age - S: sum of marker"
   )
 }
-\seealso{
-See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
-
-Other tbl_summary tools: 
-\code{\link{add_ci}()},
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_summary}()}
-}
 \author{
 Joseph Larmarange
 }
-\concept{tbl_summary tools}

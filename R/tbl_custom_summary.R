@@ -78,9 +78,7 @@
 #' in the denominator, not at each level of the categorical variable.
 #'
 #' @export
-#' @return A `tbl_summary` object
-#' @family tbl_summary tools
-#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
+#' @return A `tbl_custom_summary` object
 #' @author Joseph Larmarange
 #' @examples
 #' # Example 1 ----------------------------------
