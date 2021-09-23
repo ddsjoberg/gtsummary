@@ -82,7 +82,7 @@ table. Default is \code{FALSE}, which will display overall row first.}
 \code{"Overall"}.}
 }
 \value{
-A \code{tbl_custom_summary} object
+A \code{tbl_custom_summary} and \code{tbl_summary} object
 }
 \description{
 \lifecycle{experimental}
@@ -125,10 +125,6 @@ encouraged the user-defined function accept \code{...} as each of the arguments
 \emph{will} be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. \code{foo(data, ...)} (see examples).
 
-One or two additional columns are added to \code{data} and \code{full_data}:
-- ".variable", a copy of the current variable defined in \code{variable}
-- ".by", a copy of the by variable defined in \code{by}, if any
-
 The user-defined function should return a one row \code{\link[dplyr:reexports]{dplyr::tibble()}} with
 one column per summary statistics (see examples).
 }
@@ -163,6 +159,20 @@ in the denominator, not at each level of the categorical variable.
 
 It is recommended to use \code{\link[=modify_footnote]{modify_footnote()}} to properly describe the
 displayed statistics (see examples).
+}
+
+\section{Caution}{
+
+
+The returned table is compatible with all \code{gtsummary} features applicable
+to a \code{tbl_summary} object, like \code{\link[=add_overall]{add_overall()}}, \code{\link[=modify_footnote]{modify_footnote()}} or
+\code{\link[=bold_labels]{bold_labels()}}.
+
+However, some of them could be inappropriate in such case. In particular,
+\code{\link[=add_p]{add_p()}} do not take into account the type of displayed statistics and
+always return the p-value of a comparison test of the current variable
+according to the \code{by} groups, which may be incorrect if the displayed
+statistics refer to a third variable.
 }
 
 \section{Example Output}{

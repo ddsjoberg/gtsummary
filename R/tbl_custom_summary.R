@@ -50,10 +50,6 @@
 #' *will* be passed to the function, even if not all inputs are utilized by
 #' the user's function, e.g. `foo(data, ...)` (see examples).
 #'
-#' One or two additional columns are added to `data` and `full_data`:
-#'     - ".variable", a copy of the current variable defined in `variable`
-#'     - ".by", a copy of the by variable defined in `by`, if any
-#'
 #' The user-defined function should return a one row [dplyr::tibble()] with
 #' one column per summary statistics (see examples).
 #'
@@ -87,9 +83,21 @@
 #' It is recommended to use [modify_footnote()] to properly describe the
 #' displayed statistics (see examples).
 #'
+#' @section Caution:
+#'
+#' The returned table is compatible with all `gtsummary` features applicable
+#' to a `tbl_summary` object, like [add_overall()], [modify_footnote()] or
+#' [bold_labels()].
+#'
+#' However, some of them could be inappropriate in such case. In particular,
+#' [add_p()] do not take into account the type of displayed statistics and
+#' always return the p-value of a comparison test of the current variable
+#' according to the `by` groups, which may be incorrect if the displayed
+#' statistics refer to a third variable.
+#'
 #' @export
 #' @family tbl_custom_summary tools
-#' @return A `tbl_custom_summary` object
+#' @return A `tbl_custom_summary` and `tbl_summary` object
 #' @author Joseph Larmarange
 #' @examples
 #' # Example 1 ----------------------------------
