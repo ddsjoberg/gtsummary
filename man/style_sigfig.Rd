@@ -4,13 +4,22 @@
 \alias{style_sigfig}
 \title{Style significant figure-like rounding}
 \usage{
-style_sigfig(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...)
+style_sigfig(
+  x,
+  digits = 2,
+  scale = 1,
+  big.mark = NULL,
+  decimal.mark = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Numeric vector}
 
 \item{digits}{Integer specifying the minimum number of significant
 digits to display}
+
+\item{scale}{A scaling factor: x will be multiplied by scale before formatting.}
 
 \item{big.mark}{Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.

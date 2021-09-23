@@ -93,17 +93,16 @@ Other tbl_uvregression tools:
 \code{\link{tbl_uvregression}()}
 
 Other tbl_summary tools: 
+\code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_summary}()},
-\code{\link{add_prop_ci}()},
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
 \code{\link{modify}},
-\code{\link{tbl_custom_summary}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
 

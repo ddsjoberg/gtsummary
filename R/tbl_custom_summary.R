@@ -2,7 +2,7 @@
 #'
 #' \lifecycle{experimental}
 #'
-#' The `tbl_custom_summary` function calculates descriptive statistics for
+#' The `tbl_custom_summary()` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.
 #' This function is similar to [tbl_summary()] but allows you to provide
 #' a custom function in charge of computing the statistics (see Details).
@@ -32,16 +32,16 @@
 #'
 #' Each function may take the following arguments:
 #' `foo(data, full_data, variable, by, type, ...)`
-#'     - `data=` is the input data frame passed to `tbl_custom_summary()`,
-#'       subsetted according to the level of `by` or `variable` if any,
-#'       excluding `NA` values of the current `variable`
+#'     - `data=` is the input data frame passed to `tbl_custom_summary()`, subset
+#'       according to the level of `by` or `variable` if any, excluding `NA`
+#'       values of the current `variable`
 #'     - `full_data=` is the full input data frame passed to `tbl_custom_summary()`
 #'     - `variable=` is a string indicating the variable to perform the
 #'       calculation on
 #'     - `by=` is a string indicating the by variable from `tbl_custom_summary=`,
 #'       if present
 #'     - `type=` is a string indicating the type of variable
-#'       (continous, categorical, ...)
+#'       (continuous, categorical, ...)
 #'     - `stat_display=` a string indicating the statistic to display (for the
 #'       `statistic` argument, for that variable)
 #'
@@ -88,10 +88,8 @@
 #' displayed statistics (see examples).
 #'
 #' @export
-#' @return A `tbl_summary` object
-#' @family tbl_summary tools
 #' @family tbl_custom_summary tools
-#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
+#' @return A `tbl_custom_summary` object
 #' @author Joseph Larmarange
 #' @examples
 #' # Example 1 ----------------------------------
@@ -136,8 +134,7 @@ tbl_custom_summary <- function(
                         include = everything(),
                         overall_row = FALSE,
                         overall_row_last = FALSE,
-                        overall_row_label = NULL
-                        ) {
+                        overall_row_label = NULL) {
   # ungrouping data ------------------------------------------------------------
   data <- data %>% ungroup()
 
@@ -285,7 +282,7 @@ tbl_custom_summary <- function(
   }
 
   # running any additional mods ------------------------------------------------
-  # ADD THEME FOR Ctbl_custom_summary
+  # ADD THEME FOR tbl_custom_summary
   x <-
     get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) %>%
     do.call(list(x))
@@ -371,8 +368,8 @@ generate_metadata_custom_summary <- function(data, stat_fns, include,
 
   # assigning variable characteristics -----------------------------------------
   # if (is.null(survey)) {
-    df_stats_function <- df_custom_stats_fun # custom functions
-    data_for_df_stats <- data
+  df_stats_function <- df_custom_stats_fun # custom functions
+  data_for_df_stats <- data
   # } else {
   #   df_stats_function <- df_stats_fun_survey
   #   data_for_df_stats <- survey
@@ -483,13 +480,13 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
 
   if (!is.null(dichotomous_value))
     data <- data %>%
-      mutate(
-        # adding dichotomous level (in case it is unobserved)
-        .variable = forcats::fct_expand(
-          as.factor(.data$.variable),
-          as.character(dichotomous_value)
-        )
+    mutate(
+      # adding dichotomous level (in case it is unobserved)
+      .variable = forcats::fct_expand(
+        as.factor(.data$.variable),
+        as.character(dichotomous_value)
       )
+    )
 
   group_vars <- c(
     switch (!is.null(by), ".by"),
