@@ -35,6 +35,8 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      _R_CHECK_CRAN_INCOMING_: false
+      _R_CHECK_FORCE_SUGGESTS_: false
 
     steps:
       - uses: actions/checkout@v2
@@ -51,31 +53,7 @@ jobs:
         with:
           extra-packages: rcmdcheck
 
-      # - uses: r-lib/actions/check-r-package@v1
-      - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_: false
-          _R_CHECK_FORCE_SUGGESTS_: false
-        inputs:
-          args:
-            description: 'Arguments to pass to the `args` parameter of rcmdcheck'
-            default: '"--no-manual", "--as-cran"'
-          error-on:
-            description: 'What type of result should cause a build error?'
-            default: '"warning"'
-          check-dir:
-            description: 'Where should the check output go?'
-            default: '"check"'
-        runs:
-          using: "composite"
-          steps:
-            - name: Check
-              env:
-                _R_CHECK_CRAN_INCOMING_: false
-              run: |
-                options(crayon.enabled = TRUE)
-                rcmdcheck::rcmdcheck(args = c(${{ inputs.args }}), error_on = ${{ inputs.error-on }}, check_dir = ${{ inputs.check-dir }})
-              shell: Rscript {0}
+      - uses: r-lib/actions/check-r-package@v1
 
       - name: Show testthat output
         if: always()
