@@ -1,14 +1,8 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
-#
-# NOTE: This workflow is overkill for most R packages and
-# check-standard.yaml is likely a better choice.
-# usethis::use_github_action("check-standard") will install it.
 on:
   push:
-    branches: [main, master]
+    branches:
+      - master
   pull_request:
-    branches: [main, master]
 
 name: Historic-R-CMD-check
 
@@ -22,38 +16,97 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - {os: macOS-latest,   r: 'release'}
-          # - {os: windows-latest, r: 'release'}
-          # # Use older ubuntu to maximise backward compatibility
-          # - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
-          # - {os: ubuntu-18.04,   r: 'release'}
-          # - {os: ubuntu-18.04,   r: 'oldrel-1'}
-          - {os: ubuntu-18.04,   r: 'oldrel-2'}
-          - {os: ubuntu-18.04,   r: 'oldrel-3'}
-          - {os: ubuntu-18.04,   r: 'oldrel-4'}
-
+          - {os: ubuntu-16.04,   r: '3.6', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: ubuntu-16.04,   r: '3.5', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+          - {os: ubuntu-16.04,   r: '3.4', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
     env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      RSPM: ${{ matrix.config.rspm }}
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      R_KEEP_PKG_SOURCE: yes
-      _R_CHECK_CRAN_INCOMING_: false
-      _R_CHECK_FORCE_SUGGESTS_: false
 
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-pandoc@v1
-
-      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-r@master
         with:
           r-version: ${{ matrix.config.r }}
-          http-user-agent: ${{ matrix.config.http-user-agent }}
-          use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - uses: r-lib/actions/setup-pandoc@master
+
+      # trying to get nloptr pkg to install on 3.5, 3.4 2020-08-11
+      - name: Install nlopt on Linux
+        if: runner.os == 'Linux'
+        run: sudo apt-get install pkg-config libnlopt-dev
+
+      # this is here because of an issue installing the systemfonts package
+      # can likely remove later (https://github.com/r-lib/systemfonts/issues/21)
+      # Added by DS 2020-04-09
+      - name: Install pkg-config on macOS
+        if: runner.os == 'macOS'
+        run: brew install pkg-config
+
+      # Added by DS 2020-04-09
+      - name: Install cairo on macOS
+        if: runner.os == 'macOS'
+        run: brew install cairo
+
+      # Added by DS 2020-04-09 (https://github.com/r-lib/actions/issues/78)
+      - name: Install XQuartz on macOS
+        if: runner.os == 'macOS'
+        run: brew install xquartz --cask
+
+      - name: Query dependencies
+        run: |
+          install.packages(c('remotes', 'broom.helpers', 'shiny'), repos = "https://cran.rstudio.com")
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
+      - name: Cache R packages
+        if: runner.os != 'Windows'
+        uses: actions/cache@v1
         with:
-          extra-packages: rcmdcheck
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-
 
-      - uses: r-lib/actions/check-r-package@v1
+      # - name: Install system dependencies
+      #   if: runner.os == 'Linux'
+      #   env:
+      #     RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
+      #   run: |
+      #     Rscript -e "remotes::install_github('r-hub/sysreqs')"
+      #     sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+      #     sudo -s eval "$sysreqs"
+
+     # installing older versions of packages not supported on newer versions of R
+      - name: Install historical dependencies
+        run: Rscript -e "if (substr(getRversion(), 1, 3) == '3.5') install.packages(c('car', 'Hmisc', 'geepack', 'survival'), repos = 'https://mran.microsoft.com/snapshot/2019-04-01/')"
+                     -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('insight', version = '0.11.1', repos = 'https://cran.rstudio.com')"
+                     -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('bayestestR', version = '0.8.0', repos = 'https://cran.rstudio.com')"
+                     -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('parameters', version = '0.10.1', repos = 'https://cran.rstudio.com')"
+                     -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('effectsize', version = '0.4.1', repos = 'https://cran.rstudio.com')"
+                     -e "if (substr(getRversion(), 1, 3) == '3.4') remotes::install_version('survey', version = '4.0', repos = 'https://cran.rstudio.com')"
+
+      - name: Install dependencies
+        run: |
+          remotes::install_deps(dependencies = TRUE, repos = 'https://cran.rstudio.com')
+          remotes::install_cran("rcmdcheck", repos = 'https://cran.rstudio.com')
+        shell: Rscript {0}
+
+      - name: Session info
+        run: |
+          options(width = 100)
+          pkgs <- installed.packages()[, "Package"]
+          sessioninfo::session_info(pkgs, include_base = TRUE)
+        shell: Rscript {0}
+
+      - name: Check
+        env:
+          _R_CHECK_CRAN_INCOMING_: false
+          _R_CHECK_FORCE_SUGGESTS_: false
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+        shell: Rscript {0}
 
       - name: Show testthat output
         if: always()
@@ -62,7 +115,7 @@ jobs:
 
       - name: Upload check results
         if: failure()
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@master
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
