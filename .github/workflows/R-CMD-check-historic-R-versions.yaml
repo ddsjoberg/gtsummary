@@ -10,7 +10,7 @@ on:
   pull_request:
     branches: [main, master]
 
-name: Historic-R-CMD-check
+name: R-CMD-check
 
 jobs:
   R-CMD-check:
@@ -22,21 +22,21 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - {os: macOS-latest,   r: 'release'}
-          # - {os: windows-latest, r: 'release'}
-          # # Use older ubuntu to maximise backward compatibility
-          # - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
-          # - {os: ubuntu-18.04,   r: 'release'}
-          # - {os: ubuntu-18.04,   r: 'oldrel-1'}
-          - {os: ubuntu-18.04,   r: 'oldrel-2'}
-          - {os: ubuntu-18.04,   r: 'oldrel-3'}
-          - {os: ubuntu-18.04,   r: 'oldrel-4'}
+          - {os: macOS-latest,   r: 'release'}
+          - {os: windows-latest, r: 'release'}
+          # Use older ubuntu to maximise backward compatibility
+          - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-18.04,   r: 'release'}
+          - {os: ubuntu-18.04,   r: 'oldrel-1'}
+          # - {os: ubuntu-18.04,   r: 'oldrel-2'}
+          # - {os: ubuntu-18.04,   r: 'oldrel-3'}
+          # - {os: ubuntu-18.04,   r: 'oldrel-4'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
-      _R_CHECK_CRAN_INCOMING_: false
       _R_CHECK_FORCE_SUGGESTS_: false
+      R_CHECK_FORCE_SUGGESTS_: false
 
     steps:
       - uses: actions/checkout@v2
@@ -53,13 +53,7 @@ jobs:
         with:
           extra-packages: rcmdcheck
 
-      # - uses: r-lib/actions/check-r-package@v1
-      - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_: false
-          _R_CHECK_FORCE_SUGGESTS_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
-        shell: Rscript {0}
+      - uses: r-lib/actions/check-r-package@v1
 
       - name: Show testthat output
         if: always()
