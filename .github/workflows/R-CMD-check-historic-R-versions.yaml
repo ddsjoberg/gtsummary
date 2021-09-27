@@ -95,9 +95,8 @@ jobs:
               pak::pkg_system_requirements(dep, execute = TRUE)
             }
           }
-          pak::pkg_install(c(local_deps, needs_only_deps, extra_deps, "sessioninfo"))
+          tryCatch(pak::pkg_install(c(local_deps, needs_only_deps, extra_deps, "sessioninfo", "rcmdcheck")), error = function(e) NULL)
           cat("::endgroup::\n")
-          install.packages("rcmdcheck", repos = "http://cran.rstudio.com")
         shell: Rscript {0}
 
       - name: Session info
