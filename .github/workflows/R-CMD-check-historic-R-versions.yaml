@@ -49,9 +49,91 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
-        with:
-          extra-packages: rcmdcheck
+      # - uses: r-lib/actions/setup-r-dependencies@v1
+      #   with:
+      #     extra-packages: rcmdcheck
+      # ------------------------------------------------------------------------
+      # copied from https://github.com/r-lib/actions/blob/master/setup-r-dependencies/action.yaml
+      # and modified not error when Suggested pkgs cannot be installed
+      - name: 'setup-r-dependencies'
+        description: 'Action to setup installation tools and install R dependencies'
+        author: 'Jim Hester'
+        inputs:
+          cache-version:
+            description: 'The version of the cache, change this from the default (1) to start over with a fresh cache'
+            required: true
+            default: 1
+          extra-packages:
+            description: 'Any extra packages to install outside of the packages listed in the dependencies'
+          needs:
+            description: 'Any extra Config/Needs fields which need to be included when installing dependencies'
+        runs:
+          using: "composite"
+          steps:
+              - name: Install pak and query dependencies
+                run: |
+                  cat("::group::Install pak\n")
+                  options(pak.no_extra_messages = TRUE)
+                  install.packages("pak", repos = "https://r-lib.github.io/p/pak/dev/")
+                  saveRDS(pak::pkg_deps("local::.", dependencies = TRUE), ".github/r-depends.rds")
+                shell: Rscript {0}
+
+              - name: Get R and OS version
+                id: get-version
+                run: |
+                  cat("::set-output name=os-version::", sessionInfo()$running, "\n", sep = "")
+                  cat("::set-output name=r-version::", R.Version()$version.string, "\n", sep = "")
+                  cat("::endgroup::\n")
+                shell: Rscript {0}
+
+              - name: Restore R package cache
+                uses: actions/cache@v2
+                with:
+                  path: |
+                    ${{ env.R_LIBS_USER }}/*
+                    !${{ env.R_LIBS_USER }}/pak
+                  key: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}-${{ hashFiles('.github/r-depends.rds') }}
+                  restore-keys: ${{ steps.get-version.outputs.os-version }}-${{ steps.get-version.outputs.r-version }}-${{inputs.cache-version }}-
+
+              - name: Install dependencies
+                run: |
+                  cat("::group::Install dependencies\n")
+                  options(pak.no_extra_messages = TRUE)
+                  local_deps <- pak::local_dev_deps(dependencies = "all")[["ref"]]
+                  needs <- sprintf("Config/Needs/%s", strsplit("${{ inputs.needs }}", "[[:space:],]+")[[1]])
+                  needs_deps <- pak::local_dev_deps(dependencies = needs)[["ref"]]
+                  needs_only_deps <- setdiff(needs_deps, local_deps)
+                  extra_deps <- strsplit("${{ inputs.extra-packages }}", "[[:space:],]+")[[1]]
+                  if (Sys.info()[["sysname"]] == "Linux") {
+                    pak::local_system_requirements(execute = TRUE)
+                    for (dep in c(needs_only_deps, extra_deps)) {
+                      pak::pkg_system_requirements(dep, execute = TRUE)
+                    }
+                  }
+                  pak::pkg_install(c(local_deps, needs_only_deps, extra_deps, "sessioninfo"))
+                  cat("::endgroup::\n")
+                shell: Rscript {0}
+
+              - name: Session info
+                run: |
+                  cat("::group::Session info\n")
+                  options(width = 100)
+                  pkgs <- installed.packages()[, "Package"]
+                  sessioninfo::session_info(pkgs, include_base = TRUE)
+                  cat("::endgroup::\n")
+                shell: Rscript {0}
+
+              - name: Don't use tar 1.30 from Rtools35 to store the cache
+                shell: bash
+                run: |
+                  if command -v /c/Rtools/bin/tar && /c/Rtools/bin/tar --version | grep -q 'tar (GNU tar) 1.30'
+                    then echo 'C:/Program Files/Git/usr/bin' >> $GITHUB_PATH
+                  fi
+      # ------------------------------------------------------------------------
+
+
+
+
 
       - uses: r-lib/actions/check-r-package@v1
 
