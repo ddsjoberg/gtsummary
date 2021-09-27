@@ -83,19 +83,22 @@ jobs:
       - name: Install dependencies
         run: |
           cat("::group::Install dependencies\n")
-          options(pak.no_extra_messages = TRUE)
-          local_deps <- pak::local_dev_deps(dependencies = "all")[["ref"]]
-          needs <- sprintf("Config/Needs/%s", strsplit("${{ inputs.needs }}", "[[:space:],]+")[[1]])
-          needs_deps <- pak::local_dev_deps(dependencies = needs)[["ref"]]
-          needs_only_deps <- setdiff(needs_deps, local_deps)
-          extra_deps <- strsplit("${{ inputs.extra-packages }}", "[[:space:],]+")[[1]]
-          if (Sys.info()[["sysname"]] == "Linux") {
-            pak::local_system_requirements(execute = TRUE)
-            for (dep in c(needs_only_deps, extra_deps)) {
-              pak::pkg_system_requirements(dep, execute = TRUE)
+          tryCatch({
+            options(pak.no_extra_messages = TRUE)
+            local_deps <- pak::local_dev_deps(dependencies = "all")[["ref"]]
+            needs <- sprintf("Config/Needs/%s", strsplit("${{ inputs.needs }}", "[[:space:],]+")[[1]])
+            needs_deps <- pak::local_dev_deps(dependencies = needs)[["ref"]]
+            needs_only_deps <- setdiff(needs_deps, local_deps)
+            extra_deps <- strsplit("${{ inputs.extra-packages }}", "[[:space:],]+")[[1]]
+            if (Sys.info()[["sysname"]] == "Linux") {
+              pak::local_system_requirements(execute = TRUE)
+              for (dep in c(needs_only_deps, extra_deps)) {
+                pak::pkg_system_requirements(dep, execute = TRUE)
+              }
             }
-          }
-          tryCatch(pak::pkg_install(c(local_deps, needs_only_deps, extra_deps, "sessioninfo", "rcmdcheck")), error = function(e) NULL)
+            pak::pkg_install(c(local_deps, needs_only_deps, extra_deps, "sessioninfo", "rcmdcheck"))
+          },
+          error = function(e) NULL)
           cat("::endgroup::\n")
         shell: Rscript {0}
 
