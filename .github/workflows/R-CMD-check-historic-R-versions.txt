@@ -1,0 +1,121 @@
+# on:
+#   push:
+#     branches:
+#       - master
+#   pull_request:
+#
+# name: Historic-R-CMD-check
+#
+# jobs:
+#   R-CMD-check:
+#     runs-on: ${{ matrix.config.os }}
+#
+#     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+#
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         config:
+#           - {os: ubuntu-16.04,   r: '3.6', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+#           - {os: ubuntu-16.04,   r: '3.5', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+#           - {os: ubuntu-16.04,   r: '3.4', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
+#     env:
+#       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+#       RSPM: ${{ matrix.config.rspm }}
+#       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+#
+#     steps:
+#       - uses: actions/checkout@v2
+#
+#       - uses: r-lib/actions/setup-r@master
+#         with:
+#           r-version: ${{ matrix.config.r }}
+#
+#       - uses: r-lib/actions/setup-pandoc@master
+#
+#       # trying to get nloptr pkg to install on 3.5, 3.4 2020-08-11
+#       - name: Install nlopt on Linux
+#         if: runner.os == 'Linux'
+#         run: sudo apt-get install pkg-config libnlopt-dev
+#
+#       # this is here because of an issue installing the systemfonts package
+#       # can likely remove later (https://github.com/r-lib/systemfonts/issues/21)
+#       # Added by DS 2020-04-09
+#       - name: Install pkg-config on macOS
+#         if: runner.os == 'macOS'
+#         run: brew install pkg-config
+#
+#       # Added by DS 2020-04-09
+#       - name: Install cairo on macOS
+#         if: runner.os == 'macOS'
+#         run: brew install cairo
+#
+#       # Added by DS 2020-04-09 (https://github.com/r-lib/actions/issues/78)
+#       - name: Install XQuartz on macOS
+#         if: runner.os == 'macOS'
+#         run: brew install xquartz --cask
+#
+#       - name: Query dependencies
+#         run: |
+#           install.packages(c('remotes', 'broom.helpers', 'shiny'), repos = "https://cran.rstudio.com")
+#           saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+#           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+#         shell: Rscript {0}
+#
+#       - name: Cache R packages
+#         if: runner.os != 'Windows'
+#         uses: actions/cache@v1
+#         with:
+#           path: ${{ env.R_LIBS_USER }}
+#           key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-${{ hashFiles('.github/depends.Rds') }}
+#           restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-
+#
+#       # - name: Install system dependencies
+#       #   if: runner.os == 'Linux'
+#       #   env:
+#       #     RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
+#       #   run: |
+#       #     Rscript -e "remotes::install_github('r-hub/sysreqs')"
+#       #     sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+#       #     sudo -s eval "$sysreqs"
+#
+#      # installing older versions of packages not supported on newer versions of R
+#       - name: Install historical dependencies
+#         run: Rscript -e "if (substr(getRversion(), 1, 3) == '3.5') install.packages(c('car', 'Hmisc', 'geepack', 'survival'), repos = 'https://mran.microsoft.com/snapshot/2019-04-01/')"
+#                      -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('insight', version = '0.11.1', repos = 'https://cran.rstudio.com')"
+#                      -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('bayestestR', version = '0.8.0', repos = 'https://cran.rstudio.com')"
+#                      -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('parameters', version = '0.10.1', repos = 'https://cran.rstudio.com')"
+#                      -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('effectsize', version = '0.4.1', repos = 'https://cran.rstudio.com')"
+#                      -e "if (substr(getRversion(), 1, 3) == '3.4') remotes::install_version('survey', version = '4.0', repos = 'https://cran.rstudio.com')"
+#
+#       - name: Install dependencies
+#         run: |
+#           remotes::install_deps(dependencies = TRUE, repos = 'https://cran.rstudio.com')
+#           remotes::install_cran("rcmdcheck", repos = 'https://cran.rstudio.com')
+#         shell: Rscript {0}
+#
+#       - name: Session info
+#         run: |
+#           options(width = 100)
+#           pkgs <- installed.packages()[, "Package"]
+#           sessioninfo::session_info(pkgs, include_base = TRUE)
+#         shell: Rscript {0}
+#
+#       - name: Check
+#         env:
+#           _R_CHECK_CRAN_INCOMING_: false
+#           _R_CHECK_FORCE_SUGGESTS_: false
+#         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
+#         shell: Rscript {0}
+#
+#       - name: Show testthat output
+#         if: always()
+#         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+#         shell: bash
+#
+#       - name: Upload check results
+#         if: failure()
+#         uses: actions/upload-artifact@master
+#         with:
+#           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+#           path: check
