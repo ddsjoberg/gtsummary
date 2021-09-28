@@ -1,29 +1,67 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master]
+    branches:
+      - master
   pull_request:
-    branches: [main, master]
 
 name: test-coverage
 
 jobs:
   test-coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
+    # runs-on: macOS-latest # 2020-01-23 erring on lme4 installation
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
     steps:
       - uses: actions/checkout@v2
 
-      - uses: r-lib/actions/setup-r@v1
-        with:
-          use-public-rspm: true
+      - uses: r-lib/actions/setup-r@master
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
+      - uses: r-lib/actions/setup-pandoc@master
+
+      # this is here because of an issue installing the systemfonts package
+      # can likely remove later (https://github.com/r-lib/systemfonts/issues/21)
+      # Added by DS 2020-04-09
+      - name: Install pkg-config on macOS
+        if: runner.os == 'macOS'
+        run: brew install pkg-config
+
+      # Added by DS 2020-04-09
+      - name: Install cairo on macOS
+        if: runner.os == 'macOS'
+        run: brew install cairo
+
+      # Added by DS 2020-04-09 (https://github.com/r-lib/actions/issues/78)
+      - name: Install XQuartz on macOS
+        if: runner.os == 'macOS'
+        run: brew install xquartz --cask
+
+      - name: Install libcurl on Linux
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y libcurl4-openssl-dev
+
+      - name: Query dependencies
+        run: |
+          install.packages(c('remotes', 'broom.helpers', 'shiny'), repos = "https://cran.rstudio.com")
+          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+        shell: Rscript {0}
+
+      - name: Cache R packages
+        uses: actions/cache@v1
         with:
-          extra-packages: covr
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+
+      - name: Install dependencies
+        run: |
+          install.packages(c('remotes', 'broom.helpers', 'shiny'), repos = "https://cran.rstudio.com")
+          remotes::install_deps(dependencies = TRUE)
+          remotes::install_cran("covr")
+        shell: Rscript {0}
 
       - name: Test coverage
         run: covr::codecov()
