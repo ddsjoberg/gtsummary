@@ -482,26 +482,20 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
 
   # prepping data set
   df_by <- df_by(data, by)
-  data$.variable <- data[[variable]]
-  if (!is.null(by)) data$.by <- data[[by]]
 
   if (!is.null(dichotomous_value))
-    data <- data %>%
-    mutate(
-      # adding dichotomous level (in case it is unobserved)
-      .variable = forcats::fct_expand(
-        as.factor(.data$.variable),
-        as.character(dichotomous_value)
-      )
+    data[[variable]] <- forcats::fct_expand(
+      as.factor(data[[variable]]),
+      as.character(dichotomous_value)
     )
 
   group_vars <- c(
-    switch (!is.null(by), ".by"),
-    switch (summary_type %in% c("categorical", "dichotomous"), ".variable")
+    switch (!is.null(by), by),
+    switch (summary_type %in% c("categorical", "dichotomous"), variable)
   )
   data <- data %>%
-    dplyr::group_by(dplyr::across(all_of(group_vars)), .drop = FALSE) %>%
-    dplyr::filter(!is.na(.data$.variable))
+    dplyr::filter(!is.na(data[[variable]])) %>%
+    dplyr::group_by(dplyr::across(all_of(group_vars)), .drop = FALSE)
 
   # calculating stats
   df_stats <- data %>%
@@ -516,7 +510,7 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
     ) %>%
     dplyr::mutate(variable = variable) %>%
     dplyr::ungroup() %>%
-    dplyr::rename(any_of(c(by = ".by", variable_levels = ".variable")))
+    dplyr::rename(any_of(c(by = by, variable_levels = variable)))
 
   # replacing by variable with original (non-factor version)
   if (!is.null(by)) {
