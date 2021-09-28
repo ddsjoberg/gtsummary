@@ -500,7 +500,7 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
     switch (summary_type %in% c("categorical", "dichotomous"), ".variable")
   )
   data <- data %>%
-    dplyr::group_by(dplyr::across(all_of(group_vars))) %>%
+    dplyr::group_by(dplyr::across(all_of(group_vars)), .drop = FALSE) %>%
     dplyr::filter(!is.na(.data$.variable))
 
   # calculating stats
