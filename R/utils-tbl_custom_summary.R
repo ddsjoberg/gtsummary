@@ -4,7 +4,7 @@
 #' This helper to be used with [tbl_custom_summary()] creates a function
 #' summarizing a continuous variable.
 #'
-#' @param String indicating the name of the variable to be summarized. This
+#' @param variable String indicating the name of the variable to be summarized. This
 #' variable should be continuous.
 #'
 #' @details
@@ -38,7 +38,7 @@
 continuous_summary <- function(variable) {
   variable_to_summarize <- variable
   function(data, stat_display, ...) {
-    gtsummary:::summarize_continuous(
+    summarize_continuous(
       data = data,
       variable = variable_to_summarize,
       by = NULL,

@@ -7,7 +7,7 @@
 continuous_summary(variable)
 }
 \arguments{
-\item{String}{indicating the name of the variable to be summarized. This
+\item{variable}{String indicating the name of the variable to be summarized. This
 variable should be continuous.}
 }
 \description{
