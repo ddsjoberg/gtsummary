@@ -77,7 +77,7 @@ jobs:
       - name: Install dependencies
         run: |
           tryCatch(pak::local_install_dev_deps(upgrade = TRUE), error = function(e) invisible())
-          pak::pkg_install("rcmdcheck")
+          pak::pkg_install(c("rcmdcheck", "knitr")
         shell: Rscript {0}
 
       - name: Session info
