@@ -76,7 +76,7 @@ continuous_summary <- function(variable) {
 #'   \item `{conf.high}` upper confidence interval
 #' }
 #'
-#' Condidence interval is computed with [stats::poisson.test()], if and only if
+#' Confidence interval is computed with [stats::poisson.test()], if and only if
 #' `num` is an integer.
 #'
 #' @export
@@ -119,6 +119,109 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
       ratio = ratio,
       conf.low = ci_poisson[1],
       conf.high = ci_poisson[2]
+    )
+  }
+}
+
+
+
+
+#' Summarize a proportion
+#'
+#' \lifecycle{experimental}
+#' This helper, to be used with [tbl_custom_summary()], creates a function
+#' computing a proportion and its confidence interval.
+#'
+#' @param variable String indicating the name of the variable from wich the
+#' proportion will be computed.
+#' @param value Value (or list of values) of `variable` to be taken into account
+#' in the numerator.
+#' @param weights Optional string indicating the name of a weighting variable.
+#' If `NULL`, all observations will be assumed to have a weight equal to `1`.
+#' @param na.rm Should missing values be removed before computing the
+#' proportion? (default is `TRUE`)
+#' @param conf.level Confidence level for the returned confidence interval.
+#' Must be strictly greater than 0 and les than 1. Default to 0.95, which
+#' corresponds to a 95 percent confidence interval.
+#' @param method Confidence interval method. Must be one of
+#' `c("wilson", "wilson.no.correct", "exact", "asymptotic")`. See details below.
+#'
+#' @details
+#' Computed statistics:
+#' \itemize{
+#'   \item `{n}` numerator, (weighted) number of observations equal to `values`
+#'   \item `{N}` denominator, (weighted) number of observations
+#'   \item `{prop}` proportion, i.e. `n/N`
+#'   \item `{conf.low}` lower confidence interval
+#'   \item `{conf.high}` upper confidence interval
+#' }
+#'
+#' Methods `c("wilson", "wilson.no.correct")` are calculated with
+#' [stats::prop.test(correct = c(TRUE, FALSE))]. The default method, "wilson",
+#' includes the Yates continuity correction. Methods `c("exact", "asymptotic")`
+#' are calculated with [Hmisc::binconf(method=)].
+#'
+#' @export
+#' @family tbl_custom_summary tools
+#' @author Joseph Larmarange
+#' @examples
+#' # Example 1 ----------------------------------
+#' proportion_summary_ex1 <-
+#'   Titanic %>%
+#'   as.data.frame() %>%
+#'   tbl_custom_summary(
+#'     include = c("Age", "Class"),
+#'     by = "Sex",
+#'     stat_fns = everything() ~ proportion_summary("Survived", "Yes", weights = "Freq"),
+#'     statistic = everything() ~ "{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
+#'     digits = everything() ~ list(function(x) {style_percent(x, digits = 1)}, 0, 0, style_percent, style_percent),
+#'     overall_row = TRUE,
+#'     overall_row_last = TRUE
+#'   ) %>%
+#'   bold_labels() %>%
+#'   modify_footnote(
+#'     update = all_stat_cols() ~ "Proportion (%) of survivors (n/N) [95% CI]"
+#'   )
+#' @section Example Output:
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{proportion_summary_ex1.png}{options: width=31\%}}
+proportion_summary <- function(variable, value, weights = NULL, na.rm = TRUE,
+                               conf.level = 0.95,
+                               method = c("wilson", "wilson.no.correct", "exact", "asymptotic")) {
+  method <- match.arg(method)
+  variable_to_summarize <- variable
+  function(data, ...) {
+    if (is.null(weights)) {
+      n <- sum(data[[variable_to_summarize]] %in% value, na.rm = na.rm)
+      N <- sum(!is.na(data[[variable_to_summarize]]), na.rm = na.rm)
+    } else {
+      n <- sum((data[[variable_to_summarize]] %in% value) * data[[weights]], na.rm = na.rm)
+      N <- sum((!is.na(data[[variable_to_summarize]])) * data[[weights]], na.rm = na.rm)
+    }
+    if (anyNA(n, N)) {
+      ci <- c(NA, NA)
+    } else {
+      if (method %in% c("wilson", "wilson.no.correct")) {
+        ci <-
+          stats::prop.test(n, N,
+                           conf.level = conf.level,
+                           correct = isTRUE(method == "wilson")) %>%
+          purrr::pluck("conf.int")
+      }
+      else if (method %in% c("exact", "asymptotic")) {
+        assert_package("Hmisc", fn = 'proportion_summary(method = c("exact", "asymptotic"))')
+        ci <-
+          Hmisc::binconf(n, N,
+                         method = method, alpha = 1 - conf.level)[2:3]
+      }
+    }
+    dplyr::tibble(
+      n = n,
+      N = N,
+      prop = n/N,
+      conf.low = ci[1],
+      conf.high = ci[2]
     )
   }
 }
