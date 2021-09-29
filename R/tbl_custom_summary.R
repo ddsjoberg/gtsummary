@@ -8,7 +8,9 @@
 #'
 #' @inheritParams tbl_summary
 #' @param stat_fns Formula or list of formulas specifying the function to be
-#' used to compute the statistics (see below for details and examples).
+#' used to compute the statistics (see below for details and examples). You can
+#' also use dedicated helpers such as [continuous_summary()], [ratio_summary()]
+#' or [proportion_summary()].
 #' @param statistic List of formulas specifying the [glue::glue()] pattern to
 #' display the statistics for each variable. The statistics should be returned
 #' by the functions specified in `stat_fns` (see below for details and
@@ -127,11 +129,67 @@
 #'     update = all_stat_cols() ~ "A: mean age - S: sum of marker"
 #'   ) %>%
 #'   bold_labels()
+#'
+#' # Example 2 ----------------------------------
+#' # Use `data[[variable]]` to access the current variable
+#' mean_ci <- function(data, variable, ...) {
+#'   test <- t.test(data[[variable]])
+#'   dplyr::tibble(
+#'     mean = test$estimate,
+#'     conf.low = test$conf.int[1],
+#'     conf.high = test$conf.int[2]
+#'   )
+#' }
+#'
+#' tbl_custom_summary_ex2 <-
+#'   trial %>%
+#'   tbl_custom_summary(
+#'     include = c("marker", "ttdeath"),
+#'     by = "trt",
+#'     stat_fns = everything() ~ mean_ci,
+#'     statistic = everything() ~ "{mean} [{conf.low}; {conf.high}]"
+#'   ) %>%
+#'   add_overall(last = TRUE) %>%
+#'   modify_footnote(
+#'     update = all_stat_cols() ~ "mean [95% CI]"
+#'   )
+#'
+#' # Example 2 ----------------------------------
+#' # Use `full_data` to access the full datasets
+#' # Returned statistic can also be a character, but you need to
+#' # define `digits` accordingly
+#' diff_to_great_mean <- function(data, full_data, ...) {
+#'   mean <- mean(data$marker, na.rm = TRUE)
+#'   great_mean <- mean(full_data$marker, na.rm = TRUE)
+#'   diff <- mean - great_mean
+#'   dplyr::tibble(
+#'     mean = mean,
+#'     great_mean = great_mean,
+#'     diff = diff,
+#'     level = ifelse(diff > 0, "high", "low")
+#'   )
+#' }
+#'
+#' tbl_custom_summary_ex3 <-
+#'   trial %>%
+#'   tbl_custom_summary(
+#'     include = c("grade", "stage"),
+#'     by = "trt",
+#'     stat_fns = everything() ~ diff_to_great_mean,
+#'     statistic = everything() ~ "{mean} ({level}, diff: {diff})",
+#'     digits = everything() ~ list(1, as.character, 1),
+#'     overall_row = TRUE
+#'   ) %>%
+#'   bold_labels()
 #' @section Example Output:
 #' \if{html}{Example 1}
-#'
 #' \if{html}{\figure{tbl_custom_summary_ex1.png}{options: width=31\%}}
-
+#'
+#' \if{html}{Example 2}
+#' \if{html}{\figure{tbl_custom_summary_ex2.png}{options: width=31\%}}
+#'
+#' \if{html}{Example 3}
+#' \if{html}{\figure{tbl_custom_summary_ex3.png}{options: width=31\%}}
 
 tbl_custom_summary <- function(
                         data, by = NULL, label = NULL,
