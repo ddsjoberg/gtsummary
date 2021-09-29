@@ -12,7 +12,7 @@ variable should be continuous.}
 }
 \description{
 \lifecycle{experimental}
-This helper to be used with \code{\link[=tbl_custom_summary]{tbl_custom_summary()}} creates a function
+This helper, to be used with \code{\link[=tbl_custom_summary]{tbl_custom_summary()}}, creates a function
 summarizing a continuous variable.
 }
 \details{
@@ -46,6 +46,7 @@ continuous_summary_ex1 <-
 }
 \seealso{
 Other tbl_custom_summary tools: 
+\code{\link{ratio_summary}()},
 \code{\link{tbl_custom_summary}()}
 }
 \author{

@@ -212,7 +212,8 @@ tbl_custom_summary_ex1 <-
 }
 \seealso{
 Other tbl_custom_summary tools: 
-\code{\link{continuous_summary}()}
+\code{\link{continuous_summary}()},
+\code{\link{ratio_summary}()}
 }
 \author{
 Joseph Larmarange
