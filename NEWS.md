@@ -1,6 +1,12 @@
 # gtsummary (development version)
 
-* Allow add_p() and add_difference() to be run on the same table. (#959)
+* Now using `broom::tidy()` to prepare the `car::Anova()` results. This will be more stable than the version originally written. (#898)
+
+* The survival package has been moved from Imports to Suggests, and will no longer automatically be installed when {gtsummary} is installed. Additionally, `survival::Surv()` is no longer re-exported with the package.
+
+* The internal package `assert_package()` now takes the minimum required version of the package from the DESCRIPTION file.
+
+* Allow `add_p()` and `add_difference()` to be run on the same table. (#959)
 
 * Added Standardized Mean Difference method to `add_difference()`, wrapping the {smd} package's calculations. (#966)
 
