@@ -129,8 +129,11 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     ) %>%
       stop(call. = FALSE)
   }
-  if ("add_difference" %in% names(x$call_list)) {
-    stop("`add_p()` cannot be run after `add_difference()`, and vice versa")
+  if ("add_difference" %in% names(x$call_list) &&
+      "p.value" %in% names(x$table_body)) {
+    paste("`add_p()` cannot be run after `add_difference()` when a",
+          "'p.value' column is already present.") %>%
+    stop(call. = FALSE)
   }
 
   # test -----------------------------------------------------------------------
@@ -176,7 +179,9 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     )
   # adding test_name to table body so it can be used to select vars by the test
   x$table_body <-
-    left_join(x$table_body, meta_data[c("variable", "test_name")], by = "variable") %>%
+    x$table_body %>%
+    select(-any_of(c("test_name", "test_result"))) %>%
+    left_join(meta_data[c("variable", "test_name")], by = "variable") %>%
     select(.data$variable, .data$test_name, everything())
 
   # converting to named list
@@ -207,7 +212,10 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     ) %>%
     select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
     {
-      left_join(x$meta_data, ., by = "variable")
+      left_join(
+        x$meta_data %>% select(-any_of(c("test_result", "p.value", "stat_test_lbl"))),
+        .,
+        by = "variable")
     }
 
   x$call_list <- updated_call_list
@@ -253,7 +261,11 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
           row_type = "label"
         ) %>%
         unnest(.data$df_result) %>%
-        select(-any_of("method")),
+        select(
+          -any_of("method"),
+          # removing any columns already present in table_body
+          -any_of(names(x$table_body) %>% setdiff(c("variable", "row_type")))
+        ),
       by = c("variable", "row_type")
     ) %>%
     # adding print instructions for p-value column
