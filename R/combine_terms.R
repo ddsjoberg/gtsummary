@@ -42,6 +42,7 @@
 #' \if{html}{\figure{combine_terms_ex1.png}{options: width=45\%}}
 
 combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
+  assert_package("survival", "combine_terms()") # required for survreg() models
   updated_call_list <- c(x$call_list, list(combine_terms = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
