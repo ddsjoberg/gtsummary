@@ -30,7 +30,7 @@ NULL
 plot.tbl_regression <- function(x,
                                 remove_header_rows = TRUE,
                                 remove_reference_rows = FALSE, ...) {
-  assert_package("GGally", fn = "plot.tbl_regression()", version = "2.1.0")
+  assert_package("GGally", fn = "plot.tbl_regression()")
 
   df_coefs <- x$table_body
   if (isTRUE(remove_header_rows)) {
