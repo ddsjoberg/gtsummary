@@ -202,19 +202,19 @@ test_that("p-values are replicated within tbl_summary()", {
   tbl_test.args <-
     trial %>%
     select(trt,
-      var_t.test = age,
-      var_t.test_dots = age,
-      var_kruskal.test = age,
-      var_wilcox.test = age,
-      var_wilcox.test_dots = age,
-      var_aov = age,
-      var_chisq.test = response,
-      var_chisq.test_dots = response,
-      var_chisq.test.no.correct = response,
-      var_fisher.test = response,
-      var_fisher.test_dots = response,
-      var_mcnemar.test = response,
-      var_mcnemar.test_dots = response,
+           var_t.test = age,
+           var_t.test_dots = age,
+           var_kruskal.test = age,
+           var_wilcox.test = age,
+           var_wilcox.test_dots = age,
+           var_aov = age,
+           var_chisq.test = response,
+           var_chisq.test_dots = response,
+           var_chisq.test.no.correct = response,
+           var_fisher.test = response,
+           var_fisher.test_dots = response,
+           var_mcnemar.test = response,
+           var_mcnemar.test_dots = response,
     ) %>%
     tbl_summary(by = trt, missing = "no") %>%
     add_p(
@@ -364,7 +364,7 @@ test_that("Groups arg and lme4", {
   tbl_groups <-
     trial_group %>%
     select(trt, id,
-      age_lme4 = age
+           age_lme4 = age
     ) %>%
     tbl_summary(by = trt, missing = "no", include = -id) %>%
     add_p(
@@ -407,4 +407,49 @@ test_that("no error with missing data", {
     t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
     rep_len(NA_character_, 8)
   )
+})
+
+test_that("add_p can be run after add_difference", {
+  expect_error(
+    trial %>%
+      select(age, trt) %>%
+      tbl_summary(by = trt) %>%
+      add_difference() %>%
+      add_p(all_continuous() ~ "t.test")
+  )
+
+  expect_error(
+    tbl <-
+      trial %>%
+      select(age, trt) %>%
+      tbl_summary(
+        by = trt,
+        missing = "no",
+        statistic = all_continuous() ~ "{mean}",
+        digits = all_continuous() ~ 3
+      ) %>%
+      add_difference(all_continuous() ~ "cohens_d") %>%
+      add_p(all_continuous() ~ "t.test") %>%
+      as_tibble(col_labels = FALSE),
+    NA
+  )
+
+  expect_equal(
+    tbl %>%
+      unlist(),
+    c(label = "Age",
+      stat_1 = "47.011",
+      stat_2 = "47.449",
+      estimate = "-0.03",
+      ci = "-0.32, 0.25",
+      p.value = "0.8")
+  )
+  expect_true(
+    tbl %>%
+      select(ends_with(".x") | ends_with(".y")) %>%
+      names() %>%
+      rlang::is_empty()
+  )
+
+
 })

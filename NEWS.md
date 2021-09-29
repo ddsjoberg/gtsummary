@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Allow add_p() and add_difference() to be run on the same table. (#959)
+
 * Added Standardized Mean Difference method to `add_difference()`, wrapping the {smd} package's calculations. (#966)
 
 * Fix in `tbl_summary()` when a factor variable is passed that is all NA with no specified levels. (#977)
