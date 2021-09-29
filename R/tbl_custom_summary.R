@@ -173,16 +173,25 @@ tbl_custom_summary <- function(
   }
 
   # setting defaults from gtsummary theme --------------------------------------
-  # THEME ELEMENTS SHOULD BE ADDED FOR tbl_custom_summary
-  label <- label %||% get_theme_element("tbl_summary-arg:label")
-  digits <- digits %||% get_theme_element("tbl_summary-arg:digits")
-  type <- type %||% get_theme_element("tbl_summary-arg:type")
-  value <- value %||% get_theme_element("tbl_summary-arg:value")
+  label <- label %||%
+    get_theme_element("tbl_custom_summary-arg:label") %||%
+    get_theme_element("tbl_summary-arg:label")
+  digits <- digits %||%
+    get_theme_element("tbl_custom_summary-arg:digits") %||%
+    get_theme_element("tbl_summary-arg:digits")
+  type <- type %||%
+    get_theme_element("tbl_custom_summary-arg:type") %||%
+    get_theme_element("tbl_summary-arg:type")
+  value <- value %||%
+    get_theme_element("tbl_custom_summary-arg:value") %||%
+    get_theme_element("tbl_summary-arg:value")
   missing <-
     missing %||%
+    get_theme_element("tbl_custom_summary-arg:missing") %||%
     get_theme_element("tbl_summary-arg:missing", default = "ifany")
   missing_text <-
     missing_text %||%
+    get_theme_element("tbl_custom_summary-arg:missing_text") %||%
     get_theme_element("tbl_summary-arg:missing_text",
                       default = translate_text("Unknown"))
 
