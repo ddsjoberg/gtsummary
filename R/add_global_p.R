@@ -124,7 +124,7 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
     error = function(e) {
       paste0(
         "{.code add_global_p()} uses ",
-        "{.code car::Anova() %>% broom::tidy()} to calculate the global p-value,\n",
+        "{.code car::Anova() %>% broom::tidy()} to calculate/tidy the global p-value,\n",
         "and the function returned an error while calculating the p-values.\n",
         "Is your model type supported by {.code car::Anova()}?"
       ) %>%
@@ -235,12 +235,13 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
                 car::Anova,
                 mod = x[["model_obj"]], type = type, !!!dots
               ) %>%
-              rlang::eval_tidy()
+              rlang::eval_tidy() %>%
+              {suppressWarnings(broom::tidy(.))}
           },
           error = function(e) {
             paste0(
               "{.code add_global_p()} uses ",
-              "{.code car::Anova()} to calculate the global p-value,\n",
+              "{.code car::Anova() %>% broom::tidy()} to calculate/tidy the global p-value,\n",
               "and the function returned an error while calculating the p-value ",
               "for {.val {y}}."
             ) %>%
@@ -250,7 +251,6 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
         )
 
         car_Anova %>%
-          {suppressWarnings(broom::tidy(.))} %>%
           mutate(
             variable = broom.helpers::.clean_backticks(.data$term),
             row_type = "label"
