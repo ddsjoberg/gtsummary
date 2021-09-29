@@ -41,7 +41,7 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   if (!inherits(x, "tbl_regression")) {
     stop("`x=` must be class 'tbl_regression'")
   }
-  assert_package("car")
+  assert_package("car", "add_vif()")
   estimate_fun <- estimate_fun %||% style_sigfig %>% gts_mapper("add_vif(estimate_fun=)")
 
   # calculating VIF ------------------------------------------------------------

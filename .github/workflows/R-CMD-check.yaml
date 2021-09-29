@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          # - {os: macOS-latest,   r: 'devel'}
+          - {os: macOS-latest,   r: 'devel'}
           - {os: macOS-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
           # - {os: ubuntu-16.04,   r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest", http-user-agent: "R/4.0.0 (ubuntu-16.04) R (4.0.0 x86_64-pc-linux-gnu x86_64 linux-gnu) on GitHub Actions" }
@@ -77,8 +77,8 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
+          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-${{ hashFiles('.github/depends.Rds') }}
+          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-2-
 
       # - name: Install system dependencies
       #   if: runner.os == 'Linux'
@@ -88,14 +88,6 @@ jobs:
       #     Rscript -e "remotes::install_github('r-hub/sysreqs')"
       #     sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
       #     sudo -s eval "$sysreqs"
-
-     # installing older versions of packages not supported on newer versions of R
-      - name: Install historical dependencies
-        run: Rscript -e "if (substr(getRversion(), 1, 3) == '3.5') install.packages(c('car', 'Hmisc', 'geepack', 'survival'), repos = 'https://mran.microsoft.com/snapshot/2019-04-01/')"
-                     -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('insight', version = '0.11.1', repos = 'https://cran.rstudio.com')"
-                     -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('bayestestR', version = '0.8.0', repos = 'https://cran.rstudio.com')"
-                     -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('parameters', version = '0.10.1', repos = 'https://cran.rstudio.com')"
-                     -e "if (substr(getRversion(), 1, 3) == '3.5') remotes::install_version('effectsize', version = '0.4.1', repos = 'https://cran.rstudio.com')"
 
       - name: Install dependencies
         run: |

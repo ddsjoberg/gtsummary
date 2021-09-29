@@ -34,6 +34,7 @@ skip_on_cran()
 skip_if(!isTRUE(as.logical(Sys.getenv("CI"))))
 skip_if_not(requireNamespace("car"))
 skip_if_not(requireNamespace("lme4"))
+skip_if_not(requireNamespace("survival"))
 library(dplyr)
 library(survival)
 

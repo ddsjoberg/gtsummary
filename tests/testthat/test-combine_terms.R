@@ -2,6 +2,7 @@ skip_on_cran()
 skip_if_not(requireNamespace("car"))
 skip_if_not(requireNamespace("Hmisc"))
 skip_if_not(requireNamespace("geepack"))
+skip_if_not(requireNamespace("survival") && packageVersion("survival") >= "3.2-12")
 
 library(Hmisc)
 mod1 <- lm(

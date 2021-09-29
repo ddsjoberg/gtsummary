@@ -58,7 +58,8 @@ add_global_p <- function(x, ...) {
 #' @name add_global_p
 #' @export
 add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
-                                        keep = FALSE, quiet = NULL, ..., terms = NULL) {
+                                        keep = FALSE,
+                                        quiet = NULL, ..., terms = NULL) {
   updated_call_list <- c(x$call_list, list(add_global_p = match.call()))
   # deprecated arguments -------------------------------------------------------
   if (!is.null(terms)) {
@@ -117,12 +118,13 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
     {
       car_Anova <-
         x$model_obj %>%
-        car::Anova(type = type, ...)
+        car::Anova(type = type, ...) %>%
+        {suppressWarnings(broom::tidy(.))}
     },
     error = function(e) {
       paste0(
         "{.code add_global_p()} uses ",
-        "{.code car::Anova()} to calculate the global p-value,\n",
+        "{.code car::Anova() %>% broom::tidy()} to calculate/tidy the global p-value,\n",
         "and the function returned an error while calculating the p-values.\n",
         "Is your model type supported by {.code car::Anova()}?"
       ) %>%
@@ -130,16 +132,19 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
       stop(e)
     }
   )
+
+
+  # cleaning up data frame with global p-values before merging -----------------
   global_p <-
     car_Anova %>%
-    as.data.frame() %>%
-    tibble::rownames_to_column(var = "variable") %>%
-    mutate(variable = broom.helpers::.clean_backticks(.data$variable)) %>%
-    filter(.data$variable %in% !!include) %>%
-    select(c("variable", starts_with("Pr(>"))) %>%
-    # selecting the pvalue column
-    set_names(c("variable", "p.value_global")) %>%
-    mutate(row_type = "label")
+    mutate(
+      variable = broom.helpers::.clean_backticks(.data$term),
+      row_type = "label"
+    ) %>%
+    filter(.data$variable %in% .env$include) %>%
+    select(any_of(c("variable", "row_type", "p.value"))) %>%
+    set_names(c("variable", "row_type", "p.value_global"))
+
 
   # merging in global pvalue ---------------------------------------------------
   # adding p-value column, if it is not already there
@@ -173,7 +178,7 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
       x$table_body %>%
       mutate(
         p.value = if_else(.data$variable %in% !!include & .data$row_type == "level",
-          NA_real_, .data$p.value
+                          NA_real_, .data$p.value
         )
       )
   }
@@ -230,12 +235,13 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
                 car::Anova,
                 mod = x[["model_obj"]], type = type, !!!dots
               ) %>%
-              rlang::eval_tidy()
+              rlang::eval_tidy() %>%
+              {suppressWarnings(broom::tidy(.))}
           },
           error = function(e) {
             paste0(
               "{.code add_global_p()} uses ",
-              "{.code car::Anova()} to calculate the global p-value,\n",
+              "{.code car::Anova() %>% broom::tidy()} to calculate/tidy the global p-value,\n",
               "and the function returned an error while calculating the p-value ",
               "for {.val {y}}."
             ) %>%
@@ -245,15 +251,13 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
         )
 
         car_Anova %>%
-          as.data.frame() %>%
-          tibble::rownames_to_column(var = "variable") %>%
-          mutate(variable = broom.helpers::.clean_backticks(.data$variable)) %>%
-          filter(.data$variable == y) %>%
-          select(c(
-            "variable", starts_with("Pr(>")
-          )) %>%
-          # selecting the pvalue column
-          set_names(c("variable", "p.value_global"))
+          mutate(
+            variable = broom.helpers::.clean_backticks(.data$term),
+            row_type = "label"
+          ) %>%
+          filter(.data$variable %in% .env$include) %>%
+          select(any_of(c("variable", "row_type", "p.value"))) %>%
+          set_names(c("variable", "row_type", "p.value_global"))
       }
     ) %>%
     select(c("variable", "p.value_global"))
@@ -298,7 +302,7 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
       x$table_body %>%
       mutate(
         p.value = if_else(.data$variable %in% !!include & .data$row_type == "level",
-          NA_real_, .data$p.value
+                          NA_real_, .data$p.value
         )
       )
   }
