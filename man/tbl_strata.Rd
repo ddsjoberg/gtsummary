@@ -39,7 +39,7 @@ the stratum are passed in \code{tbl_stack(group_header=)}. Default is \code{TRUE
 Default is \code{FALSE}}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{maturing}
 Build a stratified gtsummary table. Any gtsummary table that accepts
 a data frame as its first argument can be stratified.
 }

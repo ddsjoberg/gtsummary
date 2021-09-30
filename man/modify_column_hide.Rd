@@ -15,7 +15,7 @@ modify_column_unhide(x, columns)
 \item{columns}{vector or selector of columns in \code{x$table_body}}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{maturing}
 Use these functions to hide or unhide columns in a gtsummary tables.
 }
 \section{Example Output}{

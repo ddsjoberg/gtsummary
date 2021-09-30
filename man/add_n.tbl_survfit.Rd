@@ -12,7 +12,7 @@
 \item{...}{Not used}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{maturing}
 For each \code{survfit()} object summarized with \code{tbl_survfit()} this function
 will add the total number of observations in a new column.
 }
