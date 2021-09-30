@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Deleted deprecated functions `add_comparison()`, `add_global()`, `tab_style_bold_p()`, `tab_style_bold_labels()`, `tab_style_italicize_levels()`, `tab_style_italicize_labels()`, `tab_style_bold_levels()`.
+
+* The following deprecated arguments have been removed: `tbl_summary(group=)`, `as_gt(omit=)`.
+
 * Now using `broom::tidy()` to prepare the `car::Anova()` results. This will be more stable than the version originally written. (#898)
 
 * The survival package has been moved from Imports to Suggests, and will no longer automatically be installed when {gtsummary} is installed. Additionally, `survival::Surv()` is no longer re-exported with the package.

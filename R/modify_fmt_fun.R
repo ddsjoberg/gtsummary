@@ -1,6 +1,6 @@
 #' Modify Formatting Functions
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{maturing}
 #' Use this function to update the way numeric columns and rows of `.$table_body`
 #' are formatted
 #'
