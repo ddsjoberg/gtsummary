@@ -53,6 +53,12 @@ jobs:
         with:
           extra-packages: rcmdcheck
 
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y texlive-fonts-extra
+
       - uses: r-lib/actions/check-r-package@v1
 
       - name: Show testthat output
