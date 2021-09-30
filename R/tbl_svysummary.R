@@ -66,7 +66,7 @@
 #' @return A `tbl_svysummary` object
 #' @family tbl_svysummary tools
 #' @author Joseph Larmarange
-#' @examples
+#' @examplesIf requireNamespace("survey")
 #' # A simple weighted dataset
 #' tbl_svysummary_ex1 <-
 #'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
