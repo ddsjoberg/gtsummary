@@ -21,7 +21,6 @@
 #' as a list of expressions.
 #' @param ... Arguments passed on to [gt::gt]
 #' @param exclude DEPRECATED.
-#' @param omit DEPRECATED.
 #' @return A `gt_tbl` object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
@@ -36,25 +35,12 @@
 #' \if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
 
 as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
-                  exclude = NULL, omit = NULL) {
+                  exclude = NULL) {
   # making list of commands to include -----------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_stop(
       "1.2.5",
       "gtsummary::as_gt(exclude = )",
-      "as_gt(include = )",
-      details = paste0(
-        "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "to `dplyr::select()`. To exclude commands, use the minus sign.\n",
-        "For example, `include = -tab_spanner`"
-      )
-    )
-  }
-
-  if (!is.null(omit)) {
-    lifecycle::deprecate_stop(
-      "1.2.0",
-      "gtsummary::as_gt(omit = )",
       "as_gt(include = )",
       details = paste0(
         "The `include` argument accepts quoted and unquoted expressions similar\n",
