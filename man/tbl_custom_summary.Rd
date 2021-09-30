@@ -100,9 +100,9 @@ helpers, and arguments as include, by, type, value, digits, missing and
 missing_text.
 }
 
-\section{stat_fns argument}{
+\section{\code{stat_fns} argument}{
 
-The stat_fns argument specify the custom function(s) to be used for computing
+The \code{stat_fns} argument specify the custom function(s) to be used for computing
 the summary statistics. For example, \code{stat_fns = everything() ~ foo}.
 
 Each function may take the following arguments:

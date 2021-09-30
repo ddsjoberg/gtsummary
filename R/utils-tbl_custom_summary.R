@@ -63,7 +63,7 @@ continuous_summary <- function(variable) {
 #' @param na.rm Should missing values be removed before summing the numerator
 #' and the denominator? (default is `TRUE`)
 #' @param conf.level Confidence level for the returned confidence interval.
-#' Must be strictly greater than 0 and les than 1. Default to 0.95, which
+#' Must be strictly greater than 0 and less than 1. Default to 0.95, which
 #' corresponds to a 95 percent confidence interval.
 #'
 #' @details
@@ -132,7 +132,7 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #' This helper, to be used with [tbl_custom_summary()], creates a function
 #' computing a proportion and its confidence interval.
 #'
-#' @param variable String indicating the name of the variable from wich the
+#' @param variable String indicating the name of the variable from which the
 #' proportion will be computed.
 #' @param value Value (or list of values) of `variable` to be taken into account
 #' in the numerator.
@@ -141,7 +141,7 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #' @param na.rm Should missing values be removed before computing the
 #' proportion? (default is `TRUE`)
 #' @param conf.level Confidence level for the returned confidence interval.
-#' Must be strictly greater than 0 and les than 1. Default to 0.95, which
+#' Must be strictly greater than 0 and less than 1. Default to 0.95, which
 #' corresponds to a 95 percent confidence interval.
 #' @param method Confidence interval method. Must be one of
 #' `c("wilson", "wilson.no.correct", "exact", "asymptotic")`. See details below.
@@ -157,9 +157,10 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #' }
 #'
 #' Methods `c("wilson", "wilson.no.correct")` are calculated with
-#' [stats::prop.test()] (with `correct = c(TRUE, FALSE)`). The default method, "wilson",
-#' includes the Yates continuity correction. Methods `c("exact", "asymptotic")`
-#' are calculated with [Hmisc::binconf()] and the corresponding method.
+#' [stats::prop.test()] (with `correct = c(TRUE, FALSE)`). The default method,
+#' `"wilson"`, includes the Yates continuity correction.
+#' Methods `c("exact", "asymptotic")` are calculated with [Hmisc::binconf()]
+#' and the corresponding method.
 #'
 #' @export
 #' @family tbl_custom_summary tools

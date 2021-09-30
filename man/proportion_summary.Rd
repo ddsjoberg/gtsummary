@@ -14,7 +14,7 @@ proportion_summary(
 )
 }
 \arguments{
-\item{variable}{String indicating the name of the variable from wich the
+\item{variable}{String indicating the name of the variable from which the
 proportion will be computed.}
 
 \item{value}{Value (or list of values) of \code{variable} to be taken into account
@@ -27,7 +27,7 @@ If \code{NULL}, all observations will be assumed to have a weight equal to \code
 proportion? (default is \code{TRUE})}
 
 \item{conf.level}{Confidence level for the returned confidence interval.
-Must be strictly greater than 0 and les than 1. Default to 0.95, which
+Must be strictly greater than 0 and less than 1. Default to 0.95, which
 corresponds to a 95 percent confidence interval.}
 
 \item{method}{Confidence interval method. Must be one of
@@ -49,9 +49,10 @@ Computed statistics:
 }
 
 Methods \code{c("wilson", "wilson.no.correct")} are calculated with
-\code{\link[stats:prop.test]{stats::prop.test()}} (with \code{correct = c(TRUE, FALSE)}). The default method, "wilson",
-includes the Yates continuity correction. Methods \code{c("exact", "asymptotic")}
-are calculated with \code{\link[Hmisc:binconf]{Hmisc::binconf()}} and the corresponding method.
+\code{\link[stats:prop.test]{stats::prop.test()}} (with \code{correct = c(TRUE, FALSE)}). The default method,
+\code{"wilson"}, includes the Yates continuity correction.
+Methods \code{c("exact", "asymptotic")} are calculated with \code{\link[Hmisc:binconf]{Hmisc::binconf()}}
+and the corresponding method.
 }
 \section{Example Output}{
 

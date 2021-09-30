@@ -17,7 +17,7 @@ for computing the denominator.}
 and the denominator? (default is \code{TRUE})}
 
 \item{conf.level}{Confidence level for the returned confidence interval.
-Must be strictly greater than 0 and les than 1. Default to 0.95, which
+Must be strictly greater than 0 and less than 1. Default to 0.95, which
 corresponds to a 95 percent confidence interval.}
 }
 \description{
