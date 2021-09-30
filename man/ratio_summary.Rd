@@ -52,9 +52,9 @@ ratio_summary_ex1 <-
   tbl_custom_summary(
     include = c("stage", "grade"),
     by = "trt",
-    stat_fns = everything() ~ ratio_summary("response", "ttdeath"),
-    statistic = everything() ~ "{ratio} [{conf.low}; {conf.high}] ({num}/{denom})",
-    digits = everything() ~ c(3, 2, 2, 0, 0),
+    stat_fns = ~ ratio_summary("response", "ttdeath"),
+    statistic = ~ "{ratio} [{conf.low}; {conf.high}] ({num}/{denom})",
+    digits = ~ c(3, 2, 2, 0, 0),
     overall_row = TRUE,
     overall_row_label = "All stages & grades"
   ) \%>\%

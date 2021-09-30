@@ -35,8 +35,8 @@ continuous_summary_ex1 <-
   tbl_custom_summary(
     include = c("stage", "grade"),
     by = "trt",
-    stat_fns = everything() ~ continuous_summary("age"),
-    statistic = everything() ~ "{median} [{p25}-{p75}]",
+    stat_fns = ~ continuous_summary("age"),
+    statistic = ~ "{median} [{p25}-{p75}]",
     overall_row = TRUE,
     overall_row_label = "All stages & grades"
   ) \%>\%

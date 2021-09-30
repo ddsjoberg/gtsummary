@@ -147,8 +147,8 @@
 #'   tbl_custom_summary(
 #'     include = c("marker", "ttdeath"),
 #'     by = "trt",
-#'     stat_fns = everything() ~ mean_ci,
-#'     statistic = everything() ~ "{mean} [{conf.low}; {conf.high}]"
+#'     stat_fns = ~ mean_ci,
+#'     statistic = ~ "{mean} [{conf.low}; {conf.high}]"
 #'   ) %>%
 #'   add_overall(last = TRUE) %>%
 #'   modify_footnote(
@@ -176,9 +176,9 @@
 #'   tbl_custom_summary(
 #'     include = c("grade", "stage"),
 #'     by = "trt",
-#'     stat_fns = everything() ~ diff_to_great_mean,
-#'     statistic = everything() ~ "{mean} ({level}, diff: {diff})",
-#'     digits = everything() ~ list(1, as.character, 1),
+#'     stat_fns = ~ diff_to_great_mean,
+#'     statistic = ~ "{mean} ({level}, diff: {diff})",
+#'     digits = ~ list(1, as.character, 1),
 #'     overall_row = TRUE
 #'   ) %>%
 #'   bold_labels()

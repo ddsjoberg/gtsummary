@@ -23,8 +23,8 @@
 #'   tbl_custom_summary(
 #'     include = c("stage", "grade"),
 #'     by = "trt",
-#'     stat_fns = everything() ~ continuous_summary("age"),
-#'     statistic = everything() ~ "{median} [{p25}-{p75}]",
+#'     stat_fns = ~ continuous_summary("age"),
+#'     statistic = ~ "{median} [{p25}-{p75}]",
 #'     overall_row = TRUE,
 #'     overall_row_label = "All stages & grades"
 #'   ) %>%
@@ -89,9 +89,9 @@ continuous_summary <- function(variable) {
 #'   tbl_custom_summary(
 #'     include = c("stage", "grade"),
 #'     by = "trt",
-#'     stat_fns = everything() ~ ratio_summary("response", "ttdeath"),
-#'     statistic = everything() ~ "{ratio} [{conf.low}; {conf.high}] ({num}/{denom})",
-#'     digits = everything() ~ c(3, 2, 2, 0, 0),
+#'     stat_fns = ~ ratio_summary("response", "ttdeath"),
+#'     statistic = ~ "{ratio} [{conf.low}; {conf.high}] ({num}/{denom})",
+#'     digits = ~ c(3, 2, 2, 0, 0),
 #'     overall_row = TRUE,
 #'     overall_row_label = "All stages & grades"
 #'   ) %>%
@@ -173,9 +173,9 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #'   tbl_custom_summary(
 #'     include = c("Age", "Class"),
 #'     by = "Sex",
-#'     stat_fns = everything() ~ proportion_summary("Survived", "Yes", weights = "Freq"),
-#'     statistic = everything() ~ "{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
-#'     digits = everything() ~ list(function(x) {style_percent(x, digits = 1)}, 0, 0, style_percent, style_percent),
+#'     stat_fns = ~ proportion_summary("Survived", "Yes", weights = "Freq"),
+#'     statistic = ~ "{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
+#'     digits = ~ list(function(x) {style_percent(x, digits = 1)}, 0, 0, style_percent, style_percent),
 #'     overall_row = TRUE,
 #'     overall_row_last = TRUE
 #'   ) %>%

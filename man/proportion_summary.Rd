@@ -69,9 +69,9 @@ proportion_summary_ex1 <-
   tbl_custom_summary(
     include = c("Age", "Class"),
     by = "Sex",
-    stat_fns = everything() ~ proportion_summary("Survived", "Yes", weights = "Freq"),
-    statistic = everything() ~ "{prop}\% ({n}/{N}) [{conf.low}-{conf.high}]",
-    digits = everything() ~ list(function(x) {style_percent(x, digits = 1)}, 0, 0, style_percent, style_percent),
+    stat_fns = ~ proportion_summary("Survived", "Yes", weights = "Freq"),
+    statistic = ~ "{prop}\% ({n}/{N}) [{conf.low}-{conf.high}]",
+    digits = ~ list(function(x) {style_percent(x, digits = 1)}, 0, 0, style_percent, style_percent),
     overall_row = TRUE,
     overall_row_last = TRUE
   ) \%>\%
