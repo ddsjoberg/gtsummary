@@ -175,7 +175,10 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #'     by = "Sex",
 #'     stat_fns = ~ proportion_summary("Survived", "Yes", weights = "Freq"),
 #'     statistic = ~ "{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
-#'     digits = ~ list(function(x) {style_percent(x, digits = 1)}, 0, 0, style_percent, style_percent),
+#'     digits = ~ list(
+#'       function(x) {style_percent(x, digits = 1)},
+#'       0, 0, style_percent, style_percent
+#'     ),
 #'     overall_row = TRUE,
 #'     overall_row_last = TRUE
 #'   ) %>%
