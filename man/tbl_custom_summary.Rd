@@ -270,6 +270,21 @@ tbl_custom_summary_ex3 <-
   bold_labels()
 }
 \seealso{
+Other tbl_summary tools: 
+\code{\link{add_ci}()},
+\code{\link{add_n.tbl_summary}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_summary}()},
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{inline_text.tbl_survfit}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
+
 Other tbl_custom_summary tools: 
 \code{\link{continuous_summary}()},
 \code{\link{proportion_summary}()},
@@ -279,3 +294,4 @@ Other tbl_custom_summary tools:
 Joseph Larmarange
 }
 \concept{tbl_custom_summary tools}
+\concept{tbl_summary tools}

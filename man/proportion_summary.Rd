@@ -49,9 +49,9 @@ Computed statistics:
 }
 
 Methods \code{c("wilson", "wilson.no.correct")} are calculated with
-\link[stats:prop.test(correct = c(TRUE, FALSE))]{stats::prop.test(correct = c(TRUE, FALSE))}. The default method, "wilson",
+\code{\link[stats:prop.test]{stats::prop.test()}} (with \code{correct = c(TRUE, FALSE)}). The default method, "wilson",
 includes the Yates continuity correction. Methods \code{c("exact", "asymptotic")}
-are calculated with \link[Hmisc:binconf(method=)]{Hmisc::binconf(method=)}.
+are calculated with \code{\link[Hmisc:binconf]{Hmisc::binconf()}} and the corresponding method.
 }
 \section{Example Output}{
 

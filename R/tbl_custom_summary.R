@@ -97,6 +97,7 @@
 #' statistics refer to a third variable.
 #'
 #' @export
+#' @family tbl_summary tools
 #' @family tbl_custom_summary tools
 #' @return A `tbl_custom_summary` and `tbl_summary` object
 #' @author Joseph Larmarange
