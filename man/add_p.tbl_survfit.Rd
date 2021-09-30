@@ -42,7 +42,7 @@ functions. Default is \code{everything()}.}
 \item{...}{Not used}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{maturing}
 Calculate and add a p-value
 }
 \section{test argument}{

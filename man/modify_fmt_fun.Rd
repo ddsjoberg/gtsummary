@@ -18,7 +18,7 @@ and the RHS is the updated formatting function.}
 Default is \code{NULL}. See details below.}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{maturing}
 Use this function to update the way numeric columns and rows of \code{.$table_body}
 are formatted
 }
