@@ -1,6 +1,6 @@
 #' Stratified gtsummary tables
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{maturing}
 #' Build a stratified gtsummary table. Any gtsummary table that accepts
 #' a data frame as its first argument can be stratified.
 #'

@@ -2,13 +2,6 @@
 % Please edit documentation in R/deprecated.R
 \name{deprecated}
 \alias{deprecated}
-\alias{add_comparison}
-\alias{add_global}
-\alias{tab_style_bold_p}
-\alias{tab_style_bold_labels}
-\alias{tab_style_italicize_levels}
-\alias{tab_style_italicize_labels}
-\alias{tab_style_bold_levels}
 \alias{tbl_summary_}
 \alias{add_p_}
 \alias{as_flextable}
@@ -20,20 +13,6 @@
 \alias{all_factor}
 \title{Deprecated functions}
 \usage{
-add_comparison(...)
-
-add_global(...)
-
-tab_style_bold_p(...)
-
-tab_style_bold_labels(...)
-
-tab_style_italicize_levels(...)
-
-tab_style_italicize_labels(...)
-
-tab_style_bold_levels(...)
-
 tbl_summary_(...)
 
 add_p_(...)

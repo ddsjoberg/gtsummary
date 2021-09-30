@@ -192,7 +192,7 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 
 #' Add column with number of observations
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{maturing}
 #' For each `survfit()` object summarized with `tbl_survfit()` this function
 #' will add the total number of observations in a new column.
 #'

@@ -1,6 +1,6 @@
 #' Collection of custom tidiers
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{maturing}
 #' Collection of tidiers that can be passed to `tbl_regression()`
 #' and `tbl_uvregression()` to obtain modified results. See examples below.
 #'

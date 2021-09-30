@@ -72,7 +72,7 @@ Default is \code{FALSE}.  Does not apply to survival quantile requests}
 \item{include}{Variable to include as stratifying variables.}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{maturing}
 Function takes a \code{survfit} object as an argument, and provides a
 formatted summary table of the results
 }

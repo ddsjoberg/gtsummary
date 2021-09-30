@@ -16,8 +16,7 @@ tbl_summary(
   missing_text = NULL,
   sort = NULL,
   percent = NULL,
-  include = everything(),
-  group = NULL
+  include = everything()
 )
 }
 \arguments{
@@ -75,8 +74,6 @@ e.g. \code{sort = list(everything() ~ "frequency")}}
 \code{"column"}, \code{"row"}, or \code{"cell"}. Default is \code{"column"}.}
 
 \item{include}{variables to include in the summary table. Default is \code{everything()}}
-
-\item{group}{DEPRECATED. Migrated to \link{add_p}}
 }
 \value{
 A \code{tbl_summary} object

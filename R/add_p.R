@@ -466,7 +466,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 
 #' Adds p-value to survfit table
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{maturing}
 #' Calculate and add a p-value
 #' @param x Object of class `"tbl_survfit"`
 #' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`,

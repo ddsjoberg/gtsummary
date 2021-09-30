@@ -32,8 +32,8 @@ test_that("tbl_survfit", {
   library(survival)
   fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 
-  expect_error(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% as_kable_extra(), NA)
-  expect_warning(tbl_survfit(fit1, times = c(12, 24), label = "{time} Months") %>% as_kable_extra(), NA)
+  expect_error(tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months") %>% as_kable_extra(), NA)
+  expect_warning(tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months") %>% as_kable_extra(), NA)
 })
 
 test_that("tbl_merge/tbl_stack", {

@@ -48,7 +48,6 @@
 #' @param percent Indicates the type of percentage to return. Must be one of
 #' `"column"`, `"row"`, or `"cell"`. Default is `"column"`.
 #' @param include variables to include in the summary table. Default is `everything()`
-#' @param group DEPRECATED. Migrated to [add_p]
 #'
 #' @section select helpers:
 #' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
@@ -191,7 +190,7 @@
 tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,
                         missing = NULL, missing_text = NULL, sort = NULL,
-                        percent = NULL, include = everything(), group = NULL) {
+                        percent = NULL, include = everything()) {
   # ungrouping data ------------------------------------------------------------
   data <- data %>% ungroup()
 
@@ -246,15 +245,6 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
     ))
 
     data <- filter(data, !is.na(.data[[by]]))
-  }
-
-  # deprecation note about group -----------------------------------------------
-  if (!rlang::quo_is_null(rlang::enquo(group))) {
-    lifecycle::deprecate_stop(
-      "1.2.0",
-      "gtsummary::tbl_summary(group=)",
-      "add_p(group=)"
-    )
   }
 
   # will return call, and all object passed to in tbl_summary call -------------
