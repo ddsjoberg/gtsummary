@@ -65,7 +65,8 @@ add_p_footnotes <- function(x) {
 #' @param fn Calling function from the user perspective
 #'
 #' @return Returns NULL or not at all.
-#'
+#' @family tbl_summary tools
+
 #' @noRd
 #' @keywords internal
 assert_package <- function(pkg, fn, version = NULL) {

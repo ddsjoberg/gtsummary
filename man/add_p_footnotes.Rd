@@ -4,7 +4,7 @@
 \alias{add_p_footnotes}
 \title{Create footnotes for individual p-values}
 \usage{
-add_p_footnotes(x, printer = NULL, index_start = NULL)
+add_p_footnotes(x)
 }
 \arguments{
 \item{x}{object with class \code{"tbl_summary"} created from the gtsummary package}
