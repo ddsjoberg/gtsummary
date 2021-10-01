@@ -21,7 +21,9 @@
 #' - `tidy_robust()` tidier to report robust standard errors. The
 #' [parameters](https://easystats.github.io/parameters/reference/model_parameters.default.html)
 #' package includes a wonderful function to calculate robust standard errors.
-#' The tidiers uses the outout from `parameters::`
+#' The tidier uses the output from `parameters::model_parameters()`, and
+#' merely takes the result and puts it in `broom::tidy()` format.
+#'
 #'
 #' - `pool_and_tidy_mice()` tidier to report models resulting from multiply imputed data
 #' using the mice package. Pass the mice model object *before* the model results
