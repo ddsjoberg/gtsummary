@@ -59,7 +59,7 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 \code{pool_and_tidy_mice()}. Default is \code{NULL}}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{maturing}
 Collection of tidiers that can be passed to \code{tbl_regression()}
 and \code{tbl_uvregression()} to obtain modified results. See examples below.
 }

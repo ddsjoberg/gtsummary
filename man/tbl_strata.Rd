@@ -31,7 +31,7 @@ used to separate the levels in the spanning header. Default is \code{", "}}
 used to combine the stratified tables.}
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{maturing}
 Build a stratified gtsummary table. Any gtsummary table that accepts
 a data frame as its first argument can be stratified.
 }

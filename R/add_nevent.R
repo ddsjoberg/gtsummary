@@ -103,7 +103,7 @@ add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 
 #' Add column with number of observed events
 #'
-#' \lifecycle{experimental}
+#' \lifecycle{maturing}
 #' For each `survfit()` object summarized with `tbl_survfit()` this function
 #' will add the total number of events observed in a new column.
 #'
