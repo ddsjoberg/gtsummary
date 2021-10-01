@@ -166,7 +166,7 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
 #' @rdname custom_tidiers
 #' @export
 tidy_robust <- function(x, exponentiate = FALSE,
-                        conf.int = TRUE, conf.level = 0.95,
+                        conf.level = 0.95,conf.int = TRUE,
                         std.err = TRUE,
                         cov.matrix = "CL", #type of covariance matrix
                         est.type = "HC1", #type of robust estimation
