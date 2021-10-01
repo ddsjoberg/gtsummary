@@ -187,14 +187,14 @@ tidy_robust <- function(x, exponentiate = FALSE,
   if (!is.null(cluster.var)) {
     robust_coef <-
       expr(parameters::model_parameters(
-        model = x, ci = !!conf.level, robust = TRUE,
+        model = !!x, ci = !!conf.level, robust = TRUE,
         vcov_estimation = !!cov.matrix, vcov_type = !!est.type,
         vcov_args = !!cluster.var,!!!dots)) %>%
       eval()
   } else{
     robust_coef <-
       expr(parameters::model_parameters(
-        model = x, ci = !!conf.level, robust = TRUE,
+        model = !!x, ci = !!conf.level, robust = TRUE,
         vcov_estimation = !!cov.matrix, vcov_type = !!est.type,
         !!!dots)) %>%
       eval()
