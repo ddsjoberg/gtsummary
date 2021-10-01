@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Style significant figure-like rounding — style_sigfig • gtsummary</title>
+<title>Summarize a proportion — proportion_summary • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,12 +52,11 @@
 
 
 
-<meta property="og:title" content="Style significant figure-like rounding — style_sigfig" />
-<meta property="og:description" content="Converts a numeric argument into a string that has been rounded to a
-significant figure-like number. Scientific notation output
-is avoided, however, and additional significant figures may be displayed for
-large numbers.  For example, if the number of significant digits
-requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2)." />
+<meta property="og:title" content="Summarize a proportion — proportion_summary" />
+<meta property="og:description" content="
+
+This helper, to be used with tbl_custom_summary(), creates a function
+computing a proportion and its confidence interval." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -172,85 +171,116 @@ requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Style significant figure-like rounding</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/style_sigfig.R'><code>R/style_sigfig.R</code></a></small>
-    <div class="hidden name"><code>style_sigfig.Rd</code></div>
+    <h1>Summarize a proportion</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/utils-tbl_custom_summary.R'><code>R/utils-tbl_custom_summary.R</code></a></small>
+    <div class="hidden name"><code>proportion_summary.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Converts a numeric argument into a string that has been rounded to a
-significant figure-like number. Scientific notation output
-is avoided, however, and additional significant figures may be displayed for
-large numbers.  For example, if the number of significant digits
-requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2).</p>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
+
+This helper, to be used with <code><a href='tbl_custom_summary.html'>tbl_custom_summary()</a></code>, creates a function
+computing a proportion and its confidence interval.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>style_sigfig</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  digits <span class='op'>=</span> <span class='fl'>2</span>,
-  scale <span class='op'>=</span> <span class='fl'>1</span>,
-  big.mark <span class='op'>=</span> <span class='cn'>NULL</span>,
-  decimal.mark <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>...</span>
+    <pre class="usage"><span class='fu'>proportion_summary</span><span class='op'>(</span>
+  <span class='va'>variable</span>,
+  <span class='va'>value</span>,
+  weights <span class='op'>=</span> <span class='cn'>NULL</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"wilson"</span>, <span class='st'>"wilson.no.correct"</span>, <span class='st'>"exact"</span>, <span class='st'>"asymptotic"</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>Numeric vector</p></td>
+      <th>variable</th>
+      <td><p>String indicating the name of the variable from which the
+proportion will be computed.</p></td>
     </tr>
     <tr>
-      <th>digits</th>
-      <td><p>Integer specifying the minimum number of significant
-digits to display</p></td>
+      <th>value</th>
+      <td><p>Value (or list of values) of <code>variable</code> to be taken into account
+in the numerator.</p></td>
     </tr>
     <tr>
-      <th>scale</th>
-      <td><p>A scaling factor: x will be multiplied by scale before formatting.</p></td>
+      <th>weights</th>
+      <td><p>Optional string indicating the name of a weighting variable.
+If <code>NULL</code>, all observations will be assumed to have a weight equal to <code>1</code>.</p></td>
     </tr>
     <tr>
-      <th>big.mark</th>
-      <td><p>Character used between every 3 digits to separate
-hundreds/thousands/millions/etc.
-Default is <code>","</code>, except when <code>decimal.mark = ","</code> when the default is a space.</p></td>
+      <th>na.rm</th>
+      <td><p>Should missing values be removed before computing the
+proportion? (default is <code>TRUE</code>)</p></td>
     </tr>
     <tr>
-      <th>decimal.mark</th>
-      <td><p>The character to be used to indicate the numeric decimal point.
-Default is <code>"."</code>  or <code><a href='https://rdrr.io/r/base/options.html'>getOption("OutDec")</a></code></p></td>
+      <th>conf.level</th>
+      <td><p>Confidence level for the returned confidence interval.
+Must be strictly greater than 0 and less than 1. Default to 0.95, which
+corresponds to a 95 percent confidence interval.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Other arguments passed on to <code><a href='https://rdrr.io/r/base/format.html'>base::format()</a></code></p></td>
+      <th>method</th>
+      <td><p>Confidence interval method. Must be one of
+<code><a href='https://rdrr.io/r/base/c.html'>c("wilson", "wilson.no.correct", "exact", "asymptotic")</a></code>. See details below.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A character vector of styled numbers</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>If 2 sig figs are input, the number is rounded to 2 decimal places
-when <code>abs(x) &lt; 1</code>, 1 decimal place when <code>abs(x) &gt;= 1 &amp; abs(x) &lt; 10</code>,
-and to the nearest integer when <code>abs(x) &gt;= 10</code>.</p>
+    <p>Computed statistics:</p><ul>
+<li><p><code>{n}</code> numerator, (weighted) number of observations equal to <code>values</code></p></li>
+<li><p><code>{N}</code> denominator, (weighted) number of observations</p></li>
+<li><p><code>{prop}</code> proportion, i.e. <code>n/N</code></p></li>
+<li><p><code>{conf.low}</code> lower confidence interval</p></li>
+<li><p><code>{conf.high}</code> upper confidence interval</p></li>
+</ul>
+
+<p>Methods <code><a href='https://rdrr.io/r/base/c.html'>c("wilson", "wilson.no.correct")</a></code> are calculated with
+<code><a href='https://rdrr.io/r/stats/prop.test.html'>stats::prop.test()</a></code> (with <code>correct = c(TRUE, FALSE)</code>). The default method,
+<code>"wilson"</code>, includes the Yates continuity correction.
+Methods <code><a href='https://rdrr.io/r/base/c.html'>c("exact", "asymptotic")</a></code> are calculated with <code><a href='https://rdrr.io/pkg/Hmisc/man/binconf.html'>Hmisc::binconf()</a></code>
+and the corresponding method.</p>
+    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+
+    
+
+<p>Example 1</p>
+<p><img src='figures/proportion_summary_ex1.png' width=31% /></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other style tools: 
-<code><a href='style_number.html'>style_number</a>()</code>,
-<code><a href='style_percent.html'>style_percent</a>()</code>,
-<code><a href='style_pvalue.html'>style_pvalue</a>()</code>,
-<code><a href='style_ratio.html'>style_ratio</a>()</code></p></div>
+    <div class='dont-index'><p>Other tbl_custom_summary tools: 
+<code><a href='continuous_summary.html'>continuous_summary</a>()</code>,
+<code><a href='ratio_summary.html'>ratio_summary</a>()</code>,
+<code><a href='tbl_custom_summary.html'>tbl_custom_summary</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Daniel D. Sjoberg</p>
+    <p>Joseph Larmarange</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.123</span>, <span class='fl'>0.9</span>, <span class='fl'>1.1234</span>, <span class='fl'>12.345</span>, <span class='op'>-</span><span class='fl'>0.123</span>, <span class='op'>-</span><span class='fl'>0.9</span>, <span class='op'>-</span><span class='fl'>1.1234</span>, <span class='op'>-</span><span class='fl'>132.345</span>, <span class='cn'>NA</span>, <span class='op'>-</span><span class='fl'>0.001</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>style_sigfig</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "0.12"  "0.90"  "1.1"   "12"    "-0.12" "-0.90" "-1.1"  "-132"  NA     
-#&gt; [10] "0.00" </div></pre>
+    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
+<span class='va'>proportion_summary_ex1</span> <span class='op'>&lt;-</span>
+  <span class='va'>Titanic</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_custom_summary.html'>tbl_custom_summary</a></span><span class='op'>(</span>
+    include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Age"</span>, <span class='st'>"Class"</span><span class='op'>)</span>,
+    by <span class='op'>=</span> <span class='st'>"Sex"</span>,
+    stat_fns <span class='op'>=</span> <span class='op'>~</span> <span class='fu'>proportion_summary</span><span class='op'>(</span><span class='st'>"Survived"</span>, <span class='st'>"Yes"</span>, weights <span class='op'>=</span> <span class='st'>"Freq"</span><span class='op'>)</span>,
+    statistic <span class='op'>=</span> <span class='op'>~</span> <span class='st'>"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]"</span>,
+    digits <span class='op'>=</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+      <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='style_percent.html'>style_percent</a></span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>}</span>,
+      <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='va'>style_percent</span>, <span class='va'>style_percent</span>
+    <span class='op'>)</span>,
+    overall_row <span class='op'>=</span> <span class='cn'>TRUE</span>,
+    overall_row_last <span class='op'>=</span> <span class='cn'>TRUE</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span>
+    update <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_stat_cols</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"Proportion (%) of survivors (n/N) [95% CI]"</span>
+  <span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
