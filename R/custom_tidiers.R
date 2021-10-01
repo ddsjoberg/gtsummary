@@ -18,6 +18,11 @@
 #' The tidier uses the output from `parameters::bootstrap_parameters(test = "p")`, and
 #' merely takes the result and puts it in `broom::tidy()` format.
 #'
+#' - `tidy_robust()` tidier to report robust standard errors. The
+#' [parameters](https://easystats.github.io/parameters/reference/model_parameters.default.html)
+#' package includes a wonderful function to calculate robust standard errors.
+#' The tidiers uses the outout from `parameters::`
+#'
 #' - `pool_and_tidy_mice()` tidier to report models resulting from multiply imputed data
 #' using the mice package. Pass the mice model object *before* the model results
 #' have been pooled. See example.
@@ -32,6 +37,7 @@
 #' - `pool_and_tidy_mice()`: `mice::tidy(x, ...)`
 #' - `tidy_standardize()`: `effectsize::standardize_parameters(x, ...)`
 #' - `tidy_bootstrap()`: `parameters::bootstrap_parameters(x, ...)`
+#' - `tidy_robust()`: `parameters::model_parameters(x, ...)`
 #'
 #' @param x a regression model object
 #' @name custom_tidiers
@@ -153,6 +159,71 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
 
   tidy
 }
+
+
+#' @rdname custom_tidiers
+#' @export
+tidy_robust <- function(x, exponentiate = FALSE,
+                        conf.int = TRUE, conf.level = 0.95,
+                        std.err = TRUE,
+                        cov.matrix = "CL", #type of covariance matrix
+                        est.type = "HC1", #type of robust estimation
+                        cluster.var = NULL, #specify the cluster-structure
+                        ..., quiet = FALSE) {
+  assert_package("parameters", "tidy_robust()")
+  dots <- list(...)
+
+  # calculating robust coefs
+  robust_coef_expr <- expr(parameters::model_parameters(
+    model = x, ci = !!conf.level, robust = TRUE,
+    vcov_estimation = !!cov.matrix, vcov_type = !!est.type,
+      !!!dots))
+  if (quiet == FALSE) {
+    inform(glue("tidy_robust(): Robust estimation with\n  `{deparse(robust_coef_expr, width.cutoff = 500L)}`"))
+  }
+
+  if (!is.null(cluster.var)) {
+    robust_coef <-
+      expr(parameters::model_parameters(
+        model = x, ci = !!conf.level, robust = TRUE,
+        vcov_estimation = !!cov.matrix, vcov_type = !!est.type,
+        vcov_args = !!cluster.var,!!!dots)) %>%
+      eval()
+  } else{
+    robust_coef <-
+      expr(parameters::model_parameters(
+        model = x, ci = !!conf.level, robust = TRUE,
+        vcov_estimation = !!cov.matrix, vcov_type = !!est.type,
+        !!!dots)) %>%
+      eval()
+  }
+
+  # converting output to broom::tidy format
+  tidy <-
+    as_tibble(robust_coef) %>%
+    select(
+      term = .data$Parameter, estimate = .data$Coefficient,
+      std.error = .data$SE, conf.low = .data$CI_low, conf.high = .data$CI_high,
+      statistics = match('CI_high',names(.data))+1, p.value = .data$p
+    )
+
+  # exponentiate, if requested
+  if (exponentiate) {
+    tidy <- mutate_at(tidy,
+                      vars(.data$estimate, .data$conf.low, .data$conf.high), exp)
+  }
+
+  # removing conf int, if requested
+  if (!conf.int) tidy <- select(tidy,
+                                -any_of(c("conf.low", "conf.high")))
+
+  # remove se, if requested
+  if(!std.err) tidy <- select(tidy,-std.error)
+
+
+  tidy
+}
+
 
 #' @rdname custom_tidiers
 #' @export
