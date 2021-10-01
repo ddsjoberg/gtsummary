@@ -201,12 +201,15 @@ tidy_robust <- function(x, exponentiate = FALSE,
   }
 
   # converting output to broom::tidy format
+
+  stats_index = match("CI_high" ,names(robust_coef))+1
+
   tidy <-
     as_tibble(robust_coef) %>%
     select(
       term = .data$Parameter, estimate = .data$Coefficient,
       std.error = .data$SE, conf.low = .data$CI_low, conf.high = .data$CI_high,
-      statistics = match('CI_high',names(.data))+1, p.value = .data$p
+      statistics = stats_index, p.value = .data$p
     )
 
   # exponentiate, if requested
