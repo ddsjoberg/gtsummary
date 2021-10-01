@@ -1,4 +1,4 @@
-context("test-add_p_footnotes")
+context("test-separate_p_footnotes")
 
 library(gtsummary)
 gts_tbl <- trial %>%
@@ -6,6 +6,9 @@ gts_tbl <- trial %>%
   tbl_summary(by = trt) %>%
   add_p()
 
-test_that("add_p_footnotes works", {
-  expect_error(add_p_footnotes(gts_tbl), NA)
+test_that("no errors/warnings with standard use", {
+  expect_error(gts_tbl, NA)
+  expect_warning(gts_tbl, NA)
+  expect_error(tbl_split(gts_tbl), NA)
+  expect_warning(tbl_split(gts_tbl), NA)
 })
