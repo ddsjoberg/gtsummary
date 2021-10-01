@@ -18,9 +18,9 @@
 #' The tidier uses the output from `parameters::bootstrap_parameters(test = "p")`, and
 #' merely takes the result and puts it in `broom::tidy()` format.
 #'
-#' - `tidy_robust()` tidier to report robust standard errors. The
-#' [parameters](https://easystats.github.io/parameters/reference/model_parameters.default.html)
-#' package includes a wonderful function to calculate robust standard errors.
+#' - `tidy_robust()` tidier to report robust standard errors, confidence intervals,
+#' and p-values. The [parameters](https://easystats.github.io/parameters/reference/model_parameters.default.html)
+#' package includes a wonderful function to calculate robust standard errors, confidence intervals, and p-values
 #' The tidier uses the output from `parameters::model_parameters()`, and
 #' merely takes the result and puts it in `broom::tidy()` format.
 #'
