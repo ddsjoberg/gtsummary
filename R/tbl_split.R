@@ -1,4 +1,4 @@
-#' Split gtsummary Table
+#' Split gtsummary table
 #'
 #' The `tbl_split` function splits a single gtsummary table into multiple tables
 #'
@@ -7,7 +7,7 @@
 #'  will be separated after each of these variables)
 #' @param ... not used
 #'
-#' @return tbl_split object
+#' @return `tbl_split` object
 #' @name tbl_split
 #'
 #' @family gtsummary-related functions

@@ -2,7 +2,7 @@
 % Please edit documentation in R/tbl_split.R
 \name{tbl_split}
 \alias{tbl_split}
-\title{Split gtsummary Table}
+\title{Split gtsummary table}
 \usage{
 tbl_split(x, variables)
 }
@@ -15,7 +15,7 @@ will be separated after each of these variables)}
 \item{...}{not used}
 }
 \value{
-tbl_split object
+\code{tbl_split} object
 }
 \description{
 The \code{tbl_split} function splits a single gtsummary table into multiple tables
