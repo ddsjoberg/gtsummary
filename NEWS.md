@@ -12,6 +12,10 @@
 
 * Allow `add_p()` and `add_difference()` to be run on the same table. (#959)
 
+* New function `tbl_custom_summary()` allowing to create a table of summary statistics using a custom summary function (#973, #976)
+
+* Set of helpers to be used with `tbl_custom_summary()`: `continuous_summary()`, `proportion_summary()`, `ratio_summary()
+
 * Added Standardized Mean Difference method to `add_difference()`, wrapping the {smd} package's calculations. (#966)
 
 * Fix in `tbl_summary()` when a factor variable is passed that is all NA with no specified levels. (#977)
