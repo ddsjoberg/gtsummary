@@ -4,6 +4,7 @@
 \alias{custom_tidiers}
 \alias{tidy_standardize}
 \alias{tidy_bootstrap}
+\alias{tidy_robust}
 \alias{pool_and_tidy_mice}
 \alias{tidy_gam}
 \title{Collection of custom tidiers}
@@ -22,6 +23,19 @@ tidy_bootstrap(
   exponentiate = FALSE,
   conf.level = 0.95,
   conf.int = TRUE,
+  ...,
+  quiet = FALSE
+)
+
+tidy_robust(
+  x,
+  exponentiate = FALSE,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  std.err = TRUE,
+  cov.matrix = "CL",
+  est.type = "HC1",
+  cluster.var = NULL,
   ...,
   quiet = FALSE
 )
@@ -50,6 +64,7 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 \item \code{pool_and_tidy_mice()}: \code{mice::tidy(x, ...)}
 \item \code{tidy_standardize()}: \code{effectsize::standardize_parameters(x, ...)}
 \item \code{tidy_bootstrap()}: \code{parameters::bootstrap_parameters(x, ...)}
+\item \code{tidy_robust()}: \code{parameters::model_parameters(x, ...)}
 }}
 
 \item{quiet}{Logical indicating whether to print messages in console. Default is
@@ -75,6 +90,11 @@ merely takes the result and puts it in \code{broom::tidy()} format.
 \href{https://easystats.github.io/parameters/reference/model_parameters.default.html}{parameters}
 package includes a wonderful function to estimate bootstrapped coefficients.
 The tidier uses the output from \code{parameters::bootstrap_parameters(test = "p")}, and
+merely takes the result and puts it in \code{broom::tidy()} format.
+\item \code{tidy_robust()} tidier to report robust standard errors, confidence intervals,
+and p-values. The \href{https://easystats.github.io/parameters/reference/model_parameters.default.html}{parameters}
+package includes a wonderful function to calculate robust standard errors, confidence intervals, and p-values
+The tidier uses the output from \code{parameters::model_parameters()}, and
 merely takes the result and puts it in \code{broom::tidy()} format.
 \item \code{pool_and_tidy_mice()} tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object \emph{before} the model results
