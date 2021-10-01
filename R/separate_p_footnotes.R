@@ -2,9 +2,9 @@
 #'
 #' The usual presentation of footnotes for p-values on a gtsummary table is
 #' to have a single footnote that lists all statistical tests that were used to
-#' compute p-values on a given table. The `separate_p_footnotes` function moves
-#' aggregate p-value footnotes to individual footnotes that denote the specific
-#' test used for each of the p-values
+#' compute p-values on a given table. The `separate_p_footnotes` function
+#' separates aggregated p-value footnotes to individual footnotes that denote
+#' the specific test used for each of the p-values.
 #'
 #' @param x object with class `"tbl_summary"` created from the gtsummary package
 #'
