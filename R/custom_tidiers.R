@@ -211,13 +211,11 @@ tidy_robust <- function(x, exponentiate = FALSE,
 
   # exponentiate, if requested
   if (exponentiate) {
-    tidy <- mutate_at(tidy,
-                      vars(.data$estimate, .data$conf.low, .data$conf.high), exp)
+    tidy <- mutate_at(tidy,vars(.data$estimate, .data$conf.low, .data$conf.high), exp)
   }
 
   # removing conf int, if requested
-  if (!conf.int) tidy <- select(tidy,
-                                -any_of(c("conf.low", "conf.high")))
+  if (!conf.int) tidy <- select(tidy,-any_of(c("conf.low", "conf.high")))
 
   # remove se, if requested
   if(!std.err) tidy <- select(tidy,-std.error)
