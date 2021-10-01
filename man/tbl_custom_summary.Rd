@@ -96,8 +96,8 @@ a custom function in charge of computing the statistics (see Details).
 \section{Similarities with \code{tbl_summary()}}{
 
 Please refer to the help file of \code{\link[=tbl_summary]{tbl_summary()}} regarding the use of select
-helpers, and arguments as include, by, type, value, digits, missing and
-missing_text.
+helpers, and arguments \code{include}, \code{by}, \code{type}, \code{value}, \code{digits}, \code{missing} and
+\code{missing_text}.
 }
 
 \section{\code{stat_fns} argument}{
@@ -107,18 +107,20 @@ the summary statistics. For example, \code{stat_fns = everything() ~ foo}.
 
 Each function may take the following arguments:
 \code{foo(data, full_data, variable, by, type, ...)}
-- \verb{data=} is the input data frame passed to \code{tbl_custom_summary()}, subset
+\itemize{
+\item \verb{data=} is the input data frame passed to \code{tbl_custom_summary()}, subset
 according to the level of \code{by} or \code{variable} if any, excluding \code{NA}
 values of the current \code{variable}
-- \verb{full_data=} is the full input data frame passed to \code{tbl_custom_summary()}
-- \verb{variable=} is a string indicating the variable to perform the
+\item \verb{full_data=} is the full input data frame passed to \code{tbl_custom_summary()}
+\item \verb{variable=} is a string indicating the variable to perform the
 calculation on
-- \verb{by=} is a string indicating the by variable from \verb{tbl_custom_summary=},
+\item \verb{by=} is a string indicating the by variable from \verb{tbl_custom_summary=},
 if present
-- \verb{type=} is a string indicating the type of variable
+\item \verb{type=} is a string indicating the type of variable
 (continuous, categorical, ...)
-- \verb{stat_display=} a string indicating the statistic to display (for the
+\item \verb{stat_display=} a string indicating the statistic to display (for the
 \code{statistic} argument, for that variable)
+}
 
 The user-defined does not need to utilize each of these inputs. It's
 encouraged the user-defined function accept \code{...} as each of the arguments

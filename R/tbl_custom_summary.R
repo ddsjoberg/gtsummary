@@ -24,8 +24,8 @@
 #'
 #' @section Similarities with `tbl_summary()`:
 #' Please refer to the help file of [tbl_summary()] regarding the use of select
-#' helpers, and arguments as include, by, type, value, digits, missing and
-#' missing_text.
+#' helpers, and arguments `include`, `by`, `type`, `value`, `digits`, `missing` and
+#' `missing_text`.
 #'
 #' @section `stat_fns` argument:
 #' The `stat_fns` argument specify the custom function(s) to be used for computing
@@ -33,18 +33,24 @@
 #'
 #' Each function may take the following arguments:
 #' `foo(data, full_data, variable, by, type, ...)`
-#'     - `data=` is the input data frame passed to `tbl_custom_summary()`, subset
-#'       according to the level of `by` or `variable` if any, excluding `NA`
-#'       values of the current `variable`
-#'     - `full_data=` is the full input data frame passed to `tbl_custom_summary()`
-#'     - `variable=` is a string indicating the variable to perform the
-#'       calculation on
-#'     - `by=` is a string indicating the by variable from `tbl_custom_summary=`,
-#'       if present
-#'     - `type=` is a string indicating the type of variable
-#'       (continuous, categorical, ...)
-#'     - `stat_display=` a string indicating the statistic to display (for the
-#'       `statistic` argument, for that variable)
+#'
+#'   - `data=` is the input data frame passed to `tbl_custom_summary()`, subset
+#'     according to the level of `by` or `variable` if any, excluding `NA`
+#'     values of the current `variable`
+#'
+#'   - `full_data=` is the full input data frame passed to `tbl_custom_summary()`
+#'
+#'   - `variable=` is a string indicating the variable to perform the
+#'     calculation on
+#'
+#'   - `by=` is a string indicating the by variable from `tbl_custom_summary=`,
+#'     if present
+#'
+#'   - `type=` is a string indicating the type of variable
+#'     (continuous, categorical, ...)
+#'
+#'   - `stat_display=` a string indicating the statistic to display (for the
+#'     `statistic` argument, for that variable)
 #'
 #' The user-defined does not need to utilize each of these inputs. It's
 #' encouraged the user-defined function accept `...` as each of the arguments
