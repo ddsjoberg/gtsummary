@@ -176,6 +176,8 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Deleted deprecated functions <code>add_comparison()</code>, <code>add_global()</code>, <code>tab_style_bold_p()</code>, <code>tab_style_bold_labels()</code>, <code>tab_style_italicize_levels()</code>, <code>tab_style_italicize_labels()</code>, <code>tab_style_bold_levels()</code>.</p></li>
+<li><p>The following deprecated arguments have been removed: <code><a href="../reference/tbl_summary.html">tbl_summary(group=)</a></code>, <code><a href="../reference/as_gt.html">as_gt(omit=)</a></code>.</p></li>
 <li><p>Now using <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> to prepare the <code><a href="https://rdrr.io/pkg/car/man/Anova.html">car::Anova()</a></code> results. This will be more stable than the version originally written. (<a href='https://github.com/ddsjoberg/gtsummary/issues/898'>#898</a>)</p></li>
 <li><p>The survival package has been moved from Imports to Suggests, and will no longer automatically be installed when {gtsummary} is installed. Additionally, <code><a href="https://rdrr.io/pkg/survival/man/Surv.html">survival::Surv()</a></code> is no longer re-exported with the package.</p></li>
 <li><p>The internal package <code>assert_package()</code> now takes the minimum required version of the package from the DESCRIPTION file.</p></li>
@@ -827,11 +829,11 @@
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-    <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span><span class="op">(</span><span class="op">)</span>            <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_p</a></span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_labels</a></span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_bold_levels</a></span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_labels</a></span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/deprecated.html">tab_style_italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  </code></pre></div>
+    <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span><span class="op">(</span><span class="op">)</span>            <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_p</span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_labels</span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_levels</span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu">tab_style_italicize_labels</span><span class="op">(</span><span class="op">)</span>  
+    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu">tab_style_italicize_levels</span><span class="op">(</span><span class="op">)</span>  </code></pre></div>
 <ul>
 <li><p>Passing named lists in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is now defunct.</p></li>
 <li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> fix for <code>tbl_uvregression</code> objects (<a href='https://github.com/ddsjoberg/gtsummary/issues/175'>#175</a>)</p></li>
@@ -856,7 +858,7 @@
 <li><p>Added {tidyselect} and {gtsummary} variable select functions (<a href='https://github.com/ddsjoberg/gtsummary/issues/146'>#146</a>)</p></li>
 <li><p>Added <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> function (<a href='https://github.com/ddsjoberg/gtsummary/issues/152'>#152</a>)</p></li>
 <li><p>Bug fix for dichotomous yes/no variables in <code>tbl_summary</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/158'>#158</a>)</p></li>
-<li><p>Changed <code><a href="../reference/deprecated.html">add_comparison()</a></code> and <code><a href="../reference/deprecated.html">add_global()</a></code> to <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_global_p.html">add_global_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/143'>#143</a>)</p></li>
+<li><p>Changed <code>add_comparison()</code> and <code>add_global()</code> to <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_global_p.html">add_global_p()</a></code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/143'>#143</a>)</p></li>
 <li><p>Added <code><a href="../reference/sort_filter_p.html">sort_p()</a></code> function (<a href='https://github.com/ddsjoberg/gtsummary/issues/105'>#105</a>)</p></li>
 <li><p>Allow unobserved values to serve as the level for dichotomous variables (<a href='https://github.com/ddsjoberg/gtsummary/issues/149'>#149</a>)</p></li>
 <li><p>Bug fix in <code><a href="../reference/add_nevent.html">add_nevent()</a></code> when formula was passed to <code><a href="https://rdrr.io/r/stats/glm.html">glm()</a></code> as a string (<a href='https://github.com/ddsjoberg/gtsummary/issues/148'>#148</a>)</p></li>

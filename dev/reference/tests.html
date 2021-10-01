@@ -265,7 +265,7 @@ calculate a p-value from <code><a href='https://rdrr.io/r/stats/t.test.html'>t.t
 <p>To report a p-value (or difference) for a test not available in gtsummary, you can create a
 custom function. The output is a data frame that is one line long. The
 structure is similar to the output of <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy()</a></code> of a typical
-statistical test. The <code><a href='add_p.html'>add_p()</a></code> and <code><a href='deprecated.html'>add_comparison()</a></code> functions will look for columns called
+statistical test. The <code><a href='add_p.html'>add_p()</a></code> and <code>add_comparison()</code> functions will look for columns called
 <code>"p.value"</code>, <code>"estimate"</code>, <code>"conf.low"</code>, <code>"conf.high"</code>, and <code>"method"</code> for the
 p-value, difference, confidence interval, and the test name used in the footnote.</p>
 <p>Example calculating a p-value from a t-test assuming a common variance
