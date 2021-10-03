@@ -1,5 +1,6 @@
 #' Split gtsummary table
 #'
+#' \lifecycle{experimental}
 #' The `tbl_split` function splits a single gtsummary table into multiple tables
 #'
 #' @param x gtsummary table
@@ -10,10 +11,7 @@
 #' @return `tbl_split` object
 #' @name tbl_split
 #'
-#' @family gtsummary-related functions
 #' @examples
-#' library(gtsummary)
-#'
 #' tbl <-
 #'   tbl_summary(trial) %>%
 #'   tbl_split(variables = c(marker, grade))
@@ -35,7 +33,7 @@ tbl_split <- function(x, variables) {
     union(x$table_body$variable %>% rev() %>% purrr::pluck(1))
 
   # merging split points -------------------------------------------------------
-  # convert list of table_body into list of gtsummary obejcts
+  # convert list of table_body into list of gtsummary objects
   x$table_body %>%
     dplyr::left_join(
       tibble(variable = variables, ..group.. = variables),
@@ -50,9 +48,11 @@ tbl_split <- function(x, variables) {
         c(purrr::list_modify(x, "table_body" = NULL)) %>% # add the other parts of the gtsummary table
         `class<-`(class(x)) # add original class from `x`
     ) %>%
-    `class<-`("tbl_split") # assign class (can't assign gtsummary becuase of print definitions)
+    `class<-`("tbl_split") # assign class (can't assign gtsummary because of print definitions)
 }
 
+#' @export
+#' @rdname tbl_split
 print.tbl_split <- function(x, ...) {
   purrr::walk(x, print)
 }

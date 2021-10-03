@@ -2,9 +2,12 @@
 % Please edit documentation in R/tbl_split.R
 \name{tbl_split}
 \alias{tbl_split}
+\alias{print.tbl_split}
 \title{Split gtsummary table}
 \usage{
 tbl_split(x, variables)
+
+\method{print}{tbl_split}(x, ...)
 }
 \arguments{
 \item{x}{gtsummary table}
@@ -18,14 +21,12 @@ will be separated after each of these variables)}
 \code{tbl_split} object
 }
 \description{
+\lifecycle{experimental}
 The \code{tbl_split} function splits a single gtsummary table into multiple tables
 }
 \examples{
-library(gtsummary)
-
 tbl <-
   tbl_summary(trial) \%>\%
   tbl_split(variables = c(marker, grade))
 
 }
-\concept{gtsummary-related functions}
