@@ -7,14 +7,15 @@
 separate_p_footnotes(x)
 }
 \arguments{
-\item{x}{object with class \code{"tbl_summary"} created from the gtsummary package}
+\item{x}{object with class \code{"tbl_summary"} or \code{"tbl_svysummary"}}
 }
 \description{
+\lifecycle{experimental}
 The usual presentation of footnotes for p-values on a gtsummary table is
 to have a single footnote that lists all statistical tests that were used to
-compute p-values on a given table. The \code{separate_p_footnotes} function moves
-aggregate p-value footnotes to individual footnotes that denote the specific
-test used for each of the p-values
+compute p-values on a given table. The \code{separate_p_footnotes()} function
+separates aggregated p-value footnotes to individual footnotes that denote
+the specific test used for each of the p-values.
 }
 \section{Example Output}{
 
@@ -22,7 +23,6 @@ test used for each of the p-values
 }
 
 \examples{
-library(gtsummary)
 separate_p_footnotes_ex1 <-
   trial \%>\%
   select(trt, age, grade) \%>\%
@@ -31,3 +31,33 @@ separate_p_footnotes_ex1 <-
   separate_p_footnotes()
 
 }
+\seealso{
+Other tbl_summary tools: 
+\code{\link{add_ci}()},
+\code{\link{add_n.tbl_summary}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_summary}()},
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{inline_text.tbl_survfit}()},
+\code{\link{modify}},
+\code{\link{tbl_custom_summary}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_summary}()}
+
+Other tbl_svysummary tools: 
+\code{\link{add_n.tbl_summary}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_svysummary}()},
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_svysummary}()}
+}
+\concept{tbl_summary tools}
+\concept{tbl_svysummary tools}

@@ -53,6 +53,7 @@ Other tbl_summary tools:
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
 \code{\link{modify}},
+\code{\link{separate_p_footnotes}()},
 \code{\link{tbl_custom_summary}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
@@ -64,6 +65,7 @@ Other tbl_svysummary tools:
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
 \code{\link{modify}},
+\code{\link{separate_p_footnotes}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_svysummary}()}
