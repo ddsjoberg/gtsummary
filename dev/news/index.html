@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9014</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9015</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Migrated a new function <code><a href="../reference/tbl_split.html">tbl_split()</a></code> from the {bstfun} package. Package allows users to split a {gtsummary} table into multiple tables.</p></li>
 <li><p>Deleted deprecated functions <code>add_comparison()</code>, <code>add_global()</code>, <code>tab_style_bold_p()</code>, <code>tab_style_bold_labels()</code>, <code>tab_style_italicize_levels()</code>, <code>tab_style_italicize_labels()</code>, <code>tab_style_bold_levels()</code>.</p></li>
 <li><p>The following deprecated arguments have been removed: <code><a href="../reference/tbl_summary.html">tbl_summary(group=)</a></code>, <code><a href="../reference/as_gt.html">as_gt(omit=)</a></code>.</p></li>
 <li><p>Now using <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> to prepare the <code><a href="https://rdrr.io/pkg/car/man/Anova.html">car::Anova()</a></code> results. This will be more stable than the version originally written. (<a href='https://github.com/ddsjoberg/gtsummary/issues/898'>#898</a>)</p></li>

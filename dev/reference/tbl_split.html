@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Report statistics from cross table inline — inline_text.tbl_cross • gtsummary</title>
+<title>Split gtsummary table — tbl_split • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,12 +52,10 @@
 
 
 
-<meta property="og:title" content="Report statistics from cross table inline — inline_text.tbl_cross" />
+<meta property="og:title" content="Split gtsummary table — tbl_split" />
 <meta property="og:description" content="
 
-Extracts and returns statistics from a tbl_cross object for
-inline reporting in an R markdown document. Detailed examples in the
-inline_text vignette" />
+The tbl_split function splits a single gtsummary table into multiple tables" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -172,72 +170,50 @@ inline_text vignette" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Report statistics from cross table inline</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/inline_text.R'><code>R/inline_text.R</code></a></small>
-    <div class="hidden name"><code>inline_text.tbl_cross.Rd</code></div>
+    <h1>Split gtsummary table</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/tbl_split.R'><code>R/tbl_split.R</code></a></small>
+    <div class="hidden name"><code>tbl_split.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#maturing'><img src='figures/lifecycle-maturing.svg' alt='[Maturing]' /></a>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
 
-Extracts and returns statistics from a <code>tbl_cross</code> object for
-inline reporting in an R markdown document. Detailed examples in the
-<a href='http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html'>inline_text vignette</a></p>
+The <code>tbl_split</code> function splits a single gtsummary table into multiple tables</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for tbl_cross</span>
-<span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>x</span>, col_level <span class='op'>=</span> <span class='cn'>NULL</span>, row_level <span class='op'>=</span> <span class='cn'>NULL</span>, pvalue_fun <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tbl_split</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>variables</span><span class='op'>)</span>
+
+<span class='co'># S3 method for tbl_split</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>a <code>tbl_cross</code> object</p></td>
+      <td><p>gtsummary table</p></td>
     </tr>
     <tr>
-      <th>col_level</th>
-      <td><p>Level of the column variable to display. Default is <code>NULL</code>
-Can also specify "<code>p.value</code>" for the p-value and "<code>stat_0</code>" for Total column.</p></td>
-    </tr>
-    <tr>
-      <th>row_level</th>
-      <td><p>Level of the row variable to display.
-Can also specify the 'Unknown' row. Default is <code>NULL</code></p></td>
-    </tr>
-    <tr>
-      <th>pvalue_fun</th>
-      <td><p>Function to round and format p-values.
-Default is <a href='style_pvalue.html'>style_pvalue</a>.
-The function must have a numeric vector input (the numeric, exact p-value),
-and return a string that is the rounded/formatted p-value (e.g.
-<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+      <th>variables</th>
+      <td><p>variables at which to split the gtsummary table rows (tables
+will be separated after each of these variables)</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Not used</p></td>
+      <td><p>not used</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A string reporting results from a gtsummary table</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other tbl_cross tools: 
-<code><a href='add_p.tbl_cross.html'>add_p.tbl_cross</a>()</code>,
-<code><a href='tbl_cross.html'>tbl_cross</a>()</code></p></div>
+    <p><code>tbl_split</code> object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>tbl_cross</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='tbl_cross.html'>tbl_cross</a></span><span class='op'>(</span><span class='va'>trial</span>, row <span class='op'>=</span> <span class='va'>trt</span>, col <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='va'>tbl</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span><span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>tbl_split</span><span class='op'>(</span>variables <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>marker</span>, <span class='va'>grade</span><span class='op'>)</span><span class='op'>)</span>
 
-<span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>tbl_cross</span>, row_level <span class='op'>=</span> <span class='st'>"Drug A"</span>, col_level <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "28"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>tbl_cross</span>, row_level <span class='op'>=</span> <span class='st'>"Total"</span>, col_level <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "61"</div><div class='input'><span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>tbl_cross</span>, col_level <span class='op'>=</span> <span class='st'>"p.value"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "p=0.7"</div></pre>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
