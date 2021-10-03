@@ -11,7 +11,6 @@
 #' @export
 #'
 #' @examples
-#' library(gtsummary)
 #' separate_p_footnotes_ex1 <-
 #'   trial %>%
 #'   select(trt, age, grade) %>%
@@ -25,7 +24,7 @@
 separate_p_footnotes <- function(x) {
   # check inputs ---------------------------------------------------------------
   if (!inherits(x, "gtsummary") || !"p.value" %in% names(x$table_body))
-    stop("x must be a gtsummary table with a p-value column.", call. = FALSE)
+    stop("`x=` must be a gtsummary table with a p-value column.", call. = FALSE)
   if (!"stat_test_lbl" %in% names(x$meta_data))
     stop("The `x$meta_data` data frame must have a column called 'stat_test_lbl'.")
 
