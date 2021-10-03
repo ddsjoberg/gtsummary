@@ -81,7 +81,9 @@ Other tbl_regression tools:
 \code{\link{inline_text.tbl_regression}()},
 \code{\link{modify}},
 \code{\link{tbl_regression}()},
-\code{\link{tbl_stack}()}
+\code{\link{tbl_split}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()}
 
 Other tbl_uvregression tools: 
 \code{\link{add_global_p}()},
@@ -89,7 +91,9 @@ Other tbl_uvregression tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_uvregression}()},
 \code{\link{modify}},
+\code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
 \code{\link{tbl_uvregression}()}
 
 Other tbl_summary tools: 
@@ -105,7 +109,9 @@ Other tbl_summary tools:
 \code{\link{modify}},
 \code{\link{separate_p_footnotes}()},
 \code{\link{tbl_custom_summary}()},
+\code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
 \code{\link{tbl_summary}()}
 
 Other tbl_survfit tools: 
@@ -113,7 +119,9 @@ Other tbl_survfit tools:
 \code{\link{add_nevent.tbl_survfit}()},
 \code{\link{add_p.tbl_survfit}()},
 \code{\link{modify}},
+\code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
 \code{\link{tbl_survfit}()}
 
 Other tbl_svysummary tools: 
@@ -124,7 +132,9 @@ Other tbl_svysummary tools:
 \code{\link{add_stat_label}()},
 \code{\link{modify}},
 \code{\link{separate_p_footnotes}()},
+\code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
 \code{\link{tbl_svysummary}()}
 }
 \author{

@@ -9,7 +9,11 @@
 #' @param ... not used
 #'
 #' @return `tbl_split` object
-#' @name tbl_split
+#' @family tbl_regression tools
+#' @family tbl_uvregression tools
+#' @family tbl_summary tools
+#' @family tbl_survfit tools
+#' @family tbl_svysummary tools
 #'
 #' @examples
 #' tbl <-
