@@ -156,7 +156,7 @@ test_that("no errors/warnings with competing events", {
     tbl_survfit(cr_1, times = c(12, 24)), NA
   )
   expect_error(
-    summod2 <- tbl_survfit(cr_2, times = c(12, 24), label = "Tumor Grade"), NA
+    summod2 <- tbl_survfit(cr_2, times = c(12, 24), label = ~"Tumor Grade"), NA
   )
 
   # output is identical in tbl_survfit and summary
