@@ -24,7 +24,6 @@
 #' The tidier uses the output from `parameters::model_parameters()`, and
 #' merely takes the result and puts it in `broom::tidy()` format.
 #'
-#'
 #' - `pool_and_tidy_mice()` tidier to report models resulting from multiply imputed data
 #' using the mice package. Pass the mice model object *before* the model results
 #' have been pooled. See example.

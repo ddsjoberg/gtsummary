@@ -30,12 +30,11 @@ tidy_bootstrap(
 tidy_robust(
   x,
   exponentiate = FALSE,
-  conf.int = TRUE,
   conf.level = 0.95,
-  std.err = TRUE,
-  cov.matrix = "CL",
-  est.type = "HC1",
-  cluster.var = NULL,
+  conf.int = TRUE,
+  vcov_estimation = NULL,
+  vcov_type = NULL,
+  vcov_args = NULL,
   ...,
   quiet = FALSE
 )
@@ -69,6 +68,9 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
+
+\item{vcov_estimation, vcov_type, vcov_args}{arguments passed to
+\code{parameters::model_parameters()}}
 
 \item{pool.args}{named list of arguments passed to \code{mice::pool()} in
 \code{pool_and_tidy_mice()}. Default is \code{NULL}}
