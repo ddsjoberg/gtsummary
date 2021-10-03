@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Migrated a new function `tbl_split()` from the {bstfun} package. Package allows users to split a {gtsummary} table into multiple tables.
+* Migrated a new function `separate_p_footnotes()` from the {bstfun} package. Function allows users to separate the composite footnote listing the tests performed in `add_p()`, and replaces it with individual footnotes for each test name.
+
+* Migrated a new function `tbl_split()` from the {bstfun} package. Function allows users to split a {gtsummary} table into multiple tables.
 
 * Deleted deprecated functions `add_comparison()`, `add_global()`, `tab_style_bold_p()`, `tab_style_bold_labels()`, `tab_style_italicize_levels()`, `tab_style_italicize_labels()`, `tab_style_bold_levels()`.
 

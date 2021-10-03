@@ -94,9 +94,12 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{modify}},
+\code{\link{separate_p_footnotes}()},
 \code{\link{tbl_custom_summary}()},
 \code{\link{tbl_merge}()},
+\code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
 \code{\link{tbl_summary}()}
 }
 \author{
