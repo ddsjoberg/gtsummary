@@ -80,7 +80,9 @@ Other tbl_uvregression tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{modify}},
 \code{\link{tbl_merge}()},
+\code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
 \code{\link{tbl_uvregression}()}
 }
 \author{

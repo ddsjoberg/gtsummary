@@ -30,3 +30,73 @@ tbl <-
   tbl_split(variables = c(marker, grade))
 
 }
+\seealso{
+Other tbl_regression tools: 
+\code{\link{add_global_p}()},
+\code{\link{add_q}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{combine_terms}()},
+\code{\link{inline_text.tbl_regression}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_regression}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()}
+
+Other tbl_uvregression tools: 
+\code{\link{add_global_p}()},
+\code{\link{add_q}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{inline_text.tbl_uvregression}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
+\code{\link{tbl_uvregression}()}
+
+Other tbl_summary tools: 
+\code{\link{add_ci}()},
+\code{\link{add_n.tbl_summary}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_summary}()},
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()},
+\code{\link{bold_italicize_labels_levels}},
+\code{\link{inline_text.tbl_summary}()},
+\code{\link{inline_text.tbl_survfit}()},
+\code{\link{modify}},
+\code{\link{separate_p_footnotes}()},
+\code{\link{tbl_custom_summary}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
+\code{\link{tbl_summary}()}
+
+Other tbl_survfit tools: 
+\code{\link{add_n.tbl_survfit}()},
+\code{\link{add_nevent.tbl_survfit}()},
+\code{\link{add_p.tbl_survfit}()},
+\code{\link{modify}},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
+\code{\link{tbl_survfit}()}
+
+Other tbl_svysummary tools: 
+\code{\link{add_n.tbl_summary}()},
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_svysummary}()},
+\code{\link{add_q}()},
+\code{\link{add_stat_label}()},
+\code{\link{modify}},
+\code{\link{separate_p_footnotes}()},
+\code{\link{tbl_merge}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
+\code{\link{tbl_svysummary}()}
+}
+\concept{tbl_regression tools}
+\concept{tbl_summary tools}
+\concept{tbl_survfit tools}
+\concept{tbl_svysummary tools}
+\concept{tbl_uvregression tools}

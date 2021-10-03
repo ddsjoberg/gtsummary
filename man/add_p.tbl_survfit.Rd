@@ -95,7 +95,9 @@ Other tbl_survfit tools:
 \code{\link{add_nevent.tbl_survfit}()},
 \code{\link{modify}},
 \code{\link{tbl_merge}()},
+\code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
 \code{\link{tbl_survfit}()}
 }
 \concept{tbl_survfit tools}
