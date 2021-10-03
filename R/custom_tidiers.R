@@ -22,7 +22,10 @@
 #' and p-values. The [parameters](https://easystats.github.io/parameters/reference/model_parameters.default.html)
 #' package includes a wonderful function to calculate robust standard errors, confidence intervals, and p-values
 #' The tidier uses the output from `parameters::model_parameters()`, and
-#' merely takes the result and puts it in `broom::tidy()` format.
+#' merely takes the result and puts it in `broom::tidy()` format. To use this
+#' function with `tbl_regression()`, pass a function with the arguments for
+#' `tidy_robust()` populated. This is easily done using `purrr::partial()` e.g.
+#' `tbl_regression(tidy_fun = partial(tidy_robust, vcov_estimation = "CL"))`
 #'
 #' - `pool_and_tidy_mice()` tidier to report models resulting from multiply imputed data
 #' using the mice package. Pass the mice model object *before* the model results
