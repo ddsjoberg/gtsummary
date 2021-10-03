@@ -50,7 +50,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 A string reporting results from a gtsummary table
 }
 \description{
-\lifecycle{experimental}
+\lifecycle{maturing}
 Extracts and returns statistics from a \code{tbl_survfit} object for
 inline reporting in an R markdown document. Detailed examples in the
 \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
@@ -94,6 +94,7 @@ Other tbl_summary tools:
 \code{\link{bold_italicize_labels_levels}},
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{modify}},
+\code{\link{tbl_custom_summary}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_stack}()},
 \code{\link{tbl_summary}()}
