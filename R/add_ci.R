@@ -46,7 +46,7 @@
 #'     select(response, trt) %>%
 #'     tbl_summary(statistic = all_categorical() ~ "{p}%",
 #'                 missing = "no") %>%
-#'     add_ci(method = all_continuous() ~ "wilcox.test") %>%
+#'     add_ci() %>%
 #'     modify_cols_merge(
 #'       rows = !is.na(ci_stat_0),
 #'       pattern = "{stat_0} ({ci_stat_0})"
