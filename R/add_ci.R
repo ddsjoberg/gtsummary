@@ -24,7 +24,7 @@
 #' The default method, `"wilson"`, includes the Yates continuity correction.
 #' Methods `c("exact", "asymptotic")` are calculated with `Hmisc::binconf(method=)`.
 #' Confidence intervals for means are calculated using `t.test()` and
-#' `wilcox.test()` for psuedo-medians.
+#' `wilcox.test()` for pseudo-medians.
 #'
 #' @return gtsummary table
 #' @rdname add_ci
@@ -260,7 +260,7 @@ calculate_mean_ci <- function(data, variable, statistic,
   else if (method %in% "wilcox.test") {
     if (!"median" %in%
         names(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]])) {
-      paste("{.code add_ci()} added psuedo-median CI for {.val {variable}};",
+      paste("{.code add_ci()} added pseudo-median CI for {.val {variable}};",
             "however, no median is shown in the {.code tbl_summary()} table.") %>%
         cli::cli_alert_danger()
     }
