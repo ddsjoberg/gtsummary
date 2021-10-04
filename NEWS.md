@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added new function `tidy_robust()` that will add robust standard errors, confidence intervals, and p-values with `tbl_regression()` and `tbl_uvregression()`. The function is a wrapper for `parameters::model_paramters()`. (#979)
+
 * Migrated a new function `separate_p_footnotes()` from the {bstfun} package. Function allows users to separate the composite footnote listing the tests performed in `add_p()`, and replaces it with individual footnotes for each test name.
 
 * Migrated a new function `tbl_split()` from the {bstfun} package. Function allows users to split a {gtsummary} table into multiple tables.
