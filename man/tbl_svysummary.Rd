@@ -209,8 +209,11 @@ Other tbl_svysummary tools:
 \code{\link{add_q}()},
 \code{\link{add_stat_label}()},
 \code{\link{modify}},
+\code{\link{separate_p_footnotes}()},
 \code{\link{tbl_merge}()},
-\code{\link{tbl_stack}()}
+\code{\link{tbl_split}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()}
 }
 \author{
 Joseph Larmarange
