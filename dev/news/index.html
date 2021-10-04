@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9017</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9018</span>
       </span>
     </div>
 
@@ -176,6 +176,7 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Added function <code><a href="../reference/tbl_butcher.html">tbl_butcher()</a></code> to reduce the size of a gtsummary table. After an object has been butchered, other gtsummary functions may not be able to execute on the object.</p></li>
 <li><p>Added new function <code><a href="../reference/custom_tidiers.html">tidy_robust()</a></code> that will add robust standard errors, confidence intervals, and p-values with <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. The function is a wrapper for <code>parameters::model_paramters()</code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/979'>#979</a>)</p></li>
 <li><p>Migrated a new function <code><a href="../reference/separate_p_footnotes.html">separate_p_footnotes()</a></code> from the {bstfun} package. Function allows users to separate the composite footnote listing the tests performed in <code><a href="../reference/add_p.html">add_p()</a></code>, and replaces it with individual footnotes for each test name.</p></li>
 <li><p>Migrated a new function <code><a href="../reference/tbl_split.html">tbl_split()</a></code> from the {bstfun} package. Function allows users to split a {gtsummary} table into multiple tables.</p></li>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Set a gtsummary theme — set_gtsummary_theme • gtsummary</title>
+<title>Reduce size of gtsummary objects — tbl_butcher • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,16 +52,16 @@
 
 
 
-<meta property="og:title" content="Set a gtsummary theme — set_gtsummary_theme" />
-<meta property="og:description" content="
-
-Use this function to set preferences for the display of gtsummary tables.
-The default formatting and styling throughout the gtsummary package are
-taken from the published reporting guidelines of the top four urology
-journals: European Urology, The Journal of Urology, Urology and
-the British Journal of Urology International. Use this function to change
-the default reporting style to match another journal, or your own
-personal style." />
+<meta property="og:title" content="Reduce size of gtsummary objects — tbl_butcher" />
+<meta property="og:description" content="Some gtsummary objects can become large and the size becomes cumbersome
+when working with the object.
+The function removes all elements from a gtsummary object, except those
+required to print the table. This may result in gtsummary functions
+that add information or modify the table, such as add_global_p(),
+will no longer execute
+after the excess elements have been removed (aka butchered). Of note,
+the majority of inline_text() calls will continue to execute
+properly." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -176,64 +176,54 @@ personal style." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Set a gtsummary theme</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/set_gtsummary_theme.R'><code>R/set_gtsummary_theme.R</code></a></small>
-    <div class="hidden name"><code>set_gtsummary_theme.Rd</code></div>
+    <h1>Reduce size of gtsummary objects</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/tbl_butcher.R'><code>R/tbl_butcher.R</code></a></small>
+    <div class="hidden name"><code>tbl_butcher.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#maturing'><img src='figures/lifecycle-maturing.svg' alt='[Maturing]' /></a>
-
-Use this function to set preferences for the display of gtsummary tables.
-The default formatting and styling throughout the gtsummary package are
-taken from the published reporting guidelines of the top four urology
-journals: European Urology, The Journal of Urology, Urology and
-the British Journal of Urology International. Use this function to change
-the default reporting style to match another journal, or your own
-personal style.</p>
+    <p>Some gtsummary objects can become large and the size becomes cumbersome
+when working with the object.
+The function removes all elements from a gtsummary object, except those
+required to print the table. This may result in gtsummary functions
+that add information or modify the table, such as <code><a href='add_global_p.html'>add_global_p()</a></code>,
+will no longer execute
+after the excess elements have been removed (aka butchered). Of note,
+the majority of <code><a href='inline_text.html'>inline_text()</a></code> calls will continue to execute
+properly.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>set_gtsummary_theme</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-
-<span class='fu'>reset_gtsummary_theme</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tbl_butcher</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A gtsummary theme function, e.g. <code><a href='theme_gtsummary.html'>theme_gtsummary_journal()</a></code>, or a
-named list defining a gtsummary theme. See details below.</p></td>
+      <td><p>a gtsummary object</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    
-
-<p>Example</p>
-<p><img src='figures/set_gtsummary_theme_ex1.png' width=70% /></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><a href='http://www.danieldsjoberg.com/gtsummary/articles/themes.html'>Themes vignette</a></p>
-<p>Available <a href='theme_gtsummary.html'>gtsummary themes</a></p></div>
+    <p>a gtsummary object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Setting JAMA theme for gtsummary</span>
-<span class='fu'>set_gtsummary_theme</span><span class='op'>(</span><span class='fu'><a href='theme_gtsummary.html'>theme_gtsummary_journal</a></span><span class='op'>(</span><span class='st'>"jama"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Setting theme `JAMA`</span></div><div class='output co'>#&gt; <span class='message'>Setting theme `JAMA`</span></div><div class='input'><span class='co'># Themes can be combined by including more than one</span>
-<span class='fu'>set_gtsummary_theme</span><span class='op'>(</span><span class='fu'><a href='theme_gtsummary.html'>theme_gtsummary_compact</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Setting theme `Compact`</span></div><div class='output co'>#&gt; <span class='message'>Setting theme `Compact`</span></div><div class='input'>
-<span class='va'>set_gtsummary_theme_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_stat_label.html'>add_stat_label</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='as_gt.html'>as_gt</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> <span style='color: #262626; background-color: #DADADA;'>`add_stat_label()`</span> has previously been applied. Returning <span style='color: #00BB00;'>gtsummary</span> table unaltered.</span></div><div class='input'>
-<span class='co'># reset gtsummary theme</span>
-<span class='fu'>reset_gtsummary_theme</span><span class='op'>(</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>tbl_large</span> <span class='op'>&lt;-</span>
+ <span class='va'>trial</span> <span class='op'>%&gt;%</span>
+ <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span><span class='op'>(</span>
+   y <span class='op'>=</span> <span class='va'>age</span>,
+   method <span class='op'>=</span> <span class='va'>lm</span>
+ <span class='op'>)</span>
+
+ <span class='va'>tbl_butchered</span> <span class='op'>&lt;-</span>
+   <span class='va'>tbl_large</span> <span class='op'>%&gt;%</span>
+   <span class='fu'>tbl_butcher</span><span class='op'>(</span><span class='op'>)</span>
+
+ <span class='co'># size comparison</span>
+ <span class='fu'><a href='https://rdrr.io/r/utils/object.size.html'>object.size</a></span><span class='op'>(</span><span class='va'>tbl_large</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span>units <span class='op'>=</span> <span class='st'>"Mb"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "16.6 Mb"</div><div class='input'> <span class='fu'><a href='https://rdrr.io/r/utils/object.size.html'>object.size</a></span><span class='op'>(</span><span class='va'>tbl_butchered</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span>units <span class='op'>=</span> <span class='st'>"Mb"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "5.2 Mb"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
