@@ -73,7 +73,7 @@ add_ci_ex1 <-
   trial \%>\%
   select(age, response, trt) \%>\%
   tbl_summary(missing = "no",
-              statistic = all_continuous ~ "{mean} ({sd})") \%>\%
+              statistic = all_continuous() ~ "{mean} ({sd})") \%>\%
   add_ci()
 
 # Example 2 ----------------------------------
@@ -82,7 +82,7 @@ add_ci_ex2 <-
     select(response, trt) \%>\%
     tbl_summary(statistic = all_categorical() ~ "{p}\%",
                 missing = "no") \%>\%
-    add_ci(method = all_continuous ~ "wilcox.test") \%>\%
+    add_ci(method = all_continuous() ~ "wilcox.test") \%>\%
     modify_cols_merge(
       rows = !is.na(ci_stat_0),
       pattern = "{stat_0} ({ci_stat_0})"
