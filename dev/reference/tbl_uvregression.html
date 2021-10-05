@@ -111,7 +111,7 @@ dichotomous variables appropriate for logistic regression with glm." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9018</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9019</span>
       </span>
     </div>
 
@@ -367,19 +367,6 @@ fit object and not the parsnip/workflows object.</p></li>
 models use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy(x, effects = "fixed")</a></code>. Specify <code>tidy_fun = broom.mixed::tidy</code>
 to print the random components.</p></li>
 </ul>
-
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    
-
-<p>The N reported in the output is the number of observations
-in the data frame <code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame(x)</a></code>. Depending on the model input, this N
-may represent different quantities. In most cases, it is the number of people or
-units in your model.  Here are some common exceptions.</p><ol>
-<li><p>Survival regression models including time dependent covariates.</p></li>
-<li><p>Random- or mixed-effects regression models with clustered data.</p></li>
-<li><p>GEE regression models with clustered data.</p></li>
-</ol>
 
 <p>This list is not exhaustive, and care should be taken for each number reported.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>

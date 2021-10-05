@@ -96,7 +96,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9018</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9019</span>
       </span>
     </div>
 
@@ -207,7 +207,7 @@
 <code><a href='https://rdrr.io/r/base/list.html'>list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")</a></code>.
 Must be one of
 <code><a href='https://rdrr.io/r/base/c.html'>c("wilson", "wilson.no.correct", "exact", "asymptotic")</a></code> for categorical
-variables, and <code>"t.test"</code> for continuous variables.
+variables, and <code><a href='https://rdrr.io/r/base/c.html'>c("t.test", "wilcox.test")</a></code> for continuous variables.
 See details below.</p></td>
     </tr>
     <tr>
@@ -242,7 +242,8 @@ interval. Default is
 <code><a href='https://rdrr.io/r/stats/prop.test.html'>prop.test(correct = c(TRUE, FALSE))</a></code>.
 The default method, <code>"wilson"</code>, includes the Yates continuity correction.
 Methods <code><a href='https://rdrr.io/r/base/c.html'>c("exact", "asymptotic")</a></code> are calculated with <code><a href='https://rdrr.io/pkg/Hmisc/man/binconf.html'>Hmisc::binconf(method=)</a></code>.
-Confidence intervals for means are calculated using <code><a href='https://rdrr.io/r/stats/t.test.html'>t.test()</a></code>.</p>
+Confidence intervals for means are calculated using <code><a href='https://rdrr.io/r/stats/t.test.html'>t.test()</a></code> and
+<code><a href='https://rdrr.io/r/stats/wilcox.test.html'>wilcox.test()</a></code> for pseudo-medians.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -276,7 +277,8 @@ Confidence intervals for means are calculated using <code><a href='https://rdrr.
 <span class='va'>add_ci_ex1</span> <span class='op'>&lt;-</span>
   <span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>response</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>missing <span class='op'>=</span> <span class='st'>"no"</span>,
+              statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>add_ci</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># Example 2 ----------------------------------</span>
