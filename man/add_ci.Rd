@@ -26,7 +26,7 @@ add_ci(x, ...)
 \code{list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")}.
 Must be one of
 \code{c("wilson", "wilson.no.correct", "exact", "asymptotic")} for categorical
-variables, and \code{"t.test"} for continuous variables.
+variables, and \code{c("t.test", "wilcox.test")} for continuous variables.
 See details below.}
 
 \item{include}{variables to include in the summary table. Default is \code{everything()}}
@@ -52,7 +52,8 @@ Methods \code{c("wilson", "wilson.no.correct")} are calculated with
 \code{prop.test(correct = c(TRUE, FALSE))}.
 The default method, \code{"wilson"}, includes the Yates continuity correction.
 Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf(method=)}.
-Confidence intervals for means are calculated using \code{t.test()}.
+Confidence intervals for means are calculated using \code{t.test()} and
+\code{wilcox.test()} for pseudo-medians.
 }
 
 \section{Example Output}{
@@ -71,7 +72,8 @@ Confidence intervals for means are calculated using \code{t.test()}.
 add_ci_ex1 <-
   trial \%>\%
   select(age, response, trt) \%>\%
-  tbl_summary(missing = "no") \%>\%
+  tbl_summary(missing = "no",
+              statistic = all_continuous() ~ "{mean} ({sd})") \%>\%
   add_ci()
 
 # Example 2 ----------------------------------
@@ -98,9 +100,12 @@ Other tbl_summary tools:
 \code{\link{inline_text.tbl_summary}()},
 \code{\link{inline_text.tbl_survfit}()},
 \code{\link{modify}},
+\code{\link{separate_p_footnotes}()},
 \code{\link{tbl_custom_summary}()},
 \code{\link{tbl_merge}()},
+\code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()},
 \code{\link{tbl_summary}()}
 }
 \concept{tbl_summary tools}

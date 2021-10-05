@@ -18,6 +18,15 @@
 #' The tidier uses the output from `parameters::bootstrap_parameters(test = "p")`, and
 #' merely takes the result and puts it in `broom::tidy()` format.
 #'
+#' - `tidy_robust()` tidier to report robust standard errors, confidence intervals,
+#' and p-values. The [parameters](https://easystats.github.io/parameters/reference/model_parameters.default.html)
+#' package includes a wonderful function to calculate robust standard errors, confidence intervals, and p-values
+#' The tidier uses the output from `parameters::model_parameters()`, and
+#' merely takes the result and puts it in `broom::tidy()` format. To use this
+#' function with `tbl_regression()`, pass a function with the arguments for
+#' `tidy_robust()` populated. This is easily done using `purrr::partial()` e.g.
+#' `tbl_regression(tidy_fun = partial(tidy_robust, vcov_estimation = "CL"))`
+#'
 #' - `pool_and_tidy_mice()` tidier to report models resulting from multiply imputed data
 #' using the mice package. Pass the mice model object *before* the model results
 #' have been pooled. See example.
@@ -28,10 +37,13 @@
 #' @inheritParams add_global_p
 #' @param pool.args named list of arguments passed to `mice::pool()` in
 #' `pool_and_tidy_mice()`. Default is `NULL`
+#' @param vcov_estimation,vcov_type,vcov_args arguments passed to
+#' `parameters::model_parameters()`
 #' @param ... arguments passed to method;
 #' - `pool_and_tidy_mice()`: `mice::tidy(x, ...)`
 #' - `tidy_standardize()`: `effectsize::standardize_parameters(x, ...)`
 #' - `tidy_bootstrap()`: `parameters::bootstrap_parameters(x, ...)`
+#' - `tidy_robust()`: `parameters::model_parameters(x, ...)`
 #'
 #' @param x a regression model object
 #' @name custom_tidiers
@@ -154,6 +166,59 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
   tidy
 }
 
+
+#' @rdname custom_tidiers
+#' @export
+tidy_robust <- function(x,
+                        exponentiate = FALSE,
+                        conf.level = 0.95,
+                        conf.int = TRUE,
+                        vcov_estimation = NULL, #type of covariance matrix
+                        vcov_type = NULL, #type of robust estimation
+                        vcov_args = NULL, #specify the cluster-structure
+                        ...,
+                        quiet = FALSE) {
+  assert_package("parameters", "tidy_robust()")
+  assert_package("insight", "tidy_robust()")
+
+  dots <- rlang::dots_list(...)
+  lst_model_parameters_args <-
+    rlang::inject(list(ci = !!conf.level,
+                       robust = TRUE,
+                       vcov_estimation = !!vcov_estimation,
+                       vcov_type = !!vcov_type,
+                       !!!dots)) %>%
+    purrr::compact()
+
+  # calculating robust coefs
+  robust_coef_expr <-
+    expr(parameters::model_parameters(model = x, !!!lst_model_parameters_args))
+  if (quiet == FALSE) {
+    glue("tidy_robust(): Robust estimation with\n",
+         "  `{deparse(robust_coef_expr, width.cutoff = 500L)}`\n\n") %>%
+      inform()
+  }
+  robust_coef <- eval(robust_coef_expr)
+
+  # converting output to broom::tidy format ------------------------------------
+  tidy <- insight::standardize_names(robust_coef, style = "broom")
+
+  # exponentiate, if requested -------------------------------------------------
+  if (exponentiate) {
+    tidy <-
+      mutate_at(tidy, vars(.data$estimate, .data$conf.low, .data$conf.high), exp)
+  }
+
+  # removing conf int, if requested --------------------------------------------
+  if (!conf.int) {
+    tidy <- select(tidy,-any_of(c("conf.low", "conf.high")))
+  }
+
+  # return results -------------------------------------------------------------
+  tidy
+}
+
+
 #' @rdname custom_tidiers
 #' @export
 pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
@@ -176,15 +241,15 @@ pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
 #' @export
 tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...) {
   broom::tidy(x,
-    conf.int = conf.int,
-    conf.level = conf.level,
-    parametric = TRUE, ...
+              conf.int = conf.int,
+              conf.level = conf.level,
+              parametric = TRUE, ...
   ) %>%
     # exponentiate coefs (GAM tidier does not have an `exponentiate=` argument)
     dplyr::mutate_at(
       vars(any_of(c("estimate", "conf.low", "conf.high"))),
       ~ switch(exponentiate == TRUE,
-        exp(.)
+               exp(.)
       ) %||% .
     ) %>%
     dplyr::mutate(parametric = TRUE) %>%

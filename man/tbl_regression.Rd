@@ -102,19 +102,6 @@ fit object and not the parsnip/workflows object.
 models use \code{broom.mixed::tidy(x, effects = "fixed")}. Specify \code{tidy_fun = broom.mixed::tidy}
 to print the random components.
 }
-}
-
-\section{Note}{
-
-The N reported in the output is the number of observations
-in the data frame \code{model.frame(x)}. Depending on the model input, this N
-may represent different quantities. In most cases, it is the number of people or
-units in your model.  Here are some common exceptions.
-\enumerate{
-\item Survival regression models including time dependent covariates.
-\item Random- or mixed-effects regression models with clustered data.
-\item GEE regression models with clustered data.
-}
 
 This list is not exhaustive, and care should be taken for each number reported.
 }
@@ -163,7 +150,9 @@ Other tbl_regression tools:
 \code{\link{inline_text.tbl_regression}()},
 \code{\link{modify}},
 \code{\link{tbl_merge}()},
-\code{\link{tbl_stack}()}
+\code{\link{tbl_split}()},
+\code{\link{tbl_stack}()},
+\code{\link{tbl_strata}()}
 }
 \author{
 Daniel D. Sjoberg

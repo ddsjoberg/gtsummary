@@ -107,5 +107,7 @@ fit object and not the parsnip/workflows object.
 models use \code{broom.mixed::tidy(x, effects = "fixed")}. Specify \code{tidy_fun = broom.mixed::tidy}
 to print the random components.
 }
+
+This list is not exhaustive, and care should be taken for each number reported.
 }
 
