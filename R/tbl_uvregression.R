@@ -21,7 +21,6 @@
 #' dichotomous variables appropriate for logistic regression with [glm].
 #'
 #' @inheritSection tbl_regression Methods
-#' @inheritSection tbl_regression Note
 #'
 #' @param data Data frame to be used in univariate regression modeling.  Data
 #' frame includes the outcome variable(s) and the independent variables.
