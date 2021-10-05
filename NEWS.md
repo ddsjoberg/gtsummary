@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updates to `tbl_regression()` documentation. The model N is no longer reported by default, and removed that section from the help file. (#998)
+
 * Added function `tbl_butcher()` to reduce the size of a gtsummary table. After an object has been butchered, other gtsummary functions may not be able to execute on the object.
 
 * Added new function `tidy_robust()` that will add robust standard errors, confidence intervals, and p-values with `tbl_regression()` and `tbl_uvregression()`. The function is a wrapper for `parameters::model_paramters()`. (#979)
