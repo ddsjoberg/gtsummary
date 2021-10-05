@@ -9,7 +9,7 @@
 #' `list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")`.
 #' Must be one of
 #' `c("wilson", "wilson.no.correct", "exact", "asymptotic")` for categorical
-#' variables, and `"t.test"` for continuous variables.
+#' variables, and `c("t.test", "wilcox.test")` for continuous variables.
 #' See details below.
 #' @param conf.level Confidence level. Default is `0.95`
 #' @param style_fun Function to style upper and lower bound of confidence
@@ -23,7 +23,8 @@
 #' `prop.test(correct = c(TRUE, FALSE))`.
 #' The default method, `"wilson"`, includes the Yates continuity correction.
 #' Methods `c("exact", "asymptotic")` are calculated with `Hmisc::binconf(method=)`.
-#' Confidence intervals for means are calculated using `t.test()`.
+#' Confidence intervals for means are calculated using `t.test()` and
+#' `wilcox.test()` for pseudo-medians.
 #'
 #' @return gtsummary table
 #' @rdname add_ci
@@ -35,7 +36,8 @@
 #' add_ci_ex1 <-
 #'   trial %>%
 #'   select(age, response, trt) %>%
-#'   tbl_summary(missing = "no") %>%
+#'   tbl_summary(missing = "no",
+#'               statistic = all_continuous() ~ "{mean} ({sd})") %>%
 #'   add_ci()
 #'
 #' # Example 2 ----------------------------------
@@ -173,7 +175,7 @@ add_ci.tbl_summary <- function(x,
 
 # function to add CI for one variable
 single_ci <- function(variable, by, tbl, method, conf.level,
-                      style_fun, statistic, summary_type,...) {
+                      style_fun, statistic, summary_type, ...) {
   if (method[[variable]] %in% c("wilson", "wilson.no.correct",
                                 "exact", "asymptotic") &&
       summary_type[[variable]] %in% c("categorical", "dichotomous")) {
@@ -192,7 +194,7 @@ single_ci <- function(variable, by, tbl, method, conf.level,
 
       )
   }
-  else if (method[[variable]] %in% "t.test" &&
+  else if (method[[variable]] %in% c("t.test", "wilcox.test") &&
            summary_type[[variable]] %in% c("continuous", "continuous2")) {
     df_single_ci <-
       tbl$inputs$data %>%
@@ -206,7 +208,8 @@ single_ci <- function(variable, by, tbl, method, conf.level,
                             statistic = statistic[[variable]],
                             method = method[[variable]],
                             conf.level = conf.level,
-                            style_fun = style_fun[[variable]])
+                            style_fun = style_fun[[variable]],
+                            tbl = tbl)
       )
     if (is.null(tbl$by)) {
       df_single_ci <-
@@ -242,10 +245,27 @@ single_ci <- function(variable, by, tbl, method, conf.level,
 }
 
 calculate_mean_ci <- function(data, variable, statistic,
-                              method, conf.level, style_fun) {
-  if (method %in% c("t.test")) {
+                              method, conf.level, style_fun, tbl) {
+  if (method %in% "t.test") {
+    if (!"mean" %in%
+        names(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]])) {
+      paste("{.code add_ci()} added mean CI for {.val {variable}};",
+            "however, no mean is shown in the {.code tbl_summary()} table.") %>%
+      cli::cli_alert_danger()
+    }
     df_ci <-
       stats::t.test(data[[variable]], conf.level = conf.level) %>%
+      broom::tidy()
+  }
+  else if (method %in% "wilcox.test") {
+    if (!"median" %in%
+        names(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]])) {
+      paste("{.code add_ci()} added pseudo-median CI for {.val {variable}};",
+            "however, no median is shown in the {.code tbl_summary()} table.") %>%
+        cli::cli_alert_danger()
+    }
+    df_ci <-
+      stats::wilcox.test(data[[variable]], conf.level = conf.level, conf.int = TRUE) %>%
       broom::tidy()
   }
 
