@@ -8,8 +8,9 @@ tbl_continuous(
   data,
   variable,
   include,
+  digits = NULL,
   by = NULL,
-  statistic = "{median} ({p25}, {p75})",
+  statistic = everything() ~ "{median} ({p25}, {p75})",
   label = NULL
 )
 }
@@ -19,6 +20,10 @@ tbl_continuous(
 \item{variable}{Variable name of the continuous column to be summarized}
 
 \item{include}{Vector of categorical variable names}
+
+\item{digits}{An integer specifying the number of decimal places to round
+the variable to. Default is \code{NULL} and the number of decimal places is guessed
+based on the distribution of the continuous variable.}
 
 \item{by}{Optional name of single categorical variable. Default it \code{NULL}}
 

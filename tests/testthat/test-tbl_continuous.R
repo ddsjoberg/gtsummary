@@ -23,7 +23,7 @@ test_that("tbl_continuous() works", {
         data = trial,
         variable = age,
         include = c(grade, stage),
-        statistic = "{mean}"
+        statistic = everything() ~ "{mean}"
       ) %>%
       as_tibble(col_labels = FALSE),
     NA
