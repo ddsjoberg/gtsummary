@@ -63,7 +63,7 @@ tbl_continuous <- function(data,
   tbl_custom_summary(
     data, data,
     by = by,
-    stat_fns = everything() ~ .continuous_summary(variable),
+    stat_fns = everything() ~ continuous_summary(variable),
     statistic = statistic,
     digits = everything() ~ digits,
     label = label,
@@ -72,16 +72,3 @@ tbl_continuous <- function(data,
   )
 }
 
-.continuous_summary <- function(variable) {
-  variable_to_summarize <- variable
-  function(data, stat_display, ...) {
-    summarize_continuous(
-      data = data,
-      variable = variable_to_summarize,
-      by = NULL,
-      stat_display = stat_display,
-      summary_type = "continuous"
-    ) %>%
-      dplyr::select(-.data$variable, -.data$stat_display)
-  }
-}
