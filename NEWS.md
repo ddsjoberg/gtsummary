@@ -30,6 +30,8 @@
 
 ### Other Updates
 
+* Added a help file detailing the formula list notation used throughout the {gtsummary} package. (#981)
+
 * Updates to `tbl_regression()` documentation. The model N is no longer reported by default, and removed that section from the help file. (#998)
 
 * Updates to make the internal `df_stats` objects consistent across various gtsummary objects. Added internal function `df_stats_to_table_body` that adds the numeric df_stats tibble to `.$table_body`. The formatting functions are also added for the new columns to `.$table_styling$fmt_fun`. This function is now used in `inline_text.gtsummary()` to prepare the returned statistics (#921)
