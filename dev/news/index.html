@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9020</span>
       </span>
     </div>
 
@@ -208,6 +208,7 @@
 <h3 class="hasAnchor">
 <a href="#other-updates" class="anchor"></a>Other Updates</h3>
 <ul>
+<li><p>Added a help file detailing the formula list notation used throughout the {gtsummary} package. (<a href='https://github.com/ddsjoberg/gtsummary/issues/981'>#981</a>)</p></li>
 <li><p>Updates to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> documentation. The model N is no longer reported by default, and removed that section from the help file. (<a href='https://github.com/ddsjoberg/gtsummary/issues/998'>#998</a>)</p></li>
 <li><p>Updates to make the internal <code>df_stats</code> objects consistent across various gtsummary objects. Added internal function <code>df_stats_to_table_body</code> that adds the numeric df_stats tibble to <code>.$table_body</code>. The formatting functions are also added for the new columns to <code>.$table_styling$fmt_fun</code>. This function is now used in <code><a href="../reference/inline_text.gtsummary.html">inline_text.gtsummary()</a></code> to prepare the returned statistics (<a href='https://github.com/ddsjoberg/gtsummary/issues/921'>#921</a>)</p></li>
 <li><p>Now using <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> to prepare the <code><a href="https://rdrr.io/pkg/car/man/Anova.html">car::Anova()</a></code> results. This will be more stable than the version originally written. (<a href='https://github.com/ddsjoberg/gtsummary/issues/898'>#898</a>)</p></li>
