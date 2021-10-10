@@ -1,7 +1,22 @@
-#' Formula-list Notation
+#' Syntax and Notation
 #'
-#' @name formula_list
-#' @description Many arguments throughout the gtsummary package accept list and
+#' @name syntax
+#' @description
+#' The gtsummary package also utilizes selectors: selectors from the tidyselect
+#' package and custom selectors. Review their help files for details.
+#'
+#' - **tidy selectors**
+#'
+#'     `everything()`, `all_of()`, `any_of()`, `starts_with()`, `ends_with()`,
+#'     `contains()`, `matches()`, `num_range()`, `last_col()`
+#'
+#' - **gtsummary selectors**
+#'
+#'     `all_continuous()`, `all_categorical()`, `all_dichotomous()`,
+#'     `all_continuous2()`, `all_tests()`, `all_stat_cols()`,
+#'     `all_interaction()`, `all_intercepts()`, `all_contrasts()`
+#'
+#' Many arguments throughout the gtsummary package accept list and
 #' formula notation, e.g. `tbl_summary(statistic=)`. Below enumerates a few
 #' tips and shortcuts for using the list and formulas.
 #'
@@ -44,5 +59,13 @@
 #'     ```r
 #'     tbl_summary(statistic = ~"{n}")
 #'     tbl_summary(statistic = everything() ~ "{n}")
+#'     ```
+#'
+#' 1. **Combination Selectors**
+#'
+#'     Selectors can be combined using the `c()` function.
+#'
+#'     ```r
+#'     tbl_summary(statistic = c(everything(), -grade) ~ "{n}")
 #'     ```
 NULL
