@@ -7,10 +7,10 @@
 tbl_continuous(
   data,
   variable,
-  include,
+  include = everything(),
   digits = NULL,
   by = NULL,
-  statistic = everything() ~ "{median} ({p25}, {p75})",
+  statistic = NULL,
   label = NULL
 )
 }
@@ -19,17 +19,22 @@ tbl_continuous(
 
 \item{variable}{Variable name of the continuous column to be summarized}
 
-\item{include}{Vector of categorical variable names}
+\item{include}{variables to include in the summary table. Default is \code{everything()}}
 
-\item{digits}{An integer specifying the number of decimal places to round
-the variable to. Default is \code{NULL} and the number of decimal places is guessed
-based on the distribution of the continuous variable.}
+\item{digits}{List of formulas specifying the number of decimal places
+to round continuous summary statistics. If not specified, an appropriate
+number of decimals to round statistics will be guessed based on the
+the variable's distribution.}
 
-\item{by}{Optional name of single categorical variable. Default it \code{NULL}}
+\item{by}{A column name (quoted or unquoted) in \code{data}.
+Summary statistics will be calculated separately for each level of the \code{by}
+variable (e.g. \code{by = trt}). If \code{NULL}, summary statistics
+are calculated using all observations. To stratify a table by two or more
+variables, use \code{tbl_strata()}}
 
-\item{statistic}{String specifying the continuous summary statistics to
-display.  The default is \code{"{median} ({p25}, {p75})"}. See
-\code{tbl_summary(statistic=)} argument for details.}
+\item{statistic}{List of formulas specifying types of summary statistics
+to display for each variable. The default is
+\code{everything() ~ {median} ({p25}, {p75})}}
 
 \item{label}{List of formulas specifying variables labels,
 e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}.  If a
