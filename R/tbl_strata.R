@@ -14,6 +14,10 @@
 #' used to separate the levels in the spanning header. Default is `", "`
 #' @param .combine_with One of `c("tbl_merge", "tbl_stack")`. Names the function
 #' used to combine the stratified tables.
+#' @param .stack_group_header When `TRUE` and `.combine_with = 'tbl_stack'`,
+#' the stratum are passed in `tbl_stack(group_header=)`. Default is `TRUE`
+#' @param .quiet Logical indicating whether to print messages in console.
+#' Default is `FALSE`
 #'
 #' @section Tips:
 #'
@@ -54,7 +58,16 @@
 #'
 #' \if{html}{\figure{tbl_strata_ex1.png}{options: width=64\%}}
 
-tbl_strata <- function(data, strata, .tbl_fun, ..., .sep = ", ", .combine_with = c("tbl_merge", "tbl_stack")) {
+tbl_strata <- function(data, strata,
+                       .tbl_fun,
+                       ...,
+                       .sep = ", ",
+                       .combine_with = c("tbl_merge", "tbl_stack"),
+                       .stack_group_header = TRUE,
+                       .quiet = NULL) {
+  # setting defaults -----------------------------------------------------------
+  .quiet <- .quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
+
   # checking inputs ------------------------------------------------------------
   if (!is.data.frame(data) && !is_survey(data)) {
     abort("`data=` must be a data frame or survey object.")
@@ -65,7 +78,7 @@ tbl_strata <- function(data, strata, .tbl_fun, ..., .sep = ", ", .combine_with =
   strata <-
     select(
       switch(is_survey(data),
-        data$variables
+             data$variables
       ) %||% data, # select from data frame
       {{ strata }}
     ) %>%
@@ -77,22 +90,28 @@ tbl_strata <- function(data, strata, .tbl_fun, ..., .sep = ", ", .combine_with =
     nest_df_and_svy(data, strata) %>%
     arrange(!!!syms(strata)) %>%
     rename(!!!syms(new_strata_names)) %>%
-    mutate(
-      tbl = map(.data$data, .tbl_fun, ...)
-    ) %>%
     rowwise() %>%
     mutate(
+      strata = paste(!!!syms(names(new_strata_names)), sep = .sep),
       header =
-        paste(!!!syms(names(new_strata_names)), sep = .sep) %>% {
-          ifelse(.env$.combine_with == "tbl_merge", paste0("**", ., "**"), .)
-        }
+        ifelse(.env$.combine_with == "tbl_merge",
+               paste0("**", .data$strata, "**"),
+               .data$strata)
+    ) %>%
+    ungroup() %>%
+    mutate(
+      tbl = map(.data$data, .tbl_fun, ...)
     )
 
   # combining tbls -------------------------------------------------------------
   if (.combine_with == "tbl_merge") {
     tbl <- tbl_merge(tbls = df_tbls$tbl, tab_spanner = df_tbls$header)
-  } else if (.combine_with == "tbl_stack") {
-    tbl <- tbl_stack(tbls = df_tbls$tbl, group_header = df_tbls$header)
+  }
+  else if (.combine_with == "tbl_stack") {
+    tbl <-
+      tbl_stack(tbls = df_tbls$tbl,
+                group_header = switch(isTRUE(.stack_group_header), df_tbls$header),
+                quiet = .quiet)
   }
 
   # return tbl -----------------------------------------------------------------
