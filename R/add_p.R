@@ -650,7 +650,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #' @export
 #' @return A `tbl_svysummary` object
 #' @author Joseph Larmarange
-#' @examplesIf requireNamespace("survey")
+#' @examplesIf assert_package("survey", boolean = TRUE)
 #' # Example 1 ----------------------------------
 #' # A simple weighted dataset
 #' add_p_svysummary_ex1 <-

@@ -11,22 +11,18 @@
 #' @param estimate_fun Default is [`style_sigfig()`].
 #' @export
 #'
-#' @examples
+#' @examplesIf assert_package("car", boolean = TRUE)
 #' # Example 1 ----------------------------------
-#' if (requireNamespace("car")) {
-#'   add_vif_ex1 <-
-#'     lm(age ~ grade + marker, trial) %>%
-#'     tbl_regression() %>%
-#'     add_vif()
-#' }
+#' add_vif_ex1 <-
+#'   lm(age ~ grade + marker, trial) %>%
+#'   tbl_regression() %>%
+#'   add_vif()
 #'
 #' # Example 2 ----------------------------------
-#' if (requireNamespace("car")) {
-#'   add_vif_ex2 <-
-#'     lm(age ~ grade + marker, trial) %>%
-#'     tbl_regression() %>%
-#'     add_vif(c("aGVIF", "df"))
-#' }
+#' add_vif_ex2 <-
+#'   lm(age ~ grade + marker, trial) %>%
+#'   tbl_regression() %>%
+#'   add_vif(c("aGVIF", "df"))
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

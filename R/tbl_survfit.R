@@ -35,7 +35,7 @@
 #' @rdname tbl_survfit
 #' @family tbl_survfit tools
 #' @author Daniel D. Sjoberg
-#' @examples
+#' @examplesIf assert_package("survival", boolean = TRUE)
 #' library(survival)
 #'
 #' # Example 1 ----------------------------------

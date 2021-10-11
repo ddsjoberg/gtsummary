@@ -15,7 +15,7 @@
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @export
-#' @examples
+#' @examplesIf assert_package("car", boolean = TRUE)
 #' # Example 1 ----------------------------------
 #' add_q_ex1 <-
 #'   trial[c("trt", "age", "grade", "response")] %>%
@@ -24,18 +24,16 @@
 #'   add_q()
 #'
 #' # Example 2 ----------------------------------
-#' if (requireNamespace("car")) {
-#'   add_q_ex2 <-
-#'     trial[c("trt", "age", "grade", "response")] %>%
-#'     tbl_uvregression(
-#'       y = response,
-#'       method = glm,
-#'       method.args = list(family = binomial),
-#'       exponentiate = TRUE
-#'     ) %>%
-#'     add_global_p() %>%
-#'     add_q()
-#' }
+#' add_q_ex2 <-
+#'   trial[c("trt", "age", "grade", "response")] %>%
+#'   tbl_uvregression(
+#'     y = response,
+#'     method = glm,
+#'     method.args = list(family = binomial),
+#'     exponentiate = TRUE
+#'   ) %>%
+#'   add_global_p() %>%
+#'   add_q()
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

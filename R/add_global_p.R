@@ -17,27 +17,23 @@
 #' @param ... Additional arguments to be passed to `car::Anova`
 #' @author Daniel D. Sjoberg
 #' @export
-#' @examples
+#' @examplesIf assert_package("car", boolean = TRUE)
 #' # Example 1 ----------------------------------
-#' if (requireNamespace("car")) {
-#'   tbl_lm_global_ex1 <-
-#'     lm(marker ~ age + grade, trial) %>%
-#'     tbl_regression() %>%
-#'     add_global_p()
-#' }
+#' tbl_lm_global_ex1 <-
+#'   lm(marker ~ age + grade, trial) %>%
+#'   tbl_regression() %>%
+#'   add_global_p()
 #'
 #' # Example 2 ----------------------------------
-#' if (requireNamespace("car")) {
-#'   tbl_uv_global_ex2 <-
-#'     trial[c("response", "trt", "age", "grade")] %>%
-#'     tbl_uvregression(
-#'       method = glm,
-#'       y = response,
-#'       method.args = list(family = binomial),
-#'       exponentiate = TRUE
-#'     ) %>%
-#'     add_global_p()
-#' }
+#' tbl_uv_global_ex2 <-
+#'   trial[c("response", "trt", "age", "grade")] %>%
+#'   tbl_uvregression(
+#'     method = glm,
+#'     y = response,
+#'     method.args = list(family = binomial),
+#'     exponentiate = TRUE
+#'   ) %>%
+#'   add_global_p()
 #' @family tbl_uvregression tools
 #' @family tbl_regression tools
 #' @section Example Output:

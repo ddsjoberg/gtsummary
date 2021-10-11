@@ -96,6 +96,7 @@ formatted summary table of the results
 }
 
 \examples{
+\dontshow{if (assert_package("survival", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 
 # Example 1 ----------------------------------
@@ -141,6 +142,7 @@ trial2 <- trial \%>\%
 survfit_cr_ex4 <-
   survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) \%>\%
   tbl_survfit(times = c(12, 24), label = "Tumor Grade")
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other tbl_survfit tools: 

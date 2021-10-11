@@ -187,7 +187,7 @@ of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \c
 }
 
 \examples{
-\dontshow{if (requireNamespace("survey")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (assert_package("survey", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # A simple weighted dataset
 tbl_svysummary_ex1 <-
   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%

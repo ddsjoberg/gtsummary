@@ -69,7 +69,7 @@ knit_print.gtsummary <- function(x, ...) {
   # don't use word_document with gt engine
   else if (identical(print_engine %||% "gt", "gt") &&
     "docx" %in% knitr::opts_knit$get("rmarkdown.pandoc.to")) {
-    if (requireNamespace("flextable", quietly = TRUE)) {
+    if (assert_package("flextable", boolean = TRUE)) {
       rlang::inform(paste(
         "Table printed with {flextable}, not {gt}. Learn why at",
         "http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html",
