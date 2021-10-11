@@ -46,6 +46,7 @@ attribute label is \code{NULL}, the variable name will be used.}
 a gtsummary table
 }
 \description{
+\lifecycle{experimental}
 Summarize a continuous variable by one or more categorical variables
 }
 \section{Example Output}{

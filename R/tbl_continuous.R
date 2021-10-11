@@ -1,5 +1,6 @@
 #' Summarize a continuous variable
 #'
+#' \lifecycle{experimental}
 #' Summarize a continuous variable by one or more categorical variables
 #'
 #' @param variable Variable name of the continuous column to be summarized
