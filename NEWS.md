@@ -38,7 +38,7 @@
 
 * Now using `broom::tidy()` to prepare the `car::Anova()` results. This will be more stable than the version originally written. (#898)
 
-* The internal function `assert_package()` now takes the minimum required version of the package from the DESCRIPTION file.
+* The function `assert_package()` now takes the minimum required version of the package from the DESCRIPTION file, and the function is now exported.
 
 * Now using `broom::tidy()` to prepare `aov()` test results in `add_p.tbl_summary()`, which adds additional columns to `.$table_body()` (#956)
 
