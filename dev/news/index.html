@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9020</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9021</span>
       </span>
     </div>
 
@@ -212,7 +212,7 @@
 <li><p>Updates to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> documentation. The model N is no longer reported by default, and removed that section from the help file. (<a href='https://github.com/ddsjoberg/gtsummary/issues/998'>#998</a>)</p></li>
 <li><p>Updates to make the internal <code>df_stats</code> objects consistent across various gtsummary objects. Added internal function <code>df_stats_to_table_body</code> that adds the numeric df_stats tibble to <code>.$table_body</code>. The formatting functions are also added for the new columns to <code>.$table_styling$fmt_fun</code>. This function is now used in <code><a href="../reference/inline_text.gtsummary.html">inline_text.gtsummary()</a></code> to prepare the returned statistics (<a href='https://github.com/ddsjoberg/gtsummary/issues/921'>#921</a>)</p></li>
 <li><p>Now using <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> to prepare the <code><a href="https://rdrr.io/pkg/car/man/Anova.html">car::Anova()</a></code> results. This will be more stable than the version originally written. (<a href='https://github.com/ddsjoberg/gtsummary/issues/898'>#898</a>)</p></li>
-<li><p>The internal function <code>assert_package()</code> now takes the minimum required version of the package from the DESCRIPTION file.</p></li>
+<li><p>The function <code><a href="../reference/assert_package.html">assert_package()</a></code> now takes the minimum required version of the package from the DESCRIPTION file, and the function is now exported.</p></li>
 <li><p>Now using <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> to prepare <code><a href="https://rdrr.io/r/stats/aov.html">aov()</a></code> test results in <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code>, which adds additional columns to <code>.$table_body()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/956'>#956</a>)</p></li>
 <li><p>Updated the <code>README</code> to include links to a recording of a gtsummary presentation and to the RStudio Education blog post.</p></li>
 <li><p>Removed <code>maturing</code> lifecycle tag from <code>README</code>.</p></li>

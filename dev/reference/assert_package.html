@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert gtsummary object to a flextable object — as_flex_table • gtsummary</title>
+<title>Check a package installation — assert_package • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,12 +52,10 @@
 
 
 
-<meta property="og:title" content="Convert gtsummary object to a flextable object — as_flex_table" />
-<meta property="og:description" content="Function converts a gtsummary object to a flextable object.
-A user can use this function if they wish to add customized formatting
-available via the flextable functions. The flextable output is particularly
-useful when combined with R markdown with Word output, since the gt package
-does not support Word." />
+<meta property="og:title" content="Check a package installation — assert_package" />
+<meta property="og:description" content="The function checks whether a package is installed and returns an error
+or FALSE if not available. If a package search is provided, the function
+will check whether a minimum version of a package is required." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -172,107 +170,49 @@ does not support Word." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert gtsummary object to a flextable object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/as_flex_table.R'><code>R/as_flex_table.R</code></a></small>
-    <div class="hidden name"><code>as_flex_table.Rd</code></div>
+    <h1>Check a package installation</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/assert_package.R'><code>R/assert_package.R</code></a></small>
+    <div class="hidden name"><code>assert_package.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Function converts a gtsummary object to a flextable object.
-A user can use this function if they wish to add customized formatting
-available via the flextable functions. The flextable output is particularly
-useful when combined with R markdown with Word output, since the gt package
-does not support Word.</p>
+    <p>The function checks whether a package is installed and returns an error
+or <code>FALSE</code> if not available. If a package search is provided, the function
+will check whether a minimum version of a package is required.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>as_flex_table</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
-  return_calls <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  strip_md_bold <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>assert_package</span><span class='op'>(</span><span class='va'>pkg</span>, fn <span class='op'>=</span> <span class='cn'>NULL</span>, pkg_search <span class='op'>=</span> <span class='st'>"gtsummary"</span>, boolean <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>Object created by a function from the gtsummary package
-(e.g. <a href='tbl_summary.html'>tbl_summary</a> or <a href='tbl_regression.html'>tbl_regression</a>)</p></td>
+      <th>pkg</th>
+      <td><p>Package required</p></td>
     </tr>
     <tr>
-      <th>include</th>
-      <td><p>Commands to include in output. Input may be a vector of
-quoted or unquoted names. tidyselect and gtsummary select helper
-functions are also accepted.
-Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code>.</p></td>
+      <th>fn</th>
+      <td><p>Calling function from the user perspective</p></td>
     </tr>
     <tr>
-      <th>return_calls</th>
-      <td><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
-as a list of expressions.</p></td>
+      <th>pkg_search</th>
+      <td><p>the package the function will search for a minimum
+required version from.</p></td>
     </tr>
     <tr>
-      <th>strip_md_bold</th>
-      <td><p>When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.</p></td>
+      <th>boolean</th>
+      <td><p>logical indicating whether to return a TRUE/FALSE, rather
+than error when package/package version not available.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A flextable object</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    
-
-<p>The <code>as_flex_table()</code> functions converts the gtsummary object to a flextable,
-and prints it with the following styling functions.</p><ol>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/flextable.html'>flextable::flextable()</a></code></p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/set_header_labels.html'>flextable::set_header_labels()</a></code> to set column labels</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/add_header_row.html'>flextable::add_header_row()</a></code>, if applicable, to set spanning column header</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/align.html'>flextable::align()</a></code> to set column alignment</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/padding.html'>flextable::padding()</a></code> to indent variable levels</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/fontsize.html'>flextable::fontsize()</a></code> to set font size</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/autofit.html'>flextable::autofit()</a></code> to estimate the column widths</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/footnote.html'>flextable::footnote()</a></code> to add table footnotes and source notes</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/bold.html'>flextable::bold()</a></code> to bold cells in data frame</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/italic.html'>flextable::italic()</a></code> to italicize cells in data frame</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/border.html'>flextable::border()</a></code> to set all border widths to 1</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/padding.html'>flextable::padding()</a></code> to set consistent header padding</p></li>
-<li><p><code><a href='https://davidgohel.github.io/flextable/reference/valign.html'>flextable::valign()</a></code> to ensure label column is top-left justified</p></li>
-</ol>
-
-<p>Any one of these commands may be omitted using the <code>include=</code> argument.</p>
-<p>Pro tip: Use the <code><a href='https://davidgohel.github.io/flextable/reference/width.html'>flextable::width()</a></code> function for exacting control over
-column width after calling <code>as_flex_table()</code>.</p>
-    <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
-
-    
-
-<p>Example 1</p>
-<p><img src='figures/as_flex_table_ex1.png' width=60% /></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other gtsummary output types: 
-<code><a href='as_gt.html'>as_gt</a>()</code>,
-<code><a href='as_hux_table.html'>as_hux_table</a>()</code>,
-<code><a href='as_kable_extra.html'>as_kable_extra</a>()</code>,
-<code><a href='as_kable.html'>as_kable</a>()</code>,
-<code><a href='as_tibble.gtsummary.html'>as_tibble.gtsummary</a>()</code></p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Daniel D. Sjoberg</p>
+    <p>Returns NULL or not at all.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"flextable"</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='va'>as_flex_table_ex1</span> <span class='op'>&lt;-</span>
-    <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>as_flex_table</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: flextable</span></div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>assert_package</span><span class='op'>(</span><span class='st'>"gt"</span>, boolean <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
