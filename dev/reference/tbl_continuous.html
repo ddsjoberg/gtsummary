@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Stratified gtsummary tables — tbl_strata • gtsummary</title>
+<title>Summarize a continuous variable — tbl_continuous • gtsummary</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -52,11 +52,10 @@
 
 
 
-<meta property="og:title" content="Stratified gtsummary tables — tbl_strata" />
+<meta property="og:title" content="Summarize a continuous variable — tbl_continuous" />
 <meta property="og:description" content="
 
-Build a stratified gtsummary table. Any gtsummary table that accepts
-a data frame as its first argument can be stratified." />
+Summarize a continuous variable by one or more categorical variables" />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -171,27 +170,25 @@ a data frame as its first argument can be stratified." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Stratified gtsummary tables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/tbl_strata.R'><code>R/tbl_strata.R</code></a></small>
-    <div class="hidden name"><code>tbl_strata.Rd</code></div>
+    <h1>Summarize a continuous variable</h1>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/tbl_continuous.R'><code>R/tbl_continuous.R</code></a></small>
+    <div class="hidden name"><code>tbl_continuous.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#maturing'><img src='figures/lifecycle-maturing.svg' alt='[Maturing]' /></a>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
 
-Build a stratified gtsummary table. Any gtsummary table that accepts
-a data frame as its first argument can be stratified.</p>
+Summarize a continuous variable by one or more categorical variables</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tbl_strata</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>tbl_continuous</span><span class='op'>(</span>
   <span class='va'>data</span>,
-  <span class='va'>strata</span>,
-  <span class='va'>.tbl_fun</span>,
-  <span class='va'>...</span>,
-  .sep <span class='op'>=</span> <span class='st'>", "</span>,
-  .combine_with <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"tbl_merge"</span>, <span class='st'>"tbl_stack"</span><span class='op'>)</span>,
-  .stack_group_header <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  .quiet <span class='op'>=</span> <span class='cn'>NULL</span>
+  <span class='va'>variable</span>,
+  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
+  digits <span class='op'>=</span> <span class='cn'>NULL</span>,
+  by <span class='op'>=</span> <span class='cn'>NULL</span>,
+  statistic <span class='op'>=</span> <span class='cn'>NULL</span>,
+  label <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -199,143 +196,75 @@ a data frame as its first argument can be stratified.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>a data frame or survey object</p></td>
+      <td><p>A data frame</p></td>
     </tr>
     <tr>
-      <th>strata</th>
-      <td><p>character vector or tidy-selector of columns in data to stratify results by</p></td>
+      <th>variable</th>
+      <td><p>Variable name of the continuous column to be summarized</p></td>
     </tr>
     <tr>
-      <th>.tbl_fun</th>
-      <td><p>A function or formula. If a <em>function</em>, it is used as is.
-If a formula, e.g. <code>~ .x %&gt;% tbl_summary() %&gt;% add_p()</code>, it is converted to a function.
-The stratified data frame is passed to this function.</p></td>
+      <th>include</th>
+      <td><p>variables to include in the summary table. Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code></p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Additional arguments passed on to the <code>.tbl_fun</code> function.</p></td>
+      <th>digits</th>
+      <td><p>List of formulas specifying the number of decimal places
+to round continuous summary statistics. If not specified, an appropriate
+number of decimals to round statistics will be guessed based on the
+the variable's distribution.</p></td>
     </tr>
     <tr>
-      <th>.sep</th>
-      <td><p>when more than one stratifying variable is passed, this string is
-used to separate the levels in the spanning header. Default is <code>", "</code></p></td>
+      <th>by</th>
+      <td><p>A column name (quoted or unquoted) in <code>data</code>.
+Summary statistics will be calculated separately for each level of the <code>by</code>
+variable (e.g. <code>by = trt</code>). If <code>NULL</code>, summary statistics
+are calculated using all observations. To stratify a table by two or more
+variables, use <code><a href='tbl_strata.html'>tbl_strata()</a></code></p></td>
     </tr>
     <tr>
-      <th>.combine_with</th>
-      <td><p>One of <code><a href='https://rdrr.io/r/base/c.html'>c("tbl_merge", "tbl_stack")</a></code>. Names the function
-used to combine the stratified tables.</p></td>
+      <th>statistic</th>
+      <td><p>List of formulas specifying types of summary statistics
+to display for each variable. The default is
+<code>everything() ~ {median} ({p25}, {p75})</code></p></td>
     </tr>
     <tr>
-      <th>.stack_group_header</th>
-      <td><p>When <code>TRUE</code> and <code>.combine_with = 'tbl_stack'</code>,
-the stratum are passed in <code><a href='tbl_stack.html'>tbl_stack(group_header=)</a></code>. Default is <code>TRUE</code></p></td>
-    </tr>
-    <tr>
-      <th>.quiet</th>
-      <td><p>Logical indicating whether to print messages in console.
-Default is <code>FALSE</code></p></td>
+      <th>label</th>
+      <td><p>List of formulas specifying variables labels,
+e.g. <code><a href='https://rdrr.io/r/base/list.html'>list(age ~ "Age", stage ~ "Path T Stage")</a></code>.  If a
+variable's label is not specified here, the label attribute
+(<code><a href='https://rdrr.io/r/base/attr.html'>attr(data$age, "label")</a></code>) is used.  If
+attribute label is <code>NULL</code>, the variable name will be used.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="tips"><a class="anchor" href="#tips"></a>Tips</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    
-
-<ul>
-<li><p><code><a href='tbl_summary.html'>tbl_summary()</a></code></p><ul>
-<li><p>The number of digits continuous variables are rounded to is determined
-separately within each stratum of the data frame. Set the <code>digits=</code>
-argument to ensure continuous variables are rounded to the same number
-of decimal places.</p></li>
-<li><p>If some levels of a categorical variable are unobserved within a
-stratum, convert the variable to a factor to ensure all levels appear in
-each stratum's summary table.</p></li>
-</ul></li>
-</ul>
-
+    <p>a gtsummary table</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
 
 <p>Example 1</p>
-<p><img src='figures/tbl_strata_ex1.png' width=64% /></p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Other tbl_regression tools: 
-<code><a href='add_global_p.html'>add_global_p</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='combine_terms.html'>combine_terms</a>()</code>,
-<code><a href='inline_text.tbl_regression.html'>inline_text.tbl_regression</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
-<code><a href='tbl_split.html'>tbl_split</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p>
-<p>Other tbl_uvregression tools: 
-<code><a href='add_global_p.html'>add_global_p</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_split.html'>tbl_split</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_uvregression.html'>tbl_uvregression</a>()</code></p>
-<p>Other tbl_summary tools: 
-<code><a href='add_ci.html'>add_ci</a>()</code>,
-<code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
-<code><a href='bold_italicize_labels_levels.html'>bold_italicize_labels_levels</a></code>,
-<code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
-<code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='separate_p_footnotes.html'>separate_p_footnotes</a>()</code>,
-<code><a href='tbl_custom_summary.html'>tbl_custom_summary</a>()</code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_split.html'>tbl_split</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
-<p>Other tbl_survfit tools: 
-<code><a href='add_n.tbl_survfit.html'>add_n.tbl_survfit</a>()</code>,
-<code><a href='add_nevent.tbl_survfit.html'>add_nevent.tbl_survfit</a>()</code>,
-<code><a href='add_p.tbl_survfit.html'>add_p.tbl_survfit</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_split.html'>tbl_split</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_survfit.html'>tbl_survfit</a>()</code></p>
-<p>Other tbl_svysummary tools: 
-<code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
-<code><a href='add_overall.html'>add_overall</a>()</code>,
-<code><a href='add_p.tbl_svysummary.html'>add_p.tbl_svysummary</a>()</code>,
-<code><a href='add_q.html'>add_q</a>()</code>,
-<code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
-<code><a href='modify.html'>modify</a></code>,
-<code><a href='separate_p_footnotes.html'>separate_p_footnotes</a>()</code>,
-<code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_split.html'>tbl_split</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
-<code><a href='tbl_svysummary.html'>tbl_svysummary</a>()</code></p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Daniel D. Sjoberg</p>
+<p><img src='figures/tbl_continuous_ex1.png' width=38% /></p>
+<p>Example 2</p>
+<p><img src='figures/tbl_continuous_ex2.png' width=35% /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='va'>tbl_strata_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>stage</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>grade <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Grade"</span>, <span class='va'>grade</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>tbl_strata</span><span class='op'>(</span>
-    strata <span class='op'>=</span> <span class='va'>grade</span>,
-    .tbl_fun <span class='op'>=</span>
-      <span class='op'>~</span> <span class='va'>.x</span> <span class='op'>%&gt;%</span>
-        <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-        <span class='fu'><a href='add_n.html'>add_n</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>tbl_continuous_ex1</span> <span class='op'>&lt;-</span>
+  <span class='fu'>tbl_continuous</span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='va'>trial</span>,
+    variable <span class='op'>=</span> <span class='va'>age</span>,
+    by <span class='op'>=</span> <span class='va'>trt</span>,
+    include <span class='op'>=</span> <span class='va'>grade</span>
+  <span class='op'>)</span>
+
+<span class='co'># Example 2 ----------------------------------</span>
+<span class='va'>tbl_continuous_ex2</span> <span class='op'>&lt;-</span>
+  <span class='fu'>tbl_continuous</span><span class='op'>(</span>
+    data <span class='op'>=</span> <span class='va'>trial</span>,
+    variable <span class='op'>=</span> <span class='va'>age</span>,
+    include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>grade</span><span class='op'>)</span>
   <span class='op'>)</span>
 </div></pre>
   </div>

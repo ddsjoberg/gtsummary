@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9022</span>
       </span>
     </div>
 
@@ -179,6 +179,7 @@
 <h3 class="hasAnchor">
 <a href="#new-functions" class="anchor"></a>New Functions</h3>
 <ul>
+<li><p>Added new function <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> to summarize a continuous variable by 1 or more categorial variables.</p></li>
 <li>
 <p>New function <code><a href="../reference/tbl_custom_summary.html">tbl_custom_summary()</a></code> allowing to create a table of summary statistics using a custom summary function (<a href='https://github.com/ddsjoberg/gtsummary/issues/973'>#973</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/976'>#976</a>)</p>
 <ul>
@@ -198,6 +199,8 @@
 <h3 class="hasAnchor">
 <a href="#new-functionality" class="anchor"></a>New Functionality</h3>
 <ul>
+<li><p>Added <code><a href="../reference/tbl_strata.html">tbl_strata(.stack_group_header=)</a></code> argument to include/exclude the headers when tables are combined with <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code></p></li>
+<li><p>Added <code><a href="../reference/tbl_strata.html">tbl_strata(.quiet=)</a></code> argument.</p></li>
 <li><p>Added a <code>CITATION</code> file so users can now cite the R Journal manuscript using <code><a href="https://rdrr.io/r/utils/citation.html">citation("gtsummary")</a></code>.</p></li>
 <li><p>Allow <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_difference.html">add_difference()</a></code> to be run on the same table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/959'>#959</a>)</p></li>
 <li><p>Updated <code><a href="../reference/add_overall.html">add_overall()</a></code> to include the overall statistics in the <code>df_stats</code> tibbles saved in <code>.$meta_data.</code> This makes it possible to report any of the overall statistics using the <code><a href="../reference/inline_text.html">inline_text(pattern=)</a></code> argument.</p></li>
