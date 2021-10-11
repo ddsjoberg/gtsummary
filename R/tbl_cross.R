@@ -93,7 +93,7 @@ tbl_cross <- function(data,
     col <- names(data)[2]
   }
 
-  # saving function intputs
+  # saving function inputs
   tbl_cross_inputs <- as.list(environment())
 
   # if only one of col/row provided, error
