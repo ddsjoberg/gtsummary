@@ -315,46 +315,28 @@ the model parameters before attempting to use the tidier with <code><a href='tbl
 <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>marker</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span><span class='op'>)</span>
 
 <span class='va'>tbl_stnd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>mod</span>, tidy_fun <span class='op'>=</span> <span class='va'>tidy_standardize</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'parameters':</span>
-#&gt; <span class='message'>  method                           from      </span>
-#&gt; <span class='message'>  as.double.parameters_kurtosis    datawizard</span>
-#&gt; <span class='message'>  as.double.parameters_skewness    datawizard</span>
-#&gt; <span class='message'>  as.double.parameters_smoothness  datawizard</span>
-#&gt; <span class='message'>  as.numeric.parameters_kurtosis   datawizard</span>
-#&gt; <span class='message'>  as.numeric.parameters_skewness   datawizard</span>
-#&gt; <span class='message'>  as.numeric.parameters_smoothness datawizard</span>
-#&gt; <span class='message'>  print.parameters_distribution    datawizard</span>
-#&gt; <span class='message'>  print.parameters_kurtosis        datawizard</span>
-#&gt; <span class='message'>  print.parameters_skewness        datawizard</span>
-#&gt; <span class='message'>  summary.parameters_kurtosis      datawizard</span>
-#&gt; <span class='message'>  summary.parameters_skewness      datawizard</span></div><div class='output co'>#&gt; <span class='message'>tidy_standardize(): Estimating standardized coefs with</span>
+</div><div class='output co'>#&gt; <span class='message'>tidy_standardize(): Estimating standardized coefs with</span>
 #&gt; <span class='message'>`effectsize::standardize_parameters(model = x, ci = 0.95)`</span></div><div class='input'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
 
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"effectsize"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>tidy_standardize_ex1</span> <span class='op'>&lt;-</span>
-    <span class='fu'><a href='tbl_merge.html'>tbl_merge</a></span><span class='op'>(</span>
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>tbl_stnd</span>, <span class='va'>tbl</span><span class='op'>)</span>,
-      tab_spanner <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"**Standardized Model**"</span>, <span class='st'>"**Original Model**"</span><span class='op'>)</span>
-    <span class='op'>)</span>
-<span class='op'>}</span>
+<span class='va'>tidy_standardize_ex1</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='tbl_merge.html'>tbl_merge</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>tbl_stnd</span>, <span class='va'>tbl</span><span class='op'>)</span>,
+    tab_spanner <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"**Standardized Model**"</span>, <span class='st'>"**Original Model**"</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># use "posthoc" method for coef calculation</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"parameters"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>tidy_standardize_ex2</span> <span class='op'>&lt;-</span>
-    <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>mod</span>, tidy_fun <span class='op'>=</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/partial.html'>partial</a></span><span class='op'>(</span><span class='va'>tidy_standardize</span>, method <span class='op'>=</span> <span class='st'>"posthoc"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
+<span class='va'>tidy_standardize_ex2</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>mod</span>, tidy_fun <span class='op'>=</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/partial.html'>partial</a></span><span class='op'>(</span><span class='va'>tidy_standardize</span>, method <span class='op'>=</span> <span class='st'>"posthoc"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidy_standardize(): Estimating standardized coefs with</span>
 #&gt; <span class='message'>`effectsize::standardize_parameters(model = x, ci = 0.95, method = "posthoc")`</span></div><div class='input'>
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># Multiple Imputation using the mice package</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1123</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"mice"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>pool_and_tidy_mice_ex3</span> <span class='op'>&lt;-</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span><span class='op'>(</span><span class='fu'>mice</span><span class='fu'>::</span><span class='fu'><a href='https://amices.org/mice/reference/mice.html'>mice</a></span><span class='op'>(</span><span class='va'>trial</span>, m <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>marker</span> <span class='op'>+</span> <span class='va'>grade</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>}</span> <span class='co'># mice method called that uses `pool_and_tidy_mice()` as tidier</span>
+<span class='va'>pool_and_tidy_mice_ex3</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span><span class='op'>(</span><span class='fu'>mice</span><span class='fu'>::</span><span class='fu'><a href='https://amices.org/mice/reference/mice.html'>mice</a></span><span class='op'>(</span><span class='va'>trial</span>, m <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>marker</span> <span class='op'>+</span> <span class='va'>grade</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt;  iter imp variable
 #&gt;   1   1  age  marker  response
