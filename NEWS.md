@@ -2,6 +2,8 @@
 
 ### New Functions
 
+* Added new function `tbl_continuous()` to summarize a continuous variable by 1 or more categorial variables.
+
 * New function `tbl_custom_summary()` allowing to create a table of summary statistics using a custom summary function (#973, #976)
 
     * Set of helpers to be used with `tbl_custom_summary()`: `continuous_summary()`, `proportion_summary()`, `ratio_summary()`
@@ -19,6 +21,10 @@
 * Migrated a new function `tbl_split()` from the {bstfun} package. Function allows users to split a {gtsummary} table into multiple tables.
 
 ### New Functionality
+
+* Added `tbl_strata(.stack_group_header=)` argument to include/exclude the headers when tables are combined with `tbl_stack()`
+
+* Added `tbl_strata(.quiet=)` argument.
 
 * Added a `CITATION` file so users can now cite the R Journal manuscript using `citation("gtsummary")`.
 
