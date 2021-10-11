@@ -39,11 +39,12 @@ available via \link[knitr:kable]{knitr::kable} and {kableExtra}. Bold
 and italic cells are not supported for {kableExtra} output via gtsummary.
 }
 \examples{
-if (requireNamespace("kableExtra"))
-  tbl <-
-    trial \%>\%
-    tbl_summary(by = trt) \%>\%
-    as_kable_extra()
+\dontshow{if (assert_package("kableExtra", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+tbl <-
+  trial \%>\%
+  tbl_summary(by = trt) \%>\%
+  as_kable_extra()
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other gtsummary output types: 
