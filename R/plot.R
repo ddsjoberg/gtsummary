@@ -14,15 +14,13 @@
 #' @return a ggplot
 #' @name plot
 #'
-#' @examples
-#' if (requireNamespace("GGally")) {
-#'   glm(response ~ marker + grade, trial, family = binomial) %>%
-#'     tbl_regression(
-#'       add_estimate_to_reference_rows = TRUE,
-#'       exponentiate = TRUE
-#'     ) %>%
-#'     plot()
-#' }
+#' @examplesIf assert_package("GGally", boolean = TRUE)
+#' glm(response ~ marker + grade, trial, family = binomial) %>%
+#'   tbl_regression(
+#'     add_estimate_to_reference_rows = TRUE,
+#'     exponentiate = TRUE
+#'   ) %>%
+#'   plot()
 NULL
 
 #' @rdname plot

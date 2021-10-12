@@ -56,12 +56,13 @@ Any one of these commands may be omitted using the \verb{include=} argument.
 }
 
 \examples{
-if (requireNamespace("huxtable"))
-  trial \%>\%
-    dplyr::select(trt, age, grade) \%>\%
-    tbl_summary(by = trt) \%>\%
-    add_p() \%>\%
-    as_hux_table()
+\dontshow{if (assert_package("huxtable", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+trial \%>\%
+  dplyr::select(trt, age, grade) \%>\%
+  tbl_summary(by = trt) \%>\%
+  add_p() \%>\%
+  as_hux_table()
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other gtsummary output types: 

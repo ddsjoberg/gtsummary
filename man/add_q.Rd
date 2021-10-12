@@ -39,6 +39,7 @@ Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust
 }
 
 \examples{
+\dontshow{if (assert_package("car", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 add_q_ex1 <-
   trial[c("trt", "age", "grade", "response")] \%>\%
@@ -47,18 +48,17 @@ add_q_ex1 <-
   add_q()
 
 # Example 2 ----------------------------------
-if (requireNamespace("car")) {
-  add_q_ex2 <-
-    trial[c("trt", "age", "grade", "response")] \%>\%
-    tbl_uvregression(
-      y = response,
-      method = glm,
-      method.args = list(family = binomial),
-      exponentiate = TRUE
-    ) \%>\%
-    add_global_p() \%>\%
-    add_q()
-}
+add_q_ex2 <-
+  trial[c("trt", "age", "grade", "response")] \%>\%
+  tbl_uvregression(
+    y = response,
+    method = glm,
+    method.args = list(family = binomial),
+    exponentiate = TRUE
+  ) \%>\%
+  add_global_p() \%>\%
+  add_q()
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other tbl_summary tools: 
