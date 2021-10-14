@@ -294,6 +294,10 @@
     return(test[[variable]])
   }
 
+  if (is_survey(data)) {
+    return("smd")
+  }
+
   if (summary_type %in% c("continuous", "continuous2") && is.null(group) && is.null(adj.vars)) {
     return("t.test")
   }

@@ -62,14 +62,14 @@ add_difference <- function(x, test = NULL, group = NULL,
                            pvalue_fun = NULL, estimate_fun = NULL) {
   # checking inputs ------------------------------------------------------------
   updated_call_list <- c(x$call_list, list(add_difference = match.call()))
-  if (!inherits(x, "tbl_summary")) {
-    stop("`x=` must be class 'tbl_summary'")
+  if (!inherits(x, c("tbl_summary", "tbl_svysummary"))) {
+    stop("`x=` must be class 'tbl_summary' or 'tbl_svysummary'", call. = FALSE)
   }
   if (is.null(x$by) || nrow(x$df_by) != 2) {
-    stop("'tbl_summary' object must have a `by=` value with exactly two levels")
+    stop("'tbl_summary'/'tbl_svysummary' object must have a `by=` value with exactly two levels", call. = FALSE)
   }
   if ("add_p" %in% names(x$call_list)) {
-    stop("`add_difference()` cannot be run after `add_p()`")
+    stop("`add_difference()` cannot be run after `add_p()`", call. = FALSE)
   }
   if (rlang::is_function(estimate_fun)) {
     lifecycle::deprecate_warn(
@@ -85,7 +85,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   include <-
     .select_to_varnames(
       select = {{ include }},
-      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      data = select(use_data_frame(x$inputs$data), any_of(x$meta_data$variable)),
       var_info = x$table_body,
       arg_name = "include"
     )
@@ -93,7 +93,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   test <-
     .formula_list_to_named_list(
       x = test,
-      data = select(x$inputs$data, any_of(include)),
+      data = select(use_data_frame(x$inputs$data), any_of(include)),
       var_info = x$table_body,
       arg_name = "test"
     )
@@ -101,7 +101,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   estimate_fun <-
     .formula_list_to_named_list(
       x = {{ estimate_fun }},
-      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      data = select(use_data_frame(x$inputs$data), any_of(x$meta_data$variable)),
       var_info = x$table_body,
       arg_name = "estimate_fun"
     )
@@ -121,7 +121,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   adj.vars <-
     .select_to_varnames(
       select = {{ adj.vars }},
-      data = x$inputs$data,
+      data = use_data_frame(x$inputs$data),
       var_info = x$table_body,
       arg_name = "adj.vars"
     )
@@ -136,7 +136,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   group <-
     .select_to_varnames(
       select = {{ group }},
-      data = x$inputs$data,
+      data = use_data_frame(x$inputs$data),
       var_info = x$table_body,
       arg_name = "group",
       select_single = TRUE
@@ -184,10 +184,10 @@ add_difference <- function(x, test = NULL, group = NULL,
       test_info = map(
         .data$test,
         function(test) {
-          .get_add_p_test_fun("tbl_summary",
+          .get_add_p_test_fun(class(x)[1],
                               test = test,
-                              env = caller_env, parent_fun = "add_difference"
-          )
+                              env = caller_env,
+                              parent_fun = "add_difference")
         }
       ),
       test_name = map_chr(.data$test_info, ~ pluck(.x, "test_name"))
@@ -201,7 +201,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   test.args <-
     .formula_list_to_named_list(
       x = test.args,
-      data = select(x$inputs$data, any_of(include)),
+      data = select(use_data_frame(x$inputs$data), any_of(include)),
       var_info = x$table_body,
       arg_name = "test.args"
     )
@@ -247,4 +247,9 @@ add_difference <- function(x, test = NULL, group = NULL,
 
   # return results -------------------------------------------------------------
   x
+}
+
+use_data_frame <- function(x) {
+  if (is.data.frame(x)) return(x)
+  x$variables # return survey object data frame
 }
