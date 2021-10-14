@@ -343,6 +343,7 @@ add_p_test_smd <- function(data, variable, by, tbl, type,
                            conf.level = 0.95, ...) {
   # formulas from https://support.sas.com/resources/papers/proceedings12/335-2012.pdf
   assert_package("smd")
+  if (is_survey(data)) assert_package("survey")
 
   if (use_data_frame(data)[[by]] %>% na.omit() %>% unique() %>% length() != 2L) {
     stop("SMD requires exactly two levels of `by=` variable", call. = FALSE)
