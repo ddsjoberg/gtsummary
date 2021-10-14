@@ -352,7 +352,8 @@ add_p_test_smd <- function(data, variable, by, tbl, type,
   smd_args <-
     list(x = use_data_frame(data)[[variable]],
          g = use_data_frame(data)[[by]],
-         std.error = TRUE)
+         std.error = TRUE,
+         na.rm = TRUE)
 
   if (is_survey(data)) {
     smd_args <- c(smd_args, list(w = stats::weights(data)))
