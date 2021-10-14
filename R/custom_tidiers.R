@@ -49,7 +49,7 @@
 #' @name custom_tidiers
 #' @rdname custom_tidiers
 #' @export
-#' @examples
+#' @examplesIf assert_package("effectsize", boolean = TRUE) && assert_package("parameters", boolean = TRUE) && assert_package("mice", boolean = TRUE)
 #' \donttest{
 #' # Example 1 ----------------------------------
 #' mod <- lm(age ~ marker + grade, trial)
@@ -57,30 +57,24 @@
 #' tbl_stnd <- tbl_regression(mod, tidy_fun = tidy_standardize)
 #' tbl <- tbl_regression(mod)
 #'
-#' if (requireNamespace("effectsize")) {
-#'   tidy_standardize_ex1 <-
-#'     tbl_merge(
-#'       list(tbl_stnd, tbl),
-#'       tab_spanner = c("**Standardized Model**", "**Original Model**")
-#'     )
-#' }
+#' tidy_standardize_ex1 <-
+#'   tbl_merge(
+#'     list(tbl_stnd, tbl),
+#'     tab_spanner = c("**Standardized Model**", "**Original Model**")
+#'   )
 #'
 #' # Example 2 ----------------------------------
 #' # use "posthoc" method for coef calculation
-#' if (requireNamespace("parameters")) {
-#'   tidy_standardize_ex2 <-
-#'     tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
-#' }
+#' tidy_standardize_ex2 <-
+#'   tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
 #'
 #' # Example 3 ----------------------------------
 #' # Multiple Imputation using the mice package
 #' set.seed(1123)
-#' if (requireNamespace("mice")) {
-#'   pool_and_tidy_mice_ex3 <-
-#'     suppressWarnings(mice::mice(trial, m = 2)) %>%
-#'     with(lm(age ~ marker + grade)) %>%
-#'     tbl_regression()
-#' } # mice method called that uses `pool_and_tidy_mice()` as tidier
+#' pool_and_tidy_mice_ex3 <-
+#'   suppressWarnings(mice::mice(trial, m = 2)) %>%
+#'   with(lm(age ~ marker + grade)) %>%
+#'   tbl_regression()
 #' }
 #' @section Example Output:
 #' \if{html}{Example 1}
