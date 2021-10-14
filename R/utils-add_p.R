@@ -294,24 +294,25 @@
     return(test[[variable]])
   }
 
-  if (is_survey(data)) {
-    return("smd")
-  }
-
-  if (summary_type %in% c("continuous", "continuous2") && is.null(group) && is.null(adj.vars)) {
+  if (summary_type %in% c("continuous", "continuous2") &&
+      is.null(group) && is.null(adj.vars) && is.data.frame(data)) {
     return("t.test")
   }
-  if (summary_type %in% c("continuous", "continuous2") && is.null(group)) {
+  if (summary_type %in% c("continuous", "continuous2")
+      && is.null(group) && is.data.frame(data)) {
     return("ancova")
   }
-  if (summary_type %in% "dichotomous" && is.null(group) && is.null(adj.vars)) {
+  if (summary_type %in% "dichotomous" && is.null(group) &&
+      is.null(adj.vars) && is.data.frame(data)) {
     return("prop.test")
   }
-  if (summary_type %in% "categorical" && is.null(group) && is.null(adj.vars)) {
+  if (summary_type %in% "categorical" && is.null(group) &&
+      is.null(adj.vars) && is.data.frame(data)) {
     return("smd")
   }
 
-  if (summary_type %in% c("continuous", "continuous2") && !is.null(group)) {
+  if (summary_type %in% c("continuous", "continuous2") &&
+      !is.null(group) && is.data.frame(data)) {
     return("ancova_lme4")
   }
 
