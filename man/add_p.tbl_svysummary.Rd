@@ -75,7 +75,7 @@ Adds p-values to tables created by \code{tbl_svysummary} by comparing values acr
 }
 
 \examples{
-\dontshow{if (requireNamespace("survey")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (assert_package("survey", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 # A simple weighted dataset
 add_p_svysummary_ex1 <-
