@@ -73,6 +73,13 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
+\section{tbl_svysummary() \%>\% add_difference()}{
+\tabular{llll}{
+   \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \cr
+   \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \verb{smd::smd(x= data$variables[[variable]], g = data$variables[[by]], w = weights(data)  std.error = TRUE)} \cr
+}
+}
+
 \section{Custom Functions}{
 
 

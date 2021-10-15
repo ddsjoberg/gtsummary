@@ -14,8 +14,8 @@ tbl_summary,TRUE,TRUE,rate difference,stats,prop.test,stats::prop.test,gtsummary
 tbl_summary,TRUE,TRUE,mean difference,stats,ancova,,gtsummary:::add_p_test_ancova,FALSE,lm(variable ~ by + adj.vars),ANCOVA
 tbl_summary,FALSE,TRUE,mean difference,stats,ancova_lme4,,gtsummary:::add_p_test_ancova_lme4,FALSE,"lme4::lmer(variable ~ by + adj.vars + (1 \UFF5C group), data)",ANCOVA with random intercept
 tbl_summary,FALSE,TRUE,standardized mean difference,effectsize,cohens_d,effectsize::cohens_d,gtsummary:::add_p_test_cohens_d,TRUE,"effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)",Cohen's D
-tbl_summary,FALSE,TRUE,standardized mean difference,smd,smd,,gtsummary:::add_p_test_smd,FALSE,"smd::smd(x= data[[variable]], g = data[[by]], std.error = TRUE)",Standardized Mean Difference
-tbl_svysummary,FALSE,TRUE,standardized mean difference,smd,smd,,gtsummary:::add_p_test_smd,FALSE,"smd::smd(x= data$variables[[variable]], g = data$variables[[by]], w = weights(data)  std.error = TRUE)",Standardized Mean Difference
+tbl_summary,FALSE,TRUE,standardized mean difference,smd,smd,,gtsummary:::add_p_test_smd,FALSE,"smd::smd(x = data[[variable]], g = data[[by]], std.error = TRUE)",Standardized Mean Difference
+tbl_svysummary,FALSE,TRUE,standardized mean difference,smd,smd,,gtsummary:::add_p_test_smd,FALSE,"smd::smd(x = data$variables[[variable]], g = data$variables[[by]], w = weights(data),  std.error = TRUE)",Standardized Mean Difference
 tbl_svysummary,TRUE,FALSE,,survey,svy.t.test,survey::svyttest,gtsummary:::add_p_test_svy.t.test,FALSE,"survey::svyttest(~variable + by, data)",t-test adapted to complex survey samples
 tbl_svysummary,TRUE,FALSE,,survey,svy.wilcox.test,survey::svyranktest,gtsummary:::add_p_test_svy.wilcox.test,FALSE,"survey::svyranktest(~variable + by, data, test = 'wilcoxon')",Wilcoxon rank-sum test for complex survey samples
 tbl_svysummary,TRUE,FALSE,,survey,svy.kruskal.test,,gtsummary:::add_p_test_svy.kruskal.test,FALSE,"survey::svyranktest(~variable + by, data, test = 'KruskalWallis')",Kruskal-Wallis rank-sum test for complex survey samples
