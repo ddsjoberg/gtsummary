@@ -345,7 +345,7 @@ add_p_test_smd <- function(data, variable, by, tbl, type,
   assert_package("smd")
   if (is_survey(data)) assert_package("survey")
 
-  if (use_data_frame(data)[[by]] %>% na.omit() %>% unique() %>% length() != 2L) {
+  if (use_data_frame(data)[[by]] %>% stats::na.omit() %>% unique() %>% length() != 2L) {
     stop("SMD requires exactly two levels of `by=` variable", call. = FALSE)
   }
 
