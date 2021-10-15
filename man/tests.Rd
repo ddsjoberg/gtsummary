@@ -69,14 +69,14 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{"ancova"} \tab ANCOVA \tab mean difference \tab \code{lm(variable ~ by + adj.vars)} \cr
    \code{"ancova_lme4"} \tab ANCOVA with random intercept \tab mean difference \tab \verb{lme4::lmer(variable ~ by + adj.vars + (1 \\UFF5C group), data)} \cr
    \code{"cohens_d"} \tab Cohen's D \tab standardized mean difference \tab \code{effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)} \cr
-   \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x= data[[variable]], g = data[[by]], std.error = TRUE)} \cr
+   \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = data[[variable]], g = data[[by]], std.error = TRUE)} \cr
 }
 }
 
 \section{tbl_svysummary() \%>\% add_difference()}{
 \tabular{llll}{
    \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \cr
-   \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \verb{smd::smd(x= data$variables[[variable]], g = data$variables[[by]], w = weights(data)  std.error = TRUE)} \cr
+   \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = data$variables[[variable]], g = data$variables[[by]], w = weights(data),  std.error = TRUE)} \cr
 }
 }
 

@@ -3,7 +3,7 @@
 #' Add the difference between two groups (typically mean difference),
 #' along with the difference confidence interval and p-value.
 #'
-#' @param x `"tbl_summary"` object
+#' @param x `"tbl_summary"` or `"tbl_svysummary"` object
 #' @inheritParams  add_p.tbl_summary
 #' @inheritParams tbl_regression
 #' @param adj.vars Variables to include in mean difference adjustment (e.g. in ANCOVA models)
