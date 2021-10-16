@@ -2,35 +2,27 @@
 
 ### New Functions
 
-* Added new function `tbl_continuous()` to summarize a continuous variable by 1 or more categorial variables.
+* Added new function `tbl_continuous()` to summarize a continuous variable by 1 or more categorical variables.
+
+* Added new function `add_ci()` that adds a new column with the confidence interval for proportions/means reported in `tbl_summary()`. (#868)
+
+* Migrated a new function `tbl_split()` from the {bstfun} package. Function allows users to split a {gtsummary} table into multiple tables.
+
+* Migrated a new function `separate_p_footnotes()` from the {bstfun} package. Function allows users to separate the composite footnote listing the tests performed in `add_p()`, and replaces it with individual footnotes for each test name.
 
 * New function `tbl_custom_summary()` allowing to create a table of summary statistics using a custom summary function (#973, #976)
 
     * Set of helpers to be used with `tbl_custom_summary()`: `continuous_summary()`, `proportion_summary()`, `ratio_summary()`
 
-* New function `modify_cols_merge()` that can merge two or more columns in a gtsummary table. (#939)
+* New function `modify_cols_merge()` that can merge two or more columns in a {gtsummary} table. (#939)
 
-* Added new function `add_ci()` that adds a new column with the confidence interval for proportions/means reported in `tbl_summary()`. (#868)
-
-* Added function `tbl_butcher()` to reduce the size of a gtsummary table. After an object has been butchered, other gtsummary functions may not be able to execute on the object.
+* Added function `tbl_butcher()` to reduce the size of a {gtsummary} table. After an object has been butchered, other {gtsummary} functions may not be able to execute on the object.
 
 * Added new function `tidy_robust()` that will add robust standard errors, confidence intervals, and p-values with `tbl_regression()` and `tbl_uvregression()`. The function is a wrapper for `parameters::model_paramters()`. (#979)
 
-* Migrated a new function `separate_p_footnotes()` from the {bstfun} package. Function allows users to separate the composite footnote listing the tests performed in `add_p()`, and replaces it with individual footnotes for each test name.
-
-* Migrated a new function `tbl_split()` from the {bstfun} package. Function allows users to split a {gtsummary} table into multiple tables.
-
 ### New Functionality
 
-* Added `tbl_strata(.stack_group_header=)` argument to include/exclude the headers when tables are combined with `tbl_stack()`
-
-* Added `tbl_strata(.quiet=)` argument.
-
 * Added a `CITATION` file so users can now cite the R Journal manuscript using `citation("gtsummary")`.
-
-* Allow `add_p()` and `add_difference()` to be run on the same table. (#959)
-
-* Updated `add_overall()` to include the overall statistics in the `df_stats` tibbles saved in `.$meta_data.` This makes it possible to report any of the overall statistics using the `inline_text(pattern=)` argument.
 
 * Added Standardized Mean Difference method to `add_difference()`, wrapping the {smd} package's calculations. (#966)
 
@@ -38,13 +30,21 @@
 
 * Added a standardized mean difference method for  `tbl_svysummary()` tables.
 
+* Added `tbl_strata(.stack_group_header=)` argument to include/exclude the headers when tables are combined with `tbl_stack()`
+
+* Added `tbl_strata(.quiet=)` argument.
+
+* Allow `add_p()` and `add_difference()` to be run on the same table. (#959)
+
+* Updated `add_overall()` to include the overall statistics in the `df_stats` tibbles saved in `.$meta_data.` This makes it possible to report any of the overall statistics using the `inline_text(pattern=)` argument.
+
 ### Other Updates
 
 * Added a help file detailing the formula list notation used throughout the {gtsummary} package. (#981)
 
 * Updates to `tbl_regression()` documentation. The model N is no longer reported by default, and removed that section from the help file. (#998)
 
-* Updates to make the internal `df_stats` objects consistent across various gtsummary objects. Added internal function `df_stats_to_table_body` that adds the numeric df_stats tibble to `.$table_body`. The formatting functions are also added for the new columns to `.$table_styling$fmt_fun`. This function is now used in `inline_text.gtsummary()` to prepare the returned statistics (#921)
+* Updates to make the internal `df_stats` objects consistent across various {gtsummary} objects. Added internal function `df_stats_to_table_body` that adds the numeric df_stats tibble to `.$table_body`. The formatting functions are also added for the new columns to `.$table_styling$fmt_fun`. This function is now used in `inline_text.gtsummary()` to prepare the returned statistics (#921)
 
 * Now using `broom::tidy()` to prepare the `car::Anova()` results. This will be more stable than the version originally written. (#898)
 
@@ -60,7 +60,7 @@
 
 ### Bug Fixes
 
-* Fix in `tbl_summary()` when a factor variable is passed that is all NA with no specified levels. (#977)
+* Fix in `tbl_summary()` when a factor variable is passed that is all `NA` with no specified levels. (#977)
 
 * Fix in `add_p.tbl_summary()` when a factor variable with all NA values is passed. (#977)
 

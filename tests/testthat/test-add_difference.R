@@ -1,5 +1,7 @@
 skip_on_cran()
 skip_if_not(requireNamespace("lme4"))
+skip_if_not(requireNamespace("smd"))
+skip_if_not(requireNamespace("survey"))
 
 test_that("add_difference-basic use", {
   expect_error(
