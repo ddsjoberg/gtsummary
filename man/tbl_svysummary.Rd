@@ -180,10 +180,12 @@ and IQR.  To change all continuous variables to mean and standard deviation use
 All columns with class logical are displayed as dichotomous variables showing
 the proportion of events that are \code{TRUE} on a single row. To show both rows
 (i.e. a row for \code{TRUE} and a row for \code{FALSE}) use
-\code{type = list(all_logical() ~ "categorical")}.
+\code{type = list(where(is.logical) ~ "categorical")}.
 
 The select helpers are available for use in any argument that accepts a list
 of formulas (e.g. \code{statistic}, \code{type}, \code{digits}, \code{value}, \code{sort}, etc.)
+
+Read more on the \link{syntax} used through the package.
 }
 
 \examples{

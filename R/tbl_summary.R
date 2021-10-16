@@ -60,10 +60,12 @@
 #' All columns with class logical are displayed as dichotomous variables showing
 #' the proportion of events that are `TRUE` on a single row. To show both rows
 #' (i.e. a row for `TRUE` and a row for `FALSE`) use
-#' `type = list(all_logical() ~ "categorical")`.
+#' `type = list(where(is.logical) ~ "categorical")`.
 #'
 #' The select helpers are available for use in any argument that accepts a list
 #' of formulas (e.g. `statistic`, `type`, `digits`, `value`, `sort`, etc.)
+#'
+#' Read more on the [syntax] used through the package.
 #'
 #' @section type argument:
 #' The `tbl_summary()` function has four summary types:
