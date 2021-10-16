@@ -124,7 +124,7 @@ rlang::expr(survfit(!!formula_arg, !!data_arg)) %&amp;gt;%
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -213,17 +213,17 @@ run without issue.</p><ol>
 a data frame to <code><a href='tbl_survfit.html'>tbl_survfit()</a></code>. The survfit model will be constructed
 in a manner ensuring the formula and data are available.
 This only works if you have a stratified model.</p>
-<p>Instead of the following line<div class="r"></p><pre><span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+<p>Instead of the following line<div class="sourceCode r"></p><pre><span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span><span class='op'>(</span>times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span>
 </pre><p></div></p>
-<p>Use this code<div class="r"></p><pre><span class='va'>trial</span> <span class='op'>%&gt;%</span>
+<p>Use this code<div class="sourceCode r"></p><pre><span class='va'>trial</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='tbl_survfit.html'>tbl_survfit</a></span><span class='op'>(</span>y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span>, times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span>
 </pre><p></div></p></li>
 <li><p>Construct an expression of the <code><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survival::survfit()</a></code> before evaluating it.
 Ensure the formula and data are available in the call by using the tidyverse
 bang-bang operator, <code>!!</code>.</p>
-<p>Use this code<div class="r"></p><pre><span class='va'>formula_arg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>
+<p>Use this code<div class="sourceCode r"></p><pre><span class='va'>formula_arg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='fl'>1</span>
 <span class='va'>data_arg</span> <span class='op'>&lt;-</span> <span class='va'>trial</span>
 <span class='fu'>rlang</span><span class='fu'>::</span><span class='fu'><a href='https://rlang.r-lib.org/reference/nse-defuse.html'>expr</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='op'>!</span><span class='op'>!</span><span class='va'>formula_arg</span>, <span class='op'>!</span><span class='op'>!</span><span class='va'>data_arg</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://rdrr.io/r/base/eval.html'>eval</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
@@ -247,7 +247,7 @@ bang-bang operator, <code>!!</code>.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href='http://www.jessicalavery.com/'>Jessica Lavery</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

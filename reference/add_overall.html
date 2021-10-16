@@ -97,7 +97,7 @@ created by tbl_summary or tbl_svysummary." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -170,7 +170,7 @@ created by tbl_summary or tbl_svysummary." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Add column with overall summary statistics</h1>
-    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_overall.R'><code>R/add_overall.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/add_overall.R'><code>R/add_overall.R</code></a>, <a href='https://github.com/ddsjoberg/gtsummary/blob/master/R/tbl_custom_summary.R'><code>R/tbl_custom_summary.R</code></a></small>
     <div class="hidden name"><code>add_overall.Rd</code></div>
     </div>
 
@@ -185,6 +185,9 @@ created by <code>tbl_summary</code> or <code>tbl_svysummary</code>.</p>
 <span class='fu'>add_overall</span><span class='op'>(</span><span class='va'>x</span>, last <span class='op'>=</span> <span class='cn'>FALSE</span>, col_label <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='co'># S3 method for tbl_svysummary</span>
+<span class='fu'>add_overall</span><span class='op'>(</span><span class='va'>x</span>, last <span class='op'>=</span> <span class='cn'>FALSE</span>, col_label <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+
+<span class='co'># S3 method for tbl_custom_summary</span>
 <span class='fu'>add_overall</span><span class='op'>(</span><span class='va'>x</span>, last <span class='op'>=</span> <span class='cn'>FALSE</span>, col_label <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -217,6 +220,7 @@ Default is <code>FALSE</code>, which will display overall column first.</p></td>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_summary tools: 
+<code><a href='add_ci.html'>add_ci</a>()</code>,
 <code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
 <code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
 <code><a href='add_q.html'>add_q</a>()</code>,
@@ -225,8 +229,12 @@ Default is <code>FALSE</code>, which will display overall column first.</p></td>
 <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
 <code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
 <code><a href='modify.html'>modify</a></code>,
+<code><a href='separate_p_footnotes.html'>separate_p_footnotes</a>()</code>,
+<code><a href='tbl_custom_summary.html'>tbl_custom_summary</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_split.html'>tbl_split</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_strata.html'>tbl_strata</a>()</code>,
 <code><a href='tbl_summary.html'>tbl_summary</a>()</code></p>
 <p>Other tbl_svysummary tools: 
 <code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
@@ -234,8 +242,11 @@ Default is <code>FALSE</code>, which will display overall column first.</p></td>
 <code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
 <code><a href='modify.html'>modify</a></code>,
+<code><a href='separate_p_footnotes.html'>separate_p_footnotes</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_split.html'>tbl_split</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_strata.html'>tbl_strata</a>()</code>,
 <code><a href='tbl_svysummary.html'>tbl_svysummary</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
@@ -258,7 +269,7 @@ Default is <code>FALSE</code>, which will display overall column first.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href='http://www.jessicalavery.com/'>Jessica Lavery</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

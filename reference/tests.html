@@ -100,7 +100,7 @@ tbl_summary(trial, by = trt) %&amp;gt;% add_p(age ~ &quot;t.test&quot;, test.arg
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -199,7 +199,7 @@ calculate a p-value from <code><a href='https://rdrr.io/r/stats/t.test.html'>t.t
 <tr><td><code>"chisq.test"</code></td><td>chi-square test of independence</td><td><code><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)</a></code></td></tr>
 <tr><td><code>"chisq.test.no.correct"</code></td><td>chi-square test of independence</td><td><code><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)</a></code></td></tr>
 <tr><td><code>"fisher.test"</code></td><td>Fisher's exact test</td><td><code><a href='https://rdrr.io/r/stats/fisher.test.html'>fisher.test(data[[variable]], as.factor(data[[by]]), conf.level = 0.95, ...)</a></code></td></tr>
-<tr><td><code>"mcnemar.test"</code></td><td>McNemar's test</td><td><code><a href='https://rdrr.io/r/stats/mcnemar.test.html'>mcnemar.test(data[[variable]], data[[by]], conf.level = 0.95, ...)</a></code></td></tr>
+<tr><td><code>"mcnemar.test"</code></td><td>McNemar's test</td><td><code>tidyr::pivot_wider(id_cols = group, ...); mcnemar.test(by_1, by_2, conf.level = 0.95, ...)</code></td></tr>
 <tr><td><code>"lme4"</code></td><td>random intercept logistic regression</td><td><code>lme4::glmer(by ~ (1 \UFF5C group), data, family = binomial) %&gt;% anova(lme4::glmer(by ~ variable + (1 \UFF5C group), data, family = binomial))</code></td></tr>
 <tr><td><code>"paired.t.test"</code></td><td>Paired t-test</td><td><code>tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)</code></td></tr>
 <tr><td><code>"paired.wilcox.test"</code></td><td>Paired Wilcoxon rank-sum test</td><td><code>tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)</code></td></tr>
@@ -253,6 +253,16 @@ calculate a p-value from <code><a href='https://rdrr.io/r/stats/t.test.html'>t.t
 <tr><td><code>"ancova"</code></td><td>ANCOVA</td><td>mean difference</td><td><code><a href='https://rdrr.io/r/stats/lm.html'>lm(variable ~ by + adj.vars)</a></code></td></tr>
 <tr><td><code>"ancova_lme4"</code></td><td>ANCOVA with random intercept</td><td>mean difference</td><td><code>lme4::lmer(variable ~ by + adj.vars + (1 \UFF5C group), data)</code></td></tr>
 <tr><td><code>"cohens_d"</code></td><td>Cohen's D</td><td>standardized mean difference</td><td><code><a href='https://easystats.github.io/effectsize/reference/cohens_d.html'>effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)</a></code></td></tr>
+<tr><td><code>"smd"</code></td><td>Standardized Mean Difference</td><td>standardized mean difference</td><td><code><a href='https://rdrr.io/pkg/smd/man/smd.html'>smd::smd(x = data[[variable]], g = data[[by]], std.error = TRUE)</a></code></td></tr>
+</table>
+
+
+    <h2 class="hasAnchor" id="tbl-svysummary-gt-add-difference-"><a class="anchor" href="#tbl-svysummary-gt-add-difference-"></a>tbl_svysummary() %&gt;% add_difference()</h2>
+
+    
+<table class='table'>
+<tr><td><strong>alias</strong></td><td><strong>description</strong></td><td><strong>difference statistic</strong></td><td><strong>pseudo-code</strong></td></tr>
+<tr><td><code>"smd"</code></td><td>Standardized Mean Difference</td><td>standardized mean difference</td><td><code><a href='https://rdrr.io/pkg/smd/man/smd.html'>smd::smd(x = data$variables[[variable]], g = data$variables[[by]], w = weights(data),  std.error = TRUE)</a></code></td></tr>
 </table>
 
 
@@ -264,11 +274,11 @@ calculate a p-value from <code><a href='https://rdrr.io/r/stats/t.test.html'>t.t
 <p>To report a p-value (or difference) for a test not available in gtsummary, you can create a
 custom function. The output is a data frame that is one line long. The
 structure is similar to the output of <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy()</a></code> of a typical
-statistical test. The <code><a href='add_p.html'>add_p()</a></code> and <code><a href='deprecated.html'>add_comparison()</a></code> functions will look for columns called
+statistical test. The <code><a href='add_p.html'>add_p()</a></code> and <code>add_comparison()</code> functions will look for columns called
 <code>"p.value"</code>, <code>"estimate"</code>, <code>"conf.low"</code>, <code>"conf.high"</code>, and <code>"method"</code> for the
 p-value, difference, confidence interval, and the test name used in the footnote.</p>
 <p>Example calculating a p-value from a t-test assuming a common variance
-between groups.<div class="r"></p><pre><span class='va'>ttest_common_variance</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>variable</span>, <span class='va'>by</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
+between groups.<div class="sourceCode r"></p><pre><span class='va'>ttest_common_variance</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>variable</span>, <span class='va'>by</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>data</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>by</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/complete.cases.html'>complete.cases</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>variable</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>by</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>, var.equal <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
@@ -279,7 +289,7 @@ between groups.<div class="r"></p><pre><span class='va'>ttest_common_variance</s
   <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span>test <span class='op'>=</span> <span class='va'>age</span> <span class='op'>~</span> <span class='st'>"ttest_common_variance"</span><span class='op'>)</span>
 </pre><p></div></p>
 <p>A custom <code><a href='add_difference.html'>add_difference()</a></code> is similar, and accepts arguments <code>conf.level=</code>
-and <code>adj.vars=</code> as well.<div class="r"></p><pre><span class='va'>ttest_common_variance</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>variable</span>, <span class='va'>by</span>, <span class='va'>conf.level</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
+and <code>adj.vars=</code> as well.<div class="sourceCode r"></p><pre><span class='va'>ttest_common_variance</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>variable</span>, <span class='va'>by</span>, <span class='va'>conf.level</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>data</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>by</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/complete.cases.html'>complete.cases</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>)</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/stats/t.test.html'>t.test</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>variable</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>[[</span><span class='va'>by</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>, conf.level <span class='op'>=</span> <span class='va'>conf.level</span>, var.equal <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='op'>)</span>
@@ -318,7 +328,7 @@ to future-proof against updates where additional arguments are added.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href='http://www.jessicalavery.com/'>Jessica Lavery</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

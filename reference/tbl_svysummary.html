@@ -98,7 +98,7 @@ It is similar to tbl_summary()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -372,9 +372,10 @@ and IQR.  To change all continuous variables to mean and standard deviation use
 <p>All columns with class logical are displayed as dichotomous variables showing
 the proportion of events that are <code>TRUE</code> on a single row. To show both rows
 (i.e. a row for <code>TRUE</code> and a row for <code>FALSE</code>) use
-<code>type = list(all_logical() ~ "categorical")</code>.</p>
+<code>type = list(where(is.logical) ~ "categorical")</code>.</p>
 <p>The select helpers are available for use in any argument that accepts a list
 of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>, <code>value</code>, <code>sort</code>, etc.)</p>
+<p>Read more on the <a href='syntax.html'>syntax</a> used through the package.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_svysummary tools: 
@@ -384,8 +385,11 @@ of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>
 <code><a href='add_q.html'>add_q</a>()</code>,
 <code><a href='add_stat_label.html'>add_stat_label</a>()</code>,
 <code><a href='modify.html'>modify</a></code>,
+<code><a href='separate_p_footnotes.html'>separate_p_footnotes</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+<code><a href='tbl_split.html'>tbl_split</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_strata.html'>tbl_strata</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Joseph Larmarange</p>
@@ -414,7 +418,7 @@ of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href='http://www.jessicalavery.com/'>Jessica Lavery</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

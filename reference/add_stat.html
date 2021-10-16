@@ -99,7 +99,7 @@ existing tbl_summary or tbl_svysummary object." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -183,15 +183,7 @@ The function allows a user to add a new column (or columns) of statistics to an
 existing <code>tbl_summary</code> or <code>tbl_svysummary</code> object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>add_stat</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  <span class='va'>fns</span>,
-  location <span class='op'>=</span> <span class='cn'>NULL</span>,
-  fmt_fun <span class='op'>=</span> <span class='cn'>NULL</span>,
-  header <span class='op'>=</span> <span class='cn'>NULL</span>,
-  footnote <span class='op'>=</span> <span class='cn'>NULL</span>,
-  new_col_name <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>add_stat</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>fns</span>, location <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -216,20 +208,8 @@ on the variable level rows. The length of the vector of statistics returned from
 new statistics on the label row.</p></td>
     </tr>
     <tr>
-      <th>fmt_fun</th>
-      <td><p>DEPRECATED.</p></td>
-    </tr>
-    <tr>
-      <th>header</th>
-      <td><p>DEPRECATED.</p></td>
-    </tr>
-    <tr>
-      <th>footnote</th>
-      <td><p>DEPRECATED.</p></td>
-    </tr>
-    <tr>
-      <th>new_col_name</th>
-      <td><p>DEPRECATED.</p></td>
+      <th>...</th>
+      <td><p>DEPRECATED</p></td>
     </tr>
     </table>
 
@@ -355,7 +335,7 @@ p-value formatting functions, such as <code><a href='bold_p.html'>bold_p()</a></
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href='http://www.jessicalavery.com/'>Jessica Lavery</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

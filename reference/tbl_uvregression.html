@@ -111,7 +111,7 @@ dichotomous variables appropriate for logistic regression with glm." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -368,19 +368,6 @@ models use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.
 to print the random components.</p></li>
 </ul>
 
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    
-
-<p>The N reported in the output is the number of observations
-in the data frame <code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame(x)</a></code>. Depending on the model input, this N
-may represent different quantities. In most cases, it is the number of people or
-units in your model.  Here are some common exceptions.</p><ol>
-<li><p>Survival regression models including time dependent covariates.</p></li>
-<li><p>Random- or mixed-effects regression models with clustered data.</p></li>
-<li><p>GEE regression models with clustered data.</p></li>
-</ol>
-
 <p>This list is not exhaustive, and care should be taken for each number reported.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -392,7 +379,9 @@ units in your model.  Here are some common exceptions.</p><ol>
 <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
 <code><a href='modify.html'>modify</a></code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+<code><a href='tbl_split.html'>tbl_split</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_strata.html'>tbl_strata</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Daniel D. Sjoberg</p>
@@ -431,7 +420,7 @@ units in your model.  Here are some common exceptions.</p><ol>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href='http://www.jessicalavery.com/'>Jessica Lavery</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

@@ -97,7 +97,7 @@ Output from tbl_regression and tbl_uvregression objects supported." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -256,7 +256,9 @@ Default is <code>FALSE</code></p></td>
 <code><a href='inline_text.tbl_uvregression.html'>inline_text.tbl_uvregression</a>()</code>,
 <code><a href='modify.html'>modify</a></code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
+<code><a href='tbl_split.html'>tbl_split</a>()</code>,
 <code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_strata.html'>tbl_strata</a>()</code>,
 <code><a href='tbl_uvregression.html'>tbl_uvregression</a>()</code></p>
 <p>Other tbl_regression tools: 
 <code><a href='add_q.html'>add_q</a>()</code>,
@@ -266,34 +268,32 @@ Default is <code>FALSE</code></p></td>
 <code><a href='modify.html'>modify</a></code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
 <code><a href='tbl_regression.html'>tbl_regression</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+<code><a href='tbl_split.html'>tbl_split</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_strata.html'>tbl_strata</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"car"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>tbl_lm_global_ex1</span> <span class='op'>&lt;-</span>
-    <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>marker</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>add_global_p</span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: car</span></div><div class='output co'>#&gt; <span class='message'>add_global_p: Global p-values for variable(s) `add_global_p(include = c("age",</span>
+<span class='va'>tbl_lm_global_ex1</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>marker</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>add_global_p</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>add_global_p: Global p-values for variable(s) `add_global_p(include = c("age",</span>
 #&gt; <span class='message'>"grade"))` were calculated with</span>
 #&gt; <span class='message'>  `car::Anova(x$model_obj, type = "III")`</span></div><div class='input'>
 <span class='co'># Example 2 ----------------------------------</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"car"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>tbl_uv_global_ex2</span> <span class='op'>&lt;-</span>
-    <span class='va'>trial</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"response"</span>, <span class='st'>"trt"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span><span class='op'>(</span>
-      method <span class='op'>=</span> <span class='va'>glm</span>,
-      y <span class='op'>=</span> <span class='va'>response</span>,
-      method.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span>,
-      exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span>
-    <span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>add_global_p</span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>}</span>
+<span class='va'>tbl_uv_global_ex2</span> <span class='op'>&lt;-</span>
+  <span class='va'>trial</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"response"</span>, <span class='st'>"trt"</span>, <span class='st'>"age"</span>, <span class='st'>"grade"</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span><span class='op'>(</span>
+    method <span class='op'>=</span> <span class='va'>glm</span>,
+    y <span class='op'>=</span> <span class='va'>response</span>,
+    method.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>family <span class='op'>=</span> <span class='va'>binomial</span><span class='op'>)</span>,
+    exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span>
+  <span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>add_global_p</span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>add_global_p: Global p-values for variable(s) `add_global_p(include = c("trt",</span>
 #&gt; <span class='message'>"age", "grade"))` were calculated with</span>
 #&gt; <span class='message'>  `car::Anova(mod = x$model_obj, type = "III")`</span></div></pre>
@@ -308,7 +308,7 @@ Default is <code>FALSE</code></p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href='http://www.jessicalavery.com/'>Jessica Lavery</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

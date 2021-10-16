@@ -99,7 +99,7 @@ for detailed examples." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -195,8 +195,7 @@ for detailed examples.</p>
   missing_text <span class='op'>=</span> <span class='cn'>NULL</span>,
   sort <span class='op'>=</span> <span class='cn'>NULL</span>,
   percent <span class='op'>=</span> <span class='cn'>NULL</span>,
-  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>,
-  group <span class='op'>=</span> <span class='cn'>NULL</span>
+  include <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -281,10 +280,6 @@ e.g. <code>sort = list(everything() ~ "frequency")</code></p></td>
       <th>include</th>
       <td><p>variables to include in the summary table. Default is <code><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything()</a></code></p></td>
     </tr>
-    <tr>
-      <th>group</th>
-      <td><p>DEPRECATED. Migrated to <a href='add_p.html'>add_p</a></p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -303,9 +298,10 @@ and IQR.  To change all continuous variables to mean and standard deviation use
 <p>All columns with class logical are displayed as dichotomous variables showing
 the proportion of events that are <code>TRUE</code> on a single row. To show both rows
 (i.e. a row for <code>TRUE</code> and a row for <code>FALSE</code>) use
-<code>type = list(all_logical() ~ "categorical")</code>.</p>
+<code>type = list(where(is.logical) ~ "categorical")</code>.</p>
 <p>The select helpers are available for use in any argument that accepts a list
 of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>, <code>value</code>, <code>sort</code>, etc.)</p>
+<p>Read more on the <a href='syntax.html'>syntax</a> used through the package.</p>
     <h2 class="hasAnchor" id="type-argument"><a class="anchor" href="#type-argument"></a>type argument</h2>
 
     
@@ -382,6 +378,7 @@ in the denominator, not at each level of the categorical variable.</p>
     <div class='dont-index'><p>See <a href='http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html'>tbl_summary vignette</a> for detailed tutorial</p>
 <p>See <a href='http://www.danieldsjoberg.com/gtsummary/articles/gallery.html'>table gallery</a> for additional examples</p>
 <p>Other tbl_summary tools: 
+<code><a href='add_ci.html'>add_ci</a>()</code>,
 <code><a href='add_n.tbl_summary.html'>add_n.tbl_summary</a>()</code>,
 <code><a href='add_overall.html'>add_overall</a>()</code>,
 <code><a href='add_p.tbl_summary.html'>add_p.tbl_summary</a>()</code>,
@@ -391,8 +388,12 @@ in the denominator, not at each level of the categorical variable.</p>
 <code><a href='inline_text.tbl_summary.html'>inline_text.tbl_summary</a>()</code>,
 <code><a href='inline_text.tbl_survfit.html'>inline_text.tbl_survfit</a>()</code>,
 <code><a href='modify.html'>modify</a></code>,
+<code><a href='separate_p_footnotes.html'>separate_p_footnotes</a>()</code>,
+<code><a href='tbl_custom_summary.html'>tbl_custom_summary</a>()</code>,
 <code><a href='tbl_merge.html'>tbl_merge</a>()</code>,
-<code><a href='tbl_stack.html'>tbl_stack</a>()</code></p></div>
+<code><a href='tbl_split.html'>tbl_split</a>()</code>,
+<code><a href='tbl_stack.html'>tbl_stack</a>()</code>,
+<code><a href='tbl_strata.html'>tbl_strata</a>()</code></p></div>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Daniel D. Sjoberg</p>
@@ -448,7 +449,7 @@ in the denominator, not at each level of the categorical variable.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href='http://www.jessicalavery.com/'>Jessica Lavery</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">

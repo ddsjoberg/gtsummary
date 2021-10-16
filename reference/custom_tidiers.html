@@ -99,7 +99,7 @@ and tbl_uvregression() to obtain modified results. See examples below." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.4.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.0</span>
       </span>
     </div>
 
@@ -177,7 +177,7 @@ and tbl_uvregression() to obtain modified results. See examples below." />
     </div>
 
     <div class="ref-description">
-    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#experimental'><img src='figures/lifecycle-experimental.svg' alt='[Experimental]' /></a>
+    <p><a href='https://lifecycle.r-lib.org/articles/stages.html#maturing'><img src='figures/lifecycle-maturing.svg' alt='[Maturing]' /></a>
 
 Collection of tidiers that can be passed to <code><a href='tbl_regression.html'>tbl_regression()</a></code>
 and <code><a href='tbl_uvregression.html'>tbl_uvregression()</a></code> to obtain modified results. See examples below.</p>
@@ -197,6 +197,18 @@ and <code><a href='tbl_uvregression.html'>tbl_uvregression()</a></code> to obtai
   exponentiate <span class='op'>=</span> <span class='cn'>FALSE</span>,
   conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
   conf.int <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span>
+
+<span class='fu'>tidy_robust</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  exponentiate <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  conf.level <span class='op'>=</span> <span class='fl'>0.95</span>,
+  conf.int <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  vcov_estimation <span class='op'>=</span> <span class='cn'>NULL</span>,
+  vcov_type <span class='op'>=</span> <span class='cn'>NULL</span>,
+  vcov_args <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>,
   quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span>
@@ -236,12 +248,18 @@ interval in the tidied output. Defaults to <code>FALSE</code>.</p></td>
 <li><p><code>pool_and_tidy_mice()</code>: <code><a href='https://generics.r-lib.org/reference/tidy.html'>mice::tidy(x, ...)</a></code></p></li>
 <li><p><code>tidy_standardize()</code>: <code><a href='https://easystats.github.io/effectsize/reference/standardize_parameters.html'>effectsize::standardize_parameters(x, ...)</a></code></p></li>
 <li><p><code>tidy_bootstrap()</code>: <code><a href='https://easystats.github.io/parameters/reference/bootstrap_parameters.html'>parameters::bootstrap_parameters(x, ...)</a></code></p></li>
+<li><p><code>tidy_robust()</code>: <code><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>parameters::model_parameters(x, ...)</a></code></p></li>
 </ul></td>
     </tr>
     <tr>
       <th>quiet</th>
       <td><p>Logical indicating whether to print messages in console. Default is
 <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>vcov_estimation, vcov_type, vcov_args</th>
+      <td><p>arguments passed to
+<code><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>parameters::model_parameters()</a></code></p></td>
     </tr>
     <tr>
       <th>pool.args</th>
@@ -265,6 +283,14 @@ merely takes the result and puts it in <code><a href='https://generics.r-lib.org
 package includes a wonderful function to estimate bootstrapped coefficients.
 The tidier uses the output from <code><a href='https://easystats.github.io/parameters/reference/bootstrap_parameters.html'>parameters::bootstrap_parameters(test = "p")</a></code>, and
 merely takes the result and puts it in <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy()</a></code> format.</p></li>
+<li><p><code>tidy_robust()</code> tidier to report robust standard errors, confidence intervals,
+and p-values. The <a href='https://easystats.github.io/parameters/reference/model_parameters.default.html'>parameters</a>
+package includes a wonderful function to calculate robust standard errors, confidence intervals, and p-values
+The tidier uses the output from <code><a href='https://easystats.github.io/parameters/reference/model_parameters.html'>parameters::model_parameters()</a></code>, and
+merely takes the result and puts it in <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy()</a></code> format. To use this
+function with <code><a href='tbl_regression.html'>tbl_regression()</a></code>, pass a function with the arguments for
+<code>tidy_robust()</code> populated. This is easily done using <code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial()</a></code> e.g.
+<code><a href='tbl_regression.html'>tbl_regression(tidy_fun = partial(tidy_robust, vcov_estimation = "CL"))</a></code></p></li>
 <li><p><code>pool_and_tidy_mice()</code> tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object <em>before</em> the model results
 have been pooled. See example.</p></li>
@@ -292,31 +318,25 @@ the model parameters before attempting to use the tidier with <code><a href='tbl
 </div><div class='output co'>#&gt; <span class='message'>tidy_standardize(): Estimating standardized coefs with</span>
 #&gt; <span class='message'>`effectsize::standardize_parameters(model = x, ci = 0.95)`</span></div><div class='input'><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
 
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"effectsize"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>tidy_standardize_ex1</span> <span class='op'>&lt;-</span>
-    <span class='fu'><a href='tbl_merge.html'>tbl_merge</a></span><span class='op'>(</span>
-      <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>tbl_stnd</span>, <span class='va'>tbl</span><span class='op'>)</span>,
-      tab_spanner <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"**Standardized Model**"</span>, <span class='st'>"**Original Model**"</span><span class='op'>)</span>
-    <span class='op'>)</span>
-<span class='op'>}</span>
+<span class='va'>tidy_standardize_ex1</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='tbl_merge.html'>tbl_merge</a></span><span class='op'>(</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>tbl_stnd</span>, <span class='va'>tbl</span><span class='op'>)</span>,
+    tab_spanner <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"**Standardized Model**"</span>, <span class='st'>"**Original Model**"</span><span class='op'>)</span>
+  <span class='op'>)</span>
 
 <span class='co'># Example 2 ----------------------------------</span>
 <span class='co'># use "posthoc" method for coef calculation</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"parameters"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>tidy_standardize_ex2</span> <span class='op'>&lt;-</span>
-    <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>mod</span>, tidy_fun <span class='op'>=</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/partial.html'>partial</a></span><span class='op'>(</span><span class='va'>tidy_standardize</span>, method <span class='op'>=</span> <span class='st'>"posthoc"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='op'>}</span>
+<span class='va'>tidy_standardize_ex2</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='va'>mod</span>, tidy_fun <span class='op'>=</span> <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/partial.html'>partial</a></span><span class='op'>(</span><span class='va'>tidy_standardize</span>, method <span class='op'>=</span> <span class='st'>"posthoc"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>tidy_standardize(): Estimating standardized coefs with</span>
 #&gt; <span class='message'>`effectsize::standardize_parameters(model = x, ci = 0.95, method = "posthoc")`</span></div><div class='input'>
 <span class='co'># Example 3 ----------------------------------</span>
 <span class='co'># Multiple Imputation using the mice package</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1123</span><span class='op'>)</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"mice"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>pool_and_tidy_mice_ex3</span> <span class='op'>&lt;-</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span><span class='op'>(</span><span class='fu'>mice</span><span class='fu'>::</span><span class='fu'><a href='https://amices.org/mice/reference/mice.html'>mice</a></span><span class='op'>(</span><span class='va'>trial</span>, m <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>marker</span> <span class='op'>+</span> <span class='va'>grade</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>}</span> <span class='co'># mice method called that uses `pool_and_tidy_mice()` as tidier</span>
+<span class='va'>pool_and_tidy_mice_ex3</span> <span class='op'>&lt;-</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span><span class='op'>(</span><span class='fu'>mice</span><span class='fu'>::</span><span class='fu'><a href='https://amices.org/mice/reference/mice.html'>mice</a></span><span class='op'>(</span><span class='va'>trial</span>, m <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>marker</span> <span class='op'>+</span> <span class='va'>grade</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt;  iter imp variable
 #&gt;   1   1  age  marker  response
@@ -342,7 +362,7 @@ the model parameters before attempting to use the tidier with <code><a href='tbl
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, <a href='http://margarethannum.github.io/'>Margie Hannum</a>, Joseph Larmarange, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
+  <p>Developed by <a href='http://www.danieldsjoberg.com/'>Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href='http://www.jessicalavery.com/'>Jessica Lavery</a>, Karissa Whiting, <a href='http://www.emilyzabor.com/'>Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
