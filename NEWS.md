@@ -34,6 +34,10 @@
 
 * Added Standardized Mean Difference method to `add_difference()`, wrapping the {smd} package's calculations. (#966)
 
+* Extended `add_difference()` to accept `tbl_svysummary()` objects in addition to `tbl_summary()` objects.
+
+* Added a standardized mean difference method for  `tbl_svysummary()` tables.
+
 ### Other Updates
 
 * Added a help file detailing the formula list notation used throughout the {gtsummary} package. (#981)

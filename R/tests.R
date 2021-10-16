@@ -51,6 +51,20 @@
 #'          `**difference statistic**` = diff_statistic,
 #'          `**pseudo-code**` = pseudo_code) %>%
 #'   knitr::kable()
+#' ```
+#'
+#' @section tbl_svysummary() %>% add_difference():
+#'
+#' ```{r, echo = FALSE}
+#' gtsummary:::df_add_p_tests %>%
+#'   dplyr::filter(class == "tbl_svysummary", add_difference == TRUE) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   select(`**alias**` = test_name,
+#'          `**description**` = description,
+#'          `**difference statistic**` = diff_statistic,
+#'          `**pseudo-code**` = pseudo_code) %>%
+#'   knitr::kable()
+#' ```
 #'
 #' @section Custom Functions:
 #'
