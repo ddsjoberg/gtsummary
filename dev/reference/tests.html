@@ -100,7 +100,7 @@ tbl_summary(trial, by = trt) %&amp;gt;% add_p(age ~ &quot;t.test&quot;, test.arg
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9022</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9023</span>
       </span>
     </div>
 
@@ -253,7 +253,16 @@ calculate a p-value from <code><a href='https://rdrr.io/r/stats/t.test.html'>t.t
 <tr><td><code>"ancova"</code></td><td>ANCOVA</td><td>mean difference</td><td><code><a href='https://rdrr.io/r/stats/lm.html'>lm(variable ~ by + adj.vars)</a></code></td></tr>
 <tr><td><code>"ancova_lme4"</code></td><td>ANCOVA with random intercept</td><td>mean difference</td><td><code>lme4::lmer(variable ~ by + adj.vars + (1 \UFF5C group), data)</code></td></tr>
 <tr><td><code>"cohens_d"</code></td><td>Cohen's D</td><td>standardized mean difference</td><td><code><a href='https://easystats.github.io/effectsize/reference/cohens_d.html'>effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)</a></code></td></tr>
-<tr><td><code>"smd"</code></td><td>Standardized Mean Difference</td><td>standardized mean difference</td><td><code><a href='https://rdrr.io/pkg/smd/man/smd.html'>smd::smd(x= data[[variable]], g = data[[by]], std.error = TRUE)</a></code></td></tr>
+<tr><td><code>"smd"</code></td><td>Standardized Mean Difference</td><td>standardized mean difference</td><td><code><a href='https://rdrr.io/pkg/smd/man/smd.html'>smd::smd(x = data[[variable]], g = data[[by]], std.error = TRUE)</a></code></td></tr>
+</table>
+
+
+    <h2 class="hasAnchor" id="tbl-svysummary-gt-add-difference-"><a class="anchor" href="#tbl-svysummary-gt-add-difference-"></a>tbl_svysummary() %&gt;% add_difference()</h2>
+
+    
+<table class='table'>
+<tr><td><strong>alias</strong></td><td><strong>description</strong></td><td><strong>difference statistic</strong></td><td><strong>pseudo-code</strong></td></tr>
+<tr><td><code>"smd"</code></td><td>Standardized Mean Difference</td><td>standardized mean difference</td><td><code><a href='https://rdrr.io/pkg/smd/man/smd.html'>smd::smd(x = data$variables[[variable]], g = data$variables[[by]], w = weights(data),  std.error = TRUE)</a></code></td></tr>
 </table>
 
 
