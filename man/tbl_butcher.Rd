@@ -24,6 +24,7 @@ the majority of \code{inline_text()} calls will continue to execute
 properly.
 }
 \examples{
+\donttest{
 tbl_large <-
  trial \%>\%
  tbl_uvregression(
@@ -38,4 +39,5 @@ tbl_large <-
  # size comparison
  object.size(tbl_large) \%>\% format(units = "Mb")
  object.size(tbl_butchered) \%>\% format(units = "Mb")
+ }
 }

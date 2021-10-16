@@ -16,6 +16,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' tbl_large <-
 #'  trial %>%
 #'  tbl_uvregression(
@@ -30,6 +31,7 @@
 #'  # size comparison
 #'  object.size(tbl_large) %>% format(units = "Mb")
 #'  object.size(tbl_butchered) %>% format(units = "Mb")
+#'  }
 tbl_butcher <- function(x) {
   if (!inherits(x, "gtsummary") || is.null(x$table_styling)) {
     stop("`x=` must be a gtsummary object created with v1.4.0 or later.")
