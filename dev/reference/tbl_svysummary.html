@@ -98,7 +98,7 @@ It is similar to tbl_summary()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.4.2.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9000</span>
       </span>
     </div>
 
@@ -372,9 +372,10 @@ and IQR.  To change all continuous variables to mean and standard deviation use
 <p>All columns with class logical are displayed as dichotomous variables showing
 the proportion of events that are <code>TRUE</code> on a single row. To show both rows
 (i.e. a row for <code>TRUE</code> and a row for <code>FALSE</code>) use
-<code>type = list(all_logical() ~ "categorical")</code>.</p>
+<code>type = list(where(is.logical) ~ "categorical")</code>.</p>
 <p>The select helpers are available for use in any argument that accepts a list
 of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>, <code>value</code>, <code>sort</code>, etc.)</p>
+<p>Read more on the <a href='syntax.html'>syntax</a> used through the package.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other tbl_svysummary tools: 
