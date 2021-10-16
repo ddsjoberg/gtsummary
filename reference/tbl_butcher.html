@@ -209,7 +209,8 @@ properly.</p>
     <p>a gtsummary object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>tbl_large</span> <span class='op'>&lt;-</span>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='va'>tbl_large</span> <span class='op'>&lt;-</span>
  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
  <span class='fu'><a href='tbl_uvregression.html'>tbl_uvregression</a></span><span class='op'>(</span>
    y <span class='op'>=</span> <span class='va'>age</span>,
@@ -223,7 +224,8 @@ properly.</p>
  <span class='co'># size comparison</span>
  <span class='fu'><a href='https://rdrr.io/r/utils/object.size.html'>object.size</a></span><span class='op'>(</span><span class='va'>tbl_large</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span>units <span class='op'>=</span> <span class='st'>"Mb"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "16.6 Mb"</div><div class='input'> <span class='fu'><a href='https://rdrr.io/r/utils/object.size.html'>object.size</a></span><span class='op'>(</span><span class='va'>tbl_butchered</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span>units <span class='op'>=</span> <span class='st'>"Mb"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "5.2 Mb"</div></pre>
+</div><div class='output co'>#&gt; [1] "5.2 Mb"</div><div class='input'> <span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
