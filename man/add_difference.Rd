@@ -17,7 +17,7 @@ add_difference(
 )
 }
 \arguments{
-\item{x}{\code{"tbl_summary"} object}
+\item{x}{\code{"tbl_summary"} or \code{"tbl_svysummary"} object}
 
 \item{test}{List of formulas specifying statistical tests to perform for each variable,
 e.g. \code{list(all_continuous() ~ "t.test")}.

@@ -343,16 +343,23 @@ add_p_test_smd <- function(data, variable, by, tbl, type,
                            conf.level = 0.95, ...) {
   # formulas from https://support.sas.com/resources/papers/proceedings12/335-2012.pdf
   assert_package("smd")
-  data <-
-    data %>%
-    select(all_of(c(variable, by))) %>%
-    filter(stats::complete.cases(.))
-  if (unique(data[[by]]) %>% length() != 2L)
-    stop("SMD requires exactly two levels of `by=` variable", call. = FALSE)
+  if (is_survey(data)) assert_package("survey")
 
-  smd::smd(x = data[[variable]],
-           g = data[[by]],
-           std.error = TRUE) %>%
+  if (use_data_frame(data)[[by]] %>% stats::na.omit() %>% unique() %>% length() != 2L) {
+    stop("SMD requires exactly two levels of `by=` variable", call. = FALSE)
+  }
+
+  smd_args <-
+    list(x = use_data_frame(data)[[variable]],
+         g = use_data_frame(data)[[by]],
+         std.error = TRUE,
+         na.rm = TRUE)
+
+  if (is_survey(data)) {
+    smd_args <- c(smd_args, list(w = stats::weights(data)))
+  }
+
+  rlang::inject(smd::smd(!!!smd_args)) %>%
     select(.data$estimate, .data$std.error) %>%
     mutate(
       conf.low = .data$estimate + stats::qnorm((1 - .env$conf.level) / 2) * .data$std.error,
