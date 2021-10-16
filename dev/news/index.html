@@ -179,7 +179,10 @@
 <h3 class="hasAnchor">
 <a href="#new-functions" class="anchor"></a>New Functions</h3>
 <ul>
-<li><p>Added new function <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> to summarize a continuous variable by 1 or more categorial variables.</p></li>
+<li><p>Added new function <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> to summarize a continuous variable by 1 or more categorical variables.</p></li>
+<li><p>Added new function <code><a href="../reference/add_ci.html">add_ci()</a></code> that adds a new column with the confidence interval for proportions/means reported in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/868'>#868</a>)</p></li>
+<li><p>Migrated a new function <code><a href="../reference/tbl_split.html">tbl_split()</a></code> from the {bstfun} package. Function allows users to split a {gtsummary} table into multiple tables.</p></li>
+<li><p>Migrated a new function <code><a href="../reference/separate_p_footnotes.html">separate_p_footnotes()</a></code> from the {bstfun} package. Function allows users to separate the composite footnote listing the tests performed in <code><a href="../reference/add_p.html">add_p()</a></code>, and replaces it with individual footnotes for each test name.</p></li>
 <li>
 <p>New function <code><a href="../reference/tbl_custom_summary.html">tbl_custom_summary()</a></code> allowing to create a table of summary statistics using a custom summary function (<a href='https://github.com/ddsjoberg/gtsummary/issues/973'>#973</a>, <a href='https://github.com/ddsjoberg/gtsummary/issues/976'>#976</a>)</p>
 <ul>
@@ -187,26 +190,23 @@
 </li>
 </ul>
 </li>
-<li><p>New function <code><a href="../reference/modify_cols_merge.html">modify_cols_merge()</a></code> that can merge two or more columns in a gtsummary table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/939'>#939</a>)</p></li>
-<li><p>Added new function <code><a href="../reference/add_ci.html">add_ci()</a></code> that adds a new column with the confidence interval for proportions/means reported in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/868'>#868</a>)</p></li>
-<li><p>Added function <code><a href="../reference/tbl_butcher.html">tbl_butcher()</a></code> to reduce the size of a gtsummary table. After an object has been butchered, other gtsummary functions may not be able to execute on the object.</p></li>
+<li><p>New function <code><a href="../reference/modify_cols_merge.html">modify_cols_merge()</a></code> that can merge two or more columns in a {gtsummary} table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/939'>#939</a>)</p></li>
+<li><p>Added function <code><a href="../reference/tbl_butcher.html">tbl_butcher()</a></code> to reduce the size of a {gtsummary} table. After an object has been butchered, other {gtsummary} functions may not be able to execute on the object.</p></li>
 <li><p>Added new function <code><a href="../reference/custom_tidiers.html">tidy_robust()</a></code> that will add robust standard errors, confidence intervals, and p-values with <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. The function is a wrapper for <code>parameters::model_paramters()</code>. (<a href='https://github.com/ddsjoberg/gtsummary/issues/979'>#979</a>)</p></li>
-<li><p>Migrated a new function <code><a href="../reference/separate_p_footnotes.html">separate_p_footnotes()</a></code> from the {bstfun} package. Function allows users to separate the composite footnote listing the tests performed in <code><a href="../reference/add_p.html">add_p()</a></code>, and replaces it with individual footnotes for each test name.</p></li>
-<li><p>Migrated a new function <code><a href="../reference/tbl_split.html">tbl_split()</a></code> from the {bstfun} package. Function allows users to split a {gtsummary} table into multiple tables.</p></li>
 </ul>
 </div>
 <div id="new-functionality" class="section level3">
 <h3 class="hasAnchor">
 <a href="#new-functionality" class="anchor"></a>New Functionality</h3>
 <ul>
-<li><p>Added <code><a href="../reference/tbl_strata.html">tbl_strata(.stack_group_header=)</a></code> argument to include/exclude the headers when tables are combined with <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code></p></li>
-<li><p>Added <code><a href="../reference/tbl_strata.html">tbl_strata(.quiet=)</a></code> argument.</p></li>
 <li><p>Added a <code>CITATION</code> file so users can now cite the R Journal manuscript using <code><a href="https://rdrr.io/r/utils/citation.html">citation("gtsummary")</a></code>.</p></li>
-<li><p>Allow <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_difference.html">add_difference()</a></code> to be run on the same table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/959'>#959</a>)</p></li>
-<li><p>Updated <code><a href="../reference/add_overall.html">add_overall()</a></code> to include the overall statistics in the <code>df_stats</code> tibbles saved in <code>.$meta_data.</code> This makes it possible to report any of the overall statistics using the <code><a href="../reference/inline_text.html">inline_text(pattern=)</a></code> argument.</p></li>
 <li><p>Added Standardized Mean Difference method to <code><a href="../reference/add_difference.html">add_difference()</a></code>, wrapping the {smd} package’s calculations. (<a href='https://github.com/ddsjoberg/gtsummary/issues/966'>#966</a>)</p></li>
 <li><p>Extended <code><a href="../reference/add_difference.html">add_difference()</a></code> to accept <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects in addition to <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> objects.</p></li>
 <li><p>Added a standardized mean difference method for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> tables.</p></li>
+<li><p>Added <code><a href="../reference/tbl_strata.html">tbl_strata(.stack_group_header=)</a></code> argument to include/exclude the headers when tables are combined with <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code></p></li>
+<li><p>Added <code><a href="../reference/tbl_strata.html">tbl_strata(.quiet=)</a></code> argument.</p></li>
+<li><p>Allow <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_difference.html">add_difference()</a></code> to be run on the same table. (<a href='https://github.com/ddsjoberg/gtsummary/issues/959'>#959</a>)</p></li>
+<li><p>Updated <code><a href="../reference/add_overall.html">add_overall()</a></code> to include the overall statistics in the <code>df_stats</code> tibbles saved in <code>.$meta_data.</code> This makes it possible to report any of the overall statistics using the <code><a href="../reference/inline_text.html">inline_text(pattern=)</a></code> argument.</p></li>
 </ul>
 </div>
 <div id="other-updates" class="section level3">
@@ -215,7 +215,7 @@
 <ul>
 <li><p>Added a help file detailing the formula list notation used throughout the {gtsummary} package. (<a href='https://github.com/ddsjoberg/gtsummary/issues/981'>#981</a>)</p></li>
 <li><p>Updates to <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> documentation. The model N is no longer reported by default, and removed that section from the help file. (<a href='https://github.com/ddsjoberg/gtsummary/issues/998'>#998</a>)</p></li>
-<li><p>Updates to make the internal <code>df_stats</code> objects consistent across various gtsummary objects. Added internal function <code>df_stats_to_table_body</code> that adds the numeric df_stats tibble to <code>.$table_body</code>. The formatting functions are also added for the new columns to <code>.$table_styling$fmt_fun</code>. This function is now used in <code><a href="../reference/inline_text.gtsummary.html">inline_text.gtsummary()</a></code> to prepare the returned statistics (<a href='https://github.com/ddsjoberg/gtsummary/issues/921'>#921</a>)</p></li>
+<li><p>Updates to make the internal <code>df_stats</code> objects consistent across various {gtsummary} objects. Added internal function <code>df_stats_to_table_body</code> that adds the numeric df_stats tibble to <code>.$table_body</code>. The formatting functions are also added for the new columns to <code>.$table_styling$fmt_fun</code>. This function is now used in <code><a href="../reference/inline_text.gtsummary.html">inline_text.gtsummary()</a></code> to prepare the returned statistics (<a href='https://github.com/ddsjoberg/gtsummary/issues/921'>#921</a>)</p></li>
 <li><p>Now using <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> to prepare the <code><a href="https://rdrr.io/pkg/car/man/Anova.html">car::Anova()</a></code> results. This will be more stable than the version originally written. (<a href='https://github.com/ddsjoberg/gtsummary/issues/898'>#898</a>)</p></li>
 <li><p>The function <code><a href="../reference/assert_package.html">assert_package()</a></code> now takes the minimum required version of the package from the DESCRIPTION file, and the function is now exported.</p></li>
 <li><p>Now using <code><a href="https://generics.r-lib.org/reference/tidy.html">broom::tidy()</a></code> to prepare <code><a href="https://rdrr.io/r/stats/aov.html">aov()</a></code> test results in <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code>, which adds additional columns to <code>.$table_body()</code> (<a href='https://github.com/ddsjoberg/gtsummary/issues/956'>#956</a>)</p></li>
@@ -228,7 +228,7 @@
 <h3 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
 <ul>
-<li><p>Fix in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> when a factor variable is passed that is all NA with no specified levels. (<a href='https://github.com/ddsjoberg/gtsummary/issues/977'>#977</a>)</p></li>
+<li><p>Fix in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> when a factor variable is passed that is all <code>NA</code> with no specified levels. (<a href='https://github.com/ddsjoberg/gtsummary/issues/977'>#977</a>)</p></li>
 <li><p>Fix in <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> when a factor variable with all NA values is passed. (<a href='https://github.com/ddsjoberg/gtsummary/issues/977'>#977</a>)</p></li>
 <li><p>Bug fix for the <code><a href="../reference/add_difference.html">add_difference(estimate_fun=)</a></code> argument.</p></li>
 </ul>
