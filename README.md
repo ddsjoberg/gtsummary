@@ -2,12 +2,11 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
-[![Codecov test
-coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/gh/ddsjoberg/gtsummary?branch=master)
-[![R build
-status](https://github.com/ddsjoberg/gtsummary/workflows/R-CMD-check/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions)
+[![R-CMD-check](https://github.com/ddsjoberg/gtsummary/workflows/R-CMD-check/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
+[![Codecov test
+coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://codecov.io/gh/ddsjoberg/gtsummary?branch=master)
 [![](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![DOI:10.32614/RJ-2021-053](https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg)](https://doi.org/10.32614/RJ-2021-053)
 <!-- badges: end -->
@@ -273,6 +272,7 @@ Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms. Thank
 you to all contributors!  
 [@ablack3](https://github.com/ablack3),
+[@ABorakati](https://github.com/ABorakati),
 [@aghaynes](https://github.com/aghaynes),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
 [@albertostefanelli](https://github.com/albertostefanelli),
@@ -288,6 +288,7 @@ you to all contributors!
 [@BeauMeche](https://github.com/BeauMeche),
 [@benediktclaus](https://github.com/benediktclaus),
 [@bwiernik](https://github.com/bwiernik),
+[@bx259](https://github.com/bx259),
 [@calebasaraba](https://github.com/calebasaraba),
 [@CarolineXGao](https://github.com/CarolineXGao),
 [@Chris-M-P](https://github.com/Chris-M-P),
@@ -304,17 +305,21 @@ you to all contributors!
 [@DeFilippis](https://github.com/DeFilippis),
 [@denis-or](https://github.com/denis-or),
 [@dieuv0](https://github.com/dieuv0),
+[@discoleo](https://github.com/discoleo),
 [@djbirke](https://github.com/djbirke),
 [@eamoncaddigan](https://github.com/eamoncaddigan),
 [@ElfatihHasabo](https://github.com/ElfatihHasabo),
 [@emilyvertosick](https://github.com/emilyvertosick),
 [@ercbk](https://github.com/ercbk),
+[@erikvona](https://github.com/erikvona),
+[@eweisbrod](https://github.com/eweisbrod),
 [@fh-jsnider](https://github.com/fh-jsnider),
 [@gjones1219](https://github.com/gjones1219),
 [@gorkang](https://github.com/gorkang),
 [@GuiMarthe](https://github.com/GuiMarthe),
 [@hughjonesd](https://github.com/hughjonesd),
 [@iaingallagher](https://github.com/iaingallagher),
+[@ilyamusabirov](https://github.com/ilyamusabirov),
 [@IndrajeetPatil](https://github.com/IndrajeetPatil),
 [@IsadoraBM](https://github.com/IsadoraBM),
 [@j-tamad](https://github.com/j-tamad),
@@ -331,7 +336,6 @@ you to all contributors!
 [@juseer](https://github.com/juseer),
 [@jwilliman](https://github.com/jwilliman),
 [@karissawhiting](https://github.com/karissawhiting),
-[@khizzr](https://github.com/khizzr),
 [@kmdono02](https://github.com/kmdono02),
 [@kwakuduahc1](https://github.com/kwakuduahc1),
 [@larmarange](https://github.com/larmarange),
@@ -351,8 +355,10 @@ you to all contributors!
 [@MyKo101](https://github.com/MyKo101),
 [@oranwutang](https://github.com/oranwutang),
 [@Pascal-Schmidt](https://github.com/Pascal-Schmidt),
+[@polc1410](https://github.com/polc1410),
 [@proshano](https://github.com/proshano),
 [@raphidoc](https://github.com/raphidoc),
+[@roman2023](https://github.com/roman2023),
 [@ryzhu75](https://github.com/ryzhu75),
 [@sachijay](https://github.com/sachijay),
 [@sammo3182](https://github.com/sammo3182),
@@ -376,5 +382,6 @@ you to all contributors!
 [@zabore](https://github.com/zabore),
 [@zachariae](https://github.com/zachariae),
 [@zeyunlu](https://github.com/zeyunlu),
+[@zhengnow](https://github.com/zhengnow),
 [@zlkrvsm](https://github.com/zlkrvsm), and
 [@zongell-star](https://github.com/zongell-star)
