@@ -163,6 +163,7 @@ add_p_test_mcnemar.test <- function(data, variable, by, group = NULL,
       details =
         paste(
           "Follow the link for an example of the updated syntax",
+          "or update the test to `test = varname ~ 'mcnemar.test.wide'`.",
           "https://www.danieldsjoberg.com/gtsummary/articles/gallery.html#paired-test")
     )
   }
