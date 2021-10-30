@@ -118,7 +118,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       footnote_abbrev = translate_text("CI = Confidence Interval")
     ) %>%
     modify_table_styling(
-      columns = "ci",
+      columns = any_of("ci"),
       rows = .data$reference_row == TRUE,
       missing_symbol = get_theme_element("tbl_regression-str:ref_row_text", default = "\U2014")
     )
@@ -146,7 +146,8 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       label = paste0("**", translate_text("SE"), "**"),
       footnote_abbrev = translate_text("SE = Standard Error"),
       fmt_fun = purrr::partial(style_sigfig, digits = 3),
-      hide = !"std.error" %in% tidy_columns_to_report
+      # report std.error if there is no CI
+      hide = !"std.error" %in% tidy_columns_to_report | !"ci" %in% names(x$table_body)
     ) %>%
     modify_table_styling(
       columns = any_of("std.error"),
