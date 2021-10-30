@@ -201,6 +201,19 @@ add_p_test_mcnemar.test <- function(data, variable, by, group = NULL,
     broom::tidy()
 }
 
+add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args = NULL, ...) {
+  .superfluous_args(variable, ...)
+  rlang::expr(stats::mcnemar.test(data[[variable]], data[[by]], !!!test.args)) %>%
+    eval() %>%
+    broom::tidy() %>%
+    mutate(
+      method = case_when(
+        .data$method == "McNemar's Chi-squared test with continuity correction" ~ "McNemar's Chi-squared test",
+        TRUE ~ .data$method
+      )
+    )
+}
+
 add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
                                                  test.args = NULL, conf.level = 0.95,
                                                  quiet = FALSE, ...) {
