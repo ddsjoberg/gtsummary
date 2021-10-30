@@ -71,7 +71,7 @@ Confidence intervals for means are calculated using \code{t.test()} and
 # Example 1 ----------------------------------
 add_ci_ex1 <-
   trial \%>\%
-  select(age, response, trt) \%>\%
+  select(marker, response, trt) \%>\%
   tbl_summary(missing = "no",
               statistic = all_continuous() ~ "{mean} ({sd})") \%>\%
   add_ci()
