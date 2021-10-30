@@ -146,8 +146,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       label = paste0("**", translate_text("SE"), "**"),
       footnote_abbrev = translate_text("SE = Standard Error"),
       fmt_fun = purrr::partial(style_sigfig, digits = 3),
-      # report std.error if there is no CI
-      hide = !"std.error" %in% tidy_columns_to_report | !"ci" %in% names(x$table_body)
+      hide = !"std.error" %in% tidy_columns_to_report
     ) %>%
     modify_table_styling(
       columns = any_of("std.error"),
