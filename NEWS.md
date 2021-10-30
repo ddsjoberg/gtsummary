@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `tbl_regression()` when a tidier returns CI columns that are all missing. (#1012)
+
 # gtsummary 1.5.0
 
 ### New Functions
