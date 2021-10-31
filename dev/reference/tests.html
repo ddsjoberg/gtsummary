@@ -100,7 +100,7 @@ tbl_summary(trial, by = trt) %&amp;gt;% add_p(age ~ &quot;t.test&quot;, test.arg
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9002</span>
       </span>
     </div>
 
@@ -200,6 +200,7 @@ calculate a p-value from <code><a href='https://rdrr.io/r/stats/t.test.html'>t.t
 <tr><td><code>"chisq.test.no.correct"</code></td><td>chi-square test of independence</td><td><code><a href='https://rdrr.io/r/stats/chisq.test.html'>chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)</a></code></td></tr>
 <tr><td><code>"fisher.test"</code></td><td>Fisher's exact test</td><td><code><a href='https://rdrr.io/r/stats/fisher.test.html'>fisher.test(data[[variable]], as.factor(data[[by]]), conf.level = 0.95, ...)</a></code></td></tr>
 <tr><td><code>"mcnemar.test"</code></td><td>McNemar's test</td><td><code>tidyr::pivot_wider(id_cols = group, ...); mcnemar.test(by_1, by_2, conf.level = 0.95, ...)</code></td></tr>
+<tr><td><code>"mcnemar.test.wide"</code></td><td>McNemar's test</td><td><code><a href='https://rdrr.io/r/stats/mcnemar.test.html'>mcnemar.test(data[[variable]], data[[by]], conf.level = 0.95, ...)</a></code></td></tr>
 <tr><td><code>"lme4"</code></td><td>random intercept logistic regression</td><td><code>lme4::glmer(by ~ (1 \UFF5C group), data, family = binomial) %&gt;% anova(lme4::glmer(by ~ variable + (1 \UFF5C group), data, family = binomial))</code></td></tr>
 <tr><td><code>"paired.t.test"</code></td><td>Paired t-test</td><td><code>tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)</code></td></tr>
 <tr><td><code>"paired.wilcox.test"</code></td><td>Paired Wilcoxon rank-sum test</td><td><code>tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)</code></td></tr>

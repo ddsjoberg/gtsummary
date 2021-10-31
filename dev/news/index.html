@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9002</span>
       </span>
     </div>
 
@@ -176,7 +176,8 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
-<li>Fix in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> when a tidier returns CI columns that are all missing. (<a href='https://github.com/ddsjoberg/gtsummary/issues/1012'>#1012</a>)</li>
+<li><p>Fix in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> when a tidier returns CI columns that are all missing. (<a href='https://github.com/ddsjoberg/gtsummary/issues/1012'>#1012</a>)</p></li>
+<li><p>Adding <code><a href="../reference/add_p.html">add_p()</a></code> test <code>"mcnemar.test.wide"</code> to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.</p></li>
 </ul>
 </div>
     <div id="gtsummary-150" class="section level1">
