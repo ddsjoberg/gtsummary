@@ -22,6 +22,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{"chisq.test.no.correct"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \cr
    \code{"fisher.test"} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), conf.level = 0.95, ...)} \cr
    \code{"mcnemar.test"} \tab McNemar's test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); mcnemar.test(by_1, by_2, conf.level = 0.95, ...)} \cr
+   \code{"mcnemar.test.wide"} \tab McNemar's test \tab \code{mcnemar.test(data[[variable]], data[[by]], conf.level = 0.95, ...)} \cr
    \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1 \\UFF5C group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1 \\UFF5C group), data, family = binomial))} \cr
    \code{"paired.t.test"} \tab Paired t-test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \cr
    \code{"paired.wilcox.test"} \tab Paired Wilcoxon rank-sum test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)} \cr
