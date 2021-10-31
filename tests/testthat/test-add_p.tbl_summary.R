@@ -225,13 +225,15 @@ test_that("p-values are replicated within tbl_summary()", {
         contains("aov") ~ aov,
         contains("chisq.test") ~ chisq.test,
         contains("chisq.test.no.correct") ~ "chisq.test.no.correct",
-        contains("fisher.test") ~ fisher.test
+        contains("fisher.test") ~ fisher.test,
+        contains("mcnemar.test") ~ "mcnemar.test.wide"
       ),
       test.args = list(
         var_t.test_dots = list(var.equal = TRUE),
         var_wilcox.test_dots = list(correct = FALSE),
         var_chisq.test_dots = list(correct = FALSE),
-        var_fisher.test_dots = list(alternative = "greater")
+        var_fisher.test_dots = list(alternative = "greater"),
+        var_mcnemar.test_dots = list(correct = FALSE)
       )
     )
 
@@ -290,6 +292,16 @@ test_that("p-values are replicated within tbl_summary()", {
   expect_equal(
     filter(tbl_test.args$meta_data, variable == "var_fisher.test_dots")$p.value,
     fisher.test(trial[["response"]], as.factor(trial[["trt"]]), alternative = "greater")$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_mcnemar.test")$p.value,
+    mcnemar.test(trial[["response"]], as.factor(trial[["trt"]]))$p.value
+  )
+
+  expect_equal(
+    filter(tbl_test.args$meta_data, variable == "var_mcnemar.test_dots")$p.value,
+    mcnemar.test(trial[["response"]], as.factor(trial[["trt"]]), correct = FALSE)$p.value
   )
 
   tbl_groups <-

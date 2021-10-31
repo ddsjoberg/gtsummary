@@ -2,6 +2,8 @@
 
 * Fix in `tbl_regression()` when a tidier returns CI columns that are all missing. (#1012)
 
+* Adding `add_p()` test `"mcnemar.test.wide"` to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.
+
 # gtsummary 1.5.0
 
 ### New Functions

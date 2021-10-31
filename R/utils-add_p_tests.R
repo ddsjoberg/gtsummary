@@ -163,6 +163,7 @@ add_p_test_mcnemar.test <- function(data, variable, by, group = NULL,
       details =
         paste(
           "Follow the link for an example of the updated syntax",
+          "or update the test to `test = varname ~ 'mcnemar.test.wide'`.",
           "https://www.danieldsjoberg.com/gtsummary/articles/gallery.html#paired-test")
     )
   }
@@ -197,6 +198,13 @@ add_p_test_mcnemar.test <- function(data, variable, by, group = NULL,
 
   # calculate p-value
   rlang::expr(stats::mcnemar.test(data_wide[[2]], data_wide[[3]], !!!test.args)) %>%
+    eval() %>%
+    broom::tidy()
+}
+
+add_p_test_mcnemar.test_wide <- function(data, variable, by, test.args = NULL, ...) {
+  .superfluous_args(variable, ...)
+  rlang::expr(stats::mcnemar.test(data[[variable]], data[[by]], !!!test.args)) %>%
     eval() %>%
     broom::tidy()
 }
