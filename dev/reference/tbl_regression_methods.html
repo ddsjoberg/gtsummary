@@ -192,7 +192,7 @@ Those methods are listed below.</p>
 <span class='co'># S3 method for survreg</span>
 <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span>
   <span class='va'>x</span>,
-  tidy_fun <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>.data</span><span class='op'>$</span><span class='va'>term</span> <span class='op'>!=</span>
+  tidy_fun <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>.data</span><span class='op'>$</span><span class='va'>term</span> <span class='op'>!=</span>
     <span class='st'>"Log(scale)"</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
@@ -276,7 +276,7 @@ if installed.</p></td>
     
 
 
-<p>The default method for <code><a href='tbl_regression.html'>tbl_regression()</a></code> model summary uses <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom::tidy(x)</a></code>
+<p>The default method for <code><a href='tbl_regression.html'>tbl_regression()</a></code> model summary uses <code>broom::tidy(x)</code>
 to perform the initial tidying of the model object. There are, however,
 a few models that use modifications.</p><ul>
 <li><p><code>"parsnip/workflows"</code>: If the model was prepared using parsnip/workflows,
@@ -288,7 +288,7 @@ fit object and not the parsnip/workflows object.</p></li>
 <li><p><code>"multinom"</code>: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)</p></li>
 <li><p><code>"gam"</code>: Uses the internal tidier <code><a href='custom_tidiers.html'>tidy_gam()</a></code> to print both parametric and smooth terms.</p></li>
 <li><p><code>"lmerMod"</code>, <code>"glmerMod"</code>, <code>"glmmTMB"</code>, <code>"glmmadmb"</code>, <code>"stanreg"</code>, <code>"brmsfit"</code>: These mixed effects
-models use <code><a href='https://generics.r-lib.org/reference/tidy.html'>broom.mixed::tidy(x, effects = "fixed")</a></code>. Specify <code>tidy_fun = broom.mixed::tidy</code>
+models use <code>broom.mixed::tidy(x, effects = "fixed")</code>. Specify <code>tidy_fun = broom.mixed::tidy</code>
 to print the random components.</p></li>
 </ul>
 

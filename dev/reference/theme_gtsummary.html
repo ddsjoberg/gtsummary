@@ -224,7 +224,7 @@ for details.</p>
     <tr>
       <th>journal</th>
       <td><p>String indicating the journal theme to follow. One of
-<code><a href='https://rdrr.io/r/base/c.html'>c("jama", "lancet", "nejm", "qjecon")</a></code>. Details below.</p></td>
+<code>c("jama", "lancet", "nejm", "qjecon")</code>. Details below.</p></td>
     </tr>
     <tr>
       <th>set_theme</th>
@@ -250,7 +250,7 @@ with the translated text!</p></td>
     <tr>
       <th>decimal.mark</th>
       <td><p>The character to be used to indicate the numeric decimal point.
-Default is <code>"."</code>  or <code><a href='https://rdrr.io/r/base/options.html'>getOption("OutDec")</a></code></p></td>
+Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></td>
     </tr>
     <tr>
       <th>big.mark</th>
@@ -336,20 +336,22 @@ to create your own themes.</p>
 <p><code><a href='set_gtsummary_theme.html'>set_gtsummary_theme()</a></code>, <code><a href='set_gtsummary_theme.html'>reset_gtsummary_theme()</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Setting JAMA theme for gtsummary</span>
-<span class='fu'>theme_gtsummary_journal</span><span class='op'>(</span><span class='st'>"jama"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Setting theme `JAMA`</span></div><div class='input'><span class='co'># Themes can be combined by including more than one</span>
-<span class='fu'>theme_gtsummary_compact</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Setting theme `Compact`</span></div><div class='input'>
-<span class='va'>set_gtsummary_theme_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='as_gt.html'>as_gt</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># reset gtsummary themes</span>
-<span class='fu'><a href='set_gtsummary_theme.html'>reset_gtsummary_theme</a></span><span class='op'>(</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Setting JAMA theme for gtsummary</span></span>
+<span class='r-in'><span class='fu'>theme_gtsummary_journal</span><span class='op'>(</span><span class='st'>"jama"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Setting theme `JAMA`</span>
+<span class='r-in'><span class='co'># Themes can be combined by including more than one</span></span>
+<span class='r-in'><span class='fu'>theme_gtsummary_compact</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Setting theme `Compact`</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>set_gtsummary_theme_ex1</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='va'>trial</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='as_gt.html'>as_gt</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># reset gtsummary themes</span></span>
+<span class='r-in'><span class='fu'><a href='set_gtsummary_theme.html'>reset_gtsummary_theme</a></span><span class='op'>(</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

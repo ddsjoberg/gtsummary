@@ -199,7 +199,7 @@ expected cell counts &lt;5.</p></td>
       <th>pvalue_fun</th>
       <td><p>Function to round and format p-value.
 Default is <a href='style_pvalue.html'>style_pvalue</a>, except when <code>source_note = TRUE</code> when the
-default is <code><a href='style_pvalue.html'>style_pvalue(x, prepend_p = TRUE)</a></code></p></td>
+default is <code>style_pvalue(x, prepend_p = TRUE)</code></p></td>
     </tr>
     <tr>
       <th>source_note</th>
@@ -230,18 +230,18 @@ in the {gt} table source notes rather than a column.</p></td>
     <p>Karissa Whiting</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='va'>add_p_cross_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_cross.html'>tbl_cross</a></span><span class='op'>(</span>row <span class='op'>=</span> <span class='va'>stage</span>, col <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># Example 2 ----------------------------------</span>
-<span class='va'>add_p_cross_ex2</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_cross.html'>tbl_cross</a></span><span class='op'>(</span>row <span class='op'>=</span> <span class='va'>stage</span>, col <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span>source_note <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Example 1 ----------------------------------</span></span>
+<span class='r-in'><span class='va'>add_p_cross_ex1</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='va'>trial</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_cross.html'>tbl_cross</a></span><span class='op'>(</span>row <span class='op'>=</span> <span class='va'>stage</span>, col <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 2 ----------------------------------</span></span>
+<span class='r-in'><span class='va'>add_p_cross_ex2</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='va'>trial</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_cross.html'>tbl_cross</a></span><span class='op'>(</span>row <span class='op'>=</span> <span class='va'>stage</span>, col <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span>source_note <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

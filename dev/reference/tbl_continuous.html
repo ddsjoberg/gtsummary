@@ -230,9 +230,9 @@ to display for each variable. The default is
     <tr>
       <th>label</th>
       <td><p>List of formulas specifying variables labels,
-e.g. <code><a href='https://rdrr.io/r/base/list.html'>list(age ~ "Age", stage ~ "Path T Stage")</a></code>.  If a
+e.g. <code>list(age ~ "Age", stage ~ "Path T Stage")</code>.  If a
 variable's label is not specified here, the label attribute
-(<code><a href='https://rdrr.io/r/base/attr.html'>attr(data$age, "label")</a></code>) is used.  If
+(<code>attr(data$age, "label")</code>) is used.  If
 attribute label is <code>NULL</code>, the variable name will be used.</p></td>
     </tr>
     </table>
@@ -250,23 +250,23 @@ attribute label is <code>NULL</code>, the variable name will be used.</p></td>
 <p><img src='figures/tbl_continuous_ex2.png' width=35% /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='va'>tbl_continuous_ex1</span> <span class='op'>&lt;-</span>
-  <span class='fu'>tbl_continuous</span><span class='op'>(</span>
-    data <span class='op'>=</span> <span class='va'>trial</span>,
-    variable <span class='op'>=</span> <span class='va'>age</span>,
-    by <span class='op'>=</span> <span class='va'>trt</span>,
-    include <span class='op'>=</span> <span class='va'>grade</span>
-  <span class='op'>)</span>
-
-<span class='co'># Example 2 ----------------------------------</span>
-<span class='va'>tbl_continuous_ex2</span> <span class='op'>&lt;-</span>
-  <span class='fu'>tbl_continuous</span><span class='op'>(</span>
-    data <span class='op'>=</span> <span class='va'>trial</span>,
-    variable <span class='op'>=</span> <span class='va'>age</span>,
-    include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>grade</span><span class='op'>)</span>
-  <span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Example 1 ----------------------------------</span></span>
+<span class='r-in'><span class='va'>tbl_continuous_ex1</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='fu'>tbl_continuous</span><span class='op'>(</span></span>
+<span class='r-in'>    data <span class='op'>=</span> <span class='va'>trial</span>,</span>
+<span class='r-in'>    variable <span class='op'>=</span> <span class='va'>age</span>,</span>
+<span class='r-in'>    by <span class='op'>=</span> <span class='va'>trt</span>,</span>
+<span class='r-in'>    include <span class='op'>=</span> <span class='va'>grade</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 2 ----------------------------------</span></span>
+<span class='r-in'><span class='va'>tbl_continuous_ex2</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='fu'>tbl_continuous</span><span class='op'>(</span></span>
+<span class='r-in'>    data <span class='op'>=</span> <span class='va'>trial</span>,</span>
+<span class='r-in'>    variable <span class='op'>=</span> <span class='va'>age</span>,</span>
+<span class='r-in'>    include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>grade</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

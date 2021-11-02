@@ -240,7 +240,7 @@ which is a string. Default is x$estimate_fun</p></td>
 
     
 
-<p>The following items are available to print.  Use <code><a href='https://rdrr.io/r/base/print.html'>print(x$table_long)</a></code> to
+<p>The following items are available to print.  Use <code>print(x$table_long)</code> to
 print the table the estimates are extracted from.</p><ul>
 <li><p><code>{label}</code> 'time' or 'prob' label</p></li>
 <li><p><code>{estimate}</code> survival or survival time estimate formatted with 'estimate_fun'</p></li>
@@ -261,17 +261,22 @@ print the table the estimates are extracted from.</p><ul>
     <p>Karissa Whiting</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/therneau/survival'>survival</a></span><span class='op'>)</span>
-<span class='va'>surv_table</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span><span class='op'>(</span>times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: `tbl_survival()` was deprecated in gtsummary 1.4.0.</span>
-#&gt; <span class='warning'>Please use `tbl_survfit()` instead.</span></div><div class='input'>
-<span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>surv_table</span>,
-  strata <span class='op'>=</span> <span class='st'>"Drug A"</span>,
-  time <span class='op'>=</span> <span class='fl'>12</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>ℹ</span> Updating <span style='color: #00BB00;'>gtsummary</span> object from <span style='color: #262626; background-color: #DADADA;'>`x$table_header`</span> to <span style='color: #262626; background-color: #DADADA;'>`x$table_styling`</span> introduced in <span style='color: #0000BB;'>"v1.4.0"</span>.</span></div><div class='output co'>#&gt; 91% (95% CI 85%, 97%)</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/therneau/survival'>survival</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>surv_table</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/pkg/survival/man/survfit.html'>survfit</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/survival/man/Surv.html'>Surv</a></span><span class='op'>(</span><span class='va'>ttdeath</span>, <span class='va'>death</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>trt</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_survival.html'>tbl_survival</a></span><span class='op'>(</span>times <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>`tbl_survival()` was deprecated in gtsummary 1.4.0.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> Please use `tbl_survfit()` instead.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span style='color: #555555;'>This warning is displayed once every 8 hours.</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span style='color: #555555;'>Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='inline_text.html'>inline_text</a></span><span class='op'>(</span><span class='va'>surv_table</span>,</span>
+<span class='r-in'>  strata <span class='op'>=</span> <span class='st'>"Drug A"</span>,</span>
+<span class='r-in'>  time <span class='op'>=</span> <span class='fl'>12</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> <span style='color: #00BBBB;'>ℹ</span> Updating <span style='color: #00BB00;'>gtsummary</span> object from <span style='color: #262626; background-color: #DADADA;'>`x$table_header`</span> to <span style='color: #262626; background-color: #DADADA;'>`x$table_styling`</span> introduced in <span style='color: #0000BB;'>"v1.4.0"</span>.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 91% (95% CI 85%, 97%)</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

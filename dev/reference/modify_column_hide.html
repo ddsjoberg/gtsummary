@@ -213,14 +213,14 @@ Use these functions to hide or unhide columns in a gtsummary tables.</p>
 <code><a href='modify_table_styling.html'>modify_table_styling</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='co'># hide 95% CI, and replace with standard error</span>
-<span class='va'>modify_column_hide_ex1</span> <span class='op'>&lt;-</span>
-  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>marker</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>modify_column_hide</span><span class='op'>(</span>columns <span class='op'>=</span> <span class='va'>ci</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>modify_column_unhide</span><span class='op'>(</span>columns <span class='op'>=</span> <span class='va'>std.error</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Example 1 ----------------------------------</span></span>
+<span class='r-in'><span class='co'># hide 95% CI, and replace with standard error</span></span>
+<span class='r-in'><span class='va'>modify_column_hide_ex1</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>age</span> <span class='op'>~</span> <span class='va'>marker</span> <span class='op'>+</span> <span class='va'>grade</span>, <span class='va'>trial</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'>modify_column_hide</span><span class='op'>(</span>columns <span class='op'>=</span> <span class='va'>ci</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'>modify_column_unhide</span><span class='op'>(</span>columns <span class='op'>=</span> <span class='va'>std.error</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

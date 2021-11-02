@@ -224,7 +224,7 @@ corresponds to a 95 percent confidence interval.</p></td>
     <tr>
       <th>method</th>
       <td><p>Confidence interval method. Must be one of
-<code><a href='https://rdrr.io/r/base/c.html'>c("wilson", "wilson.no.correct", "exact", "asymptotic")</a></code>. See details below.</p></td>
+<code>c("wilson", "wilson.no.correct", "exact", "asymptotic")</code>. See details below.</p></td>
     </tr>
     </table>
 
@@ -238,10 +238,10 @@ corresponds to a 95 percent confidence interval.</p></td>
 <li><p><code>{conf.high}</code> upper confidence interval</p></li>
 </ul>
 
-<p>Methods <code><a href='https://rdrr.io/r/base/c.html'>c("wilson", "wilson.no.correct")</a></code> are calculated with
+<p>Methods <code>c("wilson", "wilson.no.correct")</code> are calculated with
 <code><a href='https://rdrr.io/r/stats/prop.test.html'>stats::prop.test()</a></code> (with <code>correct = c(TRUE, FALSE)</code>). The default method,
 <code>"wilson"</code>, includes the Yates continuity correction.
-Methods <code><a href='https://rdrr.io/r/base/c.html'>c("exact", "asymptotic")</a></code> are calculated with <code><a href='https://rdrr.io/pkg/Hmisc/man/binconf.html'>Hmisc::binconf()</a></code>
+Methods <code>c("exact", "asymptotic")</code> are calculated with <code><a href='https://rdrr.io/pkg/Hmisc/man/binconf.html'>Hmisc::binconf()</a></code>
 and the corresponding method.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
@@ -260,27 +260,27 @@ and the corresponding method.</p>
     <p>Joseph Larmarange</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='va'>proportion_summary_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>Titanic</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_custom_summary.html'>tbl_custom_summary</a></span><span class='op'>(</span>
-    include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Age"</span>, <span class='st'>"Class"</span><span class='op'>)</span>,
-    by <span class='op'>=</span> <span class='st'>"Sex"</span>,
-    stat_fns <span class='op'>=</span> <span class='op'>~</span> <span class='fu'>proportion_summary</span><span class='op'>(</span><span class='st'>"Survived"</span>, <span class='st'>"Yes"</span>, weights <span class='op'>=</span> <span class='st'>"Freq"</span><span class='op'>)</span>,
-    statistic <span class='op'>=</span> <span class='op'>~</span> <span class='st'>"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]"</span>,
-    digits <span class='op'>=</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-      <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='style_percent.html'>style_percent</a></span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>}</span>,
-      <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='va'>style_percent</span>, <span class='va'>style_percent</span>
-    <span class='op'>)</span>,
-    overall_row <span class='op'>=</span> <span class='cn'>TRUE</span>,
-    overall_row_last <span class='op'>=</span> <span class='cn'>TRUE</span>
-  <span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span>
-    update <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_stat_cols</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"Proportion (%) of survivors (n/N) [95% CI]"</span>
-  <span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Example 1 ----------------------------------</span></span>
+<span class='r-in'><span class='va'>proportion_summary_ex1</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='va'>Titanic</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_custom_summary.html'>tbl_custom_summary</a></span><span class='op'>(</span></span>
+<span class='r-in'>    include <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Age"</span>, <span class='st'>"Class"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    by <span class='op'>=</span> <span class='st'>"Sex"</span>,</span>
+<span class='r-in'>    stat_fns <span class='op'>=</span> <span class='op'>~</span> <span class='fu'>proportion_summary</span><span class='op'>(</span><span class='st'>"Survived"</span>, <span class='st'>"Yes"</span>, weights <span class='op'>=</span> <span class='st'>"Freq"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    statistic <span class='op'>=</span> <span class='op'>~</span> <span class='st'>"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]"</span>,</span>
+<span class='r-in'>    digits <span class='op'>=</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>      <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span><span class='fu'><a href='style_percent.html'>style_percent</a></span><span class='op'>(</span><span class='va'>x</span>, digits <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>}</span>,</span>
+<span class='r-in'>      <span class='fl'>0</span>, <span class='fl'>0</span>, <span class='va'>style_percent</span>, <span class='va'>style_percent</span></span>
+<span class='r-in'>    <span class='op'>)</span>,</span>
+<span class='r-in'>    overall_row <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>    overall_row_last <span class='op'>=</span> <span class='cn'>TRUE</span></span>
+<span class='r-in'>  <span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span></span>
+<span class='r-in'>    update <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_stat_cols</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"Proportion (%) of survivors (n/N) [95% CI]"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

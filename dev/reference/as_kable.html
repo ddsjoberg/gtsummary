@@ -243,31 +243,32 @@ indenting is not supported, try <code><a href='bold_italicize_labels_levels.html
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>as_kable</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; 
-#&gt; |**Characteristic**         |**Drug A**, N = 98 |**Drug B**, N = 102 |
-#&gt; |:--------------------------|:------------------|:-------------------|
-#&gt; |__Age__                    |46 (37, 59)        |48 (39, 56)         |
-#&gt; |Unknown                    |7                  |4                   |
-#&gt; |__Marker Level (ng/mL)__   |0.84 (0.24, 1.57)  |0.52 (0.19, 1.20)   |
-#&gt; |Unknown                    |6                  |4                   |
-#&gt; |__T Stage__                |                   |                    |
-#&gt; |T1                         |28 (29%)           |25 (25%)            |
-#&gt; |T2                         |25 (26%)           |29 (28%)            |
-#&gt; |T3                         |22 (22%)           |21 (21%)            |
-#&gt; |T4                         |23 (23%)           |27 (26%)            |
-#&gt; |__Grade__                  |                   |                    |
-#&gt; |I                          |35 (36%)           |33 (32%)            |
-#&gt; |II                         |32 (33%)           |36 (35%)            |
-#&gt; |III                        |31 (32%)           |33 (32%)            |
-#&gt; |__Tumor Response__         |28 (29%)           |33 (34%)            |
-#&gt; |Unknown                    |3                  |4                   |
-#&gt; |__Patient Died__           |52 (53%)           |60 (59%)            |
-#&gt; |__Months to Death/Censor__ |23.5 (17.4, 24.0)  |21.2 (14.6, 24.0)   |</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>trial</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'>as_kable</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |**Characteristic**         |**Drug A**, N = 98 |**Drug B**, N = 102 |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |:--------------------------|:------------------|:-------------------|</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |__Age__                    |46 (37, 59)        |48 (39, 56)         |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |Unknown                    |7                  |4                   |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |__Marker Level (ng/mL)__   |0.84 (0.24, 1.57)  |0.52 (0.19, 1.20)   |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |Unknown                    |6                  |4                   |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |__T Stage__                |                   |                    |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |T1                         |28 (29%)           |25 (25%)            |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |T2                         |25 (26%)           |29 (28%)            |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |T3                         |22 (22%)           |21 (21%)            |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |T4                         |23 (23%)           |27 (26%)            |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |__Grade__                  |                   |                    |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |I                          |35 (36%)           |33 (32%)            |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |II                         |32 (33%)           |36 (35%)            |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |III                        |31 (32%)           |33 (32%)            |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |__Tumor Response__         |28 (29%)           |33 (34%)            |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |Unknown                    |3                  |4                   |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |__Patient Died__           |52 (53%)           |60 (59%)            |</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> |__Months to Death/Censor__ |23.5 (17.4, 24.0)  |21.2 (14.6, 24.0)   |</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

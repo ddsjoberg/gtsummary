@@ -244,7 +244,7 @@ select all variables being compared with <code>"t.test"</code></p></td>
       <th>contrasts_type</th>
       <td><p>type of contrast to select. When <code>NULL</code>, all variables with a
 contrast will be selected. Default is <code>NULL</code>.  Select among contrast types
-<code><a href='https://rdrr.io/r/base/c.html'>c("treatment", "sum", "poly", "helmert", "other")</a></code></p></td>
+<code>c("treatment", "sum", "poly", "helmert", "other")</code></p></td>
     </tr>
     </table>
 
@@ -259,14 +259,14 @@ contrast will be selected. Default is <code>NULL</code>.  Select among contrast 
 <p><img src='figures/select_ex1.png' width=55% /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>select_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>response</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>
-    statistic <span class='op'>=</span> <span class='fu'>all_continuous</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,
-    type <span class='op'>=</span> <span class='fu'>all_dichotomous</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"categorical"</span>
-  <span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>select_ex1</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='va'>trial</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>age</span>, <span class='va'>response</span>, <span class='va'>grade</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span></span>
+<span class='r-in'>    statistic <span class='op'>=</span> <span class='fu'>all_continuous</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span>,</span>
+<span class='r-in'>    type <span class='op'>=</span> <span class='fu'>all_dichotomous</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"categorical"</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

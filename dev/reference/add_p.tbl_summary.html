@@ -200,7 +200,7 @@
       <th>test</th>
       <td><p>List of formulas specifying statistical tests to perform for each
 variable,
-e.g. <code><a href='https://rdrr.io/r/base/list.html'>list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")</a></code>.
+e.g. <code>list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")</code>.
 Common tests include <code>"t.test"</code>, <code>"aov"</code>, <code>"wilcox.test"</code>, <code>"kruskal.test"</code>,
 <code>"chisq.test"</code>, <code>"fisher.test"</code>, and <code>"lme4"</code> (for clustered data). See <a href='tests.html'>tests</a>
 for details, more tests, and instruction for implementing a custom test.</p>
@@ -216,7 +216,7 @@ Default is <a href='style_pvalue.html'>style_pvalue</a>.
 The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 <code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
-<code><a href='https://purrr.tidyverse.org/reference/partial.html'>purrr::partial(style_pvalue, digits = 2)</a></code>).</p></td>
+<code>purrr::partial(style_pvalue, digits = 2)</code>).</p></td>
     </tr>
     <tr>
       <th>group</th>
@@ -282,24 +282,24 @@ use <code>test.args = all_tests("t.test") ~ list(var.equal = TRUE)</code></p></t
     <p>Daniel D. Sjoberg, Emily C. Zabor</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='va'>add_p_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"trt"</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># Example 2 ----------------------------------</span>
-<span class='va'>add_p_ex2</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span>
-    <span class='co'># perform t-test for all variables</span>
-    test <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"t.test"</span>,
-    <span class='co'># assume equal variance in the t-test</span>
-    test.args <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_tests</a></span><span class='op'>(</span><span class='st'>"t.test"</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>var.equal <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-  <span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Example 1 ----------------------------------</span></span>
+<span class='r-in'><span class='va'>add_p_ex1</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='va'>trial</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"age"</span>, <span class='st'>"grade"</span>, <span class='st'>"trt"</span><span class='op'>)</span><span class='op'>]</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 2 ----------------------------------</span></span>
+<span class='r-in'><span class='va'>add_p_ex2</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='va'>trial</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>marker</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span>, missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='add_p.html'>add_p</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='co'># perform t-test for all variables</span></span>
+<span class='r-in'>    test <span class='op'>=</span> <span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"t.test"</span>,</span>
+<span class='r-in'>    <span class='co'># assume equal variance in the t-test</span></span>
+<span class='r-in'>    test.args <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_tests</a></span><span class='op'>(</span><span class='st'>"t.test"</span><span class='op'>)</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>var.equal <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

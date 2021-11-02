@@ -204,10 +204,10 @@
     <tr>
       <th>method</th>
       <td><p>Confidence interval method. Default is
-<code><a href='https://rdrr.io/r/base/list.html'>list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")</a></code>.
+<code>list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")</code>.
 Must be one of
-<code><a href='https://rdrr.io/r/base/c.html'>c("wilson", "wilson.no.correct", "exact", "asymptotic")</a></code> for categorical
-variables, and <code><a href='https://rdrr.io/r/base/c.html'>c("t.test", "wilcox.test")</a></code> for continuous variables.
+<code>c("wilson", "wilson.no.correct", "exact", "asymptotic")</code> for categorical
+variables, and <code>c("t.test", "wilcox.test")</code> for continuous variables.
 See details below.</p></td>
     </tr>
     <tr>
@@ -217,7 +217,7 @@ See details below.</p></td>
     <tr>
       <th>statistic</th>
       <td><p>Formula indicating how the confidence interval will be displayed.
-Default is <code><a href='https://rdrr.io/r/base/list.html'>list(all_categorical() ~ "{conf.low}%, {conf.high}%", all_continuous() ~ "{conf.low}, {conf.high}")</a></code></p></td>
+Default is <code>list(all_categorical() ~ "{conf.low}%, {conf.high}%", all_continuous() ~ "{conf.low}, {conf.high}")</code></p></td>
     </tr>
     <tr>
       <th>conf.level</th>
@@ -227,7 +227,7 @@ Default is <code><a href='https://rdrr.io/r/base/list.html'>list(all_categorical
       <th>style_fun</th>
       <td><p>Function to style upper and lower bound of confidence
 interval. Default is
-<code><a href='https://rdrr.io/r/base/list.html'>list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100), all_continuous() ~ style_sigfig)</a></code>.</p></td>
+<code>list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100), all_continuous() ~ style_sigfig)</code>.</p></td>
     </tr>
     </table>
 
@@ -238,10 +238,10 @@ interval. Default is
 
     
 
-<p>Methods <code><a href='https://rdrr.io/r/base/c.html'>c("wilson", "wilson.no.correct")</a></code> are calculated with
-<code><a href='https://rdrr.io/r/stats/prop.test.html'>prop.test(correct = c(TRUE, FALSE))</a></code>.
+<p>Methods <code>c("wilson", "wilson.no.correct")</code> are calculated with
+<code>prop.test(correct = c(TRUE, FALSE))</code>.
 The default method, <code>"wilson"</code>, includes the Yates continuity correction.
-Methods <code><a href='https://rdrr.io/r/base/c.html'>c("exact", "asymptotic")</a></code> are calculated with <code><a href='https://rdrr.io/pkg/Hmisc/man/binconf.html'>Hmisc::binconf(method=)</a></code>.
+Methods <code>c("exact", "asymptotic")</code> are calculated with <code>Hmisc::binconf(method=)</code>.
 Confidence intervals for means are calculated using <code><a href='https://rdrr.io/r/stats/t.test.html'>t.test()</a></code> and
 <code><a href='https://rdrr.io/r/stats/wilcox.test.html'>wilcox.test()</a></code> for pseudo-medians.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
@@ -273,27 +273,27 @@ Confidence intervals for means are calculated using <code><a href='https://rdrr.
 <code><a href='tbl_summary.html'>tbl_summary</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Example 1 ----------------------------------</span>
-<span class='va'>add_ci_ex1</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>marker</span>, <span class='va'>response</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>missing <span class='op'>=</span> <span class='st'>"no"</span>,
-              statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>add_ci</span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># Example 2 ----------------------------------</span>
-<span class='va'>add_ci_ex2</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_categorical</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span>,
-                missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>add_ci</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='modify_cols_merge.html'>modify_cols_merge</a></span><span class='op'>(</span>
-      rows <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>ci_stat_0</span><span class='op'>)</span>,
-      pattern <span class='op'>=</span> <span class='st'>"{stat_0} ({ci_stat_0})"</span>
-    <span class='op'>)</span> <span class='op'>%&gt;%</span>
-    <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='cn'>NA</span><span class='op'>)</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Example 1 ----------------------------------</span></span>
+<span class='r-in'><span class='va'>add_ci_ex1</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='va'>trial</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>marker</span>, <span class='va'>response</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>missing <span class='op'>=</span> <span class='st'>"no"</span>,</span>
+<span class='r-in'>              statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_continuous</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{mean} ({sd})"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'>add_ci</span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 2 ----------------------------------</span></span>
+<span class='r-in'><span class='va'>add_ci_ex2</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='va'>trial</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>trt</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>statistic <span class='op'>=</span> <span class='fu'><a href='select_helpers.html'>all_categorical</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"{p}%"</span>,</span>
+<span class='r-in'>                missing <span class='op'>=</span> <span class='st'>"no"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'>add_ci</span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='modify_cols_merge.html'>modify_cols_merge</a></span><span class='op'>(</span></span>
+<span class='r-in'>      rows <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>ci_stat_0</span><span class='op'>)</span>,</span>
+<span class='r-in'>      pattern <span class='op'>=</span> <span class='st'>"{stat_0} ({ci_stat_0})"</span></span>
+<span class='r-in'>    <span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>    <span class='fu'><a href='modify.html'>modify_footnote</a></span><span class='op'>(</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/everything.html'>everything</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>~</span> <span class='cn'>NA</span><span class='op'>)</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

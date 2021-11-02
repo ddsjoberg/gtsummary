@@ -238,36 +238,38 @@ as a list of expressions.</p></td>
     <p>Daniel D. Sjoberg</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>tbl</span> <span class='op'>&lt;-</span>
-  <span class='va'>trial</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>response</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span>
-
-<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 8 × 3</span>
-#&gt;   `**Characteristic**` `**Drug A**, N = 98` `**Drug B**, N = 102`
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                
-#&gt; <span style='color: #BCBCBC;'>1</span> Age                  46 (37, 59)          48 (39, 56)          
-#&gt; <span style='color: #BCBCBC;'>2</span> Unknown              7                    4                    
-#&gt; <span style='color: #BCBCBC;'>3</span> Grade                <span style='color: #BB0000;'>NA</span>                   <span style='color: #BB0000;'>NA</span>                   
-#&gt; <span style='color: #BCBCBC;'>4</span> I                    35 (36%)             33 (32%)             
-#&gt; <span style='color: #BCBCBC;'>5</span> II                   32 (33%)             36 (35%)             
-#&gt; <span style='color: #BCBCBC;'>6</span> III                  31 (32%)             33 (32%)             
-#&gt; <span style='color: #BCBCBC;'>7</span> Tumor Response       28 (29%)             33 (34%)             
-#&gt; <span style='color: #BCBCBC;'>8</span> Unknown              3                    4                    </div><div class='input'>
-<span class='co'># without column labels</span>
-<span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>tbl</span>, col_labels <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 8 × 3</span>
-#&gt;   label          stat_1      stat_2     
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      
-#&gt; <span style='color: #BCBCBC;'>1</span> Age            46 (37, 59) 48 (39, 56)
-#&gt; <span style='color: #BCBCBC;'>2</span> Unknown        7           4          
-#&gt; <span style='color: #BCBCBC;'>3</span> Grade          <span style='color: #BB0000;'>NA</span>          <span style='color: #BB0000;'>NA</span>         
-#&gt; <span style='color: #BCBCBC;'>4</span> I              35 (36%)    33 (32%)   
-#&gt; <span style='color: #BCBCBC;'>5</span> II             32 (33%)    36 (35%)   
-#&gt; <span style='color: #BCBCBC;'>6</span> III            31 (32%)    33 (32%)   
-#&gt; <span style='color: #BCBCBC;'>7</span> Tumor Response 28 (29%)    33 (34%)   
-#&gt; <span style='color: #BCBCBC;'>8</span> Unknown        3           4          </div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>tbl</span> <span class='op'>&lt;-</span></span>
+<span class='r-in'>  <span class='va'>trial</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>age</span>, <span class='va'>grade</span>, <span class='va'>response</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='tbl_summary.html'>tbl_summary</a></span><span class='op'>(</span>by <span class='op'>=</span> <span class='va'>trt</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>tbl</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 8 × 3</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   `**Characteristic**` `**Drug A**, N = 98` `**Drug B**, N = 102`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> Age                  46 (37, 59)          48 (39, 56)          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> Unknown              7                    4                    </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> Grade                <span style='color: #BB0000;'>NA</span>                   <span style='color: #BB0000;'>NA</span>                   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span> I                    35 (36%)             33 (32%)             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>5</span> II                   32 (33%)             36 (35%)             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>6</span> III                  31 (32%)             33 (32%)             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>7</span> Tumor Response       28 (29%)             33 (34%)             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>8</span> Unknown              3                    4                    </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># without column labels</span></span>
+<span class='r-in'><span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>tbl</span>, col_labels <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 8 × 3</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   label          stat_1      stat_2     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> Age            46 (37, 59) 48 (39, 56)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> Unknown        7           4          </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> Grade          <span style='color: #BB0000;'>NA</span>          <span style='color: #BB0000;'>NA</span>         </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span> I              35 (36%)    33 (32%)   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>5</span> II             32 (33%)    36 (35%)   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>6</span> III            31 (32%)    33 (32%)   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>7</span> Tumor Response 28 (29%)    33 (34%)   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>8</span> Unknown        3           4          </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
