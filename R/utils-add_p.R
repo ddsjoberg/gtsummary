@@ -28,16 +28,18 @@
     filter(.data$class %in% .env$class)
 
   # if test is character, then subset based on test name
-  if (rlang::is_string(test)) { # character test name ------------------------------
+  if (rlang::is_string(test)) { # character test name --------------------------
     df <-
       df %>%
       filter(.data$test_name %in% .env$test)
   }
-  else if (rlang::is_function(test)) { # test function passed -------------------------
+  else if (rlang::is_function(test)) { # test function passed ------------------
     df <-
       df %>%
       # now select test object equivalent to the passed function
-      filter(map_lgl(.data$test_fun, ~ identical(eval(.x), test)))
+      filter(map_lgl(.data$test_fun,
+                     ~tryCatch(identical(eval(.x), test),
+                               error = function(e) FALSE)))
   }
 
   # return info from df if internal test selected
