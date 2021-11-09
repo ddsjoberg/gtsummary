@@ -97,6 +97,7 @@ tbl_continuous <- function(data,
   result[["call_list"]] <- list(tbl_continuous = match.call())
 
   # return result --------------------------------------------------------------
+  class(result) <- c("tbl_continuous", "gtsummary")
   result
 }
 
