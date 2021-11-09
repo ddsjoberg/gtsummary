@@ -95,7 +95,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9003</span>
       </span>
     </div>
 
@@ -176,6 +176,8 @@
 <a href="#gtsummary-development-version" class="anchor"></a>gtsummary (development version)<small> Unreleased </small>
 </h1>
 <ul>
+<li><p>Fix in <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> when <code>include=</code> is not specified.</p></li>
+<li><p>Added class <code>"tbl_continuous"</code> to the output of <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code>.</p></li>
 <li><p>Fix in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> when a tidier returns CI columns that are all missing. (<a href='https://github.com/ddsjoberg/gtsummary/issues/1012'>#1012</a>)</p></li>
 <li><p>Fix in <code><a href="../reference/add_p.html">add_p()</a></code>/<code><a href="../reference/add_difference.html">add_difference()</a></code> when check whether the passed test is an internal method or a custom method. The previous code required Suggested packages, such as, {lme4}, {effectsize}, and {survey}, to be installed. (<a href='https://github.com/ddsjoberg/gtsummary/issues/1018'>#1018</a>)</p></li>
 <li><p>Adding <code><a href="../reference/add_p.html">add_p()</a></code> test <code>"mcnemar.test.wide"</code> to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.</p></li>
