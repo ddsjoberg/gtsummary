@@ -52,10 +52,13 @@ tbl_continuous <- function(data,
   # evaluate inputs ------------------------------------------------------------
   variable <- .select_to_varnames(data = data, select = {{ variable }},
                                   select_single = TRUE, arg_name = "variable")
-  include <- .select_to_varnames(data = data, select = {{ include }},
-                                 select_single = FALSE, arg_name = "include")
   by <- .select_to_varnames(data = data, select = {{ by }},
                             select_single = TRUE, arg_name = "by")
+  include <-
+    .select_to_varnames(data = data, select = {{ include }},
+                        select_single = FALSE, arg_name = "include") %>%
+    setdiff(c(variable, by))
+
   digits <-
     rep_len(
       list(continuous_digits_guess(data, variable, "continuous")),
@@ -94,6 +97,7 @@ tbl_continuous <- function(data,
   result[["call_list"]] <- list(tbl_continuous = match.call())
 
   # return result --------------------------------------------------------------
+  class(result) <- c("tbl_continuous", "gtsummary")
   result
 }
 
