@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `as_tibble()` for `nnet::multinom()` regression models.
+
 * Fix in `tbl_continuous()` when `include=` is not specified.
 
 * Added class `"tbl_continuous"` to the output of `tbl_continuous()`.
