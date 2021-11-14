@@ -2,9 +2,9 @@
 #'
 #' \lifecycle{maturing}
 #' The function allows a user to add a new column (or columns) of statistics to an
-#' existing `tbl_summary` or `tbl_svysummary` object.
+#' existing `tbl_summary`, `tbl_svysummary`, or `tbl_continuous` object.
 #'
-#' @param x `tbl_summary` or `tbl_svysummary` object
+#' @param x `tbl_summary`, `tbl_svysummary`, or `tbl_continuous` object
 #' @param fns list of formulas indicating the functions that create the statistic.
 #' See details below.
 #' @param location list of formulas indicating the location the new statistics
@@ -19,8 +19,7 @@
 #' @section Details:
 #'
 #' The returns from custom functions passed in `fns=` are required to follow a
-#' specified format. Each of these function will execute on a single variable from
-#' `tbl_summary()`/`tbl_svysummary()`.
+#' specified format. Each of these function will execute on a single variable.
 #' 1. Each function must return a tibble or a vector. If a vector is returned,
 #' it will be converted to a tibble with one column and number of rows equal
 #' to the length of the vector.
@@ -30,7 +29,7 @@
 #' row for unknown values).
 #' 1. Each function may take the following arguments: `foo(data, variable, by, tbl, ...)`
 #'     - `data=` is the input data frame passed to `tbl_summary()`
-#'     - `variable=` is a string indicating the variable to perform the calculation on
+#'     - `variable=` is a string indicating the variable to perform the calculation on. This is the variable in the label column of the table.
 #'     - `by=` is a string indicating the by variable from `tbl_summary=`, if present
 #'     - `tbl=` the original `tbl_summary()`/`tbl_svysummary()` object is also available to utilize
 #'
@@ -46,6 +45,9 @@
 #' If you return a tibble with column names `p.value` or `q.value`, default
 #' p-value formatting will be applied, and you may take advantage of subsequent
 #' p-value formatting functions, such as `bold_p()` or `add_q()`.
+#'
+#' To access the continuous variable in a `tbl_continuous()` table, use
+#' `tbl$inputs$variable`.
 #'
 #' @export
 #' @examples
@@ -123,13 +125,15 @@
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{add_stat_ex3.png}{options: width=40\%}}
+#' \if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
 
 add_stat <- function(x, fns, location = NULL, ...) {
   updated_call_list <- c(x$call_list, list(add_stat = match.call()))
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, c("tbl_summary", "tbl_svysummary"))) {
-    abort("Argument `x=` must be of class 'tbl_summary' or 'tbl_svysummary'")
+  if (!inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_continuous"))) {
+    paste("Argument `x=` must be of class 'tbl_summary', 'tbl_svysummary',",
+          "or 'tbl_continuous'") %>%
+      abort()
   }
 
   # deprecated arguments -------------------------------------------------------
