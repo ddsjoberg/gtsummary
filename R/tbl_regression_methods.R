@@ -113,12 +113,18 @@ tbl_regression.multinom <- function(x, ...) {
   # adding a grouped header for the outcome levels
   result$table_body <-
     result$table_body %>%
-    mutate(groupname_col = .data$y.level) %>%
-    select(.data$groupname_col, everything()) %>%
-    group_by(.data$groupname_col)
-  result <- .update_table_styling(result)
+    mutate(groupname_col = .data$y.level, .before = 1)
+  result <-
+    modify_table_styling(
+      x = result,
+      column = groupname_col,
+      hide= FALSE,
+      label = "**Outcome**",
+      align = "left"
+    )
 
-  # warning about multi-nomial models
+
+  # warning about multinomial models
   paste(
     "Multinomial models have a different underlying structure than",
     "the models gtsummary was designed for.",
