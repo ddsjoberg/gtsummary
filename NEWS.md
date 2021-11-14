@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `add_stat()` function was updated to accept `tbl_continuous()` tables.
+
 * Fix in `as_tibble()` for `nnet::multinom()` regression models.
 
 * Fix in `tbl_continuous()` when `include=` is not specified.
