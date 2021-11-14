@@ -804,3 +804,40 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
   x$call_list <- updated_call_list
   add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }
+
+#' P-values for `tbl_continuous`
+#'
+#' @export
+add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
+                                 include = everything(), test.args = NULL, ...) {
+  # setting defaults from gtsummary theme --------------------------------------
+  pvalue_fun <-
+    pvalue_fun %||%
+    get_theme_element("pkgwide-fn:pvalue_fun") %||%
+    gts_mapper("add_p(pvalue_fun=)")
+
+  # converting bare arguments to string ----------------------------------------
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      var_info = x$table_body,
+      arg_name = "include"
+    )
+
+  test <-
+    .formula_list_to_named_list(
+      x = test,
+      data = select(x$inputs$data, any_of(x$meta_data$variable)),
+      var_info = x$table_body,
+      arg_name = "test"
+    )
+
+  # checking pvalue_fun are functions
+  if (!is.function(pvalue_fun)) {
+    stop("Input 'pvalue_fun' must be a function.", call. = FALSE)
+  }
+
+  # caller_env for add_p
+  caller_env <- rlang::caller_env()
+}
