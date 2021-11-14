@@ -7,7 +7,7 @@
 add_stat(x, fns, location = NULL, ...)
 }
 \arguments{
-\item{x}{\code{tbl_summary} or \code{tbl_svysummary} object}
+\item{x}{\code{tbl_summary}, \code{tbl_svysummary}, or \code{tbl_continuous} object}
 
 \item{fns}{list of formulas indicating the functions that create the statistic.
 See details below.}
@@ -25,14 +25,13 @@ new statistics on the label row.}
 \description{
 \lifecycle{maturing}
 The function allows a user to add a new column (or columns) of statistics to an
-existing \code{tbl_summary} or \code{tbl_svysummary} object.
+existing \code{tbl_summary}, \code{tbl_svysummary}, or \code{tbl_continuous} object.
 }
 \section{Details}{
 
 
 The returns from custom functions passed in \verb{fns=} are required to follow a
-specified format. Each of these function will execute on a single variable from
-\code{tbl_summary()}/\code{tbl_svysummary()}.
+specified format. Each of these function will execute on a single variable.
 \enumerate{
 \item Each function must return a tibble or a vector. If a vector is returned,
 it will be converted to a tibble with one column and number of rows equal
@@ -44,7 +43,7 @@ row for unknown values).
 \item Each function may take the following arguments: \code{foo(data, variable, by, tbl, ...)}
 \itemize{
 \item \verb{data=} is the input data frame passed to \code{tbl_summary()}
-\item \verb{variable=} is a string indicating the variable to perform the calculation on
+\item \verb{variable=} is a string indicating the variable to perform the calculation on. This is the variable in the label column of the table.
 \item \verb{by=} is a string indicating the by variable from \verb{tbl_summary=}, if present
 \item \verb{tbl=} the original \code{tbl_summary()}/\code{tbl_svysummary()} object is also available to utilize
 }
@@ -63,6 +62,9 @@ the user's function, e.g. \code{foo(data, variable, by, ...)}
 If you return a tibble with column names \code{p.value} or \code{q.value}, default
 p-value formatting will be applied, and you may take advantage of subsequent
 p-value formatting functions, such as \code{bold_p()} or \code{add_q()}.
+
+To access the continuous variable in a \code{tbl_continuous()} table, use
+\code{tbl$inputs$variable}.
 }
 
 \section{Example Output}{
@@ -77,7 +79,7 @@ p-value formatting functions, such as \code{bold_p()} or \code{add_q()}.
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_stat_ex3.png}{options: width=40\%}}
+\if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
 }
 
 \examples{
