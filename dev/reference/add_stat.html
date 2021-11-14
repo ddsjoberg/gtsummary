@@ -56,7 +56,7 @@
 <meta property="og:description" content="
 
 The function allows a user to add a new column (or columns) of statistics to an
-existing tbl_summary or tbl_svysummary object." />
+existing tbl_summary, tbl_svysummary, or tbl_continuous object." />
 <meta property="og:image" content="http://www.danieldsjoberg.com/gtsummary/logo.png" />
 
 
@@ -180,7 +180,7 @@ existing tbl_summary or tbl_svysummary object." />
     <p><a href='https://lifecycle.r-lib.org/articles/stages.html#maturing'><img src='figures/lifecycle-maturing.svg' alt='[Maturing]' /></a>
 
 The function allows a user to add a new column (or columns) of statistics to an
-existing <code>tbl_summary</code> or <code>tbl_svysummary</code> object.</p>
+existing <code>tbl_summary</code>, <code>tbl_svysummary</code>, or <code>tbl_continuous</code> object.</p>
     </div>
 
     <pre class="usage"><span class='fu'>add_stat</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>fns</span>, location <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
@@ -190,7 +190,7 @@ existing <code>tbl_summary</code> or <code>tbl_svysummary</code> object.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>tbl_summary</code> or <code>tbl_svysummary</code> object</p></td>
+      <td><p><code>tbl_summary</code>, <code>tbl_svysummary</code>, or <code>tbl_continuous</code> object</p></td>
     </tr>
     <tr>
       <th>fns</th>
@@ -219,8 +219,7 @@ new statistics on the label row.</p></td>
 
 
 <p>The returns from custom functions passed in <code>fns=</code> are required to follow a
-specified format. Each of these function will execute on a single variable from
-<code><a href='tbl_summary.html'>tbl_summary()</a></code>/<code><a href='tbl_svysummary.html'>tbl_svysummary()</a></code>.</p><ol>
+specified format. Each of these function will execute on a single variable.</p><ol>
 <li><p>Each function must return a tibble or a vector. If a vector is returned,
 it will be converted to a tibble with one column and number of rows equal
 to the length of the vector.</p></li>
@@ -230,7 +229,7 @@ the same number of rows as there are levels in the variable (excluding the
 row for unknown values).</p></li>
 <li><p>Each function may take the following arguments: <code>foo(data, variable, by, tbl, ...)</code></p><ul>
 <li><p><code>data=</code> is the input data frame passed to <code><a href='tbl_summary.html'>tbl_summary()</a></code></p></li>
-<li><p><code>variable=</code> is a string indicating the variable to perform the calculation on</p></li>
+<li><p><code>variable=</code> is a string indicating the variable to perform the calculation on. This is the variable in the label column of the table.</p></li>
 <li><p><code>by=</code> is a string indicating the by variable from <code>tbl_summary=</code>, if present</p></li>
 <li><p><code>tbl=</code> the original <code><a href='tbl_summary.html'>tbl_summary()</a></code>/<code><a href='tbl_svysummary.html'>tbl_svysummary()</a></code> object is also available to utilize</p></li>
 </ul></li>
@@ -248,6 +247,8 @@ the user's function, e.g. <code>foo(data, variable, by, ...)</code></p><ul>
 <p>If you return a tibble with column names <code>p.value</code> or <code>q.value</code>, default
 p-value formatting will be applied, and you may take advantage of subsequent
 p-value formatting functions, such as <code><a href='bold_p.html'>bold_p()</a></code> or <code><a href='add_q.html'>add_q()</a></code>.</p>
+<p>To access the continuous variable in a <code><a href='tbl_continuous.html'>tbl_continuous()</a></code> table, use
+<code>tbl$inputs$variable</code>.</p>
     <h2 class="hasAnchor" id="example-output"><a class="anchor" href="#example-output"></a>Example Output</h2>
 
     
@@ -257,7 +258,7 @@ p-value formatting functions, such as <code><a href='bold_p.html'>bold_p()</a></
 <p>Example 2</p>
 <p><img src='figures/add_stat_ex2.png' width=60% /></p>
 <p>Example 3</p>
-<p><img src='figures/add_stat_ex3.png' width=40% /></p>
+<p><img src='figures/add_stat_ex3.png' width=60% /></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>, warn.conflicts <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
