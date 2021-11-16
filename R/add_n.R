@@ -347,6 +347,7 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
     modify_table_styling(
       columns = stat_n,
       label = "**N**",
+      hide = FALSE,
       fmt_fun = style_number
     )
 
