@@ -344,7 +344,12 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
       .data$stat_n,
       .after = .data$label
     ) %>%
-    modify_header(stat_n ~ "**N**")
+    modify_table_styling(
+      columns = stat_n,
+      label = "**N**",
+      hide = FALSE,
+      fmt_fun = style_number
+    )
 
   x$call_list <- updated_call_list
   x
