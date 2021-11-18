@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `add_n.tbl_regression()` (which is also utilized in `tbl_uvregression()`) was adding the N column without applying a formatting function. The `style_number()` function has now been added as the default styler. (#1022)
+
 * The `add_stat()` function was updated to accept `tbl_continuous()` tables.
 
 * Fix in `as_tibble()` for `nnet::multinom()` regression models.
