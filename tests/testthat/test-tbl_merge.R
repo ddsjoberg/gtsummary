@@ -38,7 +38,7 @@ coxph(
   trial
 ) %>%
   tbl_regression(
-    include = .x,
+    include = all_of(.x),
     exponentiate = TRUE
   ))
 
@@ -108,5 +108,18 @@ test_that("tbl_merge throws errors", {
       purrr::pluck("table_styling", "header", "spanning_header") %>%
       unique(),
     c(NA, "Drug A", "Drug B")
+  )
+})
+
+test_that("tbl_merge() column ordering", {
+  t1 <- lm(marker ~ age, trial) %>% tbl_regression()
+  t2 <- lm(marker ~ response, trial) %>% tbl_regression()
+  t3 <- lm(marker ~ age, trial) %>% tbl_regression()
+
+  expect_equal(
+    tbl_merge(list(t1, t2, t3)) %>% as_tibble(col_labels = FALSE),
+    tbl_merge(list(t1, t2, t3)) %>%
+      as_tibble(col_labels = FALSE) %>%
+      select(label, ends_with("_1"), ends_with("_2"), ends_with("_3"))
   )
 })
