@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `tbl_merge()` when rows in a merging table are not present in the first table. (#1033)
+
 * The `add_n.tbl_regression()` (which is also utilized in `tbl_uvregression()`) was adding the N column without applying a formatting function. The `style_number()` function has now been added as the default styler. (#1022)
 
 * The `add_stat()` function was updated to accept `tbl_continuous()` tables.
