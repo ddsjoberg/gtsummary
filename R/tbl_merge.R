@@ -176,10 +176,13 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   }
 
   # unnesting results from within variable column tibbles
+  ends_with_selectors <-
+    map(seq_len(tbls_length), ~rlang::expr(ends_with(!!paste0("_", .x))))
   table_body <-
     merged_table %>%
     unnest("table") %>%
-    select(.data$variable, .data$var_label, .data$row_type, .data$label, everything())
+    select(.data$variable, .data$var_label, .data$row_type, .data$label,
+           !!!ends_with_selectors, everything())
 
   # renaming columns in stylings and updating ----------------------------------
   x <- .create_gtsummary_object(
