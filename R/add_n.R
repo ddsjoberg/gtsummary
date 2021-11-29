@@ -40,6 +40,7 @@ add_n <- function(x, ...) {
 #' @family tbl_svysummary tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @rdname add_n.tbl_summary
 #' @return A `tbl_summary` or `tbl_svysummary` object
 #' @examples
@@ -199,6 +200,7 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 #' @param x object of class "`tbl_survfit`"
 #' @param ... Not used
 #' @export
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @family tbl_survfit tools
 #' @examples
 #' library(survival)

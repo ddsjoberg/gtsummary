@@ -145,6 +145,8 @@ survfit_cr_ex4 <-
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_survfit tools: 
 \code{\link{add_n.tbl_survfit}()},
 \code{\link{add_nevent.tbl_survfit}()},

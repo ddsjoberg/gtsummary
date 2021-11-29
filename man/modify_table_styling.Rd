@@ -110,6 +110,8 @@ numeric columns numeric. For the \emph{vast majority} of users,
 
 See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other Advanced modifiers: 
 \code{\link{modify_cols_merge}()},
 \code{\link{modify_column_hide}()},

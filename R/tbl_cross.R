@@ -19,6 +19,7 @@
 #' @inheritParams tbl_summary
 #'
 #' @family tbl_cross tools
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Karissa Whiting, Daniel D. Sjoberg
 #' @export
 #' @return A `tbl_cross` object

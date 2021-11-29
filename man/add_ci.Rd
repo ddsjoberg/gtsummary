@@ -90,6 +90,8 @@ add_ci_ex2 <-
     modify_footnote(everything() ~ NA)
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_summary tools: 
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},

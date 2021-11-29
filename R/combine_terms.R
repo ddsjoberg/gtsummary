@@ -15,6 +15,7 @@
 #' @inheritParams add_global_p
 #' @author Daniel D. Sjoberg
 #' @family tbl_regression tools
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @return `tbl_regression` object
 #' @export
 #'

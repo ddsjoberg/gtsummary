@@ -78,3 +78,6 @@ tbl_continuous_ex2 <-
     include = c(trt, grade)
   )
 }
+\seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+}

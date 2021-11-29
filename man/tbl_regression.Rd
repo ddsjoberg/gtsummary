@@ -142,6 +142,8 @@ tbl_regression_ex3 <-
 \seealso{
 See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_regression tools: 
 \code{\link{add_global_p}()},
 \code{\link{add_q}()},

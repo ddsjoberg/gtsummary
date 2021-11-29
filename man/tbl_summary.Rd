@@ -234,6 +234,8 @@ See \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl
 
 See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
 
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_summary tools: 
 \code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},

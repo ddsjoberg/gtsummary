@@ -83,6 +83,8 @@ tbl_cross_ex2 <-
   add_p()
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_cross tools: 
 \code{\link{add_p.tbl_cross}()},
 \code{\link{inline_text.tbl_cross}()}

@@ -272,6 +272,8 @@ tbl_custom_summary_ex3 <-
   bold_labels()
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_summary tools: 
 \code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},
