@@ -9,4 +9,10 @@ test_that("correct rounding near thresholds", {
   expect_true(
     style_sigfig(0.97, digits = 1) == "1"
   )
+
+  vec2 <- c(one = 0.99, two = 0.0005)
+  expect_equal(
+    attributes(vec2),
+    style_sigfig(vec2) %>% attributes()
+  )
 })
