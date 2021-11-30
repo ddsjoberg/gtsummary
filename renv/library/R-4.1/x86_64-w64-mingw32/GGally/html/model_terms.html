@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Model term names</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for model_response_variables {GGally}"><tr><td>model_response_variables {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Model term names</h2>
+
+<h3>Description</h3>
+
+<p>Retrieve either the response variable names, the beta variable names, or beta variable names.  If the model is an object of class 'lm', by default, the beta variable names will include anova significance stars.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+model_response_variables(model, data = broom::augment(model))
+
+model_beta_variables(model, data = broom::augment(model))
+
+model_beta_label(model, data = broom::augment(model), lmStars = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>model</code></td>
+<td>
+<p>model in question</p>
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>equivalent to <code>broom::augment(model)</code></p>
+</td></tr>
+<tr valign="top"><td><code>lmStars</code></td>
+<td>
+<p>boolean that determines if stars are added to labels</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>character vector of names
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

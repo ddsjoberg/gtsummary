@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Read a DESCRIPTION file</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for desc {desc}"><tr><td>desc {desc}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Read a DESCRIPTION file</h2>
+
+<h3>Description</h3>
+
+<p>This is a convenience wrapper for <code>description$new()</code>.
+Very often you want to read an existing <code>DESCRIPTION</code>
+file, and to do this you can just supply the path to the file or its
+directory to <code>desc()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+desc(cmd = NULL, file = NULL, text = NULL, package = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>cmd</code></td>
+<td>
+<p>A command to create a description from scratch.
+Currently only <code>"!new"</code> is implemented. If it does not start
+with an exclamation mark, it will be interpreted as the &lsquo;file&rsquo;
+argument.</p>
+</td></tr>
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>Name of the <code>DESCRIPTION</code> file to load. If all of
+&lsquo;cmd&rsquo;, &lsquo;file&rsquo; and &lsquo;text&rsquo; are <code>NULL</code> (the
+default), then the <code>DESCRIPTION</code> file in the current working
+directory is used. The file can also be an R package (source, or
+binary), in which case the DESCRIPTION file is extracted from it, but
+note that in this case <code>$write()</code> cannot write the file back in
+the package archive.</p>
+</td></tr>
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>A character scalar containing the full DESCRIPTION.
+Character vectors are collapsed into a character scalar, with
+newline as the separator.</p>
+</td></tr>
+<tr valign="top"><td><code>package</code></td>
+<td>
+<p>If not NULL, then the name of an installed package
+and the DESCRIPTION file of this package will be loaded.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+desc(package = "desc")
+DESCRIPTION &lt;- system.file("DESCRIPTION", package = "desc")
+desc(DESCRIPTION)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>desc</em> version 1.4.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Permutation matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for pMatrix-class {Matrix}"><tr><td>pMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Permutation matrices</h2>
+
+<h3>Description</h3>
+
+<p>The <code>"pMatrix"</code> class is the class of permutation
+matrices, stored as 1-based integer permutation vectors.
+</p>
+<p>Matrix (vector) multiplication with permutation matrices is equivalent
+to row or column permutation, and is implemented that way in the
+<span class="pkg">Matrix</span> package, see the &lsquo;Details&rsquo; below.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Matrix multiplication with permutation matrices is equivalent to row
+or column permutation.
+Here are the four different cases for an arbitrary matrix <i>M</i> and
+a permutation matrix <i>P</i> (where we assume matching dimensions):
+</p>
+
+<table summary="Rd table">
+<tr>
+ <td style="text-align: left;">
+    <i>MP </i></td><td style="text-align: center;">= </td><td style="text-align: left;"><code>M %*% P</code>					    </td><td style="text-align: center;">= </td><td style="text-align: left;"><code>M[, i(p)]</code></td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <i>PM </i></td><td style="text-align: center;">= </td><td style="text-align: left;"><code>P %*% M</code>					    </td><td style="text-align: center;">= </td><td style="text-align: left;"><code>M[ p , ]</code> </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <i>P'M</i></td><td style="text-align: center;">= </td><td style="text-align: left;"><code>crossprod(P,M)</code> (<i>~=</i><code>t(P) %*% M</code>)</td><td style="text-align: center;">= </td><td style="text-align: left;"><code>M[i(p), ]</code></td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <i>MP'</i></td><td style="text-align: center;">= </td><td style="text-align: left;"><code>tcrossprod(M,P)</code> (<i>~=</i><code>M %*% t(P)</code>)</td><td style="text-align: center;">= </td><td style="text-align: left;"><code>M[ , p ]</code> </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+  </td>
+</tr>
+
+</table>
+
+<p>where <code>p</code> is the &ldquo;permutation vector&rdquo; corresponding to the
+permutation matrix <code>P</code> (see first note), and <code>i(p)</code> is short
+for <code><a href="invPerm.html">invPerm</a>(p)</code>.
+</p>
+<p>Also one could argue that these are really only two cases if you take
+into account that inversion (<code><a href="solve-methods.html">solve</a></code>) and transposition
+(<code><a href="../../base/html/t.html">t</a></code>) are the same for permutation matrices <i>P</i>.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("pMatrix", ...)</code>
+or by coercion from an integer permutation vector, see below.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>perm</code>:</dt><dd><p>An integer, 1-based permutation vector, i.e.
+an integer vector of length <code>Dim[1]</code> whose elements form a
+permutation of <code>1:Dim[1]</code>.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>Object of class <code>"integer"</code>. The dimensions
+of the matrix which must be a two-element vector of equal,
+non-negative integers.</p>
+</dd>
+<dt><code>Dimnames</code>:</dt><dd><p>list of length two; each component
+containing NULL or a <code><a href="../../base/html/character.html">character</a></code> vector length
+equal the corresponding <code>Dim</code> element.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"<a href="indMatrix-class.html">indMatrix</a>"</code>, directly.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>%*%</dt><dd><p><code>signature(x = "matrix", y = "pMatrix")</code> and other
+signatures (use <code>showMethods("%*%", class="pMatrix")</code>): ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "integer", to = "pMatrix")</code>:
+This is enables typical <code>"pMatrix"</code> construction, given
+a permutation vector of <code>1:n</code>, see the first example.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "numeric", to = "pMatrix")</code>:
+a user convenience, to allow <code>as(perm, "pMatrix")</code> for
+numeric <code>perm</code> with integer values.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "pMatrix", to = "matrix")</code>:
+coercion to a traditional FALSE/TRUE <code><a href="../../base/html/matrix.html">matrix</a></code> of
+<code><a href="../../base/html/mode.html">mode</a></code> <code>logical</code>.
+(in earlier version of <span class="pkg">Matrix</span>, it resulted in a 0/1-integer
+matrix; <code>logical</code> makes slightly more sense, corresponding
+better to the &ldquo;natural&rdquo; sparseMatrix counterpart,
+<code>"ngTMatrix"</code>.)</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "pMatrix", to = "ngTMatrix")</code>:
+coercion to sparse logical matrix of class <code><a href="nsparseMatrix-classes.html">ngTMatrix</a></code>.</p>
+</dd>
+<dt>determinant</dt><dd><p><code>signature(x = "pMatrix", logarithm="logical")</code>:
+Since permutation matrices are orthogonal, the determinant must be
++1 or -1.  In fact, it is exactly the <em>sign of the
+permutation</em>.</p>
+</dd>
+<dt>solve</dt><dd><p><code>signature(a = "pMatrix", b = "missing")</code>: return
+the inverse permutation matrix; note that <code>solve(P)</code> is
+identical to <code>t(P)</code> for permutation matrices.  See
+<code><a href="solve-methods.html">solve-methods</a></code> for other methods.</p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "pMatrix")</code>: return the transpose of
+the permutation matrix (which is also the inverse of the
+permutation matrix).</p>
+</dd>
+</dl>
+
+
+
+<h3>Note</h3>
+
+<p>For every permutation matrix <code>P</code>, there is a corresponding
+permutation vector <code>p</code> (of indices, 1:n), and these are related by
+</p>
+<pre> P &lt;- as(p, "pMatrix")
+ p &lt;- P@perm
+</pre>
+<p>see also the &lsquo;Examples&rsquo;.
+</p>
+<p>&ldquo;Row-indexing&rdquo; a permutation matrix typically returns
+an <code>"indMatrix"</code>.  See <code>"<a href="indMatrix-class.html">indMatrix</a>"</code> for all other
+subsetting/indexing and subassignment (<code>A[..] &lt;- v</code>) operations.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="invPerm.html">invPerm</a>(p)</code> computes the inverse permutation of an
+integer (index) vector <code>p</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(pm1 &lt;- as(as.integer(c(2,3,1)), "pMatrix"))
+t(pm1) # is the same as
+solve(pm1)
+pm1 %*% t(pm1) # check that the transpose is the inverse
+stopifnot(all(diag(3) == as(pm1 %*% t(pm1), "matrix")),
+          is.logical(as(pm1, "matrix")))
+
+set.seed(11)
+## random permutation matrix :
+(p10 &lt;- as(sample(10),"pMatrix"))
+
+## Permute rows / columns of a numeric matrix :
+(mm &lt;- round(array(rnorm(3 * 3), c(3, 3)), 2))
+mm %*% pm1
+pm1 %*% mm
+try(as(as.integer(c(3,3,1)), "pMatrix"))# Error: not a permutation
+
+as(pm1, "ngTMatrix")
+p10[1:7, 1:4] # gives an "ngTMatrix" (most economic!)
+
+## row-indexing of a &lt;pMatrix&gt; keeps it as an &lt;indMatrix&gt;:
+p10[1:3, ]
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

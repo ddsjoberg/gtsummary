@@ -1,0 +1,18 @@
+citHeader("To cite package 'rio' in publications use:")
+     
+ year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+ vers <- paste("R package version", meta$Version)
+ 
+ citEntry(entry="Manual",
+		  title = "rio: A Swiss-army knife for data file I/O",
+		  author = personList(as.person("Chung-hong Chan"), 
+                              as.person("Geoffrey CH Chan"), 
+                              as.person("Thomas J. Leeper"), 
+                              as.person("Jason Becker")),
+		  year = year,
+		  note = vers,
+		  textVersion =
+		  paste("Chung-hong Chan, Geoffrey CH Chan, Thomas J. Leeper, and Jason Becker (",
+				year,
+				"). rio: A Swiss-army knife for data file I/O. ",
+				vers, ".", sep=""))

@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Build windows binary package.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for check_win {devtools}"><tr><td>check_win {devtools}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Build windows binary package.</h2>
+
+<h3>Description</h3>
+
+<p>This function works by bundling source package, and then uploading to
+<a href="https://win-builder.r-project.org/">https://win-builder.r-project.org/</a>.  Once building is complete you'll
+receive a link to the built package in the email address listed in the
+maintainer field.  It usually takes around 30 minutes. As a side effect,
+win-build also runs <code style="white-space: pre;">R CMD check</code> on the package, so <code>check_win</code>
+is also useful to check that your package is ok on windows.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+check_win_devel(
+  pkg = ".",
+  args = NULL,
+  manual = TRUE,
+  email = NULL,
+  quiet = FALSE,
+  ...
+)
+
+check_win_release(
+  pkg = ".",
+  args = NULL,
+  manual = TRUE,
+  email = NULL,
+  quiet = FALSE,
+  ...
+)
+
+check_win_oldrelease(
+  pkg = ".",
+  args = NULL,
+  manual = TRUE,
+  email = NULL,
+  quiet = FALSE,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pkg</code></td>
+<td>
+<p>The package to use, can be a file path to the package or a
+package object.  See <code><a href="../../devtools/help/as.package.html">as.package()</a></code> for more information.</p>
+</td></tr>
+<tr valign="top"><td><code>args</code></td>
+<td>
+<p>An optional character vector of additional command
+line arguments to be passed to <code style="white-space: pre;">R CMD build</code> if <code>binary = FALSE</code>,
+or <code style="white-space: pre;">R CMD install</code> if <code>binary = TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>manual</code></td>
+<td>
+<p>For source packages: if <code>FALSE</code>, don't build PDF
+vignettes (<code>--no-build-vignettes</code>) or manual (<code>--no-manual</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>email</code></td>
+<td>
+<p>An alternative email to use, default <code>NULL</code> uses the package
+Maintainer's email.</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>If <code>TRUE</code>, suppresses output.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional arguments passed to <code><a href="../../pkgbuild/help/build.html">pkgbuild::build()</a></code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>check_win_devel</code>: Check package on the development version of R.
+</p>
+</li>
+<li> <p><code>check_win_release</code>: Check package on the release version of R.
+</p>
+</li>
+<li> <p><code>check_win_oldrelease</code>: Check package on the previous major release version of R.
+</p>
+</li></ul>
+
+
+<h3>See Also</h3>
+
+<p>Other build functions: 
+<code><a href="../../devtools/help/check_rhub.html">check_rhub</a>()</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>devtools</em> version 2.4.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

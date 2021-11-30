@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Knit an R Markdown document and post it to WordPress</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for knit2wp {knitr}"><tr><td>knit2wp {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Knit an R Markdown document and post it to WordPress</h2>
+
+<h3>Description</h3>
+
+<p>This function is a wrapper around the <span class="pkg">RWordPress</span> package. It compiles
+an R Markdown document to HTML and post the results to WordPress. Please note
+that <span class="pkg">RWordPress</span> has not been updated for several years, which is
+<a href="https://github.com/yihui/knitr/issues/1866">not a good sign</a>. For
+blogging with R, you may want to try the <span class="pkg">blogdown</span> package instead.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+knit2wp(
+  input,
+  title = "A post from knitr",
+  ...,
+  envir = parent.frame(),
+  shortcode = FALSE,
+  action = c("newPost", "editPost", "newPage"),
+  postid,
+  publish = TRUE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>input</code></td>
+<td>
+<p>Filename of the Rmd document.</p>
+</td></tr>
+<tr valign="top"><td><code>title</code></td>
+<td>
+<p>Title of the post.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Other meta information of the post, e.g. <code>categories = c('R',
+'Stats')</code> and <code>mt_keywords = c('knitr', 'wordpress')</code>, et cetera.</p>
+</td></tr>
+<tr valign="top"><td><code>envir</code></td>
+<td>
+<p>Environment in which code chunks are to be evaluated, for
+example, <code><a href="../../base/html/sys.parent.html">parent.frame</a>()</code>, <code><a href="../../base/html/environment.html">new.env</a>()</code>, or
+<code><a href="../../base/html/environment.html">globalenv</a>()</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>shortcode</code></td>
+<td>
+<p>A length-2 logical vector: whether to use the shortcode
+<span class="samp">[sourcecode lang='lang']</span>, which can be useful to WordPress.com users
+for syntax highlighting of source code and output. The first element
+applies to source code, and the second applies to text output. By default,
+both are <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>action</code></td>
+<td>
+<p>Whether to create a new post, update an existing post, or
+create a new page.</p>
+</td></tr>
+<tr valign="top"><td><code>postid</code></td>
+<td>
+<p>If <code>action</code> is <code>editPost</code>, the post id <code>postid</code>
+must be specified.</p>
+</td></tr>
+<tr valign="top"><td><code>publish</code></td>
+<td>
+<p>Boolean: publish the post immediately?</p>
+</td></tr>
+</table>
+
+
+<h3>Note</h3>
+
+<p>This function will convert the encoding of the post and the title to
+UTF-8 internally. If you have additional data to send to WordPress (e.g.
+keywords and categories), you may have to manually convert them to the
+UTF-8 encoding with the <code><a href="../../base/html/iconv.html">iconv</a>(x, to = 'UTF-8')</code> function
+(especially when using Windows).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>William K. Morris, Yihui Xie, and Jared Lander
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://yihui.org/knitr/demo/wordpress/">https://yihui.org/knitr/demo/wordpress/</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# see the reference
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

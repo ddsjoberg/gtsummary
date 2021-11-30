@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Box plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggally_box {GGally}"><tr><td>ggally_box {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Box plot</h2>
+
+<h3>Description</h3>
+
+<p>Make a box plot with a given data set. <code>ggally_box_no_facet</code> will be a single panel plot, while <code>ggally_box</code> will be a faceted plot
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggally_box(data, mapping, ...)
+
+ggally_box_no_facet(data, mapping, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data set using</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>aesthetics being used</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other arguments being supplied to geom_boxplot</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Barret Schloerke
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+data(tips, package = "reshape")
+p_(ggally_box(tips, mapping = ggplot2::aes(x = total_bill, y = sex)))
+p_(ggally_box(tips, mapping = ggplot2::aes_string(x = "total_bill", y = "sex")))
+p_(ggally_box(
+  tips,
+  mapping        = ggplot2::aes_string(y = "total_bill", x = "sex", color = "sex"),
+  outlier.colour = "red",
+  outlier.shape  = 13,
+  outlier.size   = 8
+))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

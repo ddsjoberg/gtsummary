@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;abIndex&quot; of Abstract Index Vectors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for abIndex-class {Matrix}"><tr><td>abIndex-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;abIndex&quot; of Abstract Index Vectors</h2>
+
+<h3>Description</h3>
+
+<p>The <code>"abIndex"</code> <code><a href="../../base/html/class.html">class</a></code>, short for &ldquo;Abstract
+Index Vector&rdquo;, is used for dealing with large index vectors more
+efficiently, than using integer (or <code><a href="../../base/html/numeric.html">numeric</a></code>) vectors of
+the kind <code>2:1000000</code> or <code>c(0:1e5, 1000:1e6)</code>.
+</p>
+<p>Note that the current implementation details are subject to change,
+and if you consider working with these classes, please contact the
+package maintainers (<code>packageDescription("Matrix")$Maintainer</code>).
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("abIndex", ...)</code>,
+but more easily and typically either by <code>as(x, "abIndex")</code> where
+<code>x</code> is an integer (valued) vector, or directly by
+<code><a href="abIseq.html">abIseq</a>()</code> and combination <code><a href="../../base/html/c.html">c</a>(...)</code> of such.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>kind</code>:</dt><dd><p>a <code><a href="../../base/html/character.html">character</a></code> string,
+one of <code>("int32", "double", "rleDiff")</code>, denoting the
+internal structure of the abIndex object.</p>
+</dd>
+<dt><code>x</code>:</dt><dd><p>Object of class <code>"numLike"</code>; is
+used (i.e., not of length <code>0</code>) only iff the object is <em>not</em>
+compressed, i.e., currently exactly when <code>kind != "rleDiff"</code>.</p>
+</dd>
+<dt><code>rleD</code>:</dt><dd><p>object of class <code>"<a href="rleDiff-class.html">rleDiff</a>"</code>,
+used for compression via <code><a href="../../base/html/rle.html">rle</a></code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>as.numeric, as.integer, as.vector</dt><dd><p><code>signature(x = "abIndex")</code>: ... </p>
+</dd>
+<dt>[</dt><dd><p><code>signature(x = "abIndex", i = "index", j = "ANY", drop = "ANY")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "numeric", to = "abIndex")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "abIndex", to = "numeric")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "abIndex", to = "integer")</code>: ... </p>
+</dd>
+<dt>length</dt><dd><p><code>signature(x = "abIndex")</code>: ... </p>
+</dd>
+<dt>Ops</dt><dd><p><code>signature(e1 = "numeric", e2 = "abIndex")</code>: These
+and the following arithmetic and logic operations are
+<b>not yet implemented</b>; see <code><a href="../../methods/html/Ops.html">Ops</a></code> for a
+list of these (S4) group methods.</p>
+</dd>
+<dt>Ops</dt><dd><p><code>signature(e1 = "abIndex", e2 = "abIndex")</code>: ... </p>
+</dd>
+<dt>Ops</dt><dd><p><code>signature(e1 = "abIndex", e2 = "numeric")</code>: ... </p>
+</dd>
+<dt>Summary</dt><dd><p><code>signature(x = "abIndex")</code>: ... </p>
+</dd>
+<dt>show</dt><dd><p><code>("abIndex")</code>: simple <code><a href="../../methods/html/show.html">show</a></code> method,
+building on <code>show(&lt;rleDiff&gt;)</code>.</p>
+</dd>
+<dt>is.na</dt><dd><p><code>("abIndex")</code>: works analogously to regular vectors.</p>
+</dd>
+<dt>is.finite, is.infinite</dt><dd><p><code>("abIndex")</code>: ditto.</p>
+</dd>
+</dl>
+
+
+
+<h3>Note</h3>
+
+<p>This is currently experimental and not yet used for our own code.
+Please contact us (<code>packageDescription("Matrix")$Maintainer</code>),
+if you plan to make use of this class.
+</p>
+<p>Partly builds on ideas and code from Jens Oehlschlaegel,
+as implemented (around 2008, in the GPL'ed part of) package <span class="pkg">ff</span>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/rle.html">rle</a></code> (<span class="pkg">base</span>) which is used here;
+<code><a href="../../base/html/numeric.html">numeric</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("abIndex")
+ii &lt;- c(-3:40, 20:70)
+str(ai &lt;- as(ii, "abIndex"))# note
+ai # -&gt; show() method
+
+
+stopifnot(identical(-3:20,
+                    as(abIseq1(-3,20), "vector")))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

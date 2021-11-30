@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;dgeMatrix&quot; of Dense Numeric (S4 Class) Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for dgeMatrix-class {Matrix}"><tr><td>dgeMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;dgeMatrix&quot; of Dense Numeric (S4 Class) Matrices</h2>
+
+<h3>Description</h3>
+
+<p>A general numeric dense matrix in the S4 Matrix
+representation.  <code>dgeMatrix</code> is the <em>&ldquo;standard&rdquo;</em>
+class for dense numeric matrices in the <span class="pkg">Matrix</span> package.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("dgeMatrix", ...)</code>
+or, more commonly, by coercion from the <code>Matrix</code> class (see
+<a href="Matrix-class.html">Matrix</a>) or by <code><a href="Matrix.html">Matrix</a>(..)</code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>x</code>:</dt><dd><p>Object of class <code>"numeric"</code> - the numeric
+values contained in the matrix, in column-major order.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>Object of class <code>"integer"</code> - the dimensions
+of the matrix - must be an integer vector with exactly two
+non-negative values.</p>
+</dd>
+<dt><code>Dimnames</code>:</dt><dd><p>a list of length two - inherited from class
+<code><a href="Matrix-class.html">Matrix</a></code>.</p>
+</dd>
+<dt><code>factors</code>:</dt><dd><p>Object of class <code>"list"</code> - a list
+of factorizations of the matrix.</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+<p>The are group methods (see, e.g., <code><a href="../../methods/html/S4groupGeneric.html">Arith</a></code>)
+</p>
+
+<dl>
+<dt>Arith</dt><dd><p><code>signature(e1 = "dgeMatrix", e2 = "dgeMatrix")</code>: ... </p>
+</dd>
+<dt>Arith</dt><dd><p><code>signature(e1 = "dgeMatrix", e2 = "numeric")</code>: ... </p>
+</dd>
+<dt>Arith</dt><dd><p><code>signature(e1 = "numeric", e2 = "dgeMatrix")</code>: ... </p>
+</dd>
+<dt>Math</dt><dd><p><code>signature(x = "dgeMatrix")</code>: ... </p>
+</dd>
+<dt>Math2</dt><dd><p><code>signature(x = "dgeMatrix", digits = "numeric")</code>: ...</p>
+</dd>
+</dl>
+
+<p>matrix products <code><a href="matrix-products.html">%*%</a></code>,
+<code><a href="matrix-products.html">crossprod</a>()</code> and <code>tcrossprod()</code>,
+several <code><a href="solve-methods.html">solve</a></code> methods,
+and other matrix methods available:
+</p>
+
+<dl>
+<dt>Schur</dt><dd><p><code>signature(x = "dgeMatrix", vectors = "logical")</code>: ... </p>
+</dd>
+<dt>Schur</dt><dd><p><code>signature(x = "dgeMatrix", vectors = "missing")</code>: ... </p>
+</dd>
+<dt>chol</dt><dd><p><code>signature(x = "dgeMatrix")</code>: see <code><a href="chol.html">chol</a></code>.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dgeMatrix", to = "lgeMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dgeMatrix", to = "matrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "matrix", to = "dgeMatrix")</code>: ... </p>
+</dd>
+<dt>colMeans</dt><dd><p><code>signature(x = "dgeMatrix")</code>: columnwise means (averages)</p>
+</dd>
+<dt>colSums</dt><dd><p><code>signature(x = "dgeMatrix")</code>: columnwise sums</p>
+</dd>
+<dt>diag</dt><dd><p><code>signature(x = "dgeMatrix")</code>: ... </p>
+</dd>
+<dt>dim</dt><dd><p><code>signature(x = "dgeMatrix")</code>: ... </p>
+</dd>
+<dt>dimnames</dt><dd><p><code>signature(x = "dgeMatrix")</code>: ... </p>
+</dd>
+<dt>eigen</dt><dd><p><code>signature(x = "dgeMatrix", only.values= "logical")</code>: ...</p>
+</dd>
+<dt>eigen</dt><dd><p><code>signature(x = "dgeMatrix", only.values= "missing")</code>: ...</p>
+</dd>
+<dt>norm</dt><dd><p><code>signature(x = "dgeMatrix", type = "character")</code>: ... </p>
+</dd>
+<dt>norm</dt><dd><p><code>signature(x = "dgeMatrix", type = "missing")</code>: ... </p>
+</dd>
+<dt>rcond</dt><dd><p><code>signature(x = "dgeMatrix", norm = "character")</code>
+or <code>norm = "missing"</code>:
+the reciprocal condition number, <code><a href="rcond.html">rcond</a>()</code>.</p>
+</dd>
+<dt>rowMeans</dt><dd><p><code>signature(x = "dgeMatrix")</code>: rowwise means (averages)</p>
+</dd>
+<dt>rowSums</dt><dd><p><code>signature(x = "dgeMatrix")</code>: rowwise sums</p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "dgeMatrix")</code>: matrix transpose</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>Classes <code><a href="Matrix-class.html">Matrix</a></code>,
+<code><a href="dtrMatrix-class.html">dtrMatrix</a></code>, and <code><a href="dsyMatrix-class.html">dsyMatrix</a></code>.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

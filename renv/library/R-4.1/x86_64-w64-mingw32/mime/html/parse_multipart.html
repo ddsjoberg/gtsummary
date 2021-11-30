@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Parse multipart form data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for parse_multipart {mime}"><tr><td>parse_multipart {mime}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Parse multipart form data</h2>
+
+<h3>Description</h3>
+
+<p>This function parses the HTML form data from a Rook environment (an HTTP POST
+request).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+parse_multipart(env)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>env</code></td>
+<td>
+<p>the HTTP request environment</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A named list containing the values of the form data, and the files
+uploaded are saved to temporary files (the temporary filenames are
+returned). It may also be <code>NULL</code> if there is anything unexpected in
+the form data, or the form is empty.
+</p>
+
+
+<h3>References</h3>
+
+<p>This function was borrowed from
+<a href="https://github.com/jeffreyhorner/Rook/">https://github.com/jeffreyhorner/Rook/</a> with slight modifications.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>mime</em> version 0.12 <a href="00Index.html">Index</a>]</div>
+</body></html>

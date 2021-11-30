@@ -1,0 +1,182 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{urltools}
+-->
+
+## Elegant URL handling with urltools
+
+URLs are treated, by base R, as nothing more than components of a data retrieval process: they exist
+to create connections to retrieve datasets. This is an essential feature for the language to have,
+but it also means that URL handlers are designed for situations where URLs *get* you to the data - 
+not situations where URLs *are* the data.
+
+There is no support for encoding or decoding URLs en-masse, and no support for parsing and
+interpreting them. `urltools` provides this support!
+
+### URL encoding and decoding
+
+Base R provides two functions - <code>URLdecode</code> and <code>URLencode</code> - for taking percentage-encoded
+URLs and turning them into regular strings, or vice versa. As discussed, these are primarily designed to
+enable connections, and so they have several inherent limitations, including a lack of vectorisation, that
+make them unsuitable for large datasets.
+
+Not only are they not vectorised, they also have several particularly idiosyncratic bugs and limitations:
+<code>URLdecode</code>, for example, breaks if the decoded value is out of range:
+
+```{r, eval=FALSE}
+URLdecode("test%gIL")
+Error in rawToChar(out) : embedded nul in string: '\0L'
+In addition: Warning message:
+In URLdecode("%gIL") : out-of-range values treated as 0 in coercion to raw
+```
+
+URLencode, on the other hand, encodes slashes on its most strict setting - without
+paying attention to where those slashes *are*: if we attempt to URLencode an entire URL, we get:
+
+```{r, eval=FALSE}
+URLencode("https://en.wikipedia.org/wiki/Article", reserved = TRUE)
+[1] "https%3a%2f%2fen.wikipedia.org%2fwiki%2fArticle"
+```
+That's a completely unusable URL (or ewRL, if you will).
+
+urltools replaces both functions with <code>url\_decode</code> and <code>url\_encode</code> respectively:
+```{r, eval=FALSE}
+library(urltools)
+url_decode("test%gIL")
+[1] "test"
+url_encode("https://en.wikipedia.org/wiki/Article")
+[1] "https://en.wikipedia.org%2fwiki%2fArticle"
+```
+
+As you can see, <code>url\_decode</code> simply excludes out-of-range characters from consideration, while <code>url\_encode</code> detects characters that make up part of the URLs scheme, and leaves them unencoded. Both are extremely fast; with `urltools`, you can
+decode a vector of 1,000,000 URLs in 0.9 seconds.
+
+Alongside these, we have functions for encoding and decoding the 'punycode' format of URLs - ones that are designed to be internationalised and have unicode characters in them. These also take one argument, a vector of URLs, and can be found at `puny_encode` and `puny_decode` respectively.
+
+### URL parsing
+
+Once you've got your nicely decoded (or encoded) URLs, it's time to do something with them - and, most of the time,
+you won't actually care about most of the URL. You'll want to look at the scheme, or the domain, or the path,
+but not the entire thing as one string.
+
+The solution is <code>url_parse</code>, which takes a URL and breaks it out into its [RfC 3986](http://www.ietf.org/rfc/rfc3986.txt) components: scheme, domain, port, path, query string and fragment identifier. This is,
+again, fully vectorised, and can happily be run over hundreds of thousands of URLs, rapidly processing them. The
+results are provided as a data.frame, since most people use data.frames to store data.
+
+```{r, eval=FALSE}
+> parsed_address <- url_parse("https://en.wikipedia.org/wiki/Article")
+> str(parsed_address)
+'data.frame':	1 obs. of  6 variables:
+ $ scheme   : chr "https"
+ $ domain   : chr "en.wikipedia.org"
+ $ port     : chr NA
+ $ path     : chr "wiki/Article"
+ $ parameter: chr NA
+ $ fragment : chr NA                         
+```
+
+We can also perform the opposite of this operation with `url_compose`:
+```{r, eval=FALSE}
+> url_compose(parsed_address)
+[1] "https://en.wikipedia.org/wiki/article"
+```
+
+### Getting/setting URL components
+With the inclusion of a URL parser, we suddenly have the opportunity for lubridate-style component getting
+and setting. Syntax is identical to that of `lubridate`, but uses URL components as function names.
+
+```{r, eval=FALSE}
+url <- "https://en.wikipedia.org/wiki/Article"
+scheme(url)
+"https"
+scheme(url) <- "ftp"
+url
+"ftp://en.wikipedia.org/wiki/Article"
+```
+Fields that can be extracted or set are <code>scheme</code>, <code>domain</code>, <code>port</code>, <code>path</code>,
+<code>parameters</code> and <code>fragment</code>.
+
+### Suffix and TLD extraction
+
+Once we've extracted a domain from a URL with `domain` or `url_parse`, we can identify which bit is the domain name, and which
+bit is the suffix:
+
+```{r, eval=FALSE}
+> url <- "https://en.wikipedia.org/wiki/Article"
+> domain_name <- domain(url)
+> domain_name
+[1] "en.wikipedia.org"
+> str(suffix_extract(domain_name))
+'data.frame':	1 obs. of  4 variables:
+ $ host     : chr "en.wikipedia.org"
+ $ subdomain: chr "en"
+ $ domain   : chr "wikipedia"
+ $ suffix      : chr "org"
+```
+
+This relies on an internal database of public suffixes, accessible at `suffix_dataset` - we recognise, though,
+that this dataset may get a bit out of date, so you can also pass the results of the `suffix_refresh` function,
+which retrieves an updated dataset, to `suffix_extract`:
+
+```{r, eval=FALSE}
+domain_name <- domain("https://en.wikipedia.org/wiki/Article")
+updated_suffixes <- suffix_refresh()
+suffix_extract(domain_name, updated_suffixes)
+```
+
+We can do the same thing with top-level domains, with precisely the same setup, except the functions and datasets are `tld_refresh`, `tld_extract` and `tld_dataset`.
+
+In the other direction we have `host_extract`, which retrieves, well, the host! If the URL has subdomains, it'll be the
+lowest-level subdomain. If it doesn't, it'll be the actual domain name, without the suffixes:
+
+```{r, eval=FALSE}
+domain_name <- domain("https://en.wikipedia.org/wiki/Article")
+host_extract(domain_name)
+```
+### Query manipulation
+Once a URL is parsed, it's sometimes useful to get the value associated with a particular query parameter. As
+an example, take the URL `http://en.wikipedia.org/wiki/api.php?action=parse&pageid=1023&export=json`. What
+pageID is being used? What is the export format? We can find out with `param_get`.
+
+```{r, eval=FALSE}
+> str(param_get(urls = "http://en.wikipedia.org/wiki/api.php?action=parse&pageid=1023&export=json",
+                     parameter_names = c("pageid","export")))
+'data.frame':	1 obs. of  2 variables:
+ $ pageid: chr "1023"
+ $ export: chr "json"
+```
+
+This isn't the only function for query manipulation; we can also dynamically modify the values a particular parameter
+might have, or strip them out entirely.
+
+To modify the values, we use `param_set`:
+
+```{r, eval=FALSE}
+url <- "http://en.wikipedia.org/wiki/api.php?action=parse&pageid=1023&export=json"
+url <- param_set(url, key = "pageid", value = "12")
+url
+# [1] "http://en.wikipedia.org/wiki/api.php?action=parse&pageid=12&export=json"
+```
+
+As you can see this works pretty well; it even works in situations where the URL doesn't *have* a query yet:
+
+```{r, eval=FALSE}
+url <- "http://en.wikipedia.org/wiki/api.php"
+url <- param_set(url, key = "pageid", value = "12")
+url
+# [1] "http://en.wikipedia.org/wiki/api.php?pageid=12"
+```
+
+On the other hand we might have a parameter we just don't want any more - that can be handled with `param_remove`, which can
+take multiple parameters as well as multiple URLs:
+
+```{r, eval=FALSE}
+url <- "http://en.wikipedia.org/wiki/api.php?action=parse&pageid=1023&export=json"
+url <- param_remove(url, keys = c("action","export"))
+url
+# [1] "http://en.wikipedia.org/wiki/api.php?pageid=1023"
+```
+
+### Other URL handlers
+If you have ideas for other URL handlers that would make your data processing easier, the best approach
+is to either [request it](https://github.com/Ironholds/urltools/issues) or [add it](https://github.com/Ironholds/urltools/pulls)!

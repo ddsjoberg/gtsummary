@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Mark an argument as deprecated</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for deprecated {lifecycle}"><tr><td>deprecated {lifecycle}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Mark an argument as deprecated</h2>
+
+<h3>Description</h3>
+
+<p>Signal deprecated argument by using self-documenting sentinel
+<code>deprecated()</code> as default argument. Test whether the caller has
+supplied the argument with <code>is_present()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+deprecated()
+
+is_present(arg)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>arg</code></td>
+<td>
+<p>A <code>deprecated()</code> function argument.</p>
+</td></tr>
+</table>
+
+
+<h3>Magical defaults</h3>
+
+<p>We recommend importing <code>lifecycle::deprecated()</code> in your namespace
+and use it without the namespace qualifier.
+</p>
+<p>In general, we <a href="https://principles.tidyverse.org/def-magical.html">advise against</a> such
+magical defaults, i.e. defaults that cannot be evaluated by the
+user. In the case of <code>deprecated()</code>, the trade-off is worth it
+because the meaning of this default is obvious and there is no
+reason for the user to call <code>deprecated()</code> themselves.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+foobar_adder &lt;- function(foo, bar, baz = deprecated()) {
+  # Check if user has supplied `baz` instead of `bar`
+  if (lifecycle::is_present(baz)) {
+
+    # Signal the deprecation to the user
+    deprecate_warn("1.0.0", "foo::bar_adder(baz = )", "foo::bar_adder(bar = )")
+
+    # Deal with the deprecated argument for compatibility
+    bar &lt;- baz
+  }
+
+  foo + bar
+}
+
+foobar_adder(1, 2)
+foobar_adder(1, baz = 2)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lifecycle</em> version 1.0.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

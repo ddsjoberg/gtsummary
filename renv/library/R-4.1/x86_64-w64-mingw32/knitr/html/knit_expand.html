@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: A simple macro preprocessor for templating purposes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for knit_expand {knitr}"><tr><td>knit_expand {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>A simple macro preprocessor for templating purposes</h2>
+
+<h3>Description</h3>
+
+<p>This function expands a template based on the R expressions in <code>{{}}</code>
+(this tag can be customized by the <code>delim</code> argument). These expressions
+are extracted, evaluated and replaced by their values in the original
+template.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+knit_expand(file, ..., text = read_utf8(file), delim = c("{{", "}}"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>The template file.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>A list of variables to be used for the code in the template; note that
+the variables will be searched for in the parent frame as well.</p>
+</td></tr>
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>Character vector of lines of code. An alternative way to specify
+the template code directly. If <code>text</code> is provided, <code>file</code> will be ignored.</p>
+</td></tr>
+<tr valign="top"><td><code>delim</code></td>
+<td>
+<p>A pair of opening and closing delimiters for the templating tags.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector, with the tags evaluated and replaced by their
+values.
+</p>
+
+
+<h3>References</h3>
+
+<p>This function was inspired by the pyexpander and m4
+(<a href="http://www.gnu.org/software/m4/">http://www.gnu.org/software/m4/</a>), thanks to Frank Harrell.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# see the knit_expand vignette
+if (interactive()) browseVignettes(package = "knitr")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

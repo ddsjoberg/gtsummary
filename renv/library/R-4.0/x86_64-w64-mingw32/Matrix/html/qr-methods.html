@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: QR Decomposition - S4 Methods and Generic</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for qr-methods {Matrix}"><tr><td>qr-methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>QR Decomposition &ndash; S4 Methods and Generic</h2>
+
+<h3>Description</h3>
+
+<p>The <span class="pkg">Matrix</span> package provides methods for the QR decomposition
+of special classes of matrices.  There is a generic function which uses
+<code><a href="../../base/html/qr.html">qr</a></code> as default, but methods defined in this package
+can take extra arguments.  In particular there is an option for
+determining a fill-reducing permutation of the columns of a sparse,
+rectangular matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+qr(x, ...)
+qrR(qr, complete=FALSE, backPermute=TRUE, row.names = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a numeric or complex matrix whose QR decomposition is to be
+computed.  Logical matrices are coerced to numeric.</p>
+</td></tr>
+<tr valign="top"><td><code>qr</code></td>
+<td>
+<p>a QR decomposition of the type computed by <code>qr</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>complete</code></td>
+<td>
+<p>logical indicating whether the <i>\bold{R}</i>
+matrix is to be completed by binding zero-value rows beneath the
+square upper triangle.</p>
+</td></tr>
+<tr valign="top"><td><code>backPermute</code></td>
+<td>
+<p>logical indicating if the rows of the <i>\bold{R}</i>
+matrix should be back permuted such that <code>qrR()</code>'s result can
+be used directly to reconstruct the original matrix <i>\bold{X}</i>.</p>
+</td></tr>
+<tr valign="top"><td><code>row.names</code></td>
+<td>
+<p>logical indicating if <code><a href="../../base/html/colnames.html">rownames</a></code> should
+propagated to the result.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods</p>
+</td></tr>
+</table>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>x = &quot;dgCMatrix&quot;</dt><dd><p>QR decomposition of a general sparse
+double-precision matrix with <code>nrow(x) &gt;= ncol(x)</code>.  Returns
+an object of class <code>"<a href="sparseQR-class.html">sparseQR</a>"</code>.</p>
+</dd>
+<dt>x = &quot;sparseMatrix&quot;</dt><dd><p>works via <code>"dgCMatrix"</code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/qr.html">qr</a></code>; then, the class documentations,
+mainly <code><a href="sparseQR-class.html">sparseQR</a></code>, and also
+<code><a href="dgCMatrix-class.html">dgCMatrix</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+##------------- example of pivoting -- from base'  qraux.Rd -------------
+X &lt;- cbind(int = 1,
+           b1=rep(1:0, each=3), b2=rep(0:1, each=3),
+           c1=rep(c(1,0,0), 2), c2=rep(c(0,1,0), 2), c3=rep(c(0,0,1),2))
+rownames(X) &lt;- paste0("r", seq_len(nrow(X)))
+dnX &lt;- dimnames(X)
+bX &lt;- X # [b]ase version of X
+X &lt;- as(bX, "sparseMatrix")
+X # is singular, columns "b2" and "c3" are "extra"
+stopifnot(identical(dimnames(X), dnX))# some versions changed X's dimnames!
+c(rankMatrix(X)) # = 4 (not 6)
+m &lt;- function(.) as(., "matrix")
+
+##----- regular case ------------------------------------------
+Xr &lt;- X[ , -c(3,6)] # the "regular" (non-singular) version of X
+stopifnot(rankMatrix(Xr) == ncol(Xr))
+Y &lt;- cbind(y &lt;- setNames(1:6, paste0("y", 1:6)))
+## regular case:
+qXr   &lt;- qr(  Xr)
+qxr   &lt;- qr(m(Xr))
+qxrLA &lt;- qr(m(Xr), LAPACK=TRUE) # =&gt; qr.fitted(), qr.resid() not supported
+qcfXy &lt;- qr.coef (qXr, y) # vector
+qcfXY &lt;- qr.coef (qXr, Y) # 4x1 dgeMatrix
+cf &lt;- c(int=6, b1=-3, c1=-2, c2=-1)
+doExtras &lt;- interactive() || nzchar(Sys.getenv("R_MATRIX_CHECK_EXTRA")) ||
+    identical("true", unname(Sys.getenv("R_PKG_CHECKING_doExtras")))
+tolE &lt;- if(doExtras) 1e-15 else 1e-13
+stopifnot(exprs = {
+  all.equal(qr.coef(qxr,  y),   cf,  tol=tolE)
+  all.equal(qr.coef(qxrLA,y),   cf,  tol=tolE)
+  all.equal(qr.coef(qxr,  Y), m(cf), tol=tolE)
+  all.equal(  qcfXy,    cf, tol=tolE)
+  all.equal(m(qcfXY), m(cf), tol=tolE)
+  all.equal(y, qr.fitted(qxr, y), tol=2*tolE)
+  all.equal(y, qr.fitted(qXr, y), tol=2*tolE)
+  all.equal(m(qr.fitted(qXr, Y)), qr.fitted(qxr, Y), tol=tolE)
+  all.equal(  qr.resid (qXr, y),  qr.resid (qxr, y), tol=tolE)
+  all.equal(m(qr.resid (qXr, Y)), qr.resid (qxr, Y), tol=tolE)
+})
+
+##----- rank-deficient ("singular") case ------------------------------------
+
+(qX &lt;- qr(  X))           # both @p and @q are non-trivial permutations
+ qx &lt;- qr(m(X)) ; str(qx) # $pivot is non-trivial, too
+
+drop0(R. &lt;- qr.R(qX), tol=tolE) # columns *permuted*: c3 b1 ..
+Q. &lt;- qr.Q(qX)
+qI &lt;- sort.list(qX@q) # the inverse 'q' permutation
+(X. &lt;- drop0(Q. %*% R.[, qI], tol=tolE))## just = X, incl. correct colnames
+stopifnot(all(X - X.) &lt; 8*.Machine$double.eps,
+          ## qrR(.) returns R already "back permuted" (as with qI):
+          identical(R.[, qI], qrR(qX)) )
+##
+## In this sense, classical qr.coef() is fine:
+cfqx &lt;- qr.coef(qx, y) # quite different from
+nna &lt;- !is.na(cfqx)
+stopifnot(all.equal(unname(qr.fitted(qx,y)),
+                    as.numeric(X[,nna] %*% cfqx[nna])))
+## FIXME: do these make *any* sense? --- should give warnings !
+qr.coef(qX, y)
+qr.coef(qX, Y)
+rm(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

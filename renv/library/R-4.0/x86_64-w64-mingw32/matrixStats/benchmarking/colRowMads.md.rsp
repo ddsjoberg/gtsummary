@@ -1,0 +1,108 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string colname="colMads"%>
+<%@string rowname="rowMads"%>
+<%@meta title="${colname}() and ${rowname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-11-18"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=colname%>() and <%=rowname%>() against alternative methods.
+
+## Alternative methods
+
+* apply() + mad()
+* colMads2() and rowMads2()
+
+where `rowMads2()` and `colMads2()` are:
+
+```r
+<%=withCapture({
+rowMads2 <- function(x, const = 1.4826, na.rm = FALSE) {
+  mu <- rowMedians(x, na.rm = na.rm)
+  x <- abs(x - mu)
+  mad <- rowMedians(x, na.rm = FALSE)
+  const * mad
+}
+
+colMads2 <- function(x, const = 1.4826, na.rm = FALSE) {
+  mu <- colMedians(x, na.rm = na.rm)
+  x <- abs(x - mu)
+  mad <- colMedians(x, na.rm = FALSE)
+  const * mad
+}
+})%>
+```
+
+<%
+rowMads_R <- function(x, na.rm = FALSE) {
+ apply(x, MARGIN = 1L, FUN = mad, na.rm = na.rm)
+}
+
+colMads_R <- function(x, na.rm = FALSE) {
+ apply(x, MARGIN = 2L, FUN = mad, na.rm = na.rm)
+}
+%>
+
+
+<% for (mode in c("integer", "double")) { %>
+
+## Data type "<%=mode%>"
+
+### Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = mode)
+})%>
+```
+
+### Results
+
+<% for (dataLabel in names(data)) { %>
+<% mprintf("%s: %s\n", mode, dataLabel)  %>
+#### <%=dataLabel%> <%=mode%> matrix
+
+```r
+<%=withCapture({
+X <- data[[.dataLabel.]]
+gc()
+
+colStats <- microbenchmark(
+ colMads     = colMads(X, na.rm = FALSE),
+ colMads2    = colMads2(X, na.rm = FALSE),
+ "apply+mad" = apply(X, MARGIN = 2L, FUN = mad, na.rm = FALSE),
+ unit = "ms"
+)
+
+X <- t(X)
+gc()
+
+rowStats <- microbenchmark(
+ rowMads     = rowMads(X, na.rm = FALSE),
+ rowMads2    = rowMads2(X, na.rm = FALSE),
+ "apply+mad" = apply(X, MARGIN = 1L, FUN = mad, na.rm = FALSE),
+ unit = "ms"
+)
+})%>
+```
+
+<% crBenchmarkResults(colStats, rowStats, tags=c(mode, dataLabel)) %>
+
+<% } # for (dataLabel ...) %>
+
+<% } # for (mode ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-11-17
+o Created.
+---------------------------------------------------------------------------%>

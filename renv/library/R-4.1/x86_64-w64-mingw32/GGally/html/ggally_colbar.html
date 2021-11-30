@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Column and row bar plots</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggally_colbar {GGally}"><tr><td>ggally_colbar {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Column and row bar plots</h2>
+
+<h3>Description</h3>
+
+<p>Plot column or row percentage using bar plots.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggally_colbar(
+  data,
+  mapping,
+  label_format = scales::label_percent(accuracy = 0.1),
+  ...,
+  remove_background = FALSE,
+  remove_percentage_axis = FALSE,
+  reverse_fill_levels = FALSE,
+  geom_bar_args = NULL
+)
+
+ggally_rowbar(
+  data,
+  mapping,
+  label_format = scales::label_percent(accuracy = 0.1),
+  ...,
+  remove_background = FALSE,
+  remove_percentage_axis = FALSE,
+  reverse_fill_levels = TRUE,
+  geom_bar_args = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data set using</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>aesthetics being used</p>
+</td></tr>
+<tr valign="top"><td><code>label_format</code></td>
+<td>
+<p>formatter function for displaying proportions, not taken into account if a label aesthetic is provided in <code>mapping</code></p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other arguments passed to <code><a href="../../ggplot2/help/geom_text.html">geom_text</a>(...)</code></p>
+</td></tr>
+<tr valign="top"><td><code>remove_background</code></td>
+<td>
+<p>should the <code>panel.background</code> be removed?</p>
+</td></tr>
+<tr valign="top"><td><code>remove_percentage_axis</code></td>
+<td>
+<p>should percentage axis be removed? Removes the y-axis for <code>ggally_colbar()</code> and x-axis for <code>ggally_rowbar()</code></p>
+</td></tr>
+<tr valign="top"><td><code>reverse_fill_levels</code></td>
+<td>
+<p>should the levels of the fill variable be reversed?</p>
+</td></tr>
+<tr valign="top"><td><code>geom_bar_args</code></td>
+<td>
+<p>other arguments passed to <code><a href="../../ggplot2/help/geom_bar.html">geom_bar</a>(...)</code></p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Joseph Larmarange
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+data(tips, package = "reshape")
+p_(ggally_colbar(tips, mapping = aes(x = smoker, y = sex)))
+p_(ggally_rowbar(tips, mapping = aes(x = smoker, y = sex)))
+
+# change labels' size
+p_(ggally_colbar(tips, mapping = aes(x = smoker, y = sex), size = 8))
+
+# change labels' colour and use bold
+p_(ggally_colbar(tips, mapping = aes(x = smoker, y = sex),
+              colour = "white", fontface = "bold"))
+
+# display number of observations instead of proportions
+p_(ggally_colbar(tips, mapping = aes(x = smoker, y = sex, label = after_stat(count))))
+
+# custom bar width
+p_(ggally_colbar(tips, mapping = aes(x = smoker, y = sex), geom_bar_args = list(width = .5)))
+
+# change format of labels
+p_(ggally_colbar(tips, mapping = aes(x = smoker, y = sex),
+              label_format = scales::label_percent(accuracy = .01, decimal.mark = ",")))
+
+p_(ggduo(
+  data = as.data.frame(Titanic),
+  mapping = aes(weight = Freq),
+  columnsX = "Survived",
+  columnsY = c("Sex", "Class", "Age"),
+  types = list(discrete = "rowbar"),
+  legend = 1
+))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

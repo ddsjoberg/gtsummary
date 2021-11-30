@@ -1,0 +1,816 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: S3 Infrastructure for Regular and Irregular Time Series (Z's
+Ordered Observations)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> S3 Infrastructure for Regular and Irregular Time Series (Z's
+Ordered Observations)
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;zoo&rsquo; version 1.8-9</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+<li><a href="../demo">Code demos</a>.  Use <a href="../../utils/help/demo">demo()</a> to run them.</li>
+<li><a href="../NEWS">Package NEWS</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<p style="text-align: center;">
+<a href="#A">A</a>
+<a href="#B">B</a>
+<a href="#C">C</a>
+<a href="#D">D</a>
+<a href="#E">E</a>
+<a href="#F">F</a>
+<a href="#G">G</a>
+<a href="#H">H</a>
+<a href="#I">I</a>
+<a href="#L">L</a>
+<a href="#M">M</a>
+<a href="#N">N</a>
+<a href="#O">O</a>
+<a href="#P">P</a>
+<a href="#Q">Q</a>
+<a href="#R">R</a>
+<a href="#S">S</a>
+<a href="#T">T</a>
+<a href="#U">U</a>
+<a href="#W">W</a>
+<a href="#X">X</a>
+<a href="#Y">Y</a>
+<a href="#Z">Z</a>
+<a href="#misc">misc</a>
+</p>
+
+
+<h2><a name="A">-- A --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="aggregate.zoo.html">aggregate.zoo</a></td>
+<td>Compute Summary Statistics of zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.character.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.character.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.data.frame.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.data.frame.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.data.frame.zoo</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.Date</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.Date.numeric</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.Date.ts</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.Date.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.Date.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.list.ts</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.list.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.list.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.list.zoo</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.matrix.zoo</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.numeric.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.numeric.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.POSIXct.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.POSIXct.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.POSIXlt.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.POSIXlt.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.ts.zoo</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">as.ts.zooreg</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.vector.zoo</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.character</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.Date</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.date</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.dates</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.default</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.factor</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.integer</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.jul</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.numeric</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.POSIXt</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">as.yearmon.timeDate</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.character</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.Date</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.date</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.dates</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.default</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.factor</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.integer</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.jul</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.numeric</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.POSIXt</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.timeDate</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">as.yearqtr.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.data.frame</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.default</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">as.zoo.factor</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.fts</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.irts</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.its</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.matrix</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.mcmc</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.tis</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.ts</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.xts</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="as.zoo.html">as.zoo.zoo</a></td>
+<td>Coercion from and to zoo</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">as.zoo.zooreg</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">as.zooreg</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">as.zooreg.default</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">as.zooreg.its</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">as.zooreg.ts</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">as.zooreg.xts</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">as.zooreg.zoo</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">autoplot.zoo</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+</table>
+
+<h2><a name="B">-- B --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="plot.zoo.html">barplot.zoo</a></td>
+<td>Plotting zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="plot.zoo.html">boxplot.zoo</a></td>
+<td>Plotting zoo Objects</td></tr>
+</table>
+
+<h2><a name="C">-- C --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="yearmon.html">c.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">c.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="merge.zoo.html">c.zoo</a></td>
+<td>Merge Two or More zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="merge.zoo.html">cbind.zoo</a></td>
+<td>Merge Two or More zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata.default</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata.irts</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata.its</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata.ts</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata.zoo</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata&lt;-</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata&lt;-.irts</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata&lt;-.its</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata&lt;-.ts</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="coredata.html">coredata&lt;-.zoo</a></td>
+<td>Extracting/Replacing the Core Data of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">cummax.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">cummin.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">cumprod.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">cumsum.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">cycle.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">cycle.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">cycle.zoo</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">cycle.zooreg</a></td>
+<td>Regular zoo Series</td></tr>
+</table>
+
+<h2><a name="D">-- D --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="zooreg.html">deltat.zoo</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">deltat.zooreg</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="lag.zoo.html">diff.zoo</a></td>
+<td>Lags and Differences of zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">dim&lt;-.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+</table>
+
+<h2><a name="E">-- E --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="index.html">end.zoo</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+</table>
+
+<h2><a name="F">-- F --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">facet_free</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">format.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">format.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">fortify.zoo</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">frequency.zoo</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">frequency.zooreg</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="frequency.html">frequency&lt;-</a></td>
+<td>Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="frequency.html">frequency&lt;-.zoo</a></td>
+<td>Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="frequency.html">frequency&lt;-.zooreg</a></td>
+<td>Replacing the Index of Objects</td></tr>
+</table>
+
+<h2><a name="G">-- G --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">ggplot2.zoo</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+</table>
+
+<h2><a name="H">-- H --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="zoo.html">head.ts</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">head.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+</table>
+
+<h2><a name="I">-- I --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="zoo.html">ifelse.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="index.html">index</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="index.html">index.default</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="index.html">index.ts</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="index.html">index.zoo</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">index2char</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">index2char.default</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">index2char.numeric</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="index.html">index&lt;-</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="index.html">index&lt;-.zoo</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">index&lt;-.zooreg</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">is.numeric.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">is.numeric.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="is.regular.html">is.regular</a></td>
+<td>Check Regularity of a Series</td></tr>
+<tr><td style="width: 25%;"><a href="is.regular.html">is.regular.default</a></td>
+<td>Check Regularity of a Series</td></tr>
+<tr><td style="width: 25%;"><a href="is.regular.html">is.regular.ts</a></td>
+<td>Check Regularity of a Series</td></tr>
+<tr><td style="width: 25%;"><a href="is.regular.html">is.regular.zoo</a></td>
+<td>Check Regularity of a Series</td></tr>
+<tr><td style="width: 25%;"><a href="is.regular.html">is.regular.zooreg</a></td>
+<td>Check Regularity of a Series</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">is.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+</table>
+
+<h2><a name="L">-- L --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="lag.zoo.html">lag.zoo</a></td>
+<td>Lags and Differences of zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">lag.zooreg</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="plot.zoo.html">lines.zoo</a></td>
+<td>Plotting zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">llines.its</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">llines.tis</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">llines.zoo</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">lpoints.its</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">lpoints.tis</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">lpoints.zoo</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">ltext.its</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">ltext.tis</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">ltext.zoo</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+</table>
+
+<h2><a name="M">-- M --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="make.par.list.html">make.par.list</a></td>
+<td>Make a List from a Parameter Specification</td></tr>
+<tr><td style="width: 25%;"><a href="MATCH.html">MATCH</a></td>
+<td>Value Matching</td></tr>
+<tr><td style="width: 25%;"><a href="MATCH.html">MATCH.default</a></td>
+<td>Value Matching</td></tr>
+<tr><td style="width: 25%;"><a href="MATCH.html">MATCH.times</a></td>
+<td>Value Matching</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">MATCH.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">MATCH.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">mean.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">mean.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">mean.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">median.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="merge.zoo.html">merge.zoo</a></td>
+<td>Merge Two or More zoo Objects</td></tr>
+</table>
+
+<h2><a name="N">-- N --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="na.aggregate.html">na.aggregate</a></td>
+<td>Replace NA by Aggregation</td></tr>
+<tr><td style="width: 25%;"><a href="na.aggregate.html">na.aggregate.default</a></td>
+<td>Replace NA by Aggregation</td></tr>
+<tr><td style="width: 25%;"><a href="na.approx.html">na.approx</a></td>
+<td>Replace NA by Interpolation</td></tr>
+<tr><td style="width: 25%;"><a href="na.approx.html">na.approx.default</a></td>
+<td>Replace NA by Interpolation</td></tr>
+<tr><td style="width: 25%;"><a href="na.approx.html">na.approx.ts</a></td>
+<td>Replace NA by Interpolation</td></tr>
+<tr><td style="width: 25%;"><a href="na.approx.html">na.approx.zoo</a></td>
+<td>Replace NA by Interpolation</td></tr>
+<tr><td style="width: 25%;"><a href="na.approx.html">na.approx.zooreg</a></td>
+<td>Replace NA by Interpolation</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">na.contiguous</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">na.contiguous.data.frame</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">na.contiguous.default</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">na.contiguous.list</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">na.contiguous.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="na.fill.html">na.fill</a></td>
+<td>Fill NA or specified positions.</td></tr>
+<tr><td style="width: 25%;"><a href="na.fill.html">na.fill.default</a></td>
+<td>Fill NA or specified positions.</td></tr>
+<tr><td style="width: 25%;"><a href="na.fill.html">na.fill.ts</a></td>
+<td>Fill NA or specified positions.</td></tr>
+<tr><td style="width: 25%;"><a href="na.fill.html">na.fill.zoo</a></td>
+<td>Fill NA or specified positions.</td></tr>
+<tr><td style="width: 25%;"><a href="na.fill.html">na.fill0</a></td>
+<td>Fill NA or specified positions.</td></tr>
+<tr><td style="width: 25%;"><a href="na.locf.html">na.locf</a></td>
+<td>Last Observation Carried Forward</td></tr>
+<tr><td style="width: 25%;"><a href="na.locf.html">na.locf.data.frame</a></td>
+<td>Last Observation Carried Forward</td></tr>
+<tr><td style="width: 25%;"><a href="na.locf.html">na.locf.default</a></td>
+<td>Last Observation Carried Forward</td></tr>
+<tr><td style="width: 25%;"><a href="na.locf.html">na.locf.list</a></td>
+<td>Last Observation Carried Forward</td></tr>
+<tr><td style="width: 25%;"><a href="na.locf.html">na.locf0</a></td>
+<td>Last Observation Carried Forward</td></tr>
+<tr><td style="width: 25%;"><a href="na.approx.html">na.spline</a></td>
+<td>Replace NA by Interpolation</td></tr>
+<tr><td style="width: 25%;"><a href="na.approx.html">na.spline.default</a></td>
+<td>Replace NA by Interpolation</td></tr>
+<tr><td style="width: 25%;"><a href="na.approx.html">na.spline.ts</a></td>
+<td>Replace NA by Interpolation</td></tr>
+<tr><td style="width: 25%;"><a href="na.approx.html">na.spline.zoo</a></td>
+<td>Replace NA by Interpolation</td></tr>
+<tr><td style="width: 25%;"><a href="na.approx.html">na.spline.zooreg</a></td>
+<td>Replace NA by Interpolation</td></tr>
+<tr><td style="width: 25%;"><a href="na.StructTS.html">na.StructTS</a></td>
+<td>Fill NA or specified positions.</td></tr>
+<tr><td style="width: 25%;"><a href="na.StructTS.html">na.StructTS.ts</a></td>
+<td>Fill NA or specified positions.</td></tr>
+<tr><td style="width: 25%;"><a href="na.StructTS.html">na.StructTS.zoo</a></td>
+<td>Fill NA or specified positions.</td></tr>
+<tr><td style="width: 25%;"><a href="na.trim.html">na.trim</a></td>
+<td>Trim Leading/Trailing Missing Observations</td></tr>
+<tr><td style="width: 25%;"><a href="na.trim.html">na.trim.default</a></td>
+<td>Trim Leading/Trailing Missing Observations</td></tr>
+<tr><td style="width: 25%;"><a href="na.trim.html">na.trim.ts</a></td>
+<td>Trim Leading/Trailing Missing Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">names.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">names&lt;-.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+</table>
+
+<h2><a name="O">-- O --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="yearmon.html">Ops.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">Ops.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">Ops.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="ORDER.html">ORDER</a></td>
+<td>Ordering Permutation</td></tr>
+<tr><td style="width: 25%;"><a href="ORDER.html">ORDER.default</a></td>
+<td>Ordering Permutation</td></tr>
+</table>
+
+<h2><a name="P">-- P --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.lines.its</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.lines.tis</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.lines.ts</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.lines.zoo</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.plot.custom</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.plot.default</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.points.its</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.points.tis</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.points.ts</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.points.zoo</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.polygon.its</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.polygon.tis</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.polygon.ts</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.polygon.zoo</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.rect.its</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.rect.tis</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.rect.ts</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.rect.zoo</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.segments.its</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.segments.tis</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.segments.ts</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.segments.zoo</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.text.its</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.text.tis</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.text.ts</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">panel.text.zoo</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="plot.zoo.html">plot.zoo</a></td>
+<td>Plotting zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="plot.zoo.html">points.zoo</a></td>
+<td>Plotting zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">print.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">print.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">print.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+</table>
+
+<h2><a name="Q">-- Q --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="zoo.html">quantile.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+</table>
+
+<h2><a name="R">-- R --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="yearmon.html">range.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">range.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">range.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="merge.zoo.html">rbind.zoo</a></td>
+<td>Merge Two or More zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="read.zoo.html">read.csv.zoo</a></td>
+<td>Reading and Writing zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="read.zoo.html">read.csv2.zoo</a></td>
+<td>Reading and Writing zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="read.zoo.html">read.delim.zoo</a></td>
+<td>Reading and Writing zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="read.zoo.html">read.delim2.zoo</a></td>
+<td>Reading and Writing zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="read.zoo.html">read.table.zoo</a></td>
+<td>Reading and Writing zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="read.zoo.html">read.zoo</a></td>
+<td>Reading and Writing zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">rev.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="rollapply.html">rollapply</a></td>
+<td>Apply Rolling Functions</td></tr>
+<tr><td style="width: 25%;"><a href="rollapply.html">rollapply.default</a></td>
+<td>Apply Rolling Functions</td></tr>
+<tr><td style="width: 25%;"><a href="rollapply.html">rollapply.ts</a></td>
+<td>Apply Rolling Functions</td></tr>
+<tr><td style="width: 25%;"><a href="rollapply.html">rollapply.zoo</a></td>
+<td>Apply Rolling Functions</td></tr>
+<tr><td style="width: 25%;"><a href="rollapply.html">rollapplyr</a></td>
+<td>Apply Rolling Functions</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmax</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmax.default</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmax.ts</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmax.zoo</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmaxr</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmean</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmean.default</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmean.ts</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmean.zoo</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmeanr</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmedian</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmedian.default</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmedian.ts</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmedian.zoo</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollmedianr</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollsum</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollsum.default</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollsum.ts</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollsum.zoo</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+<tr><td style="width: 25%;"><a href="rollmean.html">rollsumr</a></td>
+<td>Rolling Means/Maximums/Medians/Sums</td></tr>
+</table>
+
+<h2><a name="S">-- S --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="zoo.html">scale.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">scale_type.yearmon</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">scale_type.yearqtr</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">scale_x_yearmon</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">scale_x_yearqtr</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">scale_y_yearmon</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">scale_y_yearqtr</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+<tr><td style="width: 25%;"><a href="aggregate.zoo.html">split.zoo</a></td>
+<td>Compute Summary Statistics of zoo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="index.html">start.zoo</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">str.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">subset.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">Summary.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">summary.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">Summary.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">summary.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">summary.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">Sys.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">Sys.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+</table>
+
+<h2><a name="T">-- T --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="zoo.html">t.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">tail.ts</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">tail.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="index.html">time.zoo</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="index.html">time&lt;-</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="index.html">time&lt;-.zoo</a></td>
+<td>Extracting/Replacing the Index of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">time&lt;-.zooreg</a></td>
+<td>Regular zoo Series</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">transform.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+</table>
+
+<h2><a name="U">-- U --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="yearmon.html">unique.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">unique.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+</table>
+
+<h2><a name="W">-- W --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="window.zoo.html">window.zoo</a></td>
+<td>Extract/Replacing the Time Windows of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="window.zoo.html">window&lt;-.zoo</a></td>
+<td>Extract/Replacing the Time Windows of Objects</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">with.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="read.zoo.html">write.zoo</a></td>
+<td>Reading and Writing zoo Series</td></tr>
+</table>
+
+<h2><a name="X">-- X --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="xblocks.html">xblocks</a></td>
+<td>Plot contiguous blocks along x axis.</td></tr>
+<tr><td style="width: 25%;"><a href="xblocks.html">xblocks.default</a></td>
+<td>Plot contiguous blocks along x axis.</td></tr>
+<tr><td style="width: 25%;"><a href="xblocks.html">xblocks.ts</a></td>
+<td>Plot contiguous blocks along x axis.</td></tr>
+<tr><td style="width: 25%;"><a href="xblocks.html">xblocks.zoo</a></td>
+<td>Plot contiguous blocks along x axis.</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">xtfrm.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">xtfrm.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">xtfrm.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">xyplot.its</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">xyplot.tis</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+<tr><td style="width: 25%;"><a href="xyplot.zoo.html">xyplot.zoo</a></td>
+<td>Plot zoo Series with Lattice</td></tr>
+</table>
+
+<h2><a name="Y">-- Y --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="yearmon.html">yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">yearmon_trans</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="ggplot2.zoo.html">yearqtr_trans</a></td>
+<td>Convenience Functions for Plotting zoo Objects with ggplot2</td></tr>
+</table>
+
+<h2><a name="Z">-- Z --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="zoo.html">zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zooreg.html">zooreg</a></td>
+<td>Regular zoo Series</td></tr>
+</table>
+
+<h2><a name="misc">-- misc --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="zoo.html">$.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">$&lt;-.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">-.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">-.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">[.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">[.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">[.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="zoo.html">[&lt;-.zoo</a></td>
+<td>Z's Ordered Observations</td></tr>
+<tr><td style="width: 25%;"><a href="yearmon.html">[[.yearmon</a></td>
+<td>An Index Class for Monthly Data</td></tr>
+<tr><td style="width: 25%;"><a href="yearqtr.html">[[.yearqtr</a></td>
+<td>An Index Class for Quarterly Data</td></tr>
+</table>
+</body></html>

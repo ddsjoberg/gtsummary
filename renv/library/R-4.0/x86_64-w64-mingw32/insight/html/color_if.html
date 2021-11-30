@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Color-formatting for data columns based on condition</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for color_if {insight}"><tr><td>color_if {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Color-formatting for data columns based on condition</h2>
+
+<h3>Description</h3>
+
+<p>Convenient function that formats columns in data frames
+with color codes, where the color is chosen based on certain conditions.
+Columns are then printed in color in the console.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+color_if(
+  x,
+  columns,
+  predicate = `&gt;`,
+  value = 0,
+  color_if = "green",
+  color_else = "red",
+  digits = 2
+)
+
+colour_if(
+  x,
+  columns,
+  predicate = `&gt;`,
+  value = 0,
+  colour_if = "green",
+  colour_else = "red",
+  digits = 2
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A data frame</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>Character vector with column names of <code>x</code> that should be formatted.</p>
+</td></tr>
+<tr valign="top"><td><code>predicate</code></td>
+<td>
+<p>A function that takes <code>columns</code> and <code>value</code> as input
+and which should return <code>TRUE</code> or <code>FALSE</code>, based on if the condition
+(in comparison with <code>value</code>) is met.</p>
+</td></tr>
+<tr valign="top"><td><code>value</code></td>
+<td>
+<p>The comparator. May be used in conjunction with <code>predicate</code>
+to quickly set up a function which compares elements in <code>colums</code> to <code>value</code>.
+May be ignored when <code>predicate</code> is a function that internally computes other
+comparisons. See 'Examples'.</p>
+</td></tr>
+<tr valign="top"><td><code>color_if, colour_if</code></td>
+<td>
+<p>Character vector, indicating the color code used to
+format values in <code>x</code> that meet the condition of <code>predicate</code> and <code>value</code>.
+May be one of <code>"red"</code>, <code>"yellow"</code>, <code>"green"</code>, <code>"blue"</code>,
+<code>"violet"</code>, <code>"cyan"</code> or <code>"grey"</code>. Formatting is also possible
+with <code>"bold"</code> or <code>"italic"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>color_else, colour_else</code></td>
+<td>
+<p>See <code>color_if</code>, but only for conditions
+that are <em>not</em> met.</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>Digits for rounded values.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The predicate-function simply works like this:
+<code>which(predicate(x[, columns], value))</code>
+</p>
+
+
+<h3>Value</h3>
+
+<p>The .
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# all values in Sepal.Length larger than 5 in green, all remaining in red
+x &lt;- color_if(iris[1:10, ], columns = "Sepal.Length", predicate = `&gt;`, value = 5)
+x
+cat(x$Sepal.Length)
+
+# all levels "setosa" in Species in green, all remaining in red
+x &lt;- color_if(iris, columns = "Species", predicate = `==`, value = "setosa")
+cat(x$Species)
+
+# own function, argument "value" not needed here
+p &lt;- function(x, y) {
+  x &gt;= 4.9 &amp; x &lt;= 5.1
+}
+# all values in Sepal.Length between 4.9 and 5.1 in green, all remaining in red
+x &lt;- color_if(iris[1:10, ], columns = "Sepal.Length", predicate = p)
+cat(x$Sepal.Length)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

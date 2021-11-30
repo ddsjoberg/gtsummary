@@ -1,0 +1,238 @@
+---
+title: "Molding data for modeling"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Molding data for modeling}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+options(rlang_backtrace_on_error = "none")
+```
+
+```{r setup}
+library(hardhat)
+library(modeldata)
+
+data(penguins)
+penguins <- na.omit(penguins)
+```
+
+## Introduction
+
+For most modeling functions, data must be accepted from the user in some format where the _outcomes_ and _predictors_ are both specified. The next step is often to validate and preprocess that input in some way to prepare it for the actual modeling implementation function. For example, when a formula method is used, R provides some infrastructure for preprocessing the user input through the `model.frame()` and `model.matrix()` functions. 
+
+But the formula method is not the only way to specify modeling terms. There is also an XY method, where `x` and `y` are supplied directly, and, recently, a `recipe` implementation can be used to preprocess data using a set of sequential steps.
+
+As a developer, you likely won't want to care about the details of how each of these methods work, but (hopefully) still want to provide all three of these interfaces for your shiny new model. `mold()` makes this easy on you, and takes care of the details of preprocessing user input from any of these methods.
+
+The intended use of `mold()` is to be called from your user facing modeling function. To see that in action, have a look at the vignette found here: `vignette("package", "hardhat")`. The rest of this vignette will be focused on the various different ways to use `mold()`, but keep in mind that generally it is not used as an interactive function like this.
+
+## A First Example
+
+The most familiar interface for R users is likely the formula interface. In this case, terms are specified using the formula notation: `outcomes ~ predictors`. Generally, as a developer, you have to then call `model.frame()` and `model.matrix()` on this result to coerce it into the right format for ingestion into your model. `mold()` handles all of that for you.
+
+```{r}
+penguin_form <- mold(body_mass_g ~ log(bill_length_mm), penguins)
+
+names(penguin_form)
+```
+
+`mold()` returns four things. Two of them are immediately useful, and are almost always applicable to the modeling implementation you have created. The first is the `predictors`, returned as a tibble. All of the required processing has been done for you, so you just have to focus on the modeling implementation.
+
+```{r}
+penguin_form$predictors
+```
+
+Second is the `outcomes`, also returned as a tibble. While not used here, any processing on the outcome that was specified in the formula would also be done here.
+
+```{r}
+penguin_form$outcomes
+```
+
+Beyond these two elements, `mold()` also returns a slot for any `extras` that might have been generated during preprocessing, but aren't specifically predictors or outcomes. For example, an `offset()` can be specified directly in the formula, but isn't technically a predictor.
+
+```{r}
+mold(body_mass_g ~ log(bill_length_mm) + offset(bill_depth_mm), penguins)$extras
+```
+
+Lastly, `mold()` returns a very important object, the `blueprint`. This is responsible for knowing how to preprocess both the training data, and any new data at prediction time. As a developer, you should attach the `blueprint` to your model object before returning it to the user. For more information about this, see the package development vignette, `vignette("package", "hardhat")`.
+
+## blueprints
+
+As mentioned above, one of the objects that `mold()` returns is an `blueprint` responsible for controlling the preprocessing. There are multiple blueprints available in `hardhat`, but when you call `mold()` one is selected automatically for you. The following two calls generate the same result, using the default formula blueprint.
+
+```{r}
+identical(
+  mold(~ body_mass_g, penguins), 
+  mold(~ body_mass_g, penguins, blueprint = default_formula_blueprint())
+)
+```
+
+Each blueprint can be tweaked to change how the processing for that interface occurs, and the options vary per blueprint. To understand why you'd ever want to do this, read on!
+
+## Formulas
+
+Now that you have a basic idea of how `mold()` works, we can talk about some of the more interesting functionality.
+
+### Intercepts
+
+One challenge with the standard formula interface is that, by default, intercepts are always implicitly present and are added to your data set automatically. This works great for the simple regression case. However, other models might either always require or never allow an intercept, but still use the formula interface because of its convenience (for example, `earth`). This has led to many ad hoc solutions that prevent the user from removing or adding an intercept.
+
+To get around this, `mold()` will never add an intercept by default. Instead, the addition of an intercept is completely controlled by the formula blueprint argument, `intercept`.
+
+```{r}
+no_intercept <- mold(~ body_mass_g, penguins)
+
+no_intercept$predictors
+```
+
+```{r}
+with_intercept <- mold(
+  ~ body_mass_g, penguins, 
+  blueprint = default_formula_blueprint(intercept = TRUE)
+)
+
+with_intercept$predictors
+```
+
+An error is thrown if an intercept removal term is specified:
+
+```{r, error=TRUE}
+mold(~ body_mass_g - 1, penguins)
+
+mold(~ body_mass_g + 0, penguins)
+```
+
+### Dummy variables
+
+One of the nice things about the formula interface is that it expands factors into dummy variable columns for you. Like intercepts, this is great...until it isn't. For example, `ranger` fits a random forest, which can take factors directly, but still uses the formula notation. In this case, it would be great if the factor columns specified as predictors _weren't_ expanded. This is the job of the blueprint argument, `indicators`.
+
+```{r}
+expanded_dummies <- mold(~ body_mass_g + species, penguins)
+
+expanded_dummies$predictors
+```
+
+```{r}
+non_expanded_dummies <- mold(
+  ~ body_mass_g + species, penguins, 
+  blueprint = default_formula_blueprint(indicators = "none")
+)
+
+non_expanded_dummies$predictors
+```
+
+_Note:_ It's worth mentioning that when an intercept is not present, base R expands the first factor completely into `K` indicator columns corresponding to the `K` levels present in that factor (also known as one-hot encoding). Subsequent columns are expanded into the more traditional `K - 1` columns. When an intercept is present, `K - 1` columns are generated for all factor predictors.
+
+```{r}
+k_cols <- mold(~ species, penguins)
+
+k_minus_one_cols <- mold(
+  ~ species, penguins, 
+  blueprint = default_formula_blueprint(intercept = TRUE)
+)
+
+colnames(k_cols$predictors)
+
+colnames(k_minus_one_cols$predictors)
+```
+
+### Multivariate outcomes
+
+One of the other frustrating things about working with the formula method is that multivariate outcomes are a bit clunky to specify.
+
+```{r}
+.f <- cbind(body_mass_g, bill_length_mm) ~ bill_depth_mm
+
+frame <- model.frame(.f, penguins)
+
+head(frame)
+```
+
+This might look like 3 columns, but it is actually 2, where the first column is named `cbind(body_mass_g, bill_length_mm)`, and it is actually a matrix with 2 columns, `body_mass_g` and `bill_length_mm` inside it.
+
+```{r}
+ncol(frame)
+
+class(frame$`cbind(body_mass_g, bill_length_mm)`)
+
+head(frame$`cbind(body_mass_g, bill_length_mm)`)
+```
+
+The default formula blueprint used with `mold()` allows you to specify multiple outcomes like you specify multiple predictors. You can even do inline transformations of each outcome, although if you are doing very much of that, I'd advise using a recipe instead. `outcomes` then holds the two outcomes columns.
+
+```{r}
+multivariate <- mold(body_mass_g + log(bill_length_mm) ~ bill_depth_mm, penguins)
+
+multivariate$outcomes
+```
+
+## XY
+
+The second interface is the XY interface, useful when the predictors and outcomes are specified separately.
+
+```{r}
+x <- subset(penguins, select = -body_mass_g)
+y <- subset(penguins, select =  body_mass_g)
+
+penguin_xy <- mold(x, y)
+
+penguin_xy$predictors
+
+penguin_xy$outcomes
+```
+
+This interface doesn't do too much in the way of preprocessing, but it does let you specify an `intercept` in the blueprint specific arguments. Rather than `default_formula_blueprint()`, this uses the `default_xy_blueprint()`.
+
+```{r}
+xy_with_intercept <- mold(x, y, blueprint = default_xy_blueprint(intercept = TRUE))
+
+xy_with_intercept$predictors
+```
+
+### Vector outcomes
+
+`y` is a bit special in the XY interface, because in the univariate case users might expect to be able to pass a vector, a 1 column data frame, or a matrix. `mold()` is prepared for all of those cases, but the vector case requires special attention. To be consistent with all of the other `mold()` interfaces, the `outcomes` slot of the return value should be a tibble. To achieve this when `y` is supplied as a vector, a default column name is created, `".outcome"`.
+
+```{r}
+mold(x, y$body_mass_g)$outcomes
+```
+
+## Recipe
+
+The last of the three interfaces is the relatively new recipes interface. The `default_recipe_blueprint()` knows how to `prep()` your recipe, and `juice()` it to extract the predictors and the outcomes. This is by far the most flexible way to preprocess your data.
+
+```{r, message=FALSE, warning=FALSE}
+library(recipes)
+
+rec <- recipe(bill_length_mm ~ species + bill_depth_mm, penguins) %>%
+  step_log(bill_length_mm) %>%
+  step_dummy(species)
+
+penguin_recipe <- mold(rec, penguins)
+
+penguin_recipe$predictors
+
+penguin_recipe$outcomes
+```
+
+The only special thing you can tweak with the recipe blueprint is whether or not an intercept is added.
+
+```{r}
+recipe_with_intercept <- mold(
+  rec, penguins, 
+  blueprint = default_recipe_blueprint(intercept = TRUE)
+)
+
+recipe_with_intercept$predictors
+```
+

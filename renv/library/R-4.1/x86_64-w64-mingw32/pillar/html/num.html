@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Format a numeric vector in a tibble</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for num {pillar}"><tr><td>num {pillar}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Format a numeric vector in a tibble</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+</p>
+<p>Constructs a numeric vector that can be formatted with predefined
+significant digits, or with a maximum or fixed number of digits
+after the decimal point.
+Scaling is supported, as well as forcing a decimal, scientific
+or engineering notation.
+If a label is given, it is shown in the header of a column.
+</p>
+<p>The formatting is applied when the vector is printed or formatted,
+and also in a tibble column.
+The formatting annotation and the class survives most arithmetic transformations,
+the most notable exceptions are <code><a href="../../stats/html/cor.html">var()</a></code> and <code><a href="../../stats/html/sd.html">sd()</a></code>.
+</p>
+<p><code>set_num_opts()</code> adds formatting options to an arbitrary numeric vector,
+useful for composing with other types.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+num(
+  x,
+  ...,
+  sigfig = NULL,
+  digits = NULL,
+  label = NULL,
+  scale = NULL,
+  notation = c("fit", "dec", "sci", "eng", "si"),
+  fixed_exponent = NULL,
+  extra_sigfig = NULL
+)
+
+set_num_opts(
+  x,
+  ...,
+  sigfig = NULL,
+  digits = NULL,
+  label = NULL,
+  scale = NULL,
+  notation = c("fit", "dec", "sci", "eng", "si"),
+  fixed_exponent = NULL,
+  extra_sigfig = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A numeric vector.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>These dots are for future extensions and must be empty.</p>
+</td></tr>
+<tr valign="top"><td><code>sigfig</code></td>
+<td>
+<p>Define the number of significant digits to show. Must be one or greater.
+The <code>"pillar.sigfig"</code> option is not consulted.
+Can't be combined with <code>digits</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>Number of digits after the decimal points to show.
+Positive numbers specify the exact number of digits to show.
+Negative numbers specify (after negation) the maximum number of digits to show.
+With <code>digits = 2</code>, the numbers 1.2 and 1.234 are printed as 1.20 and 1.23,
+with <code>digits = -2</code> as 1.2 and 1.23, respectively.
+Can't be combined with <code>sigfig</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>A label to show instead of the type description.</p>
+</td></tr>
+<tr valign="top"><td><code>scale</code></td>
+<td>
+<p>Multiplier to apply to the data before showing.
+Useful for displaying e.g. percentages.
+Must be combined with <code>label</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>notation</code></td>
+<td>
+<p>One of <code>"fit"</code>, <code>"dec"</code>, <code>"sci"</code>, <code>"eng"</code>, or <code>"si"</code>.
+</p>
+
+<ul>
+<li> <p><code>"fit"</code>: Use decimal notation if it fits and if it consumes 13 digits or less,
+otherwise use scientific notation. (The default for numeric pillars.)
+</p>
+</li>
+<li> <p><code>"dec"</code>: Use decimal notation, regardless of width.
+</p>
+</li>
+<li> <p><code>"sci"</code>: Use scientific notation.
+</p>
+</li>
+<li> <p><code>"eng"</code>: Use engineering notation, i.e. scientific notation
+using exponents that are a multiple of three.
+</p>
+</li>
+<li> <p><code>"si"</code>: Use SI notation, prefixes between <code>1e-24</code> and <code>1e24</code> are supported.
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>fixed_exponent</code></td>
+<td>
+<p>Use the same exponent for all numbers in scientific, engineering or SI notation.
+<code>-Inf</code> uses the smallest, <code>+Inf</code> the largest fixed_exponent present in the data.
+The default is to use varying exponents.</p>
+</td></tr>
+<tr valign="top"><td><code>extra_sigfig</code></td>
+<td>
+<p>If <code>TRUE</code>, increase the number of significant digits if the data consists of
+numbers of the same magnitude with subtle differences.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p>Other vector classes: 
+<code><a href="../../pillar/help/char.html">char</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Display as a vector
+num(9:11 * 100 + 0.5)
+
+
+# Significant figures
+tibble::tibble(
+  x3 = num(9:11 * 100 + 0.5, sigfig = 3),
+  x4 = num(9:11 * 100 + 0.5, sigfig = 4),
+  x5 = num(9:11 * 100 + 0.5, sigfig = 5),
+)
+
+# Maximum digits after the decimal points
+tibble::tibble(
+  x0 = num(9:11 * 100 + 0.5, digits =  0),
+  x1 = num(9:11 * 100 + 0.5, digits = -1),
+  x2 = num(9:11 * 100 + 0.5, digits = -2),
+)
+
+# Use fixed digits and a currency label
+tibble::tibble(
+  usd = num(9:11 * 100 + 0.5, digits = 2, label = "USD"),
+  gbp = num(9:11 * 100 + 0.5, digits = 2, label = "£"),
+  chf = num(9:11 * 100 + 0.5, digits = 2, label = "SFr")
+)
+
+# Scale
+tibble::tibble(
+  small  = num(9:11 / 1000 + 0.00005, label = "%", scale = 100),
+  medium = num(9:11 /  100 + 0.0005 , label = "%", scale = 100),
+  large  = num(9:11 /   10 + 0.005  , label = "%", scale = 100)
+)
+
+# Notation
+tibble::tibble(
+  sci = num(10^(-13:6), notation = "sci"),
+  eng = num(10^(-13:6), notation = "eng"),
+  si  = num(10^(-13:6), notation = "si"),
+  dec = num(10^(-13:6), notation = "dec")
+)
+
+# Fixed exponent
+tibble::tibble(
+  scimin = num(10^(-7:6) * 123, notation = "sci", fixed_exponent = -Inf),
+  engmin = num(10^(-7:6) * 123, notation = "eng", fixed_exponent = -Inf),
+  simin  = num(10^(-7:6) * 123, notation = "si",  fixed_exponent = -Inf)
+)
+
+tibble::tibble(
+  scismall = num(10^(-7:6) * 123, notation = "sci", fixed_exponent = -3),
+  scilarge = num(10^(-7:6) * 123, notation = "sci", fixed_exponent = 3),
+  scimax   = num(10^(-7:6) * 123, notation = "sci", fixed_exponent = Inf)
+)
+
+#' Extra significant digits
+tibble::tibble(
+  default = num(100 + 1:3 * 0.001),
+  extra1 = num(100 + 1:3 * 0.001, extra_sigfig = TRUE),
+  extra2 = num(100 + 1:3 * 0.0001, extra_sigfig = TRUE),
+  extra3 = num(10000 + 1:3 * 0.00001, extra_sigfig = TRUE)
+)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>pillar</em> version 1.6.3 <a href="00Index.html">Index</a>]</div>
+</body></html>

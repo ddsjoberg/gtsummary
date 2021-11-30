@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Stratified gtsummary tables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tbl_strata {gtsummary}"><tr><td>tbl_strata {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Stratified gtsummary tables</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+Build a stratified gtsummary table. Any gtsummary table that accepts
+a data frame as its first argument can be stratified.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tbl_strata(
+  data,
+  strata,
+  .tbl_fun,
+  ...,
+  .sep = ", ",
+  .combine_with = c("tbl_merge", "tbl_stack")
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data frame or survey object</p>
+</td></tr>
+<tr valign="top"><td><code>strata</code></td>
+<td>
+<p>character vector or tidy-selector of columns in data to stratify results by</p>
+</td></tr>
+<tr valign="top"><td><code>.tbl_fun</code></td>
+<td>
+<p>A function or formula. If a <em>function</em>, it is used as is.
+If a formula, e.g. <code>~ .x %&gt;% tbl_summary() %&gt;% add_p()</code>, it is converted to a function.
+The stratified data frame is passed to this function.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional arguments passed on to the <code>.tbl_fun</code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>.sep</code></td>
+<td>
+<p>when more than one stratifying variable is passed, this string is
+used to separate the levels in the spanning header. Default is <code>", "</code></p>
+</td></tr>
+<tr valign="top"><td><code>.combine_with</code></td>
+<td>
+<p>One of <code>c("tbl_merge", "tbl_stack")</code>. Names the function
+used to combine the stratified tables.</p>
+</td></tr>
+</table>
+
+
+<h3>Tips</h3>
+
+
+<ul>
+<li> <p><code>tbl_summary()</code>
+</p>
+
+<ul>
+<li><p> The number of digits continuous variables are rounded to is determined
+separately within each stratum of the data frame. Set the <code style="white-space: pre;">digits=</code>
+argument to ensure continuous variables are rounded to the same number
+of decimal places.
+</p>
+</li>
+<li><p> If some levels of a categorical variable are unobserved within a
+stratum, convert the variable to a factor to ensure all levels appear in
+each stratum's summary table.
+</p>
+</li></ul>
+
+</li></ul>
+
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/tbl_strata_ex1.png" width=64% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Example 1 ----------------------------------
+tbl_strata_ex1 &lt;-
+  trial %&gt;%
+  select(age, grade, stage, trt) %&gt;%
+  mutate(grade = paste("Grade", grade)) %&gt;%
+  tbl_strata(
+    strata = grade,
+    .tbl_fun =
+      ~ .x %&gt;%
+        tbl_summary(by = trt, missing = "no") %&gt;%
+        add_n()
+  )
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.0.9006 <a href="00Index.html">Index</a>]</div>
+</body></html>

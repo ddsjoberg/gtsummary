@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Replace NAs with specified values</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for replace_na {tidyr}"><tr><td>replace_na {tidyr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Replace NAs with specified values</h2>
+
+<h3>Description</h3>
+
+<p>Replace NAs with specified values
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+replace_na(data, replace, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A data frame or vector.</p>
+</td></tr>
+<tr valign="top"><td><code>replace</code></td>
+<td>
+<p>If <code>data</code> is a data frame, <code>replace</code> takes a list of values,
+with one value for each column that has <code>NA</code> values to be replaced.
+</p>
+<p>If <code>data</code> is a vector, <code>replace</code> takes a single value. This single value
+replaces all of the <code>NA</code> values in the vector.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional arguments for methods. Currently unused.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+
+<ul>
+<li><p> If <code>data</code> is a data frame, <code>replace_na()</code> returns a data frame.
+</p>
+</li>
+<li><p> If <code>data</code> is a vector, <code>replace_na()</code> returns a vector, with class
+given by the union of <code>data</code> and <code>replace</code>.
+</p>
+</li></ul>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../dplyr/help/na_if.html">dplyr::na_if()</a></code> to replace specified values with <code>NA</code>s;
+<code><a href="../../dplyr/help/coalesce.html">dplyr::coalesce()</a></code> to replaces <code>NA</code>s with values from other vectors.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Replace NAs in a data frame
+df &lt;- tibble(x = c(1, 2, NA), y = c("a", NA, "b"))
+df %&gt;% replace_na(list(x = 0, y = "unknown"))
+
+# Replace NAs in a vector
+df %&gt;% dplyr::mutate(x = replace_na(x, 0))
+# OR
+df$x %&gt;% replace_na(0)
+df$y %&gt;% replace_na("unknown")
+
+# Replace NULLs in a list: NULLs are the list-col equivalent of NAs
+df_list &lt;- tibble(z = list(1:5, NULL, 10:20))
+df_list %&gt;% replace_na(list(z = list(5)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>tidyr</em> version 1.1.4 <a href="00Index.html">Index</a>]</div>
+</body></html>

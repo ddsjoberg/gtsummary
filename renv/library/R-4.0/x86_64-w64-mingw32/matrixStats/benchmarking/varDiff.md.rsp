@@ -1,0 +1,70 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string fcnname="varDiff"%>
+<% fcnname <- "<%@string name="fcnname"%>" %>
+<%@meta title="${fcnname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-11-10"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=fcnname%>() against alternative methods.
+
+## Alternative methods
+
+* N/A
+
+<% for (mode in c("integer", "double")) { %>
+
+## Data type "<%=mode%>"
+### Data
+```r
+<%=withCapture({
+<%@include file="R/random-vectors.R"%>
+data <- rvectors(mode = mode)
+data <- data[1:4]
+})%>
+```
+
+### Results
+
+<% for (ii in seq_along(data)) { %>
+<%
+dataLabel <- names(data)[ii]
+mprintf("%s: %s\n", mode, dataLabel)
+x <- data[[dataLabel]]
+gc()
+%>
+### <%=dataLabel%> vector
+
+#### All elements
+```r
+<%=withCapture({
+x <- data[[.dataLabel.]]
+
+stats <- microbenchmark(
+ "varDiff"         = varDiff(x),
+ "var"             = var(x),
+ "diff"            = diff(x),
+  unit = "ms"
+)
+})%>
+```
+
+<% benchmarkResults(stats, tags=c(mode, dataLabel)) %>
+
+<% } # for (ii ...) %>
+
+<% } # for (mode ...) %>
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-11-10
+o Created.
+---------------------------------------------------------------------------%>

@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Spell checking</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for spell_check {devtools}"><tr><td>spell_check {devtools}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Spell checking</h2>
+
+<h3>Description</h3>
+
+<p>Runs a spell check on text fields in the package description file, manual
+pages, and optionally vignettes. Wraps the <a href="../../spelling/help/spell_check_package.html">spelling</a>
+package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+spell_check(pkg = ".", vignettes = TRUE, use_wordlist = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pkg</code></td>
+<td>
+<p>The package to use, can be a file path to the package or a
+package object.  See <code><a href="../../devtools/help/as.package.html">as.package()</a></code> for more information.</p>
+</td></tr>
+<tr valign="top"><td><code>vignettes</code></td>
+<td>
+<p>also check all <code>rmd</code> and <code>rnw</code> files in the pkg <code>vignettes</code> folder</p>
+</td></tr>
+<tr valign="top"><td><code>use_wordlist</code></td>
+<td>
+<p>ignore words in the package <a href="../../spelling/help/wordlist.html">WORDLIST</a> file</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>devtools</em> version 2.4.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

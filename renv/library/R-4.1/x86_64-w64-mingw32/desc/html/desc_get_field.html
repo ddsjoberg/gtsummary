@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get a single field from a DESCRIPTION file, fail if not found</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for desc_get_field {desc}"><tr><td>desc_get_field {desc}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get a single field from a DESCRIPTION file, fail if not found</h2>
+
+<h3>Description</h3>
+
+<p><code>desc_get_list()</code> parses a comma separated list into a character
+vector.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+desc_get_field(
+  key,
+  default = stop("Field '", key, "' not found"),
+  trim_ws = TRUE,
+  squish_ws = trim_ws,
+  file = "."
+)
+
+desc_get_or_fail(keys, file = ".")
+
+desc_get_list(
+  key,
+  default = stop("Field '", key, "' not found"),
+  sep = ",",
+  trim_ws = TRUE,
+  squish_ws = trim_ws,
+  file = "."
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>key</code></td>
+<td>
+<p>The field to query.</p>
+</td></tr>
+<tr valign="top"><td><code>default</code></td>
+<td>
+<p>Value to return if <code>key</code> is not found.
+By default it throws an error.</p>
+</td></tr>
+<tr valign="top"><td><code>trim_ws</code></td>
+<td>
+<p>Whether to trim leading and trailing whitespace
+from the value. Defaults to <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>squish_ws</code></td>
+<td>
+<p>Whether to reduce repeated whitespace in the value.
+Defaults to <code>trim_ws</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>DESCRIPTION file to use. By default the DESCRIPTION
+file of the current package (i.e. the package the working directory
+is part of) is used.</p>
+</td></tr>
+<tr valign="top"><td><code>keys</code></td>
+<td>
+<p>Character vector of fields to get.</p>
+</td></tr>
+<tr valign="top"><td><code>sep</code></td>
+<td>
+<p>Separator string for <code>desc_get_list()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Character string, the value of <code>key</code>, or <code>default</code>
+if <code>key</code> is not found and <code>default</code> is specified.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other simple queries: 
+<code><a href="../../desc/help/desc_del.html">desc_del</a>()</code>,
+<code><a href="../../desc/help/desc_fields.html">desc_fields</a>()</code>,
+<code><a href="../../desc/help/desc_get.html">desc_get</a>()</code>,
+<code><a href="../../desc/help/desc_has_fields.html">desc_has_fields</a>()</code>,
+<code><a href="../../desc/help/desc_set.html">desc_set</a>()</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>desc</em> version 1.4.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

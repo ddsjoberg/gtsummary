@@ -1,0 +1,2356 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Effect Sizes for Bayesian Models</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Effect Sizes for Bayesian Models</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#standardized-parameters">Standardized Parameters</a>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#set-up">Set up</a></li>
+</ul></li>
+<li><a href="#eta2">Eta<sup>2</sup></a>
+<ul>
+<li><a href="#introduction-1">Introduction</a></li>
+<li><a href="#setup">Setup</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<div id="standardized-parameters" class="section level1">
+<h1>Standardized Parameters</h1>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Like in OLS / ML or other frequentists methods of model parameter estimation, standardizing the parameters of Bayesian (generalized) linear regression models can allow for the comparison of so-called “effects” within and between models, variables and studies.</p>
+<p>As with frequentists methods, standardizing parameters should not be the only method of examining the role different predictors play in a particular Bayesian model, and this vignette generally assumes that the issues of model convergence, goodness of fit and model selection have already been taken care of. (Learn more about how to become a Bayesian master with <a href="https://easystats.github.io/bayestestR/">the <code>bayestestR</code> package</a>.)</p>
+</div>
+<div id="set-up" class="section level2">
+<h2>Set up</h2>
+<p>We will examine the predictive role of overtime (<code>xtra_hours</code>), number of compliments given to the boss (<code>n_comps</code>) and seniority in predicting workers salaries. Let’s fit the model:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstanarm)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;hardlyworking&quot;</span>, <span class="at">package =</span> <span class="st">&quot;effectsize&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(hardlyworking)</span></code></pre></div>
+<pre><code>&gt;   salary xtra_hours n_comps age seniority
+&gt; 1  19745        4.2       1  32         3
+&gt; 2  11302        1.6       0  34         3
+&gt; 3  20636        1.2       3  33         5
+&gt; 4  23047        7.2       1  35         3
+&gt; 5  27342       11.3       0  33         4
+&gt; 6  25657        3.6       2  30         5</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">stan_glm</span>(salary <span class="sc">~</span> xtra_hours <span class="sc">+</span> n_comps <span class="sc">+</span> seniority,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> hardlyworking,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> <span class="fu">normal</span>(<span class="dv">0</span>, <span class="at">scale =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>), <span class="at">autoscale =</span> <span class="cn">TRUE</span>), <span class="co"># set some priors</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">refresh =</span> <span class="dv">0</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>parameters<span class="sc">::</span><span class="fu">model_parameters</span>(mod, <span class="at">test =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<pre><code>&gt; # Fixed effects
+&gt; 
+&gt; Parameter   |   Median |              89% CI |  Rhat |     ESS |                      Prior
+&gt; -------------------------------------------------------------------------------------------
+&gt; (Intercept) | 10023.20 | [9365.61, 10724.72] | 0.999 | 5405.00 | Normal (20000 +- 15495.02)
+&gt; xtra_hours  |  1236.25 | [1189.92,  1285.99] | 1.000 | 4756.00 |      Normal (0 +- 1587.80)
+&gt; n_comps     |  2964.35 | [2754.07,  3165.00] | 1.000 | 5032.00 |      Normal (0 +- 3755.71)
+&gt; seniority   |   439.46 | [ 286.51,   605.06] | 0.999 | 4283.00 |      Normal (0 +- 2702.93)</code></pre>
+<pre><code>&gt; 
+&gt; Using highest density intervals as credible intervals.</code></pre>
+<p>Looking at the un-standardized (“raw”) parameters, it looks like all predictors positively predict workers’ salaries, but which has the highest predictive power? Unfortunately, the predictors are not on the same scale (hours, compliments, years), so comparing them is hard when looking at the raw data. This is where standardization comes in.</p>
+<p>Like with <a href="https://easystats.github.io/effectsize/articles/standardize_parameters.html">frequentists models</a> we can choose from the same standardization methods. Let’s use the (slow) <code>&quot;refit&quot;</code> method.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">standardize_parameters</span>(mod, <span class="at">method =</span> <span class="st">&quot;refit&quot;</span>, <span class="at">ci =</span> <span class="fl">0.89</span>)</span></code></pre></div>
+<pre><code>&gt; # Standardization method: refit
+&gt; 
+&gt; Parameter   | Median (std.) |        89% CI
+&gt; -------------------------------------------
+&gt; (Intercept) |     -2.63e-04 | [-0.03, 0.03]
+&gt; xtra_hours  |          0.78 | [ 0.75, 0.81]
+&gt; n_comps     |          0.39 | [ 0.37, 0.42]
+&gt; seniority   |          0.08 | [ 0.05, 0.11]</code></pre>
+<p>Note that the central tendency of the posterior distribution is still the <em>median</em> - the median of the standardized posterior distribution. We can easily change this, of the type of credible interval used:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">standardize_parameters</span>(mod,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">&quot;basic&quot;</span>, <span class="at">ci =</span> <span class="fl">0.89</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">centrality =</span> <span class="st">&quot;MAP&quot;</span>, <span class="at">ci_method =</span> <span class="st">&quot;eti&quot;</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>&gt; # Standardization method: basic
+&gt; 
+&gt; Parameter   | MAP (std.) |       89% CI
+&gt; ---------------------------------------
+&gt; (Intercept) |       0.00 | [0.00, 0.00]
+&gt; xtra_hours  |       0.78 | [0.75, 0.81]
+&gt; n_comps     |       0.39 | [0.37, 0.42]
+&gt; seniority   |       0.08 | [0.05, 0.11]</code></pre>
+<p>As we can see, working harder (or at least for longer hours) has stronger predictive power than complementing or seniority. (Do note, however, that this does not mean that if you wish to have a higher salary you should work overtime - the raw parameters seem to suggest that complementing your boss is the way to go, with one compliment worth almost 3.5 times <strong>more</strong> than a full hours’ work!)</p>
+</div>
+</div>
+<div id="eta2" class="section level1">
+<h1>Eta<sup>2</sup></h1>
+<div id="introduction-1" class="section level2">
+<h2>Introduction</h2>
+<p>In classical frequentists models, the computation of <span class="math inline">\(\eta^2\)</span> or <span class="math inline">\(\eta^2_p\)</span> is straightforward: based on the right combinations of sums-of-squares (<em>SS</em>s), we get the correct proportion of variance accounted for by some predictor term. However such a computation is not as straightforward for Bayesian models, for various reasons (e.g., the model-<em>SS</em> and the residual-<em>SS</em> don’t necessarily sum to the total-<em>SS</em>). Although some have proposed Bayesian methods of estimating explained variance in ANOVA designs <span class="citation">(Marsman et al. 2019)</span>, these are not yet easy to implement with <code>stan</code>-based models.</p>
+<p>An alternative route to obtaining effect sizes of explained variance, is via the use of the <strong><em>posterior predictive distribution</em></strong> (<em>PPD</em>). The PPD is the Bayesian expected distribution of possible unobserved values. Thus, after observing some data, we can estimate not just the expected mean values (the conditional marginal means), but also the full <em>distribution</em> of data around these values <span class="citation">(Gelman et al. 2014, chap. 7)</span>.</p>
+<p>By sampling from the PPD, we can decompose the sample to the various <em>SS</em>s needed for the computation of explained variance measures. By repeatedly sampling from the PPD, we can generate a posterior distribution of explained variance estimates. But note that <strong>these estimates are conditioned not only on the location-parameters of the model, but also on the scale-parameters of the model!</strong> So it is vital to <a href="https://mc-stan.org/docs/2_23/stan-users-guide/meta-models-part.html#meta-models.part">validate the PPD</a> before using it to estimate explained variance measures.</p>
+</div>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<p>Let’s factorize out data from above:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>hardlyworking<span class="sc">$</span>age_f <span class="ot">&lt;-</span> <span class="fu">cut</span>(hardlyworking<span class="sc">$</span>age,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">35</span>, <span class="dv">45</span>), <span class="at">right =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Young&quot;</span>, <span class="st">&quot;Less_young&quot;</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>hardlyworking<span class="sc">$</span>comps_f <span class="ot">&lt;-</span> <span class="fu">cut</span>(hardlyworking<span class="sc">$</span>n_comps,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">include.lowest =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">right =</span> <span class="cn">FALSE</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(hardlyworking<span class="sc">$</span>age_f, hardlyworking<span class="sc">$</span>comps_f)</span></code></pre></div>
+<pre><code>&gt;             
+&gt;              [0,1) [1,2) [2,3]
+&gt;   Young        124   188   114
+&gt;   Less_young    13    34    27</code></pre>
+<p>And fit our model:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use (special) effects coding</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(hardlyworking<span class="sc">$</span>age_f) <span class="ot">&lt;-</span> bayestestR<span class="sc">::</span>contr.bayes</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">contrasts</span>(hardlyworking<span class="sc">$</span>comps_f) <span class="ot">&lt;-</span> bayestestR<span class="sc">::</span>contr.bayes</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>modAOV <span class="ot">&lt;-</span> <span class="fu">stan_glm</span>(salary <span class="sc">~</span> age_f <span class="sc">*</span> comps_f,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> hardlyworking, <span class="at">family =</span> <span class="fu">gaussian</span>(),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">refresh =</span> <span class="dv">0</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>We can use <code>eta_squared_posterior()</code> to get the posterior distribution of <span class="math inline">\(eta^2\)</span> or <span class="math inline">\(eta^2_p\)</span> for each effect. Like an ANOVA table, we must make sure to use the right effects-coding and <em>SS</em>-type:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pes_posterior <span class="ot">&lt;-</span> <span class="fu">eta_squared_posterior</span>(modAOV,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">draws =</span> <span class="dv">500</span>, <span class="co"># how many samples from the PPD?</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">partial =</span> <span class="cn">TRUE</span>, <span class="co"># partial eta squared</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># type 3 SS</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ss_function =</span> car<span class="sc">::</span>Anova, <span class="at">type =</span> <span class="dv">3</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>&gt; Simulating effect size... This can take a while...</code></pre>
+<pre><code>&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).
+&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pes_posterior)</span></code></pre></div>
+<pre><code>&gt;   age_f comps_f age_f:comps_f
+&gt; 1 0.028   0.161        0.0024
+&gt; 2 0.030   0.117        0.0252
+&gt; 3 0.014   0.091        0.0078
+&gt; 4 0.035   0.112        0.0118
+&gt; 5 0.017   0.100        0.0054
+&gt; 6 0.126   0.058        0.0013</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>bayestestR<span class="sc">::</span><span class="fu">describe_posterior</span>(pes_posterior, <span class="at">rope_range =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>), <span class="at">test =</span> <span class="st">&quot;rope&quot;</span>)</span></code></pre></div>
+<pre><code>&gt; Summary of Posterior Distribution
+&gt; 
+&gt; Parameter     | Median |       95% CI |         ROPE | % in ROPE
+&gt; ----------------------------------------------------------------
+&gt; age_f         |   0.03 | [0.00, 0.07] | [0.00, 0.10] |      100%
+&gt; comps_f       |   0.14 | [0.06, 0.22] | [0.00, 0.10] |    14.08%
+&gt; age_f:comps_f |   0.01 | [0.00, 0.04] | [0.00, 0.10] |      100%</code></pre>
+<p>Compare to:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>modAOV_f <span class="ot">&lt;-</span> <span class="fu">lm</span>(salary <span class="sc">~</span> age_f <span class="sc">*</span> comps_f,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> hardlyworking</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">eta_squared</span>(car<span class="sc">::</span><span class="fu">Anova</span>(modAOV_f, <span class="at">type =</span> <span class="dv">3</span>))</span></code></pre></div>
+<pre><code>&gt; Type 3 ANOVAs only give sensible and informative results when covariates are
+&gt;   mean-centered and factors are coded with orthogonal contrasts (such as those
+&gt;   produced by &#39;contr.sum&#39;, &#39;contr.poly&#39;, or &#39;contr.helmert&#39;, but *not* by the
+&gt;   default &#39;contr.treatment&#39;).</code></pre>
+<pre><code>&gt; # Effect Size for ANOVA (Type III)
+&gt; 
+&gt; Parameter     | Eta2 (partial) |       90% CI
+&gt; ---------------------------------------------
+&gt; age_f         |           0.03 | [0.01, 0.05]
+&gt; comps_f       |           0.13 | [0.09, 0.18]
+&gt; age_f:comps_f |       6.65e-03 | [0.00, 0.02]</code></pre>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-gelman2014bayesian" class="csl-entry">
+Gelman, Andrew, John B Carlin, Hal S Stern, and Donald B Rubin. 2014. <span>“Bayesian Data Analysis (Vol. 2).”</span> <em>Boca Raton, FL: Chapman</em>.
+</div>
+<div id="ref-marsman2019bayesian" class="csl-entry">
+Marsman, Maarten, Lourens Waldorp, Fabian Dablander, and Eric-Jan Wagenmakers. 2019. <span>“Bayesian Estimation of Explained Variance in ANOVA Designs.”</span> <em>Statistica Neerlandica</em> 73 (3): 351–72.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

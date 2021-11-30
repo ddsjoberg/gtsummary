@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Modify table_header</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for modify_table_header {gtsummary}"><tr><td>modify_table_header {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Modify table_header</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt='[Deprecated]' /></a>
+Use <code>modify_table_styling()</code> instead.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+modify_table_header(
+  x,
+  column,
+  label = NULL,
+  hide = NULL,
+  align = NULL,
+  missing_emdash = NULL,
+  indent = NULL,
+  text_interpret = NULL,
+  bold = NULL,
+  italic = NULL,
+  fmt_fun = NULL,
+  footnote_abbrev = NULL,
+  footnote = NULL,
+  spanning_header = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>gtsummary object</p>
+</td></tr>
+<tr valign="top"><td><code>column</code></td>
+<td>
+<p>vector or selector of columns in <code>x$table_body</code></p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>string of column label</p>
+</td></tr>
+<tr valign="top"><td><code>hide</code></td>
+<td>
+<p>logical indicating whether to hide column from output</p>
+</td></tr>
+<tr valign="top"><td><code>align</code></td>
+<td>
+<p>string indicating alignment of column, must be one of
+<code>c("left", "right", "center")</code></p>
+</td></tr>
+<tr valign="top"><td><code>missing_emdash</code></td>
+<td>
+<p>string that evaluates to logical identifying rows to
+include em-dash for missing values, e.g. <code>"reference_row == TRUE"</code></p>
+</td></tr>
+<tr valign="top"><td><code>indent</code></td>
+<td>
+<p>string that evaluates to logical identifying rows to indent</p>
+</td></tr>
+<tr valign="top"><td><code>text_interpret</code></td>
+<td>
+<p>string, must be one of <code>"gt::md"</code> or <code>"gt::html"</code></p>
+</td></tr>
+<tr valign="top"><td><code>bold</code></td>
+<td>
+<p>string that evaluates to logical identifying rows to bold</p>
+</td></tr>
+<tr valign="top"><td><code>italic</code></td>
+<td>
+<p>string that evaluates to logical identifying rows to italicize</p>
+</td></tr>
+<tr valign="top"><td><code>fmt_fun</code></td>
+<td>
+<p>function that formats the statistics in the column</p>
+</td></tr>
+<tr valign="top"><td><code>footnote_abbrev</code></td>
+<td>
+<p>string with abbreviation definition, e.g.
+<code>"CI = Confidence Interval"</code></p>
+</td></tr>
+<tr valign="top"><td><code>footnote</code></td>
+<td>
+<p>string with text for column footnote</p>
+</td></tr>
+<tr valign="top"><td><code>spanning_header</code></td>
+<td>
+<p>string with text for spanning header</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.0.9006 <a href="00Index.html">Index</a>]</div>
+</body></html>

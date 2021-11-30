@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: World 1-degree grid contiguity matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for wrld_1deg {Matrix}"><tr><td>wrld_1deg {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>World 1-degree grid contiguity matrix</h2>
+
+<h3>Description</h3>
+
+<p>This matrix represents the distance-based contiguities of 15260
+one-degree grid cells of land areas. The representation is as a
+row standardised spatial weights matrix transformed to a symmetric
+matrix (see Ord (1975), p. 125).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>data(wrld_1deg)</pre>
+
+
+<h3>Format</h3>
+
+<p>A <i>15260 ^2</i> symmetric sparse matrix of class
+<code><a href="dsCMatrix-class.html">dsCMatrix</a></code> with 55973 non-zero entries.
+</p>
+
+
+<h3>Details</h3>
+
+<p>The data were created into <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> using the coordinates of a
+&lsquo;SpatialPixels&rsquo; object containing approximately one-degree grid
+cells for land areas only (world excluding Antarctica), using package
+<a href="https://CRAN.R-project.org/package=spdep"><span class="pkg">spdep</span></a>'s
+<code><a href="../../spdep/html/dnearneigh.html">dnearneigh</a></code> with a cutoff distance of <code>sqrt(2)</code>,
+and row-standardised and transformed to symmetry using
+<code><a href="../../spdep/html/nb2listw.html">nb2listw</a></code> and <code><a href="../../spdep/html/similar.listw.html">similar.listw</a></code>.
+This spatial weights object was converted to a <code><a href="dsCMatrix-class.html">dsTMatrix</a></code>
+using <code><a href="../../spdep/html/as_dsTMatrix_listw.html">as_dsTMatrix_listw</a></code> and then coerced
+(column-compressed).
+</p>
+
+
+<h3>Source</h3>
+
+<p>The shoreline data was read into <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> using <code><a href="../../maptools/html/Rgshhs.html">Rgshhs</a></code>
+from the GSHHS coarse shoreline database distributed with the
+<a href="https://CRAN.R-project.org/package=maptools"><span class="pkg">maptools</span></a> package, omitting Antarctica.  A matching approximately
+one-degree grid was generated using
+<code><a href="../../maptools/html/Sobj_SpatialGrid.html">Sobj_SpatialGrid</a></code>, and the grids on land were
+found using the appropriate <code><a href="../../sp/html/over.html">over</a></code>
+method for the &lsquo;SpatialPolygons&rsquo; and &lsquo;SpatialGrid&rsquo; objects,
+yielding a &lsquo;SpatialPixels&rsquo; one containing only the grid cells with
+centres on land.
+</p>
+
+
+<h3>References</h3>
+
+<p>Ord, J. K. (1975)
+Estimation methods for models of spatial interaction;
+<em>Journal of the American Statistical Association</em> <b>70</b>, 120&ndash;126.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(wrld_1deg)
+(n &lt;- ncol(wrld_1deg))
+IM &lt;- .symDiagonal(n)
+doExtras &lt;- interactive() || nzchar(Sys.getenv("R_MATRIX_CHECK_EXTRA")) ||
+    identical("true", unname(Sys.getenv("R_PKG_CHECKING_doExtras")))
+nn &lt;- if(doExtras) 20 else 3
+set.seed(1)
+rho &lt;- runif(nn, 0, 1)
+system.time(MJ &lt;- sapply(rho,
+                   function(x) determinant(IM - x * wrld_1deg,
+                                           logarithm = TRUE)$modulus))
+nWC &lt;- -wrld_1deg
+C1 &lt;- Cholesky(nWC, Imult = 2)
+## Note that det(&lt;CHMfactor&gt;) = det(L) = sqrt(det(A))
+## ====&gt; log det(A) = log( det(L)^2 ) = 2 * log det(L) :
+system.time(MJ1 &lt;- n * log(rho) +
+   sapply(rho, function(x) c(2* determinant(update(C1, nWC, 1/x))$modulus))
+)
+stopifnot(all.equal(MJ, MJ1))
+C2 &lt;- Cholesky(nWC, super = TRUE, Imult = 2)
+system.time(MJ2 &lt;- n * log(rho) +
+   sapply(rho, function(x) c(2* determinant(update(C2, nWC, 1/x))$modulus))
+)
+system.time(MJ3 &lt;- n * log(rho) + Matrix:::ldetL2up(C1, nWC, 1/rho))
+system.time(MJ4 &lt;- n * log(rho) + Matrix:::ldetL2up(C2, nWC, 1/rho))
+stopifnot(all.equal(MJ, MJ2),
+          all.equal(MJ, MJ3),
+          all.equal(MJ, MJ4))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

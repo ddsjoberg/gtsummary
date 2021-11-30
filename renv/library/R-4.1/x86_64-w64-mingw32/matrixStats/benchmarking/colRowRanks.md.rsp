@@ -1,0 +1,76 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string colname="colRanks"%>
+<%@string rowname="rowRanks"%>
+<%@meta title="${colname}() and ${rowname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-06-09"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=colname%>() and <%=rowname%>() against alternative methods.
+
+## Alternative methods
+
+* apply() + rank()
+
+
+
+<% for (mode in c("integer", "double")) { %>
+
+## Data type "<%=mode%>"
+
+### Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = mode)
+})%>
+```
+
+### Results
+
+<% for (dataLabel in names(data)) { %>
+<% mprintf("%s: %s\n", mode, dataLabel)  %>
+#### <%=dataLabel%> <%=mode%> matrix
+
+```r
+<%=withCapture({
+X <- data[[.dataLabel.]]
+gc()
+
+colStats <- microbenchmark(
+ colRanks     = colRanks(X, na.rm = FALSE),
+"apply+rank" = apply(X, MARGIN = 2L, FUN = rank, na.last = "keep", ties.method = "max"),
+ unit = "ms"
+)
+
+X <- t(X)
+gc()
+
+rowStats <- microbenchmark(
+ rowRanks        = rowRanks(X, na.rm = FALSE),
+"apply+rank" = apply(X, MARGIN = 1L, FUN = rank, na.last = "keep", ties.method = "max"),
+ unit = "ms"
+)
+})%>
+```
+
+<% crBenchmarkResults(colStats, rowStats, tags=c(mode, dataLabel)) %>
+
+<% } # for (dataLabel ...) %>
+
+<% } # for (mode ...) %> 
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-06-09
+o Created.
+---------------------------------------------------------------------------%>

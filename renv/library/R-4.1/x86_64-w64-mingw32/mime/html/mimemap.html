@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Tables for mapping filename extensions to MIME types</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for mimemap {mime}"><tr><td>mimemap {mime}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Tables for mapping filename extensions to MIME types</h2>
+
+<h3>Description</h3>
+
+<p>The data <code>mimemap</code> is a named character vector that stores the filename
+extensions and the corresponding MIME types, e.g. <code>c(html = 'text/html',
+pdf = 'application/pdf', ...)</code>. The character vector <code>mimeextra</code> stores
+some additional types that we know, such as Markdown files (&lsquo;<span class="file">.md</span>&rsquo;), or R
+scripts (&lsquo;<span class="file">.R</span>&rsquo;).
+</p>
+
+
+<h3>Source</h3>
+
+<p>The file &lsquo;<span class="file">/etc/mime.types</span>&rsquo; on Debian.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+str(as.list(mimemap))
+mimemap["pdf"]
+mimemap[c("html", "js", "css")]
+# additional MIME types (not exported)
+mime:::mimeextra
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>mime</em> version 0.12 <a href="00Index.html">Index</a>]</div>
+</body></html>

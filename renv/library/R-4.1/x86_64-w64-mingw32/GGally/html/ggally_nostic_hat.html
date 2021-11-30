@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: 'ggnostic' leverage points</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggally_nostic_hat {GGally}"><tr><td>ggally_nostic_hat {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2><code><a href="../../GGally/help/ggnostic.html">ggnostic</a></code> leverage points</h2>
+
+<h3>Description</h3>
+
+<p>A function to display stats::influence's hat information against a given explanatory variable.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggally_nostic_hat(
+  data,
+  mapping,
+  ...,
+  linePosition = 2 * sum(eval_data_col(data, mapping$y))/nrow(data),
+  lineColor = brew_colors("grey"),
+  lineSize = 0.5,
+  lineAlpha = 1,
+  lineType = 2,
+  avgLinePosition = sum(eval_data_col(data, mapping$y))/nrow(data),
+  avgLineColor = brew_colors("grey"),
+  avgLineSize = lineSize,
+  avgLineAlpha = lineAlpha,
+  avgLineType = 1
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data, mapping, ...</code></td>
+<td>
+<p>supplied directly to <code><a href="../../GGally/help/ggally_nostic_line.html">ggally_nostic_line</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>linePosition, lineColor, lineSize, lineAlpha, lineType</code></td>
+<td>
+<p>parameters supplied to
+<code><a href="../../ggplot2/help/geom_path.html">ggplot2::geom_line()</a></code> for the cutoff line</p>
+</td></tr>
+<tr valign="top"><td><code>avgLinePosition, avgLineColor, avgLineSize, avgLineAlpha, avgLineType</code></td>
+<td>
+<p>parameters supplied
+to <code><a href="../../ggplot2/help/geom_path.html">ggplot2::geom_line()</a></code> for the average line</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>As stated in <code><a href="../../stats/help/lm.influence.html">stats::influence()</a></code> documentation:
+</p>
+<p>hat: a vector containing the diagonal of the 'hat' matrix.
+</p>
+<p>The diagonal elements of the 'hat' matrix describe the influence each response value has on the fitted value for that same observation.
+</p>
+<p>A suggested &quot;cutoff&quot; line is added to the plot at a height of 2 * p / n and an expected line at a height of p / n.
+If either <code>linePosition</code> or <code>avgLinePosition</code> is <code>NULL</code>, the respective line will not be drawn.
+</p>
+
+
+<h3>Value</h3>
+
+<p><span class="pkg">ggplot2</span> plot object
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../stats/help/lm.influence.html">stats::influence()</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+dt &lt;- broomify(stats::lm(mpg ~ wt + qsec + am, data = mtcars))
+p_(ggally_nostic_hat(dt, ggplot2::aes(wt, .hat)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: USCounties Contiguity Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for USCounties {Matrix}"><tr><td>USCounties {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>USCounties Contiguity Matrix</h2>
+
+<h3>Description</h3>
+
+<p>This matrix represents the contiguities of 3111 US counties using the
+Queen criterion of at least a single shared boundary point. The
+representation is as a row standardised spatial weights matrix
+transformed to a symmetric matrix (see Ord (1975), p. 125).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>data(USCounties)</pre>
+
+
+<h3>Format</h3>
+
+<p>A <i>3111 ^2</i> symmetric sparse matrix of class
+<code><a href="dsCMatrix-class.html">dsCMatrix</a></code> with 9101 non-zero entries.
+</p>
+
+
+<h3>Details</h3>
+
+<p>The data were read into <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> using <code><a href="../../spdep/html/read.gal.html">read.gal</a></code>, and
+row-standardised and transformed to symmetry using
+<code><a href="../../spdep/html/nb2listw.html">nb2listw</a></code> and <code><a href="../../spdep/html/similar.listw.html">similar.listw</a></code>.
+This spatial weights object was converted to class
+<code><a href="dsCMatrix-class.html">dsCMatrix</a></code> using
+<code><a href="../../spdep/html/as_dsTMatrix_listw.html">as_dsTMatrix_listw</a></code> and coercion.
+</p>
+
+
+<h3>Source</h3>
+
+ 
+<p>The data were retrieved from <code>http://sal.uiuc.edu/weights/zips/usc.zip</code>,
+files &ldquo;usc.txt&rdquo; and &ldquo;usc\_q.GAL&rdquo;, with permission for use
+and distribution from Luc Anselin (in early 2008).
+</p>
+
+
+<h3>References</h3>
+
+<p>Ord, J. K. (1975)
+Estimation methods for models of spatial interaction;
+<em>Journal of the American Statistical Association</em> <b>70</b>, 120&ndash;126.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(USCounties)
+(n &lt;- ncol(USCounties))
+IM &lt;- .symDiagonal(n)
+nn &lt;- 50
+set.seed(1)
+rho &lt;- runif(nn, 0, 1)
+system.time(MJ &lt;- sapply(rho, function(x)
+	determinant(IM - x * USCounties, logarithm = TRUE)$modulus))
+
+## can be done faster, by update()ing the Cholesky factor:
+nWC &lt;- -USCounties
+C1 &lt;- Cholesky(nWC, Imult = 2)
+system.time(MJ1 &lt;- n * log(rho) +
+            sapply(rho, function(x)
+                   2 * c(determinant(update(C1, nWC, 1/x))$modulus)))
+all.equal(MJ, MJ1)
+
+
+C2 &lt;- Cholesky(nWC, super = TRUE, Imult = 2)
+system.time(MJ2 &lt;- n * log(rho) +
+            sapply(rho, function(x)
+                   2 * c(determinant(update(C2, nWC, 1/x))$modulus)))
+all.equal(MJ, MJ2)  
+system.time(MJ3 &lt;- n * log(rho) + Matrix:::ldetL2up(C1, nWC, 1/rho))
+stopifnot(all.equal(MJ, MJ3))
+system.time(MJ4 &lt;- n * log(rho) + Matrix:::ldetL2up(C2, nWC, 1/rho))
+stopifnot(all.equal(MJ, MJ4))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,137 @@
+---
+title: "Demo of the bit package"
+author: "Dr. Jens Oehlschlägel"
+date: '`r Sys.Date()`'
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 3
+vignette: >
+  %\VignetteIndexEntry{Demo of the bit package} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE, results = "hide", message = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+require(bit)
+.ff.version <- try(packageVersion("ff"), silent = TRUE)
+.ff.is.available <- !inherits(.ff.version, "try-error") && .ff.version >= "4.0.0" && require(ff)
+#tools::buildVignette("vignettes/bit-demo.Rmd")
+#devtools::build_vignettes()
+```
+
+---
+
+## bit type
+
+Create a huge boolean vector (no NAs allowed)
+
+```{r}
+n <- 1e8
+b1 <- bit(n)
+b1
+```
+
+It costs only one bit per element
+
+```{r}
+object.size(b1)/n
+```
+
+
+A couple of standard methods work 
+
+```{r}
+b1[10:30] <- TRUE
+summary(b1)
+```
+
+Create a another boolean vector with TRUE in some different positions
+
+```{r}
+b2 <- bit(n)
+b2[20:40] <- TRUE
+b2
+```
+
+fast boolean operations
+
+```{r}
+b1 & b2
+```
+
+fast boolean operations
+
+```{r}
+summary(b1 & b2)
+```
+
+
+## bitwhich type
+
+Since we have a very skewed distribution we may coerce to an even sparser representation
+
+```{r}
+w1 <- as.bitwhich(b1) 
+w2 <- as.bitwhich(b2)
+object.size(w1)/n
+```
+
+and everything 
+
+```{r}
+w1 & w2
+```
+
+works as expected
+
+```{r}
+summary(w1 & w2)
+```
+
+
+even mixing
+
+```{r}
+summary(b1 & w2)
+```
+
+
+## processing chunks
+
+Many bit functions support a range restriction, 
+
+```{r}
+summary(b1, range=c(1,1000))
+```
+
+which is useful 
+
+```{r}
+as.which(b1, range=c(1, 1000))
+```
+
+for filtered chunked looping 
+
+```{r}
+lapply(chunk(from=1, to=n, length=10), function(i)as.which(b1, range=i))
+```
+
+over large ff vectors
+
+```{r, eval=.ff.is.available}
+options(ffbatchbytes=1024^3)
+x <- ff(vmode="single", length=n)
+x[1:1000] <- runif(1000)
+lapply(chunk(x, length.out = 10), function(i)sum(x[as.hi(b1, range=i)]))
+```
+
+and wrap-up
+
+```{r, eval=.ff.is.available}
+delete(x)
+rm(x, b1, b2, w1, w2, n)
+```
+
+for more info check the usage vignette

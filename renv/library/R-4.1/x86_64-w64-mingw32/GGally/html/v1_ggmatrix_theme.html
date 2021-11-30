@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Modify a 'ggmatrix' object by adding an 'ggplot2' object to...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for v1_ggmatrix_theme {GGally}"><tr><td>v1_ggmatrix_theme {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Modify a <code><a href="../../GGally/help/ggmatrix.html">ggmatrix</a></code> object by adding an <span class="pkg">ggplot2</span> object to all</h2>
+
+<h3>Description</h3>
+
+<p>Modify a <code><a href="../../GGally/help/ggmatrix.html">ggmatrix</a></code> object by adding an <span class="pkg">ggplot2</span> object to all
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+v1_ggmatrix_theme()
+</pre>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+p_(ggpairs(iris, 1:2) + v1_ggmatrix_theme())
+# move the column names to the left and bottom
+p_(ggpairs(iris, 1:2, switch = "both") + v1_ggmatrix_theme())
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

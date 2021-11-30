@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Unite multiple columns into one by pasting strings together</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for unite {tidyr}"><tr><td>unite {tidyr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Unite multiple columns into one by pasting strings together</h2>
+
+<h3>Description</h3>
+
+<p>Convenience function to paste together multiple columns into one.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+unite(data, col, ..., sep = "_", remove = TRUE, na.rm = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A data frame.</p>
+</td></tr>
+<tr valign="top"><td><code>col</code></td>
+<td>
+<p>The name of the new column, as a string or symbol.
+</p>
+<p>This argument is passed by expression and supports
+<a href="../../rlang/help/nse-force.html">quasiquotation</a> (you can unquote strings
+and symbols). The name is captured from the expression with
+<code><a href="../../rlang/help/nse-defuse.html">rlang::ensym()</a></code> (note that this kind of interface where
+symbols do not represent actual objects is now discouraged in the
+tidyverse; we support it here for backward compatibility).</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>&lt;<code><a href="../../tidyr/help/tidyr_tidy_select.html">tidy-select</a></code>&gt; Columns to unite</p>
+</td></tr>
+<tr valign="top"><td><code>sep</code></td>
+<td>
+<p>Separator to use between values.</p>
+</td></tr>
+<tr valign="top"><td><code>remove</code></td>
+<td>
+<p>If <code>TRUE</code>, remove input columns from output data frame.</p>
+</td></tr>
+<tr valign="top"><td><code>na.rm</code></td>
+<td>
+<p>If <code>TRUE</code>, missing values will be remove prior to uniting
+each value.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../tidyr/help/separate.html">separate()</a></code>, the complement.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+df &lt;- expand_grid(x = c("a", NA), y = c("b", NA))
+df
+
+df %&gt;% unite("z", x:y, remove = FALSE)
+# To remove missing values:
+df %&gt;% unite("z", x:y, na.rm = TRUE, remove = FALSE)
+
+# Separate is almost the complement of unite
+df %&gt;%
+  unite("xy", x:y) %&gt;%
+  separate(xy, c("x", "y"))
+# (but note `x` and `y` contain now "NA" not NA)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>tidyr</em> version 1.1.4 <a href="00Index.html">Index</a>]</div>
+</body></html>

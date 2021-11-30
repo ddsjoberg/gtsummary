@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Report package development situation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for dev_sitrep {devtools}"><tr><td>dev_sitrep {devtools}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Report package development situation</h2>
+
+<h3>Description</h3>
+
+<p><code>dev_sitrep()</code> reports
+</p>
+
+<ul>
+<li><p> If R is up to date
+</p>
+</li>
+<li><p> If RStudio is up to date
+</p>
+</li>
+<li><p> If compiler build tools are installed and available for use
+</p>
+</li>
+<li><p> If devtools and its dependencies are up to date
+</p>
+</li>
+<li><p> If the package's dependencies are up to date
+</p>
+</li></ul>
+
+<p>Call this function if things seem weird and you're not sure
+what's wrong or how to fix it. If this function returns no output
+everything should be ready for package development.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+dev_sitrep(pkg = ".", debug = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pkg</code></td>
+<td>
+<p>The package to use, can be a file path to the package or a
+package object.  See <code><a href="../../devtools/help/as.package.html">as.package()</a></code> for more information.</p>
+</td></tr>
+<tr valign="top"><td><code>debug</code></td>
+<td>
+<p>If <code>TRUE</code>, will print out extra information useful for
+debugging. If <code>FALSE</code>, it will use result cached from a previous run.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A named list, with S3 class <code>dev_sitrep</code> (for printing purposes).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+dev_sitrep()
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>devtools</em> version 2.4.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

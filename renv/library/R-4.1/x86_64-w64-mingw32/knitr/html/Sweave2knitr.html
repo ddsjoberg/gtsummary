@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Convert Sweave to knitr documents</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for Sweave2knitr {knitr}"><tr><td>Sweave2knitr {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert Sweave to knitr documents</h2>
+
+<h3>Description</h3>
+
+<p>This function converts an Sweave document to a <span class="pkg">knitr</span>-compatible
+document.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+Sweave2knitr(
+  file,
+  output = gsub("[.]([^.]+)$", "-knitr.\\1", file),
+  text = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>Path to the Rnw file (must be encoded in UTF-8).</p>
+</td></tr>
+<tr valign="top"><td><code>output</code></td>
+<td>
+<p>Output file path. By default, &lsquo;<span class="file">file.Rnw</span>&rsquo; produces
+&lsquo;<span class="file">file-knitr.Rnw</span>&rsquo;); if <code>text</code> is not NULL, no output file will be
+produced.</p>
+</td></tr>
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>An alternative way to provide the Sweave code as a character
+string. If <code>text</code> is provided, <code>file</code> will be ignored.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The pseudo command <span class="samp">\SweaveInput{file.Rnw}</span> is converted to a code
+chunk header <code>&lt;&lt;child='file.Rnw'&gt;&gt;=</code>.
+</p>
+<p>Similarly <span class="samp">\SweaveOpts{opt = value}</span> is converted to a code chunk
+<span class="samp">opts_chunk$set(opt = value)</span> with the chunk option <code>include =
+FALSE</code>; the options are automatically fixed in the same way as local chunk
+options (explained below).
+</p>
+<p>The Sweave package <span class="samp">\usepackage{Sweave}</span> in the preamble is removed
+because it is not required.
+</p>
+<p>Chunk options are updated if necessary: option values <code>true</code> and
+<code>false</code> are changed to <code>TRUE</code> and <code>FALSE</code> respectively;
+<code>fig=TRUE</code> is removed because it is not necessary for <span class="pkg">knitr</span> (plots
+will be automatically generated); <code>fig=FALSE</code> is changed to
+<code>fig.keep='none'</code>; the devices <code>pdf/jpeg/png/eps/tikz=TRUE</code> are
+converted to <code>dev='pdf'/'jpeg'/'png'/'postscript'/'tikz'</code>;
+<code>pdf/jpeg/png/eps/tikz=FALSE</code> are removed;
+<code>results=tex/verbatim/hide</code> are changed to
+<code>results='asis'/'markup'/'hide'</code>; <code>width/height</code> are changed to
+<code>fig.width/fig.height</code>; <code>prefix.string</code> is changed to
+<code>fig.path</code>; <code>print/term/prefix=TRUE/FALSE</code> are removed; most of the
+character options (e.g. <code>engine</code> and <code>out.width</code>) are quoted;
+<code>keep.source=TRUE/FALSE</code> is changed to <code>tidy=FALSE/TRUE</code> (note the
+order of values).
+</p>
+<p>If a line <code>@</code> (it closes a chunk) directly follows a previous
+<code>@</code>, it is removed; if a line <code>@</code> appears before a code chunk and
+no chunk is before it, it is also removed, because <span class="pkg">knitr</span> only uses one
+<span class="samp">@</span> after <span class="samp">&lt;&lt;&gt;&gt;=</span> by default (which is not the original Noweb
+syntax but more natural).
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>text</code> is <code>NULL</code>, the <code>output</code> file is written and
+<code>NULL</code> is returned. Otherwise, the converted text string is returned.
+</p>
+
+
+<h3>Note</h3>
+
+<p>If <span class="samp">\SweaveOpts{}</span> spans across multiple lines, it will not be
+fixed, and you have to fix it manually. The LaTeX-style syntax of Sweave
+chunks are ignored (see <code>?SweaveSyntaxLatex</code>); only the Noweb syntax
+is supported.
+</p>
+
+
+<h3>References</h3>
+
+<p>The motivation of the changes in the syntax:
+<a href="https://yihui.org/knitr/demo/sweave/">https://yihui.org/knitr/demo/sweave/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../utils/html/Sweave.html">Sweave</a></code>, <code><a href="../../base/html/grep.html">gsub</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+Sweave2knitr(text = "&lt;&lt;echo=TRUE&gt;&gt;=")  # this is valid
+Sweave2knitr(text = "&lt;&lt;png=true&gt;&gt;=")  # dev='png'
+Sweave2knitr(text = "&lt;&lt;eps=TRUE, pdf=FALSE, results=tex, width=5, prefix.string=foo&gt;&gt;=")
+Sweave2knitr(text = "&lt;&lt;,png=false,fig=TRUE&gt;&gt;=")
+Sweave2knitr(text = "\\SweaveOpts{echo=false}")
+Sweave2knitr(text = "\\SweaveInput{hello.Rnw}")
+# Sweave example in utils
+testfile = system.file("Sweave", "Sweave-test-1.Rnw", package = "utils")
+Sweave2knitr(testfile, output = "Sweave-test-knitr.Rnw")
+if (interactive()) knit("Sweave-test-knitr.Rnw")  # or knit2pdf() directly
+unlink("Sweave-test-knitr.Rnw")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

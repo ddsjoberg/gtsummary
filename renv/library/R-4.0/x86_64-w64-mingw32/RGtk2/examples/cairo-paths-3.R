@@ -1,0 +1,5 @@
+cr$moveTo(x, y)
+cr$relLineTo(width, 0)
+cr$relLineTo(0, height)
+cr$relLineTo(-width, 0)
+cr$closePath()

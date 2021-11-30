@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Engines of other languages</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for knit_engines {knitr}"><tr><td>knit_engines {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Engines of other languages</h2>
+
+<h3>Description</h3>
+
+<p>This object controls how to execute the code from languages other than R
+(when the chunk option <code>engine</code> is not <code>'R'</code>). Each component in
+this object is a function that takes a list of current chunk options
+(including the source code) and returns a character string to be written into
+the output.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+knit_engines
+</pre>
+
+
+<h3>Format</h3>
+
+<p>An object of class <code>list</code> of length 6.
+</p>
+
+
+<h3>Details</h3>
+
+<p>The engine function has one argument <code>options</code>: the source code of the
+current chunk is in <code>options$code</code>. Usually we can call external
+programs to run the code via <code><a href="../../base/html/system2.html">system2</a></code>. Other chunk options are
+also contained in this argument, e.g. <code>options$echo</code> and
+<code>options$eval</code>, etc.
+</p>
+<p>In most cases, <code>options$engine</code> can be directly used in command line to
+execute the code, e.g. <code>python</code> or <code>ruby</code>, but sometimes we may
+want to specify the path of the engine program, in which case we can pass it
+through the <code>engine.path</code> option. For example, <code>engine='ruby',
+engine.path='/usr/bin/ruby1.9.1'</code>. Additional command line arguments can be
+passed through <code>options$engine.opts</code>, e.g. <code>engine='ruby',
+engine.opts='-v'</code>.
+</p>
+<p>See <code>str(knitr::knit_engines$get())</code> for a list of built-in language
+engines.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The Leiningen engine <code>lein</code> requires lein-exec plugin; see
+<a href="https://github.com/yihui/knitr/issues/1176">https://github.com/yihui/knitr/issues/1176</a> for details.
+</p>
+
+
+<h3>References</h3>
+
+<p>Usage: <a href="https://yihui.org/knitr/objects/">https://yihui.org/knitr/objects/</a>; examples:
+<a href="https://yihui.org/knitr/demo/engines/">https://yihui.org/knitr/demo/engines/</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+knit_engines$get("python")
+knit_engines$get("awk")
+names(knit_engines$get())
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;TsparseMatrix&quot; of Sparse Matrices in Triplet Form</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for TsparseMatrix-class {Matrix}"><tr><td>TsparseMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;TsparseMatrix&quot; of Sparse Matrices in Triplet Form</h2>
+
+<h3>Description</h3>
+
+<p>The <code>"TsparseMatrix"</code> class is the virtual class of
+all sparse matrices coded in triplet form.  Since it is a virtual class,
+no objects may be created from it.  See
+<code>showClass("TsparseMatrix")</code> for its subclasses.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>Dim</code>, <code>Dimnames</code>:</dt><dd><p>from the <code>"<a href="Matrix-class.html">Matrix</a>"</code> class,</p>
+</dd>
+<dt><code>i</code>:</dt><dd><p>Object of class <code>"integer"</code> - the row indices
+of non-zero entries <em>in 0-base</em>, i.e., must be in
+<code>0:(nrow(.)-1)</code>.</p>
+</dd>
+<dt><code>j</code>:</dt><dd><p>Object of class <code>"integer"</code> - the column
+indices of non-zero entries.  Must be the same length as slot
+<code>i</code> and <em>0-based</em> as well, i.e., in
+<code>0:(ncol(.)-1)</code>.   For numeric Tsparse matrices, <code>(i,j)</code>
+pairs can occur more than once, see <code><a href="dgTMatrix-class.html">dgTMatrix</a></code>.
+</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"sparseMatrix"</code>, directly.
+Class <code>"Matrix"</code>, by class <code>"sparseMatrix"</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>Extraction (<code>"["</code>) methods, see
+<code><a href="Xtrct-methods.html">[-methods</a></code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Most operations with sparse matrices are performed using the
+compressed, column-oriented or <code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>
+representation.  The triplet representation is convenient for
+creating a sparse matrix or for reading and writing such
+matrices.  Once it is created, however, the matrix is generally
+coerced to a <code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> for further
+operations.
+</p>
+<p>Note that all <code>new(.)</code>, <code><a href="spMatrix.html">spMatrix</a></code> and
+<code><a href="sparseMatrix.html">sparseMatrix</a>(*, repr="T")</code> constructors
+for <code>"TsparseMatrix"</code> classes implicitly add (i.e., &ldquo;sum up&rdquo;)
+<i>x_k</i>'s that belong to identical <i>(i_k, j_k)</i> pairs, see, the
+example below, or also <code>"<a href="dgTMatrix-class.html">dgTMatrix</a>"</code>.
+</p>
+<p>For convenience, methods for some operations such as <code>%*%</code>
+and <code>crossprod</code> are defined for
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code> objects.  These methods simply
+coerce the <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code> object to a
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> object then perform the
+operation.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>its superclass, <code><a href="sparseMatrix-class.html">sparseMatrix</a></code>, and the
+<code><a href="dgTMatrix-class.html">dgTMatrix</a></code> class, for the links to other classes.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("TsparseMatrix")
+## or just the subclasses' names
+names(getClass("TsparseMatrix")@subclasses)
+
+T3 &lt;- spMatrix(3,4, i=c(1,3:1), j=c(2,4:2), x=1:4)
+T3 # only 3 non-zero entries, 5 = 1+4 !
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Joseph Larmarange" />
+
+
+<title>Generate a data dictionnary and search for variables with look_for()</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Generate a data dictionnary and search for variables with <code>look_for()</code></h1>
+<h4 class="author">Joseph Larmarange</h4>
+
+
+
+<div id="showing-a-summary-of-a-data-frame" class="section level2">
+<h2>Showing a summary of a data frame</h2>
+<div id="default-printing-of-tibbles" class="section level3">
+<h3>Default printing of tibbles</h3>
+<p>It is a common need to easily get a description of all variables in a data frame.</p>
+<p>When a data frame is converted into a tibble (e.g. with <code>dplyr::as_tibble()</code>), it as a nice printing showing the first rows of the data frame as well as the type of column.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 150 x 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1          5.1         3.5          1.4         0.2 setosa 
+##  2          4.9         3            1.4         0.2 setosa 
+##  3          4.7         3.2          1.3         0.2 setosa 
+##  4          4.6         3.1          1.5         0.2 setosa 
+##  5          5           3.6          1.4         0.2 setosa 
+##  6          5.4         3.9          1.7         0.4 setosa 
+##  7          4.6         3.4          1.4         0.3 setosa 
+##  8          5           3.4          1.5         0.2 setosa 
+##  9          4.4         2.9          1.4         0.2 setosa 
+## 10          4.9         3.1          1.5         0.1 setosa 
+## # ... with 140 more rows</code></pre>
+<p>However, when you have too many variables, all of them cannot be printed and their are just listed.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(fertility, <span class="at">package =</span> <span class="st">&quot;questionr&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>women</span></code></pre></div>
+<pre><code>## # A tibble: 2,000 x 17
+##    id_woman id_household weight interview_date date_of_birth   age residency
+##       &lt;dbl&gt;        &lt;dbl&gt;  &lt;dbl&gt; &lt;date&gt;         &lt;date&gt;        &lt;dbl&gt; &lt;dbl+lbl&gt;
+##  1      391          381  1.80  2012-05-05     1997-03-07       15 2 [rural]
+##  2     1643         1515  1.80  2012-01-23     1982-01-06       30 2 [rural]
+##  3       85           85  1.80  2012-01-21     1979-01-01       33 2 [rural]
+##  4      881          844  1.80  2012-01-06     1968-03-29       43 2 [rural]
+##  5     1981         1797  1.80  2012-05-11     1986-05-25       25 2 [rural]
+##  6     1072         1015  0.998 2012-02-20     1993-07-03       18 2 [rural]
+##  7     1978         1794  0.998 2012-02-23     1967-01-28       45 2 [rural]
+##  8     1607         1486  0.998 2012-02-20     1989-01-21       23 2 [rural]
+##  9      738          711  0.192 2012-03-09     1962-07-24       49 2 [rural]
+## 10     1656         1525  0.192 2012-03-15     1980-12-25       31 2 [rural]
+## # ... with 1,990 more rows, and 10 more variables: region &lt;dbl+lbl&gt;,
+## #   instruction &lt;dbl+lbl&gt;, employed &lt;dbl+lbl&gt;, matri &lt;dbl+lbl&gt;,
+## #   religion &lt;dbl+lbl&gt;, newspaper &lt;dbl+lbl&gt;, radio &lt;dbl+lbl&gt;, tv &lt;dbl+lbl&gt;,
+## #   ideal_nb_children &lt;dbl+lbl&gt;, test &lt;dbl+lbl&gt;</code></pre>
+<p>Note: in <strong>R</strong> console, value labels (if defined) are usually printed but they do not appear in a R markdown document like this vignette.</p>
+</div>
+<div id="dplyrglimpse" class="section level3">
+<h3><code>dplyr::glimpse()</code></h3>
+<p>The function <code>dplyr::glimpse()</code> allows you to have a quick look at all the variables in a data frame.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(iris)</span></code></pre></div>
+<pre><code>## Rows: 150
+## Columns: 5
+## $ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.9, 5.4, 4.~
+## $ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.1, 3.7, 3.~
+## $ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.5, 1.5, 1.~
+## $ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.~
+## $ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa, setosa, s~</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(women)</span></code></pre></div>
+<pre><code>## Rows: 2,000
+## Columns: 17
+## $ id_woman          &lt;dbl&gt; 391, 1643, 85, 881, 1981, 1072, 1978, 1607, 738, 165~
+## $ id_household      &lt;dbl&gt; 381, 1515, 85, 844, 1797, 1015, 1794, 1486, 711, 152~
+## $ weight            &lt;dbl&gt; 1.803150, 1.803150, 1.803150, 1.803150, 1.803150, 0.~
+## $ interview_date    &lt;date&gt; 2012-05-05, 2012-01-23, 2012-01-21, 2012-01-06, 201~
+## $ date_of_birth     &lt;date&gt; 1997-03-07, 1982-01-06, 1979-01-01, 1968-03-29, 198~
+## $ age               &lt;dbl&gt; 15, 30, 33, 43, 25, 18, 45, 23, 49, 31, 26, 45, 25, ~
+## $ residency         &lt;dbl+lbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, ~
+## $ region            &lt;dbl+lbl&gt; 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, ~
+## $ instruction       &lt;dbl+lbl&gt; 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 2, 1, 0, ~
+## $ employed          &lt;dbl+lbl&gt; 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, ~
+## $ matri             &lt;dbl+lbl&gt; 0, 2, 2, 2, 1, 0, 1, 1, 2, 5, 2, 3, 0, 2, 1, 2, ~
+## $ religion          &lt;dbl+lbl&gt; 1, 3, 2, 3, 2, 2, 3, 1, 3, 3, 2, 3, 2, 2, 2, 2, ~
+## $ newspaper         &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, ~
+## $ radio             &lt;dbl+lbl&gt; 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, ~
+## $ tv                &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, ~
+## $ ideal_nb_children &lt;dbl+lbl&gt;  4,  4,  4,  4,  4,  5, 10,  5,  4,  5,  6, 10, ~
+## $ test              &lt;dbl+lbl&gt; 0, 9, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, ~</code></pre>
+<p>It will show you the first values of each variable as well as the type of each variable. However, some important informations are not displayed:</p>
+<ul>
+<li>variable labels, when defined;</li>
+<li>value labels for labelled vectors;</li>
+<li>the list of levels for factors;</li>
+<li>the range of values for numerical variables.</li>
+</ul>
+</div>
+<div id="labelledlook_for" class="section level3">
+<h3><code>labelled::look_for()</code></h3>
+<p><code>look_for()</code> provided by the <code>labelled</code> package will print in the console a data dictionary of all variables, showing variable labels when available, the type of variable and a list of values corresponding to:</p>
+<ul>
+<li>levels for factors;</li>
+<li>value labels for labelled vectors;</li>
+<li>the range of observed values in the vector otherwise (if <code>details = &quot;full&quot;</code>).</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(labelled)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(iris)</span></code></pre></div>
+<pre><code>##  pos variable     label           col_type values    
+##  1   Sepal.Length —               dbl                
+##  2   Sepal.Width  —               dbl                
+##  3   Petal.Length Length of petal dbl                
+##  4   Petal.Width  Width of Petal  dbl                
+##  5   Species      —               fct      setosa    
+##                                            versicolor
+##                                            virginica</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women)</span></code></pre></div>
+<pre><code>##  pos variable          label                     col_type values             
+##  1   id_woman          Woman Id                  dbl                         
+##  2   id_household      Household Id              dbl                         
+##  3   weight            Sample weight             dbl                         
+##  4   interview_date    Interview date            date                        
+##  5   date_of_birth     Date of birth             date                        
+##  6   age               Age at last anniversary ~ dbl                         
+##  7   residency         Urban / rural residency   dbl+lbl  [1] urban          
+##                                                           [2] rural          
+##  8   region            Region                    dbl+lbl  [1] North          
+##                                                           [2] East           
+##                                                           [3] South          
+##                                                           [4] West           
+##  9   instruction       Level of instruction      dbl+lbl  [0] none           
+##                                                           [1] primary        
+##                                                           [2] secondary      
+##                                                           [3] higher         
+##  10  employed          Employed?                 dbl+lbl  [0] no             
+##                                                           [1] yes            
+##                                                           [9] missing        
+##  11  matri             Matrimonial status        dbl+lbl  [0] single         
+##                                                           [1] married        
+##                                                           [2] living together
+##                                                           [3] windowed       
+##                                                           [4] divorced       
+##                                                           [5] separated      
+##  12  religion          Religion                  dbl+lbl  [1] Muslim         
+##                                                           [2] Christian      
+##                                                           [3] Protestant     
+##                                                           [4] no religion    
+##                                                           [5] other          
+##  13  newspaper         Read newspaper?           dbl+lbl  [0] no             
+##                                                           [1] yes            
+##  14  radio             Listen to radio?          dbl+lbl  [0] no             
+##                                                           [1] yes            
+##  15  tv                Watch TV?                 dbl+lbl  [0] no             
+##                                                           [1] yes            
+##  16  ideal_nb_children Ideal number of children  dbl+lbl  [96] don&#39;t know    
+##                                                           [99] missing       
+##  17  test              Ever tested for HIV?      dbl+lbl  [0] no             
+##                                                           [1] yes            
+##                                                           [9] missing</code></pre>
+<p>Note that <code>lookfor()</code> and <code>generate_dictionary()</code> are synonyms of <code>look_for()</code> and works exactly in the same way.</p>
+<p>If there is not enough space to print full labels in the console, they will be truncated (truncation is indicated by a <code>~</code>).</p>
+</div>
+</div>
+<div id="searching-variables-by-key" class="section level2">
+<h2>Searching variables by key</h2>
+<p>When a data frame has dozens or even hundreds of variables, it could become difficult to find a specific variable. In such case, you can provide an optional list of keywords, which can be simple character strings or regular expression, to search for specific variables.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Look for a single keyword.</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(iris, <span class="st">&quot;petal&quot;</span>)</span></code></pre></div>
+<pre><code>##  pos variable     label           col_type values
+##  3   Petal.Length Length of petal dbl            
+##  4   Petal.Width  Width of Petal  dbl</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(iris, <span class="st">&quot;s&quot;</span>)</span></code></pre></div>
+<pre><code>##  pos variable     label col_type values    
+##  1   Sepal.Length —     dbl                
+##  2   Sepal.Width  —     dbl                
+##  5   Species      —     fct      setosa    
+##                                  versicolor
+##                                  virginica</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Look for with a regular expression</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(iris, <span class="st">&quot;petal|species&quot;</span>)</span></code></pre></div>
+<pre><code>##  pos variable     label           col_type values    
+##  3   Petal.Length Length of petal dbl                
+##  4   Petal.Width  Width of Petal  dbl                
+##  5   Species      —               fct      setosa    
+##                                            versicolor
+##                                            virginica</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(iris, <span class="st">&quot;s$&quot;</span>)</span></code></pre></div>
+<pre><code>##  pos variable label col_type values    
+##  5   Species  —     fct      setosa    
+##                              versicolor
+##                              virginica</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Look for with several keywords</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(iris, <span class="st">&quot;pet&quot;</span>, <span class="st">&quot;sp&quot;</span>)</span></code></pre></div>
+<pre><code>##  pos variable     label           col_type values    
+##  3   Petal.Length Length of petal dbl                
+##  4   Petal.Width  Width of Petal  dbl                
+##  5   Species      —               fct      setosa    
+##                                            versicolor
+##                                            virginica</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Look_for will take variable labels into account</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women, <span class="st">&quot;read&quot;</span>, <span class="st">&quot;level&quot;</span>)</span></code></pre></div>
+<pre><code>##  pos variable    label                col_type values       
+##  9   instruction Level of instruction dbl+lbl  [0] none     
+##                                                [1] primary  
+##                                                [2] secondary
+##                                                [3] higher   
+##  13  newspaper   Read newspaper?      dbl+lbl  [0] no       
+##                                                [1] yes</code></pre>
+<p>By default, <code>look_for()</code> will look through both variable names and variables labels. Use <code>labels = FALSE</code> to look only through variable names.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women, <span class="st">&quot;read&quot;</span>)</span></code></pre></div>
+<pre><code>##  pos variable  label           col_type values 
+##  13  newspaper Read newspaper? dbl+lbl  [0] no 
+##                                         [1] yes</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women, <span class="st">&quot;read&quot;</span>, <span class="at">labels =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## Nothing found. Sorry.</code></pre>
+<p>Similarly, the search is by default case insensitive. To make the search case sensitive, use <code>ignore.case = FALSE</code>.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(iris, <span class="st">&quot;sepal&quot;</span>)</span></code></pre></div>
+<pre><code>##  pos variable     label col_type values
+##  1   Sepal.Length —     dbl            
+##  2   Sepal.Width  —     dbl</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(iris, <span class="st">&quot;sepal&quot;</span>, <span class="at">ignore.case =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## Nothing found. Sorry.</code></pre>
+</div>
+<div id="level-of-details" class="section level2">
+<h2>Level of details</h2>
+<p>If you just want to use the search feature of <code>look_for()</code> without computing the details of each variable, simply indicate <code>details = &quot;none&quot;</code> or <code>details = FALSE</code>.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women, <span class="st">&quot;id&quot;</span>, <span class="at">details =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<pre><code>##  pos variable          label                   
+##   1  id_woman          Woman Id                
+##   2  id_household      Household Id            
+##   7  residency         Urban / rural residency 
+##  16  ideal_nb_children Ideal number of children</code></pre>
+<p>If you want more details (but can be time consuming for big data frames), indicate <code>details = &quot;full&quot;</code> or <code>details = TRUE</code>.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women, <span class="at">details =</span> <span class="st">&quot;full&quot;</span>)</span></code></pre></div>
+<pre><code>##  pos variable          label                  col_type values                
+##  1   id_woman          Woman Id               dbl      range: 1 - 2000       
+##  2   id_household      Household Id           dbl      range: 1 - 1814       
+##  3   weight            Sample weight          dbl      range: 0.044629 - 4.3~
+##  4   interview_date    Interview date         date     range: 2011-12-01 - 2~
+##  5   date_of_birth     Date of birth          date     range: 1962-02-07 - 1~
+##  6   age               Age at last anniversa~ dbl      range: 14 - 49        
+##  7   residency         Urban / rural residen~ dbl+lbl  [1] urban             
+##                                                        [2] rural             
+##  8   region            Region                 dbl+lbl  [1] North             
+##                                                        [2] East              
+##                                                        [3] South             
+##                                                        [4] West              
+##  9   instruction       Level of instruction   dbl+lbl  [0] none              
+##                                                        [1] primary           
+##                                                        [2] secondary         
+##                                                        [3] higher            
+##  10  employed          Employed?              dbl+lbl  [0] no                
+##                                                        [1] yes               
+##                                                        [9] missing           
+##  11  matri             Matrimonial status     dbl+lbl  [0] single            
+##                                                        [1] married           
+##                                                        [2] living together   
+##                                                        [3] windowed          
+##                                                        [4] divorced          
+##                                                        [5] separated         
+##  12  religion          Religion               dbl+lbl  [1] Muslim            
+##                                                        [2] Christian         
+##                                                        [3] Protestant        
+##                                                        [4] no religion       
+##                                                        [5] other             
+##  13  newspaper         Read newspaper?        dbl+lbl  [0] no                
+##                                                        [1] yes               
+##  14  radio             Listen to radio?       dbl+lbl  [0] no                
+##                                                        [1] yes               
+##  15  tv                Watch TV?              dbl+lbl  [0] no                
+##                                                        [1] yes               
+##  16  ideal_nb_children Ideal number of child~ dbl+lbl  [96] don&#39;t know       
+##                                                        [99] missing          
+##  17  test              Ever tested for HIV?   dbl+lbl  [0] no                
+##                                                        [1] yes               
+##                                                        [9] missing</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women, <span class="at">details =</span> <span class="st">&quot;full&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 17
+## Columns: 13
+## $ pos           &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
+## $ variable      &lt;chr&gt; &quot;id_woman&quot;, &quot;id_household&quot;, &quot;weight&quot;, &quot;interview_date&quot;, ~
+## $ label         &lt;chr&gt; &quot;Woman Id&quot;, &quot;Household Id&quot;, &quot;Sample weight&quot;, &quot;Interview ~
+## $ col_type      &lt;chr&gt; &quot;dbl&quot;, &quot;dbl&quot;, &quot;dbl&quot;, &quot;date&quot;, &quot;date&quot;, &quot;dbl&quot;, &quot;dbl+lbl&quot;, &quot;~
+## $ levels        &lt;named list&gt; [NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, N~
+## $ value_labels  &lt;named list&gt; [NULL, NULL, NULL, NULL, NULL, NULL, &lt;1, 2&gt;, &lt;1, ~
+## $ class         &lt;named list&gt; [&quot;numeric&quot;, &quot;numeric&quot;, &quot;numeric&quot;, &quot;Date&quot;, &quot;Date&quot;,~
+## $ type          &lt;chr&gt; &quot;double&quot;, &quot;double&quot;, &quot;double&quot;, &quot;double&quot;, &quot;double&quot;,~
+## $ na_values     &lt;named list&gt; [NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 9~
+## $ na_range      &lt;named list&gt; [NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, ~
+## $ unique_values &lt;int&gt; 2000, 1814, 351, 165, 1740, 36, 2, 4, 4, 3, 6, 6,~
+## $ n_na          &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 4, 0, 0, 0, 0, 29
+## $ range         &lt;named list&gt; [&lt;1, 2000&gt;, &lt;1, 1814&gt;, &lt;0.044629, 4.396831&gt;, &lt;2011-12-01~</code></pre>
+</div>
+<div id="advanced-usages-of-look_for" class="section level2">
+<h2>Advanced usages of <code>look_for()</code></h2>
+<p><code>look_for()</code> returns a detailed tibble which is summarized before printing. To deactivate default printing and see full results, simply use <code>dplyr::as_tibble()</code>, <code>dplyr::glimpse()</code> or even <code>utils::View()</code>.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women) <span class="sc">%&gt;%</span> <span class="fu">View</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women) <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 17 x 6
+##      pos variable       label                    col_type levels    value_labels
+##    &lt;int&gt; &lt;chr&gt;          &lt;chr&gt;                    &lt;chr&gt;    &lt;named l&gt; &lt;named list&gt;
+##  1     1 id_woman       Woman Id                 dbl      &lt;NULL&gt;    &lt;NULL&gt;      
+##  2     2 id_household   Household Id             dbl      &lt;NULL&gt;    &lt;NULL&gt;      
+##  3     3 weight         Sample weight            dbl      &lt;NULL&gt;    &lt;NULL&gt;      
+##  4     4 interview_date Interview date           date     &lt;NULL&gt;    &lt;NULL&gt;      
+##  5     5 date_of_birth  Date of birth            date     &lt;NULL&gt;    &lt;NULL&gt;      
+##  6     6 age            Age at last anniversary~ dbl      &lt;NULL&gt;    &lt;NULL&gt;      
+##  7     7 residency      Urban / rural residency  dbl+lbl  &lt;NULL&gt;    &lt;dbl [2]&gt;   
+##  8     8 region         Region                   dbl+lbl  &lt;NULL&gt;    &lt;dbl [4]&gt;   
+##  9     9 instruction    Level of instruction     dbl+lbl  &lt;NULL&gt;    &lt;dbl [4]&gt;   
+## 10    10 employed       Employed?                dbl+lbl  &lt;NULL&gt;    &lt;dbl [3]&gt;   
+## 11    11 matri          Matrimonial status       dbl+lbl  &lt;NULL&gt;    &lt;dbl [6]&gt;   
+## 12    12 religion       Religion                 dbl+lbl  &lt;NULL&gt;    &lt;dbl [5]&gt;   
+## 13    13 newspaper      Read newspaper?          dbl+lbl  &lt;NULL&gt;    &lt;dbl [2]&gt;   
+## 14    14 radio          Listen to radio?         dbl+lbl  &lt;NULL&gt;    &lt;dbl [2]&gt;   
+## 15    15 tv             Watch TV?                dbl+lbl  &lt;NULL&gt;    &lt;dbl [2]&gt;   
+## 16    16 ideal_nb_chil~ Ideal number of children dbl+lbl  &lt;NULL&gt;    &lt;dbl [2]&gt;   
+## 17    17 test           Ever tested for HIV?     dbl+lbl  &lt;NULL&gt;    &lt;dbl [3]&gt;</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(<span class="fu">look_for</span>(women))</span></code></pre></div>
+<pre><code>## Rows: 17
+## Columns: 6
+## $ pos          &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17
+## $ variable     &lt;chr&gt; &quot;id_woman&quot;, &quot;id_household&quot;, &quot;weight&quot;, &quot;interview_date&quot;, &quot;~
+## $ label        &lt;chr&gt; &quot;Woman Id&quot;, &quot;Household Id&quot;, &quot;Sample weight&quot;, &quot;Interview d~
+## $ col_type     &lt;chr&gt; &quot;dbl&quot;, &quot;dbl&quot;, &quot;dbl&quot;, &quot;date&quot;, &quot;date&quot;, &quot;dbl&quot;, &quot;dbl+lbl&quot;, &quot;d~
+## $ levels       &lt;named list&gt; [NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NU~
+## $ value_labels &lt;named list&gt; [NULL, NULL, NULL, NULL, NULL, NULL, &lt;1, 2&gt;, &lt;1, 2~</code></pre>
+<p>The tibble returned by <code>look_for()</code> could be easily manipulated for advanced programming.</p>
+<p>When a column has several values for one variable (e.g. <code>levels</code> or <code>value_labels</code>), results as stored with nested named list. You can convert named lists into simpler character vectors, you can use <code>convert_list_columns_to_character()</code>.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women) <span class="sc">%&gt;%</span> <span class="fu">convert_list_columns_to_character</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 17 x 6
+##      pos variable    label         col_type levels value_labels                 
+##    &lt;int&gt; &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;                        
+##  1     1 id_woman    Woman Id      dbl      &quot;&quot;     &quot;&quot;                           
+##  2     2 id_househo~ Household Id  dbl      &quot;&quot;     &quot;&quot;                           
+##  3     3 weight      Sample weight dbl      &quot;&quot;     &quot;&quot;                           
+##  4     4 interview_~ Interview da~ date     &quot;&quot;     &quot;&quot;                           
+##  5     5 date_of_bi~ Date of birth date     &quot;&quot;     &quot;&quot;                           
+##  6     6 age         Age at last ~ dbl      &quot;&quot;     &quot;&quot;                           
+##  7     7 residency   Urban / rura~ dbl+lbl  &quot;&quot;     &quot;[1] urban; [2] rural&quot;       
+##  8     8 region      Region        dbl+lbl  &quot;&quot;     &quot;[1] North; [2] East; [3] So~
+##  9     9 instruction Level of ins~ dbl+lbl  &quot;&quot;     &quot;[0] none; [1] primary; [2] ~
+## 10    10 employed    Employed?     dbl+lbl  &quot;&quot;     &quot;[0] no; [1] yes; [9] missin~
+## 11    11 matri       Matrimonial ~ dbl+lbl  &quot;&quot;     &quot;[0] single; [1] married; [2~
+## 12    12 religion    Religion      dbl+lbl  &quot;&quot;     &quot;[1] Muslim; [2] Christian; ~
+## 13    13 newspaper   Read newspap~ dbl+lbl  &quot;&quot;     &quot;[0] no; [1] yes&quot;            
+## 14    14 radio       Listen to ra~ dbl+lbl  &quot;&quot;     &quot;[0] no; [1] yes&quot;            
+## 15    15 tv          Watch TV?     dbl+lbl  &quot;&quot;     &quot;[0] no; [1] yes&quot;            
+## 16    16 ideal_nb_c~ Ideal number~ dbl+lbl  &quot;&quot;     &quot;[96] don&#39;t know; [99] missi~
+## 17    17 test        Ever tested ~ dbl+lbl  &quot;&quot;     &quot;[0] no; [1] yes; [9] missin~</code></pre>
+<p>Alternatively, you can use <code>lookfor_to_long_format()</code> to transform results into a long format with one row per factor level and per value label.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women) <span class="sc">%&gt;%</span> <span class="fu">lookfor_to_long_format</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 41 x 6
+##      pos variable      label                        col_type levels value_labels
+##    &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;                        &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;       
+##  1     1 id_woman      Woman Id                     dbl      &lt;NA&gt;   &lt;NA&gt;        
+##  2     2 id_household  Household Id                 dbl      &lt;NA&gt;   &lt;NA&gt;        
+##  3     3 weight        Sample weight                dbl      &lt;NA&gt;   &lt;NA&gt;        
+##  4     4 interview_da~ Interview date               date     &lt;NA&gt;   &lt;NA&gt;        
+##  5     5 date_of_birth Date of birth                date     &lt;NA&gt;   &lt;NA&gt;        
+##  6     6 age           Age at last anniversary (in~ dbl      &lt;NA&gt;   &lt;NA&gt;        
+##  7     7 residency     Urban / rural residency      dbl+lbl  &lt;NA&gt;   [1] urban   
+##  8     7 residency     Urban / rural residency      dbl+lbl  &lt;NA&gt;   [2] rural   
+##  9     8 region        Region                       dbl+lbl  &lt;NA&gt;   [1] North   
+## 10     8 region        Region                       dbl+lbl  &lt;NA&gt;   [2] East    
+## # ... with 31 more rows</code></pre>
+<p>Both can be combined:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">look_for</span>(women) <span class="sc">%&gt;%</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lookfor_to_long_format</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convert_list_columns_to_character</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 41 x 6
+##      pos variable      label                        col_type levels value_labels
+##    &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;                        &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;       
+##  1     1 id_woman      Woman Id                     dbl      &lt;NA&gt;   &lt;NA&gt;        
+##  2     2 id_household  Household Id                 dbl      &lt;NA&gt;   &lt;NA&gt;        
+##  3     3 weight        Sample weight                dbl      &lt;NA&gt;   &lt;NA&gt;        
+##  4     4 interview_da~ Interview date               date     &lt;NA&gt;   &lt;NA&gt;        
+##  5     5 date_of_birth Date of birth                date     &lt;NA&gt;   &lt;NA&gt;        
+##  6     6 age           Age at last anniversary (in~ dbl      &lt;NA&gt;   &lt;NA&gt;        
+##  7     7 residency     Urban / rural residency      dbl+lbl  &lt;NA&gt;   [1] urban   
+##  8     7 residency     Urban / rural residency      dbl+lbl  &lt;NA&gt;   [2] rural   
+##  9     8 region        Region                       dbl+lbl  &lt;NA&gt;   [1] North   
+## 10     8 region        Region                       dbl+lbl  &lt;NA&gt;   [2] East    
+## # ... with 31 more rows</code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

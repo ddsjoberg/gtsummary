@@ -1,0 +1,821 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Fast and Versatile Argument Checks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Fast and Versatile Argument Checks
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;checkmate&rsquo; version 2.0.0</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<p style="text-align: center;">
+<a href="# "> </a>
+<a href="#A">A</a>
+<a href="#C">C</a>
+<a href="#E">E</a>
+<a href="#M">M</a>
+<a href="#Q">Q</a>
+<a href="#R">R</a>
+<a href="#T">T</a>
+<a href="#V">V</a>
+<a href="#W">W</a>
+<a href="#misc">misc</a>
+</p>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="checkmate-package.html">checkmate-package</a></td>
+<td>checkmate: Fast and Versatile Argument Checks</td></tr>
+</table>
+
+<h2><a name="A">-- A --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="anyMissing.html">allMissing</a></td>
+<td>Check if an object contains missing values</td></tr>
+<tr><td style="width: 25%;"><a href="anyInfinite.html">anyInfinite</a></td>
+<td>Check if an object contains infinite values</td></tr>
+<tr><td style="width: 25%;"><a href="anyMissing.html">anyMissing</a></td>
+<td>Check if an object contains missing values</td></tr>
+<tr><td style="width: 25%;"><a href="anyNaN.html">anyNaN</a></td>
+<td>Check if an object contains NaN values</td></tr>
+<tr><td style="width: 25%;"><a href="asInteger.html">asCount</a></td>
+<td>Convert an argument to an integer</td></tr>
+<tr><td style="width: 25%;"><a href="asInteger.html">asInt</a></td>
+<td>Convert an argument to an integer</td></tr>
+<tr><td style="width: 25%;"><a href="asInteger.html">asInteger</a></td>
+<td>Convert an argument to an integer</td></tr>
+<tr><td style="width: 25%;"><a href="assert.html">assert</a></td>
+<td>Combine multiple checks into one assertion</td></tr>
+<tr><td style="width: 25%;"><a href="checkAccess.html">assertAccess</a></td>
+<td>Check file system access rights</td></tr>
+<tr><td style="width: 25%;"><a href="checkArray.html">assertArray</a></td>
+<td>Check if an argument is an array</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomic.html">assertAtomic</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomicVector.html">assertAtomicVector</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkCharacter.html">assertCharacter</a></td>
+<td>Check if an argument is a vector of type character</td></tr>
+<tr><td style="width: 25%;"><a href="checkChoice.html">assertChoice</a></td>
+<td>Check if an object is an element of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkClass.html">assertClass</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="AssertCollection.html">AssertCollection</a></td>
+<td>Collect multiple assertions</td></tr>
+<tr><td style="width: 25%;"><a href="checkComplex.html">assertComplex</a></td>
+<td>Check if an argument is a vector of type complex</td></tr>
+<tr><td style="width: 25%;"><a href="checkCount.html">assertCount</a></td>
+<td>Check if an argument is a count</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataFrame.html">assertDataFrame</a></td>
+<td>Check if an argument is a data frame</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataTable.html">assertDataTable</a></td>
+<td>Check if an argument is a data table</td></tr>
+<tr><td style="width: 25%;"><a href="checkDate.html">assertDate</a></td>
+<td>Check that an argument is a Date</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">assertDirectory</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">assertDirectoryExists</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDisjunct.html">assertDisjunct</a></td>
+<td>Check if an argument is disjunct from a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkDouble.html">assertDouble</a></td>
+<td>Check that an argument is a vector of type double</td></tr>
+<tr><td style="width: 25%;"><a href="checkEnvironment.html">assertEnvironment</a></td>
+<td>Check if an argument is an environment</td></tr>
+<tr><td style="width: 25%;"><a href="checkFactor.html">assertFactor</a></td>
+<td>Check if an argument is a factor</td></tr>
+<tr><td style="width: 25%;"><a href="checkFALSE.html">assertFALSE</a></td>
+<td>Check if an argument is FALSE</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">assertFile</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">assertFileExists</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFlag.html">assertFlag</a></td>
+<td>Check if an argument is a flag</td></tr>
+<tr><td style="width: 25%;"><a href="checkFormula.html">assertFormula</a></td>
+<td>Check if an argument is a formula</td></tr>
+<tr><td style="width: 25%;"><a href="checkFunction.html">assertFunction</a></td>
+<td>Check if an argument is a function</td></tr>
+<tr><td style="width: 25%;"><a href="checkInt.html">assertInt</a></td>
+<td>Check if an argument is a single integerish value</td></tr>
+<tr><td style="width: 25%;"><a href="checkInteger.html">assertInteger</a></td>
+<td>Check if an argument is vector of type integer</td></tr>
+<tr><td style="width: 25%;"><a href="checkIntegerish.html">assertIntegerish</a></td>
+<td>Check if an object is an integerish vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkList.html">assertList</a></td>
+<td>Check if an argument is a list</td></tr>
+<tr><td style="width: 25%;"><a href="checkLogical.html">assertLogical</a></td>
+<td>Check if an argument is a vector of type logical</td></tr>
+<tr><td style="width: 25%;"><a href="checkMatrix.html">assertMatrix</a></td>
+<td>Check if an argument is a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="checkMultiClass.html">assertMultiClass</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkNamed.html">assertNamed</a></td>
+<td>Check if an argument is named</td></tr>
+<tr><td style="width: 25%;"><a href="checkNames.html">assertNames</a></td>
+<td>Check names to comply to specific rules</td></tr>
+<tr><td style="width: 25%;"><a href="checkNull.html">assertNull</a></td>
+<td>Check if an argument is NULL</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumber.html">assertNumber</a></td>
+<td>Check if an argument is a single numeric value</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumeric.html">assertNumeric</a></td>
+<td>Check that an argument is a vector of type numeric</td></tr>
+<tr><td style="width: 25%;"><a href="checkOS.html">assertOS</a></td>
+<td>Check the operating system</td></tr>
+<tr><td style="width: 25%;"><a href="checkPathForOutput.html">assertPathForOutput</a></td>
+<td>Check if a path is suited for creating an output file</td></tr>
+<tr><td style="width: 25%;"><a href="checkPOSIXct.html">assertPOSIXct</a></td>
+<td>Check that an argument is a date/time object in POSIXct format</td></tr>
+<tr><td style="width: 25%;"><a href="checkR6.html">assertR6</a></td>
+<td>Check if an argument is a R6 class</td></tr>
+<tr><td style="width: 25%;"><a href="checkRaw.html">assertRaw</a></td>
+<td>Check if an argument is a raw vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalar.html">assertScalar</a></td>
+<td>Check if an argument is a single atomic value</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalarNA.html">assertScalarNA</a></td>
+<td>Check if an argument is a single missing value</td></tr>
+<tr><td style="width: 25%;"><a href="checkSetEqual.html">assertSetEqual</a></td>
+<td>Check if an argument is equal to a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkString.html">assertString</a></td>
+<td>Check if an argument is a string</td></tr>
+<tr><td style="width: 25%;"><a href="checkSubset.html">assertSubset</a></td>
+<td>Check if an argument is a subset of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkTibble.html">assertTibble</a></td>
+<td>Check if an argument is a tibble</td></tr>
+<tr><td style="width: 25%;"><a href="checkTRUE.html">assertTRUE</a></td>
+<td>Check if an argument is TRUE</td></tr>
+<tr><td style="width: 25%;"><a href="checkVector.html">assertVector</a></td>
+<td>Check if an argument is a vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkAccess.html">assert_access</a></td>
+<td>Check file system access rights</td></tr>
+<tr><td style="width: 25%;"><a href="checkArray.html">assert_array</a></td>
+<td>Check if an argument is an array</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomic.html">assert_atomic</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomicVector.html">assert_atomic_vector</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkCharacter.html">assert_character</a></td>
+<td>Check if an argument is a vector of type character</td></tr>
+<tr><td style="width: 25%;"><a href="checkChoice.html">assert_choice</a></td>
+<td>Check if an object is an element of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkClass.html">assert_class</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkComplex.html">assert_complex</a></td>
+<td>Check if an argument is a vector of type complex</td></tr>
+<tr><td style="width: 25%;"><a href="checkCount.html">assert_count</a></td>
+<td>Check if an argument is a count</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataFrame.html">assert_data_frame</a></td>
+<td>Check if an argument is a data frame</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataTable.html">assert_data_table</a></td>
+<td>Check if an argument is a data table</td></tr>
+<tr><td style="width: 25%;"><a href="checkDate.html">assert_date</a></td>
+<td>Check that an argument is a Date</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">assert_directory</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">assert_directory_exists</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDisjunct.html">assert_disjunct</a></td>
+<td>Check if an argument is disjunct from a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkDouble.html">assert_double</a></td>
+<td>Check that an argument is a vector of type double</td></tr>
+<tr><td style="width: 25%;"><a href="checkEnvironment.html">assert_environment</a></td>
+<td>Check if an argument is an environment</td></tr>
+<tr><td style="width: 25%;"><a href="checkFactor.html">assert_factor</a></td>
+<td>Check if an argument is a factor</td></tr>
+<tr><td style="width: 25%;"><a href="checkFALSE.html">assert_false</a></td>
+<td>Check if an argument is FALSE</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">assert_file</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">assert_file_exists</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFlag.html">assert_flag</a></td>
+<td>Check if an argument is a flag</td></tr>
+<tr><td style="width: 25%;"><a href="checkFormula.html">assert_formula</a></td>
+<td>Check if an argument is a formula</td></tr>
+<tr><td style="width: 25%;"><a href="checkFunction.html">assert_function</a></td>
+<td>Check if an argument is a function</td></tr>
+<tr><td style="width: 25%;"><a href="checkInt.html">assert_int</a></td>
+<td>Check if an argument is a single integerish value</td></tr>
+<tr><td style="width: 25%;"><a href="checkInteger.html">assert_integer</a></td>
+<td>Check if an argument is vector of type integer</td></tr>
+<tr><td style="width: 25%;"><a href="checkIntegerish.html">assert_integerish</a></td>
+<td>Check if an object is an integerish vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkList.html">assert_list</a></td>
+<td>Check if an argument is a list</td></tr>
+<tr><td style="width: 25%;"><a href="checkLogical.html">assert_logical</a></td>
+<td>Check if an argument is a vector of type logical</td></tr>
+<tr><td style="width: 25%;"><a href="checkMatrix.html">assert_matrix</a></td>
+<td>Check if an argument is a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="checkMultiClass.html">assert_multi_class</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkNamed.html">assert_named</a></td>
+<td>Check if an argument is named</td></tr>
+<tr><td style="width: 25%;"><a href="checkNames.html">assert_names</a></td>
+<td>Check names to comply to specific rules</td></tr>
+<tr><td style="width: 25%;"><a href="checkNull.html">assert_null</a></td>
+<td>Check if an argument is NULL</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumber.html">assert_number</a></td>
+<td>Check if an argument is a single numeric value</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumeric.html">assert_numeric</a></td>
+<td>Check that an argument is a vector of type numeric</td></tr>
+<tr><td style="width: 25%;"><a href="checkOS.html">assert_os</a></td>
+<td>Check the operating system</td></tr>
+<tr><td style="width: 25%;"><a href="checkPathForOutput.html">assert_path_for_output</a></td>
+<td>Check if a path is suited for creating an output file</td></tr>
+<tr><td style="width: 25%;"><a href="checkPOSIXct.html">assert_posixct</a></td>
+<td>Check that an argument is a date/time object in POSIXct format</td></tr>
+<tr><td style="width: 25%;"><a href="checkR6.html">assert_r6</a></td>
+<td>Check if an argument is a R6 class</td></tr>
+<tr><td style="width: 25%;"><a href="checkRaw.html">assert_raw</a></td>
+<td>Check if an argument is a raw vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalar.html">assert_scalar</a></td>
+<td>Check if an argument is a single atomic value</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalarNA.html">assert_scalar_na</a></td>
+<td>Check if an argument is a single missing value</td></tr>
+<tr><td style="width: 25%;"><a href="checkSetEqual.html">assert_set_equal</a></td>
+<td>Check if an argument is equal to a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkString.html">assert_string</a></td>
+<td>Check if an argument is a string</td></tr>
+<tr><td style="width: 25%;"><a href="checkSubset.html">assert_subset</a></td>
+<td>Check if an argument is a subset of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkTibble.html">assert_tibble</a></td>
+<td>Check if an argument is a tibble</td></tr>
+<tr><td style="width: 25%;"><a href="checkTRUE.html">assert_true</a></td>
+<td>Check if an argument is TRUE</td></tr>
+<tr><td style="width: 25%;"><a href="checkVector.html">assert_vector</a></td>
+<td>Check if an argument is a vector</td></tr>
+</table>
+
+<h2><a name="C">-- C --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="checkAccess.html">checkAccess</a></td>
+<td>Check file system access rights</td></tr>
+<tr><td style="width: 25%;"><a href="checkArray.html">checkArray</a></td>
+<td>Check if an argument is an array</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomic.html">checkAtomic</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomicVector.html">checkAtomicVector</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkCharacter.html">checkCharacter</a></td>
+<td>Check if an argument is a vector of type character</td></tr>
+<tr><td style="width: 25%;"><a href="checkChoice.html">checkChoice</a></td>
+<td>Check if an object is an element of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkClass.html">checkClass</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkComplex.html">checkComplex</a></td>
+<td>Check if an argument is a vector of type complex</td></tr>
+<tr><td style="width: 25%;"><a href="checkCount.html">checkCount</a></td>
+<td>Check if an argument is a count</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataFrame.html">checkDataFrame</a></td>
+<td>Check if an argument is a data frame</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataTable.html">checkDataTable</a></td>
+<td>Check if an argument is a data table</td></tr>
+<tr><td style="width: 25%;"><a href="checkDate.html">checkDate</a></td>
+<td>Check that an argument is a Date</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">checkDirectory</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">checkDirectoryExists</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDisjunct.html">checkDisjunct</a></td>
+<td>Check if an argument is disjunct from a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkDouble.html">checkDouble</a></td>
+<td>Check that an argument is a vector of type double</td></tr>
+<tr><td style="width: 25%;"><a href="checkEnvironment.html">checkEnvironment</a></td>
+<td>Check if an argument is an environment</td></tr>
+<tr><td style="width: 25%;"><a href="checkFactor.html">checkFactor</a></td>
+<td>Check if an argument is a factor</td></tr>
+<tr><td style="width: 25%;"><a href="checkFALSE.html">checkFALSE</a></td>
+<td>Check if an argument is FALSE</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">checkFile</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">checkFileExists</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFlag.html">checkFlag</a></td>
+<td>Check if an argument is a flag</td></tr>
+<tr><td style="width: 25%;"><a href="checkFormula.html">checkFormula</a></td>
+<td>Check if an argument is a formula</td></tr>
+<tr><td style="width: 25%;"><a href="checkFunction.html">checkFunction</a></td>
+<td>Check if an argument is a function</td></tr>
+<tr><td style="width: 25%;"><a href="checkInt.html">checkInt</a></td>
+<td>Check if an argument is a single integerish value</td></tr>
+<tr><td style="width: 25%;"><a href="checkInteger.html">checkInteger</a></td>
+<td>Check if an argument is vector of type integer</td></tr>
+<tr><td style="width: 25%;"><a href="checkIntegerish.html">checkIntegerish</a></td>
+<td>Check if an object is an integerish vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkList.html">checkList</a></td>
+<td>Check if an argument is a list</td></tr>
+<tr><td style="width: 25%;"><a href="checkLogical.html">checkLogical</a></td>
+<td>Check if an argument is a vector of type logical</td></tr>
+<tr><td style="width: 25%;"><a href="checkmate-package.html">checkmate</a></td>
+<td>checkmate: Fast and Versatile Argument Checks</td></tr>
+<tr><td style="width: 25%;"><a href="checkMatrix.html">checkMatrix</a></td>
+<td>Check if an argument is a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="checkMultiClass.html">checkMultiClass</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkNamed.html">checkNamed</a></td>
+<td>Check if an argument is named</td></tr>
+<tr><td style="width: 25%;"><a href="checkNames.html">checkNames</a></td>
+<td>Check names to comply to specific rules</td></tr>
+<tr><td style="width: 25%;"><a href="checkNull.html">checkNull</a></td>
+<td>Check if an argument is NULL</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumber.html">checkNumber</a></td>
+<td>Check if an argument is a single numeric value</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumeric.html">checkNumeric</a></td>
+<td>Check that an argument is a vector of type numeric</td></tr>
+<tr><td style="width: 25%;"><a href="checkOS.html">checkOS</a></td>
+<td>Check the operating system</td></tr>
+<tr><td style="width: 25%;"><a href="checkPathForOutput.html">checkPathForOutput</a></td>
+<td>Check if a path is suited for creating an output file</td></tr>
+<tr><td style="width: 25%;"><a href="checkPOSIXct.html">checkPOSIXct</a></td>
+<td>Check that an argument is a date/time object in POSIXct format</td></tr>
+<tr><td style="width: 25%;"><a href="checkR6.html">checkR6</a></td>
+<td>Check if an argument is a R6 class</td></tr>
+<tr><td style="width: 25%;"><a href="checkRaw.html">checkRaw</a></td>
+<td>Check if an argument is a raw vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalar.html">checkScalar</a></td>
+<td>Check if an argument is a single atomic value</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalarNA.html">checkScalarNA</a></td>
+<td>Check if an argument is a single missing value</td></tr>
+<tr><td style="width: 25%;"><a href="checkSetEqual.html">checkSetEqual</a></td>
+<td>Check if an argument is equal to a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkString.html">checkString</a></td>
+<td>Check if an argument is a string</td></tr>
+<tr><td style="width: 25%;"><a href="checkSubset.html">checkSubset</a></td>
+<td>Check if an argument is a subset of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkTibble.html">checkTibble</a></td>
+<td>Check if an argument is a tibble</td></tr>
+<tr><td style="width: 25%;"><a href="checkTRUE.html">checkTRUE</a></td>
+<td>Check if an argument is TRUE</td></tr>
+<tr><td style="width: 25%;"><a href="checkVector.html">checkVector</a></td>
+<td>Check if an argument is a vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkAccess.html">check_access</a></td>
+<td>Check file system access rights</td></tr>
+<tr><td style="width: 25%;"><a href="checkArray.html">check_array</a></td>
+<td>Check if an argument is an array</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomic.html">check_atomic</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomicVector.html">check_atomic_vector</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkCharacter.html">check_character</a></td>
+<td>Check if an argument is a vector of type character</td></tr>
+<tr><td style="width: 25%;"><a href="checkChoice.html">check_choice</a></td>
+<td>Check if an object is an element of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkClass.html">check_class</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkComplex.html">check_complex</a></td>
+<td>Check if an argument is a vector of type complex</td></tr>
+<tr><td style="width: 25%;"><a href="checkCount.html">check_count</a></td>
+<td>Check if an argument is a count</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataFrame.html">check_data_frame</a></td>
+<td>Check if an argument is a data frame</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataTable.html">check_data_table</a></td>
+<td>Check if an argument is a data table</td></tr>
+<tr><td style="width: 25%;"><a href="checkDate.html">check_date</a></td>
+<td>Check that an argument is a Date</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">check_directory_exists</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDisjunct.html">check_disjunct</a></td>
+<td>Check if an argument is disjunct from a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkDouble.html">check_double</a></td>
+<td>Check that an argument is a vector of type double</td></tr>
+<tr><td style="width: 25%;"><a href="checkEnvironment.html">check_environment</a></td>
+<td>Check if an argument is an environment</td></tr>
+<tr><td style="width: 25%;"><a href="checkFactor.html">check_factor</a></td>
+<td>Check if an argument is a factor</td></tr>
+<tr><td style="width: 25%;"><a href="checkFALSE.html">check_false</a></td>
+<td>Check if an argument is FALSE</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">check_file_exists</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFlag.html">check_flag</a></td>
+<td>Check if an argument is a flag</td></tr>
+<tr><td style="width: 25%;"><a href="checkFormula.html">check_formula</a></td>
+<td>Check if an argument is a formula</td></tr>
+<tr><td style="width: 25%;"><a href="checkFunction.html">check_function</a></td>
+<td>Check if an argument is a function</td></tr>
+<tr><td style="width: 25%;"><a href="checkInt.html">check_int</a></td>
+<td>Check if an argument is a single integerish value</td></tr>
+<tr><td style="width: 25%;"><a href="checkInteger.html">check_integer</a></td>
+<td>Check if an argument is vector of type integer</td></tr>
+<tr><td style="width: 25%;"><a href="checkIntegerish.html">check_integerish</a></td>
+<td>Check if an object is an integerish vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkList.html">check_list</a></td>
+<td>Check if an argument is a list</td></tr>
+<tr><td style="width: 25%;"><a href="checkLogical.html">check_logical</a></td>
+<td>Check if an argument is a vector of type logical</td></tr>
+<tr><td style="width: 25%;"><a href="checkMatrix.html">check_matrix</a></td>
+<td>Check if an argument is a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="checkMultiClass.html">check_multi_class</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkNamed.html">check_named</a></td>
+<td>Check if an argument is named</td></tr>
+<tr><td style="width: 25%;"><a href="checkNames.html">check_names</a></td>
+<td>Check names to comply to specific rules</td></tr>
+<tr><td style="width: 25%;"><a href="checkNull.html">check_null</a></td>
+<td>Check if an argument is NULL</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumber.html">check_number</a></td>
+<td>Check if an argument is a single numeric value</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumeric.html">check_numeric</a></td>
+<td>Check that an argument is a vector of type numeric</td></tr>
+<tr><td style="width: 25%;"><a href="checkOS.html">check_os</a></td>
+<td>Check the operating system</td></tr>
+<tr><td style="width: 25%;"><a href="checkPathForOutput.html">check_path_for_output</a></td>
+<td>Check if a path is suited for creating an output file</td></tr>
+<tr><td style="width: 25%;"><a href="checkPOSIXct.html">check_posixct</a></td>
+<td>Check that an argument is a date/time object in POSIXct format</td></tr>
+<tr><td style="width: 25%;"><a href="checkR6.html">check_r6</a></td>
+<td>Check if an argument is a R6 class</td></tr>
+<tr><td style="width: 25%;"><a href="checkRaw.html">check_raw</a></td>
+<td>Check if an argument is a raw vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalar.html">check_scalar</a></td>
+<td>Check if an argument is a single atomic value</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalarNA.html">check_scalar_na</a></td>
+<td>Check if an argument is a single missing value</td></tr>
+<tr><td style="width: 25%;"><a href="checkSetEqual.html">check_set_equal</a></td>
+<td>Check if an argument is equal to a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkString.html">check_string</a></td>
+<td>Check if an argument is a string</td></tr>
+<tr><td style="width: 25%;"><a href="checkSubset.html">check_subset</a></td>
+<td>Check if an argument is a subset of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkTibble.html">check_tibble</a></td>
+<td>Check if an argument is a tibble</td></tr>
+<tr><td style="width: 25%;"><a href="checkTRUE.html">check_true</a></td>
+<td>Check if an argument is TRUE</td></tr>
+<tr><td style="width: 25%;"><a href="checkVector.html">check_vector</a></td>
+<td>Check if an argument is a vector</td></tr>
+</table>
+
+<h2><a name="E">-- E --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="checkAccess.html">expect_access</a></td>
+<td>Check file system access rights</td></tr>
+<tr><td style="width: 25%;"><a href="checkArray.html">expect_array</a></td>
+<td>Check if an argument is an array</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomic.html">expect_atomic</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomicVector.html">expect_atomic_vector</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkCharacter.html">expect_character</a></td>
+<td>Check if an argument is a vector of type character</td></tr>
+<tr><td style="width: 25%;"><a href="checkChoice.html">expect_choice</a></td>
+<td>Check if an object is an element of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkClass.html">expect_class</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkComplex.html">expect_complex</a></td>
+<td>Check if an argument is a vector of type complex</td></tr>
+<tr><td style="width: 25%;"><a href="checkCount.html">expect_count</a></td>
+<td>Check if an argument is a count</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataFrame.html">expect_data_frame</a></td>
+<td>Check if an argument is a data frame</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataTable.html">expect_data_table</a></td>
+<td>Check if an argument is a data table</td></tr>
+<tr><td style="width: 25%;"><a href="checkDate.html">expect_date</a></td>
+<td>Check that an argument is a Date</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">expect_directory</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">expect_directory_exists</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDisjunct.html">expect_disjunct</a></td>
+<td>Check if an argument is disjunct from a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkDouble.html">expect_double</a></td>
+<td>Check that an argument is a vector of type double</td></tr>
+<tr><td style="width: 25%;"><a href="checkEnvironment.html">expect_environment</a></td>
+<td>Check if an argument is an environment</td></tr>
+<tr><td style="width: 25%;"><a href="checkFactor.html">expect_factor</a></td>
+<td>Check if an argument is a factor</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">expect_file</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">expect_file_exists</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFlag.html">expect_flag</a></td>
+<td>Check if an argument is a flag</td></tr>
+<tr><td style="width: 25%;"><a href="checkFormula.html">expect_formula</a></td>
+<td>Check if an argument is a formula</td></tr>
+<tr><td style="width: 25%;"><a href="checkFunction.html">expect_function</a></td>
+<td>Check if an argument is a function</td></tr>
+<tr><td style="width: 25%;"><a href="checkInt.html">expect_int</a></td>
+<td>Check if an argument is a single integerish value</td></tr>
+<tr><td style="width: 25%;"><a href="checkInteger.html">expect_integer</a></td>
+<td>Check if an argument is vector of type integer</td></tr>
+<tr><td style="width: 25%;"><a href="checkIntegerish.html">expect_integerish</a></td>
+<td>Check if an object is an integerish vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkList.html">expect_list</a></td>
+<td>Check if an argument is a list</td></tr>
+<tr><td style="width: 25%;"><a href="checkLogical.html">expect_logical</a></td>
+<td>Check if an argument is a vector of type logical</td></tr>
+<tr><td style="width: 25%;"><a href="checkMatrix.html">expect_matrix</a></td>
+<td>Check if an argument is a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="checkMultiClass.html">expect_multi_class</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkNames.html">expect_names</a></td>
+<td>Check names to comply to specific rules</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumber.html">expect_number</a></td>
+<td>Check if an argument is a single numeric value</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumeric.html">expect_numeric</a></td>
+<td>Check that an argument is a vector of type numeric</td></tr>
+<tr><td style="width: 25%;"><a href="checkOS.html">expect_os</a></td>
+<td>Check the operating system</td></tr>
+<tr><td style="width: 25%;"><a href="checkPathForOutput.html">expect_path_for_output</a></td>
+<td>Check if a path is suited for creating an output file</td></tr>
+<tr><td style="width: 25%;"><a href="checkPOSIXct.html">expect_posixct</a></td>
+<td>Check that an argument is a date/time object in POSIXct format</td></tr>
+<tr><td style="width: 25%;"><a href="checkR6.html">expect_r6</a></td>
+<td>Check if an argument is a R6 class</td></tr>
+<tr><td style="width: 25%;"><a href="checkRaw.html">expect_raw</a></td>
+<td>Check if an argument is a raw vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalar.html">expect_scalar</a></td>
+<td>Check if an argument is a single atomic value</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalarNA.html">expect_scalar_na</a></td>
+<td>Check if an argument is a single missing value</td></tr>
+<tr><td style="width: 25%;"><a href="checkSetEqual.html">expect_set_equal</a></td>
+<td>Check if an argument is equal to a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkString.html">expect_string</a></td>
+<td>Check if an argument is a string</td></tr>
+<tr><td style="width: 25%;"><a href="checkSubset.html">expect_subset</a></td>
+<td>Check if an argument is a subset of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkTibble.html">expect_tibble</a></td>
+<td>Check if an argument is a tibble</td></tr>
+</table>
+
+<h2><a name="M">-- M --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="AssertCollection.html">makeAssertCollection</a></td>
+<td>Collect multiple assertions</td></tr>
+<tr><td style="width: 25%;"><a href="makeAssertion.html">makeAssertion</a></td>
+<td>Turn a Check into an Assertion</td></tr>
+<tr><td style="width: 25%;"><a href="makeAssertion.html">makeAssertionFunction</a></td>
+<td>Turn a Check into an Assertion</td></tr>
+<tr><td style="width: 25%;"><a href="makeExpectation.html">makeExpectation</a></td>
+<td>Turn a Check into an Expectation</td></tr>
+<tr><td style="width: 25%;"><a href="makeExpectation.html">makeExpectationFunction</a></td>
+<td>Turn a Check into an Expectation</td></tr>
+<tr><td style="width: 25%;"><a href="makeTest.html">makeTest</a></td>
+<td>Turn a Check into a Test</td></tr>
+<tr><td style="width: 25%;"><a href="makeTest.html">makeTestFunction</a></td>
+<td>Turn a Check into a Test</td></tr>
+<tr><td style="width: 25%;"><a href="matchArg.html">matchArg</a></td>
+<td>Partial Argument Matching</td></tr>
+</table>
+
+<h2><a name="Q">-- Q --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="qassert.html">qassert</a></td>
+<td>Quick argument checks on (builtin) R types</td></tr>
+<tr><td style="width: 25%;"><a href="qassertr.html">qassertr</a></td>
+<td>Quick recursive arguments checks on lists and data frames</td></tr>
+<tr><td style="width: 25%;"><a href="qassert.html">qexpect</a></td>
+<td>Quick argument checks on (builtin) R types</td></tr>
+<tr><td style="width: 25%;"><a href="qassertr.html">qexpectr</a></td>
+<td>Quick recursive arguments checks on lists and data frames</td></tr>
+<tr><td style="width: 25%;"><a href="qassert.html">qtest</a></td>
+<td>Quick argument checks on (builtin) R types</td></tr>
+<tr><td style="width: 25%;"><a href="qassertr.html">qtestr</a></td>
+<td>Quick recursive arguments checks on lists and data frames</td></tr>
+</table>
+
+<h2><a name="R">-- R --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="register_test_backend.html">register_test_backend</a></td>
+<td>Select Backend for Unit Tests</td></tr>
+<tr><td style="width: 25%;"><a href="AssertCollection.html">reportAssertions</a></td>
+<td>Collect multiple assertions</td></tr>
+</table>
+
+<h2><a name="T">-- T --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="checkAccess.html">testAccess</a></td>
+<td>Check file system access rights</td></tr>
+<tr><td style="width: 25%;"><a href="checkArray.html">testArray</a></td>
+<td>Check if an argument is an array</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomic.html">testAtomic</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomicVector.html">testAtomicVector</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkCharacter.html">testCharacter</a></td>
+<td>Check if an argument is a vector of type character</td></tr>
+<tr><td style="width: 25%;"><a href="checkChoice.html">testChoice</a></td>
+<td>Check if an object is an element of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkClass.html">testClass</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkComplex.html">testComplex</a></td>
+<td>Check if an argument is a vector of type complex</td></tr>
+<tr><td style="width: 25%;"><a href="checkCount.html">testCount</a></td>
+<td>Check if an argument is a count</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataFrame.html">testDataFrame</a></td>
+<td>Check if an argument is a data frame</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataTable.html">testDataTable</a></td>
+<td>Check if an argument is a data table</td></tr>
+<tr><td style="width: 25%;"><a href="checkDate.html">testDate</a></td>
+<td>Check that an argument is a Date</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">testDirectory</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">testDirectoryExists</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDisjunct.html">testDisjunct</a></td>
+<td>Check if an argument is disjunct from a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkDouble.html">testDouble</a></td>
+<td>Check that an argument is a vector of type double</td></tr>
+<tr><td style="width: 25%;"><a href="checkEnvironment.html">testEnvironment</a></td>
+<td>Check if an argument is an environment</td></tr>
+<tr><td style="width: 25%;"><a href="checkFactor.html">testFactor</a></td>
+<td>Check if an argument is a factor</td></tr>
+<tr><td style="width: 25%;"><a href="checkFALSE.html">testFALSE</a></td>
+<td>Check if an argument is FALSE</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">testFile</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">testFileExists</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFlag.html">testFlag</a></td>
+<td>Check if an argument is a flag</td></tr>
+<tr><td style="width: 25%;"><a href="checkFormula.html">testFormula</a></td>
+<td>Check if an argument is a formula</td></tr>
+<tr><td style="width: 25%;"><a href="checkFunction.html">testFunction</a></td>
+<td>Check if an argument is a function</td></tr>
+<tr><td style="width: 25%;"><a href="checkInt.html">testInt</a></td>
+<td>Check if an argument is a single integerish value</td></tr>
+<tr><td style="width: 25%;"><a href="checkInteger.html">testInteger</a></td>
+<td>Check if an argument is vector of type integer</td></tr>
+<tr><td style="width: 25%;"><a href="checkIntegerish.html">testIntegerish</a></td>
+<td>Check if an object is an integerish vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkList.html">testList</a></td>
+<td>Check if an argument is a list</td></tr>
+<tr><td style="width: 25%;"><a href="checkLogical.html">testLogical</a></td>
+<td>Check if an argument is a vector of type logical</td></tr>
+<tr><td style="width: 25%;"><a href="checkMatrix.html">testMatrix</a></td>
+<td>Check if an argument is a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="checkMultiClass.html">testMultiClass</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkNamed.html">testNamed</a></td>
+<td>Check if an argument is named</td></tr>
+<tr><td style="width: 25%;"><a href="checkNames.html">testNames</a></td>
+<td>Check names to comply to specific rules</td></tr>
+<tr><td style="width: 25%;"><a href="checkNull.html">testNull</a></td>
+<td>Check if an argument is NULL</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumber.html">testNumber</a></td>
+<td>Check if an argument is a single numeric value</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumeric.html">testNumeric</a></td>
+<td>Check that an argument is a vector of type numeric</td></tr>
+<tr><td style="width: 25%;"><a href="checkOS.html">testOS</a></td>
+<td>Check the operating system</td></tr>
+<tr><td style="width: 25%;"><a href="checkPathForOutput.html">testPathForOutput</a></td>
+<td>Check if a path is suited for creating an output file</td></tr>
+<tr><td style="width: 25%;"><a href="checkPOSIXct.html">testPOSIXct</a></td>
+<td>Check that an argument is a date/time object in POSIXct format</td></tr>
+<tr><td style="width: 25%;"><a href="checkR6.html">testR6</a></td>
+<td>Check if an argument is a R6 class</td></tr>
+<tr><td style="width: 25%;"><a href="checkRaw.html">testRaw</a></td>
+<td>Check if an argument is a raw vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalar.html">testScalar</a></td>
+<td>Check if an argument is a single atomic value</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalarNA.html">testScalarNA</a></td>
+<td>Check if an argument is a single missing value</td></tr>
+<tr><td style="width: 25%;"><a href="checkSetEqual.html">testSetEqual</a></td>
+<td>Check if an argument is equal to a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkString.html">testString</a></td>
+<td>Check if an argument is a string</td></tr>
+<tr><td style="width: 25%;"><a href="checkSubset.html">testSubset</a></td>
+<td>Check if an argument is a subset of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkTibble.html">testTibble</a></td>
+<td>Check if an argument is a tibble</td></tr>
+<tr><td style="width: 25%;"><a href="checkTRUE.html">testTRUE</a></td>
+<td>Check if an argument is TRUE</td></tr>
+<tr><td style="width: 25%;"><a href="checkVector.html">testVector</a></td>
+<td>Check if an argument is a vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkAccess.html">test_access</a></td>
+<td>Check file system access rights</td></tr>
+<tr><td style="width: 25%;"><a href="checkArray.html">test_array</a></td>
+<td>Check if an argument is an array</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomic.html">test_atomic</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkAtomicVector.html">test_atomic_vector</a></td>
+<td>Check that an argument is an atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkCharacter.html">test_character</a></td>
+<td>Check if an argument is a vector of type character</td></tr>
+<tr><td style="width: 25%;"><a href="checkChoice.html">test_choice</a></td>
+<td>Check if an object is an element of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkClass.html">test_class</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkComplex.html">test_complex</a></td>
+<td>Check if an argument is a vector of type complex</td></tr>
+<tr><td style="width: 25%;"><a href="checkCount.html">test_count</a></td>
+<td>Check if an argument is a count</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataFrame.html">test_data_frame</a></td>
+<td>Check if an argument is a data frame</td></tr>
+<tr><td style="width: 25%;"><a href="checkDataTable.html">test_data_table</a></td>
+<td>Check if an argument is a data table</td></tr>
+<tr><td style="width: 25%;"><a href="checkDate.html">test_date</a></td>
+<td>Check that an argument is a Date</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">test_directory</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDirectoryExists.html">test_directory_exists</a></td>
+<td>Check for existence and access rights of directories</td></tr>
+<tr><td style="width: 25%;"><a href="checkDisjunct.html">test_disjunct</a></td>
+<td>Check if an argument is disjunct from a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkDouble.html">test_double</a></td>
+<td>Check that an argument is a vector of type double</td></tr>
+<tr><td style="width: 25%;"><a href="checkEnvironment.html">test_environment</a></td>
+<td>Check if an argument is an environment</td></tr>
+<tr><td style="width: 25%;"><a href="checkFactor.html">test_factor</a></td>
+<td>Check if an argument is a factor</td></tr>
+<tr><td style="width: 25%;"><a href="checkFALSE.html">test_false</a></td>
+<td>Check if an argument is FALSE</td></tr>
+<tr><td style="width: 25%;"><a href="checkFileExists.html">test_file_exists</a></td>
+<td>Check existence and access rights of files</td></tr>
+<tr><td style="width: 25%;"><a href="checkFlag.html">test_flag</a></td>
+<td>Check if an argument is a flag</td></tr>
+<tr><td style="width: 25%;"><a href="checkFormula.html">test_formula</a></td>
+<td>Check if an argument is a formula</td></tr>
+<tr><td style="width: 25%;"><a href="checkFunction.html">test_function</a></td>
+<td>Check if an argument is a function</td></tr>
+<tr><td style="width: 25%;"><a href="checkInt.html">test_int</a></td>
+<td>Check if an argument is a single integerish value</td></tr>
+<tr><td style="width: 25%;"><a href="checkInteger.html">test_integer</a></td>
+<td>Check if an argument is vector of type integer</td></tr>
+<tr><td style="width: 25%;"><a href="checkIntegerish.html">test_integerish</a></td>
+<td>Check if an object is an integerish vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkList.html">test_list</a></td>
+<td>Check if an argument is a list</td></tr>
+<tr><td style="width: 25%;"><a href="checkLogical.html">test_logical</a></td>
+<td>Check if an argument is a vector of type logical</td></tr>
+<tr><td style="width: 25%;"><a href="checkMatrix.html">test_matrix</a></td>
+<td>Check if an argument is a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="checkMultiClass.html">test_multi_class</a></td>
+<td>Check the class membership of an argument</td></tr>
+<tr><td style="width: 25%;"><a href="checkNamed.html">test_named</a></td>
+<td>Check if an argument is named</td></tr>
+<tr><td style="width: 25%;"><a href="checkNames.html">test_names</a></td>
+<td>Check names to comply to specific rules</td></tr>
+<tr><td style="width: 25%;"><a href="checkNull.html">test_null</a></td>
+<td>Check if an argument is NULL</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumber.html">test_number</a></td>
+<td>Check if an argument is a single numeric value</td></tr>
+<tr><td style="width: 25%;"><a href="checkNumeric.html">test_numeric</a></td>
+<td>Check that an argument is a vector of type numeric</td></tr>
+<tr><td style="width: 25%;"><a href="checkOS.html">test_os</a></td>
+<td>Check the operating system</td></tr>
+<tr><td style="width: 25%;"><a href="checkPathForOutput.html">test_path_for_output</a></td>
+<td>Check if a path is suited for creating an output file</td></tr>
+<tr><td style="width: 25%;"><a href="checkPOSIXct.html">test_posixct</a></td>
+<td>Check that an argument is a date/time object in POSIXct format</td></tr>
+<tr><td style="width: 25%;"><a href="checkR6.html">test_r6</a></td>
+<td>Check if an argument is a R6 class</td></tr>
+<tr><td style="width: 25%;"><a href="checkRaw.html">test_raw</a></td>
+<td>Check if an argument is a raw vector</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalar.html">test_scalar</a></td>
+<td>Check if an argument is a single atomic value</td></tr>
+<tr><td style="width: 25%;"><a href="checkScalarNA.html">test_scalar_na</a></td>
+<td>Check if an argument is a single missing value</td></tr>
+<tr><td style="width: 25%;"><a href="checkSetEqual.html">test_set_equal</a></td>
+<td>Check if an argument is equal to a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkString.html">test_string</a></td>
+<td>Check if an argument is a string</td></tr>
+<tr><td style="width: 25%;"><a href="checkSubset.html">test_subset</a></td>
+<td>Check if an argument is a subset of a given set</td></tr>
+<tr><td style="width: 25%;"><a href="checkTibble.html">test_tibble</a></td>
+<td>Check if an argument is a tibble</td></tr>
+<tr><td style="width: 25%;"><a href="checkTRUE.html">test_true</a></td>
+<td>Check if an argument is TRUE</td></tr>
+<tr><td style="width: 25%;"><a href="checkVector.html">test_vector</a></td>
+<td>Check if an argument is a vector</td></tr>
+</table>
+
+<h2><a name="V">-- V --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="vname.html">vname</a></td>
+<td>Lookup a variable name</td></tr>
+</table>
+
+<h2><a name="W">-- W --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="wf.html">wf</a></td>
+<td>Get the index of the first/last TRUE</td></tr>
+<tr><td style="width: 25%;"><a href="wf.html">wl</a></td>
+<td>Get the index of the first/last TRUE</td></tr>
+</table>
+
+<h2><a name="misc">-- misc --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="coalesce.html">%??%</a></td>
+<td>Coalesce operator</td></tr>
+</table>
+</body></html>

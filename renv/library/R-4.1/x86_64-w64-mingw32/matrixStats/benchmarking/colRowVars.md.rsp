@@ -1,0 +1,136 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string colname="colVars"%>
+<%@string rowname="rowVars"%>
+<%@meta title="${colname}() and ${rowname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2015-01-06"%>
+
+<%@include file="${header}"%>
+
+<%@string test_genefilter="TRUE"%>
+
+<%@ifeq test_genefilter="TRUE"%>
+<%
+use("genefilter", how = "load")
+genefilter_rowVars <- genefilter::rowVars
+genefilter_colVars <- function(x, ...) genefilter_rowVars(t(x), ...)
+%>
+<%@endif%>
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=colname%>() and <%=rowname%>() against alternative methods.
+
+## Alternative methods
+
+* apply() + var()
+* colVarColMeans() and rowVarColMeans()
+<%@ifeq test_genefilter="TRUE"%>
+* genefilter::rowVars(t(.)) and genefilter::rowVars()
+<%@endif%>
+
+where
+
+```r
+<%=withCapture({
+colVarColMeans <- function(x, na.rm = TRUE) {
+  if (na.rm) {
+    n <- colSums(!is.na(x))
+  } else {
+    n <- nrow(x)
+  }
+  var <- colMeans(x*x, na.rm = na.rm) - (colMeans(x, na.rm = na.rm))^2
+  var * n/(n-1)
+}
+})%>
+```
+
+and
+
+```r
+<%=withCapture({
+rowVarRowMeans <- function(x, na.rm = TRUE) {
+  if (na.rm) {
+    n <- rowSums(!is.na(x))
+  } else {
+    n <- ncol(x)
+  }
+  mu <- rowMeans(x, na.rm = na.rm)
+  var <- rowMeans(x*x, na.rm = na.rm) - mu^2
+  var * (n/(n-1))
+}
+})%>
+```
+
+
+<% for (mode in c("integer", "double")) { %>
+
+## Data type "<%=mode%>"
+
+### Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = mode)
+})%>
+```
+
+### Results
+
+<% for (dataLabel in names(data)) { %>
+<% mprintf("%s: %s\n", mode, dataLabel)  %>
+#### <%=dataLabel%> <%=mode%> matrix
+
+```r
+<%=withCapture({
+X <- data[[.dataLabel.]]
+gc()
+
+colStats <- microbenchmark(
+ colVars        = colVars(X, na.rm = FALSE),
+ colVarsCenter  = colVars(X, center = colMeans(X, na.rm = FALSE), na.rm = FALSE),
+ colVarColMeans = colVarColMeans(X, na.rm = FALSE),
+ "apply+var"    = apply(X, MARGIN = 2L, FUN = var, na.rm = FALSE),
+<%@ifeq test_genefilter="TRUE"%>
+ "genefilter::rowVars(t(.))" = genefilter_colVars(X, na.rm = FALSE),
+<%@endif%>
+ unit = "ms"
+)
+
+X <- t(X)
+gc()
+
+rowStats <- microbenchmark(
+ rowVars        = rowVars(X, na.rm = FALSE),
+ rowVarsCenter  = rowVars(X, center = rowMeans(X, na.rm = FALSE), na.rm = FALSE),
+ rowVarRowMeans = rowVarRowMeans(X, na.rm = FALSE),
+"apply+var"     = apply(X, MARGIN = 1L, FUN = var, na.rm = FALSE),
+<%@ifeq test_genefilter="TRUE"%>
+ "genefilter::rowVars" = genefilter_rowVars(X, na.rm = FALSE),
+<%@endif%>
+ unit = "ms"
+)
+})%>
+```
+
+<% crBenchmarkResults(colStats, rowStats, tags=c(mode, dataLabel)) %>
+
+<% } # for (dataLabel ...) %>
+
+<% } # for (mode ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2015-01-06
+o Now benchmarking 'genefilter' functions too.
+2014-11-23
+o Now benchmarking rowVars() instead of rowSds() since the latter uses
+  the former.
+2014-06-09
+o Created.
+---------------------------------------------------------------------------%>

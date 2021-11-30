@@ -1,0 +1,111 @@
+---
+title: "Significant figures and scientific notation"
+output: html_vignette
+vignette: >
+  %\VignetteIndexEntry{Significant figures and scientific notation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(pillar)
+```
+
+Base R offers the `"digits"` and `"scipen"` options to control the number of significant digits and the switch to scientific notation.
+For pillar, the options `"pillar.sigfig"` and `"pillar.max_dec_width"` fulfill a similar purpose.
+This vignette showcases similarities and differences.
+See `?"pillar-package"` for an overview over all options.
+
+## Digits
+
+The default for `getOption("digits")` is 7, whereas the `"pillar.sigfig"` option defaults to 3.
+Another difference is that pillar will show at most the specified number of significant digits, even if space is available.
+The rationale is to allow a quick glance over the magnitude of a number, without spending too much horizontal space.
+
+```{r}
+options(digits = 3)
+c(1.2345, 12.345, 123.45, 1234.5, 12345)
+pillar(c(1.2345, 12.345, 123.45, 1234.5, 12345))
+```
+
+Terminal zeros are only shown in pillar if there is a nonzero value past the significant digits shown.
+This is in contrast to base R where terminal zeros are always shown if there is space, but hidden if the value is too insignificant:
+
+```{r}
+c(1, 1.00001)
+pillar(c(1, 1.00001))
+```
+
+A trailing decimal separator is shown if there is a fractional part but the integer part already exceeds the significant digits.
+The presence of the decimal separator does **not** indicate that the number is larger, only that there exists a nonzero fractional part:
+
+```{r}
+c(123, 123.45, 567.89)
+pillar(c(123, 123.45, 567.89))
+```
+
+To show more significant digits, set the `"pillar.sigfig"` option to a larger value:
+
+```{r}
+options(digits = 7)
+options(pillar.sigfig = 7)
+c(1.2345, 12.345, 123.45, 1234.5, 12345)
+pillar(c(1.2345, 12.345, 123.45, 1234.5, 12345))
+```
+
+To show a fixed number of decimal digits, use `num()` with a `digits` argument:
+
+```{r}
+num(c(1.2345, 12.345, 123.45, 1234.5, 12345), digits = 2)
+```
+
+See `vignette("numbers")` for details.
+
+## Scientific notation
+
+Both base R and pillar switch to scientific notation when the decimal representation becomes too wide.
+The larger `getOption("scipen")`, the stronger the resistance to switching to scientific notation.
+The default `0` seems to be anchored at 13 digits for the integer part.
+
+```{r}
+123456789012
+123456789012.3
+1234567890123
+1234567890123.4
+options(scipen = 1)
+1234567890123
+12345678901234
+12345678901234.5
+```
+
+The `"pillar.max_dec_width"` option is similar, it indicates the width that must be exceeded for a switch to scientific notation to happen.
+This width includes the decimal separator.
+
+```{r}
+pillar(123456789012)
+pillar(123456789012.3)
+pillar(1234567890123)
+pillar(1234567890123.4)
+options(pillar.max_dec_width = 14)
+pillar(1234567890123)
+pillar(12345678901234)
+pillar(12345678901234.5)
+```
+
+To avoid switching to scientific notation, set the `"pillar.max_dec_width"` option to a large value.
+Note that if the required width is not available to show the column, it will not be shown at all in this case.
+The `notation` argument to `num()` offers more options:
+
+```{r}
+num(12345678901234567, notation = "dec")
+num(12345678901234567, notation = "sci")
+num(12345678901234567, notation = "eng")
+num(12345678901234567, notation = "si")
+```

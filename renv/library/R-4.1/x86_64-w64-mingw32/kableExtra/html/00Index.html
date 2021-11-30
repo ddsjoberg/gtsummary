@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Construct Complex Table with 'kable' and Pipe Syntax</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Construct Complex Table with 'kable' and Pipe Syntax
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;kableExtra&rsquo; version 1.3.4</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="kableExtra-package.html">kableExtra-package</a></td>
+<td>kableExtra</td></tr>
+<tr><td style="width: 25%;"><a href="add_footnote.html">add_footnote</a></td>
+<td>Add footnote</td></tr>
+<tr><td style="width: 25%;"><a href="add_header_above.html">add_header_above</a></td>
+<td>Add a header row on top of current header</td></tr>
+<tr><td style="width: 25%;"><a href="add_indent.html">add_indent</a></td>
+<td>Add indentations to row headers</td></tr>
+<tr><td style="width: 25%;"><a href="as_image.html">as_image</a></td>
+<td>Render the table as an format-independent image and use it in rmarkdown</td></tr>
+<tr><td style="width: 25%;"><a href="auto_index.html">auto_index</a></td>
+<td>Automatically figuring out the group_row index</td></tr>
+<tr><td style="width: 25%;"><a href="cell_spec.html">cell_spec</a></td>
+<td>Specify Cell/Text format</td></tr>
+<tr><td style="width: 25%;"><a href="collapse_rows.html">collapse_rows</a></td>
+<td>Collapse repeated rows to multirow cell</td></tr>
+<tr><td style="width: 25%;"><a href="column_spec.html">column_spec</a></td>
+<td>Specify the look of the selected column</td></tr>
+<tr><td style="width: 25%;"><a href="graphics_helpers.html">dev_chr</a></td>
+<td>Helper functions to use various graphics devices</td></tr>
+<tr><td style="width: 25%;"><a href="footnote.html">footnote</a></td>
+<td>Add footnote (new)</td></tr>
+<tr><td style="width: 25%;"><a href="footnote_marker_number.html">footnote_marker_alphabet</a></td>
+<td>Footnote marker</td></tr>
+<tr><td style="width: 25%;"><a href="footnote_marker_number.html">footnote_marker_number</a></td>
+<td>Footnote marker</td></tr>
+<tr><td style="width: 25%;"><a href="footnote_marker_number.html">footnote_marker_symbol</a></td>
+<td>Footnote marker</td></tr>
+<tr><td style="width: 25%;"><a href="graphics_helpers.html">graphics_dev</a></td>
+<td>Helper functions to use various graphics devices</td></tr>
+<tr><td style="width: 25%;"><a href="graphics_helpers.html">graphics_helpers</a></td>
+<td>Helper functions to use various graphics devices</td></tr>
+<tr><td style="width: 25%;"><a href="group_rows.html">group_rows</a></td>
+<td>Put a few rows of a table into one category</td></tr>
+<tr><td style="width: 25%;"><a href="header_separate.html">header_separate</a></td>
+<td>Separate table headers and add additional header rows based on grouping</td></tr>
+<tr><td style="width: 25%;"><a href="html_dependency_bsTable.html">html_dependency_bsTable</a></td>
+<td>HTML dependency for Twitter bootstrap (table only)</td></tr>
+<tr><td style="width: 25%;"><a href="html_dependency_kePrint.html">html_dependency_kePrint</a></td>
+<td>HTML dependency for js script to enable bootstrap tooltip and popup message</td></tr>
+<tr><td style="width: 25%;"><a href="html_dependency_lightable.html">html_dependency_lightable</a></td>
+<td>HTML dependency for lightable</td></tr>
+<tr><td style="width: 25%;"><a href="graphics_helpers.html">is_svg</a></td>
+<td>Helper functions to use various graphics devices</td></tr>
+<tr><td style="width: 25%;"><a href="kableExtra-package.html">kableExtra</a></td>
+<td>kableExtra</td></tr>
+<tr><td style="width: 25%;"><a href="kableExtra_latex_packages.html">kableExtra_latex_packages</a></td>
+<td>LaTeX Packages</td></tr>
+<tr><td style="width: 25%;"><a href="kable_as_image.html">kable_as_image</a></td>
+<td>Deprecated</td></tr>
+<tr><td style="width: 25%;"><a href="kable_as_xml.html">kable_as_xml</a></td>
+<td>Read HTML kable as XML</td></tr>
+<tr><td style="width: 25%;"><a href="kable_classic.html">kable_classic</a></td>
+<td>Alternative HTML themes</td></tr>
+<tr><td style="width: 25%;"><a href="kable_classic.html">kable_classic_2</a></td>
+<td>Alternative HTML themes</td></tr>
+<tr><td style="width: 25%;"><a href="kable_classic.html">kable_material</a></td>
+<td>Alternative HTML themes</td></tr>
+<tr><td style="width: 25%;"><a href="kable_classic.html">kable_material_dark</a></td>
+<td>Alternative HTML themes</td></tr>
+<tr><td style="width: 25%;"><a href="kable_classic.html">kable_minimal</a></td>
+<td>Alternative HTML themes</td></tr>
+<tr><td style="width: 25%;"><a href="kable_classic.html">kable_paper</a></td>
+<td>Alternative HTML themes</td></tr>
+<tr><td style="width: 25%;"><a href="kable_styling.html">kable_styling</a></td>
+<td>HTML table attributes</td></tr>
+<tr><td style="width: 25%;"><a href="kbl.html">kbl</a></td>
+<td>Wrapper function of knitr::kable</td></tr>
+<tr><td style="width: 25%;"><a href="landscape.html">landscape</a></td>
+<td>Print the table on an isolated landscape page in PDF</td></tr>
+<tr><td style="width: 25%;"><a href="linebreak.html">linebreak</a></td>
+<td>Make linebreak in LaTeX Table cells</td></tr>
+<tr><td style="width: 25%;"><a href="listify_args.html">listify_args</a></td>
+<td>Convert arguments for a single call into Map-able args</td></tr>
+<tr><td style="width: 25%;"><a href="magic_mirror.html">magic_mirror</a></td>
+<td>Magic mirror that returns kable's attributes</td></tr>
+<tr><td style="width: 25%;"><a href="make_inline_plot.html">make_inline_plot</a></td>
+<td>Combine file (or svg text) and parameters into a 'kableExtraInlinePlots' object</td></tr>
+<tr><td style="width: 25%;"><a href="group_rows.html">pack_rows</a></td>
+<td>Put a few rows of a table into one category</td></tr>
+<tr><td style="width: 25%;"><a href="remove_column.html">remove_column</a></td>
+<td>Remove columns</td></tr>
+<tr><td style="width: 25%;"><a href="rmd_format.html">rmd_format</a></td>
+<td>Rmarkdown Format</td></tr>
+<tr><td style="width: 25%;"><a href="row_spec.html">row_spec</a></td>
+<td>Specify the look of the selected row</td></tr>
+<tr><td style="width: 25%;"><a href="save_kable.html">save_kable</a></td>
+<td>Save kable to files</td></tr>
+<tr><td style="width: 25%;"><a href="scroll_box.html">scroll_box</a></td>
+<td>Put a HTML table into a scrollable box</td></tr>
+<tr><td style="width: 25%;"><a href="spec_angle.html">spec_angle</a></td>
+<td>Generate rotation angle for continuous values</td></tr>
+<tr><td style="width: 25%;"><a href="spec_boxplot.html">spec_boxplot</a></td>
+<td>Helper functions to generate inline sparklines</td></tr>
+<tr><td style="width: 25%;"><a href="spec_color.html">spec_color</a></td>
+<td>Generate viridis Color code for continuous values</td></tr>
+<tr><td style="width: 25%;"><a href="spec_font_size.html">spec_font_size</a></td>
+<td>Generate common font size for continuous values</td></tr>
+<tr><td style="width: 25%;"><a href="spec_hist.html">spec_hist</a></td>
+<td>Helper functions to generate inline sparklines</td></tr>
+<tr><td style="width: 25%;"><a href="spec_image.html">spec_image</a></td>
+<td>Setup image path, size, etc</td></tr>
+<tr><td style="width: 25%;"><a href="spec_plot.html">spec_plot</a></td>
+<td>Helper functions to generate inline sparklines</td></tr>
+<tr><td style="width: 25%;"><a href="spec_pointrange.html">spec_pointrange</a></td>
+<td>Helper functions to generate inline sparklines</td></tr>
+<tr><td style="width: 25%;"><a href="spec_popover.html">spec_popover</a></td>
+<td>Setup bootstrap popover</td></tr>
+<tr><td style="width: 25%;"><a href="spec_tooltip.html">spec_tooltip</a></td>
+<td>Setup bootstrap tooltip</td></tr>
+<tr><td style="width: 25%;"><a href="cell_spec.html">text_spec</a></td>
+<td>Specify Cell/Text format</td></tr>
+<tr><td style="width: 25%;"><a href="usepackage_latex.html">usepackage_latex</a></td>
+<td>Load a LaTeX package</td></tr>
+<tr><td style="width: 25%;"><a href="xml_as_kable.html">xml_as_kable</a></td>
+<td>Convert XML back to kable</td></tr>
+<tr><td style="width: 25%;"><a href="xtable2kable.html">xtable2kable</a></td>
+<td>Convert xtable to a kable object</td></tr>
+</table>
+</body></html>

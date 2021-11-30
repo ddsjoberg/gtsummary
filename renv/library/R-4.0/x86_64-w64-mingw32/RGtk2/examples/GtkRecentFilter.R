@@ -1,0 +1,2 @@
+filter <- gtkRecentFilter()
+filter$addPattern("*")

@@ -1,0 +1,38 @@
+{{=<% %>=}}
+version: 2
+jobs:
+  build:
+    docker:
+      - image: <% image %>
+    environment:
+      R_LIBS: ~/R/Library
+    steps:
+      - restore_cache:
+          keys:
+            - r-pkg-cache-{{ arch }}-{{ .Branch }}
+            - r-pkg-cache-{{ arch }}-
+      - checkout
+      - run:
+          name: Install package dependencies
+          command: |
+            mkdir -p ~/R/Library
+            Rscript -e 'install.packages("remotes")'
+            Rscript -e 'remotes::install_deps(dependencies = TRUE)'
+      - run:
+          name: Session information and installed package versions
+          command: |
+            Rscript -e 'sessionInfo()'
+            Rscript -e 'installed.packages()[, c("Package", "Version")]'
+            Rscript -e 'rmarkdown::pandoc_version()'
+      - run:
+          name: Build package
+          command: R CMD build .
+      - run:
+          name: Check package
+          command: R CMD check --as-cran --no-manual *tar.gz
+      - store_artifacts:
+          path: <% package %>.Rcheck/
+      - save_cache:
+          key: r-pkg-cache-{{ arch }}-{{ .Branch }}
+          paths:
+            - "~/R/Library"

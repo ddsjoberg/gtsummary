@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Install/Uninstall TinyTeX</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for install_tinytex {tinytex}"><tr><td>install_tinytex {tinytex}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Install/Uninstall TinyTeX</h2>
+
+<h3>Description</h3>
+
+<p>The function <code>install_tinytex()</code> downloads and installs TinyTeX, a
+custom LaTeX distribution based on TeX Live. The function
+<code>uninstall_tinytex()</code> removes TinyTeX; <code>reinstall_tinytex()</code>
+reinstalls TinyTeX as well as previously installed LaTeX packages by default;
+<code>tinytex_root()</code> returns the root directory of TinyTeX if found.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+install_tinytex(
+  force = FALSE,
+  dir = "auto",
+  version = "daily",
+  repository = "ctan",
+  extra_packages = if (is_tinytex()) tl_pkgs(),
+  add_path = TRUE
+)
+
+uninstall_tinytex(force = FALSE, dir = tinytex_root())
+
+reinstall_tinytex(packages = TRUE, dir = tinytex_root(), ...)
+
+tinytex_root(error = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>force</code></td>
+<td>
+<p>Whether to force to install (override) or uninstall TinyTeX.</p>
+</td></tr>
+<tr valign="top"><td><code>dir</code></td>
+<td>
+<p>The directory to install or uninstall TinyTeX (should not exist
+unless <code>force = TRUE</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>version</code></td>
+<td>
+<p>The version of TinyTeX, e.g., <code>"2020.09"</code> (see all
+available versions at <a href="https://github.com/yihui/tinytex-releases">https://github.com/yihui/tinytex-releases</a>, or
+the last few releases via
+<code>xfun::github_releases('yihui/tinytex-releases')</code>). By default, it
+installs the latest daily build of TinyTeX. If <code>version = 'latest'</code>,
+it installs the latest Github release of TinyTeX.</p>
+</td></tr>
+<tr valign="top"><td><code>repository</code></td>
+<td>
+<p>The CTAN repository to set. You can find available
+repositories at <code>https://ctan.org/mirrors</code>), e.g.,
+<code>'http://mirrors.tuna.tsinghua.edu.cn/CTAN/'</code>, or
+<code>'https://mirror.las.iastate.edu/tex-archive/'</code>. In theory, this
+argument should end with the path &lsquo;<span class="file">/systems/texlive/tlnet</span>&rsquo;, and if it
+does not, the path will be automatically appended.</p>
+</td></tr>
+<tr valign="top"><td><code>extra_packages</code></td>
+<td>
+<p>A character vector of extra LaTeX packages to be
+installed. By default, a vector of all currently installed LaTeX packages
+if an existing installation of TinyTeX is found. If you want a fresh
+installation, you may use <code>extra_packages = NULL</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>add_path</code></td>
+<td>
+<p>Whether to run the command <code>tlmgr path add</code> to add
+the bin path of TeX Live to the system environment variable <var>PATH</var>.</p>
+</td></tr>
+<tr valign="top"><td><code>packages</code></td>
+<td>
+<p>Whether to reinstall all currently installed packages.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Other arguments to be passed to <code>install_tinytex()</code> (note
+that the <code>extra_packages</code> argument will be set to <code>tl_pkgs()</code> if
+<code>packages = TRUE</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>error</code></td>
+<td>
+<p>Whether to signal an error if TinyTeX is not found.</p>
+</td></tr>
+</table>
+
+
+<h3>References</h3>
+
+<p>See the TinyTeX documentation (<a href="https://yihui.org/tinytex/">https://yihui.org/tinytex/</a>)
+for the default installation directories on different platforms.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>tinytex</em> version 0.34 <a href="00Index.html">Index</a>]</div>
+</body></html>

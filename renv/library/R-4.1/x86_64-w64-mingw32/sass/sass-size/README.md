@@ -1,0 +1,1 @@
+This example shows how to use the [sass](https://github.com/rstudio/sass) R package to dynamically generate a stylesheet that changes the background and font color in a shiny app. The app also allows you to dynmically resize the plot width.

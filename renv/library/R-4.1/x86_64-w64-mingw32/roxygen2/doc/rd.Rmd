@@ -1,0 +1,700 @@
+---
+title: "Rd (documentation) tags"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Rd (documentation) tags}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(comment = "#>", collapse = TRUE)
+```
+
+## Basics
+
+A roxygen __block__ is a sequence of lines starting with `#'` (optionally preceded by whitespace). Blocks gain additional structure through the use of __tags__ like `@tag details`. Tags must start at the beginning of a line, and the content of a tag extends to the start of the next tag (or the end of the block). 
+
+Text within roxygen blocks can be formatted using markdown or `Rd` commands; see `vignette("rd-formatting")` for details.
+
+## The description block
+
+Each documentation block starts with some text which defines the title, the description, and the details. Here's an example showing what the documentation for `sum()` might look like if it had been written with roxygen:
+
+```{r}
+#' Sum of vector elements
+#'
+#' `sum` returns the sum of all the values present in its arguments.
+#'
+#' This is a generic function: methods can be defined for it directly
+#' or via the [Summary()] group generic. For this to work properly,
+#' the arguments `...` should be unnamed, and dispatch is on the
+#' first argument.
+sum <- function(..., na.rm = TRUE) {}
+```
+
+This introductory block is broken up as follows:
+
+*  The first sentence is the __title__: that's what you see when you look at 
+   `help(package = mypackage)` and is shown at the top of each help file. It 
+   should generally fit on one line, be written in sentence case, and not end 
+   in a full stop. 
+  
+*  The second paragraph is the __description__: this comes first in the 
+   documentation and should briefly describe what the function does. 
+   
+*  The third and subsequent paragraphs go into the __details__: this is a
+   (often long) section that comes after the argument description and should 
+   provide any other important details of how the function operates. The 
+   details are optional.
+
+You can also use explicit `@title`, `@description`, and `@details` tags. This is unnecessary unless you want to have a multi-paragraph description, bulleted list, or other more exotic structure.
+
+```{r}
+#' Sum of vector elements
+#' 
+#' @description
+#' `sum` returns the sum of all the values present in its arguments.
+#'
+#' @details
+#' This is a generic function: methods can be defined for it directly
+#' or via the [Summary()] group generic. For this to work properly,
+#' the arguments `...` should be unnamed, and dispatch is on the
+#' first argument.
+```
+
+## Object specifics
+
+Further details of roxygen2 depend on what you're documenting. The following sections describe the most commonly used tags for functions, S3, S4, datasets, and packages.
+
+### Functions
+
+Functions are the mostly commonly documented objects. Most functions use three tags:
+
+*   `@param name description` describes the inputs to the function.
+    The description should provide a succinct summary of the type of the
+    parameter (e.g. a string, a numeric vector), and if not obvious from
+    the name, what the parameter does. The description should start with a
+    capital letter and end with a full stop. It can span multiple lines (or
+    even paragraphs) if necessary. All parameters must be documented.
+
+    You can document multiple arguments in one place by separating
+    the names with commas (no spaces). For example, to document both
+    `x` and `y`, you can say `@param x,y Numeric vectors`.
+
+*   `@examples` provides executable R code showing how to use the function in
+    practice. This is a very important part of the documentation because
+    many people look at the examples before reading anything. Example code
+    must work without errors as it is run automatically as part of `R CMD
+    check`.
+
+    However for the purpose of illustration, it's often useful to include code
+    that causes an error. `\dontrun{}` allows you to include code in the
+    example that is never used. There are two other special commands.
+    `\dontshow{}` is run, but not shown in the help page: this can
+    be useful for informal tests. `\donttest{}` is run in examples,
+    but not run automatically in `R CMD check`. This is useful if you
+    have examples that take a long time to run. The options are summarised
+    below.
+
+    Command      | example   | help   | R CMD check | R CMD check --as-cran 
+    ------------ | --------- | ------ | ----------- | ---------------------
+    `\dontrun{}` |           | x      |             |
+    `\dontshow{}`| x         |        | x           | x
+    `\donttest{}`| x         | x      |             | x
+
+    Note that `R CMD check --as-cran` is run for incoming CRAN checks but
+    not for regular CRAN checks.
+    
+    For finer control you can use `@examplesIf
+    
+    ```r
+    #' @examplesIf interactive()
+    #' browseURL("https://roxygen2.r-lib.org")
+    ```
+    
+    will generate
+    
+    ```
+    \examples{
+    \dontshow{if (interactive() (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+    gh_organizations(since = 42)
+    \dontshow{\}) # examplesIf}
+    }
+    ```
+    
+    This way the code evaluating whether the example can be run is not 
+    shown to users reading the help, but it still prevents R CMD check failures.
+    
+    Instead of including examples directly in the documentation, you can
+    put them in separate files and use `@example path/relative/to/package/root`
+    to insert them into the documentation.
+
+*   `@return description` describes the output from the function. This is
+    not always necessary, but is a good idea if you return different types
+    of outputs depending on the input, or you're returning an S3, S4 or RC
+    object.
+
+We could use these new tags to improve our documentation of `sum()` as follows:
+
+```{r}
+#' Sum of vector elements
+#'
+#' `sum()` returns the sum of all the values present in its arguments.
+#'
+#' This is a generic function: methods can be defined for it directly
+#' or via the [Summary] group generic. For this to work properly,
+#' the arguments `...` should be unnamed, and dispatch is on the
+#' first argument.
+#'
+#' @param ... Numeric, complex, or logical vectors.
+#' @param na.rm A logical scalar. Should missing values (including `NaN`)
+#'   be removed?
+#' @return If all inputs are integer and logical, then the output
+#'   will be an integer. If integer overflow 
+#'   (<http://en.wikipedia.org/wiki/Integer_overflow>) occurs, the output
+#'   will be NA with a warning. Otherwise it will be a length-one numeric or
+#'   complex vector.
+#'
+#'   Zero-length vectors have sum 0 by definition. See
+#'   <http://en.wikipedia.org/wiki/Empty_sum> for more details.
+#' @examples
+#' sum(1:10)
+#' sum(1:5, 6:10)
+#' sum(F, F, F, T, T)
+#'
+#' sum(.Machine$integer.max, 1L)
+#' sum(.Machine$integer.max, 1)
+#'
+#' \dontrun{
+#' sum("a")
+#' }
+sum <- function(..., na.rm = TRUE) {}
+```
+
+Indent the second and subsequent lines of a tag so that when scanning the documentation so it's easy to see where one tag ends and the next begins. Tags that always span multiple lines (like `@example`) should start on a new line and don't need to be indented.
+
+### S3
+
+* S3 __generics__ are regular functions, so document them as such. 
+  If necessary, include a `@section` that provides additional details for 
+  method implementors
+ 
+* S3 __classes__ have no formal definition, so document the 
+  [constructor](https://adv-r.hadley.nz/s3.html#s3-constructor). 
+
+* It is your choice whether or not to document S3 __methods__. Generally, it's
+  not necessary to document straightforward methods for common generics like 
+  `print()`. (You should, however, always `@export` S3 methods).
+  
+  If your method is more complicated, you should document it by setting 
+  `@rdname`. Typically you will document methods with their generic, so you'd
+  document `foofy.data.frame` by setting `@rdname`. In base R, you can find 
+  documentation for more complex methods like `?predict.lm`, `?predict.glm`, 
+  and `?anova.glm`.
+
+  Generally, roxygen2 will automatically figure out the generic that the method
+  belongs to, and you should only need to use `@method` if there is ambiguity.
+  For example, is `all.equal.data.frame()` the `equal.data.frame` method for 
+  `all()`, or the `data.frame` method for `all.equal()`?. If this happens to 
+  you, disambiguate with (e.g.) `@method all.equal data.frame`.
+
+### S4
+
+S4 __generics__ are also functions, so document them as such. 
+
+Document __S4 classes__ by adding a roxygen block before `setClass()`. Use `@slot` to document the slots of the class. Here's a simple example:
+
+```{r}
+#' An S4 class to represent a bank account
+#'
+#' @slot balance A length-one numeric vector
+Account <- setClass("Account",
+  slots = list(balance = "numeric")
+)
+```
+
+S4 __methods__ are a little more complicated. Unlike S3 methods, all S4 methods must be documented. You can document them in three places:
+
+* In the class. Most appropriate if the corresponding generic uses single
+  dispatch and you created the class.
+
+* In the generic. Most appropriate if the generic uses multiple dispatch
+  and you control it.
+
+* In its own file. Most appropriate if the method is complex. or the
+  either two options don't apply.
+
+Use either `@rdname` or `@describeIn` to control where method documentation goes. See the next section for more details.
+
+### R6
+
+Starting from version 7.0.0 roxygen treats documentation for R6 classes
+specially:
+
+* R6 methods can be documented in-line, i.e. the method's documentation
+  comments come right before the definition of the method.
+
+* Method documentation can use the `@description`, `@details`,
+  `@param`, `@return` and `@examples` tags. These are used to create a
+  subsection for the method, within a separate 'Methods' section.
+  All roxygen comment lines of a method documentation must appear after
+  a tag.
+
+* `@param` tags that appear before the class definition are automatically
+  inherited by all methods, if needed.
+
+* R6 fields and active bindings can make use of the `@field` tag.
+  Their documentation should also be in-line.
+
+* Roxygen2 checks that all public methods, public fields, active
+  bindings and all method arguments are documented, and issues warnings
+  otherwise.
+
+* To turn off the special handling of R6 classes and go back to the
+  roxygen2 6.x.x behavior, use the `r6 = FALSE` option in `DESCRIPTION`,
+  in the `Roxygen` entry: `Roxygen: list(r6 = FALSE)`.
+
+Roxygen2 automatically generates additional sections for an R6 class:
+
+* A section with information about the superclass(es) of the class,
+  with links. In HTML this includes a list of all inherited methods,
+  with links.
+
+* An 'Examples' section that contains all class and method examples.
+  This section is run by `R CMD check`, so method examples must work
+  without errors.
+
+An example from the R6 tutorial:
+
+```{r}
+#' R6 Class Representing a Person
+#'
+#' @description
+#' A person has a name and a hair color.
+#'
+#' @details
+#' A person can also greet you.
+
+Person <- R6::R6Class("Person",
+public = list(
+
+    #' @field name First or full name of the person.
+    name = NULL,
+
+    #' @field hair Hair color of the person.
+    hair = NULL,
+
+    #' @description
+    #' Create a new person object.
+    #' @param name Name.
+    #' @param hair Hair color.
+    #' @return A new `Person` object.
+    initialize = function(name = NA, hair = NA) {
+      self$name <- name
+      self$hair <- hair
+      self$greet()
+    },
+
+    #' @description
+    #' Change hair color.
+    #' @param val New hair color.
+    #' @examples
+    #' P <- Person("Ann", "black")
+    #' P$hair
+    #' P$set_hair("red")
+    #' P$hair
+    set_hair = function(val) {
+      self$hair <- val
+    },
+
+    #' @description
+    #' Say hi.
+    greet = function() {
+      cat(paste0("Hello, my name is ", self$name, ".\n"))
+    }
+  )
+)
+```
+
+### Datasets
+
+Datasets are usually stored as `.rdata` files in `data/` and not as regular R objects in the package. This means you need to document them slightly differently: instead of documenting the data directly, you quote the dataset's name.
+
+```{r}
+#' Prices of 50,000 round cut diamonds
+#'
+#' A dataset containing the prices and other attributes of almost 54,000
+#' diamonds.
+#'
+#' @format A data frame with 53940 rows and 10 variables
+#' \describe{
+#'   \item{price}{price in US dollars (\$326--\$18,823)}
+#'   \item{carat}{weight of the diamond (0.2--5.01)}
+#'   \item{cut}{quality of the cut (Fair, Good, Very Good, Premium, Ideal)}
+#'   \item{color}{diamond colour, from D (best) to J (worst)}
+#'   \item{clarity}{a measurement of how clear the diamond is (I1 (worst), SI2,
+#'     SI1, VS2, VS1, VVS2, VVS1, IF (best))}
+#'   \item{x}{length in mm (0--10.74)}
+#'   \item{y}{width in mm (0--58.9)}
+#'   \item{z}{depth in mm (0--31.8)}
+#'   \item{depth}{total depth percentage = z / mean(x, y) = 2 * z / (x + y) (43--79)}
+#'   \item{table}{width of top of diamond relative to widest point (43--95)}
+#' }
+#' @source <http://www.diamondse.info/>
+"diamonds"
+```
+
+Note the use of two additional tags that are particularly useful for documenting data:
+
+* `@format`, which gives an overview of the structure of the dataset.
+  This should include a __definition list__ that describes each variable.
+  There's currently no way to generate this with markdown, so this is 
+  one of the few places you'll need to Rd markup directly.
+
+* `@source` where you got the data form, often a URL.
+
+### Packages
+
+As well as documenting every object inside the package, you can also document the package itself by documenting the special sentinel `"_PACKAGE"`. We recommend placing package documentation in `{pkgname}-package.R`, and have `@keywords internal`. Here's an example:
+
+```{r, eval = FALSE}
+#' @details
+#' The only function you're likely to need from roxygen2 is [roxygenize()]. 
+#' Otherwise refer to the vignettes to see how to format the documentation.
+#' @keywords internal
+"_PACKAGE"
+```
+
+Package documentation is a good place to put `@section Package options:` that documents options used by the package.
+
+Some notes:
+
+* Package documentation will automatically include information parsed from the
+  `DESCRIPTION`, including title, description, list of authors, and useful
+  URLs.
+
+* By default, aliases will be added so that both `?pkgname` and 
+  `package?pkgname` will find the package help. If there's an existing 
+  function called `pkgname`, use `@aliases {pkgname}-package` to
+  override the default.
+
+* `usethis::use_package_doc()` will generate a basic template to get 
+  you started.
+
+* Use `@references` to point to published material about the package that
+  users might find helpful.
+
+## Sections
+
+You can add arbitrary sections with the `@section` tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case, must fit on one line, and must be followed by a colon.
+
+```{r}
+#' @section Warning:
+#' Do not operate heavy machinery within 8 hours of using this function.
+```
+
+You can also create sections using the markdown syntax for headers. For example, the previously-defined section can be created with markdown headers like this:
+
+```{r}
+#' @details # Warning
+#' Do not operate heavy machinery within 8 hours of using this function.
+```
+
+Note that '`#`' may only appear after the `@description` and `@details` tags. Since `@details` can appear multiple times in a block, you can always precede a '`#`' section with `@details`.
+
+To add a subsection, use level two or greater headings:
+
+```{r}
+#' @details # Warning
+#' You must not call this function unless ...
+#'
+#' ## Exceptions
+#' Apart from the following special cases...
+```
+
+If you find yourself adding a lot of sections, you might consider using a vignette instead.
+
+## Do repeat yourself
+
+There is a tension between the DRY (do not repeat yourself) principle of programming and the need for documentation to be self-contained. It's frustrating to have to navigate through multiple help files in order to pull together all the pieces you need. Roxygen2 provides several ways to avoid repeating yourself in code documentation, while assembling information from multiple places in one documentation file:
+
+* Cross-link documentation files with `@seealso` and `@family`.
+
+* Inherit documentation from another topic with  
+  `@inherit`, `@inheritParams`, and `@inheritSection`.
+
+* Document multiple functions in the same topic with `@describeIn` or `@rdname`.
+
+* Run arbitrary R code with the markdown markup for inline code, see section 'Dynamic R code' in `vignette("rd-formatting")`.
+
+* Run arbitrary R code with `@eval`.
+
+* Create reusable templates with `@template` and `@templateVar`.
+
+### Cross-references
+
+There are two tags that make it easier for people to navigate around your documentation: `@seealso` and `@family`.  `@seealso` allows you to point to other useful resources, either on the web `<http://www.r-project.org>` or to other documentation with `[function_name()]`. If you have a family of related functions, you can use `@family {family}` to cross-reference each function to every other function within the family. A function can be a member of multiple families.
+
+For `sum()`, this might look like:
+
+```{r}
+#' @family aggregations
+#' @seealso [prod()] for products, [cumsum()] for cumulative sums, and
+#'   [colSums()]/[rowSums()] marginal sums over high-dimensional arrays.
+```
+
+By default  `@family {family}`, will generate the see also text "Other {family}:", so the `@family` name should be plural (i.e., "model building helpers" not "model building helper"). You can override the default title by providing a `rd_family_title` list in `man/roxygen/meta.R`:
+
+```{r, eval = FALSE}
+list(
+  rd_family_title = list(aggregations = "Aggregation functions")
+)
+```
+
+### Inheriting documentation from other topics
+
+You can inherit documentation from other functions in a few ways:
+
+* `@inherit source_function` will inherit parameters, return, references,
+  description, details, sections, and seealso from `source_function()`.
+  
+* `@inherit source_function return details` will inherit selected components 
+  from `source_function()`
+
+* `@inheritParams source_function` inherits just the parameter documentation 
+  from `source_function()`.
+
+* `@inheritSection source_function Section title` will inherit the single 
+  `@section` called "Section title" from `source_function()`.
+  
+All of these work recursively so you can inherit documentation from a function that has inherited it from elsewhere.
+
+You can also inherit documentation from functions provided by another package by using `pkg::source_function`.
+
+### Documenting multiple functions in the same file
+
+You can document multiple functions in the same file by using either `@rdname` or `@describeIn` tag. It’s a technique best used with care: documenting too many functions in one place leads to confusion. Use it when all functions have the same (or very similar) arguments.
+
+#### `@describeIn`
+
+`@describeIn` is designed for the most common cases:
+
+* documenting methods in a generic
+* documenting methods in a class
+* documenting functions with the same (or similar arguments)
+
+It generates a new section, named either "Methods (by class)", "Methods (by generic)" or "Functions". The section contains a bulleted list describing each function, labelled so that you know what function or method it's talking about. Here's an example, documenting an imaginary new generic:
+
+```{r}
+#' Foo bar generic
+#'
+#' @param x Object to foo.
+foobar <- function(x) UseMethod("x")
+
+#' @describeIn foobar Difference between the mean and the median
+foobar.numeric <- function(x) abs(mean(x) - median(x))
+
+#' @describeIn foobar First and last values pasted together in a string.
+foobar.character <- function(x) paste0(x[1], "-", x[length(x)])
+```
+
+#### `@rdname`
+
+`@rdname` is a more general purpose tool. It overrides the default file name generated by roxygen and merges documentation for multiple objects into one file. This gives you complete freedom to combine documentation however you see fit. There are two ways to use `@rdname`. You can add documentation to an existing function:
+
+```{r}
+#' Basic arithmetic
+#'
+#' @param x,y numeric vectors.
+add <- function(x, y) x + y
+
+#' @rdname add
+times <- function(x, y) x * y
+```
+
+Or, you can create a dummy documentation file by documenting `NULL` and setting an informative `@name`.
+
+```{r}
+#' Basic arithmetic
+#'
+#' @param x,y numeric vectors.
+#' @name arith
+NULL
+
+#' @rdname arith
+add <- function(x, y) x + y
+
+#' @rdname arith
+times <- function(x, y) x * y
+```
+
+### Order of includes
+
+By default, roxygen blocks are processed in the order in which they appear in the file. When you're combining multiple files, this can sometimes cause the function usage to appear in a suboptimal order. You can override the default ordering with `@order`. For example, the following the block would place `times` first in `arith.Rd` because 1 comes before 2.
+
+```{r}
+#' @rdname arith
+#' @order 2
+add <- function(x, y) x + y
+
+#' @rdname arith
+#' @order 1
+times <- function(x, y) x * y
+```
+
+### Evaluating arbitrary code
+
+Another technique is the `@eval` tag. It evaluates code and treatments the result as if it was a literal roxygen tags. This makes it possible to eliminate duplication by writing functions. The code will be evaluated in the package environment and should yield a character vector of roxygen comments (but without the leading `#'`).
+
+For example, this code + roxygen block:
+
+```{r}
+my_params <- function() {
+  c(
+    "@param x An integer vector",
+    "@param y A character vector"
+  )
+}
+
+#' A title
+#' 
+#' @eval my_params()
+#' @export
+foo <- function(x, y) {
+}
+```
+
+Is equivalent to:
+
+```{r}
+#' A title
+#' 
+#' @param x An integer vector
+#' @param y A character vector
+#' @export
+foo <- function(x, y) {
+}
+```
+
+Note that `@eval` cannot be embedded into another roxygen tag. If you want to dynamically generate part of a roxygen tag, see section 'Dynamic R code' in `vignette("rd-formatting")`.
+
+A related function is `@evalRd`. It works in the same way as `@eval` (i.e. it's evaluated in the package environment) but rather than yielding roxygen comments that are processed as if they had been typed directly, it yields top-level Rd code that is inserted directly into the generated `.Rd` file. It is primarily useful if you want to generate Rd structure that is not currently supported by roxygen2.
+
+For example, this block:
+
+```{r}
+my_note <- function(x) {
+  paste0("\\note{", paste0(x, "\n", collapse =""), "}")
+}
+
+#' @evalRd my_note(c(
+#'   "This is the first line",
+#'   "This is the second line"
+#' ))
+NULL
+```
+
+Would generate this Rd:
+
+```latex
+\note{
+This is the first line
+This is the second line
+}
+```
+
+### Roxygen templates
+
+Roxygen templates are R files that contain only roxygen comments and that live in the `man-roxygen` directory. Use `@template file-name` (without extension) to insert the contents of a template into the current documentation.
+
+You can make templates more flexible by using template variables defined with `@templateVar name value`. Template files are run with brew, so you can retrieve values (or execute any other arbitrary R code) with `<%= name %>`.
+
+Note that templates are parsed a little differently to regular blocks, so you'll need to explicitly set the title, description and details with `@title`, `@description` and `@details`.
+
+## Including external `.Rmd`/`.md` files
+
+Starting from roxygen2 7.0.0, you can use `@includeRmd path/to/file.Rmd` to include an external `.Rmd` or `.md` document into a manual page (the path is relative from the source package root directory). You can include the same file in multiple documentation files, and for the first time, share content across documentation and vignettes.
+
+### Sections
+
+`@includeRmd` supports headings in the external Rmd. The rules are as follows:
+
+*   All text before the first level 1 heading (i.e. `#`), is added to the 
+    details section. If you prefer a different section, then write the
+    name of the section after the path in the `@includeRmd` tag, in all
+    lowercase. Example: `@includeRmd path description`. This currently does
+    not work with user defined sections (created with `@section`).
+
+*   Level 1 headings generate their own section (`\section{}`).
+
+*   Other headings (level 2 and so on) create subsections (`\subsection{}`)
+    within the section they appear in.
+
+All content in the Rmd file will go either in the details or in new top level sections. It is currently not possible to document function arguments, return values, etc. in external Rmd documents.
+
+### Links
+
+The included Rmd file can have roxygen markdown style links to other help topics. E.g. `[roxygen2::roxygenize()]` will link to the manual page of the `roxygenize` function in roxygen2. See `vignette("rd-formatting")` for details.
+
+### Caching and figures
+
+`@includeRmd` tries to set up knitr to support caching in the Rmd file. It sets the cache path to the default knitr cache path of the included Rmd file (i.e. `foo/bar/file_cache/` for `foo/bar/file.Rmd`), so if you do not change the cache path within the Rmd itself, then everything should work out of the box. You should add these cache paths to `.gitignore` and `.Rbuildignore`.
+
+`@includeRmd` also sets the knitr figure path of the (`fig.path`) to the default figure path of the included Rmd. Overriding this default is unlikely to work.
+
+### Sharing text between vignettes and the manual
+
+`@includeRmd` helps avoiding repetition, as you can use the same `.Rmd` or `.md`  document in the manual and also in the `README.md` file or in vignettes. One way to include an Rmd file in another one is to use child documents:
+
+````
+```{r child = "common.Rmd"}`r ''`
+```
+````
+
+If the Rmd file has links to other help topics, then some care is needed, as those links while not work in Rmd files. A workaround is to specify external HTML links for them. These external locations will _not_ be used for `@includeRmd`, which always links them to the help topics in the manual. Example:
+
+```
+See also the [roxygen2::roxygenize()] function.
+
+[roxygen2::roxygenize()]: https://roxygen2.r-lib.org/reference/roxygenize.html
+```
+
+This example will link to the supplied URLs in html / markdown files and it will link to the `roxygenize` help topic in the manual.
+
+Note that if you add external link targets like these, then roxygen will emit a warning about these link references being defined multiple times (once externally, and once to the help topic). This warning originates in pandoc, and it is harmless.
+
+## Other tags
+
+### Indexing
+
+Three other tags make it easier for the user to find documentation within R's help system:
+
+*   Aliases form the index that `?` searches. Use 
+    `@aliases space separated aliases` to add additional aliases.
+    
+*   `@concept` add extra keywords that will be found with `help.search()`
+
+*   Use `@keywords keyword1 keyword2 ...` to add standardised keywords. 
+    Keywords are optional, but if present, must be taken from the 
+    predefined list found `file.path(R.home("doc"), "KEYWORDS")`.
+
+Apart from `@keywords internal`, these tags are not very useful because most people find documentation using Google. `@keywords internal` is useful because it removes the function from the documentation index; it's useful for functions aimed primarily at other developers, not typical users of the package.
+
+### Back references
+
+The original source location is added as a comment
+to the second line of each generated `.Rd` file in the following form:
+
+```
+% Please edit documentation in ...
+```
+
+`roxygen2` tries to capture all locations from which the documentation is assembled.
+For code that *generates* R code with Roxygen comments (e.g., the Rcpp package),
+the `@backref` tag is provided. This allows specifying the "true" source of the documentation, and will substitute the default list of source files. Use one tag per source file:
+
+```{r}
+#' @backref src/file.cpp
+#' @backref src/file.h
+```

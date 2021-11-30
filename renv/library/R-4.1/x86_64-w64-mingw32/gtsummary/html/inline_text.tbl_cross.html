@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Report statistics from cross table inline</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for inline_text.tbl_cross {gtsummary}"><tr><td>inline_text.tbl_cross {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Report statistics from cross table inline</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+Extracts and returns statistics from a <code>tbl_cross</code> object for
+inline reporting in an R markdown document. Detailed examples in the
+<a href="http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html">inline_text vignette</a>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'tbl_cross'
+inline_text(x, col_level = NULL, row_level = NULL, pvalue_fun = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a <code>tbl_cross</code> object</p>
+</td></tr>
+<tr valign="top"><td><code>col_level</code></td>
+<td>
+<p>Level of the column variable to display. Default is <code>NULL</code>
+Can also specify &quot;<code>p.value</code>&quot; for the p-value and &quot;<code>stat_0</code>&quot; for Total column.</p>
+</td></tr>
+<tr valign="top"><td><code>row_level</code></td>
+<td>
+<p>Level of the row variable to display.
+Can also specify the 'Unknown' row. Default is <code>NULL</code></p>
+</td></tr>
+<tr valign="top"><td><code>pvalue_fun</code></td>
+<td>
+<p>Function to round and format p-values.
+Default is <a href="../../gtsummary/help/style_pvalue.html">style_pvalue</a>.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
+<code>purrr::partial(style_pvalue, digits = 2)</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Not used</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A string reporting results from a gtsummary table
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tbl_cross tools: 
+<code><a href="../../gtsummary/help/add_p.tbl_cross.html">add_p.tbl_cross</a>()</code>,
+<code><a href="../../gtsummary/help/tbl_cross.html">tbl_cross</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+tbl_cross &lt;-
+  tbl_cross(trial, row = trt, col = response) %&gt;%
+  add_p()
+
+inline_text(tbl_cross, row_level = "Drug A", col_level = "1")
+inline_text(tbl_cross, row_level = "Total", col_level = "1")
+inline_text(tbl_cross, col_level = "p.value")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.2.9012 <a href="00Index.html">Index</a>]</div>
+</body></html>

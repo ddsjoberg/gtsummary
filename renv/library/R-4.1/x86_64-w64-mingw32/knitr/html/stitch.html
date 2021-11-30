@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Automatically create a report based on an R script and a...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for stitch {knitr}"><tr><td>stitch {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Automatically create a report based on an R script and a template</h2>
+
+<h3>Description</h3>
+
+<p>This is a convenience function for small-scale automatic reporting based on
+an R script and a template. The default template is an Rnw file (LaTeX);
+<code>stitch_rhtml()</code> and <code>stitch_rmd()</code> are wrappers on top of
+<code>stitch()</code> using the R HTML and R Markdown templates respectively.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+stitch(
+  script,
+  template = system.file("misc", "knitr-template.Rnw", package = "knitr"),
+  output = NULL,
+  text = NULL,
+  envir = parent.frame()
+)
+
+stitch_rhtml(..., envir = parent.frame())
+
+stitch_rmd(..., envir = parent.frame())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>script</code></td>
+<td>
+<p>Path to the R script.</p>
+</td></tr>
+<tr valign="top"><td><code>template</code></td>
+<td>
+<p>Path of the template to use. By default, the Rnw template in
+this package; there is also an HTML template in <span class="pkg">knitr</span>.</p>
+</td></tr>
+<tr valign="top"><td><code>output</code></td>
+<td>
+<p>Output filename, passed to <code><a href="../../knitr/help/knit.html">knit</a></code>). By default,
+the base filename of the script is used.</p>
+</td></tr>
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>A character vector. This is an alternative way to provide the
+input file.</p>
+</td></tr>
+<tr valign="top"><td><code>envir</code></td>
+<td>
+<p>Environment in which code chunks are to be evaluated, for
+example, <code><a href="../../base/html/sys.parent.html">parent.frame</a>()</code>, <code><a href="../../base/html/environment.html">new.env</a>()</code>, or
+<code><a href="../../base/html/environment.html">globalenv</a>()</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments passed to <code>stitch()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The first two lines of the R script can contain the title and author of the
+report in comments of the form <span class="samp">## title:</span> and <span class="samp">## author:</span>. The
+template must have a token <span class="samp">%sCHUNK_LABEL_HERE</span>, which will be used to
+input all the R code from the script. See the examples below.
+</p>
+<p>The R script may contain chunk headers of the form <span class="samp">## ---- label,
+opt1=val1, opt2=val2</span>, which will be copied to the template; if no chunk
+headers are found, the whole R script will be inserted into the template as
+one code chunk.
+</p>
+
+
+<h3>Value</h3>
+
+<p>path of the output document
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../knitr/help/spin.html">spin</a></code> (turn a specially formatted R script to a report)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+s = system.file("misc", "stitch-test.R", package = "knitr")
+if (interactive()) stitch(s)  # compile to PDF
+
+# HTML report
+stitch(s, system.file("misc", "knitr-template.Rhtml", package = "knitr"))
+
+# or convert markdown to HTML
+stitch(s, system.file("misc", "knitr-template.Rmd", package = "knitr"))
+
+unlink(c("stitch-test.html", "stitch-test.md", "figure"), recursive = TRUE)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

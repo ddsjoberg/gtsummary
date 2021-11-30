@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Construct a setup object for formatting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for new_tbl_format_setup {pillar}"><tr><td>new_tbl_format_setup {pillar}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Construct a setup object for formatting</h2>
+
+<h3>Description</h3>
+
+<p>The object returned from the default method of <code><a href="../../pillar/help/tbl_format_setup.html">tbl_format_setup()</a></code>
+is an object with a <code>"class"</code> attribute and the elements described in the
+&quot;Parameters&quot; section.
+</p>
+<p>Named elements can be added to such objects without affecting the behavior.
+Do not modify existing elements.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+new_tbl_format_setup(
+  x,
+  df,
+  width,
+  tbl_sum,
+  body,
+  rows_missing,
+  rows_total,
+  extra_cols,
+  extra_cols_total,
+  max_footer_lines
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>The input object unchanged.</p>
+</td></tr>
+<tr valign="top"><td><code>df</code></td>
+<td>
+<p>A data frame representation of the intended output,
+trimmed to the desired number of rows.</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>The <code>width</code> argument unchanged.</p>
+</td></tr>
+<tr valign="top"><td><code>tbl_sum</code></td>
+<td>
+<p>A named character vector, as returned from <code><a href="../../pillar/help/tbl_sum.html">tbl_sum()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>body</code></td>
+<td>
+<p>A character vector with the formatted body,
+one element per line,</p>
+</td></tr>
+<tr valign="top"><td><code>rows_missing</code></td>
+<td>
+<p>The number of rows not shown from the body,
+<code>NA</code> if unknown.</p>
+</td></tr>
+<tr valign="top"><td><code>rows_total</code></td>
+<td>
+<p>The total number of rows in the data,
+<code>NA</code> if unknown.</p>
+</td></tr>
+<tr valign="top"><td><code>extra_cols</code></td>
+<td>
+<p>Columns that did not fit into the body,
+as a character vector of formatted column names and types.</p>
+</td></tr>
+<tr valign="top"><td><code>extra_cols_total</code></td>
+<td>
+<p>The total number of columns, may be larger than
+<code>length(extra_cols)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>max_footer_lines</code></td>
+<td>
+<p>The maximum number of lines in the footer.</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>pillar</em> version 1.6.3 <a href="00Index.html">Index</a>]</div>
+</body></html>

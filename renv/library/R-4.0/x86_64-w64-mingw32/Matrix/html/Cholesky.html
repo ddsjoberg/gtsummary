@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Cholesky Decomposition of a Sparse Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for Cholesky {Matrix}"><tr><td>Cholesky {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Cholesky Decomposition of a Sparse Matrix</h2>
+
+<h3>Description</h3>
+
+<p>Computes the Cholesky (aka &ldquo;Choleski&rdquo;) decomposition of a
+sparse, symmetric, positive-definite matrix.  However, typically <code><a href="chol.html">chol</a>()</code>
+should rather be used unless you are interested in the different kinds
+of sparse Cholesky decompositions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+Cholesky(A, perm = TRUE, LDL = !super, super = FALSE, Imult = 0, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>A</code></td>
+<td>
+<p>sparse symmetric matrix.  No missing values or IEEE special
+values are allowed.</p>
+</td></tr>
+<tr valign="top"><td><code>perm</code></td>
+<td>
+<p>logical scalar indicating if a fill-reducing permutation
+should be computed and applied to the rows and columns of <code>A</code>.
+Default is <code>TRUE</code>.</p>
+</td></tr></table>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>LDL</code></td>
+<td>
+<p>logical scalar indicating if the decomposition should be
+computed as LDL' where <code>L</code> is a unit lower triangular matrix.
+The alternative is LL' where <code>L</code> is lower triangular with
+arbitrary diagonal elements.  Default is <code>TRUE</code>.  Setting it to
+<code><a href="../../base/html/NA.html">NA</a></code> leaves the choice to a CHOLMOD-internal heuristic.</p>
+</td></tr>
+<tr valign="top"><td><code>super</code></td>
+<td>
+<p>logical scalar indicating if a supernodal decomposition
+should be created.  The alternative is a simplicial decomposition.
+Default is <code>FALSE</code>.  Setting it to <code><a href="../../base/html/NA.html">NA</a></code> leaves the
+choice to a CHOLMOD-internal heuristic.</p>
+</td></tr>
+<tr valign="top"><td><code>Imult</code></td>
+<td>
+<p>numeric scalar which defaults to zero. The matrix that is
+decomposed is <i>A+m*I</i> where <i>m</i> is the value of <code>Imult</code>
+and <code>I</code> is the identity matrix of order <code>ncol(A)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This is a generic function with special methods for different types
+of matrices.  Use <code><a href="../../methods/html/showMethods.html">showMethods</a>("Cholesky")</code> to list all
+the methods for the <code><a href="Cholesky.html">Cholesky</a></code> generic.
+</p>
+<p>The method for class <code><a href="dsCMatrix-class.html">dsCMatrix</a></code> of sparse matrices
+&mdash; the only one available currently &mdash;
+is based on functions from the CHOLMOD library.
+</p>
+<p>Again: If you just want the Cholesky decomposition of a matrix in a
+straightforward way, you should probably rather use <code><a href="chol.html">chol</a>(.)</code>.
+</p>
+<p>Note that if <code>perm=TRUE</code> (default), the decomposition is
+</p>
+<p style="text-align: center;"><i>A = P' L~ D L~' P = P' L L' P,</i></p>
+
+<p>where <i>L</i> can be extracted by <code>as(*, "Matrix")</code>, <i>P</i> by
+<code>as(*, "pMatrix")</code> and both by <code><a href="expand.html">expand</a>(*)</code>, see the
+class <code><a href="CHMfactor-class.html">CHMfactor</a></code> documentation.
+</p>
+<p>Note that consequently, you cannot easily get the &ldquo;traditional&rdquo;
+cholesky factor <i>R</i>, from this decomposition, as
+</p>
+<p style="text-align: center;"><i>
+        R'R = A = P'LL'P = P' R~' R~ P = (R~ P)' (R~ P),</i></p>
+
+<p>but <i>R~ P</i> is <em>not</em> triangular even though <i>R~</i> is.
+</p>
+
+
+<h3>Value</h3>
+
+<p>an object inheriting from either
+<code>"<a href="CHMfactor-class.html">CHMsuper</a>"</code>, or
+<code>"<a href="CHMfactor-class.html">CHMsimpl</a>"</code>, depending on the <code>super</code>
+argument; both classes extend <code>"<a href="CHMfactor-class.html">CHMfactor</a>"</code> which
+extends <code>"<a href="MatrixFactorization-class.html">MatrixFactorization</a>"</code>.
+</p>
+<p>In other words, the result of <code>Cholesky()</code> is <em>not</em> a
+matrix, and if you want one, you should probably rather use
+<code><a href="chol.html">chol</a>()</code>, see Details.
+</p>
+
+
+<h3>References</h3>
+
+<p>Yanqing Chen, Timothy A. Davis, William W. Hager, and Sivasankaran Rajamanickam (2008)
+Algorithm 887: CHOLMOD, Supernodal Sparse Cholesky Factorization and Update/Downdate.
+<em>ACM Trans. Math. Softw.</em> <b>35</b>, 3, Article 22, 14 pages.
+doi: <a href="https://doi.org/10.1145/1391989.1391995">10.1145/1391989.1391995</a>
+</p>
+<p>Timothy A. Davis (2006)
+<em>Direct Methods for Sparse Linear Systems</em>, SIAM Series
+&ldquo;Fundamentals of Algorithms&rdquo;.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Class definitions <code><a href="CHMfactor-class.html">CHMfactor</a></code> and
+<code><a href="dsCMatrix-class.html">dsCMatrix</a></code> and function <code><a href="expand.html">expand</a></code>.
+Note the extra <code><a href="solve-methods.html">solve</a>(*, system = . )</code> options in
+<code><a href="CHMfactor-class.html">CHMfactor</a></code>.
+</p>
+<p>Note that <code><a href="chol.html">chol</a>()</code> returns matrices (inheriting from
+<code>"<a href="Matrix-class.html">Matrix</a>"</code>) whereas <code>Cholesky()</code> returns a
+<code>"<a href="CHMfactor-class.html">CHMfactor</a>"</code> object, and hence a typical user
+will rather use <code>chol(A)</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(KNex)
+mtm &lt;- with(KNex, crossprod(mm))
+str(mtm@factors) # empty list()
+(C1 &lt;- Cholesky(mtm))             # uses show(&lt;MatrixFactorization&gt;)
+str(mtm@factors) # 'sPDCholesky' (simpl)
+(Cm &lt;- Cholesky(mtm, super = TRUE))
+c(C1 = isLDL(C1), Cm = isLDL(Cm))
+str(mtm@factors) # 'sPDCholesky'  *and* 'SPdCholesky'
+str(cm1  &lt;- as(C1, "sparseMatrix"))
+str(cmat &lt;- as(Cm, "sparseMatrix"))# hmm: super is *less* sparse here
+cm1[1:20, 1:20]
+
+b &lt;- matrix(c(rep(0, 711), 1), nc = 1)
+## solve(Cm, b) by default solves  Ax = b, where A = Cm'Cm (= mtm)!
+## hence, the identical() check *should* work, but fails on some GOTOblas:
+x &lt;- solve(Cm, b)
+stopifnot(identical(x, solve(Cm, b, system = "A")),
+          all.equal(x, solve(mtm, b)))
+
+Cn &lt;- Cholesky(mtm, perm = FALSE)# no permutation -- much worse:
+sizes &lt;- c(simple = object.size(C1),
+           super  = object.size(Cm),
+           noPerm = object.size(Cn))
+## simple is 100, super= 137, noPerm= 812 :
+noquote(cbind(format(100 * sizes / sizes[1], digits=4)))
+
+
+## Visualize the sparseness:
+dq &lt;- function(ch) paste('"',ch,'"', sep="") ## dQuote(&lt;UTF-8&gt;) gives bad plots
+image(mtm, main=paste("crossprod(mm) : Sparse", dq(class(mtm))))
+image(cm1, main= paste("as(Cholesky(crossprod(mm)),\"sparseMatrix\"):",
+                        dq(class(cm1))))
+
+
+## Smaller example, with same matrix as in  help(chol) :
+(mm &lt;- Matrix(toeplitz(c(10, 0, 1, 0, 3)), sparse = TRUE)) # 5 x 5
+(opts &lt;- expand.grid(perm = c(TRUE,FALSE), LDL = c(TRUE,FALSE), super = c(FALSE,TRUE)))
+rr &lt;- lapply(seq_len(nrow(opts)), function(i)
+             do.call(Cholesky, c(list(A = mm), opts[i,])))
+nn &lt;- do.call(expand.grid, c(attr(opts, "out.attr")$dimnames,
+              stringsAsFactors=FALSE,KEEP.OUT.ATTRS=FALSE))
+names(rr) &lt;- apply(nn, 1, function(r)
+                   paste(sub("(=.).*","\\1", r), collapse=","))
+str(rr, max=1)
+
+str(re &lt;- lapply(rr, expand), max=2) ## each has a 'P' and a 'L' matrix
+
+R0 &lt;- chol(mm, pivot=FALSE)
+R1 &lt;- chol(mm, pivot=TRUE )
+stopifnot(all.equal(t(R1), re[[1]]$L),
+          all.equal(t(R0), re[[2]]$L),
+          identical(as(1:5, "pMatrix"), re[[2]]$P), # no pivoting
+TRUE)
+
+
+
+# Version of the underlying SuiteSparse library by Tim Davis :
+.SuiteSparse_version()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

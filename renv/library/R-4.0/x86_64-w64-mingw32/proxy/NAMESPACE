@@ -1,0 +1,37 @@
+import("stats")
+importFrom("utils", "formatUL")
+
+export("dist", "simil",
+       "as.dist", "as.simil", "as.matrix",
+       "pr_simil2dist", "pr_dist2simil",
+       "row.dist", "col.dist",
+       "rowSums.dist", "colSums.dist", "rowMeans.dist", "colMeans.dist",
+       "pr_DB")
+
+S3method("dim", "dist")
+S3method("dimnames", "dist")
+S3method("dimnames<-", "dist")
+S3method("names", "dist")
+S3method("names<-", "dist")
+
+S3method("subset", "dist")
+S3method("[[", "dist")
+S3method("as.matrix", "dist")
+S3method("as.matrix", "simil")
+S3method("print","crossdist")
+S3method("print","pairdist")
+S3method("print","simil")
+
+S3method("summary","pr_DB")
+S3method("print","summary.pr_DB")
+
+## generic registry stuff
+S3method("[[", "proxy_registry")
+S3method("length", "proxy_registry")
+S3method("print","proxy_registry")
+S3method("print","registry_field")
+S3method("print","registry_entry")
+S3method("summary","proxy_registry")
+S3method("as.data.frame","proxy_registry")
+
+useDynLib("proxy", .registration = TRUE)

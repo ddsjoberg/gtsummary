@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Unit Testing for R</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Unit Testing for R
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;testthat&rsquo; version 3.0.2</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="auto_test.html">auto_test</a></td>
+<td>Watches code and tests for changes, rerunning tests as appropriate.</td></tr>
+<tr><td style="width: 25%;"><a href="auto_test_package.html">auto_test_package</a></td>
+<td>Watches a package for changes, rerunning tests as appropriate.</td></tr>
+<tr><td style="width: 25%;"><a href="CheckReporter.html">CheckReporter</a></td>
+<td>Check reporter: 13 line summary of problems</td></tr>
+<tr><td style="width: 25%;"><a href="ProgressReporter.html">CompactProgressReporter</a></td>
+<td>Test reporter: interactive progress bar of errors.</td></tr>
+<tr><td style="width: 25%;"><a href="comparison-expectations.html">comparison-expectations</a></td>
+<td>Does code return a number greater/less than the expected value?</td></tr>
+<tr><td style="width: 25%;"><a href="DebugReporter.html">DebugReporter</a></td>
+<td>Test reporter: start recovery.</td></tr>
+<tr><td style="width: 25%;"><a href="describe.html">describe</a></td>
+<td>describe: a BDD testing language</td></tr>
+<tr><td style="width: 25%;"><a href="equality-expectations.html">equality-expectations</a></td>
+<td>Does code return the expected value?</td></tr>
+<tr><td style="width: 25%;"><a href="expect.html">expect</a></td>
+<td>The building block of all 'expect_' functions</td></tr>
+<tr><td style="width: 25%;"><a href="expect_error.html">expect_condition</a></td>
+<td>Does code throw an error, warning, message, or other condition?</td></tr>
+<tr><td style="width: 25%;"><a href="equality-expectations.html">expect_equal</a></td>
+<td>Does code return the expected value?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_error.html">expect_error</a></td>
+<td>Does code throw an error, warning, message, or other condition?</td></tr>
+<tr><td style="width: 25%;"><a href="logical-expectations.html">expect_false</a></td>
+<td>Does code return 'TRUE' or 'FALSE'?</td></tr>
+<tr><td style="width: 25%;"><a href="comparison-expectations.html">expect_gt</a></td>
+<td>Does code return a number greater/less than the expected value?</td></tr>
+<tr><td style="width: 25%;"><a href="comparison-expectations.html">expect_gte</a></td>
+<td>Does code return a number greater/less than the expected value?</td></tr>
+<tr><td style="width: 25%;"><a href="equality-expectations.html">expect_identical</a></td>
+<td>Does code return the expected value?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_invisible.html">expect_invisible</a></td>
+<td>Does code return a visible or invisible object?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_length.html">expect_length</a></td>
+<td>Does code return a vector with the specified length?</td></tr>
+<tr><td style="width: 25%;"><a href="comparison-expectations.html">expect_lt</a></td>
+<td>Does code return a number greater/less than the expected value?</td></tr>
+<tr><td style="width: 25%;"><a href="comparison-expectations.html">expect_lte</a></td>
+<td>Does code return a number greater/less than the expected value?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_setequal.html">expect_mapequal</a></td>
+<td>Does code return a vector containing the expected values?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_error.html">expect_message</a></td>
+<td>Does code throw an error, warning, message, or other condition?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_named.html">expect_named</a></td>
+<td>Does code return a vector with (given) names?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_output.html">expect_output</a></td>
+<td>Does code print output to the console?</td></tr>
+<tr><td style="width: 25%;"><a href="inheritance-expectations.html">expect_s3_class</a></td>
+<td>Does code return an object inheriting from the expected base type, S3 class, or S4 class?</td></tr>
+<tr><td style="width: 25%;"><a href="inheritance-expectations.html">expect_s4_class</a></td>
+<td>Does code return an object inheriting from the expected base type, S3 class, or S4 class?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_setequal.html">expect_setequal</a></td>
+<td>Does code return a vector containing the expected values?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_silent.html">expect_silent</a></td>
+<td>Does code execute silently?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_snapshot.html">expect_snapshot</a></td>
+<td>Snapshot testing</td></tr>
+<tr><td style="width: 25%;"><a href="expect_snapshot.html">expect_snapshot_error</a></td>
+<td>Snapshot testing</td></tr>
+<tr><td style="width: 25%;"><a href="expect_snapshot_file.html">expect_snapshot_file</a></td>
+<td>Snapshot testing for whole files</td></tr>
+<tr><td style="width: 25%;"><a href="expect_snapshot.html">expect_snapshot_output</a></td>
+<td>Snapshot testing</td></tr>
+<tr><td style="width: 25%;"><a href="expect_snapshot.html">expect_snapshot_value</a></td>
+<td>Snapshot testing</td></tr>
+<tr><td style="width: 25%;"><a href="logical-expectations.html">expect_true</a></td>
+<td>Does code return 'TRUE' or 'FALSE'?</td></tr>
+<tr><td style="width: 25%;"><a href="inheritance-expectations.html">expect_type</a></td>
+<td>Does code return an object inheriting from the expected base type, S3 class, or S4 class?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_vector.html">expect_vector</a></td>
+<td>Does code return a vector with the expected size and/or prototype?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_invisible.html">expect_visible</a></td>
+<td>Does code return a visible or invisible object?</td></tr>
+<tr><td style="width: 25%;"><a href="expect_error.html">expect_warning</a></td>
+<td>Does code throw an error, warning, message, or other condition?</td></tr>
+<tr><td style="width: 25%;"><a href="fail.html">fail</a></td>
+<td>Default expectations that always succeed or fail.</td></tr>
+<tr><td style="width: 25%;"><a href="FailReporter.html">FailReporter</a></td>
+<td>Test reporter: fail at end.</td></tr>
+<tr><td style="width: 25%;"><a href="inheritance-expectations.html">inheritance-expectations</a></td>
+<td>Does code return an object inheriting from the expected base type, S3 class, or S4 class?</td></tr>
+<tr><td style="width: 25%;"><a href="is_testing.html">is_parallel</a></td>
+<td>Determine testing status</td></tr>
+<tr><td style="width: 25%;"><a href="is_testing.html">is_testing</a></td>
+<td>Determine testing status</td></tr>
+<tr><td style="width: 25%;"><a href="JunitReporter.html">JunitReporter</a></td>
+<td>Test reporter: summary of errors in jUnit XML format.</td></tr>
+<tr><td style="width: 25%;"><a href="ListReporter.html">ListReporter</a></td>
+<td>List reporter: gather all test results along with elapsed time and file information.</td></tr>
+<tr><td style="width: 25%;"><a href="LocationReporter.html">LocationReporter</a></td>
+<td>Test reporter: location</td></tr>
+<tr><td style="width: 25%;"><a href="logical-expectations.html">logical-expectations</a></td>
+<td>Does code return 'TRUE' or 'FALSE'?</td></tr>
+<tr><td style="width: 25%;"><a href="MinimalReporter.html">MinimalReporter</a></td>
+<td>Test reporter: minimal.</td></tr>
+<tr><td style="width: 25%;"><a href="MultiReporter.html">MultiReporter</a></td>
+<td>Multi reporter: combine several reporters in one.</td></tr>
+<tr><td style="width: 25%;"><a href="ProgressReporter.html">ParallelProgressReporter</a></td>
+<td>Test reporter: interactive progress bar of errors.</td></tr>
+<tr><td style="width: 25%;"><a href="ProgressReporter.html">ProgressReporter</a></td>
+<td>Test reporter: interactive progress bar of errors.</td></tr>
+<tr><td style="width: 25%;"><a href="RStudioReporter.html">RStudioReporter</a></td>
+<td>Test reporter: RStudio</td></tr>
+<tr><td style="width: 25%;"><a href="SilentReporter.html">SilentReporter</a></td>
+<td>Test reporter: gather all errors silently.</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_if</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_if_not</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_if_not_installed</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_if_offline</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_if_translated</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_on_appveyor</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_on_bioc</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_on_ci</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_on_covr</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_on_cran</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_on_os</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="skip.html">skip_on_travis</a></td>
+<td>Skip a test</td></tr>
+<tr><td style="width: 25%;"><a href="snapshot_accept.html">snapshot_accept</a></td>
+<td>Snapshot management</td></tr>
+<tr><td style="width: 25%;"><a href="snapshot_accept.html">snapshot_review</a></td>
+<td>Snapshot management</td></tr>
+<tr><td style="width: 25%;"><a href="StopReporter.html">StopReporter</a></td>
+<td>Test reporter: stop on error.</td></tr>
+<tr><td style="width: 25%;"><a href="fail.html">succeed</a></td>
+<td>Default expectations that always succeed or fail.</td></tr>
+<tr><td style="width: 25%;"><a href="SummaryReporter.html">SummaryReporter</a></td>
+<td>Test reporter: summary of errors.</td></tr>
+<tr><td style="width: 25%;"><a href="TapReporter.html">TapReporter</a></td>
+<td>Test reporter: TAP format.</td></tr>
+<tr><td style="width: 25%;"><a href="TeamcityReporter.html">TeamcityReporter</a></td>
+<td>Test reporter: Teamcity format.</td></tr>
+<tr><td style="width: 25%;"><a href="teardown_env.html">teardown_env</a></td>
+<td>Run code after all test files</td></tr>
+<tr><td style="width: 25%;"><a href="is_testing.html">testing_package</a></td>
+<td>Determine testing status</td></tr>
+<tr><td style="width: 25%;"><a href="test_package.html">test_check</a></td>
+<td>Run all tests in a package</td></tr>
+<tr><td style="width: 25%;"><a href="test_file.html">test_file</a></td>
+<td>Run all tests in a single file</td></tr>
+<tr><td style="width: 25%;"><a href="test_package.html">test_local</a></td>
+<td>Run all tests in a package</td></tr>
+<tr><td style="width: 25%;"><a href="test_package.html">test_package</a></td>
+<td>Run all tests in a package</td></tr>
+<tr><td style="width: 25%;"><a href="test_path.html">test_path</a></td>
+<td>Locate file in testing directory.</td></tr>
+<tr><td style="width: 25%;"><a href="test_that.html">test_that</a></td>
+<td>Create a test.</td></tr>
+<tr><td style="width: 25%;"><a href="use_catch.html">use_catch</a></td>
+<td>Use Catch for C++ Unit Testing</td></tr>
+</table>
+</body></html>

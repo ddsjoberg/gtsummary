@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Form Row and Column Sums and Means</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for colSums {Matrix}"><tr><td>colSums {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Form Row and Column Sums and Means</h2>
+
+<h3>Description</h3>
+
+<p>Form row and column sums and means for
+objects, for <code><a href="sparseMatrix-class.html">sparseMatrix</a></code> the result may
+optionally be sparse (<code><a href="sparseVector-class.html">sparseVector</a></code>), too.
+Row or column names are kept respectively as for <span class="pkg">base</span> matrices
+and <code><a href="colSums.html">colSums</a></code> methods, when the result is
+<code><a href="../../base/html/numeric.html">numeric</a></code> vector.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+colSums (x, na.rm = FALSE, dims = 1, ...)
+rowSums (x, na.rm = FALSE, dims = 1, ...)
+colMeans(x, na.rm = FALSE, dims = 1, ...)
+rowMeans(x, na.rm = FALSE, dims = 1, ...)
+
+## S4 method for signature 'CsparseMatrix'
+colSums(x, na.rm = FALSE,
+        dims = 1, sparseResult = FALSE)
+## S4 method for signature 'CsparseMatrix'
+rowSums(x, na.rm = FALSE,
+        dims = 1, sparseResult = FALSE)
+## S4 method for signature 'CsparseMatrix'
+colMeans(x, na.rm = FALSE,
+        dims = 1, sparseResult = FALSE)
+## S4 method for signature 'CsparseMatrix'
+rowMeans(x, na.rm = FALSE,
+        dims = 1, sparseResult = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a Matrix, i.e., inheriting from  <code><a href="Matrix-class.html">Matrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>na.rm</code></td>
+<td>
+<p>logical.  Should missing values (including <code>NaN</code>)
+be omitted from the calculations?</p>
+</td></tr>
+<tr valign="top"><td><code>dims</code></td>
+<td>
+<p>completely ignored by the <code>Matrix</code> methods.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>potentially further arguments, for method <code>&lt;-&gt;</code>
+generic compatibility.</p>
+</td></tr>
+<tr valign="top"><td><code>sparseResult</code></td>
+<td>
+<p>logical indicating if the result should be sparse,
+i.e., inheriting from class <code><a href="sparseVector-class.html">sparseVector</a></code>.  Only
+applicable when <code>x</code> is inheriting from a
+<code><a href="sparseMatrix-class.html">sparseMatrix</a></code> class.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>returns a numeric vector if <code>sparseResult</code> is <code>FALSE</code> as per
+default.  Otherwise, returns a <code><a href="sparseVector-class.html">sparseVector</a></code>.
+</p>
+<p><code><a href="../../base/html/dimnames.html">dimnames</a>(x)</code> are only kept (as <code><a href="../../base/html/names.html">names</a>(v)</code>)
+when the resulting <code>v</code> is <code><a href="../../base/html/numeric.html">numeric</a></code>, since
+<code><a href="sparseVector.html">sparseVector</a></code>s do not have names.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/colSums.html">colSums</a></code> and the
+<code><a href="sparseVector-class.html">sparseVector</a></code> classes.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(M &lt;- bdiag(Diagonal(2), matrix(1:3, 3,4), diag(3:2))) # 7 x 8
+colSums(M)
+d &lt;- Diagonal(10, c(0,0,10,0,2,rep(0,5)))
+MM &lt;- kronecker(d, M)
+dim(MM) # 70 80
+length(MM@x) # 160, but many are '0' ; drop those:
+MM &lt;- drop0(MM)
+length(MM@x) # 32
+  cm &lt;- colSums(MM)
+(scm &lt;- colSums(MM, sparseResult = TRUE))
+stopifnot(is(scm, "sparseVector"),
+          identical(cm, as.numeric(scm)))
+rowSums (MM, sparseResult = TRUE) # 14 of 70 are not zero
+colMeans(MM, sparseResult = TRUE) # 16 of 80 are not zero
+## Since we have no 'NA's, these two are equivalent :
+stopifnot(identical(rowMeans(MM, sparseResult = TRUE),
+                    rowMeans(MM, sparseResult = TRUE, na.rm = TRUE)),
+	  rowMeans(Diagonal(16)) == 1/16,
+	  colSums(Diagonal(7)) == 1)
+
+## dimnames(x) --&gt;  names( &lt;value&gt; ) :
+dimnames(M) &lt;- list(paste0("r", 1:7), paste0("V",1:8))
+M
+colSums(M)
+rowMeans(M)
+## Assertions :
+stopifnot(all.equal(colSums(M),
+		    setNames(c(1,1,6,6,6,6,3,2), colnames(M))),
+	  all.equal(rowMeans(M), structure(c(1,1,4,8,12,3,2) / 8,
+					   .Names = paste0("r", 1:7))))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

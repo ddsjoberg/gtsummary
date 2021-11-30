@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Compile a LaTeX document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for latexmk {tinytex}"><tr><td>latexmk {tinytex}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Compile a LaTeX document</h2>
+
+<h3>Description</h3>
+
+<p>The function <code>latexmk()</code> emulates the system command <code>latexmk</code>
+(<a href="https://ctan.org/pkg/latexmk">https://ctan.org/pkg/latexmk</a>) to compile a LaTeX document. The
+functions <code>pdflatex()</code>, <code>xelatex()</code>, and <code>lualatex()</code> are
+wrappers of <code>latexmk(engine =, emulation = TRUE)</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+latexmk(
+  file,
+  engine = c("pdflatex", "xelatex", "lualatex", "latex", "tectonic"),
+  bib_engine = c("bibtex", "biber"),
+  engine_args = NULL,
+  emulation = TRUE,
+  min_times = 1,
+  max_times = 10,
+  install_packages = emulation &amp;&amp; tlmgr_writable(),
+  pdf_file = gsub("tex$", "pdf", file),
+  clean = TRUE
+)
+
+pdflatex(...)
+
+xelatex(...)
+
+lualatex(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>A LaTeX file path.</p>
+</td></tr>
+<tr valign="top"><td><code>engine</code></td>
+<td>
+<p>A LaTeX engine (can be set in the global option
+<code>tinytex.engine</code>, e.g., <code>options(tinytex.engine = 'xelatex')</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>bib_engine</code></td>
+<td>
+<p>A bibliography engine (can be set in the global option
+<code>tinytex.bib_engine</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>engine_args</code></td>
+<td>
+<p>Command-line arguments to be passed to <code>engine</code> (can
+be set in the global option <code>tinytex.engine_args</code>, e.g.,
+<code>options(tinytex.engine_args = '-shell-escape'</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>emulation</code></td>
+<td>
+<p>Whether to emulate the executable <code>latexmk</code> using R.
+Note that this is unused when <code>engine == 'tectonic'</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>min_times, max_times</code></td>
+<td>
+<p>The minimum and maximum number of times to rerun
+the LaTeX engine when using emulation. You can set the global options
+<code>tinytex.compile.min_times</code> or <code>tinytex.compile.max_times</code>, e.g.,
+<code>options(tinytex.compile.max_times = 3)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>install_packages</code></td>
+<td>
+<p>Whether to automatically install missing LaTeX
+packages found by <code><a href="../../tinytex/help/parse_packages.html">parse_packages</a>()</code> from the LaTeX log. This
+argument is only for the emulation mode and TeX Live. Its value can also be
+set via the global option <code>tinytex.install_packages</code>, e.g.,
+<code>options(tinytex.install_packages = FALSE)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>pdf_file</code></td>
+<td>
+<p>Path to the PDF output file. By default, it is under the same
+directory as the input <code>file</code> and also has the same base name. When
+<code>engine == 'latex'</code>, this will be a DVI file.</p>
+</td></tr>
+<tr valign="top"><td><code>clean</code></td>
+<td>
+<p>Whether to clean up auxiliary files after compilation (can be
+set in the global option <code>tinytex.clean</code>, which defaults to
+<code>TRUE</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments to be passed to <code>latexmk()</code> (other than
+<code>engine</code> and <code>emulation</code>).</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The <code>latexmk</code> emulation works like this: run the LaTeX engine once
+(e.g., <code>pdflatex</code>), run <code>makeindex</code> to make the index if
+necessary (the &lsquo;<span class="file">*.idx</span>&rsquo; file exists), run the bibliography engine
+<code>bibtex</code> or <code>biber</code> to make the bibliography if necessary
+(the &lsquo;<span class="file">*.aux</span>&rsquo; or &lsquo;<span class="file">*.bcf</span>&rsquo; file exists), and finally run the LaTeX
+engine a number of times (the maximum is 10 by default) to resolve all
+cross-references.
+</p>
+<p>By default, LaTeX warnings will be converted to R warnings. To suppress these
+warnings, set <code>options(tinytex.latexmk.warning = FALSE)</code>.
+</p>
+<p>If <code>emulation = FALSE</code>, you need to make sure the executable
+<code>latexmk</code> is available in your system, otherwise <code>latexmk()</code>
+will fall back to <code>emulation = TRUE</code>. You can set the global option
+<code>options(tinytex.latexmk.emulation = FALSE)</code> to always avoid emulation
+(i.e., always use the executable <code>latexmk</code>).
+</p>
+<p>The default command to generate the index (if necessary) is
+<code>makeindex</code>. To change it to a different command (e.g.,
+<code>zhmakeindex</code>), you may set the global option
+<code>tinytex.makeindex</code>. To pass additional command-line arguments to the
+command, you may set the global option <code>tinytex.makeindex.args</code> (e.g.,
+<code>options(tinytex.makeindex = 'zhmakeindex', tinytex.makeindex.args =
+c('-z', 'pinyin'))</code>).
+</p>
+<p>If you are using the LaTeX distribution TinyTeX, but its path is not in the
+<code>PATH</code> variable of your operating system, you may set the global option
+<code>tinytex.tlmgr.path</code> to the full path of the executable <code>tlmgr</code>,
+so that <code>latexmk()</code> knows where to find executables like
+<code>pdflatex</code>. For example, if you are using Windows and your TinyTeX is
+on an external drive &lsquo;<span class="file">Z:/</span>&rsquo; under the folder &lsquo;<span class="file">TinyTeX</span>&rsquo;, you may set
+<code>options(tinytex.tlmgr.path = "Z:/TinyTeX/bin/win32/tlmgr.bat")</code>.
+Usually you should not need to set this option because TinyTeX can add itself
+to the <code>PATH</code> variable during installation or via
+<code><a href="../../tinytex/help/use_tinytex.html">use_tinytex</a>()</code>. In case both methods fail, you can use this
+manual approach.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A character string of the path of the output file (i.e., the value of
+the <code>pdf_file</code> argument).
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>tinytex</em> version 0.34 <a href="00Index.html">Index</a>]</div>
+</body></html>

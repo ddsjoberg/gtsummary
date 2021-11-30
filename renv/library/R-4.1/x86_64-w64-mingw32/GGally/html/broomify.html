@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Broomify a model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for broomify {GGally}"><tr><td>broomify {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Broomify a model</h2>
+
+<h3>Description</h3>
+
+<p>broom::augment a model and add broom::glance and broom::tidy output as attributes. X and Y variables are also added.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+broomify(model, lmStars = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>model</code></td>
+<td>
+<p>model to be sent to <code><a href="../../broom/help/reexports.html">broom::augment()</a></code>, <code><a href="../../broom/help/reexports.html">broom::glance()</a></code>, and <code><a href="../../broom/help/reexports.html">broom::tidy()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>lmStars</code></td>
+<td>
+<p>boolean that determines if stars are added to labels</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>broom::augmented data frame with the broom::glance data.frame and broom::tidy data.frame as 'broom_glance' and 'broom_tidy' attributes respectively.  <code>var_x</code> and <code>var_y</code> variables are also added as attributes
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+model &lt;- stats::lm(mpg ~ wt + qsec + am, data = mtcars)
+broomified_model &lt;- broomify(model)
+str(broomified_model)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

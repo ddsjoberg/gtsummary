@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Alternating Background Colour</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for geom_stripped_rows {GGally}"><tr><td>geom_stripped_rows {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Alternating Background Colour</h2>
+
+<h3>Description</h3>
+
+<p>Add alternating background color along the y-axis. The geom takes default
+aesthetics <code>odd</code> and <code>even</code> that receive color codes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+geom_stripped_rows(
+  mapping = NULL,
+  data = NULL,
+  stat = "identity",
+  position = "identity",
+  ...,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  xfrom = -Inf,
+  xto = Inf,
+  width = 1,
+  nudge_y = 0
+)
+
+geom_stripped_cols(
+  mapping = NULL,
+  data = NULL,
+  stat = "identity",
+  position = "identity",
+  ...,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  yfrom = -Inf,
+  yto = Inf,
+  width = 1,
+  nudge_x = 0
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>Set of aesthetic mappings created by <code><a href="../../ggplot2/help/aes.html">aes()</a></code> or
+<code><a href="../../ggplot2/help/aes_.html">aes_()</a></code>. If specified and <code>inherit.aes = TRUE</code> (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply <code>mapping</code> if there is no plot mapping.</p>
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>The data to be displayed in this layer. There are three
+options:
+</p>
+<p>If <code>NULL</code>, the default, the data is inherited from the plot
+data as specified in the call to <code><a href="../../ggplot2/help/ggplot.html">ggplot()</a></code>.
+</p>
+<p>A <code>data.frame</code>, or other object, will override the plot
+data. All objects will be fortified to produce a data frame. See
+<code><a href="../../ggplot2/help/fortify.html">fortify()</a></code> for which variables will be created.
+</p>
+<p>A <code>function</code> will be called with a single argument,
+the plot data. The return value must be a <code>data.frame</code>, and
+will be used as the layer data. A <code>function</code> can be created
+from a <code>formula</code> (e.g. <code>~ head(.x, 10)</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>stat</code></td>
+<td>
+<p>The statistical transformation to use on the data for this
+layer, as a string.</p>
+</td></tr>
+<tr valign="top"><td><code>position</code></td>
+<td>
+<p>Position adjustment, either as a string, or the result of
+a call to a position adjustment function.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Other arguments passed on to <code><a href="../../ggplot2/help/layer.html">layer()</a></code>. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+<code>colour = "red"</code> or <code>size = 3</code>. They may also be parameters
+to the paired geom/stat.</p>
+</td></tr>
+<tr valign="top"><td><code>show.legend</code></td>
+<td>
+<p>logical. Should this layer be included in the legends?
+<code>NA</code>, the default, includes if any aesthetics are mapped.
+<code>FALSE</code> never includes, and <code>TRUE</code> always includes.
+It can also be a named logical vector to finely select the aesthetics to
+display.</p>
+</td></tr>
+<tr valign="top"><td><code>inherit.aes</code></td>
+<td>
+<p>If <code>FALSE</code>, overrides the default aesthetics,
+rather than combining with them. This is most useful for helper functions
+that define both data and aesthetics and shouldn't inherit behaviour from
+the default plot specification, e.g. <code><a href="../../ggplot2/help/borders.html">borders()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>xfrom, xto</code></td>
+<td>
+<p>limitation of the strips along the x-axis</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>width of the strips</p>
+</td></tr>
+<tr valign="top"><td><code>yfrom, yto</code></td>
+<td>
+<p>limitation of the strips along the y-axis</p>
+</td></tr>
+<tr valign="top"><td><code>nudge_x, nudge_y</code></td>
+<td>
+<p>horizontal or vertical adjustment to nudge strips by</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+data(tips, package = "reshape")
+p &lt;- ggplot(tips) +
+  aes(x = time, y = day) +
+  geom_count() +
+  theme_light()
+
+p_(p)
+p_(p + geom_stripped_rows())
+p_(p + geom_stripped_cols())
+p_(p + geom_stripped_rows() + geom_stripped_cols())
+
+p &lt;- ggplot(tips) +
+  aes(x = total_bill, y = day) +
+  geom_count() +
+  theme_light()
+p
+p_(p + geom_stripped_rows())
+p_(p + geom_stripped_rows() + scale_y_discrete(expand = expansion(0, 0.5)))
+p_(p + geom_stripped_rows(xfrom = 10, xto = 35))
+p_(p + geom_stripped_rows(odd = "blue", even = "yellow"))
+p_(p + geom_stripped_rows(odd = "blue", even = "yellow", alpha = .1))
+p_(p + geom_stripped_rows(odd = "#00FF0022", even = "#FF000022"))
+
+p_(p + geom_stripped_cols())
+p_(p + geom_stripped_cols(width = 10))
+p_(p + geom_stripped_cols(width = 10, nudge_x = 5))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

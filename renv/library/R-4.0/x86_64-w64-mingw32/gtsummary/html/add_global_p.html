@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add the global p-values</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add_global_p {gtsummary}"><tr><td>add_global_p {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add the global p-values</h2>
+
+<h3>Description</h3>
+
+<p>This function uses <code>car::Anova(type = "III")</code> to calculate global p-values variables.
+Output from <code>tbl_regression</code> and <code>tbl_uvregression</code> objects supported.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+add_global_p(x, ...)
+
+## S3 method for class 'tbl_regression'
+add_global_p(
+  x,
+  include = everything(),
+  type = NULL,
+  keep = FALSE,
+  quiet = NULL,
+  ...,
+  terms = NULL
+)
+
+## S3 method for class 'tbl_uvregression'
+add_global_p(
+  x,
+  type = NULL,
+  include = everything(),
+  keep = FALSE,
+  quiet = NULL,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object with class <code>tbl_regression</code> from the
+<a href="tbl_regression.html">tbl_regression</a> function</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to <code>car::Anova</code></p>
+</td></tr>
+<tr valign="top"><td><code>include</code></td>
+<td>
+<p>Variables to calculate global p-value for. Input may be a vector of
+quoted or unquoted variable names. Default is <code>everything()</code></p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>Type argument passed to <code>car::Anova</code>. Default is <code>"III"</code></p>
+</td></tr>
+<tr valign="top"><td><code>keep</code></td>
+<td>
+<p>Logical argument indicating whether to also retain the individual
+p-values in the table output for each level of the categorical variable.
+Default is <code>FALSE</code></p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>Logical indicating whether to print messages in console. Default is
+<code>FALSE</code></p>
+</td></tr>
+<tr valign="top"><td><code>terms</code></td>
+<td>
+<p>DEPRECATED.  Use <code style="white-space: pre;">include=</code> argument instead.</p>
+</td></tr>
+</table>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/tbl_lm_global_ex1.png" width=45% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/tbl_uv_global_ex2.png" width=50% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tbl_uvregression tools: 
+<code><a href="add_q.html">add_q</a>()</code>,
+<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="inline_text.tbl_uvregression.html">inline_text.tbl_uvregression</a>()</code>,
+<code><a href="modify.html">modify</a></code>,
+<code><a href="tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="tbl_uvregression.html">tbl_uvregression</a>()</code>
+</p>
+<p>Other tbl_regression tools: 
+<code><a href="add_q.html">add_q</a>()</code>,
+<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="combine_terms.html">combine_terms</a>()</code>,
+<code><a href="inline_text.tbl_regression.html">inline_text.tbl_regression</a>()</code>,
+<code><a href="modify.html">modify</a></code>,
+<code><a href="tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="tbl_regression.html">tbl_regression</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Example 1 ----------------------------------
+if (requireNamespace("car")) {
+  tbl_lm_global_ex1 &lt;-
+    lm(marker ~ age + grade, trial) %&gt;%
+    tbl_regression() %&gt;%
+    add_global_p()
+}
+
+# Example 2 ----------------------------------
+if (requireNamespace("car")) {
+  tbl_uv_global_ex2 &lt;-
+    trial[c("response", "trt", "age", "grade")] %&gt;%
+    tbl_uvregression(
+      method = glm,
+      y = response,
+      method.args = list(family = binomial),
+      exponentiate = TRUE
+    ) %&gt;%
+    add_global_p()
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.0.9006 <a href="00Index.html">Index</a>]</div>
+</body></html>

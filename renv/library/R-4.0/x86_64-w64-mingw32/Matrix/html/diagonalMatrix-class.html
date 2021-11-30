@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;diagonalMatrix&quot; of Diagonal Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for diagonalMatrix-class {Matrix}"><tr><td>diagonalMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;diagonalMatrix&quot; of Diagonal Matrices</h2>
+
+<h3>Description</h3>
+
+<p>Class &quot;diagonalMatrix&quot; is the virtual class of all diagonal matrices.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>A virtual Class: No objects may be
+created from it.</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>diag</code>:</dt><dd><p>code&quot;character&quot; string, either <code>"U"</code> or
+<code>"N"</code>, where <code>"U"</code> means &lsquo;unit-diagonal&rsquo;.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>matrix dimension, and</p>
+</dd>
+<dt><code>Dimnames</code>:</dt><dd><p>the <code><a href="../../base/html/dimnames.html">dimnames</a></code>, a
+<code><a href="../../base/html/list.html">list</a></code>, see the <code><a href="Matrix-class.html">Matrix</a></code> class
+description.  Typically <code>list(NULL,NULL)</code> for diagonal matrices.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"<a href="sparseMatrix-class.html">sparseMatrix</a>"</code>, directly.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>These are just a subset of the signature for which defined methods.
+Currently, there are (too) many explicit methods defined in order to
+ensure efficient methods for diagonal matrices.
+</p>
+
+<dl>
+<dt>coerce</dt><dd><p><code>signature(from = "matrix", to = "diagonalMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "Matrix", to = "diagonalMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "diagonalMatrix", to = "generalMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "diagonalMatrix", to = "triangularMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "diagonalMatrix", to = "nMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "diagonalMatrix", to = "matrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "diagonalMatrix", to = "sparseVector")</code>: ... </p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "diagonalMatrix")</code>: ... </p>
+</dd>
+</dl>
+<p><br /> and many more methods
+</p>
+<dl>
+<dt>solve</dt><dd><p><code>signature(a = "diagonalMatrix", b, ...)</code>: is
+trivially implemented, of course; see also <code><a href="solve-methods.html">solve-methods</a></code>.</p>
+</dd>
+<dt>which</dt><dd><p><code>signature(x = "nMatrix")</code>, semantically
+equivalent to <span class="pkg">base</span> function <code><a href="../../base/html/which.html">which</a>(x, arr.ind)</code>.</p>
+</dd>
+<dt>&quot;Math&quot;</dt><dd><p><code>signature(x = "diagonalMatrix")</code>: all these
+group methods return a <code>"diagonalMatrix"</code>, apart from
+<code><a href="../../base/html/cumsum.html">cumsum</a>()</code> etc which return a <em>vector</em> also for
+<span class="pkg">base</span> <code><a href="../../base/html/matrix.html">matrix</a></code>.</p>
+</dd>
+<dt>*</dt><dd><p><code>signature(e1 = "ddiMatrix", e2="denseMatrix")</code>:
+arithmetic and other operators from the <code><a href="../../methods/html/S4groupGeneric.html">Ops</a></code>
+group have a few dozen explicit method definitions, in order to
+keep the results <em>diagonal</em> in many cases, including the following:</p>
+</dd>
+<dt>/</dt><dd><p><code>signature(e1 = "ddiMatrix", e2="denseMatrix")</code>:
+the result is from class <code><a href="ddiMatrix-class.html">ddiMatrix</a></code> which is
+typically very desirable.  Note that when <code>e2</code> contains
+off-diagonal zeros or <code><a href="../../base/html/NA.html">NA</a></code>s, we implicitly use <i>0 / x = 0</i>, hence
+differing from traditional <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> arithmetic (where <i>0/0 |-&gt; NaN</i>), in order to preserve sparsity.</p>
+</dd>
+<dt>summary</dt><dd><p><code>(object = "diagonalMatrix")</code>: Returns
+an object of S3 class <code>"diagSummary"</code> which is the summary of
+the vector <code>object@x</code> plus a simple heading, and an
+appropriate <code><a href="../../base/html/print.html">print</a></code> method.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Diagonal.html">Diagonal</a>()</code> as constructor of these matrices, and
+<code><a href="isTriangular.html">isDiagonal</a></code>.
+<code><a href="ddiMatrix-class.html">ddiMatrix</a></code> and <code><a href="ldiMatrix-class.html">ldiMatrix</a></code> are
+&ldquo;actual&rdquo; classes extending <code>"diagonalMatrix"</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+I5 &lt;- Diagonal(5)
+D5 &lt;- Diagonal(x = 10*(1:5))
+## trivial (but explicitly defined) methods:
+stopifnot(identical(crossprod(I5), I5),
+          identical(tcrossprod(I5), I5),
+          identical(crossprod(I5, D5), D5),
+          identical(tcrossprod(D5, I5), D5),
+          identical(solve(D5), solve(D5, I5)),
+          all.equal(D5, solve(solve(D5)), tolerance = 1e-12)
+          )
+solve(D5)# efficient as is diagonal
+
+# an unusual way to construct a band matrix:
+rbind2(cbind2(I5, D5),
+       cbind2(D5, I5))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

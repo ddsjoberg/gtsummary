@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get all chunk labels in a document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for all_labels {knitr}"><tr><td>all_labels {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get all chunk labels in a document</h2>
+
+<h3>Description</h3>
+
+<p>The function <code>all_labels()</code> returns all chunk labels as a character
+vector. Optionally, you can specify a series of conditions to filter the
+labels. The function 'all_rcpp_labels()' is a wrapper function for
+<code>all_labels(engine == 'Rcpp')</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+all_labels(...)
+
+all_rcpp_labels(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>A vector of R expressions, each of which should return <code>TRUE</code>
+or <code>FALSE</code>. The expressions are evaluated using the <em>local</em> chunk
+options of each code chunk as the environment, which means global chunk
+options are not considered when evaluating these expressions. For example,
+if you set the global chunk option <code>opts_chunk$set(purl = TRUE)</code>,
+<code>all_labels(purl == TRUE)</code> will <em>not</em> return the labels of all
+code chunks, but will only return the labels of those code chunks that have
+local chunk options <code>purl = TRUE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>For example, suppose the condition expression is <code>engine == 'Rcpp'</code>, the
+object <code>engine</code> is the local chunk option <code>engine</code>. If an
+expression fails to be evaluated (e.g. when a certain object does not exist),
+<code>FALSE</code> is returned and the label for this chunk will be filtered out.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A character vector.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Empty code chunks are always ignored, including those chunks that are
+empty in the original document but filled with code using chunk options
+such as <code>ref.label</code> or <code>code</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# the examples below are meaningless unless you put them in a knitr document
+all_labels()
+all_labels(engine == "Rcpp")
+all_labels(echo == FALSE &amp;&amp; results != "hide")
+# or separate the two conditions
+all_labels(echo == FALSE, results != "hide")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

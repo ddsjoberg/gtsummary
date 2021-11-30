@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>NAMESPACE tags</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">NAMESPACE tags</h1>
+
+
+
+<p>The package <code>NAMESPACE</code> is one of the most confusing parts of building a package. Roxygen2 aims to make it as easy as possible to build a package that is a well-behaved member of the R ecosystem. This is a little frustrating at first, but soon becomes second-nature.</p>
+<div id="exports" class="section level2">
+<h2>Exports</h2>
+<p>For a function to be usable outside of your package, you must <strong>export</strong> it. By default roxygen2 doesn’t export anything from your package. If you want an object to be publicly available, you must explicitly tag it with <code>@export</code>.</p>
+<p>Use the following guidelines to decide what to export:</p>
+<ul>
+<li><p>Functions: export functions that you want to make available. Exported functions must be documented, and you must be cautious when changing their interface.</p></li>
+<li><p>Datasets: all datasets are publicly available. They exist outside of the package namespace and should not be exported.</p></li>
+<li><p>S3 classes: if you want others to be able to create instances of the class <code>@export</code> the constructor function.</p></li>
+<li><p>S3 generics: the generic is a function so <code>@export</code> if you want it to be usable outside the package</p></li>
+<li><p>S3 methods: every S3 method <em>must</em> be exported, even if the generic is not. Otherwise the S3 method table will not be generated correctly and internal generics will not find the correct method.</p>
+<p>If you are providing a method for a generic defined in another package, you must also import that generic.</p></li>
+<li><p>S4 classes: if you want others to be able to extend your class, <code>@export</code> it. If you want others to create instances of your class, but not extend it, <code>@export</code> the constructor function, but not the class.</p>
+<pre><code>```R
+# Can extend and create
+#&#39; @export
+setClass(&quot;A&quot;)
+
+# Can extend, but constructor not exported
+#&#39; @export
+B &lt;- setClass(&quot;B&quot;)
+
+# Can create, but not extend
+#&#39; @export C
+C &lt;- setClass(&quot;C&quot;)
+
+# Can create and extend
+#&#39; @export D
+#&#39; @exportClass D
+D &lt;- setClass(&quot;D&quot;)
+```</code></pre></li>
+<li><p>S4 generics: <code>@export</code> if you want the generic to be publicly usable.</p></li>
+<li><p>S4 methods: you only need to <code>@export</code> methods for generics that you did not define.</p></li>
+<li><p>RC classes: the same principles apply as for S4 classes. <code>@export</code> will only export the class.</p></li>
+</ul>
+<div id="specialised-exports" class="section level3">
+<h3>Specialised exports</h3>
+<p>Generally, roxygen2 can generate the correct namespace directive when <code>@export</code>ing a specific object. However, you may want to override the defaults and exercise greater control. In this case you can use the more specialised tags described below:</p>
+<ul>
+<li><code>@export foo</code> generates <code>export(foo)</code></li>
+<li><code>@exportClass foo</code> generates <code>exportClasses(foo)</code></li>
+<li><code>@exportMethod foo</code> generates <code>exportMethods(foo)</code></li>
+<li><code>@exportPattern foo</code> generates <code>exportPattern(foo)</code></li>
+</ul>
+<p>For even more specialised cases you can use <code>@rawNamespace code</code> which inserts <code>code</code> literally into the <code>NAMESPACE</code>. If you need to automate this, <code>@evalNamespace foo()</code> will evaluate the <code>foo()</code> in the package environment and insert the results into <code>NAMESPACE</code>. Because <code>evalNamespace()</code> is run in the package environment, it can only generate exports, not imports.</p>
+</div>
+</div>
+<div id="imports" class="section level2">
+<h2>Imports</h2>
+<p>The <code>NAMESPACE</code> also controls which functions from other packages are made available to your package. Only unique directives are saved to the <code>NAMESPACE</code> file, so you can repeat them as needed to maintain a close link between the functions where they are needed and the namespace file.</p>
+<p>If you are using just a few functions from another package, the recommended option is to note the package name in the <code>Imports:</code> field of the <code>DESCRIPTION</code> file and call the function(s) explicitly using <code>::</code>, e.g., <code>pkg::fun()</code>. Alternatively, though no longer recommended due to its poorer readability, use <code>@importFrom</code>, e.g., <code>@importFrom pgk fun</code>, and call the function(s) without <code>::</code>.</p>
+<p>If you are using many functions from another package, use <code>@import package</code> to import them all and make available without using <code>::</code>.</p>
+<p>If you want to add a new method to an S3 generic, import it with <code>@importFrom pkg generic</code>.</p>
+<p>If you are using S4 you may also need:</p>
+<ul>
+<li><p><code>@importClassesFrom package classa classb ...</code> to import selected S4 classes.</p></li>
+<li><p><code>@importMethodsFrom package methoda methodb ...</code> to import selected S4 methods.</p></li>
+</ul>
+<p>To import compiled code from another package, use <code>@useDynLib</code></p>
+<ul>
+<li><p><code>@useDynLib package</code> imports all compiled functions.</p></li>
+<li><p><code>@useDynLib package routinea routineb</code> imports selected compiled functions.</p></li>
+<li><p>Any <code>@useDynLib</code> specification containing a comma, e.g. <code>@useDynLib mypackage, .registration = TRUE</code> will be inserted as is into the the NAMESPACE, e.g. <code>useDynLib(mypackage, .registration = TRUE)</code></p></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Transform Triangular Matrices from Unit Triangular to General...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for diagU2N {Matrix}"><tr><td>diagU2N {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Transform Triangular Matrices from Unit Triangular to General Triangular and Back</h2>
+
+<h3>Description</h3>
+
+<p>Transform a triangular matrix <code>x</code>, i.e., of <code><a href="../../base/html/class.html">class</a></code>
+<code>"<a href="triangularMatrix-class.html">triangularMatrix</a>"</code>,
+from (internally!) unit triangular (&ldquo;unitriangular&rdquo;) to
+&ldquo;general&rdquo; triangular (<code>diagU2N(x)</code>) or back (<code>diagN2U(x)</code>).
+Note that the latter, <code>diagN2U(x)</code>, also sets the diagonal to one
+in cases where <code>diag(x)</code> was not all one.
+</p>
+<p><code>.diagU2N(x)</code> assumes but does <em>not</em> check that <code>x</code> is
+a <code><a href="triangularMatrix-class.html">triangularMatrix</a></code> with <code>diag</code> slot
+<code>"U"</code>, and should hence be used with care.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ diagN2U(x, cl = getClassDef(class(x)), checkDense = FALSE)
+
+ diagU2N(x, cl = getClassDef(class(x)), checkDense = FALSE)
+.diagU2N(x, cl, checkDense = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a <code><a href="triangularMatrix-class.html">triangularMatrix</a></code>, often sparse.</p>
+</td></tr>
+<tr valign="top"><td><code>cl</code></td>
+<td>
+<p>(optional, for speedup only:) class (definition) of <code>x</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>checkDense</code></td>
+<td>
+<p>logical indicating if dense (see
+<code><a href="denseMatrix-class.html">denseMatrix</a></code>) matrices should be considered at
+all; i.e., when false, as per default, the result will be sparse even
+when <code>x</code> is dense.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The concept of unit triangular matrices with a <code>diag</code> slot of
+<code>"U"</code> stems from LAPACK.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a triangular matrix of the same <code><a href="../../base/html/class.html">class</a></code> but with a
+different <code>diag</code> slot.  For <code>diagU2N</code> (semantically) with
+identical entries as <code>x</code>, whereas in <code>diagN2U(x)</code>, the
+off-diagonal entries are unchanged and the diagonal is set to all
+<code>1</code> even if it was not previously.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Such internal storage details should rarely be of relevance to the
+user.  Hence, these functions really are rather <em>internal</em>
+utilities.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code>"<a href="triangularMatrix-class.html">triangularMatrix</a>"</code>,
+<code>"<a href="dtCMatrix-class.html">dtCMatrix</a>"</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(T &lt;- Diagonal(7) + triu(Matrix(rpois(49, 1/4), 7,7), k = 1))
+(uT &lt;- diagN2U(T)) # "unitriangular"
+(t.u &lt;- diagN2U(10*T))# changes the diagonal!
+stopifnot(all(T == uT), diag(t.u) == 1,
+          identical(T, diagU2N(uT)))
+T[upper.tri(T)] &lt;- 5
+T &lt;- diagN2U(as(T,"triangularMatrix"))
+stopifnot(T@diag == "U")
+dT &lt;- as(T, "denseMatrix")
+dt. &lt;- diagN2U(dT)
+dtU &lt;- diagN2U(dT, checkDense=TRUE)
+stopifnot(is(dtU, "denseMatrix"), is(dt., "sparseMatrix"),
+          all(dT == dt.), all(dT == dtU),
+          dt.@diag == "U", dtU@diag == "U")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

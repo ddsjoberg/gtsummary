@@ -1,0 +1,123 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string fcnname="t_tx_OP_y"%>
+<% fcnname <- "<%@string name="fcnname"%>" %>
+<%@meta title="${fcnname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-11-26"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=fcnname%>() against alternative methods.
+
+## Alternative methods
+
+* t_tx_OP_y_R()
+
+as below
+
+```r
+<%=withCapture({
+t_tx_OP_y_R <- function(x, y, OP, na.rm = FALSE) {
+  x <- t(x)
+  
+  if (na.rm) {
+    xnok <- is.na(x)
+    ynok <- is.na(y)
+    anok <- xnok & ynok
+    unit <- switch(OP,
+      "+" = 0,
+      "-" = NA_real_,
+      "*" = 1,
+      "/" = NA_real_,
+      stop("Unknown 'OP' operator: ", OP)
+    )
+    x[xnok] <- unit
+    y[ynok] <- unit
+  }
+
+  ans <- switch(OP,
+    "+" = x + y,
+    "-" = x - y,
+    "*" = x * y,
+    "/" = x / y,
+    stop("Unknown 'OP' operator: ", OP)
+  )
+
+  if (na.rm) {
+    ans[anok] <- NA_real_
+  }
+
+  t(ans)
+} # t_tx_OP_y_R()
+})%>
+```
+
+
+<% for (mode in c("integer", "double")) { %>
+
+## Data type "<%=mode%>"
+### Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = mode)
+})%>
+```
+
+### Results
+
+<% for (ii in seq_along(data)) { %>
+<%
+dataLabel <- names(data)[ii]
+mprintf("%s: %s\n", mode, dataLabel)
+x <- data[[dataLabel]]
+gc()
+%>
+### <%=dataLabel%> vector
+
+#### All elements
+```r
+<%=withCapture({
+x <- data[[.dataLabel.]]
+y <- x[, 1L]
+})%>
+```
+
+<% for (OP in c("+", "-", "*", "/")) { %>
+<%
+OPTag <- c("+" = "add", "-" = "sub", "*" = "mul", "/" = "div")[OP]
+gc()
+%>
+```r
+<%=withCapture({
+OP
+stats <- microbenchmark(
+ "t_tx_OP_y"   = t_tx_OP_y(x, y, OP = OP, na.rm = FALSE),
+ "t_tx_OP_y_R" = t_tx_OP_y_R(x, y, OP = OP, na.rm = FALSE),
+  unit = "ms"
+)
+
+gc()
+})%>
+```
+
+<% benchmarkResults(stats, tags=c(mode, dataLabel, OPTag)) %>
+
+<% } # for (OP ...) %>
+
+<% } # for (ii ...) %>
+
+<% } # for (mode ...) %>
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-11-26
+o Created.
+---------------------------------------------------------------------------%>

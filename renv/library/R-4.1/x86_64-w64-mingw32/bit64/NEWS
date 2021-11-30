@@ -1,0 +1,259 @@
+    CHANGES IN bit64 VERSION 4.0.5
+
+BUG FIXES
+
+    o PKG_LIBS=-lm added to Makevars
+      (fixes https://bugzilla.redhat.com/show_bug.cgi?id=1763127
+      thanks to Elliott Sales de Andrade)
+
+
+
+    CHANGES IN bit64 VERSION 4.0.4
+
+BUG FIXES
+
+    o runif64() no longer long long overflows
+      for the maximum integer64 range
+    o UBSAN false alarms removed with 
+      __attribute__((no_sanitize("signed-integer-overflow")))
+    o added temporary flags to Makefile 
+      for UBSAN checks
+
+
+
+    CHANGES IN bit64 VERSION 4.0.3
+
+BUG FIXES
+
+    o added Makefile with temporary -flto 
+      and removed LTO error regarding runif_integer64
+
+
+
+    CHANGES IN bit64 VERSION 4.0.2
+
+BUG FIXES
+
+    o now DESCRIPTION URL points to github
+
+
+
+    CHANGES IN bit64 VERSION 4.0.1
+
+BUG FIXES
+
+    o removed pragma because no longer needed with recent compilers
+    o removed a clang warning
+
+
+
+    CHANGES IN bit64 VERSION 4.0.0
+
+
+NEW FEATURES
+
+    o new method all.equal.integer64
+      (contributed by Leonardo Silvestri)
+
+
+USER VISIBLE CHANGES
+
+    o license has been extendend from GPL-2 to GPL-2 | GPL-3
+    o still.identical is now exported from package bit
+
+
+BUG FIXES
+
+    o removed unused SEXP ret_ from r_ram_integer64_sortnut and 
+      r_ram_integer64_ordernut (LTO problems reported by Brian Ripley)
+    o min, max and range now give correct results for multiple arguments
+      (reported by Colin Umanski)
+    o r_ram_integer64_ordertab_asc and r_ram_integer64_sortordertab_asc 
+      now properly PROTECT their shortened return vector before R_Busy(0)
+      (Thanks to Tomas Kalibera)
+    o operations on zero length integer64 now return 
+      zero length integer64 instead of throwing an error 
+      (reported by Xianying Tan)
+    o match.integer64 (and %in%) now coerce the second argument to integer64
+      instead of throwing an error (reported by Xianying Tan)
+    o zero-length integer64() no longer prints as `character(0)` 
+      (reported by Xianying Tan)
+
+
+      
+    CHANGES IN bit64 VERSION 0.9-8
+
+
+NEW FEATURES
+
+    o New function runif64 which can sample from finite 
+      and infinite populations (wish of Dan Reznik)
+
+    o New methods as.integer64.bitstring
+      and print.bitstring (wish of Dan Reznik)
+
+
+USER VISIBLE CHANGES
+
+    o [.integer64 now returns NA where the subscripts require this
+      (contributed by Leonardo Silvestri)
+    o binary operators now handle attributes more like R 
+      (new binattr() code contributed by Leonardo Silvestri)
+    o as.bitstring.integer64 now returns its string vector
+      with class 'bitstring'
+    o round.integer64 with a negative digits argument now rounds 
+      like round(integer) would do (wish of Ian Lyttle)
+    o range.integer64 now has an argument finite=FALSE for compatibility 
+      with range.default (wish of Sergio Oller)
+      
+
+BUG FIXES
+
+    o calculating hashbits in hashfun, hashmap, hashmaptab and hashmapuni 
+      now gives 0 instead of stopping (bug reported by Jakob Schelbert) 
+
+
+
+    CHANGES IN bit64 VERSION 0.9-7
+
+BUG FIXES
+
+    o All .Call routines are now registered
+
+
+
+    CHANGES IN bit64 VERSION 0.9-6
+
+NEW FEATURES
+
+    o New method str.integer64 shows the integer64 
+      and no longer the underlying double
+      (wish of Matt Dowle)
+    o New integer64 methods is.nan, is.finite, is.infinite
+      (wish of Florent Angly)
+
+
+USER VISIBLE CHANGES
+
+    o as.integer64.double and as.double.integer64
+      now have an argument keep.names=FALSE
+      (wish of Dirk Edelbüttel and Leonardo Silvestri)
+
+	
+BUG FIXES
+
+    o We now protect our SEXP return-vector before calling R_Busy
+      (reported by Thjomas Kalibera)
+    o median.integer64 now gets a ... argument if the generic has it
+      (wish of Kurt Hornik)
+    o we migrated all files to UTF-8
+
+    
+
+    CHANGES IN bit64 VERSION 0.9-5
+
+USER VISIBLE CHANGES
+
+    o The following functions are converted to S3 generics and mask package:base
+      :, is.double, match, %in%, rank, order
+    o NA_integer64_ is now available and exported
+
+	
+BUG FIXES
+
+    o ramsort.integer64 no longer complains about misssing return 
+      value when stable || optimize == "time" (reported by Dan Southern)
+    o removed a harmless warning on request of CRAN maintainers
+      gcc had complained about using %lli format which is not 
+      supported under the windows MCPP compiler, under which
+      %lli and thus as.character.integer64 will fail.
+    o now uses R's RNG instead of the system RNG
+
+    
+
+    CHANGES IN bit64 VERSION 0.9-4
+
+BUG FIXES
+
+    o The packages now uses clone(x) instead of x[]
+    o log(x) tests no longer fail under valgrind
+      (Thanks to Heisenberg it only failed under Valgrind)
+    o UBSAN should no longer complain about left shift
+
+    
+
+    CHANGES IN bit64 VERSION 0.9-3
+
+USER VISIBLE CHANGES
+
+    o The following functions are converted to S3 generics and mask package:base
+      :, is.double, match, %in%, rank, order
+    o table.integer64 now automatically converts non-integer64 arguments to integer64
+      rather than stopping on error (but gives a warning for each column) 
+    o table.integer64 called with return="table" returns empty cells now with 
+      0 rather than NA
+    o %in%.integer64 no longer has arguments 'nunique' and 'method' in order
+      to match the generic with only two arguments 'x', 'table' and ...
+
+
+BUG FIXES
+
+    o c(x,x,x) failed with integer64 type because R no longer copies the 
+      arguments in list(...) as from R-3.0.2 . Presumably now the ugly 
+      workaround in table.integer64 is no longer needed but that has NOT 
+      been fixed yet
+    o round.integer64 no longer removes the "integer64" class attribute
+      (reported by Dan Southern)
+
+    
+
+    CHANGES IN bit64 VERSION 0.9-2
+
+BUG FIXES
+
+    o match.integer64 (and %in%.integer64) now call correctly with 
+      method="hashpos" and method="hashrev"
+    o removed platform specific timing code that was not needed 
+      and prevented compiling under MacOS
+
+
+    
+
+    CHANGES IN bit64 VERSION 0.9-1
+
+    
+NEW FEATURES
+
+    o new methods for 'match', '%in%', 'duplicated', 'unique', 'table'
+      , 'sort', 'order', 'rank', 'quantile', 'median' and 'summary'
+    o new generics and methods for data management: 
+        'unipos' (positions of the unique values)
+      , 'tiepos' (positions of ties)
+      , 'keypos' (positions of values in a sorted unique table) 
+      and derived methods 'as.factor' and 'as.ordered'
+    o new generic caching scheme, see ?cache and ?hashcache
+    o new low level functions for fast sorting, ordering and hashing,
+    see ?sortnut and ?hashmap
+
+    
+    
+USER VISIBLE CHANGES
+
+    o the package is back on CRAN. Method 'as.vector.integer64' has been removed 
+      at request of the CRAN maintainer. The starting point for this request was: 
+      'matrix(integer64())' does not work. The result of removing 
+      'as.vector.integer64' is a deterioration: 'array(integer64())' does not work 
+      anymore. You can restore 'as.vector.integer64' if you prefer.
+    o package 'bit64' now shares generics for low-level sorting with package 'ff' 
+      and depends on package 'bit' for those generics
+      
+
+
+      
+    CHANGES IN bit64 VERSION 0.8-3
+
+
+FIXES
+
+    o removed chonst char warning (thanks to Murray Stokely)
+    o reduced R dependency down to version 2.12.1 (wish of Murray Stokely)

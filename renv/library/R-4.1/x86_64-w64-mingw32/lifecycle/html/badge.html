@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Embed a lifecycle badge in documentation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for badge {lifecycle}"><tr><td>badge {lifecycle}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Embed a lifecycle badge in documentation</h2>
+
+<h3>Description</h3>
+
+<p>To include lifecycle badges in your documentation:
+</p>
+
+<ol>
+<li><p> Call <code>usethis::use_lifecycle()</code> to copy the badge images into the
+<code style="white-space: pre;">man/</code> folder of your package.
+</p>
+</li>
+<li><p> Call <code>lifecycle::badge()</code> inside R backticks to insert a
+lifecycle badge:</p>
+<pre>#' `r lifecycle::badge("experimental")`
+#' `r lifecycle::badge("deprecated")`
+#' `r lifecycle::badge("superseded")`
+</pre>
+<p>If the deprecated feature is a function, a good place for this
+badge is at the top of the topic description. If it is an argument,
+you can put the badge in the argument description.
+</p>
+</li></ol>
+
+<p>The badge is displayed as an image in the HTML version of the
+documentation and as text otherwise.
+</p>
+<p><code>lifecycle::badge()</code> is run by roxygen at build time so you don't need
+to add lifecycle to <code style="white-space: pre;">Imports:</code> just to use the badges. However, it's still
+good practice to add to <code style="white-space: pre;">Suggests:</code> so that it will be available to
+package developers.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+badge(stage)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>stage</code></td>
+<td>
+<p>A lifecycle stage as a string. Must be one of
+<code>"experimental"</code>, <code>"stable"</code>, <code>"superseded"</code>, or <code>"deprecated"</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An <code>Rd</code> expression describing the lifecycle stage.
+</p>
+
+
+<h3>Badges</h3>
+
+
+<ul>
+<li> <p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a> <code>lifecycle::badge("experimental")</code>
+</p>
+</li>
+<li> <p><a href="https://lifecycle.r-lib.org/articles/stages.html#stable"><img src="../help/figures/lifecycle-stable.svg" alt='[Stable]' /></a> <code>lifecycle::badge("stable")</code>
+</p>
+</li>
+<li> <p><a href="https://lifecycle.r-lib.org/articles/stages.html#superseded"><img src="../help/figures/lifecycle-superseded.svg" alt='[Superseded]' /></a> <code>lifecycle::badge("superseded")</code>
+</p>
+</li>
+<li> <p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt='[Deprecated]' /></a> <code>lifecycle::badge("deprecated")</code>
+</p>
+</li></ul>
+
+<p>The meaning of these stages is described in
+<code>vignette("stages")</code>.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>lifecycle</em> version 1.0.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

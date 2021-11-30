@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Virtual Class of Triangular Matrices in Package Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for triangularMatrix-class {Matrix}"><tr><td>triangularMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Virtual Class of Triangular Matrices in Package Matrix</h2>
+
+<h3>Description</h3>
+
+<p>The virtual class of triangular matrices,<code>"triangularMatrix"</code>,
+the package <span class="pkg">Matrix</span> contains <em>square</em> (<code><a href="../../base/html/nrow.html">nrow</a> ==
+    <a href="../../base/html/nrow.html">ncol</a></code>) numeric and logical, dense and sparse matrices, e.g.,
+see the examples.
+A main use of the virtual class is in methods (and C functions) that
+can deal with all triangular matrices.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>uplo</code>:</dt><dd><p>String (of class <code>"character"</code>).  Must be
+either &quot;U&quot;, for upper triangular, and &quot;L&quot;, for lower triangular.</p>
+</dd>
+<dt><code>diag</code>:</dt><dd><p>String (of class <code>"character"</code>).  Must be
+either <code>"U"</code>, for unit triangular (diagonal is all ones), or
+<code>"N"</code> for non-unit.  The diagonal elements are not
+accessed internally when <code>diag</code> is <code>"U"</code>. For
+<code><a href="denseMatrix-class.html">denseMatrix</a></code> classes, they need to be
+allocated though, i.e., the length of the <code>x</code> slot does not
+depend on <code>diag</code>.</p>
+</dd>
+<dt><code>Dim</code>, <code>Dimnames</code>:</dt><dd><p>The dimension (a length-2
+<code>"integer"</code>) and corresponding names (or <code>NULL</code>),
+inherited from the <code><a href="Matrix-class.html">Matrix</a></code>, see there.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"Matrix"</code>, directly.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>There's a C function <code>triangularMatrix_validity()</code>
+called by the internal validity checking functions.
+</p>
+<p>Currently, <code><a href="Schur.html">Schur</a></code>, <code><a href="../../base/html/isSymmetric.html">isSymmetric</a></code> and
+<code>as()</code> (i.e. <code><a href="../../methods/html/setAs.html">coerce</a></code>) have methods with
+<code>triangularMatrix</code> in their signature.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="isTriangular.html">isTriangular</a>()</code> for testing any matrix for triangularity;
+classes <code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>, and, e.g.,
+<code><a href="dtrMatrix-class.html">dtrMatrix</a></code> for numeric <em>dense</em> matrices, or
+<code><a href="lsparseMatrix-classes.html">ltCMatrix</a></code> for a logical <em>sparse</em> matrix
+subclass of <code>"triangularMatrix"</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("triangularMatrix")
+
+## The names of direct subclasses:
+scl &lt;- getClass("triangularMatrix")@subclasses
+directly &lt;- sapply(lapply(scl, slot, "by"), length) == 0
+names(scl)[directly]
+
+(m &lt;- matrix(c(5,1,0,3), 2))
+as(m, "triangularMatrix")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

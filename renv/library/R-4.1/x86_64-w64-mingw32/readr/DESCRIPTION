@@ -1,0 +1,64 @@
+Package: readr
+Title: Read Rectangular Text Data
+Version: 2.0.2
+Authors@R: 
+    c(person(given = "Hadley",
+             family = "Wickham",
+             role = "aut",
+             email = "hadley@rstudio.com"),
+      person(given = "Jim",
+             family = "Hester",
+             role = c("aut", "cre"),
+             email = "jim.hester@rstudio.com"),
+      person(given = "Romain",
+             family = "Francois",
+             role = "ctb"),
+      person(given = "RStudio",
+             role = c("cph", "fnd")),
+      person(given = "https://github.com/mandreyel/",
+             role = "cph",
+             comment = "mio library"),
+      person(given = "Jukka",
+             family = "Jylänki",
+             role = c("ctb", "cph"),
+             comment = "grisu3 implementation"),
+      person(given = "Mikkel",
+             family = "Jørgensen",
+             role = c("ctb", "cph"),
+             comment = "grisu3 implementation"))
+Description: The goal of 'readr' is to provide a fast and
+    friendly way to read rectangular data (like 'csv', 'tsv', and 'fwf').
+    It is designed to flexibly parse many types of data found in the wild,
+    while still cleanly failing when data unexpectedly changes.
+License: MIT + file LICENSE
+URL: https://readr.tidyverse.org, https://github.com/tidyverse/readr
+BugReports: https://github.com/tidyverse/readr/issues
+Depends: R (>= 3.1)
+Imports: cli, clipr, crayon, hms (>= 0.4.1), methods, rlang, R6,
+        tibble, vroom (>= 1.5.4), utils, lifecycle (>= 0.2.0)
+Suggests: covr, curl, dplyr, knitr, rmarkdown, spelling, stringi,
+        testthat, tzdb (>= 0.1.1), waldo, withr, xml2
+LinkingTo: cpp11, tzdb (>= 0.1.1)
+VignetteBuilder: knitr
+Config/Needs/website: pkgdown, tidyverse, tidyverse/tidytemplate
+Config/testthat/edition: 3
+Config/testthat/parallel: false
+Encoding: UTF-8
+Language: en-US
+RoxygenNote: 7.1.1
+SystemRequirements: C++11
+RdMacros: lifecycle
+NeedsCompilation: yes
+Packaged: 2021-09-24 14:15:33 UTC; jhester
+Author: Hadley Wickham [aut],
+  Jim Hester [aut, cre],
+  Romain Francois [ctb],
+  RStudio [cph, fnd],
+  https://github.com/mandreyel/ [cph] (mio library),
+  Jukka Jylänki [ctb, cph] (grisu3 implementation),
+  Mikkel Jørgensen [ctb, cph] (grisu3 implementation)
+Maintainer: Jim Hester <jim.hester@rstudio.com>
+Repository: CRAN
+Date/Publication: 2021-09-27 14:10:08 UTC
+Built: R 4.1.0; x86_64-w64-mingw32; 2021-09-29 13:43:26 UTC; windows
+Archs: x64

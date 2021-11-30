@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Find names of random effects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for find_random {insight}"><tr><td>find_random {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Find names of random effects</h2>
+
+<h3>Description</h3>
+
+<p>Return the name of the grouping factors from mixed effects models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+find_random(x, split_nested = FALSE, flatten = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted mixed model.</p>
+</td></tr>
+<tr valign="top"><td><code>split_nested</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, terms from nested random
+effects will be returned as separated elements, not as single string
+with colon. See 'Examples'.</p>
+</td></tr>
+<tr valign="top"><td><code>flatten</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, the values are returned
+as character vector, not as list. Duplicated values are removed.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A list of character vectors that represent the name(s) of the
+random effects (grouping factors). Depending on the model, the
+returned list has following elements:
+</p>
+
+<ul>
+<li> <p><code>random</code>, the &quot;random effects&quot; terms from the conditional part of model
+</p>
+</li>
+<li> <p><code>zero_inflated_random</code>, the &quot;random effects&quot; terms from the zero-inflation component of the model
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+if (require("lme4")) {
+  data(sleepstudy)
+  sleepstudy$mygrp &lt;- sample(1:5, size = 180, replace = TRUE)
+  sleepstudy$mysubgrp &lt;- NA
+  for (i in 1:5) {
+    filter_group &lt;- sleepstudy$mygrp == i
+    sleepstudy$mysubgrp[filter_group] &lt;-
+      sample(1:30, size = sum(filter_group), replace = TRUE)
+  }
+
+  m &lt;- lmer(
+    Reaction ~ Days + (1 | mygrp / mysubgrp) + (1 | Subject),
+    data = sleepstudy
+  )
+
+  find_random(m)
+  find_random(m, split_nested = TRUE)
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

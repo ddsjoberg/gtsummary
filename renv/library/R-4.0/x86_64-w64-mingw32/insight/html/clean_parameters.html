@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get clean names of model parameters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for clean_parameters {insight}"><tr><td>clean_parameters {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get clean names of model parameters</h2>
+
+<h3>Description</h3>
+
+<p>This function &quot;cleans&quot; names of model parameters by removing
+patterns like <code>"r_"</code> or <code>"b[]"</code> (mostly applicable to Stan models)
+and adding columns with information to which group or component parameters
+belong (i.e. fixed or random, count or zero-inflated...)
+<br /> <br />
+The main purpose of this function is to easily filter and select model parameters,
+in particular of - but not limited to - posterior samples from Stan models,
+depending on certain characteristics. This might be useful when only selective
+results should be reported or results from all parameters should be filtered
+to return only certain results (see <code><a href="print_parameters.html">print_parameters</a></code>).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+clean_parameters(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The <code>Effects</code> column indicate if a parameter is a <em>fixed</em>
+or <em>random</em> effect. The <code>Component</code> can either be <em>conditional</em>
+or <em>zero_inflated</em>. For models with random effects, the <code>Group</code>
+column indicates the grouping factor of the random effects. For multivariate
+response models from <span class="pkg">brms</span> or <span class="pkg">rstanarm</span>, an additional <em>Response</em>
+column is included, to indicate which parameters belong to which response
+formula. Furthermore, <em>Cleaned_Parameter</em> column is returned that
+contains &quot;human readable&quot; parameter names (which are mostly identical to
+<code>Parameter</code>, except for for models from <span class="pkg">brms</span> or <span class="pkg">rstanarm</span>,
+or for specific terms like smooth- or spline-terms).
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame with &quot;cleaned&quot; parameter names and information on
+effects, component and group where parameters belong to. To be consistent
+across different models, the returned data frame always has at least four
+columns <code>Parameter</code>, <code>Effects</code>, <code>Component</code> and
+<code>Cleaned_Parameter</code>. See 'Details'.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(brms)
+model &lt;- download_model("brms_zi_2")
+clean_parameters(model)
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

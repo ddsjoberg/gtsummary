@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Triangular Dense Logical Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ltrMatrix-class {Matrix}"><tr><td>ltrMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Triangular Dense Logical Matrices</h2>
+
+<h3>Description</h3>
+
+<p>The <code>"ltrMatrix"</code> class is the class of triangular, dense,
+logical matrices in nonpacked storage.  The <code>"ltpMatrix"</code> class
+is the same except in packed storage.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>x</code>:</dt><dd><p>Object of class <code>"logical"</code>. The logical
+values that constitute the matrix, stored in column-major order.</p>
+</dd>
+<dt><code>uplo</code>:</dt><dd><p>Object of class <code>"character"</code>. Must be
+either &quot;U&quot;, for upper triangular, and &quot;L&quot;, for lower triangular.</p>
+</dd>
+<dt><code>diag</code>:</dt><dd><p>Object of class <code>"character"</code>. Must be
+either <code>"U"</code>, for unit triangular (diagonal is all ones), or
+<code>"N"</code>; see <code><a href="triangularMatrix-class.html">triangularMatrix</a></code>.</p>
+</dd>
+<dt><code>Dim</code>,<code>Dimnames</code>:</dt><dd><p>The dimension (a length-2
+<code>"integer"</code>) and corresponding names (or <code>NULL</code>), see the
+<code><a href="Matrix-class.html">Matrix</a></code> class.</p>
+</dd>
+<dt><code>factors</code>:</dt><dd><p>Object of class <code>"list"</code>.  A named
+list of factorizations that have been computed for the matrix.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Both extend classes <code>"<a href="ldenseMatrix-class.html">ldenseMatrix</a>"</code> and
+<code>"<a href="triangularMatrix-class.html">triangularMatrix</a>"</code>, directly; further, class
+<code>"Matrix"</code>, <code>"<a href="dMatrix-class.html">lMatrix</a>"</code> and others,
+<em>in</em>directly.  Use <code><a href="../../methods/html/RClassUtils.html">showClass</a>("ltrMatrix")</code>, e.g.,
+for details.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>Currently, mainly <code><a href="../../base/html/t.html">t</a>()</code> and coercion methods (for
+<code><a href="../../methods/html/as.html">as</a>(.)</code>; use, e.g.,
+<code><a href="../../methods/html/showMethods.html">showMethods</a>(class="ltpMatrix")</code> for details.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Classes <code><a href="lgeMatrix-class.html">lgeMatrix</a></code>, <code><a href="Matrix-class.html">Matrix</a></code>;
+function <code><a href="../../base/html/t.html">t</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("ltrMatrix")
+
+str(new("ltpMatrix"))
+(lutr &lt;- as(upper.tri(matrix(,4,4)), "ltrMatrix"))
+str(lutp &lt;- as(lutr, "ltpMatrix"))# packed matrix: only 10 = (4+1)*4/2 entries
+!lutp ## the logical negation (is *not* logical triangular !)
+## but this one is:
+stopifnot(all.equal(lutp, as(!!lutp, "ltpMatrix")))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Nearest Positive Definite Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for nearPD {Matrix}"><tr><td>nearPD {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Nearest Positive Definite Matrix</h2>
+
+<h3>Description</h3>
+
+<p>Compute the nearest positive definite matrix to an approximate
+one, typically a correlation or variance-covariance matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+nearPD(x, corr = FALSE, keepDiag = FALSE, base.matrix = FALSE,
+       do2eigen = TRUE, doSym = FALSE,
+       doDykstra = TRUE, only.values = FALSE,
+       ensureSymmetry = !isSymmetric(x),
+       eig.tol = 1e-06, conv.tol = 1e-07, posd.tol = 1e-08,
+       maxit = 100, conv.norm.type = "I", trace = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>numeric <i>n * n</i> approximately positive
+definite matrix, typically an approximation to a correlation or
+covariance matrix.  If <code>x</code> is not symmetric (and
+<code>ensureSymmetry</code> is not false), <code><a href="symmpart.html">symmpart</a>(x)</code> is used.</p>
+</td></tr>
+<tr valign="top"><td><code>corr</code></td>
+<td>
+<p>logical indicating if the matrix should be a
+<em>correlation</em> matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>keepDiag</code></td>
+<td>
+<p>logical, generalizing <code>corr</code>: if <code>TRUE</code>, the
+resulting matrix should have the same diagonal
+(<code><a href="../../base/html/diag.html">diag</a>(x)</code>) as the input matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>base.matrix</code></td>
+<td>
+<p>logical indicating if the resulting <code>mat</code>
+component should be a <span class="pkg">base</span> <code><a href="../../base/html/matrix.html">matrix</a></code> or (by default) a
+<code><a href="Matrix-class.html">Matrix</a></code> of class <code><a href="dpoMatrix-class.html">dpoMatrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>do2eigen</code></td>
+<td>
+<p>logical indicating if a
+<code><a href="../../sfsmisc/html/posdefify.html">posdefify</a>()</code> eigen step should be applied to
+the result of the Higham algorithm.</p>
+</td></tr>
+<tr valign="top"><td><code>doSym</code></td>
+<td>
+<p>logical indicating if <code>X &lt;- (X + t(X))/2</code> should be
+done, after <code>X &lt;- tcrossprod(Qd, Q)</code>; some doubt if this is necessary.</p>
+</td></tr>
+<tr valign="top"><td><code>doDykstra</code></td>
+<td>
+<p>logical indicating if Dykstra's correction should be
+used; true by default.  If false, the algorithm is basically the
+direct fixpoint iteration
+<i>Y(k) = P_U(P_S(Y(k-1)))</i>.</p>
+</td></tr>
+<tr valign="top"><td><code>only.values</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, the result is just the
+vector of eigenvalues of the approximating matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>ensureSymmetry</code></td>
+<td>
+<p>logical; by default, <code><a href="symmpart.html">symmpart</a>(x)</code>
+is used whenever <code><a href="../../base/html/isSymmetric.html">isSymmetric</a>(x)</code> is not true.  The user
+can explicitly set this to <code>TRUE</code> or <code>FALSE</code>, saving the
+symmetry test. <em>Beware</em> however that setting it <code>FALSE</code>
+for an <b>a</b>symmetric input <code>x</code>, is typically nonsense!</p>
+</td></tr>
+<tr valign="top"><td><code>eig.tol</code></td>
+<td>
+<p>defines relative positiveness of eigenvalues compared
+to largest one, <i>&lambda;_1</i>. Eigenvalues <i>&lambda;_k</i> are
+treated as if zero when <i>&lambda;_k / &lambda;_1 &le; eig.tol</i>.</p>
+</td></tr>
+<tr valign="top"><td><code>conv.tol</code></td>
+<td>
+<p>convergence tolerance for Higham algorithm.</p>
+</td></tr>
+<tr valign="top"><td><code>posd.tol</code></td>
+<td>
+<p>tolerance for enforcing positive definiteness (in the
+final <code>posdefify</code> step when <code>do2eigen</code> is <code>TRUE</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>maxit</code></td>
+<td>
+<p>maximum number of iterations allowed.</p>
+</td></tr>
+<tr valign="top"><td><code>conv.norm.type</code></td>
+<td>
+<p>convergence norm type (<code><a href="norm.html">norm</a>(*,
+      type)</code>) used for Higham algorithm.  The default is <code>"I"</code>
+(infinity), for reasons of speed (and back compatibility); using
+<code>"F"</code> is more in line with Higham's proposal.</p>
+</td></tr>
+<tr valign="top"><td><code>trace</code></td>
+<td>
+<p>logical or integer specifying if convergence monitoring
+should be traced.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This implements the algorithm of Higham (2002), and then (if
+<code>do2eigen</code> is true) forces positive definiteness using code from
+<code><a href="../../sfsmisc/html/posdefify.html">posdefify</a></code>.  The algorithm of Knol and ten
+Berge (1989) (not implemented here) is more general in that it
+allows constraints to (1) fix some rows (and columns) of the matrix and
+(2) force the smallest eigenvalue to have a certain value.
+</p>
+<p>Note that setting <code>corr = TRUE</code> just sets <code>diag(.) &lt;- 1</code>
+within the algorithm.
+</p>
+<p>Higham (2002) uses Dykstra's correction, but the version by Jens
+Oehlschlaegel did not use it (accidentally), and still gave
+reasonable results; this simplification, now only
+used if <code>doDykstra = FALSE</code>,
+was active in <code>nearPD()</code> up to Matrix version 0.999375-40.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>only.values = TRUE</code>, a numeric vector of eigenvalues of the
+approximating matrix;
+Otherwise, as by default, an S3 object of <code><a href="../../base/html/class.html">class</a></code>
+<code>"nearPD"</code>, basically a list with components
+</p>
+<table summary="R valueblock">
+<tr valign="top"><td><code>mat</code></td>
+<td>
+<p>a matrix of class <code><a href="dpoMatrix-class.html">dpoMatrix</a></code>, the
+computed positive-definite matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>eigenvalues</code></td>
+<td>
+<p>numeric vector of eigenvalues of <code>mat</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>corr</code></td>
+<td>
+<p>logical, just the argument <code>corr</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>normF</code></td>
+<td>
+<p>the Frobenius norm (<code><a href="norm.html">norm</a>(x-X, "F")</code>) of the
+difference between the original and the resulting matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>iterations</code></td>
+<td>
+<p>number of iterations needed.</p>
+</td></tr>
+<tr valign="top"><td><code>converged</code></td>
+<td>
+<p>logical indicating if iterations converged.</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Jens Oehlschlaegel donated a first version.  Subsequent changes
+by the Matrix package authors.
+</p>
+
+
+<h3>References</h3>
+
+
+<p>Cheng, Sheung Hun and Higham, Nick (1998)
+A Modified Cholesky Algorithm Based on a Symmetric Indefinite Factorization;
+<em>SIAM J. Matrix Anal.\ Appl.</em>, <b>19</b>, 1097&ndash;1110.
+</p>
+<p>Knol DL, ten Berge JMF (1989)
+Least-squares approximation of an improper correlation matrix by a
+proper one.
+<em>Psychometrika</em> <b>54</b>, 53&ndash;61.
+</p>
+<p>Higham, Nick (2002)
+Computing the nearest correlation matrix - a problem from finance;
+<em>IMA Journal of Numerical Analysis</em> <b>22</b>, 329&ndash;343.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>A first version of this (with non-optional <code>corr=TRUE</code>)
+has been available as <code><a href="../../sfsmisc/html/nearcor.html">nearcor</a>()</code>; and
+more simple versions with a similar purpose
+<code><a href="../../sfsmisc/html/posdefify.html">posdefify</a>()</code>, both from package <span class="pkg">sfsmisc</span>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ ## Higham(2002), p.334f - simple example
+ A &lt;- matrix(1, 3,3); A[1,3] &lt;- A[3,1] &lt;- 0
+ n.A &lt;- nearPD(A, corr=TRUE, do2eigen=FALSE)
+ n.A[c("mat", "normF")]
+ n.A.m &lt;- nearPD(A, corr=TRUE, do2eigen=FALSE, base.matrix=TRUE)$mat
+ stopifnot(exprs = {                           #=--------------
+   all.equal(n.A$mat[1,2], 0.760689917)
+   all.equal(n.A$normF, 0.52779033, tolerance=1e-9)
+   all.equal(n.A.m, unname(as.matrix(n.A$mat)), tolerance = 1e-15)# seen rel.d.= 1.46e-16
+ })
+ set.seed(27)
+ m &lt;- matrix(round(rnorm(25),2), 5, 5)
+ m &lt;- m + t(m)
+ diag(m) &lt;- pmax(0, diag(m)) + 1
+ (m &lt;- round(cov2cor(m), 2))
+
+ str(near.m &lt;- nearPD(m, trace = TRUE))
+ round(near.m$mat, 2)
+ norm(m - near.m$mat) # 1.102 / 1.08
+
+ if(require("sfsmisc")) {
+    m2 &lt;- posdefify(m) # a simpler approach
+    norm(m - m2)  # 1.185, i.e., slightly "less near"
+ }
+
+ round(nearPD(m, only.values=TRUE), 9)
+
+## A longer example, extended from Jens' original,
+## showing the effects of some of the options:
+
+pr &lt;- Matrix(c(1,     0.477, 0.644, 0.478, 0.651, 0.826,
+               0.477, 1,     0.516, 0.233, 0.682, 0.75,
+               0.644, 0.516, 1,     0.599, 0.581, 0.742,
+               0.478, 0.233, 0.599, 1,     0.741, 0.8,
+               0.651, 0.682, 0.581, 0.741, 1,     0.798,
+               0.826, 0.75,  0.742, 0.8,   0.798, 1),
+             nrow = 6, ncol = 6)
+
+nc.  &lt;- nearPD(pr, conv.tol = 1e-7) # default
+nc.$iterations  # 2
+nc.1 &lt;- nearPD(pr, conv.tol = 1e-7, corr = TRUE)
+nc.1$iterations # 11 / 12 (!)
+ncr   &lt;- nearPD(pr, conv.tol = 1e-15)
+str(ncr)# still 2 iterations
+ncr.1 &lt;- nearPD(pr, conv.tol = 1e-15, corr = TRUE)
+ncr.1 $ iterations # 27 / 30 !
+
+ncF &lt;- nearPD(pr, conv.tol = 1e-15, conv.norm = "F")
+stopifnot(all.equal(ncr, ncF))# norm type does not matter at all in this example
+
+## But indeed, the 'corr = TRUE' constraint did ensure a better solution;
+## cov2cor() does not just fix it up equivalently :
+norm(pr - cov2cor(ncr$mat)) # = 0.09994
+norm(pr -       ncr.1$mat)  # = 0.08746 / 0.08805
+
+### 3) a real data example from a 'systemfit' model (3 eq.):
+(load(system.file("external", "symW.rda", package="Matrix"))) # "symW"
+dim(symW) #  24 x 24
+class(symW)# "dsCMatrix": sparse symmetric
+if(dev.interactive())  image(symW)
+EV &lt;- eigen(symW, only=TRUE)$values
+summary(EV) ## looking more closely {EV sorted decreasingly}:
+tail(EV)# all 6 are negative
+EV2 &lt;- eigen(sWpos &lt;- nearPD(symW)$mat, only=TRUE)$values
+stopifnot(EV2 &gt; 0)
+if(require("sfsmisc")) {
+       plot(pmax(1e-3,EV), EV2, type="o", log="xy", xaxt="n",yaxt="n")
+       eaxis(1); eaxis(2)
+} else plot(pmax(1e-3,EV), EV2, type="o", log="xy")
+abline(0,1, col="red3",lty=2)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

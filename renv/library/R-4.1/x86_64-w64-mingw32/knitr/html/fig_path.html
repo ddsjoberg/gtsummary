@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Path for figure files</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for fig_path {knitr}"><tr><td>fig_path {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Path for figure files</h2>
+
+<h3>Description</h3>
+
+<p>The filename of figure files is the combination of options <code>fig.path</code>
+and <code>label</code>. This function returns the path of figures for the current
+chunk by default.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+fig_path(suffix = "", options = opts_current$get(), number)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>suffix</code></td>
+<td>
+<p>A filename suffix; if it is non-empty and does not
+contain a dot <code>.</code>, it will be treated as the filename extension (e.g.
+<code>png</code> will be used as <code>.png</code>)</p>
+</td></tr>
+<tr valign="top"><td><code>options</code></td>
+<td>
+<p>A list of options; by default the options of the current chunk.</p>
+</td></tr>
+<tr valign="top"><td><code>number</code></td>
+<td>
+<p>The current figure number. The default is the internal chunk option
+<code>fig.cur</code>, if this is available.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector of the form &lsquo;<span class="file">fig.path-label-i.suffix</span>&rsquo;.
+</p>
+
+
+<h3>Note</h3>
+
+<p>When there are special characters (not alphanumeric or <span class="samp">-</span> or
+<span class="samp">_</span>) in the path, they will be automatically replaced with <span class="samp">_</span>.
+For example, &lsquo;<span class="file">a b/c.d-</span>&rsquo; will be sanitized to &lsquo;<span class="file">a_b/c_d-</span>&rsquo;. This
+makes the filenames safe to LaTeX.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+fig_path(".pdf", options = list(fig.path = "figure/abc-", label = "first-plot"))
+fig_path(".png", list(fig.path = "foo-", label = "bar"), 1:10)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Combine multiple words into a single string</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for combine_words {knitr}"><tr><td>combine_words {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Combine multiple words into a single string</h2>
+
+<h3>Description</h3>
+
+<p>When a value from an inline R expression is a character vector of multiple
+elements, we may want to combine them into a phrase like <span class="samp">a and b</span>, or
+<code>a, b, and c</code>. That is what this a helper function does.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+combine_words(
+  words,
+  sep = ", ",
+  and = " and ",
+  before = "",
+  after = before,
+  oxford_comma = TRUE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>words</code></td>
+<td>
+<p>A character vector.</p>
+</td></tr>
+<tr valign="top"><td><code>sep</code></td>
+<td>
+<p>Separator to be inserted between words.</p>
+</td></tr>
+<tr valign="top"><td><code>and</code></td>
+<td>
+<p>Character string to be prepended to the last word.</p>
+</td></tr>
+<tr valign="top"><td><code>before, after</code></td>
+<td>
+<p>A character string to be added before/after each word.</p>
+</td></tr>
+<tr valign="top"><td><code>oxford_comma</code></td>
+<td>
+<p>Whether to insert the separator between the last two
+elements in the list.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If the length of the input <code>words</code> is smaller than or equal to 1,
+<code>words</code> is returned. When <code>words</code> is of length 2, the first word
+and second word are combined using the <code>and</code> string, or if blank,
+<code>sep</code> if is used. When the length is greater than 2, <code>sep</code> is used
+to separate all words, and the <code>and</code> string is prepended to the last
+word.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A character string marked by <code>xfun::<a href="../../xfun/html/raw_string.html">raw_string</a>()</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+combine_words("a")
+combine_words(c("a", "b"))
+combine_words(c("a", "b", "c"))
+combine_words(c("a", "b", "c"), sep = " / ", and = "")
+combine_words(c("a", "b", "c"), and = "")
+combine_words(c("a", "b", "c"), before = "\"", after = "\"")
+combine_words(c("a", "b", "c"), before = "\"", after = "\"", oxford_comma = FALSE)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Sparse QR decomposition of a sparse matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sparseQR-class {Matrix}"><tr><td>sparseQR-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Sparse QR decomposition of a sparse matrix</h2>
+
+<h3>Description</h3>
+
+<p>Objects class <code>"sparseQR"</code> represent a QR decomposition of a
+sparse <i>m x n</i> (&ldquo;long&rdquo;: <i>m &gt;= n</i>)
+rectangular matrix <i>A</i>, typically resulting from
+<code><a href="qr-methods.html">qr</a>()</code>, see &lsquo;Details&rsquo; notably about row and column
+permutations for pivoting.
+</p>
+
+
+<h3>Details</h3>
+
+<p>For a sparse <i>m x n</i> (&ldquo;long&rdquo;: <i>m &gt;= n</i>)
+rectangular matrix <i>A</i>, the sparse QR decomposition is either 
+<br /> of the form <i>P A = Q R</i> with a (row)
+permutation matrix <i>P</i>, (encoded in the <code>p</code> slot of the
+result) if the <code>q</code> slot is of length 0,
+<br /> or of the form <i>P A P* = Q R</i> with an extra (column) permutation
+matrix <i>P*</i> (encoded in the <code>q</code> slot).
+Note that the row permutation <i>P A</i> in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> is simply <code>A[p+1, ]</code>
+where <code>p</code> is the <code>p</code>-slot, a 0-based permutation of
+<code>1:m</code> applied to the rows of the original matrix.
+</p>
+<p>If the <code>q</code> slot has length <code>n</code> it is a 0-based permutation
+of <code>1:n</code> applied to the columns of the original matrix to reduce
+the amount of &ldquo;fill-in&rdquo; in the matrix <i>R</i>, and
+<i>A P*</i> in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> is simply <code>A[ , q+1]</code>.
+</p>
+<p><i>R</i> is an <i>m by n</i> matrix that is zero below the
+main diagonal, i.e., upper triangular (<i>m by n</i>) with
+<i>m-n</i> extra zero rows.
+</p>
+<p>The matrix <i>Q</i> is a &quot;virtual matrix&quot;.  It is the product of
+<i>n</i> Householder transformations.  The information to generate
+these Householder transformations is stored in the <code>V</code> and
+<code>beta</code> slots.
+<br />
+Note however that <code>qr.Q()</code> returns the row permuted matrix
+<i>Q* := P^(-1) Q = P'Q</i> as permutation matrices are
+orthogonal; and <i>Q*</i> is orthogonal itself because <i>Q</i> and <i>P</i> are.
+This is useful because then, as in the dense matrix and <span class="pkg">base</span> <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>
+matrix <code><a href="qr-methods.html">qr</a></code> case, we have the mathematical identity
+</p>
+<p style="text-align: center;"><i>P A = Q* R,</i></p>
+<p> in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> as </p>
+<pre>            A[p+1,] == qr.Q(*) %*% R .</pre>
+<p>The <code>"sparseQR"</code> methods for the <code>qr.*</code> functions return
+objects of class <code>"dgeMatrix"</code> (see
+<code><a href="dgeMatrix-class.html">dgeMatrix</a></code>).  Results from <code>qr.coef</code>,
+<code>qr.resid</code> and <code>qr.fitted</code> (when <code>k == ncol(R)</code>) are
+well-defined and should match those from the corresponding dense matrix
+calculations.  However, because the matrix <code>Q</code> is not uniquely
+defined, the results of <code>qr.qy</code> and <code>qr.qty</code> do not
+necessarily match those from the corresponding dense matrix
+calculations.
+</p>
+<p>Also, the results of <code>qr.qy</code> and <code>qr.qty</code> apply to the
+permuted column order when the <code>q</code> slot has length <code>n</code>.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("sparseQR", ...)</code>
+but are more commonly created by function <code><a href="../../base/html/qr.html">qr</a></code> applied
+to a sparse matrix such as a matrix of class
+<code><a href="dgCMatrix-class.html">dgCMatrix</a></code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>V</code>:</dt><dd><p>Object of class <code>"dgCMatrix"</code>.  The columns of
+<code>V</code> are the vectors that generate the Householder
+transformations of which the matrix Q is composed.</p>
+</dd>
+<dt><code>beta</code>:</dt><dd><p>Object of class <code>"numeric"</code>, the normalizing
+factors for the Householder transformations.</p>
+</dd>
+<dt><code>p</code>:</dt><dd><p>Object of class <code>"integer"</code>: Permutation
+(of <code>0:(n-1)</code>) applied to the rows of the original matrix.</p>
+</dd>
+<dt><code>R</code>:</dt><dd><p>Object of class <code>"dgCMatrix"</code>: An upper
+triangular matrix of the same dimension as <i>X</i>.</p>
+</dd>
+<dt><code>q</code>:</dt><dd><p>Object of class <code>"integer"</code>: Permutation
+applied from the right, i.e., to the <em>columns</em> of the
+original matrix.  Can be of length 0 which implies no permutation.</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>qr.R</dt><dd><p><code>signature(qr = "sparseQR")</code>: compute the upper
+triangular <i>R</i> matrix of the QR decomposition.
+Note that this currently warns because of possible permutation
+mismatch with the classical <code>qr.R()</code> result, <em>and</em> you
+can suppress these warnings by setting <code><a href="../../base/html/options.html">options</a>()</code>
+either <code>"Matrix.quiet.qr.R"</code> or (the more general)
+either <code>"Matrix.quiet"</code> to <code><a href="../../base/html/logical.html">TRUE</a></code>.</p>
+</dd>
+<dt>qr.Q</dt><dd><p><code>signature(qr = "sparseQR")</code>: compute the
+orthogonal <i>Q</i> matrix of the QR decomposition.</p>
+</dd>
+<dt>qr.coef</dt><dd><p><code>signature(qr = "sparseQR", y = "ddenseMatrix")</code>: ... </p>
+</dd>
+<dt>qr.coef</dt><dd><p><code>signature(qr = "sparseQR", y = "matrix")</code>: ... </p>
+</dd>
+<dt>qr.coef</dt><dd><p><code>signature(qr = "sparseQR", y = "numeric")</code>: ... </p>
+</dd>
+<dt>qr.fitted</dt><dd><p><code>signature(qr = "sparseQR", y = "ddenseMatrix")</code>: ... </p>
+</dd>
+<dt>qr.fitted</dt><dd><p><code>signature(qr = "sparseQR", y = "matrix")</code>: ... </p>
+</dd>
+<dt>qr.fitted</dt><dd><p><code>signature(qr = "sparseQR", y = "numeric")</code>: ... </p>
+</dd>
+<dt>qr.qty</dt><dd><p><code>signature(qr = "sparseQR", y = "ddenseMatrix")</code>: ... </p>
+</dd>
+<dt>qr.qty</dt><dd><p><code>signature(qr = "sparseQR", y = "matrix")</code>: ... </p>
+</dd>
+<dt>qr.qty</dt><dd><p><code>signature(qr = "sparseQR", y = "numeric")</code>: ... </p>
+</dd>
+<dt>qr.qy</dt><dd><p><code>signature(qr = "sparseQR", y = "ddenseMatrix")</code>: ... </p>
+</dd>
+<dt>qr.qy</dt><dd><p><code>signature(qr = "sparseQR", y = "matrix")</code>: ... </p>
+</dd>
+<dt>qr.qy</dt><dd><p><code>signature(qr = "sparseQR", y = "numeric")</code>: ... </p>
+</dd>
+<dt>qr.resid</dt><dd><p><code>signature(qr = "sparseQR", y = "ddenseMatrix")</code>: ... </p>
+</dd>
+<dt>qr.resid</dt><dd><p><code>signature(qr = "sparseQR", y = "matrix")</code>: ... </p>
+</dd>
+<dt>qr.resid</dt><dd><p><code>signature(qr = "sparseQR", y = "numeric")</code>: ... </p>
+</dd>
+<dt>solve</dt><dd><p><code>signature(a = "sparseQR", b = "ANY")</code>: For
+<code>solve(a,b)</code>, simply uses <code>qr.coef(a,b)</code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/qr.html">qr</a></code>, <code><a href="sparseQR-class.html">qr.Q</a></code>,
+<code><a href="../../base/html/qraux.html">qr.R</a></code>,     <code><a href="../../base/html/qr.html">qr.fitted</a></code>,
+<code><a href="../../base/html/qr.html">qr.resid</a></code>, <code><a href="../../base/html/qr.html">qr.coef</a></code>,
+<code><a href="../../base/html/qr.html">qr.qty</a></code>,   <code><a href="../../base/html/qr.html">qr.qy</a></code>,
+</p>
+<p>Permutation matrices in the <span class="pkg">Matrix</span> package: <code><a href="pMatrix-class.html">pMatrix</a></code>;
+<code><a href="dgCMatrix-class.html">dgCMatrix</a></code>, <code><a href="dgeMatrix-class.html">dgeMatrix</a></code>.
+</p>
+
+
+
+
+
+<h3>Examples</h3>
+
+<pre>
+data(KNex)
+mm &lt;- KNex $ mm
+ y &lt;- KNex $  y
+ y. &lt;- as(as.matrix(y), "dgCMatrix")
+str(qrm &lt;- qr(mm))
+ qc  &lt;- qr.coef  (qrm, y); qc. &lt;- qr.coef  (qrm, y.) # 2nd failed in Matrix &lt;= 1.1-0
+ qf  &lt;- qr.fitted(qrm, y); qf. &lt;- qr.fitted(qrm, y.)
+ qs  &lt;- qr.resid (qrm, y); qs. &lt;- qr.resid (qrm, y.)
+stopifnot(all.equal(qc, as.numeric(qc.),  tolerance=1e-12),
+          all.equal(qf, as.numeric(qf.),  tolerance=1e-12),
+          all.equal(qs, as.numeric(qs.),  tolerance=1e-12),
+          all.equal(qf+qs, y, tolerance=1e-12))
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

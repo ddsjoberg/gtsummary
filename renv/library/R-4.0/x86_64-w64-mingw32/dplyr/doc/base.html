@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>dplyr &lt;-&gt; base R</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">dplyr &lt;-&gt; base R</h1>
+
+
+
+<p>This vignette compares dplyr functions to their base R equivalents. This helps those familiar with base R understand better what dplyr does, and shows dplyr users how you might express the same ideas in base R code. We’ll start with a rough overview of the major differences, then discuss the one table verbs in more detail, followed by the two table verbs.</p>
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<ol style="list-style-type: decimal">
+<li><p>The code dplyr verbs input and output data frames. This contrasts with base R functions which more frequently work with individual vectors.</p></li>
+<li><p>dplyr relies heavily on “non-standard evaluation” so that you don’t need to use <code>$</code> to refer to columns in the “current” data frame. This behaviour is inspired by the base functions <code>subset()</code> and <code>transform()</code>.</p></li>
+<li><p>dplyr solutions tend to use a variety of single purpose verbs, while base R solutions typically tend to use <code>[</code> in a variety of ways, depending on the task at hand.</p></li>
+<li><p>Multiple dplyr verbs are often strung together into a pipeline by <code>%&gt;%</code>. In base R, you’ll typically save intermediate results to a variable that you either discard, or repeatedly overwrite.</p></li>
+<li><p>All dplyr verbs handle “grouped” data frames so that the code to perform a computation per-group looks very similar to code that works on a whole data frame. In base R, per-group operations tend to have varied forms.</p></li>
+</ol>
+</div>
+<div id="one-table-verbs" class="section level1">
+<h1>One table verbs</h1>
+<p>The following table shows a condensed translation between dplyr verbs and their base R equivalents. The following sections describe each operation in more detail. You learn more about the dplyr verbs in their documentation and in For more <code>vignette(&quot;one-table&quot;)</code>.</p>
+<table>
+<thead>
+<tr class="header">
+<th>dplyr</th>
+<th>base</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>arrange(df, x)</code></td>
+<td><code>df[order(x), , drop = FALSE]</code></td>
+</tr>
+<tr class="even">
+<td><code>distinct(df, x)</code></td>
+<td><code>df[!duplicated(x), , drop = FALSE]</code>, <code>unique()</code></td>
+</tr>
+<tr class="odd">
+<td><code>filter(df, x)</code></td>
+<td><code>df[which(x), , drop = FALSE]</code>, <code>subset()</code></td>
+</tr>
+<tr class="even">
+<td><code>mutate(df, z = x + y)</code></td>
+<td><code>df$z &lt;- df$x + df$y</code>, <code>transform()</code></td>
+</tr>
+<tr class="odd">
+<td><code>pull(df, 1)</code></td>
+<td><code>df[[1]]</code></td>
+</tr>
+<tr class="even">
+<td><code>pull(df, x)</code></td>
+<td><code>df$x</code></td>
+</tr>
+<tr class="odd">
+<td><code>rename(df, y = x)</code></td>
+<td><code>names(df)[names(df) == &quot;x&quot;] &lt;- &quot;y&quot;</code></td>
+</tr>
+<tr class="even">
+<td><code>relocate(df, y)</code></td>
+<td><code>df[union(&quot;y&quot;, names(df))]</code></td>
+</tr>
+<tr class="odd">
+<td><code>select(df, x, y)</code></td>
+<td><code>df[c(&quot;x&quot;, &quot;y&quot;)]</code>, <code>subset()</code></td>
+</tr>
+<tr class="even">
+<td><code>select(df, starts_with(&quot;x&quot;)</code></td>
+<td><code>df[grepl(names(df), &quot;^x&quot;)]</code></td>
+</tr>
+<tr class="odd">
+<td><code>summarise(df, mean(x))</code></td>
+<td><code>mean(df$x)</code>, <code>tapply()</code>, <code>aggregate()</code>, <code>by()</code></td>
+</tr>
+<tr class="even">
+<td><code>slice(df, c(1, 2, 5))</code></td>
+<td><code>df[c(1, 2, 5), , drop = FALSE]</code></td>
+</tr>
+</tbody>
+</table>
+<p>To begin, we’ll load dplyr and convert <code>mtcars</code> and <code>iris</code> to tibbles so that we can easily show only abbreviated output for each operation.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>mtcars &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(mtcars)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>iris &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(iris)</span></code></pre></div>
+<div id="arrange-arrange-rows-by-variables" class="section level2">
+<h2><code>arrange()</code>: Arrange rows by variables</h2>
+<p><code>dplyr::arrange()</code> orders the rows of a data frame by the values of one or more columns:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(cyl, disp)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; # A tibble: 32 x 11</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt;     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; 1  33.9     4  71.1    65  4.22  1.84  19.9     1     1     4     1</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; 2  30.4     4  75.7    52  4.93  1.62  18.5     1     1     4     2</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; 3  32.4     4  78.7    66  4.08  2.2   19.5     1     1     4     1</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; 4  27.3     4  79      66  4.08  1.94  18.9     1     1     4     1</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; # … with 28 more rows</span></span></code></pre></div>
+<p>The <code>desc()</code> helper allows you to order selected variables in descending order:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(cyl), <span class="kw">desc</span>(disp))</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; # A tibble: 32 x 11</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt;     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; 1  10.4     8   472   205  2.93  5.25  18.0     0     0     3     4</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; 2  10.4     8   460   215  3     5.42  17.8     0     0     3     4</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; 3  14.7     8   440   230  3.23  5.34  17.4     0     0     3     4</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; 4  19.2     8   400   175  3.08  3.84  17.0     0     0     3     2</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; # … with 28 more rows</span></span></code></pre></div>
+<p>We can replicate in base R by using <code>[</code> with <code>order()</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>mtcars[<span class="kw">order</span>(mtcars<span class="op">$</span>cyl, mtcars<span class="op">$</span>disp), , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; # A tibble: 32 x 11</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt;     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; 1  33.9     4  71.1    65  4.22  1.84  19.9     1     1     4     1</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt; 2  30.4     4  75.7    52  4.93  1.62  18.5     1     1     4     2</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; 3  32.4     4  78.7    66  4.08  2.2   19.5     1     1     4     1</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; 4  27.3     4  79      66  4.08  1.94  18.9     1     1     4     1</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; # … with 28 more rows</span></span></code></pre></div>
+<p>Note the use of <code>drop = FALSE</code>. If you forget this, and the input is a data frame with a single column, the output will be a vector, not a data frame. This is a source of subtle bugs.</p>
+<p>Base R does not provide a convenient and general way to sort individual variables in descending order, so you have two options:</p>
+<ul>
+<li>For numeric variables, you can use <code>-x</code>.</li>
+<li>You can request <code>order()</code> to sort all variables in descending order.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>mtcars[<span class="kw">order</span>(mtcars<span class="op">$</span>cyl, mtcars<span class="op">$</span>disp, <span class="dt">decreasing =</span> <span class="ot">TRUE</span>), , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb5-2"><a href="#cb5-2"></a>mtcars[<span class="kw">order</span>(<span class="op">-</span>mtcars<span class="op">$</span>cyl, <span class="op">-</span>mtcars<span class="op">$</span>disp), , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span></code></pre></div>
+</div>
+<div id="distinct-select-distinctunique-rows" class="section level2">
+<h2><code>distinct()</code>: Select distinct/unique rows</h2>
+<p><code>dplyr::distinct()</code> selects unique rows:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>df &lt;-<span class="st"> </span><span class="kw">tibble</span>(</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="dt">x =</span> <span class="kw">sample</span>(<span class="dv">10</span>, <span class="dv">100</span>, <span class="dt">rep =</span> <span class="ot">TRUE</span>),</span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="dt">y =</span> <span class="kw">sample</span>(<span class="dv">10</span>, <span class="dv">100</span>, <span class="dt">rep =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(x) <span class="co"># selected columns</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; # A tibble: 10 x 1</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt;       x</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt;   &lt;int&gt;</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; 1     6</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; 2     4</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt; 3     2</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co">#&gt; 4     7</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="co">#&gt; # … with 6 more rows</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">distinct</span>(x, <span class="dt">.keep_all =</span> <span class="ot">TRUE</span>) <span class="co"># whole data frame</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co">#&gt; # A tibble: 10 x 2</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="co">#&gt;       x     y</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt;</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co">#&gt; 1     6     5</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="co">#&gt; 2     4     5</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="co">#&gt; 3     2     9</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="co">#&gt; 4     7     9</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="co">#&gt; # … with 6 more rows</span></span></code></pre></div>
+<p>There are two equivalents in base R, depending on whether you want the whole data frame, or just selected variables:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">unique</span>(df[<span class="st">&quot;x&quot;</span>]) <span class="co"># selected columns</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; # A tibble: 10 x 1</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt;       x</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt;   &lt;int&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; 1     6</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; 2     4</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">#&gt; 3     2</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt; 4     7</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt; # … with 6 more rows</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a>df[<span class="op">!</span><span class="kw">duplicated</span>(df<span class="op">$</span>x), , drop =<span class="st"> </span><span class="ot">FALSE</span>] <span class="co"># whole data frame</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt; # A tibble: 10 x 2</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt;       x     y</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt;</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co">#&gt; 1     6     5</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="co">#&gt; 2     4     5</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="co">#&gt; 3     2     9</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co">#&gt; 4     7     9</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="co">#&gt; # … with 6 more rows</span></span></code></pre></div>
+</div>
+<div id="filter-return-rows-with-matching-conditions" class="section level2">
+<h2><code>filter()</code>: Return rows with matching conditions</h2>
+<p><code>dplyr::filter()</code> selects rows where an expression is <code>TRUE</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(species <span class="op">==</span><span class="st"> &quot;Human&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt; # A tibble: 35 x 14</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt;   name     height  mass hair_color  skin_color eye_color birth_year sex   gender</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; </span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; 1 Luke Sk…    172    77 blond       fair       blue            19   male  mascu…</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; 2 Darth V…    202   136 none        white      yellow          41.9 male  mascu…</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; 3 Leia Or…    150    49 brown       light      brown           19   fema… femin…</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; 4 Owen La…    178   120 brown, grey light      blue            52   male  mascu…</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; # … with 31 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(mass <span class="op">&gt;</span><span class="st"> </span><span class="dv">1000</span>)</span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt; # A tibble: 1 x 14</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt;   name    height  mass hair_color skin_color  eye_color birth_year sex    gender</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; </span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; 1 Jabba …    175  1358 &lt;NA&gt;       green-tan,… orange           600 herma… mascu…</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt; # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="co">#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</span></span>
+<span id="cb8-18"><a href="#cb8-18"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(hair_color <span class="op">==</span><span class="st"> &quot;none&quot;</span> <span class="op">&amp;</span><span class="st"> </span>eye_color <span class="op">==</span><span class="st"> &quot;black&quot;</span>)</span>
+<span id="cb8-19"><a href="#cb8-19"></a><span class="co">#&gt; # A tibble: 9 x 14</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a><span class="co">#&gt;   name    height  mass hair_color skin_color  eye_color birth_year sex   gender </span></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  </span></span>
+<span id="cb8-22"><a href="#cb8-22"></a><span class="co">#&gt; 1 Nien N…    160    68 none       grey        black             NA male  mascul…</span></span>
+<span id="cb8-23"><a href="#cb8-23"></a><span class="co">#&gt; 2 Gasgano    122    NA none       white, blue black             NA male  mascul…</span></span>
+<span id="cb8-24"><a href="#cb8-24"></a><span class="co">#&gt; 3 Kit Fi…    196    87 none       green       black             NA male  mascul…</span></span>
+<span id="cb8-25"><a href="#cb8-25"></a><span class="co">#&gt; 4 Plo Ko…    188    80 none       orange      black             22 male  mascul…</span></span>
+<span id="cb8-26"><a href="#cb8-26"></a><span class="co">#&gt; # … with 5 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,</span></span>
+<span id="cb8-27"><a href="#cb8-27"></a><span class="co">#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</span></span></code></pre></div>
+<p>The closest base equivalent (and the inspiration for <code>filter()</code>) is <code>subset()</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">subset</span>(starwars, species <span class="op">==</span><span class="st"> &quot;Human&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; # A tibble: 35 x 14</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;   name     height  mass hair_color  skin_color eye_color birth_year sex   gender</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; </span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; 1 Luke Sk…    172    77 blond       fair       blue            19   male  mascu…</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; 2 Darth V…    202   136 none        white      yellow          41.9 male  mascu…</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt; 3 Leia Or…    150    49 brown       light      brown           19   fema… femin…</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; 4 Owen La…    178   120 brown, grey light      blue            52   male  mascu…</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; # … with 31 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="kw">subset</span>(starwars, mass <span class="op">&gt;</span><span class="st"> </span><span class="dv">1000</span>)</span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt; # A tibble: 1 x 14</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt;   name    height  mass hair_color skin_color  eye_color birth_year sex    gender</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; </span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt; 1 Jabba …    175  1358 &lt;NA&gt;       green-tan,… orange           600 herma… mascu…</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt; # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="kw">subset</span>(starwars, hair_color <span class="op">==</span><span class="st"> &quot;none&quot;</span> <span class="op">&amp;</span><span class="st"> </span>eye_color <span class="op">==</span><span class="st"> &quot;black&quot;</span>)</span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="co">#&gt; # A tibble: 9 x 14</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">#&gt;   name    height  mass hair_color skin_color  eye_color birth_year sex   gender </span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  </span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">#&gt; 1 Nien N…    160    68 none       grey        black             NA male  mascul…</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="co">#&gt; 2 Gasgano    122    NA none       white, blue black             NA male  mascul…</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt; 3 Kit Fi…    196    87 none       green       black             NA male  mascul…</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a><span class="co">#&gt; 4 Plo Ko…    188    80 none       orange      black             22 male  mascul…</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="co">#&gt; # … with 5 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="co">#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</span></span></code></pre></div>
+<p>You can also use <code>[</code> but this also requires the use of <code>which()</code> to remove <code>NA</code>s:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>starwars[<span class="kw">which</span>(starwars<span class="op">$</span>species <span class="op">==</span><span class="st"> &quot;Human&quot;</span>), , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; # A tibble: 35 x 14</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt;   name     height  mass hair_color  skin_color eye_color birth_year sex   gender</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt;   &lt;chr&gt;     &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; </span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; 1 Luke Sk…    172    77 blond       fair       blue            19   male  mascu…</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; 2 Darth V…    202   136 none        white      yellow          41.9 male  mascu…</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; 3 Leia Or…    150    49 brown       light      brown           19   fema… femin…</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; 4 Owen La…    178   120 brown, grey light      blue            52   male  mascu…</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; # … with 31 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a>starwars[<span class="kw">which</span>(starwars<span class="op">$</span>mass <span class="op">&gt;</span><span class="st"> </span><span class="dv">1000</span>), , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt; # A tibble: 1 x 14</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt;   name    height  mass hair_color skin_color  eye_color birth_year sex    gender</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; </span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="co">#&gt; 1 Jabba …    175  1358 &lt;NA&gt;       green-tan,… orange           600 herma… mascu…</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="co">#&gt; # … with 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;, films &lt;list&gt;,</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="co">#&gt; #   vehicles &lt;list&gt;, starships &lt;list&gt;</span></span>
+<span id="cb10-18"><a href="#cb10-18"></a>starwars[<span class="kw">which</span>(starwars<span class="op">$</span>hair_color <span class="op">==</span><span class="st"> &quot;none&quot;</span> <span class="op">&amp;</span><span class="st"> </span>starwars<span class="op">$</span>eye_color <span class="op">==</span><span class="st"> &quot;black&quot;</span>), , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="co">#&gt; # A tibble: 9 x 14</span></span>
+<span id="cb10-20"><a href="#cb10-20"></a><span class="co">#&gt;   name    height  mass hair_color skin_color  eye_color birth_year sex   gender </span></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  </span></span>
+<span id="cb10-22"><a href="#cb10-22"></a><span class="co">#&gt; 1 Nien N…    160    68 none       grey        black             NA male  mascul…</span></span>
+<span id="cb10-23"><a href="#cb10-23"></a><span class="co">#&gt; 2 Gasgano    122    NA none       white, blue black             NA male  mascul…</span></span>
+<span id="cb10-24"><a href="#cb10-24"></a><span class="co">#&gt; 3 Kit Fi…    196    87 none       green       black             NA male  mascul…</span></span>
+<span id="cb10-25"><a href="#cb10-25"></a><span class="co">#&gt; 4 Plo Ko…    188    80 none       orange      black             22 male  mascul…</span></span>
+<span id="cb10-26"><a href="#cb10-26"></a><span class="co">#&gt; # … with 5 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,</span></span>
+<span id="cb10-27"><a href="#cb10-27"></a><span class="co">#&gt; #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;</span></span></code></pre></div>
+</div>
+<div id="mutate-create-or-transform-variables" class="section level2">
+<h2><code>mutate()</code>: Create or transform variables</h2>
+<p><code>dplyr::mutate()</code> creates new variables from existing variables:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">z =</span> x <span class="op">+</span><span class="st"> </span>y, <span class="dt">z2 =</span> z <span class="op">^</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt; # A tibble: 100 x 4</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">#&gt;       x     y     z    z2</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt; 1     6     5    11   121</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; 2     4     5     9    81</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; 3     2     9    11   121</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; 4     7     9    16   256</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; # … with 96 more rows</span></span></code></pre></div>
+<p>The closest base equivalent is <code>transform()</code>, but note that it cannot use freshly created variables:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">head</span>(<span class="kw">transform</span>(df, <span class="dt">z =</span> x <span class="op">+</span><span class="st"> </span>y, <span class="dt">z2 =</span> (x <span class="op">+</span><span class="st"> </span>y) <span class="op">^</span><span class="st"> </span><span class="dv">2</span>))</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt;    x  y  z  z2</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt; 1  6  5 11 121</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt; 2  4  5  9  81</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; 3  2  9 11 121</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; 4  7  9 16 256</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; 5  5 10 15 225</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt; 6 10  4 14 196</span></span></code></pre></div>
+<p>Alternatively, you can use <code>$&lt;-</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>mtcars<span class="op">$</span>cyl2 &lt;-<span class="st"> </span>mtcars<span class="op">$</span>cyl <span class="op">*</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a>mtcars<span class="op">$</span>cyl4 &lt;-<span class="st"> </span>mtcars<span class="op">$</span>cyl2 <span class="op">*</span><span class="st"> </span><span class="dv">2</span></span></code></pre></div>
+<p>When applied to a grouped data frame, <code>dplyr::mutate()</code> computes new variable once per group:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>gf &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">g =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>), <span class="dt">x =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">1.5</span>, <span class="fl">2.5</span>, <span class="fl">3.5</span>))</span>
+<span id="cb14-2"><a href="#cb14-2"></a>gf <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="st">  </span><span class="kw">group_by</span>(g) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">x_mean =</span> <span class="kw">mean</span>(x), <span class="dt">x_rank =</span> <span class="kw">rank</span>(x))</span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; # Groups:   g [2]</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt;       g     x x_mean x_rank</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co">#&gt; 1     1   0.5      1      1</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt; 2     1   1.5      1      2</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt; 3     2   2.5      3      1</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt; 4     2   3.5      3      2</span></span></code></pre></div>
+<p>To replicate this in base R, you can use <code>ave()</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">transform</span>(gf, </span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="dt">x_mean =</span> <span class="kw">ave</span>(x, g, <span class="dt">FUN =</span> mean), </span>
+<span id="cb15-3"><a href="#cb15-3"></a>  <span class="dt">x_rank =</span> <span class="kw">ave</span>(x, g, <span class="dt">FUN =</span> rank)</span>
+<span id="cb15-4"><a href="#cb15-4"></a>)</span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt;   g   x x_mean x_rank</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt; 1 1 0.5      1      1</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt; 2 1 1.5      1      2</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt; 3 2 2.5      3      1</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#&gt; 4 2 3.5      3      2</span></span></code></pre></div>
+</div>
+<div id="pull-pull-out-a-single-variable" class="section level2">
+<h2><code>pull()</code>: Pull out a single variable</h2>
+<p><code>dplyr::pull()</code> extracts a variable either by name or position:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(<span class="dv">1</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="co">#&gt;  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2 10.4</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="co">#&gt; [16] 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4 15.8 19.7</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="co">#&gt; [31] 15.0 21.4</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(cyl)</span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="co">#&gt;  [1] 6 6 4 6 8 6 8 4 4 6 6 8 8 8 8 8 8 4 4 4 4 8 8 8 8 4 4 4 8 6 8 4</span></span></code></pre></div>
+<p>This equivalent to <code>[[</code> for positions and <code>$</code> for names:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>mtcars[[<span class="dv">1</span>]]</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="co">#&gt;  [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3 15.2 10.4</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co">#&gt; [16] 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3 26.0 30.4 15.8 19.7</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="co">#&gt; [31] 15.0 21.4</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>mtcars<span class="op">$</span>cyl</span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="co">#&gt;  [1] 6 6 4 6 8 6 8 4 4 6 6 8 8 8 8 8 8 4 4 4 4 8 8 8 8 4 4 4 8 6 8 4</span></span></code></pre></div>
+</div>
+<div id="relocate-change-column-order" class="section level2">
+<h2><code>relocate()</code>: Change column order</h2>
+<p><code>dplyr::relocate()</code> makes it easy to move a set of columns to a new position (by default, the front):</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># to front</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(gear, carb) </span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#&gt; # A tibble: 32 x 13</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#&gt;    gear  carb   mpg   cyl  disp    hp  drat    wt  qsec    vs    am  cyl2  cyl4</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#&gt; 1     4     4  21       6   160   110  3.9   2.62  16.5     0     1    12    24</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#&gt; 2     4     4  21       6   160   110  3.9   2.88  17.0     0     1    12    24</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt; 3     4     1  22.8     4   108    93  3.85  2.32  18.6     1     1     8    16</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt; 4     3     1  21.4     6   258   110  3.08  3.22  19.4     1     0    12    24</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co">#&gt; # … with 28 more rows</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a></span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="co"># to back</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">relocate</span>(mpg, cyl, <span class="dt">.after =</span> <span class="kw">last_col</span>()) </span>
+<span id="cb18-14"><a href="#cb18-14"></a><span class="co">#&gt; # A tibble: 32 x 13</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a><span class="co">#&gt;    disp    hp  drat    wt  qsec    vs    am  gear  carb  cyl2  cyl4   mpg   cyl</span></span>
+<span id="cb18-16"><a href="#cb18-16"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb18-17"><a href="#cb18-17"></a><span class="co">#&gt; 1   160   110  3.9   2.62  16.5     0     1     4     4    12    24  21       6</span></span>
+<span id="cb18-18"><a href="#cb18-18"></a><span class="co">#&gt; 2   160   110  3.9   2.88  17.0     0     1     4     4    12    24  21       6</span></span>
+<span id="cb18-19"><a href="#cb18-19"></a><span class="co">#&gt; 3   108    93  3.85  2.32  18.6     1     1     4     1     8    16  22.8     4</span></span>
+<span id="cb18-20"><a href="#cb18-20"></a><span class="co">#&gt; 4   258   110  3.08  3.22  19.4     1     0     3     1    12    24  21.4     6</span></span>
+<span id="cb18-21"><a href="#cb18-21"></a><span class="co">#&gt; # … with 28 more rows</span></span></code></pre></div>
+<p>We can replicate this in base R with a little set manipulation:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>mtcars[<span class="kw">union</span>(<span class="kw">c</span>(<span class="st">&quot;gear&quot;</span>, <span class="st">&quot;carb&quot;</span>), <span class="kw">names</span>(mtcars))]</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="co">#&gt; # A tibble: 32 x 13</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co">#&gt;    gear  carb   mpg   cyl  disp    hp  drat    wt  qsec    vs    am  cyl2  cyl4</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="co">#&gt; 1     4     4  21       6   160   110  3.9   2.62  16.5     0     1    12    24</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="co">#&gt; 2     4     4  21       6   160   110  3.9   2.88  17.0     0     1    12    24</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="co">#&gt; 3     4     1  22.8     4   108    93  3.85  2.32  18.6     1     1     8    16</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="co">#&gt; 4     3     1  21.4     6   258   110  3.08  3.22  19.4     1     0    12    24</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="co">#&gt; # … with 28 more rows</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a></span>
+<span id="cb19-11"><a href="#cb19-11"></a>to_back &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;cyl&quot;</span>)</span>
+<span id="cb19-12"><a href="#cb19-12"></a>mtcars[<span class="kw">c</span>(<span class="kw">setdiff</span>(<span class="kw">names</span>(mtcars), to_back), to_back)]</span>
+<span id="cb19-13"><a href="#cb19-13"></a><span class="co">#&gt; # A tibble: 32 x 13</span></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="co">#&gt;    disp    hp  drat    wt  qsec    vs    am  gear  carb  cyl2  cyl4   mpg   cyl</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb19-16"><a href="#cb19-16"></a><span class="co">#&gt; 1   160   110  3.9   2.62  16.5     0     1     4     4    12    24  21       6</span></span>
+<span id="cb19-17"><a href="#cb19-17"></a><span class="co">#&gt; 2   160   110  3.9   2.88  17.0     0     1     4     4    12    24  21       6</span></span>
+<span id="cb19-18"><a href="#cb19-18"></a><span class="co">#&gt; 3   108    93  3.85  2.32  18.6     1     1     4     1     8    16  22.8     4</span></span>
+<span id="cb19-19"><a href="#cb19-19"></a><span class="co">#&gt; 4   258   110  3.08  3.22  19.4     1     0     3     1    12    24  21.4     6</span></span>
+<span id="cb19-20"><a href="#cb19-20"></a><span class="co">#&gt; # … with 28 more rows</span></span></code></pre></div>
+<p>Moving columns to somewhere in the middle requires a little more set twiddling.</p>
+</div>
+<div id="rename-rename-variables-by-name" class="section level2">
+<h2><code>rename()</code>: Rename variables by name</h2>
+<p><code>dplyr::rename()</code> allows you to rename variables by name or position:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">sepal_length =</span> Sepal.Length, <span class="dt">sepal_width =</span> <span class="dv">2</span>)</span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="co">#&gt; # A tibble: 150 x 5</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="co">#&gt;   sepal_length sepal_width Petal.Length Petal.Width Species</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co">#&gt;          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  </span></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="co">#&gt; 1          5.1         3.5          1.4         0.2 setosa </span></span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="co">#&gt; 2          4.9         3            1.4         0.2 setosa </span></span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="co">#&gt; 3          4.7         3.2          1.3         0.2 setosa </span></span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt; 4          4.6         3.1          1.5         0.2 setosa </span></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; # … with 146 more rows</span></span></code></pre></div>
+<p>Renaming variables by position is straight forward in base R:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>iris2 &lt;-<span class="st"> </span>iris</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="kw">names</span>(iris2)[<span class="dv">2</span>] &lt;-<span class="st"> &quot;sepal_width&quot;</span></span></code></pre></div>
+<p>Renaming variables by name requires a bit more work:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">names</span>(iris2)[<span class="kw">names</span>(iris2) <span class="op">==</span><span class="st"> &quot;Sepal.Length&quot;</span>] &lt;-<span class="st"> &quot;sepal_length&quot;</span></span></code></pre></div>
+</div>
+<div id="rename_with-rename-variables-with-a-function" class="section level2">
+<h2><code>rename_with()</code>: Rename variables with a function</h2>
+<p><code>dplyr::rename_with()</code> transform column names with a function:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename_with</span>(toupper)</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co">#&gt; # A tibble: 150 x 5</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="co">#&gt;   SEPAL.LENGTH SEPAL.WIDTH PETAL.LENGTH PETAL.WIDTH SPECIES</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co">#&gt;          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  </span></span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="co">#&gt; 1          5.1         3.5          1.4         0.2 setosa </span></span>
+<span id="cb23-6"><a href="#cb23-6"></a><span class="co">#&gt; 2          4.9         3            1.4         0.2 setosa </span></span>
+<span id="cb23-7"><a href="#cb23-7"></a><span class="co">#&gt; 3          4.7         3.2          1.3         0.2 setosa </span></span>
+<span id="cb23-8"><a href="#cb23-8"></a><span class="co">#&gt; 4          4.6         3.1          1.5         0.2 setosa </span></span>
+<span id="cb23-9"><a href="#cb23-9"></a><span class="co">#&gt; # … with 146 more rows</span></span></code></pre></div>
+<p>A similar effect can be achieved with <code>setNames()</code> in base R:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">setNames</span>(iris, <span class="kw">toupper</span>(<span class="kw">names</span>(iris)))</span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="co">#&gt; # A tibble: 150 x 5</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="co">#&gt;   SEPAL.LENGTH SEPAL.WIDTH PETAL.LENGTH PETAL.WIDTH SPECIES</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="co">#&gt;          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  </span></span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="co">#&gt; 1          5.1         3.5          1.4         0.2 setosa </span></span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="co">#&gt; 2          4.9         3            1.4         0.2 setosa </span></span>
+<span id="cb24-7"><a href="#cb24-7"></a><span class="co">#&gt; 3          4.7         3.2          1.3         0.2 setosa </span></span>
+<span id="cb24-8"><a href="#cb24-8"></a><span class="co">#&gt; 4          4.6         3.1          1.5         0.2 setosa </span></span>
+<span id="cb24-9"><a href="#cb24-9"></a><span class="co">#&gt; # … with 146 more rows</span></span></code></pre></div>
+</div>
+<div id="select-select-variables-by-name" class="section level2">
+<h2><code>select()</code>: Select variables by name</h2>
+<p><code>dplyr::select()</code> subsets columns by position, name, function of name, or other property:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)</span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="co">#&gt; # A tibble: 150 x 3</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length</span></span>
+<span id="cb25-4"><a href="#cb25-4"></a><span class="co">#&gt;          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;</span></span>
+<span id="cb25-5"><a href="#cb25-5"></a><span class="co">#&gt; 1          5.1         3.5          1.4</span></span>
+<span id="cb25-6"><a href="#cb25-6"></a><span class="co">#&gt; 2          4.9         3            1.4</span></span>
+<span id="cb25-7"><a href="#cb25-7"></a><span class="co">#&gt; 3          4.7         3.2          1.3</span></span>
+<span id="cb25-8"><a href="#cb25-8"></a><span class="co">#&gt; 4          4.6         3.1          1.5</span></span>
+<span id="cb25-9"><a href="#cb25-9"></a><span class="co">#&gt; # … with 146 more rows</span></span>
+<span id="cb25-10"><a href="#cb25-10"></a>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(Species, Sepal.Length)</span>
+<span id="cb25-11"><a href="#cb25-11"></a><span class="co">#&gt; # A tibble: 150 x 2</span></span>
+<span id="cb25-12"><a href="#cb25-12"></a><span class="co">#&gt;   Species Sepal.Length</span></span>
+<span id="cb25-13"><a href="#cb25-13"></a><span class="co">#&gt;   &lt;fct&gt;          &lt;dbl&gt;</span></span>
+<span id="cb25-14"><a href="#cb25-14"></a><span class="co">#&gt; 1 setosa           5.1</span></span>
+<span id="cb25-15"><a href="#cb25-15"></a><span class="co">#&gt; 2 setosa           4.9</span></span>
+<span id="cb25-16"><a href="#cb25-16"></a><span class="co">#&gt; 3 setosa           4.7</span></span>
+<span id="cb25-17"><a href="#cb25-17"></a><span class="co">#&gt; 4 setosa           4.6</span></span>
+<span id="cb25-18"><a href="#cb25-18"></a><span class="co">#&gt; # … with 146 more rows</span></span>
+<span id="cb25-19"><a href="#cb25-19"></a>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;Petal&quot;</span>))</span>
+<span id="cb25-20"><a href="#cb25-20"></a><span class="co">#&gt; # A tibble: 150 x 2</span></span>
+<span id="cb25-21"><a href="#cb25-21"></a><span class="co">#&gt;   Petal.Length Petal.Width</span></span>
+<span id="cb25-22"><a href="#cb25-22"></a><span class="co">#&gt;          &lt;dbl&gt;       &lt;dbl&gt;</span></span>
+<span id="cb25-23"><a href="#cb25-23"></a><span class="co">#&gt; 1          1.4         0.2</span></span>
+<span id="cb25-24"><a href="#cb25-24"></a><span class="co">#&gt; 2          1.4         0.2</span></span>
+<span id="cb25-25"><a href="#cb25-25"></a><span class="co">#&gt; 3          1.3         0.2</span></span>
+<span id="cb25-26"><a href="#cb25-26"></a><span class="co">#&gt; 4          1.5         0.2</span></span>
+<span id="cb25-27"><a href="#cb25-27"></a><span class="co">#&gt; # … with 146 more rows</span></span>
+<span id="cb25-28"><a href="#cb25-28"></a>iris <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">where</span>(is.factor))</span>
+<span id="cb25-29"><a href="#cb25-29"></a><span class="co">#&gt; # A tibble: 150 x 1</span></span>
+<span id="cb25-30"><a href="#cb25-30"></a><span class="co">#&gt;   Species</span></span>
+<span id="cb25-31"><a href="#cb25-31"></a><span class="co">#&gt;   &lt;fct&gt;  </span></span>
+<span id="cb25-32"><a href="#cb25-32"></a><span class="co">#&gt; 1 setosa </span></span>
+<span id="cb25-33"><a href="#cb25-33"></a><span class="co">#&gt; 2 setosa </span></span>
+<span id="cb25-34"><a href="#cb25-34"></a><span class="co">#&gt; 3 setosa </span></span>
+<span id="cb25-35"><a href="#cb25-35"></a><span class="co">#&gt; 4 setosa </span></span>
+<span id="cb25-36"><a href="#cb25-36"></a><span class="co">#&gt; # … with 146 more rows</span></span></code></pre></div>
+<p>Subsetting variables by position is straightforward in base R:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>iris[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] <span class="co"># single argument selects columns; never drops</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="co">#&gt; # A tibble: 150 x 3</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length</span></span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="co">#&gt;          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;</span></span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="co">#&gt; 1          5.1         3.5          1.4</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a><span class="co">#&gt; 2          4.9         3            1.4</span></span>
+<span id="cb26-7"><a href="#cb26-7"></a><span class="co">#&gt; 3          4.7         3.2          1.3</span></span>
+<span id="cb26-8"><a href="#cb26-8"></a><span class="co">#&gt; 4          4.6         3.1          1.5</span></span>
+<span id="cb26-9"><a href="#cb26-9"></a><span class="co">#&gt; # … with 146 more rows</span></span>
+<span id="cb26-10"><a href="#cb26-10"></a>iris[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb26-11"><a href="#cb26-11"></a><span class="co">#&gt; # A tibble: 3 x 5</span></span>
+<span id="cb26-12"><a href="#cb26-12"></a><span class="co">#&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span></span>
+<span id="cb26-13"><a href="#cb26-13"></a><span class="co">#&gt;          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  </span></span>
+<span id="cb26-14"><a href="#cb26-14"></a><span class="co">#&gt; 1          5.1         3.5          1.4         0.2 setosa </span></span>
+<span id="cb26-15"><a href="#cb26-15"></a><span class="co">#&gt; 2          4.9         3            1.4         0.2 setosa </span></span>
+<span id="cb26-16"><a href="#cb26-16"></a><span class="co">#&gt; 3          4.7         3.2          1.3         0.2 setosa</span></span></code></pre></div>
+<p>You have two options to subset by name:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>iris[<span class="kw">c</span>(<span class="st">&quot;Species&quot;</span>, <span class="st">&quot;Sepal.Length&quot;</span>)]</span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="co">#&gt; # A tibble: 150 x 2</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="co">#&gt;   Species Sepal.Length</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a><span class="co">#&gt;   &lt;fct&gt;          &lt;dbl&gt;</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a><span class="co">#&gt; 1 setosa           5.1</span></span>
+<span id="cb27-6"><a href="#cb27-6"></a><span class="co">#&gt; 2 setosa           4.9</span></span>
+<span id="cb27-7"><a href="#cb27-7"></a><span class="co">#&gt; 3 setosa           4.7</span></span>
+<span id="cb27-8"><a href="#cb27-8"></a><span class="co">#&gt; 4 setosa           4.6</span></span>
+<span id="cb27-9"><a href="#cb27-9"></a><span class="co">#&gt; # … with 146 more rows</span></span>
+<span id="cb27-10"><a href="#cb27-10"></a><span class="kw">subset</span>(iris, <span class="dt">select =</span> <span class="kw">c</span>(Species, Sepal.Length))</span>
+<span id="cb27-11"><a href="#cb27-11"></a><span class="co">#&gt; # A tibble: 150 x 2</span></span>
+<span id="cb27-12"><a href="#cb27-12"></a><span class="co">#&gt;   Species Sepal.Length</span></span>
+<span id="cb27-13"><a href="#cb27-13"></a><span class="co">#&gt;   &lt;fct&gt;          &lt;dbl&gt;</span></span>
+<span id="cb27-14"><a href="#cb27-14"></a><span class="co">#&gt; 1 setosa           5.1</span></span>
+<span id="cb27-15"><a href="#cb27-15"></a><span class="co">#&gt; 2 setosa           4.9</span></span>
+<span id="cb27-16"><a href="#cb27-16"></a><span class="co">#&gt; 3 setosa           4.7</span></span>
+<span id="cb27-17"><a href="#cb27-17"></a><span class="co">#&gt; 4 setosa           4.6</span></span>
+<span id="cb27-18"><a href="#cb27-18"></a><span class="co">#&gt; # … with 146 more rows</span></span></code></pre></div>
+<p>Subsetting by function of name requires a bit of work with <code>grep()</code>:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>iris[<span class="kw">grep</span>(<span class="st">&quot;^Petal&quot;</span>, <span class="kw">names</span>(iris))]</span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="co">#&gt; # A tibble: 150 x 2</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="co">#&gt;   Petal.Length Petal.Width</span></span>
+<span id="cb28-4"><a href="#cb28-4"></a><span class="co">#&gt;          &lt;dbl&gt;       &lt;dbl&gt;</span></span>
+<span id="cb28-5"><a href="#cb28-5"></a><span class="co">#&gt; 1          1.4         0.2</span></span>
+<span id="cb28-6"><a href="#cb28-6"></a><span class="co">#&gt; 2          1.4         0.2</span></span>
+<span id="cb28-7"><a href="#cb28-7"></a><span class="co">#&gt; 3          1.3         0.2</span></span>
+<span id="cb28-8"><a href="#cb28-8"></a><span class="co">#&gt; 4          1.5         0.2</span></span>
+<span id="cb28-9"><a href="#cb28-9"></a><span class="co">#&gt; # … with 146 more rows</span></span></code></pre></div>
+<p>And you can use <code>Filter()</code> to subset by type:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">Filter</span>(is.factor, iris)</span>
+<span id="cb29-2"><a href="#cb29-2"></a><span class="co">#&gt; # A tibble: 150 x 1</span></span>
+<span id="cb29-3"><a href="#cb29-3"></a><span class="co">#&gt;   Species</span></span>
+<span id="cb29-4"><a href="#cb29-4"></a><span class="co">#&gt;   &lt;fct&gt;  </span></span>
+<span id="cb29-5"><a href="#cb29-5"></a><span class="co">#&gt; 1 setosa </span></span>
+<span id="cb29-6"><a href="#cb29-6"></a><span class="co">#&gt; 2 setosa </span></span>
+<span id="cb29-7"><a href="#cb29-7"></a><span class="co">#&gt; 3 setosa </span></span>
+<span id="cb29-8"><a href="#cb29-8"></a><span class="co">#&gt; 4 setosa </span></span>
+<span id="cb29-9"><a href="#cb29-9"></a><span class="co">#&gt; # … with 146 more rows</span></span></code></pre></div>
+</div>
+<div id="summarise-reduce-multiple-values-down-to-a-single-value" class="section level2">
+<h2><code>summarise()</code>: Reduce multiple values down to a single value</h2>
+<p><code>dplyr::summarise()</code> computes one or more summaries for each group:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="st">  </span><span class="kw">group_by</span>(cyl) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-3"><a href="#cb30-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(disp), <span class="dt">n =</span> <span class="kw">n</span>())</span>
+<span id="cb30-4"><a href="#cb30-4"></a><span class="co">#&gt; # A tibble: 3 x 3</span></span>
+<span id="cb30-5"><a href="#cb30-5"></a><span class="co">#&gt;     cyl  mean     n</span></span>
+<span id="cb30-6"><a href="#cb30-6"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;</span></span>
+<span id="cb30-7"><a href="#cb30-7"></a><span class="co">#&gt; 1     4  105.    11</span></span>
+<span id="cb30-8"><a href="#cb30-8"></a><span class="co">#&gt; 2     6  183.     7</span></span>
+<span id="cb30-9"><a href="#cb30-9"></a><span class="co">#&gt; 3     8  353.    14</span></span></code></pre></div>
+<p>I think the closest base R equivalent uses <code>by()</code>. Unfortunately <code>by()</code> returns a list of data frames, but you can combine them back together again with <code>do.call()</code> and <code>rbind()</code>:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>mtcars_by &lt;-<span class="st"> </span><span class="kw">by</span>(mtcars, mtcars<span class="op">$</span>cyl, <span class="cf">function</span>(df) {</span>
+<span id="cb31-2"><a href="#cb31-2"></a>  <span class="kw">with</span>(df, <span class="kw">data.frame</span>(<span class="dt">cyl =</span> cyl[[<span class="dv">1</span>]], <span class="dt">mean =</span> <span class="kw">mean</span>(disp), <span class="dt">n =</span> <span class="kw">nrow</span>(df)))</span>
+<span id="cb31-3"><a href="#cb31-3"></a>})</span>
+<span id="cb31-4"><a href="#cb31-4"></a><span class="kw">do.call</span>(rbind, mtcars_by)</span>
+<span id="cb31-5"><a href="#cb31-5"></a><span class="co">#&gt;   cyl     mean  n</span></span>
+<span id="cb31-6"><a href="#cb31-6"></a><span class="co">#&gt; 4   4 105.1364 11</span></span>
+<span id="cb31-7"><a href="#cb31-7"></a><span class="co">#&gt; 6   6 183.3143  7</span></span>
+<span id="cb31-8"><a href="#cb31-8"></a><span class="co">#&gt; 8   8 353.1000 14</span></span></code></pre></div>
+<p><code>aggregate()</code> comes very close to providing an elegant answer:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>agg &lt;-<span class="st"> </span><span class="kw">aggregate</span>(disp <span class="op">~</span><span class="st"> </span>cyl, mtcars, <span class="cf">function</span>(x) <span class="kw">c</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(x), <span class="dt">n =</span> <span class="kw">length</span>(x)))</span>
+<span id="cb32-2"><a href="#cb32-2"></a>agg</span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="co">#&gt;   cyl disp.mean   disp.n</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a><span class="co">#&gt; 1   4  105.1364  11.0000</span></span>
+<span id="cb32-5"><a href="#cb32-5"></a><span class="co">#&gt; 2   6  183.3143   7.0000</span></span>
+<span id="cb32-6"><a href="#cb32-6"></a><span class="co">#&gt; 3   8  353.1000  14.0000</span></span></code></pre></div>
+<p>But unfortunately while it looks like there are <code>disp.mean</code> and <code>disp.n</code> columns, it’s actually a single matrix column:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">str</span>(agg)</span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="co">#&gt; &#39;data.frame&#39;:    3 obs. of  2 variables:</span></span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="co">#&gt;  $ cyl : num  4 6 8</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a><span class="co">#&gt;  $ disp: num [1:3, 1:2] 105 183 353 11 7 ...</span></span>
+<span id="cb33-5"><a href="#cb33-5"></a><span class="co">#&gt;   ..- attr(*, &quot;dimnames&quot;)=List of 2</span></span>
+<span id="cb33-6"><a href="#cb33-6"></a><span class="co">#&gt;   .. ..$ : NULL</span></span>
+<span id="cb33-7"><a href="#cb33-7"></a><span class="co">#&gt;   .. ..$ : chr [1:2] &quot;mean&quot; &quot;n&quot;</span></span></code></pre></div>
+<p>You can see a variety of other options at <a href="https://gist.github.com/hadley/c430501804349d382ce90754936ab8ec" class="uri">https://gist.github.com/hadley/c430501804349d382ce90754936ab8ec</a>.</p>
+</div>
+<div id="slice-choose-rows-by-position" class="section level2">
+<h2><code>slice()</code>: Choose rows by position</h2>
+<p><code>slice()</code> selects rows with their location:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="kw">slice</span>(mtcars, <span class="dv">25</span><span class="op">:</span><span class="kw">n</span>())</span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="co">#&gt; # A tibble: 8 x 13</span></span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="co">#&gt;     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb  cyl2  cyl4</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb34-5"><a href="#cb34-5"></a><span class="co">#&gt; 1  19.2     8 400     175  3.08  3.84  17.0     0     0     3     2    16    32</span></span>
+<span id="cb34-6"><a href="#cb34-6"></a><span class="co">#&gt; 2  27.3     4  79      66  4.08  1.94  18.9     1     1     4     1     8    16</span></span>
+<span id="cb34-7"><a href="#cb34-7"></a><span class="co">#&gt; 3  26       4 120.     91  4.43  2.14  16.7     0     1     5     2     8    16</span></span>
+<span id="cb34-8"><a href="#cb34-8"></a><span class="co">#&gt; 4  30.4     4  95.1   113  3.77  1.51  16.9     1     1     5     2     8    16</span></span>
+<span id="cb34-9"><a href="#cb34-9"></a><span class="co">#&gt; # … with 4 more rows</span></span></code></pre></div>
+<p>This is straightforward to replicate with <code>[</code>:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>mtcars[<span class="dv">25</span><span class="op">:</span><span class="kw">nrow</span>(mtcars), , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="co">#&gt; # A tibble: 8 x 13</span></span>
+<span id="cb35-3"><a href="#cb35-3"></a><span class="co">#&gt;     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb  cyl2  cyl4</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb35-5"><a href="#cb35-5"></a><span class="co">#&gt; 1  19.2     8 400     175  3.08  3.84  17.0     0     0     3     2    16    32</span></span>
+<span id="cb35-6"><a href="#cb35-6"></a><span class="co">#&gt; 2  27.3     4  79      66  4.08  1.94  18.9     1     1     4     1     8    16</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a><span class="co">#&gt; 3  26       4 120.     91  4.43  2.14  16.7     0     1     5     2     8    16</span></span>
+<span id="cb35-8"><a href="#cb35-8"></a><span class="co">#&gt; 4  30.4     4  95.1   113  3.77  1.51  16.9     1     1     5     2     8    16</span></span>
+<span id="cb35-9"><a href="#cb35-9"></a><span class="co">#&gt; # … with 4 more rows</span></span></code></pre></div>
+</div>
+</div>
+<div id="two-table-verbs" class="section level1">
+<h1>Two-table verbs</h1>
+<p>When we want to merge two data frames, <code>x</code> and <code>y</code>), we have a variety of different ways to bring them together. Various base R <code>merge()</code> calls are replaced by a variety of dplyr <code>join()</code> functions.</p>
+<table>
+<thead>
+<tr class="header">
+<th>dplyr</th>
+<th>base</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>inner_join(df1, df2)</code></td>
+<td><code>merge(df1, df2)</code></td>
+</tr>
+<tr class="even">
+<td><code>left_join(df1, df2)</code></td>
+<td><code>merge(df1, df2, all.x = TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td><code>right_join(df1, df2)</code></td>
+<td><code>merge(df1, df2, all.y = TRUE)</code></td>
+</tr>
+<tr class="even">
+<td><code>full_join(df1, df2)</code></td>
+<td><code>merge(df1, df2, all = TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td><code>semi_join(df1, df2)</code></td>
+<td><code>df1[df1$x %in% df2$x, , drop = FALSE]</code></td>
+</tr>
+<tr class="even">
+<td><code>anti_join(df1, df2)</code></td>
+<td><code>df1[!df1$x %in% df2$x, , drop = FALSE]</code></td>
+</tr>
+</tbody>
+</table>
+<p>For more information about two-table verbs, see <code>vignette(&quot;two-table&quot;)</code>.</p>
+<div id="mutating-joins" class="section level3">
+<h3>Mutating joins</h3>
+<p>dplyr’s <code>inner_join()</code>, <code>left_join()</code>, <code>right_join()</code>, and <code>full_join()</code> add new columns from <code>y</code> to <code>x</code>, matching rows based on a set of “keys”, and differ only in how missing matches are handled. They are equivalent to calls to <code>merge()</code> with various settings of the <code>all</code>, <code>all.x</code>, and <code>all.y</code> arguments. The main difference is the order of the rows:</p>
+<ul>
+<li>dplyr preserves the order of the <code>x</code> data frame.</li>
+<li><code>merge()</code> sorts the key columns.</li>
+</ul>
+</div>
+<div id="filtering-joins" class="section level3">
+<h3>Filtering joins</h3>
+<p>dplyr’s <code>semi_join()</code> and <code>anti_join()</code> affect only the rows, not the columns:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>band_members <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">semi_join</span>(band_instruments)</span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="co">#&gt; Joining, by = &quot;name&quot;</span></span>
+<span id="cb36-3"><a href="#cb36-3"></a><span class="co">#&gt; # A tibble: 2 x 2</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a><span class="co">#&gt;   name  band   </span></span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;  </span></span>
+<span id="cb36-6"><a href="#cb36-6"></a><span class="co">#&gt; 1 John  Beatles</span></span>
+<span id="cb36-7"><a href="#cb36-7"></a><span class="co">#&gt; 2 Paul  Beatles</span></span>
+<span id="cb36-8"><a href="#cb36-8"></a>band_members <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">anti_join</span>(band_instruments)</span>
+<span id="cb36-9"><a href="#cb36-9"></a><span class="co">#&gt; Joining, by = &quot;name&quot;</span></span>
+<span id="cb36-10"><a href="#cb36-10"></a><span class="co">#&gt; # A tibble: 1 x 2</span></span>
+<span id="cb36-11"><a href="#cb36-11"></a><span class="co">#&gt;   name  band  </span></span>
+<span id="cb36-12"><a href="#cb36-12"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; </span></span>
+<span id="cb36-13"><a href="#cb36-13"></a><span class="co">#&gt; 1 Mick  Stones</span></span></code></pre></div>
+<p>They can be replicated in base R with <code>[</code> and <code>%in%</code>:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>band_members[band_members<span class="op">$</span>name <span class="op">%in%</span><span class="st"> </span>band_instruments<span class="op">$</span>name, , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb37-2"><a href="#cb37-2"></a><span class="co">#&gt; # A tibble: 2 x 2</span></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="co">#&gt;   name  band   </span></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;  </span></span>
+<span id="cb37-5"><a href="#cb37-5"></a><span class="co">#&gt; 1 John  Beatles</span></span>
+<span id="cb37-6"><a href="#cb37-6"></a><span class="co">#&gt; 2 Paul  Beatles</span></span>
+<span id="cb37-7"><a href="#cb37-7"></a>band_members[<span class="op">!</span>band_members<span class="op">$</span>name <span class="op">%in%</span><span class="st"> </span>band_instruments<span class="op">$</span>name, , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb37-8"><a href="#cb37-8"></a><span class="co">#&gt; # A tibble: 1 x 2</span></span>
+<span id="cb37-9"><a href="#cb37-9"></a><span class="co">#&gt;   name  band  </span></span>
+<span id="cb37-10"><a href="#cb37-10"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt; </span></span>
+<span id="cb37-11"><a href="#cb37-11"></a><span class="co">#&gt; 1 Mick  Stones</span></span></code></pre></div>
+<p>Semi and anti joins with multiple key variables are considerably more challenging to implement.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

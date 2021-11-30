@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create the full sequence of values in a vector</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for full_seq {tidyr}"><tr><td>full_seq {tidyr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create the full sequence of values in a vector</h2>
+
+<h3>Description</h3>
+
+<p>This is useful if you want to fill in missing values that should have
+been observed but weren't. For example, <code>full_seq(c(1, 2, 4, 6), 1)</code>
+will return <code>1:6</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+full_seq(x, period, tol = 1e-06)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A numeric vector.</p>
+</td></tr>
+<tr valign="top"><td><code>period</code></td>
+<td>
+<p>Gap between each observation. The existing data will be
+checked to ensure that it is actually of this periodicity.</p>
+</td></tr>
+<tr valign="top"><td><code>tol</code></td>
+<td>
+<p>Numerical tolerance for checking periodicity.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+full_seq(c(1, 2, 4, 5, 10), 1)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>tidyr</em> version 1.1.4 <a href="00Index.html">Index</a>]</div>
+</body></html>

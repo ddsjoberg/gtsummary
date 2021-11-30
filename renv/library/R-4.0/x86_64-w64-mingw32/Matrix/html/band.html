@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Extract bands of a matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for band {Matrix}"><tr><td>band {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Extract bands of a matrix</h2>
+
+<h3>Description</h3>
+
+<p>Returns a new matrix formed by extracting the lower triangle
+(<code>tril</code>) or the upper triangle (<code>triu</code>) or a general band
+relative to the diagonal (<code>band</code>), and setting other elements
+to zero.  The general forms of these functions include integer
+arguments to specify how many diagonal bands above or below the main
+diagonal are not set to zero.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+band(x, k1, k2, ...)
+tril(x, k = 0, ...)
+triu(x, k = 0, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a matrix-like object</p>
+</td></tr>
+<tr valign="top"><td><code>k,k1,k2</code></td>
+<td>
+<p>integers specifying the diagonal bands that will not
+be set to zero.  These are given relative to the main diagonal,
+which is <code>k=0</code>.  A negative value of <code>k</code> indicates a
+diagonal below the main diagonal and a positive value indicates a
+diagonal above the main diagonal.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Optional arguments used by specific methods. (None used at present.)</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An object of an appropriate matrix class.  The class of the value of
+<code>tril</code> or <code>triu</code> inherits from
+<code><a href="triangularMatrix-class.html">triangularMatrix</a></code> when appropriate.  Note that the
+result is of class <code><a href="sparseMatrix-class.html">sparseMatrix</a></code> only if <code>x</code> is.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>x = &quot;CsparseMatrix&quot;</dt><dd><p>method for compressed, sparse,
+column-oriented matrices.</p>
+</dd>
+<dt>x = &quot;TsparseMatrix&quot;</dt><dd><p>method for sparse matrices in triplet format.</p>
+</dd>
+<dt>x = &quot;RsparseMatrix&quot;</dt><dd><p>method for compressed, sparse,
+row-oriented matrices.</p>
+</dd>
+<dt>x = &quot;ddenseMatrix&quot;</dt><dd><p>method for dense numeric matrices,
+including packed numeric matrices.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="bandSparse.html">bandSparse</a></code> for the <em>construction</em> of a banded
+sparse matrix directly from its non-zero diagonals.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## A random sparse matrix :
+set.seed(7)
+m &lt;- matrix(0, 5, 5)
+m[sample(length(m), size = 14)] &lt;- rep(1:9, length=14)
+(mm &lt;- as(m, "CsparseMatrix"))
+
+tril(mm)        # lower triangle
+tril(mm, -1)    # strict lower triangle
+triu(mm,  1)    # strict upper triangle
+band(mm, -1, 2) # general band
+(m5 &lt;- Matrix(rnorm(25), nc = 5))
+tril(m5)        # lower triangle
+tril(m5, -1)    # strict lower triangle
+triu(m5, 1)     # strict upper triangle
+band(m5, -1, 2) # general band
+(m65 &lt;- Matrix(rnorm(30), nc = 5))  # not square
+triu(m65)       # result in not dtrMatrix unless square
+(sm5 &lt;- crossprod(m65)) # symmetric
+   band(sm5, -1, 1)# symmetric band preserves symmetry property
+as(band(sm5, -1, 1), "sparseMatrix")# often preferable
+
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Alexander Walker, Philipp Schauberger" />
+
+<meta name="date" content="2021-06-15" />
+
+<title>Introduction</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction</h1>
+<h4 class="author">Alexander Walker, Philipp Schauberger</h4>
+<h4 class="date">2021-06-15</h4>
+
+
+
+<div id="basic-examples" class="section level2">
+<h2>Basic Examples</h2>
+<div id="write.xlsx" class="section level3">
+<h3>write.xlsx</h3>
+<p>The simplest way to write to a workbook is write.xlsx(). By default, write.xlsx calls writeData. If asTable is TRUE write.xlsx will write x as an Excel table.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## write to working directory</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(openxlsx)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(iris, <span class="at">file =</span> <span class="st">&quot;writeXLSX1.xlsx&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(iris, <span class="at">file =</span> <span class="st">&quot;writeXLSXTable1.xlsx&quot;</span>, <span class="at">asTable =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="write-list-of-data.frames-to-xlsx-file" class="section level3">
+<h3>write list of data.frames to xlsx-file</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="do">## write a list of data.frames to individual worksheets using list names as worksheet names</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;IRIS&quot;</span> <span class="ot">=</span> iris, <span class="st">&quot;MTCARS&quot;</span> <span class="ot">=</span> mtcars)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(l, <span class="at">file =</span> <span class="st">&quot;writeXLSX2.xlsx&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(l, <span class="at">file =</span> <span class="st">&quot;writeXLSXTable2.xlsx&quot;</span>, <span class="at">asTable =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="write.xlsx-also-accepts-styling-parameters" class="section level3">
+<h3>write.xlsx also accepts styling parameters</h3>
+<div id="the-simplest-way-is-to-set-default-options-and-set-column-class" class="section level4">
+<h4>The simplest way is to set default options and set column class</h4>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;openxlsx.borderColour&quot;</span> <span class="ot">=</span> <span class="st">&quot;#4F80BD&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;openxlsx.borderStyle&quot;</span> <span class="ot">=</span> <span class="st">&quot;thin&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;openxlsx.dateFormat&quot;</span> <span class="ot">=</span> <span class="st">&quot;mm/dd/yyyy&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;openxlsx.datetimeFormat&quot;</span> <span class="ot">=</span> <span class="st">&quot;yyyy-mm-dd hh:mm:ss&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;openxlsx.numFmt&quot;</span> <span class="ot">=</span> <span class="cn">NULL</span>) <span class="do">## For default style rounding of numeric columns</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;Date&quot;</span> <span class="ot">=</span> <span class="fu">Sys.Date</span>()<span class="sc">-</span><span class="dv">0</span><span class="sc">:</span><span class="dv">19</span>, <span class="st">&quot;LogicalT&quot;</span> <span class="ot">=</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;Time&quot;</span> <span class="ot">=</span> <span class="fu">Sys.time</span>()<span class="sc">-</span><span class="dv">0</span><span class="sc">:</span><span class="dv">19</span><span class="sc">*</span><span class="dv">60</span><span class="sc">*</span><span class="dv">60</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;Cash&quot;</span> <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">&quot;$&quot;</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>), <span class="st">&quot;Cash2&quot;</span> <span class="ot">=</span> <span class="dv">31</span><span class="sc">:</span><span class="dv">50</span>,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;hLink&quot;</span> <span class="ot">=</span> <span class="st">&quot;https://CRAN.R-project.org/&quot;</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;Percentage&quot;</span> <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length.out=</span><span class="dv">20</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;TinyNumbers&quot;</span> <span class="ot">=</span> <span class="fu">runif</span>(<span class="dv">20</span>) <span class="sc">/</span> <span class="fl">1E9</span>,  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(df<span class="sc">$</span>Cash) <span class="ot">&lt;-</span> <span class="st">&quot;currency&quot;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(df<span class="sc">$</span>Cash2) <span class="ot">&lt;-</span> <span class="st">&quot;accounting&quot;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(df<span class="sc">$</span>hLink) <span class="ot">&lt;-</span> <span class="st">&quot;hyperlink&quot;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(df<span class="sc">$</span>Percentage) <span class="ot">&lt;-</span> <span class="st">&quot;percentage&quot;</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(df<span class="sc">$</span>TinyNumbers) <span class="ot">&lt;-</span> <span class="st">&quot;scientific&quot;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(df, <span class="st">&quot;writeXLSX3.xlsx&quot;</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(df, <span class="at">file =</span> <span class="st">&quot;writeXLSXTable3.xlsx&quot;</span>, <span class="at">asTable =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="workbook-styles" class="section level2">
+<h2>Workbook styles</h2>
+<div id="define-a-style-for-column-headers" class="section level3">
+<h3>define a style for column headers</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hs <span class="ot">&lt;-</span> <span class="fu">createStyle</span>(<span class="at">fontColour =</span> <span class="st">&quot;#ffffff&quot;</span>, <span class="at">fgFill =</span> <span class="st">&quot;#4F80BD&quot;</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">halign =</span> <span class="st">&quot;center&quot;</span>, <span class="at">valign =</span> <span class="st">&quot;center&quot;</span>, <span class="at">textDecoration =</span> <span class="st">&quot;Bold&quot;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">border =</span> <span class="st">&quot;TopBottomLeftRight&quot;</span>, <span class="at">textRotation =</span> <span class="dv">45</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(iris, <span class="at">file =</span> <span class="st">&quot;writeXLSX4.xlsx&quot;</span>, <span class="at">borders =</span> <span class="st">&quot;rows&quot;</span>, <span class="at">headerStyle =</span> hs)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(iris, <span class="at">file =</span> <span class="st">&quot;writeXLSX5.xlsx&quot;</span>, <span class="at">borders =</span> <span class="st">&quot;columns&quot;</span>, <span class="at">headerStyle =</span> hs)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(iris, <span class="st">&quot;writeXLSXTable4.xlsx&quot;</span>, <span class="at">asTable =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">headerStyle =</span> <span class="fu">createStyle</span>(<span class="at">textRotation =</span> <span class="dv">45</span>))</span></code></pre></div>
+</div>
+<div id="when-writing-a-list-the-stylings-will-apply-to-all-list-elements" class="section level3">
+<h3>When writing a list, the stylings will apply to all list elements</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;IRIS&quot;</span> <span class="ot">=</span> iris, <span class="st">&quot;colClasses&quot;</span> <span class="ot">=</span> df)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(l, <span class="at">file =</span> <span class="st">&quot;writeXLSX6.xlsx&quot;</span>, <span class="at">borders =</span> <span class="st">&quot;columns&quot;</span>, <span class="at">headerStyle =</span> hs)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">write.xlsx</span>(l, <span class="at">file =</span> <span class="st">&quot;writeXLSXTable5.xlsx&quot;</span>, <span class="at">asTable =</span> <span class="cn">TRUE</span>, <span class="at">tableStyle =</span> <span class="st">&quot;TableStyleLight2&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">openXL</span>(<span class="st">&quot;writeXLSX6.xlsx&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">openXL</span>(<span class="st">&quot;writeXLSXTable5.xlsx&quot;</span>)</span></code></pre></div>
+</div>
+<div id="write.xlsx-returns-the-workbook-object-for-further-editing" class="section level3">
+<h3>write.xlsx returns the workbook object for further editing</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>wb <span class="ot">&lt;-</span> <span class="fu">write.xlsx</span>(iris, <span class="st">&quot;writeXLSX6.xlsx&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">setColWidths</span>(wb, <span class="at">sheet =</span> <span class="dv">1</span>, <span class="at">cols =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">widths =</span> <span class="dv">20</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">saveWorkbook</span>(wb, <span class="st">&quot;writeXLSX6.xlsx&quot;</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="workbook-creation-walk-through" class="section level2">
+<h2>Workbook creation walk-through</h2>
+<div id="create-workbook-and-set-default-border-colour-and-style" class="section level3">
+<h3>create workbook and set default border Colour and style</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>wb <span class="ot">&lt;-</span> <span class="fu">createWorkbook</span>()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;openxlsx.borderColour&quot;</span> <span class="ot">=</span> <span class="st">&quot;#4F80BD&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="st">&quot;openxlsx.borderStyle&quot;</span> <span class="ot">=</span> <span class="st">&quot;thin&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">modifyBaseFont</span>(wb, <span class="at">fontSize =</span> <span class="dv">10</span>, <span class="at">fontName =</span> <span class="st">&quot;Arial Narrow&quot;</span>)</span></code></pre></div>
+</div>
+<div id="add-sheets" class="section level3">
+<h3>Add Sheets</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(wb, <span class="at">sheetName =</span> <span class="st">&quot;Motor Trend Car Road Tests&quot;</span>, <span class="at">gridLines =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(wb, <span class="at">sheetName =</span> <span class="st">&quot;Iris&quot;</span>, <span class="at">gridLines =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+</div>
+<div id="write-data-to-sheet-1" class="section level3">
+<h3>write data to sheet 1</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">freezePane</span>(wb, <span class="at">sheet =</span> <span class="dv">1</span>, <span class="at">firstRow =</span> <span class="cn">TRUE</span>, <span class="at">firstCol =</span> <span class="cn">TRUE</span>) <span class="do">## freeze first row and column</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">writeDataTable</span>(wb, <span class="at">sheet =</span> <span class="dv">1</span>, <span class="at">x =</span> mtcars,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="at">colNames =</span> <span class="cn">TRUE</span>, <span class="at">rowNames =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="at">tableStyle =</span> <span class="st">&quot;TableStyleLight9&quot;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">setColWidths</span>(wb, <span class="at">sheet =</span> <span class="dv">1</span>, <span class="at">cols =</span> <span class="st">&quot;A&quot;</span>, <span class="at">widths =</span> <span class="dv">18</span>)</span></code></pre></div>
+</div>
+<div id="write-data-to-sheet-2" class="section level3">
+<h3>write data to sheet 2</h3>
+<p>iris data.frame is added as excel table on sheet 2.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeDataTable</span>(wb, <span class="at">sheet =</span> <span class="dv">2</span>, iris, <span class="at">startCol =</span> <span class="st">&quot;K&quot;</span>, <span class="at">startRow =</span> <span class="dv">2</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="at">data=</span>iris, <span class="at">x =</span> Sepal.Length, <span class="at">y=</span> Sepal.Width, <span class="at">colour =</span> Species)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">insertPlot</span>(wb, <span class="dv">2</span>, <span class="at">xy=</span><span class="fu">c</span>(<span class="st">&quot;B&quot;</span>, <span class="dv">16</span>)) <span class="do">## insert plot at cell B16</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="at">x =</span> iris[,<span class="sc">-</span><span class="dv">5</span>], <span class="at">by =</span> <span class="fu">list</span>(iris<span class="sc">$</span>Species), <span class="at">FUN =</span> mean)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(<span class="at">x =</span> iris[,<span class="sc">-</span><span class="dv">5</span>], <span class="at">by =</span> <span class="fu">list</span>(iris<span class="sc">$</span>Species), <span class="at">FUN =</span> var)</span></code></pre></div>
+</div>
+<div id="add-write-group-means" class="section level3">
+<h3>add write group means</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>headSty <span class="ot">&lt;-</span> <span class="fu">createStyle</span>(<span class="at">fgFill=</span><span class="st">&quot;#DCE6F1&quot;</span>, <span class="at">halign=</span><span class="st">&quot;center&quot;</span>, <span class="at">border =</span> <span class="st">&quot;TopBottomLeftRight&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(wb, <span class="dv">2</span>, <span class="at">x =</span> <span class="st">&quot;Iris dataset group means&quot;</span>, <span class="at">startCol =</span> <span class="dv">2</span>, <span class="at">startRow =</span> <span class="dv">2</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(wb, <span class="dv">2</span>, <span class="at">x =</span> means, <span class="at">startCol =</span> <span class="st">&quot;B&quot;</span>, <span class="at">startRow=</span><span class="dv">3</span>, <span class="at">borders=</span><span class="st">&quot;rows&quot;</span>, <span class="at">headerStyle =</span> headSty)</span></code></pre></div>
+</div>
+<div id="add-write-group-variances" class="section level3">
+<h3>add write group variances</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(wb, <span class="dv">2</span>, <span class="at">x =</span> <span class="st">&quot;Iris dataset group variances&quot;</span>, <span class="at">startCol =</span> <span class="dv">2</span>, <span class="at">startRow =</span> <span class="dv">9</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(wb, <span class="dv">2</span>, <span class="at">x=</span> vars, <span class="at">startCol =</span> <span class="st">&quot;B&quot;</span>, <span class="at">startRow=</span><span class="dv">10</span>, <span class="at">borders=</span><span class="st">&quot;columns&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="at">headerStyle =</span> headSty)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">setColWidths</span>(wb, <span class="dv">2</span>, <span class="at">cols=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">widths =</span> <span class="dv">12</span>) <span class="do">## width is recycled for each col</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">setColWidths</span>(wb, <span class="dv">2</span>, <span class="at">cols=</span><span class="dv">11</span><span class="sc">:</span><span class="dv">15</span>, <span class="at">widths =</span> <span class="dv">15</span>)</span></code></pre></div>
+</div>
+<div id="add-style-mean-variance-table-headers" class="section level3">
+<h3>add style mean &amp; variance table headers</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>s1 <span class="ot">&lt;-</span> <span class="fu">createStyle</span>(<span class="at">fontSize=</span><span class="dv">14</span>, <span class="at">textDecoration=</span><span class="fu">c</span>(<span class="st">&quot;bold&quot;</span>, <span class="st">&quot;italic&quot;</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">addStyle</span>(wb, <span class="dv">2</span>, <span class="at">style =</span> s1, <span class="at">rows=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">9</span>), <span class="at">cols=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span></code></pre></div>
+</div>
+<div id="save-workbook" class="section level3">
+<h3>save workbook</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveWorkbook</span>(wb, <span class="st">&quot;basics.xlsx&quot;</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>) <span class="do">## save to working directory</span></span></code></pre></div>
+</div>
+</div>
+<div id="gallery" class="section level2">
+<h2>Gallery</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## inspired by xtable gallery</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#https://CRAN.R-project.org/package=xtable/vignettes/xtableGallery.pdf</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Create a new workbook</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>wb <span class="ot">&lt;-</span> <span class="fu">createWorkbook</span>()</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(tli, <span class="at">package =</span> <span class="st">&quot;xtable&quot;</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="do">## data.frame</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;data.frame&quot;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>my.df <span class="ot">&lt;-</span> tli[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, ]</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> my.df, <span class="at">borders =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="do">## matrix</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;matrix&quot;</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>design.matrix <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> sex <span class="sc">*</span> grade, <span class="at">data =</span> my.df)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> design.matrix)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="do">## aov</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;aov&quot;</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>fm1 <span class="ot">&lt;-</span> <span class="fu">aov</span>(tlimth <span class="sc">~</span> sex <span class="sc">+</span> ethnicty <span class="sc">+</span> grade <span class="sc">+</span> disadvg, <span class="at">data =</span> tli)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> fm1)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="do">## lm</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;lm&quot;</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>fm2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(tlimth <span class="sc">~</span> sex<span class="sc">*</span>ethnicty, <span class="at">data =</span> tli)</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> fm2)</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="do">## anova 1 </span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;anova&quot;</span></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>my.anova <span class="ot">&lt;-</span> <span class="fu">anova</span>(fm2)</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> my.anova)</span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a><span class="do">## anova 2</span></span>
+<span id="cb15-39"><a href="#cb15-39" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;anova2&quot;</span></span>
+<span id="cb15-40"><a href="#cb15-40" aria-hidden="true" tabindex="-1"></a>fm2b <span class="ot">&lt;-</span> <span class="fu">lm</span>(tlimth <span class="sc">~</span> ethnicty, <span class="at">data =</span> tli)</span>
+<span id="cb15-41"><a href="#cb15-41" aria-hidden="true" tabindex="-1"></a>my.anova2 <span class="ot">&lt;-</span> <span class="fu">anova</span>(fm2b, fm2)</span>
+<span id="cb15-42"><a href="#cb15-42" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-43"><a href="#cb15-43" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> my.anova2)</span>
+<span id="cb15-44"><a href="#cb15-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-45"><a href="#cb15-45" aria-hidden="true" tabindex="-1"></a><span class="do">## glm</span></span>
+<span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;glm&quot;</span></span>
+<span id="cb15-47"><a href="#cb15-47" aria-hidden="true" tabindex="-1"></a>fm3 <span class="ot">&lt;-</span> <span class="fu">glm</span>(disadvg <span class="sc">~</span> ethnicty<span class="sc">*</span>grade, <span class="at">data =</span> tli, <span class="at">family =</span> <span class="fu">binomial</span>())</span>
+<span id="cb15-48"><a href="#cb15-48" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-49"><a href="#cb15-49" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> fm3)</span>
+<span id="cb15-50"><a href="#cb15-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-51"><a href="#cb15-51" aria-hidden="true" tabindex="-1"></a><span class="do">## prcomp</span></span>
+<span id="cb15-52"><a href="#cb15-52" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;prcomp&quot;</span></span>
+<span id="cb15-53"><a href="#cb15-53" aria-hidden="true" tabindex="-1"></a>pr1 <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(USArrests)</span>
+<span id="cb15-54"><a href="#cb15-54" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-55"><a href="#cb15-55" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> pr1)</span>
+<span id="cb15-56"><a href="#cb15-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-57"><a href="#cb15-57" aria-hidden="true" tabindex="-1"></a><span class="do">## summary.prcomp</span></span>
+<span id="cb15-58"><a href="#cb15-58" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;summary.prcomp&quot;</span></span>
+<span id="cb15-59"><a href="#cb15-59" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-60"><a href="#cb15-60" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> <span class="fu">summary</span>(pr1))</span>
+<span id="cb15-61"><a href="#cb15-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-62"><a href="#cb15-62" aria-hidden="true" tabindex="-1"></a><span class="do">## simple table</span></span>
+<span id="cb15-63"><a href="#cb15-63" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;table&quot;</span></span>
+<span id="cb15-64"><a href="#cb15-64" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(airquality)</span>
+<span id="cb15-65"><a href="#cb15-65" aria-hidden="true" tabindex="-1"></a>airquality<span class="sc">$</span>OzoneG80 <span class="ot">&lt;-</span> <span class="fu">factor</span>(airquality<span class="sc">$</span>Ozone <span class="sc">&gt;</span> <span class="dv">80</span>,</span>
+<span id="cb15-66"><a href="#cb15-66" aria-hidden="true" tabindex="-1"></a><span class="at">levels =</span> <span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>),</span>
+<span id="cb15-67"><a href="#cb15-67" aria-hidden="true" tabindex="-1"></a><span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Oz &lt;= 80&quot;</span>, <span class="st">&quot;Oz &gt; 80&quot;</span>))</span>
+<span id="cb15-68"><a href="#cb15-68" aria-hidden="true" tabindex="-1"></a>airquality<span class="sc">$</span>Month <span class="ot">&lt;-</span> <span class="fu">factor</span>(airquality<span class="sc">$</span>Month,</span>
+<span id="cb15-69"><a href="#cb15-69" aria-hidden="true" tabindex="-1"></a><span class="at">levels =</span> <span class="dv">5</span><span class="sc">:</span><span class="dv">9</span>,</span>
+<span id="cb15-70"><a href="#cb15-70" aria-hidden="true" tabindex="-1"></a><span class="at">labels =</span> month.abb[<span class="dv">5</span><span class="sc">:</span><span class="dv">9</span>])</span>
+<span id="cb15-71"><a href="#cb15-71" aria-hidden="true" tabindex="-1"></a>my.table <span class="ot">&lt;-</span> <span class="fu">with</span>(airquality, <span class="fu">table</span>(OzoneG80,Month) )</span>
+<span id="cb15-72"><a href="#cb15-72" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-73"><a href="#cb15-73" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> my.table)</span>
+<span id="cb15-74"><a href="#cb15-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-75"><a href="#cb15-75" aria-hidden="true" tabindex="-1"></a><span class="do">## survdiff 1</span></span>
+<span id="cb15-76"><a href="#cb15-76" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb15-77"><a href="#cb15-77" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;survdiff1&quot;</span></span>
+<span id="cb15-78"><a href="#cb15-78" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-79"><a href="#cb15-79" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(futime, fustat) <span class="sc">~</span> rx, <span class="at">data =</span> ovarian)</span>
+<span id="cb15-80"><a href="#cb15-80" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> x)</span>
+<span id="cb15-81"><a href="#cb15-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-82"><a href="#cb15-82" aria-hidden="true" tabindex="-1"></a><span class="do">## survdiff 2</span></span>
+<span id="cb15-83"><a href="#cb15-83" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;survdiff2&quot;</span></span>
+<span id="cb15-84"><a href="#cb15-84" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-85"><a href="#cb15-85" aria-hidden="true" tabindex="-1"></a>expect <span class="ot">&lt;-</span> <span class="fu">survexp</span>(futime <span class="sc">~</span> <span class="fu">ratetable</span>(<span class="at">age=</span>(accept.dt <span class="sc">-</span> birth.dt),</span>
+<span id="cb15-86"><a href="#cb15-86" aria-hidden="true" tabindex="-1"></a>      <span class="at">sex=</span><span class="dv">1</span>,<span class="at">year=</span>accept.dt,<span class="at">race=</span><span class="st">&quot;white&quot;</span>), jasa, <span class="at">cohort=</span><span class="cn">FALSE</span>,</span>
+<span id="cb15-87"><a href="#cb15-87" aria-hidden="true" tabindex="-1"></a>      <span class="at">ratetable=</span>survexp.usr)</span>
+<span id="cb15-88"><a href="#cb15-88" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">survdiff</span>(<span class="fu">Surv</span>(jasa<span class="sc">$</span>futime, jasa<span class="sc">$</span>fustat) <span class="sc">~</span> <span class="fu">offset</span>(expect))</span>
+<span id="cb15-89"><a href="#cb15-89" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> x)</span>
+<span id="cb15-90"><a href="#cb15-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-91"><a href="#cb15-91" aria-hidden="true" tabindex="-1"></a><span class="do">## coxph 1</span></span>
+<span id="cb15-92"><a href="#cb15-92" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;coxph1&quot;</span></span>
+<span id="cb15-93"><a href="#cb15-93" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-94"><a href="#cb15-94" aria-hidden="true" tabindex="-1"></a>bladder<span class="sc">$</span>rx <span class="ot">&lt;-</span> <span class="fu">factor</span>(bladder<span class="sc">$</span>rx, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Pla&quot;</span>,<span class="st">&quot;Thi&quot;</span>))</span>
+<span id="cb15-95"><a href="#cb15-95" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(stop,event) <span class="sc">~</span> rx, <span class="at">data =</span> bladder)</span>
+<span id="cb15-96"><a href="#cb15-96" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> x)</span>
+<span id="cb15-97"><a href="#cb15-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-98"><a href="#cb15-98" aria-hidden="true" tabindex="-1"></a><span class="do">## coxph 2</span></span>
+<span id="cb15-99"><a href="#cb15-99" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;coxph2&quot;</span></span>
+<span id="cb15-100"><a href="#cb15-100" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-101"><a href="#cb15-101" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(stop,event) <span class="sc">~</span> rx <span class="sc">+</span> <span class="fu">cluster</span>(id), <span class="at">data =</span> bladder)</span>
+<span id="cb15-102"><a href="#cb15-102" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> x)</span>
+<span id="cb15-103"><a href="#cb15-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-104"><a href="#cb15-104" aria-hidden="true" tabindex="-1"></a><span class="do">## cox.zph</span></span>
+<span id="cb15-105"><a href="#cb15-105" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;cox.zph&quot;</span></span>
+<span id="cb15-106"><a href="#cb15-106" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-107"><a href="#cb15-107" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">cox.zph</span>(<span class="fu">coxph</span>(<span class="fu">Surv</span>(futime, fustat) <span class="sc">~</span> age <span class="sc">+</span> ecog.ps,  <span class="at">data=</span>ovarian))</span>
+<span id="cb15-108"><a href="#cb15-108" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> x)</span>
+<span id="cb15-109"><a href="#cb15-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-110"><a href="#cb15-110" aria-hidden="true" tabindex="-1"></a><span class="do">## summary.coxph 1</span></span>
+<span id="cb15-111"><a href="#cb15-111" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;summary.coxph1&quot;</span></span>
+<span id="cb15-112"><a href="#cb15-112" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-113"><a href="#cb15-113" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">coxph</span>(<span class="fu">Surv</span>(stop,event) <span class="sc">~</span> rx, <span class="at">data =</span> bladder))</span>
+<span id="cb15-114"><a href="#cb15-114" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> x)</span>
+<span id="cb15-115"><a href="#cb15-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-116"><a href="#cb15-116" aria-hidden="true" tabindex="-1"></a><span class="do">## summary.coxph 2</span></span>
+<span id="cb15-117"><a href="#cb15-117" aria-hidden="true" tabindex="-1"></a>test.n <span class="ot">&lt;-</span> <span class="st">&quot;summary.coxph2&quot;</span></span>
+<span id="cb15-118"><a href="#cb15-118" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(<span class="at">wb =</span> wb, <span class="at">sheetName =</span> test.n)</span>
+<span id="cb15-119"><a href="#cb15-119" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">summary</span>(<span class="fu">coxph</span>(<span class="fu">Surv</span>(stop,event) <span class="sc">~</span> rx <span class="sc">+</span> <span class="fu">cluster</span>(id), <span class="at">data =</span> bladder))</span>
+<span id="cb15-120"><a href="#cb15-120" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(<span class="at">wb =</span> wb, <span class="at">sheet =</span> test.n, <span class="at">x =</span> x)</span>
+<span id="cb15-121"><a href="#cb15-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-122"><a href="#cb15-122" aria-hidden="true" tabindex="-1"></a><span class="do">## view without saving</span></span>
+<span id="cb15-123"><a href="#cb15-123" aria-hidden="true" tabindex="-1"></a><span class="fu">openXL</span>(wb)</span></code></pre></div>
+</div>
+<div id="further-examples" class="section level2">
+<h2>Further Examples</h2>
+<div id="stock-price" class="section level3">
+<h3>Stock Price</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>wb <span class="ot">&lt;-</span> <span class="fu">createWorkbook</span>()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="do">## read historical prices from yahoo finance</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>ticker <span class="ot">&lt;-</span> <span class="st">&quot;CBA.AX&quot;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>csv.url <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;http://ichart.finance.yahoo.com/table.csv?s=&quot;</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>ticker, <span class="st">&quot;&amp;a=01&amp;b=9&amp;c=2009&amp;d=01&amp;e=9&amp;f=2014&amp;g=d&amp;ignore=.csv&quot;</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>prices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">url</span>(csv.url), <span class="at">as.is =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>prices<span class="sc">$</span>Date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(prices<span class="sc">$</span>Date)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>close <span class="ot">&lt;-</span> prices<span class="sc">$</span>Close</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>prices<span class="sc">$</span>logReturns <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">log</span>(close[<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(close)]<span class="sc">/</span>close[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(close)<span class="sc">-</span><span class="dv">1</span>)]))</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Create plot of price series and add to worksheet</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> prices, <span class="fu">aes</span>(<span class="fu">as.Date</span>(Date), <span class="fu">as.numeric</span>(Close))) <span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_line</span>(<span class="at">colour=</span><span class="st">&quot;royalblue2&quot;</span>) <span class="sc">+</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Date&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Price&quot;</span>, <span class="at">title =</span> ticker) <span class="sc">+</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_area</span>(<span class="at">fill =</span> <span class="st">&quot;royalblue1&quot;</span>,<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="fu">coord_cartesian</span>(<span class="at">ylim=</span><span class="fu">c</span>(<span class="fu">min</span>(prices<span class="sc">$</span>Close)<span class="sc">-</span><span class="fl">1.5</span>, <span class="fu">max</span>(prices<span class="sc">$</span>Close)<span class="sc">+</span><span class="fl">1.5</span>)) </span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="do">## Add worksheet and write plot to sheet</span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(wb, <span class="at">sheetName =</span> <span class="st">&quot;CBA&quot;</span>)</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="fu">insertPlot</span>(wb, <span class="at">sheet =</span> <span class="dv">1</span>, <span class="at">xy =</span> <span class="fu">c</span>(<span class="st">&quot;J&quot;</span>, <span class="dv">3</span>))</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="do">## Histogram of log returns</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> prices, <span class="fu">aes</span>(<span class="at">x =</span> logReturns)) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">binwidth=</span><span class="fl">0.0025</span>) <span class="sc">+</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Histogram of log returns&quot;</span>)</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="do">## currency </span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(prices<span class="sc">$</span>Close) <span class="ot">&lt;-</span> <span class="st">&quot;currency&quot;</span> <span class="do">## styles as currency in workbook</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="do">## write historical data and  histogram of returns</span></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a><span class="fu">writeDataTable</span>(wb, <span class="at">sheet =</span> <span class="st">&quot;CBA&quot;</span>, <span class="at">x =</span> prices)</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a><span class="fu">insertPlot</span>(wb, <span class="at">sheet =</span> <span class="dv">1</span>, <span class="at">startRow=</span><span class="dv">25</span>, <span class="at">startCol =</span> <span class="st">&quot;J&quot;</span>)</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a><span class="do">## Add conditional formatting to show where logReturn &gt; 0.01 using default style</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a><span class="fu">conditionalFormat</span>(wb, <span class="at">sheet =</span> <span class="dv">1</span>, <span class="at">cols =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(prices), <span class="at">rows =</span> <span class="dv">2</span><span class="sc">:</span>(<span class="fu">nrow</span>(prices)<span class="sc">+</span><span class="dv">1</span>),</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a><span class="at">rule =</span> <span class="st">&quot;$H2 &gt; 0.01&quot;</span>)</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="do">## style log return col as a percentage  </span></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>logRetStyle <span class="ot">&lt;-</span> <span class="fu">createStyle</span>(<span class="at">numFmt =</span> <span class="st">&quot;percentage&quot;</span>)</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a><span class="fu">addStyle</span>(wb, <span class="dv">1</span>, <span class="at">style =</span> logRetStyle, <span class="at">rows =</span> <span class="dv">2</span><span class="sc">:</span>(<span class="fu">nrow</span>(prices) <span class="sc">+</span> <span class="dv">1</span>), </span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a><span class="at">cols =</span> <span class="st">&quot;H&quot;</span>, <span class="at">gridExpand =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a><span class="fu">setColWidths</span>(wb, <span class="at">sheet=</span><span class="dv">1</span>, <span class="at">cols =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;F&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;H&quot;</span>), <span class="at">widths =</span> <span class="dv">15</span>)</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a><span class="do">## save workbook to working directory</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="fu">saveWorkbook</span>(wb, <span class="st">&quot;stockPrice.xlsx&quot;</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="fu">openXL</span>(<span class="st">&quot;stockPrice.xlsx&quot;</span>)</span></code></pre></div>
+</div>
+<div id="image-compression-using-pca" class="section level3">
+<h3>Image Compression using PCA</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(openxlsx)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(jpeg)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(ggplot2)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>plotFn <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...){</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  colvec <span class="ot">&lt;-</span> <span class="fu">grey</span>(x)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  colmat <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">match</span>(colvec, <span class="fu">unique</span>(colvec)), <span class="at">dim =</span> <span class="fu">dim</span>(x)[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>])</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">image</span>(<span class="at">x =</span> <span class="dv">0</span><span class="sc">:</span>(<span class="fu">dim</span>(colmat)[<span class="dv">2</span>]), <span class="at">y =</span> <span class="dv">0</span><span class="sc">:</span>(<span class="fu">dim</span>(colmat)[<span class="dv">1</span>]), <span class="at">z =</span> <span class="fu">t</span>(colmat[<span class="fu">nrow</span>(colmat)<span class="sc">:</span><span class="dv">1</span>, ]),</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> <span class="fu">unique</span>(colvec), <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>, <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">asp =</span> <span class="dv">1</span>,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">bty =</span><span class="st">&quot;n&quot;</span>, <span class="at">frame.plot=</span>F, <span class="at">ann=</span><span class="cn">FALSE</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Create workbook and add a worksheet, hide gridlines</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>wb <span class="ot">&lt;-</span> <span class="fu">createWorkbook</span>(<span class="st">&quot;Einstein&quot;</span>)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(wb, <span class="st">&quot;Original Image&quot;</span>, <span class="at">gridLines =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">readJPEG</span>(<span class="fu">file.path</span>(<span class="fu">path.package</span>(<span class="st">&quot;openxlsx&quot;</span>), <span class="st">&quot;einstein.jpg&quot;</span>))</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>height <span class="ot">&lt;-</span> <span class="fu">nrow</span>(A); width <span class="ot">&lt;-</span> <span class="fu">ncol</span>(A)</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="do">## write &quot;Original Image&quot; to cell B2</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(wb, <span class="dv">1</span>, <span class="st">&quot;Original Image&quot;</span>, <span class="at">xy =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="do">## write Object size to cell B3</span></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(wb, <span class="dv">1</span>, <span class="fu">sprintf</span>(<span class="st">&quot;Image object size: %s bytes&quot;</span>,</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">format</span>(<span class="fu">object.size</span>(A<span class="sc">+</span><span class="dv">0</span>)[[<span class="dv">1</span>]], <span class="at">big.mark=</span><span class="st">&#39;,&#39;</span>)), </span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>          <span class="at">xy =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>))  <span class="do">## equivalent to startCol = 2, startRow = 3</span></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a><span class="do">## Plot image</span></span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar=</span><span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">4</span>), <span class="at">xpd =</span> <span class="cn">NA</span>); <span class="fu">plotFn</span>(A)</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a><span class="do">## insert plot currently showing in plot window</span></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a><span class="fu">insertPlot</span>(wb, <span class="dv">1</span>, width, height, <span class="at">units=</span><span class="st">&quot;px&quot;</span>, <span class="at">startRow=</span> <span class="dv">5</span>, <span class="at">startCol =</span> <span class="dv">2</span>)       </span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a><span class="do">## SVD of covariance matrix</span></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>rMeans <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(A)</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>rowMeans <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&quot;cbind&quot;</span>, <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">ncol</span>(A), <span class="cf">function</span>(X) rMeans))</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> A <span class="sc">-</span> rowMeans</span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>E <span class="ot">&lt;-</span> <span class="fu">svd</span>(A <span class="sc">%*%</span> <span class="fu">t</span>(A) <span class="sc">/</span> (<span class="fu">ncol</span>(A) <span class="sc">-</span> <span class="dv">1</span>)) <span class="co"># SVD on covariance matrix of A</span></span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>pve <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;Eigenvalues&quot;</span> <span class="ot">=</span> E<span class="sc">$</span>d, </span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;PVE&quot;</span> <span class="ot">=</span> E<span class="sc">$</span>d<span class="sc">/</span><span class="fu">sum</span>(E<span class="sc">$</span>d),</span>
+<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;Cumulative PVE&quot;</span> <span class="ot">=</span> <span class="fu">cumsum</span>(E<span class="sc">$</span>d<span class="sc">/</span><span class="fu">sum</span>(E<span class="sc">$</span>d)))</span>
+<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a><span class="do">## write eigenvalues to worksheet</span></span>
+<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(wb, <span class="st">&quot;Principal Component Analysis&quot;</span>)</span>
+<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>hs <span class="ot">&lt;-</span> <span class="fu">createStyle</span>(<span class="at">fontColour =</span> <span class="st">&quot;#ffffff&quot;</span>, <span class="at">fgFill =</span> <span class="st">&quot;#4F80BD&quot;</span>,</span>
+<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>                  <span class="at">halign =</span> <span class="st">&quot;CENTER&quot;</span>, <span class="at">textDecoration =</span> <span class="st">&quot;Bold&quot;</span>,</span>
+<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>                  <span class="at">border =</span> <span class="st">&quot;TopBottomLeftRight&quot;</span>, <span class="at">borderColour =</span> <span class="st">&quot;#4F81BD&quot;</span>)</span>
+<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(wb, <span class="dv">2</span>, <span class="at">x=</span><span class="st">&quot;Proportions of variance explained by Eigenvector&quot;</span> ,<span class="at">startRow =</span> <span class="dv">2</span>)</span>
+<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a><span class="fu">mergeCells</span>(wb, <span class="at">sheet=</span><span class="dv">2</span>, <span class="at">cols=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">rows=</span><span class="dv">2</span>)</span>
+<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a><span class="fu">setColWidths</span>(wb, <span class="dv">2</span>, <span class="at">cols =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">12</span>, <span class="dv">15</span>))</span>
+<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a><span class="fu">writeData</span>(wb, <span class="dv">2</span>, <span class="at">x=</span>pve, <span class="at">startRow =</span> <span class="dv">3</span>, <span class="at">startCol =</span> <span class="dv">1</span>, <span class="at">borders=</span><span class="st">&quot;rows&quot;</span>, <span class="at">headerStyle=</span>hs)</span>
+<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a><span class="do">## Plots</span></span>
+<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>pve <span class="ot">&lt;-</span> <span class="fu">cbind</span>(pve, <span class="st">&quot;Ind&quot;</span> <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(pve))</span>
+<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pve[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,], <span class="fu">aes</span>(<span class="at">x =</span> Ind, <span class="at">y =</span> <span class="dv">100</span><span class="sc">*</span>PVE)) <span class="sc">+</span></span>
+<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">&quot;identity&quot;</span>, <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Principal Component Index&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;Proportion of Variance Explained&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a><span class="do">## Write plot to worksheet 2</span></span>
+<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a><span class="fu">insertPlot</span>(wb, <span class="dv">2</span>, <span class="at">width =</span> <span class="dv">5</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">startCol =</span> <span class="st">&quot;E&quot;</span>, <span class="at">startRow =</span> <span class="dv">2</span>) </span>
+<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a><span class="do">## Plot of cumulative explained variance</span></span>
+<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> pve[<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>,], <span class="fu">aes</span>(<span class="at">x =</span> Ind, <span class="at">y =</span> <span class="dv">100</span><span class="sc">*</span>Cumulative.PVE)) <span class="sc">+</span></span>
+<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="fl">2.5</span>) <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">&quot;Number of PCs&quot;</span>) <span class="sc">+</span></span>
+<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Cumulative Proportion of Variance Explained&quot;</span>)</span>
+<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a><span class="fu">insertPlot</span>(wb, <span class="dv">2</span>, <span class="at">width =</span> <span class="dv">5</span>, <span class="at">height =</span> <span class="dv">4</span>, <span class="at">xy=</span> <span class="fu">c</span>(<span class="st">&quot;M&quot;</span>, <span class="dv">2</span>)) </span>
+<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a><span class="do">## Reconstruct image using increasing number of PCs</span></span>
+<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a>nPCs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">12</span>, <span class="dv">20</span>, <span class="dv">50</span>, <span class="dv">200</span>)</span>
+<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a>startRow <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">24</span>), <span class="at">each =</span> <span class="dv">3</span>)</span>
+<span id="cb17-75"><a href="#cb17-75" aria-hidden="true" tabindex="-1"></a>startCol <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;B&quot;</span>, <span class="st">&quot;H&quot;</span>, <span class="st">&quot;N&quot;</span>), <span class="dv">2</span>)</span>
+<span id="cb17-76"><a href="#cb17-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-77"><a href="#cb17-77" aria-hidden="true" tabindex="-1"></a><span class="do">## create a worksheet to save reconstructed images to</span></span>
+<span id="cb17-78"><a href="#cb17-78" aria-hidden="true" tabindex="-1"></a><span class="fu">addWorksheet</span>(wb, <span class="st">&quot;Reconstructed Images&quot;</span>, <span class="at">zoom =</span> <span class="dv">90</span>)</span>
+<span id="cb17-79"><a href="#cb17-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-80"><a href="#cb17-80" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(nPCs)){</span>
+<span id="cb17-81"><a href="#cb17-81" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-82"><a href="#cb17-82" aria-hidden="true" tabindex="-1"></a>  V <span class="ot">&lt;-</span> E<span class="sc">$</span>v[, <span class="dv">1</span><span class="sc">:</span>nPCs[i]]</span>
+<span id="cb17-83"><a href="#cb17-83" aria-hidden="true" tabindex="-1"></a>  imgHat <span class="ot">&lt;-</span> <span class="fu">t</span>(V) <span class="sc">%*%</span> A  <span class="do">## project img data on to PCs</span></span>
+<span id="cb17-84"><a href="#cb17-84" aria-hidden="true" tabindex="-1"></a>  imgSize <span class="ot">&lt;-</span> <span class="fu">object.size</span>(V) <span class="sc">+</span> <span class="fu">object.size</span>(imgHat) <span class="sc">+</span> <span class="fu">object.size</span>(rMeans)</span>
+<span id="cb17-85"><a href="#cb17-85" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-86"><a href="#cb17-86" aria-hidden="true" tabindex="-1"></a>  imgHat <span class="ot">&lt;-</span> V <span class="sc">%*%</span> imgHat <span class="sc">+</span> rowMeans  <span class="do">## reconstruct from PCs and add back row means</span></span>
+<span id="cb17-87"><a href="#cb17-87" aria-hidden="true" tabindex="-1"></a>  imgHat <span class="ot">&lt;-</span> <span class="fu">round</span>((imgHat <span class="sc">-</span> <span class="fu">min</span>(imgHat)) <span class="sc">/</span> (<span class="fu">max</span>(imgHat) <span class="sc">-</span> <span class="fu">min</span>(imgHat))<span class="sc">*</span><span class="dv">255</span>) <span class="co"># scale</span></span>
+<span id="cb17-88"><a href="#cb17-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plotFn</span>(imgHat<span class="sc">/</span><span class="dv">255</span>)</span>
+<span id="cb17-89"><a href="#cb17-89" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-90"><a href="#cb17-90" aria-hidden="true" tabindex="-1"></a>  <span class="do">## write strings to worksheet 3</span></span>
+<span id="cb17-91"><a href="#cb17-91" aria-hidden="true" tabindex="-1"></a>  <span class="fu">writeData</span>(wb, <span class="st">&quot;Reconstructed Images&quot;</span>, </span>
+<span id="cb17-92"><a href="#cb17-92" aria-hidden="true" tabindex="-1"></a>            <span class="fu">sprintf</span>(<span class="st">&quot;Number of principal components used:  %s&quot;</span>, </span>
+<span id="cb17-93"><a href="#cb17-93" aria-hidden="true" tabindex="-1"></a>                    nPCs[[i]]), startCol[i], startRow[i])</span>
+<span id="cb17-94"><a href="#cb17-94" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-95"><a href="#cb17-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">writeData</span>(wb, <span class="st">&quot;Reconstructed Images&quot;</span>, </span>
+<span id="cb17-96"><a href="#cb17-96" aria-hidden="true" tabindex="-1"></a>            <span class="fu">sprintf</span>(<span class="st">&quot;Sum of component object sizes: %s bytes&quot;</span>,</span>
+<span id="cb17-97"><a href="#cb17-97" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">format</span>(<span class="fu">as.numeric</span>(imgSize), <span class="at">big.mark=</span><span class="st">&#39;,&#39;</span>)), startCol[i], startRow[i]<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb17-98"><a href="#cb17-98" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-99"><a href="#cb17-99" aria-hidden="true" tabindex="-1"></a>  <span class="do">## write reconstruced image</span></span>
+<span id="cb17-100"><a href="#cb17-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">insertPlot</span>(wb, <span class="st">&quot;Reconstructed Images&quot;</span>, width, height, <span class="at">units=</span><span class="st">&quot;px&quot;</span>,</span>
+<span id="cb17-101"><a href="#cb17-101" aria-hidden="true" tabindex="-1"></a>             <span class="at">xy =</span> <span class="fu">c</span>(startCol[i], startRow[i]<span class="sc">+</span><span class="dv">3</span>))</span>
+<span id="cb17-102"><a href="#cb17-102" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb17-103"><a href="#cb17-103" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-104"><a href="#cb17-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-105"><a href="#cb17-105" aria-hidden="true" tabindex="-1"></a><span class="co"># hide grid lines</span></span>
+<span id="cb17-106"><a href="#cb17-106" aria-hidden="true" tabindex="-1"></a><span class="fu">showGridLines</span>(wb, <span class="at">sheet =</span> <span class="dv">3</span>, <span class="at">showGridLines =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-107"><a href="#cb17-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-108"><a href="#cb17-108" aria-hidden="true" tabindex="-1"></a><span class="do">## Make text above images BOLD</span></span>
+<span id="cb17-109"><a href="#cb17-109" aria-hidden="true" tabindex="-1"></a>boldStyle <span class="ot">&lt;-</span> <span class="fu">createStyle</span>(<span class="at">textDecoration=</span><span class="st">&quot;BOLD&quot;</span>)</span>
+<span id="cb17-110"><a href="#cb17-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-111"><a href="#cb17-111" aria-hidden="true" tabindex="-1"></a><span class="do">## only want to apply style to specified cells (not all combinations of rows &amp; cols)</span></span>
+<span id="cb17-112"><a href="#cb17-112" aria-hidden="true" tabindex="-1"></a><span class="fu">addStyle</span>(wb, <span class="st">&quot;Reconstructed Images&quot;</span>, <span class="at">style=</span>boldStyle, </span>
+<span id="cb17-113"><a href="#cb17-113" aria-hidden="true" tabindex="-1"></a>         <span class="at">rows =</span> <span class="fu">c</span>(startRow, startRow<span class="sc">+</span><span class="dv">1</span>), <span class="at">cols =</span> <span class="fu">rep</span>(startCol, <span class="dv">2</span>), </span>
+<span id="cb17-114"><a href="#cb17-114" aria-hidden="true" tabindex="-1"></a>         <span class="at">gridExpand =</span> <span class="cn">FALSE</span>)  </span>
+<span id="cb17-115"><a href="#cb17-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-116"><a href="#cb17-116" aria-hidden="true" tabindex="-1"></a><span class="do">## save workbook to working directory</span></span>
+<span id="cb17-117"><a href="#cb17-117" aria-hidden="true" tabindex="-1"></a><span class="fu">saveWorkbook</span>(wb, <span class="st">&quot;Image dimensionality reduction.xlsx&quot;</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb17-118"><a href="#cb17-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-119"><a href="#cb17-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-120"><a href="#cb17-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-121"><a href="#cb17-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-122"><a href="#cb17-122" aria-hidden="true" tabindex="-1"></a><span class="do">## remove example files for cran test</span></span>
+<span id="cb17-123"><a href="#cb17-123" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">identical</span>(<span class="fu">Sys.getenv</span>(<span class="st">&quot;NOT_CRAN&quot;</span>, <span class="at">unset =</span> <span class="st">&quot;true&quot;</span>), <span class="st">&quot;false&quot;</span>)) {</span>
+<span id="cb17-124"><a href="#cb17-124" aria-hidden="true" tabindex="-1"></a>file_list<span class="ot">&lt;-</span><span class="fu">list.files</span>(<span class="at">pattern=</span><span class="st">&quot;</span><span class="sc">\\</span><span class="st">.xlsx&quot;</span>,<span class="at">recursive =</span> T)</span>
+<span id="cb17-125"><a href="#cb17-125" aria-hidden="true" tabindex="-1"></a>file_list<span class="ot">&lt;-</span>fl[<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">&quot;inst/extdata&quot;</span>,file_list)<span class="sc">&amp;!</span><span class="fu">grepl</span>(<span class="st">&quot;man/&quot;</span>,file_list)]</span>
+<span id="cb17-126"><a href="#cb17-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-127"><a href="#cb17-127" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">length</span>(file_list)<span class="sc">&gt;</span><span class="dv">0</span>){</span>
+<span id="cb17-128"><a href="#cb17-128" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(file_list)</span>
+<span id="cb17-129"><a href="#cb17-129" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

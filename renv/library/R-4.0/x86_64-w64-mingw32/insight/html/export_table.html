@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Data frame and Tables Pretty Formatting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for export_table {insight}"><tr><td>export_table {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Data frame and Tables Pretty Formatting</h2>
+
+<h3>Description</h3>
+
+<p>Data frame and Tables Pretty Formatting
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+export_table(
+  x,
+  sep = " | ",
+  header = "-",
+  empty_line = NULL,
+  digits = 2,
+  protect_integers = TRUE,
+  missing = "",
+  width = NULL,
+  format = NULL,
+  title = NULL,
+  caption = title,
+  subtitle = NULL,
+  footer = NULL,
+  align = NULL,
+  group_by = NULL,
+  zap_small = FALSE,
+  verbose = TRUE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A data frame.</p>
+</td></tr>
+<tr valign="top"><td><code>sep</code></td>
+<td>
+<p>Column separator.</p>
+</td></tr>
+<tr valign="top"><td><code>header</code></td>
+<td>
+<p>Header separator. Can be <code>NULL</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>empty_line</code></td>
+<td>
+<p>Separator used for empty lines. If <code>NULL</code>, line remains
+empty (i.e. filled with whitespaces).</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>Number of significant digits. May also be <code>"scientific"</code>
+to return scientific notation. For the latter case, control the number of
+digits by adding the value as suffix, e.g. <code>digits = "scientific4"</code>
+to have scientific notation with 4 decimal places.</p>
+</td></tr>
+<tr valign="top"><td><code>protect_integers</code></td>
+<td>
+<p>Should integers be kept as integers (i.e., without
+decimals)?</p>
+</td></tr>
+<tr valign="top"><td><code>missing</code></td>
+<td>
+<p>Value by which <code>NA</code> values are replaced. By default, an
+empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>Minimum width of the returned string. If not <code>NULL</code> and
+<code>width</code> is larger than the string's length, leading whitespaces are
+added to the string.</p>
+</td></tr>
+<tr valign="top"><td><code>format</code></td>
+<td>
+<p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
+returned output is used for basic printing. Can be one of <code>NULL</code> (the
+default) resp. <code>"text"</code> for plain text, <code>"markdown"</code> (or
+<code>"md"</code>) for markdown and <code>"html"</code> for HTML output.</p>
+</td></tr>
+<tr valign="top"><td><code>title, caption, subtitle</code></td>
+<td>
+<p>Table title (same as caption) and subtitle, as strings. If <code>NULL</code>,
+no title or subtitle is printed, unless it is stored as attributes (<code>table_title</code>,
+or its alias <code>table_caption</code>, and <code>table_subtitle</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>footer</code></td>
+<td>
+<p>Table footer, as string. For markdown-formatted tables, table
+footers, due to the limitation in markdown rendering, are actually just a
+new text line under the table.</p>
+</td></tr>
+<tr valign="top"><td><code>align</code></td>
+<td>
+<p>Column alignment. For markdown-formatted tables, the default
+<code>align = NULL</code> will right-align numeric columns, while all other
+columns will be left-aligned. If <code>format = "html"</code>, the default is
+left-align first column and center all remaining. May be a string to
+indicate alignment rules for the complete table, like <code>"left"</code>,
+<code>"right"</code>, <code>"center"</code> or <code>"firstleft"</code> (to left-align first
+column, center remaining); or maybe a string with abbreviated alignment
+characters, where the length of the string must equal the number of columns,
+for instance, <code>align = "lccrl"</code> would left-align the first column, center
+the second and third, right-align column four and left-align the fifth
+column. For HTML-tables, may be one of <code>"center"</code>, <code>"left"</code> or
+<code>"right"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>group_by</code></td>
+<td>
+<p>Name of column in <code>x</code> that indicates grouping for tables.
+Only applies when <code>format = "html"</code>. <code>group_by</code> is passed down
+to <code>gt::gt(groupname_col = group_by)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>zap_small</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, small values are rounded after
+<code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal
+places than <code>digits</code> are printed in scientific notation.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle messages and warnings.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A data frame in character format.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The values for <code>caption</code>, <code>subtitle</code> and <code>footer</code>
+can also be provided as attributes of <code>x</code>, e.g. if <code>caption = NULL</code>
+and <code>x</code> has attribute <code>table_caption</code>, the value for this
+attribute will be used as table caption. <code>table_subtitle</code> is the
+attribute for <code>subtitle</code>, and <code>table_footer</code> for <code>footer</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+cat(export_table(iris))
+cat(export_table(iris, sep = " ", header = "*", digits = 1))
+## Not run: 
+# colored footers
+data(iris)
+x &lt;- as.data.frame(iris[1:5, ])
+attr(x, "table_footer") &lt;- c("This is a yellow footer line.", "yellow")
+cat(export_table(x))
+
+attr(x, "table_footer") &lt;- list(
+  c("\nA yellow line", "yellow"),
+  c("\nAnd a red line", "red"),
+  c("\nAnd a blue line", "blue")
+)
+cat(export_table(x))
+
+attr(x, "table_footer") &lt;- list(
+  c("Without the ", "yellow"),
+  c("new-line character ", "red"),
+  c("we can have multiple colors per line.", "blue")
+)
+cat(export_table(x))
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

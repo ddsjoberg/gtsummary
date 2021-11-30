@@ -1,0 +1,262 @@
+/* MENU */
+
+.mw-menu {
+  width:50px;
+  height:100%;
+  background-color: #e7e8ea;
+  border-right:solid 1px #e7e8ea;
+  padding-top: 30px;
+}
+
+
+/* general style for buttons */
+.mw-btn {
+  position: relative;
+  width:50px;
+  height:50px;
+  cursor:pointer;
+}
+
+.mw-btn.active {
+  background-color: #4e9cff;
+}
+
+/* Arrow that is displayed when a button is active*/
+.right-arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 25px 0 25px 8px;
+  border-color: transparent transparent transparent #4e9cff;
+  position: absolute;
+  top:0;
+  left: 50px;
+  display:none;
+}
+
+.mw-btn:hover .right-arrow {
+  border-color: transparent transparent transparent #2b7be2;
+}
+
+.active>.right-arrow {
+  display: block;
+}
+
+/* Settings button */
+.mw-btn-settings {
+  margin-bottom: 30px;
+  padding: 2px;
+}
+
+.mw-btn-settings:hover {
+  color:#fff;
+  background-color: #2b7be2;
+}
+
+.bt1, .btn.bt1 {
+  color: #4e9cff;
+  text-align: center;
+  vertical-align: bottom;
+  line-height: 44px;
+  font-size: 30px;
+  background-color: white;
+  border: solid 1px #4e9cff;
+}
+.mw-btn-settings:hover .bt1 {
+  color:#fff;
+  border:solid 1px #2b7be2;
+  background-color: #2b7be2;
+}
+
+.mw-btn-settings.active .bt1 {
+  color: white;
+  background-color: #4e9cff;
+}
+
+.mw-btn-settings.active:hover .bt1 {
+  color: white;
+  background-color: #2b7be2;
+  border: solid 1px #2b7be2;
+}
+
+/* Buttons used to display inputs for a specific area */
+.mw-btn-area {
+  padding: 10px 3.3px;
+}
+
+.mw-btn-area:hover {
+  background-color: #2b7be2;
+}
+
+.mw-icon-areachart {
+  position:relative;
+  background-color: white;
+  border: solid 1px #4e9cff;
+  width: 44px;
+  height: 30px;
+}
+
+.mw-icon-chart {
+  position: absolute;
+  background-color: #4e9cff;
+}
+
+.mw-btn:hover .mw-icon-chart {
+  background-color: #2b7be2;
+}
+
+
+/* OK and save buttons button */
+.btn.mw-btn-ok, .btn.mw-btn-save, .btn.mw-btn-export {
+  margin: 0 3px;
+  width: 44px;
+  height: 44px;
+  position: absolute;
+  bottom: 30px;
+  background-color: #26b48b;
+  color: white;
+  text-align: center;
+  vertical-align: bottom;
+  line-height: 44px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: bold;
+  padding:0;
+}
+
+.btn.mw-btn-ok:hover, .btn.mw-btn-ok:active, .btn.mw-btn-ok:focus, .btn.mw-btn-save:hover, .btn.mw-btn-save:focus, .btn.mw-btn-save:active, .btn.mw-btn-export:hover, .btn.mw-btn-export:focus, .btn.mw-btn-export:active  {
+  color: white;
+  background-color: #0b946c;
+}
+
+
+.mw-btn-update {
+  padding: 2px;
+}
+
+.mw-btn-update .bt1 {
+  height: 46px;
+  width: 46px;
+  padding: 2px;
+}
+
+.mw-btn-update .bt1:focus {
+  color: #4e9cff;
+  background-color: white;
+  border-color: #4e9cff;
+}
+
+.mw-btn-update>.bt1:hover {
+  color: white;
+  background-color: #2b7be2;
+  border-color: #2b7be2;
+}
+
+.mw-btn-update .bt1:active {
+  color: white;
+  background-color: #4e9cff;
+  border-color: #4e9cff;
+}
+
+
+.mw-chart-selection {
+  margin-bottom: 30px;
+}
+
+
+/* /!\ DO NOT MODIFY THE REST OF THE FILE /!\ */
+
+html, body {
+  height:100%;
+}
+
+.mw-container {
+  height:100%;
+  width:100%;
+}
+
+.with-border {
+  padding: 30px 0;
+}
+
+.without-ok .mw-btn-ok {
+  display: none;
+}
+
+.without-save .mw-btn-save {
+  display: none;
+}
+
+.without-export .mw-btn-export {
+  display: none;
+}
+
+.with-border > div {
+  border:solid 1px #ccc;
+  border-radius: 5px;
+}
+
+.mw-input-container {
+  height:100%;
+}
+
+.mw-inputs {
+  width: 200px;
+  height:100%;
+  display:none;
+  border-right:solid 1px #4e9cff;
+  padding:10px;
+  overflow: auto;
+}
+
+.mw-chartarea {
+  flex: 1;
+  -webkit-flex: 1;
+  -moz-flex: 1;
+  -ms-flex: 1;
+}
+
+.mw-chart {
+  width:100%;
+  height:100%;
+}
+
+/* Overhide bootstrap style for some input controls */
+
+.form-control:focus, .selectize-input.focus  {
+  border-color: #4e9cff;
+}
+
+/* slider input */
+.irs-from, .irs-to, .irs-bar, .irs-bar-edge {
+  background-color: #4e9cff;
+}
+
+.irs-bar {
+  border-top: solid 1px #4e9cff;
+  border-bottom: solid 1px #4e9cff;
+}
+
+
+/* Group of inputs */
+.panel-default>.panel-heading {
+  background-color: #f0f0f0;
+}
+
+.panel-heading .arrow {
+  width: 22px;
+  text-align: center;
+}
+
+.panel-heading .arrow::before {
+  font-family: FontAwesome;
+  font-size: 20px;
+  content: "\f0d7";
+  display: inline-block;
+  padding-right: 10px;
+  vertical-align: middle;
+}
+
+.panel-heading.collapsed .arrow::before {
+  content: "\f0da";
+}

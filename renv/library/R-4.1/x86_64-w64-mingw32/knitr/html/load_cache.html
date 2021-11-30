@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Load the cache database of a code chunk</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for load_cache {knitr}"><tr><td>load_cache {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Load the cache database of a code chunk</h2>
+
+<h3>Description</h3>
+
+<p>If a code chunk has turned on the chunk option <code>cache = TRUE</code>, a cache
+database will be established after the document is compiled. You can use this
+function to manually load the database anywhere in the document (even before
+the code chunk). This makes it possible to use objects created later in the
+document earlier, e.g. in an inline R expression before the cached code
+chunk, which is normally not possible because <span class="pkg">knitr</span> compiles the
+document in a linear fashion, and objects created later cannot be used before
+they are created.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+load_cache(
+  label,
+  object,
+  notfound = "NOT AVAILABLE",
+  path = opts_chunk$get("cache.path"),
+  dir = opts_knit$get("output.dir"),
+  envir = NULL,
+  lazy = TRUE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>The chunk label of the code chunk that has a cache database.</p>
+</td></tr>
+<tr valign="top"><td><code>object</code></td>
+<td>
+<p>The name of the object to be fetched from the database. If it
+is missing, <code>NULL</code> is returned).</p>
+</td></tr>
+<tr valign="top"><td><code>notfound</code></td>
+<td>
+<p>A value to use when the <code>object</code> cannot be found.</p>
+</td></tr>
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p>Path of the cache database (normally set in the global chunk
+option <code>cache.path</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>dir</code></td>
+<td>
+<p>Path to use as the working directory. Defaults to the output
+directory if run inside a <span class="pkg">knitr</span> context and to the current working
+directory otherwise. Any relative <code>path</code> is defined from <code>dir</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>envir</code></td>
+<td>
+<p>Environment to use for cache loading, into which all objects in
+the cache for the specified chunk (not just that in <code>object</code>) will be
+loaded. Defaults to the value in <code><a href="../../knitr/help/knit_global.html">knit_global</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>lazy</code></td>
+<td>
+<p>Whether to <code><a href="../../base/html/lazyload.html">lazyLoad</a></code> the cache database (depending
+on the chunk option <code>cache.lazy = TRUE</code> or <code>FALSE</code> of that code
+chunk).</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Invisible <code>NULL</code> when <code>object</code> is not specified (the cache
+database will be loaded as a side effect), otherwise the value of the
+object if found.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Apparently this function loads the value of the object from the
+<em>previous</em> run of the document, which may be problematic when the
+value of the object becomes different the next time the document is
+compiled. Normally you must compile the document twice to make sure the
+cache database is created, and the object can be read from it. Please use
+this function with caution.
+</p>
+
+
+<h3>References</h3>
+
+<p>See the example #114 at
+<a href="https://github.com/yihui/knitr-examples">https://github.com/yihui/knitr-examples</a>.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

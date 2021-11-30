@@ -1,0 +1,45 @@
+Package: cpp11
+Title: A C++11 Interface for R's C Interface
+Version: 0.4.0
+Authors@R: 
+    c(person(given = "Jim",
+             family = "Hester",
+             role = c("aut", "cre"),
+             email = "jim.hester@rstudio.com",
+             comment = c(ORCID = "0000-0002-2739-7082")),
+      person(given = "Romain",
+             family = "François",
+             role = "ctb"),
+      person(given = "Benjamin",
+             family = "Kietzman",
+             role = "ctb"),
+      person(given = "RStudio",
+             role = c("cph", "fnd")))
+Description: Provides a header only, C++11 interface to R's C
+    interface.  Compared to other approaches 'cpp11' strives to be safe
+    against long jumps from the C API as well as C++ exceptions, conform
+    to normal R function semantics and supports interaction with 'ALTREP'
+    vectors.
+License: MIT + file LICENSE
+URL: https://cpp11.r-lib.org, https://github.com/r-lib/cpp11
+BugReports: https://github.com/r-lib/cpp11/issues
+Suggests: bench, brio, callr, cli, covr, decor, desc, ggplot2, glue,
+        knitr, lobstr, mockery, progress, rmarkdown, scales, Rcpp,
+        testthat, tibble, utils, vctrs, withr
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Config/Needs/cpp11/cpp_register: brio, cli, decor, desc, glue, tibble,
+        vctrs
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+SystemRequirements: C++11
+NeedsCompilation: no
+Packaged: 2021-09-21 15:22:56 UTC; jhester
+Author: Jim Hester [aut, cre] (<https://orcid.org/0000-0002-2739-7082>),
+  Romain François [ctb],
+  Benjamin Kietzman [ctb],
+  RStudio [cph, fnd]
+Maintainer: Jim Hester <jim.hester@rstudio.com>
+Repository: CRAN
+Date/Publication: 2021-09-22 08:50:10 UTC
+Built: R 4.1.1; ; 2021-09-23 17:19:45 UTC; windows

@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Squeeze a colonnade to a fixed width</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for squeeze {pillar}"><tr><td>squeeze {pillar}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Squeeze a colonnade to a fixed width</h2>
+
+<h3>Description</h3>
+
+<p>The <code>squeeze()</code> function usually doesn't need to be called manually.
+It returns an object suitable for printing and formatting at a fixed width
+with additional information about omitted columns, which can be retrieved
+via <code><a href="../../pillar/help/extra_cols.html">extra_cols()</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+squeeze(x, width = NULL, ...)
+</pre>
+
+
+<h3>Examples</h3>
+
+<pre>
+long_string &lt;- list(paste(letters, collapse = " "))
+squeeze(colonnade(long_string), width = 40)
+squeeze(colonnade(long_string), width = 20)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>pillar</em> version 1.6.3 <a href="00Index.html">Index</a>]</div>
+</body></html>

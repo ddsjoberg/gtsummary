@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Expand data frame to include all possible combinations of...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for expand {tidyr}"><tr><td>expand {tidyr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Expand data frame to include all possible combinations of values</h2>
+
+<h3>Description</h3>
+
+<p><code>expand()</code> generates all combination of variables found in a dataset.
+It is paired with <code>nesting()</code> and <code>crossing()</code> helpers. <code>crossing()</code>
+is a wrapper around <code><a href="../../tidyr/help/expand_grid.html">expand_grid()</a></code> that de-duplicates and sorts its inputs;
+<code>nesting()</code> is a helper that only finds combinations already present in the
+data.
+</p>
+<p><code>expand()</code> is often useful in conjunction with joins:
+</p>
+
+<ul>
+<li><p> use it with <code>right_join()</code> to convert implicit missing values to
+explicit missing values (e.g., fill in gaps in your data frame).
+</p>
+</li>
+<li><p> use it with <code>anti_join()</code> to figure out which combinations are missing
+(e.g., identify gaps in your data frame).
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+expand(data, ..., .name_repair = "check_unique")
+
+crossing(..., .name_repair = "check_unique")
+
+nesting(..., .name_repair = "check_unique")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A data frame.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Specification of columns to expand. Columns can be atomic vectors
+or lists.
+</p>
+
+<ul>
+<li><p> To find all unique combinations of <code>x</code>, <code>y</code> and <code>z</code>, including those not
+present in the data, supply each variable as a separate argument:
+<code>expand(df, x, y, z)</code>.
+</p>
+</li>
+<li><p> To find only the combinations that occur in the
+data, use <code>nesting</code>: <code>expand(df, nesting(x, y, z))</code>.
+</p>
+</li>
+<li><p> You can combine the two forms. For example,
+<code>expand(df, nesting(school_id, student_id), date)</code> would produce
+a row for each present school-student combination for all possible
+dates.
+</p>
+</li></ul>
+
+<p>When used with factors, <code>expand()</code> uses the full set of levels, not just
+those that appear in the data. If you want to use only the values seen in
+the data, use <code>forcats::fct_drop()</code>.
+</p>
+<p>When used with continuous variables, you may need to fill in values
+that do not appear in the data: to do so use expressions like
+<code>year = 2010:2020</code> or <code>year = full_seq(year,1)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>.name_repair</code></td>
+<td>
+<p>Treatment of problematic column names:
+</p>
+
+<ul>
+<li> <p><code>"minimal"</code>: No name repair or checks, beyond basic existence,
+</p>
+</li>
+<li> <p><code>"unique"</code>: Make sure names are unique and not empty,
+</p>
+</li>
+<li> <p><code>"check_unique"</code>: (default value), no name repair, but check they are
+<code>unique</code>,
+</p>
+</li>
+<li> <p><code>"universal"</code>: Make the names <code>unique</code> and syntactic
+</p>
+</li>
+<li><p> a function: apply custom name repair (e.g., <code>.name_repair = make.names</code>
+for names in the style of base R).
+</p>
+</li>
+<li><p> A purrr-style anonymous function, see <code><a href="../../rlang/help/as_function.html">rlang::as_function()</a></code>
+</p>
+</li></ul>
+
+<p>This argument is passed on as <code>repair</code> to <code><a href="../../vctrs/help/vec_as_names.html">vctrs::vec_as_names()</a></code>.
+See there for more details on these terms and the strategies used
+to enforce them.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../tidyr/help/complete.html">complete()</a></code> to expand list objects. <code><a href="../../tidyr/help/expand_grid.html">expand_grid()</a></code>
+to input vectors rather than a data frame.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+fruits &lt;- tibble(
+  type   = c("apple", "orange", "apple", "orange", "orange", "orange"),
+  year   = c(2010, 2010, 2012, 2010, 2010, 2012),
+  size  =  factor(
+    c("XS", "S",  "M", "S", "S", "M"),
+    levels = c("XS", "S", "M", "L")
+  ),
+  weights = rnorm(6, as.numeric(size) + 2)
+)
+
+# All possible combinations ---------------------------------------
+# Note that all defined, but not necessarily present, levels of the
+# factor variable `size` are retained.
+fruits %&gt;% expand(type)
+fruits %&gt;% expand(type, size)
+fruits %&gt;% expand(type, size, year)
+
+# Only combinations that already appear in the data ---------------
+fruits %&gt;% expand(nesting(type))
+fruits %&gt;% expand(nesting(type, size))
+fruits %&gt;% expand(nesting(type, size, year))
+
+# Other uses -------------------------------------------------------
+# Use with `full_seq()` to fill in values of continuous variables
+fruits %&gt;% expand(type, size, full_seq(year, 1))
+fruits %&gt;% expand(type, size, 2010:2012)
+
+# Use `anti_join()` to determine which observations are missing
+all &lt;- fruits %&gt;% expand(type, size, year)
+all
+all %&gt;% dplyr::anti_join(fruits)
+
+# Use with `right_join()` to fill in missing rows
+fruits %&gt;% dplyr::right_join(all)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>tidyr</em> version 1.1.4 <a href="00Index.html">Index</a>]</div>
+</body></html>

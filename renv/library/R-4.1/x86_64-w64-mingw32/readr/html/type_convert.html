@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Re-convert character columns in existing data frame</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for type_convert {readr}"><tr><td>type_convert {readr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Re-convert character columns in existing data frame</h2>
+
+<h3>Description</h3>
+
+<p>This is useful if you need to do some manual munging - you can read the
+columns in as character, clean it up with (e.g.) regular expressions and
+then let readr take another stab at parsing it. The name is a homage to
+the base <code><a href="../../utils/help/type.convert.html">utils::type.convert()</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+type_convert(
+  df,
+  col_types = NULL,
+  na = c("", "NA"),
+  trim_ws = TRUE,
+  locale = default_locale(),
+  guess_integer = FALSE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>df</code></td>
+<td>
+<p>A data frame.</p>
+</td></tr>
+<tr valign="top"><td><code>col_types</code></td>
+<td>
+<p>One of <code>NULL</code>, a <code><a href="../../readr/help/cols.html">cols()</a></code> specification, or
+a string. See <code>vignette("readr")</code> for more details.
+</p>
+<p>If <code>NULL</code>, column types will be imputed using all rows.</p>
+</td></tr>
+<tr valign="top"><td><code>na</code></td>
+<td>
+<p>Character vector of strings to interpret as missing values. Set this
+option to <code>character()</code> to indicate no missing values.</p>
+</td></tr>
+<tr valign="top"><td><code>trim_ws</code></td>
+<td>
+<p>Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
+each field before parsing it?</p>
+</td></tr>
+<tr valign="top"><td><code>locale</code></td>
+<td>
+<p>The locale controls defaults that vary from place to place.
+The default locale is US-centric (like R), but you can use
+<code><a href="../../readr/help/locale.html">locale()</a></code> to create your own locale that controls things like
+the default time zone, encoding, decimal mark, big mark, and day/month
+names.</p>
+</td></tr>
+<tr valign="top"><td><code>guess_integer</code></td>
+<td>
+<p>If <code>TRUE</code>, guess integer types for whole numbers, if
+<code>FALSE</code> guess numeric type for all numbers.</p>
+</td></tr>
+</table>
+
+
+<h3>Note</h3>
+
+<p><code>type_convert()</code> removes a 'spec' attribute,
+because it likely modifies the column data types.
+(see <code><a href="../../readr/help/spec.html">spec()</a></code> for more information about column specifications).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+df &lt;- data.frame(
+  x = as.character(runif(10)),
+  y = as.character(sample(10)),
+  stringsAsFactors = FALSE
+)
+str(df)
+str(type_convert(df))
+
+df &lt;- data.frame(x = c("NA", "10"), stringsAsFactors = FALSE)
+str(type_convert(df))
+
+# Type convert can be used to infer types from an entire dataset
+
+# first read the data as character
+data &lt;- read_csv(readr_example("mtcars.csv"),
+  col_types = list(.default = col_character())
+)
+str(data)
+# Then convert it with type_convert
+type_convert(data)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>readr</em> version 2.0.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

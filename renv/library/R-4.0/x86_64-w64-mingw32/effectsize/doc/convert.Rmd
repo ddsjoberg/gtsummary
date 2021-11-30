@@ -1,0 +1,210 @@
+---
+title: "Converting Between Indices of Effect Size"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, effect size, rules of thumb, guidelines, conversion]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Converting Between Indices of Effect Size}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = "")
+knitr::opts_chunk$set(comment = ">")
+options(digits = 3)
+
+pkgs <- c("effectsize", "ggplot2", "correlation", "parameters", "bayestestR")
+if (!all(sapply(pkgs, require, quietly = TRUE, character.only = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+The `effectsize` package contains function to convert among indices of effect
+size. This can be useful for meta-analyses, or any comparison between different
+types of statistical analyses.
+
+## Converting Between *r* and *d*
+
+The most basic conversion is between *r* values, a measure of standardized
+association between two continuous measures, and *d* values (such as Cohen's
+*d*), a measure of standardized differences between two groups / conditions.
+
+Let's simulate some data:
+
+```{r}
+set.seed(1)
+data <- bayestestR::simulate_difference(
+  n = 10,
+  d = 0.2,
+  names = c("Group", "Outcome")
+)
+```
+
+```{r, echo=FALSE}
+print(data, digits = 3)
+```
+
+We can compute Cohen's *d* between the two groups:
+
+```{r}
+cohens_d(Outcome ~ Group, data = data)
+```
+
+But we can also treat the 2-level `group` variable as a numeric variable, and
+compute Pearon's *r*:
+
+```{r, warning=FALSE}
+correlation::correlation(data)[2, ]
+```
+
+But what if we only have summary statistics? Say, we only have $d=-0.37$ and we
+want to know what the *r* would have been? We can approximate *r* using the
+following formula [@borenstein2009converting]:
+
+$$
+r \approx \frac{d}{\sqrt{d^2 + 4}}
+$$
+And indeed, if we use `d_to_r()`, we get a pretty decent approximation:
+
+```{r}
+d_to_r(-0.31)
+```
+
+(Which also works in the other way, with <code>r_to_d(0.17) = `r
+r_to_d(0.17)`</code>)
+
+As we can see, these are rough approximations, but they can be useful when we
+don't have the raw data on hand.
+
+### In multiple regression
+
+Although not exactly a classic Cohen's d, we can also approximate a partial-*d*
+value (that is, the standardized difference between two groups / conditions,
+with variance from other predictors partilled out). For example:
+
+```{r}
+fit <- lm(mpg ~ am + hp, data = mtcars)
+
+parameters::model_parameters(fit)
+
+# A couple of ways to get partial-d:
+5.28 / sigma(fit)
+t_to_d(4.89, df_error = 29)[[1]]
+```
+
+We can convert these semi-*d* values to *r* values, but in this case these
+represent the *partial* correlation:
+
+```{r}
+t_to_r(4.89, df_error = 29)
+
+correlation::correlation(mtcars[, c("mpg", "am", "hp")], partial = TRUE)[1, ]
+
+# all close to:
+d_to_r(1.81)
+```
+
+## From Odds ratios
+
+In binomial regression (more specifically in logistic regression), Odds ratios
+(OR) are themselves measures of effect size; they indicate the expected change
+in the odds of a some event.
+
+In some fields, it is common to dichotomize outcomes in order to be able to
+analyze them with logistic models. For example, if the outcome is the count of
+white blood cells, it can be more useful (medically) to predict the crossing of
+the threshold rather than the raw count itself. And so, where some scientists
+would maybe analyze the above data with a *t*-test and present Cohen's *d*,
+others might analyze it with a logistic regression model on the dichotomized
+outcome, and present OR. So the question can be asked: given such a OR, what
+would Cohen's *d* have been?
+
+Fortunately, there is a formula to approximate this [@sanchez2003effect]:
+
+$$
+d = log(OR) \times \frac{\sqrt{3}}{\pi}
+$$
+
+which is implemented in the `oddsratio_to_d()` function.
+
+Let's give it a try:
+
+```{r}
+# 1. Set a threshold
+thresh <- 0
+
+# 2. dichotomize the outcome
+data$Outcome_binom <- data$Outcome < thresh
+
+# 3. Fit a logistic regression:
+fit <- glm(Outcome_binom ~ Group,
+  data = data,
+  family = binomial()
+)
+
+parameters::model_parameters(fit)
+
+# Convert log(OR) (the coefficient) to d
+oddsratio_to_d(-0.81, log = TRUE)
+```
+
+### Odds ratios to Risk Ratios
+
+Odds ratio, although popular, are not very intuitive in their interpretations.
+We don't often think about the chances of catching a disease in terms of *odds*,
+instead we instead tend to think in terms of *probability* or some event - or
+the *risk*. Talking about *risks* we can also talk about the *change in risk*,
+knows as the *risk ratio* (*RR*).
+
+For example, if we find that for individual suffering from a migraine, for every
+bowl of brussels sprouts they eat, they're odds of reducing the migraine
+increase by an $OR = 3.5$ over a period of an hour. So, should people eat
+brussels sprouts to effectively reduce pain? Well, hard to say... Maybe if we
+look at *RR* we'll get a clue.
+
+We can convert between *OR* and *RR* for the following formula
+[@grant2014converting]:
+
+$$
+RR = \frac{OR}{(1 - p0 + (p0 \times OR))}  
+$$
+
+Where $p0$ is the base-rate risk - the probability of the event without the
+intervention (e.g., what is the probability of the migraine subsiding within an
+hour without eating any brussels sprouts). If it the base-rate risk is, say,
+85%, we get a *RR* of:
+
+```{r}
+OR <- 3.5
+baserate <- 0.85
+
+oddsratio_to_riskratio(OR, baserate)
+```
+
+That is - for every bowl of brussels sprouts, we increase the chances of
+reducing the migraine by a mere 12%! Is if worth it? Depends on you affinity to
+brussels sprouts...
+
+Note that the base-rate risk is crucial here. If instead of 85% it was only 4%,
+then the *RR* would be:
+
+```{r}
+OR <- 3.5
+baserate <- 0.04
+
+oddsratio_to_riskratio(OR, baserate)
+```
+
+That is - for every bowl of brussels sprouts, we increase the chances of
+reducing the migraine by a whopping 318%! Is if worth it? I guess that still
+depends on you affinity to brussels sprouts...
+
+# References

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Select helper functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for select_helpers {gtsummary}"><tr><td>select_helpers {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Select helper functions</h2>
+
+<h3>Description</h3>
+
+<p>Set of functions to supplement the tidyselect set of
+functions for selecting columns of data frames (and other items as well).
+</p>
+
+<ul>
+<li> <p><code>all_continuous()</code> selects continuous variables
+</p>
+</li>
+<li> <p><code>all_continuous2()</code> selects only type <code>"continuous2"</code>
+</p>
+</li>
+<li> <p><code>all_categorical()</code> selects categorical (including <code>"dichotomous"</code>) variables
+</p>
+</li>
+<li> <p><code>all_dichotomous()</code> selects only type <code>"dichotomous"</code>
+</p>
+</li>
+<li> <p><code>all_tests()</code> selects variables by the name of the test performed
+</p>
+</li>
+<li> <p><code>all_stat_cols()</code> selects columns from <code>tbl_summary</code>/<code>tbl_svysummary</code> object with summary statistics (i.e. <code>"stat_0"</code>, <code>"stat_1"</code>, <code>"stat_2"</code>, etc.)
+</p>
+</li>
+<li> <p><code>all_interaction()</code> selects interaction terms from a regression model
+</p>
+</li>
+<li> <p><code>all_intercepts()</code> selects intercept terms from a regression model
+</p>
+</li>
+<li> <p><code>all_contrasts()</code> selects variables in regression model based on their type of contrast
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+all_continuous(continuous2 = TRUE)
+
+all_continuous2()
+
+all_categorical(dichotomous = TRUE)
+
+all_dichotomous()
+
+all_tests(tests = NULL)
+
+all_stat_cols(stat_0 = TRUE)
+
+all_interaction()
+
+all_intercepts()
+
+all_contrasts(contrasts_type = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>continuous2</code></td>
+<td>
+<p>Logical indicating whether to include continuous2 variables. Default is <code>TRUE</code></p>
+</td></tr>
+<tr valign="top"><td><code>dichotomous</code></td>
+<td>
+<p>Logical indicating whether to include dichotomous variables.
+Default is <code>TRUE</code></p>
+</td></tr>
+<tr valign="top"><td><code>tests</code></td>
+<td>
+<p>string indicating the test type of the variables to select, e.g.
+select all variables being compared with <code>"t.test"</code></p>
+</td></tr>
+<tr valign="top"><td><code>stat_0</code></td>
+<td>
+<p>When <code>FALSE</code>, will not select the <code>"stat_0"</code> column. Default is <code>TRUE</code></p>
+</td></tr>
+<tr valign="top"><td><code>contrasts_type</code></td>
+<td>
+<p>type of contrast to select. When <code>NULL</code>, all variables with a
+contrast will be selected. Default is <code>NULL</code>.  Select among contrast types
+<code>c("treatment", "sum", "poly", "helmert", "other")</code></p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector of column names selected
+</p>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/select_ex1.png" width=55% />
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+select_ex1 &lt;-
+  trial %&gt;%
+  select(age, response, grade) %&gt;%
+  tbl_summary(
+    statistic = all_continuous() ~ "{mean} ({sd})",
+    type = all_dichotomous() ~ "categorical"
+  )
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.0.9006 <a href="00Index.html">Index</a>]</div>
+</body></html>

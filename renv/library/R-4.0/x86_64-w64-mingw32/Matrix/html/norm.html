@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Matrix Norms</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for norm {Matrix}"><tr><td>norm {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Matrix Norms</h2>
+
+<h3>Description</h3>
+
+<p>Computes a matrix norm of <code>x</code>, using Lapack for dense matrices.
+The norm can be the one  (<code>"O"</code>, or <code>"1"</code>) norm, the
+infinity (<code>"I"</code>) norm, the Frobenius  (<code>"F"</code>) norm,
+the maximum modulus (<code>"M"</code>) among elements of a matrix, or the
+spectral norm or 2-norm (<code>"2"</code>), as determined by the value of
+<code>type</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+norm(x, type, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>a real or complex matrix.
+</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+
+<p>A character indicating the type of norm desired.
+</p>
+
+<dl>
+<dt><code>"O"</code>, <code>"o"</code> or <code>"1"</code></dt><dd><p>specifies the one norm,
+(maximum absolute column sum);</p>
+</dd>
+<dt><code>"I"</code> or <code>"i"</code></dt><dd><p>specifies the infinity norm (maximum
+absolute row sum);</p>
+</dd>
+<dt><code>"F"</code> or <code>"f"</code></dt><dd><p>specifies the Frobenius norm (the
+Euclidean norm of <code>x</code> treated as if it were a vector);</p>
+</dd>
+<dt><code>"M"</code> or <code>"m"</code></dt><dd><p>specifies the maximum modulus of
+all the elements in <code>x</code>; and</p>
+</dd>
+<dt><code>"2"</code></dt><dd><p>specifies the &ldquo;spectral norm&rdquo; or 2-norm, which
+is the largest singular value (<code><a href="../../base/html/svd.html">svd</a></code>) of <code>x</code>.</p>
+</dd>
+</dl>
+
+<p>The default is <code>"O"</code>.  Only the first character of
+<code>type[1]</code> is used.
+</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>For dense matrices, the methods eventually call the Lapack functions
+<code>dlange</code>, <code>dlansy</code>, <code>dlantr</code>, <code>zlange</code>,
+<code>zlansy</code>, and <code>zlantr</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A numeric value of class <code>"norm"</code>, representing the quantity
+chosen according to <code>type</code>.
+</p>
+
+
+<h3>References</h3>
+
+<p>Anderson, E., et al. (1994).
+<em>LAPACK User's Guide,</em>
+2nd edition, SIAM, Philadelphia.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="condest.html">onenormest</a>()</code>, an <em>approximate</em> randomized estimate
+of the 1-norm condition number, efficient for large sparse matrices.
+</p>
+<p>The <code><a href="../../base/html/norm.html">norm</a>()</code> function from <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>'s <span class="pkg">base</span> package.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- Hilbert(9)
+norm(x)# = "O" = "1"
+stopifnot(identical(norm(x), norm(x, "1")))
+norm(x, "I")# the same, because 'x' is symmetric
+
+allnorms &lt;- function(d) vapply(c("1","I","F","M","2"),
+                               norm, x = d, double(1))
+allnorms(x)
+allnorms(Hilbert(10))
+
+i &lt;- c(1,3:8); j &lt;- c(2,9,6:10); x &lt;- 7 * (1:7)
+A &lt;- sparseMatrix(i, j, x = x)                      ##  8 x 10 "dgCMatrix"
+(sA &lt;- sparseMatrix(i, j, x = x, symmetric = TRUE)) ## 10 x 10 "dsCMatrix"
+(tA &lt;- sparseMatrix(i, j, x = x, triangular= TRUE)) ## 10 x 10 "dtCMatrix"
+(allnorms(A) -&gt; nA)
+allnorms(sA)
+allnorms(tA)
+stopifnot(all.equal(nA, allnorms(as(A, "matrix"))),
+	  all.equal(nA, allnorms(tA))) # because tA == rbind(A, 0, 0)
+A. &lt;- A; A.[1,3] &lt;- NA
+stopifnot(is.na(allnorms(A.))) # gave error
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Coerce lists and data.frames to data.table by reference</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for setDT {data.table}"><tr><td>setDT {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Coerce lists and data.frames to data.table by reference</h2>
+
+<h3>Description</h3>
+
+<p>In <code>data.table</code> parlance, all <code>set*</code> functions change their input <em>by reference</em>. That is, no copy is made at all, other than temporary working memory, which is as large as one column.. The only other <code>data.table</code> operator that modifies input by reference is <code><a href="../../data.table/help/:=.html">:=</a></code>. Check out the <code>See Also</code> section below for other <code>set*</code> function <code>data.table</code> provides.
+</p>
+<p><code>setDT</code> converts lists (both named and unnamed) and data.frames to data.tables <em>by reference</em>. This feature was requested on <a href="https://stackoverflow.com/questions/20345022/convert-a-data-frame-to-a-data-table-without-copy">Stackoverflow</a>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+setDT(x, keep.rownames=FALSE, key=NULL, check.names=FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p> A named or unnamed <code>list</code>, <code>data.frame</code> or <code>data.table</code>. </p>
+</td></tr>
+<tr valign="top"><td><code>keep.rownames</code></td>
+<td>
+<p> For <code>data.frame</code>s, <code>TRUE</code> retains the <code>data.frame</code>'s row names under a new column <code>rn</code>. <code>keep.rownames = "id"</code> names the column <code>"id"</code> instead. </p>
+</td></tr> 
+<tr valign="top"><td><code>key</code></td>
+<td>
+<p>Character vector of one or more column names which is passed to <code><a href="../../data.table/help/setkeyv.html">setkeyv</a></code>. It may be a single comma separated string such as <code>key="x,y,z"</code>, or a vector of names such as <code>key=c("x","y","z")</code>. </p>
+</td></tr>
+<tr valign="top"><td><code>check.names</code></td>
+<td>
+<p> Just as <code>check.names</code> in <code><a href="../../base/html/data.frame.html">data.frame</a></code>. </p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>When working on large <code>lists</code> or <code>data.frames</code>, it might be both time and memory consuming to convert them to a <code>data.table</code> using <code>as.data.table(.)</code>, as this will make a complete copy of the input object before to convert it to a <code>data.table</code>. The <code>setDT</code> function takes care of this issue by allowing to convert <code>lists</code> - both named and unnamed lists and <code>data.frames</code> <em>by reference</em> instead. That is, the input object is modified in place, no copy is being made.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The input is modified by reference, and returned (invisibly) so it can be used in compound statements; e.g., <code>setDT(X)[, sum(B), by=A]</code>. If you require a copy, take a copy first (using <code>DT2 = copy(DT)</code>). See <code>?copy</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+ <p><code><a href="../../data.table/help/data.table.html">data.table</a></code>, <code><a href="../../data.table/help/as.data.table.html">as.data.table</a></code>, <code><a href="../../data.table/help/setDF.html">setDF</a></code>, <code><a href="../../data.table/help/copy.html">copy</a></code>, <code><a href="../../data.table/help/setkey.html">setkey</a></code>, <code><a href="../../data.table/help/setcolorder.html">setcolorder</a></code>, <code><a href="../../data.table/help/setattr.html">setattr</a></code>, <code><a href="../../data.table/help/setnames.html">setnames</a></code>, <code><a href="../../data.table/help/set.html">set</a></code>, <code><a href="../../data.table/help/:=.html">:=</a></code>, <code><a href="../../data.table/help/setorder.html">setorder</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+set.seed(45L)
+X = data.frame(A=sample(3, 10, TRUE),
+         B=sample(letters[1:3], 10, TRUE),
+         C=sample(10), stringsAsFactors=FALSE)
+
+# Convert X to data.table by reference and
+# get the frequency of each "A,B" combination
+setDT(X)[, .N, by=.(A,B)]
+
+# convert list to data.table
+# autofill names
+X = list(1:4, letters[1:4])
+setDT(X)
+# don't provide names
+X = list(a=1:4, letters[1:4])
+setDT(X, FALSE)
+
+# setkey directly
+X = list(a = 4:1, b=runif(4))
+setDT(X, key="a")[]
+
+# check.names argument
+X = list(a=1:5, a=6:10)
+setDT(X, check.names=TRUE)[]
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,162 @@
+---
+title: "Managing Personal Access Tokens"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Managing Personal Access Tokens}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(gh)
+```
+
+<!-- This vignette uses a convention of "one sentence per line" in prose. -->
+
+gh generally sends a Personal Access Token (PAT) with its requests.
+Some endpoints of the GitHub API can be accessed without authenticating yourself.
+But once your API use becomes more frequent, you will want a PAT to prevent problems with rate limits and to access all possible endpoints.
+
+This article describes how to store your PAT, so that gh can find it (automatically, in most cases). The function gh uses for this is `gh_token()`.
+
+More resources on PAT management:
+
+  * GitHub documentation on [Creating a personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+  * In the [usethis package](https://usethis.r-lib.org):
+    - Vignette: [Managing Git(Hub) Credentials](https://usethis.r-lib.org/articles/articles/git-credentials.html) 
+    - `usethis::gh_token_help()` and `usethis::git_sitrep()` help you check if
+      a PAT is discoverable and has suitable scopes
+    - `usethis::create_github_token()` guides you through the process of getting
+      a new PAT
+  * In the [gitcreds package](https://gitcreds.r-lib.org/):
+    - `gitcreds::gitcreds_set()` helps you explicitly put your PAT into the Git
+      credential store
+  
+## PAT and host
+
+`gh::gh()` allows the user to provide a PAT via the `.token` argument and to specify a host other than "github.com" via the `.api_url` argument.
+(Some companies and universities run their own instance of GitHub Enterprise.)
+
+```{r, eval = FALSE}
+gh(endpoint, ..., .token = NULL, ..., .api_url = NULL, ...)
+```
+
+However, it's annoying to always provide your PAT or host and it's unsafe for your PAT to appear explicitly in your R code.
+It's important to make it *possible* for the user to provide the PAT and/or API URL directly, but it should rarely be necessary.
+`gh::gh()` is designed to play well with more secure, less fiddly methods for expressing what you want.
+
+How are `.api_url` and `.token` determined when the user does not provide them?
+
+  1. `.api_url` defaults to the value of the `GITHUB_API_URL` environment
+    variable and, if that is unset, falls back to `"https://api.github.com"`.
+    This is always done before worrying about the PAT.
+  1. The PAT is obtained via a call to `gh_token(.api_url)`. That is, the token
+    is looked up based on the host.
+
+## The gitcreds package
+
+gh now uses the gitcreds package to interact with the Git credential store.
+
+gh calls `gitcreds::gitcreds_get()` with a URL to try to find a matching PAT.
+`gitcreds::gitcreds_get()` checks session environment variables and then the local Git credential store.
+Therefore, if you have previously used a PAT with, e.g., command line Git, gh may retrieve and re-use it.
+You can call `gitcreds::gitcreds_get()` directly, yourself, if you want to see what is found for a specific URL.
+
+``` r
+gitcreds::gitcreds_get()
+```
+
+If you see something like this:
+``` r
+#> <gitcreds>
+#>   protocol: https
+#>   host    : github.com
+#>   username: PersonalAccessToken
+#>   password: <-- hidden -->
+```
+that means that gitcreds could get the PAT from the Git credential store.
+You can call `gitcreds_get()$password` to see the actual PAT.
+
+If no matching PAT is found, `gitcreds::gitcreds_get()` errors.
+
+## PAT in an environment variable
+
+If you don't have a Git installation, or your Git installation does not have a working credential store, then you can specify the PAT in an environment variable.
+For `github.com` you can set the `GITHUB_PAT_GITHUB_COM` or `GITHUB_PAT` variable.
+For a different GitHub host, call `gitcreds::gitcreds_cache_envvar()` with the API URL to see the environment variable you need to set.
+For example:
+
+```{r}
+gitcreds::gitcreds_cache_envvar("https://github.acme.com")
+```
+
+## Recommendations
+
+On a machine used for interactive development, we recommend:
+
+  * Store your PAT(s) in an official credential store.
+  * Do **not** store your PAT(s) in plain text in, e.g., `.Renviron`. In the
+    past, this has been a common and recommended practice for pragmatic reasons.
+    However, gitcreds/gh have now evolved to the point where it's
+    possible for all of us to follow better security practices.
+  * If you use a general-purpose password manager, like 1Password or LastPass,
+    you may *also* want to store your PAT(s) there. Why? If your PAT is
+    "forgotten" from the OS-level credential store, intentionally or not, you'll
+    need to provide it again when prompted.
+    
+    If you don't have any other record of your PAT, you'll have to get a new
+    PAT whenever this happens. This is not the end of the world. But if you
+    aren't disciplined about deleting lost PATs from
+    <https://github.com/settings/tokens>, you will eventually find yourself in a
+    confusing situation where you can't be sure which PAT(s) are in use.
+
+On a headless system, such as on a CI/CD platform, provide the necessary PAT(s) via secure environment variables.
+Regular environment variables can be used to configure less sensitive settings, such as the API host.
+Don't expose your PAT by doing something silly like dumping all environment variables to a log file.
+
+Note that on GitHub Actions, specifically, a personal access token is [automatically available to the workflow](https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token) as the `GITHUB_TOKEN` secret.
+That is why many workflows in the R community contain this snippet:
+
+``` yaml
+env:
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+```
+
+This makes the automatic PAT available as the `GITHUB_PAT` environment variable.
+If that PAT doesn't have the right permissions, then you'll need to explicitly provide one that does (see link above for more).
+
+## Failure
+
+If there is no PAT to be had, `gh::gh()` sends a request with no token.
+(Internally, the `Authorization` header is omitted if the PAT is found to be the empty string, `""`.)
+
+What do PAT-related failures look like?
+
+If no PAT is sent and the endpoint requires no auth, the request probably succeeds!
+At least until you run up against rate limits.
+If the endpoint requires auth, you'll get an HTTP error, possibly this one:
+
+```
+GitHub API error (401): 401 Unauthorized
+Message: Requires authentication
+```
+
+If a PAT is first discovered in an environment variable, it is taken at face value.
+The two most common ways to arrive here are PAT specification via `.Renviron` or as a secret in a CI/CD platform, such as GitHub Actions.
+If the PAT is invalid, the first affected request will fail, probably like so:
+
+```
+GitHub API error (401): 401 Unauthorized
+Message: Bad credentials
+```
+
+This will also be the experience if an invalid PAT is provided directly via `.token`.
+
+Even a valid PAT can lead to a downstream error, if it has insufficient scopes with respect to a specific request.

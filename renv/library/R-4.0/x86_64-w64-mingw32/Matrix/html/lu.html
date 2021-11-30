@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: (Generalized) Triangular Decomposition of a Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for lu {Matrix}"><tr><td>lu {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>(Generalized) Triangular Decomposition of a Matrix</h2>
+
+<h3>Description</h3>
+
+<p>Computes (generalized) triangular decompositions of square (sparse or
+dense) and non-square dense matrices.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+lu(x, ...)
+## S4 method for signature 'matrix'
+lu(x, warnSing = TRUE, ...)
+## S4 method for signature 'dgeMatrix'
+lu(x, warnSing = TRUE, ...)
+## S4 method for signature 'dgCMatrix'
+lu(x, errSing = TRUE, order = TRUE, tol = 1,
+   keep.dimnames = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a dense or sparse matrix, in the latter case of square
+dimension.  No missing values or IEEE special values are allowed.</p>
+</td></tr>
+<tr valign="top"><td><code>warnSing</code></td>
+<td>
+<p>(when <code>x</code> is a
+<code>"<a href="denseMatrix-class.html">denseMatrix</a>"</code>) logical specifying if a <code><a href="../../base/html/warning.html">warning</a></code>
+should be signalled when <code>x</code> is singular.</p>
+</td></tr>
+<tr valign="top"><td><code>errSing</code></td>
+<td>
+<p>(when <code>x</code> is a
+<code>"<a href="sparseMatrix-class.html">sparseMatrix</a>"</code>) logical specifying if an error
+(see <code><a href="../../base/html/stop.html">stop</a></code>) should be signalled when <code>x</code> is
+singular.  When <code>x</code> is singular, <code>lu(x, errSing=FALSE)</code>
+returns <code><a href="../../base/html/NA.html">NA</a></code> instead of an LU decomposition.  No
+warning is signalled and the useR should be careful in that case.
+</p>
+</td></tr>
+<tr valign="top"><td><code>order</code></td>
+<td>
+<p>logical or integer, used to choose which fill-reducing
+permutation technique will be used internally.  Do not change unless
+you know what you are doing.</p>
+</td></tr>
+<tr valign="top"><td><code>tol</code></td>
+<td>
+<p>positive number indicating the pivoting tolerance used in
+<code>cs_lu</code>.  Do only change with much care.</p>
+</td></tr>
+<tr valign="top"><td><code>keep.dimnames</code></td>
+<td>
+<p>logical indicating that <code><a href="../../base/html/dimnames.html">dimnames</a></code>
+should be propagated to the result, i.e., &ldquo;kept&rdquo;.  This was
+hardcoded to <code>FALSE</code> in upto <span class="pkg">Matrix</span> version 1.2-0.
+Setting to <code>FALSE</code> may gain some performance.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>lu()</code> is a generic function with special methods for different types
+of matrices.  Use <code><a href="../../methods/html/showMethods.html">showMethods</a>("lu")</code> to list all the methods
+for the <code><a href="lu.html">lu</a></code> generic.
+</p>
+<p>The method for class <code><a href="dgeMatrix-class.html">dgeMatrix</a></code> (and all dense
+matrices) is based on LAPACK's <code>"dgetrf"</code> subroutine.  It returns
+a decomposition also for singular and non-square matrices.
+</p>
+<p>The method for class <code><a href="dgCMatrix-class.html">dgCMatrix</a></code> (and all sparse
+matrices) is based on functions from the CSparse library.  It signals
+an error (or returns <code>NA</code>, when <code>errSing = FALSE</code>, see
+above) when the decomposition algorithm fails, as when <code>x</code> is
+(too close to) singular.
+
+
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"LU"</code>, i.e., <code>"<a href="LU-class.html">denseLU</a>"</code>
+(see its separate help page),
+or <code>"sparseLU"</code>, see <code><a href="sparseLU-class.html">sparseLU</a></code>; this is
+a representation of a triangular decomposition of <code>x</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Because the underlying algorithm differ entirely,
+in the <em>dense</em> case (class <code><a href="LU-class.html">denseLU</a></code>), the
+decomposition is
+</p>
+<p style="text-align: center;"><i>A = P L U,</i></p>
+
+
+<p>where as  in the <em>sparse</em> case (class
+<code><a href="sparseLU-class.html">sparseLU</a></code>), it is
+</p>
+<p style="text-align: center;"><i>A = P' L U Q.</i></p>
+
+
+
+
+<h3>References</h3>
+
+<p>Golub, G., and Van Loan, C. F. (1989).
+<em>Matrix Computations,</em>
+2nd edition, Johns Hopkins, Baltimore.
+</p>
+
+
+<p>Timothy A. Davis (2006)
+<em>Direct Methods for Sparse Linear Systems</em>, SIAM Series
+&ldquo;Fundamentals of Algorithms&rdquo;.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Class definitions <code><a href="LU-class.html">denseLU</a></code> and <code><a href="sparseLU-class.html">sparseLU</a></code>
+and function <code><a href="expand.html">expand</a></code>;
+<code><a href="qr-methods.html">qr</a></code>, <code><a href="chol.html">chol</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+##--- Dense  -------------------------
+x &lt;- Matrix(rnorm(9), 3, 3)
+lu(x)
+dim(x2 &lt;- round(10 * x[,-3]))# non-square
+expand(lu2 &lt;- lu(x2))
+
+##--- Sparse (see more in ?"sparseLU-class")----- % ./sparseLU-class.Rd
+
+pm &lt;- as(readMM(system.file("external/pores_1.mtx",
+                            package = "Matrix")),
+         "CsparseMatrix")
+str(pmLU &lt;- lu(pm))		# p is a 0-based permutation of the rows
+                                # q is a 0-based permutation of the columns
+## permute rows and columns of original matrix
+ppm &lt;- pm[pmLU@p + 1L, pmLU@q + 1L]
+pLU &lt;- drop0(pmLU@L %*% pmLU@U) # L %*% U -- dropping extra zeros
+## equal up to "rounding"
+ppm[1:14, 1:5]
+pLU[1:14, 1:5]
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

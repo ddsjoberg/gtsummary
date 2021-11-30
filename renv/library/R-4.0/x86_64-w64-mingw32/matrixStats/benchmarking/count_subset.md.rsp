@@ -1,0 +1,67 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string fcnname="count_subset"%>
+<%@string subname="count"%>
+<%@meta title="${subname}() benchmarks on subsetted computation"%>
+<%@meta author="Dongcan Jiang"%>
+<%@meta date="2015-06-07"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=subname%>() on subsetted computation.
+
+
+<% for (mode in c("integer", "double")) { %>
+
+## Data type "<%=mode%>"
+### Data
+```r
+<%=withCapture({
+<%@include file="R/random-vectors.R"%>
+data <- rvectors(mode = mode)
+})%>
+```
+
+### Results
+
+<% for (ii in seq_along(data)) { %>
+<%
+dataLabel <- names(data)[ii]
+mprintf("%s: %s\n", mode, dataLabel)
+value <- 42
+%>
+### <%=dataLabel%> vector
+
+```r
+<%=withCapture({
+x <- data[[.dataLabel.]]
+idxs <- sample.int(length(x), size = length(x)*0.7)
+x_S <- x[idxs]
+gc()
+
+stats <- microbenchmark(
+ "count_x_S"      = count(x_S, value),
+ "count(x, idxs)"  = count(x, idxs = idxs, value),
+ "count(x[idxs])" = count(x[idxs], value),
+  unit = "ms"
+)
+})%>
+```
+
+<% benchmarkResults(stats, tags=c(mode, dataLabel)) %>
+
+<% } # for (ii ...) %>
+
+<% } # for (mode ...) %>
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2015-06-07
+o Created.
+---------------------------------------------------------------------------%>

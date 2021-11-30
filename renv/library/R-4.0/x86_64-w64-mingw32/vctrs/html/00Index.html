@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Vector Helpers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Vector Helpers
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;vctrs&rsquo; version 0.3.8</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="op-empty-default.html">%0%</a></td>
+<td>Default value for empty vectors</td></tr>
+<tr><td style="width: 25%;"><a href="list_of.html">as_list_of</a></td>
+<td>'list_of' S3 class for homogenous lists</td></tr>
+<tr><td style="width: 25%;"><a href="data_frame.html">data_frame</a></td>
+<td>Construct a data frame</td></tr>
+<tr><td style="width: 25%;"><a href="df_ptype2.html">df_cast</a></td>
+<td>Coercion between two data frames</td></tr>
+<tr><td style="width: 25%;"><a href="df_list.html">df_list</a></td>
+<td>Collect columns for data frame construction</td></tr>
+<tr><td style="width: 25%;"><a href="df_ptype2.html">df_ptype2</a></td>
+<td>Coercion between two data frames</td></tr>
+<tr><td style="width: 25%;"><a href="faq-compatibility-types.html">faq-compatibility-types</a></td>
+<td>FAQ - How is the compatibility of vector types decided?</td></tr>
+<tr><td style="width: 25%;"><a href="faq-error-incompatible-attributes.html">faq-error-incompatible-attributes</a></td>
+<td>FAQ - Error/Warning: Some attributes are incompatible</td></tr>
+<tr><td style="width: 25%;"><a href="faq-error-scalar-type.html">faq-error-scalar-type</a></td>
+<td>FAQ - Error: Input must be a vector</td></tr>
+<tr><td style="width: 25%;"><a href="howto-faq-coercion.html">howto-faq-coercion</a></td>
+<td>FAQ - How to implement ptype2 and cast methods?</td></tr>
+<tr><td style="width: 25%;"><a href="howto-faq-coercion-data-frame.html">howto-faq-coercion-data-frame</a></td>
+<td>FAQ - How to implement ptype2 and cast methods? (Data frames)</td></tr>
+<tr><td style="width: 25%;"><a href="howto-faq-fix-scalar-type-error.html">howto-faq-fix-scalar-type-error</a></td>
+<td>FAQ - Why isn't my class treated as a vector?</td></tr>
+<tr><td style="width: 25%;"><a href="internal-faq-ptype2-identity.html">internal-faq-ptype2-identity</a></td>
+<td>Internal FAQ - 'vec_ptype2()', 'NULL', and unspecified vectors</td></tr>
+<tr><td style="width: 25%;"><a href="list_of.html">is_list_of</a></td>
+<td>'list_of' S3 class for homogenous lists</td></tr>
+<tr><td style="width: 25%;"><a href="list_of.html">list_of</a></td>
+<td>'list_of' S3 class for homogenous lists</td></tr>
+<tr><td style="width: 25%;"><a href="vec_size.html">list_sizes</a></td>
+<td>Number of observations</td></tr>
+<tr><td style="width: 25%;"><a href="name_spec.html">name_spec</a></td>
+<td>Name specifications</td></tr>
+<tr><td style="width: 25%;"><a href="new_data_frame.html">new_data_frame</a></td>
+<td>Assemble attributes for data frame construction</td></tr>
+<tr><td style="width: 25%;"><a href="reference-faq-compatibility.html">reference-faq-compatibility</a></td>
+<td>FAQ - Is my class compatible with vctrs?</td></tr>
+<tr><td style="width: 25%;"><a href="theory-faq-coercion.html">theory-faq-coercion</a></td>
+<td>FAQ - How does coercion work in vctrs?</td></tr>
+<tr><td style="width: 25%;"><a href="df_ptype2.html">tib_cast</a></td>
+<td>Coercion between two data frames</td></tr>
+<tr><td style="width: 25%;"><a href="df_ptype2.html">tib_ptype2</a></td>
+<td>Coercion between two data frames</td></tr>
+<tr><td style="width: 25%;"><a href="list_of.html">validate_list_of</a></td>
+<td>'list_of' S3 class for homogenous lists</td></tr>
+<tr><td style="width: 25%;"><a href="vec-rep.html">vec-rep</a></td>
+<td>Repeat a vector</td></tr>
+<tr><td style="width: 25%;"><a href="vec_assert.html">vec_assert</a></td>
+<td>Assert an argument has known prototype and/or size</td></tr>
+<tr><td style="width: 25%;"><a href="vec_as_names.html">vec_as_names</a></td>
+<td>Retrieve and repair names</td></tr>
+<tr><td style="width: 25%;"><a href="vec_bind.html">vec_bind</a></td>
+<td>Combine many data frames into one data frame</td></tr>
+<tr><td style="width: 25%;"><a href="vec_c.html">vec_c</a></td>
+<td>Combine many vectors into one vector</td></tr>
+<tr><td style="width: 25%;"><a href="vec_cast.html">vec_cast</a></td>
+<td>Cast a vector to a specified type</td></tr>
+<tr><td style="width: 25%;"><a href="vec_cast.html">vec_cast.character</a></td>
+<td>Cast a vector to a specified type</td></tr>
+<tr><td style="width: 25%;"><a href="vec_cast.html">vec_cast.complex</a></td>
+<td>Cast a vector to a specified type</td></tr>
+<tr><td style="width: 25%;"><a href="vec_cast.html">vec_cast.double</a></td>
+<td>Cast a vector to a specified type</td></tr>
+<tr><td style="width: 25%;"><a href="vec_cast.html">vec_cast.integer</a></td>
+<td>Cast a vector to a specified type</td></tr>
+<tr><td style="width: 25%;"><a href="vec_cast.html">vec_cast.list</a></td>
+<td>Cast a vector to a specified type</td></tr>
+<tr><td style="width: 25%;"><a href="vec_cast.html">vec_cast.logical</a></td>
+<td>Cast a vector to a specified type</td></tr>
+<tr><td style="width: 25%;"><a href="vec_cast.html">vec_cast.raw</a></td>
+<td>Cast a vector to a specified type</td></tr>
+<tr><td style="width: 25%;"><a href="list_of.html">vec_cast.vctrs_list_of</a></td>
+<td>'list_of' S3 class for homogenous lists</td></tr>
+<tr><td style="width: 25%;"><a href="vec_cast.html">vec_cast_common</a></td>
+<td>Cast a vector to a specified type</td></tr>
+<tr><td style="width: 25%;"><a href="vec_bind.html">vec_cbind</a></td>
+<td>Combine many data frames into one data frame</td></tr>
+<tr><td style="width: 25%;"><a href="vec_chop.html">vec_chop</a></td>
+<td>Chopping</td></tr>
+<tr><td style="width: 25%;"><a href="vec_compare.html">vec_compare</a></td>
+<td>Compare two vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_count.html">vec_count</a></td>
+<td>Count unique values in a vector</td></tr>
+<tr><td style="width: 25%;"><a href="vec_detect_complete.html">vec_detect_complete</a></td>
+<td>Complete</td></tr>
+<tr><td style="width: 25%;"><a href="vec_duplicate.html">vec_duplicate</a></td>
+<td>Find duplicated values</td></tr>
+<tr><td style="width: 25%;"><a href="vec_duplicate.html">vec_duplicate_any</a></td>
+<td>Find duplicated values</td></tr>
+<tr><td style="width: 25%;"><a href="vec_duplicate.html">vec_duplicate_detect</a></td>
+<td>Find duplicated values</td></tr>
+<tr><td style="width: 25%;"><a href="vec_duplicate.html">vec_duplicate_id</a></td>
+<td>Find duplicated values</td></tr>
+<tr><td style="width: 25%;"><a href="vec_equal.html">vec_equal</a></td>
+<td>Test if two vectors are equal</td></tr>
+<tr><td style="width: 25%;"><a href="vec_equal.html">vec_equal_na</a></td>
+<td>Test if two vectors are equal</td></tr>
+<tr><td style="width: 25%;"><a href="vec_fill_missing.html">vec_fill_missing</a></td>
+<td>Fill in missing values with the previous or following value</td></tr>
+<tr><td style="width: 25%;"><a href="vec_identify_runs.html">vec_identify_runs</a></td>
+<td>Runs</td></tr>
+<tr><td style="width: 25%;"><a href="vec_match.html">vec_in</a></td>
+<td>Find matching observations across vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_init.html">vec_init</a></td>
+<td>Initialize a vector</td></tr>
+<tr><td style="width: 25%;"><a href="vec_seq_along.html">vec_init_along</a></td>
+<td>Useful sequences</td></tr>
+<tr><td style="width: 25%;"><a href="vec_assert.html">vec_is</a></td>
+<td>Assert an argument has known prototype and/or size</td></tr>
+<tr><td style="width: 25%;"><a href="vec_size.html">vec_is_empty</a></td>
+<td>Number of observations</td></tr>
+<tr><td style="width: 25%;"><a href="vec_is_list.html">vec_is_list</a></td>
+<td>Is the object a list?</td></tr>
+<tr><td style="width: 25%;"><a href="vec_match.html">vec_match</a></td>
+<td>Find matching observations across vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_names.html">vec_names</a></td>
+<td>Get or set the names of a vector</td></tr>
+<tr><td style="width: 25%;"><a href="vec_names.html">vec_names2</a></td>
+<td>Get or set the names of a vector</td></tr>
+<tr><td style="width: 25%;"><a href="vec_order.html">vec_order</a></td>
+<td>Order and sort vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype.html">vec_ptype</a></td>
+<td>Find the prototype of a set of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype2.html">vec_ptype2</a></td>
+<td>Find the common type for a pair of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype2.html">vec_ptype2.character</a></td>
+<td>Find the common type for a pair of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype2.html">vec_ptype2.complex</a></td>
+<td>Find the common type for a pair of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype2.html">vec_ptype2.double</a></td>
+<td>Find the common type for a pair of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype2.html">vec_ptype2.integer</a></td>
+<td>Find the common type for a pair of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype2.html">vec_ptype2.list</a></td>
+<td>Find the common type for a pair of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype2.html">vec_ptype2.logical</a></td>
+<td>Find the common type for a pair of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype2.html">vec_ptype2.raw</a></td>
+<td>Find the common type for a pair of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="list_of.html">vec_ptype2.vctrs_list_of</a></td>
+<td>'list_of' S3 class for homogenous lists</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype.html">vec_ptype_common</a></td>
+<td>Find the prototype of a set of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_ptype.html">vec_ptype_show</a></td>
+<td>Find the prototype of a set of vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_bind.html">vec_rbind</a></td>
+<td>Combine many data frames into one data frame</td></tr>
+<tr><td style="width: 25%;"><a href="vec_recycle.html">vec_recycle</a></td>
+<td>Vector recycling</td></tr>
+<tr><td style="width: 25%;"><a href="vec_recycle.html">vec_recycle_common</a></td>
+<td>Vector recycling</td></tr>
+<tr><td style="width: 25%;"><a href="vec-rep.html">vec_rep</a></td>
+<td>Repeat a vector</td></tr>
+<tr><td style="width: 25%;"><a href="vec-rep.html">vec_rep_each</a></td>
+<td>Repeat a vector</td></tr>
+<tr><td style="width: 25%;"><a href="vec_seq_along.html">vec_seq_along</a></td>
+<td>Useful sequences</td></tr>
+<tr><td style="width: 25%;"><a href="vec_names.html">vec_set_names</a></td>
+<td>Get or set the names of a vector</td></tr>
+<tr><td style="width: 25%;"><a href="vec_size.html">vec_size</a></td>
+<td>Number of observations</td></tr>
+<tr><td style="width: 25%;"><a href="vec_size.html">vec_size_common</a></td>
+<td>Number of observations</td></tr>
+<tr><td style="width: 25%;"><a href="vec_order.html">vec_sort</a></td>
+<td>Order and sort vectors</td></tr>
+<tr><td style="width: 25%;"><a href="vec_split.html">vec_split</a></td>
+<td>Split a vector into groups</td></tr>
+<tr><td style="width: 25%;"><a href="vec_chop.html">vec_unchop</a></td>
+<td>Chopping</td></tr>
+<tr><td style="width: 25%;"><a href="vec_unique.html">vec_unique</a></td>
+<td>Find and count unique values</td></tr>
+<tr><td style="width: 25%;"><a href="vec_unique.html">vec_unique_count</a></td>
+<td>Find and count unique values</td></tr>
+<tr><td style="width: 25%;"><a href="vec_unique.html">vec_unique_loc</a></td>
+<td>Find and count unique values</td></tr>
+<tr><td style="width: 25%;"><a href="vec-rep.html">vec_unrep</a></td>
+<td>Repeat a vector</td></tr>
+</table>
+</body></html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Up- and Down-Dating a Cholesky Decomposition</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for updown {Matrix}"><tr><td>updown {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Up- and Down-Dating a Cholesky Decomposition</h2>
+
+<h3>Description</h3>
+
+<p>Compute the up- or down-dated Cholesky decomposition
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+updown(update, C, L)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>update</code></td>
+<td>
+<p>logical (<code>TRUE</code> or <code>FALSE</code>) or <code>"+"</code> or
+<code>"-"</code> indicating if an up- or a down-date is to be computed.</p>
+</td></tr>
+<tr valign="top"><td><code>C</code></td>
+<td>
+<p>any <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object, coercable to a sparse matrix (i.e., of
+subclass of <code><a href="sparseMatrix-class.html">sparseMatrix</a></code>).</p>
+</td></tr>
+<tr valign="top"><td><code>L</code></td>
+<td>
+<p>a Cholesky factor, specifically, of class
+<code>"<a href="CHMfactor-class.html">CHMfactor</a>"</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an updated Cholesky factor, of the same dimension as <code>L</code>.
+Typically of class <code>"<a href="CHMfactor-class.html">dCHMsimpl</a>"</code> (a sub class of
+<code>"<a href="CHMfactor-class.html">CHMfactor</a>"</code>).
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt><code>signature(update = "character", C = "mMatrix", L = "CHMfactor")</code></dt><dd><p>..</p>
+</dd>
+<dt><code>signature(update = "logical", C = "mMatrix", L = "CHMfactor")</code></dt><dd><p> .. </p>
+</dd>
+</dl>
+
+
+
+<h3>Author(s)</h3>
+
+<p>Contributed by Nicholas Nagle, University of Tennessee, Knoxville, USA</p>
+
+
+<h3>References</h3>
+
+<p>CHOLMOD manual, currently beginning of chapter~18. ... 
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Cholesky.html">Cholesky</a></code>,
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+dn &lt;- list(LETTERS[1:3], letters[1:5])
+## pointer vectors can be used, and the (i,x) slots are sorted if necessary:
+m &lt;- sparseMatrix(i = c(3,1, 3:2, 2:1), p= c(0:2, 4,4,6), x = 1:6, dimnames = dn)
+cA &lt;- Cholesky(A &lt;- crossprod(m) + Diagonal(5))
+166 * as(cA,"Matrix") ^ 2
+uc1 &lt;- updown("+",   Diagonal(5), cA)
+## Hmm: this loses positive definiteness:
+uc2 &lt;- updown("-", 2*Diagonal(5), cA)
+image(show(as(cA, "Matrix")))
+image(show(c2 &lt;- as(uc2,"Matrix")))# severely negative entries
+##--&gt; Warning
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

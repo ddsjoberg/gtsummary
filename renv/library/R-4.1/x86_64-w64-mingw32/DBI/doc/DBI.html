@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="James Wondrasek, Katharina Brunner, Kirill Müller" />
+
+<meta name="date" content="2020-02-27" />
+
+<title>Introduction to DBI</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to DBI</h1>
+<h4 class="author">James Wondrasek, Katharina Brunner, Kirill Müller</h4>
+<h4 class="date">27 February 2020</h4>
+
+
+
+<div id="who-this-tutorial-is-for" class="section level2">
+<h2>Who this tutorial is for</h2>
+<p>This tutorial is for you if you want to access or manipulate data in a database that may be on your machine or on a different computer on the internet, and you have found libraries that use a higher level of abstraction, such as <a href="https://dbplyr.tidyverse.org/">dbplyr</a>, are not suitable for your purpose. Depending on what you want to achieve, you may find it useful to have an understanding of SQL before using DBI.</p>
+<p>The DBI (<strong>D</strong>ata<strong>B</strong>ase <strong>I</strong>nterface) package provides a simple, consistent interface between R and database management systems (DBMS). Each supported DBMS is supported by its own R package that implements the DBI specification in <code>vignette(&quot;spec&quot;, package = &quot;DBI&quot;)</code>.</p>
+<p>DBI currently supports about 30 DBMS, including:</p>
+<ul>
+<li>MySQL, using the R-package <a href="https://github.com/r-dbi/RMySQL">RMySQL</a></li>
+<li>MariaDB, using the R-package <a href="https://github.com/r-dbi/RMariaDB">RMariaDB</a></li>
+<li>Postgres, using the R-package <a href="https://github.com/r-dbi/RPostgres">RPostgres</a></li>
+<li>SQLite, using the R-package <a href="https://github.com/r-dbi/RSQLite">RSQLite</a></li>
+</ul>
+<p>For a more complete list of supported DBMS visit <a href="https://github.com/r-dbi/backends#readme">https://github.com/r-dbi/backends</a>. You may need to install the package specific to your DBMS.</p>
+<p>The functionality currently supported for each of these DBMS’s includes:</p>
+<ul>
+<li>manage a connection to a database</li>
+<li>list the tables in a database</li>
+<li>list the column names in a table</li>
+<li>read a table into a data frame</li>
+</ul>
+<p>For more advanced features, such as parameterised queries, transactions, and more see <code>vignette(&quot;DBI-advanced&quot;, package = &quot;DBI&quot;)</code>.</p>
+</div>
+<div id="how-to-connect-to-a-database-using-dbi" class="section level2">
+<h2>How to connect to a database using DBI</h2>
+<p>The following code establishes a connection to the <a href="https://relational.fit.cvut.cz/dataset/Sakila"><code>Sakila</code></a> database hosted by the Relational Dataset Repository, lists all tables on the database, and closes the connection. The database represents a fictional movie rental business and includes tables describing films, actors, customers, stores, etc.:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DBI)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  RMariaDB<span class="sc">::</span><span class="fu">MariaDB</span>(),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">host =</span> <span class="st">&quot;relational.fit.cvut.cz&quot;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">port =</span> <span class="dv">3306</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">username =</span> <span class="st">&quot;guest&quot;</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">password =</span> <span class="st">&quot;relational&quot;</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">dbname =</span> <span class="st">&quot;sakila&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">dbListTables</span>(con)</span></code></pre></div>
+<pre><code>##  [1] &quot;actor&quot;         &quot;address&quot;       &quot;category&quot;      &quot;city&quot;         
+##  [5] &quot;country&quot;       &quot;customer&quot;      &quot;film&quot;          &quot;film_actor&quot;   
+##  [9] &quot;film_category&quot; &quot;film_text&quot;     &quot;inventory&quot;     &quot;language&quot;     
+## [13] &quot;payment&quot;       &quot;rental&quot;        &quot;staff&quot;         &quot;store&quot;</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
+<p>Connections to databases are created using the <code>dbConnect()</code> function. The first argument to the function is the driver for the DBMS you are connecting to. In the example above we are connecting to a MariaDB instance, so we use the <code>RMariaDB::MariaDB()</code> driver. The other arguments depend on the authentication required by the DBMS. In the example host, port, username, password, dbname are required. See the documentation for the DBMS driver package that you are using for specifics.</p>
+<p>The function <code>dbListTables()</code> takes a database connection as its only argument and returns a character vector with all table and view names in the database.</p>
+<p>After completing a session with a DBMS, we release the connection with a call to <code>dbDisconnect()</code>.</p>
+</div>
+<div id="how-to-retrieve-column-names-for-a-table" class="section level2">
+<h2>How to retrieve column names for a table</h2>
+<p>We can list the column names for a table with the function <code>dbListFields()</code>. It takes as arguments a database connection and a table name and returns a character vector of the column names in order.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RMariaDB<span class="sc">::</span><span class="fu">MariaDB</span>(), <span class="at">username =</span> <span class="st">&quot;guest&quot;</span>, <span class="at">password =</span> <span class="st">&quot;relational&quot;</span>, <span class="at">host =</span> <span class="st">&quot;relational.fit.cvut.cz&quot;</span>, <span class="at">port =</span> <span class="dv">3306</span>, <span class="at">dbname =</span> <span class="st">&quot;sakila&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dbListFields</span>(con, <span class="st">&quot;film&quot;</span>)</span></code></pre></div>
+<pre><code>##  [1] &quot;film_id&quot;              &quot;title&quot;                &quot;description&quot;         
+##  [4] &quot;release_year&quot;         &quot;language_id&quot;          &quot;original_language_id&quot;
+##  [7] &quot;rental_duration&quot;      &quot;rental_rate&quot;          &quot;length&quot;              
+## [10] &quot;replacement_cost&quot;     &quot;rating&quot;               &quot;special_features&quot;    
+## [13] &quot;last_update&quot;</code></pre>
+</div>
+<div id="read-a-table-into-a-data-frame" class="section level2">
+<h2>Read a table into a data frame</h2>
+<p>The function <code>dbReadTable()</code> reads an entire table and returns it as a data frame. It is equivalent to the SQL query <code>SELECT * FROM &lt;name&gt;</code>. The columns of the returned data frame share the same names as the columns in the table. DBI and the database backends do their best to coerce data to equivalent R data types.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">dbReadTable</span>(con, <span class="st">&quot;film&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##   film_id            title
+## 1       1 ACADEMY DINOSAUR
+## 2       2   ACE GOLDFINGER
+## 3       3 ADAPTATION HOLES
+##                                                                                            description
+## 1     A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies
+## 2 A Astounding Epistle of a Database Administrator And a Explorer who must Find a Car in Ancient China
+## 3     A Astounding Reflection of a Lumberjack And a Car who must Sink a Lumberjack in A Baloon Factory
+##   release_year language_id original_language_id rental_duration rental_rate
+## 1         2006           1                   NA               6        0.99
+## 2         2006           1                   NA               3        4.99
+## 3         2006           1                   NA               7        2.99
+##   length replacement_cost rating                 special_features
+## 1     86            20.99     PG Deleted Scenes,Behind the Scenes
+## 2     48            12.99      G          Trailers,Deleted Scenes
+## 3     50            18.99  NC-17          Trailers,Deleted Scenes
+##           last_update
+## 1 2006-02-15 04:03:42
+## 2 2006-02-15 04:03:42
+## 3 2006-02-15 04:03:42</code></pre>
+</div>
+<div id="read-only-selected-rows-and-columns-into-a-data-frame" class="section level2">
+<h2>Read only selected rows and columns into a data frame</h2>
+<p>To read a subset of the data in a table into a data frame, DBI provides functions to run custom SQL queries and manage the results. For small datasets where you do not need to manage the number of results being returned, the function <code>dbGetQuery()</code> takes a SQL <code>SELECT</code> query to execute and returns a data frame. Below is a basic query that specifies the columns we require (<code>film_id</code>, <code>title</code> and <code>description</code>) and which rows (records) we are interested in. Here we retrieve films released in the year 2006.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">&quot;SELECT film_id, title, description FROM film WHERE release_year = 2006&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df,<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##   film_id            title
+## 1       1 ACADEMY DINOSAUR
+## 2       2   ACE GOLDFINGER
+## 3       3 ADAPTATION HOLES
+##                                                                                            description
+## 1     A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies
+## 2 A Astounding Epistle of a Database Administrator And a Explorer who must Find a Car in Ancient China
+## 3     A Astounding Reflection of a Lumberjack And a Car who must Sink a Lumberjack in A Baloon Factory</code></pre>
+<p>We could also retrieve movies released in 2006 that are rated “G”. Note that character strings must be quoted. As the query itself is contained within double quotes, we use single quotes around the rating. See <code>dbQuoteLiteral()</code> for programmatically converting arbitrary R values to SQL, this is covered in more detail in <code>vignette(&quot;DBI-advanced&quot;, package = &quot;DBI&quot;)</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(con, <span class="st">&quot;SELECT film_id, title, description FROM film WHERE release_year = 2006 and rating = &#39;G&#39;&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(df,<span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##   film_id            title
+## 1       2   ACE GOLDFINGER
+## 2       4 AFFAIR PREJUDICE
+## 3       5      AFRICAN EGG
+##                                                                                                             description
+## 1                  A Astounding Epistle of a Database Administrator And a Explorer who must Find a Car in Ancient China
+## 2                          A Fanciful Documentary of a Frisbee And a Lumberjack who must Chase a Monkey in A Shark Tank
+## 3 A Fast-Paced Documentary of a Pastry Chef And a Dentist who must Pursue a Forensic Psychologist in The Gulf of Mexico</code></pre>
+<p>The equivalent operation using <code>dplyr</code> reconstructs the SQL query using three functions to specify the table (<code>tbl()</code>), the subset of the rows (<code>filter()</code>), and the columns we require (<code>select()</code>).</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>lazy_df <span class="ot">&lt;-</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl</span>(con, <span class="st">&quot;film&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(release_year <span class="sc">==</span> <span class="dv">2006</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(film_id, title, description)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(lazy_df, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## # Source:   lazy query [?? x 3]
+## # Database: mysql [guest@relational.fit.cvut.cz:NA/sakila]
+##   film_id title         description                                             
+##     &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;                                                   
+## 1       1 ACADEMY DINO… A Epic Drama of a Feminist And a Mad Scientist who must…
+## 2       2 ACE GOLDFING… A Astounding Epistle of a Database Administrator And a …
+## 3       3 ADAPTATION H… A Astounding Reflection of a Lumberjack And a Car who m…</code></pre>
+<p>If you want to perform other data manipulation queries such as <code>UPDATE</code>s and <code>DELETE</code>s, see <code>dbSendStatement()</code> which is introduced in <code>vignette(&quot;DBI-advanced&quot;, package = &quot;DBI&quot;)</code>.</p>
+</div>
+<div id="how-to-end-a-dbms-session" class="section level2">
+<h2>How to end a DBMS session</h2>
+<p>When finished accessing the DBMS, always close the connection using <code>dbDisconnect()</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This tutorial has given you the basic techniques for accessing data in any supported DBMS. If you need to work with databases that will not fit in memory, or want to run more complex queries, including parameterised queries, please see <code>vignette(&quot;DBI-advanced&quot;, package = &quot;DBI&quot;)</code>.</p>
+</div>
+<div id="further-reading" class="section level2">
+<h2>Further Reading</h2>
+<ul>
+<li>An overview on <a href="https://db.rstudio.com/">working with databases in R on Rstudio.com</a></li>
+<li>The DBI specification: <code>vignette(&quot;spec&quot;, package = &quot;DBI&quot;)</code></li>
+<li><a href="https://github.com/r-dbi/backends#readme">List of supported DBMS</a></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

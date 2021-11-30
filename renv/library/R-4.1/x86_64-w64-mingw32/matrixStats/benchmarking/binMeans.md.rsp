@@ -1,0 +1,104 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string fcnname="binMeans"%>
+<% fcnname <- "<%@string name="fcnname"%>" %>
+<%@meta title="${fcnname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-06-04"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=fcnname%>() against alternative methods.
+
+## Alternative methods
+
+* binMeans_R()
+
+which is defined as
+
+```r
+<%=withCapture({
+binMeans_R <- function(y, x, bx, na.rm = FALSE, count = TRUE, right = FALSE) {
+  B <- length(bx)-1L
+  res <- double(B)
+  counts <- integer(B)
+
+  # For each bin...
+  for (kk in seq_len(B)) {
+    if (right) {
+      idxs <- which(bx[kk] <  x & x <= bx[kk+1L])
+    } else {
+      idxs <- which(bx[kk] <= x & x <  bx[kk+1L])
+    }
+    yKK <- y[idxs]
+    muKK <- mean(yKK)
+    res[kk] <- muKK
+    counts[kk] <- length(idxs)
+  } # for (kk ...)
+
+  if (count) attr(res, "count") <- counts
+  res
+} # binMeans_R()
+})%>
+```
+
+## Results
+
+### Non-sorted simulated data
+```r
+<%=withCapture({
+nx <- 10e3 # Number of data points
+set.seed(0xBEEF)
+x <- runif(nx, min = 0, max = 1)
+y <- runif(nx, min = 0, max = 1)
+
+# Uniformely distributed bins
+nb <- 1e3 # Number of bins
+bx <- seq(from = 0, to = 1, length.out = nb+1L)
+bx <- c(-1, bx, 2)
+})%>
+```
+
+<% benchmark <- function() { %>
+<% dataLabel <- if (is.unsorted(x)) "unsorted" else "sorted" %>
+<% message(dataLabel) %>
+```r
+<%=withCapture({
+gc()
+
+stats <- microbenchmark(
+ binMeans   = binMeans(x = x, y = y, bx = bx, count = TRUE),
+ binMeans_R = binMeans_R(x = x, y = y, bx = bx, count = TRUE),
+ unit = "ms"
+)
+})%>
+```
+
+<% benchmarkResults(stats, tags=dataLabel) %>
+<% } # benchmark() %>
+
+<% benchmark() %>
+
+
+### Sorted simulated data
+```r
+<%=withCapture({
+  x <- sort(x)
+})%>
+```
+<% benchmark() %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-06-02
+o Restructured.
+2014-05-25
+o Created.
+---------------------------------------------------------------------------%>

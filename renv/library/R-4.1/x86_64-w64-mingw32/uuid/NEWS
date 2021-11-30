@@ -1,0 +1,31 @@
+ NEWS for uuid
+---------------
+
+0.1-4	2020-02-26
+    o	add `n' parameter to UUIDgenerate() to generate
+	multiple UUIDs at once (#2)
+
+    o	use crypto-safe RNG on Windows to avoid UUIDs
+	that are identical. That makes the default behavior
+	equivalent to `use.time=FALSE' on Windows. (#8)
+
+
+0.1-3	2020-02-25
+    o	don't use deprecated `R CMD config CPP`
+
+    o	isolate rand()/srand() to avoid warnings
+
+
+0.1-2	2015-07-27
+    o	update License entry to conform to CRAN rules
+
+    o	don't break on systems without flock()
+	(thanks to Brian Ripley)
+
+
+0.1-1	2013-09-03
+    o	initial CRAN release
+
+
+0.1-0	2013-02-24
+    o	initial version based on libuuid

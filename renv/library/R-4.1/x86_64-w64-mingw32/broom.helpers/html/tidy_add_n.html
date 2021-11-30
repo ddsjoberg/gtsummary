@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add the (weighted) number of observations</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tidy_add_n {broom.helpers}"><tr><td>tidy_add_n {broom.helpers}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add the (weighted) number of observations</h2>
+
+<h3>Description</h3>
+
+<p>Add the number of observations in a new column <code>n_obs</code>, taking into account any
+weights if they have been defined.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tidy_add_n(x, model = tidy_get_model(x))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a tidy tibble</p>
+</td></tr>
+<tr valign="top"><td><code>model</code></td>
+<td>
+<p>the corresponding model, if not attached to <code>x</code></p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>For continuous variables, it corresponds to all valid observations
+contributing to the model.
+</p>
+<p>For categorical variables coded with treatment or sum contrasts,
+each model term could be associated to only one level of the original
+categorical variable. Therefore, <code>n_obs</code> will correspond to the number of
+observations associated with that level. <code>n_obs</code> will also be computed for
+reference rows. For polynomial contrasts (defined with <code><a href="../../stats/help/contrast.html">stats::contr.poly()</a></code>),
+all levels will contribute to the computation of each model term. Therefore,
+<code>n_obs</code> will be equal to the total number of observations. For Helmert and custom
+contrasts, only rows contributing positively (i.e. with a positive contrast)
+to the computation of a term will be considered for estimating <code>n_obs</code>. The
+result could therefore be difficult to interpret. For a better understanding
+of which observations are taken into account to compute <code>n_obs</code> values, you
+could look at <code><a href="../../broom.helpers/help/model_compute_terms_contributions.html">model_compute_terms_contributions()</a></code>.
+</p>
+<p>For interaction terms, only rows contributing to all the terms of the
+interaction will be considered to compute <code>n_obs</code>.
+</p>
+<p>For binomial logistic models, <code>tidy_add_n()</code> will also return the
+corresponding number of events (<code>n_event</code>) for each term, taking into account
+any defined weights. Observed proportions could be obtained as <code>n_obs / n_event</code>.
+</p>
+<p>Similarly, a number of events will be computed for multinomial logistic
+models (<code><a href="../../nnet/help/multinom.html">nnet::multinom()</a></code>) for each level of the outcome (<code>y.level</code>),
+corresponding to the number of observations equal to that outcome level.
+</p>
+<p>For Poisson models, <code>n_event</code> will be equal to the number of counts per term.
+In addition, a third column <code>exposure</code> will be computed. If no offset is
+defined, exposure is assumed to be equal to 1 (eventually multiplied by
+weights) per observation. If an offset is defined, <code>exposure</code> will be equal
+to the (weighted) sum of the exponential of the offset (as a reminder, to
+model the effect of <code>x</code> on the ratio <code>y / z</code>, a Poisson model will be defined
+as <code>glm(y ~ x + offset(log(z)), family = poisson)</code>). Observed rates could be
+obtained with <code>n_event / exposure</code>.
+</p>
+<p>For Cox models (<code><a href="../../survival/help/coxph.html">survival::coxph()</a></code>), an individual could be coded
+with several observations (several rows). <code>n_obs</code> will correspond to the weighted
+number of observations which could be different from the number of
+individuals. <code>tidy_add_n()</code> will also compute a (weighted) number of events
+(<code>n_events</code>) according to the definition of the <code><a href="../../survival/help/Surv.html">survival::Surv()</a></code> object.
+Exposure time is also returned in <code>exposure</code> column. It is equal to the
+(weighted) sum of the time variable if only one variable time is passed to
+<code><a href="../../survival/help/Surv.html">survival::Surv()</a></code>, and to the (weighted) sum of <code>time2 - time</code> if two time
+variables are defined in <code><a href="../../survival/help/Surv.html">survival::Surv()</a></code>.
+</p>
+<p>The (weighted) total number of observations (<code>N_obs</code>), of events (<code>N_event</code>) and
+of exposure time (<code>Exposure</code>) are stored as attributes of the returned
+tibble.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tidy_helpers: 
+<code><a href="../../broom.helpers/help/tidy_add_coefficients_type.html">tidy_add_coefficients_type</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_contrasts.html">tidy_add_contrasts</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_estimate_to_reference_rows.html">tidy_add_estimate_to_reference_rows</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_header_rows.html">tidy_add_header_rows</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_reference_rows.html">tidy_add_reference_rows</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_term_labels.html">tidy_add_term_labels</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_variable_labels.html">tidy_add_variable_labels</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_attach_model.html">tidy_attach_model</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_disambiguate_terms.html">tidy_disambiguate_terms</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_identify_variables.html">tidy_identify_variables</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_plus_plus.html">tidy_plus_plus</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_remove_intercept.html">tidy_remove_intercept</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_select_variables.html">tidy_select_variables</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+lm(Petal.Length ~ ., data = iris) %&gt;%
+  tidy_and_attach() %&gt;%
+  tidy_add_n()
+
+lm(Petal.Length ~ ., data = iris, contrasts = list(Species = contr.sum)) %&gt;%
+  tidy_and_attach() %&gt;%
+  tidy_add_n()
+
+lm(Petal.Length ~ ., data = iris, contrasts = list(Species = contr.poly)) %&gt;%
+  tidy_and_attach() %&gt;%
+  tidy_add_n()
+
+lm(Petal.Length ~ poly(Sepal.Length, 2), data = iris) %&gt;%
+  tidy_and_attach() %&gt;%
+  tidy_add_n()
+
+df &lt;- Titanic %&gt;%
+  dplyr::as_tibble() %&gt;%
+  dplyr::mutate(Survived = factor(Survived, c("No", "Yes")))
+
+df %&gt;%
+  glm(
+    Survived ~ Class + Age + Sex,
+    data = ., weights = .$n, family = binomial,
+    contrasts = list(Age = contr.sum, Class = "contr.helmert")
+  ) %&gt;%
+  tidy_and_attach() %&gt;%
+  tidy_add_n()
+
+df %&gt;%
+  glm(
+    Survived ~ Class * (Age : Sex),
+    data = ., weights = .$n, family = binomial,
+    contrasts = list(Age = contr.sum, Class = "contr.helmert")
+  ) %&gt;%
+  tidy_and_attach() %&gt;%
+  tidy_add_n()
+
+glm(response ~ age + grade * trt, gtsummary::trial, family = poisson) %&gt;%
+  tidy_and_attach() %&gt;%
+  tidy_add_n()
+
+glm(
+  response ~ trt * grade + offset(log(ttdeath)),
+  gtsummary::trial,
+  family = poisson
+) %&gt;%
+  tidy_and_attach() %&gt;%
+  tidy_add_n()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>broom.helpers</em> version 1.3.0.9001 <a href="00Index.html">Index</a>]</div>
+</body></html>

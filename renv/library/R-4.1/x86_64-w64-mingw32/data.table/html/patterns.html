@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Obtain matching indices corresponding to patterns</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for patterns {data.table}"><tr><td>patterns {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Obtain matching indices corresponding to patterns</h2>
+
+<h3>Description</h3>
+
+<p><code>patterns</code> returns the matching indices in the argument <code>cols</code>
+corresponding to the regular expression patterns provided. The patterns must be
+supported by <code><a href="../../base/help/grep.html">grep</a></code>.
+</p>
+<p>From <code>v1.9.6</code>, <code><a href="../../data.table/help/melt.data.table.html">melt.data.table</a></code> has an enhanced functionality
+in which <code>measure.vars</code> argument can accept a <em>list of column names</em>
+and melt them into separate columns. See the <code>Efficient reshaping using
+data.tables</code> vignette linked below to learn more.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+patterns(..., cols=character(0))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>A set of regular expression patterns.</p>
+</td></tr>
+<tr valign="top"><td><code>cols</code></td>
+<td>
+<p>A character vector of names to which each pattern is matched.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../data.table/help/melt.html">melt</a></code>,
+<a href="https://github.com/Rdatatable/data.table/wiki/Getting-started">https://github.com/Rdatatable/data.table/wiki/Getting-started</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+DT = data.table(x1 = 1:5, x2 = 6:10, y1 = letters[1:5], y2 = letters[6:10])
+# melt all columns that begin with 'x' &amp; 'y', respectively, into separate columns
+melt(DT, measure.vars = patterns("^x", "^y", cols=names(DT)))
+# when used with melt, 'cols' is implicitly assumed to be names of input
+# data.table, if not provided.
+melt(DT, measure.vars = patterns("^x", "^y"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

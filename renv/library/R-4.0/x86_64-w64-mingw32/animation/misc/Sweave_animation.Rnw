@@ -1,0 +1,49 @@
+%% an example to show how to use saveLatex() to insert animations in Sweave
+
+\documentclass{article}
+\usepackage[letterpaper]{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+
+\usepackage{Sweave}
+\usepackage{animate}
+
+\begin{document}
+
+%% we don't need to open the pdf or postscript devices
+\SweaveOpts{prefix.string=Sweave_ani_demo, eps=FALSE, pdf=FALSE}
+<<setup,echo=FALSE>>=
+old.opts = options(continue = ' ', prompt = ' ')
+@
+
+\title{Insert Animations into Sweave with the \textbf{animation} Package}
+\author{Yihui Xie}
+\maketitle
+
+Here we demonstrate how to use the function \emph{saveLatex()} in the
+package \textbf{animation} to insert animations in Sweave.
+
+\begin{figure}[tbh]
+%% !! it is important to set results=tex
+<<Newton, results=tex, keep.source=TRUE>>=
+library(animation)
+ani.options(outdir = getwd())
+saveLatex({
+    ## put any code here to produce several plots
+
+    ## example from ?newton.method
+    ani.options(interval = 0.5)
+    par(mar = c(3, 3, 1, 1.5), mgp = c(1.5, 0.5, 0), pch = 19)
+    newton.method(function(x) 5 * x^3 - 7 * x^2 - 40 * x + 100,
+        7.15, c(-6.2, 7.1), main = "")
+
+}, ani.dev = 'pdf', ani.type = 'pdf',
+          ani.height = 4, ani.width = 7, ani.opts='controls,width=.8\\linewidth')
+@
+\caption{An animation created with the package \textbf{animation} in Sweave.}
+\end{figure}
+
+<<cleaning,echo=FALSE>>=
+## thanks, Michael :-)
+options(old.opts)
+@
+\end{document}

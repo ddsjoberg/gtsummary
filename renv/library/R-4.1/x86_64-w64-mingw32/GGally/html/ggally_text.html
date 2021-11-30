@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Text plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggally_text {GGally}"><tr><td>ggally_text {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Text plot</h2>
+
+<h3>Description</h3>
+
+<p>Plot text for a plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggally_text(
+  label,
+  mapping = ggplot2::aes(color = "black"),
+  xP = 0.5,
+  yP = 0.5,
+  xrange = c(0, 1),
+  yrange = c(0, 1),
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>text that you want to appear</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>aesthetics that don't relate to position (such as color)</p>
+</td></tr>
+<tr valign="top"><td><code>xP</code></td>
+<td>
+<p>horizontal position percentage</p>
+</td></tr>
+<tr valign="top"><td><code>yP</code></td>
+<td>
+<p>vertical position percentage</p>
+</td></tr>
+<tr valign="top"><td><code>xrange</code></td>
+<td>
+<p>range of the data around it.  Only nice to have if plotting in a matrix</p>
+</td></tr>
+<tr valign="top"><td><code>yrange</code></td>
+<td>
+<p>range of the data around it.  Only nice to have if plotting in a matrix</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other arguments for geom_text</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Barret Schloerke
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+p_(ggally_text("Example 1"))
+p_(ggally_text("Example\nTwo", mapping = ggplot2::aes(size = 15), color = I("red")))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

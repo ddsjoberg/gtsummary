@@ -1,0 +1,260 @@
+---
+title: "Effect sizes for ANOVAs"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, effect size, ANOVA]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Effect sizes for ANOVAs}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = "")
+options(digits = 2)
+knitr::opts_chunk$set(comment = ">")
+
+set.seed(1)
+pkgs <- c("effectsize", "parameters", "car", "afex")
+if (!all(sapply(pkgs, require, quietly = TRUE, character.only = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+# Eta<sup>2</sup>
+
+In the context of ANOVA-like tests, it is common to report ANOVA-like effect sizes. Unlike [standardized parameters](https://easystats.github.io/effectsize/articles/standardize_parameters.html), these effect sizes represent the amount of variance explained by each of the model's terms, where each term can be represented by 1 *or more* parameters.
+
+For example, in the following case, the parameters for the `treatment` term represent specific contrasts between the factor's levels (treatment groups) - the difference between each level and the reference level (`obk.long == 'control'`).
+
+```{r}
+data(obk.long, package = "afex")
+# modify the data slightly for the demonstration:
+obk.long <- obk.long[1:240 %% 3 == 0, ]
+obk.long$id <- seq_len(nrow(obk.long))
+
+m <- lm(value ~ treatment, data = obk.long)
+
+parameters::model_parameters(m)
+```
+
+But we can also ask about the overall effect of `treatment` - how much of the
+variation in our dependent variable `value` can be predicted by (or explained
+by) the variation between the `treatment` groups. Such a question can be
+answered with an ANOVA test:
+
+```{r}
+parameters::model_parameters(anova(m))
+```
+
+As we can see, the variance in `value` (the *sums-of-squares*, or *SS*) has been
+split into pieces:
+
+- The part associated with `treatment`.
+- The unexplained part (The Residual-*SS*).
+
+We can now ask what is the percent of the total variance in `value` that is
+associated with `treatment`. This measure is called Eta-squared (written as
+$\eta^2$):
+
+$$
+\eta^2 = \frac{SS_{effect}}{SS_{total}} = \frac{72.23}{72.23 + 250.96} = 0.22
+$$
+
+and can be accessed via the `eta_squared()` function:
+
+```{r}
+library(effectsize)
+
+eta_squared(m, partial = FALSE)
+```
+
+
+## Adding More Terms
+
+When we add more terms to our model, we can ask two different questions about
+the percent of variance explained by a predictor - how much variance is
+accounted by the predictor in *total*, and how much is accounted when
+*controlling* for any other predictors. The latter questions is answered by the
+*partial*-Eta squared ($\eta^2_p$), which is the percent of the **partial**
+variance (after accounting for other predictors in the model) associated with a
+term:
+
+$$
+\eta^2_p = \frac{SS_{effect}}{SS_{effect} + SS_{error}}
+$$
+which can also be accessed via the `eta_squared()` function:
+
+```{r}
+m <- lm(value ~ gender + phase + treatment, data = obk.long)
+
+eta_squared(m, partial = FALSE)
+
+eta_squared(m) # partial = TRUE by default
+```
+
+*(`phase` is a repeated-measures variable, but for simplicity it is not modeled as such.)*
+
+In the calculation above, the *SS*s were computed sequentially - that is the
+*SS* for `phase` is computed after controlling for `gender`, and the *SS* for
+`treatment` is computed after controlling for both `gender` and `phase`. This
+method of sequential *SS* is called also *type-I* test. If this is what you
+want, that's great - however in many fields (and other statistical programs) it
+is common to use "simultaneous" sums of squares (*type-II* or *type-III* tests),
+where each *SS* is computed controlling for all other predictors, regardless of
+order. This can be done with `car::Anova(type = ...)`:
+
+```{r}
+eta_squared(car::Anova(m, type = 3), partial = FALSE)
+
+eta_squared(car::Anova(m, type = 3)) # partial = TRUE by default
+```
+
+$\eta^2_p$ will always be larger than $\eta^2$. The idea is to simulate the
+effect size in a design where only the term of interest was manipulated. This
+terminology assumes some causal relationship between the predictor and the
+outcome, which reflects the experimental world from which these analyses and
+measures hail; However, $\eta^2_p$ can also simply be seen as a
+**signal-to-noise- ratio**, as it only uses the term's *SS* and the error-term's
+*SS*.[^in repeated-measure designs the term-specific residual-*SS* is used for
+the computation of the effect size].
+
+(Note that in a one-way fixed-effect designs $\eta^2 = \eta^2_p$.)
+
+## Adding Interactions
+
+When modeling interactions, it is important to center all of the predictors; for
+numeric variables this can be done by mean-centering the predictors; for factors
+this can be done by using **effects-coding** for the dummy variables. This
+unfortunately makes parameter interpretation harder, but *only* when this is
+does do the *SS*s associated with each lower-order term (or lower-order
+interaction) represent the ***SS*** **main effect** (with treatment coding they
+represent the *SS* of the simple effects).
+
+
+```{r}
+# compare
+m_interaction1 <- lm(value ~ treatment * gender, data = obk.long)
+
+# to:
+m_interaction2 <- lm(
+  value ~ treatment * gender,
+  data = obk.long,
+  contrasts = list(
+    treatment = "contr.sum",
+    gender = "contr.sum"
+  )
+)
+
+eta_squared(car::Anova(m_interaction1, type = 3))
+eta_squared(car::Anova(m_interaction2, type = 3))
+```
+
+If all of this type-III-effects-coding seems like a hassle, you can use the `afex` package, which takes care of all of this behind the scenes:
+
+```{r}
+library(afex)
+m_afex <- aov_car(value ~ treatment * gender + Error(id), data = obk.long)
+
+eta_squared(m_afex)
+```
+
+
+# Other Measures of Effect Size
+
+## Unbiased Effect Sizes
+
+These effect sizes are unbiased estimators of the population's $\eta^2$:
+
+- **Omega Squared** ($\omega^2$)
+- **Epsilon Squared** ($\epsilon^2$), also referred to as *Adjusted Eta Squared*.
+
+```{r}
+omega_squared(m_afex)
+
+epsilon_squared(m_afex)
+```
+
+
+Both $\omega^2$ and $\epsilon^2$ (and their partial counterparts, $\omega^2_p$ &
+$\epsilon^2_p$) are unbiased estimators of the population's $\eta^2$ (or
+$\eta^2_p$, respectively), which is especially important is small samples.
+Though $\omega^2$ is the more popular choice [@albers2018power], $\epsilon^2$ is
+analogous to adjusted-$R^2$ [@allen2017statistics, p. 382], and has been found
+to be less biased [@carroll1975sampling].
+
+## Generalized Eta<sup>2</sup>
+
+*Partial* Eta squared aims at estimating the effect size in a design where only
+the term of interest was manipulated, assuming all other terms are have also
+manipulated. However, not all predictors are always manipulated - some can only
+be observed. For such cases, we can use *generalized* Eta squared ($\eta^2_G$),
+which like $\eta^2_p$ estimating the effect size in a design where only the term
+of interest was manipulated, accounting for the fact that some terms cannot be
+manipulated (and so their variance would be present in such a design).
+
+```{r}
+eta_squared(m_afex, generalized = "gender")
+```
+
+$\eta^2_G$ is useful in repeated-measures designs, as it can estimate what a
+*within-subject* effect size would have been had that predictor been manipulated
+*between-subjects* [@olejnik2003generalized].
+
+
+## Cohen's *f*
+
+Finally, we have the forgotten child - Cohen's $f$. Cohen's $f$ is a
+transformation of $\eta^2_p$, and is the ratio between the term-*SS* and the
+error-*SS*.
+
+$$\text{Cohen's} f_p = \sqrt{\frac{\eta^2_p}{1-\eta^2_p}} = \sqrt{\frac{SS_{effect}}{SS_{error}}}$$
+
+It can take on values between zero, when the population means are all equal, and
+an indefinitely large number as the means are further and further apart. It is
+analogous to Cohen's $d$ when there are only two groups.
+
+```{r}
+cohens_f(m_afex)
+```
+
+# When Sum-of-Squares are Hard to Come By
+
+Until now we've discusses effect sizes in fixed-effect linear model and
+repeated-measures ANOVA's - cases where the *SS*s are readily available, and so
+the various effect sized presented can easily be estimated. How ever this is not
+always the case.
+
+For example, in linear mixed models (LMM/HLM/MLM), the estimation of all required *SS*s is not straightforward. However, we can still *approximate* these effect sizes (only their partial versions) based on the **test-statistic approximation method** (learn more in the [*Effect Size from Test Statistics* vignette](https://easystats.github.io/effectsize/articles/from_test_statistics.html)).
+
+```{r, eval=require(lmerTest)}
+library(lmerTest)
+
+fit_lmm <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+
+anova(fit_lmm) # note the type-3 errors
+
+F_to_eta2(45.8, df = 1, df_error = 17)
+```
+
+Or directly with `eta_squared() and co.:
+
+
+```{r, eval=require(lmerTest)}
+eta_squared(fit_lmm)
+epsilon_squared(fit_lmm)
+omega_squared(fit_lmm)
+```
+
+Another case where *SS*s are not available is when use Bayesian models. `effectsize` has Bayesian solutions for Bayesian models, about which you can read in the [*Effect Sizes for Bayesian Models* vignette](https://easystats.github.io/effectsize/articles/bayesian_models.html).
+
+
+# References

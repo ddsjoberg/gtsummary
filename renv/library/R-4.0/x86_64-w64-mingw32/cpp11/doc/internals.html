@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>cpp11 internals</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">cpp11 internals</h1>
+
+
+
+<p>The development repository for cpp11 is <a href="https://github.com/r-lib/cpp11" class="uri">https://github.com/r-lib/cpp11</a>.</p>
+<div id="initial-setup-and-dev-workflow" class="section level2">
+<h2>Initial setup and dev workflow</h2>
+<p>First install any dependencies needed for development.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>remotes<span class="op">::</span><span class="kw">install_deps</span>(<span class="dt">dependencies =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<p>You can load the package in an interactive R session</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>devtools<span class="op">::</span><span class="kw">load_all</span>()</span></code></pre></div>
+<p>Or run the tests with</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>devtools<span class="op">::</span><span class="kw">test</span>()</span></code></pre></div>
+<p><code>test()</code> will also re-compile the package if needed, so you do not always have to run <code>load_all()</code>.</p>
+<p>If you change the cpp11 headers you will need to clean and recompile the cpp11test package</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>devtools<span class="op">::</span><span class="kw">clean_dll</span>()</span>
+<span id="cb4-2"><a href="#cb4-2"></a>devtools<span class="op">::</span><span class="kw">load_all</span>()</span></code></pre></div>
+<p>Generally when developing the C++ headers I run R with its working directory in the <code>cpp11test</code> directory and use <code>devtools::test()</code> to run the cpp11tests.</p>
+<p>To calculate code coverage of the cpp11 package run the following from the <code>cpp11</code> root directory.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>covr<span class="op">::</span><span class="kw">report</span>(<span class="kw">cpp11_coverage</span>())</span></code></pre></div>
+</div>
+<div id="code-formatting" class="section level2">
+<h2>Code formatting</h2>
+<p>This project uses <a href="https://clang.llvm.org/docs/ClangFormat.html">clang-format</a> to automatically format the c++ code.</p>
+<p>You can run <code>make format</code> to re-format all code in the project. Alternatively many IDEs support automatically running <code>clang-format</code> every time files are written.</p>
+</div>
+<div id="code-organization" class="section level2">
+<h2>Code organization</h2>
+<p>cpp11 is a header only library, so all source code exposed to users lives in <a href="https://github.com/r-lib/cpp11/tree/master/inst/include">inst/include</a>. R code used to register functions and for <code>cpp11::cpp_source()</code> is in <a href="https://github.com/r-lib/cpp11/tree/master/R">R/</a>. Tests for <em>only</em> the code in <code>R/</code> is in <a href="https://github.com/r-lib/cpp11/tree/master/tests/testthat">tests/testthat/</a> The rest of the code is in a separate <a href="https://github.com/r-lib/cpp11/tree/master/cpp11test">cpp11test/</a> package included in the source tree. Inside <a href="https://github.com/r-lib/cpp11/tree/master/cpp11test/src">cpp11test/src</a> the files that start with <code>test-</code> are C++ tests using the <a href="https://testthat.r-lib.org/reference/use_catch.html">Catch</a> support in testthat. In addition there are some regular R tests in <a href="https://github.com/r-lib/cpp11/tree/master/cpp11test/tests/testthat">cpp11test/tests/testthat/</a>.</p>
+</div>
+<div id="naming-conventions" class="section level2">
+<h2>Naming conventions</h2>
+<ul>
+<li>All header files are named with a <code>.hpp</code> extension.</li>
+<li>All source files are named with a <code>.cpp</code> extension.</li>
+<li>Public header files should be put in <code>inst/include/cpp11</code></li>
+<li>Read only r_vector classes and free functions should be put in the <code>cpp11</code> namespace.</li>
+<li>Writable r_vector class should be put in the <code>cpp11::writable</code> namespace.</li>
+<li>Private classes and functions should be put in the <code>cpp11::internal</code> namespace.</li>
+</ul>
+</div>
+<div id="vector-classes" class="section level2">
+<h2>Vector classes</h2>
+<p>All of the basic r_vector classes are class templates, the base template is defined in <a href="https://github.com/r-lib/cpp11/blob/master/inst/include/cpp11/r_vector.hpp">cpp11/r_vector.hpp</a> The template parameter is the type of <strong>value</strong> the particular R vector stores, e.g. <code>double</code> for <code>cpp11::doubles</code>. This differs from Rcpp, whose first template parameter is the R vector type, e.g. <code>REALSXP</code>.</p>
+<p>The file first has the class declarations, then function definitions further down in the file. Specializations for the various types are in separate files, e.g. <a href="https://github.com/r-lib/cpp11/blob/master/inst/include/cpp11/doubles.hpp">cpp11/doubles.hpp</a>, <a href="https://github.com/r-lib/cpp11/blob/master/inst/include/cpp11/integers.hpp">cpp11/integers.hpp</a></p>
+</div>
+<div id="coercion-functions" class="section level2">
+<h2>Coercion functions</h2>
+<p>There are two different coercion functions</p>
+<p><code>as_sexp()</code> takes a C++ object and coerces it to a SEXP object, so it can be used in R. <code>as_cpp&lt;&gt;()</code> is a template function that takes a SEXP and creates a C++ object from it</p>
+<p>The various methods for both functions are defined in <a href="https://github.com/r-lib/cpp11/blob/master/inst/include/cpp11/as.hpp">cpp11/as.hpp</a></p>
+<p>This is definitely the most complex part of the cpp11 code, with extensive use of <a href="https://en.wikipedia.org/wiki/Template_metaprogramming">template metaprogramming</a>. In particular the <a href="https://en.wikipedia.org/wiki/Substitution_failure_is_not_an_error">substitution failure is not an error (SFINAE)</a> technique is used to control overloading of the functions. If we could use C++20 a lot of this code would be made simpler with <a href="https://en.cppreference.com/w/cpp/language/constraints">Concepts</a>, but alas.</p>
+<p>The most common C++ types are included in the test suite and should work without issues, as more exotic types are used in real projects additional issues may arise.</p>
+<p>Some useful links on SFINAE</p>
+<ul>
+<li><a href="https://www.fluentcpp.com/2018/05/15/make-sfinae-pretty-1-what-value-sfinae-brings-to-code/" class="uri">https://www.fluentcpp.com/2018/05/15/make-sfinae-pretty-1-what-value-sfinae-brings-to-code/</a>, <a href="https://www.fluentcpp.com/2018/05/18/make-sfinae-pretty-2-hidden-beauty-sfinae/" class="uri">https://www.fluentcpp.com/2018/05/18/make-sfinae-pretty-2-hidden-beauty-sfinae/</a></li>
+</ul>
+</div>
+<div id="protection" class="section level2">
+<h2>Protection</h2>
+<div id="protect-list" class="section level3">
+<h3>Protect list</h3>
+<p>cpp11 uses an idea proposed by <a href="https://github.com/RcppCore/Rcpp/issues/1081#issuecomment-630330838">Luke Tierney</a> to use a double linked list with the head preserved to protect objects cpp11 is protecting.</p>
+<p>Each node in the list uses the head (<code>CAR</code>) part to point to the previous node, and the <code>CDR</code> part to point to the next node. The <code>TAG</code> is used to point to the object being protected. The head and tail of the list have <code>R_NilValue</code> as their <code>CAR</code> and <code>CDR</code> pointers respectively.</p>
+<p>Calling <code>preserved.insert()</code> with a regular R object will add a new node to the list and return a protect token corresponding to the node added. Calling <code>preserved.release()</code> on this returned token will release the protection by unlinking the node from the linked list.</p>
+<p>This scheme scales in O(1) time to release or insert an object vs O(N) or worse time with <code>R_PreserveObject()</code> / <code>R_ReleaseObject()</code>.</p>
+<p>These functions are defined in <a href="https://github.com/r-lib/cpp11/blob/master/inst/include/cpp11/protect.hpp">protect.hpp</a></p>
+</div>
+<div id="unwind-protect" class="section level3">
+<h3>Unwind Protect</h3>
+<p>In R 3.5+ cpp11 uses <code>R_UnwindProtect</code> to protect (most) calls to the R API that could fail. These are usually those that allocate memory, though in truth most R API functions could error along some paths. If an error happends under <code>R_UnwindProtect</code> cpp11 will throw a C++ exception. This exception is caught by the try catch block defined in the <code>BEGIN_CPP11</code> macro in <a href="https://github.com/r-lib/cpp11/blob/master/inst/include/cpp11/declarations.hpp">cpp11/declarations.hpp</a>. The exception will cause any C++ destructors to run, freeing any resources held by C++ objects. After the try catch block exits the R error unwinding is then continued by <code>R_ContinueUnwind()</code> and a normal R error results.</p>
+<p>In R versions prior to 3.5 <code>R_UnwindProtect()</code> is not available. Unfortunately the options to emulate it are not ideal.</p>
+<ol style="list-style-type: decimal">
+<li>Using <code>R_TopLevelExec()</code> works to avoid the C long jump, but because the code is always run in a top level context any errors or messages thrown cannot be caught by <code>tryCatch()</code> or similar techniques.</li>
+<li>Using <code>R_TryCatch()</code> is not available prior to R 3.4, and also has a serious bug in R 3.4 (fixed in R 3.5).</li>
+<li>Calling the R level <code>tryCatch()</code> function which contains an expression that runs a C function which then runs the C++ code would be an option, but implementing this is convoluted and it would impact performance, perhaps severely.</li>
+<li>Have <code>cpp11::unwind_protect()</code> be a no-op for these versions. This means any resources held by C++ objects would leak, including cpp11::r_vector / cpp11::sexp objects.</li>
+</ol>
+<p>None of these options is perfect, here are some pros and cons for each.</p>
+<ol style="list-style-type: decimal">
+<li>Causes behavior changes and test failures, so it was ruled out.</li>
+<li>Was also ruled out since we want to support back to R 3.3.</li>
+<li>Was ruled out partially because the implementation would be somewhat tricky and more because performance would suffer greatly.</li>
+<li>is what we now do in cpp11. It leaks protected objects when there are R API errors.</li>
+</ol>
+<p>If packages are concerned about the leaked memory they can call <code>cpp11::preserved.release_all()</code> as needed to release the current protections for all objects managed by cpp11. This is not done automatically because in some cases the protections should persist beyond the <code>.Call()</code> boundry, e.g. in vroom altrep objects for example.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Correlation matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggcorr {GGally}"><tr><td>ggcorr {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Correlation matrix</h2>
+
+<h3>Description</h3>
+
+<p>Function for making a correlation matrix plot, using <span class="pkg">ggplot2</span>.
+The function is directly inspired by Tian Zheng and Yu-Sung Su's
+<code>corrplot</code> function in the 'arm' package.
+Please visit <a href="https://github.com/briatte/ggcorr">https://github.com/briatte/ggcorr</a> for the latest version
+of <code>ggcorr</code>, and see the vignette at
+<a href="https://briatte.github.io/ggcorr/">https://briatte.github.io/ggcorr/</a> for many examples of how to use it.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggcorr(
+  data,
+  method = c("pairwise", "pearson"),
+  cor_matrix = NULL,
+  nbreaks = NULL,
+  digits = 2,
+  name = "",
+  low = "#3B9AB2",
+  mid = "#EEEEEE",
+  high = "#F21A00",
+  midpoint = 0,
+  palette = NULL,
+  geom = "tile",
+  min_size = 2,
+  max_size = 6,
+  label = FALSE,
+  label_alpha = FALSE,
+  label_color = "black",
+  label_round = 1,
+  label_size = 4,
+  limits = c(-1, 1),
+  drop = is.null(limits) || identical(limits, FALSE),
+  layout.exp = 0,
+  legend.position = "right",
+  legend.size = 9,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data frame or matrix containing numeric (continuous) data. If
+any of the columns contain non-numeric data, they will be dropped with a
+warning.</p>
+</td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+<p>a vector of two character strings. The first value gives the
+method for computing covariances in the presence of missing values, and must
+be (an abbreviation of) one of <code>"everything"</code>, <code>"all.obs"</code>,
+<code>"complete.obs"</code>, <code>"na.or.complete"</code> or
+<code>"pairwise.complete.obs"</code>. The second value gives the type of
+correlation coefficient to compute, and must be one of <code>"pearson"</code>,
+<code>"kendall"</code> or <code>"spearman"</code>.
+See <code><a href="../../stats/help/cor.html">cor</a></code> for details.
+Defaults to <code>c("pairwise", "pearson")</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>cor_matrix</code></td>
+<td>
+<p>the named correlation matrix to use for calculations.
+Defaults to the correlation matrix of <code>data</code> when <code>data</code> is
+supplied.</p>
+</td></tr>
+<tr valign="top"><td><code>nbreaks</code></td>
+<td>
+<p>the number of breaks to apply to the correlation coefficients,
+which results in a categorical color scale. See 'Note'.
+Defaults to <code>NULL</code> (no breaks, continuous scaling).</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>the number of digits to show in the breaks of the correlation
+coefficients: see <code><a href="../../base/help/cut.html">cut</a></code> for details.
+Defaults to <code>2</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p>a character string for the legend that shows the colors of the
+correlation coefficients.
+Defaults to <code>""</code> (no legend name).</p>
+</td></tr>
+<tr valign="top"><td><code>low</code></td>
+<td>
+<p>the lower color of the gradient for continuous scaling of the
+correlation coefficients.
+Defaults to <code>"#3B9AB2"</code> (blue).</p>
+</td></tr>
+<tr valign="top"><td><code>mid</code></td>
+<td>
+<p>the midpoint color of the gradient for continuous scaling of the
+correlation coefficients.
+Defaults to <code>"#EEEEEE"</code> (very light grey).</p>
+</td></tr>
+<tr valign="top"><td><code>high</code></td>
+<td>
+<p>the upper color of the gradient for continuous scaling of the
+correlation coefficients.
+Defaults to <code>"#F21A00"</code> (red).</p>
+</td></tr>
+<tr valign="top"><td><code>midpoint</code></td>
+<td>
+<p>the midpoint value for continuous scaling of the
+correlation coefficients.
+Defaults to <code>0</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>palette</code></td>
+<td>
+<p>if <code>nbreaks</code> is used, a ColorBrewer palette to use
+instead of the colors specified by <code>low</code>, <code>mid</code> and <code>high</code>.
+Defaults to <code>NULL</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>geom</code></td>
+<td>
+<p>the geom object to use. Accepts either <code>"tile"</code>,
+<code>"circle"</code>, <code>"text"</code> or <code>"blank"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>min_size</code></td>
+<td>
+<p>when <code>geom</code> has been set to <code>"circle"</code>, the minimum
+size of the circles.
+Defaults to <code>2</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>max_size</code></td>
+<td>
+<p>when <code>geom</code> has been set to <code>"circle"</code>, the maximum
+size of the circles.
+Defaults to <code>6</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>whether to add correlation coefficients to the plot.
+Defaults to <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>label_alpha</code></td>
+<td>
+<p>whether to make the correlation coefficients increasingly
+transparent as they come close to 0. Also accepts any numeric value between
+<code>0</code> and <code>1</code>, in which case the level of transparency is set to that
+fixed value.
+Defaults to <code>FALSE</code> (no transparency).</p>
+</td></tr>
+<tr valign="top"><td><code>label_color</code></td>
+<td>
+<p>the color of the correlation coefficients.
+Defaults to <code>"grey75"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>label_round</code></td>
+<td>
+<p>the decimal rounding of the correlation coefficients.
+Defaults to <code>1</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>label_size</code></td>
+<td>
+<p>the size of the correlation coefficients.
+Defaults to <code>4</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>limits</code></td>
+<td>
+<p>bounding of color scaling for correlations, set <code>limits = NULL</code> or <code>FALSE</code> to remove</p>
+</td></tr>
+<tr valign="top"><td><code>drop</code></td>
+<td>
+<p>if using <code>nbreaks</code>, whether to drop unused breaks from the
+color scale.
+Defaults to <code>FALSE</code> (recommended).</p>
+</td></tr>
+<tr valign="top"><td><code>layout.exp</code></td>
+<td>
+<p>a multiplier to expand the horizontal axis to the left if
+variable names get clipped.
+Defaults to <code>0</code> (no expansion).</p>
+</td></tr>
+<tr valign="top"><td><code>legend.position</code></td>
+<td>
+<p>where to put the legend of the correlation
+coefficients: see <code><a href="../../ggplot2/help/theme.html">theme</a></code> for details.
+Defaults to <code>"bottom"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>legend.size</code></td>
+<td>
+<p>the size of the legend title and labels, in points: see
+<code><a href="../../ggplot2/help/theme.html">theme</a></code> for details.
+Defaults to <code>9</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other arguments supplied to <code><a href="../../ggplot2/help/geom_text.html">geom_text</a></code> for
+the diagonal labels.</p>
+</td></tr>
+</table>
+
+
+<h3>Note</h3>
+
+<p>Recommended values for the <code>nbreaks</code> argument are <code>3</code> to
+<code>11</code>, as values above 11 are visually difficult to separate and are not
+supported by diverging ColorBrewer palettes.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Francois Briatte, with contributions from Amos B. Elberg and
+Barret Schloerke
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../stats/help/cor.html">cor</a></code> and <code>corrplot</code> in the
+<code>arm</code> package.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+# Basketball statistics provided by Nathan Yau at Flowing Data.
+dt &lt;- read.csv("http://datasets.flowingdata.com/ppg2008.csv")
+
+# Default output.
+p_(ggcorr(dt[, -1]))
+
+# Labeled output, with coefficient transparency.
+p_(ggcorr(dt[, -1],
+       label = TRUE,
+       label_alpha = TRUE))
+
+# Custom options.
+p_(ggcorr(
+  dt[, -1],
+  name = expression(rho),
+  geom = "circle",
+  max_size = 10,
+  min_size = 2,
+  size = 3,
+  hjust = 0.75,
+  nbreaks = 6,
+  angle = -45,
+  palette = "PuOr" # colorblind safe, photocopy-able
+))
+
+# Supply your own correlation matrix
+p_(ggcorr(
+  data = NULL,
+  cor_matrix = cor(dt[, -1], use = "pairwise")
+))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

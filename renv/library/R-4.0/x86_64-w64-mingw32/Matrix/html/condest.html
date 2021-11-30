@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Compute Approximate CONDition number and 1-Norm of (Large)...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for condest {Matrix}"><tr><td>condest {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Compute Approximate CONDition number and 1-Norm of (Large) Matrices</h2>
+
+<h3>Description</h3>
+
+<p>&ldquo;Estimate&rdquo;, i.e. compute approximately the CONDition number of
+a (potentially large, often sparse) matrix <code>A</code>.
+It works by apply a fast <em>randomized</em> approximation of the 1-norm,
+<code>norm(A,"1")</code>, through <code>onenormest(.)</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+condest(A, t = min(n, 5), normA = norm(A, "1"),
+        silent = FALSE, quiet = TRUE)
+
+onenormest(A, t = min(n, 5), A.x, At.x, n,
+           silent = FALSE, quiet = silent,
+           iter.max = 10, eps = 4 * .Machine$double.eps)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>A</code></td>
+<td>
+<p>a square matrix, optional for <code>onenormest()</code>, where
+instead of <code>A</code>, <code>A.x</code> and <code>At.x</code> can be specified,
+see there.</p>
+</td></tr>
+<tr valign="top"><td><code>t</code></td>
+<td>
+<p>number of columns to use in the iterations.</p>
+</td></tr>
+<tr valign="top"><td><code>normA</code></td>
+<td>
+<p>number; (an estimate of) the 1-norm of <code>A</code>, by
+default <code><a href="norm.html">norm</a>(A, "1")</code>; may be replaced by an estimate.</p>
+</td></tr>
+<tr valign="top"><td><code>silent</code></td>
+<td>
+<p>logical indicating if warning and (by default)
+convergence messages should be displayed.</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>logical indicating if convergence messages should be
+displayed.</p>
+</td></tr>
+<tr valign="top"><td><code>A.x, At.x</code></td>
+<td>
+<p>when <code>A</code> is missing, these two must be given as
+functions which compute <code>A %% x</code>, or <code>t(A) %% x</code>,
+respectively.</p>
+</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+<p><code> == nrow(A)</code>, only needed when <code>A</code> is not specified.</p>
+</td></tr>
+<tr valign="top"><td><code>iter.max</code></td>
+<td>
+<p>maximal number of iterations for the 1-norm estimator.</p>
+</td></tr>
+<tr valign="top"><td><code>eps</code></td>
+<td>
+<p>the relative change that is deemed irrelevant.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code><a href="condest.html">condest</a>()</code> calls <code><a href="lu.html">lu</a>(A)</code>, and subsequently
+<code>onenormest(A.x = , At.x = )</code> to compute an approximate norm of
+the <em>inverse</em> of <code>A</code>, <i>A^{-1}</i>, in a way which
+keeps using sparse matrices efficiently when <code>A</code> is sparse.
+</p>
+<p>Note that <code>onenormest()</code> uses random vectors and hence
+<em>both</em> functions' results are random, i.e., depend on the random
+seed, see, e.g., <code><a href="../../base/html/Random.html">set.seed</a>()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Both functions return a <code><a href="../../base/html/list.html">list</a></code>;
+<code>condest()</code> with components,
+</p>
+<table summary="R valueblock">
+<tr valign="top"><td><code>est</code></td>
+<td>
+<p>a number <i>&gt; 0</i>, the estimated (1-norm) condition number
+<i>k.</i>; when <i>r :=</i><code>rcond(A)</code>,
+<i>1/k. ~= r</i>.</p>
+</td></tr>
+<tr valign="top"><td><code>v</code></td>
+<td>
+<p>the maximal <i>A x</i> column, scaled to norm(v) = 1.
+Consequently, <i>norm(A v) = norm(A) / est</i>;
+when <code>est</code> is large, <code>v</code> is an approximate null vector.</p>
+</td></tr>
+</table>
+<p>The function <code>onenormest()</code> returns a list with components,
+</p>
+<table summary="R valueblock">
+<tr valign="top"><td><code>est</code></td>
+<td>
+<p>a number <i>&gt; 0</i>, the estimated <code>norm(A, "1")</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>v</code></td>
+<td>
+<p>0-1 integer vector length <code>n</code>, with an <code>1</code> at the index
+<code>j</code> with maximal column <code>A[,j]</code> in <i>A</i>.</p>
+</td></tr>
+<tr valign="top"><td><code>w</code></td>
+<td>
+<p>numeric vector, the largest <i>A x</i> found.</p>
+</td></tr>
+<tr valign="top"><td><code>iter</code></td>
+<td>
+<p>the number of iterations used.</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>This is based on octave's <code>condest()</code> and
+<code>onenormest()</code> implementations with original author
+Jason Riedy, U Berkeley; translation to <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> and
+adaption by Martin Maechler.
+</p>
+
+
+<h3>References</h3>
+
+
+<p>Nicholas J. Higham and Françoise Tisseur (2000).
+A Block Algorithm for Matrix 1-Norm Estimation, with an Application to 1-Norm
+Pseudospectra.
+<em>SIAM J. Matrix Anal. Appl.</em> <b>21</b>, 4, 1185&ndash;1201.
+
+<a href="https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.9804">https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.7.9804</a>
+</p>
+<p>William W. Hager (1984).
+Condition Estimates.
+<em>SIAM J. Sci. Stat. Comput.</em> <b>5</b>, 311&ndash;316.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="norm.html">norm</a></code>, <code><a href="rcond.html">rcond</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(KNex)
+mtm &lt;- with(KNex, crossprod(mm))
+system.time(ce &lt;- condest(mtm))
+sum(abs(ce$v)) ## || v ||_1  == 1
+## Prove that  || A v || = || A || / est  (as ||v|| = 1):
+stopifnot(all.equal(norm(mtm %*% ce$v),
+                    norm(mtm) / ce$est))
+
+## reciprocal
+1 / ce$est
+system.time(rc &lt;- rcond(mtm)) # takes ca  3 x  longer
+rc
+all.equal(rc, 1/ce$est) # TRUE -- the approxmation was good
+
+one &lt;- onenormest(mtm)
+str(one) ## est = 12.3
+## the maximal column:
+which(one$v == 1) # mostly 4, rarely 1, depending on random seed
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

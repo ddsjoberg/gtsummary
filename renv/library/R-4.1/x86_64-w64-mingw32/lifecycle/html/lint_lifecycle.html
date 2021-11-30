@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Lint usages of functions that have a non-stable life cycle.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for pkg_lifecycle_statuses {lifecycle}"><tr><td>pkg_lifecycle_statuses {lifecycle}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Lint usages of functions that have a non-stable life cycle.</h2>
+
+<h3>Description</h3>
+
+
+<ul>
+<li> <p><code>lint_lifecycle</code> dynamically queries the package documentation for packages
+in <code>packages</code> for lifecycle annotations and then searches the directory in
+<code>path</code> for usages of those functions.
+</p>
+</li>
+<li> <p><code>lint_tidyverse_lifecycle</code> is a convenience function to call <code>lint_lifecycle</code>
+for all the packages in the tidyverse.
+</p>
+</li>
+<li> <p><code>pkg_lifecycle_statuses</code> returns a data frame of functions with lifecycle
+annotations for an installed package.
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+pkg_lifecycle_statuses(
+  package,
+  which = c("superseded", "deprecated", "questioning", "defunct", "experimental",
+    "soft-deprecated", "retired")
+)
+
+lint_lifecycle(
+  packages,
+  path = ".",
+  pattern = "[.][Rr](md)?",
+  which = c("superseded", "deprecated", "questioning", "defunct", "experimental",
+    "soft-deprecated", "retired")
+)
+
+lint_tidyverse_lifecycle(
+  path = ".",
+  pattern = "[.][Rr](md)?",
+  which = c("superseded", "deprecated", "questioning", "defunct", "experimental",
+    "soft-deprecated", "retired")
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>package</code></td>
+<td>
+<p>The name of an installed package.</p>
+</td></tr>
+<tr valign="top"><td><code>which</code></td>
+<td>
+<p>The lifecycle statuses to retrieve.
+Include <code>NA</code> if you want to include functions without a specified lifecycle
+status in the results.</p>
+</td></tr>
+<tr valign="top"><td><code>packages</code></td>
+<td>
+<p>One or more installed packages to query for lifecycle statuses.</p>
+</td></tr>
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p>The directory path to the files you want to search.</p>
+</td></tr>
+<tr valign="top"><td><code>pattern</code></td>
+<td>
+<p>Any files matching this pattern will be searched. The default
+searches any files ending in <code>.R</code> or <code>.Rmd</code>.</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>lifecycle</em> version 1.0.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

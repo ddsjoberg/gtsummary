@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Standardize column names</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for standardize_names {insight}"><tr><td>standardize_names {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Standardize column names</h2>
+
+<h3>Description</h3>
+
+<p>Standardize column names from data frames, in particular objects returned from
+<code><a href="../../parameters/html/model_parameters.html">model_parameters()</a></code>, so column names are
+consistent and the same for any model object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+standardize_names(data, ...)
+
+## S3 method for class 'parameters_model'
+standardize_names(
+  data,
+  style = c("easystats", "broom"),
+  ignore_estimate = FALSE,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>A data frame. In particular, objects from <em>easystats</em>
+package functions like
+<code><a href="../../parameters/html/model_parameters.html">model_parameters()</a></code> or
+<code><a href="../../effectsize/html/effectsize.html">effectsize()</a></code> are accepted, but also
+data frames returned by <code>broom::tidy()</code> are valid objects.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>style</code></td>
+<td>
+<p>Standardization can either be based on the naming conventions
+from the <a href="https://easystats.github.io/easystats/">easystats-project</a>,
+or on <span class="pkg">broom</span>'s naming scheme.</p>
+</td></tr>
+<tr valign="top"><td><code>ignore_estimate</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, column names like
+<code>"mean"</code> or <code>"median"</code> will <em>not</em> be converted to
+<code>"Coefficient"</code> resp. <code>"estimate"</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This method is in particular useful for package developers or users
+who use, e.g.,
+<code><a href="../../parameters/html/model_parameters.html">model_parameters()</a></code> in their own
+code or functions to retrieve model parameters for further processing. As
+<code>model_parameters()</code> returns a data frame with varying column names
+(depending on the input), accessing the required information is probably
+not quite straightforward. In such cases, <code>standardize_names()</code> can be
+used to get consistent, i.e. always the same column names, no matter what
+kind of model was used in <code>model_parameters()</code>.
+<br /> <br />
+For <code>style = "broom"</code>, column names are renamed to match <span class="pkg">broom</span>'s
+naming scheme, i.e. <code>Parameter</code> is renamed to <code>term</code>, <code>Coefficient</code>
+becomes <code>estimate</code> and so on.
+<br /> <br />
+For <code>style = "easystats"</code>, when <code>data</code> is an object from <code>broom::tidy()</code>,
+column names are converted from &quot;broom&quot;-style into &quot;easystats&quot;-style.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame, with standardized column names.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (require("parameters")) {
+  model &lt;- lm(mpg ~ wt + cyl, data = mtcars)
+  mp &lt;- model_parameters(model)
+
+  as.data.frame(mp)
+  standardize_names(mp)
+  standardize_names(mp, style = "broom")
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

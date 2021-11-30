@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Methods for Function 'kronecker()' in Package 'Matrix'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for kronecker-methods {Matrix}"><tr><td>kronecker-methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Methods for Function 'kronecker()' in Package 'Matrix'</h2>
+
+<h3>Description</h3>
+
+<p>Computes Kronecker products for objects inheriting from
+<code>"<a href="Matrix-class.html">Matrix</a>"</code>.
+</p>
+<p>In order to preserver sparseness, we treat <code>0 * NA</code> as <code>0</code>,
+not as <code><a href="../../base/html/NA.html">NA</a></code> as usually in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> (and as used for the
+<span class="pkg">base</span> function <code><a href="../../base/html/kronecker.html">kronecker</a></code>).
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>kronecker</dt><dd><p><code>signature(X = "Matrix", Y = "ANY")</code> .......</p>
+</dd>
+<dt>kronecker</dt><dd><p><code>signature(X = "ANY", Y = "Matrix")</code> .......</p>
+</dd>
+<dt>kronecker</dt><dd><p><code>signature(X = "diagonalMatrix", Y = "ANY")</code> .......</p>
+</dd>
+<dt>kronecker</dt><dd><p><code>signature(X = "sparseMatrix", Y = "ANY")</code> .......</p>
+</dd>
+<dt>kronecker</dt><dd><p><code>signature(X = "TsparseMatrix", Y = "TsparseMatrix")</code> .......</p>
+</dd>
+<dt>kronecker</dt><dd><p><code>signature(X = "dgTMatrix", Y = "dgTMatrix")</code> .......</p>
+</dd>
+<dt>kronecker</dt><dd><p><code>signature(X = "dtTMatrix", Y = "dtTMatrix")</code> .......</p>
+</dd>
+<dt>kronecker</dt><dd><p><code>signature(X = "indMatrix", Y = "indMatrix")</code> .......</p>
+</dd>
+</dl>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+(t1 &lt;- spMatrix(5,4, x= c(3,2,-7,11), i= 1:4, j=4:1)) #  5 x  4
+(t2 &lt;- kronecker(Diagonal(3, 2:4), t1))               # 15 x 12
+
+## should also work with special-cased logical matrices
+l3 &lt;- upper.tri(matrix(,3,3))
+M &lt;- Matrix(l3)
+(N &lt;- as(M, "nsparseMatrix")) # "ntCMatrix" (upper triangular)
+N2 &lt;- as(N, "generalMatrix")  # (lost "t"riangularity)
+MM &lt;- kronecker(M,M)
+NN &lt;- kronecker(N,N) # "dtTMatrix" i.e. did keep
+NN2 &lt;- kronecker(N2,N2)
+stopifnot(identical(NN,MM),
+          is(NN2, "sparseMatrix"), all(NN2 == NN),
+          is(NN, "triangularMatrix"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

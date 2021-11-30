@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add/remove R's texmf tree to/from TeX Live</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for r_texmf {tinytex}"><tr><td>r_texmf {tinytex}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add/remove R's texmf tree to/from TeX Live</h2>
+
+<h3>Description</h3>
+
+<p>R ships a custom texmf tree containing a few LaTeX style and class files,
+which are required when compiling R packages manuals (&lsquo;<span class="file">Rd.sty</span>&rsquo;) or
+Sweave documents (&lsquo;<span class="file">Sweave.sty</span>&rsquo;). This tree can be found under the
+directory <code>file.path(R.home('share'), 'texmf')</code>. This function can be
+used to add/remove R's texmf tree to/from TeX Live via
+<code><a href="../../tinytex/help/tlmgr_conf.html">tlmgr_conf</a>('auxtrees')</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+r_texmf(action = c("add", "remove"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>action</code></td>
+<td>
+<p>Add/remove R's texmf tree to/from TeX Live.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments passed to <code><a href="../../tinytex/help/tlmgr.html">tlmgr</a>()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>References</h3>
+
+<p>See the <span class="pkg">tlmgr</span> manual for detailed information about
+<code>tlmgr conf auxtrees</code>. Check out
+<a href="https://tex.stackexchange.com/q/77720/9128">https://tex.stackexchange.com/q/77720/9128</a> if you don't know what
+<code>texmf</code> means.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# running the code below will modify your texmf tree; please do not run
+# unless you know what it means
+
+# r_texmf('remove')
+# r_texmf('add')
+
+# all files under R's texmf tree
+list.files(file.path(R.home('share'), 'texmf'), recursive = TRUE, full.names = TRUE)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>tinytex</em> version 0.34 <a href="00Index.html">Index</a>]</div>
+</body></html>

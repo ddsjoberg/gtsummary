@@ -1,0 +1,143 @@
+---
+title: "Introduction to forcats"
+author: "Emily Robinson"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to forcats}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The goal of the __forcats__ package is to provide a suite of useful tools that solve common problems with factors. Factors are useful when you have categorical data, variables that have a fixed and known set of values, and when you want to display character vectors in non-alphabetical order. If you want to learn more, the best place to start is the [chapter on factors](https://r4ds.had.co.nz/factors.html) in R for Data Science.  
+
+## Ordering by frequency
+
+```{r message = FALSE}
+library(dplyr)
+library(ggplot2)
+library(forcats)
+```
+
+Let's try answering the question, "what are the most common hair colors of star wars characters?" Let's start off by making a bar plot:
+
+```{r initial-plot}
+ggplot(starwars, aes(x = hair_color)) + 
+  geom_bar() + 
+  coord_flip()
+```
+
+That's okay, but it would be more helpful the graph was ordered by count. This is a case of an **unordered** categorical variable where we want it ordered by its frequency. To do so, we can use the function `fct_infreq()`:
+
+```{r fct-infreq-hair}
+ggplot(starwars, aes(x = fct_infreq(hair_color))) + 
+  geom_bar() + 
+  coord_flip()
+```
+
+Note that `fct_infreq()` it automatically puts NA at the top, even though that doesn't have the smallest number of entries. 
+
+## Combining levels
+
+Let's take a look at skin color now: 
+
+```{r}
+starwars %>%
+  count(skin_color, sort = TRUE)
+```
+
+We see that there's 31 different skin colors - if we want to make a plot this would be way too many to display! Let's reduce it to only be the top 5. We can use `fct_lump()` to "lump" all the infrequent colors into one factor, "other." The argument `n` is the number of levels we want to keep.
+
+```{r}
+starwars %>%
+  mutate(skin_color = fct_lump(skin_color, n = 5)) %>%
+  count(skin_color, sort = TRUE)
+```
+
+We could also have used `prop` instead, which keeps all the levels that appear at least `prop` of the time. For example, let's keep skin colors that at least 10% of the characters have: 
+
+```{r}
+starwars %>%
+  mutate(skin_color = fct_lump(skin_color, prop = .1)) %>%
+  count(skin_color, sort = TRUE)
+```
+
+Only light and fair remain; everything else is other. 
+
+If you wanted to call it something than "other", you can change it with the argument `other_level`:
+
+```{r}
+starwars %>%
+  mutate(skin_color = fct_lump(skin_color, prop = .1, other_level = "extra")) %>%
+  count(skin_color, sort = TRUE)
+```
+
+What if we wanted to see if the average mass differed by eye color? We'll only look at the 6 most popular eye colors and remove `NA`s.  
+
+```{r fct-lump-mean}
+avg_mass_eye_color <- starwars %>%
+  mutate(eye_color = fct_lump(eye_color, n = 6)) %>%
+  group_by(eye_color) %>%
+  summarise(mean_mass = mean(mass, na.rm = TRUE))
+
+avg_mass_eye_color
+```
+
+## Ordering by another variable
+
+It looks like people (or at least one person) with orange eyes are definitely heavier! If we wanted to make a graph, it would be nice if it was ordered by `mean_mass`. We can do this with `fct_reorder()`, which reorders one variable by another. 
+
+```{r fct-reorder}
+avg_mass_eye_color %>%
+  mutate(eye_color = fct_reorder(eye_color, mean_mass)) %>%
+  ggplot(aes(x = eye_color, y = mean_mass)) + 
+  geom_col()
+```
+
+## Manually reordering
+
+Let's switch to using another dataset, `gss_cat`, the general social survey. What is the income distribution among the respondents? 
+
+```{r}
+gss_cat %>%
+  count(rincome)
+```
+
+Notice that the income levels are in the correct order - they start with the non-answers and then go from highest to lowest. This is the same order you'd see if you plotted it as a bar chart. This is not a coincidence. When you're working with ordinal data, where there is an order, you can have an ordered factor. You can examine them with the base function `levels()`, which prints them in order:
+
+```{r}
+levels(gss_cat$rincome)
+```
+
+But what if your factor came in the wrong order? Let's simulate that by reordering the levels of `rincome` randomly with `fct_shuffle()`:
+
+```{r}
+reshuffled_income <- gss_cat$rincome %>%
+  fct_shuffle()
+
+levels(reshuffled_income)
+```
+
+Now if we plotted it, it would show in this order, which is all over the place! How can we fix this and put it in the right order?
+
+We can use the function `fct_relevel()` when we need to manually reorder our factor levels. In addition to the factor, you give it a character vector of level names, and specify where you want to move them. It defaults to moving them to the front, but you can move them after another level with the argument `after`. If you want to move it to the end, you set `after` equal to `Inf`. 
+
+For example, let's say we wanted to move `Lt $1000` and `$1000 to 2999` to the front. We would write:
+
+```{r}
+fct_relevel(reshuffled_income, c("Lt $1000", "$1000 to 2999")) %>%
+  levels()
+```
+
+What if we want to move them to the second and third place? 
+
+```{r}
+fct_relevel(reshuffled_income, c("Lt $1000", "$1000 to 2999"), after = 1) %>%
+  levels()
+```

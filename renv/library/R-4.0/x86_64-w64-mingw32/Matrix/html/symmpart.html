@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Symmetric Part and Skew(symmetric) Part of a Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for symmpart {Matrix}"><tr><td>symmpart {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Symmetric Part and Skew(symmetric) Part of a Matrix</h2>
+
+<h3>Description</h3>
+
+<p><code>symmpart(x)</code> computes the symmetric part <code>(x + t(x))/2</code> and
+<code>skewpart(x)</code> the
+skew symmetric part <code>(x - t(x))/2</code> of a square matrix <code>x</code>,
+more efficiently for specific Matrix classes.
+</p>
+<p>Note that <code>x == symmpart(x) + skewpart(x)</code> for all square
+matrices &ndash; apart from extraneous <code><a href="../../base/html/NA.html">NA</a></code> values in the RHS.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+symmpart(x)
+skewpart(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a <em>square</em> matrix; either &ldquo;traditional&rdquo; of class
+<code>"matrix"</code>, or typically, inheriting from the
+<code><a href="Matrix-class.html">Matrix</a></code> class.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>These are generic functions with several methods for different matrix
+classes, use e.g., <code><a href="../../methods/html/showMethods.html">showMethods</a>(symmpart)</code> to see them.
+</p>
+<p>If the row and column names differ, the result will use the column
+names unless they are (partly) <code>NULL</code> where the row names are
+non-<code>NULL</code> (see also the examples).
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>symmpart()</code> returns a symmetric matrix, inheriting from
+<code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code> iff <code>x</code> inherited from
+<code>Matrix</code>.
+</p>
+<p><code>skewpart()</code> returns a skew-symmetric matrix,
+typically of the same class as <code>x</code> (or the closest
+&ldquo;general&rdquo; one, see <code><a href="generalMatrix-class.html">generalMatrix</a></code>).
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/isSymmetric.html">isSymmetric</a></code>.</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+m &lt;- Matrix(1:4, 2,2)
+symmpart(m)
+skewpart(m)
+
+stopifnot(all(m == symmpart(m) + skewpart(m)))
+
+dn &lt;- dimnames(m) &lt;- list(row = c("r1", "r2"), col = c("var.1", "var.2"))
+stopifnot(all(m == symmpart(m) + skewpart(m)))
+colnames(m) &lt;- NULL
+stopifnot(all(m == symmpart(m) + skewpart(m)))
+dimnames(m) &lt;- unname(dn)
+stopifnot(all(m == symmpart(m) + skewpart(m)))
+
+
+## investigate the current methods:
+showMethods(skewpart, include = TRUE)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

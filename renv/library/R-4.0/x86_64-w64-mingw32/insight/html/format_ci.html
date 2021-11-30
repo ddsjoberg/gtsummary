@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Confidence/Credible Interval (CI) Formatting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for format_ci {insight}"><tr><td>format_ci {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Confidence/Credible Interval (CI) Formatting</h2>
+
+<h3>Description</h3>
+
+<p>Confidence/Credible Interval (CI) Formatting
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+format_ci(
+  CI_low,
+  CI_high,
+  ci = 0.95,
+  digits = 2,
+  brackets = TRUE,
+  width = NULL,
+  width_low = width,
+  width_high = width,
+  missing = "",
+  zap_small = FALSE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>CI_low</code></td>
+<td>
+<p>Lower CI bound.</p>
+</td></tr>
+<tr valign="top"><td><code>CI_high</code></td>
+<td>
+<p>Upper CI bound.</p>
+</td></tr>
+<tr valign="top"><td><code>ci</code></td>
+<td>
+<p>CI level in percentage.</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>Number of significant digits.</p>
+</td></tr>
+<tr valign="top"><td><code>brackets</code></td>
+<td>
+<p>Either a logical, and if <code>TRUE</code> (default), values are encompassed in square brackets. If <code>FALSE</code> or <code>NULL</code>, no brackets are used. Else, a character vector of length two, indicating the opening and closing brackets.</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>Minimum width of the returned string. If not <code>NULL</code> and <code>width</code> is larger than the string's length, leading whitespaces are added to the string. If <code>width="auto"</code>, width will be set to the length of the longest string.</p>
+</td></tr>
+<tr valign="top"><td><code>width_low, width_high</code></td>
+<td>
+<p>Like <code>width</code>, but only applies to the lower or higher confidence interval value. This can be used when the values for the lower and upper CI are of very different length.</p>
+</td></tr>
+<tr valign="top"><td><code>missing</code></td>
+<td>
+<p>Value by which <code>NA</code> values are replaced. By default, an
+empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>zap_small</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, small values are rounded after
+<code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal
+places than <code>digits</code> are printed in scientific notation.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A formatted string.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+format_ci(1.20, 3.57, ci = 0.90)
+format_ci(1.20, 3.57, ci = NULL)
+format_ci(1.20, 3.57, ci = NULL, brackets = FALSE)
+format_ci(1.20, 3.57, ci = NULL, brackets = c("(", ")"))
+format_ci(c(1.205645, 23.4), c(3.57, -1.35), ci = 0.90)
+format_ci(c(1.20, NA, NA), c(3.57, -1.35, NA), ci = 0.90)
+
+# automatic alignment of width, useful for printing multiple CIs in columns
+x &lt;- format_ci(c(1.205, 23.4, 100.43), c(3.57, -13.35, 9.4))
+cat(x, sep = "\n")
+
+x &lt;- format_ci(c(1.205, 23.4, 100.43), c(3.57, -13.35, 9.4), width = "auto")
+cat(x, sep = "\n")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

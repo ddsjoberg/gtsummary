@@ -1,0 +1,44 @@
+Package: tzdb
+Title: Time Zone Database Information
+Version: 0.1.2
+Authors@R: 
+    c(person(given = "Davis",
+             family = "Vaughan",
+             role = c("aut", "cre"),
+             email = "davis@rstudio.com"),
+      person(given = "Howard",
+             family = "Hinnant",
+             role = "cph",
+             comment = "Author of the included date library"),
+      person(given = "RStudio",
+             role = c("cph", "fnd")))
+Description: Provides an up-to-date copy of the Internet Assigned Numbers
+    Authority (IANA) Time Zone Database. It is updated periodically to
+    reflect changes made by political bodies to time zone boundaries, UTC
+    offsets, and daylight saving time rules. Additionally, this package
+    provides a C++ interface for working with the 'date' library. 'date'
+    provides comprehensive support for working with dates and date-times,
+    which this package exposes to make it easier for other R packages to
+    utilize. Headers are provided for calendar specific calculations,
+    along with a limited interface for time zone manipulations.
+License: MIT + file LICENSE
+URL: https://r-lib.github.io/tzdb/, https://github.com/r-lib/tzdb
+BugReports: https://github.com/r-lib/tzdb/issues
+Depends: R (>= 3.3)
+Suggests: covr, testthat (>= 3.0.0)
+LinkingTo: cpp11 (>= 0.2.7)
+Biarch: yes
+Config/testthat/edition: 3
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+SystemRequirements: C++11
+NeedsCompilation: yes
+Packaged: 2021-07-20 17:32:53 UTC; davis
+Author: Davis Vaughan [aut, cre],
+  Howard Hinnant [cph] (Author of the included date library),
+  RStudio [cph, fnd]
+Maintainer: Davis Vaughan <davis@rstudio.com>
+Repository: CRAN
+Date/Publication: 2021-07-20 17:50:02 UTC
+Built: R 4.1.0; x86_64-w64-mingw32; 2021-08-05 06:54:45 UTC; windows
+Archs: i386, x64

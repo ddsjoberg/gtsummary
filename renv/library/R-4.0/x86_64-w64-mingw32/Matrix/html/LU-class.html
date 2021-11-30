@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: LU (dense) Matrix Decompositions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for LU-class {Matrix}"><tr><td>LU-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>LU (dense) Matrix Decompositions</h2>
+
+<h3>Description</h3>
+
+<p>The <code>"LU"</code> class is the <em>virtual</em> class of LU decompositions of
+real matrices.  <code>"denseLU"</code> the class of LU decompositions of
+dense real matrices.
+</p>
+
+
+<h3>Details</h3>
+
+<p>The decomposition is of the form
+</p>
+<p style="text-align: center;"><i>A = P L U</i></p>
+
+<p>where typically all matrices are of size <i>n by n</i>, and
+the matrix <i>P</i> is a permutation matrix, <i>L</i> is lower
+triangular and <i>U</i> is upper triangular (both of class
+<code><a href="dtrMatrix-class.html">dtrMatrix</a></code>).
+</p>
+<p>Note that the <em>dense</em> decomposition is also implemented for
+a <i>m by n</i> matrix <i>A</i>, when <i>m != n</i>.
+</p>
+<p>If <i>m &lt; n</i> (&ldquo;wide case&rdquo;), <i>U</i> is <i>m by n</i>,
+and hence not triangular.<br />
+If <i>m &gt; n</i> (&ldquo;long case&rdquo;), <i>L</i> is <i>m by n</i>,
+and hence not triangular.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("denseLU", ...)</code>.
+More commonly the objects are created explicitly from calls of the form
+<code><a href="lu.html">lu</a>(mm)</code> where <code>mm</code> is an object that inherits from the
+<code>"dgeMatrix"</code> class or as a side-effect of other functions applied
+to <code>"dgeMatrix"</code> objects.
+</p>
+
+
+<h3>Extends</h3>
+
+<p><code>"LU"</code> directly extends the virtual class
+<code>"<a href="MatrixFactorization-class.html">MatrixFactorization</a>"</code>.
+</p>
+<p><code>"denseLU"</code> directly extends <code>"LU"</code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>x</code>:</dt><dd><p>object of class <code>"numeric"</code>.  The <code>"L"</code>
+(unit lower triangular) and <code>"U"</code> (upper triangular) factors
+of the original matrix.  These are stored in a packed format
+described in the Lapack manual, and can retrieved by the
+<code>expand()</code> method, see below.</p>
+</dd>
+<dt><code>perm</code>:</dt><dd><p>Object of class <code>"integer"</code> - a vector of
+length <code>min(Dim)</code> that describes the permutation applied to
+the rows of the original matrix.  The contents of this vector are
+described in the Lapack manual.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>the dimension of the original matrix; inherited
+from class <code><a href="MatrixFactorization-class.html">MatrixFactorization</a></code> .</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>expand</dt><dd><p><code>signature(x = "denseLU")</code>: Produce the <code>"L"</code> and
+<code>"U"</code> (and <code>"P"</code>) factors as a named list of matrices,
+see also the example below.</p>
+</dd>
+<dt>solve</dt><dd><p><code>signature(a = "denseLU", b = "missing")</code>: Compute
+the inverse of A, <i>A^(-1)</i>, <code>solve(A)</code> using the LU
+decomposition, see also <code><a href="solve-methods.html">solve-methods</a></code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>class <code><a href="sparseLU-class.html">sparseLU</a></code> for LU decompositions of
+<em>sparse</em> matrices;
+further, class <code><a href="dgeMatrix-class.html">dgeMatrix</a></code> and functions <code><a href="lu.html">lu</a></code>,
+<code><a href="expand.html">expand</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+set.seed(1)
+mm &lt;- Matrix(round(rnorm(9),2), nrow = 3)
+mm
+str(lum &lt;- lu(mm))
+elu &lt;- expand(lum)
+elu # three components: "L", "U", and "P", the permutation
+elu$L %*% elu$U
+(m2 &lt;- with(elu, P %*% L %*% U)) # the same as 'mm'
+stopifnot(all.equal(as(mm, "matrix"),
+                    as(m2, "matrix")))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

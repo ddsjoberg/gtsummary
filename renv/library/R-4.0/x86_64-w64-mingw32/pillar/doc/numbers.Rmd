@@ -1,0 +1,115 @@
+---
+title: "Controlling display of numbers"
+output: html_vignette
+vignette: >
+  %\VignetteIndexEntry{Controlling display of numbers}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r numbers-1, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  cache = TRUE,
+  comment = "#>"
+)
+```
+
+Tibbles print numbers with three significant digits by default, switching to scientific notation if the available space is too small.
+Underlines are used to highlight groups of three digits.
+This display works for many, but not for all use cases.
+
+```{r numbers-2}
+library(pillar)
+library(tibble)
+```
+
+## Per-column number formatting
+
+The new `num()` constructor allows creating vectors that behave like numbers but allow customizing their display.
+
+```{r numbers-5}
+num(-1:3, notation = "sci")
+
+tibble(
+  x4 = num(8:12 * 100 + 0.5, digits = 4),
+  x1 = num(8:12 * 100 + 0.5, digits = -1),
+  usd = num(8:12 * 100 + 0.5, digits = 2, label = "USD"),
+  percent = num(8:12 / 100 + 0.0005, label = "%", scale = 100),
+  eng = num(10^(-3:1), notation = "eng", fixed_exponent = -Inf),
+  si = num(10^(-3:1) * 123, notation = "si")
+)
+```
+
+
+## Computing on `num`
+
+Formatting numbers is useful for presentation of results.
+If defined early on in the analysis, the formatting options survive most operations.
+It is worth defining output options that suit your data once early on in the process, to benefit from the formatting throughout the analysis.
+We are working on seamlessly applying this formatting to the final presentation (plots, tables, ...).
+
+
+### Arithmetics
+
+```{r numbers-13}
+num(1) + 2
+1 + num(2)
+1L + num(2)
+num(3.23456, sigfig = 4) - num(2)
+num(4, sigfig = 2) * num(3, digits = 2)
+num(3, digits = 2) * num(4, sigfig = 2)
+-num(2)
+```
+
+### Mathematics
+
+```{r numbers-15}
+min(num(1:3, label = "$"))
+mean(num(1:3, notation = "eng"))
+sin(num(1:3, label = "%", scale = 100))
+```
+
+### Recovery
+
+The `var()` function is one of the examples where the formatting is lost:
+
+```{r numbers-16}
+x <- num(c(1, 2, 4), notation = "eng")
+var(x)
+```
+
+One way to recover is to apply `num()` to the result:
+
+```{r numbers-16a}
+num(var(x), notation = "eng")
+```
+
+For automatic recovery, we can also define our version of `var()`, or even override the base implementation:
+
+```{r numbers-16b}
+var_ <- function(x, ...) {
+  out <- var(x, ...)
+  vctrs::vec_restore(out, x)
+}
+var_(x)
+```
+
+This pattern can be applied to all functions that lose the formatting.
+The `make_restore()` function defined below is a function factory that consumes a function and returns a derived function:
+
+```{r numbers-16c}
+make_restore <- function(fun) {
+  force(fun)
+  function(x, ...) {
+    out <- fun(x, ...)
+    vctrs::vec_restore(out, x)
+  }
+}
+
+var_ <- make_restore(var)
+sd_ <- make_restore(sd)
+
+var_(x)
+sd_(x)
+```

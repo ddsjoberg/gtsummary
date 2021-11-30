@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Rank of a Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for rankMatrix {Matrix}"><tr><td>rankMatrix {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Rank of a Matrix</h2>
+
+<h3>Description</h3>
+
+<p>Compute &lsquo;the&rsquo; matrix rank, a well-defined functional in theory(*),
+somewhat ambiguous in practice.  We provide several methods, the
+default corresponding to Matlab's definition.
+</p>
+<p>(*) The rank of a <i>n x m</i> matrix <i>A</i>, <i>rk(A)</i>,
+is the maximal number of linearly independent columns (or rows); hence
+<i>rk(A) &lt;= min(n,m)</i>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rankMatrix(x, tol = NULL,
+           method = c("tolNorm2", "qr.R", "qrLINPACK", "qr",
+                      "useGrad", "maybeGrad"),
+           sval = svd(x, 0, 0)$d, warn.t = TRUE, warn.qr = TRUE)
+
+qr2rankMatrix(qr, tol = NULL, isBqr = is.qr(qr), do.warn = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>numeric matrix, of dimension <i>n x m</i>, say.</p>
+</td></tr>
+<tr valign="top"><td><code>tol</code></td>
+<td>
+<p>nonnegative number specifying a (relative,
+&ldquo;scalefree&rdquo;) tolerance for testing of
+&ldquo;practically zero&rdquo; with specific meaning depending on
+<code>method</code>; by default, <code>max(dim(x)) * <a href="../../base/html/zMachine.html">.Machine</a>$double.eps</code>
+is according to Matlab's default (for its only method which is our
+<code>method="tolNorm2"</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+<p>a character string specifying the computational method
+for the rank, can be abbreviated:
+</p>
+
+<dl>
+<dt><code>"tolNorm2"</code>:</dt><dd><p>the number of singular values
+<code>&gt;= tol * max(sval)</code>;</p>
+</dd>
+<dt><code>"qrLINPACK"</code>:</dt><dd><p>for a dense matrix, this is the rank of
+<code><a href="../../base/html/qr.html">qr</a>(x, tol, LAPACK=FALSE)</code> (which is
+<code>qr(...)$rank</code>);
+<br />
+This (&quot;qr*&quot;, dense) version used to be <em>the</em> recommended way to
+compute a matrix rank for a while in the past.
+</p>
+<p>For sparse <code>x</code>, this is equivalent to <code>"qr.R"</code>.
+</p>
+</dd>
+<dt><code>"qr.R"</code>:</dt><dd><p>this is the rank of triangular matrix
+<i>R</i>, where <code>qr()</code> uses LAPACK or a &quot;sparseQR&quot; method
+(see <code><a href="qr-methods.html">qr-methods</a></code>) to compute the decomposition
+<i>QR</i>.  The rank of <i>R</i> is then defined as the number of
+&ldquo;non-zero&rdquo; diagonal entries <i>d_i</i> of <i>R</i>, and
+&ldquo;non-zero&rdquo;s fulfill
+<i>|d_i| &gt;= tol * max(|d_i|)</i>.
+</p>
+</dd>
+<dt><code>"qr"</code>:</dt><dd><p>is for back compatibility; for dense <code>x</code>,
+it corresponds to <code>"qrLINPACK"</code>, whereas for sparse
+<code>x</code>, it uses <code>"qr.R"</code>.
+</p>
+<p>For all the &quot;qr*&quot; methods, singular values <code>sval</code> are not
+used, which may be crucially important for a large sparse matrix
+<code>x</code>, as in that case, when <code>sval</code> is not specified,
+the default, computing <code><a href="../../base/html/svd.html">svd</a>()</code> currently coerces
+<code>x</code> to a dense matrix.
+</p>
+</dd>
+<dt><code>"useGrad"</code>:</dt><dd><p>considering the &ldquo;gradient&rdquo; of the
+(decreasing) singular values, the index of the <em>smallest</em> gap.</p>
+</dd>
+<dt><code>"maybeGrad"</code>:</dt><dd><p>choosing method <code>"useGrad"</code> only when
+that seems <em>reasonable</em>; otherwise using <code>"tolNorm2"</code>.</p>
+</dd>
+</dl>
+
+
+</td></tr>
+<tr valign="top"><td><code>sval</code></td>
+<td>
+<p>numeric vector of non-increasing singular values of
+<code>x</code>; typically unspecified and computed from <code>x</code> when
+needed, i.e., unless <code>method = "qr"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>warn.t</code></td>
+<td>
+<p>logical indicating if <code>rankMatrix()</code> should warn
+when it needs <code><a href="../../base/html/t.html">t</a>(x)</code> instead of <code>x</code>.  Currently, for
+<code>method = "qr"</code> only, gives a warning by default because the
+caller often could have passed <code>t(x)</code> directly, more efficiently.</p>
+</td></tr>
+<tr valign="top"><td><code>warn.qr</code></td>
+<td>
+<p>in the <i>QR</i> cases (i.e., if <code>method</code> starts with
+<code>"qr"</code>), <code>rankMatrix()</code> calls
+<code>qr2rankMarix(.., do.warn = warn.qr)</code>, see below.</p>
+</td></tr>
+</table>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>qr</code></td>
+<td>
+<p>an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object resulting from <code><a href="qr-methods.html">qr</a>(x,..)</code>, i.e.,
+typically inheriting from <code><a href="../../base/html/class.html">class</a></code> <code>"<a href="qr-methods.html">qr</a>"</code> or
+<code>"<a href="sparseQR-class.html">sparseQR</a>"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>isBqr</code></td>
+<td>
+<p><code><a href="../../base/html/logical.html">logical</a></code> indicating if <code>qr</code> is resulting
+from <span class="pkg">base</span> <code><a href="../../base/html/qr.html">qr</a>()</code>.  (Otherwise, it is typically
+from <span class="pkg">Matrix</span> package sparse <code><a href="qr.html">qr</a></code>.)</p>
+</td></tr>
+<tr valign="top"><td><code>do.warn</code></td>
+<td>
+<p>logical; if true, warn about non-finite (or in the
+<code>sparseQR</code> case negative)
+diagonal entries in the <i>R</i> matrix of the <i>QR</i> decomposition.
+Do not change lightly!</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>qr2rankMatrix()</code> is typically called from <code>rankMatrix()</code> for
+the <code>"qr"</code>* <code>method</code>s, but can be used directly - much more
+efficiently in case the <code>qr</code>-decomposition is available anyway.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>x</code> is a matrix of all <code>0</code> (or of zero dimension), the rank
+is zero; otherwise, typically a positive integer in <code>1:min(dim(x))</code>
+with attributes detailing the method used.
+</p>
+<p>There are rare cases where the sparse <i>QR</i> decomposition
+&ldquo;fails&rdquo; in so far as the diagonal entries of <i>R</i>, the
+<i>d_i</i> (see above), end with non-finite, typically <code><a href="../../base/html/is.finite.html">NaN</a></code>
+entries.  Then, a warning is signalled (unless <code>warn.qr</code> /
+<code>do.warn</code> is not true) and <code>NA</code> (specifically,
+<code><a href="../../base/html/NA.html">NA_integer_</a></code>) is returned.
+</p>
+
+
+<h3>Note</h3>
+
+<p>For large sparse matrices <code>x</code>, unless you can specify
+<code>sval</code> yourself, currently <code>method = "qr"</code> may
+be the only feasible one, as the others need <code>sval</code> and call
+<code><a href="../../base/html/svd.html">svd</a>()</code> which currently coerces <code>x</code> to a
+<code><a href="denseMatrix-class.html">denseMatrix</a></code> which may be very slow or impossible,
+depending on the matrix dimensions.
+</p>
+<p>Note that in the case of sparse <code>x</code>, <code>method = "qr"</code>, all
+non-strictly zero diagonal entries <i>d_i</i> where counted, up to
+including <span class="pkg">Matrix</span> version 1.1-0, i.e., that method implicitly
+used <code>tol = 0</code>, see also the <code>set.seed(42)</code> example below.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler; for the &quot;*Grad&quot; methods building on
+suggestions by Ravi Varadhan.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="qr-methods.html">qr</a></code>, <code><a href="../../base/html/svd.html">svd</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+rankMatrix(cbind(1, 0, 1:3)) # 2
+
+(meths &lt;- eval(formals(rankMatrix)$method))
+
+## a "border" case:
+H12 &lt;- Hilbert(12)
+rankMatrix(H12, tol = 1e-20) # 12;  but  11  with default method &amp; tol.
+sapply(meths, function(.m.) rankMatrix(H12, method = .m.))
+## tolNorm2   qr.R  qrLINPACK   qr  useGrad maybeGrad
+##       11     11         12   12       11        11
+## The meaning of 'tol' for method="qrLINPACK" and *dense* x is not entirely "scale free"
+rMQL &lt;- function(ex, M) rankMatrix(M, method="qrLINPACK",tol = 10^-ex)
+rMQR &lt;- function(ex, M) rankMatrix(M, method="qr.R",     tol = 10^-ex)
+sapply(5:15, rMQL, M = H12) # result is platform dependent
+##  7  7  8 10 10 11 11 11 12 12 12  {x86_64}
+sapply(5:15, rMQL, M = 1000 * H12) # not identical unfortunately
+##  7  7  8 10 11 11 12 12 12 12 12
+sapply(5:15, rMQR, M = H12)
+##  5  6  7  8  8  9  9 10 10 11 11
+sapply(5:15, rMQR, M = 1000 * H12) # the *same*
+
+
+## "sparse" case:
+M15 &lt;- kronecker(diag(x=c(100,1,10)), Hilbert(5))
+sapply(meths, function(.m.) rankMatrix(M15, method = .m.))
+#--&gt; all 15, but 'useGrad' has 14.
+sapply(meths, function(.m.) rankMatrix(M15, method = .m., tol = 1e-7)) # all 14
+
+## "large" sparse
+n &lt;- 250000; p &lt;- 33; nnz &lt;- 10000
+L &lt;- sparseMatrix(i = sample.int(n, nnz, replace=TRUE),
+                  j = sample.int(p, nnz, replace=TRUE), x = rnorm(nnz))
+(st1 &lt;- system.time(r1 &lt;- rankMatrix(L)))                # warning+ ~1.5 sec (2013)
+(st2 &lt;- system.time(r2 &lt;- rankMatrix(L, method = "qr"))) # considerably faster!
+r1[[1]] == print(r2[[1]]) ## --&gt;  ( 33  TRUE )
+
+## another sparse-"qr" one, which ``failed'' till 2013-11-23:
+set.seed(42)
+f1 &lt;- factor(sample(50, 1000, replace=TRUE))
+f2 &lt;- factor(sample(50, 1000, replace=TRUE))
+f3 &lt;- factor(sample(50, 1000, replace=TRUE))
+D &lt;- t(do.call(rbind, lapply(list(f1,f2,f3), as, 'sparseMatrix')))
+dim(D); nnzero(D) ## 1000 x 150 // 3000 non-zeros (= 2%)
+stopifnot(rankMatrix(D,           method='qr') == 148,
+	  rankMatrix(crossprod(D),method='qr') == 148)
+
+## zero matrix has rank 0 :
+stopifnot(sapply(meths, function(.m.)
+                        rankMatrix(matrix(0, 2, 2), method = .m.)) == 0)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

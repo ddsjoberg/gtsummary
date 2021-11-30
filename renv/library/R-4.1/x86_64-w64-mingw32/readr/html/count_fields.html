@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Count the number of fields in each line of a file</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for count_fields {readr}"><tr><td>count_fields {readr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Count the number of fields in each line of a file</h2>
+
+<h3>Description</h3>
+
+<p>This is useful for diagnosing problems with functions that fail
+to parse correctly.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+count_fields(file, tokenizer, skip = 0, n_max = -1L)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>Either a path to a file, a connection, or literal data
+(either a single string or a raw vector).
+</p>
+<p>Files ending in <code>.gz</code>, <code>.bz2</code>, <code>.xz</code>, or <code>.zip</code> will
+be automatically uncompressed. Files starting with <code style="white-space: pre;">http://</code>,
+<code style="white-space: pre;">https://</code>, <code style="white-space: pre;">ftp://</code>, or <code style="white-space: pre;">ftps://</code> will be automatically
+downloaded. Remote gz files can also be automatically downloaded and
+decompressed.
+</p>
+<p>Literal data is most useful for examples and tests. To be recognised as a
+path, it must be wrapped with <code>I()</code>, be a string containing at least one
+new line, or be a vector containing at least one string with a new line.
+</p>
+<p>Using a value of <code><a href="../../readr/help/clipboard.html">clipboard()</a></code> will read from the system clipboard.</p>
+</td></tr>
+<tr valign="top"><td><code>tokenizer</code></td>
+<td>
+<p>A tokenizer that specifies how to break the <code>file</code>
+up into fields, e.g., <code><a href="../../readr/help/tokenizer_csv.html">tokenizer_csv()</a></code>,
+<code><a href="../../readr/help/tokenizer_fwf.html">tokenizer_fwf()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>skip</code></td>
+<td>
+<p>Number of lines to skip before reading data.</p>
+</td></tr>
+<tr valign="top"><td><code>n_max</code></td>
+<td>
+<p>Optionally, maximum number of rows to count fields for.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+count_fields(readr_example("mtcars.csv"), tokenizer_csv())
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>readr</em> version 2.0.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

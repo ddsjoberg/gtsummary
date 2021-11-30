@@ -1,0 +1,283 @@
+---
+title: "Building a complex table"
+author: "Max Gordon"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    css: custom.css
+vignette: >
+  %\VignetteIndexEntry{Building a complex table}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+Introduction
+============
+
+Tables are an essential part of publishing, well... anything. I therefore want to explore the options available for generating these in knitr. It is important to remember that there are two ways of generating tables in markdown:
+
+1. Markdown tables
+2. HTML tables
+
+As the `htmlTable`-package is all about [HTML](https://en.wikipedia.org/wiki/HTML) tables we will work only with that output option. The core idea is that HTML is ubiquitous and that most word-processors will have to support copy-pasting tables and by providing simple simple CSS-formatting we are able to maximize this compatibility. *Note* CSS is today an extremely complex topic and it is no surprise that word-processors may have difficulty importing tables that have lots of advanced syntax, htmlTable tries to avoid all of that by putting the style close to each element, often at the cell-level.
+
+Basics
+======
+
+I developed the `htmlTable` in order to get tables matching those available in top medical journals. After finding no HTML-alternative to the `Hmisc::latex` function on [Stack Overflow](https://stackoverflow.com/questions/11950703/html-with-multicolumn-table-in-markdown-using-knitr) I wrote a basic function allowing column spanners and row groups. Below is a basic example on these two:
+
+```{r}
+library(htmlTable)
+library(magrittr)
+
+setHtmlTableTheme(theme = "Google docs")
+
+output <- 
+  matrix(paste("Content", LETTERS[1:16]), 
+         ncol = 4, byrow = TRUE)
+
+output %>% 
+  htmlTable(header =  paste(c("1st", "2nd", "3rd", "4th"), "header"),
+            rnames = paste(c("1st", "2nd", "3rd", "4th"), "row"),
+            rgroup = c("Group A", "Group B"),
+            n.rgroup = c(2, 2),
+            cgroup = c("Cgroup 1", "Cgroup 2&dagger;"),
+            n.cgroup = c(2, 2), 
+            caption = "Basic table with both column spanners (groups) and row groups",
+            tfoot = "&dagger; A table footer commment")
+```
+We can modify all our tables by using the `setHtmlTableTemplate()` and we also don't have to set the exact span of each group as it can be assumed from the data.
+
+```{r}
+setHtmlTableTheme(pos.caption = "bottom")
+
+output %>% 
+  addHtmlTableStyle(css.rgroup = "font-style: italic") %>%
+  htmlTable(header =  paste(c("1st", "2nd", "3rd", "4th"), "header"),
+            rnames = paste(c("1st", "2nd", "3rd", "4th"), "row"),
+            rgroup = c("Group A", "Group B", ""),
+            n.rgroup = c(1, 2),
+            cgroup = c("Cgroup 1", "Cgroup 2&dagger;"),
+            n.cgroup = 3, 
+            caption = "A slightly differnt table with a bottom caption",
+            tfoot = "&dagger; A table footer commment")
+```
+
+
+The basic principles are:
+
+* use the `%>%` pipe as much as possible
+* build complexity stepwise through passing `addHtmlTableStyle()` function
+* keep arguments to a minimum through templating and autocalculation
+
+Example based upon Swedish statistics
+=====================================
+
+In order to make a more interesting example we will try to look at how the average age changes between Swedish counties the last 15 years. **Goal: visualize migration patterns**.
+
+The dataset has been downloaded from Statistics Sweden and is attached to the htmlTable-package. We will start by reshaping our tidy dataset into a more table adapted format.
+
+```{r, results='markup', message=FALSE, warning=FALSE}
+data(SCB)
+
+# The SCB has three other coulmns and one value column
+library(reshape)
+SCB$region <- relevel(SCB$region, "Sweden")
+SCB <- cast(SCB, year ~ region + sex, value = "values")
+
+# Set rownames to be year
+rownames(SCB) <- SCB$year
+SCB$year <- NULL
+
+# The dataset now has the rows
+names(SCB)
+# and the dimensions
+dim(SCB)
+```
+
+The next step is to calculate two new columns:
+
+* &Delta;<sub>int</sub> = The change within each group since the start of the observation.
+* &Delta;<sub>std</sub> = The change in relation to the overall age change in Sweden.
+
+To convey all these layers of information will create a table with multiple levels of column spanners:
+
+<table>
+<tr>
+  <td colspan="7" style="text-align: center; border-bottom: 1px solid grey;">County</td></tr>
+<tr>
+  <td colspan="3" style="text-align: center; border-bottom: 1px solid grey;">Men</td>
+  <td>&nbsp;</td>
+  <td colspan="3" style="text-align: center; border-bottom: 1px solid grey;">Women</td></tr>
+<tr>
+  <td>Age</td><td>&Delta;<sub>int.</sub></td><td>&Delta;<sub>ext.</sub></td>
+  <td>&nbsp;</td>
+  <td>Age</td><td>&Delta;<sub>int.</sub></td><td>&Delta;<sub>ext.</sub></td>
+</tr></table>
+
+```{r}
+mx <- NULL
+for (n in names(SCB)) {
+  tmp <- paste0("Sweden_", strsplit(n, "_")[[1]][2])
+  mx <- cbind(mx,
+              cbind(SCB[[n]], 
+                    SCB[[n]] - SCB[[n]][1],
+                    SCB[[n]] - SCB[[tmp]]))
+}
+rownames(mx) <- rownames(SCB)
+colnames(mx) <- rep(c("Age", 
+                      "&Delta;<sub>int</sub>",
+                      "&Delta;<sub>std</sub>"), 
+                    times = ncol(SCB))
+mx <- mx[,c(-3, -6)]
+
+# This automated generation of cgroup elements is 
+# somewhat of an overkill
+cgroup <- 
+  unique(sapply(names(SCB), 
+                function(x) strsplit(x, "_")[[1]][1], 
+                USE.NAMES = FALSE))
+n.cgroup <- 
+  sapply(cgroup, 
+         function(x) sum(grepl(paste0("^", x), names(SCB))), 
+         USE.NAMES = FALSE)*3
+n.cgroup[cgroup == "Sweden"] <-
+  n.cgroup[cgroup == "Sweden"] - 2
+
+cgroup <- 
+  rbind(c(cgroup, rep(NA, ncol(SCB) - length(cgroup))),
+        Hmisc::capitalize(
+          sapply(names(SCB), 
+                 function(x) strsplit(x, "_")[[1]][2],
+                 USE.NAMES = FALSE)))
+n.cgroup <- 
+  rbind(c(n.cgroup, rep(NA, ncol(SCB) - length(n.cgroup))),
+        c(2,2, rep(3, ncol(cgroup) - 2)))
+
+print(cgroup)
+print(n.cgroup)
+```
+
+Next step is to output the table after rounding to the correct number of decimals. The `txtRound` function helps with this, as it uses the `sprintf` function instead of the `round` the resulting strings have the correct number of decimals, i.e. 1.02 will by round become 1 while we want it to retain the last decimal, i.e. be shown as 1.0.
+
+```{r}
+htmlTable(txtRound(mx, 1), 
+          cgroup = cgroup,
+          n.cgroup = n.cgroup,
+          rgroup = c("First period", 
+                     "Second period",
+                     "Third period"),
+          n.rgroup = rep(5, 3),
+          tfoot = txtMergeLines("&Delta;<sub>int</sub> correspnds to the change since start",
+                                "&Delta;<sub>std</sub> corresponds to the change compared to national average"))
+```
+
+In order to increase the readability we may want to separate the Sweden columns from the county columns, one way is to use the align option with a |. Note that in 1.0 the function continues with the same alignment until the end, i.e. you no longer need count to have the exact right number of columns in your alignment argument.
+
+```{r}
+mx %>% 
+  txtRound(digits = 1) %>% 
+  addHtmlTableStyle(align = "rrrr|r",
+                    spacer.celltype = "double_cell") %>% 
+  htmlTable(cgroup = cgroup,
+            n.cgroup = n.cgroup,
+            rgroup = c("First period", 
+                       "Second period",
+                       "Third period"),
+            n.rgroup = rep(5, 3),
+            tfoot = txtMergeLines("&Delta;<sub>int</sub> correspnds to the change since start",
+                                  "&Delta;<sub>std</sub> corresponds to the change compared to national average"))
+```
+
+If we still feel that we want more separation it is always possible to add colors.
+
+```{r}
+mx %>% 
+  txtRound(digits = 1) %>% 
+  addHtmlTableStyle(align = "rrrr|r",
+                    align.header = "c",
+                    col.columns = c(rep("#E6E6F0", 4),
+                          rep("none", ncol(mx) - 4))) %>% 
+  htmlTable(cgroup = cgroup,
+            n.cgroup = n.cgroup,
+            rgroup = c("First period", 
+                       "Second period",
+                       "Third period"),
+            n.rgroup = rep(5, 3),
+            tfoot = txtMergeLines("&Delta;<sub>int</sub> correspnds to the change since start",
+                                  "&Delta;<sub>std</sub> corresponds to the change compared to national average"))
+```
+
+If we add a color to the row group and restrict the rgroup spanner we may even have a more visual aid.
+
+```{r}
+mx %>% 
+  txtRound(digits = 1) %>% 
+  addHtmlTableStyle(align = "rrrr|r",
+                    align.header = "c",
+                    col.columns = c(rep("#E6E6F0", 4),
+                          rep("none", ncol(mx) - 4)),
+                    col.rgroup = c("none", "#FFFFCC")) %>% 
+  htmlTable(cgroup = cgroup,
+            n.cgroup = n.cgroup,
+            # I use the &nbsp; - the no breaking space as I don't want to have a
+            # row break in the row group. This adds a little space in the table
+            # when used together with the cspan.rgroup=1.
+            rgroup = c("1st&nbsp;period", 
+                       "2nd&nbsp;period",
+                       "3rd&nbsp;period"),
+            n.rgroup = rep(5, 3),
+            tfoot = txtMergeLines("&Delta;<sub>int</sub> correspnds to the change since start",
+                                  "&Delta;<sub>std</sub> corresponds to the change compared to national average"),
+            cspan.rgroup = 1)
+```
+
+If you want to further add to the visual hints you can use specific HTML-code and insert it into the cells. Here we will color the &Delta;<sub>std</sub> according to color. By default htmlTable does not escape HTML characters.
+
+```{r}
+cols_2_clr <- grep("&Delta;<sub>std</sub>", colnames(mx))
+# We need a copy as the formatting causes the matrix to loos
+# its numerical property
+out_mx <- txtRound(mx, 1)
+
+min_delta <- min(mx[,cols_2_clr])
+span_delta <- max(mx[,cols_2_clr]) - min(mx[,cols_2_clr]) 
+for (col in cols_2_clr) {
+  out_mx[, col] <- mapply(function(val, strength)
+    paste0("<span style='font-weight: 900; color: ", 
+           colorRampPalette(c("#009900", "#000000", "#990033"))(101)[strength],
+           "'>",
+           val, "</span>"), 
+    val = out_mx[,col], 
+    strength = round((mx[,col] - min_delta)/span_delta*100 + 1),
+    USE.NAMES = FALSE)
+}
+
+out_mx %>% 
+  addHtmlTableStyle(align = "rrrr|r",
+                    align.header = "cccc|c",
+                    pos.rowlabel = "bottom", 
+                    col.rgroup = c("none", "#FFFFCC"),
+                    col.columns = c(rep("#EFEFF0", 4),
+                                    rep("none", ncol(mx) - 4))) %>% 
+  htmlTable(caption = "Average age in Sweden counties over a period of
+                     15 years. The Norbotten county is typically known
+                     for having a negative migration pattern compared to
+                     Stockholm, while Uppsala has a proportionally large 
+                     population of students.",
+            rowlabel = "Year",
+            cgroup = cgroup,
+            n.cgroup = n.cgroup,
+            rgroup = c("1st&nbsp;period", 
+                       "2nd&nbsp;period",
+                       "3rd&nbsp;period"),
+            n.rgroup = rep(5, 3),
+            tfoot = txtMergeLines("&Delta;<sub>int</sub> corresponds to the change since start",
+                                  "&Delta;<sub>std</sub> corresponds to the change compared to national average"),
+            cspan.rgroup = 1)
+```
+
+Although a graph most likely does the visualization task better, tables are good at conveying detailed information. It is in my mind without doubt easier in the latest version to find the pattern in the data.
+
+Lastly I would like to thank [Stephen Few](https://www.amazon.com/Show-Me-Numbers-Designing-Enlighten/dp/0970601999), [ThinkUI](http://www.thinkui.co.uk/resources/effective-design-of-data-tables/), [ACAPS](https://www.acaps.org/sites/acaps/files/resources/files/table_design_september_2012.pdf), and [LabWrite](https://projects.ncsu.edu/labwrite//res/gh/gh-tables.html) for inspiration.

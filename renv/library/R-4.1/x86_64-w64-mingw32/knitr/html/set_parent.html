@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Specify the parent document of child documents</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for set_parent {knitr}"><tr><td>set_parent {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Specify the parent document of child documents</h2>
+
+<h3>Description</h3>
+
+<p>This function extracts the LaTeX preamble of the parent document to use for
+the child document, so that the child document can be compiled as an
+individual document.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+set_parent(parent)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>parent</code></td>
+<td>
+<p>Path to the parent document, relative to the current child
+document.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>When the preamble of the parent document also contains code chunks and inline
+R code, they will be evaluated as if they were in this child document. For
+examples, when <span class="pkg">knitr</span> hooks or other options are set in the preamble of
+the parent document, it will apply to the child document as well.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The preamble is extracted and stored to be used later when the
+complete output is written.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Obviously this function is only useful when the output format is LaTeX.
+This function only works when the child document is compiled in a
+standalone mode using <code><a href="../../knitr/help/knit.html">knit</a>()</code> (instead of being called in
+<code><a href="../../knitr/help/knit_child.html">knit_child</a>()</code>); when the parent document is compiled, this
+function in the child document will be ignored.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://yihui.org/knitr/demo/child/">https://yihui.org/knitr/demo/child/</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## can use, e.g. \Sexpr{set_parent('parent_doc.Rnw')} or
+
+# &lt;&lt;setup-child, include=FALSE&gt;&gt;=
+
+# set_parent('parent_doc.Rnw')
+
+# @
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

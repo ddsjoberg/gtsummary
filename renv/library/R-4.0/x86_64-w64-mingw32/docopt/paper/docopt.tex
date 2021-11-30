@@ -1,0 +1,80 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage{amsfonts, amsmath, hanging, hyperref, parskip, times}
+\usepackage[numbers]{natbib}
+\usepackage[pdftex]{graphicx}
+\hypersetup{
+  colorlinks,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\let\section=\subsubsection
+\newcommand{\pkg}[1]{{\normalfont\fontseries{b}\selectfont #1}} 
+\let\proglang=\textit
+\let\code=\texttt 
+\renewcommand{\title}[1]{\begin{center}{\bf \LARGE #1}\end{center}}
+\newcommand{\affiliations}{\footnotesize\centering}
+\newcommand{\keywords}{\paragraph{Keywords:}}
+
+\setlength{\topmargin}{-15mm}
+\setlength{\oddsidemargin}{-2mm}
+\setlength{\textwidth}{165mm}
+\setlength{\textheight}{250mm}
+
+\begin{document}
+\pagestyle{empty}
+
+\title{docopt, add beautiful command line options to \proglang{R} scripts}
+
+\begin{center}
+  {\bf Edwin de Jonge$^{1,^\star}$}
+\end{center}
+
+\begin{affiliations}
+1. Statistics Netherlands (CBS) \\[-2pt]
+$^\star$Contact author: \href{mailto:e.dejonge@cbs.nl}{e.dejonge@cbs.nl}\\
+\end{affiliations}
+
+\keywords Options, Rscript, docopt, programming
+
+\vskip 0.8cm
+
+With its increasing popularity \proglang{R} scripts are more and more executed in batch mode from the command line. 
+When a script matures and becomes more generic it often is desirable to add command-line options to 
+it. Starting simple you may use \code{cmdArgs} to parse the extra options given to the script, but it quickly 
+becomes complicated: parsing multiple options, long and short names for options, default values for options, 
+generating sensible information when incorrect input is given and documenting all options for usage can take 
+quite some code and time. The packages \pkg{getopt}~\cite{getopt} and \pkg{optparse}~\cite{optparse} can be of 
+great help for parsing command-line arguments, but \pkg{docopt} makes it super easy.
+
+The R-package \pkg{docopt}~\citep{docoptR} is a port of the \proglang{Python} package \code{docopt}.
+Docopt is a command-line interface description language, and helps you to formulate a 
+command-line interface and automatically generate a parser for it, that will parse the command-line arguments automatically for you. The nice part is that the documentation given to the user is equal to its definition.
+
+As an appetizer: \code{docopt("Usage: prog [-a -b=value]")} will generate a parser and test if \code{a} and \code{b} were set in the command line. It returns a list in which the values for \code{a} and \code{b} 
+are included.
+
+The presentation will introduce \pkg{docopt}, describe its usage, specification format and some of its implementation details.
+
+%% The \proglang, \code, and \pkg macros may be reused
+
+
+%% references: 
+\nocite{docopt,van2007python}
+\bibliographystyle{chicago}
+\bibliography{docopt}
+
+%% references can alternatively be entered by hand
+%\subsubsection*{References}
+
+%\begin{hangparas}{.25in}{1}
+%AuthorA (2007). Title of a web resource, \url{http://url/of/resource/}.
+
+%AuthorC (2008a). Article example in proceedings. In \textit{useR! 2008, The R
+%User Conference, (Dortmund, Germany)}, pp. 31--37.
+
+%AuthorC (2008b). Title of an article. \textit{Journal name 6}, 13--17.
+%\end{hangparas}
+
+\end{document}

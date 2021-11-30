@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Compare two recorded plots</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for is_low_change {knitr}"><tr><td>is_low_change {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Compare two recorded plots</h2>
+
+<h3>Description</h3>
+
+<p>Check if one plot only contains a low-level update of another plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+is_low_change(p1, p2)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>p1, p2</code></td>
+<td>
+<p>Plot objects.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Logical value indicating whether <code>p2</code> is a low-level update of
+<code>p1</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+pdf(NULL)
+dev.control("enable")  # enable plot recording
+plot(1:10)
+p1 = recordPlot()
+abline(0, 1)  # add a line (a low-level change)
+p2 = recordPlot()
+plot(rnorm(100))
+p3 = recordPlot()  # draw a completely new plot
+dev.off()
+knitr::is_low_change(p1, p2)  # true
+knitr::is_low_change(p1, p3)  # false
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

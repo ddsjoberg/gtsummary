@@ -1,0 +1,168 @@
+---
+title: "Reporting Guidelines"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, bayesian, posterior, test]
+vignette: >
+  %\VignetteIndexEntry{Reporting Guidelines}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+csl: apa.csl
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = '')
+knitr::opts_chunk$set(comment=">")
+options(digits=2)
+```
+
+
+This vignette can be referred to by citing the package:
+
+- Makowski, D., Ben-Shachar, M. S., \& Lüdecke, D. (2019). *bayestestR: Describing Effects and their Uncertainty, Existence and Significance within the Bayesian Framework*. Journal of Open Source Software, 4(40), 1541. https://doi.org/10.21105/joss.01541
+- Makowski, D., Ben-Shachar, M. S., Chen, S. H. A., \& Lüdecke, D. (2019). *Indices of Effect Existence and Significance in the Bayesian Framework*. Frontiers in Psychology 2019;10:2767. [10.3389/fpsyg.2019.02767](https://doi.org/10.3389/fpsyg.2019.02767)
+
+---
+
+# Reporting Guidelines
+
+## How to describe and report the parameters of a model
+
+A Bayesian analysis returns a posterior distribution for each parameter (or
+*effect*). To minimally describe these distributions, we recommend reporting a
+point-estimate of [centrality](https://en.wikipedia.org/wiki/Central_tendency)
+as well as information characterizing the estimation uncertainty (the
+[dispersion](https://en.wikipedia.org/wiki/Statistical_dispersion)).
+Additionally, one can also report indices of effect existence and/or
+significance.
+
+Based on the previous [**comparison of point-estimates**](https://easystats.github.io/bayestestR/articles/indicesEstimationComparison.html)
+and [**indices of effect existence**](https://www.frontiersin.org/articles/10.3389/fpsyg.2019.02767/full),
+we can draw the following recommendations.
+
+### **Centrality**
+
+We suggest reporting the
+[**median**](https://easystats.github.io/bayestestR/reference/point_estimate.html)
+as an index of centrality, as it is more robust compared to the
+[mean](https://easystats.github.io/bayestestR/reference/point_estimate.html) or
+the [MAP
+estimate](https://easystats.github.io/bayestestR/reference/map_estimate.html).
+However, in case of a severely skewed posterior distribution, the MAP estimate
+could be a good alternative.
+ 
+
+### **Uncertainty** 
+
+The [**95\% or 89\% Credible Intervals (CI)**](https://easystats.github.io/bayestestR/articles/credible_interval.html)
+are two reasonable ranges to characterize the uncertainty related to the
+estimation (see [here](https://easystats.github.io/bayestestR/articles/credible_interval.html) for a discussion about the differences between these two values). We also recommend computing the CIs based on the [HDI](https://easystats.github.io/bayestestR/reference/hdi.html) rather than [quantiles](https://easystats.github.io/bayestestR/reference/ci.html), favouring
+probable over central values.
+
+Note that a CI based on the quantile (equal-tailed interval) might be more
+appropriate in case of transformations (for instance when transforming log-odds
+to probabilities). Otherwise, intervals that originally do not cover the null
+might cover it after transformation (see
+[here](https://easystats.github.io/bayestestR/articles/credible_interval.html#different-types-of-cis)).
+
+
+### **Existence** 
+
+```{r echo=FALSE, fig.cap="Reviewer 2 (circa a long time ago in a galaxy far away).", fig.align='center', out.width="60%"}
+knitr::include_graphics("https://github.com/easystats/easystats/raw/master/man/figures/bayestestR/watto.jpg")
+```
+
+The Bayesian framework can neatly delineate and quantify different aspects of
+hypothesis testing, such as effect *existence* and *significance*. The most
+straightforward index to describe existence of an effect is the [**Probability of Direction (pd)**](https://easystats.github.io/bayestestR/articles/probability_of_direction.html),
+representing the certainty associated with the most probable direction (positive
+or negative) of the effect. This index is easy to understand, simple to
+interpret, straightforward to compute, robust to model characteristics, and
+independent from the scale of the data.
+
+Moreover, it is strongly correlated with the frequentist **p*-value**, and can
+thus be used to draw parallels and give some reference to readers non-familiar
+with Bayesian statistics. A **two-sided *p*-value** of respectively `.1`, `.05`,
+`.01` and `.001` correspond approximately to a ***pd*** of 95\%, 97.5\%,
+99.5\% and 99.95\%. 
+
+Thus, for convenience, we suggest the following reference values as an
+interpretation helpers:
+
+  - *pd* **\<= 95\%** ~ *p* \> .1: uncertain
+  - *pd* **\> 95\%** ~ *p* \< .1: possibly existing
+  - *pd* **\> 97\%**: likely existing
+  - *pd* **\> 99\%**: probably existing
+  - *pd* **\> 99.9\%**: certainly existing
+
+### **Significance** 
+
+The percentage in **ROPE** is a index of **significance** (in its primary
+meaning), informing us whether a parameter is related or not to a
+non-negligible change (in terms of magnitude) in the outcome. We suggest
+reporting the **percentage of the full posterior distribution** (the *full*
+ROPE) instead of a given proportion of CI in the ROPE, which appears to be more
+sensitive (especially to delineate highly significant effects). Rather than
+using it as a binary, all-or-nothing decision criterion, such as suggested by
+the original [equivalence test](https://easystats.github.io/bayestestR/articles/region_of_practical_equivalence.html#equivalence-test),
+we recommend using the percentage as a *continuous* index of significance.
+However, based on [simulation data](https://www.frontiersin.org/articles/10.3389/fpsyg.2019.02767/full), we
+suggest the following reference values as an interpretation helpers:
+
+
+  - **\> 99\%** in ROPE: negligible (we can accept the null hypothesis)
+  - **\> 97.5\%** in ROPE: probably negligible
+  - **\<= 97.5\%** \& **\>= 2.5\%** in ROPE: undecided significance
+  - **\< 2.5\%** in ROPE: probably significant
+  - **\< 1\%** in ROPE: significant (we can reject the null hypothesis)
+
+
+*Note that extra caution is required as its interpretation highly depends on other parameters such as sample size and ROPE range (see [here](https://easystats.github.io/bayestestR/articles/region_of_practical_equivalence.html#sensitivity-to-parameters-scale))*.
+
+
+### **Template Sentence** 
+
+Based on these suggestions, a template sentence for minimal reporting of a
+parameter based on its posterior distribution could be:
+
+> "the effect of *X* has a probability of ***pd*** of being *negative* (Median =
+***median***, 89\% CI [ ***HDI<sub>low</sub>*** , ***HDI<sub>high</sub>*** ] and
+can be considered as *significant* (***ROPE***\% in ROPE)."
+
+## How to compare different models
+
+Although it can also be used to assess effect existence and significance, the
+**Bayes factor (BF)** is a versatile index that can be used to directly compare
+different models (or data generation processes). The [Bayes factor](https://easystats.github.io/bayestestR/articles/bayes_factors.html) is a
+ratio that informs us by how much more (or less) likely the observed data are
+under two compared models - usually a model *with* versus a model *without* the
+effect. Depending on the specifications of the null model (whether it is a
+point-estimate (e.g., **0**) or an interval), the Bayes factor could be used
+both in the context of effect existence and significance.
+
+In general, a Bayes factor greater than 1 is taken as evidence in favour of one
+of the model (in the nominator), and a Bayes factor smaller than 1 is taken as
+evidence in favour of the other model (in the denominator). Several rules of
+thumb exist to help the interpretation (see
+[here](https://easystats.github.io/effectsize/reference/interpret_bf.html)),
+with **\> 3** being one common threshold to categorize non-anecdotal evidence.
+ 
+
+### **Template Sentence** 
+
+When reporting Bayes factors (BF), one can use the following sentence: 
+
+> "There is *moderate evidence* in favour of an *absence* of effect of *x* (BF = *BF*)."
+
+# Suggestions
+
+If you have any advice, opinion or such, we encourage you to let us know by
+opening an [discussion thread](https://github.com/easystats/bayestestR/issues)
+or making a pull request.

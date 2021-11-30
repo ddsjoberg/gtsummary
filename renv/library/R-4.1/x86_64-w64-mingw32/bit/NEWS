@@ -1,0 +1,373 @@
+        CHANGES IN bit VERSION 4.0.4
+
+USER VISIBLE CHANGES
+
+    o copy() and reverse() have been renamed to 
+    copy_vector() and reverse_vector() to avoid
+    naming conflict with data.table
+
+
+
+        CHANGES IN bit VERSION 4.0.3
+
+BUG FIXES
+
+    o temporarily removed link to clone.ff 
+      to satisfy CRAN checks
+
+
+
+        CHANGES IN bit VERSION 4.0.2
+
+USER VISIBLE CHANGES
+
+    o Vignettes nolonger execute ff code 
+      for ff-version prior 4.0.0
+
+BUG FIXES
+
+    o NA could crash bit_extract_unsorted 
+    o now DESCRIPTION URL points to github
+    
+    
+
+        CHANGES IN bit VERSION 4.0.1
+
+USER VISIBLE CHANGES
+
+    o bbatch now checks input N >= 0, B > 0
+      and returns batchsize b in 1..N
+
+BUG FIXES
+
+    o NA could crash bit_extract_unsorted 
+
+
+ 
+        CHANGES IN bit VERSION 4.0.0
+ 
+NEW FEATURES
+
+    o new superclass ?booltype now allows proper method 
+      dispatch even for two user defined booleans, e.g. (bit | bitwhich)
+    o new ordinal 'booltypes' nobool < logical < bit < bitwhich < which < ri
+      and diagnostic functions booltype() and is.booltype() 
+    o bitwhich now has methods for [[ [ [[<- and [<-
+    o new functions 'c', '==', '!=', '|', '&', 'xor' for .booltype 
+    o new function bitwhich_representation() to inspect the bitwhich 
+      representation without the cost of unclass() 
+    o new method 'is' for .which, .ri, .hi (and .booltype)
+    o new coercion generic as.booltype with .default method
+    o new coercion method as.logical.which
+    o new generic as.ri with methods for .ri and .default (lossy)
+    o new methods rep, rev, as.character and str for .bit and .bitwhich
+    o new methods all, any, min, max, range, sum, summary for .booltype, .which
+    o new method anyNA for all booltypes
+    o new dummy method 'is.na' for .bit, .bitwhich
+    o new function in.bitwhich much faster than %in%
+    o new integer sorting function bitsort() using bit_sort() or bit_sort_unique() 
+      which can be by an order of magnitude faster than radix sorts 
+      or falling back to one of countsort(), quicksort2(), quicksort3() 
+    o new symmetric set function symdiff 
+    o new functions copy(), reverse() for copying and reversing integer vectors
+    o new helper functions range_na(), range_nanozero(), range_sortna() 
+      join multiple tasks in one go
+    o new fast unary functions for integers: bit_unique, bit_duplicated,
+      bit_anyDuplicated, bit_sumDuplicated
+    o new fast binary functions for integers: bit_in, bit_intersect, bit_union, 
+      bit_setequal, bit_symdiff, bit_setdiff, bit_rangediff
+    o new fast unary functions for sorted integers: merge_rev, 
+      merge_unique, merge_duplicated, merge_anyDuplicated, merge_sumDuplicated,
+      merge_first, merge_last, 
+    o new fast binary functions for sorted integers: 
+      merge_firstin, merge_firstnotin, merge_lastin, merge_lastnotin,
+      merge_match, merge_in, merge_notin, 
+      merge_union, merge_intersect, merge_setdiff, merge_symdiff,
+      merge_setequal
+    o new even faster binary functions when the first argument is a range of integers: 
+      merge_rangein, merge_rangenotin, merge_rangesect, merge_rangediff
+    o new function firstNA substantially faster than which.max(is.na(x))
+    o new function getsetattr() does setattr() but returns the old attr()
+    o new function get_length() directly returns LENGTH(SEXP) 
+      circumventing all method dispatch for length()
+    o new methods rlepack.integer, rleunpack.rlepack anyDuplicated.rlepack   
+
+USER VISIBLE CHANGES
+
+    o license has been extendend from GPL-2 to GPL-2 | GPL-3
+    o S3methods are no longer exported in NAMESPACE
+      (except for .booltype)
+    o class bitwhich 
+    - now is a fully functional alternative to bit vectors  
+    - has argument order changed to (maxindex, x, poslength) 
+    - its internal representation of bitwhich(0) has been changed 
+      from FALSE to logical() and from unsorted to sorted integers
+    o class 'which' now carries an attribute 'maxindex' if available  
+    o as.which() and bitwhich() now filter zeroes and store data unique(sort(x))
+    o as.which() now has methods for .which, .logical, .integer and .numeric 
+      instead of .default.
+    o bit() and bitwhich() now behave more like logical(), without 
+      arguments they return objects of length zero
+    o as.bit, as.bitwhich and as.which now have methods for class NULL
+      such that for example as.bit(c()) will return bit(0)
+      (wish of Martijn Schuemle)
+    o binary operators now allow for different lengths 
+      and recycle instead of throwing an error
+    o xor.default now keeps the original definition of xor() and uses 
+      a new method xor.logical to speed-up logicals
+    o the generics poslength and maxindex have been moved from package ff
+      with methods now for .default, .logical, .bit, .bitwhich, .which, .ri
+    o old method chunk.default has been renamed to chunks and now returns with names
+      (for backward compatibility chunk() with named arguments behaves as before)
+    o new method chunk.default calls chunks() along the length(x) 
+      using typeof(x) or vmode(x), this replaces chunk.bit from package ff
+    o clone.default now uses R's C-function duplicate()
+      and clone.list has been removed
+    o intisasc() and intisdesc() have a new argument 
+      na.method=c("none","break","skip") to specify tie handling
+      
+TESTING and DOCUMENTATION
+
+    o there are much more regression tests now
+    o testing uses package testthat
+    o documentation uses package roxygen2 now
+    o new vignettes bit-demo, bit-usage and bit-performance
+
+BUG FIXES
+
+    o assignment functions '[<-.bit' now behave like '[<-.logical' when it 
+      comes to NAs or ZEROs in subscripts
+    o length<-.bit no longer tries to access memory before it is allocated
+    o as.bit.bitwhich now handles non-positive bitwhich correctly
+    o declare as static many functions/variables in bit.c. (Thanks to Brian Ripley)
+    
+    
+
+        CHANGES IN bit VERSION 1.1-14
+
+BUG FIXES
+
+    o bit[i] and bit[i]<-v now check for non-positive integers
+      which prevents a segfault when bit[NA] or bit[NA]<-v   
+
+      
+
+        CHANGES IN bit VERSION 1.1-13
+
+USER VISIBLE CHANGES
+
+    o logical NA is now mapped to bit FALSE as in ff booleans
+    o extractor function '[.bit' with positive numeric subscripts
+	  (integer, double, bitwhich) now behaves like '[.logical' and returns 
+	  NA for out-of-bound requests and no element for 0
+    o extractor function '[[.bit' with positive numeric (integer, double, 
+      bitwhich) subscripts now behaves like '[[.logical' and throws an error
+      for out-of-bound requests
+    o extractor function '[.bit' with range index subscripts (ri)
+      subscripts now behaves like '[[.bit' and throws an error
+      for out-of-bound requests
+    o assignment functions '[<-.bit' and '[[<-.bit' with positive numeric 
+      (integer, double, bitwhich) subscripts now behave like '[<-.logical' and
+      '[[<-.logical' and silently increase vector length if necessary
+    o assignment function '[<-.bit' with range index subscripts (ri) now 
+      behaves like '[[<-.bit' and silently increases vector length if necessary
+    o rlepack() is now a generic with a method for class 'integer'
+    o rleunpack() is now a generic with a method for class 'rlepack'
+    o unique.rlepack() now gives correct results for unordered sequences
+    o anyDuplicated.rlepack() now returns the position of the first
+	  duplicate and gives correct results for unordered sequences
+
+TUNING
+
+    o The package can now compiled with 64bit words instead of 32bit words,
+      since we only measured a minor speedup, we left 32bit as the default.
+
+BUG FIXES
+
+    o extractor and assignment functions now check for legal (positive) 
+      subscript bounds, hence illegally large subscripts or zero no longer 
+      cause memory violations
+
+    
+    
+CHANGES IN bit VERSION 1.1-12
+
+NEW FEATURES
+
+    o function still.identical() has been moved to here from package bit64
+    o generic 'clone' and methods clone.default and clone.list have been moved to here from package ff
+
+BUG FIXES
+
+    o bit[bitwhich] is now subscripting properly (VALGRIND)
+    o UBSAN should no longer complain about left shift of int
+      (although that never was a problem)
+
+    
+    
+    CHANGES IN bit VERSION 1.1-10
+
+
+TUNING
+
+    o function 'vecseq' now calls C-code when calling with the default 
+      parameters 'concat=TRUE, eval=TRUE' (wish of Matthew Dowle)
+
+BUG FIXES
+
+    o all.bit no longer ignores TRUE values in the second and following words
+      (spotted by Nelson Chen)
+
+    
+    
+    CHANGES IN bit VERSION 1.1-9
+
+
+NEW FEATURES
+
+    o new function 'repeat.time' for adaptive timing
+
+    
+CODE ORGANIZATION
+
+    o generics for sorting and ordering have been moved from 'ff' to 'bit'
+    
+    
+    
+    CHANGES IN bit VERSION 1.1-7
+
+
+USER VISIBLE CHANGES
+
+    o all calls to 'seq.int' have been replaced by 'seq_along' or 'seq_len'
+    o most calls to 'cat' have been replaced by 'message'
+
+
+BUG FIXES
+
+    o chunk.default now works with chunk(from=2, to=3, by=1) thanks to Edwin de Jonge
+
+
+
+    CHANGES IN bit VERSION 1.1-5
+
+
+NEW FEATURES
+
+    o new utility functions setattr() and setattributes() allow to set attributes 
+      by reference (unlike attr()<- attributes()<- without copying the object)
+
+    o new utility unattr() returns copy of input with attributes removed
+
+
+USER VISIBLE CHANGES
+
+    o certain operations like creating a bit object are even faster now: need 
+      half the time and RAM through the use of setattr() instead of attr()<-
+
+    o [.bit now decorates its logical return vector with attr(,'vmode')='boolean',
+      i.e. we retain the information that there are no NAs.
+
+
+BUG FIXES
+
+    o .onLoad() no longer calls installed.packages() which substantially 
+      improves startup time (thanks to Brian Ripley)
+
+
+
+    CHANGES IN bit VERSION 1.1-2
+
+
+USER VISIBLE CHANGES
+
+    o The package now has a namespace
+
+
+
+
+    CHANGES IN bit VERSION 1.1-1
+
+
+USER VISIBLE CHANGES
+
+    o Function 'chunk' has been made generic, the default method
+      provides the previous behavior.
+
+    o New method to increase length of bitwhich objects.
+
+    o Added further coercion methods.
+      provides the previous behavior.
+
+
+BUG FIXES
+
+    o as.bitwhich.ri now generates correct negative subscripts.
+
+
+
+
+    CHANGES IN bit VERSION 1.1-0
+
+
+NEW FEATURES
+
+    o New class 'bitwhich' stores subscript positions in most efficient way:
+      TRUE for all()==TRUE, FALSE for !any()==TRUE. otherwise positive or
+      negative subscripts, whatever needs less RAM. Coercion functions and 
+      logical operators are available, the latter being efficient for very
+      asymetric (skewed) distributions: selecting or exlcuding small factions
+      of the data.
+    
+    o New class 'ri' (range index) allows to select ranges of positions for 
+      chunked processing: all three classes 'bit', 'bitwhich' and 'ri' can be 
+      used for subsetting 'ff' objects (ff-2.1.0 and higher).
+    
+    o New c() method for 'bit' and 'bitwhich' objects which behaves like 
+      c(logical).
+
+    o The bit methods sum(), any(), all(), min(), max(), range(), summary() 
+      and which() now support a range argument that allows to restrict the 
+      range of evaluation for chunked processing.
+
+    o New utilities for chunked processing: bbatch, repfromto, chunk, vecseq.
+
+
+USER VISIBLE CHANGES
+
+    o reducing length of bit objects will now set hidden bits to FALSE, 
+      such that subsequent length increase behaves consistent with bit
+      objects that had never been reduced in length: new bits are FALSE
+
+    o 'which' is no longer turned into a generic. Use 'bitwhich' instead, 
+      or, 'as.which' if you need strictly positive subscripts. 
+      
+    o 'which.bit' has been renamed to 'as.which.bit'. It no longer has 
+      parameter 'negative' and always returns positive subscripts (wish of 
+      Stavros Macrakis). It now has second parameter 'range' in order to return
+      subscripts for chunked processing (note that the bitwhich representation 
+      is not suitable for chunked processing). In order to facilitate coercion, 
+      the return vector of 'as.which' now has class 'which'.
+      
+    o the internal structure of a bit object has been changed to align with ff 
+      ram objects: the bitlength of a bit object is no longer stored in 
+      attr(bit, "n"), instead in attr(attr(bit, "physical"), "Length"),
+      which is accessible via physical(bit)$Length, but should be accessed
+      usually via length(bit). 
+
+    o the semantics of 'min', 'max' and 'range' have been changed. They now 
+      refer to the positions of TRUE in the bit vector (and thus are consistent
+      with bitwhich rather than with logical. The 'summary' method now returns 
+      four elements c("FALSE"=, "TRUE"=, "Min."=, "Max."=).
+
+
+BUG FIXES
+
+    o which.bit no longer returns integer() for a bit vector that has all TRUE
+
+
+KNOWN PROBLEMS / TODOs
+
+    o NAs are mapped to TRUE in 'bit' and to FALSE in 'ff' booleans. Might be aligned 
+      in a future release. Don't use bit if you have NAs - or map NAs explicitely.
+

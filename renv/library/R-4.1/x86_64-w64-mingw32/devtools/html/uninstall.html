@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Uninstall a local development package.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for uninstall {devtools}"><tr><td>uninstall {devtools}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Uninstall a local development package.</h2>
+
+<h3>Description</h3>
+
+<p>Uses <code>remove.package</code> to uninstall the package.
+To uninstall a package from a non-default library,
+use <code><a href="../../withr/help/with_libpaths.html">withr::with_libpaths()</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+uninstall(pkg = ".", unload = TRUE, quiet = FALSE, lib = .libPaths()[[1]])
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pkg</code></td>
+<td>
+<p>The package to use, can be a file path to the package or a
+package object.  See <code><a href="../../devtools/help/as.package.html">as.package()</a></code> for more information.</p>
+</td></tr>
+<tr valign="top"><td><code>unload</code></td>
+<td>
+<p>if <code>TRUE</code> (the default), will automatically unload the
+package prior to uninstalling.</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>If <code>TRUE</code>, suppress output.</p>
+</td></tr>
+<tr valign="top"><td><code>lib</code></td>
+<td>
+<p>a character vector giving the library directories to remove the
+packages from.  If missing, defaults to the first element in
+<code><a href="../../base/html/libPaths.html">.libPaths</a>()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../devtools/help/with_debug.html">with_debug()</a></code> to install packages with debugging flags
+set.
+</p>
+<p>Other package installation: 
+<code><a href="../../devtools/help/install.html">install</a>()</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>devtools</em> version 2.4.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

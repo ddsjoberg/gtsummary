@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Find possible offset terms in a model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for find_offset {insight}"><tr><td>find_offset {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Find possible offset terms in a model</h2>
+
+<h3>Description</h3>
+
+<p>Returns a character vector with the name(s) of offset terms.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+find_offset(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector with the name(s) of offset terms.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Generate some zero-inflated data
+set.seed(123)
+N &lt;- 100 # Samples
+x &lt;- runif(N, 0, 10) # Predictor
+off &lt;- rgamma(N, 3, 2) # Offset variable
+yhat &lt;- -1 + x * 0.5 + log(off) # Prediction on log scale
+dat &lt;- data.frame(y = NA, x, logOff = log(off))
+dat$y &lt;- rpois(N, exp(yhat)) # Poisson process
+dat$y &lt;- ifelse(rbinom(N, 1, 0.3), 0, dat$y) # Zero-inflation process
+
+if (require("pscl")) {
+  m1 &lt;- zeroinfl(y ~ offset(logOff) + x | 1, data = dat, dist = "poisson")
+  find_offset(m1)
+
+  m2 &lt;- zeroinfl(y ~ x | 1, data = dat, offset = logOff, dist = "poisson")
+  find_offset(m2)
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

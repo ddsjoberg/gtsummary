@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Inverse Permutation Vector</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for invPerm {Matrix}"><tr><td>invPerm {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Inverse Permutation Vector</h2>
+
+<h3>Description</h3>
+
+<p>From a permutation vector <code>p</code>, compute its <em>inverse</em>
+permutation vector.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+invPerm(p, zero.p = FALSE, zero.res = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>p</code></td>
+<td>
+<p>an integer vector of length, say, <code>n</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>zero.p</code></td>
+<td>
+<p>logical indicating if <code>p</code> contains values
+<code>0:(n-1)</code> or rather (by default, <code>zero.p = FALSE</code>) <code>1:n</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>zero.res</code></td>
+<td>
+<p>logical indicating if the result should contain values
+<code>0:(n-1)</code> or rather (by default, <code>zero.res = FALSE</code>) <code>1:n</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>an integer vector of the same length (<code>n</code>) as <code>p</code>.
+By default, (<code>zero.p = FALSE, zero.res = FALSE</code>),
+<code>invPerm(p)</code> is the same as <code><a href="../../base/html/order.html">order</a>(p)</code> or
+<code><a href="../../base/html/order.html">sort.list</a>(p)</code> and for that case, the function is
+equivalent to <code>invPerm. &lt;- function(p) { p[p] &lt;- seq_along(p) ; p }</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>See Also</h3>
+
+<p>the class of permutation matrices, <code><a href="pMatrix-class.html">pMatrix</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+  p &lt;- sample(10) # a random permutation vector
+  ip &lt;- invPerm(p)
+  p[ip] # == 1:10
+  ## they are indeed inverse of each other:
+  stopifnot(
+    identical(p[ip], 1:10),
+    identical(ip[p], 1:10),
+    identical(invPerm(ip), p)
+  )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

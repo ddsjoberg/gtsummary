@@ -1,0 +1,35 @@
+Package: blob
+Title: A Simple S3 Class for Representing Vectors of Binary Data
+        ('BLOBS')
+Version: 1.2.1
+Authors@R: 
+    c(person(given = "Hadley",
+             family = "Wickham",
+             role = "aut"),
+      person(given = "Kirill",
+             family = "Müller",
+             role = "cre",
+             email = "krlmlr+r@mailbox.org"),
+      person(given = "RStudio",
+             role = "cph"))
+Description: R's raw vector is useful for storing a single
+    binary object.  What if you want to put a vector of them in a data
+    frame? The 'blob' package provides the blob object, a list of raw
+    vectors, suitable for use as a column in data frame.
+License: GPL-3
+URL: https://github.com/tidyverse/blob
+BugReports: https://github.com/tidyverse/blob/issues
+Imports: methods, rlang, vctrs (>= 0.2.1)
+Suggests: covr, crayon, pillar (>= 1.2.1), testthat
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
+NeedsCompilation: no
+Packaged: 2020-01-20 22:32:38 UTC; kirill
+Author: Hadley Wickham [aut],
+  Kirill Müller [cre],
+  RStudio [cph]
+Maintainer: Kirill Müller <krlmlr+r@mailbox.org>
+Repository: CRAN
+Date/Publication: 2020-01-20 22:50:02 UTC
+Built: R 4.0.5; ; 2021-05-07 17:06:14 UTC; windows

@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: 'ggplot2' generalized pairs plot for two columns sets of data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggduo {GGally}"><tr><td>ggduo {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2><span class="pkg">ggplot2</span> generalized pairs plot for two columns sets of data</h2>
+
+<h3>Description</h3>
+
+<p>Make a matrix of plots with a given data set with two different column sets
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggduo(
+  data,
+  mapping = NULL,
+  columnsX = 1:ncol(data),
+  columnsY = 1:ncol(data),
+  title = NULL,
+  types = list(continuous = "smooth_loess", comboVertical = "box_no_facet",
+    comboHorizontal = "facethist", discrete = "count"),
+  axisLabels = c("show", "none"),
+  columnLabelsX = colnames(data[columnsX]),
+  columnLabelsY = colnames(data[columnsY]),
+  labeller = "label_value",
+  switch = NULL,
+  xlab = NULL,
+  ylab = NULL,
+  showStrips = NULL,
+  legend = NULL,
+  cardinality_threshold = 15,
+  progress = NULL,
+  xProportions = NULL,
+  yProportions = NULL,
+  legends = stop("deprecated")
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data set using.  Can have both numerical and categorical data.</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>aesthetic mapping (besides <code>x</code> and <code>y</code>).  See <code><a href="../../ggplot2/help/aes.html">aes</a>()</code>.  If <code>mapping</code> is numeric, <code>columns</code> will be set to the <code>mapping</code> value and <code>mapping</code> will be set to <code>NULL</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>columnsX, columnsY</code></td>
+<td>
+<p>which columns are used to make plots.  Defaults to all columns.</p>
+</td></tr>
+<tr valign="top"><td><code>title, xlab, ylab</code></td>
+<td>
+<p>title, x label, and y label for the graph</p>
+</td></tr>
+<tr valign="top"><td><code>types</code></td>
+<td>
+<p>see Details</p>
+</td></tr>
+<tr valign="top"><td><code>axisLabels</code></td>
+<td>
+<p>either &quot;show&quot; to display axisLabels or &quot;none&quot; for no axis labels</p>
+</td></tr>
+<tr valign="top"><td><code>columnLabelsX, columnLabelsY</code></td>
+<td>
+<p>label names to be displayed.  Defaults to names of columns being used.</p>
+</td></tr>
+<tr valign="top"><td><code>labeller</code></td>
+<td>
+<p>labeller for facets. See <code><a href="../../ggplot2/help/labellers.html">labellers</a></code>. Common values are <code>"label_value"</code> (default) and <code>"label_parsed"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>switch</code></td>
+<td>
+<p>switch parameter for facet_grid. See <code>ggplot2::<a href="../../ggplot2/help/facet_grid.html">facet_grid</a></code>.  By default, the labels are displayed on the top and right of the plot. If <code>"x"</code>, the top labels will be displayed to the bottom. If <code>"y"</code>, the right-hand side labels will be displayed to the left. Can also be set to <code>"both"</code></p>
+</td></tr>
+<tr valign="top"><td><code>showStrips</code></td>
+<td>
+<p>boolean to determine if each plot's strips should be displayed. <code>NULL</code> will default to the top and right side plots only. <code>TRUE</code> or <code>FALSE</code> will turn all strips on or off respectively.</p>
+</td></tr>
+<tr valign="top"><td><code>legend</code></td>
+<td>
+<p>May be the two objects described below or the default <code>NULL</code> value.  The legend position can be moved by using ggplot2's theme element <code>pm + theme(legend.position = "bottom")</code> </p>
+<dl>
+<dt>a numeric vector of length 2</dt><dd><p>provides the location of the plot to use the legend for the plot matrix's legend. Such as <code>legend = c(3,5)</code> which will use the legend from the plot in the third row and fifth column</p>
+</dd><dt>a single numeric value</dt><dd><p>provides the location of a plot according to the display order. Such as <code>legend = 3</code> in a plot matrix with 2 rows and 5 columns displayed by column will return the plot in position <code>c(1,2)</code></p>
+</dd><dt>a object from <code><a href="../../GGally/help/grab_legend.html">grab_legend</a>()</code></dt><dd><p>a predetermined plot legend that will be displayed directly</p>
+</dd></dl>
+</td></tr>
+<tr valign="top"><td><code>cardinality_threshold</code></td>
+<td>
+<p>maximum number of levels allowed in a character / factor column.  Set this value to NULL to not check factor columns. Defaults to 15</p>
+</td></tr>
+<tr valign="top"><td><code>progress</code></td>
+<td>
+<p><code>NULL</code> (default) for a progress bar in interactive sessions with more than 15 plots, <code>TRUE</code> for a progress bar, <code>FALSE</code> for no progress bar, or a function that accepts at least a plot matrix and returns a new <code>progress::<a href="../../progress/help/progress_bar.html">progress_bar</a></code>.  See <code><a href="../../GGally/help/ggmatrix_progress.html">ggmatrix_progress</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>xProportions, yProportions</code></td>
+<td>
+<p>Value to change how much area is given for each plot. Either <code>NULL</code> (default), numeric value matching respective length, <code>grid::<a href="../../grid/help/unit.html">unit</a></code> object with matching respective length or <code>"auto"</code> for automatic relative proportions based on the number of levels for categorical variables.</p>
+</td></tr>
+<tr valign="top"><td><code>legends</code></td>
+<td>
+<p>deprecated</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>types</code> is a list that may contain the variables
+'continuous', 'combo', 'discrete', and 'na'. Each element of the list may be a function or a string.  If a string is supplied, If a string is supplied, it must be a character string representing the tail end of a <code>ggally_NAME</code> function. The list of current valid <code>ggally_NAME</code> functions is visible in a dedicated vignette.
+</p>
+
+<dl>
+<dt>continuous</dt><dd><p>This option is used for continuous X and Y data.</p>
+</dd>
+<dt>comboHorizontal</dt><dd><p>This option is used for either continuous X and categorical Y data or categorical X and continuous Y data.</p>
+</dd>
+<dt>comboVertical</dt><dd><p>This option is used for either continuous X and categorical Y data or categorical X and continuous Y data.</p>
+</dd>
+<dt>discrete</dt><dd><p>This option is used for categorical X and Y data.</p>
+</dd>
+<dt>na</dt><dd><p>This option is used when all X data is <code>NA</code>, all Y data is <code>NA</code>, or either all X or Y data is <code>NA</code>.</p>
+</dd>
+</dl>
+
+<p>If 'blank' is ever chosen as an option, then ggduo will produce an empty plot.
+</p>
+<p>If a function is supplied as an option, it should implement the function api of <code>function(data, mapping, ...){#make ggplot2 plot}</code>.  If a specific function needs its parameters set, <code><a href="../../GGally/help/wrap.html">wrap</a>(fn, param1 = val1, param2 = val2)</code> the function with its parameters.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ # small function to display plots only if it's interactive
+ p_ &lt;- GGally::print_if_interactive
+
+ data(baseball, package = "plyr")
+
+ # Keep players from 1990-1995 with at least one at bat
+ # Add how many singles a player hit
+ # (must do in two steps as X1b is used in calculations)
+ dt &lt;- transform(
+   subset(baseball, year &gt;= 1990 &amp; year &lt;= 1995 &amp; ab &gt; 0),
+   X1b = h - X2b - X3b - hr
+ )
+ # Add
+ #  the player's batting average,
+ #  the player's slugging percentage,
+ #  and the player's on base percentage
+ # Make factor a year, as each season is discrete
+ dt &lt;- transform(
+   dt,
+   batting_avg = h / ab,
+   slug = (X1b + 2*X2b + 3*X3b + 4*hr) / ab,
+   on_base = (h + bb + hbp) / (ab + bb + hbp),
+   year = as.factor(year)
+ )
+
+
+ pm &lt;- ggduo(
+   dt,
+   c("year", "g", "ab", "lg"),
+   c("batting_avg", "slug", "on_base"),
+   mapping = ggplot2::aes(color = lg)
+ )
+ # Prints, but
+ #   there is severe over plotting in the continuous plots
+ #   the labels could be better
+ #   want to add more hitting information
+ p_(pm)
+
+ # address overplotting issues and add a title
+ pm &lt;- ggduo(
+   dt,
+   c("year", "g", "ab", "lg"),
+   c("batting_avg", "slug", "on_base"),
+   columnLabelsX = c("year", "player game count", "player at bat count", "league"),
+   columnLabelsY = c("batting avg", "slug %", "on base %"),
+   title = "Baseball Hitting Stats from 1990-1995",
+   mapping = ggplot2::aes(color = lg),
+   types = list(
+     # change the shape and add some transparency to the points
+     continuous = wrap("smooth_loess", alpha = 0.50, shape = "+")
+   ),
+   showStrips = FALSE
+ )
+
+ p_(pm)
+
+# Use "auto" to adapt width of the sub-plots
+ pm &lt;- ggduo(
+   dt,
+   c("year", "g", "ab", "lg"),
+   c("batting_avg", "slug", "on_base"),
+   mapping = ggplot2::aes(color = lg),
+   xProportions = "auto"
+ )
+
+ p_(pm)
+
+ # Custom widths &amp; heights of the sub-plots
+ pm &lt;- ggduo(
+   dt,
+   c("year", "g", "ab", "lg"),
+   c("batting_avg", "slug", "on_base"),
+   mapping = ggplot2::aes(color = lg),
+   xProportions = c(6, 4, 3, 2),
+   yProportions = c(1, 2, 1)
+ )
+
+ p_(pm)
+
+# Example derived from:
+## R Data Analysis Examples | Canonical Correlation Analysis.  UCLA: Institute for Digital
+##   Research and Education.
+##   from http://www.stats.idre.ucla.edu/r/dae/canonical-correlation-analysis
+##   (accessed May 22, 2017).
+# "Example 1. A researcher has collected data on three psychological variables, four
+#  academic variables (standardized test scores) and gender for 600 college freshman.
+#  She is interested in how the set of psychological variables relates to the academic
+#  variables and gender. In particular, the researcher is interested in how many
+#  dimensions (canonical variables) are necessary to understand the association between
+#  the two sets of variables."
+data(psychademic)
+summary(psychademic)
+
+(psych_variables &lt;- attr(psychademic, "psychology"))
+(academic_variables &lt;- attr(psychademic, "academic"))
+
+## Within correlation
+p_(ggpairs(psychademic, columns = psych_variables))
+p_(ggpairs(psychademic, columns = academic_variables))
+
+## Between correlation
+loess_with_cor &lt;- function(data, mapping, ..., method = "pearson") {
+  x &lt;- eval_data_col(data, mapping$x)
+  y &lt;- eval_data_col(data, mapping$y)
+  cor &lt;- cor(x, y, method = method)
+  ggally_smooth_loess(data, mapping, ...) +
+    ggplot2::geom_label(
+      data = data.frame(
+        x = min(x, na.rm = TRUE),
+        y = max(y, na.rm = TRUE),
+        lab = round(cor, digits = 3)
+      ),
+      mapping = ggplot2::aes(x = x, y = y, label = lab),
+      hjust = 0, vjust = 1,
+      size = 5, fontface = "bold",
+      inherit.aes = FALSE # do not inherit anything from the ...
+    )
+}
+pm &lt;- ggduo(
+  psychademic,
+  rev(psych_variables), academic_variables,
+  types = list(continuous = loess_with_cor),
+  showStrips = FALSE
+)
+suppressWarnings(p_(pm)) # ignore warnings from loess
+
+# add color according to sex
+pm &lt;- ggduo(
+  psychademic,
+  mapping = ggplot2::aes(color = sex),
+  rev(psych_variables), academic_variables,
+  types = list(continuous = loess_with_cor),
+  showStrips = FALSE,
+  legend = c(5,2)
+)
+suppressWarnings(p_(pm))
+
+
+# add color according to sex
+pm &lt;- ggduo(
+  psychademic,
+  mapping = ggplot2::aes(color = motivation),
+  rev(psych_variables), academic_variables,
+  types = list(continuous = loess_with_cor),
+  showStrips = FALSE,
+  legend = c(5,2)
+) +
+  ggplot2::theme(legend.position = "bottom")
+suppressWarnings(p_(pm))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

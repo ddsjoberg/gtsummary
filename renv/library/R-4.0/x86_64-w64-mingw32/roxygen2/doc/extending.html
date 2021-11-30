@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Extending roxygen2</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Extending roxygen2</h1>
+
+
+
+<div id="basics" class="section level2">
+<h2>Basics</h2>
+<p>Roxygen is extensible with user-defined <strong>roclets</strong>. It means that you can take advantage of Roxygen’s parser and extend it with your own <code>@tags</code>.</p>
+<p>There are two primary ways to extend roxygen2:</p>
+<ul>
+<li><p>Add new tag that generates a new top-level section in <code>.Rd</code> files.</p></li>
+<li><p>Add a new roclet that does anything you like.</p></li>
+</ul>
+<p>This vignette will introduce you to the key data structures in roxygen2, and then show you how to use these two extension points. This vignette is very rough, so you should expect to have to also read some roxygen2 source code to understand all the extension points. Hopefully it’s useful enough to help you get started, and if you have problems, please <a href="https://github.com/r-lib/roxygen2/issues/new">file an issue</a>!</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(roxygen2)</span></code></pre></div>
+</div>
+<div id="key-data-structures" class="section level2">
+<h2>Key data structures</h2>
+<p>Before we talk about extending roxygen2, we need to first discuss two important data structures that power roxygen: tags and blocks.</p>
+<div id="tags" class="section level3">
+<h3>Tags</h3>
+<p>A tag (a list with S3 class <code>roxy_tag</code>) represents a single tag. It has the following fields:</p>
+<ul>
+<li><p><code>tag</code>: the name of the tag.</p></li>
+<li><p><code>raw</code>: the raw contents of the tag (i.e. everything from the end of this tag to the beginning of the next).</p></li>
+<li><p><code>val</code>: the parsed value, which we’ll come back to shortly.</p></li>
+<li><p><code>file</code> and <code>line</code>: the location of the tag in the package. Used with <code>roxy_tag_warning()</code> to produce informative error messages.</p></li>
+</ul>
+<p>You <em>can</em> construct tag objects by hand with <code>roxy_tag()</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">roxy_tag</span>(<span class="st">&quot;name&quot;</span>, <span class="st">&quot;Hadley&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; [????:???] @name &#39;Hadley&#39; {unparsed}</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">str</span>(<span class="kw">roxy_tag</span>(<span class="st">&quot;name&quot;</span>, <span class="st">&quot;Hadley&quot;</span>))</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; List of 5</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt;  $ file: chr NA</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt;  $ line: int NA</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt;  $ raw : chr &quot;Hadley&quot;</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt;  $ tag : chr &quot;name&quot;</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt;  $ val : NULL</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt;  - attr(*, &quot;class&quot;)= chr [1:2] &quot;roxy_tag_name&quot; &quot;roxy_tag&quot;</span></span></code></pre></div>
+<p>However, you should rarely need to do so, because you’ll typically have them given to you in a block object, as you’ll see shortly.</p>
+</div>
+<div id="blocks" class="section level3">
+<h3>Blocks</h3>
+<p>A block (a list with S3 class <code>roxy_block</code>) represents a single roxygen block. It has the following fields:</p>
+<ul>
+<li><code>tags</code>: a list of <code>roxy_tags</code>.</li>
+<li><code>call</code>: the R code associated with the block (usually a function call).</li>
+<li><code>file</code> and <code>line</code>: the location of the R code.</li>
+<li><code>object</code>: the evaluated R object associated with the code.</li>
+</ul>
+<p>The easiest way to see the basic structure of a <code>roxy_block()</code> is to generate one by parsing a roxygen block with <code>parse_text()</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>text &lt;-<span class="st"> &quot;</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  #&#39; This is a title</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="st">  #&#39;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  #&#39; This is the description.</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="st">  #&#39;</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="st">  #&#39; @param x,y A number</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="st">  #&#39; @export</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="st">  f &lt;- function(x, y) x + y</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="st">&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co"># parse_text() returns a list of blocks, so I extract the first</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a>block &lt;-<span class="st"> </span><span class="kw">parse_text</span>(text)[[<span class="dv">1</span>]]</span>
+<span id="cb3-13"><a href="#cb3-13"></a>block</span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt; &lt;roxy_block&gt; [&lt;text&gt;:8]</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt;   $tag</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#&gt;     [line:  1] @title &#39;This is a title&#39; {parsed}</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt;     [line:  3] @description &#39;This is the description.&#39; {parsed}</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt;     [line:  6] @param &#39;x,y A number&#39; {parsed}</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt;     [line:  7] @export &#39;&#39; {parsed}</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt;     [????:???] @usage &#39;&lt;generated&gt;&#39; {parsed}</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co">#&gt;     [????:???] @.formals &#39;&lt;generated&gt;&#39; {parsed}</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="co">#&gt;     [????:???] @backref &#39;&lt;text&gt;&#39; {parsed}</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">#&gt;   $call   f &lt;- function(x, y) x + y</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co">#&gt;   $object &lt;function&gt; </span></span>
+<span id="cb3-25"><a href="#cb3-25"></a><span class="co">#&gt;     $topic f</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a><span class="co">#&gt;     $alias f</span></span></code></pre></div>
+</div>
+</div>
+<div id="adding-a-new-.rd-tag" class="section level2">
+<h2>Adding a new <code>.Rd</code> tag</h2>
+<p>The easiest way to extend roxygen2 is to create a new tag that adds output to <code>.Rd</code> files. This requires two steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Define a <code>roxy_tag_parse()</code> method that describes how to parse our new tag.</p></li>
+<li><p>Define a <code>roxy_tag_rd()</code> method that describes how to convert the tag into <code>.Rd</code> commands.</p></li>
+</ol>
+<p>To illustrate the basic idea we’ll create a new <code>@tip</code> tag that will create a bulleted list of tips about how to use a function. The idea is to take something like this:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#&#39; @tip The mean of a logical vector is the proportion of `TRUE` values.</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&#39; @tip You can compute means of dates and date-times!</span></span></code></pre></div>
+<p>And generate Rd like this:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode latex"><code class="sourceCode latex"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">\section</span>{Tips and tricks}{</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">\itemize</span>{</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">\item</span> The mean of a logical vector is the proportion of <span class="fu">\code</span>{TRUE} values.</span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">\item</span> You can compute means of dates and date-times!</span>
+<span id="cb5-5"><a href="#cb5-5"></a>}</span>
+<span id="cb5-6"><a href="#cb5-6"></a>}</span></code></pre></div>
+<p>The first step is to define a method for <code>roxy_tag_parse()</code> that describes how to turn the parse the tag text. The name of the class will be <code>roxy_tag_{tag}</code>, which in this case is <code>roxy_tag_tip</code>. This function takes a <code>roxy_tag</code> as input, and it’s job is to set <code>x$val</code> to a convenient parsed value that will be used later by the roclet. Here we want to process the text using markdown so we can just use <code>tag_markdown()</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>roxy_tag_parse.roxy_tag_tip &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="kw">tag_markdown</span>(x)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>}</span></code></pre></div>
+<p>We check this works by using <code>parse_text()</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>text &lt;-<span class="st"> &quot;</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  #&#39; Title</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="st">  #&#39;</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="st">  #&#39; @tip The mean of a logical vector is the proportion of `TRUE` values.</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="st">  #&#39; @tip You can compute means of dates and date-times!</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="st">  #&#39; @md</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="st">  f &lt;- function(x, y) {</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="st">    # ...</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="st">  }</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="st">&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a>block &lt;-<span class="st"> </span><span class="kw">parse_text</span>(text)[[<span class="dv">1</span>]]</span>
+<span id="cb7-12"><a href="#cb7-12"></a>block</span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt; &lt;roxy_block&gt; [&lt;text&gt;:7]</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co">#&gt;   $tag</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="co">#&gt;     [line:  1] @title &#39;Title&#39; {parsed}</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="co">#&gt;     [line:  4] @tip &#39;The mean of a logical vector is the proportion ...&#39; {parsed}</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co">#&gt;     [line:  5] @tip &#39;You can compute means of dates and date-times!&#39; {parsed}</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="co">#&gt;     [line:  6] @md &#39;&#39; {parsed}</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a><span class="co">#&gt;     [????:???] @usage &#39;&lt;generated&gt;&#39; {parsed}</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="co">#&gt;     [????:???] @.formals &#39;&lt;generated&gt;&#39; {parsed}</span></span>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="co">#&gt;     [????:???] @backref &#39;&lt;text&gt;&#39; {parsed}</span></span>
+<span id="cb7-22"><a href="#cb7-22"></a><span class="co">#&gt;   $call   f &lt;- function(x, y) { ...</span></span>
+<span id="cb7-23"><a href="#cb7-23"></a><span class="co">#&gt;   $object &lt;function&gt; </span></span>
+<span id="cb7-24"><a href="#cb7-24"></a><span class="co">#&gt;     $topic f</span></span>
+<span id="cb7-25"><a href="#cb7-25"></a><span class="co">#&gt;     $alias f</span></span>
+<span id="cb7-26"><a href="#cb7-26"></a></span>
+<span id="cb7-27"><a href="#cb7-27"></a><span class="kw">str</span>(block<span class="op">$</span>tags[[<span class="dv">2</span>]])</span>
+<span id="cb7-28"><a href="#cb7-28"></a><span class="co">#&gt; List of 5</span></span>
+<span id="cb7-29"><a href="#cb7-29"></a><span class="co">#&gt;  $ file: chr &quot;&lt;text&gt;&quot;</span></span>
+<span id="cb7-30"><a href="#cb7-30"></a><span class="co">#&gt;  $ line: int 4</span></span>
+<span id="cb7-31"><a href="#cb7-31"></a><span class="co">#&gt;  $ tag : chr &quot;tip&quot;</span></span>
+<span id="cb7-32"><a href="#cb7-32"></a><span class="co">#&gt;  $ raw : chr &quot;The mean of a logical vector is the proportion of `TRUE` values.&quot;</span></span>
+<span id="cb7-33"><a href="#cb7-33"></a><span class="co">#&gt;  $ val : chr &quot;The mean of a logical vector is the proportion of \\code{TRUE} values.&quot;</span></span>
+<span id="cb7-34"><a href="#cb7-34"></a><span class="co">#&gt;  - attr(*, &quot;class&quot;)= chr [1:2] &quot;roxy_tag_tip&quot; &quot;roxy_tag&quot;</span></span></code></pre></div>
+<p>(Here I explicit turn markdown parsing on using <code>@md</code>; it’s usually turned on for a package using roxygen options).</p>
+<p>Next we define a method for <code>roxy_tag_rd()</code>, which must create an <code>rd_section()</code>. We’re going to create a new section called <code>tip</code>. It will contain a character vector of tips:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>roxy_tag_rd.roxy_tag_tip &lt;-<span class="st"> </span><span class="cf">function</span>(x, base_path, env) {</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="kw">rd_section</span>(<span class="st">&quot;tip&quot;</span>, x<span class="op">$</span>val)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>}</span></code></pre></div>
+<p>This additional layer is needed because there can multiple tags of the same time in a single block, and multiple blocks can contribute to the same <code>.Rd</code> file. The job of the <code>rd_section</code> is to combine all the tags into a single top-level Rd section. Each tag generates an <code>rd_section</code> which is then combined with any previous section using <code>merge()</code>. The default <code>merge.rd_section()</code> just concatenates the values together (<code>rd_section(x$type, c(x$value, y$value))</code>); you can override this method if you need more sophisticated behaviour.</p>
+<p>We then need to define a <code>format()</code> method to converts this object into text for the <code>.Rd</code> file:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>format.rd_section_tip &lt;-<span class="st"> </span><span class="cf">function</span>(x, ...) {</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="kw">paste0</span>(</span>
+<span id="cb9-3"><a href="#cb9-3"></a>    <span class="st">&quot;</span><span class="ch">\\</span><span class="st">section{Tips and tricks}{</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb9-4"><a href="#cb9-4"></a>    <span class="st">&quot;</span><span class="ch">\\</span><span class="st">itemize{</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb9-5"><a href="#cb9-5"></a>    <span class="kw">paste0</span>(<span class="st">&quot;  </span><span class="ch">\\</span><span class="st">item &quot;</span>, x<span class="op">$</span>value, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, <span class="dt">collapse =</span> <span class="st">&quot;&quot;</span>),</span>
+<span id="cb9-6"><a href="#cb9-6"></a>    <span class="st">&quot;}</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb9-7"><a href="#cb9-7"></a>    <span class="st">&quot;}</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a>  )</span>
+<span id="cb9-9"><a href="#cb9-9"></a>}</span></code></pre></div>
+<p>We can now try this out with <code>roclet_text()</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>topic &lt;-<span class="st"> </span><span class="kw">roc_proc_text</span>(<span class="kw">rd_roclet</span>(), text)[[<span class="dv">1</span>]]</span>
+<span id="cb10-2"><a href="#cb10-2"></a>topic<span class="op">$</span><span class="kw">get_section</span>(<span class="st">&quot;tip&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; \section{Tips and tricks}{</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; \itemize{</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt;   \item The mean of a logical vector is the proportion of \code{TRUE} values.</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt;   \item You can compute means of dates and date-times!</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; }</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; }</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; </span></span></code></pre></div>
+<p>Note that there is no namespacing so if you’re defining multiple new tags I recommend using your package name as common prefix.</p>
+</div>
+<div id="creating-a-new-roclet" class="section level2">
+<h2>Creating a new roclet</h2>
+<p>Creating a new roclet is usually a two part process. First, you define new tags that your roclet will work with. Second, you define a roclet that tells roxygen how to process an entire package.</p>
+<div id="custom-tags" class="section level3">
+<h3>Custom tags</h3>
+<p>In this example we will make a new <code>@memo</code> tag to enable printing the memos at the console when the roclet runs. We choose that the <code>@memo</code> has this syntax:</p>
+<pre><code>@memo [Headline] Description</code></pre>
+<p>As an example:</p>
+<pre><code>@memo [EFFICIENCY] Currently brute-force; find better algorithm.</code></pre>
+<p>As above, we first define a parse method:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>roxy_tag_parse.roxy_tag_memo &lt;-<span class="st"> </span><span class="cf">function</span>(x) {</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="cf">if</span> (<span class="op">!</span><span class="kw">grepl</span>(<span class="st">&quot;^</span><span class="ch">\\</span><span class="st">[.*</span><span class="ch">\\</span><span class="st">].*$&quot;</span>, x<span class="op">$</span>raw)) {</span>
+<span id="cb13-3"><a href="#cb13-3"></a>    <span class="kw">roxy_tag_warning</span>(x, <span class="st">&quot;Invalid memo format&quot;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="kw">return</span>()</span>
+<span id="cb13-5"><a href="#cb13-5"></a>  }</span>
+<span id="cb13-6"><a href="#cb13-6"></a></span>
+<span id="cb13-7"><a href="#cb13-7"></a>  parsed &lt;-<span class="st"> </span>stringi<span class="op">::</span><span class="kw">stri_match</span>(<span class="dt">str =</span> x<span class="op">$</span>raw, <span class="dt">regex =</span> <span class="st">&quot;</span><span class="ch">\\</span><span class="st">[(.*)</span><span class="ch">\\</span><span class="st">](.*)&quot;</span>)[<span class="dv">1</span>, ]</span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a>  x<span class="op">$</span>val &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb13-10"><a href="#cb13-10"></a>    <span class="dt">header =</span> parsed[[<span class="dv">2</span>]], </span>
+<span id="cb13-11"><a href="#cb13-11"></a>    <span class="dt">message =</span> parsed[[<span class="dv">3</span>]]</span>
+<span id="cb13-12"><a href="#cb13-12"></a>  )</span>
+<span id="cb13-13"><a href="#cb13-13"></a>  x</span>
+<span id="cb13-14"><a href="#cb13-14"></a>}</span></code></pre></div>
+<p>Then check it works with <code>parse_text()</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>text &lt;-<span class="st"> &quot;</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="st">  #&#39; @memo [TBI] Remember to implement this!</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="st">  #&#39; @memo [API] Check best API</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="st">  f &lt;- function(x, y) {</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="st">    # ...</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="st">  }</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="st">&quot;</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a>block &lt;-<span class="st"> </span><span class="kw">parse_text</span>(text)[[<span class="dv">1</span>]]</span>
+<span id="cb14-9"><a href="#cb14-9"></a>block</span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt; &lt;roxy_block&gt; [&lt;text&gt;:4]</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt;   $tag</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt;     [line:  2] @memo &#39;[TBI] Remember to implement this!&#39; {parsed}</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt;     [line:  3] @memo &#39;[API] Check best API&#39; {parsed}</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt;     [????:???] @usage &#39;&lt;generated&gt;&#39; {parsed}</span></span>
+<span id="cb14-15"><a href="#cb14-15"></a><span class="co">#&gt;     [????:???] @.formals &#39;&lt;generated&gt;&#39; {parsed}</span></span>
+<span id="cb14-16"><a href="#cb14-16"></a><span class="co">#&gt;     [????:???] @backref &#39;&lt;text&gt;&#39; {parsed}</span></span>
+<span id="cb14-17"><a href="#cb14-17"></a><span class="co">#&gt;   $call   f &lt;- function(x, y) { ...</span></span>
+<span id="cb14-18"><a href="#cb14-18"></a><span class="co">#&gt;   $object &lt;function&gt; </span></span>
+<span id="cb14-19"><a href="#cb14-19"></a><span class="co">#&gt;     $topic f</span></span>
+<span id="cb14-20"><a href="#cb14-20"></a><span class="co">#&gt;     $alias f</span></span>
+<span id="cb14-21"><a href="#cb14-21"></a></span>
+<span id="cb14-22"><a href="#cb14-22"></a><span class="kw">str</span>(block<span class="op">$</span>tags[[<span class="dv">1</span>]])</span>
+<span id="cb14-23"><a href="#cb14-23"></a><span class="co">#&gt; List of 5</span></span>
+<span id="cb14-24"><a href="#cb14-24"></a><span class="co">#&gt;  $ file: chr &quot;&lt;text&gt;&quot;</span></span>
+<span id="cb14-25"><a href="#cb14-25"></a><span class="co">#&gt;  $ line: int 2</span></span>
+<span id="cb14-26"><a href="#cb14-26"></a><span class="co">#&gt;  $ tag : chr &quot;memo&quot;</span></span>
+<span id="cb14-27"><a href="#cb14-27"></a><span class="co">#&gt;  $ raw : chr &quot;[TBI] Remember to implement this!&quot;</span></span>
+<span id="cb14-28"><a href="#cb14-28"></a><span class="co">#&gt;  $ val :List of 2</span></span>
+<span id="cb14-29"><a href="#cb14-29"></a><span class="co">#&gt;   ..$ header : chr &quot;TBI&quot;</span></span>
+<span id="cb14-30"><a href="#cb14-30"></a><span class="co">#&gt;   ..$ message: chr &quot; Remember to implement this!&quot;</span></span>
+<span id="cb14-31"><a href="#cb14-31"></a><span class="co">#&gt;  - attr(*, &quot;class&quot;)= chr [1:2] &quot;roxy_tag_memo&quot; &quot;roxy_tag&quot;</span></span></code></pre></div>
+</div>
+<div id="the-roclet" class="section level3">
+<h3>The roclet</h3>
+<p>Next we create a constructor for the roclet, which uses <code>roclet()</code>. Our <code>memo</code> roclet doesn’t have any options so this is very simple:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>memo_roclet &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb15-2"><a href="#cb15-2"></a>  <span class="kw">roclet</span>(<span class="st">&quot;memo&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>}</span></code></pre></div>
+<p>To give the roclet behaviour, you need to define method. There are two methods that almost every roclet will use:</p>
+<ul>
+<li><p><code>roclet_process()</code> is called with a list of blocks, and returns an object of your choosing.</p></li>
+<li><p><code>roclet_output()</code>: performs side-effects (usually writing to disk) using the result from <code>roclet_process()</code></p></li>
+</ul>
+<p>For this roclet, we’ll have <code>roclet_process()</code> collect all the memo tags into a named list:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>roclet_process.roclet_memo &lt;-<span class="st"> </span><span class="cf">function</span>(x, blocks, env, base_path) {</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  results &lt;-<span class="st"> </span><span class="kw">list</span>()</span>
+<span id="cb16-3"><a href="#cb16-3"></a>  </span>
+<span id="cb16-4"><a href="#cb16-4"></a>  <span class="cf">for</span> (block <span class="cf">in</span> blocks) {</span>
+<span id="cb16-5"><a href="#cb16-5"></a>    tags &lt;-<span class="st"> </span><span class="kw">block_get_tags</span>(block, <span class="st">&quot;memo&quot;</span>)</span>
+<span id="cb16-6"><a href="#cb16-6"></a></span>
+<span id="cb16-7"><a href="#cb16-7"></a>    <span class="cf">for</span> (tag <span class="cf">in</span> tags) {</span>
+<span id="cb16-8"><a href="#cb16-8"></a>      msg &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;[&quot;</span>, tag<span class="op">$</span>file, <span class="st">&quot;:&quot;</span>, tag<span class="op">$</span>line, <span class="st">&quot;] &quot;</span>, tag<span class="op">$</span>val<span class="op">$</span>message)</span>
+<span id="cb16-9"><a href="#cb16-9"></a>      results[[tag<span class="op">$</span>val<span class="op">$</span>header]] &lt;-<span class="st"> </span><span class="kw">c</span>(results[[tag<span class="op">$</span>val<span class="op">$</span>header]], msg)</span>
+<span id="cb16-10"><a href="#cb16-10"></a>    }</span>
+<span id="cb16-11"><a href="#cb16-11"></a>  }</span>
+<span id="cb16-12"><a href="#cb16-12"></a>  </span>
+<span id="cb16-13"><a href="#cb16-13"></a>  results</span>
+<span id="cb16-14"><a href="#cb16-14"></a>}</span></code></pre></div>
+<p>And then have <code>roclet_output()</code> just print them to the screen:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>roclet_output.roclet_memo &lt;-<span class="st"> </span><span class="cf">function</span>(x, results, base_path, ...) {</span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="cf">for</span> (header <span class="cf">in</span> <span class="kw">names</span>(results)) {</span>
+<span id="cb17-3"><a href="#cb17-3"></a>    messages &lt;-<span class="st"> </span>results[[header]]</span>
+<span id="cb17-4"><a href="#cb17-4"></a>    <span class="kw">cat</span>(<span class="kw">paste0</span>(header, <span class="st">&quot;: &quot;</span>, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>))</span>
+<span id="cb17-5"><a href="#cb17-5"></a>    <span class="kw">cat</span>(<span class="kw">paste0</span>(<span class="st">&quot; * &quot;</span>, messages, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, <span class="dt">collapse =</span> <span class="st">&quot;&quot;</span>))</span>
+<span id="cb17-6"><a href="#cb17-6"></a>  }</span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a>  <span class="kw">invisible</span>(<span class="ot">NULL</span>)</span>
+<span id="cb17-9"><a href="#cb17-9"></a>}</span></code></pre></div>
+<p>Then you can test it works by using <code>roc_proc_text()</code>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>results &lt;-<span class="st"> </span><span class="kw">roc_proc_text</span>(<span class="kw">memo_roclet</span>(), <span class="st">&quot;</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="st">#&#39; @memo [TBI] Remember to implement this!</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="st">#&#39; @memo [API] Check best API</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="st">f &lt;- function(x, y) {</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="st">  # ...</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="st">}</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="st">#&#39; @memo [API] Consider passing z option</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="st">g &lt;- function(x, y) {</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="st">  # ...</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="st">}</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="st">&quot;</span>)</span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="kw">roclet_output</span>(<span class="kw">memo_roclet</span>(), results)</span>
+<span id="cb18-14"><a href="#cb18-14"></a><span class="co">#&gt; TBI: </span></span>
+<span id="cb18-15"><a href="#cb18-15"></a><span class="co">#&gt;  * [&lt;text&gt;:2]  Remember to implement this!</span></span>
+<span id="cb18-16"><a href="#cb18-16"></a><span class="co">#&gt; API: </span></span>
+<span id="cb18-17"><a href="#cb18-17"></a><span class="co">#&gt;  * [&lt;text&gt;:3]  Check best API</span></span>
+<span id="cb18-18"><a href="#cb18-18"></a><span class="co">#&gt;  * [&lt;text&gt;:8]  Consider passing z option</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

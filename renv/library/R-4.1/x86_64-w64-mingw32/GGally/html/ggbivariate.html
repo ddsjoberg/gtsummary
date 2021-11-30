@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Display an outcome using several potential explanatory...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggbivariate {GGally}"><tr><td>ggbivariate {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Display an outcome using several potential explanatory variables</h2>
+
+<h3>Description</h3>
+
+<p><code>ggbivariate</code> is a variant of <code><a href="../../GGally/help/ggduo.html">ggduo</a></code> for plotting
+an outcome variable with several potential explanatory variables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggbivariate(
+  data,
+  outcome,
+  explanatory = NULL,
+  mapping = NULL,
+  types = NULL,
+  ...,
+  rowbar_args = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>dataset to be used, can have both categorical and
+numerical variables</p>
+</td></tr>
+<tr valign="top"><td><code>outcome</code></td>
+<td>
+<p>name or position of the outcome variable (one variable only)</p>
+</td></tr>
+<tr valign="top"><td><code>explanatory</code></td>
+<td>
+<p>names or positions of the explanatory variables (if <code>NULL</code>,
+will take all variables other than <code>outcome</code>)</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>additional aesthetic to be used, for example to indicate
+weights (see examples)</p>
+</td></tr>
+<tr valign="top"><td><code>types</code></td>
+<td>
+<p>custom types of plots to use, see <code><a href="../../GGally/help/ggduo.html">ggduo</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional arguments passed to <code><a href="../../GGally/help/ggduo.html">ggduo</a></code> (see examples)</p>
+</td></tr>
+<tr valign="top"><td><code>rowbar_args</code></td>
+<td>
+<p>additional arguments passed to <code><a href="../../GGally/help/ggally_rowbar.html">ggally_rowbar</a></code>
+(see examples)</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Joseph Larmarange
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+data(tips, package = "reshape")
+p_(ggbivariate(tips, "smoker", c("day", "time", "sex", "tip")))
+
+# Personalize plot title and legend title
+p_(ggbivariate(
+  tips, "smoker", c("day", "time", "sex", "tip"),
+  title = "Custom title"
+) +
+  labs(fill = "Smoker ?"))
+
+# Customize fill colour scale
+p_(ggbivariate(tips, "smoker", c("day", "time", "sex", "tip")) +
+  scale_fill_brewer(type = "qual"))
+
+# Customize labels
+p_(ggbivariate(
+  tips, "smoker", c("day", "time", "sex", "tip"),
+  rowbar_args = list(
+    colour = "white",
+    size = 4,
+    fontface = "bold",
+    label_format = scales::label_percent(accurary = 1)
+  )
+))
+
+# Choose the sub-plot from which get legend
+p_(ggbivariate(tips, "smoker"))
+p_(ggbivariate(tips, "smoker", legend = 3))
+
+# Use mapping to indicate weights
+d &lt;- as.data.frame(Titanic)
+p_(ggbivariate(d, "Survived", mapping = aes(weight = Freq)))
+
+# outcome can be numerical
+p_(ggbivariate(tips, outcome = "tip", title = "tip"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

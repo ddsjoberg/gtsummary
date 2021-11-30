@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Sparse logical matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for lsparseMatrix-classes {Matrix}"><tr><td>lsparseMatrix-classes {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Sparse logical matrices</h2>
+
+<h3>Description</h3>
+
+<p>The <code>lsparseMatrix</code> class is a virtual class of sparse
+matrices with <code>TRUE</code>/<code>FALSE</code> or <code>NA</code> entries.  Only the
+positions of the elements that are <code>TRUE</code> are stored.
+</p>
+<p>These can be stored in the &ldquo;triplet&rdquo; form (class
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>, subclasses <code>lgTMatrix</code>,
+<code>lsTMatrix</code>, and <code>ltTMatrix</code>) or in compressed
+column-oriented form (class <code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>,
+subclasses <code>lgCMatrix</code>, <code>lsCMatrix</code>, and <code>ltCMatrix</code>)
+or&ndash;<em>rarely</em>&ndash;in compressed row-oriented form (class
+<code><a href="RsparseMatrix-class.html">RsparseMatrix</a></code>, subclasses <code>lgRMatrix</code>,
+<code>lsRMatrix</code>, and <code>ltRMatrix</code>).  The second letter in the
+name of these non-virtual classes indicates <code>g</code>eneral,
+<code>s</code>ymmetric, or <code>t</code>riangular.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Note that triplet stored (<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>) matrices
+such as <code>lgTMatrix</code> may contain duplicated pairs of indices
+<i>(i,j)</i> as for the corresponding numeric class
+<code><a href="dgTMatrix-class.html">dgTMatrix</a></code> where for such pairs, the corresponding
+<code>x</code> slot entries are added.  For logical matrices, the <code>x</code>
+entries corresponding to duplicated index pairs <i>(i,j)</i> are
+&ldquo;added&rdquo; as well if the addition is defined as logical <i>or</i>,
+i.e., &ldquo;<code>TRUE + TRUE  |-&gt;  TRUE</code>&rdquo; and
+&ldquo;<code>TRUE + FALSE  |-&gt;  TRUE</code>&rdquo;.
+Note the use of <code><a href="uniqTsparse.html">uniqTsparse</a>()</code> for getting an internally
+unique representation without duplicated <i>(i,j)</i> entries.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("lgCMatrix",
+    ...)</code> and so on.  More frequently objects are created by coercion of
+a numeric sparse matrix to the logical form, e.g. in an expression
+<code>x != 0</code>.
+</p>
+<p>The logical form is also used in the symbolic analysis phase
+of an algorithm involving sparse matrices.  Such algorithms often
+involve two phases: a symbolic phase wherein the positions of the
+non-zeros in the result are determined and a numeric phase wherein the
+actual results are calculated.  During the symbolic phase only the
+positions of the non-zero elements in any operands are of interest,
+hence any numeric sparse matrices can be treated as logical sparse
+matrices.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>x</code>:</dt><dd><p>Object of class <code>"logical"</code>, i.e., either
+<code>TRUE</code>, <code><a href="../../base/html/NA.html">NA</a></code>, or <code>FALSE</code>.</p>
+</dd>
+<dt><code>uplo</code>:</dt><dd><p>Object of class <code>"character"</code>. Must be
+either &quot;U&quot;, for upper triangular, and &quot;L&quot;, for lower
+triangular. Present in the triangular and symmetric classes but not
+in the general class.</p>
+</dd>
+<dt><code>diag</code>:</dt><dd><p>Object of class <code>"character"</code>. Must be
+either <code>"U"</code>, for unit triangular (diagonal is all ones), or
+<code>"N"</code> for non-unit.  The implicit diagonal elements are not
+explicitly stored when <code>diag</code> is <code>"U"</code>.  Present in the
+triangular classes only.</p>
+</dd>
+<dt><code>p</code>:</dt><dd><p>Object of class <code>"integer"</code> of pointers, one
+for each column (row), to the initial (zero-based) index of elements in
+the column.  Present in compressed column-oriented and compressed
+row-oriented forms only.</p>
+</dd>
+<dt><code>i</code>:</dt><dd><p>Object of class <code>"integer"</code> of length nnzero
+(number of non-zero elements).  These are the row numbers for
+each TRUE element in the matrix.  All other elements are FALSE.
+Present in triplet and compressed column-oriented forms only.</p>
+</dd>
+<dt><code>j</code>:</dt><dd><p>Object of class <code>"integer"</code> of length nnzero
+(number of non-zero elements).  These are the column numbers for
+each TRUE element in the matrix.  All other elements are FALSE.
+Present in triplet and compressed row-oriented forms only.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>Object of class <code>"integer"</code> - the dimensions
+of the matrix.</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>coerce</dt><dd><p><code>signature(from = "dgCMatrix", to = "lgCMatrix")</code></p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "lgCMatrix")</code>: returns the transpose
+of <code>x</code></p>
+</dd>
+<dt>which</dt><dd><p><code>signature(x = "lsparseMatrix")</code>, semantically
+equivalent to <span class="pkg">base</span> function <code><a href="../../base/html/which.html">which</a>(x, arr.ind)</code>;
+for details, see the <code><a href="dMatrix-class.html">lMatrix</a></code> class documentation.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>the class <code><a href="dgCMatrix-class.html">dgCMatrix</a></code> and <code><a href="dgTMatrix-class.html">dgTMatrix</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(m &lt;- Matrix(c(0,0,2:0), 3,5, dimnames=list(LETTERS[1:3],NULL)))
+(lm &lt;- (m &gt; 1)) # lgC
+!lm     # no longer sparse
+stopifnot(is(lm,"lsparseMatrix"),
+          identical(!lm, m &lt;= 1))
+
+data(KNex)
+str(mmG.1 &lt;- (KNex $ mm) &gt; 0.1)# "lgC..."
+table(mmG.1@x)# however with many ``non-structural zeros''
+## from logical to nz_pattern -- okay when there are no NA's :
+nmG.1 &lt;- as(mmG.1, "nMatrix") # &lt;&lt;&lt; has "TRUE" also where mmG.1 had FALSE
+## from logical to "double"
+dmG.1 &lt;- as(mmG.1, "dMatrix") # has '0' and back:
+lmG.1 &lt;- as(dmG.1, "lMatrix") # has no extra FALSE, i.e. drop0() included
+stopifnot(identical(nmG.1, as((KNex $ mm) != 0,"nMatrix")),
+          validObject(lmG.1), all(lmG.1@x),
+          # same "logical" but lmG.1 has no 'FALSE' in x slot:
+          all(lmG.1 == mmG.1))
+
+class(xnx &lt;- crossprod(nmG.1))# "nsC.."
+class(xlx &lt;- crossprod(mmG.1))# "dsC.." : numeric
+is0 &lt;- (xlx == 0)
+mean(as.vector(is0))# 99.3% zeros: quite sparse, but
+table(xlx@x == 0)# more than half of the entries are (non-structural!) 0
+stopifnot(isSymmetric(xlx), isSymmetric(xnx),
+          ## compare xnx and xlx : have the *same* non-structural 0s :
+          sapply(slotNames(xnx),
+                 function(n) identical(slot(xnx, n), slot(xlx, n))))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Expand a (Matrix) Decomposition into Factors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for expand {Matrix}"><tr><td>expand {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Expand a (Matrix) Decomposition into Factors</h2>
+
+<h3>Description</h3>
+
+<p>Expands decompositions stored in compact form into factors.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+expand(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a matrix decomposition.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This is a generic function with special methods for different types
+of decompositions, see <code><a href="../../methods/html/showMethods.html">showMethods</a>(expand)</code> to list them
+all.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The expanded decomposition, typically a list of matrix factors.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Factors for decompositions such as <code>lu</code> and <code>qr</code> can be
+stored in a compact form.
+The function <code>expand</code> allows all factors to be fully expanded.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The LU <code><a href="lu.html">lu</a></code>, and the <code><a href="Cholesky.html">Cholesky</a></code>
+decompositions which have <code>expand</code> methods;
+<code><a href="facmul.html">facmul</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(x &lt;- Matrix(round(rnorm(9),2), 3, 3))
+(ex &lt;- expand(lux &lt;- lu(x)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

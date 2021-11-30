@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Examine the column specifications for a data frame</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for cols_condense {readr}"><tr><td>cols_condense {readr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Examine the column specifications for a data frame</h2>
+
+<h3>Description</h3>
+
+<p><code>cols_condense()</code> takes a spec object and condenses its definition by setting
+the default column type to the most frequent type and only listing columns
+with a different type.
+</p>
+<p><code>spec()</code> extracts the full column specification from a tibble
+created by readr.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+cols_condense(x)
+
+spec(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>The data frame object to extract from</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A col_spec object.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other parsers: 
+<code><a href="../../readr/help/col_skip.html">col_skip</a>()</code>,
+<code><a href="../../readr/help/cols.html">cols</a>()</code>,
+<code><a href="../../readr/help/parse_datetime.html">parse_datetime</a>()</code>,
+<code><a href="../../readr/help/parse_factor.html">parse_factor</a>()</code>,
+<code><a href="../../readr/help/parse_guess.html">parse_guess</a>()</code>,
+<code><a href="../../readr/help/parse_logical.html">parse_logical</a>()</code>,
+<code><a href="../../readr/help/parse_number.html">parse_number</a>()</code>,
+<code><a href="../../readr/help/parse_vector.html">parse_vector</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+df &lt;- read_csv(readr_example("mtcars.csv"))
+s &lt;- spec(df)
+s
+
+cols_condense(s)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>readr</em> version 2.0.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Read/write RDS files.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for read_rds {readr}"><tr><td>read_rds {readr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Read/write RDS files.</h2>
+
+<h3>Description</h3>
+
+<p>Consistent wrapper around <code><a href="../../base/html/readRDS.html">saveRDS()</a></code> and <code><a href="../../base/html/readRDS.html">readRDS()</a></code>.
+<code>write_rds()</code> does not compress by default as space is generally cheaper
+than time.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+read_rds(file, refhook = NULL)
+
+write_rds(
+  x,
+  file,
+  compress = c("none", "gz", "bz2", "xz"),
+  version = 2,
+  refhook = NULL,
+  text = FALSE,
+  path = deprecated(),
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>The file path to read from/write to.</p>
+</td></tr>
+<tr valign="top"><td><code>refhook</code></td>
+<td>
+<p>A function to handle reference objects.</p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>R object to write to serialise.</p>
+</td></tr>
+<tr valign="top"><td><code>compress</code></td>
+<td>
+<p>Compression method to use: &quot;none&quot;, &quot;gz&quot; ,&quot;bz&quot;, or &quot;xz&quot;.</p>
+</td></tr>
+<tr valign="top"><td><code>version</code></td>
+<td>
+<p>Serialization format version to be used. The default value is 2
+as it's compatible for R versions prior to 3.5.0. See <code><a href="../../base/help/readRDS.html">base::saveRDS()</a></code>
+for more details.</p>
+</td></tr>
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>If <code>TRUE</code> a text representation is used, otherwise a binary representation is used.</p>
+</td></tr>
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt='[Deprecated]' /></a>, use the <code>file</code> argument instead.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional arguments to connection function. For example, control
+the space-time trade-off of different compression methods with
+<code>compression</code>. See <code><a href="../../base/html/connections.html">connections()</a></code> for more details.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code>write_rds()</code> returns <code>x</code>, invisibly.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+temp &lt;- tempfile()
+write_rds(mtcars, temp)
+read_rds(temp)
+## Not run: 
+write_rds(mtcars, "compressed_mtc.rds", "xz", compression = 9L)
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>readr</em> version 2.0.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

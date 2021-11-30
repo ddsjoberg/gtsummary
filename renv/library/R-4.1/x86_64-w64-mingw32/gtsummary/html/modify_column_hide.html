@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Modify Hidden Columns</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for modify_column_hide {gtsummary}"><tr><td>modify_column_hide {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Modify Hidden Columns</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+Use these functions to hide or unhide columns in a gtsummary tables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+modify_column_hide(x, columns)
+
+modify_column_unhide(x, columns)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>gtsummary object</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>vector or selector of columns in <code>x$table_body</code></p>
+</td></tr>
+</table>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/modify_column_hide_ex1.png" width=45% />
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Advanced modifiers: 
+<code><a href="../../gtsummary/help/modify_cols_merge.html">modify_cols_merge</a>()</code>,
+<code><a href="../../gtsummary/help/modify_fmt_fun.html">modify_fmt_fun</a>()</code>,
+<code><a href="../../gtsummary/help/modify_table_body.html">modify_table_body</a>()</code>,
+<code><a href="../../gtsummary/help/modify_table_styling.html">modify_table_styling</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Example 1 ----------------------------------
+# hide 95% CI, and replace with standard error
+modify_column_hide_ex1 &lt;-
+  lm(age ~ marker + grade, trial) %&gt;%
+  tbl_regression() %&gt;%
+  modify_column_hide(columns = ci) %&gt;%
+  modify_column_unhide(columns = std.error)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.2.9012 <a href="00Index.html">Index</a>]</div>
+</body></html>

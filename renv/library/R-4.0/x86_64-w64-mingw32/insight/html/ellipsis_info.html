@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Gather information about objects in ellipsis (dot dot dot)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ellipsis_info {insight}"><tr><td>ellipsis_info {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Gather information about objects in ellipsis (dot dot dot)</h2>
+
+<h3>Description</h3>
+
+<p>Provides information regarding the models entered in an ellipsis.
+It detects whether all are models, regressions, nested regressions etc.,
+assigning different classes to the list of objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ellipsis_info(objects, ...)
+
+## Default S3 method:
+ellipsis_info(..., only_models = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>objects, ...</code></td>
+<td>
+<p>Arbitrary number of objects.</p>
+</td></tr>
+<tr valign="top"><td><code>only_models</code></td>
+<td>
+<p>Only keep supported models (default to <code>TRUE</code>).</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The list with objects that were passed to the function, including
+additional information as attributes (e.g. if models have same response or
+are nested).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+m1 &lt;- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
+m2 &lt;- lm(Sepal.Length ~ Species, data = iris)
+m3 &lt;- lm(Sepal.Length ~ Petal.Width, data = iris)
+m4 &lt;- lm(Sepal.Length ~ 1, data = iris)
+m5 &lt;- lm(Petal.Width ~ 1, data = iris)
+
+objects &lt;- ellipsis_info(m1, m2, m3, m4)
+class(objects)
+
+objects &lt;- ellipsis_info(m1, m2, m4)
+attributes(objects)$is_nested
+
+objects &lt;- ellipsis_info(m1, m2, m5)
+attributes(objects)$same_response
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

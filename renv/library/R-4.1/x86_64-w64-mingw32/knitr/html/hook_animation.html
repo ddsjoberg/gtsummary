@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Hooks to create animations in HTML output</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for hook_ffmpeg_html {knitr}"><tr><td>hook_ffmpeg_html {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Hooks to create animations in HTML output</h2>
+
+<h3>Description</h3>
+
+<p><code>hook_ffmpeg_html()</code> uses FFmpeg to convert images to a video;
+<code>hook_gifski()</code> uses the <span class="pkg">gifski</span> to convert images to a GIF
+animation; <code>hook_scianimator()</code> uses the JavaScript library SciAnimator
+to create animations; <code>hook_r2swf()</code> uses the <span class="pkg">R2SWF</span> package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+hook_ffmpeg_html(x, options)
+
+hook_gifski(x, options)
+
+hook_scianimator(x, options)
+
+hook_r2swf(x, options)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Filename for the plot (a character string).</p>
+</td></tr>
+<tr valign="top"><td><code>options</code></td>
+<td>
+<p>A list of the current chunk options.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>These hooks are mainly for the package option <code>animation.fun</code>, e.g. you
+can set <code>opts_knit$set(animation.fun = hook_scianimator)</code>.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

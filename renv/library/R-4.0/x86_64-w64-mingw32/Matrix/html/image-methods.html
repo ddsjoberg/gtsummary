@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Methods for image() in Package 'Matrix'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for image-methods {Matrix}"><tr><td>image-methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Methods for image() in Package 'Matrix'</h2>
+
+<h3>Description</h3>
+
+<p>Methods for function <code><a href="../../graphics/html/image.html">image</a></code> in package
+<span class="pkg">Matrix</span>.  An image of a matrix simply color codes all matrix
+entries and draws the <i>n x m</i> matrix using an
+<i>n x m</i> grid of (colored) rectangles.
+</p>
+<p>The <span class="pkg">Matrix</span> package <code>image</code> methods are based on
+<code><a href="../../lattice/html/levelplot.html">levelplot</a>()</code> from package <span class="pkg">lattice</span>; hence
+these methods return an &ldquo;object&rdquo; of class <code>"trellis"</code>,
+producing a graphic when (auto-) <code><a href="../../base/html/print.html">print</a>()</code>ed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S4 method for signature 'dgTMatrix'
+image(x,
+      xlim = c(1, di[2]),
+      ylim = c(di[1], 1), aspect = "iso",
+      sub = sprintf("Dimensions: %d x %d", di[1], di[2]),
+      xlab = "Column", ylab = "Row", cuts = 15,
+      useRaster = FALSE,
+      useAbs = NULL, colorkey = !useAbs,
+      col.regions = NULL,
+      lwd = NULL, border.col = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a Matrix object, i.e., fulfilling <code><a href="../../methods/html/is.html">is</a>(x, "Matrix")</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>xlim, ylim</code></td>
+<td>
+<p>x- and y-axis limits; may be used to &ldquo;zoom
+into&rdquo; matrix.  Note that <i>x,y</i> &ldquo;feel reversed&rdquo;:
+<code>ylim</code> is for the rows (= 1st index) and <code>xlim</code> for the
+columns (= 2nd index).  For convenience, when the limits are integer
+valued, they are both extended by <code>0.5</code>; also, <code>ylim</code> is
+always used decreasingly.</p>
+</td></tr>
+<tr valign="top"><td><code>aspect</code></td>
+<td>
+<p>aspect ratio specified as number (y/x) or string;
+see <code><a href="../../lattice/html/levelplot.html">levelplot</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>sub, xlab, ylab</code></td>
+<td>
+<p>axis annotation with sensible defaults;
+see <code><a href="../../graphics/html/plot.default.html">plot.default</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>cuts</code></td>
+<td>
+<p>number of levels the range of matrix values would be
+divided into.</p>
+</td></tr>
+<tr valign="top"><td><code>useRaster</code></td>
+<td>
+<p>logical indicating if raster graphics should be used
+(instead of the tradition rectangle vector drawing).  If true,
+<code><a href="../../lattice/html/panel.levelplot.raster.html">panel.levelplot.raster</a></code> (from <span class="pkg">lattice</span>
+package) is used, and the colorkey is also done via rasters, see
+also <code><a href="../../lattice/html/levelplot.html">levelplot</a></code> and possibly
+<code><a href="../../grid/html/grid.raster.html">grid.raster</a></code>.
+</p>
+<p>Note that using raster graphics may often be faster, but can be slower,
+depending on the matrix dimensions and the graphics device (dimensions).</p>
+</td></tr>
+<tr valign="top"><td><code>useAbs</code></td>
+<td>
+<p>logical indicating if <code><a href="../../base/html/MathFun.html">abs</a>(x)</code> should be
+shown; if <code>TRUE</code>, the former (implicit) default, the default
+<code>col.regions</code> will be <code><a href="../../grDevices/html/gray.html">grey</a></code> colors (and no
+<code>colorkey</code> drawn).  The default is <code>FALSE</code> unless the
+matrix has no negative entries.</p>
+</td></tr>
+<tr valign="top"><td><code>colorkey</code></td>
+<td>
+<p>logical indicating if a color key aka &lsquo;legend&rsquo;
+should be produced.  Default is to draw one, unless <code>useAbs</code> is
+true.  You can also specify a <code><a href="../../base/html/list.html">list</a></code>, see
+<code><a href="../../lattice/html/levelplot.html">levelplot</a></code>, such as<code>list(raster=TRUE)</code> in
+the case of rastering.</p>
+</td></tr>
+<tr valign="top"><td><code>col.regions</code></td>
+<td>
+<p>vector of gradually varying colors; see
+<code><a href="../../lattice/html/levelplot.html">levelplot</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>lwd</code></td>
+<td>
+<p>(only used when <code>useRaster</code> is false:) non-negative
+number or <code>NULL</code> (default), specifying the line-width of the
+rectangles of each non-zero matrix entry (drawn by
+<code><a href="../../grid/html/grid.rect.html">grid.rect</a></code>).  The default depends on the matrix
+dimension and the device size.</p>
+</td></tr>
+<tr valign="top"><td><code>border.col</code></td>
+<td>
+<p>color for the border of each rectangle. <code>NA</code>
+means no border is drawn.   When <code>NULL</code> as by default,
+<code>border.col &lt;- if(lwd &lt; .01) NA else NULL</code> is used.
+Consider using an opaque color instead of <code>NULL</code> which
+corresponds to <code>grid::<a href="../../grid/html/get.gpar.html">get.gpar</a>("col")</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to methods and
+<code><a href="../../lattice/html/levelplot.html">levelplot</a></code>, notably <code>at</code> for specifying
+(possibly non equidistant) cut values for dividing the matrix
+values (superseding <code>cuts</code> above).</p>
+</td></tr></table>
+
+
+
+<h3>Value</h3>
+
+<p>as all <span class="pkg">lattice</span> graphics functions, <code>image(&lt;Matrix&gt;)</code>
+returns a <code>"trellis"</code> object, effectively the result of
+<code><a href="../../lattice/html/levelplot.html">levelplot</a>()</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>All methods currently end up calling the method for the
+<code><a href="dgTMatrix-class.html">dgTMatrix</a></code> class.
+Use <code>showMethods(image)</code> to list them all.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../lattice/html/levelplot.html">levelplot</a></code>, and
+<code><a href="../../lattice/html/print.trellis.html">print.trellis</a></code> from package <span class="pkg">lattice</span>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showMethods(image)
+## If you want to see all the methods' implementations:
+showMethods(image, incl=TRUE, inherit=FALSE)
+
+data(CAex)
+image(CAex, main = "image(CAex)")
+image(CAex, useAbs=TRUE, main = "image(CAex, useAbs=TRUE)")
+
+cCA &lt;- Cholesky(crossprod(CAex), Imult = .01)
+## See  ?print.trellis --- place two image() plots side by side:
+print(image(cCA, main="Cholesky(crossprod(CAex), Imult = .01)"),
+      split=c(x=1,y=1,nx=2, ny=1), more=TRUE)
+print(image(cCA, useAbs=TRUE),
+      split=c(x=2,y=1,nx=2,ny=1))
+
+data(USCounties)
+image(USCounties)# huge
+image(sign(USCounties))## just the pattern
+    # how the result looks, may depend heavily on
+    # the device, screen resolution, antialiasing etc
+    # e.g. x11(type="Xlib") may show very differently than cairo-based
+
+## Drawing borders around each rectangle;
+    # again, viewing depends very much on the device:
+image(USCounties[1:400,1:200], lwd=.1)
+## Using (xlim,ylim) has advantage : matrix dimension and (col/row) indices:
+image(USCounties, c(1,200), c(1,400), lwd=.1)
+image(USCounties, c(1,300), c(1,200), lwd=.5 )
+image(USCounties, c(1,300), c(1,200), lwd=.01)
+## These 3 are all equivalent :
+(I1 &lt;- image(USCounties, c(1,100), c(1,100), useAbs=FALSE))
+ I2 &lt;- image(USCounties, c(1,100), c(1,100), useAbs=FALSE,        border.col=NA)
+ I3 &lt;- image(USCounties, c(1,100), c(1,100), useAbs=FALSE, lwd=2, border.col=NA)
+stopifnot(all.equal(I1, I2, check.environment=FALSE),
+          all.equal(I2, I3, check.environment=FALSE))
+## using an opaque border color
+image(USCounties, c(1,100), c(1,100), useAbs=FALSE, lwd=3, border.col = adjustcolor("skyblue", 1/2))
+
+if(doExtras &lt;- interactive() || nzchar(Sys.getenv("R_MATRIX_CHECK_EXTRA")) ||
+    identical("true", unname(Sys.getenv("R_PKG_CHECKING_doExtras")))) {
+## Using raster graphics: For PDF this would give a 77 MB file,
+## however, for such a large matrix, this is typically considerably
+## *slower* (than vector graphics rectangles) in most cases :
+if(doPNG &lt;- !dev.interactive())
+   png("image-USCounties-raster.png", width=3200, height=3200)
+image(USCounties, useRaster = TRUE) # should not suffer from anti-aliasing
+if(doPNG)
+   dev.off()
+   ## and now look at the *.png image in a viewer you can easily zoom in and out
+}#only if(doExtras)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

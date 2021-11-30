@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Compute intercept-only model for regression models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for null_model {insight}"><tr><td>null_model {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Compute intercept-only model for regression models</h2>
+
+<h3>Description</h3>
+
+<p>This function computes the null-model (i.e. <code>(y ~ 1)</code>) of
+a model. For mixed models, the null-model takes random effects into account.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+null_model(model, verbose = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>model</code></td>
+<td>
+<p>A (mixed effects) model.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle off warnings.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The null-model of <code>x</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (require("lme4")) {
+  data(sleepstudy)
+  m &lt;- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+  summary(m)
+  summary(null_model(m))
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Prepare summary statistics of model parameters for printing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for print_parameters {insight}"><tr><td>print_parameters {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Prepare summary statistics of model parameters for printing</h2>
+
+<h3>Description</h3>
+
+<p>This function takes a data frame, typically a data frame with
+information on summaries of model parameters like <code><a href="../../bayestestR/html/describe_posterior.html">describe_posterior</a></code>,
+<code><a href="../../bayestestR/html/hdi.html">hdi</a></code> or <code><a href="../../parameters/html/model_parameters.html">model_parameters</a></code>,
+as input and splits this information into several parts, depending on the
+model. See details below.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+print_parameters(
+  x,
+  ...,
+  split_by = c("Effects", "Component", "Group", "Response"),
+  format = "text",
+  parameter_column = "Parameter",
+  keep_parameter_column = TRUE,
+  remove_empty_column = FALSE,
+  titles = NULL,
+  subtitles = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model, or a data frame returned by <code><a href="clean_parameters.html">clean_parameters</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>One or more objects (data frames), which contain information about
+the model parameters and related statistics (like confidence intervals, HDI,
+ROPE, ...).</p>
+</td></tr>
+<tr valign="top"><td><code>split_by</code></td>
+<td>
+<p><code>split_by</code> should be a character vector with one or
+more of the following elements: <code>"Effects"</code>, <code>"Component"</code>,
+<code>"Response"</code> and <code>"Group"</code>. These are the column names returned
+by <code><a href="clean_parameters.html">clean_parameters</a></code>, which is used to extract the information
+from which the group or component model parameters belong. If <code>NULL</code>, the
+merged data frame is returned. Else, the data frame is split into a list,
+split by the values from those columns defined in <code>split_by</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>format</code></td>
+<td>
+<p>Name of output-format, as string. If <code>NULL</code> (or <code>"text"</code>),
+assumed use for output is basic printing. If <code>"markdown"</code>, markdown-format
+is assumed. This only affects the style of title- and table-caption attributes,
+which are used in <code><a href="export_table.html">export_table</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>parameter_column</code></td>
+<td>
+<p>String, name of the column that contains the
+parameter names. Usually, for data frames returned by functions the
+easystats-packages, this will be <code>"Parameter"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>keep_parameter_column</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, the data frames in the
+returned list have both a <code>"Cleaned_Parameter"</code> and <code>"Parameter"</code>
+column. If <code>FALSE</code>, the (unformatted) <code>"Parameter"</code> is removed,
+and the column with cleaned parameter names (<code>"Cleaned_Parameter"</code>) is
+renamed into <code>"Parameter"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>remove_empty_column</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, columns with completely
+empty character values will be removed.</p>
+</td></tr>
+<tr valign="top"><td><code>titles, subtitles</code></td>
+<td>
+<p>By default, the names of the model components (like
+fixed or random effects, count or zero-inflated model part) are added as
+attributes <code>"table_title"</code> and <code>"table_subtitle"</code> to each list
+element returned by <code>print_parameters()</code>. These attributes are then
+extracted and used as table (sub) titles in <code><a href="export_table.html">export_table</a></code>.
+Use <code>titles</code> and <code>subtitles</code> to override the default attribute
+values for <code>"table_title"</code> and <code>"table_subtitle"</code>. <code>titles</code>
+and <code>subtitles</code> may be any length from 1 to same length as returned
+list elements. If <code>titles</code> and <code>subtitles</code> are shorter than
+existing elements, only the first default attributes are overwritten.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This function prepares data frames that contain information
+about model parameters for clear printing.
+<br /> <br />
+First, <code>x</code> is required, which should either be a model object or a
+prepared data frame as returned by <code><a href="clean_parameters.html">clean_parameters</a></code>. If
+<code>x</code> is a model, <code>clean_parameters()</code> is called on that model
+object to get information with which model components the parameters
+are associated.
+<br /> <br />
+Then, <code>...</code> take one or more data frames that also contain information
+about parameters from the same model, but also have additional information
+provided by other methods. For instance, a data frame in <code>...</code> might
+be the result of, for instance, <code><a href="../../bayestestR/html/describe_posterior.html">describe_posterior</a></code>,
+or <code><a href="../../parameters/html/model_parameters.html">model_parameters</a></code>, where we have a) a
+<code>Parameter</code> column and b) columns with other parameter values (like
+CI, HDI, test statistic, etc.).
+<br /> <br />
+Now we have a data frame with model parameters and information about the
+association to the different model components, a data frame with model
+parameters, and some summary statistics. <code>print_parameters()</code>
+then merges these data frames, so the parameters or statistics of interest
+are also associated with the different model components. The data
+frame is split into a list, so for a clear printing. Users can loop over this
+list and print each component for a better overview. Further, parameter
+names are &quot;cleaned&quot;, if necessary, also for a cleaner print. See also 'Examples'.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A data frame or a list of data frames (if <code>split_by</code> is not <code>NULL</code>).
+If a list is returned, the element names reflect the model components where the
+extracted information in the data frames belong to, e.g. <code>`random.zero_inflated.Intercept: persons`</code>.
+This is the data frame that contains the parameters for the random effects from
+group-level &quot;persons&quot; from the zero-inflated model component.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(bayestestR)
+model &lt;- download_model("brms_zi_2")
+x &lt;- hdi(model, effects = "all", component = "all")
+
+# hdi() returns a data frame; here we use only the
+# information on parameter names and HDI values
+tmp &lt;- as.data.frame(x)[, 1:4]
+tmp
+
+# Based on the "split_by" argument, we get a list of data frames that
+# is split into several parts that reflect the model components.
+print_parameters(model, tmp)
+
+# This is the standard print()-method for "bayestestR::hdi"-objects.
+# For printing methods, it is easy to print complex summary statistics
+# in a clean way to the console by splitting the information into
+# different model components.
+x
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

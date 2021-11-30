@@ -1,0 +1,105 @@
+useDynLib(maptools)
+
+import(sp)
+import(foreign)
+import(grid)
+importFrom(lattice, strip.custom, trellis.grobname, trellis.par.get, llines)
+importFrom(stats, smooth.spline, runif, na.omit, median, quantile, predict)
+importFrom(utils, read.table, write.table, packageVersion, compareVersion, packageDescription)
+importFrom(graphics, image, polygon, par, text, rect, points, lines, box, strwidth, strheight)
+importFrom(grDevices, hsv, col2rgb, as.graphicsAnnot, xy.coords)
+import(methods)
+
+export(leglabs, dotsInPolys, symbolsInPolys, getinfo.shape, print.shapehead) 
+        # plotpolys, shape2poly, shape2lines, 
+	# shape2points, shape2bbs, Map2poly, Map2poly1, Map2lines, Map2points, 
+	# Map2bbs, convert.pl, get.Pcent, read.shape,
+	# plot.Map, plot.polylist, subset.polylist, maptools, dotsInPolys,
+	# symbolsInPolys, write.pointShape, write.polylistShape, 
+	# write.linelistShape)
+
+export(readShapePoints, readShapeLines, readShapePoly)
+
+export(writePointsShape, writeLinesShape, writePolyShape)
+
+export(readShapeSpatial, writeSpatialShape)
+
+export(readAsciiGrid, writeAsciiGrid)
+
+export(readGPS)
+
+export(sp2WB, sp2tmap, sp2Mondrian, readSplus)
+
+export(gzAzimuth, trackAzimuth)
+
+export(MapGen2SL, ArcObj2SLDF, ContourLines2SLDF, pal2SpatialPolygons)
+
+#exportClass(ppp, im, owin, psp)
+
+exportMethods("crepuscule", "sunriset", "solarnoon", "solarpos")
+
+export(SpatialPolygons2PolySet, SpatialLines2PolySet, PolySet2SpatialPolygons, PolySet2SpatialLines, map2SpatialPolygons, map2SpatialLines, pruneMap)
+
+export(as.ppp.SpatialPoints, as.ppp.SpatialPointsDataFrame, as.SpatialPoints.ppp, as.SpatialPointsDataFrame.ppp, as.SpatialGridDataFrame.ppp)
+export(as.owin.SpatialGridDataFrame, as.owin.SpatialPixelsDataFrame, as.owin.SpatialPolygons, as.SpatialGridDataFrame.im, as.im.SpatialGridDataFrame, as.im.RasterLayer)
+
+export(as.psp.SpatialLinesDataFrame, as.psp.SpatialLines, as.psp.Lines, as.psp.Line, as.SpatialLines.psp)
+
+export(as.linnet.SpatialLines)
+
+if(getRversion() >= "3.6.0") {
+  S3method(spatstat.geom::as.im, "RasterLayer")
+  S3method(spatstat.geom::as.im, "SpatialGridDataFrame")
+  S3method(spatstat.linnet::as.linnet, "SpatialLines")
+  S3method(spatstat.geom::as.owin, "SpatialGridDataFrame")
+  S3method(spatstat.geom::as.owin, "SpatialPixelsDataFrame")
+  S3method(spatstat.geom::as.owin, "SpatialPolygons")
+  S3method(spatstat.geom::as.ppp, "SpatialPoints")
+  S3method(spatstat.geom::as.ppp, "SpatialPointsDataFrame")
+  S3method(spatstat.geom::as.psp, "Line")
+  S3method(spatstat.geom::as.psp, "Lines")
+  S3method(spatstat.geom::as.psp, "SpatialLines")
+  S3method(spatstat.geom::as.psp, "SpatialLinesDataFrame")
+}
+
+export(gpclibPermit, gpclibPermitStatus, rgeosStatus)
+
+export(unionSpatialPolygons, nowrapSpatialPolygons, nowrapRecenter, checkPolygonsHoles, nowrapSpatialLines)
+
+export(Rgshhs, getRgshhsMap)
+
+export(CCmaps)
+
+exportMethods(coerce, spCbind, spRbind)
+
+exportMethods(elide)
+
+export(GE_SpatialGrid, kmlOverlay, Sobj_SpatialGrid)
+
+export(kmlPolygons, kmlLines, kmlPolygon, kmlLine, getKMLcoordinates, kmlPoints)
+
+export(pointLabel, gcDestination)
+export(thinnedSpatialPoly)
+
+export(snapPointsToLines, nearestPointOnSegment, nearestPointOnLine, SpatialLinesMidPoints)
+
+export(panel.pointLabel, lineLabel)
+S3method("drawDetails", "labels")
+exportMethods(sp.pointLabel, sp.lineLabel, label)
+
+#S3method(plot, Map)
+#S3method(plot, polylist)
+#S3method(subset, polylist)
+S3method(print, shapehead)
+#S3method(as.ppp, SpatialPoints)
+#S3method(as.ppp, SpatialPointsDataFrame)
+#S3method(as.owin, SpatialGridDataFrame)
+#S3method(as.owin, SpatialPixelsDataFrame)
+#S3method(as.owin, SpatialPolygons)
+#S3method(as.SpatialPoints, ppp)
+#S3method(as.SpatialPointsDataFrame, ppp)
+#S3method(as.SpatialGridDataFrame, ppp)
+#S3method(as.SpatialGridDataFrame, im)
+
+
+

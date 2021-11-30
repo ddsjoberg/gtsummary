@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Conversions &quot;graph&quot; &lt;-&gt; (sparse) Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for graph-sparseMatrix {Matrix}"><tr><td>graph-sparseMatrix {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Conversions &quot;graph&quot; &lt;&ndash;&gt; (sparse) Matrix</h2>
+
+<h3>Description</h3>
+
+<p>The <span class="pkg">Matrix</span> package has supported conversion from and to
+<code>"<a href="../../graph/html/graph-class.html">graph</a>"</code> objects from (Bioconductor) package
+<span class="pkg">graph</span> since summer 2005, via the usual <code><a href="../../methods/html/as.html">as</a>(., "&lt;class&gt;")</code>
+coercion, </p>
+<pre>  as(from, Class)
+</pre>
+<p>Since 2013, this functionality is further exposed as the
+<code>graph2T()</code> and <code>T2graph()</code> functions (with further
+arguments than just <code>from</code>), which convert graphs to and from
+the triplet form of sparse matrices (of class
+<code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code>) .
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+graph2T(from, use.weights = )
+T2graph(from, need.uniq = is_not_uniqT(from), edgemode = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>from</code></td>
+<td>
+<p>for <code>graph2T()</code>, an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object of class
+<code>"graph"</code>; <br />
+for <code>T2graph()</code>, a sparse matrix inheriting from
+<code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>use.weights</code></td>
+<td>
+<p>logical indicating if weights should be used, i.e.,
+equivalently the result will be numeric, i.e. of class
+<code><a href="dgTMatrix-class.html">dgTMatrix</a></code>; otherwise the result will be
+<code><a href="nsparseMatrix-classes.html">ngTMatrix</a></code> or <code><a href="nsparseMatrix-classes.html">nsTMatrix</a></code>,
+the latter if the graph is undirected.  The default looks if there
+are weights in the graph, and if any differ from <code>1</code>, weights
+are used.</p>
+</td></tr>
+<tr valign="top"><td><code>need.uniq</code></td>
+<td>
+<p>a logical indicating if <code>from</code> may need to be
+internally &ldquo;uniqified&rdquo;; do not set this and hence rather use
+the default, unless you know what you are doing!</p>
+</td></tr>
+<tr valign="top"><td><code>edgemode</code></td>
+<td>
+<p>one of <code>NULL</code>, <code>"directed"</code>, or
+<code>"undirected"</code>.  The default <code>NULL</code> looks if the matrix is
+symmetric and assumes <code>"undirected"</code> in that case.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>For <code>graph2T()</code>, a sparse matrix  inheriting from
+<code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code>.
+</p>
+<p>For <code>T2graph()</code> an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object of class <code>"graph"</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Note that the CRAN package <span class="pkg">igraph</span> also provides conversions from
+and to sparse matrices (of package <span class="pkg">Matrix</span>) via its
+<code><a href="../../igraph/html/graph.adjacency.html">graph.adjacency</a>()</code> and
+<code><a href="../../igraph/html/get.adjacency.html">get.adjacency</a>()</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if(isTRUE(try(require(graph)))) { ## super careful .. for "checking reasons"
+  n4 &lt;- LETTERS[1:4]; dns &lt;- list(n4,n4)
+  show(a1 &lt;- sparseMatrix(i= c(1:4),   j=c(2:4,1),   x = 2,    dimnames=dns))
+  show(g1 &lt;- as(a1, "graph")) # directed
+  unlist(edgeWeights(g1)) # all '2'
+
+  show(a2 &lt;- sparseMatrix(i= c(1:4,4), j=c(2:4,1:2), x = TRUE, dimnames=dns))
+  show(g2 &lt;- as(a2, "graph")) # directed
+  # now if you want it undirected:
+  show(g3  &lt;- T2graph(as(a2,"TsparseMatrix"), edgemode="undirected"))
+  show(m3 &lt;- as(g3,"Matrix"))
+  show( graph2T(g3) ) # a "pattern Matrix" (nsTMatrix)
+
+  a. &lt;- sparseMatrix(i= 4:1, j=1:4, dimnames=list(n4,n4), giveC=FALSE) # no 'x'
+  show(a.) # "ngTMatrix"
+  show(g. &lt;- as(a., "graph"))
+
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

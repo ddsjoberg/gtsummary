@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Methods for &quot;[&lt;-&quot; - Assigning to Subsets for 'Matrix'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for [&amp;lt;&amp;ndash;methods {Matrix}"><tr><td>[&lt;&ndash;methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Methods for &quot;[&lt;-&quot; - Assigning to Subsets for 'Matrix'</h2>
+
+<h3>Description</h3>
+
+<p>Methods for <code>"[&lt;-"</code>, i.e., extraction or subsetting mostly of
+matrices, in package <span class="pkg">Matrix</span>.
+</p>
+<p><b>Note</b>: Contrary to standard <code><a href="../../base/html/matrix.html">matrix</a></code> assignment in
+base <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>, in <code>x[..] &lt;- val</code> it is typically an <b>error</b> (see
+<code><a href="../../base/html/stop.html">stop</a></code>) when the <a href="../../base/html/typeof.html">type</a> or <code><a href="../../base/html/class.html">class</a></code> of
+<code>val</code> would require the class of <code>x</code> to be changed, e.g.,
+when <code>x</code> is logical, say <code>"lsparseMatrix"</code>, and <code>val</code>
+is numeric.
+In other cases, e.g., when <code>x</code> is a <code>"nsparseMatrix"</code> and
+<code>val</code> is not <code>TRUE</code> or <code>FALSE</code>, a warning is signalled,
+and <code>val</code> is &ldquo;interpreted&rdquo; as <code><a href="../../base/html/logical.html">logical</a></code>, and
+(logical) <code><a href="../../base/html/NA.html">NA</a></code> is interpreted as <code>TRUE</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>There are <em>many many</em> more than these:
+</p>
+
+<dl>
+<dt>x = &quot;Matrix&quot;, i = &quot;missing&quot;, j = &quot;missing&quot;, value= &quot;ANY&quot;</dt><dd>
+<p>is currently a simple fallback method implementation which ensures
+&ldquo;readable&rdquo; error messages.</p>
+</dd>
+<dt>x = &quot;Matrix&quot;, i = &quot;ANY&quot;, j = &quot;ANY&quot;, value= &quot;ANY&quot;</dt><dd><p> currently
+gives an error </p>
+</dd>
+<dt>x = &quot;denseMatrix&quot;, i = &quot;index&quot;, j = &quot;missing&quot;, value= &quot;numeric&quot;</dt><dd><p> ... </p>
+</dd>
+<dt>x = &quot;denseMatrix&quot;, i = &quot;index&quot;, j = &quot;index&quot;, value= &quot;numeric&quot;</dt><dd><p> ... </p>
+</dd>
+<dt>x = &quot;denseMatrix&quot;, i = &quot;missing&quot;, j = &quot;index&quot;, value= &quot;numeric&quot;</dt><dd><p> ... </p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+
+<p><code><a href="Xtrct-methods.html">[-methods</a></code> for subsetting <code>"Matrix"</code> objects; the
+<code><a href="index-class.html">index</a></code> class;
+<code><a href="../../base/html/Extract.html">Extract</a></code> about the standard subset assignment (and extraction).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+set.seed(101)
+(a &lt;- m &lt;- Matrix(round(rnorm(7*4),2), nrow = 7))
+
+a[] &lt;- 2.2 # &lt;&lt;- replaces **every** entry
+a
+## as do these:
+a[,] &lt;- 3 ; a[TRUE,] &lt;- 4
+
+m[2, 3]  &lt;- 3.14 # simple number
+m[3, 3:4]&lt;- 3:4  # simple numeric of length 2
+
+## sub matrix assignment:
+m[-(4:7), 3:4] &lt;- cbind(1,2:4) #-&gt; upper right corner of 'm'
+m[3:5, 2:3] &lt;- 0
+m[6:7, 1:2] &lt;- Diagonal(2)
+m
+
+## rows or columns only:
+m[1,] &lt;- 10
+m[,2] &lt;- 1:7
+m[-(1:6), ] &lt;- 3:0 # not the first 6 rows, i.e. only the 7th
+as(m, "sparseMatrix")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

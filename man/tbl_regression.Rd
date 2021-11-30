@@ -140,7 +140,7 @@ tbl_regression_ex3 <-
   tbl_regression(exponentiate = TRUE)
 }
 \seealso{
-See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
+See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Transformers</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Transformers</h1>
+
+
+
+<p>Transformers allow you to apply functions to the glue input and output, before and after evaluation. This allows you to write things like <code>glue_sql()</code>, which automatically quotes variables for you or add a syntax for automatically collapsing outputs.</p>
+<p>The transformer functions simply take two arguments <code>text</code> and <code>envir</code>, where <code>text</code> is the unparsed string inside the glue block and <code>envir</code> is the execution environment. Most transformers will then call <code>eval(parse(text = text, keep.source = FALSE), envir)</code> which parses and evaluates the code.</p>
+<p>You can then supply the transformer function to glue with the <code>.transformer</code> argument. In this way users can manipulate the text before parsing and change the output after evaluation.</p>
+<p>It is often useful to write a <code>glue()</code> wrapper function which supplies a <code>.transformer</code> to <code>glue()</code> or <code>glue_data()</code> and potentially has additional arguments. One important consideration when doing this is to include <code>.envir = parent.frame()</code> in the wrapper to ensure the evaluation environment is correct.</p>
+<p>Some example implementations of potentially useful transformers follow. The aim right now is not to include most of these custom functions within the <code>glue</code> package. Rather, users are encouraged to create custom functions using transformers to fit their individual needs.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(glue)</span></code></pre></div>
+<div id="collapse-transformer" class="section level3">
+<h3>collapse transformer</h3>
+<p>A transformer which automatically collapses any glue block ending with <code>*</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>collapse_transformer &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">regex =</span> <span class="st">&quot;[*]$&quot;</span>, ...) {</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="cf">function</span>(text, envir) {</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    collapse &lt;-<span class="st"> </span><span class="kw">grepl</span>(regex, text)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="cf">if</span> (collapse) {</span>
+<span id="cb2-5"><a href="#cb2-5"></a>      text &lt;-<span class="st"> </span><span class="kw">sub</span>(regex, <span class="st">&quot;&quot;</span>, text)</span>
+<span id="cb2-6"><a href="#cb2-6"></a>    }</span>
+<span id="cb2-7"><a href="#cb2-7"></a>    res &lt;-<span class="st"> </span><span class="kw">identity_transformer</span>(text, envir)</span>
+<span id="cb2-8"><a href="#cb2-8"></a>    <span class="cf">if</span> (collapse) {</span>
+<span id="cb2-9"><a href="#cb2-9"></a>      <span class="kw">glue_collapse</span>(res, ...)  </span>
+<span id="cb2-10"><a href="#cb2-10"></a>    } <span class="cf">else</span> {</span>
+<span id="cb2-11"><a href="#cb2-11"></a>      res</span>
+<span id="cb2-12"><a href="#cb2-12"></a>    }</span>
+<span id="cb2-13"><a href="#cb2-13"></a>  }</span>
+<span id="cb2-14"><a href="#cb2-14"></a>}</span>
+<span id="cb2-15"><a href="#cb2-15"></a></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="kw">glue</span>(<span class="st">&quot;{1:5*}</span><span class="ch">\n</span><span class="st">{letters[1:5]*}&quot;</span>, <span class="dt">.transformer =</span> <span class="kw">collapse_transformer</span>(<span class="dt">sep =</span> <span class="st">&quot;, &quot;</span>))</span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; 1, 2, 3, 4, 5</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt; a, b, c, d, e</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="kw">glue</span>(<span class="st">&quot;{1:5*}</span><span class="ch">\n</span><span class="st">{letters[1:5]*}&quot;</span>, <span class="dt">.transformer =</span> <span class="kw">collapse_transformer</span>(<span class="dt">sep =</span> <span class="st">&quot;, &quot;</span>, <span class="dt">last =</span> <span class="st">&quot; and &quot;</span>))</span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="co">#&gt; 1, 2, 3, 4 and 5</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="co">#&gt; a, b, c, d and e</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a></span>
+<span id="cb2-24"><a href="#cb2-24"></a>x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;one&quot;</span>, <span class="st">&quot;two&quot;</span>)</span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="kw">glue</span>(<span class="st">&quot;{x}: {1:5*}&quot;</span>, <span class="dt">.transformer =</span> <span class="kw">collapse_transformer</span>(<span class="dt">sep =</span> <span class="st">&quot;, &quot;</span>))</span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co">#&gt; one: 1, 2, 3, 4, 5</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="co">#&gt; two: 1, 2, 3, 4, 5</span></span></code></pre></div>
+</div>
+<div id="shell-quoting-transformer" class="section level3">
+<h3>Shell quoting transformer</h3>
+<p>A transformer which automatically quotes variables for use in shell commands, e.g. via <code>system()</code> or <code>system2()</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>shell_transformer &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">type =</span> <span class="kw">c</span>(<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;csh&quot;</span>, <span class="st">&quot;cmd&quot;</span>, <span class="st">&quot;cmd2&quot;</span>)) {</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  type &lt;-<span class="st"> </span><span class="kw">match.arg</span>(type)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="cf">function</span>(text, envir) {</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    res &lt;-<span class="st"> </span><span class="kw">eval</span>(<span class="kw">parse</span>(<span class="dt">text =</span> text, <span class="dt">keep.source =</span> <span class="ot">FALSE</span>), envir)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>    <span class="kw">shQuote</span>(res)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>  }</span>
+<span id="cb3-7"><a href="#cb3-7"></a>}</span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a>glue_sh &lt;-<span class="st"> </span><span class="cf">function</span>(..., <span class="dt">.envir =</span> <span class="kw">parent.frame</span>(), <span class="dt">.type =</span> <span class="kw">c</span>(<span class="st">&quot;sh&quot;</span>, <span class="st">&quot;csh&quot;</span>, <span class="st">&quot;cmd&quot;</span>, <span class="st">&quot;cmd2&quot;</span>)) {</span>
+<span id="cb3-10"><a href="#cb3-10"></a>  .type &lt;-<span class="st"> </span><span class="kw">match.arg</span>(.type)</span>
+<span id="cb3-11"><a href="#cb3-11"></a>  <span class="kw">glue</span>(..., <span class="dt">.envir =</span> .envir, <span class="dt">.transformer =</span> <span class="kw">shell_transformer</span>(.type))</span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a>}</span>
+<span id="cb3-14"><a href="#cb3-14"></a></span>
+<span id="cb3-15"><a href="#cb3-15"></a>filename &lt;-<span class="st"> &quot;test&quot;</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="kw">writeLines</span>(<span class="dt">con =</span> filename, <span class="st">&quot;hello!&quot;</span>)</span>
+<span id="cb3-17"><a href="#cb3-17"></a></span>
+<span id="cb3-18"><a href="#cb3-18"></a>command &lt;-<span class="st"> </span><span class="kw">glue_sh</span>(<span class="st">&quot;cat {filename}&quot;</span>)</span>
+<span id="cb3-19"><a href="#cb3-19"></a>command</span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt; cat &#39;test&#39;</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="kw">system</span>(command)</span></code></pre></div>
+</div>
+<div id="emoji-transformer" class="section level3">
+<h3>emoji transformer</h3>
+<p>A transformer which converts the text to the equivalent emoji.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>emoji_transformer &lt;-<span class="st"> </span><span class="cf">function</span>(text, envir) {</span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="cf">if</span> (<span class="kw">grepl</span>(<span class="st">&quot;[*]$&quot;</span>, text)) {</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    text &lt;-<span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot;[*]$&quot;</span>, <span class="st">&quot;&quot;</span>, text)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="kw">glue_collapse</span>(<span class="kw">ji_find</span>(text)<span class="op">$</span>emoji)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>  } <span class="cf">else</span> {</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="kw">ji</span>(text)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>  }</span>
+<span id="cb4-8"><a href="#cb4-8"></a>}</span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a>glue_ji &lt;-<span class="st"> </span><span class="cf">function</span>(..., <span class="dt">.envir =</span> <span class="kw">parent.frame</span>()) {</span>
+<span id="cb4-11"><a href="#cb4-11"></a>  <span class="kw">glue</span>(..., <span class="dt">.open =</span> <span class="st">&quot;:&quot;</span>, <span class="dt">.close =</span> <span class="st">&quot;:&quot;</span>, <span class="dt">.envir =</span> .envir, <span class="dt">.transformer =</span> emoji_transformer)</span>
+<span id="cb4-12"><a href="#cb4-12"></a>}</span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="kw">glue_ji</span>(<span class="st">&quot;one :heart:&quot;</span>)</span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="kw">glue_ji</span>(<span class="st">&quot;many :heart*:&quot;</span>)</span></code></pre></div>
+</div>
+<div id="sprintf-transformer" class="section level3">
+<h3>sprintf transformer</h3>
+<p>A transformer which allows succinct sprintf format strings.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>sprintf_transformer &lt;-<span class="st"> </span><span class="cf">function</span>(text, envir) {</span>
+<span id="cb5-2"><a href="#cb5-2"></a>  m &lt;-<span class="st"> </span><span class="kw">regexpr</span>(<span class="st">&quot;:.+$&quot;</span>, text)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="cf">if</span> (m <span class="op">!=</span><span class="st"> </span><span class="dv">-1</span>) {</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    format &lt;-<span class="st"> </span><span class="kw">substring</span>(<span class="kw">regmatches</span>(text, m), <span class="dv">2</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    <span class="kw">regmatches</span>(text, m) &lt;-<span class="st"> &quot;&quot;</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>    res &lt;-<span class="st"> </span><span class="kw">eval</span>(<span class="kw">parse</span>(<span class="dt">text =</span> text, <span class="dt">keep.source =</span> <span class="ot">FALSE</span>), envir)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="kw">do.call</span>(sprintf, <span class="kw">list</span>(<span class="kw">glue</span>(<span class="st">&quot;%{format}f&quot;</span>), res))</span>
+<span id="cb5-8"><a href="#cb5-8"></a>  } <span class="cf">else</span> {</span>
+<span id="cb5-9"><a href="#cb5-9"></a>    <span class="kw">eval</span>(<span class="kw">parse</span>(<span class="dt">text =</span> text, <span class="dt">keep.source =</span> <span class="ot">FALSE</span>), envir)</span>
+<span id="cb5-10"><a href="#cb5-10"></a>  }</span>
+<span id="cb5-11"><a href="#cb5-11"></a>}</span>
+<span id="cb5-12"><a href="#cb5-12"></a></span>
+<span id="cb5-13"><a href="#cb5-13"></a>glue_fmt &lt;-<span class="st"> </span><span class="cf">function</span>(..., <span class="dt">.envir =</span> <span class="kw">parent.frame</span>()) {</span>
+<span id="cb5-14"><a href="#cb5-14"></a>  <span class="kw">glue</span>(..., <span class="dt">.transformer =</span> sprintf_transformer, <span class="dt">.envir =</span> .envir)</span>
+<span id="cb5-15"><a href="#cb5-15"></a>}</span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="kw">glue_fmt</span>(<span class="st">&quot;π = {pi:.2}&quot;</span>)</span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">#&gt; π = 3.14</span></span></code></pre></div>
+</div>
+<div id="safely-transformer" class="section level3">
+<h3>safely transformer</h3>
+<p>A transformer that acts like <code>purrr::safely()</code>, which returns a value instead of an error.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>safely_transformer &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">otherwise =</span> <span class="ot">NA</span>) {</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="cf">function</span>(text, envir) {</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="kw">tryCatch</span>(</span>
+<span id="cb6-4"><a href="#cb6-4"></a>      <span class="kw">eval</span>(<span class="kw">parse</span>(<span class="dt">text =</span> text, <span class="dt">keep.source =</span> <span class="ot">FALSE</span>), envir),</span>
+<span id="cb6-5"><a href="#cb6-5"></a>      <span class="dt">error =</span> <span class="cf">function</span>(e) <span class="cf">if</span> (<span class="kw">is.language</span>(otherwise)) <span class="kw">eval</span>(otherwise) <span class="cf">else</span> otherwise)</span>
+<span id="cb6-6"><a href="#cb6-6"></a>  }</span>
+<span id="cb6-7"><a href="#cb6-7"></a>}</span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a>glue_safely &lt;-<span class="st"> </span><span class="cf">function</span>(..., <span class="dt">.otherwise =</span> <span class="ot">NA</span>, <span class="dt">.envir =</span> <span class="kw">parent.frame</span>()) {</span>
+<span id="cb6-10"><a href="#cb6-10"></a>  <span class="kw">glue</span>(..., <span class="dt">.transformer =</span> <span class="kw">safely_transformer</span>(.otherwise), <span class="dt">.envir =</span> .envir)</span>
+<span id="cb6-11"><a href="#cb6-11"></a>}</span>
+<span id="cb6-12"><a href="#cb6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co"># Default returns missing if there is an error</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="kw">glue_safely</span>(<span class="st">&quot;foo: {xyz}&quot;</span>)</span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="co">#&gt; foo: NA</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="co"># Or an empty string</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="kw">glue_safely</span>(<span class="st">&quot;foo: {xyz}&quot;</span>, <span class="dt">.otherwise =</span> <span class="st">&quot;Error&quot;</span>)</span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co">#&gt; foo: Error</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="co"># Or output the error message in red</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="kw">library</span>(crayon)</span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="kw">glue_safely</span>(<span class="st">&quot;foo: {xyz}&quot;</span>, <span class="dt">.otherwise =</span> <span class="kw">quote</span>(<span class="kw">glue</span>(<span class="st">&quot;{red}Error: {conditionMessage(e)}{reset}&quot;</span>)))</span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="co">#&gt; foo: Error: object &#39;xyz&#39; not found</span></span></code></pre></div>
+</div>
+<div id="variables-and-values-transformer" class="section level3">
+<h3>“Variables and Values” transformer</h3>
+<p>A transformer that expands input of the form <code>{var_name=}</code> into <code>var_name = var_value</code>, i.e. a shorthand for exposing variable names with their values. This is inspired by an <a href="https://docs.python.org/3.8/whatsnew/3.8.html#f-strings-now-support-for-quick-and-easy-debugging">f-strings feature coming in Python 3.8</a>. It’s actually more general: you can use it with an expression input such as <code>{expr=}</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>vv_transformer &lt;-<span class="st"> </span><span class="cf">function</span>(text, envir) {</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  regex &lt;-<span class="st"> &quot;=$&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="cf">if</span> (<span class="op">!</span><span class="kw">grepl</span>(regex, text)) {</span>
+<span id="cb7-4"><a href="#cb7-4"></a>    <span class="kw">return</span>(<span class="kw">identity_transformer</span>(text, envir))</span>
+<span id="cb7-5"><a href="#cb7-5"></a>  }</span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a>  text &lt;-<span class="st"> </span><span class="kw">sub</span>(regex, <span class="st">&quot;&quot;</span>, text)</span>
+<span id="cb7-8"><a href="#cb7-8"></a>  res &lt;-<span class="st"> </span><span class="kw">identity_transformer</span>(text, envir)</span>
+<span id="cb7-9"><a href="#cb7-9"></a>  n &lt;-<span class="st"> </span><span class="kw">length</span>(res)</span>
+<span id="cb7-10"><a href="#cb7-10"></a>  res &lt;-<span class="st"> </span><span class="kw">glue_collapse</span>(res, <span class="dt">sep =</span> <span class="st">&quot;, &quot;</span>)</span>
+<span id="cb7-11"><a href="#cb7-11"></a>  <span class="cf">if</span> (n <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>) {</span>
+<span id="cb7-12"><a href="#cb7-12"></a>    res &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;[&quot;</span>, res, <span class="st">&quot;]&quot;</span>)</span>
+<span id="cb7-13"><a href="#cb7-13"></a>  }</span>
+<span id="cb7-14"><a href="#cb7-14"></a>  <span class="kw">glue_collapse</span>(<span class="kw">c</span>(text, <span class="st">&quot; = &quot;</span>, res))</span>
+<span id="cb7-15"><a href="#cb7-15"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>description &lt;-<span class="st"> &quot;some random&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>numbers &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">100</span>, <span class="dv">4</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>average &lt;-<span class="st"> </span><span class="kw">mean</span>(numbers)</span>
+<span id="cb8-5"><a href="#cb8-5"></a>sum &lt;-<span class="st"> </span><span class="kw">sum</span>(numbers)</span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="kw">glue</span>(<span class="st">&quot;For {description} {numbers=}, {average=}, {sum=}.&quot;</span>, <span class="dt">.transformer =</span> vv_transformer)</span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; For some random numbers = [28, 80, 22, 9], average = 34.75, sum = 139.</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a></span>
+<span id="cb8-10"><a href="#cb8-10"></a>a &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>b &lt;-<span class="st"> </span><span class="fl">5.6</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="kw">glue</span>(<span class="st">&quot;{a=}</span><span class="ch">\n</span><span class="st">{b=}</span><span class="ch">\n</span><span class="st">{a * 9 + b * 2=}&quot;</span>, <span class="dt">.transformer =</span> vv_transformer)</span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt; a = 3</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt; b = 5.6</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; a * 9 + b * 2 = 38.2</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

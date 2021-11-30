@@ -1,0 +1,74 @@
+---
+title: "Auto-linking"
+output: rmarkdown::html_vignette
+description: >
+  Learn how pkgdown's automatic linking works, and how you can 
+  customise it.
+vignette: >
+  %\VignetteIndexEntry{Auto-linking}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Within a package
+
+pkgdown will automatically link to documentation and articles wherever it's possible to do unambiguously. This includes:
+
+* Bare function calls, like `build_site()`.
+* Calls to `?`, like `?build_site` or `package?pkgdown`.
+* Calls to `help()`, like `help("pkgdown")`.
+* Calls to `vignette()`, like `vignette("pkgdown")`.
+
+## Across packages
+
+Linking to documentation in another package is straightforward. Just adapt the call in the usual way:
+
+* `purrr::map()`, `MASS::addterm()`.
+* `?purrr::map`, `?MASS::addterm`.
+* `vignette("other-langs", package = "purrr")`, `vignette("longintro", package = "rpart")`
+
+If pkgdown can find a pkgdown site for the remote package, it will link to it; otherwise it will link to <https://rdrr.io/> for documentation, and CRAN for vignettes. In order for a pkgdown site to be findable, it needs to be listed in two places:
+
+*   In the `URL` field in the `DESCRIPTION`, as in
+    [dplyr](https://github.com/tidyverse/dplyr/blob/85faf79c1fd74f4b4f95319e5be6a124a8075502/DESCRIPTION#L15):
+  
+    ```
+    URL: https://dplyr.tidyverse.org, https://github.com/tidyverse/dplyr
+    ```
+
+*   In the `url` field in `_pkgdown.yml`, as in 
+    [dplyr](https://github.com/tidyverse/dplyr/blob/master/_pkgdown.yml#L1)
+    
+    ```yaml
+    url: https://dplyr.tidyverse.org
+    ```
+    
+    When this field is defined, pkgdown generate a public facing
+    [`pkgdown.yml` file](https://dplyr.tidyverse.org/pkgdown.yml) that provides
+    metadata about the site:
+    
+    ```yaml
+    pandoc: '2.2'
+    pkgdown: 1.3.0
+    pkgdown_sha: ~
+    articles:
+      compatibility: compatibility.html
+      dplyr: dplyr.html
+      dplyr_0.8.0: future/dplyr_0.8.0.html
+      dplyr_0.8.0_new_hybrid: future/dplyr_0.8.0_new_hybrid.html
+      programming: programming.html
+      two-table: two-table.html
+      window-functions: window-functions.html
+    urls:
+      reference: https://dplyr.tidyverse.org/reference
+      article: https://dplyr.tidyverse.org/articles
+    ```
+
+Now, when you build a pkgdown site for a package that links to the dplyr documentation (e.g., `dplyr::mutate()`), pkgdown looks first in dplyr's `DESCRIPTION` to find its website, then it looks for `pkgdown.yml`, and uses the metadata to generate the correct links.

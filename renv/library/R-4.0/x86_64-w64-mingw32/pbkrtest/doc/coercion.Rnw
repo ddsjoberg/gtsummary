@@ -1,0 +1,118 @@
+%\VignetteIndexEntry{coercion: Model objects and restriction matrices}
+%\VignettePackage{pbkrtest}
+
+\documentclass[11pt]{article}
+\usepackage{url,a4}
+
+\usepackage[latin1]{inputenc}
+%\usepackage{inputenx}
+\usepackage{boxedminipage,color}
+\usepackage[noae]{Sweave}
+
+\parindent0pt\parskip5pt
+\def\code#1{{\texttt{#1}}}
+\def\pkg#1{{\texttt{#1}}}
+\def\R{\texttt{R}}
+
+
+
+<<echo=FALSE,print=FALSE>>=
+require( pbkrtest )
+prettyVersion <- packageDescription("pbkrtest")$Version
+prettyDate <- format(Sys.Date())
+@
+
+\title{Coercion between model objects and restriction matrices in the \pkg{pbkrtest} package}
+\author{S{\o}ren H{\o}jsgaard and Ulrich Halekoh}
+\date{\pkg{pbkrtest} version \Sexpr{prettyVersion} as of \Sexpr{prettyDate}}
+
+\SweaveOpts{prefix.string=figures/pbkr, keep.source=T, height=4}
+
+\begin{document}
+
+\definecolor{darkred}{rgb}{.7,0,0}
+\definecolor{midnightblue}{rgb}{0.098,0.098,0.439}
+
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{
+  fontfamily=tt,
+  %%fontseries=b,
+  %% xleftmargin=2em,
+  formatcom={\color{midnightblue}}
+}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{
+  fontfamily=tt,
+  %%fontseries=b,
+  %% xleftmargin=2em,
+  formatcom={\color{darkred}}
+}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{
+  fontfamily=tt,
+  %%fontseries=b,
+  %% xleftmargin=2em,
+  formatcom={\color{blue}}
+}
+
+\fvset{listparameters={\setlength{\topsep}{-2pt}}}
+\renewenvironment{Schunk}{\linespread{.90}}{}
+
+
+
+\maketitle
+%% \tableofcontents
+
+@
+<<echo=F,results=hide>>=
+options(prompt = "R> ", continue = "+  ", width = 80, useFancyQuotes=FALSE)
+dir.create("figures")
+@ %def
+
+%% useFancyQuotes = FALSE
+@
+<<echo=FALSE>>=
+library(pbkrtest)
+@ %def
+
+%% \section{Introduction}
+
+Consider regression models for the `cars` dataset:
+
+<<>>=
+mod0 <- lm(dist ~ 1, data=cars); coef(mod0)
+mod1 <- update(mod0, .~. + speed); coef(mod1)
+mod2 <- update(mod1, .~. + I(speed^2)); coef(mod2)
+@ 
+
+Reducing `mod2` to `mod0` corresponds to restricting the model space for
+`mod2` and so on:
+
+<<>>=
+L21 <- model2remat(mod2, mod1); L21
+L20 <- model2remat(mod2, mod0); L20
+L10 <- model2remat(mod1, mod0); L10
+@ 
+
+The other way around is that given a restriction matrix and a large
+model, we can construct the corresponding smaller model:
+
+<<>>=
+new1  <- remat2model(mod2, L21); coef(new1)
+new0a <- remat2model(mod2, L20); coef(new0a)
+new0b <- remat2model(mod1, L10); coef(new0b)
+@ 
+
+It should be checked that the original and new model matrices span the
+same space. For now we will simply check that the fitted values are
+practically identical:
+
+<<>>=
+eps <- 1e-8
+max(abs(fitted(new1)  - fitted(mod1))) < eps
+max(abs(fitted(new0a) - fitted(mod0))) < eps
+max(abs(fitted(new0b) - fitted(mod0))) < eps
+@ 
+
+
+
+\end{document}
+
+

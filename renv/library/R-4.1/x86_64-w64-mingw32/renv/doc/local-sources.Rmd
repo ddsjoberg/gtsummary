@@ -1,0 +1,95 @@
+---
+title: "Installing from Local Sources"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Installing from Local Sources}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+
+If your project depends on R packages not available in any external source, you
+can set up an ad-hoc local source to use during restore. This allows you to
+provide package tarballs that can be used to restore packages otherwise not
+available elsewhere.
+
+The environment variable `RENV_PATHS_LOCAL` can be used to customize where this
+local source of packages should live. It should point to a directory containing
+package binaries and sources, with a structure of the form:
+
+- `${RENV_PATHS_LOCAL}/<package>_<version>.tar.gz`; or
+- `${RENV_PATHS_LOCAL}/<package>/<package>_<version>.tar.gz`
+
+Alternatively, you can also use project-specific local sources by placing your
+packages within a folder located at `renv/local`. Note that this folder does
+not exist by default; you must create it to opt-in to this mechanism.
+
+- `<project>/renv/local/<package>_<version>.tar.gz`; or
+- `<project>/renv/local/<package>/<package>_<version>.tar.gz`
+
+As an example, if your project depended on a package `skeleton 1.0.0`, you could
+place a tarball for this package in one of the following locations:
+
+- `${RENV_PATHS_LOCAL}/skeleton_1.0.0.tar.gz`
+- `${RENV_PATHS_LOCAL}/skeleton/skeleton_1.0.0.tar.gz`
+- `<project>/renv/local/skeleton_1.0.0.tar.gz`; or
+- `<project>/renv/local/skeleton/skeleton_1.0.0.tar.gz`
+
+Once this is done, `renv` will consult these directories during future attempts
+to restore packages installed from unknown sources.
+
+To directly install a package from these local sources, you must specify the
+package version or provide the full path to the tarball:
+
+- `renv::install("<package>@<version>")`
+- `renv::install("<project>/renv/local/<package>_<version>.tar.gz")`
+
+Note that packages placed in one of these local sources will override any
+default source recorded in the lockfile. For example, if `skeleton 1.0.0` was
+also available on CRAN, `renv::restore()` would still use the locally-provided
+tarball rather than the version available from CRAN.
+
+If you want to see what directory is being used by `renv` for local package
+sources, you can execute:
+
+```{r}
+renv:::renv_paths_local()
+```
+
+See `?paths` for more details.
+
+
+## Explicit Sources
+
+You can also provide explicit source paths in the lockfile if desired. This is
+most useful if you are building an `renv` lockfile "by hand", or need to tweak
+an existing lockfile to point at a separate package for installation. For
+example, you could have a package record in `renv.lock` of the form:
+
+```
+{
+  "Package": "skeleton",
+  "Version": "1.0.1",
+  "Source": "/mnt/r/pkg/skeleton_1.0.1.tar.gz"
+}
+```
+
+Packages should have the following extensions, depending on whether the archive
+contains a binary copy of the package or the package sources:
+
+| **Platform** | **Binary** | **Sources** |
+| ------------ | ---------- | ----------- |
+| Windows      | `.zip`     | `.tar.gz`   |
+| macOS        | `.tgz`     | `.tar.gz`   |
+| Linux        | `.tar.gz`  | `.tar.gz`   |
+
+Note that on Linux, both binaries and sources should have the `.tar.gz`
+extension, but R and `renv` will handle this as appropriate during installation.

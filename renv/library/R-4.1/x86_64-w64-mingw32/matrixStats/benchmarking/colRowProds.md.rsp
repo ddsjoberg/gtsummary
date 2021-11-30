@@ -1,0 +1,79 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string colname="colProds"%>
+<%@string rowname="rowProds"%>
+<%@meta title="${colname}() and ${rowname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-11-15"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=colname%>() and <%=rowname%>() against alternative methods.
+
+## Alternative methods
+
+* <%=colname%>()/<%=rowname%>() using method="expSumLog"
+* apply() + prod()
+* apply() + product()
+
+
+## Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = "double")
+})%>
+```
+
+## Results
+
+<% for (dataLabel in names(data)) { %>
+<% message(dataLabel) %>
+### <%=dataLabel%> matrix
+
+
+```r
+<%=withCapture({
+X <- data[[.dataLabel.]]
+})%>
+<% gc() %>
+<%=withCapture({
+colStats <- microbenchmark(
+ "colProds w/ direct"    = colProds(X, method = "direct", na.rm = FALSE),
+ "colProds w/ expSumLog" = colProds(X, method = "expSumLog", na.rm = FALSE),
+ "apply+prod"            = apply(X, MARGIN = 2L, FUN = prod, na.rm = FALSE),
+ "apply+product"         = apply(X, MARGIN = 2L, FUN = product, na.rm = FALSE),
+ unit = "ms"
+)
+})%>
+<%=withCapture({
+X <- t(X)
+})%>
+<% gc() %>
+<%=withCapture({
+rowStats <- microbenchmark(
+ "rowProds w/ direct"    = rowProds(X, method = "direct", na.rm = FALSE),
+ "rowProds w/ expSumLog" = rowProds(X, method = "expSumLog", na.rm = FALSE),
+ "apply+prod"            = apply(X, MARGIN = 1L, FUN = prod, na.rm = FALSE),
+ "apply+product"         = apply(X, MARGIN = 1L, FUN = product, na.rm = FALSE),
+ unit = "ms"
+)
+})%>
+```
+
+<% crBenchmarkResults(colStats, rowStats, tags=dataLabel) %>
+
+<% } # for (dataLabel ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-06-09
+o Created.
+---------------------------------------------------------------------------%>

@@ -1,0 +1,63 @@
+---
+title: "Using renv with RStudio Connect"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using renv with RStudio Connect}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+[RStudio Connect](https://www.rstudio.com/products/connect/) is a publication
+platform for deploying content built in R and Python to share with a broad
+audience. R users may want to develop content (like [Shiny
+applications](https://shiny.rstudio.com/) or [RMarkdown
+documents](https://rmarkdown.rstudio.com/index.html)) using `renv` and then
+publish that content to RStudio Connect. This is a supported pattern where
+`renv` is used to manage the local project environment and then RStudio Connect
+recreates and manages the deployment environment.
+
+## Publishing from the RStudio IDE
+
+The RStudio IDE includes a button for push-button deployment to RStudio
+Connect: ![RStudio IDE Publish Button](ide-publish.png)
+
+When this option is used to deploy content to RStudio Connect, a manifest file
+is automatically generated and sent to RStudio Connect describing the project
+environment. This manifest file will reflect the project environment create and
+managed by `renv`. The `renv` generated `.Rprofile` file should **not** be
+included in deployments to RStudio Connect.
+
+## Publishing programatically
+
+When publishing content to RStudio Connect programatically, it is necessary to
+generate a manifest file describing the project environment. This can be done
+with the `writeManifest()` function from the
+[`rsconnect`](https://github.com/rstudio/rsconnect) package. When using `renv`,
+the only thing that needs to be considered is that `rsconnect` should be
+installed and executed from within the `renv` environment so that it recognizes
+the local project library when generating the manifest file. As long as
+`rsconnect` is run from within the `renv` created environment, it will capture
+project dependencies from the local `renv` library. This can be accomplished by
+opening the project in RStudio or by starting the R session from the project
+root directory. The `renv` generated `.Rprofile` file should **not** be
+included in deployments to RStudio Connect.
+
+## A word about packrat
+
+RStudio Connect uses [`packrat`](https://rstudio.github.io/packrat/) to restore
+project environments on the RStudio Connect server. This should have no impact
+on how the user develops content for RStudio Connect. It is not necessary for
+the user to use `packrat` instead of `renv` when developing content, as the
+environment management tool used locally has no impact on the tools RStudio
+Connect uses for environment management. Therefore, there should be no concerns
+with using `renv` to develop content that will be deployed to RStudio Connect.

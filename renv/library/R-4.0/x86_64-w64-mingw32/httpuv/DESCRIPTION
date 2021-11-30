@@ -1,0 +1,52 @@
+Package: httpuv
+Type: Package
+Encoding: UTF-8
+Title: HTTP and WebSocket Server Library
+Version: 1.6.1
+Authors@R: c(
+    person("Joe", "Cheng", role = c("aut"), email = "joe@rstudio.com"),
+    person("Winston", "Chang", role = c("aut", "cre"), email = "winston@rstudio.com"),
+    person(family = "RStudio, PBC", role = "cph"),
+    person("Hector", "Corrada Bravo", role = "ctb"),
+    person("Jeroen", "Ooms", role = "ctb"),
+    person("Andrzej", "Krzemienski", role = "cph", comment = "optional.hpp")
+    )
+Copyright: RStudio, PBC; Joyent, Inc.; Nginx Inc.; Igor Sysoev; Niels
+        Provos; Internet Systems Consortium, Inc.; Alexander Chemeris;
+        Berkeley Software Design; Google Inc.; Sony Mobile
+        Communications AB; Alexander Peslyak; Free Software Foundation,
+        Inc.; X Consortium; Ben Noordhuis; StrongLoop, Inc.; Saúl
+        Ibarra Corretgé; Bert Belder; Fedor Indutny; libuv project;
+        Refael Ackermann; Kenneth MacKay; Emergya; Diego Pettenò; xine
+        project, The Regents of the University of California, Dariusz
+        Dwornikowski
+Description: Provides low-level socket and protocol support for handling
+    HTTP and WebSocket requests directly from within R. It is primarily
+    intended as a building block for other packages, rather than making it
+    particularly easy to create complete web applications using httpuv alone.
+    httpuv is built on top of the libuv and http-parser C libraries, both of
+    which were developed by Joyent, Inc. (See LICENSE file for libuv and
+    http-parser license information.)
+License: GPL (>= 2) | file LICENSE
+Depends: R (>= 2.15.1)
+Imports: Rcpp (>= 0.11.0), utils, R6, promises, later (>= 0.8.0)
+LinkingTo: Rcpp, later
+URL: https://github.com/rstudio/httpuv
+SystemRequirements: GNU make, C++11
+RoxygenNote: 7.1.1
+Suggests: testthat, callr, curl, websocket
+Collate: 'RcppExports.R' 'httpuv.R' 'random_port.R' 'server.R'
+        'static_paths.R' 'utils.R'
+NeedsCompilation: yes
+Packaged: 2021-05-06 23:41:39 UTC; winston
+Author: Joe Cheng [aut],
+  Winston Chang [aut, cre],
+  RStudio, PBC [cph],
+  Hector Corrada Bravo [ctb],
+  Jeroen Ooms [ctb],
+  Andrzej Krzemienski [cph] (optional.hpp)
+Maintainer: Winston Chang <winston@rstudio.com>
+Repository: CRAN
+Date/Publication: 2021-05-07 04:50:02 UTC
+Built: R 4.0.5; x86_64-w64-mingw32; 2021-05-07 09:09:49 UTC; windows
+Archs: i386, x64

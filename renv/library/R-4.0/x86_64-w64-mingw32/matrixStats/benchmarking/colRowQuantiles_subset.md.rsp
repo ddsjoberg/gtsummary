@@ -1,0 +1,75 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string colname="colQuantiles"%>
+<%@string rowname="rowQuantiles"%>
+<%@string fcnname="colRowQuantiles_subset"%>
+<%@meta title="${colname}() and ${rowname}() benchmarks on subsetted computation"%>
+<%@meta author="Dongcan Jiang"%>
+<%@meta date="2015-06-07"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=colname%>() and <%=rowname%>() on subsetted computation.
+
+
+## Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = "double")
+})%>
+```
+
+## Results
+
+<% for (dataLabel in names(data)) { %>
+<% message(dataLabel) %>
+### <%=dataLabel%> matrix
+
+
+```r
+<%=withCapture({
+X <- data[[.dataLabel.]]
+rows <- sample.int(nrow(X), size = nrow(X)*0.7)
+cols <- sample.int(ncol(X), size = ncol(X)*0.7)
+X_S <- X[rows, cols]
+gc()
+
+probs <- seq(from = 0, to = 1, by = 0.25)
+
+colStats <- microbenchmark(
+ "colQuantiles_X_S"           = colQuantiles(X_S, probs = probs, na.rm = FALSE),
+ "colQuantiles(X, rows, cols)"  = colQuantiles(X, rows = rows, cols = cols, probs = probs, na.rm = FALSE),
+ "colQuantiles(X[rows, cols])" = colQuantiles(X[rows, cols], probs = probs, na.rm = FALSE),
+ unit = "ms"
+)
+
+X <- t(X)
+X_S <- t(X_S)
+gc()
+
+rowStats <- microbenchmark(
+ "rowQuantiles_X_S"           = rowQuantiles(X_S, probs = probs, na.rm = FALSE),
+ "rowQuantiles(X, cols, rows)"  = rowQuantiles(X, rows = cols, cols = rows, probs = probs, na.rm = FALSE),
+ "rowQuantiles(X[cols, rows])" = rowQuantiles(X[cols, rows], probs = probs, na.rm = FALSE),
+ unit = "ms"
+)
+})%>
+```
+
+<% crBenchmarkResults(colStats, rowStats, tags=dataLabel) %>
+
+<% } # for (dataLabel ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2015-06-07
+o Created.
+---------------------------------------------------------------------------%>

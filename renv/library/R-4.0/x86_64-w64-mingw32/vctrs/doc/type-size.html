@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Prototypes and sizes</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Prototypes and sizes</h1>
+
+
+
+<p>Rather than using <code>class()</code> and <code>length()</code>, vctrs has notions of prototype (<code>vec_ptype_show()</code>) and size (<code>vec_size()</code>). This vignette discusses the motivation for why these alternatives are necessary and connects their definitions to type coercion and the recycling rules.</p>
+<p>Size and prototype are motivated by thinking about the optimal behaviour for <code>c()</code> and <code>rbind()</code>, particularly inspired by data frames with columns that are matrices or data frames.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vctrs)</span></code></pre></div>
+<div id="prototype" class="section level2">
+<h2>Prototype</h2>
+<p>The idea of a prototype is to capture the metadata associated with a vector without capturing any data. Unfortunately, the <code>class()</code> of an object is inadequate for this purpose:</p>
+<ul>
+<li><p>The <code>class()</code> doesn’t include attributes. Attributes are important because, for example, they store the levels of a factor and the timezone of a <code>POSIXct</code>. You cannot combine two factors or two <code>POSIXct</code>s without thinking about the attributes.</p></li>
+<li><p>The <code>class()</code> of a matrix is “matrix” and doesn’t include the type of the underlying vector or the dimensionality.</p></li>
+</ul>
+<p>Instead, vctrs takes advantage of R’s vectorised nature and uses a <strong>prototype</strong>, a 0-observation slice of the vector (this is basically <code>x[0]</code> but with some subtleties we’ll come back to later). This is a miniature version of the vector that contains all of the attributes but none of the data.</p>
+<p>Conveniently, you can create many prototypes using existing base functions (e.g, <code>double()</code> and <code>factor(levels = c(&quot;a&quot;, &quot;b&quot;))</code>). vctrs provides a few helpers (e.g. <code>new_date()</code>, <code>new_datetime()</code>, and <code>new_duration()</code>) where the equivalents in base R are missing.</p>
+<div id="base-prototypes" class="section level3">
+<h3>Base prototypes</h3>
+<p><code>vec_ptype()</code> creates a prototype from an existing object. However, many base vectors have uninformative printing methods for 0-length subsets, so vctrs also provides <code>vec_ptype_show()</code>, which prints the prototype in a friendly way (and returns nothing).</p>
+<p>Using <code>vec_ptype_show()</code> allows us to see the prototypes base R classes:</p>
+<ul>
+<li><p>Atomic vectors have no attributes and just display the underlying <code>typeof()</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="cn">FALSE</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: logical</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(1L)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: integer</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fl">2.5</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: double</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="st">&quot;three&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: character</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">list</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: list</span></span></code></pre></div></li>
+<li><p>The prototype of matrices and arrays include the base type and the dimensions after the first:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">array</span>(<span class="fu">logical</span>(), <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>)))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: logical[,3]</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">array</span>(<span class="fu">integer</span>(), <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)))</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: integer[,3,4]</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">array</span>(<span class="fu">character</span>(), <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: character[,3,4,5]</span></span></code></pre></div></li>
+<li><p>The prototype of a factor includes its levels. Levels are a character vector, which can be arbitrarily long, so the prototype just shows a hash. If the hash of two factors is equal, it’s highly likely that their levels are also equal.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">factor</span>(<span class="st">&quot;a&quot;</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: factor&lt;4d52a&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">ordered</span>(<span class="st">&quot;b&quot;</span>))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: ordered&lt;9b7e3&gt;</span></span></code></pre></div>
+<p>While <code>vec_ptype_show()</code> prints only the hash, the prototype object itself does contain all levels:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype</span>(<span class="fu">factor</span>(<span class="st">&quot;a&quot;</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; factor(0)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Levels: a</span></span></code></pre></div></li>
+<li><p>Base R has three key date time classes: dates, date-times (<code>POSIXct</code>), and durations (<code>difftime)</code>. Date-times have a timezone, and durations have a unit.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">Sys.Date</span>())</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: date</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">Sys.time</span>())</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: datetime&lt;local&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">as.difftime</span>(<span class="dv">10</span>, <span class="at">units =</span> <span class="st">&quot;mins&quot;</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: duration&lt;mins&gt;</span></span></code></pre></div></li>
+<li><p>Data frames have the most complex prototype: the prototype of a data frame is the name and prototype of each column:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">data.frame</span>(<span class="at">a =</span> <span class="cn">FALSE</span>, <span class="at">b =</span> 1L, <span class="at">c =</span> <span class="fl">2.5</span>, <span class="at">d =</span> <span class="st">&quot;x&quot;</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: data.frame&lt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   a: logical</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   b: integer</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   c: double</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   d: character</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &gt;</span></span></code></pre></div>
+<p>Data frames can have columns that are themselves data frames, making this a “recursive” type:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">a =</span> 1L, <span class="at">b =</span> <span class="fl">2.5</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(df)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: data.frame&lt;</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   x: logical</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   y: </span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     data.frame&lt;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       a: integer</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       b: double</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     &gt;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &gt;</span></span></code></pre></div></li>
+</ul>
+</div>
+<div id="coercing-to-common-type" class="section level3">
+<h3>Coercing to common type</h3>
+<p>It’s often important to combine vectors with multiple types. vctrs provides a consistent set of rules for coercion, via <code>vec_ptype_common()</code>. <code>vec_ptype_common()</code> possesses the following invariants:</p>
+<ul>
+<li><p><code>class(vec_ptype_common(x, y))</code> equals <code>class(vec_ptype_common(y, x))</code>.</p></li>
+<li><p><code>class(vec_ptype_common(x, vec_ptype_common(y, z))</code> equals <code>class(vec_ptype_common(vec_ptype_common(x, y), z))</code>.</p></li>
+<li><p><code>vec_ptype_common(x, NULL) == vec_ptype(x)</code>.</p></li>
+</ul>
+<p>i.e., <code>vec_ptype_common()</code> is both commutative and associative (with respect to class) and has an identity element, <code>NULL</code>; i.e., it’s a <strong>commutative monoid</strong>. This means the underlying implementation is quite simple: we can find the common type of any number of objects by progressively finding the common type of pairs of objects.</p>
+<p>Like with <code>vec_ptype()</code>, the easiest way to explore <code>vec_ptype_common()</code> is with <code>vec_ptype_show()</code>: when given multiple inputs, it will print their common prototype. (In other words: program with <code>vec_ptype_common()</code> but play with <code>vec_ptype_show()</code>.)</p>
+<ul>
+<li><p>The common type of atomic vectors is computed very similar to the rules of base R, except that we do not coerce to character automatically:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">logical</span>(), <span class="fu">integer</span>(), <span class="fu">double</span>())</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: &lt;double&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0. (           , &lt;logical&gt; ) = &lt;logical&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1. ( &lt;logical&gt; , &lt;integer&gt; ) = &lt;integer&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2. ( &lt;integer&gt; , &lt;double&gt;  ) = &lt;double&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">logical</span>(), <span class="fu">character</span>())</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: Can&#39;t combine &lt;logical&gt; and &lt;character&gt;.</span></span></code></pre></div></li>
+<li><p>Matrices and arrays are automatically broadcast to higher dimensions:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">array</span>(<span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)), </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">array</span>(<span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: &lt;double[,2]&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0. (              , &lt;double[,1]&gt; ) = &lt;double[,1]&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1. ( &lt;double[,1]&gt; , &lt;double[,2]&gt; ) = &lt;double[,2]&gt;</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">array</span>(<span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)), </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">array</span>(<span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>)),</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">array</span>(<span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>)),</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">array</span>(<span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>))</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: &lt;double[,3,4,5]&gt;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0. (                , &lt;double[,1]&gt;     ) = &lt;double[,1]&gt;    </span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1. ( &lt;double[,1]&gt;   , &lt;double[,3]&gt;     ) = &lt;double[,3]&gt;    </span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2. ( &lt;double[,3]&gt;   , &lt;double[,3,4]&gt;   ) = &lt;double[,3,4]&gt;  </span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3. ( &lt;double[,3,4]&gt; , &lt;double[,3,4,5]&gt; ) = &lt;double[,3,4,5]&gt;</span></span></code></pre></div>
+<p>Provided that the dimensions follow the vctrs recycling rules:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">array</span>(<span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>)), </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">array</span>(<span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: Can&#39;t combine &lt;double[,2]&gt; and &lt;double[,3]&gt;.</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ✖ Incompatible sizes 2 and 3 along axis 2.</span></span></code></pre></div></li>
+<li><p>Factors combine levels in the order in which they appear.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fa <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="st">&quot;a&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fb <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="st">&quot;b&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(<span class="fu">vec_ptype_common</span>(fa, fb))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;a&quot; &quot;b&quot;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(<span class="fu">vec_ptype_common</span>(fb, fa))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;b&quot; &quot;a&quot;</span></span></code></pre></div></li>
+<li><p>Combining a date and date-time yields a date-time:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">new_date</span>(), <span class="fu">new_datetime</span>())</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: &lt;datetime&lt;local&gt;&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0. (        , &lt;date&gt;            ) = &lt;date&gt;           </span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1. ( &lt;date&gt; , &lt;datetime&lt;local&gt;&gt; ) = &lt;datetime&lt;local&gt;&gt;</span></span></code></pre></div>
+<p>When combining two date times, the timezone is taken from the first input:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">new_datetime</span>(<span class="at">tzone =</span> <span class="st">&quot;US/Central&quot;</span>), </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">new_datetime</span>(<span class="at">tzone =</span> <span class="st">&quot;Pacific/Auckland&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: &lt;datetime&lt;US/Central&gt;&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0. (                        , &lt;datetime&lt;US/Central&gt;&gt;       ) = &lt;datetime&lt;US/Central&gt;&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1. ( &lt;datetime&lt;US/Central&gt;&gt; , &lt;datetime&lt;Pacific/Auckland&gt;&gt; ) = &lt;datetime&lt;US/Central&gt;&gt;</span></span></code></pre></div>
+<p>Unless it’s the local timezone, in which case any explicit time zone will win:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">new_datetime</span>(<span class="at">tzone =</span> <span class="st">&quot;&quot;</span>), </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">new_datetime</span>(<span class="at">tzone =</span> <span class="st">&quot;&quot;</span>), </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">new_datetime</span>(<span class="at">tzone =</span> <span class="st">&quot;Pacific/Auckland&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: &lt;datetime&lt;Pacific/Auckland&gt;&gt;</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0. (                   , &lt;datetime&lt;local&gt;&gt;            ) = &lt;datetime&lt;local&gt;&gt;           </span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1. ( &lt;datetime&lt;local&gt;&gt; , &lt;datetime&lt;local&gt;&gt;            ) = &lt;datetime&lt;local&gt;&gt;           </span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2. ( &lt;datetime&lt;local&gt;&gt; , &lt;datetime&lt;Pacific/Auckland&gt;&gt; ) = &lt;datetime&lt;Pacific/Auckland&gt;&gt;</span></span></code></pre></div></li>
+<li><p>The common type of two data frames is the common type of each column that occurs in both data frames:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="cn">FALSE</span>), </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">x =</span> 1L),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fl">2.5</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: &lt;data.frame&lt;x:double&gt;&gt;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0. (                         , &lt;data.frame&lt;x:logical&gt;&gt; ) = &lt;data.frame&lt;x:logical&gt;&gt;</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1. ( &lt;data.frame&lt;x:logical&gt;&gt; , &lt;data.frame&lt;x:integer&gt;&gt; ) = &lt;data.frame&lt;x:integer&gt;&gt;</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2. ( &lt;data.frame&lt;x:integer&gt;&gt; , &lt;data.frame&lt;x:double&gt;&gt;  ) = &lt;data.frame&lt;x:double&gt;&gt;</span></span></code></pre></div>
+<p>And the union of the columns that only occur in one:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_ptype_show</span>(<span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> <span class="dv">1</span>), <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="dv">1</span>, <span class="at">z =</span> <span class="dv">1</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Prototype: &lt;data.frame&lt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   x: double</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   y: double</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   z: double</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; &gt;&gt;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 0. ┌              , &lt;data.frame&lt; ┐ = &lt;data.frame&lt;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    │                  x: double  │     x: double </span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    │                  y: double  │     y: double </span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    └                &gt;&gt;           ┘   &gt;&gt;          </span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1. ┌ &lt;data.frame&lt; , &lt;data.frame&lt; ┐ = &lt;data.frame&lt;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    │   x: double      y: double  │     x: double </span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    │   y: double      z: double  │     y: double </span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    │ &gt;&gt;             &gt;&gt;           │     z: double </span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    └                             ┘   &gt;&gt;</span></span></code></pre></div>
+<p>Note that new columns are added on the right-hand side. This is consistent with the way that factor levels and time zones are handled.</p></li>
+</ul>
+</div>
+<div id="casting-to-specified-type" class="section level3">
+<h3>Casting to specified type</h3>
+<p><code>vec_ptype_common()</code> finds the common type of a set of vector. Typically, however, what you want is a set of vectors coerced to that common type. That’s the job of <code>vec_cast_common()</code>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(<span class="fu">vec_cast_common</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="cn">FALSE</span>, </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fl">2.5</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; List of 3</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : num 0</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : num [1:5] 1 2 3 4 5</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : num 2.5</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(<span class="fu">vec_cast_common</span>(</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factor</span>(<span class="st">&quot;x&quot;</span>), </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">factor</span>(<span class="st">&quot;y&quot;</span>)</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; List of 2</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : Factor w/ 2 levels &quot;x&quot;,&quot;y&quot;: 1</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : Factor w/ 2 levels &quot;x&quot;,&quot;y&quot;: 2</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(<span class="fu">vec_cast_common</span>(</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="dv">1</span>),</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; List of 2</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ :&#39;data.frame&#39;:    1 obs. of  2 variables:</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ..$ x: num 1</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ..$ y: int NA</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ :&#39;data.frame&#39;:    2 obs. of  2 variables:</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ..$ x: num [1:2] NA NA</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ..$ y: int [1:2] 1 2</span></span></code></pre></div>
+<p>Alternatively, you can cast to a specific prototype using <code>vec_cast()</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cast succeeds</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_cast</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="fu">integer</span>())</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Cast fails</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_cast</span>(<span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">2.5</span>), <span class="fu">factor</span>(<span class="st">&quot;a&quot;</span>))</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: Can&#39;t convert &lt;double&gt; to &lt;factor&lt;4d52a&gt;&gt;.</span></span></code></pre></div>
+<p>If a cast is possible in general (i.e., double -&gt; integer), but information is lost for a specific input (e.g. 1.5 -&gt; 1), it will generate an error.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_cast</span>(<span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>), <span class="fu">integer</span>())</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error: Can&#39;t convert from &lt;double&gt; to &lt;integer&gt; due to loss of precision.</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; • Locations: 1</span></span></code></pre></div>
+<p>You can suppress the lossy cast errors with <code>allow_lossy_cast()</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">allow_lossy_cast</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vec_cast</span>(<span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>), <span class="fu">integer</span>())</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2</span></span></code></pre></div>
+<p>This will suppress all lossy cast errors. Supply prototypes if you want to be specific about the type of lossy cast allowed:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">allow_lossy_cast</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vec_cast</span>(<span class="fu">c</span>(<span class="fl">1.5</span>, <span class="dv">2</span>), <span class="fu">integer</span>()),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x_ptype =</span> <span class="fu">double</span>(),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">to_ptype =</span> <span class="fu">integer</span>()</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2</span></span></code></pre></div>
+<p>The set of casts should not be more permissive than the set of coercions. This is not enforced but it is expected from classes to follow the rule and keep the coercion ecosystem sound.</p>
+</div>
+</div>
+<div id="size" class="section level2">
+<h2>Size</h2>
+<p><code>vec_size()</code> was motivated by the need to have an invariant that describes the number of “observations” in a data structure. This is particularly important for data frames, as it’s useful to have some function such that <code>f(data.frame(x))</code> equals <code>f(x)</code>. No base function has this property:</p>
+<ul>
+<li><p><code>length(data.frame(x))</code> equals <code>1</code> because the length of a data frame is the number of columns.</p></li>
+<li><p><code>nrow(data.frame(x))</code> does not equal <code>nrow(x)</code> because <code>nrow()</code> of a vector is <code>NULL</code>.</p></li>
+<li><p><code>NROW(data.frame(x))</code> equals <code>NROW(x)</code> for vector <code>x</code>, so is almost what we want. But because <code>NROW()</code> is defined in terms of <code>length()</code>, it returns a value for every object, even types that can’t go in a data frame, e.g. <code>data.frame(mean)</code> errors even though <code>NROW(mean)</code> is <code>1</code>.</p></li>
+</ul>
+<p>We define <code>vec_size()</code> as follows:</p>
+<ul>
+<li>It is the length of 1d vectors.</li>
+<li>It is the number of rows of data frames, matrices, and arrays.</li>
+<li>It throws error for non vectors.</li>
+</ul>
+<p>Given <code>vec_size()</code>, we can give a precise definition of a data frame: a data frame is a list of vectors where every vector has the same size. This has the desirable property of trivially supporting matrix and data frame columns.</p>
+<div id="slicing" class="section level3">
+<h3>Slicing</h3>
+<p><code>vec_slice()</code> is to <code>vec_size()</code> as <code>[</code> is to <code>length()</code>; i.e., it allows you to select observations regardless of the dimensionality of the underlying object. <code>vec_slice(x, i)</code> is equivalent to:</p>
+<ul>
+<li><code>x[i]</code> when <code>x</code> is a vector.</li>
+<li><code>x[i, , drop = FALSE]</code> when <code>x</code> is a data frame.</li>
+<li><code>x[i, , , drop = FALSE]</code> when <code>x</code> is a 3d array.</li>
+</ul>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_slice</span>(x, <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 8 2</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_slice</span>(df, <span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   x</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 8</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 2</span></span></code></pre></div>
+<p><code>vec_slice(data.frame(x), i)</code> equals <code>data.frame(vec_slice(x, i))</code> (modulo variable and row names).</p>
+<p>Prototypes are generated with <code>vec_slice(x, 0L)</code>; given a prototype, you can initialize a vector of given size (filled with <code>NA</code>s) with <code>vec_init()</code>.</p>
+</div>
+<div id="common-sizes-recycling-rules" class="section level3">
+<h3>Common sizes: recycling rules</h3>
+<p>Closely related to the definition of size are the <strong>recycling rules</strong>. The recycling rules determine the size of the output when two vectors of different sizes are combined. In vctrs, the recycling rules are encoded in <code>vec_size_common()</code>, which gives the common size of a set of vectors:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_size_common</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_size_common</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 10</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_size_common</span>(<span class="fu">integer</span>(), <span class="dv">1</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<p>vctrs obeys a stricter set of recycling rules than base R. Vectors of size 1 are recycled to any other size. All other size combinations will generate an error. This strictness prevents common mistakes like <code>dest == c(&quot;IAH&quot;, &quot;HOU&quot;))</code>, at the cost of occasionally requiring an explicit calls to <code>rep()</code>.</p>
+<div class="figure">
+<img src="data:image/png;base64,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" alt="Summary of vctrs recycling rules. X indicates n error" width="121" />
+<p class="caption">
+Summary of vctrs recycling rules. X indicates n error
+</p>
+</div>
+<p>You can apply the recycling rules in two ways:</p>
+<ul>
+<li><p>If you have a vector and desired size, use <code>vec_recycle()</code>:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_recycle</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_recycle</span>(<span class="dv">1</span>, <span class="dv">10</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] 1 1 1 1 1 1 1 1 1 1</span></span></code></pre></div></li>
+<li><p>If you have multiple vectors and you want to recycle them to the same size, use <code>vec_recycle_common()</code>:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_recycle_common</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1 2 3</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">vec_recycle_common</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [1] 1 1 1 1 1 1 1 1 1 1</span></span></code></pre></div></li>
+</ul>
+</div>
+</div>
+<div id="appendix-recycling-in-base-r" class="section level2">
+<h2>Appendix: recycling in base R</h2>
+<p>The recycling rules in base R are described in <a href="https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Recycling-rules">The R Language Definition</a> but are not implemented in a single function and thus are not applied consistently. Here, I give a brief overview of their most common realisation, as well as showing some of the exceptions.</p>
+<p>Generally, in base R, when a pair of vectors is not the same length, the shorter vector is recycled to the same length as the longer:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">6</span>) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 2 2 2 2 2 2</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">6</span>) <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 2 3 2 3 2 3</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">6</span>) <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 2 3 4 2 3 4</span></span></code></pre></div>
+<p>If the length of the longer vector is not an integer multiple of the length of the shorter, you usually get a warning:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">pmax</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in pmax(1:2, 1:3): an argument will be fractionally recycled</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in 1:2 + 1:3: longer object length is not a multiple of shorter object</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; length</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">cbind</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>))</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning in cbind(1:2, 1:3): number of rows of result is not a multiple of vector</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; length (arg 1)</span></span></code></pre></div>
+<p>But some functions recycle silently:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">atan2</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>))</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">paste</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>))</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">ifelse</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>))</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
+<p>And <code>data.frame()</code> throws an error:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in data.frame(1:2, 1:3): arguments imply differing number of rows: 2, 3</span></span></code></pre></div>
+<p>The R language definition states that “any arithmetic operation involving a zero-length vector has a zero-length result”. But outside of arithmetic, this rule is not consistently followed:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># length-0 output</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">integer</span>()</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; integer(0)</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">atan2</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">integer</span>())</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; numeric(0)</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">pmax</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">integer</span>())</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; integer(0)</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="co"># dropped</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">integer</span>())</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      [,1]</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]    1</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,]    2</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a><span class="co"># recycled to length of first</span></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ifelse</span>(<span class="fu">rep</span>(<span class="cn">TRUE</span>, <span class="dv">4</span>), <span class="fu">integer</span>(), <span class="fu">character</span>())</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA NA NA NA</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a><span class="co"># preserved-ish</span></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a><span class="fu">paste</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">integer</span>())</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1 &quot; &quot;2 &quot;</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Errors</span></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">integer</span>())</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in data.frame(1:2, integer()): arguments imply differing number of rows: 2, 0</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,697 @@
+---
+title: "Create Awesome LaTeX Table with knitr::kable and kableExtra"
+author: "Hao Zhu"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 2
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{xcolor}
+vignette: >
+  %\VignetteIndexEntry{Create Awesome PDF Table with knitr::kable and kableExtra}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+\clearpage
+
+> Please see the package [documentation site](http://haozhu233.github.io/kableExtra) for how to use this package in HTML and more.  
+
+# Overview
+\begin{wrapfigure}{r}{0.2\textwidth}\centering
+  \includegraphics{kableExtra_sm.png}
+\end{wrapfigure}
+The goal of `kableExtra` is to help you build common complex tables and manipulate table styles. It imports the pipe `%>%` symbol from `magrittr` and verbalizes all the functions, so basically you can add "layers" to a kable output in a way that is similar with `ggplot2` and `plotly`.
+
+For users who are not very familiar with the pipe operator `%>%` in R, it is the R version of the [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface). The ides is to pass the result along the chain for a more literal coding experience. Basically when we say `A %>% B`, technically it means sending the results of A to B as B's first argument.
+
+To learn how to generate complex tables in HTML, please visit [http://haozhu233.github.io/kableExtra/awesome_table_in_html.html](http://haozhu233.github.io/kableExtra/awesome_table_in_html.html).
+
+# Installation
+```r
+install.packages("kableExtra")
+
+# For dev version
+# install.packages("devtools")
+devtools::install_github("haozhu233/kableExtra")
+```
+
+# Getting Started
+Here we are using the first few columns and rows from dataset `mtcars`
+```{r, echo = F}
+options(kableExtra.latex.load_packages = F)
+```
+
+```{r}
+library(kableExtra)
+dt <- mtcars[1:5, 1:6]
+```
+
+> **Key Update:** In the latest version of this package (1.2+), we provide a wrapper funciton `kbl` to the original `kable` function with detailed documentation of all the hidden html/latex options. It also does auto-formatting check in every function call instead of relying on the global environement variable. As a result, it also solves an issue for multi-format R Markdown documents. I encourage you start to use the new `kbl` function for all its convenience but the support for the original `kable` function is still there. In this doc, we will use `kbl` instead of `kable`.
+
+
+**This paragraph is a little outdated. It's here only for education purpose because it's helpful to understand how `kable` works under the hood**. When you are using `kable()`, if you don't specify `format`, by default it will generate a markdown table and let pandoc handle the conversion from markdown to HTML/PDF. This is the most favorable approach to render most simple tables as it is format independent. If you switch from HTML to pdf, you basically don't need to change anything in your code. However, markdown doesn't support complex table. For example, if you want to have a double-row header table, markdown just cannot provide you the functionality you need. As a result, when you have such a need, you should **define `format` in `kable()`** as either "html" or "latex". *You can also define a global option at the beginning using `options(knitr.table.format = "html")` so you don't repeat the step everytime.* **Starting from `kableExtra` 0.9.0**, when you load this package (`library(kableExtra)`), it will automatically set up the global option 'knitr.table.format' based on your current environment. Unless you are rendering a PDF, `kableExtra` will try to render a HTML table for you. **You no longer need to manually set either the global option or the `format` option in each `kable()` function**. I'm still including the explanation above here in this vignette so you can understand what is going on behind the scene. Note that this is only an global option. You can manually set any format in `kable()` whenever you want. I just hope you can enjoy a peace of mind in most of your time. You can disable this behavior by setting `options(kableExtra.auto_format = FALSE)` before you load `kableExtra`.
+
+```{r}
+# If you are using kableExtra < 0.9.0, you are recommended to set a global option first.
+# options(knitr.table.format = "latex") 
+## If you don't define format here, you'll need put `format = "latex"` 
+## in every kable function.
+```
+
+## LaTeX packages used in this package
+If you are using a recent version of rmarkdown, you are recommended to load this package entirely via `library(kableExtra)` or `require(kableExtra)` because this package will load all necessary LaTeX packages, such as `booktabs` or `multirow`, for you automatically. Note that, if you are calling functions from `kableExtra` via `kableExtra::kable_styling()` or if you put `library(kableExtra)` in a separate R file that is **sourced** by the rmarkdown document, these packages won't be loaded. Furthermore, you can suppress this auto-loading behavior by setting a global option `kableExtra.latex.load_packages` to be `FALSE` before you load `kableExtra`.
+
+```{r, eval = FALSE}
+# Not evaluated. Illustration purpose
+options(kableExtra.latex.load_packages = FALSE)
+library(kableExtra)
+```
+
+If you are using R Sweave, beamer, R package vignette template, tufte or some customized rmarkdown templates, you can put the following meta data into the `yaml` section. If you are familar with LaTeX and you know what you are doing, feel free to remove unnecessary packages from the list. 
+
+```
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{longtable}
+  - \usepackage{array}
+  - \usepackage{multirow}
+  - \usepackage{wrapfig}
+  - \usepackage{float}
+  - \usepackage{colortbl}
+  - \usepackage{pdflscape}
+  - \usepackage{tabu}
+  - \usepackage{threeparttable}
+  - \usepackage{threeparttablex}
+  - \usepackage[normalem]{ulem}
+  - \usepackage{makecell}
+  - \usepackage{xcolor}
+```
+
+Note: `kableExtra` was using `xcolor` with the `table` option for alternative row color before 1.0. However, the recent updates in `fancyvbr` causes a clash in `xcolor` option. Therefore, we removed the `xcolor` dependency in version 1.0 and started to rely on `colortbl` completely. 
+
+In reality, most cases, you still need `xcolor` to define new colors. The tricky part is that, if you are using a older version of `rmarkdown`, `xcolor` is not included in the template while in recent version, after `rmarkdown` started to use the default pandoc template, `xcolor` is included by default. To minimize the effort, we chose to load `xcolor` in the end. 
+
+## Plain LaTeX
+Plain LaTeX table looks relatively ugly in 2017.
+```{r}
+# Again, with kableExtra >= 0.9.0, `format = "latex"` is automatically defined
+# when this package gets loaded. Otherwise, you still need to define formats
+kbl(dt)
+# Same: kable(dt, "latex")
+```
+
+## LaTeX table with booktabs
+Similar to Bootstrap in HTML, in LaTeX, you can also use a trick to make your table look prettier as well. The different part is that, this time you don't need to pipe kable outputs to another function. Instead, you should call `booktabs = T` directly in `kable()`.
+
+```{r}
+kbl(dt, booktabs = T)
+```
+
+# Table Styles
+`kable_styling` in LaTeX uses the same syntax and structure as `kable_styling` in HTML. However, instead of `bootstrap_options`, you should specify `latex_options` instead. 
+
+## LaTeX options
+Similar with `bootstap_options`, `latex_options` is also a charter vector with a bunch of options including `striped`, `hold_position` and `scale_down`.
+
+### Striped
+Even though in the LaTeX world, people usually call it `alternative row colors` but here I'm using its bootstrap name for consistency. Note that to make it happen, LaTeX package `xcolor` is required to be loaded. In an environment like rmarkdown::pdf_document (rmarkdown 1.4.0 +), `kable_styling` will load it automatically if `striped` is enabled. However, in other cases, you probably need to import that package by yourself. 
+```{r}
+kbl(dt, booktabs = T) %>%
+  kable_styling(latex_options = "striped")
+```
+
+You can also specify which rows you want to striped on via `stripe_index`. In most case, you might want to turn off the default 5 rows + a space setting in `knitr::kable()` by setting `linesep = ""`. See this SO answer for details. https://stackoverflow.com/questions/45409750/get-rid-of-addlinespace-in-kable.
+
+```{r}
+kbl(mtcars[1:8, 1:4], booktabs = T, linesep = "") %>%
+  kable_styling(latex_options = "striped", stripe_index = c(1,2, 5:6))
+```
+
+### Hold position
+If you provide a table caption in `kbl()`, it will put your LaTeX tabular in a `table` environment, unless you are using `longtable`. A `table` environment will automatically find the best place (it thinks) to put your table. However, in many cases, you do want your table to appear in a position you want it to be. In this case, you can use this `hold_position` options here. 
+```{r}
+kbl(dt, caption = "Demo table", booktabs = T) %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+If you find `hold_position` is not powerful enough to literally PIN your table in the exact position, you may want to use `HOLD_position`, which is a more powerful version of this feature. For those who are familiar with LaTeX, `hold_position` uses `[!h]` and `HOLD_position` uses `[H]` and the `float` package.
+
+### Scale down
+When you have a wide table that will normally go out of the page, and you want to scale down the table to fit the page, you can use the `scale_down` option here. Note that, if your table is too small, it will also scale up your table. It was named in this way only because scaling up isn't very useful in most cases. You should also note that `scale_down` does not work with `longtable`. If you `longtable` is too wide, you should manually adjust your fontsize or switch to landscape layout. 
+```{r}
+kbl(cbind(dt, dt, dt), booktabs = T) %>%
+  kable_styling(latex_options = c("striped", "scale_down"))
+```
+```{r}
+kbl(cbind(dt), booktabs = T) %>%
+  kable_styling(latex_options = c("striped", "scale_down"))
+```
+
+### Repeat header in longtable
+In `kableExtra` 0.3.0 or above, a new option `repeat_header` was introduced into `kable_styling`. It will add header rows to longtables spanning multiple pages. For table captions on following pages, it will append *"continued"* to the caption to differentiate. If you need texts other than *"(continued)"* (for example, other languages), you can specify it using `kable_styling(..., repeat_header_text = "xxx")`. If you want to completely replace the table caption instead of appending, you can specify it in the option `repeat_header_method`.
+```{r}
+long_dt <- rbind(mtcars, mtcars) 
+
+kbl(long_dt, longtable = T, booktabs = T, caption = "Longtable") %>%
+  add_header_above(c(" ", "Group 1" = 5, "Group 2" = 6)) %>%
+  kable_styling(latex_options = c("repeat_header"))
+```
+
+
+## Full width?
+If you have a small table and you want it to spread wide on the page, you can try the `full_width` option. Unlike `scale_down`, it won't change your font size. You can use `column_spec`, which will be explained later, together with `full_width` to achieve the best result.
+```{r}
+kbl(dt, booktabs = T) %>%
+  kable_styling(full_width = T) %>%
+  column_spec(1, width = "8cm")
+```
+
+## Position
+Table Position only matters when the table doesn't have `full_width`. You can choose to align the table to `center` or `left` side of the page. The default value of position is `center`. 
+
+Note that even though you can select to `right` align your table but the table will actually be centered. Somehow it is very difficult to right align a table in LaTeX (since it's not very useful in the real world?). If you know how to do it, please send out an issue or PR and let me know. 
+```{r}
+kbl(dt, booktabs = T) %>%
+  kable_styling(position = "center")
+```
+
+Besides these three common options, you can also wrap text around the table using the `float-left` or `float-right` options. Note that, like `striped`, this feature will load another non-default LaTeX package `wrapfig` which requires rmarkdown 1.4.0 +. If you rmarkdown version < 1.4.0, you need to load the package through a customed LaTeX template file. 
+```{r}
+kbl(dt, booktabs = T) %>%
+  kable_styling(position = "float_right")
+```
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sit amet mauris in ex ultricies elementum vel rutrum dolor. Phasellus tempor convallis dui, in hendrerit mauris placerat scelerisque. Maecenas a accumsan enim, a maximus velit. Pellentesque in risus eget est faucibus convallis nec at nulla. Phasellus nec lacinia justo. Morbi fermentum, orci id varius accumsan, nibh neque porttitor ipsum, consectetur luctus risus arcu ac ex. Aenean a luctus augue. Suspendisse et auctor nisl. Suspendisse cursus ultrices quam non vulputate. Phasellus et pharetra neque, vel feugiat erat. Sed feugiat elit at mauris commodo consequat. Sed congue lectus id mattis hendrerit. Mauris turpis nisl, congue eget velit sed, imperdiet convallis magna. Nam accumsan urna risus, non feugiat odio vehicula eget.
+
+## Font Size
+If one of your tables is huge and you want to use a smaller font size for that specific table, you can use the `font_size` option. 
+```{r}
+kbl(dt, booktabs = T) %>%
+  kable_styling(font_size = 7)
+```
+
+# Column / Row Specification
+## Column spec
+When you have a table with lots of explanatory texts, you may want to specify the column width for different column, since the auto adjust in HTML may not work in its best way while basic LaTeX table is really bad at handling text wrapping. Also, sometimes, you may want to highlight a column (e.g., a "Total" column) by making it bold. In these scenarios, you can use `column_spec()`. You can find an example below. 
+```{r}
+text_tbl <- data.frame(
+  Items = c("Item 1", "Item 2", "Item 3"),
+  Features = c(
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vehicula tempor ex. Morbi malesuada sagittis turpis, at venenatis nisl luctus a. ",
+    "In eu urna at magna luctus rhoncus quis in nisl. Fusce in velit varius, posuere risus et, cursus augue. Duis eleifend aliquam ante, a aliquet ex tincidunt in. ", 
+    "Vivamus venenatis egestas eros ut tempus. Vivamus id est nisi. Aliquam molestie erat et sollicitudin venenatis. In ac lacus at velit scelerisque mattis. "
+  )
+)
+
+kbl(text_tbl, booktabs = T) %>%
+  kable_styling(full_width = F) %>%
+  column_spec(1, bold = T, color = "red") %>%
+  column_spec(2, width = "30em")
+```
+
+
+> **Key Update**: I understand the need of doing conditional formatting and the previous solution `cell_spec` is relatively hard to use. Therefore in kableExtra 1.2, I improved the functionality of `column_spec` so it can take vectorized input for most of its arguments (except `width`, `border_left` and `border_right`). It is really easy right now to format a column based on other values. 
+
+```{r}
+that_cell <- c(rep(F, 7), T)
+mtcars[1:8, 1:8] %>%
+  kbl(booktabs = T, linesep = "") %>%
+  kable_paper(full_width = F) %>%
+  column_spec(2, color = spec_color(mtcars$mpg[1:8]),
+              link = "https://haozhu233.github.io/kableExtra") %>%
+  column_spec(6, color = "white", 
+              background = spec_color(mtcars$drat[1:8], end = 0.7),
+              popover = paste("am:", mtcars$am[1:8])) %>%
+  column_spec(9, strikeout = that_cell, bold = that_cell,
+              color = c(rep("black", 7), "red"))
+```
+
+You can still use the `spec_***` helper functions to help you define color. See the documentation [below](#visualize-data-with-viridis-color). 
+
+## Insert Images into Columns
+Technically, we are still talking about `column_spec` here. However, since this topic itself contains its own subtopics, we split it out as a separate section. Since `kableExtra` 1.2, we introduced the feature of adding images to columns of tables. Here is a quick example. 
+
+```{r}
+tbl_img <- data.frame(
+  name = c("kableExtra 1", "kableExtra 2"),
+  logo = ""
+)
+tbl_img %>%
+  kbl(booktabs = T) %>%
+  kable_paper(full_width = F) %>%
+  column_spec(2, image = "kableExtra_sm.png")
+```
+
+If you need to specify the size of the images, you need to do it through `spec_image`. 
+
+```{r}
+tbl_img %>%
+  kbl(booktabs = T) %>%
+  kable_paper(full_width = F) %>%
+  column_spec(2, image = spec_image(
+    c("kableExtra_sm.png", "kableExtra_sm.png"), 50, 50))
+```
+
+`kableExtra` also provides a few inline plotting tools. Right now, there are `spec_hist`, `spec_boxplot`, and `spec_plot`. One key feature is that by default, the limits of every subplots are fixed so you can compare across rows.
+
+```{r}
+mpg_list <- split(mtcars$mpg, mtcars$cyl)
+disp_list <- split(mtcars$disp, mtcars$cyl)
+inline_plot <- data.frame(cyl = c(4, 6, 8), mpg_box = "", mpg_hist = "",
+                          mpg_line1 = "", mpg_line2 = "",
+                          mpg_points1 = "", mpg_points2 = "", mpg_poly = "")
+inline_plot %>%
+  kbl(booktabs = TRUE) %>%
+  kable_paper(full_width = FALSE) %>%
+  column_spec(2, image = spec_boxplot(mpg_list)) %>%
+  column_spec(3, image = spec_hist(mpg_list)) %>%
+  column_spec(4, image = spec_plot(mpg_list, same_lim = TRUE)) %>%
+  column_spec(5, image = spec_plot(mpg_list, same_lim = FALSE)) %>%
+  column_spec(6, image = spec_plot(mpg_list, type = "p")) %>%
+  column_spec(7, image = spec_plot(mpg_list, disp_list, type = "p")) %>%
+  column_spec(8, image = spec_plot(mpg_list, polymin = 5))
+```
+
+There is also a `spec_pointrange` function specifically designed for forest plots in regression tables. Of course, feel free to use it for other purposes. 
+
+```{r}
+coef_table <- data.frame(
+  Variables = c("var 1", "var 2", "var 3"),
+  Coefficients = c(1.6, 0.2, -2.0),
+  Conf.Lower = c(1.3, -0.4, -2.5),
+  Conf.Higher = c(1.9, 0.6, -1.4)
+) 
+
+data.frame(
+  Variable = coef_table$Variables,
+  Visualization = ""
+) %>%
+  kbl(booktabs = T) %>%
+  kable_classic(full_width = FALSE) %>%
+  column_spec(2, image = spec_pointrange(
+    x = coef_table$Coefficients, 
+    xmin = coef_table$Conf.Lower, 
+    xmax = coef_table$Conf.Higher, 
+    vline = 0)
+    )
+```
+
+## Row spec
+Similar with `column_spec`, you can define specifications for rows. Currently, you can either bold or italicize an entire row. Note that, similar to other row-related functions in `kableExtra`, for the position of the target row, you don't need to count in header rows or the group labeling rows.
+
+```{r}
+kbl(dt, booktabs = T) %>%
+  kable_styling("striped", full_width = F) %>%
+  column_spec(7, border_left = T, bold = T) %>%
+  row_spec(1, strikeout = T) %>%
+  row_spec(3:5, bold = T, color = "white", background = "black")
+```
+
+## Header Rows
+One special case of `row_spec` is that you can specify the format of the header row via `row_spec(row = 0, ...)`. 
+```{r}
+kbl(dt, booktabs = T, align = "c") %>%
+  kable_styling(latex_options = "striped", full_width = F) %>%
+  row_spec(0, angle = 45)
+```
+
+
+
+# Cell/Text Specification
+
+>**Key Update: As said before, if you are using kableExtra 1.2+, you are now recommended to used `column_spec` to do conditional formatting**. 
+
+Function `cell_spec` is introduced in version 0.6.0 of `kableExtra`. Unlike `column_spec` and `row_spec`, **this function is designed to be used before the data.frame gets into the `kable` function**. Comparing with figuring out a list of 2 dimensional indexes for targeted cells, this design is way easier to learn and use, and it fits perfectly well with `dplyr`'s `mutate` and `summarize` functions. With this design, there are two things to be noted:
+* Since `cell_spec` generates raw `HTML` or `LaTeX` code, make sure you remember to put `escape = FALSE` in `kable`. At the same time, you have to escape special symbols including `%` manually by yourself
+* `cell_spec` needs a way to know whether you want `html` or `latex`. You can specify it locally in function or globally via the `options(knitr.table.format = "latex")` method as suggested at the beginning. If you don't provide anything, this function will output as HTML by default. 
+
+Currently, `cell_spec` supports features including bold, italic, monospace, text color, background color, align, font size & rotation angle. More features may be added in the future. Please see function documentations as reference. 
+
+## Conditional logic
+It is very easy to use `cell_spec` with conditional logic. Here is an example.
+```{r, message=FALSE, warning=FALSE}
+cs_dt <- mtcars[1:10, 1:2]
+cs_dt$car = row.names(cs_dt)
+row.names(cs_dt) <- NULL
+cs_dt$mpg = cell_spec(cs_dt$mpg, color = ifelse(cs_dt$mpg > 20, "red", "blue"))
+cs_dt$cyl = cell_spec(
+  cs_dt$cyl, color = "white", align = "c", angle = 45, 
+  background = factor(cs_dt$cyl, c(4, 6, 8), c("#666666", "#999999", "#BBBBBB")))
+cs_dt <- cs_dt[c("car", "mpg", "cyl")]
+
+kbl(cs_dt, booktabs = T, escape = F) %>%
+  kable_paper("striped", full_width = F)
+
+# You can also do this with dplyr and use one pipe from top to bottom
+# mtcars[1:10, 1:2] %>%
+#   mutate(
+#     car = row.names(.),
+#     mpg = cell_spec(mpg, "html", color = ifelse(mpg > 20, "red", "blue")),
+#     cyl = cell_spec(cyl, "html", color = "white", align = "c", angle = 45, 
+#                     background = factor(cyl, c(4, 6, 8), 
+#                                         c("#666666", "#999999", "#BBBBBB")))
+#   ) %>%
+#   select(car, mpg, cyl) %>%
+#   kbl(format = "html", escape = F) %>%
+#   kable_styling("striped", full_width = F)
+```
+
+## Visualize data with Viridis Color
+This package also comes with a few helper functions, including `spec_color`, `spec_font_size` & `spec_angle`. These functions can rescale continuous variables to certain scales. For example, function `spec_color` would map a continuous variable to any [viridis color palettes](https://CRAN.R-project.org/package=viridisLite). It offers a very visually impactful representation in a tabular format. 
+
+```{r}
+vs_dt <- iris[1:10, ]
+vs_dt[1:4] <- lapply(vs_dt[1:4], function(x) {
+    cell_spec(x, bold = T, 
+              color = spec_color(x, end = 0.9),
+              font_size = spec_font_size(x))
+})
+vs_dt[5] <- cell_spec(vs_dt[[5]], color = "white", bold = T,
+    background = spec_color(1:10, end = 0.9, option = "A", direction = -1))
+kbl(vs_dt, booktabs = T, escape = F, align = "c") %>%
+  kable_classic("striped", full_width = F)
+# Or dplyr ver
+# iris[1:10, ] %>%
+#   mutate_if(is.numeric, function(x) {
+#     cell_spec(x, bold = T, 
+#               color = spec_color(x, end = 0.9),
+#               font_size = spec_font_size(x))
+#   }) %>%
+#   mutate(Species = cell_spec(
+#     Species, color = "white", bold = T,
+#     background = spec_color(1:10, end = 0.9, option = "A", direction = -1)
+#   )) %>%
+#   kable(escape = F, align = "c") %>%
+#   kable_styling(c("striped", "condensed"), full_width = F)
+```
+
+## Text Specification
+If you check the results of `cell_spec`, you will find that this function does nothing more than wrapping the text with appropriate HTML/LaTeX formatting syntax. The result of this function is just a vector of character strings. As a result, when you are writing a `rmarkdown` document or write some text in shiny apps, if you need extra markups other than **bold** or *italic*, you may use this function to `r text_spec("color", color = "red")`, `r text_spec("change font size ", font_size = 16)` or `r text_spec("rotate", angle = 30)` your text. 
+
+An aliased function `text_spec` is also provided for a more literal writing experience. The only difference is that in LaTeX, unless you specify `latex_background_in_cell = FALSE` (default is `TRUE`) in `cell_spec`, it will define cell background color as `\cellcolor{}`, which doesn't work outside of a table, while for `text_spec`, the default value for `latex_background_in_cell` is `FALSE`.
+
+```{r}
+sometext <- strsplit(paste0(
+  "You can even try to make some crazy things like this paragraph. ", 
+  "It may seem like a useless feature right now but it's so cool ",
+  "and nobody can resist. ;)"
+), " ")[[1]]
+text_formatted <- paste(
+  text_spec(sometext, color = spec_color(1:length(sometext), end = 0.9),
+            font_size = spec_font_size(1:length(sometext), begin = 5, end = 20)),
+  collapse = " ")
+
+# To display the text, type `r text_formatted` outside of the chunk
+```
+`r text_formatted`
+
+# Grouped Columns / Rows
+## Add header rows to group columns
+Tables with multi-row headers can be very useful to demonstrate grouped data. To do that, you can pipe your kable object into `add_header_above()`. The header variable is supposed to be a named character with the names as new column names and values as column span. For your convenience, if column span equals to 1, you can ignore the `=1` part so the function below can be written as `add_header_above(c(" ", "Group 1" = 2, "Group 2" = 2, "Group 3" = 2)).
+```{r}
+kbl(dt, booktabs = T) %>%
+  kable_styling() %>%
+  add_header_above(c(" " = 1, "Group 1" = 2, "Group 2" = 2, "Group 3" = 2))
+```
+
+In fact, if you want to add another row of header on top, please feel free to do so. Also, since kableExtra 0.3.0, you can specify `bold` & `italic` as you do in `row_spec()`.
+```{r}
+kbl(dt, booktabs = T) %>%
+  kable_styling(latex_options = "striped") %>%
+  add_header_above(c(" ", "Group 1" = 2, "Group 2" = 2, "Group 3" = 2)) %>%
+  add_header_above(c(" ", "Group 4" = 4, "Group 5" = 2)) %>%
+  add_header_above(c(" ", "Group 6" = 6), bold = T, italic = T)
+```
+
+## Group rows via labeling
+Sometimes we want a few rows of the table being grouped together. They might be items under the same topic (e.g., animals in one species) or just different data groups for a categorical variable (e.g., age < 40, age > 40). With the function `pack_rows`/`group_rows()` in `kableExtra`, this kind of task can be completed in one line. Please see the example below. Note that when you count for the start/end rows of the group, you don't need to count for the header rows nor other group label rows. You only need to think about the row numbers in the "original R dataframe".
+```{r}
+kbl(mtcars[1:10, 1:6], caption = "Group Rows", booktabs = T) %>%
+  kable_styling() %>%
+  pack_rows("Group 1", 4, 7) %>%
+  pack_rows("Group 2", 8, 10)
+```
+
+In case some users need it, you can define your own gapping spaces between the group labeling row and previous rows. The default value is `0.5em`.
+```{r}
+kbl(dt, booktabs = T) %>%
+  pack_rows("Group 1", 4, 5, latex_gap_space = "2em")
+```
+
+If you prefer to build multiple groups in one step, you can use the short-hand `index` option. Basically, you can use it in the same way as you use `add_header_above`. However, since `group_row` only support one layer of grouping, you can't add multiple layers of grouping header as you can do in `add_header_above`. 
+```{r, eval=FALSE}
+kbl(mtcars[1:10, 1:6], caption = "Group Rows", booktabs = T) %>%
+  kable_styling() %>%
+  pack_rows(index=c(" " = 3, "Group 1" = 4, "Group 2" = 3))
+# Not evaluated. The code above should have the same result as the first example in this section.
+```
+
+Note that `kable` has a relatively special feature to handle `align` and it may bring troubles to you if you are not using it correctly. In the documentation of the `align` argument of `kable`, it says:
+
+> If `length(align) == 1L`, the string will be expanded to a vector of individual letters, e.g. `'clc'` becomes `c('c', 'l', 'c')`, **unless the output format is LaTeX**.
+
+For example, 
+```{r, eval=F}
+kbl(mtcars[1:2, 1:2], align = c("cl"))
+# \begin{tabular}{l|cl|cl}  # Note the column alignment here
+# \hline
+#   & mpg & cyl\\
+# ...
+```
+
+LaTeX, somehow shows surprisingly high tolerance on that, which is quite unusual. As a result, it won't throw an error if you are just using `kable` to make some simple tables. However, when you use `kableExtra` to make some advanced modification, it will start to throw some bugs. As a result, please try to form a habit of using a vector in the `align` argument for `kable` (tip: you can use `rep` function to replicate elements. For example, `c("c", rep("l", 10))`). 
+
+## Row indentation
+Unlike `pack_rows()`, which will insert a labeling row, sometimes we want to list a few sub groups under a total one. In that case, `add_indent()` is probably more appropriate.  
+
+```{r}
+kbl(dt, booktabs = T) %>%
+  add_indent(c(1, 3, 5))
+```
+
+You can also specify the width of the indentation by the `level_of_indent` option. At the same time, if you want to indent every column, you can choose to turn on `all_cols`. Note that if a column is right aligned, you probably won't be able to see the effect. 
+
+```{r}
+kbl(dt, booktabs = T, align = "l") %>%
+  add_indent(c(1, 3, 5), level_of_indent = 2, all_cols = T)
+```
+
+## Group rows via multi-row cell
+Function `pack_rows` is great for showing simple structural information on rows but sometimes people may need to show structural information with multiple layers. When it happens, you may consider using `collapse_rows` instead, which will put repeating cells in columns into multi-row cells.  
+
+In LaTeX, `collapse_rows` adds some extra hlines to help differentiate groups. You can customize this behavior using the `latex_hline` argument. You can choose from `full` (default), `major` and `none`. Vertical alignment of cells is controlled by the `valign` option. You can choose from "top", "middle"(default) and "bottom". Be cautious that the vertical alignment option was only introduced in multirow in 2016. If you are using a legacy LaTeX distribution, you will run into trouble if you set `valign` to be either "top" or "bottom".
+
+```{r}
+collapse_rows_dt <- data.frame(C1 = c(rep("a", 10), rep("b", 5)),
+                 C2 = c(rep("c", 7), rep("d", 3), rep("c", 2), rep("d", 3)),
+                 C3 = 1:15,
+                 C4 = sample(c(0,1), 15, replace = TRUE))
+kbl(collapse_rows_dt, booktabs = T, align = "c") %>%
+  column_spec(1, bold=T) %>%
+  collapse_rows(columns = 1:2, latex_hline = "major", valign = "middle")
+```
+
+Right now, you can't automatically make striped rows based on collapsed rows but you can do it manually via the `extra_latex_after` option in `row_spec`. This feature is not officially supported. I'm only document it here if you want to give it a try. 
+```{r}
+kbl(collapse_rows_dt[-1], align = "c", booktabs = T) %>%
+  column_spec(1, bold = T, width = "5em") %>%
+  row_spec(c(1:7, 11:12) - 1, extra_latex_after = "\\rowcolor{gray!6}") %>%
+  collapse_rows(1, latex_hline = "none")
+```
+
+When there are too many layers, sometimes the table can become too wide. You can choose to stack the first few layers by setting `row_group_label_position` to `stack`. 
+
+
+```{r}
+collapse_rows_dt <- expand.grid(
+  District = sprintf('District %s', c('1', '2')),
+  City = sprintf('City %s', c('1', '2')),
+  State = sprintf('State %s', c('a', 'b')),
+  Country = sprintf('Country with a long name %s', c('A', 'B'))
+) 
+collapse_rows_dt <- collapse_rows_dt[c("Country", "State", "City", "District")]
+collapse_rows_dt$C1 = rnorm(nrow(collapse_rows_dt))
+collapse_rows_dt$C2 = rnorm(nrow(collapse_rows_dt))
+
+kbl(collapse_rows_dt, 
+      booktabs = T, align = "c", linesep = '') %>%
+  collapse_rows(1:3, row_group_label_position = 'stack') 
+```
+
+To better distinguish different layers, you can format the each layer using `row_group_label_fonts`. You can also customize the hlines to better differentiate groups.
+
+```{r}
+row_group_label_fonts <- list(
+  list(bold = T, italic = T), 
+  list(bold = F, italic = F)
+  )
+kbl(collapse_rows_dt, 
+                     booktabs = T, align = "c", linesep = '') %>%
+  column_spec(1, bold=T) %>%
+  collapse_rows(1:3, latex_hline = 'custom', custom_latex_hline = 1:3, 
+                row_group_label_position = 'stack', 
+                row_group_label_fonts = row_group_label_fonts) 
+```
+
+# Table Footnote
+
+> Now it's recommended to use the new `footnote` function instead of `add_footnote` to make table footnotes. 
+
+Documentations for `add_footnote` can be found [here](http://haozhu233.github.io/kableExtra/legacy_features#add_footnote).
+
+There are four notation systems in `footnote`, namely `general`, `number`, `alphabet` and `symbol`. The last three types of footnotes will be labeled with corresponding marks while `general` won't be labeled. You can pick any one of these systems or choose to display them all for fulfilling the APA table footnotes requirements.  
+```{r}
+kbl(dt, align = "c") %>%
+  kable_styling(full_width = F) %>%
+  footnote(general = "Here is a general comments of the table. ",
+           number = c("Footnote 1; ", "Footnote 2; "),
+           alphabet = c("Footnote A; ", "Footnote B; "),
+           symbol = c("Footnote Symbol 1; ", "Footnote Symbol 2")
+           )
+```
+
+You can also specify title for each category by using the `***_title` arguments. Default value for `general_title` is "Note: " and "" for the rest three. You can also change the order using `footnote_order`. You can even display footnote as chunk texts (default is as a list) using `footnote_as_chunk`. The font format of the titles are controlled by `title_format` with options including "italic" (default), "bold" and "underline".
+
+```{r}
+kbl(dt, align = "c", booktabs = T) %>%
+  footnote(general = "Here is a general comments of the table. ",
+           number = c("Footnote 1; ", "Footnote 2; "),
+           alphabet = c("Footnote A; ", "Footnote B; "),
+           symbol = c("Footnote Symbol 1; ", "Footnote Symbol 2"),
+           general_title = "General: ", number_title = "Type I: ",
+           alphabet_title = "Type II: ", symbol_title = "Type III: ",
+           footnote_as_chunk = T, title_format = c("italic", "underline")
+           )
+```
+
+If you need to add footnote marks in a table, you need to do it manually (no fancy) using `footnote_marker_***()`. Remember that similar with `cell_spec`, you need to tell this function whether you want it to do it in `HTML` (default) or `LaTeX`. You can set it for all using the `knitr.table.format` global option. Also, if you have ever used `footnote_marker_***()`, you need to put `escape = F` in your `kable` function to avoid escaping of special characters. Note that if you want to use these `footnote_marker` functions in `kableExtra` functions like `pack_rows` (for the row label) or `add_header_above`, you need to set `double_escape = T` and `escape = F` in those functions. I'm trying to find other ways around. Please let me know if you have a good idea and are willing to contribute. 
+
+```{r}
+dt_footnote <- dt
+names(dt_footnote)[2] <- paste0(names(dt_footnote)[2], 
+                                # That "latex" can be eliminated if defined in global
+                                footnote_marker_symbol(1, "latex"))
+row.names(dt_footnote)[4] <- paste0(row.names(dt_footnote)[4], 
+                                footnote_marker_alphabet(1))
+kbl(dt_footnote, align = "c", booktabs = T,
+      # Remember this escape = F
+      escape = F) %>%
+  footnote(alphabet = "Footnote A; ",
+           symbol = "Footnote Symbol 1; ",
+           alphabet_title = "Type II: ", symbol_title = "Type III: ",
+           footnote_as_chunk = T)
+```
+
+If your table footnote is very long, please consider to put your table in a `ThreePartTable` frame. Note that, in kableExtra version <= 0.7.0, we were using `threeparttable` but since kableExtra 0.8.0, we start to use `ThreePartTable` from `threeparttablex` instead. `ThreePartTable` supports both the `longtable` and `tabu` environments. 
+
+```{r}
+kbl(dt, align = "c", booktabs = T, caption = "s") %>%
+  footnote(general = "Here is a very very very very very very very very very very very very very very very very very very very very long footnote", 
+           threeparttable = T)
+```
+
+# LaTeX Only Features
+## Linebreak processor
+Unlike in HTML, where you can use `<br>` at any time, in LaTeX, it's actually quite difficult to make a linebreak in a table. Therefore I created the `linebreak` function to facilitate this process. Please see the [Best Practice for Newline in LaTeX Table](http://haozhu233.github.io/kableExtra/best_practice_for_newline_in_latex_table.pdf) for details. 
+
+```{r}
+dt_lb <- data.frame(
+  Item = c("Hello\nWorld", "This\nis a cat"), 
+  Value = c(10, 100)
+)
+dt_lb$Item = linebreak(dt_lb$Item)
+
+# Or you can use
+# dt_lb <- dt_lb %>%
+#   mutate_all(linebreak)
+
+dt_lb %>%
+  kbl(booktabs = T, escape = F,
+      col.names = linebreak(c("Item\n(Name)", "Value\n(Number)"), align = "c"))
+```
+
+At the same time, since `kableExtra 0.8.0`, all `kableExtra` functions that have some contents input (such as `footnote` or `pack_rows`) will automatically convert `\n` to linebreaks for you in both LaTeX and HTML. 
+
+
+## Table on a Landscape Page
+Sometimes when we have a wide table, we want it to sit on a designated landscape page. The new function `landscape()` can help you on that. Unlike other functions, this little function only serves LaTeX and doesn't have a HTML side.
+```{r}
+kbl(dt, caption = "Demo Table (Landscape)[note]", booktabs = T) %>%
+  kable_styling(latex_options = c("hold_position")) %>%
+  add_header_above(c(" ", "Group 1[note]" = 3, "Group 2[note]" = 3)) %>%
+  add_footnote(c("This table is from mtcars", 
+                 "Group 1 contains mpg, cyl and disp", 
+                 "Group 2 contains hp, drat and wt"), 
+               notation = "symbol") %>%
+  pack_rows("Group 1", 4, 5) %>%
+  landscape()
+```
+
+## Decimal Alignment
+Decimal alignment has been a requested feature by many LaTeX users. However, since the syntax for either `siunitx` or `dcolumn` are a little different, it is sort of difficult to integrate them into the pipeline of this package without breaking other features. If you need this feature, Brandon Bertelsen (@1beb) provided a very nice solution on github (https://github.com/haozhu233/kableExtra/issues/174, thanks). Here is a working example. 
+
+In the `header-includes` section of the yaml header, include the following settings. If you need different rounding options, you can make changes here. 
+
+```
+\usepackage{siunitx}
+\newcolumntype{d}{S[table-format=3.2]}
+```
+
+For your table, you need to modify the column names and use `d` to as the `align` options. 
+
+```{r, eval = FALSE}
+# not evaluated
+k <- mtcars[1:10,1:5]
+names(k) <- paste("{", names(k), "}")
+kableExtra::kable(
+     k, "latex", booktabs = TRUE, longtable = TRUE,  
+     align = c("l", rep("d", 4)), linesep = "", escape = FALSE) %>% 
+  kable_styling(full_width=FALSE)
+```
+
+## Use LaTeX table in HTML or Word
+If you want to save a LaTeX table to a image, you may consider using `save_kable()`. We also provide an `as_image()` function as a convenience wrapper for `save_kable()`. It will save the image to a temp location. Note that this feature requires you to have [magick](https://github.com/ropensci/magick) installed (`install.packages("magick")`). Also, if you are planning to use it on Windows, you need to install [Ghostscript](https://www.ghostscript.com/). This feature may not work if you are using tinytex. If you are using tinytex, please consider using other alternatives to this function. 
+
+```{r, eval = F}
+# Not evaluated. 
+
+# The code below will automatically include the image in the rmarkdown document
+kbl(dt, booktabs = T) %>%
+  column_spec(1, bold = T) %>%
+  as_image()
+
+# If you want to save the image locally, just provide a name
+kbl(dt, booktabs = T) %>%
+  column_spec(1, bold = T) %>%
+  save_kable("my_latex_table.png")
+```
+
+# From other packages
+Since the structure of `kable` is relatively simple, it shouldn't be too difficult to convert HTML or LaTeX tables generated by other packages to a `kable` object and then use `kableExtra` to modify the outputs. If you are a package author, feel free to reach out to me and we can collaborate. 
+
+## `tables`
+The latest version of [`tables`](https://CRAN.R-project.org/package=tables) comes with a `toKable()` function, which is compatiable with functions in `kableExtra` (>=0.9.0).
+
+## `xtable`
+For `xtable` users, if you want to use `kableExtra` functions on that, check out this `xtable2kable()` function shipped with kableExtra 1.0. I personally have been using this function to place table caption below tables and solve some tricky case when I use `tufte_handout`. 
+
+```{r, eval=F}
+# Not evaluating
+xtable::xtable(mtcars[1:4, 1:4], caption = "Hello xtable") %>%
+  xtable2kable() %>%
+  column_spec(1, color = "red")
+```

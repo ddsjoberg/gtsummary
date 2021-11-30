@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: World Health Organization TB data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for who {tidyr}"><tr><td>who {tidyr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>World Health Organization TB data</h2>
+
+<h3>Description</h3>
+
+<p>A subset of data from the World Health Organization Global Tuberculosis
+Report, and accompanying global populations.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+who
+
+population
+</pre>
+
+
+<h3>Format</h3>
+
+<p><code>who</code>: a data frame with 7,240 rows and the columns:
+</p>
+
+<dl>
+<dt>country</dt><dd><p>Country name</p>
+</dd>
+<dt>iso2, iso3</dt><dd><p>2 &amp; 3 letter ISO country codes</p>
+</dd>
+<dt>year</dt><dd><p>Year</p>
+</dd>
+<dt>new_sp_m014 - new_rel_f65</dt><dd><p>Counts of new TB cases recorded by group.
+Column names encode three variables that describe the group (see details).</p>
+</dd>
+</dl>
+
+<p><code>population</code>: a data frame with 4,060 rows and three columns:
+</p>
+
+<dl>
+<dt>country</dt><dd><p>Country name</p>
+</dd>
+<dt>year</dt><dd><p>Year</p>
+</dd>
+<dt>population</dt><dd><p>Population</p>
+</dd>
+</dl>
+
+
+
+<h3>Details</h3>
+
+<p>The data uses the original codes given by the World Health
+Organization. The column names for columns five through 60 are made by
+combining <code>new_</code> to a code for method of diagnosis (<code>rel</code> =
+relapse, <code>sn</code> = negative pulmonary smear, <code>sp</code> = positive
+pulmonary smear, <code>ep</code> = extrapulmonary) to a code for gender
+(<code>f</code> = female, <code>m</code> = male) to a code for age group (<code>014</code> =
+0-14 yrs of age, <code>1524</code> = 15-24 years of age, <code>2534</code> = 25 to
+34 years of age, <code>3544</code> = 35 to 44 years of age, <code>4554</code> = 45 to
+54 years of age, <code>5564</code> = 55 to 64 years of age, <code>65</code> = 65 years
+of age or older).
+</p>
+
+
+<h3>Source</h3>
+
+<p><a href="https://www.who.int/teams/global-tuberculosis-programme/data">https://www.who.int/teams/global-tuberculosis-programme/data</a>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>tidyr</em> version 1.1.4 <a href="00Index.html">Index</a>]</div>
+</body></html>

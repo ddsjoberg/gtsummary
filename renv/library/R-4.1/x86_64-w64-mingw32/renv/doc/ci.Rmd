@@ -1,0 +1,153 @@
+---
+title: "Using renv with Continuous Integration"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using renv with Continuous Integration}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+When building, deploying, or testing with continuous integration (CI) systems
+(e.g. [GitHub Actions][github-actions], [Travis CI][travis-ci],
+[AppVeyor][appveyor], and others), one often needs to download and install a set
+of R packages before the service can be run. Normally, one will have to download
+and reinstall these packages on each build, which can often be slow --
+especially in environments where binary packages are not available from your R
+package repositories.
+
+`renv` can often be helpful in these situations. The general idea is:
+
+1. Call `renv::snapshot()` on your local machine, to generate `renv.lock`;
+
+2. Call `renv::restore()` on your CI service, to restore the project library
+   from `renv.lock`;
+
+3. Ensure that the project library, as well as the global `renv` cache, are
+   cached by the CI service.
+
+Normally, `renv` will use the R package repositories as encoded in `renv.lock`
+during restore, and this will override any repositories set in other locations
+(e.g. in `.Rprofile` or `.Rprofile.site`). We'll discuss some strategies for
+providing an alternate R package repository to use during restore below.
+
+
+## GitHub Actions
+
+When using GitHub Actions, you typically need two steps:
+
+1. Cache any packages installed by `renv`,
+2. Use `renv::restore()` to restore packages.
+
+As an example, these steps might look like:
+
+```
+env:
+  RENV_PATHS_ROOT: ~/.local/share/renv
+
+steps:
+
+- name: Cache packages
+  uses: actions/cache@v1
+  with:
+    path: ${{ env.RENV_PATHS_ROOT }}
+    key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+    restore-keys: |
+      ${{ runner.os }}-renv-
+
+- name: Restore packages
+  shell: Rscript {0}
+  run: |
+    if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+    renv::restore()
+```
+
+See also the [example][github-actions-renv] on GitHub actions.
+
+
+## Travis CI
+
+On Travis CI, one can add the following entries to `.travis.yml` to accomplish
+the above:
+
+```
+cache:
+  directories:
+  - $HOME/.local/share/renv
+  - $TRAVIS_BUILD_DIR/renv/library
+
+install:
+  - Rscript -e "if (!requireNamespace('renv', quietly = TRUE)) install.packages('renv')"
+  - Rscript -e "renv::restore()"
+  
+script:
+  - Rscript -e '<your-build-action>'
+```
+
+Note that we provide both `install` and `script` steps, as we want to
+override the default behaviors provided by Travis for R (which might
+attempt to install different version of R packages than what is currently
+encoded in `renv.lock`). See
+https://docs.travis-ci.com/user/languages/r/#customizing-the-travis-build-steps
+for more details.
+
+It's also possible to override the package repository used during restore by
+setting the `RENV_CONFIG_REPOS_OVERRIDE` environment variable. For example:
+
+```
+env:
+  global:
+    - RENV_CONFIG_REPOS_OVERRIDE=<cran>
+```
+
+replacing `<cran>` with your desired R package repository. This can also be
+accomplished in a similar way by setting:
+
+```
+options(renv.config.repos.override = <...>)
+```
+
+but it is generally more ergonomic to set the associated environment variable.
+(See `?config` for more details.) This can be useful if you'd like to, for
+example, enforce the usage of a [MRAN](https://mran.microsoft.com) checkpoint
+during restore, or another similarly-equipped repository.
+
+See <https://docs.travis-ci.com/user/caching> for more details on how Travis
+manages caching.
+
+
+## GitLab CI
+
+The following template can be used as a base when using `renv` with
+[GitLab CI](https://about.gitlab.com/stages-devops-lifecycle/continuous-integration/):
+
+```
+variables:
+  RENV_CONFIG_REPOS_OVERRIDE: "http://cran.r-project.org"
+  RENV_PATHS_CACHE: ${CI_PROJECT_DIR}/cache
+  RENV_PATHS_LIBRARY: ${CI_PROJECT_DIR}/renv/library
+
+cache:
+  key: ${CI_JOB_NAME}
+  paths:
+    - ${RENV_PATHS_CACHE}
+    - ${RENV_PATHS_LIBRARY}
+
+before_script:
+  - < ... other pre-deploy steps ... >
+  - Rscript -e "if (!requireNamespace('renv', quietly = TRUE)) install.packages('renv')"
+  - Rscript -e "renv::restore()"
+  
+```
+
+
+[github-actions]: https://github.com/features/actions
+[travis-ci]: https://travis-ci.org/
+[appveyor]: https://www.appveyor.com/
+[github-actions-renv]: https://github.com/actions/cache/blob/master/examples.md#r---renv

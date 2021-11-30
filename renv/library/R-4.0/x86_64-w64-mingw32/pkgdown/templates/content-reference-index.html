@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="contents col-md-9">
+    <div class="page-header">
+      <h1>Reference</h1>
+    </div>
+
+    <table class="ref-index{{#has_icons}} ref-index-icons{{/has_icons}}">
+
+    <colgroup>
+      {{#has_icons}}<col class="icon" />{{/has_icons}}
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
+
+    {{#rows}}<tbody>
+      {{#title}}<tr>
+        <th colspan="{{#has_icons}}3{{/has_icons}}{{^has_icons}}2{{/has_icons}}">
+          <h2 id="{{slug}}" class="hasAnchor"><a href="#{{slug}}" class="anchor"></a>{{title}}</h2>
+          <p class="section-desc">{{{desc}}}</p>
+        </th>
+      </tr>{{/title}}
+      {{#subtitle}}<tr>
+        <th colspan="{{#has_icons}}3{{/has_icons}}{{^has_icons}}2{{/has_icons}}">
+          <h3 id="{{slug}}" class="hasAnchor"><a href="#{{slug}}" class="anchor"></a>{{subtitle}}</h3>
+          <p class="section-desc">{{{desc}}}</p>
+        </th>
+      </tr>{{/subtitle}}
+      {{#topics}}<tr>
+        {{#has_icons}}<td>{{#icon}}<a href="{{path}}"><img src="icons/{{{.}}}" width="30" height="30" alt="" /></a>{{/icon}}</td>{{/has_icons}}
+        <td>
+          <p>{{#aliases}}<code><a href="{{path}}">{{{.}}}</a></code> {{/aliases}}</p>
+        </td>
+        <td><p>{{{title}}}</p></td>
+      </tr>{{/topics}}
+    </tbody>{{/rows}}
+    </table>
+  </div>
+
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
+  </div>
+</div>

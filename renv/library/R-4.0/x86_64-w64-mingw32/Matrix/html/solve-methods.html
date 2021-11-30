@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Methods in Package Matrix for Function 'solve()'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for solve-methods {Matrix}"><tr><td>solve-methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Methods in Package Matrix for Function <code>solve()</code></h2>
+
+<h3>Description</h3>
+
+<p>Methods for function <code><a href="solve-methods.html">solve</a></code> to solve a linear system of
+equations, or equivalently, solve for <i>X</i> in
+</p>
+<p style="text-align: center;"><i>A X = B</i></p>
+
+<p>where <i>A</i> is a square matrix, and  <i>X</i>, <i>B</i> are matrices
+or vectors (which are treated as 1-column matrices), and the <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> syntax
+is </p>
+<pre>
+			X &lt;- solve(A,B)
+  </pre>
+<p>In <code>solve(a,b)</code> in the <span class="pkg">Matrix</span> package, <code>a</code> may also
+be a <code><a href="MatrixFactorization-class.html">MatrixFactorization</a></code> instead of directly a matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S4 method for signature 'CHMfactor,ddenseMatrix'
+solve(a, b,
+      system = c("A", "LDLt", "LD", "DLt", "L", "Lt", "D", "P", "Pt"), ...)
+
+## S4 method for signature 'dgCMatrix,matrix'
+solve(a, b, sparse = FALSE, tol = .Machine$double.eps, ...)
+
+  solve(a, b, ...) ## *the* two-argument version, almost always preferred to
+# solve(a)         ## the *rarely* needed one-argument version
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>a</code></td>
+<td>
+<p>a square numeric matrix, <i>A</i>, typically of one of the
+classes in <span class="pkg">Matrix</span>.  Logical matrices are coerced to
+corresponding numeric ones.</p>
+</td></tr>
+<tr valign="top"><td><code>b</code></td>
+<td>
+<p>numeric vector or matrix (dense or sparse) as RHS
+of the linear system <i>Ax = b</i>.</p>
+</td></tr>
+<tr valign="top"><td><code>system</code></td>
+<td>
+<p>only if <code>a</code> is a <code><a href="CHMfactor-class.html">CHMfactor</a></code>:
+character string indicating the kind of linear system to be
+solved, see below.  Note that the default, <code>"A"</code>, does
+<em>not</em> solve the triangular system (but <code>"L"</code> does).</p>
+</td></tr>
+<tr valign="top"><td><code>sparse</code></td>
+<td>
+<p>only when <code>a</code> is a
+<code><a href="sparseMatrix-class.html">sparseMatrix</a></code>, i.e., typically a
+<code><a href="dgCMatrix-class.html">dgCMatrix</a></code>: logical specifying if the result
+should be a (formally) sparse matrix.</p>
+</td></tr></table>
+
+
+<table summary="R argblock">
+<tr valign="top"><td><code>tol</code></td>
+<td>
+<p>only used when <code>a</code> is sparse, in the
+<code><a href="../../base/html/isSymmetric.html">isSymmetric</a>(a, tol=*)</code> test, where that applies.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>potentially further arguments to the methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt><code>signature(a = "ANY", b = "ANY")</code></dt><dd><p>is simply the
+<span class="pkg">base</span> package's S3 generic <code><a href="solve-methods.html">solve</a></code>.</p>
+</dd>
+</dl>
+
+<dl>
+<dt><code>signature(a = "CHMfactor", b = "...."), system= *</code></dt><dd><p>The
+<code>solve</code> methods for a <code>"<a href="CHMfactor-class.html">CHMfactor</a>"</code> object
+take an optional third argument <code>system</code> whose value can be
+one of the character strings <code>"A"</code>, <code>"LDLt"</code>, <code>"LD"</code>,
+<code>"DLt"</code>, <code>"L"</code>, <code>"Lt"</code>, <code>"D"</code>, <code>"P"</code> or
+<code>"Pt"</code>.  This argument describes the system to be solved.  The
+default,  <code>"A"</code>, is to solve <i>Ax = b</i> for <i>x</i> where
+<code>A</code> is sparse, positive-definite matrix that was factored to produce
+<code>a</code>.  Analogously, <code>system = "L"</code> returns the solution
+<i>x</i>, of <i>Lx = b</i>; similarly, for all system codes
+<b>but</b> <code>"P"</code> and <code>"Pt"</code> where, e.g., <code>x &lt;-
+	solve(a, b,system="P")</code> is equivalent to <code>x &lt;- P %*% b</code>.
+</p>
+<p>If <code>b</code> is a <code><a href="sparseMatrix-class.html">sparseMatrix</a></code>, <code>system</code>
+is used as above the corresponding sparse CHOLMOD algorithm is called.
+</p>
+</dd>
+<dt><code>signature(a = "ddenseMatrix", b = "....")</code></dt><dd><p>(for all
+<code>b</code>) work via <code>as(a, "dgeMatrix")</code>, using the its
+methods, see below.</p>
+</dd>
+<dt><code>signature(a = "denseLU", b = "missing")</code></dt><dd>
+<p>basically computes uses triangular forward- and back-solve.</p>
+</dd>
+<dt><code>signature(a = "dgCMatrix", b = "matrix")</code></dt><dd><p>, and</p>
+</dd>
+</dl>
+
+<dl>
+<dt><code>signature(a = "dgCMatrix", b = "ddenseMatrix")</code></dt><dd><p>with extra
+argument list <code>( sparse = FALSE, tol = .Machine$double.eps ) </code>:
+Uses the sparse <code><a href="lu.html">lu</a>(a)</code> decomposition (which is cached
+in <code>a</code>'s <code>factor</code> slot).
+By default, <code>sparse=FALSE</code>, returns a
+<code><a href="denseMatrix-class.html">denseMatrix</a></code>, since <i>U^{-1} L^{-1} B</i> may
+not be sparse at all, even when <i>L</i> and <i>U</i> are.
+</p>
+<p>If <code>sparse=TRUE</code>, returns a <code><a href="sparseMatrix-class.html">sparseMatrix</a></code>
+(which may not be very sparse at all, even if <code>a</code> <em>was</em> sparse).
+</p>
+</dd>
+<dt><code>signature(a = "dgCMatrix", b = "dsparseMatrix")</code></dt><dd><p>, and</p>
+</dd>
+<dt><code>signature(a = "dgCMatrix", b = "missing")</code></dt><dd><p>with extra
+argument list <code>( sparse=FALSE, tol = .Machine$double.eps ) </code>:
+Checks if <code>a</code> is symmetric, and in that case, coerces it to
+<code>"<a href="symmetricMatrix-class.html">symmetricMatrix</a>"</code>, and then computes a
+<em>sparse</em> solution via sparse Cholesky factorization,
+independently of the <code>sparse</code> argument.  If <code>a</code> is not
+symmetric, the sparse <code><a href="lu.html">lu</a></code> decomposition is used
+and the result will be sparse or dense, depending on the
+<code>sparse</code> argument, exactly as for the above (<code>b =
+	"ddenseMatrix"</code>) case.
+</p>
+</dd>
+<dt><code>signature(a = "dgeMatrix", b = ".....")</code></dt><dd>
+<p>solve the system via internal LU, calling LAPACK routines
+<code>dgetri</code> or <code>dgetrs</code>.
+</p>
+</dd>
+<dt><code>signature(a = "diagonalMatrix", b = "matrix")</code></dt><dd><p>and
+other <code>b</code>s: Of course this is trivially implemented, as
+<i>D^{-1}</i> is diagonal with entries <i>1 / D[i,i]</i>.</p>
+</dd>
+<dt><code>signature(a = "dpoMatrix", b = "....Matrix")</code></dt><dd><p>, and</p>
+</dd>
+<dt><code>signature(a = "dppMatrix", b = "....Matrix")</code></dt><dd>
+<p>The Cholesky decomposition of <code>a</code> is calculated (if
+needed) while solving the system.</p>
+</dd>
+<dt><code>signature(a = "dsCMatrix", b = "....")</code></dt><dd>
+<p>All these methods first try Cholmod's Cholesky factorization; if
+that works, i.e., typically if <code>a</code> is positive semi-definite,
+it is made use of.  Otherwise, the sparse LU decomposition is used
+as for the &ldquo;general&rdquo; matrices of class <code>"dgCMatrix"</code>.</p>
+</dd>
+<dt><code>signature(a = "dspMatrix", b = "....")</code></dt><dd><p>, and</p>
+</dd>
+<dt><code>signature(a = "dsyMatrix", b = "....")</code></dt><dd>
+<p>all end up calling LAPACK routines <code>dsptri</code>, <code>dsptrs</code>,
+<code>dsytrs</code> and <code>dsytri</code>.
+</p>
+</dd>
+<dt><code>signature(a = "dtCMatrix", b = "CsparseMatrix")</code></dt><dd><p>,</p>
+</dd>
+<dt><code>signature(a = "dtCMatrix", b = "dgeMatrix")</code></dt><dd><p>, etc
+sparse triangular solve, in traditional S/<span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> also known as
+<code><a href="../../base/html/backsolve.html">backsolve</a></code>, or <code><a href="../../base/html/backsolve.html">forwardsolve</a></code>.
+<code>solve(a,b)</code> is a <code><a href="sparseMatrix-class.html">sparseMatrix</a></code> if
+<code>b</code> is, and hence a <code><a href="denseMatrix-class.html">denseMatrix</a></code>
+otherwise.
+</p>
+</dd>
+<dt><code>signature(a = "dtrMatrix", b = "ddenseMatrix")</code></dt><dd><p>, and</p>
+</dd>
+<dt><code>signature(a = "dtpMatrix", b = "matrix")</code></dt><dd><p>, and
+similar <code>b</code>, including <code>"missing"</code>, and
+<code>"diagonalMatrix"</code>:
+</p>
+<p>all use LAPACK based versions of efficient triangular
+<code><a href="../../base/html/backsolve.html">backsolve</a></code>, or <code><a href="../../base/html/backsolve.html">forwardsolve</a></code>.
+</p>
+</dd>
+<dt><code>signature(a = "Matrix", b = "diagonalMatrix")</code></dt><dd>
+<p>works via <code>as(b, "CsparseMatrix")</code>.</p>
+</dd>
+<dt><code>signature(a = "sparseQR", b = "ANY")</code></dt><dd>
+<p>simply uses <code><a href="../../base/html/qr.html">qr.coef</a>(a, b)</code>.</p>
+</dd>
+<dt><code>signature(a = "pMatrix", b = ".....")</code></dt><dd>
+<p>these methods typically use <code><a href="matrix-products.html">crossprod</a>(a,b)</code>, as
+the inverse of a permutation matrix is the same as its transpose.</p>
+</dd>
+<dt><code>signature(a = "TsparseMatrix", b = "ANY")</code></dt><dd>
+<p>all work via <code>as(a, "CsparseMatrix")</code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="solve-methods.html">solve</a></code>, <code><a href="lu.html">lu</a></code>, and class documentations
+<code><a href="CHMfactor-class.html">CHMfactor</a></code>, <code><a href="sparseLU-class.html">sparseLU</a></code>, and
+<code><a href="MatrixFactorization-class.html">MatrixFactorization</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## A close to symmetric example with "quite sparse" inverse:
+n1 &lt;- 7; n2 &lt;- 3
+dd &lt;- data.frame(a = gl(n1,n2), b = gl(n2,1,n1*n2))# balanced 2-way
+X &lt;- sparse.model.matrix(~ -1+ a + b, dd)# no intercept --&gt; even sparser
+XXt &lt;- tcrossprod(X)
+diag(XXt) &lt;- rep(c(0,0,1,0), length.out = nrow(XXt))
+
+n &lt;- nrow(ZZ &lt;- kronecker(XXt, Diagonal(x=c(4,1))))
+image(a &lt;- 2*Diagonal(n) + ZZ %*% Diagonal(x=c(10, rep(1, n-1))))
+isSymmetric(a) # FALSE
+image(drop0(skewpart(a)))
+image(ia0 &lt;- solve(a)) # checker board, dense [but really, a is singular!]
+try(solve(a, sparse=TRUE))##-&gt; error [ TODO: assertError ]
+ia. &lt;- solve(a, sparse=TRUE, tol = 1e-19)##-&gt; *no* error
+if(R.version$arch == "x86_64")
+  ## Fails on 32-bit [Fedora 19, R 3.0.2] from Matrix 1.1-0 on [FIXME ??] only
+  stopifnot(all.equal(as.matrix(ia.), as.matrix(ia0)))
+a &lt;- a + Diagonal(n)
+iad &lt;- solve(a)
+ias &lt;- solve(a, sparse=TRUE)
+stopifnot(all.equal(as(ias,"denseMatrix"), iad, tolerance=1e-14))
+I. &lt;- iad %*% a          ; image(I.)
+I0 &lt;- drop0(zapsmall(I.)); image(I0)
+.I &lt;- a %*% iad
+.I0 &lt;- drop0(zapsmall(.I))
+stopifnot( all.equal(as(I0, "diagonalMatrix"), Diagonal(n)),
+           all.equal(as(.I0,"diagonalMatrix"), Diagonal(n)) )
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

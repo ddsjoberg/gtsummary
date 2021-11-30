@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Compute Model's Predictions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_predicted {insight}"><tr><td>get_predicted {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Compute Model's Predictions</h2>
+
+<h3>Description</h3>
+
+<p>Compute Model's Predictions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_predicted(x, ...)
+
+## S3 method for class 'lm'
+get_predicted(
+  x,
+  data = NULL,
+  predict = c("expectation", "link", "prediction", "relation"),
+  iterations = NULL,
+  verbose = TRUE,
+  ...
+)
+
+## S3 method for class 'stanreg'
+get_predicted(
+  x,
+  data = NULL,
+  predict = c("expectation", "link", "prediction", "relation"),
+  iterations = NULL,
+  include_random = TRUE,
+  include_smooth = TRUE,
+  verbose = TRUE,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A statistical model (can also be a data.frame, in which case the
+second argument has to be a model).</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Other argument to be passed for instance to
+<code><a href="get_predicted_ci.html">get_predicted_ci</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>An optional data frame in which to look for variables with which
+to predict. If omitted, the data used to fit the model is used.</p>
+</td></tr>
+<tr valign="top"><td><code>predict</code></td>
+<td>
+<p>Can be <code>"link"</code>, <code>"expectation"</code> (default), or
+<code>"prediction"</code>. This modulates the scale of the output as well as the
+type of certainty interval. More specifically, <code>"link"</code> gives an
+output on the link-scale (for logistic models, that means the log-odds
+scale) with a confidence interval (CI). <code>"expectation"</code> (default) also
+returns confidence intervals, but this time the output is on the response
+scale (for logistic models, that means probabilities). Finally,
+<code>"predict"</code> also gives an output on the response scale, but this time
+associated with a prediction interval (PI), which is larger than a
+confidence interval (though it mostly make sense for linear models). Read
+more about in the <strong>Details</strong> section below. <code>"relation"</code> is
+also accepted as a (deprecated) alias for <code>"expectation"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>iterations</code></td>
+<td>
+<p>For Bayesian models, this corresponds to the number of
+posterior draws. If <code>NULL</code>, will return all the draws (one for each
+iteration of the model). For frequentist models, if not <code>NULL</code>, will
+generate bootstrapped draws, from which bootstrapped CIs will be computed.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle warnings.</p>
+</td></tr>
+<tr valign="top"><td><code>include_random</code></td>
+<td>
+<p>If <code>TRUE</code> (default), include all random effects in
+the prediction. If <code>FALSE</code>, don't take them into account. Can also be
+a formula to specify which random effects to condition on when predicting
+(passed to the <code>re.form</code> argument). If <code>include_random = TRUE</code>
+and <code>newdata</code> is provided, make sure to include the random effect
+variables in <code>newdata</code> as well.</p>
+</td></tr>
+<tr valign="top"><td><code>include_smooth</code></td>
+<td>
+<p>For General Additive Models (GAMs). If <code>FALSE</code>,
+will fix the value of the smooth to its average, so that the predictions
+are not depending on it. (default), <code>mean()</code>, or
+<code>bayestestR::map_estimate()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The <code>predict</code> argument jointly modulates two separate concepts, the
+<strong>scale</strong> and the <strong>uncertainty interval</strong>.
+</p>
+
+
+<h4>Confidence Interval vs. Prediction Interval)</h4>
+
+
+<ul>
+<li> <p><strong>Linear models</strong> - <code>lm()</code>: For linear models, Prediction
+intervals (<code>predict = "prediction"</code>) show the range that likely
+contains the value of a new observation (in what range it is likely to
+fall), whereas confidence intervals (<code>predict = "expectation"</code> or
+<code>predict = "link"</code>) reflect the uncertainty around the estimated
+parameters (and gives the range of uncertainty of the regression line). In
+general, Prediction Intervals (PIs) account for both the uncertainty in the
+model's parameters, plus the random variation of the individual values.
+Thus, prediction intervals are always wider than confidence intervals.
+Moreover, prediction intervals will not necessarily become narrower as the
+sample size increases (as they do not reflect only the quality of the fit,
+but also the variability within the data).
+</p>
+</li>
+<li> <p><strong>General Linear models</strong> - <code>glm()</code>: For binomial models,
+prediction intervals are somewhat useless (for instance, for a binomial
+(bernoulli) model for which the dependent variable is a vector of 1s and
+0s, the prediction interval is... <code>[0, 1]</code>).
+</p>
+</li></ul>
+
+
+
+<h4>Link scale vs. Response scale</h4>
+
+<p>Having the output is on the scale of the response variable is arguably the
+most convenient to understand and visualize the relationships. If on the
+link-scale, no transformation is applied and the values are on the scale of
+the model's predictors. For instance, for a logistic model, the response
+scale corresponds to the predicted probabilities, whereas the link-scale
+makes predictions of log-odds (probabilities on the logit scale).
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>The fitted values (i.e. predictions for the response). For Bayesian
+or bootstrapped models (when <code>iterations != NULL</code>), this will be a
+dataframe with all iterations as columns (observations are still rows).
+</p>
+
+
+<h3>See Also</h3>
+
+<p>get_predicted_ci
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+x &lt;- lm(mpg ~ cyl + hp, data = mtcars)
+predictions &lt;- get_predicted(x)
+predictions
+
+get_predicted(x, predict = "prediction")
+
+# Get CI
+as.data.frame(predictions)
+
+# Bootsrapped
+as.data.frame(get_predicted(x, iterations = 4))
+summary(get_predicted(x, iterations = 4)) # Same as as.data.frame(..., keep_iterations = F)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

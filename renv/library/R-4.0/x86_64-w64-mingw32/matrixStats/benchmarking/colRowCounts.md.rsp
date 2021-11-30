@@ -1,0 +1,94 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string colname="colCounts"%>
+<%@string rowname="rowCounts"%>
+<%@meta title="${colname}() and ${rowname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-06-09"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=colname%>() and <%=rowname%>() against alternative methods.
+
+## Alternative methods
+
+* colSums() and rowSums()
+* apply() + sum()
+
+
+<% for (mode in c("logical", "integer", "double")) { %>
+
+## Data type "<%=mode%>"
+
+### Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = mode)
+})%>
+```
+
+### Results
+
+<% for (dataLabel in names(data)) { %>
+<% message(dataLabel) %>
+#### <%=dataLabel%> matrix
+
+
+```r
+<%=withCapture({
+X <- data[[.dataLabel.]]
+value <- 42
+})%>
+```
+
+<% gc() %>
+
+```r
+<%=withCapture({
+colStats <- microbenchmark(
+ colCounts   = colCounts(X, value = value, na.rm = FALSE),
+ colSums     = colSums(X == value, na.rm = FALSE),
+ "apply+sum" = apply(X, MARGIN = 2L, FUN = function(x) sum(x == value, na.rm = FALSE)),
+ unit = "ms"
+)
+})%>
+```
+
+```r
+<%=withCapture({
+X <- t(X)
+})%>
+```
+
+<% gc() %>
+
+```r
+<%=withCapture({
+rowStats <- microbenchmark(
+ rowCounts   = rowCounts(X, value = value, na.rm = FALSE),
+ rowSums     = rowSums(X == value, na.rm = FALSE),
+ "apply+sum" = apply(X, MARGIN = 1L, FUN = function(x) sum(x == value, na.rm = FALSE)),
+ unit = "ms"
+)
+})%>
+```
+
+<% crBenchmarkResults(colStats, rowStats, tags=c(mode, dataLabel)) %>
+
+<% } # for (dataLabel ...) %>
+
+<% } # for (mode ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-06-09
+o Created.
+---------------------------------------------------------------------------%>
