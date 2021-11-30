@@ -2,7 +2,7 @@
 #'
 #' The `tbl_summary` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.  Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 #' for detailed examples.
 #'
 #' @param data A data frame
@@ -50,7 +50,7 @@
 #' @param include variables to include in the summary table. Default is `everything()`
 #'
 #' @section select helpers:
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
 #' from the \\{tidyselect\\} package and \\{gtsummary\\} package are available to
 #' modify default behavior for groups of variables.
 #' For example, by default continuous variables are reported with the median

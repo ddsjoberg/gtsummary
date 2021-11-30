@@ -35,7 +35,7 @@ if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
     !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
   msg <- 
     paste("View this vignette on the",
-          "[package website](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html).")
+          "[package website](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html).")
   cat(msg)
   knitr::knit_exit()
 }
@@ -58,7 +58,7 @@ library(gtsummary)
 
 ## Example data set
 
-We'll be using the [`trial`](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set throughout this example.
+We'll be using the [`trial`](https://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set throughout this example.
 
 * This set contains data from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
 The outcomes are tumor response and death.  
@@ -112,7 +112,7 @@ Note the sensible defaults with this basic usage; each of the defaults may be cu
 * Variable levels are **indented** and **footnotes** are added.
 
 For this study data the summary statistics should be **split by treatment group**, which can be done by using the **`by=`** argument.
-To compare two or more groups, include [`add_p()`](http://www.danieldsjoberg.com/gtsummary/reference/add_p.html) with the function call, which detects variable type and uses an appropriate statistical test.
+To compare two or more groups, include [`add_p()`](https://www.danieldsjoberg.com/gtsummary/reference/add_p.html) with the function call, which detects variable type and uses an appropriate statistical test.
 
 ```{r}
 trial2 %>% tbl_summary(by = trt) %>% add_p()
@@ -276,7 +276,7 @@ Going beyond typing out specific variables in your data set, you can use:
 1. All [**{tidyselect} helpers**](https://tidyselect.r-lib.org/reference/select_helpers.html) available throughout the tidyverse, such as `starts_with()`, `contains()`, and `everything()` (i.e. anything you can use with the `dplyr::select()` function), can be used with {gtsummary}.
 
 
-1. Additional [**{gtsummary} selectors**](http://www.danieldsjoberg.com/gtsummary/reference/select_helpers.html) that are included in the package to supplement tidyselect functions.
+1. Additional [**{gtsummary} selectors**](https://www.danieldsjoberg.com/gtsummary/reference/select_helpers.html) that are included in the package to supplement tidyselect functions.
 
     + **Summary type** There are two primary ways to select variables by their summary type. This is useful, for example, when you wish to report the mean and standard deviation for all continuous variables: `statistic = all_continuous() ~ "{mean} ({sd})"`.
 
@@ -353,7 +353,7 @@ The default options can be changed using the {gtsummary} themes function `set_gt
 The package includes prespecified themes, and you can also create your own.
 Themes can control baseline behavior, for example, how p-values and percentages are rounded, which statistics are presented in `tbl_summary()`, default statistical tests in `add_p()`, etc.
 
-For details on creating a theme and setting personal defaults, review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html).
+For details on creating a theme and setting personal defaults, review the [themes vignette](https://www.danieldsjoberg.com/gtsummary/dev/articles/themes.html).
 
 ## Survey Data {#tbl_svysummary}
 
@@ -386,7 +386,7 @@ After creating the survey object, we can now summarize it similarly to a standar
 Like `tbl_summary()`, `tbl_svysummary()` accepts the `by=` argument and works with the `add_p()` and `add_overall()` functions. 
 
 It is not possible to pass custom functions to the `statistic=` argument of `tbl_svysummary()`.
-You must use one of the [pre-defined summary statistic functions](http://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svysummary.html#statistic-argument) (e.g. `{mean}`, `{median}`) which leverage functions from the {survey} package to calculate weighted statistics.  
+You must use one of the [pre-defined summary statistic functions](https://www.danieldsjoberg.com/gtsummary/dev/reference/tbl_svysummary.html#statistic-argument) (e.g. `{mean}`, `{median}`) which leverage functions from the {survey} package to calculate weighted statistics.  
 
 ```{r}
 svy_apiclus1 %>%

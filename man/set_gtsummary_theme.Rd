@@ -47,7 +47,7 @@ set_gtsummary_theme_ex1 <-
 reset_gtsummary_theme()
 }
 \seealso{
-\href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}
 
 Available \link[=theme_gtsummary]{gtsummary themes}
 }

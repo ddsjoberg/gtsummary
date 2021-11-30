@@ -105,7 +105,7 @@ For models holding outcome constant, the function takes as arguments a data fram
 the type of regression model, and the outcome variable \verb{y=}. Each column in the
 data frame is regressed on the specified outcome. The \code{tbl_uvregression}
 function arguments are similar to the \link{tbl_regression} arguments. Review the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 for detailed examples.
 
 You may alternatively hold a single covariate constant. For this, pass a data
@@ -174,7 +174,7 @@ tbl_uv_ex2 <-
   )
 }
 \seealso{
-See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
+See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
 
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
