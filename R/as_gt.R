@@ -6,9 +6,9 @@
 #' available via the [gt package](https://gt.rstudio.com/index.html).
 #'
 #' @description Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#advanced}{tbl_summary vignette}
 #' or
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced}{tbl_regression vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#advanced}{tbl_regression vignette}
 #' for detailed examples in the 'Advanced Customization' section.
 #'
 #' @param x Object created by a function from the gtsummary package

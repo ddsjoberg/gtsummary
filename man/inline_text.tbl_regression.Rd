@@ -44,7 +44,7 @@ A string reporting results from a gtsummary table
 Takes an object with class \code{tbl_regression}, and the
 location of the statistic to report and returns statistics for reporting
 inline in an R markdown document.  Detailed examples in the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \section{pattern argument}{
 

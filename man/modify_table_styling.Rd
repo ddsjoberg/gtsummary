@@ -71,7 +71,7 @@ gtsummary table by directly modifying \code{.$table_styling}
 }
 \details{
 Review the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
 vignette for information on \code{.$table_styling} objects.
 }
 \section{rows argument}{
@@ -108,7 +108,7 @@ numeric columns numeric. For the \emph{vast majority} of users,
 \seealso{
 \code{modify_table_body()}
 
-See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
+See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 
 Other Advanced modifiers: 
 \code{\link{modify_cols_merge}()},

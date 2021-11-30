@@ -117,7 +117,7 @@ tbl_regression.multinom <- function(x, ...) {
   result <-
     modify_table_styling(
       x = result,
-      column = groupname_col,
+      columns = all_of("groupname_col"),
       hide= FALSE,
       label = "**Outcome**",
       align = "left"

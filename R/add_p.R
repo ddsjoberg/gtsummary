@@ -35,7 +35,7 @@ add_p <- function(x, ...) {
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
 #' @family tbl_summary tools
-#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
+#' @seealso See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
 #' @export
 #' @return A `tbl_summary` object
 #' @author Daniel D. Sjoberg, Emily C. Zabor

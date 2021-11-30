@@ -9,7 +9,7 @@
 #' @export
 #' @return A character vector of styled p-values
 #' @family style tools
-#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
+#' @seealso See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
 #' @author Daniel D. Sjoberg
 #' @examples
 #' pvals <- c(

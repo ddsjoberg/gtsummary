@@ -14,7 +14,7 @@ Creates presentation-ready tables summarizing data sets, regression models, and 
 Useful links:
 \itemize{
   \item \url{https://github.com/ddsjoberg/gtsummary}
-  \item \url{http://www.danieldsjoberg.com/gtsummary/}
+  \item \url{https://www.danieldsjoberg.com/gtsummary/}
   \item Report bugs at \url{https://github.com/ddsjoberg/gtsummary/issues}
 }
 

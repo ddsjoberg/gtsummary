@@ -5,7 +5,7 @@
 #' gtsummary table by directly modifying `.$table_styling`
 #'
 #' Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
 #' vignette for information on `.$table_styling` objects.
 #'
 #' @param x gtsummary object
@@ -36,7 +36,7 @@
 #' string must match the single column name passed in `columns=`.
 #'
 #' @seealso `modify_table_body()`
-#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
+#' @seealso See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #' @export
 #' @family Advanced modifiers
 #'
