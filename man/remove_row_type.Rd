@@ -40,3 +40,6 @@ remove_row_type_ex1 <-
   tbl_summary(by = trt, missing = "no") \%>\%
   remove_row_type(age60, type = "header")
 }
+\seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+}

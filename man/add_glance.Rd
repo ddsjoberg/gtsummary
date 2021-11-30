@@ -122,3 +122,6 @@ add_glance_ex2 <-
     include = c(r.squared, AIC, sigma)
   )
 }
+\seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+}

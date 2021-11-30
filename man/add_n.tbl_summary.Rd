@@ -78,6 +78,8 @@ tbl_n_ex <-
   add_n()
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_summary tools: 
 \code{\link{add_ci}()},
 \code{\link{add_overall}()},

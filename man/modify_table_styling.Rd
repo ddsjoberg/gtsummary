@@ -108,7 +108,9 @@ numeric columns numeric. For the \emph{vast majority} of users,
 \seealso{
 \code{modify_table_body()}
 
-See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
+See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
+
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
 Other Advanced modifiers: 
 \code{\link{modify_cols_merge}()},

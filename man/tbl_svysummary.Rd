@@ -204,6 +204,8 @@ tbl_svysummary_ex2 <-
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_svysummary tools: 
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},

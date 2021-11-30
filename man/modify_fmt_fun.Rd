@@ -60,6 +60,8 @@ modify_fmt_fun_ex1 <-
   )
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other Advanced modifiers: 
 \code{\link{modify_cols_merge}()},
 \code{\link{modify_column_hide}()},

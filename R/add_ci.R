@@ -29,6 +29,7 @@
 #' @return gtsummary table
 #' @rdname add_ci
 #' @export
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #'
 #' @family tbl_summary tools
 #' @examples

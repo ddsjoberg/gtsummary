@@ -57,4 +57,7 @@ include em-dash for missing values, e.g. \code{"reference_row == TRUE"}}
 \lifecycle{deprecated}
 Use \code{modify_table_styling()} instead.
 }
+\seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+}
 \keyword{internal}

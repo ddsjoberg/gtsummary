@@ -12,6 +12,7 @@
 #' @export
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @examples
 #' separate_p_footnotes_ex1 <-
 #'   trial %>%

@@ -35,6 +35,8 @@ add_n.tbl_survfit_ex1 <-
   add_n()
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_survfit tools: 
 \code{\link{add_nevent.tbl_survfit}()},
 \code{\link{add_p.tbl_survfit}()},

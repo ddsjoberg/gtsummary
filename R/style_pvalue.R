@@ -107,5 +107,6 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
     )
   }
 
+  attributes(p_fmt) <- attributes(x)
   return(p_fmt)
 }

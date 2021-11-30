@@ -34,6 +34,7 @@
 #' @export
 #' @rdname tbl_survfit
 #' @family tbl_survfit tools
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Daniel D. Sjoberg
 #' @examplesIf assert_package("survival", boolean = TRUE)
 #' library(survival)

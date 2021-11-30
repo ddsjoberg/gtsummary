@@ -80,3 +80,6 @@ select_ex1 <-
     type = all_dichotomous() ~ "categorical"
   )
 }
+\seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+}

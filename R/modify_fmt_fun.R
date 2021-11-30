@@ -14,6 +14,7 @@
 #'
 #' @inheritSection modify_table_styling rows argument
 #' @family Advanced modifiers
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #' @examples
 #' # Example 1 ----------------------------------

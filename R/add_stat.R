@@ -50,6 +50,7 @@
 #' `tbl$inputs$variable`.
 #'
 #' @export
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @examples
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(stringr)

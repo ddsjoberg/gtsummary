@@ -90,7 +90,9 @@ add_p_ex2 <-
   )
 }
 \seealso{
-See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
+See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
+
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
 Other tbl_summary tools: 
 \code{\link{add_ci}()},

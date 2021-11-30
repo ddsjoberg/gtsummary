@@ -7,6 +7,7 @@
 #' @param type type of row to remove. Must be one of
 #' `c("header", "reference", "missing")`
 #' @export
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #'
 #' @examples
 #' # Example 1 ----------------------------------

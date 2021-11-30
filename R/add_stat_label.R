@@ -35,6 +35,7 @@
 #' label, e.g. `label = all_categorical() ~ "No. (%)"`
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Daniel D. Sjoberg
 #' @export
 #' @return A `tbl_summary` or `tbl_svysummary` object

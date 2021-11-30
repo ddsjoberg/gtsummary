@@ -17,6 +17,7 @@
 #' `"prop.test"` for dichotomous variables.
 #' See [tests] for details and more tests.
 #' @export
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #'
 #' @examples
 #' # Example 1 ----------------------------------

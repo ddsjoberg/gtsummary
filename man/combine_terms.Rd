@@ -57,6 +57,8 @@ combine_terms_ex1 <-
 }
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_regression tools: 
 \code{\link{add_global_p}()},
 \code{\link{add_q}()},

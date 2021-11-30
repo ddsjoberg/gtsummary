@@ -45,3 +45,6 @@ add_vif_ex2 <-
   add_vif(c("aGVIF", "df"))
 \dontshow{\}) # examplesIf}
 }
+\seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+}
