@@ -3,7 +3,7 @@
 #' \lifecycle{maturing}
 #' The following themes are available to use within the gtsummary package.
 #' Print theme elements with `theme_gtsummary_journal(set_theme = FALSE) %>% print()`.
-#' Review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html)
+#' Review the [themes vignette](https://www.danieldsjoberg.com/gtsummary/articles/themes.html)
 #' for details.
 #'
 #' @param set_theme Logical indicating whether to set the theme. Default is `TRUE`.
@@ -38,7 +38,7 @@
 #'
 #' Use `reset_gtsummary_theme()` to restore the default settings
 #'
-#' Review the [themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html)
+#' Review the [themes vignette](https://www.danieldsjoberg.com/gtsummary/articles/themes.html)
 #' to create your own themes.
 #' @examples
 #' # Setting JAMA theme for gtsummary
@@ -59,7 +59,7 @@
 #'
 #' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=60\%}}
 #' @name theme_gtsummary
-#' @seealso [Themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html)
+#' @seealso [Themes vignette](https://www.danieldsjoberg.com/gtsummary/articles/themes.html)
 #' @seealso [set_gtsummary_theme()], [reset_gtsummary_theme()]
 NULL
 

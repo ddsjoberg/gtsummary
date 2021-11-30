@@ -33,7 +33,7 @@ if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
     !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
   msg <- 
     paste("View this vignette on the",
-          "[package website](http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html).")
+          "[package website](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html).")
   cat(msg)
   knitr::knit_exit()
 }
@@ -42,7 +42,7 @@ if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
 ## Introduction
 
 **Reproducible reports** are an important part of good practices.  We often need to report the **results from a table** in the text of an R markdown report.
-**Inline reporting** has been made simple with [`inline_text()`](http://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_summary.html).
+**Inline reporting** has been made simple with [`inline_text()`](https://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_summary.html).
 The `inline_text()` function reports statistics from {gtsummary} tables inline in an [R markdown](https://rmarkdown.rstudio.com/lesson-1.html) report.
 
 ## Setup
@@ -57,7 +57,7 @@ library(gtsummary)
 
 ## Example data set
 
-We'll be using the [`trial`](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set throughout this example.
+We'll be using the [`trial`](https://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set throughout this example.
 
 * This set contains data from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
 The outcomes are tumor response and death.
@@ -73,7 +73,7 @@ trial2 <-
 
 ## Inline results from tbl_summary() {#inline_text_tbl_summary}
 
-First create a basic summary table using [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) (review [`tbl_summary()` vignette](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) for detailed overview of this function if needed).
+First create a basic summary table using [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) (review [`tbl_summary()` vignette](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) for detailed overview of this function if needed).
 
 ```{r}
 tab1 <- tbl_summary(trial2, by = trt)
@@ -101,8 +101,8 @@ inline_text(tab1, variable = stage, level = "T1", column = "Drug B")` `` resolve
 
 ## Inline results from tbl_regression() {#inline_text_tbl_regression}
 
-Similar syntax is used to report results from [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) and [`tbl_uvregression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_uvregression.html) tables.
-Refer to the [`tbl_regression()` vignette](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) if you need detailed guidance on using these functions. 
+Similar syntax is used to report results from [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) and [`tbl_uvregression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_uvregression.html) tables.
+Refer to the [`tbl_regression()` vignette](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) if you need detailed guidance on using these functions. 
 
 Let's first create a regression model.
 

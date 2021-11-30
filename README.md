@@ -20,7 +20,7 @@ regression models, and more, using sensible defaults with highly
 customizable capabilities.
 
 -   [**Summarize data frames or
-    tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
+    tibbles**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
     easily in **R**. Perfect for presenting descriptive statistics,
     comparing group **demographics** (e.g creating a **Table 1** for
     medical journals), and more. Automatically detects continuous,
@@ -29,7 +29,7 @@ customizable capabilities.
     missingness in each variable.
 
 -   [**Summarize regression
-    models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
+    models**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
     in R and include reference rows for categorical variables. Common
     regression models, such as logistic regression and Cox proportional
     hazards regression, are automatically identified and the tables are
@@ -37,24 +37,24 @@ customizable capabilities.
     Hazard Ratio).
 
 -   [**Customize gtsummary
-    tables**](http://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions)
+    tables**](https://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions)
     using a growing list of formatting/styling functions.
-    **[Bold](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
+    **[Bold](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
     labels,
-    **[italicize](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
+    **[italicize](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
     levels, **[add
-    p-value](http://www.danieldsjoberg.com/gtsummary/reference/add_p.html)**
+    p-value](https://www.danieldsjoberg.com/gtsummary/reference/add_p.html)**
     to summary tables,
-    **[style](http://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)**
+    **[style](https://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)**
     the statistics however you choose,
-    **[merge](http://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)**
+    **[merge](https://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)**
     or
-    **[stack](http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)**
+    **[stack](https://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)**
     tables to present results side by side… there are so many
     possibilities to create the table of your dreams!
 
 -   **[Report statistics
-    inline](http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)**
+    inline](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)**
     from summary tables and regression summary tables in **R markdown**.
     Make your reports completely reproducible!
 
@@ -65,9 +65,9 @@ By leveraging [{broom}](https://broom.tidymodels.org/),
 result tables in a single line of R code!
 
 Check out the examples below, review the
-[vignettes](http://www.danieldsjoberg.com/gtsummary/articles/) for a
+[vignettes](https://www.danieldsjoberg.com/gtsummary/articles/) for a
 detailed exploration of the output options, and view the
-[gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html)
+[gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)
 for various customization examples.
 
 ## Installation
@@ -91,7 +91,7 @@ remotes::install_github("ddsjoberg/gtsummary")
 ### Summary Table
 
 Use
-[`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
+[`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
 to summarize a data frame.
 
 <img src = "https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_summary_demo1.gif" alt = "animated" width = "100%">
@@ -112,7 +112,7 @@ table1 <- tbl_summary(trial2)
 There are many **customization options** to **add information** (like
 comparing groups) and **format results** (like bold labels) in your
 table. See the
-[`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
+[`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
 tutorial for many more options, or below for one example.
 
 ``` r
@@ -133,10 +133,10 @@ table2 <-
 ### Regression Models
 
 Use
-[`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html)
+[`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html)
 to easily and beautifully display regression model results in a table.
 See the
-[tutorial](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
+[tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
 for customization options.
 
 ``` r
@@ -171,7 +171,7 @@ tbl_merge_ex1 <-
 <img src="man/figures/README-tbl_merge_ex1-1.png" width="60%" />
 
 Review even more output options in the **[table
-gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
+gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
 
 ## gtsummary + R Markdown
 
@@ -181,10 +181,10 @@ the **{gt}** package. Therefore, we have made it possible to print
 **{gtsummary}** tables with various engines.
 
 Review the **[gtsummary + R
-Markdown](http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)**
+Markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)**
 vignette for details.
 
-<a href="http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
+<a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
 <img src="man/figures/gt_output_formats.PNG" width="55%" /> </a>
 
 ## Save Individual Tables
@@ -268,7 +268,7 @@ hex sticker!
 
 Please note that the {gtsummary} project is released with a [Contributor
 Code of
-Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
+Conduct](https://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms. Thank
 you to all contributors!  
 [@ablack3](https://github.com/ablack3),

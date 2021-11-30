@@ -170,7 +170,7 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 
 \section{select helpers}{
 
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
 from the \\{tidyselect\\} package and \\{gtsummary\\} package are available to
 modify default behavior for groups of variables.
 For example, by default continuous variables are reported with the median

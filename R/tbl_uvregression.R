@@ -9,7 +9,7 @@
 #' the type of regression model, and the outcome variable `y=`. Each column in the
 #' data frame is regressed on the specified outcome. The `tbl_uvregression`
 #' function arguments are similar to the [tbl_regression] arguments. Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{tbl_uvregression vignette}
 #' for detailed examples.
 #'
 #' You may alternatively hold a single covariate constant. For this, pass a data
@@ -44,7 +44,7 @@
 #' @param hide_n Hide N column. Default is `FALSE`
 #' @inheritParams tbl_regression
 #' @author Daniel D. Sjoberg
-#' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
+#' @seealso See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
 #' @family tbl_uvregression tools
 #' @export
 #' @return A `tbl_uvregression` object

@@ -46,7 +46,7 @@ style_pvalue(pvals)
 style_pvalue(pvals, digits = 2, prepend_p = TRUE)
 }
 \seealso{
-See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
+See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
 
 Other style tools: 
 \code{\link{style_number}()},

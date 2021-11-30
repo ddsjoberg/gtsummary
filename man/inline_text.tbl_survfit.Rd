@@ -53,7 +53,7 @@ A string reporting results from a gtsummary table
 \lifecycle{maturing}
 Extracts and returns statistics from a \code{tbl_survfit} object for
 inline reporting in an R markdown document. Detailed examples in the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \examples{
 library(survival)

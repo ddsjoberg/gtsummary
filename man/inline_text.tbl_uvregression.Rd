@@ -44,7 +44,7 @@ A string reporting results from a gtsummary table
 Extracts and returns statistics from a table created by the \code{tbl_uvregression}
 function for inline reporting in an R markdown document.
 Detailed examples in the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \section{pattern argument}{
 

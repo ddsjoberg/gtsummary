@@ -44,7 +44,7 @@ style_percent(percent_vals)
 style_percent(percent_vals, symbol = TRUE, digits = 1)
 }
 \seealso{
-See Table Gallery \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{vignette} for example
+See Table Gallery \href{https://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{vignette} for example
 
 Other style tools: 
 \code{\link{style_number}()},
