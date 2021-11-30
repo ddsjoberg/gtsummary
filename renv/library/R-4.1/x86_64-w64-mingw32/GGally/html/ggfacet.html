@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Single 'ggplot2' plot matrix with 'facet_grid'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggfacet {GGally}"><tr><td>ggfacet {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Single <span class="pkg">ggplot2</span> plot matrix with <code><a href="../../ggplot2/help/facet_grid.html">facet_grid</a></code></h2>
+
+<h3>Description</h3>
+
+<p>Single <span class="pkg">ggplot2</span> plot matrix with <code><a href="../../ggplot2/help/facet_grid.html">facet_grid</a></code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggfacet(
+  data,
+  mapping = NULL,
+  columnsX = 1:ncol(data),
+  columnsY = 1:ncol(data),
+  fn = ggally_points,
+  ...,
+  columnLabelsX = names(data[columnsX]),
+  columnLabelsY = names(data[columnsY]),
+  xlab = NULL,
+  ylab = NULL,
+  title = NULL,
+  scales = "free"
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data.frame that contains all columns to be displayed.  This data will be melted before being passed into the function <code>fn</code></p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>aesthetic mapping (besides <code>x</code> and <code>y</code>).  See <code><a href="../../ggplot2/help/aes.html">aes</a>()</code></p>
+</td></tr>
+<tr valign="top"><td><code>columnsX</code></td>
+<td>
+<p>columns to be displayed in the plot matrix</p>
+</td></tr>
+<tr valign="top"><td><code>columnsY</code></td>
+<td>
+<p>rows to be displayed in the plot matrix</p>
+</td></tr>
+<tr valign="top"><td><code>fn</code></td>
+<td>
+<p>function to be executed. Similar to <code><a href="../../GGally/help/ggpairs.html">ggpairs</a></code> and <code><a href="../../GGally/help/ggduo.html">ggduo</a></code>, the function may either be a string identifier or a real function that <code><a href="../../GGally/help/wrap.html">wrap</a></code> understands.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>extra arguments passed directly to <code>fn</code></p>
+</td></tr>
+<tr valign="top"><td><code>columnLabelsX, columnLabelsY</code></td>
+<td>
+<p>column and row labels to display in the plot matrix</p>
+</td></tr>
+<tr valign="top"><td><code>xlab, ylab, title</code></td>
+<td>
+<p>plot matrix labels</p>
+</td></tr>
+<tr valign="top"><td><code>scales</code></td>
+<td>
+<p>parameter supplied to <code>ggplot2::<a href="../../ggplot2/help/facet_grid.html">facet_grid</a></code>. Default behavior is <code>"free"</code></p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+if (requireNamespace("chemometrics", quietly = TRUE)) {
+  data(NIR, package = "chemometrics")
+  NIR_sub &lt;- data.frame(NIR$yGlcEtOH, NIR$xNIR[,1:3])
+  str(NIR_sub)
+  x_cols &lt;- c("X1115.0", "X1120.0", "X1125.0")
+  y_cols &lt;- c("Glucose", "Ethanol")
+
+  # using ggduo directly
+  p &lt;- ggduo(NIR_sub, x_cols, y_cols, types = list(continuous = "points"))
+  p_(p)
+
+  # using ggfacet
+  p &lt;- ggfacet(NIR_sub, x_cols, y_cols)
+  p_(p)
+
+  # add a smoother
+  p &lt;- ggfacet(NIR_sub, x_cols, y_cols, fn = 'smooth_loess')
+  p_(p)
+  # same output
+  p &lt;- ggfacet(NIR_sub, x_cols, y_cols, fn = ggally_smooth_loess)
+  p_(p)
+
+  # Change scales to be the same in for every row and for every column
+  p &lt;- ggfacet(NIR_sub, x_cols, y_cols, scales = "fixed")
+  p_(p)
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

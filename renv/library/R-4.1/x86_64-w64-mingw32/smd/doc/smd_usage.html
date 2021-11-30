@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Bradley Saul" />
+
+<meta name="date" content="2020-10-13" />
+
+<title>Using smd</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Using smd</h1>
+<h4 class="author">Bradley Saul</h4>
+<h4 class="date">2020-10-13</h4>
+
+
+
+<p>The <code>smd</code> package provides the <code>smd</code> method to compute standardized mean differences between two groups for continuous values (<code>numeric</code> and <code>integer</code> data types) and categorical values (<code>factor</code>, <code>character</code>, and <code>logical</code>). The method also works on <code>matrix</code>, <code>list</code>, and <code>data.frame</code> data types by applying <code>smd()</code> over the columns of the <code>matrix</code> or <code>data.frame</code> and each item of the <code>list</code>. The package is based on <span class="citation">Yang and Dalton (2012)</span>.</p>
+<p>The <code>smd</code> function computes the standardized mean difference for each level <span class="math inline">\(k\)</span> of a grouping variable compared to a reference <span class="math inline">\(r\)</span> level:</p>
+<p><span class="math display">\[
+d_k = \sqrt{(\bar{x}_r - \bar{x}_{k})^{\intercal}S_{rk}^{-1}(\bar{x}_r - \bar{x}_{k})}
+\]</span></p>
+<p>where <span class="math inline">\(\bar{x}_{\cdot}\)</span> and <span class="math inline">\(S_{rk}\)</span> are the sample mean and covariances for reference group <span class="math inline">\(r\)</span> and group <span class="math inline">\(k\)</span>, respectively. In the case that <span class="math inline">\(x\)</span> is categorical, <span class="math inline">\(\bar{x}\)</span> is the vector of proportions of each category level within a group, and <span class="math inline">\(S_{rk}\)</span> is the multinomial covariance matrix.</p>
+<p>Standard errors are computed using the formula described in <span class="citation">Hedges and Olkin (1985)</span>:</p>
+<p><span class="math display">\[
+\sqrt{ \frac{n_r + n_k}{n_rn_k} + \frac{d_k^2}{2(n_r + n_k)} }
+\]</span></p>
+<div id="examples" class="section level1">
+<h1>Examples</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(smd)</span></code></pre></div>
+<div id="numeric" class="section level2">
+<h2>Numeric</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>xn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">90</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>gg2 &lt;-<span class="st"> </span><span class="kw">rep</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], <span class="dt">each =</span> <span class="dv">45</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>gg3 &lt;-<span class="st"> </span><span class="kw">rep</span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>], <span class="dt">each =</span> <span class="dv">30</span>)</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="kw">smd</span>(<span class="dt">x =</span> xn, <span class="dt">g =</span> gg2)</span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt;   term   estimate</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; 1    B 0.03413269</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="kw">smd</span>(<span class="dt">x =</span> xn, <span class="dt">g =</span> gg3)</span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt;   term    estimate</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; 1    B -0.25169577</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; 2    C -0.07846864</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="kw">smd</span>(<span class="dt">x =</span> xn, <span class="dt">g =</span> gg2, <span class="dt">std.error =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt;   term   estimate std.error</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; 1    B 0.03413269 0.2108339</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="kw">smd</span>(<span class="dt">x =</span> xn, <span class="dt">g =</span> gg3, <span class="dt">std.error =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt;   term    estimate std.error</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt; 1    B -0.25169577 0.2592192</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="co">#&gt; 2    C -0.07846864 0.2582982</span></span></code></pre></div>
+</div>
+<div id="integers" class="section level2">
+<h2>Integers</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>xi &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">20</span>, <span class="dv">90</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">smd</span>(<span class="dt">x =</span> xi, <span class="dt">g =</span> gg2)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt;   term  estimate</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; 1    B 0.1687339</span></span></code></pre></div>
+</div>
+<div id="character" class="section level2">
+<h2>Character</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>xc &lt;-<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">replicate</span>(<span class="dv">2</span>, <span class="kw">sort</span>(<span class="kw">sample</span>(letters[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>], <span class="dv">45</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)), <span class="dt">simplify =</span> <span class="ot">FALSE</span>))</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">smd</span>(<span class="dt">x =</span> xc, <span class="dt">g =</span> gg2)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt;   term  estimate</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; 1    B 0.1946887</span></span></code></pre></div>
+</div>
+<div id="factors" class="section level2">
+<h2>Factors</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>xf &lt;-<span class="st"> </span><span class="kw">factor</span>(xc)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">smd</span>(<span class="dt">x =</span> xf, <span class="dt">g =</span> gg2)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt;   term  estimate</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; 1    B 0.1946887</span></span></code></pre></div>
+</div>
+<div id="logical" class="section level2">
+<h2>Logical</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>xl &lt;-<span class="st"> </span><span class="kw">as.logical</span>(<span class="kw">rbinom</span>(<span class="dv">90</span>, <span class="dv">1</span>, <span class="dt">prob =</span> <span class="fl">0.5</span>))</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">smd</span>(<span class="dt">x =</span> xl, <span class="dt">g =</span> gg2)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt;   term estimate</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; 1    B        0</span></span></code></pre></div>
+</div>
+<div id="matrices" class="section level2">
+<h2>Matrices</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>mm &lt;-<span class="st"> </span><span class="kw">cbind</span>(xl, xl, xl, xl)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">smd</span>(<span class="dt">x =</span> mm, <span class="dt">g =</span> gg3, <span class="dt">std.error =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt;               xl          xl          xl          xl</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; [1,] -0.06765101 -0.06765101 -0.06765101 -0.06765101</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; [2,] -0.20203051 -0.20203051 -0.20203051 -0.20203051</span></span></code></pre></div>
+</div>
+<div id="lists" class="section level2">
+<h2>Lists</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>ll &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">xn =</span> xn, <span class="dt">xi =</span> xi, <span class="dt">xf =</span> xf, <span class="dt">xl =</span> xl)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">smd</span>(<span class="dt">x =</span> ll, <span class="dt">g =</span> gg3)</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt;   variable term    estimate</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; 1       xn    B -0.25169577</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; 2       xn    C -0.07846864</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; 3       xi    B  0.30325301</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; 4       xi    C  0.36089675</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; 5       xf    B  1.50232594</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; 6       xf    C  2.23606798</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; 7       xl    B -0.06765101</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt; 8       xl    C -0.20203051</span></span></code></pre></div>
+</div>
+<div id="data.frames" class="section level2">
+<h2>data.frames</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(xn, xi, xc, xf, xl)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">smd</span>(<span class="dt">x =</span> df, <span class="dt">g =</span> gg3)</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;    variable term    estimate</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt; 1        xn    B -0.25169577</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; 2        xn    C -0.07846864</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt; 3        xi    B  0.30325301</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt; 4        xi    C  0.36089675</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; 5        xc    B  1.50232594</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; 6        xc    C  2.23606798</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; 7        xf    B  1.50232594</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt; 8        xf    C  2.23606798</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt; 9        xl    B -0.06765101</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt; 10       xl    C -0.20203051</span></span></code></pre></div>
+</div>
+<div id="using-smd-with-dplyr" class="section level2">
+<h2>Using <code>smd</code> with <code>dplyr</code></h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">library</span>(dplyr, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; Warning: package &#39;dplyr&#39; was built under R version 3.6.2</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; </span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; Attaching package: &#39;dplyr&#39;</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; The following objects are masked from &#39;package:stats&#39;:</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; </span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt;     filter, lag</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; The following objects are masked from &#39;package:base&#39;:</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; </span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a>df<span class="op">$</span>g &lt;-<span class="st"> </span>gg2</span>
+<span id="cb10-12"><a href="#cb10-12"></a>df <span class="op">%&gt;%</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="st">  </span><span class="kw">summarize_at</span>(</span>
+<span id="cb10-14"><a href="#cb10-14"></a>    <span class="dt">.vars =</span> <span class="kw">vars</span>(dplyr<span class="op">::</span><span class="kw">matches</span>(<span class="st">&quot;^x&quot;</span>)),</span>
+<span id="cb10-15"><a href="#cb10-15"></a>    <span class="dt">.funs =</span> <span class="kw">list</span>(<span class="dt">smd =</span> <span class="op">~</span><span class="st"> </span><span class="kw">smd</span>(., <span class="dt">g =</span> g)<span class="op">$</span>estimate))</span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="co">#&gt;       xn_smd    xi_smd    xc_smd    xf_smd xl_smd</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="co">#&gt; 1 0.03413269 0.1687339 0.1946887 0.1946887      0</span></span></code></pre></div>
+</div>
+</div>
+<div id="other-packages" class="section level1">
+<h1>Other packages</h1>
+<p>See:</p>
+<ul>
+<li><a href="https://CRAN.R-project.org/package=tableone">tableone</a></li>
+<li><a href="https://cran.r-project.org/package=stddiff">stddiff</a></li>
+</ul>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references hanging-indent">
+<div id="ref-hedges1985">
+<p>Hedges, LV, and I Olkin. 1985. <em>Statistical Methods for Meta-Analysis</em>.</p>
+</div>
+<div id="ref-yang2012unified">
+<p>Yang, Dongsheng, and Jarrod E Dalton. 2012. “A Unified Approach to Measuring the Effect Size Between Two Groups Using SAS” 335: 1–6. <a href="http://www.lerner.ccf.org/qhs/software/lib/stddiff.pdf">http://www.lerner.ccf.org/qhs/software/lib/stddiff.pdf</a>.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

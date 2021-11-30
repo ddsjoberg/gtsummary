@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Find file in a package.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for package_file {devtools}"><tr><td>package_file {devtools}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Find file in a package.</h2>
+
+<h3>Description</h3>
+
+<p>It always starts by walking up the path until it finds the root directory,
+i.e. a directory containing <code>DESCRIPTION</code>. If it cannot find the root
+directory, or it can't find the specified path, it will throw an error.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+package_file(..., path = ".")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Components of the path.</p>
+</td></tr>
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p>Place to start search for package directory.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+package_file("figures", "figure_1")
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>devtools</em> version 2.4.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

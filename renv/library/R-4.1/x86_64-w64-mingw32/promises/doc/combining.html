@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Combining promises</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Combining <code>promises</code></h1>
+
+
+
+<p>So far, all of our examples have involved chaining operations onto a single promise. In practice, you’ll often find yourself needing to perform tasks that require the results of more than one promise. These are some patterns you may find useful:</p>
+<ul>
+<li><a href="#gathering"><strong>Gathering:</strong></a> Combining multiple independent promises into a single computation</li>
+<li><a href="#nesting"><strong>Nesting:</strong></a> Using the result of one promise to affect the input or execution of another async operation</li>
+<li><a href="#racing"><strong>Racing:</strong></a> Using the fastest of multiple promises</li>
+<li><a href="#mapping"><strong>Mapping:</strong></a> Applying an async function to each of a list’s elements and collecting the results</li>
+<li><a href="#reducing"><strong>Reducing:</strong></a> Applying an async function to each of a list’s elements and reducing</li>
+</ul>
+<div id="gathering" class="section level2">
+<h2>Gathering</h2>
+<p>The most common pattern for combining promises is gathering, where you have two or more promises in hand and you want to use all of their results in a computation. The <code>promise_all</code> function is designed for this. Its signature looks like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">promise_all</span>(..., <span class="dt">.list =</span> <span class="ot">NULL</span>)</span></code></pre></div>
+<p><code>promise_all</code> takes any number of promises as named arguments, and returns a promise of a list containing named elements with the results of those promises.</p>
+<p>Here’s an example using <code>promise_all</code> to combine the results of two async <code>read.csv</code> operations:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(promises)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">library</span>(future)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">plan</span>(multisession)</span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a>a &lt;-<span class="st"> </span><span class="kw">future_promise</span>(<span class="kw">read.csv</span>(<span class="st">&quot;a.csv&quot;</span>))</span>
+<span id="cb2-6"><a href="#cb2-6"></a>b &lt;-<span class="st"> </span><span class="kw">future_promise</span>(<span class="kw">read.csv</span>(<span class="st">&quot;b.csv&quot;</span>))</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a>result &lt;-<span class="st"> </span><span class="kw">promise_all</span>(<span class="dt">a =</span> a, <span class="dt">b =</span> b) <span class="op">%...&gt;%</span><span class="st"> </span>{</span>
+<span id="cb2-9"><a href="#cb2-9"></a>  <span class="kw">rbind</span>(.<span class="op">$</span>a, .<span class="op">$</span>b)</span>
+<span id="cb2-10"><a href="#cb2-10"></a>}</span></code></pre></div>
+<p>In this example, the value of <code>.</code> within the curly braces is a list whose elements <code>a</code> and <code>b</code> are both data frames. We use <code>rbind</code> to combine them.</p>
+<p>The <code>.$</code> prefix is a bit inelegant, so we recommend the use of the base R function <code>with</code>, which lets you skip the prefix. Here’s the same example, with <code>with</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">library</span>(promises)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">library</span>(future)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">plan</span>(multisession)</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a>a &lt;-<span class="st"> </span><span class="kw">future_promise</span>(<span class="kw">read.csv</span>(<span class="st">&quot;a.csv&quot;</span>))</span>
+<span id="cb3-6"><a href="#cb3-6"></a>b &lt;-<span class="st"> </span><span class="kw">future_promise</span>(<span class="kw">read.csv</span>(<span class="st">&quot;b.csv&quot;</span>))</span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="kw">promise_all</span>(<span class="dt">a =</span> a, <span class="dt">b =</span> b) <span class="op">%...&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="st">  </span><span class="kw">with</span>({</span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="kw">rbind</span>(a, b)</span>
+<span id="cb3-11"><a href="#cb3-11"></a>  })</span></code></pre></div>
+<p>(Note that since the <code>promise_all</code> argument names are the same as the variable names (<code>a = a</code>, <code>b = b</code>), the original variables are masked: inside the <code>with</code> block, <code>a</code> now refers to the <em>result</em> of the promise <code>a</code>, not the promise object itself. If you find this confusing, you can just choose a different argument name, like <code>promise_all(a_result = a, …)</code>.)</p>
+<p>The combination of <code>promise_all</code> and <code>with</code> is a concise and powerful way to gather the results of multiple promises.</p>
+<p><code>promise_all</code> also gives you two other options for passing input promises. First, if you would rather your result list be unnamed, you can pass in promises as unnamed arguments: <code>promise_all(a, b)</code> would yield <code>list(1, 2)</code>. Second, if you have a list of promises already in hand, you can pass the list as a single argument using <code>promise_all(.list = x)</code> (instead of, say, using <code>do.call(promise_all, x)</code>).</p>
+</div>
+<div id="nesting" class="section level2">
+<h2>Nesting</h2>
+<p>Gathering is easy and convenient, but sometimes not flexible enough. For example, if you use the result of promise <code>a</code> to decide whether to launch a second async task, whose result you then use in combination with the result of <code>a</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">library</span>(promises)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">library</span>(future)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">plan</span>(multisession)</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a>a &lt;-<span class="st"> </span><span class="kw">future_promise</span>(<span class="dv">1</span>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a>a <span class="op">%...&gt;%</span><span class="st"> </span>(<span class="cf">function</span>(a) {</span>
+<span id="cb4-8"><a href="#cb4-8"></a>  b &lt;-<span class="st"> </span><span class="kw">future_promise</span>(<span class="dv">2</span>)</span>
+<span id="cb4-9"><a href="#cb4-9"></a>  b <span class="op">%...&gt;%</span><span class="st"> </span>(<span class="cf">function</span>(b) {</span>
+<span id="cb4-10"><a href="#cb4-10"></a>    a <span class="op">+</span><span class="st"> </span>b</span>
+<span id="cb4-11"><a href="#cb4-11"></a>  })</span>
+<span id="cb4-12"><a href="#cb4-12"></a>})</span></code></pre></div>
+<p>(We use anonymous functions here to mask the names of the original promises–i.e. once inside the first anonymous function, the symbol <code>a</code> now refers to the result of the promise <code>a</code>.)</p>
+<p>The nesting pattern is effective and flexible. The main downside is the physical nesting of the source code; if you use this pattern to a depth of more than a couple of promises, your code will be quite indented (in programming jargon this is referred to as the “pyramid of doom”).</p>
+</div>
+<div id="racing" class="section level2">
+<h2>Racing</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">library</span>(promises)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">library</span>(future)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="kw">plan</span>(multisession)</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a>a &lt;-<span class="st"> </span><span class="kw">future_promise</span>({ <span class="kw">Sys.sleep</span>(<span class="dv">1</span>); <span class="dv">1</span> })</span>
+<span id="cb5-6"><a href="#cb5-6"></a>b &lt;-<span class="st"> </span><span class="kw">future_promise</span>({ <span class="kw">Sys.sleep</span>(<span class="fl">0.5</span>); <span class="dv">2</span> })</span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a>first &lt;-<span class="st"> </span><span class="kw">promise_race</span>(a, b)</span></code></pre></div>
+<p><code>promise_race</code> takes multiple promises and returns a new promise that will be fulfilled with the first promise that succeeds. In the example above, <code>first</code> is a promise that will be fulfilled with <code>2</code> after 0.5 seconds.</p>
+<p>If one of the input promises rejects before any succeed, then the returned promise will be rejected.</p>
+<p>Note that promises does not currently support cancellation. So losing promises will attempt to run to completion even after the race ends.</p>
+</div>
+<div id="mapping" class="section level2">
+<h2>Mapping</h2>
+<p>Use <code>promise_map</code> to run an async operation on each element of a list or vector, and collect the results in a list. It’s very similar to <code>lapply</code> or <code>purrr::map</code>, except that the function to apply can return a promise, and the return value is also a promise.</p>
+<p>In the example below, we iterate over a named vector of package names. For each package name, we launch an async task to download the package’s description file from CRAN pick out the last published date.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">library</span>(promises)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">library</span>(future)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="kw">plan</span>(multisession)</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a>get_pub_date &lt;-<span class="st"> </span><span class="cf">function</span>(pkg) {</span>
+<span id="cb6-6"><a href="#cb6-6"></a>  desc_url &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;https://cran.r-project.org/web/packages/&quot;</span>, pkg, <span class="st">&quot;/DESCRIPTION&quot;</span>)</span>
+<span id="cb6-7"><a href="#cb6-7"></a>  <span class="kw">future_promise</span>({</span>
+<span id="cb6-8"><a href="#cb6-8"></a>    <span class="kw">read.dcf</span>(<span class="kw">url</span>(desc_url))[, <span class="st">&quot;Date/Publication&quot;</span>] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unname</span>()</span>
+<span id="cb6-9"><a href="#cb6-9"></a>  })</span>
+<span id="cb6-10"><a href="#cb6-10"></a>}</span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a>packages &lt;-<span class="st"> </span><span class="kw">setNames</span>(, <span class="kw">c</span>(<span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;knitr&quot;</span>))</span>
+<span id="cb6-13"><a href="#cb6-13"></a></span>
+<span id="cb6-14"><a href="#cb6-14"></a>pkg_dates &lt;-<span class="st"> </span><span class="kw">promise_map</span>(packages, get_pub_date)</span>
+<span id="cb6-15"><a href="#cb6-15"></a></span>
+<span id="cb6-16"><a href="#cb6-16"></a>pkg_dates <span class="op">%...&gt;%</span><span class="st"> </span><span class="kw">print</span>()</span></code></pre></div>
+<p>The resulting output looks like this:</p>
+<pre><code>$ggplot2
+[1] &quot;2016-12-30 22:45:17&quot;
+
+$dplyr
+[1] &quot;2017-09-28 20:43:29 UTC&quot;
+
+$knitr
+[1] &quot;2018-01-29 11:01:22 UTC&quot;</code></pre>
+<p><code>promise_map</code> works serially; each time it calls the given function on an element of the list/vector, it will wait for the returned promise to resolve before proceeding to the next element. Furthermore, any error or rejected promise will cause the entire <code>promise_map</code> operation to reject.</p>
+<p>If you want behavior that’s similar to <code>promise_map</code> but for all the async operations to occur in parallel, you can achieve that with a combination of a regular <code>purrr::map</code> and <code>promise_all</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>pkg_dates &lt;-<span class="st"> </span>purrr<span class="op">::</span><span class="kw">map</span>(packages, get_pub_date) <span class="op">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="st">  </span><span class="kw">promise_all</span>(<span class="dt">.list =</span> .)</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a>pkg_dates <span class="op">%...&gt;%</span><span class="st"> </span><span class="kw">print</span>()</span></code></pre></div>
+</div>
+<div id="reducing" class="section level2">
+<h2>Reducing</h2>
+<p>Use <code>promise_reduce</code> when you have a list where you want to run an async operation on each of the elements, and to do so serially (i.e. only one async operation runs at a time). This can be helpful when you’re searching through some elements using an async operation and want to terminate early when your search succeeds.</p>
+<p>The signature of <code>promise_reduce</code> is as follows:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">promise_reduce</span>(x, func, <span class="dt">init =</span> <span class="ot">NULL</span>)</span></code></pre></div>
+<p>If you’ve worked with <code>base::Reduce()</code> or <code>purr:::reduce()</code>, this should seem reasonably familiar: <code>x</code> is a vector or list; <code>func</code> is a function that takes two arguments, the accumulated value and the “next” value; and <code>init</code> is the default accumulated value.</p>
+<p>The main difference between <code>promise_reduce</code> and <code>purrr:::reduce</code> is that with <code>promise_reduce</code>, your <code>func</code> can return a promise. If it does, <code>promise_reduce</code> will wait for it to resolve before updating the accumulated value and invoking <code>func</code> on the next element. The result returned from <code>promise_reduce</code> is a promise that resolves to the ultimate accumulated value.</p>
+<p>The following example loops through a partial list of CRAN mirrors, returning the first one that passes whatever check <code>http::http_error</code> performs.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">library</span>(promises)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">library</span>(future)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="kw">plan</span>(multisession)</span>
+<span id="cb10-4"><a href="#cb10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5"></a>cran_mirrors &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb10-6"><a href="#cb10-6"></a>  <span class="st">&quot;https://cloud.r-project.org&quot;</span>,</span>
+<span id="cb10-7"><a href="#cb10-7"></a>  <span class="st">&quot;https://cran.usthb.dz&quot;</span>,</span>
+<span id="cb10-8"><a href="#cb10-8"></a>  <span class="st">&quot;https://cran.csiro.au&quot;</span>,</span>
+<span id="cb10-9"><a href="#cb10-9"></a>  <span class="st">&quot;https://cran.wu.ac.at&quot;</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a>)</span>
+<span id="cb10-11"><a href="#cb10-11"></a></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="kw">promise_reduce</span>(cran_mirrors, <span class="cf">function</span>(result, mirror) {</span>
+<span id="cb10-13"><a href="#cb10-13"></a>  <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(result)) {</span>
+<span id="cb10-14"><a href="#cb10-14"></a>    result</span>
+<span id="cb10-15"><a href="#cb10-15"></a>  } <span class="cf">else</span> {</span>
+<span id="cb10-16"><a href="#cb10-16"></a>    <span class="kw">future_promise</span>({</span>
+<span id="cb10-17"><a href="#cb10-17"></a>      <span class="co"># Test the URL; return the URL on success, or NULL on failure</span></span>
+<span id="cb10-18"><a href="#cb10-18"></a>      <span class="cf">if</span> (<span class="op">!</span>httr<span class="op">::</span><span class="kw">http_error</span>(mirror)) mirror</span>
+<span id="cb10-19"><a href="#cb10-19"></a>    })</span>
+<span id="cb10-20"><a href="#cb10-20"></a>  }</span>
+<span id="cb10-21"><a href="#cb10-21"></a>}, <span class="dt">.init =</span> <span class="ot">NULL</span>) <span class="op">%...&gt;%</span><span class="st"> </span><span class="kw">print</span>()</span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

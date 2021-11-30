@@ -1,0 +1,105 @@
+Type: Package
+Package: codemetar
+Title: Generate 'CodeMeta' Metadata for R Packages
+Version: 0.3.1
+Authors@R: 
+    c(person(given = "Carl",
+             family = "Boettiger",
+             role = c("aut", "cre", "cph"),
+             email = "cboettig@gmail.com",
+             comment = c(ORCID = "0000-0002-1642-628X")),
+      person(given = "Anna",
+             family = "Krystalli",
+             role = c("rev", "ctb"),
+             comment = c(ORCID = "0000-0002-2378-4915")),
+      person(given = "Toph",
+             family = "Allen",
+             role = "rev",
+             comment = c(ORCID = "0000-0003-4580-091X")),
+      person(given = "Maëlle",
+             family = "Salmon",
+             role = c("ctb", "aut"),
+             comment = c(ORCID = "0000-0002-2815-0399")),
+      person(given = "rOpenSci",
+             role = "fnd",
+             comment = "https://ropensci.org/"),
+      person(given = "Katrin",
+             family = "Leinweber",
+             role = "ctb",
+             comment = c(ORCID = "0000-0001-5135-5758")),
+      person(given = "Noam",
+             family = "Ross",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-2136-0000")),
+      person(given = "Arfon",
+             family = "Smith",
+             role = "ctb"),
+      person(given = "Jeroen",
+             family = "Ooms",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-4035-0289")),
+      person(given = "Sebastian",
+             family = "Meyer",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-1791-9449")),
+      person(given = "Michael",
+             family = "Rustler",
+             role = "ctb",
+             comment = c(ORCID = "0000-0003-0647-7726")),
+      person(given = "Hauke",
+             family = "Sonnenberg",
+             role = "ctb",
+             comment = c(ORCID = "0000-0001-9134-2871")),
+      person(given = "Sebastian",
+             family = "Kreutzer",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-0734-2199")),
+      person(given = "Thierry",
+             family = "Onkelinx",
+             role = "ctb",
+             comment = c(ORCID = "0000-0001-8804-4216"))
+      )
+Description: The 'Codemeta' Project defines a 'JSON-LD' format
+    for describing software metadata, as detailed at
+    <https://codemeta.github.io>. This package provides utilities to
+    generate, parse, and modify 'codemeta.json' files automatically for R
+    packages, as well as tools and examples for working with
+    'codemeta.json' 'JSON-LD' more generally.
+License: GPL-3
+URL: https://github.com/ropensci/codemetar,
+        https://docs.ropensci.org/codemetar/
+BugReports: https://github.com/ropensci/codemetar/issues
+Depends: R (>= 3.2.0)
+Imports: commonmark, crul, desc, gert, gh, jsonlite (>= 1.6), magrittr,
+        memoise, methods, pingr, purrr, remotes, sessioninfo, stats,
+        urltools, xml2, cli
+Suggests: withr, covr, details, dplyr (>= 0.7.0), jsonld, jsonvalidate,
+        knitr, printr, rmarkdown, testthat (>= 3.0.0), usethis
+VignetteBuilder: knitr
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+X-schema.org-isPartOf: https://ropensci.org
+X-schema.org-keywords: metadata, codemeta, ropensci, citation, credit,
+        linked-data
+Config/testthat/edition: 3
+NeedsCompilation: no
+Packaged: 2021-06-01 15:42:51 UTC; cboettig
+Author: Carl Boettiger [aut, cre, cph]
+    (<https://orcid.org/0000-0002-1642-628X>),
+  Anna Krystalli [rev, ctb] (<https://orcid.org/0000-0002-2378-4915>),
+  Toph Allen [rev] (<https://orcid.org/0000-0003-4580-091X>),
+  Maëlle Salmon [ctb, aut] (<https://orcid.org/0000-0002-2815-0399>),
+  rOpenSci [fnd] (https://ropensci.org/),
+  Katrin Leinweber [ctb] (<https://orcid.org/0000-0001-5135-5758>),
+  Noam Ross [ctb] (<https://orcid.org/0000-0002-2136-0000>),
+  Arfon Smith [ctb],
+  Jeroen Ooms [ctb] (<https://orcid.org/0000-0002-4035-0289>),
+  Sebastian Meyer [ctb] (<https://orcid.org/0000-0002-1791-9449>),
+  Michael Rustler [ctb] (<https://orcid.org/0000-0003-0647-7726>),
+  Hauke Sonnenberg [ctb] (<https://orcid.org/0000-0001-9134-2871>),
+  Sebastian Kreutzer [ctb] (<https://orcid.org/0000-0002-0734-2199>),
+  Thierry Onkelinx [ctb] (<https://orcid.org/0000-0001-8804-4216>)
+Maintainer: Carl Boettiger <cboettig@gmail.com>
+Repository: CRAN
+Date/Publication: 2021-06-02 07:50:02 UTC
+Built: R 4.1.0; ; 2021-07-18 07:46:41 UTC; windows

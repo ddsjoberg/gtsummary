@@ -1,0 +1,102 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string fcnname="allocMatrix"%>
+<% fcnname <- "<%@string name="fcnname"%>" %>
+<%@meta title="${fcnname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-11-09"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=fcnname%>() against alternative methods.
+
+## Alternative methods
+
+* matrix()
+* matrix() special trick for NA
+
+where
+```r
+<%=withCapture({
+allocMatrix_R <- function(nrow, ncol, value = NA) {
+  if (is.na(value) && !is.nan(value)) {
+    matrix(data = value[c()], nrow = nrow, ncol = ncol)
+  } else {
+    matrix(data = value, nrow = nrow, ncol = ncol)
+  }
+} # allocMatrix_R()
+})%>
+```
+
+
+<% for (mode in c("integer", "double")) { %>
+
+## Data type "<%=mode%>"
+### Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = mode)
+values <- list(zero = 0, one = 1, "NA" = NA_real_)
+if (mode != "double")
+  values <- lapply(values, FUN = function(x) { storage.mode(x) <- mode; x })
+})%>
+```
+
+### Results
+
+<% for (ii in seq_along(data)) { %>
+<%
+dataLabel <- names(data)[ii]
+x <- data[[dataLabel]]
+gc()
+%>
+### <%=dataLabel%> matrix
+
+<% for (value in values) { %>
+
+<%
+valueLabel <- as.character(value)
+mprintf("%s: %s, value=%s\n", mode, dataLabel, valueLabel)
+%>
+
+```r
+<%=withCapture({
+dim <- dim(data[[.dataLabel.]])
+nrow <- dim[1L]
+ncol <- dim[2L]
+str(value)
+})%>
+```
+<% gc() %>
+
+```r
+<%=withCapture({
+stats <- microbenchmark(
+ "allocMatrix"         = allocMatrix(nrow = nrow, ncol = ncol, value = value),
+ "matrix"              = matrix(data = value, nrow = nrow, ncol = ncol),
+ "allocMatrix_R"       = allocMatrix_R(nrow = nrow, ncol = ncol, value = value),
+  unit = "ms"
+)
+})%>
+```
+
+<% benchmarkResults(stats, tags=c(mode, dataLabel, valueLabel)) %>
+
+<% } # for (value in values) %>
+
+<% } # for (ii ...) %>
+
+<% } # for (mode ...) %>
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-11-01
+o Created.
+---------------------------------------------------------------------------%>

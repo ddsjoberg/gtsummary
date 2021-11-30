@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Count number of parameters in a model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for n_parameters {insight}"><tr><td>n_parameters {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Count number of parameters in a model</h2>
+
+<h3>Description</h3>
+
+<p>Returns the number of parameters (coefficients) of a model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+n_parameters(x, ...)
+
+## Default S3 method:
+n_parameters(x, remove_nonestimable = FALSE, ...)
+
+## S3 method for class 'merMod'
+n_parameters(
+  x,
+  effects = c("fixed", "random"),
+  remove_nonestimable = FALSE,
+  ...
+)
+
+## S3 method for class 'glmmTMB'
+n_parameters(
+  x,
+  effects = c("fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated"),
+  remove_nonestimable = FALSE,
+  ...
+)
+
+## S3 method for class 'zeroinfl'
+n_parameters(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated"),
+  remove_nonestimable = FALSE,
+  ...
+)
+
+## S3 method for class 'gam'
+n_parameters(
+  x,
+  component = c("all", "conditional", "smooth_terms"),
+  remove_nonestimable = FALSE,
+  ...
+)
+
+## S3 method for class 'brmsfit'
+n_parameters(x, effects = "all", component = "all", ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A statistical model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments passed to or from other methods.</p>
+</td></tr>
+<tr valign="top"><td><code>remove_nonestimable</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, removes (i.e. does not
+count) non-estimable parameters (which may occur for models with
+rank-deficient model matrix).</p>
+</td></tr>
+<tr valign="top"><td><code>effects</code></td>
+<td>
+<p>Should number of parameters for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.</p>
+</td></tr>
+<tr valign="top"><td><code>component</code></td>
+<td>
+<p>Should total number of parameters, number parameters for the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The number of parameters in the model.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function returns the number of parameters for the fixed effects
+by default, as returned by <code>find_parameters(x, effects = "fixed")</code>.
+It does not include <em>all</em> estimated model parameters, i.e. auxiliary
+parameters like sigma or dispersion are not counted. To get the number of
+<em>all estimated</em> parameters, use <code>get_df(x, type = "model")</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(iris)
+model &lt;- lm(Sepal.Length ~ Sepal.Width * Species, data = iris)
+n_parameters(model)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Effect Sizes for Simple Hypothesis Tests</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Effect Sizes for Simple Hypothesis Tests</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#standardized-differences">Standardized Differences</a>
+<ul>
+<li><a href="#two-independent-samples">Two Independent Samples</a></li>
+<li><a href="#one-sample-and-paired-samples">One Sample and Paired Samples</a></li>
+<li><a href="#for-a-bayesian-t-test">For a Bayesian <em>t</em>-test</a></li>
+</ul></li>
+<li><a href="#one-way-anova">One way ANOVA</a></li>
+<li><a href="#contingency-tables-and-proportions">Contingency Tables and Proportions</a>
+<ul>
+<li><a href="#comparing-two-proportions-2x2-tables">Comparing Two Proportions (2x2 tables)</a></li>
+<li><a href="#paired-contingency-tables">Paired Contingency Tables</a></li>
+</ul></li>
+<li><a href="#rank-based-tests">Rank Based tests</a>
+<ul>
+<li><a href="#difference-in-ranks">Difference in Ranks</a></li>
+<li><a href="#rank-one-way-anova">Rank One way ANOVA</a></li>
+<li><a href="#rank-one-way-repeated-measures-anova">Rank One way Repeated-Measures ANOVA</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<p>This vignette provides a short review of effect sizes for common hypothesis tests (in <strong><code>R</code></strong> these are usually achieved with various <code>*.test()</code> functions).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(BayesFactor)</span></code></pre></div>
+<p>In most cases, the effect sizes can be automagically extracted from the <code>htest</code> object via the <code>effectsize()</code> function.</p>
+<div id="standardized-differences" class="section level1">
+<h1>Standardized Differences</h1>
+<p>For <em>t</em>-tests, it is common to report an effect size representing a standardized difference between the two compared samples’ means. These measures range from <span class="math inline">\(-\infty\)</span> to <span class="math inline">\(+\infty\)</span>, with negative values indicating the second group’s mean is larger (and vice versa).</p>
+<div id="two-independent-samples" class="section level2">
+<h2>Two Independent Samples</h2>
+<p>For two independent samples, the difference between the means is standardized based on the pooled standard deviation of both samples (assumed to be equal in the population):</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> mtcars, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Two Sample t-test
+&gt; 
+&gt; data:  mpg by am
+&gt; t = -4, df = 30, p-value = 3e-04
+&gt; alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+&gt; 95 percent confidence interval:
+&gt;  -10.85  -3.64
+&gt; sample estimates:
+&gt; mean in group 0 mean in group 1 
+&gt;            17.1            24.4</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohens_d</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> mtcars)</span></code></pre></div>
+<pre><code>&gt; Cohen&#39;s d |         95% CI
+&gt; --------------------------
+&gt; -1.48     | [-2.27, -0.67]
+&gt; 
+&gt; - Estimated using pooled SD.</code></pre>
+<p>Hedges’ <em>g</em> provides a bias correction for small sample sizes (<span class="math inline">\(N &lt; 20\)</span>).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hedges_g</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> mtcars)</span></code></pre></div>
+<pre><code>&gt; Hedges&#39; g |         95% CI
+&gt; --------------------------
+&gt; -1.44     | [-2.21, -0.65]
+&gt; 
+&gt; - Estimated using pooled SD.</code></pre>
+<p>If variances cannot be assumed to be equal, it is possible to get estimates that are not based on the pooled standard deviation:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> mtcars, <span class="at">var.equal =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Welch Two Sample t-test
+&gt; 
+&gt; data:  mpg by am
+&gt; t = -4, df = 18, p-value = 0.001
+&gt; alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+&gt; 95 percent confidence interval:
+&gt;  -11.28  -3.21
+&gt; sample estimates:
+&gt; mean in group 0 mean in group 1 
+&gt;            17.1            24.4</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohens_d</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> mtcars, <span class="at">pooled_sd =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>&gt; Cohen&#39;s d |         95% CI
+&gt; --------------------------
+&gt; -1.41     | [-2.26, -0.53]
+&gt; 
+&gt; - Estimated using un-pooled SD.</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hedges_g</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> mtcars, <span class="at">pooled_sd =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>&gt; Hedges&#39; g |         95% CI
+&gt; --------------------------
+&gt; -1.35     | [-2.17, -0.51]
+&gt; 
+&gt; - Estimated using un-pooled SD.</code></pre>
+<p>In cases where the differences between the variances are substantial, it is also common to standardize the difference based only on the standard deviation of one of the groups (usually the “control” group); this effect size is known as Glass’ <span class="math inline">\(\Delta\)</span> (delta)</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glass_delta</span>(mpg <span class="sc">~</span> am, <span class="at">data =</span> mtcars)</span></code></pre></div>
+<pre><code>&gt; Glass&#39; delta |         95% CI
+&gt; -----------------------------
+&gt; -1.17        | [-1.93, -0.39]</code></pre>
+<p>(Note that the standard deviation is taken from the <em>second</em> sample.)</p>
+</div>
+<div id="one-sample-and-paired-samples" class="section level2">
+<h2>One Sample and Paired Samples</h2>
+<p>In the case of a one-sample test, the effect size represents the standardized distance of the mean of the sample from the null value. For paired-samples, the difference between the paired samples is used:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(extra <span class="sc">~</span> group, <span class="at">data =</span> sleep, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Paired t-test
+&gt; 
+&gt; data:  extra by group
+&gt; t = -4, df = 9, p-value = 0.003
+&gt; alternative hypothesis: true difference in means is not equal to 0
+&gt; 95 percent confidence interval:
+&gt;  -2.46 -0.70
+&gt; sample estimates:
+&gt; mean of the differences 
+&gt;                   -1.58</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohens_d</span>(extra <span class="sc">~</span> group, <span class="at">data =</span> sleep, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>&gt; Cohen&#39;s d |         95% CI
+&gt; --------------------------
+&gt; -1.28     | [-2.23, -0.44]</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hedges_g</span>(extra <span class="sc">~</span> group, <span class="at">data =</span> sleep, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>&gt; Hedges&#39; g |         95% CI
+&gt; --------------------------
+&gt; -1.17     | [-2.04, -0.40]</code></pre>
+</div>
+<div id="for-a-bayesian-t-test" class="section level2">
+<h2>For a Bayesian <em>t</em>-test</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>(BFt <span class="ot">&lt;-</span> <span class="fu">ttestBF</span>(mtcars<span class="sc">$</span>mpg[mtcars<span class="sc">$</span>am <span class="sc">==</span> <span class="dv">0</span>], mtcars<span class="sc">$</span>mpg[mtcars<span class="sc">$</span>am <span class="sc">==</span> <span class="dv">1</span>]))</span></code></pre></div>
+<pre><code>&gt; Bayes factor analysis
+&gt; --------------
+&gt; [1] Alt., r=0.707 : 86.6 ±0%
+&gt; 
+&gt; Against denominator:
+&gt;   Null, mu1-mu2 = 0 
+&gt; ---
+&gt; Bayes factor type: BFindepSample, JZS</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">effectsize</span>(BFt, <span class="at">test =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<pre><code>&gt; Summary of Posterior Distribution
+&gt; 
+&gt; Parameter | Median |         95% CI
+&gt; -----------------------------------
+&gt; Cohens_d  |  -1.29 | [-2.09, -0.51]</code></pre>
+</div>
+</div>
+<div id="one-way-anova" class="section level1">
+<h1>One way ANOVA</h1>
+<p>For more details, see <a href="https://easystats.github.io/effectsize/articles/anovaES.html">ANOVA vignette</a>.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>onew <span class="ot">&lt;-</span> <span class="fu">oneway.test</span>(mpg <span class="sc">~</span> gear, <span class="at">data =</span> mtcars, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">eta_squared</span>(onew)</span></code></pre></div>
+<pre><code>&gt; Eta2 |       90% CI
+&gt; -------------------
+&gt; 0.43 | [0.18, 0.59]</code></pre>
+</div>
+<div id="contingency-tables-and-proportions" class="section level1">
+<h1>Contingency Tables and Proportions</h1>
+<p>For contingency tables Cramér’s <em>V</em> and <span class="math inline">\(\phi\)</span> (Phi, also known as Cohen’s <em>w</em>) indicate the strength of association with 0 indicating no association between the variables. While Cramér’s <em>V</em> is capped at 1 (perfect association), <span class="math inline">\(\phi\)</span> can be larger than 1.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>(Music <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">150</span>, <span class="dv">130</span>, <span class="dv">35</span>, <span class="dv">55</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">100</span>, <span class="dv">50</span>, <span class="dv">10</span>, <span class="dv">40</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">165</span>, <span class="dv">65</span>, <span class="dv">2</span>, <span class="dv">25</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">byrow =</span> <span class="cn">TRUE</span>, <span class="at">nrow =</span> <span class="dv">3</span>,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Study =</span> <span class="fu">c</span>(<span class="st">&quot;Psych&quot;</span>, <span class="st">&quot;Econ&quot;</span>, <span class="st">&quot;Law&quot;</span>),</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Music =</span> <span class="fu">c</span>(<span class="st">&quot;Pop&quot;</span>, <span class="st">&quot;Rock&quot;</span>, <span class="st">&quot;Jazz&quot;</span>, <span class="st">&quot;Classic&quot;</span>)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<pre><code>&gt;        Music
+&gt; Study   Pop Rock Jazz Classic
+&gt;   Psych 150  130   35      55
+&gt;   Econ  100   50   10      40
+&gt;   Law   165   65    2      25</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(Music)</span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Pearson&#39;s Chi-squared test
+&gt; 
+&gt; data:  Music
+&gt; X-squared = 52, df = 6, p-value = 2e-09</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cramers_v</span>(Music)</span></code></pre></div>
+<pre><code>&gt; Cramer&#39;s V |       95% CI
+&gt; -------------------------
+&gt; 0.18       | [0.12, 0.22]</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">phi</span>(Music)</span></code></pre></div>
+<pre><code>&gt; Phi  |       95% CI
+&gt; -------------------
+&gt; 0.25 | [0.17, 0.31]</code></pre>
+<p>These are also applicable to tests of goodness-of-fit, where small values indicate no deviation from the hypothetical probabilities and large values indicate… large deviation from the hypothetical probabilities.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>O <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">89</span>, <span class="dv">37</span>, <span class="dv">30</span>, <span class="dv">28</span>, <span class="dv">2</span>) <span class="co"># observed group sizes</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>E <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">15</span>, <span class="dv">6</span>) <span class="co"># expected group sizes</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(O, <span class="at">p =</span> E, <span class="at">rescale.p =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Chi-squared test for given probabilities
+&gt; 
+&gt; data:  O
+&gt; X-squared = 12, df = 4, p-value = 0.02</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cramers_v</span>(O, <span class="at">p =</span> E, <span class="at">rescale.p =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>&gt; Cramer&#39;s V |       95% CI
+&gt; -------------------------
+&gt; 0.13       | [0.02, 0.18]</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">phi</span>(O, <span class="at">p =</span> E, <span class="at">rescale.p =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>&gt; Phi  |       95% CI
+&gt; -------------------
+&gt; 0.25 | [0.04, 0.37]</code></pre>
+<p>These can also be extracted from the equivalent Bayesian test:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>(BFX <span class="ot">&lt;-</span> <span class="fu">contingencyTableBF</span>(Music, <span class="at">sampleType =</span> <span class="st">&quot;jointMulti&quot;</span>))</span></code></pre></div>
+<pre><code>&gt; Bayes factor analysis
+&gt; --------------
+&gt; [1] Non-indep. (a=1) : 10053377 ±0%
+&gt; 
+&gt; Against denominator:
+&gt;   Null, independence, a = 1 
+&gt; ---
+&gt; Bayes factor type: BFcontingencyTable, joint multinomial</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">effectsize</span>(BFX, <span class="at">type =</span> <span class="st">&quot;cramers_v&quot;</span>, <span class="at">test =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<pre><code>&gt; Summary of Posterior Distribution
+&gt; 
+&gt; Parameter | Median |       95% CI
+&gt; ---------------------------------
+&gt; Cramers_v |   0.18 | [0.14, 0.22]</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">effectsize</span>(BFX, <span class="at">type =</span> <span class="st">&quot;phi&quot;</span>, <span class="at">test =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<pre><code>&gt; Summary of Posterior Distribution
+&gt; 
+&gt; Parameter | Median |       95% CI
+&gt; ---------------------------------
+&gt; phi       |   0.26 | [0.19, 0.31]</code></pre>
+<div id="comparing-two-proportions-2x2-tables" class="section level2">
+<h2>Comparing Two Proportions (2x2 tables)</h2>
+<p>For <span class="math inline">\(2\times 2\)</span> tables, in addition to Cramér’s <em>V</em> and <span class="math inline">\(\phi\)</span>, we can also compute the Odds-ratio (OR), where each column represents a different group. Values larger than 1 indicate that the odds are higher in the first group (and vice versa).</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>(RCT <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">71</span>, <span class="dv">30</span>,</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">50</span>, <span class="dv">100</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Diagnosis =</span> <span class="fu">c</span>(<span class="st">&quot;Sick&quot;</span>, <span class="st">&quot;Recovered&quot;</span>),</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">Group =</span> <span class="fu">c</span>(<span class="st">&quot;Treatment&quot;</span>, <span class="st">&quot;Control&quot;</span>)</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<pre><code>&gt;            Group
+&gt; Diagnosis   Treatment Control
+&gt;   Sick             71      30
+&gt;   Recovered        50     100</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq.test</span>(RCT) <span class="co"># or fisher.test(RCT)</span></span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+&gt; 
+&gt; data:  RCT
+&gt; X-squared = 32, df = 1, p-value = 2e-08</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">oddsratio</span>(RCT)</span></code></pre></div>
+<pre><code>&gt; Odds ratio |       95% CI
+&gt; -------------------------
+&gt; 4.73       | [2.74, 8.17]</code></pre>
+<p>We can also compute the Risk-ratio (RR), which is the ratio between the proportions of the two groups - a measure which some claim is more intuitive.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">riskratio</span>(RCT)</span></code></pre></div>
+<pre><code>&gt; Risk ratio |       95% CI
+&gt; -------------------------
+&gt; 2.54       | [1.87, 3.45]</code></pre>
+<p>Additionally, Cohen’s <em>h</em> can also be computed, which uses the <em>arcsin</em> transformation. Negative values indicate smaller proportion in the first group (and vice versa).</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohens_h</span>(RCT)</span></code></pre></div>
+<pre><code>&gt; Cohen&#39;s h |       95% CI
+&gt; ------------------------
+&gt; 0.74      | [0.50, 0.99]</code></pre>
+</div>
+<div id="paired-contingency-tables" class="section level2">
+<h2>Paired Contingency Tables</h2>
+<p>For dependent (paired) contingency tables, Cohen’s <em>g</em> represents the symmetry of the table, ranging between 0 (perfect symmetry) and 0.5 (perfect asymmetry).</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>(Performance <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">794</span>, <span class="dv">86</span>,</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">150</span>, <span class="dv">570</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;1st Survey&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Approve&quot;</span>, <span class="st">&quot;Disapprove&quot;</span>),</span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;2nd Survey&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Approve&quot;</span>, <span class="st">&quot;Disapprove&quot;</span>)</span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<pre><code>&gt;             2nd Survey
+&gt; 1st Survey   Approve Disapprove
+&gt;   Approve        794         86
+&gt;   Disapprove     150        570</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mcnemar.test</span>(Performance)</span></code></pre></div>
+<pre><code>&gt; 
+&gt;   McNemar&#39;s Chi-squared test with continuity correction
+&gt; 
+&gt; data:  Performance
+&gt; McNemar&#39;s chi-squared = 17, df = 1, p-value = 4e-05</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohens_g</span>(Performance)</span></code></pre></div>
+<pre><code>&gt; Cohen&#39;s g |       95% CI
+&gt; ------------------------
+&gt; 0.14      | [0.07, 0.19]</code></pre>
+</div>
+</div>
+<div id="rank-based-tests" class="section level1">
+<h1>Rank Based tests</h1>
+<p>Rank based tests get rank based effect sizes!</p>
+<div id="difference-in-ranks" class="section level2">
+<h2>Difference in Ranks</h2>
+<p>For two independent samples, the rank-biserial correlation (<span class="math inline">\(r_{rb}\)</span>) is a measure of relative superiority - i.e., larger values indicate a higher probability of a randomly selected observation from <em>X</em> being larger than randomly selected observation from <em>Y</em>. A value of <span class="math inline">\((-1)\)</span> indicates that all observations in the second group are larger than the first, and a value of <span class="math inline">\((+1)\)</span> indicates that all observations in the first group are larger than the second.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">48</span>, <span class="dv">48</span>, <span class="dv">77</span>, <span class="dv">86</span>, <span class="dv">85</span>, <span class="dv">85</span>)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">34</span>, <span class="dv">34</span>, <span class="dv">77</span>)</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(A, B) <span class="co"># aka Mann–Whitney U test</span></span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Wilcoxon rank sum test with continuity correction
+&gt; 
+&gt; data:  A and B
+&gt; W = 22, p-value = 0.05
+&gt; alternative hypothesis: true location shift is not equal to 0</code></pre>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rank_biserial</span>(A, B)</span></code></pre></div>
+<pre><code>&gt; r (rank biserial) |       95% CI
+&gt; --------------------------------
+&gt; 0.79              | [0.30, 0.95]</code></pre>
+<p>For one sample, <span class="math inline">\(r_{rb}\)</span> measures the symmetry around <span class="math inline">\(\mu\)</span> (mu; the null value), with 0 indicating perfect symmetry, <span class="math inline">\((-1)\)</span> indicates that all observations fall below <span class="math inline">\(\mu\)</span>, and <span class="math inline">\((+1)\)</span> indicates that all observations fall above <span class="math inline">\(\mu\)</span>. For paired samples the difference between the paired samples is used:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.15</span>, <span class="fl">0.88</span>, <span class="fl">0.90</span>, <span class="fl">0.74</span>, <span class="fl">1.21</span>)</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(x, <span class="at">mu =</span> <span class="dv">1</span>) <span class="co"># aka Signed-Rank test</span></span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Wilcoxon signed rank exact test
+&gt; 
+&gt; data:  x
+&gt; V = 7, p-value = 1
+&gt; alternative hypothesis: true location is not equal to 1</code></pre>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rank_biserial</span>(x, <span class="at">mu =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>&gt; r (rank biserial) |        95% CI
+&gt; ---------------------------------
+&gt; -0.07             | [-0.78, 0.72]
+&gt; 
+&gt; - Deviation from a difference of 1.</code></pre>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.83</span>, <span class="fl">0.50</span>, <span class="fl">1.62</span>, <span class="fl">2.48</span>, <span class="fl">1.68</span>, <span class="fl">1.88</span>, <span class="fl">1.55</span>, <span class="fl">3.06</span>, <span class="fl">1.30</span>)</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.878</span>, <span class="fl">0.647</span>, <span class="fl">0.598</span>, <span class="fl">2.05</span>, <span class="fl">1.06</span>, <span class="fl">1.29</span>, <span class="fl">1.06</span>, <span class="fl">3.14</span>, <span class="fl">1.29</span>)</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(x, y, <span class="at">paired =</span> <span class="cn">TRUE</span>) <span class="co"># aka Signed-Rank test</span></span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Wilcoxon signed rank exact test
+&gt; 
+&gt; data:  x and y
+&gt; V = 40, p-value = 0.04
+&gt; alternative hypothesis: true location shift is not equal to 0</code></pre>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rank_biserial</span>(x, y, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>&gt; r (rank biserial) |       95% CI
+&gt; --------------------------------
+&gt; 0.78              | [0.30, 0.94]</code></pre>
+</div>
+<div id="rank-one-way-anova" class="section level2">
+<h2>Rank One way ANOVA</h2>
+<p>The Rank-Epsilon-Squared (<span class="math inline">\(\varepsilon^2\)</span>) is a measure of association for the rank based one-way ANOVA. Values range between 0 (no relative superiority between any of the groups) to 1 (complete separation - with no overlap in ranks between the groups).</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>group_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">g1 =</span> <span class="fu">c</span>(<span class="fl">2.9</span>, <span class="fl">3.0</span>, <span class="fl">2.5</span>, <span class="fl">2.6</span>, <span class="fl">3.2</span>), <span class="co"># normal subjects</span></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">g2 =</span> <span class="fu">c</span>(<span class="fl">3.8</span>, <span class="fl">2.7</span>, <span class="fl">4.0</span>, <span class="fl">2.4</span>), <span class="co"># with obstructive airway disease</span></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">g3 =</span> <span class="fu">c</span>(<span class="fl">2.8</span>, <span class="fl">3.4</span>, <span class="fl">3.7</span>, <span class="fl">2.2</span>, <span class="fl">2.0</span>) <span class="co"># with asbestosis</span></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(group_data)</span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Kruskal-Wallis rank sum test
+&gt; 
+&gt; data:  group_data
+&gt; Kruskal-Wallis chi-squared = 0.8, df = 2, p-value = 0.7</code></pre>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rank_epsilon_squared</span>(group_data)</span></code></pre></div>
+<pre><code>&gt; Epsilon2 (rank) |       95% CI
+&gt; ------------------------------
+&gt; 0.06            | [0.01, 0.65]</code></pre>
+</div>
+<div id="rank-one-way-repeated-measures-anova" class="section level2">
+<h2>Rank One way Repeated-Measures ANOVA</h2>
+<p>For a rank based repeated measures one-way ANOVA, Kendall’s <em>W</em> is a measure of agreement on the effect of condition between various “blocks” (the subjects), or more often conceptualized as a measure of reliability of the rating / scores of observations (or “groups”) between “raters” (“blocks”).</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subjects are COLUMNS</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>(ReactionTimes <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">398</span>, <span class="dv">338</span>, <span class="dv">520</span>,</span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">325</span>, <span class="dv">388</span>, <span class="dv">555</span>,</span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">393</span>, <span class="dv">363</span>, <span class="dv">561</span>,</span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a>    <span class="dv">367</span>, <span class="dv">433</span>, <span class="dv">470</span>,</span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">286</span>, <span class="dv">492</span>, <span class="dv">536</span>,</span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>    <span class="dv">362</span>, <span class="dv">475</span>, <span class="dv">496</span>,</span>
+<span id="cb80-9"><a href="#cb80-9" aria-hidden="true" tabindex="-1"></a>    <span class="dv">253</span>, <span class="dv">334</span>, <span class="dv">610</span>),</span>
+<span id="cb80-10"><a href="#cb80-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">7</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb80-11"><a href="#cb80-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">dimnames =</span> <span class="fu">list</span>(</span>
+<span id="cb80-12"><a href="#cb80-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(<span class="st">&quot;Subject&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>),</span>
+<span id="cb80-13"><a href="#cb80-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Congruent&quot;</span>, <span class="st">&quot;Neutral&quot;</span>, <span class="st">&quot;Incongruent&quot;</span>)</span>
+<span id="cb80-14"><a href="#cb80-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb80-15"><a href="#cb80-15" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<pre><code>&gt;          Congruent Neutral Incongruent
+&gt; Subject1       398     338         520
+&gt; Subject2       325     388         555
+&gt; Subject3       393     363         561
+&gt; Subject4       367     433         470
+&gt; Subject5       286     492         536
+&gt; Subject6       362     475         496
+&gt; Subject7       253     334         610</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">friedman.test</span>(ReactionTimes)</span></code></pre></div>
+<pre><code>&gt; 
+&gt;   Friedman rank sum test
+&gt; 
+&gt; data:  ReactionTimes
+&gt; Friedman chi-squared = 11, df = 2, p-value = 0.004</code></pre>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kendalls_w</span>(ReactionTimes)</span></code></pre></div>
+<pre><code>&gt; Kendall&#39;s W |       95% CI
+&gt; --------------------------
+&gt; 0.80        | [0.76, 1.00]</code></pre>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

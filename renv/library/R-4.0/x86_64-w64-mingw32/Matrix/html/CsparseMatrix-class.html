@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;CsparseMatrix&quot; of Sparse Matrices in Column-compressed...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for CsparseMatrix-class {Matrix}"><tr><td>CsparseMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;CsparseMatrix&quot; of Sparse Matrices in Column-compressed Form</h2>
+
+<h3>Description</h3>
+
+<p>The <code>"CsparseMatrix"</code> class is the virtual class of
+all sparse matrices coded in sorted compressed column-oriented form.
+Since it is a virtual class, no objects may be created from it.  See
+<code>showClass("CsparseMatrix")</code> for its subclasses.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>i</code>:</dt><dd><p>Object of class <code>"integer"</code> of length nnzero
+(number of non-zero elements).  These are the <em>0-based</em> row numbers for
+each non-zero element in the matrix, i.e., <code>i</code> must be in
+<code>0:(nrow(.)-1)</code>.</p>
+</dd>
+<dt><code>p</code>:</dt><dd><p><code><a href="../../base/html/integer.html">integer</a></code> vector for providing pointers, one
+for each column, to the initial (zero-based) index of elements in
+the column.  <code>.@p</code> is of length <code>ncol(.) + 1</code>, with
+<code>p[1] == 0</code> and <code>p[length(p)] == nnzero</code>, such that in
+fact, <code>diff(.@p)</code> are the number of non-zero elements for
+each column.
+</p>
+<p>In other words, <code>m@p[1:ncol(m)]</code> contains the indices of
+those elements in <code>m@x</code> that are the first elements in the
+respective column of <code>m</code>.
+</p>
+</dd>
+<dt><code>Dim</code>, <code>Dimnames</code>:</dt><dd><p>inherited from
+the superclass, see the <code><a href="sparseMatrix-class.html">sparseMatrix</a></code> class.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"sparseMatrix"</code>, directly.
+Class <code>"Matrix"</code>, by class <code>"sparseMatrix"</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<p>matrix products <code><a href="matrix-products.html">%*%</a></code>,
+<code><a href="matrix-products.html">crossprod</a>()</code> and <code>tcrossprod()</code>,
+several <code><a href="solve-methods.html">solve</a></code> methods,
+and other matrix methods available:
+
+
+</p>
+<dl>
+<dt>Arith</dt><dd><p><code>signature(e1 = "CsparseMatrix", e2 = "numeric")</code>: ... </p>
+</dd>
+<dt>Arith</dt><dd><p><code>signature(e1 = "numeric", e2 = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>Math</dt><dd><p><code>signature(x = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>band</dt><dd><p><code>signature(x = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>-</dt><dd><p><code>signature(e1 = "CsparseMatrix", e2 = "numeric")</code>: ... </p>
+</dd>
+<dt>-</dt><dd><p><code>signature(e1 = "numeric", e2 = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>+</dt><dd><p><code>signature(e1 = "CsparseMatrix", e2 = "numeric")</code>: ... </p>
+</dd>
+<dt>+</dt><dd><p><code>signature(e1 = "numeric", e2 = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "CsparseMatrix", to = "TsparseMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "CsparseMatrix", to = "denseMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "CsparseMatrix", to = "matrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "CsparseMatrix", to = "lsparseMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "CsparseMatrix", to = "nsparseMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "TsparseMatrix", to = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "denseMatrix", to = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>diag</dt><dd><p><code>signature(x = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>gamma</dt><dd><p><code>signature(x = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>lgamma</dt><dd><p><code>signature(x = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>log</dt><dd><p><code>signature(x = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>tril</dt><dd><p><code>signature(x = "CsparseMatrix")</code>: ... </p>
+</dd>
+<dt>triu</dt><dd><p><code>signature(x = "CsparseMatrix")</code>: ... </p>
+</dd>
+</dl>
+
+
+
+<h3>Note</h3>
+
+<p>All classes extending <code>CsparseMatrix</code> have a common validity
+(see <code><a href="../../methods/html/validObject.html">validObject</a></code>) check function.  That function
+additionally checks the <code>i</code> slot for each column to contain
+increasing row numbers. <br />
+In earlier versions of <span class="pkg">Matrix</span> (<code>&lt;= 0.999375-16</code>),
+<code><a href="../../methods/html/validObject.html">validObject</a></code> automatically re-sorted the entries when
+necessary, and hence <code>new()</code> calls with somewhat permuted
+<code>i</code> and <code>x</code> slots worked, as <code><a href="../../methods/html/new.html">new</a>(...)</code>
+(<em>with</em> slot arguments) automatically checks the validity.
+</p>
+<p>Now, you have to use <code><a href="sparseMatrix.html">sparseMatrix</a></code> to achieve the same
+functionality or know how to use <code>.validateCsparse()</code> to do so.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="colSums.html">colSums</a></code>, <code><a href="../../base/html/kronecker.html">kronecker</a></code>, and other such methods
+with own help pages.
+</p>
+<p>Further, the super class of <code>CsparseMatrix</code>,
+<code><a href="sparseMatrix-class.html">sparseMatrix</a></code>, and, e.g.,
+class <code><a href="dgCMatrix-class.html">dgCMatrix</a></code> for the links to other classes.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+getClass("CsparseMatrix")
+
+## The common validity check function (based on C code):
+getValidity(getClass("CsparseMatrix"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

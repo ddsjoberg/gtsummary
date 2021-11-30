@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;ddiMatrix&quot; of Diagonal Numeric Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ddiMatrix-class {Matrix}"><tr><td>ddiMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;ddiMatrix&quot; of Diagonal Numeric Matrices</h2>
+
+<h3>Description</h3>
+
+<p>The class <code>"ddiMatrix"</code> of numerical diagonal matrices.
+
+Note that diagonal matrices now extend <em><code>sparseMatrix</code></em>, whereas
+they did extend dense matrices earlier.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("ddiMatrix", ...)</code>
+but typically rather via <code><a href="Diagonal.html">Diagonal</a></code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>x</code>:</dt><dd><p>numeric vector.  For an <i>n * n</i>
+matrix, the <code>x</code> slot is of length <i>n</i> or <code>0</code>,
+depending on the <code>diag</code> slot:</p>
+</dd>
+<dt><code>diag</code>:</dt><dd><p><code>"character"</code> string, either <code>"U"</code> or
+<code>"N"</code> where <code>"U"</code> denotes unit-diagonal, i.e., identity
+matrices.</p>
+</dd>
+<dt><code>Dim</code>,<code>Dimnames</code>:</dt><dd><p>matrix dimension and
+<code><a href="../../base/html/dimnames.html">dimnames</a></code>, see the <code><a href="Matrix-class.html">Matrix</a></code> class
+description.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"<a href="diagonalMatrix-class.html">diagonalMatrix</a>"</code>, directly.
+Class <code>"<a href="dMatrix-class.html">dMatrix</a>"</code>, directly.
+Class <code>"<a href="sparseMatrix-class.html">sparseMatrix</a>"</code>, indirectly, see
+<code><a href="../../methods/html/RClassUtils.html">showClass</a>("ddiMatrix")</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>%*%</dt><dd><p><code>signature(x = "ddiMatrix", y = "ddiMatrix")</code>: ... </p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>Class <code><a href="diagonalMatrix-class.html">diagonalMatrix</a></code> and function <code><a href="Diagonal.html">Diagonal</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(d2 &lt;- Diagonal(x = c(10,1)))
+str(d2)
+## slightly larger in internal size:
+str(as(d2, "sparseMatrix"))
+
+M &lt;- Matrix(cbind(1,2:4))
+M %*% d2 #&gt; `fast' multiplication
+
+chol(d2) # trivial
+stopifnot(is(cd2 &lt;- chol(d2), "ddiMatrix"),
+          all.equal(cd2@x, c(sqrt(10),1)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

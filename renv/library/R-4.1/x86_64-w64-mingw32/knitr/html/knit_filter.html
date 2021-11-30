@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Spell check filter for source documents</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for knit_filter {knitr}"><tr><td>knit_filter {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Spell check filter for source documents</h2>
+
+<h3>Description</h3>
+
+<p>When performing spell checking on source documents, we may need to skip R
+code chunks and inline R expressions, because many R functions and symbols
+are likely to be identified as typos. This function is designed for the
+<code>filter</code> argument of <code><a href="../../utils/html/aspell.html">aspell</a>()</code> to filter out code chunks
+and inline expressions.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+knit_filter(ifile, encoding = "UTF-8")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>ifile</code></td>
+<td>
+<p>Filename of the source document.</p>
+</td></tr>
+<tr valign="top"><td><code>encoding</code></td>
+<td>
+<p>Ignored (the file <code>ifile</code> must be encoded in UTF-8).</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector of the file content, excluding code chunks and
+inline expressions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(knitr)
+knitr_example = function(...) system.file("examples", ..., package = "knitr")
+
+if (Sys.which("aspell") != "") {
+    # -t means the TeX mode
+    utils::aspell(knitr_example("knitr-minimal.Rnw"), knit_filter, control = "-t")
+
+    # -H is the HTML mode
+    utils::aspell(knitr_example("knitr-minimal.Rmd"), knit_filter, control = "-H -t")
+}
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

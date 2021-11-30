@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Khatri-Rao Matrix Product</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for KhatriRao {Matrix}"><tr><td>KhatriRao {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Khatri-Rao Matrix Product</h2>
+
+<h3>Description</h3>
+
+<p>Computes Khatri-Rao products for any kind of matrices.
+</p>
+<p>The Khatri-Rao product is a column-wise Kronecker product.  Originally
+introduced by Khatri and Rao (1968), it has many different applications,
+see Liu and Trenkler (2008) for a survey.  Notably, it is used in
+higher-dimensional tensor decompositions, see Bader and Kolda (2008).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+KhatriRao(X, Y = X, FUN = "*", make.dimnames = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>X,Y</code></td>
+<td>
+<p>matrices of with the same number of columns.</p>
+</td></tr>
+<tr valign="top"><td><code>FUN</code></td>
+<td>
+<p>the (name of the) <code><a href="../../base/html/function.html">function</a></code> to be used for the
+column-wise Kronecker products, see <code><a href="../../base/html/kronecker.html">kronecker</a></code>,
+defaulting to the usual multiplication.</p>
+</td></tr>
+<tr valign="top"><td><code>make.dimnames</code></td>
+<td>
+<p>logical indicating if the result should inherit
+<code><a href="../../base/html/dimnames.html">dimnames</a></code> from <code>X</code> and <code>Y</code> in a simple way.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a <code>"<a href="CsparseMatrix-class.html">CsparseMatrix</a>"</code>, say <code>R</code>, the Khatri-Rao
+product of <code>X</code> (<i>n x k</i>) and <code>Y</code> (<i>m x k</i>), is of dimension <i>(n*m) x k</i>,
+where the j-th column, <code>R[,j]</code> is the kronecker product
+<code><a href="../../base/html/kronecker.html">kronecker</a>(X[,j], Y[,j])</code>.
+</p>
+
+
+<h3>Note</h3>
+
+
+<p>The current implementation is efficient for large sparse matrices.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Original by Michael Cysouw, Univ. Marburg;
+minor tweaks, bug fixes etc, by Martin Maechler.
+</p>
+
+
+<h3>References</h3>
+
+<p>Khatri, C. G., and Rao, C. Radhakrishna (1968)
+Solutions to Some Functional Equations and Their Applications to
+Characterization of Probability Distributions.
+<em>Sankhya: Indian J. Statistics, Series A</em> <b>30</b>, 167&ndash;180.
+</p>
+<p>Liu, Shuangzhe, and Gõtz Trenkler (2008)
+Hadamard, Khatri-Rao, Kronecker and Other Matrix Products.
+<em>International J. Information and Systems Sciences</em> <b>4</b>, 160&ndash;177.
+</p>
+<p>Bader, Brett W, and Tamara G Kolda (2008)
+Efficient MATLAB Computations with Sparse and Factored Tensors.
+<em>SIAM J. Scientific Computing</em> <b>30</b>, 205&ndash;231.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/kronecker.html">kronecker</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Example with very small matrices:
+m &lt;- matrix(1:12,3,4)
+d &lt;- diag(1:4)
+KhatriRao(m,d)
+KhatriRao(d,m)
+dimnames(m) &lt;- list(LETTERS[1:3], letters[1:4])
+KhatriRao(m,d, make.dimnames=TRUE)
+KhatriRao(d,m, make.dimnames=TRUE)
+dimnames(d) &lt;- list(NULL, paste0("D", 1:4))
+KhatriRao(m,d, make.dimnames=TRUE)
+KhatriRao(d,m, make.dimnames=TRUE)
+dimnames(d) &lt;- list(paste0("d", 10*1:4), paste0("D", 1:4))
+(Kmd &lt;- KhatriRao(m,d, make.dimnames=TRUE))
+(Kdm &lt;- KhatriRao(d,m, make.dimnames=TRUE))
+
+nm &lt;- as(m,"nMatrix")
+nd &lt;- as(d,"nMatrix")
+KhatriRao(nm,nd, make.dimnames=TRUE)
+KhatriRao(nd,nm, make.dimnames=TRUE)
+
+stopifnot(dim(KhatriRao(m,d)) == c(nrow(m)*nrow(d), ncol(d)))
+## border cases / checks:
+zm &lt;- nm; zm[] &lt;- 0 # all 0 matrix
+stopifnot(all(K1 &lt;- KhatriRao(nd, zm) == 0), identical(dim(K1), c(12L, 4L)),
+          all(K2 &lt;- KhatriRao(zm, nd) == 0), identical(dim(K2), c(12L, 4L)))
+
+d0 &lt;- d; d0[] &lt;- 0; m0 &lt;- Matrix(d0[-1,])
+stopifnot(all(K3 &lt;- KhatriRao(d0, m) == 0), identical(dim(K3), dim(Kdm)),
+	  all(K4 &lt;- KhatriRao(m, d0) == 0), identical(dim(K4), dim(Kmd)),
+	  all(KhatriRao(d0, d0) == 0), all(KhatriRao(m0, d0) == 0),
+	  all(KhatriRao(d0, m0) == 0), all(KhatriRao(m0, m0) == 0),
+	  identical(dimnames(KhatriRao(m, d0, make.dimnames=TRUE)), dimnames(Kmd)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

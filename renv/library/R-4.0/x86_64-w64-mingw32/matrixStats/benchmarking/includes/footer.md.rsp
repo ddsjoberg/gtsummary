@@ -1,0 +1,19 @@
+<%---------------------------------------------------------------
+  Page footer
+  ---------------------------------------------------------------%>
+<%@string appendix="${appendix}" default="false"%>
+<%@ifeq appendix="true"%>
+  <%@include file="appendix.md.rsp"%>
+<%@endif%>
+
+<%@include file="${references}"%>
+
+---------------------------------------
+Copyright <%@meta name="author"%>. Last updated on <%=format(Sys.time(), format="%Y-%m-%d %H:%M:%S (%z UTC)")%>. Powered by [RSP].
+
+<%---------------------------------------------------------------
+  Dynamically insert an HTML favicon
+  ---------------------------------------------------------------%>
+<%=toFavicon({
+  plot(1, col="blue", bg="yellow", pch=21, cex=4, lwd=4, axes=FALSE)
+}, force=FALSE)%>

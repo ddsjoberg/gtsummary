@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Random Sparse Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for rsparsematrix {Matrix}"><tr><td>rsparsematrix {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Random Sparse Matrix</h2>
+
+<h3>Description</h3>
+
+<p>Generate a random sparse matrix efficiently.  The default has rounded
+gaussian non-zero entries, and <code>rand.x = NULL</code> generates random
+patter<b>n</b> matrices, i.e. inheriting from <code><a href="nsparseMatrix-classes.html">nsparseMatrix</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rsparsematrix(nrow, ncol, density, nnz = round(density * maxE),
+              symmetric = FALSE,
+              rand.x = function(n) signif(rnorm(n), 2), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>nrow, ncol</code></td>
+<td>
+<p>number of rows and columns, i.e., the matrix
+dimension (<code><a href="../../base/html/dim.html">dim</a></code>).</p>
+</td></tr>
+<tr valign="top"><td><code>density</code></td>
+<td>
+<p>optional number in <i>[0,1]</i>, the density is the
+proportion of non-zero entries among all matrix entries.  If
+specified it determines the default for <code>nnz</code>, otherwise
+<code>nnz</code> needs to be specified.</p>
+</td></tr>
+<tr valign="top"><td><code>nnz</code></td>
+<td>
+<p>number of non-zero entries, for a sparse matrix typically
+considerably smaller than <code>nrow*ncol</code>.  Must be specified if
+<code>density</code> is not.</p>
+</td></tr>
+<tr valign="top"><td><code>symmetric</code></td>
+<td>
+<p>logical indicating if result should be a matrix of
+class <code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>.  Note that in the symmetric
+case, <code>nnz</code> denotes the number of non zero entries of the upper
+(or lower) part of the matrix, including the diagonal.</p>
+</td></tr>
+<tr valign="top"><td><code>rand.x</code></td>
+<td>
+<p><code><a href="../../base/html/NULL.html">NULL</a></code> or the random number generator for the <code>x</code> slot, a
+<code><a href="../../base/html/function.html">function</a></code> such that <code>rand.x(n)</code> generates a
+numeric vector of length <code>n</code>.  Typical examples are
+<code>rand.x = rnorm</code>, or <code>rand.x = runif</code>; the default is nice
+for didactical purposes.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>optionally further arguments passed to
+<code><a href="sparseMatrix.html">sparseMatrix</a>()</code>, notably <code>repr</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The algorithm first samples &ldquo;encoded&rdquo; <i>(i,j)</i>s without
+replacement, via one dimensional indices, if not <code>symmetric</code>
+<code><a href="../../base/html/sample.html">sample.int</a>(nrow*ncol, nnz)</code>, then&mdash;if <code>rand.x</code> is
+not <code>NULL</code>&mdash;gets <code>x &lt;- rand.x(nnz)</code> and calls
+<code><a href="sparseMatrix.html">sparseMatrix</a>(i=i, j=j, x=x, ..)</code>.  When
+<code>rand.x=NULL</code>, <code><a href="sparseMatrix.html">sparseMatrix</a>(i=i, j=j, ..)</code> will
+return a patter<b>n</b> matrix (i.e., inheriting from
+<code><a href="nsparseMatrix-classes.html">nsparseMatrix</a></code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>a <code><a href="sparseMatrix-class.html">sparseMatrix</a></code>, say <code>M</code> of dimension (nrow,
+ncol), i.e., with <code>dim(M) == c(nrow, ncol)</code>, if <code>symmetric</code>
+is not true, with <code>nzM &lt;- <a href="nnzero.html">nnzero</a>(M)</code> fulfilling
+<code>nzM &lt;= nnz</code> and typically, <code>nzM == nnz</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+set.seed(17)# to be reproducible
+M &lt;- rsparsematrix(8, 12, nnz = 30) # small example, not very sparse
+M
+M1 &lt;- rsparsematrix(1000, 20,  nnz = 123,  rand.x = runif)
+summary(M1)
+
+## a random *symmetric* Matrix
+(S9 &lt;- rsparsematrix(9, 9, nnz = 10, symmetric=TRUE)) # dsCMatrix
+nnzero(S9)# ~ 20: as 'nnz' only counts one "triangle"
+
+## a random patter*n* aka boolean Matrix (no 'x' slot):
+(n7 &lt;- rsparsematrix(5, 12, nnz = 10, rand.x = NULL))
+
+## a [T]riplet representation sparseMatrix:
+T2 &lt;- rsparsematrix(40, 12, nnz = 99, repr = "T")
+head(T2)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

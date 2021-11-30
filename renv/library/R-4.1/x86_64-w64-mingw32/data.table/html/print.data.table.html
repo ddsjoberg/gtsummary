@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: data.table Printing Options</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for print.data.table {data.table}"><tr><td>print.data.table {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2> data.table Printing Options </h2>
+
+<h3>Description</h3>
+
+<p><code>print.data.table</code> extends the functionalities of <code>print.data.frame</code>.
+</p>
+<p>Key enhancements include automatic output compression of many observations and concise column-wise <code>class</code> summary.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  ## S3 method for class 'data.table'
+print(x,
+    topn=getOption("datatable.print.topn"),             # default: 5
+    nrows=getOption("datatable.print.nrows"),           # default: 100
+    class=getOption("datatable.print.class"),           # default: FALSE
+    row.names=getOption("datatable.print.rownames"),    # default: TRUE
+    col.names=getOption("datatable.print.colnames"),    # default: "auto"
+    print.keys=getOption("datatable.print.keys"),       # default: FALSE
+    trunc.cols=getOption("datatable.print.trunc.cols"), # default: FALSE
+    quote=FALSE,
+    timezone=FALSE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p> A <code>data.table</code>. </p>
+</td></tr>
+<tr valign="top"><td><code>topn</code></td>
+<td>
+<p> The number of rows to be printed from the beginning and end of tables with more than <code>nrows</code> rows. </p>
+</td></tr>
+<tr valign="top"><td><code>nrows</code></td>
+<td>
+<p> The number of rows which will be printed before truncation is enforced. </p>
+</td></tr>
+<tr valign="top"><td><code>class</code></td>
+<td>
+<p> If <code>TRUE</code>, the resulting output will include above each column its storage class (or a self-evident abbreviation thereof). </p>
+</td></tr>
+<tr valign="top"><td><code>row.names</code></td>
+<td>
+<p> If <code>TRUE</code>, row indices will be printed alongside <code>x</code>. </p>
+</td></tr>
+<tr valign="top"><td><code>col.names</code></td>
+<td>
+<p> One of three flavours for controlling the display of column names in output. <code>"auto"</code> includes column names above the data, as well as below the table if <code>nrow(x) &gt; 20</code>. <code>"top"</code> excludes this lower register when applicable, and <code>"none"</code> suppresses column names altogether (as well as column classes if <code>class = TRUE</code>. </p>
+</td></tr>
+<tr valign="top"><td><code>print.keys</code></td>
+<td>
+<p> If <code>TRUE</code>, any <code><a href="../../data.table/help/key.html">key</a></code> and/or <code><a href="../../data.table/help/indices.html">index</a></code> currently assigned to <code>x</code> will be printed prior to the preview of the data. </p>
+</td></tr>
+<tr valign="top"><td><code>trunc.cols</code></td>
+<td>
+<p> If <code>TRUE</code>, only the columns that can be printed in the console without wrapping the columns to new lines will be printed (similar to <code>tibbles</code>). </p>
+</td></tr>
+<tr valign="top"><td><code>quote</code></td>
+<td>
+<p> If <code>TRUE</code>, all output will appear in quotes, as in <code>print.default</code>. </p>
+</td></tr>
+<tr valign="top"><td><code>timezone</code></td>
+<td>
+<p> If <code>TRUE</code>, time columns of class POSIXct or POSIXlt will be printed with their timezones (if attribute is available). </p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p> Other arguments ultimately passed to <code>format</code>. </p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>By default, with an eye to the typically large number of observations in a <code>data.table</code>, only the beginning and end of the object are displayed (specifically, <code>head(x, topn)</code> and <code>tail(x, topn)</code> are displayed unless <code>nrow(x) &lt; nrows</code>, in which case all rows will print).
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/print.default.html">print.default</a></code></p>
+
+
+<h3>Examples</h3>
+
+<pre>
+  #output compression
+  DT &lt;- data.table(a = 1:1000)
+  print(DT, nrows = 100, topn = 4)
+
+  #`quote` can be used to identify whitespace
+  DT &lt;- data.table(blanks = c(" 12", " 34"),
+                   noblanks = c("12", "34"))
+  print(DT, quote = TRUE)
+
+  #`class` provides handy column type summaries at a glance
+  DT &lt;- data.table(a = vector("integer", 3),
+                   b = vector("complex", 3),
+                   c = as.IDate(paste0("2016-02-0", 1:3)))
+  print(DT, class = TRUE)
+
+  #`row.names` can be eliminated to save space
+  DT &lt;- data.table(a = 1:3)
+  print(DT, row.names = FALSE)
+
+  #`print.keys` can alert which columns are currently keys
+  DT &lt;- data.table(a=1:3, b=4:6, c=7:9, key="b,a")
+  setindexv(DT, c("a", "b"))
+  setindexv(DT, "a")
+  print(DT, print.keys=TRUE)
+
+  # `trunc.cols` will make it so only columns that fit in console will be printed
+  #    with a message that states the variables not shown
+  old_width = options("width" = 40)
+  DT &lt;- data.table(thing_11 = vector("integer", 3),
+                   thing_21 = vector("complex", 3),
+                   thing_31 = as.IDate(paste0("2016-02-0", 1:3)),
+                   thing_41 = "aasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf",
+                   thing_51 = vector("integer", 3),
+                   thing_61 = vector("complex", 3))
+  print(DT, trunc.cols=TRUE)
+  options(old_width)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

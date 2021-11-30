@@ -1,0 +1,46 @@
+---
+title: "Using Use"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using Use}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The `renv::use()` function can make it easier to define stand-alone R scripts
+that include their R package requirements directly in the script itself.
+For example:
+
+```{r eval=FALSE}
+
+# write down the set of packages required by this script
+renv::use(
+  "digest",         # use the latest-available version of digest
+  "rlang@0.3.4"     # use an older release of rlang (installed from archive)
+)
+
+# use the requested packages
+digest::digest(list(answer = 42))
+
+```
+
+Running a script with these contents will:
+
+1. Automatically download the requested packages (the latest release of
+   `digest`, alongside `rlang 0.3.4`),
+
+2. Install the requested packages (plus their recursive package dependencies) to
+   a temporary library path,
+   
+3. Activate that library path, so that it's used subsequently in the script.
+
+`renv::use()` can hence be a useful way of sharing standalone R scripts with
+a set of specific package requirements. Running these scripts will ensure the
+requested packages are automatically downloaded and installed.

@@ -1,0 +1,56 @@
+---
+title: "Third-party integrations"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Third-party integrations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+styler functionality is available in other tools, most notably
+
+* as a pre-commit hook `style-files` in
+  <https://github.com/lorenzwalthert/precommit>
+
+* via `usethis::use_tidy_style()` styles your project according to the tidyverse
+  style guide.
+
+* through commenting a PR on GitHub with `\style` when the [GitHub
+  Action](https://github.com/features/actions) [*Tidyverse
+  CI*](https://github.com/r-lib/actions/tree/master/examples#tidyverse-ci-workflow)
+  is used. The most convenient way to set this up is via
+  [`usethis::use_tidy_github_actions()`](https://usethis.r-lib.org/reference/tidyverse.html).
+
+* in `reprex::reprex(..., style = TRUE)` to prettify reprex code before
+  printing. To permanently use `style = TRUE` without specifying it every time,
+  you can add the following line to your `.Rprofile` (via
+  `usethis::edit_r_profile()`): `options(reprex.styler = TRUE)`.
+
+* as a formatter for RMarkdown without modifying the source. This feature is
+  implemented as a code chunk option in knitr. use `tidy = "styler"` in the
+  header of a code chunks (e.g.` ```{r name-of-the-chunk, tidy = "styler"} `),
+  or `knitr::opts_chunk$set(tidy = "styler")` at the top of your RMarkdown
+  script.
+
+* As a fixer to the [ale
+  Plug-in](https://github.com/dense-analysis/ale/pull/2401) for VIM.
+
+* in the *format-all* command for Emacs in 
+  [emacs-format-all-the-code](https://github.com/lassik/emacs-format-all-the-code).
+
+* As a [Jupyterlab code
+  formatter](https://jupyterlab-code-formatter.readthedocs.io/en/latest/installation.html#r-code-formatters).
+
+* for pretty-printing [drake](https://github.com/ropensci/drake) workflow data
+  frames with `drake::drake_plan_source()`.
+
+Do you know another way to use styler that is not listed here? Please let us know
+by [opening an issue](https://github.com/r-lib/styler/issues) and we'll extend the
+list.

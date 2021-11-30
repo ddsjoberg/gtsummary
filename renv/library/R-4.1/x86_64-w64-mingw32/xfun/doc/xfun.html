@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Yihui Xie" />
+
+<meta name="date" content="2021-09-13" />
+
+<title>An Introduction to xfun</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20800px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%2020px%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%200%3B%0Apadding%3A%204px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20%7B%0Amargin%3A%20auto%3B%0Amin%2Dwidth%3A%2040%25%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%5Bsummary%3D%22R%20argblock%22%5D%20%7B%0Awidth%3A%20100%25%3B%0Aborder%3A%20none%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%2C%20table%3Anot%28%5Bclass%5D%29%20th%2C%20table%3Anot%28%5Bclass%5D%29%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20tr%2Eodd%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%2013px%3B%0Apadding%2Dbottom%3A%201px%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f5f5f5%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0A%7D%0Apre%20%7B%0Aoverflow%2Dx%3A%20auto%3B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200%2010px%200%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20white%3B%0Aborder%3A%20%23f5f5f5%201px%20solid%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20code%20%7B%0Acolor%3A%20%23444%3B%0Abackground%2Dcolor%3A%20white%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20monospace%3B%0Afont%2Dsize%3A%2090%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%204px%3B%0Acolor%3A%20%23d14%3B%0Aborder%3A%201px%20solid%20%23e1e1e8%3B%0Awhite%2Dspace%3A%20inherit%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Atable%20%3E%20caption%2C%20div%2Efigure%20p%2Ecaption%20%7B%0Afont%2Dstyle%3A%20italic%3B%0A%7D%0Atable%20%3E%20caption%20span%2C%20div%2Efigure%20p%2Ecaption%20span%20%7B%0Afont%2Dstyle%3A%20normal%3B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%200%2010px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20%7B%0Amargin%3A%20auto%20auto%2010px%20auto%3B%0A%7D%0Aimg%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0Amax%2Dwidth%3A%20100%25%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f5f5f5%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f5f5f5%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f5f5f5%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Adiv%2Er%2Dhelp%2Dpage%20%7B%0Abackground%2Dcolor%3A%20%23f9f9f9%3B%0Aborder%2Dbottom%3A%20%23ddd%201px%20solid%3B%0Amargin%2Dbottom%3A%2010px%3B%0Apadding%3A%2010px%3B%0A%7D%0Adiv%2Er%2Dhelp%2Dpage%3Ahover%20%7B%0Abackground%2Dcolor%3A%20%23f4f4f4%3B%0A%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">An Introduction to xfun</h1>
+<h3 class="subtitle">A Collection of Miscellaneous Functions</h3>
+<h4 class="author">Yihui Xie</h4>
+<h4 class="date">2021-09-13</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#no-more-partial-matching-for-lists">No more partial matching for lists!</a></li>
+<li><a href="#output-character-vectors-for-human-eyes">Output character vectors for human eyes</a></li>
+<li><a href="#print-the-content-of-a-text-file">Print the content of a text file</a></li>
+<li><a href="#get-the-data-uri-of-a-file">Get the data URI of a file</a></li>
+<li><a href="#match-strings-and-do-substitutions">Match strings and do substitutions</a></li>
+<li><a href="#search-and-replace-strings-in-files">Search and replace strings in files</a></li>
+<li><a href="#manipulate-filename-extensions">Manipulate filename extensions</a></li>
+<li><a href="#find-files-in-a-project-without-the-pain-of-thinking-about-absoluterelative-paths">Find files (in a project) without the pain of thinking about absolute/relative paths</a></li>
+<li><a href="#types-of-operating-systems">Types of operating systems</a></li>
+<li><a href="#loading-and-attaching-packages">Loading and attaching packages</a></li>
+<li><a href="#readwrite-files-in-utf-8">Read/write files in UTF-8</a></li>
+<li><a href="#convert-numbers-to-english-words">Convert numbers to English words</a></li>
+<li><a href="#cache-an-r-expression-to-an-rds-file">Cache an R expression to an RDS file</a></li>
+<li><a href="#check-reverse-dependencies-of-a-package">Check reverse dependencies of a package</a></li>
+<li><a href="#input-a-character-vector-into-the-rstudio-source-editor">Input a character vector into the RStudio source editor</a></li>
+<li><a href="#print-session-information">Print session information</a></li>
+</ul>
+</div>
+
+<p>After writing about 20 R packages, I found I had accumulated several utility functions that I used across different packages, so I decided to extract them into a separate package. Previously I had been using the evil triple-colon <code>:::</code> to access these internal utility functions. Now with <strong>xfun</strong>, these functions have been exported, and more importantly, documented. It should be better to use them under the sun instead of in the dark.</p>
+<p>This page shows examples of a subset of functions in this package. For a full list of functions, see the help page <code>help(package = &#39;xfun&#39;)</code>. The source package is available on Github: <a href="https://github.com/yihui/xfun" class="uri">https://github.com/yihui/xfun</a>.</p>
+<div id="no-more-partial-matching-for-lists" class="section level2">
+<h2>No more partial matching for lists!</h2>
+<p>I have been bitten many times by partial matching in lists, e.g., when I want <code>x$a</code> but the element <code>a</code> does not exist in the list <code>x</code>, it returns the value <code>x$abc</code> if <code>abc</code> exists in <code>x</code>. A strict list is a list for which the partial matching of the <code>$</code> operator is disabled. The functions <code>xfun::strict_list()</code> and <code>xfun::as_strict_list()</code> are the equivalents to <code>base::list()</code> and <code>base::as.list()</code> respectively which always return as strict list, e.g.,</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xfun)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>(<span class="at">z =</span> <span class="fu">strict_list</span>(<span class="at">aaa =</span> <span class="st">&quot;I am aaa&quot;</span>, <span class="at">b =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))</span></code></pre></div>
+<pre><code>## $aaa
+## [1] &quot;I am aaa&quot;
+## 
+## $b
+## [1] 1 2 3 4 5</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>z<span class="sc">$</span>a  <span class="co"># NULL (strict matching)</span></span></code></pre></div>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>z<span class="sc">$</span>aaa  <span class="co"># I am aaa</span></span></code></pre></div>
+<pre><code>## [1] &quot;I am aaa&quot;</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>z<span class="sc">$</span>b</span></code></pre></div>
+<pre><code>## [1] 1 2 3 4 5</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>z<span class="sc">$</span>c <span class="ot">=</span> <span class="st">&quot;you can create a new element&quot;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>z2 <span class="ot">=</span> <span class="fu">unclass</span>(z)  <span class="co"># a normal list</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>z2<span class="sc">$</span>a  <span class="co"># partial matching</span></span></code></pre></div>
+<pre><code>## [1] &quot;I am aaa&quot;</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>z3 <span class="ot">=</span> <span class="fu">as_strict_list</span>(z2)  <span class="co"># a strict list again</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>z3<span class="sc">$</span>a  <span class="co"># NULL (strict matching) again!</span></span></code></pre></div>
+<pre><code>## NULL</code></pre>
+<p>Similarly, the default partial matching in <code>attr()</code> can be annoying, too. The function <code>xfun::attr()</code> is simply a shorthand of <code>attr(..., exact = TRUE)</code>.</p>
+<p>I want it, or I do not want. There is no “I probably want”.</p>
+</div>
+<div id="output-character-vectors-for-human-eyes" class="section level2">
+<h2>Output character vectors for human eyes</h2>
+<p>When R prints a character vector, your eyes may be distracted by the indices like <code>[1]</code>, double quotes, and escape sequences. To see a character vector in its “raw” form, you can use <code>cat(..., sep = &#39;\n&#39;)</code>. The function <code>raw_string()</code> marks a character vector as “raw”, and the corresponding printing function will call <code>cat(sep = &#39;\n&#39;)</code> to print the character vector to the console.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xfun)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">raw_string</span>(<span class="fu">head</span>(LETTERS))</span></code></pre></div>
+<pre><code>A
+B
+C
+D
+E
+F</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>(<span class="at">x =</span> <span class="fu">c</span>(<span class="st">&quot;a </span><span class="sc">\&quot;</span><span class="st">b</span><span class="sc">\&quot;</span><span class="st">&quot;</span>, <span class="st">&quot;hello</span><span class="sc">\t</span><span class="st">world!&quot;</span>))</span></code></pre></div>
+<pre><code>[1] &quot;a \&quot;b\&quot;&quot;       &quot;hello\tworld!&quot;</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">raw_string</span>(x)  <span class="co"># this is more likely to be what you want to see</span></span></code></pre></div>
+<pre><code>a &quot;b&quot;
+hello   world!</code></pre>
+</div>
+<div id="print-the-content-of-a-text-file" class="section level2">
+<h2>Print the content of a text file</h2>
+<p>I have used <code>paste(readLines(&#39;foo&#39;), collapse = &#39;\n&#39;)</code> many times before I decided to write a simple wrapper function <code>xfun::file_string()</code>. This function also makes use of <code>raw_string()</code>, so you can see the content of a file in the console as a side-effect, e.g.,</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">=</span> <span class="fu">system.file</span>(<span class="st">&quot;LICENSE&quot;</span>, <span class="at">package =</span> <span class="st">&quot;xfun&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">file_string</span>(f)</span></code></pre></div>
+<pre><code>YEAR: 2018-2021
+COPYRIGHT HOLDER: Yihui Xie</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.character</span>(xfun<span class="sc">::</span><span class="fu">file_string</span>(f))  <span class="co"># essentially a character string</span></span></code></pre></div>
+<pre><code>[1] &quot;YEAR: 2018-2021\nCOPYRIGHT HOLDER: Yihui Xie&quot;</code></pre>
+</div>
+<div id="get-the-data-uri-of-a-file" class="section level2">
+<h2>Get the data URI of a file</h2>
+<p>Files can be encoded into base64 strings via <code>base64_uri()</code>. This is a common technique to embed arbitrary files in HTML documents (which is <a href="https://bookdown.org/yihui/rmarkdown-cookbook/embed-file.html">what <code>xfun::embed_file()</code> does</a> and it is based on <code>base64_uri()</code>).</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">=</span> <span class="fu">system.file</span>(<span class="st">&quot;LICENSE&quot;</span>, <span class="at">package =</span> <span class="st">&quot;xfun&quot;</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">base64_uri</span>(f)</span></code></pre></div>
+<pre><code>## [1] &quot;data:text/plain;base64,WUVBUjogMjAxOC0yMDIxCkNPUFlSSUdIVCBIT0xERVI6IFlpaHVpIFhpZQo=&quot;</code></pre>
+</div>
+<div id="match-strings-and-do-substitutions" class="section level2">
+<h2>Match strings and do substitutions</h2>
+<p>After typing the code <code>x = grep(pattern, x, value = TRUE); gsub(pattern, &#39;\\1&#39;, x)</code> many times, I combined them into a single function <code>xfun::grep_sub()</code>.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">grep_sub</span>(<span class="st">&#39;a([b]+)c&#39;</span>, <span class="st">&#39;a</span><span class="sc">\\</span><span class="st">U</span><span class="sc">\\</span><span class="st">1c&#39;</span>, <span class="fu">c</span>(<span class="st">&#39;abc&#39;</span>, <span class="st">&#39;abbbc&#39;</span>, <span class="st">&#39;addc&#39;</span>, <span class="st">&#39;123&#39;</span>), <span class="at">perl =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;aBc&quot;   &quot;aBBBc&quot;</code></pre>
+</div>
+<div id="search-and-replace-strings-in-files" class="section level2">
+<h2>Search and replace strings in files</h2>
+<p>I can never remember how to properly use <code>grep</code> or <code>sed</code> to search and replace strings in multiple files. My favorite IDE, RStudio, has not provided this feature yet (you can only search and replace in the currently opened file). Therefore I did a quick and dirty implementation in R, including functions <code>gsub_files()</code>, <code>gsub_dir()</code>, and <code>gsub_ext()</code>, to search and replace strings in multiple files under a directory. Note that the files are assumed to be encoded in UTF-8. If you do not use UTF-8, we cannot be friends. Seriously.</p>
+<p>All functions are based on <code>gsub_file()</code>, which performs searching and replacing in a single file, e.g.,</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xfun)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">=</span> <span class="fu">tempfile</span>()</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(<span class="fu">c</span>(<span class="st">&quot;hello&quot;</span>, <span class="st">&quot;world&quot;</span>), f)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">gsub_file</span>(f, <span class="st">&quot;world&quot;</span>, <span class="st">&quot;woRld&quot;</span>, <span class="at">fixed =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">file_string</span>(f)</span></code></pre></div>
+<pre><code>hello
+woRld</code></pre>
+<p>The function <code>gsub_dir()</code> is very flexible: you can limit the list of files by MIME types, or extensions. For example, if you want to do substitution in text files, you may use <code>gsub_dir(..., mimetype = &#39;^text/&#39;)</code>.</p>
+<p>The function <code>process_file()</code> is a more general way to process files. Basically it reads a file, process the content with a function that you pass to it, and writes back the text, e.g.,</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">process_file</span>(f, <span class="cf">function</span>(x) {</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rep</span>(x, <span class="dv">3</span>)  <span class="co"># repeat the content 3 times</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">file_string</span>(f)</span></code></pre></div>
+<pre><code>hello
+woRld
+hello
+woRld
+hello
+woRld</code></pre>
+<p><strong>WARNING</strong>: Before using these functions, make sure that you have backed up your files, or version control your files. The files will be modified in-place. If you do not back up or use version control, there is no chance to regret.</p>
+</div>
+<div id="manipulate-filename-extensions" class="section level2">
+<h2>Manipulate filename extensions</h2>
+<p>Functions <code>file_ext()</code> and <code>sans_ext()</code> are based on functions in <strong>tools</strong>. The function <code>with_ext()</code> adds or replaces extensions of filenames, and it is vectorized.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xfun)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;abc.doc&quot;</span>, <span class="st">&quot;def123.tex&quot;</span>, <span class="st">&quot;path/to/foo.Rmd&quot;</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">file_ext</span>(p)</span></code></pre></div>
+<pre><code>## [1] &quot;doc&quot; &quot;tex&quot; &quot;Rmd&quot;</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sans_ext</span>(p)</span></code></pre></div>
+<pre><code>## [1] &quot;abc&quot;         &quot;def123&quot;      &quot;path/to/foo&quot;</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_ext</span>(p, <span class="st">&quot;.txt&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;abc.txt&quot;         &quot;def123.txt&quot;      &quot;path/to/foo.txt&quot;</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_ext</span>(p, <span class="fu">c</span>(<span class="st">&quot;.ppt&quot;</span>, <span class="st">&quot;.sty&quot;</span>, <span class="st">&quot;.Rnw&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;abc.ppt&quot;         &quot;def123.sty&quot;      &quot;path/to/foo.Rnw&quot;</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_ext</span>(p, <span class="st">&quot;html&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;abc.html&quot;         &quot;def123.html&quot;      &quot;path/to/foo.html&quot;</code></pre>
+</div>
+<div id="find-files-in-a-project-without-the-pain-of-thinking-about-absoluterelative-paths" class="section level2">
+<h2>Find files (in a project) without the pain of thinking about absolute/relative paths</h2>
+<p>The function <code>proj_root()</code> was inspired by the <strong>rprojroot</strong> package, and tries to find the root directory of a project. Currently it only supports R package projects and RStudio projects by default. It is much less sophisticated than <strong>rprojroot</strong>.</p>
+<p>The function <code>from_root()</code> was inspired by <code>here::here()</code>, but returns a relative path (relative to the project’s root directory found by <code>proj_root()</code>) instead of an absolute path. For example, <code>xfun::from_root(&#39;data&#39;, &#39;cars.csv&#39;)</code> in a code chunk of <code>docs/foo.Rmd</code> will return <code>../data/cars.csv</code> when <code>docs/</code> and <code>data/</code> directories are under the root directory of a project.</p>
+<pre><code>root/
+  |-- data/
+  |   |-- cars.csv
+  |
+  |-- docs/
+      |-- foo.Rmd</code></pre>
+<p>If file paths are too much pain for you to think about, you can just pass an incomplete path to the function <code>magic_path()</code>, and it will try to find the actual path recursively under subdirectories of a root directory. For example, you may only provide a base filename, and <code>magic_path()</code> will look for this file under subdirectories and return the actual path if it is found. By default, it returns a relative path, which is relative to the current working directory. With the above example, <code>xfun::magic_path(&#39;cars.csv&#39;)</code> in a code chunk of <code>docs/foo.Rmd</code> will return <code>../data/cars.csv</code>, if <code>cars.csv</code> is a unique filename in the project. You can freely move it to any folders of this project, and <code>magic_path()</code> will still find it. If you are not using a project to manage files, <code>magic_path()</code> will look for the file under subdirectories of the current working directory.</p>
+</div>
+<div id="types-of-operating-systems" class="section level2">
+<h2>Types of operating systems</h2>
+<p>The series of functions <code>is_linux()</code>, <code>is_macos()</code>, <code>is_unix()</code>, and <code>is_windows()</code> test the types of the OS, using the information from <code>.Platform</code> and <code>Sys.info()</code>, e.g.,</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">is_macos</span>()</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">is_unix</span>()</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">is_linux</span>()</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">is_windows</span>()</span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+</div>
+<div id="loading-and-attaching-packages" class="section level2">
+<h2>Loading and attaching packages</h2>
+<p>Oftentimes I see users attach a series of packages in the beginning of their scripts by repeating <code>library()</code> multiple times. This could be easily vectorized, and the function <code>xfun::pkg_attach()</code> does this job. For example,</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(testit)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tinytex)</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mime)</span></code></pre></div>
+<p>is equivalent to</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">pkg_attach</span>(<span class="fu">c</span>(<span class="st">&#39;testit&#39;</span>, <span class="st">&#39;parallel&#39;</span>, <span class="st">&#39;tinytex&#39;</span>, <span class="st">&#39;mime&#39;</span>))</span></code></pre></div>
+<p>I also see scripts that contain code to install a package if it is not available, e.g.,</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&#39;tinytex&#39;</span>)) <span class="fu">install.packages</span>(<span class="st">&#39;tinytex&#39;</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tinytex)</span></code></pre></div>
+<p>This could be done via</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">pkg_attach2</span>(<span class="st">&#39;tinytex&#39;</span>)</span></code></pre></div>
+<p>The function <code>pkg_attach2()</code> is a shorthand of <code>pkg_attach(..., install = TRUE)</code>, which means if a package is not available, install it. This function can also deal with multiple packages.</p>
+<p>The function <code>loadable()</code> tests if a package is loadable.</p>
+</div>
+<div id="readwrite-files-in-utf-8" class="section level2">
+<h2>Read/write files in UTF-8</h2>
+<p>Functions <code>read_utf8()</code> and <code>write_utf8()</code> can be used to read/write files in UTF-8. They are simple wrappers of <code>readLines()</code> and <code>writeLines()</code>.</p>
+</div>
+<div id="convert-numbers-to-english-words" class="section level2">
+<h2>Convert numbers to English words</h2>
+<p>The function <code>numbers_to_words()</code> (or <code>n2w()</code> for short) converts numbers to English words.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n2w</span>(<span class="dv">0</span>, <span class="at">cap =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Zero&quot;</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n2w</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">121</span>, <span class="dv">11</span>), <span class="at">and =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>##  [1] &quot;zero&quot;                       &quot;eleven&quot;                    
+##  [3] &quot;twenty-two&quot;                 &quot;thirty-three&quot;              
+##  [5] &quot;forty-four&quot;                 &quot;fifty-five&quot;                
+##  [7] &quot;sixty-six&quot;                  &quot;seventy-seven&quot;             
+##  [9] &quot;eighty-eight&quot;               &quot;ninety-nine&quot;               
+## [11] &quot;one hundred and ten&quot;        &quot;one hundred and twenty-one&quot;</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n2w</span>(<span class="fl">1e+06</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;one million&quot;</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n2w</span>(<span class="fl">1e+11</span> <span class="sc">+</span> <span class="dv">12345678</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;one hundred billion, twelve million, three hundred forty-five thousand, six hundred seventy-eight&quot;</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n2w</span>(<span class="sc">-</span><span class="dv">987654321</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;minus nine hundred eighty-seven million, six hundred fifty-four thousand, three hundred twenty-one&quot;</code></pre>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">n2w</span>(<span class="fl">1e+15</span> <span class="sc">-</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;nine hundred ninety-nine trillion, nine hundred ninety-nine billion, nine hundred ninety-nine million, nine hundred ninety-nine thousand, nine hundred ninety-nine&quot;</code></pre>
+</div>
+<div id="cache-an-r-expression-to-an-rds-file" class="section level2">
+<h2>Cache an R expression to an RDS file</h2>
+<p>The function <code>cache_rds()</code> provides a simple caching mechanism: the first time an expression is passed to it, it saves the result to an RDS file; the next time it will read the RDS file and return the value instead of evaluating the expression again. If you want to invalidate the cache, you can use the argument <code>rerun = TRUE</code>.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> xfun<span class="sc">::</span><span class="fu">cache_rds</span>({</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pretend the computing here is a time-consuming</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">2</span>)</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<p>When the function is used in a code chunk in a <strong>knitr</strong> document, the RDS cache file is saved to a path determined by the chunk label (the base filename) and the chunk option <code>cache.path</code> (the cache directory), so you do not have to provide the <code>file</code> and <code>dir</code> arguments of <code>cache_rds()</code>.</p>
+<p>This caching mechanism is much simpler than <strong>knitr</strong>’s caching. Cache invalidation is often tricky (see <a href="https://yihui.org/en/2018/06/cache-invalidation/">this post</a>), so this function may be helpful if you want more transparency and control over when to invalidate the cache (for <code>cache_rds()</code>, the cache is invalidated when the cache file is deleted, which can be achieved via the argument <code>rerun = TRUE</code>).</p>
+<p>As documented on the help page of <code>cache_rds()</code>, there are two common cases in which you may want to invalidate the cache:</p>
+<ol style="list-style-type: decimal">
+<li><p>The code in the expression has changed, e.g., if you changed the code from <code>cache_rds({x + 1})</code> to <code>cache_rds({x + 2})</code>, the cache will be automatically invalidated and the expression will be re-evaluated. However, please note that changes in white spaces or comments do not matter. Or generally speaking, as long as the change does not affect the parsed expression, the cache will not be invalidated, e.g., the two expressions below are essentially identical (hence if you have executed <code>cache_rds()</code> on the first expression, the second expression will be able to take advantage of the cache):</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> xfun<span class="sc">::</span><span class="fu">cache_rds</span>({</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">3</span>  );</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  x<span class="ot">=</span><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>;  <span class="co"># semi-colons won&#39;t matter</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>  x<span class="sc">+</span><span class="dv">1</span>;</span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> xfun<span class="sc">::</span><span class="fu">cache_rds</span>({</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="dv">3</span>)</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>  <span class="co"># a comment</span></span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>  x <span class="sc">+</span></span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>  <span class="co"># feel free to make any changes in white spaces</span></span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div></li>
+<li><p>The value of a global variable in the expression has changed, e.g., if <code>y</code> has changed, you are most likely to want to invalidate the cache and rerun the expression below:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> xfun<span class="sc">::</span><span class="fu">cache_rds</span>({</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  x <span class="sc">+</span> y</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<p>This is because <code>x</code> is a local variable in the expression, and <code>y</code> is an external global variable (not created locally like <code>x</code>). To invalidate the cache when <code>y</code> has changed, you may let <code>cache_rds()</code> know through the <code>hash</code> argument that <code>y</code> needs to be considered when deciding if the cache should be invalidated:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> xfun<span class="sc">::</span><span class="fu">cache_rds</span>({</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>  x <span class="sc">+</span> y</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>}, <span class="at">hash =</span> <span class="fu">list</span>(y))</span></code></pre></div>
+<p>If you do not want to provide this list of value(s) to the <code>hash</code> argument, you may try <code>hash = &quot;auto&quot;</code> instead, which asks <code>cache_rds()</code> to try to figure out all global variables automatically and use a list of their values as the value for the <code>hash</code> argument.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> xfun<span class="sc">::</span><span class="fu">cache_rds</span>({</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  x <span class="sc">+</span> y</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>}, <span class="at">hash =</span> <span class="st">&quot;auto&quot;</span>)</span></code></pre></div></li>
+</ol>
+</div>
+<div id="check-reverse-dependencies-of-a-package" class="section level2">
+<h2>Check reverse dependencies of a package</h2>
+<p>Running <code>R CMD check</code> on the reverse dependencies of <strong>knitr</strong> and <strong>rmarkdown</strong> is my least favorite thing in developing R packages, because the numbers of their reverse dependencies are huge. The function <code>rev_check()</code> reflects some of my past experience in this process. I think I have automated it as much as possible, and made it as easy as possible to discover possible new problems introduced by the current version of the package (compared to the CRAN version). Finally I can just sit back and let it run.</p>
+</div>
+<div id="input-a-character-vector-into-the-rstudio-source-editor" class="section level2">
+<h2>Input a character vector into the RStudio source editor</h2>
+<p>The function <code>rstudio_type()</code> inputs characters in the RStudio source editor as if they were typed by a human. I came up with the idea when preparing my talk for rstudio::conf 2018 (<a href="https://yihui.org/en/2018/03/blogdown-video-rstudio-conf/">see this post</a> for more details).</p>
+</div>
+<div id="print-session-information" class="section level2">
+<h2>Print session information</h2>
+<p>Since I have never been fully satisfied by the output of <code>sessionInfo()</code>, I tweaked it to make it more useful in my use cases. For example, it is rarely useful to print out the names of base R packages, or information about the matrix products / BLAS / LAPACK. Oftentimes I want additional information in the session information, such as the Pandoc version when <strong>rmarkdown</strong> is used. The function <code>session_info()</code> tweaks the output of <code>sessionInfo()</code>, and makes it possible for other packages to append information in the output of <code>session_info()</code>.</p>
+<p>You can choose to print out the versions of only the packages you specify, e.g.,</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>xfun<span class="sc">::</span><span class="fu">session_info</span>(<span class="fu">c</span>(<span class="st">&#39;xfun&#39;</span>, <span class="st">&#39;rmarkdown&#39;</span>, <span class="st">&#39;knitr&#39;</span>, <span class="st">&#39;tinytex&#39;</span>), <span class="at">dependencies =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## R version 4.1.1 (2021-08-10)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Big Sur 10.16
+## 
+## Locale: C / en_US.UTF-8 / en_US.UTF-8 / C / en_US.UTF-8 / en_US.UTF-8
+## 
+## Package version:
+##   knitr_1.34       rmarkdown_2.10.5 tinytex_0.33     xfun_0.26       
+## 
+## Pandoc version: 2.14.2</code></pre>
+</div>
+
+<script type="text/javascript">
+window.onload = function() {
+  var i, fig = 1, caps = document.getElementsByClassName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.className !== 'figure' || cap.nodeName !== 'P')
+      continue;
+    cap.innerHTML = '<span>Figure ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+  fig = 1;
+  caps = document.getElementsByTagName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.nodeName !== 'TABLE') continue;
+    cap.innerHTML = '<span>Table ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+}
+</script>
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Representation of Packed and Unpacked (Dense) Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for unpack {Matrix}"><tr><td>unpack {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Representation of Packed and Unpacked (Dense) Matrices</h2>
+
+<h3>Description</h3>
+
+<p>&ldquo;Packed&rdquo; matrix storage here applies to dense matrices
+(<code><a href="denseMatrix-class.html">denseMatrix</a></code>) only, and there is available only
+for symmetric (<code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>)
+or triangular (<code><a href="triangularMatrix-class.html">triangularMatrix</a></code>) matrices,
+where only one triangle of the matrix needs to be stored.
+</p>
+<p><code>unpack()</code> unpacks &ldquo;packed&rdquo; matrices, where <br />
+<code>pack()</code> produces &ldquo;packed&rdquo; matrices.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+pack(x, ...)
+## S4 method for signature 'matrix'
+pack(x, symmetric = NA, upperTri = NA, ...)
+
+unpack(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+
+<dl>
+<dt>for <code>unpack()</code>:</dt><dd><p>a matrix stored in packed form, e.g.,
+of class <code>"d?pMatrix"</code> where &quot;?&quot; is &quot;t&quot; for triangular or
+&quot;s&quot; for symmetric.</p>
+</dd>
+<dt>for <code>pack()</code>:</dt><dd><p>a (symmetric or triangular) matrix stored
+in full storage.</p>
+</dd>
+</dl>
+
+</td></tr>
+<tr valign="top"><td><code>symmetric</code></td>
+<td>
+<p>logical (including <code>NA</code>) for optionally
+specifying if <code>x</code> is symmetric (or rather triangular).</p>
+</td></tr>
+<tr valign="top"><td><code>upperTri</code></td>
+<td>
+<p>(for the triangular case only) logical
+(incl. <code>NA</code>) indicating if <code>x</code> is upper (or lower) triangular.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>These are generic functions with special methods for different types
+of packed (or non-packed) symmetric or triangular dense
+matrices.  Use <code><a href="../../methods/html/showMethods.html">showMethods</a>("unpack")</code> to list
+the methods for <code>unpack()</code>, and similarly for <code>pack()</code>.
+</p>
+
+
+<h3>Value</h3>
+
+
+<dl>
+<dt>for <code>unpack()</code>:</dt><dd><p>A <code><a href="Matrix-class.html">Matrix</a></code> object
+containing the full-storage representation of <code>x</code>.</p>
+</dd>
+<dt>for <code>pack()</code>:</dt><dd>
+<p>A packed <code>Matrix</code> (i.e. of class <code>"..pMatrix"</code>)
+representation of <code>x</code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+showMethods("unpack")
+(cp4 &lt;- chol(Hilbert(4))) # is triangular
+tp4 &lt;- as(cp4,"dtpMatrix")# [t]riangular [p]acked
+str(tp4)
+(unpack(tp4))
+stopifnot(identical(tp4, pack(unpack(tp4))))
+
+(s &lt;- crossprod(matrix(sample(15), 5,3))) # traditional symmetric matrix
+(sp &lt;- pack(s))
+mt &lt;- as.matrix(tt &lt;- tril(s))
+(pt &lt;- pack(mt))
+stopifnot(identical(pt, pack(tt)),
+	  dim(s ) == dim(sp), all(s  == sp),
+	  dim(mt) == dim(pt), all(mt == pt), all(mt == tt))
+showMethods("pack")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

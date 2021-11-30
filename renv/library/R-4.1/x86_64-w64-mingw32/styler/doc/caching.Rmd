@@ -1,0 +1,110 @@
+---
+title: "Caching"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Caching}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(styler)
+```
+
+This is a developer vignette to explain how caching works and what we learned on
+the way. To use the caching feature, please have a look at the README.
+
+The main caching features were implemented in the following two pull requests:
+
+- #538: Implemented simple caching and utilities for managing caches. Input text
+  is styled as a whole and added to the cache afterwards. This makes most sense
+  given that the very same expression will probably never be passed to styler,
+  unless it is already compliant with the style guide. Apart from the
+  (negligible) innode, caching text has a memory cost of 0. Speed boosts only
+  result if the whole text passed to styler is compliant to the style guide in
+  use. Changing one line in a file with hundreds of lines means each line will
+  be styled again. This is a major drawback and makes the cache only useful for
+  a use with a pre-commit framework (the initial motivation) or when functions
+  like `style_pkg()` are run often and most files were not changed.
+
+- #578: Adds a second layer of caching by caching top-level expressions
+  individually. This will bring speed boosts to the situation where very little
+  is changed but there are many top-level expressions. Hence, changing one line
+  in a big file will invalidate the cache for the expression the line is part
+  of, i.e. when changing `x <- 2` to `x = 2` below, styler will have to restyle
+  the function definition, but not `another(call)` and all other expressions
+  that were not changed.
+
+```{r, eval = FALSE}
+function() {
+  # a comment 
+  x = 2 # <- change this line
+}
+
+another(call)
+```
+
+While #538 also required a lot of thought, this is not necessarily visible in
+the diff. The main challenge was to figure out how the caching should work
+conceptually and where we best insert the functionality as well as how to make
+caching work for edge cases like trailing blank lines etc. For details on the
+conceptual side and requirements, see #538.
+
+In comparison, the diff in #578 is much larger. We can walk through the main
+changes introduced here:
+
+- Each nest gained a column *is_cached* to indicate if an expression is cached.
+  It's only ever set for the top-level nest, but set to `NA` for all other
+  nests. Also, comments are not cached because they are essentially top level
+  terminals which are very cheap to style (also because hardly any rule concerns
+  them) and because each comment is a top-level expression, simply styling them
+  is cheaper than checking for each of them if it is in the cache.
+
+- Each nest also gained a column *block* to denote the block to which it belongs
+  for styling. Running each top-level expression through
+  `parse_transform_serialize_r()` separately is relatively expensive. We prefer
+  to put multiple top-level expressions into a block and process the block. This
+  is done with `parse_transform_serialize_r_block()`. Note that before we
+  implemented this PR, all top-level expressions were sent through
+  `parse_transform_serialize_r()` as one block. Leaving out some exceptions in
+  this explanation, we always put uncached top-level expressions in a block and
+  cached top-level expressions into a block and then style the uncached ones.
+
+- Apart from the actual styling, a very costly part of formatting code with
+  styler is to compute the nested parse data with `compute_parse_data_nested()`.
+  When caching top-level expressions, it is evident that building up the nested
+  structure for cached code is unnecessary because we don't actually style it,
+  but simply return `text`. For this reason, we introduce the concept of a
+  shallow nest. It can only occur at the top level. For the top-level
+  expressions we know that they are cached, we remove all children before
+  building up the nested parse table and let them act as `terminals` and will
+  later simply return their `text`. Hence, in the nested parse table, no cached
+  expressions have children.
+
+- Because we now style blocks of expressions and we want to preserve the line
+  breaks between them, we need to keep track of all blank lines between
+  expressions, which was not necessary previously because all expressions were
+  in a block and the blank lines separating them were stored in `newlines` and
+  `lag_newlines` except for all blank lines before the first expression.
+
+- Because we wanted to cache by expression, but process by block of expression,
+  we needed to decompose the block into individual expressions and add them to
+  the cache once we obtained the final text. We could probably also have added
+  expressions to the cache before we put the text together, but the problem is
+  that at some point we turn the nested structure into a flat structure and as
+  this must happen with a `post_visit()` approach, we'd have to implement a
+  complicated routine to check if we are now about to put together all top-level
+  expressions and then if yes write them to the cache. A simple (but maybe not
+  so elegant) parsing of the output as implemented in `cache_by_expression()`
+  seemed reasonable in terms of limiting complexity and keeping efficiency.
+
+For more detailed explanation and documentation, please consult the help files
+of the internals.
+

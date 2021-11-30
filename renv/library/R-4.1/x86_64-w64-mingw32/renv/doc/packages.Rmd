@@ -1,0 +1,117 @@
+---
+title: "Package Development with renv"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Package Development with renv}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+
+## Development
+
+Often, R packages will have other R packages as dependencies. For this, one must
+declare their R package dependencies within the package `DESCRIPTION` file. If
+you want to prepare your environment for package development, you can use:
+
+```
+renv::install()
+```
+
+to install the packages as declared in the package's `DESCRIPTION` file. This
+action is roughly analogous to `remotes::install_deps()`.
+
+If you're developing a package that you intend to release to CRAN, then you
+likely want to build and test your package against the latest versions of your
+dependencies as available on CRAN. For this, you should consider using:
+
+```
+renv::update()
+```
+
+to ensure your package dependencies are up-to-date, as appropriate.
+
+
+## Isolation
+
+Normally, a package under development should be tested against the
+latest-available versions of its dependencies on CRAN. However, in some cases,
+you may need to ensure your package is compatible with other packages also
+currently under development.
+
+In these cases, the `renv` project library can be useful -- you can install the
+development version(s) of your dependencies into the project library, without
+worrying about clobbering any packages already installed in your user library.
+
+In these cases, you can declare your development dependencies using the
+`Remotes` field of the `DESCRIPTION` file; e.g.
+
+```
+Remotes:
+  r-lib/ggplot2
+```
+
+and `renv::install()` will parse that remotes declaration and retrieve the
+requested package. See the `remotes` vignette,
+[Dependency resolution for R package development][dependencies],
+for more details.
+
+
+## Testing
+
+While developing your package, you may want to use a continuous integration
+service (such as [Travis CI](https://www.travis-ci.org/)) to build and test
+your package remotely. You can use `renv` to help facilitate this testing --
+see the [Continuous Integration][ci] vignette for more information. In
+particular, clever use of the `renv` cache can help save time that might
+normally be spent on package installation.
+
+
+## R CMD build and the Project Library
+
+By default, when building a package tarball, R will copy all files within the
+package directory to a temporary build directory before building the package.
+Unfortunately, this also implies copying the `renv` library. When that library
+is large, this can dramatically increase the amount of time it takes to build
+your package.
+
+One way to resolve this issue is to force `renv` to use a library path that
+lives outside of your project. For example, you might set the following in
+a start-up `.Renviron` file:
+
+```
+RENV_PATHS_LIBRARY_ROOT = ~/.renv/library
+```
+
+`renv` will then form library paths within this directory.
+
+By default, library paths will be formed using the project name, alongside a
+unique identifier generated from the full project path. These paths are of
+the form:
+
+```
+<name>-<id>
+```
+
+If you'd prefer to omit the `<id>`, then you can set the environment variable:
+
+```
+RENV_PATHS_LIBRARY_ROOT_ASIS = TRUE
+```
+
+to instruct `renv` to forego the use of an identifier.
+
+
+
+
+[ci]: https://CRAN.R-project.org/package=renv/vignettes/ci.html
+[dependencies]: https://CRAN.R-project.org/package=remotes/vignettes/dependencies.html
+

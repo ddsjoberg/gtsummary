@@ -1,0 +1,59 @@
+Package: broom.mixed
+Type: Package
+Title: Tidying Methods for Mixed Models
+Version: 0.2.6
+Authors@R: c(
+    person("Ben", "Bolker", email = "bolker@mcmaster.ca",
+        role = c("aut", "cre"),
+        comment=c(ORCID="0000-0002-2127-0443")),
+    person("David", "Robinson", email = "admiral.david@gmail.com",
+    	role = "aut"),
+    person("Dieter", "Menne", role = "ctb"),
+    person("Jonah", "Gabry", role = "ctb"),
+    person("Paul", "Buerkner", role = "ctb"),
+    person("Christopher", "Hua", role = "ctb"),
+    person("William", "Petry", role = "ctb",
+       comment=c(ORCID="0000-0002-5230-5987")),
+    person("Joshua", "Wiley", role = "ctb",
+       comment=c(ORCID="0000-0002-0271-6702")),
+    person("Patrick", "Kennedy", role = "ctb"),
+    person("Eduard", "Szöcs", role = "ctb",
+       comment=c(ORCID = "0000-0001-5376-1194", sponsor = "BASF SE")),
+    person("Indrajeet", "Patil", role="ctb")
+    )
+Maintainer: Ben Bolker <bolker@mcmaster.ca>
+Description: Convert fitted objects from various R mixed-model packages
+    into tidy data frames along the lines of the 'broom' package.
+    The package provides three
+    S3 generics for each model: tidy(), which summarizes a model's statistical findings such as
+    coefficients of a regression; augment(), which adds columns to the original
+    data such as predictions, residuals and cluster assignments; and glance(), which
+    provides a one-row summary of model-level statistics.
+Imports: broom, dplyr, tidyr, plyr, purrr, tibble, reshape2, nlme,
+        methods, stringr, coda, TMB, cubelyr
+Suggests: knitr, testthat, ggplot2, Matrix, MCMCglmm, lme4, brms, mgcv,
+        gamlss, gamlss.data, lmerTest, pbkrtest, glmmADMB, glmmTMB,
+        dotwhisker, pander, R2jags, GLMMadaptive, rstan, rstanarm
+URL: http://github.com/bbolker/broom.mixed
+BugReports: http://github.com/bbolker/broom.mixed/issues
+License: GPL-3
+RoxygenNote: 7.1.0
+Encoding: UTF-8
+Additional_repositories: http://bbolker.github.io/drat
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2020-05-15 00:54:20 UTC; bolker
+Author: Ben Bolker [aut, cre] (<https://orcid.org/0000-0002-2127-0443>),
+  David Robinson [aut],
+  Dieter Menne [ctb],
+  Jonah Gabry [ctb],
+  Paul Buerkner [ctb],
+  Christopher Hua [ctb],
+  William Petry [ctb] (<https://orcid.org/0000-0002-5230-5987>),
+  Joshua Wiley [ctb] (<https://orcid.org/0000-0002-0271-6702>),
+  Patrick Kennedy [ctb],
+  Eduard Szöcs [ctb] (<https://orcid.org/0000-0001-5376-1194>, BASF SE),
+  Indrajeet Patil [ctb]
+Repository: CRAN
+Date/Publication: 2020-05-17 07:40:10 UTC
+Built: R 4.0.5; ; 2021-05-07 20:47:59 UTC; windows

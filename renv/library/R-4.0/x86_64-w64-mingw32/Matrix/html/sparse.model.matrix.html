@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Construct Sparse Design / Model Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sparse.model.matrix {Matrix}"><tr><td>sparse.model.matrix {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Construct Sparse Design / Model Matrices</h2>
+
+<h3>Description</h3>
+
+<p>Construct a sparse model or &ldquo;design&rdquo; matrix,
+from a formula and data frame (<code>sparse.model.matrix</code>) or a single
+factor (<code>fac2sparse</code>).
+</p>
+<p>The <code>fac2[Ss]parse()</code> functions are utilities, also used
+internally in the principal user level function
+<code>sparse.model.matrix()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+sparse.model.matrix(object, data = environment(object),
+		    contrasts.arg = NULL, xlev = NULL, transpose = FALSE,
+		    drop.unused.levels = FALSE, row.names = TRUE,
+		    sep = "", verbose = FALSE, ...)
+
+fac2sparse(from, to = c("d", "i", "l", "n", "z"),
+	   drop.unused.levels = TRUE, repr = c("C","T","R"), giveCsparse)
+fac2Sparse(from, to = c("d", "i", "l", "n", "z"),
+	   drop.unused.levels = TRUE, repr = c("C","T","R"), giveCsparse,
+	   factorPatt12, contrasts.arg = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+<p>an object of an appropriate class.  For the default
+method, a model formula or terms object.</p>
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data frame created with <code><a href="../../stats/html/model.frame.html">model.frame</a></code>.  If
+another sort of object, <code>model.frame</code> is called first.</p>
+</td></tr>
+<tr valign="top"><td><code>contrasts.arg</code></td>
+<td>
+
+<dl>
+<dt>for <code>sparse.model.matrix()</code>:</dt><dd><p>A list, whose entries are
+contrasts suitable for input to the <code><a href="../../stats/html/contrasts.html">contrasts</a></code>
+replacement function and whose names are the names of columns
+of <code>data</code> containing <code><a href="../../base/html/factor.html">factor</a></code>s.</p>
+</dd>
+<dt>for <code>fac2Sparse()</code>:</dt><dd><p>character string or <code>NULL</code> or
+(coercable to) <code>"<a href="sparseMatrix-class.html">sparseMatrix</a>"</code>, specifying the
+contrasts to be applied to the factor levels.</p>
+</dd>
+</dl>
+</td></tr>
+<tr valign="top"><td><code>xlev</code></td>
+<td>
+<p>to be used as argument of <code><a href="../../stats/html/model.frame.html">model.frame</a></code> if
+<code>data</code> has no <code>"terms"</code> attribute.</p>
+</td></tr>
+<tr valign="top"><td><code>transpose</code></td>
+<td>
+<p>logical indicating if the <em>transpose</em> should be
+returned; if the transposed is used anyway, setting <code>transpose = TRUE</code>
+is more efficient.</p>
+</td></tr>
+<tr valign="top"><td><code>drop.unused.levels</code></td>
+<td>
+<p>should factors have unused levels dropped?
+The default for <code>sparse.model.matrix</code> has been changed to
+<code>FALSE</code>, 2010-07, for compatibility with <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>'s standard (dense)
+<code><a href="../../stats/html/model.matrix.html">model.matrix</a>()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>row.names</code></td>
+<td>
+<p>logical indicating if row names should be used.</p>
+</td></tr>
+<tr valign="top"><td><code>sep</code></td>
+<td>
+<p><code><a href="../../base/html/character.html">character</a></code> string passed to <code><a href="../../base/html/paste.html">paste</a>()</code>
+when constructing column names from the variable name and its levels.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>logical or integer indicating if (and how much)
+progress output should be printed.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td></tr>
+<tr valign="top"><td><code>from</code></td>
+<td>
+<p>(for <code>fac2sparse()</code>:) a <code><a href="../../base/html/factor.html">factor</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>to</code></td>
+<td>
+<p>a character indicating the &ldquo;kind&rdquo; of sparse matrix to
+be returned.  The default, <code>"d"</code> is for <code><a href="../../base/html/double.html">double</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>giveCsparse</code></td>
+<td>
+<p><b>deprecated</b>, replaced with <code>repr</code>; logical indicating if
+the result must be a <code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>repr</code></td>
+<td>
+<p><code><a href="../../base/html/character.html">character</a></code> string, one of <code>"C"</code>,
+<code>"T"</code>, or <code>"R"</code>, specifying the sparse <em>repr</em>esentation to
+be used for the result, i.e., one from the super classes
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>, <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>, or
+<code><a href="RsparseMatrix-class.html">RsparseMatrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>factorPatt12</code></td>
+<td>
+<p>logical vector, say <code>fp</code>, of length two;
+when <code>fp[1]</code> is true, return &ldquo;contrasted&rdquo; <code>t(X)</code>;
+when <code>fp[2]</code> is true, the original (&ldquo;dummy&rdquo;)
+<code>t(X)</code>, i.e, the result of <code><a href="sparse.model.matrix.html">fac2sparse</a>()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a sparse matrix, extending <code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> (for
+<code>fac2sparse()</code> if <code>repr = "C"</code> as per default; a
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code> or <code><a href="RsparseMatrix-class.html">RsparseMatrix</a></code>, otherwise).
+</p>
+<p>For <code>fac2Sparse()</code>, a <code><a href="../../base/html/list.html">list</a></code> of length two, both
+components with the corresponding transposed model matrix, where the
+corresponding <code>factorPatt12</code> is true.
+</p>
+<p>Note that <code><a href="../../MatrixModels/html/model.Matrix.html">model.Matrix</a>(*, sparse=TRUE)</code>
+from package <span class="pkg">MatrixModels</span> may be often be preferable to
+<code>sparse.model.matrix()</code> nowadays, as <code>model.Matrix()</code>
+returns <code><a href="../../MatrixModels/html/modelMatrix-class.html">modelMatrix</a></code>
+objects with additional slots <code>assign</code> and <code>contrasts</code> which
+relate back to the variables used.
+</p>
+<p><code>fac2sparse()</code>, the basic workhorse of
+<code>sparse.model.matrix()</code>, returns the <em>transpose</em>
+(<code><a href="../../base/html/t.html">t</a></code>) of the model matrix.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Doug Bates and Martin Maechler, with initial suggestions from Tim
+Hesterberg.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../stats/html/model.matrix.html">model.matrix</a></code> in standard <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>'s package <span class="pkg">stats</span>.<br />
+<code><a href="../../MatrixModels/html/model.Matrix.html">model.Matrix</a></code> which calls
+<code>sparse.model.matrix</code> or <code>model.matrix</code> depending on its
+<code>sparse</code> argument may be preferred to <code>sparse.model.matrix</code>.
+</p>
+<p><code>as(f, "sparseMatrix")</code> (see <code>coerce(from = "factor", ..)</code>
+in the class doc <a href="sparseMatrix-class.html">sparseMatrix</a>) produces the
+<em>transposed</em> sparse model matrix for a single factor <code>f</code>
+(and <em>no</em> contrasts).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+dd &lt;- data.frame(a = gl(3,4), b = gl(4,1,12))# balanced 2-way
+options("contrasts") # the default:  "contr.treatment"
+sparse.model.matrix(~ a + b, dd)
+sparse.model.matrix(~ -1+ a + b, dd)# no intercept --&gt; even sparser
+sparse.model.matrix(~ a + b, dd, contrasts = list(a="contr.sum"))
+sparse.model.matrix(~ a + b, dd, contrasts = list(b="contr.SAS"))
+
+## Sparse method is equivalent to the traditional one :
+stopifnot(all(sparse.model.matrix(~ a + b, dd) ==
+	      Matrix(model.matrix(~ a + b, dd), sparse=TRUE)),
+	  all(sparse.model.matrix(~ 0+ a + b, dd) ==
+	      Matrix(model.matrix(~ 0+ a + b, dd), sparse=TRUE)))
+
+
+(ff &lt;- gl(3,4,, c("X","Y", "Z")))
+fac2sparse(ff) #  3 x 12 sparse Matrix of class "dgCMatrix"
+##
+##  X  1 1 1 1 . . . . . . . .
+##  Y  . . . . 1 1 1 1 . . . .
+##  Z  . . . . . . . . 1 1 1 1
+
+## can also be computed via sparse.model.matrix():
+f30 &lt;- gl(3,0    )
+f12 &lt;- gl(3,0, 12)
+stopifnot(
+  all.equal(t( fac2sparse(ff) ),
+	    sparse.model.matrix(~ 0+ff),
+	    tolerance = 0, check.attributes=FALSE),
+  is(M &lt;- fac2sparse(f30, drop= TRUE),"CsparseMatrix"), dim(M) == c(0, 0),
+  is(M &lt;- fac2sparse(f30, drop=FALSE),"CsparseMatrix"), dim(M) == c(3, 0),
+  is(M &lt;- fac2sparse(f12, drop= TRUE),"CsparseMatrix"), dim(M) == c(0,12),
+  is(M &lt;- fac2sparse(f12, drop=FALSE),"CsparseMatrix"), dim(M) == c(3,12)
+ )
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

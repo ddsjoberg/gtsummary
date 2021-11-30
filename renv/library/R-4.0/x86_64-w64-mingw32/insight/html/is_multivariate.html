@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Checks if an object stems from a multivariate response model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for is_multivariate {insight}"><tr><td>is_multivariate {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Checks if an object stems from a multivariate response model</h2>
+
+<h3>Description</h3>
+
+<p>Small helper that checks if a model is a multivariate response
+model, i.e. a model with multiple outcomes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+is_multivariate(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A model object, or an object returned by a function from this package.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A logical, <code>TRUE</code> if either <code>x</code> is a model object and is
+a multivariate response model, or <code>TRUE</code> if a return value from a
+function of <span class="pkg">insight</span> is from a multivariate response model.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+library(rstanarm)
+data("pbcLong")
+model &lt;- stan_mvmer(
+  formula = list(
+    logBili ~ year + (1 | id),
+    albumin ~ sex + year + (year | id)
+  ),
+  data = pbcLong,
+  chains = 1, cores = 1, seed = 12345, iter = 1000
+)
+
+f &lt;- find_formula(model)
+is_multivariate(model)
+is_multivariate(f)
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

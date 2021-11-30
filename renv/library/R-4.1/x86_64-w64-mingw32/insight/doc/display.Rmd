@@ -1,0 +1,119 @@
+---
+title: "Formatting, printing and exporting tables"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Formatting, printing and exporting tables}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+if (!requireNamespace("dplyr", quietly = TRUE) ||
+    !requireNamespace("gt", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
+```
+
+## The difference between a dataframe and its render
+
+Most of objects encountered throughout the **easystats** packages are "tables", i.e., a 2D matrix with columns and rows. In R, these objects are often, at their core, *data frames*. Let's create one to use as an example:
+
+```{r, warning=FALSE, message=FALSE}
+library(insight)
+library(dplyr)
+
+df <- data.frame(
+  Variable = c(1, 3, 5, 3, 1),
+  Group = c("A", "A", "A", "B", "B"),
+  CI = c(0.95, 0.95, 0.95, 0.95, 0.95),
+  CI_low = c(3.35, 2.425, 6.213, 12.1, 1.23),
+  CI_high = c(4.23, 5.31, 7.123, 13.5, 3.61),
+  p = c(0.001, 0.0456, 0.45, 0.0042, 0.34)
+)
+
+df
+```
+
+When I display in in the console (calling an object - e.g. `df` - is actually equivalent to calling `print(df)`), the output looks alright, but it could be improved. Some packages, such as **knitr**, have functions to create a nicer output. For instance, in markdown, so that it can be nicely rendered in markdown documents when copied:
+
+```{r, eval=FALSE}
+knitr::kable(df, format = "markdown")
+
+```
+```
+| Variable|Group |   CI| CI_low| CI_high|      p|
+|--------:|:-----|----:|------:|-------:|------:|
+|        1|A     | 0.95|  3.350|   4.230| 0.0010|
+|        3|A     | 0.95|  2.425|   5.310| 0.0456|
+|        5|A     | 0.95|  6.213|   7.123| 0.4500|
+|        3|B     | 0.95| 12.100|  13.500| 0.0042|
+|        1|B     | 0.95|  1.230|   3.610| 0.3400|
+```
+
+Or HTML, which again makes it look great in HTML files (such as this webpage you're reading):
+
+```{r, results='asis'}
+knitr::kable(df, format = "html")
+```
+
+
+## The *insight* workflow
+
+The **insight** package also contains function to improve the "printing", or rendering, of tables. Its design dissociates two separate and independent steps: *formatting* and *exporting*.
+
+### Formatting
+
+The purpose of formatting is to improve a given table, while still keeping it as a regular R data frame, so that it can be for instance further modified by the user.
+
+
+```{r}
+format_table(df)
+```
+
+As you can see, `format_table()` modifies columns, turning number into characters (so that it has the same amount of digits), and  detecting confidence intervals. This is usually combined with column-specific formatting functions, like `format_p()`:
+
+```{r}
+df %>% 
+  mutate(p = format_p(p, stars = TRUE)) %>% 
+  format_table()
+```
+
+
+### Exporting
+
+The next step is *exporting*, which takes a data frame and renders it in a given format, so that it looks good in the console, or in markdown, HTML or latex.
+
+For console output, we need to `cat()` the returned result to get nicely printed code:
+
+```{r}
+cat(export_table(df))
+```
+
+For markdown or HTML, simply modify the `format` argument to markdown ("md")...
+
+```{r}
+export_table(df, format = "md")
+```
+
+...or HTML format.
+
+```{r}
+export_table(df, format = "html")
+```
+
+This can be combined with `format_table()`.
+
+```{r}
+df %>% 
+  format_table(ci_brackets = c("(", ")")) %>% 
+  export_table(format = "html")
+```
+
+TODO: What about display?

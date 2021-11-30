@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2021-09-22" />
+
+<title>Benchmarking data.table</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Benchmarking data.table</h1>
+<h4 class="date">2021-09-22</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#fread-clear-caches"><span class="toc-section-number">1</span> fread: clear caches</a></li>
+<li><a href="#subset-threshold-for-index-optimization-on-compound-queries"><span class="toc-section-number">2</span> subset: threshold for index optimization on compound queries</a></li>
+<li><a href="#subset-index-aware-benchmarking"><span class="toc-section-number">3</span> subset: index aware benchmarking</a></li>
+<li><a href="#by-reference-operations"><span class="toc-section-number">4</span> <em>by reference</em> operations</a></li>
+<li><a href="#try-to-benchmark-atomic-processes"><span class="toc-section-number">5</span> try to benchmark atomic processes</a></li>
+<li><a href="#avoid-class-coercion"><span class="toc-section-number">6</span> avoid class coercion</a></li>
+<li><a href="#avoid-microbenchmark...-times100"><span class="toc-section-number">7</span> avoid <code>microbenchmark(..., times=100)</code></a></li>
+<li><a href="#multithreaded-processing"><span class="toc-section-number">8</span> multithreaded processing</a></li>
+<li><a href="#inside-a-loop-prefer-set-instead-of"><span class="toc-section-number">9</span> inside a loop prefer <code>set</code> instead of <code>:=</code></a></li>
+<li><a href="#inside-a-loop-prefer-setdt-instead-of-data.table"><span class="toc-section-number">10</span> inside a loop prefer <code>setDT</code> instead of <code>data.table()</code></a></li>
+</ul>
+</div>
+
+<p>This document is meant to guide on measuring performance of <code>data.table</code>. Single place to document best practices and traps to avoid.</p>
+<div id="fread-clear-caches" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> fread: clear caches</h1>
+<p>Ideally each <code>fread</code> call should be run in fresh session with the following commands preceding R execution. This clears OS cache file in RAM and HD cache.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">free</span> -g</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="fu">sudo</span> sh -c <span class="st">&#39;echo 3 &gt;/proc/sys/vm/drop_caches&#39;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="fu">sudo</span> lshw -class disk</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="fu">sudo</span> hdparm -t /dev/sda</span></code></pre></div>
+<p>When comparing <code>fread</code> to non-R solutions be aware that R requires values of character columns to be added to <em>R’s global string cache</em>. This takes time when reading data but later operations benefit since the character strings have already been cached. Consequently as well timing isolated tasks (such as <code>fread</code> alone), it’s a good idea to benchmark a pipeline of tasks such as reading data, computing operators and producing final output and report the total time of the pipeline.</p>
+</div>
+<div id="subset-threshold-for-index-optimization-on-compound-queries" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> subset: threshold for index optimization on compound queries</h1>
+<p>Index optimization for compound filter queries will be not be used when cross product of elements provided to filter on exceeds 1e4 elements.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a>DT =<span class="st"> </span><span class="kw">data.table</span>(<span class="dt">V1=</span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">V2=</span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">V3=</span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">V4=</span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">setindex</span>(DT)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>v =<span class="st"> </span><span class="kw">c</span>(1L, <span class="kw">rep</span>(11L, <span class="dv">9</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">length</span>(v)<span class="op">^</span><span class="dv">4</span>               <span class="co"># cross product of elements in filter</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="co">#[1] 10000                # &lt;= 10000</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>DT[V1 <span class="op">%in%</span><span class="st"> </span>v <span class="op">&amp;</span><span class="st"> </span>V2 <span class="op">%in%</span><span class="st"> </span>v <span class="op">&amp;</span><span class="st"> </span>V3 <span class="op">%in%</span><span class="st"> </span>v <span class="op">&amp;</span><span class="st"> </span>V4 <span class="op">%in%</span><span class="st"> </span>v, verbose=<span class="ot">TRUE</span>]</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="co">#Optimized subsetting with index &#39;V1__V2__V3__V4&#39;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="co">#on= matches existing index, using index</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="co">#Starting bmerge ...done in 0.000sec</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="co">#...</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>v =<span class="st"> </span><span class="kw">c</span>(1L, <span class="kw">rep</span>(11L, <span class="dv">10</span>))</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a><span class="kw">length</span>(v)<span class="op">^</span><span class="dv">4</span>               <span class="co"># cross product of elements in filter</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="co">#[1] 14641                # &gt; 10000</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>DT[V1 <span class="op">%in%</span><span class="st"> </span>v <span class="op">&amp;</span><span class="st"> </span>V2 <span class="op">%in%</span><span class="st"> </span>v <span class="op">&amp;</span><span class="st"> </span>V3 <span class="op">%in%</span><span class="st"> </span>v <span class="op">&amp;</span><span class="st"> </span>V4 <span class="op">%in%</span><span class="st"> </span>v, verbose=<span class="ot">TRUE</span>]</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a><span class="co">#Subsetting optimization disabled because the cross-product of RHS values exceeds 1e4, causing memory problems.</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="co">#...</span></span></code></pre></div>
+</div>
+<div id="subset-index-aware-benchmarking" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> subset: index aware benchmarking</h1>
+<p>For convenience <code>data.table</code> automatically builds an index on fields you use to subset data. It will add some overhead to first subset on particular fields but greatly reduces time to query those columns in subsequent runs. When measuring speed, the best way is to measure index creation and query using an index separately. Having such timings it is easy to decide what is the optimal strategy for your use case. To control usage of index use following options:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">options</span>(<span class="dt">datatable.auto.index=</span><span class="ot">TRUE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">options</span>(<span class="dt">datatable.use.index=</span><span class="ot">TRUE</span>)</span></code></pre></div>
+<ul>
+<li><code>use.index=FALSE</code> will force query not to use indices even if they exists, but existing keys are still used for optimization.</li>
+<li><code>auto.index=FALSE</code> disables building index automatically when doing subset on non-indexed data, but if indices were created before this option was set, or explicitly by calling <code>setindex</code> they still will be used for optimization.</li>
+</ul>
+<p>Two other options control optimization globally, including use of indices:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">options</span>(<span class="dt">datatable.optimize=</span>2L)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">options</span>(<span class="dt">datatable.optimize=</span>3L)</span></code></pre></div>
+<p><code>options(datatable.optimize=2L)</code> will turn off optimization of subsets completely, while <code>options(datatable.optimize=3L)</code> will switch it back on. Those options affects much more optimizations thus should not be used when only control of index is needed. Read more in <code>?datatable.optimize</code>.</p>
+</div>
+<div id="by-reference-operations" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> <em>by reference</em> operations</h1>
+<p>When benchmarking <code>set*</code> functions it make sense to measure only first run. Those functions updates data.table by reference thus in subsequent runs they get already processed <code>data.table</code> on input.</p>
+<p>Protecting your <code>data.table</code> from being updated by reference operations can be achieved using <code>copy</code> or <code>data.table:::shallow</code> functions. Be aware <code>copy</code> might be very expensive as it needs to duplicate whole object. It is unlikely we want to include duplication time in time of the actual task we are benchmarking.</p>
+</div>
+<div id="try-to-benchmark-atomic-processes" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> try to benchmark atomic processes</h1>
+<p>If your benchmark is meant to be published it will be much more insightful if you will split it to measure time of atomic processes. This way your readers can see how much time was spent on reading data from source, cleaning, actual transformation, exporting results. Of course if your benchmark is meant to present <em>full workflow</em> then it perfectly make sense to present total timing, still splitting timings might give good insight into bottlenecks in such workflow. There are another cases when it might not be desired, for example when benchmarking <em>reading csv</em>, followed by <em>grouping</em>. R requires to populate <em>R’s global string cache</em> which adds extra overhead when importing character data to R session. On the other hand <em>global string cache</em> might speed up processes like <em>grouping</em>. In such cases when comparing R to other languages it might be useful to include total timing.</p>
+</div>
+<div id="avoid-class-coercion" class="section level1" number="6">
+<h1 number="6"><span class="header-section-number">6</span> avoid class coercion</h1>
+<p>Unless this is what you truly want to measure you should prepare input objects for every tools you are benchmarking in expected class.</p>
+</div>
+<div id="avoid-microbenchmark...-times100" class="section level1" number="7">
+<h1 number="7"><span class="header-section-number">7</span> avoid <code>microbenchmark(..., times=100)</code></h1>
+<p>Repeating benchmarking many times usually does not fit well for data processing tools. Of course it perfectly make sense for more atomic calculations. It does not well represent use case for common data processing tasks, which rather consists of batches sequentially provided transformations, each run once. Matt once said:</p>
+<blockquote>
+<p>I’m very wary of benchmarks measured in anything under 1 second. Much prefer 10 seconds or more for a single run, achieved by increasing data size. A repetition count of 500 is setting off alarm bells. 3-5 runs should be enough to convince on larger data. Call overhead and time to GC affect inferences at this very small scale.</p>
+</blockquote>
+<p>This is very valid. The smaller time measurement is the relatively bigger noise is. Noise generated by method dispatch, package/class initialization, etc. Main focus of benchmark should be on real use case scenarios.</p>
+</div>
+<div id="multithreaded-processing" class="section level1" number="8">
+<h1 number="8"><span class="header-section-number">8</span> multithreaded processing</h1>
+<p>One of the main factor that is likely to impact timings is number of threads in your machine. In recent versions of <code>data.table</code> some of the functions has been parallelized. You can control how much threads you want to use with <code>setDTthreads</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="kw">setDTthreads</span>(<span class="dv">0</span>)    <span class="co"># use all available cores (default)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="kw">getDTthreads</span>()     <span class="co"># check how many cores are currently used</span></span></code></pre></div>
+</div>
+<div id="inside-a-loop-prefer-set-instead-of" class="section level1" number="9">
+<h1 number="9"><span class="header-section-number">9</span> inside a loop prefer <code>set</code> instead of <code>:=</code></h1>
+<p>Unless you are utilizing index when doing <em>sub-assign by reference</em> you should prefer <code>set</code> function which does not impose overhead of <code>[.data.table</code> method call.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>DT =<span class="st"> </span><span class="kw">data.table</span>(<span class="dt">a=</span><span class="dv">3</span><span class="op">:</span><span class="dv">1</span>, <span class="dt">b=</span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="kw">setindex</span>(DT, a)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="co"># for (...) {                 # imagine loop here</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>  DT[a<span class="op">==</span>2L, b <span class="op">:</span><span class="er">=</span><span class="st"> &quot;z&quot;</span>]         <span class="co"># sub-assign by reference, uses index</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>  DT[, d <span class="op">:</span><span class="er">=</span><span class="st"> &quot;z&quot;</span>]              <span class="co"># not sub-assign by reference, not uses index and adds overhead of `[.data.table`</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>  <span class="kw">set</span>(DT, <span class="dt">j=</span><span class="st">&quot;d&quot;</span>, <span class="dt">value=</span><span class="st">&quot;z&quot;</span>)   <span class="co"># no `[.data.table` overhead, but no index yet, till #1196</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a><span class="co"># }</span></span></code></pre></div>
+</div>
+<div id="inside-a-loop-prefer-setdt-instead-of-data.table" class="section level1" number="10">
+<h1 number="10"><span class="header-section-number">10</span> inside a loop prefer <code>setDT</code> instead of <code>data.table()</code></h1>
+<p>As of now <code>data.table()</code> has an overhead, thus inside loops it is preferred to use <code>as.data.table()</code> or <code>setDT()</code> on a valid list.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

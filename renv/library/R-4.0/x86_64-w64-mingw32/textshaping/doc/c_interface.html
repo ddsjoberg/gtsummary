@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>textshaping C interface</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">textshaping C interface</h1>
+
+
+
+<p>textshaping is predominantly intended to be used by other packages implementing graphic devicees and calling it from the C level. As such it exports a set of functions that match the needs of graphic devices. The C API builds upon that of systemfonts and you’ll thus need to link to both packages to access it succesfully. This is done with the <code>LinkingTo</code> field in the <code>DESCRIPTION</code> file:</p>
+<pre><code>LinkingTo: 
+    systemfonts,
+    textshaping</code></pre>
+<p>You will further need to make sure that both packages are loaded when you need to use the C API. This is most easily done by importing a function from each package into your namespace.</p>
+<p>In your C/C++ code you’ll then have <code>#include &lt;textshaping.h&gt;</code> to get access to the functions described below. The functions are available in the <code>textshaping</code> namespace.</p>
+<p>The C API expects fonts to be given as <code>FontSettings</code> structs which can be obtained from the systemfonts C API with <code>locate_font_with_features()</code>. This makes it possible to both get access to the font file location along with potential OpenType features registered to the font.</p>
+<div id="string-width" class="section level2">
+<h2>String width</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1"></a><span class="dt">int</span> string_width(</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="dt">const</span> <span class="dt">char</span>* string, </span>
+<span id="cb2-3"><a href="#cb2-3"></a>  FontSettings font_info, </span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="dt">double</span> size, </span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="dt">double</span> res, </span>
+<span id="cb2-6"><a href="#cb2-6"></a>  <span class="dt">int</span> include_bearing, </span>
+<span id="cb2-7"><a href="#cb2-7"></a>  <span class="dt">double</span>* width</span>
+<span id="cb2-8"><a href="#cb2-8"></a>)</span></code></pre></div>
+<p>This function calculates the width of a string, ignoring any newlines (these are automatically being handled by the graphic engine). It takes a UTF-8 encoded string, along with a FontSettings struct to use for shaping the string before calculating the width. It also take a size in pt and a res in ppi for setting the size. In addition it takes an include_bearing flag to control whether the bearings of the first and last character should be taken into account (this is recommended by the graphic engine). It will write the width in pts to the passed in pointer and return 0 if successful.</p>
+</div>
+<div id="string-shape" class="section level2">
+<h2>String shape</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1"></a><span class="dt">int</span> string_shape(</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="dt">const</span> <span class="dt">char</span>* string, </span>
+<span id="cb3-3"><a href="#cb3-3"></a>  FontSettings font_info,</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="dt">double</span> size, </span>
+<span id="cb3-5"><a href="#cb3-5"></a>  <span class="dt">double</span> res, </span>
+<span id="cb3-6"><a href="#cb3-6"></a>  std::vector&lt;Point&gt;&amp; loc,</span>
+<span id="cb3-7"><a href="#cb3-7"></a>  std::vector&lt;<span class="dt">uint32_t</span>&gt;&amp; id, </span>
+<span id="cb3-8"><a href="#cb3-8"></a>  std::vector&lt;<span class="dt">int</span>&gt;&amp; cluster,</span>
+<span id="cb3-9"><a href="#cb3-9"></a>  std::vector&lt;<span class="dt">unsigned</span> <span class="dt">int</span>&gt;&amp; font, </span>
+<span id="cb3-10"><a href="#cb3-10"></a>  std::vector&lt;FontSettings&gt;&amp; fallbacks,</span>
+<span id="cb3-11"><a href="#cb3-11"></a>  std::vector&lt;<span class="dt">double</span>&gt;&amp; fallback_scaling</span>
+<span id="cb3-12"><a href="#cb3-12"></a>)</span></code></pre></div>
+<p>This function takes care of all the nitty-gritty of shaping a single line of text. It takes the same font information input as <code>string_width()</code>, that is, a <code>FontSettings</code> struct and size and res. It further accepts a number of vectors where the shaping information will be written. <code>loc</code> will end up containing the location of each glyph in pts starting from a (0, 0) origin. Since the graphic engine only pass single lines to the graphic device at a time then line breaking is not handled and for now all returned y positions are set to 0.0 (this may change in the future depending on the development of the graphic engine). The glyph id in the font file will be written to the <code>id</code> vector You will need to use this to look up the glyph to render instead of relying on the characters in the input string due to the potential substitution and merging of glyphs happening during shaping. The <code>cluster</code> array is currently unused (and will thus not be touched) but may in the future contain identifications of which character in the input string relates to the provided glyphs. The <code>font</code>, <code>fallback</code>, and <code>fallback_scaling</code> vectors will be filled with information about the selected fonts for the shaping. The <code>font</code> vector will map each glyph to a font in the <code>fallback</code> vector. The first element in the <code>fallback</code> vector will be the requested font, and if any additional elements exist it will be due to font fallback occurring. The <code>fallback_scaling</code> vector is holding information about how the shaping of non-scalable fonts has been scaled. It contains one element for each elements in <code>fallback</code>. If the value is negative the font is scalable and no scaling of the metrics have occurred. If it is positive it is the value that has been multiplied to the glyph metrics.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

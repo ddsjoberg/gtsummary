@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: S4 Definition for data.table</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for data.table-class {data.table}"><tr><td>data.table-class {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>S4 Definition for data.table</h2>
+
+<h3>Description</h3>
+
+<p>A <code>data.table</code> can be used in S4 class definitions as either
+a parent class (inside a <code>contains</code> argument of <code>setClass</code>),
+or as an element of an S4 slot.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Steve Lianoglou </p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../data.table/help/data.table.html">data.table</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Used in inheritance.
+setClass('SuperDataTable', contains='data.table')
+
+## Used in a slot
+setClass('Something', representation(x='character', dt='data.table'))
+x &lt;- new("Something", x='check', dt=data.table(a=1:10, b=11:20))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

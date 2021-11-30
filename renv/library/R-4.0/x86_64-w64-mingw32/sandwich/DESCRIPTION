@@ -1,0 +1,36 @@
+Package: sandwich
+Version: 3.0-0
+Date: 2020-10-01
+Title: Robust Covariance Matrix Estimators
+Authors@R: c(person(given = "Achim", family = "Zeileis", role = c("aut", "cre"), email = "Achim.Zeileis@R-project.org",
+                    comment = c(ORCID = "0000-0003-0918-3766")),
+             person(given = "Thomas", family = "Lumley", role = "aut", email = "t.lumley@auckland.ac.nz"),
+	     person(given = "Nathaniel", family = "Graham", role = "ctb", email = "npgraham1@gmail.com"),
+	     person(given = "Susanne", family = "Koell", role = "ctb"))
+Description: Object-oriented software for model-robust covariance matrix estimators. Starting out from the basic 
+             robust Eicker-Huber-White sandwich covariance methods include: heteroscedasticity-consistent (HC)
+	     covariances for cross-section data; heteroscedasticity- and autocorrelation-consistent (HAC)
+	     covariances for time series data (such as Andrews' kernel HAC, Newey-West, and WEAVE estimators);
+	     clustered covariances (one-way and multi-way); panel and panel-corrected covariances;
+	     outer-product-of-gradients covariances; and (clustered) bootstrap covariances. All methods are
+	     applicable to (generalized) linear model objects fitted by lm() and glm() but can also be adapted
+	     to other classes through S3 methods. Details can be found in Zeileis et al. (2020) <doi:10.18637/jss.v095.i01>,
+	     Zeileis (2004) <doi:10.18637/jss.v011.i10> and Zeileis (2006) <doi:10.18637/jss.v016.i09>.
+Depends: R (>= 3.0.0)
+Imports: stats, utils, zoo
+Suggests: AER, car, geepack, lattice, lmtest, MASS, multiwayvcov,
+        parallel, pcse, plm, pscl, scatterplot3d, stats4, strucchange,
+        survival
+License: GPL-2 | GPL-3
+URL: http://sandwich.R-Forge.R-project.org/
+BugReports: http://sandwich.R-Forge.R-project.org/contact.html
+NeedsCompilation: no
+Packaged: 2020-10-02 06:36:15 UTC; zeileis
+Author: Achim Zeileis [aut, cre] (<https://orcid.org/0000-0003-0918-3766>),
+  Thomas Lumley [aut],
+  Nathaniel Graham [ctb],
+  Susanne Koell [ctb]
+Maintainer: Achim Zeileis <Achim.Zeileis@R-project.org>
+Repository: CRAN
+Date/Publication: 2020-10-02 10:40:02 UTC
+Built: R 4.0.5; ; 2021-05-07 12:54:51 UTC; windows

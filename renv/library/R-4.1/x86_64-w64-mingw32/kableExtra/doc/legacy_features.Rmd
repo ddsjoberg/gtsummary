@@ -1,0 +1,65 @@
+---
+title: "Legacy or Unrecommended Features"
+author: "Hao Zhu"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    theme: simplex
+vignette: >
+  %\VignetteIndexEntry{Legacy or Unrecommended Features}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This document includes documentations for legacy/unrecommended features in this package. 
+
+Unless there are significant differences between HTML/LaTeX, I will only keep one copy of documentation in HTML here since most of the functions in this packages share a very similar interface between their HTML and LaTeX ends. 
+
+```{r, warning=FALSE}
+library(kableExtra)
+dt <- mtcars[1:5, 1:6]
+```
+
+# Unrecommended Features
+
+## add_footnote
+As the first function written in this package, the design of the `add_footnote` function is not flexible enough to introduce new features to this function. So I redesigned the footnote part and created the `footnote()` function. `add_footnote` will still be there for a while and be maintained because of its unique feature to add page footnote to longtables. 
+
+Here are the old documentation for `add_footnote`.
+
+### Notation systems
+You can also use `add_footnote()` function from this package. You will need to supply a character vector with each element as one footnote. You may select from `number`, `alphabet` and `symbol` for different types of notations. Example are listed below.
+
+#### Alphabet
+```{r}
+kable(dt, "html") %>%
+  kable_styling("striped") %>%
+  add_footnote(c("Footnote 1", "Have a good day."), notation = "alphabet")
+```
+
+#### Number
+```{r}
+kable(dt, "html") %>%
+  kable_styling("striped") %>%
+  add_footnote(c("Footnote 1", "Have a good day."), notation = "number")
+```
+
+#### Symbol
+```{r}
+kable(dt, "html") %>%
+  kable_styling("striped") %>%
+  add_footnote(c("Footnote 1", "Footnote 2", "Footnote 3"), notation = "symbol")
+```
+
+### In-table markers
+By design, `add_footnote()` will transform any `[note]` to in-table footnote markers. 
+
+```{r}
+kable(dt, "html", caption = "Demo Table[note]") %>%
+  kable_styling("striped") %>%
+  add_header_above(c(" ", "Group 1[note]" = 3, "Group 2[note]" = 3)) %>%
+  add_footnote(c("This table is from mtcars", 
+                 "Group 1 contains mpg, cyl and disp", 
+                 "Group 2 contains hp, drat and wt"), 
+               notation = "symbol")
+```

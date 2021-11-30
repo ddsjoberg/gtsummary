@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Find names of model parameters from marginal effects models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for find_parameters.betamfx {insight}"><tr><td>find_parameters.betamfx {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Find names of model parameters from marginal effects models</h2>
+
+<h3>Description</h3>
+
+<p>Returns the names of model parameters, like they typically
+appear in the <code>summary()</code> output.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'betamfx'
+find_parameters(
+  x,
+  component = c("all", "conditional", "precision", "marginal", "location",
+    "distributional", "auxiliary"),
+  flatten = FALSE,
+  ...
+)
+
+## S3 method for class 'logitmfx'
+find_parameters(
+  x,
+  component = c("all", "conditional", "marginal", "location"),
+  flatten = FALSE,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+<tr valign="top"><td><code>component</code></td>
+<td>
+<p>Which type of parameters to return, such as parameters for the
+conditional model, the zero-inflated part of the model, the dispersion
+term, the instrumental variables or marginal effects be returned? Applies
+to models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models
+with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
+<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
+component, depending on the model. There are three convenient shortcuts:
+<code>component = "all"</code> returns all possible parameters.
+If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
+<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned
+(everything that are fixed or random effects - depending on the <code>effects</code>
+argument - but no auxiliary parameters). For <code>component = "distributional"</code>
+(or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
+<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p>
+</td></tr>
+<tr valign="top"><td><code>flatten</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, the values are returned
+as character vector, not as list. Duplicated values are removed.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A list of parameter names. The returned list may have following
+elements:
+</p>
+
+<ul>
+<li> <p><code>conditional</code>, the &quot;fixed effects&quot; part from the model.
+</p>
+</li>
+<li> <p><code>marginal</code>, the marginal effects.
+</p>
+</li>
+<li> <p><code>precision</code>, the precision parameter.
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+m &lt;- lm(mpg ~ wt + cyl + vs, data = mtcars)
+find_parameters(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

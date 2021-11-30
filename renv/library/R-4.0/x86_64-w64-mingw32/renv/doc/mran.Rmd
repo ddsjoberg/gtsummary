@@ -1,0 +1,61 @@
+---
+title: "Using MRAN Binaries"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using MRAN Binaries}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+When working on macOS and Windows, users will often download and install
+package binaries, rather than sources, as provided by CRAN. However, CRAN only
+provides binaries for the latest-available version of a package, and so binaries
+for older versions of a package will become inaccessible as that package is
+updated.
+
+[MRAN](https://mran.microsoft.com/) is a service provided by Microsoft that
+mirrors CRAN every day, and allows users to use particular snapshots of CRAN
+as their active repositories within their R session.
+
+Starting with `renv 0.10.0`, `renv` can also make use of MRAN binary packages
+when restoring packages on Windows and macOS. When invoking `renv::install()`
+or `renv::restore()`, `renv` will attempt to install the package from the
+latest-available MRAN snapshot that still had this package available.
+
+As an example, the `stringi` package was updated from version `1.4.5` to version
+`1.4.6` on 2020-02-17, and binaries for that version of `stringi` were made
+available for macOS on 2020-02-20. Because of this, the last date on which
+`stringi 1.4.5` macOS binaries were available on CRAN was `2020-02-19`.
+
+Fortunately, because MRAN snapshotted CRAN on this date, we can retrieve that
+binary. For example, on macOS with R 3.6:
+
+```r
+> renv::install("stringi@1.4.5")
+Retrieving 'https://mran.microsoft.com/snapshot/2020-02-19/bin/macosx/el-capitan/contrib/3.6/stringi_1.4.5.tgz' ...
+	OK [file is up to date]
+Installing stringi [1.4.5] ...
+	OK [installed binary]
+```
+
+When binaries are available from MRAN, `renv` should transparently download and
+use them when possible. When binaries are not available, `renv` will fall back
+to the old behavior, and attempt to install packages from sources.
+
+If you prefer not to make use of MRAN (e.g. because you are using `renv` in an
+environment without external internet access), you can disable it with:
+
+```
+options(renv.config.mran.enabled = FALSE)
+```
+
+See also the `?renv::equip` function, which can assist you in preparing your
+environment for compilation of packages.

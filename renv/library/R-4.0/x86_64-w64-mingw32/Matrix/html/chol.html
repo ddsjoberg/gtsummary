@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Choleski Decomposition - 'Matrix' S4 Generic and Methods</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for chol {Matrix}"><tr><td>chol {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Choleski Decomposition - 'Matrix' S4 Generic and Methods</h2>
+
+<h3>Description</h3>
+
+<p>Compute the Choleski factorization of a real symmetric
+positive-definite square matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+chol(x, ...)
+## S4 method for signature 'dsCMatrix'
+chol(x, pivot = FALSE, ...)
+## S4 method for signature 'dsparseMatrix'
+chol(x, pivot = FALSE, cache = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a (sparse or dense) square matrix, here inheriting from class
+<code><a href="Matrix-class.html">Matrix</a></code>; if <code>x</code> is not positive definite,
+an error is signalled.</p>
+</td></tr>
+<tr valign="top"><td><code>pivot</code></td>
+<td>
+<p>logical indicating if pivoting is to be used.  Currently,
+this is <em>not</em> made use of for dense matrices.</p>
+</td></tr>
+<tr valign="top"><td><code>cache</code></td>
+<td>
+<p>logical indicating if the result should be cached in
+<code>x@factors</code>; note that this argument is experimental and only
+available for some sparse matrices.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>potentially further arguments passed to methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Note that these Cholesky factorizations are typically <em>cached</em> with
+<code>x</code> currently, and these caches are available in
+<code>x@factors</code>, which may be useful for the sparse case when
+<code>pivot = TRUE</code>, where the permutation can be retrieved; see also
+the examples.
+</p>
+<p>However, this should not be considered part of the API and made
+use of.  Rather consider <code><a href="Cholesky.html">Cholesky</a>()</code> in such situations,
+since <code>chol(x, pivot=TRUE)</code> uses the same algorithm (but not the
+same return value!) as <code><a href="Cholesky.html">Cholesky</a>(x, LDL=FALSE)</code> and
+<code>chol(x)</code> corresponds to
+<code><a href="Cholesky.html">Cholesky</a>(x, perm=FALSE, LDL=FALSE)</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a matrix of class <code><a href="Cholesky-class.html">Cholesky</a></code>,
+i.e., upper triangular: <i>R</i> such that <i>R'R = x</i> (if
+<code>pivot=FALSE</code>) <em>or</em> <i>P' R'R P = x</i> (if
+<code>pivot=TRUE</code> and <i>P</i> is the corresponding permutation matrix).
+</p>
+
+
+<h3>Methods</h3>
+
+<p>Use <code><a href="../../methods/html/showMethods.html">showMethods</a>(chol)</code> to see all; some are worth
+mentioning here:
+</p>
+
+<dl>
+<dt>chol</dt><dd><p><code>signature(x = "dgeMatrix")</code>: works via
+<code>"dpoMatrix"</code>, see class <code><a href="dpoMatrix-class.html">dpoMatrix</a></code>.</p>
+</dd>
+<dt>chol</dt><dd><p><code>signature(x = "dpoMatrix")</code>:
+Returns (and stores) the Cholesky decomposition of <code>x</code>, via
+LAPACK routines <code>dlacpy</code> and <code>dpotrf</code>.</p>
+</dd>
+<dt>chol</dt><dd><p><code>signature(x = "dppMatrix")</code>:
+Returns (and stores) the Cholesky decomposition via LAPACK routine
+<code>dpptrf</code>.</p>
+</dd>
+<dt>chol</dt><dd><p><code>signature(x = "dsCMatrix", pivot = "logical")</code>:
+Returns (and stores) the Cholesky decomposition of <code>x</code>.  If
+<code>pivot</code> is true, the Approximate Minimal Degree (AMD)
+algorithm is used to create a reordering of the rows and columns
+of <code>x</code> so as to reduce fill-in.</p>
+</dd>
+</dl>
+
+
+
+<h3>References</h3>
+
+<p>Timothy A. Davis (2006)
+<em>Direct Methods for Sparse Linear Systems</em>, SIAM Series
+&ldquo;Fundamentals of Algorithms&rdquo;.
+</p>
+<p>Tim Davis (1996),
+An approximate minimal degree ordering algorithm,
+<em>SIAM J. Matrix Analysis and Applications</em>,
+<b>17</b>, 4, 886&ndash;905.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The default from <span class="pkg">base</span>, <code><a href="../../base/html/chol.html">chol</a></code>; for more
+flexibility (but not returning a matrix!) <code><a href="Cholesky.html">Cholesky</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showMethods(chol, inherited = FALSE) # show different methods
+
+sy2 &lt;- new("dsyMatrix", Dim = as.integer(c(2,2)), x = c(14, NA,32,77))
+(c2 &lt;- chol(sy2))#-&gt; "Cholesky" matrix
+stopifnot(all.equal(c2, chol(as(sy2, "dpoMatrix")), tolerance= 1e-13))
+str(c2)
+
+## An example where chol() can't work
+(sy3 &lt;- new("dsyMatrix", Dim = as.integer(c(2,2)), x = c(14, -1, 2, -7)))
+try(chol(sy3)) # error, since it is not positive definite
+
+## A sparse example --- exemplifying 'pivot'
+(mm &lt;- toeplitz(as(c(10, 0, 1, 0, 3), "sparseVector"))) # 5 x 5
+(R &lt;- chol(mm)) ## default:  pivot = FALSE
+R2 &lt;- chol(mm, pivot=FALSE)
+stopifnot( identical(R, R2), all.equal(crossprod(R), mm) )
+(R. &lt;- chol(mm, pivot=TRUE))# nice band structure,
+## but of course crossprod(R.) is *NOT* equal to mm
+## --&gt; see Cholesky() and its examples, for the pivot structure &amp; factorization
+stopifnot(all.equal(sqrt(det(mm)), det(R)),
+          all.equal(prod(diag(R)), det(R)),
+          all.equal(prod(diag(R.)), det(R)))
+
+## a second, even sparser example:
+(M2 &lt;- toeplitz(as(c(1,.5, rep(0,12), -.1), "sparseVector")))
+c2 &lt;- chol(M2)
+C2 &lt;- chol(M2, pivot=TRUE)
+## For the experts, check the caching of the factorizations:
+ff &lt;- M2@factors[["spdCholesky"]]
+FF &lt;- M2@factors[["sPdCholesky"]]
+L1 &lt;- as(ff, "Matrix")# pivot=FALSE: no perm.
+L2 &lt;- as(FF, "Matrix"); P2 &lt;- as(FF, "pMatrix")
+stopifnot(identical(t(L1), c2),
+          all.equal(t(L2), C2, tolerance=0),#-- why not identical()?
+          all.equal(M2, tcrossprod(L1)),             # M = LL'
+          all.equal(M2, crossprod(crossprod(L2, P2)))# M = P'L L'P
+         )
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

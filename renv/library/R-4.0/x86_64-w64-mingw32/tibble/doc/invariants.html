@@ -1,0 +1,2279 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Invariants for subsetting and subassignment</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Invariants for subsetting and subassignment</h1>
+
+
+
+<style type="text/css">
+.dftbl {
+    width: 100%;
+    table-layout: fixed;
+    display: inline-table;
+}
+
+.error pre code {
+    color: red;
+}
+
+.warning pre code {
+    color: violet;
+}
+</style>
+<p>This vignette defines invariants for subsetting and subset-assignment for tibbles, and illustrates where their behaviour differs from data frames. The goal is to define a small set of invariants that consistently define how behaviors interact. Some behaviors are defined using functions of the vctrs package, e.g. <code>vec_slice()</code>, <code>vec_recycle()</code> and <code>vec_as_index()</code>. Refer to their documentation for more details about the invariants that they follow.</p>
+<p>The subsetting and subassignment operators for data frames and tibbles are particularly tricky, because they support both row and column indexes, both of which are optionally missing. We resolve this by first defining column access with <code>[[</code> and <code>$</code>, then column-wise subsetting with <code>[</code>, then row-wise subsetting, then the composition of both.</p>
+<div id="conventions" class="section level2">
+<h2>Conventions</h2>
+<p>In this article, all behaviors are demonstrated using one example data frame and its tibble equivalent:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressWarnings</span>(<span class="fu">library</span>(vctrs))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Attaching package: &#39;vctrs&#39;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following object is masked from &#39;package:dplyr&#39;:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     data_frame</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The following object is masked from &#39;package:tibble&#39;:</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     data_frame</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>new_df <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">n =</span> <span class="fu">c</span>(1L, <span class="cn">NA</span>, 3L, <span class="cn">NA</span>))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>c <span class="ot">&lt;-</span> letters[<span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>]</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  df<span class="sc">$</span>li <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">9</span>, <span class="dv">10</span><span class="sc">:</span><span class="dv">11</span>, <span class="dv">12</span><span class="sc">:</span><span class="dv">14</span>, <span class="st">&quot;text&quot;</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  df</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>new_tbl <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(<span class="fu">new_df</span>())</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Results of the same code for data frames and tibbles are presented side by side:</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">new_df</span>()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    n c         li</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1 e          9</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 NA f     10, 11</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3 g 12, 13, 14</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 NA h       text</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">new_tbl</span>()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If the results are identical (after converting to a data frame if necessary), only the tibble result is shown.</p>
+<p>Subsetting operations are read-only. The same objects are reused in all examples:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">new_df</span>()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>tbl <span class="ot">&lt;-</span> <span class="fu">new_tbl</span>()</span></code></pre></div>
+<p>Where needed, we also show examples with hierarchical columns containing a data frame or a matrix:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>new_tbl2 <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">tb =</span> tbl,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">m =</span> <span class="fu">diag</span>(<span class="dv">4</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>new_df2 <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  df2 <span class="ot">&lt;-</span> <span class="fu">new_tbl2</span>()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">class</span>(df2) <span class="ot">&lt;-</span> <span class="st">&quot;data.frame&quot;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">class</span>(df2<span class="sc">$</span>tb) <span class="ot">&lt;-</span> <span class="st">&quot;data.frame&quot;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  df2</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">new_df2</span>()</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>tbl2 <span class="ot">&lt;-</span> <span class="fu">new_tbl2</span>()</span></code></pre></div>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">new_tbl</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For subset assignment (subassignment, for short), we need a fresh copy of the data for each test. The <code>with_*()</code> functions (omitted here for brevity) allow for a more concise notation. These functions take an assignment expression, execute it on a fresh copy of the data, and return the data for printing. The first example prints what’s really executed, further examples omit this output.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df<span class="sc">$</span>n <span class="ot">&lt;-</span> <span class="fu">rev</span>(df<span class="sc">$</span>n), <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   df &lt;- new_df()</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   df$n &lt;- rev(df$n)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   df</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; }</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    n c         li</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 NA e          9</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  3 f     10, 11</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 NA g 12, 13, 14</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4  1 h       text</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl<span class="sc">$</span>n <span class="ot">&lt;-</span> <span class="fu">rev</span>(tbl<span class="sc">$</span>n), <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   tbl &lt;- new_tbl()</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   tbl$n &lt;- rev(tbl$n)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   tbl</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; }</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    NA e     &lt;dbl [1]&gt;</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     3 f     &lt;int [2]&gt;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3    NA g     &lt;int [3]&gt;</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     1 h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="column-extraction" class="section level2">
+<h2>Column extraction</h2>
+<div id="definition-of-xj" class="section level3">
+<h3>Definition of <code>x[[j]]</code></h3>
+<p><code>x[[j]]</code> is equal to <code>.subset2(x, j)</code>.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="dv">1</span>]]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1 NA  3 NA</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.subset2</span>(tbl, <span class="dv">1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1 NA  3 NA</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>NB: <code>x[[j]]</code> always returns an object of size <code>nrow(x)</code> if the column exists.</p>
+<p><code>j</code> must be a single number or a string, as enforced by <code>.subset2(x, j)</code>.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]]</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning: The `j` argument of `[[.tbl_df`
+#&gt; can&#39;t be a vector of length 2 as of
+#&gt; tibble 3.0.0.
+#&gt; Recursive subsetting is deprecated for
+#&gt; tibbles.</code></pre>
+</div>
+<pre><code>#&gt; [1] NA</code></pre>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="fu">c</span>(<span class="st">&quot;n&quot;</span>, <span class="st">&quot;c&quot;</span>)]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in .subset2(x, i, exact = exact):
+#&gt; subscript out of bounds</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="fu">c</span>(<span class="st">&quot;n&quot;</span>, <span class="st">&quot;c&quot;</span>)]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must extract column with a single
+#&gt; valid subscript.
+#&gt; ✖ Subscript `c(&quot;n&quot;, &quot;c&quot;)` has size 2 but
+#&gt; must be size 1.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="cn">TRUE</span>]]</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1 NA  3 NA</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="cn">TRUE</span>]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must extract column with a single
+#&gt; valid subscript.
+#&gt; ✖ Subscript `TRUE` has the wrong type
+#&gt; `logical`.
+#&gt; ℹ It must be numeric or character.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df[[mean]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in .subset2(x, i, exact = exact):
+#&gt; invalid subscript type &#39;closure&#39;</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>tbl[[mean]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must extract column with a single
+#&gt; valid subscript.
+#&gt; ✖ Subscript `mean` has the wrong type
+#&gt; `function`.
+#&gt; ℹ It must be numeric or character.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p><code>NA</code> indexes, numeric out-of-bounds (OOB) values, and non-integers throw an error:</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="cn">NA</span>]]</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="cn">NA</span>]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must extract column with a single
+#&gt; valid subscript.
+#&gt; ✖ Subscript `NA` can&#39;t be `NA`.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="cn">NA_character_</span>]]</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="cn">NA_character_</span>]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must extract column with a single
+#&gt; valid subscript.
+#&gt; ✖ Subscript `NA_character_` can&#39;t be
+#&gt; `NA`.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="cn">NA_integer_</span>]]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="cn">NA_integer_</span>]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must extract column with a single
+#&gt; valid subscript.
+#&gt; ✖ Subscript `NA_integer_` can&#39;t be `NA`.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="sc">-</span><span class="dv">1</span>]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in .subset2(x, i, exact = exact):
+#&gt; invalid negative subscript in get1index
+#&gt; &lt;real&gt;</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="sc">-</span><span class="dv">1</span>]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must extract column with a single
+#&gt; valid subscript.
+#&gt; ✖ Subscript `-1` has value -1 but must
+#&gt; be a positive location.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="dv">4</span>]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in .subset2(x, i, exact = exact):
+#&gt; subscript out of bounds</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="dv">4</span>]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Can&#39;t subset columns that don&#39;t
+#&gt; exist.
+#&gt; ✖ Location 4 doesn&#39;t exist.
+#&gt; ℹ There are only 3 columns.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="fl">1.5</span>]]</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1 NA  3 NA</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="fl">1.5</span>]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must extract column with a single
+#&gt; valid subscript.
+#&gt; ✖ Can&#39;t convert from &lt;double&gt; to
+#&gt; &lt;integer&gt; due to loss of precision.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="cn">Inf</span>]]</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="cn">Inf</span>]]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must extract column with a single
+#&gt; valid subscript.
+#&gt; ✖ Can&#39;t convert from &lt;double&gt; to
+#&gt; &lt;integer&gt; due to loss of precision.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Character OOB access is silent because a common package idiom is to check for the absence of a column with <code>is.null(df[[var]])</code>.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="st">&quot;x&quot;</span>]]</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="definition-of-xname" class="section level3">
+<h3>Definition of <code>x$name</code></h3>
+<p><code>x$name</code> and <code>x$&quot;name&quot;</code> are equal to <code>x[[&quot;name&quot;]]</code>.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>tbl<span class="sc">$</span>n</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1 NA  3 NA</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>tbl<span class="sc">$</span><span class="st">&quot;n&quot;</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1 NA  3 NA</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>tbl[[<span class="st">&quot;n&quot;</span>]]</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1 NA  3 NA</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Unlike data frames, tibbles do not partially match names. Because <code>df$x</code> is rarely used in packages, it can raise a warning:</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>l</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 9</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 10 11</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 12 13 14</span></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;text&quot;</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>tbl<span class="sc">$</span>l</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning: Unknown or uninitialised
+#&gt; column: `l`.</code></pre>
+</div>
+<pre><code>#&gt; NULL</code></pre>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>not_present</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>tbl<span class="sc">$</span>not_present</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning: Unknown or uninitialised
+#&gt; column: `not_present`.</code></pre>
+</div>
+<pre><code>#&gt; NULL</code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="column-subsetting" class="section level2">
+<h2>Column subsetting</h2>
+<div id="definition-of-xj-1" class="section level3">
+<h3>Definition of <code>x[j]</code></h3>
+<p><code>j</code> is converted to an integer vector by <code>vec_as_index(j, ncol(x), names = names(x))</code>. Then <code>x[c(j_1, j_2, ..., j_n)]</code> is equivalent to <code>tibble(x[[j_1]], x[[j_2]], ..., x[[j_3]])</code>, keeping the corresponding column names. This implies that <code>j</code> must be a numeric or character vector, or a logical vector with length 1 or <code>ncol(x)</code>.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c    </span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;</span></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e    </span></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f    </span></span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g    </span></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>When subsetting repeated indexes, the resulting column names are undefined, do not rely on them.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)]</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    n n.1</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1   1</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 NA  NA</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3   3</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 NA  NA</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)]</span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n     n</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt;</span></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1     1</span></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA    NA</span></span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3     3</span></span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA    NA</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For tibbles with repeated column names, subsetting by name uses the first matching column.</p>
+<p><code>nrow(df[j])</code> equals <code>nrow(df)</code>.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="fu">integer</span>()]</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 0</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Tibbles support indexing by a logical matrix, but only if all values in the returned vector are compatible.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">is.na</span>(df)]</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="fu">is.na</span>(tbl)]</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NA NA</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>df[<span class="sc">!</span><span class="fu">is.na</span>(df)]</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;e&quot;</span></span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;f&quot;</span></span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[5]]</span></span>
+<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;g&quot;</span></span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[6]]</span></span>
+<span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;h&quot;</span></span>
+<span id="cb67-19"><a href="#cb67-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb67-20"><a href="#cb67-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[7]]</span></span>
+<span id="cb67-21"><a href="#cb67-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 9</span></span>
+<span id="cb67-22"><a href="#cb67-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb67-23"><a href="#cb67-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[8]]</span></span>
+<span id="cb67-24"><a href="#cb67-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 10 11</span></span>
+<span id="cb67-25"><a href="#cb67-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb67-26"><a href="#cb67-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[9]]</span></span>
+<span id="cb67-27"><a href="#cb67-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 12 13 14</span></span>
+<span id="cb67-28"><a href="#cb67-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb67-29"><a href="#cb67-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [[10]]</span></span>
+<span id="cb67-30"><a href="#cb67-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;text&quot;</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="sc">!</span><span class="fu">is.na</span>(tbl)]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Can&#39;t combine `n` &lt;integer&gt; and
+#&gt; `c` &lt;character&gt;.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="definition-of-x-j" class="section level3">
+<h3>Definition of <code>x[, j]</code></h3>
+<p><code>x[, j]</code> is equal to <code>x[j]</code>. Tibbles do not perform column extraction if <code>x[j]</code> would yield a single column.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>df[, <span class="dv">1</span>]</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1 NA  3 NA</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>tbl[, <span class="dv">1</span>]</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 1</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n</span></span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt;</span></span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1</span></span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA</span></span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3</span></span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>tbl[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c    </span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;</span></span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e    </span></span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f    </span></span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g    </span></span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="definition-of-x-j-drop-true" class="section level3">
+<h3>Definition of <code>x[, j, drop = TRUE]</code></h3>
+<p>For backward compatiblity, <code>x[, j, drop = TRUE]</code> performs column <strong>extraction</strong>, returning <code>x[j][[1]]</code> when <code>ncol(x[j])</code> is 1.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>tbl[, <span class="dv">1</span>, drop <span class="ot">=</span> <span class="cn">TRUE</span>]</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1]  1 NA  3 NA</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="row-subsetting" class="section level2">
+<h2>Row subsetting</h2>
+<div id="definition-of-xi" class="section level3">
+<h3>Definition of <code>x[i, ]</code></h3>
+<p><code>x[i, ]</code> is equal to <code>tibble(vec_slice(x[[1]], i), vec_slice(x[[2]], i), ...)</code>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="dv">3</span>, ]</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 x 3</span></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     3 g     &lt;int [3]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This means that <code>i</code> must be a numeric vector, or a logical vector of length <code>nrow(x)</code> or 1. For compatibility, <code>i</code> can also be a character vector containing positive numbers.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>df[mean, ]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in xj[i]: invalid subscript type
+#&gt; &#39;closure&#39;</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>tbl[mean, ]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must subset rows with a valid
+#&gt; subscript vector.
+#&gt; ✖ Subscript `mean` has the wrong type
+#&gt; `function`.
+#&gt; ℹ It must be logical, numeric, or
+#&gt; character.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">list</span>(<span class="dv">1</span>), ]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in xj[i]: invalid subscript type
+#&gt; &#39;list&#39;</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="fu">list</span>(<span class="dv">1</span>), ]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must subset rows with a valid
+#&gt; subscript vector.
+#&gt; ✖ Subscript `list(1)` has the wrong type
+#&gt; `list`.
+#&gt; ℹ It must be logical, numeric, or
+#&gt; character.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="st">&quot;1&quot;</span>, ]</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 x 3</span></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Exception: OOB values generate warnings instead of errors:</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">10</span>, ]</span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     n    c   li</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NA NA &lt;NA&gt; NULL</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="dv">10</span>, ]</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning: The `i` argument of `[.tbl_df`
+#&gt; must lie in [0, rows] if positive, as of
+#&gt; tibble 3.0.0.
+#&gt; Use `NA_integer_` as row index to obtain
+#&gt; a row full of `NA` values.</code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 1 x 3
+#&gt;       n c     li    
+#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;
+#&gt; 1    NA &lt;NA&gt;  &lt;NULL&gt;</code></pre>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">&quot;x&quot;</span>, ]</span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     n    c   li</span></span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; NA NA &lt;NA&gt; NULL</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="st">&quot;x&quot;</span>, ]</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning: The `i` argument of `[.tbl_df`
+#&gt; must use valid row names as of tibble
+#&gt; 3.0.0.
+#&gt; Use `NA_integer_` as row index to obtain
+#&gt; a row full of `NA` values.</code></pre>
+</div>
+<pre><code>#&gt; # A tibble: 1 x 3
+#&gt;       n c     li    
+#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;
+#&gt; 1    NA &lt;NA&gt;  &lt;NULL&gt;</code></pre>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Unlike data frames, only logical vectors of length 1 are recycled. <!-- TODO: should this be an error? #648 --></p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>df[<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>), ]</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n c         li</span></span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1 e          9</span></span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 3 g 12, 13, 14</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>), ]</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Must subset rows with a valid
+#&gt; subscript vector.
+#&gt; ℹ Logical subscripts must match the size
+#&gt; of the indexed input.
+#&gt; ✖ Input has size 4 but subscript
+#&gt; `c(TRUE, FALSE)` has size 2.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>NB: scalar logicals are recycled, but scalar numerics are not. That makes the <code>x[NA, ]</code> and <code>x[NA_integer_, ]</code> return different results.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="cn">NA</span>, ]</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li    </span></span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;</span></span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    NA &lt;NA&gt;  &lt;NULL&gt;</span></span>
+<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA &lt;NA&gt;  &lt;NULL&gt;</span></span>
+<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3    NA &lt;NA&gt;  &lt;NULL&gt;</span></span>
+<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA &lt;NA&gt;  &lt;NULL&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="cn">NA_integer_</span>, ]</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 x 3</span></span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li    </span></span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;</span></span>
+<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    NA &lt;NA&gt;  &lt;NULL&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="definition-of-xi-drop-true" class="section level3">
+<h3>Definition of <code>x[i, , drop = TRUE]</code></h3>
+<p><code>drop = TRUE</code> has no effect when not selecting a single row:</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>df[<span class="dv">1</span>, , drop <span class="ot">=</span> <span class="cn">TRUE</span>]</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $n</span></span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $c</span></span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;e&quot;</span></span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $li</span></span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; $li[[1]]</span></span>
+<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 9</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>tbl[<span class="dv">1</span>, , drop <span class="ot">=</span> <span class="cn">TRUE</span>]</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 x 3</span></span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- TODO: soft-deprecate -->
+</div>
+</div>
+<div id="row-and-column-subsetting" class="section level2">
+<h2>Row and column subsetting</h2>
+<div id="definition-of-x-and-x" class="section level3">
+<h3>Definition of <code>x[]</code> and <code>x[,]</code></h3>
+<p><code>x[]</code> and <code>x[,]</code> are equivalent to <code>x</code>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+</div>
+<div id="definition-of-xi-j" class="section level3">
+<h3>Definition of <code>x[i, j]</code></h3>
+<p><code>x[i, j]</code> is equal to <code>x[i, ][j]</code>.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+</div>
+<div id="definition-of-xi-j-1" class="section level3">
+<h3>Definition of <code>x[[i, j]]</code></h3>
+<p><code>i</code> must be a numeric vector of length 1. <code>x[[i, j]]</code> is equal to <code>x[i, ][[j]]</code>, or <code>vctrs::vec_slice(x[[j]], i)</code>.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="dv">1</span>, <span class="dv">1</span>]]</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>df[[<span class="dv">1</span>, <span class="dv">3</span>]]</span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 9</span></span></code></pre></div>
+<p>This implies that <code>j</code> must be a numeric or character vector of length 1.</p>
+<p>NB: <code>vec_size(x[[i, j]])</code> always equals 1. Unlike <code>x[i, ]</code>, <code>x[[i, ]]</code> is not valid.</p>
+</div>
+</div>
+<div id="column-update" class="section level2">
+<h2>Column update</h2>
+<div id="definition-of-xj---a" class="section level3">
+<h3>Definition of <code>x[[j]] &lt;- a</code></h3>
+<p>If <code>a</code> is a vector then <code>x[[j]] &lt;- a</code> replaces the <code>j</code>th column with value <code>a</code>.</p>
+<p><code>a</code> is recycled to the same size as <code>x</code> so must have size <code>nrow(x)</code> or 1. (The only exception is when <code>a</code> is <code>NULL</code>, as described below.) Recycling also works for list, data frame, and matrix columns.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[[<span class="st">&quot;li&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">0</span>))</span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb100-3"><a href="#cb100-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb100-4"><a href="#cb100-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb100-5"><a href="#cb100-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb100-6"><a href="#cb100-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;dbl [1]&gt;</span></span>
+<span id="cb100-7"><a href="#cb100-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;dbl [1]&gt;</span></span>
+<span id="cb100-8"><a href="#cb100-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;dbl [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df2</span>(df2[[<span class="st">&quot;tb&quot;</span>]] <span class="ot">&lt;-</span> df[<span class="dv">1</span>, ])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in `[[&lt;-.data.frame`(`*tmp*`,
+#&gt; &quot;tb&quot;, value = structure(list(n = 1L, :
+#&gt; replacement has 1 row, data has 4</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl2</span>(tbl2[[<span class="st">&quot;tb&quot;</span>]] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    tb$n $c    $li      m[,1]  [,2]  [,3]</span></span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1…     1     0     0</span></span>
+<span id="cb103-6"><a href="#cb103-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1 e     &lt;dbl [1…     0     1     0</span></span>
+<span id="cb103-7"><a href="#cb103-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     1 e     &lt;dbl [1…     0     0     1</span></span>
+<span id="cb103-8"><a href="#cb103-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     1 e     &lt;dbl [1…     0     0     0</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df2</span>(df2[[<span class="st">&quot;m&quot;</span>]] <span class="ot">&lt;-</span> df2[[<span class="st">&quot;m&quot;</span>]][<span class="dv">1</span>, , <span class="at">drop =</span> <span class="cn">FALSE</span>])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in `[[&lt;-.data.frame`(`*tmp*`, &quot;m&quot;,
+#&gt; value = structure(c(1, 0, 0, :
+#&gt; replacement has 1 row, data has 4</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl2</span>(tbl2[[<span class="st">&quot;m&quot;</span>]] <span class="ot">&lt;-</span> tbl2[[<span class="st">&quot;m&quot;</span>]][<span class="dv">1</span>, , <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    tb$n $c    $li      m[,1]  [,2]  [,3]</span></span>
+<span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb106-5"><a href="#cb106-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1…     1     0     0</span></span>
+<span id="cb106-6"><a href="#cb106-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2…     1     0     0</span></span>
+<span id="cb106-7"><a href="#cb106-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3…     1     0     0</span></span>
+<span id="cb106-8"><a href="#cb106-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1…     1     0     0</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p><code>j</code> must be a scalar numeric or a string, and cannot be <code>NA</code>. If <code>j</code> is OOB, a new column is added on the right hand side, with name repair if needed.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[[<span class="st">&quot;x&quot;</span>]] <span class="ot">&lt;-</span> <span class="dv">0</span>)</span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li            x</span></span>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;    &lt;dbl&gt;</span></span>
+<span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;     0</span></span>
+<span id="cb107-6"><a href="#cb107-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;     0</span></span>
+<span id="cb107-7"><a href="#cb107-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;     0</span></span>
+<span id="cb107-8"><a href="#cb107-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;     0</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[[<span class="dv">4</span>]] <span class="ot">&lt;-</span> <span class="dv">0</span>)</span>
+<span id="cb108-2"><a href="#cb108-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    n c         li V4</span></span>
+<span id="cb108-3"><a href="#cb108-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1 e          9  0</span></span>
+<span id="cb108-4"><a href="#cb108-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 NA f     10, 11  0</span></span>
+<span id="cb108-5"><a href="#cb108-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3 g 12, 13, 14  0</span></span>
+<span id="cb108-6"><a href="#cb108-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 NA h       text  0</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[[<span class="dv">4</span>]] <span class="ot">&lt;-</span> <span class="dv">0</span>)</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li         ...4</span></span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;    &lt;dbl&gt;</span></span>
+<span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;     0</span></span>
+<span id="cb109-6"><a href="#cb109-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;     0</span></span>
+<span id="cb109-7"><a href="#cb109-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;     0</span></span>
+<span id="cb109-8"><a href="#cb109-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;     0</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[[<span class="dv">5</span>]] <span class="ot">&lt;-</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning in format.data.frame(if (omit)
+#&gt; x[seq_len(n0), , drop = FALSE] else
+#&gt; x, : corrupt data frame: columns will be
+#&gt; truncated or padded with NAs</code></pre>
+</div>
+<pre><code>#&gt;    n c         li      V5
+#&gt; 1  1 e          9 NULL  0
+#&gt; 2 NA f     10, 11 &lt;NA&gt;  0
+#&gt; 3  3 g 12, 13, 14 &lt;NA&gt;  0
+#&gt; 4 NA h       text &lt;NA&gt;  0</code></pre>
+</td>
+<td>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[[<span class="dv">5</span>]] <span class="ot">&lt;-</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Can&#39;t assign to columns beyond
+#&gt; the end with non-consecutive locations.
+#&gt; ℹ Input has size 3.
+#&gt; ✖ Subscript `5` contains non-consecutive
+#&gt; location 5.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- HW: should we permitted oob assignment with numeric j? It's a bit weird to create a column with unknonw column -->
+<p><code>df[[j]] &lt;- a</code> replaces the complete column so can change the type.</p>
+<p><code>[[&lt;-</code> supports removing a column by assigning <code>NULL</code> to it.</p>
+<p>Removing a nonexistent column is a no-op.</p>
+</div>
+<div id="definition-of-xname---a" class="section level3">
+<h3>Definition of <code>x$name &lt;- a</code></h3>
+<p><code>x$name &lt;- a</code> and <code>x$&quot;name&quot; &lt;- a</code> are equivalent to <code>x[[&quot;name&quot;]] &lt;- a</code>.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl<span class="sc">$</span>n <span class="ot">&lt;-</span> <span class="dv">0</span>)</span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb115-5"><a href="#cb115-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     0 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb115-6"><a href="#cb115-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     0 f     &lt;int [2]&gt;</span></span>
+<span id="cb115-7"><a href="#cb115-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     0 g     &lt;int [3]&gt;</span></span>
+<span id="cb115-8"><a href="#cb115-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     0 h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[[<span class="st">&quot;n&quot;</span>]] <span class="ot">&lt;-</span> <span class="dv">0</span>)</span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb116-4"><a href="#cb116-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb116-5"><a href="#cb116-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     0 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb116-6"><a href="#cb116-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     0 f     &lt;int [2]&gt;</span></span>
+<span id="cb116-7"><a href="#cb116-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     0 g     &lt;int [3]&gt;</span></span>
+<span id="cb116-8"><a href="#cb116-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     0 h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p><code>$&lt;-</code> does not perform partial matching.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl<span class="sc">$</span>l <span class="ot">&lt;-</span> <span class="dv">0</span>)</span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
+<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li            l</span></span>
+<span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;    &lt;dbl&gt;</span></span>
+<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;     0</span></span>
+<span id="cb117-6"><a href="#cb117-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;     0</span></span>
+<span id="cb117-7"><a href="#cb117-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;     0</span></span>
+<span id="cb117-8"><a href="#cb117-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;     0</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[[<span class="st">&quot;l&quot;</span>]] <span class="ot">&lt;-</span> <span class="dv">0</span>)</span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
+<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li            l</span></span>
+<span id="cb118-4"><a href="#cb118-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;    &lt;dbl&gt;</span></span>
+<span id="cb118-5"><a href="#cb118-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;     0</span></span>
+<span id="cb118-6"><a href="#cb118-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;     0</span></span>
+<span id="cb118-7"><a href="#cb118-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;     0</span></span>
+<span id="cb118-8"><a href="#cb118-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;     0</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="column-subassignment-xj---a" class="section level2">
+<h2>Column subassignment: <code>x[j] &lt;- a</code></h2>
+<ul>
+<li>If <code>j</code> is missing, it’s replaced with <code>seq_along(x)</code></li>
+<li>If <code>j</code> is logical vector, it’s converted to numeric with <code>seq_along(x)[j]</code>.</li>
+</ul>
+<div id="a-is-a-list-or-data-frame" class="section level3">
+<h3><code>a</code> is a list or data frame</h3>
+<p>If <code>inherits(a, &quot;list&quot;)</code> or <code>inherits(a, &quot;data.frame&quot;)</code> is <code>TRUE</code>, then <code>x[j] &lt;- a</code> is equivalent to <code>x[[j[[1]]] &lt;- a[[1]]</code>, <code>x[[j[[2]]]] &lt;- a[[2]]</code>, …</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">1</span>))</span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n         c li       </span></span>
+<span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;int&gt; &lt;list&gt;   </span></span>
+<span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 x         4 &lt;dbl [1]&gt;</span></span>
+<span id="cb119-6"><a href="#cb119-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 x         3 &lt;int [2]&gt;</span></span>
+<span id="cb119-7"><a href="#cb119-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 x         2 &lt;int [3]&gt;</span></span>
+<span id="cb119-8"><a href="#cb119-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 x         1 &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="fu">c</span>(<span class="st">&quot;li&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;c&quot;</span>)] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">1</span>, <span class="cn">NULL</span>))</span>
+<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb120-3"><a href="#cb120-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n li        x</span></span>
+<span id="cb120-4"><a href="#cb120-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;int&gt;</span></span>
+<span id="cb120-5"><a href="#cb120-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 x         4</span></span>
+<span id="cb120-6"><a href="#cb120-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA x         3</span></span>
+<span id="cb120-7"><a href="#cb120-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 x         2</span></span>
+<span id="cb120-8"><a href="#cb120-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA x         1</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If <code>length(a)</code> equals 1, then it is recycled to the same length as <code>j</code>.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span>))</span>
+<span id="cb121-2"><a href="#cb121-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb121-3"><a href="#cb121-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n     c li       </span></span>
+<span id="cb121-4"><a href="#cb121-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;   </span></span>
+<span id="cb121-5"><a href="#cb121-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1     1 &lt;dbl [1]&gt;</span></span>
+<span id="cb121-6"><a href="#cb121-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1     1 &lt;int [2]&gt;</span></span>
+<span id="cb121-7"><a href="#cb121-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     1     1 &lt;int [3]&gt;</span></span>
+<span id="cb121-8"><a href="#cb121-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     1     1 &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning in `[&lt;-.data.frame`(`*tmp*`,
+#&gt; 1:2, value = list(0, 0, 0)): provided 3
+#&gt; variables to replace 2 variables</code></pre>
+</div>
+<pre><code>#&gt;   n c         li
+#&gt; 1 0 0          9
+#&gt; 2 0 0     10, 11
+#&gt; 3 0 0 12, 13, 14
+#&gt; 4 0 0       text</code></pre>
+</td>
+<td>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Can&#39;t recycle `list(0, 0, 0)`
+#&gt; (size 3) to size 2.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n c li</span></span>
+<span id="cb127-3"><a href="#cb127-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 0 0  0</span></span>
+<span id="cb127-4"><a href="#cb127-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 0 0  0</span></span>
+<span id="cb127-5"><a href="#cb127-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 0 0  0</span></span>
+<span id="cb127-6"><a href="#cb127-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 0 0  0</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">0</span>, <span class="dv">0</span>))</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Can&#39;t recycle `list(0, 0)` (size
+#&gt; 2) to size 3.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>An attempt to update the same column twice gives an error.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in `[&lt;-.data.frame`(`*tmp*`, c(1,
+#&gt; 1), value = list(1, 2)): duplicate
+#&gt; subscripts for columns</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Column index 1 is used more than
+#&gt; once for assignment.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If <code>a</code> contains <code>NULL</code> values, the corresponding columns are removed <em>after</em> updating (i.e. position indexes refer to columns before any modifications).</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="cn">NULL</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">1</span>))</span>
+<span id="cb134-2"><a href="#cb134-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb134-3"><a href="#cb134-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       c li       </span></span>
+<span id="cb134-4"><a href="#cb134-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;list&gt;   </span></span>
+<span id="cb134-5"><a href="#cb134-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     4 &lt;dbl [1]&gt;</span></span>
+<span id="cb134-6"><a href="#cb134-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     3 &lt;int [2]&gt;</span></span>
+<span id="cb134-7"><a href="#cb134-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     2 &lt;int [3]&gt;</span></span>
+<span id="cb134-8"><a href="#cb134-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     1 &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p><code>NA</code> indexes are not supported.</p>
+<p>Just like column updates, <code>[&lt;-</code> supports changing the type of an existing column.</p>
+<p>Appending columns at the end (without gaps) is supported. The name of new columns is determined by the LHS, the RHS, or by name repair (in that order of precedence).</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)] <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="st">&quot;x&quot;</span>, <span class="at">x =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">1</span>))</span>
+<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 5</span></span>
+<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li        x         y</span></span>
+<span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;    &lt;chr&gt; &lt;int&gt;</span></span>
+<span id="cb135-5"><a href="#cb135-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt; x         4</span></span>
+<span id="cb135-6"><a href="#cb135-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt; x         3</span></span>
+<span id="cb135-7"><a href="#cb135-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt; x         2</span></span>
+<span id="cb135-8"><a href="#cb135-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt; x         1</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;x&quot;</span>, <span class="at">x =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">1</span>))</span>
+<span id="cb136-2"><a href="#cb136-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
+<span id="cb136-3"><a href="#cb136-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li        x</span></span>
+<span id="cb136-4"><a href="#cb136-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;</span></span>
+<span id="cb136-5"><a href="#cb136-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     x         4</span></span>
+<span id="cb136-6"><a href="#cb136-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     x         3</span></span>
+<span id="cb136-7"><a href="#cb136-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     x         2</span></span>
+<span id="cb136-8"><a href="#cb136-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     x         1</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">1</span>))</span>
+<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    n c         li V4</span></span>
+<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1 e          9  4</span></span>
+<span id="cb137-4"><a href="#cb137-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 NA f     10, 11  3</span></span>
+<span id="cb137-5"><a href="#cb137-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3 g 12, 13, 14  2</span></span>
+<span id="cb137-6"><a href="#cb137-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 NA h       text  1</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">1</span>))</span>
+<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
+<span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li         ...4</span></span>
+<span id="cb138-4"><a href="#cb138-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;    &lt;int&gt;</span></span>
+<span id="cb138-5"><a href="#cb138-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;     4</span></span>
+<span id="cb138-6"><a href="#cb138-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;     3</span></span>
+<span id="cb138-7"><a href="#cb138-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;     2</span></span>
+<span id="cb138-8"><a href="#cb138-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;     1</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">1</span>))</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in `[&lt;-.data.frame`(`*tmp*`, 5,
+#&gt; value = list(4:1)): new columns would
+#&gt; leave holes after existing columns</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">1</span>))</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Can&#39;t assign to columns beyond
+#&gt; the end with non-consecutive locations.
+#&gt; ℹ Input has size 3.
+#&gt; ✖ Subscript `5` contains non-consecutive
+#&gt; location 5.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Tibbles support indexing by a logical matrix, but only for a scalar RHS, and if all columns updated are compatible with the value assigned.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="fu">is.na</span>(df)] <span class="ot">&lt;-</span> <span class="dv">4</span>)</span>
+<span id="cb143-2"><a href="#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n c         li</span></span>
+<span id="cb143-3"><a href="#cb143-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1 e          9</span></span>
+<span id="cb143-4"><a href="#cb143-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 4 f     10, 11</span></span>
+<span id="cb143-5"><a href="#cb143-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 3 g 12, 13, 14</span></span>
+<span id="cb143-6"><a href="#cb143-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 4 h       text</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="fu">is.na</span>(tbl)] <span class="ot">&lt;-</span> <span class="dv">4</span>)</span>
+<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb144-3"><a href="#cb144-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb144-4"><a href="#cb144-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb144-5"><a href="#cb144-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb144-6"><a href="#cb144-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     4 f     &lt;int [2]&gt;</span></span>
+<span id="cb144-7"><a href="#cb144-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;</span></span>
+<span id="cb144-8"><a href="#cb144-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     4 h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="fu">is.na</span>(df)] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<span id="cb145-2"><a href="#cb145-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n c         li</span></span>
+<span id="cb145-3"><a href="#cb145-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1 e          9</span></span>
+<span id="cb145-4"><a href="#cb145-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 1 f     10, 11</span></span>
+<span id="cb145-5"><a href="#cb145-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 3 g 12, 13, 14</span></span>
+<span id="cb145-6"><a href="#cb145-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 2 h       text</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="fu">is.na</span>(tbl)] <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Subscript `is.na(tbl)` is a
+#&gt; matrix, the data `1:2` must have size 1.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">TRUE</span>, <span class="dv">5</span>), <span class="fu">rep</span>(<span class="cn">FALSE</span>, <span class="dv">7</span>)), <span class="at">ncol =</span> <span class="dv">3</span>)] <span class="ot">&lt;-</span> <span class="dv">4</span>)</span>
+<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n c         li</span></span>
+<span id="cb148-3"><a href="#cb148-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 4 4          9</span></span>
+<span id="cb148-4"><a href="#cb148-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 4 f     10, 11</span></span>
+<span id="cb148-5"><a href="#cb148-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 4 g 12, 13, 14</span></span>
+<span id="cb148-6"><a href="#cb148-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 4 h       text</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">TRUE</span>, <span class="dv">5</span>), <span class="fu">rep</span>(<span class="cn">FALSE</span>, <span class="dv">7</span>)), <span class="at">ncol =</span> <span class="dv">3</span>)] <span class="ot">&lt;-</span> <span class="dv">4</span>)</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Assigned data `4` must be
+#&gt; compatible with existing data.
+#&gt; ℹ Error occurred for column `c`.
+#&gt; ✖ Can&#39;t convert &lt;double&gt; to &lt;character&gt;.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="a-is-a-matrix-or-array" class="section level3">
+<h3><code>a</code> is a matrix or array</h3>
+<p>If <code>is.matrix(a)</code>, then <code>a</code> is coerced to a data frame with <code>as.data.frame()</code> before assigning. If rows are assigned, the matrix type must be compatible with all columns. If <code>is.array(a)</code> and <code>any(dim(a)[-1:-2] != 1)</code>, an error is thrown.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">8</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">ncol =</span> <span class="dv">2</span>))</span>
+<span id="cb151-2"><a href="#cb151-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb151-3"><a href="#cb151-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n     c li       </span></span>
+<span id="cb151-4"><a href="#cb151-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;list&gt;   </span></span>
+<span id="cb151-5"><a href="#cb151-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     8     4 &lt;dbl [1]&gt;</span></span>
+<span id="cb151-6"><a href="#cb151-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     7     3 &lt;int [2]&gt;</span></span>
+<span id="cb151-7"><a href="#cb151-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     6     2 &lt;int [3]&gt;</span></span>
+<span id="cb151-8"><a href="#cb151-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     5     1 &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">ncol =</span> <span class="dv">2</span>))</span>
+<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    n c         li</span></span>
+<span id="cb152-3"><a href="#cb152-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  6 3          9</span></span>
+<span id="cb152-4"><a href="#cb152-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  5 2     10, 11</span></span>
+<span id="cb152-5"><a href="#cb152-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  4 1 12, 13, 14</span></span>
+<span id="cb152-6"><a href="#cb152-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 NA h       text</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">6</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">ncol =</span> <span class="dv">2</span>))</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Assigned data `matrix(6:1, ncol =
+#&gt; 2)` must be compatible with existing
+#&gt; data.
+#&gt; ℹ Error occurred for column `c`.
+#&gt; ✖ Can&#39;t convert &lt;integer&gt; to
+#&gt; &lt;character&gt;.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">4</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>)))</span>
+<span id="cb155-2"><a href="#cb155-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb155-3"><a href="#cb155-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n     c li       </span></span>
+<span id="cb155-4"><a href="#cb155-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;list&gt;   </span></span>
+<span id="cb155-5"><a href="#cb155-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     4     4 &lt;dbl [1]&gt;</span></span>
+<span id="cb155-6"><a href="#cb155-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     3     3 &lt;int [2]&gt;</span></span>
+<span id="cb155-7"><a href="#cb155-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     2     2 &lt;int [3]&gt;</span></span>
+<span id="cb155-8"><a href="#cb155-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     1     1 &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">8</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">1</span>)))</span>
+<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n     c li       </span></span>
+<span id="cb156-4"><a href="#cb156-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;list&gt;   </span></span>
+<span id="cb156-5"><a href="#cb156-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     8     4 &lt;dbl [1]&gt;</span></span>
+<span id="cb156-6"><a href="#cb156-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     7     3 &lt;int [2]&gt;</span></span>
+<span id="cb156-7"><a href="#cb156-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     6     2 &lt;int [3]&gt;</span></span>
+<span id="cb156-8"><a href="#cb156-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     5     1 &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">8</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">4</span>)))</span>
+<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n c         li</span></span>
+<span id="cb157-3"><a href="#cb157-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 8 4          9</span></span>
+<span id="cb157-4"><a href="#cb157-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 7 3     10, 11</span></span>
+<span id="cb157-5"><a href="#cb157-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 6 2 12, 13, 14</span></span>
+<span id="cb157-6"><a href="#cb157-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 5 1       text</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">8</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">4</span>)))</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: `array(8:1, dim = c(2, 1, 4))`
+#&gt; must be a vector, a bare list, a data
+#&gt; frame, a matrix, or NULL.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">8</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">2</span>)))</span>
+<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n c         li</span></span>
+<span id="cb160-3"><a href="#cb160-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 8 4          9</span></span>
+<span id="cb160-4"><a href="#cb160-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 7 3     10, 11</span></span>
+<span id="cb160-5"><a href="#cb160-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 6 2 12, 13, 14</span></span>
+<span id="cb160-6"><a href="#cb160-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 5 1       text</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="#cb161-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">8</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">2</span>)))</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: `array(8:1, dim = c(4, 1, 2))`
+#&gt; must be a vector, a bare list, a data
+#&gt; frame, a matrix, or NULL.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="a-is-another-type-of-vector" class="section level3">
+<h3><code>a</code> is another type of vector</h3>
+<p>If <code>vec_is(a)</code>, then <code>x[j] &lt;- a</code> is equivalent to <code>x[j] &lt;- list(a)</code>. This is primarily provided for backward compatbility.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="#cb163-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">0</span>)</span>
+<span id="cb163-2"><a href="#cb163-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb163-3"><a href="#cb163-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb163-4"><a href="#cb163-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb163-5"><a href="#cb163-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     0 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb163-6"><a href="#cb163-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     0 f     &lt;int [2]&gt;</span></span>
+<span id="cb163-7"><a href="#cb163-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     0 g     &lt;int [3]&gt;</span></span>
+<span id="cb163-8"><a href="#cb163-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     0 h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="dv">0</span>))</span>
+<span id="cb164-2"><a href="#cb164-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb164-3"><a href="#cb164-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb164-4"><a href="#cb164-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb164-5"><a href="#cb164-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     0 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb164-6"><a href="#cb164-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     0 f     &lt;int [2]&gt;</span></span>
+<span id="cb164-7"><a href="#cb164-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     0 g     &lt;int [3]&gt;</span></span>
+<span id="cb164-8"><a href="#cb164-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     0 h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Matrices must be wrapped in <code>list()</code> before assignment to create a matrix column.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">ncol =</span> <span class="dv">2</span>)))</span>
+<span id="cb165-2"><a href="#cb165-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb165-3"><a href="#cb165-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n[,1]  [,2] c     li       </span></span>
+<span id="cb165-4"><a href="#cb165-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb165-5"><a href="#cb165-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1     5 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb165-6"><a href="#cb165-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     2     6 f     &lt;int [2]&gt;</span></span>
+<span id="cb165-7"><a href="#cb165-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3     7 g     &lt;int [3]&gt;</span></span>
+<span id="cb165-8"><a href="#cb165-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     4     8 h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">ncol =</span> <span class="dv">2</span>)))</span>
+<span id="cb166-2"><a href="#cb166-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb166-3"><a href="#cb166-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n[,1]  [,2] c[,1]  [,2] li       </span></span>
+<span id="cb166-4"><a href="#cb166-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;list&gt;   </span></span>
+<span id="cb166-5"><a href="#cb166-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1     5     1     5 &lt;dbl [1]&gt;</span></span>
+<span id="cb166-6"><a href="#cb166-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     2     6     2     6 &lt;int [2]&gt;</span></span>
+<span id="cb166-7"><a href="#cb166-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3     7     3     7 &lt;int [3]&gt;</span></span>
+<span id="cb166-8"><a href="#cb166-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4     4     8     4     8 &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="a-is-null" class="section level3">
+<h3><code>a</code> is <code>NULL</code></h3>
+<p>Entire columns can be removed. Specifying <code>i</code> is an error.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="#cb167-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="cn">NULL</span>)</span>
+<span id="cb167-2"><a href="#cb167-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb167-3"><a href="#cb167-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   c     li       </span></span>
+<span id="cb167-4"><a href="#cb167-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb167-5"><a href="#cb167-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb167-6"><a href="#cb167-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 f     &lt;int [2]&gt;</span></span>
+<span id="cb167-7"><a href="#cb167-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 g     &lt;int [3]&gt;</span></span>
+<span id="cb167-8"><a href="#cb167-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="cn">NULL</span>)</span>
+<span id="cb168-2"><a href="#cb168-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 1</span></span>
+<span id="cb168-3"><a href="#cb168-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n</span></span>
+<span id="cb168-4"><a href="#cb168-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt;</span></span>
+<span id="cb168-5"><a href="#cb168-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1</span></span>
+<span id="cb168-6"><a href="#cb168-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA</span></span>
+<span id="cb168-7"><a href="#cb168-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3</span></span>
+<span id="cb168-8"><a href="#cb168-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">1</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in x[[jj]][iseq] &lt;- vjj:
+#&gt; replacement has length zero</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: `NULL` must be a vector, a bare
+#&gt; list, a data frame or a matrix.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="a-is-not-a-vector" class="section level3">
+<h3><code>a</code> is not a vector</h3>
+<p>Any other type for <code>a</code> is an error. Note that if <code>is.list(a)</code> is <code>TRUE</code>, but <code>inherits(a, &quot;list&quot;)</code> is <code>FALSE</code>, then <code>a</code> is considered to be a scalar. See <code>?vec_is</code> and <code>?vec_proxy</code> for details.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">1</span>] <span class="ot">&lt;-</span> mean)</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in rep(value, length.out = n):
+#&gt; attempt to replicate an object of type
+#&gt; &#39;closure&#39;</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span>] <span class="ot">&lt;-</span> mean)</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: `mean` must be a vector, a bare
+#&gt; list, a data frame, a matrix, or NULL.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt, <span class="at">data =</span> mtcars))</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning in `[&lt;-.data.frame`(`*tmp*`,
+#&gt; 1, value = structure(list(coefficients
+#&gt; = c(`(Intercept)` = 37.285126167342, :
+#&gt; replacement element 2 has 32 rows to
+#&gt; replace 4 rows</code></pre>
+</div>
+<div class="warning">
+<pre><code>#&gt; Warning in `[&lt;-.data.frame`(`*tmp*`,
+#&gt; 1, value = structure(list(coefficients
+#&gt; = c(`(Intercept)` = 37.285126167342, :
+#&gt; replacement element 3 has 32 rows to
+#&gt; replace 4 rows</code></pre>
+</div>
+<div class="warning">
+<pre><code>#&gt; Warning in `[&lt;-.data.frame`(`*tmp*`,
+#&gt; 1, value = structure(list(coefficients
+#&gt; = c(`(Intercept)` = 37.285126167342, :
+#&gt; replacement element 5 has 32 rows to
+#&gt; replace 4 rows</code></pre>
+</div>
+<div class="warning">
+<pre><code>#&gt; Warning in `[&lt;-.data.frame`(`*tmp*`,
+#&gt; 1, value = structure(list(coefficients
+#&gt; = c(`(Intercept)` = 37.285126167342, :
+#&gt; replacement element 7 has 5 rows to
+#&gt; replace 4 rows</code></pre>
+</div>
+<div class="error">
+<pre><code>#&gt; Error in `[&lt;-.data.frame`(`*tmp*`, 1,
+#&gt; value = structure(list(coefficients =
+#&gt; c(`(Intercept)` = 37.285126167342, :
+#&gt; replacement element 10 has 3 rows, need
+#&gt; 4</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt, <span class="at">data =</span> mtcars))</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: `lm(mpg ~ wt, data = mtcars)`
+#&gt; must be a vector, a bare list, a data
+#&gt; frame, a matrix, or NULL.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- HW: we need better error messages for these cases -->
+</div>
+</div>
+<div id="row-subassignment-xi---list..." class="section level2">
+<h2>Row subassignment: <code>x[i, ] &lt;- list(...)</code></h2>
+<p><code>x[i, ] &lt;- a</code> is the same as <code>vec_slice(x[[j_1]], i) &lt;- a[[1]]</code>, <code>vec_slice(x[[j_2]], i) &lt;- a[[2]]</code>, … .<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span>
+<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb185-4"><a href="#cb185-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb185-5"><a href="#cb185-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb185-6"><a href="#cb185-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb185-7"><a href="#cb185-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb185-8"><a href="#cb185-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="fu">c</span>(<span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>), ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span>
+<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb186-3"><a href="#cb186-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb186-4"><a href="#cb186-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb186-5"><a href="#cb186-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb186-6"><a href="#cb186-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb186-7"><a href="#cb186-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb186-8"><a href="#cb186-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Only values of size one can be recycled.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span>
+<span id="cb187-2"><a href="#cb187-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb187-3"><a href="#cb187-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb187-4"><a href="#cb187-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb187-5"><a href="#cb187-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb187-6"><a href="#cb187-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb187-7"><a href="#cb187-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb187-8"><a href="#cb187-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, ] <span class="ot">&lt;-</span> <span class="fu">list</span>(tbl<span class="sc">$</span>n[<span class="dv">1</span>], tbl<span class="sc">$</span>c[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], tbl<span class="sc">$</span>li[<span class="dv">1</span>]))</span>
+<span id="cb188-2"><a href="#cb188-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb188-3"><a href="#cb188-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb188-4"><a href="#cb188-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb188-5"><a href="#cb188-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb188-6"><a href="#cb188-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb188-7"><a href="#cb188-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     1 f     &lt;dbl [1]&gt;</span></span>
+<span id="cb188-8"><a href="#cb188-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>, ] <span class="ot">&lt;-</span> df[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, ])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in `[&lt;-.data.frame`(`*tmp*`, 2:4,
+#&gt; , value = structure(list(n = c(1L, :
+#&gt; replacement element 1 has 2 rows, need 3</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>, ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, ])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Assigned data `tbl[1:2, ]` must
+#&gt; be compatible with row subscript `2:4`.
+#&gt; ✖ 3 rows must be assigned.
+#&gt; ✖ Element 1 of assigned data has 2 rows.
+#&gt; ℹ Only vectors of size 1 are recycled.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For compatibility, only a warning is issued for indexing beyond the number of rows. Appending rows right at the end of the existing data is supported, without warning.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">5</span>, ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span>
+<span id="cb193-2"><a href="#cb193-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span id="cb193-3"><a href="#cb193-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb193-4"><a href="#cb193-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb193-5"><a href="#cb193-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb193-6"><a href="#cb193-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;</span></span>
+<span id="cb193-7"><a href="#cb193-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;</span></span>
+<span id="cb193-8"><a href="#cb193-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span>
+<span id="cb193-9"><a href="#cb193-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5     1 e     &lt;dbl [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>, ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span>
+<span id="cb194-2"><a href="#cb194-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 7 x 3</span></span>
+<span id="cb194-3"><a href="#cb194-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb194-4"><a href="#cb194-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb194-5"><a href="#cb194-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb194-6"><a href="#cb194-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;</span></span>
+<span id="cb194-7"><a href="#cb194-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;</span></span>
+<span id="cb194-8"><a href="#cb194-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span>
+<span id="cb194-9"><a href="#cb194-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb194-10"><a href="#cb194-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb194-11"><a href="#cb194-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 7     1 e     &lt;dbl [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">6</span>, ] <span class="ot">&lt;-</span> df[<span class="dv">1</span>, ])</span>
+<span id="cb195-2"><a href="#cb195-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    n    c         li</span></span>
+<span id="cb195-3"><a href="#cb195-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1    e          9</span></span>
+<span id="cb195-4"><a href="#cb195-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 NA    f     10, 11</span></span>
+<span id="cb195-5"><a href="#cb195-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3    g 12, 13, 14</span></span>
+<span id="cb195-6"><a href="#cb195-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 NA    h       text</span></span>
+<span id="cb195-7"><a href="#cb195-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 NA &lt;NA&gt;       NULL</span></span>
+<span id="cb195-8"><a href="#cb195-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6  1    e          9</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">6</span>, ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Can&#39;t assign to rows beyond the
+#&gt; end with non-consecutive locations.
+#&gt; ℹ Input has size 4.
+#&gt; ✖ Subscript `6` contains non-consecutive
+#&gt; location 6.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="sc">-</span><span class="dv">5</span>, ] <span class="ot">&lt;-</span> df[<span class="dv">1</span>, ])</span>
+<span id="cb198-2"><a href="#cb198-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n c li</span></span>
+<span id="cb198-3"><a href="#cb198-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1 e  9</span></span>
+<span id="cb198-4"><a href="#cb198-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 1 e  9</span></span>
+<span id="cb198-5"><a href="#cb198-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 1 e  9</span></span>
+<span id="cb198-6"><a href="#cb198-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 1 e  9</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="#cb199-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="sc">-</span><span class="dv">5</span>, ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Can&#39;t negate rows that don&#39;t
+#&gt; exist.
+#&gt; ✖ Location 5 doesn&#39;t exist.
+#&gt; ℹ There are only 4 rows.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="sc">-</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>), ] <span class="ot">&lt;-</span> df[<span class="dv">1</span>, ])</span>
+<span id="cb201-2"><a href="#cb201-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n c li</span></span>
+<span id="cb201-3"><a href="#cb201-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1 e  9</span></span>
+<span id="cb201-4"><a href="#cb201-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 1 e  9</span></span>
+<span id="cb201-5"><a href="#cb201-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 1 e  9</span></span>
+<span id="cb201-6"><a href="#cb201-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 1 e  9</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="#cb202-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="sc">-</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>), ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Can&#39;t negate rows that don&#39;t
+#&gt; exist.
+#&gt; ✖ Locations 5, 6, and 7 don&#39;t exist.
+#&gt; ℹ There are only 4 rows.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="sc">-</span><span class="dv">6</span>, ] <span class="ot">&lt;-</span> df[<span class="dv">1</span>, ])</span>
+<span id="cb204-2"><a href="#cb204-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   n c li</span></span>
+<span id="cb204-3"><a href="#cb204-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 1 e  9</span></span>
+<span id="cb204-4"><a href="#cb204-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 1 e  9</span></span>
+<span id="cb204-5"><a href="#cb204-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 1 e  9</span></span>
+<span id="cb204-6"><a href="#cb204-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 1 e  9</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="sc">-</span><span class="dv">6</span>, ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Can&#39;t negate rows that don&#39;t
+#&gt; exist.
+#&gt; ✖ Location 6 doesn&#39;t exist.
+#&gt; ℹ There are only 4 rows.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For compatibility, <code>i</code> can also be a character vector containing positive numbers.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="fu">as.character</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>), ] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span>, ])</span>
+<span id="cb207-2"><a href="#cb207-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb207-3"><a href="#cb207-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb207-4"><a href="#cb207-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb207-5"><a href="#cb207-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb207-6"><a href="#cb207-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb207-7"><a href="#cb207-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb207-8"><a href="#cb207-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="row-and-column-subassignment" class="section level2">
+<h2>Row and column subassignment</h2>
+<div id="definition-of-xi-j---a" class="section level3">
+<h3>Definition of <code>x[i, j] &lt;- a</code></h3>
+<p><code>x[i, j] &lt;- a</code> is equivalent to <code>x[i, ][j] &lt;- a</code>.<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a></p>
+<p>Subassignment to <code>x[i, j]</code> is stricter for tibbles than for data frames. <code>x[i, j] &lt;- a</code> can’t change the data type of existing columns.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> df[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">2</span>])</span>
+<span id="cb208-2"><a href="#cb208-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;      n c         li</span></span>
+<span id="cb208-3"><a href="#cb208-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1    1 e          9</span></span>
+<span id="cb208-4"><a href="#cb208-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    e f     10, 11</span></span>
+<span id="cb208-5"><a href="#cb208-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3    f g 12, 13, 14</span></span>
+<span id="cb208-6"><a href="#cb208-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 &lt;NA&gt; h       text</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">2</span>])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Assigned data `tbl[1:2, 2]` must
+#&gt; be compatible with existing data.
+#&gt; ℹ Error occurred for column `n`.
+#&gt; ✖ Can&#39;t convert &lt;character&gt; to
+#&gt; &lt;integer&gt;.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> df[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">3</span>])</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning in `[&lt;-.data.frame`(`*tmp*`,
+#&gt; 2:3, 2, value = list(9, 10:11)):
+#&gt; provided 2 variables to replace 1
+#&gt; variables</code></pre>
+</div>
+<pre><code>#&gt;    n c         li
+#&gt; 1  1 e          9
+#&gt; 2 NA 9     10, 11
+#&gt; 3  3 9 12, 13, 14
+#&gt; 4 NA h       text</code></pre>
+</td>
+<td>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">3</span>])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Assigned data `tbl[1:2, 3]` must
+#&gt; be compatible with existing data.
+#&gt; ℹ Error occurred for column `c`.
+#&gt; ✖ Can&#39;t convert &lt;list&gt; to &lt;character&gt;.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">3</span>] <span class="ot">&lt;-</span> df2[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span>])</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning in `[&lt;-.data.frame`(`*tmp*`,
+#&gt; 2:3, 3, value = structure(list(n =
+#&gt; c(1L, : provided 3 variables to replace
+#&gt; 1 variables</code></pre>
+</div>
+<pre><code>#&gt;    n c   li
+#&gt; 1  1 e    9
+#&gt; 2 NA f    1
+#&gt; 3  3 g   NA
+#&gt; 4 NA h text</code></pre>
+</td>
+<td>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">3</span>] <span class="ot">&lt;-</span> tbl2[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span>])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Internal error in
+#&gt; `df_cast_opts()`: Data frame must have
+#&gt; names.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df2</span>(df2[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> df2[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">2</span>])</span></code></pre></div>
+<div class="warning">
+<pre><code>#&gt; Warning in matrix(value, n, p): data
+#&gt; length [8] is not a sub-multiple or
+#&gt; multiple of the number of columns [3]</code></pre>
+</div>
+<pre><code>#&gt;   tb.n tb.c tb.li m.1 m.2 m.3 m.4
+#&gt; 1    1    e     9   1   0   0   0
+#&gt; 2    1    0     0   0   1   0   0
+#&gt; 3    0    1     0   0   0   1   0
+#&gt; 4   NA    h  text   0   0   0   1</code></pre>
+</td>
+<td>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl2</span>(tbl2[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> tbl2[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">2</span>])</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Assigned data `tbl2[1:2, 2]` must
+#&gt; be compatible with existing data.
+#&gt; ℹ Error occurred for column `tb`.
+#&gt; ✖ Can&#39;t convert &lt;double[,4]&gt; to
+#&gt; &lt;tbl_df&gt;.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="#cb226-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl2</span>(tbl2[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> tbl[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">1</span>])</span>
+<span id="cb226-2"><a href="#cb226-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 2</span></span>
+<span id="cb226-3"><a href="#cb226-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    tb$n $c    $li      m[,1]  [,2]  [,3]</span></span>
+<span id="cb226-4"><a href="#cb226-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb226-5"><a href="#cb226-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1…     1     0     0</span></span>
+<span id="cb226-6"><a href="#cb226-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2…     1     1     1</span></span>
+<span id="cb226-7"><a href="#cb226-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3…    NA    NA    NA</span></span>
+<span id="cb226-8"><a href="#cb226-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1…     0     0     0</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This means that columns initialized with <code>NA</code> (which is a logical) cannot be later filled with values of a different type. Use the correct type of <code>NA</code> to initialize columns.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="#cb227-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>({df<span class="sc">$</span>x <span class="ot">&lt;-</span> <span class="cn">NA</span>; df[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">&quot;x&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>})</span>
+<span id="cb227-2"><a href="#cb227-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    n c         li  x</span></span>
+<span id="cb227-3"><a href="#cb227-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1 e          9 NA</span></span>
+<span id="cb227-4"><a href="#cb227-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 NA f     10, 11  3</span></span>
+<span id="cb227-5"><a href="#cb227-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  3 g 12, 13, 14  2</span></span>
+<span id="cb227-6"><a href="#cb227-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 NA h       text NA</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>({tbl<span class="sc">$</span>x <span class="ot">&lt;-</span> <span class="cn">NA</span>; tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">&quot;x&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>})</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: Assigned data `3:2` must be
+#&gt; compatible with existing data.
+#&gt; ℹ Error occurred for column `x`.
+#&gt; ✖ Can&#39;t convert from &lt;integer&gt; to
+#&gt; &lt;logical&gt; due to loss of precision.
+#&gt; * Locations: 1, 2.</code></pre>
+</div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>({tbl<span class="sc">$</span>x <span class="ot">&lt;-</span> <span class="cn">NA_integer_</span>; tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">&quot;x&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>})</span>
+<span id="cb230-2"><a href="#cb230-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
+<span id="cb230-3"><a href="#cb230-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li            x</span></span>
+<span id="cb230-4"><a href="#cb230-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;    &lt;int&gt;</span></span>
+<span id="cb230-5"><a href="#cb230-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;    NA</span></span>
+<span id="cb230-6"><a href="#cb230-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;     3</span></span>
+<span id="cb230-7"><a href="#cb230-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;     2</span></span>
+<span id="cb230-8"><a href="#cb230-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;    NA</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For new columns, <code>x[i, j] &lt;- a</code> fills the unassigned rows with <code>NA</code>.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">&quot;n&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">1</span>)</span>
+<span id="cb231-2"><a href="#cb231-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    n c         li</span></span>
+<span id="cb231-3"><a href="#cb231-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  1 e          9</span></span>
+<span id="cb231-4"><a href="#cb231-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2  1 f     10, 11</span></span>
+<span id="cb231-5"><a href="#cb231-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3  1 g 12, 13, 14</span></span>
+<span id="cb231-6"><a href="#cb231-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 NA h       text</span></span></code></pre></div>
+</td>
+<td>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">&quot;n&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">1</span>)</span>
+<span id="cb232-2"><a href="#cb232-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 3</span></span>
+<span id="cb232-3"><a href="#cb232-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb232-4"><a href="#cb232-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb232-5"><a href="#cb232-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb232-6"><a href="#cb232-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2     1 f     &lt;int [2]&gt;</span></span>
+<span id="cb232-7"><a href="#cb232-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     1 g     &lt;int [3]&gt;</span></span>
+<span id="cb232-8"><a href="#cb232-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">&quot;x&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">1</span>)</span>
+<span id="cb233-2"><a href="#cb233-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 4 x 4</span></span>
+<span id="cb233-3"><a href="#cb233-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li            x</span></span>
+<span id="cb233-4"><a href="#cb233-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;    &lt;dbl&gt;</span></span>
+<span id="cb233-5"><a href="#cb233-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;    NA</span></span>
+<span id="cb233-6"><a href="#cb233-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;     1</span></span>
+<span id="cb233-7"><a href="#cb233-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;     1</span></span>
+<span id="cb233-8"><a href="#cb233-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;    NA</span></span></code></pre></div>
+</td>
+</tr>
+<tr style="vertical-align:top">
+<td>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="#cb234-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_df</span>(df[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">&quot;n&quot;</span>] <span class="ot">&lt;-</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error in x[[jj]][iseq] &lt;- vjj:
+#&gt; replacement has length zero</code></pre>
+</div>
+</td>
+<td>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">&quot;n&quot;</span>] <span class="ot">&lt;-</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<div class="error">
+<pre><code>#&gt; Error: `NULL` must be a vector, a bare
+#&gt; list, a data frame or a matrix.</code></pre>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Likewise, for new rows, <code>x[i, j] &lt;- a</code> fills the unassigned columns with <code>NA</code>.</p>
+<table class="dftbl">
+<tbody>
+<tr style="vertical-align:top">
+<td>
+</td>
+<td>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="#cb238-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with_tbl</span>(tbl[<span class="dv">5</span>, <span class="st">&quot;n&quot;</span>] <span class="ot">&lt;-</span> <span class="fu">list</span>(0L))</span>
+<span id="cb238-2"><a href="#cb238-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 5 x 3</span></span>
+<span id="cb238-3"><a href="#cb238-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       n c     li       </span></span>
+<span id="cb238-4"><a href="#cb238-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt; &lt;list&gt;   </span></span>
+<span id="cb238-5"><a href="#cb238-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1     1 e     &lt;dbl [1]&gt;</span></span>
+<span id="cb238-6"><a href="#cb238-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2    NA f     &lt;int [2]&gt;</span></span>
+<span id="cb238-7"><a href="#cb238-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3     3 g     &lt;int [3]&gt;</span></span>
+<span id="cb238-8"><a href="#cb238-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4    NA h     &lt;chr [1]&gt;</span></span>
+<span id="cb238-9"><a href="#cb238-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5     0 &lt;NA&gt;  &lt;NULL&gt;</span></span></code></pre></div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="definition-of-xi-j---a-1" class="section level3">
+<h3>Definition of <code>x[[i, j]] &lt;- a</code></h3>
+<p><code>i</code> must be a numeric vector of length 1. <code>x[[i, j]] &lt;- a</code> is equivalent to <code>x[i, ][[j]] &lt;- a</code>.<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a></p>
+<p>NB: <code>vec_size(a)</code> must equal 1. Unlike <code>x[i, ] &lt;-</code>, <code>x[[i, ]] &lt;-</code> is not valid.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><code>x[j][[jj]]</code> is equal to <code>x[[ j[[jj]] ]]</code>, in particular <code>x[j][[1]]</code> is equal to <code>x[[j]]</code> for scalar numeric or integer <code>j</code>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Row subsetting <code>x[i, ]</code> is not defined in terms of <code>x[[j]][i]</code> because that definition does not generalise to matrix and data frame columns. For efficiency and backward compatibility, <code>i</code> is converted to an integer vector by <code>vec_as_index(i, nrow(x))</code> first.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p><code>x[,]</code> is equivalent to <code>x[]</code> because <code>x[, j]</code> is equivalent to <code>x[j]</code>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>A more efficient implementation of <code>x[i, j]</code> would forward to <code>x[j][i, ]</code>.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Cell subsetting <code>x[[i, j]]</code> is not defined in terms of <code>x[[j]][[i]]</code> because that definition does not generalise to list, matrix and data frame columns. A more efficient implementation of <code>x[[i, j]]</code> would check that <code>j</code> is a scalar and forward to <code>x[i, j][[1]]</code>.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p><code>$</code> behaves almost completely symmetrically to <code>[[</code> when comparing subsetting and subassignment.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p><code>x[i, ]</code> is symmetrically for subset and subassignment.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p><code>x[i, j]</code> is symmetrically for subsetting and subassignment. A more efficient implementation of <code>x[i, j] &lt;- a</code> would forward to <code>x[j][i, ] &lt;- a</code>.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p><code>x[[i, j]]</code> is symmetrically for subsetting and subassignment. An efficient implementation would check that <code>i</code> and <code>j</code> are scalar and forward to <code>x[i, j][[1]] &lt;- a</code>.<a href="#fnref9" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

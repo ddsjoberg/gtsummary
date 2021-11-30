@@ -1,0 +1,474 @@
+import(stats,graphics,splines,grid, survival,lattice,methods,Matrix)
+importFrom("grDevices", "col2rgb", "grey", "rgb")
+importFrom("utils", "getS3method")
+importFrom("mitools","withPV")
+export(svydesign, svrepdesign, as.svrepdesign,twophase, postStratify,
+       rake, calibrate, estWeights, as.svydesign2, svyplot, svyhist,
+       svyboxplot, svyby, cv, SE, deff, svycoxph, svyglm, svyquantile,
+       svymean, svytotal, svyvar, svyratio, svytable, svychisq, svymle, svysmooth,
+       withReplicates, hadamard, paley, is.hadamard, bootweights, mrbweights,
+       jk1weights,jknweights, brrweights, regTermTest, degf, nonresponse, 
+       sparseCells, neighbours, joinCells, compressWeights, make.formula,
+       svycontrast, svyCprod, svyrecvar, grake, svrVar, pchisqsum, pFsum,
+       make.calfun, cal.linear, cal.raking, cal.logit, cal.sinh,svycdf, svykappa, svykm,
+       svyolr, svycoplot, svyloglin, make.panel.svysmooth, dotchart, subbootweights,
+       svyciprop, svyttest, marginpred, twophasevar, twophase2var, ppsmat, HR, unwtd.count,
+       svyfactanal, svypredmeans, svyprcomp, trimWeights,stratsample,svylogrank,
+       svyranktest,svystandardize,
+       psrsq, svysurvreg, cal_names, svycralpha, svyivreg, svynls,
+       oldsvyquantile,svyqqplot, svyqqmath, svybys, svygofchisq, poisson_sampling,ppscov)
+
+S3method(svyloglin,survey.design)
+S3method(svyloglin,svyrep.design)
+S3method(svyloglin,DBIsvydesign)
+S3method(anova,svyloglin)
+S3method(print,svyloglin)
+S3method(print,anova.svyloglin)
+S3method(coef,svyloglin)
+S3method(vcov,svyloglin)
+S3method(deviance,svyloglin)
+S3method(print,summary.svyloglin)
+S3method(summary,svyloglin)
+S3method(update,svyloglin)
+S3method(model.matrix,svyloglin)
+S3method(terms,svyloglin)
+S3method(degf,svyloglin)
+S3method(svyttest,default)
+S3method(biplot,svyprcomp)
+
+S3method(marginpred,svycoxph)
+S3method(marginpred, svykmlist)
+S3method(marginpred, svyglm)
+
+S3method(print,svyciprop)
+S3method(vcov,svyciprop)
+S3method(confint,svyciprop)
+S3method(coef,svyciprop)
+
+
+S3method(svydesign, default)
+S3method(svydesign, imputationList)
+S3method(svydesign, character)
+S3method(svydesign, DBimputationList)
+S3method(as.svrepdesign, default)
+S3method(as.svrepdesign, svyimputationList)
+
+S3method(close, DBIsvydesign)
+S3method(open, DBIsvydesign)
+S3method(summary, DBIsvydesign)
+S3method(print, summary.DBIsvydesign)
+S3method(print, DBIsvydesign)
+
+S3method(print,  pps)
+S3method(summary, pps)
+S3method(print, summary.pps)
+S3method(print,ppsmat)
+S3method(print,ppsdelta)
+S3method(print,ppsdcheck)
+
+S3method(svrepdesign, default)
+S3method(svrepdesign, imputationList)
+S3method(svrepdesign, character)
+
+S3method(print, DBIrepdesign)
+S3method(summary, DBIrepdesign)
+
+S3method(svymean, survey.design)
+S3method(svymean, svyrep.design)
+S3method(svymean, survey.design2)
+S3method(svymean, twophase)
+S3method(svymean, twophase2)
+S3method(svymean, pps)
+S3method(svymean, DBIsvydesign)
+
+S3method(svytotal, survey.design)
+S3method(svytotal, svyrep.design)
+S3method(svytotal, survey.design2)
+S3method(svytotal, twophase)
+S3method(svytotal, twophase2)
+S3method(svytotal, pps)
+S3method(svytotal, DBIsvydesign)
+
+S3method(svyratio, survey.design)
+S3method(svyratio, svyrep.design)
+S3method(svyratio, survey.design2)
+S3method(svyratio, pps)
+S3method(svyratio, twophase)
+S3method(svyratio, twophase2)
+S3method(svyratio, DBIsvydesign)
+
+S3method(svyvar, survey.design)
+S3method(svyvar, svyrep.design)
+S3method(svyvar, DBIsvydesign)
+
+S3method(svyquantile, survey.design)
+S3method(svyquantile, svyrep.design)
+S3method(oldsvyquantile, survey.design)
+S3method(oldsvyquantile, svyrep.design)
+S3method(svyquantile, DBIsvydesign)
+S3method(oldsvyquantile, DBIsvydesign)
+
+
+S3method(svytable, survey.design)
+S3method(svytable, svyrep.design)
+S3method(svytable, DBIsvydesign)
+
+S3method(svychisq, survey.design)
+S3method(svychisq, svyrep.design)
+S3method(svychisq, DBIsvydesign)
+S3method(svychisq, twophase)
+
+S3method(svykappa, default)
+S3method(svykappa, DBIsvydesign)
+
+S3method(svyglm,survey.design)
+S3method(svyglm,svyrep.design)
+S3method(svyglm, DBIsvydesign)
+
+
+S3method(svyplot,default)
+S3method(svyplot, DBIsvydesign)
+S3method(svycoplot,default)
+S3method(svycoplot, DBIsvydesign)
+S3method(svysmooth, default)
+S3method(svysmooth, DBIsvydesign)
+S3method(svyboxplot, DBIsvydesign)
+S3method(svyboxplot, default)
+S3method(svycdf, default)
+S3method(svycdf, DBIsvydesign)
+
+S3method(plot, svystat)
+S3method(plot, svrepstat)
+S3method(barplot, svystat)
+S3method(barplot, svrepstat)
+S3method(plot, svyby)
+S3method(barplot, svyby)
+
+S3method(dotchart, svystat)
+S3method(dotchart, svrepstat)
+S3method(dotchart, svyby)
+S3method(dotchart, default)
+
+S3method(predict, svyglm)
+S3method(predict, svrepglm)
+S3method(predict, svyratio)
+S3method(predict, svyratio_separate)
+S3method(coef,svyratio)
+
+S3method(svycoxph,survey.design)
+S3method(svycoxph,svyrep.design)
+S3method(svycoxph, DBIsvydesign)
+
+S3method(svysurvreg,survey.design)
+
+S3method(residuals, svrepglm)
+S3method(residuals, svyglm)
+S3method(residuals, svysurvreg)
+
+
+S3method(coef,svrepstat)
+S3method(coef,svystat)
+S3method(coef,svyby)
+S3method(coef,svymle)
+S3method(coef, svyolr)
+S3method(coef, svyglm)
+S3method(coef, newsvyquantile)
+S3method(coef, oldsvyquantile)
+
+S3method(confint,svyglm)
+S3method(confint, svyciprop)
+S3method(confint, newsvyquantile)
+S3method(confint, oldsvyquantile)
+
+S3method(SE,default)
+S3method(SE,svrepstat)
+S3method(SE,svystat)
+S3method(SE,svyby)
+S3method(SE,newsvyquantile)
+S3method(SE,oldsvyquantile)
+S3method(SE,svyratio)
+
+S3method(vcov,svyrep.design)
+S3method(vcov, newsvyquantile)
+S3method(vcov, oldsvyquantile)
+S3method(vcov, svrepstat)
+S3method(vcov, svyglm)
+S3method(vcov, svymle)
+S3method(vcov, svystat)
+S3method(vcov, svyby)
+S3method(vcov, svyratio)
+
+S3method(logLik,svyglm)
+S3method(logLik,svrepglm)
+
+S3method(extractAIC,svyglm)
+S3method(extractAIC,svrepglm)
+S3method(extractAIC,svyglm)
+S3method(anova,svyglm)
+S3method(AIC,svyglm)
+S3method(BIC,svyglm)
+
+S3method(anova,svycoxph)
+S3method(predict,svycoxph)
+S3method(extractAIC,svycoxph)
+S3method(extractAIC,svrepcoxph)
+S3method(AIC,svycoxph)
+
+
+S3method(svycontrast,svrepstat)
+S3method(svycontrast,svystat)
+S3method(svycontrast,svyby)
+S3method(svycontrast,svyglm)
+S3method(svycontrast, svrepglm)
+S3method(svycontrast,svycoxph)
+S3method(svycontrast, svrepcoxph)
+S3method(svycontrast,default)
+
+S3method(image,svyrep.design)
+S3method(image,pps)
+S3method(plot,svysmooth)
+S3method(print,svysmooth)
+S3method(lines,svysmooth)
+
+S3method(svykm, survey.design)
+S3method(svykm, svyrep.design)
+S3method(svykm, DBIsvydesign)
+S3method(plot,svykm)
+S3method(print,svykm)
+S3method(print,svykmlist)
+S3method(lines, svykm)
+S3method(plot,svykmlist)
+S3method(quantile, svykm)
+S3method(confint,svykm)
+
+S3method(svyolr,survey.design2)
+S3method(svyolr,svyrep.design)
+S3method(svyolr,DBIsvydesign)
+S3method(vcov,svyolr)
+S3method(summary, svyolr)
+S3method(print, svyolr)
+S3method(print, summary.svyolr)
+
+S3method(ftable,svrepstat)
+S3method(ftable,svystat)
+S3method(ftable,svyby)
+
+
+S3method(weights, nonresponse)
+S3method(weights, survey.design)
+S3method(weights, survey_fpc)
+S3method(weights, svyrep.design)
+
+S3method(summary,survey.design)
+S3method(summary,survey.design2)
+S3method(summary,twophase)
+S3method(summary, twophase2)
+S3method(summary,svyrep.design)
+S3method(summary,svrepglm)
+S3method(summary,svreptable)
+S3method(summary,svycoxph)
+S3method(summary,svyglm)
+S3method(summary,svymle)
+S3method(summary,svytable)
+
+S3method(print,summary.survey.design)
+S3method(print,summary.survey.design2)
+S3method(print,summary.twophase)
+S3method(print,summary.twophase2)
+S3method(print,summary.svyrep.design)
+S3method(print,summary.svyglm)
+S3method(print,summary.svytable)
+S3method(print,svycdf)
+S3method(plot,svycdf)
+S3method(print, nonresponse)
+S3method(print, nonresponseSubset)
+S3method(print, regTermTest)
+S3method(print, regTermTestLRT)
+S3method(print, regTermTestWW)
+S3method(print, svrepstat)
+S3method(print, svystat)
+S3method(print, survey.design)
+S3method(print, survey.design2)
+S3method(print, svyrep.design)
+S3method(print, svyglm)
+S3method(print, svymle)
+S3method(print, oldsvyquantile)
+S3method(print, svyratio)
+S3method(print, svyratio_separate)
+S3method(print, twophase)
+S3method(print, twophase2)
+S3method(print, calfun)
+S3method(print, svyvar)
+S3method(print, seqanova.svyglm)
+S3method(as.matrix, svyvar)
+S3method(print, svrepvar)
+S3method(as.matrix, svrepvar)
+
+S3method(withReplicates, svyrep.design)
+S3method(withReplicates, svrepvar)
+S3method(withReplicates, svrepstat)
+S3method(withReplicates, svyimputationList)
+
+S3method(dim,repweights_compressed)
+S3method(dim,survey.design)
+S3method(dim,twophase)
+S3method(dim,twophase2)
+S3method(dim, DBIsvydesign)
+S3method(dim, DBIrepdesign)
+S3method(dim, svyrep.design)
+S3method(dim, svyimputationList)
+
+S3method(dimnames,survey.design)
+S3method(dimnames,svyrep.design)
+S3method(dimnames,twophase)
+S3method(dimnames, DBIsvydesign)
+S3method(dimnames, DBIrepdesign)
+S3method(dimnames, svyimputationList)
+
+S3method(dimnames, repweights_compressed)
+
+S3method(degf, survey.design2)
+S3method(degf, svyrep.design)
+S3method(degf, pps)
+S3method(degf, twophase)
+S3method(degf, twophase2)
+
+S3method(cv,default)
+S3method(cv,svyratio)
+
+S3method(deff,default)
+S3method(deff,svyby)
+
+S3method(postStratify,survey.design)
+S3method(postStratify,svyrep.design)
+S3method(postStratify,twophase)
+S3method(postStratify,twophase2)
+S3method(postStratify,DBIsvydesign)
+
+S3method(calibrate,survey.design2)
+S3method(calibrate,svyrep.design)
+S3method(calibrate,twophase)
+S3method(calibrate,twophase2)
+S3method(calibrate, DBIsvydesign)
+S3method(calibrate, pps)
+
+S3method(estWeights,data.frame)
+S3method(estWeights,twophase)
+
+S3method(compressWeights, default)
+S3method(compressWeights, repweights_compressed)
+S3method(compressWeights, svyrep.design)
+S3method(trimWeights, svyrep.design)
+S3method(trimWeights, survey.design2)
+
+S3method(subset,survey.design)
+S3method(subset,svyrep.design)
+S3method(subset,twophase)
+S3method(subset,twophase2)
+S3method(subset, DBIsvydesign)
+
+S3method(update,survey.design)
+S3method(update,svyrep.design)
+S3method(update,twophase)
+S3method(update,twophase2)
+S3method(update,DBIsvydesign)
+S3method(update,svyimputationList)
+S3method(transform,survey.design)
+S3method(transform,svyrep.design)
+S3method(transform,twophase)
+S3method(transform,twophase2)
+S3method(transform,DBIsvydesign)
+S3method(transform,svyimputationList)
+
+
+S3method(svyby, default)
+S3method(svyby, DBIsvydesign)
+S3method(svyby, survey.design2)
+
+S3method(regcalibrate, survey.design2)
+S3method(regcalibrate, svyrep.design)
+
+S3method(na.exclude,survey.design)
+S3method(na.exclude,twophase)
+S3method(na.fail,survey.design)
+S3method(na.fail,twophase)
+S3method(na.omit,survey.design)
+S3method(na.omit,twophase)
+
+S3method(model.frame,survey.design)
+S3method(model.frame,svycoxph)
+S3method(model.frame,svyrep.design)
+S3method(model.frame, twophase)
+S3method(model.frame, twophase2)
+S3method(model.frame, svyolr)
+
+S3method(as.matrix,repweights)
+S3method(as.matrix, repweights_compressed)
+S3method(as.vector, repweights_compressed)
+
+S3method(as.data.frame,svrepstat)
+S3method(as.data.frame,svystat)
+
+S3method(with,svyimputationList)
+S3method(print, svyimputationList)
+S3method(subset, svyimputationList)
+S3method(print, svyDBimputationList)
+S3method(with, svyDBimputationList)
+S3method(update, svyDBimputationList)
+S3method(close, svyDBimputationList)
+S3method(open, svyDBimputationList)
+S3method(subset, svyDBimputationList)
+S3method(withPV, survey.design)
+S3method(withPV, svyrep.design)
+
+S3method(confint,svystat)
+S3method(confint,svrepstat)
+S3method(confint, svyratio)
+S3method(confint, svyby)
+S3method(confint,svyttest)
+
+S3method(`[`, survey.design)
+S3method(`[`, survey.design2)
+S3method(`[`, svyrep.design)
+S3method(`[`, twophase)
+S3method(`[`, twophase2)
+S3method(`[`, repweights_compressed)
+S3method(`[`, nonresponse)
+S3method(`[`, DBIsvydesign)
+S3method(`[`, DBIrepdesign)
+
+         
+
+S3method(`[<-`, survey.design)         
+
+S3method(`names<-`, svrepstat)
+
+S3method(svylogrank,survey.design2)
+S3method(svylogrank,svyrep.design)
+S3method(svylogrank,twophase)
+S3method(svylogrank,DBIsvydesign)
+
+
+S3method(svyranktest,survey.design)
+S3method(svyranktest,svyrep.design)
+S3method(svyranktest,DBIsvydesign)
+
+
+S3method(svyivreg,survey.design)
+S3method(svyivreg, svyrep.design)
+S3method(summary, svyivreg)
+
+S3method(psrsq,glm)
+S3method(psrsq,svyglm)
+
+S3method(cal_names, survey.design)
+S3method(cal_names, DBIsvydesign)
+
+S3method(svynls, DBIsvydesign)
+S3method(svynls, survey.design2)
+S3method(svynls, svyrep.design)
+
+S3method(print, svynls)
+S3method(summary, svynls)
+S3method(coef,svynls)
+S3method(vcov,svynls)

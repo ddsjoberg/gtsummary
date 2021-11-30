@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: The Matrix (Super-) Class of a Class</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for MatrixClass {Matrix}"><tr><td>MatrixClass {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>The Matrix (Super-) Class of a Class</h2>
+
+<h3>Description</h3>
+
+<p>Return the (maybe super-)<code><a href="../../base/html/class.html">class</a></code> of class <code>cl</code> from
+package <span class="pkg">Matrix</span>, returning <code><a href="../../base/html/character.html">character</a>(0)</code> if there is none.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+MatrixClass(cl, cld = getClassDef(cl), ...Matrix = TRUE,
+            dropVirtual = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>cl</code></td>
+<td>
+<p>string, class name</p>
+</td></tr>
+<tr valign="top"><td><code>cld</code></td>
+<td>
+<p>its class definition</p>
+</td></tr>
+<tr valign="top"><td><code>...Matrix</code></td>
+<td>
+<p><code><a href="../../base/html/logical.html">logical</a></code> indicating if the result must be of
+pattern <code>"[dlniz]..Matrix"</code> where the first letter &quot;[dlniz]&quot;
+denotes the content kind.</p>
+</td></tr>
+<tr valign="top"><td><code>dropVirtual</code></td>
+<td>
+<p><code><a href="../../base/html/logical.html">logical</a></code> indicating if virtual classes
+are included or not.</p>
+</td></tr></table>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments are passed to
+<code><a href="../../methods/html/selectSuperClasses.html">.selectSuperClasses</a>()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a <code><a href="../../base/html/character.html">character</a></code> string
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler, 24 Mar 2009</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Matrix-class.html">Matrix</a></code>, the mother of all <span class="pkg">Matrix</span> classes.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+mkA &lt;- setClass("A", contains="dgCMatrix")
+(A &lt;- mkA())
+stopifnot(identical(
+     MatrixClass("A"),
+     "dgCMatrix"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

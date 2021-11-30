@@ -1,0 +1,224 @@
+---
+title: 2. crul workflows
+author: Scott Chamberlain
+date: "2020-07-09"
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteIndexEntry{2. crul workflows}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+
+
+The following aims to help you decide how to use `crul` in different 
+scenarios.
+
+`crul` is aimed a bit more at developers than at the casual 
+user doing HTTP requests. That is, `crul` is probably a better fit 
+for an R package developer, mainly because it heavily uses `R6` - 
+an interface that's very unlike the interface in `httr` but very
+similar to interacting with classes in Ruby/Python.
+
+```r
+library("crul")
+```
+
+## A simple HTTP request function
+
+Most likely you'll want to do a `GET` request - so let's start with that - 
+though the details are not much different for other HTTP verbs.
+
+And in most cases you'll likely not want to do asynchronous requests - though
+see below if you do.
+
+You'll probably want to write a small function, like so (annotated for 
+clarity)
+
+
+
+```r
+make_request <- function(url) {
+  # create a HttpClient object, defining the url
+  cli <- crul::HttpClient$new(url = url)
+  # do a GET request
+  res <- cli$get()
+  # check to see if request failed or succeeded
+  # - if succeeds this will return nothing and proceeds to next step
+  res$raise_for_status()
+  # parse response to plain text (JSON in this case) - most likely you'll 
+  # want UTF-8 encoding
+  txt <- res$parse("UTF-8")
+  # parse the JSON to an R list
+  jsonlite::fromJSON(txt)
+}
+```
+
+Use the function
+
+
+
+```r
+make_request("https://httpbin.org/get")
+#> $args
+#> named list()
+#> 
+#> $headers
+#> $headers$Accept
+#> [1] "application/json, text/xml, application/xml, */*"
+#> 
+#> $headers$`Accept-Encoding`
+#> [1] "gzip, deflate"
+#> 
+#> $headers$Host
+#> [1] "httpbin.org"
+#> 
+#> $headers$`User-Agent`
+#> [1] "libcurl/7.64.1 r-curl/4.3 crul/0.9.2.93"
+#> 
+#> $headers$`X-Amzn-Trace-Id`
+#> [1] "Root=1-5f077ab0-7142dc982d077268af3d2a28"
+#> 
+#> 
+#> $origin
+#> [1] "24.21.229.59"
+#> 
+#> $url
+#> [1] "https://httpbin.org/get"
+```
+
+Now you can use the `make_request` function in your script or package.
+
+## More customized function
+
+Once you get more familiar (or if you're already familiar with HTTP) you may
+want to have more control, toggle more switches.
+
+In the next function, we'll allow for users to pass in curl options, use 
+a custom HTTP status checker, and xxx.
+
+
+
+```r
+make_request2 <- function(url, ...) {
+  # create a HttpClient object, defining the url
+  cli <- crul::HttpClient$new(url = url)
+  # do a GET request, allow curl options to be passed in
+  res <- cli$get(...)
+  # check to see if request failed or succeeded
+  # - a custom approach this time combining status code, 
+  #   explanation of the code, and message from the server
+  if (res$status_code > 201) {
+    mssg <- jsonlite::fromJSON(res$parse("UTF-8"))$message$message
+    x <- res$status_http()
+    stop(
+      sprintf("HTTP (%s) - %s\n  %s", x$status_code, x$explanation, mssg),
+      call. = FALSE
+    )
+  }
+  # parse response
+  txt <- res$parse("UTF-8")
+  # parse the JSON to an R list
+  jsonlite::fromJSON(txt)
+}
+```
+
+Use the function
+
+
+
+```r
+make_request2("https://api.crossref.org/works?rows=0")
+#> $status
+#> [1] "ok"
+#> 
+#> $`message-type`
+#> [1] "work-list"
+#> 
+#> $`message-version`
+#> [1] "1.0.0"
+#> 
+#> $message
+#> $message$facets
+#> named list()
+#> 
+#> $message$`total-results`
+#> [1] 115235329
+#> 
+#> $message$items
+#> list()
+#> 
+#> $message$`items-per-page`
+#> [1] 0
+#> 
+#> $message$query
+#> $message$query$`start-index`
+#> [1] 0
+#> 
+#> $message$query$`search-terms`
+#> NULL
+```
+
+No different from the first function (besides the URL). However, now we can 
+pass in curl options:
+
+
+```r
+make_request2("https://api.crossref.org/works?rows=0", verbose = TRUE)
+make_request2("https://api.crossref.org/works?rows=0", timeout_ms = 1)
+```
+
+We can also pass named parameters supported in the `get` method, including
+`query`, `disk`, and `stream`.
+
+
+
+```r
+make_request2("https://api.crossref.org/works", query = list(rows = 0))
+#> $status
+#> [1] "ok"
+#> 
+#> $`message-type`
+#> [1] "work-list"
+#> 
+#> $`message-version`
+#> [1] "1.0.0"
+#> 
+#> $message
+#> $message$facets
+#> named list()
+#> 
+#> $message$`total-results`
+#> [1] 115235329
+#> 
+#> $message$items
+#> list()
+#> 
+#> $message$`items-per-page`
+#> [1] 0
+#> 
+#> $message$query
+#> $message$query$`start-index`
+#> [1] 0
+#> 
+#> $message$query$`search-terms`
+#> NULL
+```
+
+In addition, the failure behavior is different, and customized to the 
+specific web resource we are working with
+
+
+```r
+make_request2("https://api.crossref.org/works?rows=asdf")
+#> Error: HTTP (400) - Bad request syntax or unsupported method
+#>   Integer specified as asdf but must be a positive integer less than or equal to 1000.
+```
+
+## Asynchronous requests
+
+You may want to use asynchronous HTTP requests when any one HTTP request 
+takes "too long". This is of course all relative. You may be dealing with a 
+server that responds very slowly, or other circumstances. 
+
+See the __async with crul__ vignette for more details on asynchronous requests.

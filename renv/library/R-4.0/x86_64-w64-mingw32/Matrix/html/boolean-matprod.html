@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Boolean Arithmetic Matrix Products: '%&amp;%' and Methods</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for %&amp;amp;%-methods {Matrix}"><tr><td>%&amp;%-methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Boolean Arithmetic Matrix Products: <code>%&amp;%</code> and Methods</h2>
+
+<h3>Description</h3>
+
+<p>For boolean or &ldquo;patter<b>n</b>&rdquo; matrices, i.e., <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> objects of
+class <code><a href="nMatrix-class.html">nMatrix</a></code>, it is natural to allow matrix
+products using boolean instead of numerical arithmetic.
+</p>
+<p>In package <span class="pkg">Matrix</span>, we use the binary operator <code>%&amp;%</code> (aka
+&ldquo;infix&rdquo;) function) for this and provide methods for all our
+matrices and the traditional <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> matrices (see <code><a href="../../base/html/matrix.html">matrix</a></code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>a pattern matrix, i.e., inheriting from <code>"<a href="nMatrix-class.html">nMatrix</a>"</code>,
+or an <code>"<a href="ldiMatrix-class.html">ldiMatrix</a>"</code> in case of a diagonal matrix.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>We provide methods for both the &ldquo;traditional&rdquo; (<span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> base) matrices
+and numeric vectors and conceptually all matrices and
+<code><a href="sparseVector-class.html">sparseVector</a></code>s in package <span class="pkg">Matrix</span>.
+</p>
+
+<dl>
+<dt><code>signature(x = "ANY", y = "ANY")</code></dt><dd> </dd>
+<dt><code>signature(x = "ANY", y = "Matrix")</code></dt><dd> </dd>
+<dt><code>signature(x = "Matrix", y = "ANY")</code></dt><dd> </dd>
+<dt><code>signature(x = "mMatrix", y = "mMatrix")</code></dt><dd> </dd>
+<dt><code>signature(x = "nMatrix", y = "nMatrix")</code></dt><dd> </dd>
+<dt><code>signature(x = "nMatrix", y = "nsparseMatrix")</code></dt><dd> </dd>
+<dt><code>signature(x = "nsparseMatrix", y = "nMatrix")</code></dt><dd> </dd>
+<dt><code>signature(x = "nsparseMatrix", y = "nsparseMatrix")</code></dt><dd> </dd>
+<dt><code>signature(x = "sparseVector", y = "mMatrix")</code></dt><dd> </dd>
+<dt><code>signature(x = "mMatrix", y = "sparseVector")</code></dt><dd> </dd>
+<dt><code>signature(x = "sparseVector", y = "sparseVector")</code></dt><dd> </dd>
+</dl>
+
+
+
+<h3>Note</h3>
+
+<p>The current implementation ends up coercing both <code>x</code> and <code>y</code>
+to (virtual) class <code><a href="nsparseMatrix-classes.html">nsparseMatrix</a></code> which may be
+quite inefficient.  A future implementation may well return a matrix
+with <b>different</b> class, but the &ldquo;same&rdquo; content, i.e., the
+same matrix entries <i>m[i,j]</i>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+set.seed(7)
+L &lt;- Matrix(rnorm(20) &gt; 1,    4,5)
+(N &lt;- as(L, "nMatrix"))
+D &lt;- Matrix(round(rnorm(30)), 5,6) # -&gt; values in -1:1 (for this seed)
+L %&amp;% D
+stopifnot(identical(L %&amp;% D, N %&amp;% D),
+          all(L %&amp;% D == as((L %*% abs(D)) &gt; 0, "sparseMatrix")))
+
+## cross products , possibly with  boolArith = TRUE :
+crossprod(N)     # -&gt; sparse patter'n' (TRUE/FALSE : boolean arithmetic)
+crossprod(N  +0) # -&gt; numeric Matrix (with same "pattern")
+stopifnot(all(crossprod(N) == t(N) %&amp;% N),
+          identical(crossprod(N), crossprod(N +0, boolArith=TRUE)),
+          identical(crossprod(L), crossprod(N   , boolArith=FALSE)))
+crossprod(D, boolArith =  TRUE) # pattern: "nsCMatrix"
+crossprod(L, boolArith =  TRUE) #  ditto
+crossprod(L, boolArith = FALSE) # numeric: "dsCMatrix"
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

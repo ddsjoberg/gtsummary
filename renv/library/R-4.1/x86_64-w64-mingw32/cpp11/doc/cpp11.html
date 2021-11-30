@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Get started with cpp11</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Get started with cpp11</h1>
+
+
+
+<p><em>This content is adapted (with permission) from the <a href="https://adv-r.hadley.nz/rcpp.html">Rcpp chapter</a> of Hadley Wickham’s book Advanced R.</em></p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Sometimes R code just isn’t fast enough. You’ve used profiling to figure out where your bottlenecks are, and you’ve done everything you can in R, but your code still isn’t fast enough. In this vignette you’ll learn how to improve performance by rewriting key functions in C++. This magic comes by way of the <a href="https://github.com/r-lib/cpp11">cpp11</a> package.</p>
+<p>cpp11 makes it very simple to connect C++ to R. While it is <em>possible</em> to write C or Fortran code for use in R, it will be painful by comparison. cpp11 provides a clean, approachable API that lets you write high-performance code, insulated from R’s more complex C API.</p>
+<p>Typical bottlenecks that C++ can address include:</p>
+<ul>
+<li><p>Loops that can’t be easily vectorised because subsequent iterations depend on previous ones.</p></li>
+<li><p>Recursive functions, or problems which involve calling functions millions of times. The overhead of calling a function in C++ is much lower than in R.</p></li>
+<li><p>Problems that require advanced data structures and algorithms that R doesn’t provide. Through the standard template library (STL), C++ has efficient implementations of many important data structures, from ordered maps to double-ended queues.</p></li>
+</ul>
+<p>The aim of this vignette is to discuss only those aspects of C++ and cpp11 that are absolutely necessary to help you eliminate bottlenecks in your code. We won’t spend much time on advanced features like object-oriented programming or templates because the focus is on writing small, self-contained functions, not big programs. A working knowledge of C++ is helpful, but not essential. Many good tutorials and references are freely available, including <a href="https://www.learncpp.com/" class="uri">https://www.learncpp.com/</a> and <a href="https://en.cppreference.com/w/cpp" class="uri">https://en.cppreference.com/w/cpp</a>. For more advanced topics, the <em>Effective C++</em> series by Scott Meyers is a popular choice.</p>
+<div id="outline" class="section level3">
+<h3>Outline</h3>
+<ul>
+<li><p>Section <a href="#intro">intro</a> teaches you how to write C++ by converting simple R functions to their C++ equivalents. You’ll learn how C++ differs from R, and what the key scalar, vector, and matrix classes are called.</p></li>
+<li><p>Section <a href="#cpp-source">cpp_source</a> shows you how to use <code>cpp11::cpp_source()</code> to load a C++ file from disk in the same way you use <code>source()</code> to load a file of R code.</p></li>
+<li><p>Section <a href="#classes">classes</a> discusses how to modify attributes from cpp11, and mentions some of the other important classes.</p></li>
+<li><p>Section <a href="#na">na</a> teaches you how to work with R’s missing values in C++.</p></li>
+<li><p>Section <a href="#stl">stl</a> shows you how to use some of the most important data structures and algorithms from the standard template library, or STL, built-in to C++.</p></li>
+<li><p>Section <a href="#case-studies">case-studies</a> shows two real case studies where cpp11 was used to get considerable performance improvements.</p></li>
+<li><p>Section <a href="#package">package</a> teaches you how to add C++ code to an R package.</p></li>
+<li><p>Section <a href="#more">more</a> concludes the vignette with pointers to more resources to help you learn cpp11 and C++.</p></li>
+</ul>
+</div>
+<div id="prerequisites" class="section level3">
+<h3>Prerequisites</h3>
+<p>We’ll use <a href="https://github.com/r-lib/cpp11">cpp11</a> to call C++ from R:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cpp11)</span></code></pre></div>
+<p>You’ll also need a working C++ compiler. To get it:</p>
+<ul>
+<li>On Windows, install <a href="https://CRAN.R-project.org/bin/windows/Rtools/">Rtools</a>.</li>
+<li>On Mac, install Xcode from the app store.</li>
+<li>On Linux, <code>sudo apt-get install r-base-dev</code> or similar.</li>
+</ul>
+</div>
+</div>
+<div id="intro" class="section level2">
+<h2>Getting started with C++</h2>
+<p><code>cpp_function()</code> allows you to write C++ functions in R:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_function</span>(<span class="st">&#39;int add(int x, int y, int z) {</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">  int sum = x + y + z;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">  return sum;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">}&#39;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># add works like a regular R function</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>add</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; function (x, y, z) </span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     .Call(&quot;_code_11a4b6d4da9e5_add&quot;, x, y, z, PACKAGE = &quot;code_11a4b6d4da9e5&quot;)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; }</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">add</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 6</span></span></code></pre></div>
+<p>When you run the above code, cpp11 will compile the C++ code and construct an R function that connects to the compiled C++ function. There’s a lot going on underneath the hood but cpp11 takes care of all the details so you don’t need to worry about them.</p>
+<p>The following sections will teach you the basics by translating simple R functions to their C++ equivalents. We’ll start simple with a function that has no inputs and a scalar output, and then make it progressively more complicated:</p>
+<ul>
+<li>Scalar input and scalar output</li>
+<li>Vector input and scalar output</li>
+<li>Vector input and vector output</li>
+<li>Matrix input and vector output</li>
+</ul>
+<div id="no-inputs-scalar-output" class="section level3">
+<h3>No inputs, scalar output</h3>
+<p>Let’s start with a very simple function. It has no arguments and always returns the integer 1:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>one <span class="ot">&lt;-</span> <span class="cf">function</span>() 1L</span></code></pre></div>
+<p>The equivalent C++ function is:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> one<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>We can compile and use this from R with <code>cpp_function()</code></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_function</span>(<span class="st">&#39;int one() {</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="st">  return 1;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">}&#39;</span>)</span></code></pre></div>
+<p>This small function illustrates a number of important differences between R and C++:</p>
+<ul>
+<li><p>The syntax to create a function looks like the syntax to call a function; you don’t use assignment to create functions as you do in R.</p></li>
+<li><p>You must declare the type of output the function returns. This function returns an <code>int</code> (a scalar integer). The classes for the most common types of R vectors are: <code>doubles</code>, <code>integers</code>, <code>strings</code>, and <code>logicals</code>.</p></li>
+<li><p>Scalars and vectors are different. The scalar equivalents of numeric, integer, character, and logical vectors are: <code>double</code>, <code>int</code>, <code>String</code>, and <code>bool</code>.</p></li>
+<li><p>You must use an explicit <code>return</code> statement to return a value from a function.</p></li>
+<li><p>Every statement is terminated by a <code>;</code>.</p></li>
+</ul>
+</div>
+<div id="scalar-input-scalar-output" class="section level3">
+<h3>Scalar input, scalar output</h3>
+<p>The next example function implements a scalar version of the <code>sign()</code> function which returns 1 if the input is positive, and -1 if it’s negative:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sign_r <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (x <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (x <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="sc">-</span><span class="dv">1</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_function</span>(<span class="st">&#39;int sign_cpp(int x) {</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="st">  if (x &gt; 0) {</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="st">    return 1;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="st">  } else if (x == 0) {</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="st">    return 0;</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="st">  } else {</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="st">    return -1;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="st">}&#39;</span>)</span></code></pre></div>
+<p>In the C++ version:</p>
+<ul>
+<li><p>We declare the type of each input in the same way we declare the type of the output. While this makes the code a little more verbose, it also makes clear the type of input the function needs.</p></li>
+<li><p>The <code>if</code> syntax is identical — while there are some big differences between R and C++, there are also lots of similarities! C++ also has a <code>while</code> statement that works the same way as R’s. As in R you can use <code>break</code> to exit the loop, but to skip one iteration you need to use <code>continue</code> instead of <code>next</code>.</p></li>
+</ul>
+</div>
+<div id="vector-input-scalar-output" class="section level3">
+<h3>Vector input, scalar output</h3>
+<p>One big difference between R and C++ is that the cost of loops is much lower in C++. For example, we could implement the <code>sum</code> function in R using a loop. If you’ve been programming in R a while, you’ll probably have a visceral reaction to this function!</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sum_r <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  total <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(x)) {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    total <span class="ot">&lt;-</span> total <span class="sc">+</span> x[i]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  total</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In C++, loops have very little overhead, so it’s fine to use them. In Section <a href="#stl">stl</a>, you’ll see alternatives to <code>for</code> loops that more clearly express your intent; they’re not faster, but they can make your code easier to understand.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_function</span>(<span class="st">&#39;double sum_cpp(doubles x) {</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="st">  int n = x.size();</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">  double total = 0;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">  for(int i = 0; i &lt; n; ++i) {</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="st">    total += x[i];</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="st">  return total;</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="st">}&#39;</span>)</span></code></pre></div>
+<p>The C++ version is similar, but:</p>
+<ul>
+<li><p>To find the length of the vector, we use the <code>.size()</code> method, which returns an integer. C++ methods are called with <code>.</code> (i.e., a full stop).</p></li>
+<li><p>The <code>for</code> statement has a different syntax: <code>for(init; check; increment)</code>. This loop is initialised by creating a new variable called <code>i</code> with value 0. Before each iteration we check that <code>i &lt; n</code>, and terminate the loop if it’s not. After each iteration, we increment the value of <code>i</code> by one, using the special prefix operator <code>++</code> which increases the value of <code>i</code> by 1.</p></li>
+<li><p>In C++, vector indices start at 0, which means that the last element is at position <code>n - 1</code>. I’ll say this again because it’s so important: <strong>IN C++, VECTOR INDICES START AT 0</strong>! This is a very common source of bugs when converting R functions to C++.</p></li>
+<li><p>Use <code>=</code> for assignment, not <code>&lt;-</code>.</p></li>
+<li><p>C++ provides operators that modify in-place: <code>total += x[i]</code> is equivalent to <code>total = total + x[i]</code>. Similar in-place operators are <code>-=</code>, <code>*=</code>, and <code>/=</code>.</p></li>
+</ul>
+<p>This is a good example of where C++ is much more efficient than R. As shown by the following microbenchmark, <code>sumC()</code> is competitive with the built-in (and highly optimised) <code>sum()</code>, while <code>sumR()</code> is several orders of magnitude slower.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="fl">1e3</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(x),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_cpp</span>(x),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_r</span>(x)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 6</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   expression      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 sum(x)       2.06µs   2.34µs   397806.        0B     0   </span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 sum_cpp(x)   3.31µs   3.58µs   241680.        0B     0   </span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 sum_r(x)    19.73µs  21.26µs    43602.    21.3KB     4.36</span></span></code></pre></div>
+</div>
+<div id="vector-input-vector-output" class="section level3">
+<h3>Vector input, vector output</h3>
+<!-- FIXME: come up with better example. Also fix in two other places it occurs -->
+<p>Next we’ll create a function that computes the Euclidean distance between a value and a vector of values:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pdist_r <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ys) {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sqrt</span>((x <span class="sc">-</span> ys) <span class="sc">^</span> <span class="dv">2</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In R, it’s not obvious that we want <code>x</code> to be a scalar from the function definition, and we’d need to make that clear in the documentation. That’s not a problem in the C++ version because we have to be explicit about types:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_function</span>(<span class="st">&#39;doubles pdist_cpp(double x, doubles ys) {</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="st">  int n = ys.size();</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="st">  writable::doubles out(n);</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="st">  for(int i = 0; i &lt; n; ++i) {</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="st">    out[i] = sqrt(pow(ys[i] - x, 2.0));</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="st">  }</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="st">  return out;</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="st">}&#39;</span>)</span></code></pre></div>
+<p>This function introduces a few new concepts:</p>
+<ul>
+<li><p>Because we are creating a new vector we need to use <code>writable::doubles</code> rather than the read-only <code>doubles</code>.</p></li>
+<li><p>We create a new numeric vector of length <code>n</code> with a constructor: <code>cpp11::writable::doubles out(n)</code>. Another useful way of making a vector is to copy an existing one: <code>cpp11::doubles zs(ys)</code>.</p></li>
+<li><p>C++ uses <code>pow()</code>, not <code>^</code>, for exponentiation.</p></li>
+</ul>
+<p>Note that because the R version is fully vectorised, it’s already going to be fast.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="fl">1e6</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pdist_r</span>(<span class="fl">0.5</span>, y),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pdist_cpp</span>(<span class="fl">0.5</span>, y)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 6</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   expression             min   median `itr/sec` mem_alloc `gc/sec`</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;bch:expr&gt;        &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 pdist_r(0.5, y)      4.3ms   4.74ms      179.    7.63MB     50.5</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 pdist_cpp(0.5, y)    2.5ms   2.62ms      343.    7.63MB     82.2</span></span></code></pre></div>
+<p>On my computer, it takes around 5 ms with a 1 million element <code>y</code> vector. The C++ function is about 2.5 times faster, ~2 ms, but assuming it took you 10 minutes to write the C++ function, you’d need to run it ~200,000 times to make rewriting worthwhile. The reason why the C++ function is faster is subtle, and relates to memory management. The R version needs to create an intermediate vector the same length as y (<code>x - ys</code>), and allocating memory is an expensive operation. The C++ function avoids this overhead because it uses an intermediate scalar.</p>
+</div>
+<div id="cpp-source" class="section level3">
+<h3>Using cpp_source</h3>
+<p>So far, we’ve used inline C++ with <code>cpp_function()</code>. This makes presentation simpler, but for real problems, it’s usually easier to use stand-alone C++ files and then source them into R using <code>cpp_source()</code>. This lets you take advantage of text editor support for C++ files (e.g., syntax highlighting) as well as making it easier to identify the line numbers in compilation errors.</p>
+<p>Your stand-alone C++ file should have extension <code>.cpp</code>, and needs to start with:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span></code></pre></div>
+<p>And for each function that you want available within R, you need to prefix it with:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span></code></pre></div>
+<p>If you’re familiar with roxygen2, you might wonder how this relates to <code>@export</code>. <code>cpp11::register</code> registers a C++ function to be called from R. <code>@export</code> controls whether a function is exported from a package and made available to the user.</p>
+<p>To compile the C++ code, use <code>cpp_source(&quot;path/to/file.cpp&quot;)</code>. This will create the matching R functions and add them to your current session. Note that these functions can not be saved in a <code>.Rdata</code> file and reloaded in a later session; they must be recreated each time you restart R.</p>
+<p>This example also illustrates a different kind of a <code>for</code> loop, a for-each loop.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11/doubles.hpp&quot;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> mean_cpp<span class="op">(</span>doubles x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> n <span class="op">=</span> x<span class="op">.</span>size<span class="op">();</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="dt">double</span> value <span class="op">:</span> x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    total <span class="op">+=</span> value<span class="op">;</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> total <span class="op">/</span> n<span class="op">;</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>NB: if you run this code, you’ll notice that <code>mean_cpp()</code> is faster than the built-in <code>mean()</code>. This is because it trades numerical accuracy for speed.</p>
+<p>For the remainder of this vignette C++ code will be presented stand-alone rather than wrapped in a call to <code>cpp_function</code>. If you want to try compiling and/or modifying the examples you should paste them into a C++ source file that includes the elements described above. This is easy to do in RMarkdown by using <code>{cpp11}</code> instead of <code>{r}</code> at the beginning of your code blocks.</p>
+</div>
+<div id="exercises" class="section level3">
+<h3>Exercises</h3>
+<ol style="list-style-type: decimal">
+<li>With the basics of C++ in hand, it’s now a great time to practice by reading and writing some simple C++ functions. For each of the following functions, read the code and figure out what the corresponding base R function is. You might not understand every part of the code yet, but you should be able to figure out the basics of what the function does.</li>
+</ol>
+<div class="sourceCode" id="cb16"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> writable <span class="op">=</span> cpp11<span class="op">::</span>writable<span class="op">;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> f1<span class="op">(</span>doubles x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> n <span class="op">=</span> x<span class="op">.</span>size<span class="op">();</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    y <span class="op">+=</span> x<span class="op">[</span>i<span class="op">]</span> <span class="op">/</span> n<span class="op">;</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> y<span class="op">;</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>doubles f2<span class="op">(</span>doubles x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> n <span class="op">=</span> x<span class="op">.</span>size<span class="op">();</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  writable<span class="op">::</span>doubles out<span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  out<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> x<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    out<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> out<span class="op">[</span>i <span class="op">-</span> <span class="dv">1</span><span class="op">]</span> <span class="op">+</span> x<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> out<span class="op">;</span></span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a><span class="dt">bool</span> f3<span class="op">(</span>logicals x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> n <span class="op">=</span> x<span class="op">.</span>size<span class="op">();</span></span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>x<span class="op">[</span>i<span class="op">])</span> <span class="op">{</span></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> f4<span class="op">(</span>cpp11<span class="op">::</span>function pred<span class="op">,</span> list x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> n <span class="op">=</span> x<span class="op">.</span>size<span class="op">();</span></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>    logicals res<span class="op">(</span>pred<span class="op">(</span>x<span class="op">[</span>i<span class="op">]));</span></span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>res<span class="op">[</span><span class="dv">0</span><span class="op">])</span> <span class="op">{</span></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> i <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<ol style="list-style-type: decimal">
+<li><p>To practice your function writing skills, convert the following functions into C++. For now, assume the inputs have no missing values.</p>
+<ol style="list-style-type: decimal">
+<li><p><code>all()</code>.</p></li>
+<li><p><code>cumprod()</code>, <code>cummin()</code>, <code>cummax()</code>.</p></li>
+<li><p><code>diff()</code>. Start by assuming lag 1, and then generalise for lag <code>n</code>.</p></li>
+<li><p><code>range()</code>.</p></li>
+<li><p><code>var()</code>. Read about the approaches you can take on <a href="https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance">Wikipedia</a>. Whenever implementing a numerical algorithm, it’s always good to check what is already known about the problem.</p></li>
+</ol></li>
+</ol>
+</div>
+</div>
+<div id="classes" class="section level2">
+<h2>Other classes</h2>
+<p>You’ve already seen the basic vector classes (<code>integers</code>, <code>doubles</code>, <code>logicals</code>, <code>strings</code>) and their scalar (<code>int</code>, <code>double</code>, <code>bool</code>, <code>string</code>) equivalents. cpp11 also provides wrappers for other base data types. The most important are for lists and data frames, functions, and attributes, as described below.</p>
+<div id="lists-and-data-frames" class="section level3">
+<h3>Lists and data frames</h3>
+<p>cpp11 also provides <code>list</code> and <code>data_frame</code> classes, but they are more useful for output than input. This is because lists and data frames can contain arbitrary classes but C++ needs to know their classes in advance. If the list has known structure (e.g., it’s an S3 object), you can extract the components and manually convert them to their C++ equivalents with <code>as_cpp()</code>. For example, the object created by <code>lm()</code>, the function that fits a linear model, is a list whose components are always of the same type.</p>
+<p>The following code illustrates how you might extract the mean percentage error (<code>mpe()</code>) of a linear model. This isn’t a good example of when to use C++, because it’s so easily implemented in R, but it shows how to work with an important S3 class. Note the use of <code>Rf_inherits()</code> and the <code>stop()</code> to check that the object really is a linear model.</p>
+<!-- FIXME: needs better motivation -->
+<div class="sourceCode" id="cb17"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> mpe<span class="op">(</span>list mod<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="op">(!</span>Rf_inherits<span class="op">(</span>mod<span class="op">,</span> <span class="st">&quot;lm&quot;</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    stop<span class="op">(</span><span class="st">&quot;Input must be a linear model&quot;</span><span class="op">);</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  doubles resid<span class="op">(</span>mod<span class="op">[</span><span class="st">&quot;residuals&quot;</span><span class="op">]);</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  doubles fitted<span class="op">(</span>mod<span class="op">[</span><span class="st">&quot;fitted.values&quot;</span><span class="op">]);</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> n <span class="op">=</span> resid<span class="op">.</span>size<span class="op">();</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> err <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    err <span class="op">+=</span> resid<span class="op">[</span>i<span class="op">]</span> <span class="op">/</span> <span class="op">(</span>fitted<span class="op">[</span>i<span class="op">]</span> <span class="op">+</span> resid<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> err <span class="op">/</span> n<span class="op">;</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mpe</span>(mod)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] -0.01541615</span></span></code></pre></div>
+</div>
+<div id="functions-cpp11" class="section level3">
+<h3>Functions</h3>
+<p>You can put R functions in an object of type <code>function</code>. This makes calling an R function from C++ straightforward. The only challenge is that we don’t know what type of output the function will return, so we use the catchall type <code>sexp</code>. This stands for S-Expression and is used as the type of all R Objects in the internal C code.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> writable <span class="op">=</span> cpp11<span class="op">::</span>writable<span class="op">;</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>sexp call_with_one<span class="op">(</span>function f<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> f<span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">call_with_one</span>(<span class="cf">function</span>(x) x <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">call_with_one</span>(paste)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;1&quot;</span></span></code></pre></div>
+<p>Calling R functions with positional arguments is obvious:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>f<span class="op">(</span><span class="st">&quot;y&quot;</span><span class="op">,</span> <span class="dv">1</span><span class="op">);</span></span></code></pre></div>
+<p>But you need a special syntax for named arguments:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">::</span>literals<span class="op">;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>f<span class="op">(</span><span class="st">&quot;x&quot;_nm</span> <span class="op">=</span> <span class="st">&quot;y&quot;</span><span class="op">,</span> <span class="st">&quot;value&quot;_nm</span> <span class="op">=</span> <span class="dv">1</span><span class="op">);</span></span></code></pre></div>
+</div>
+<div id="attributes" class="section level3">
+<h3>Attributes</h3>
+<p>All R objects have attributes, which can be queried and modified with <code>.attr()</code>. cpp11 also provides <code>.names()</code> as an alias for the <code>names</code> attribute. The following code snippet illustrates these methods. Note the use of <code>{}</code> <a href="https://en.cppreference.com/w/cpp/utility/initializer_list">initializer list</a> syntax. This allows you to create an R vector from C++ scalar values:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> writable <span class="op">=</span> cpp11<span class="op">::</span>writable<span class="op">;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>doubles attribs<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  writable<span class="op">::</span>doubles out <span class="op">=</span> <span class="op">{</span><span class="fl">1.</span><span class="op">,</span> <span class="fl">2.</span><span class="op">,</span> <span class="fl">3.</span><span class="op">};</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  out<span class="op">.</span>names<span class="op">()</span> <span class="op">=</span> <span class="op">{</span><span class="st">&quot;a&quot;</span><span class="op">,</span> <span class="st">&quot;b&quot;</span><span class="op">,</span> <span class="st">&quot;c&quot;</span><span class="op">};</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  out<span class="op">.</span>attr<span class="op">(</span><span class="st">&quot;my-attr&quot;</span><span class="op">)</span> <span class="op">=</span> <span class="st">&quot;my-value&quot;</span><span class="op">;</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  out<span class="op">.</span>attr<span class="op">(</span><span class="st">&quot;class&quot;</span><span class="op">)</span> <span class="op">=</span> <span class="st">&quot;my-class&quot;</span><span class="op">;</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> out<span class="op">;</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+</div>
+<div id="na" class="section level2">
+<h2>Missing values</h2>
+<p>If you’re working with missing values, you need to know two things: * How R’s missing values behave in C++’s scalars (e.g., <code>double</code>). * How to get and set missing values in vectors (e.g., <code>doubles</code>).</p>
+<div id="scalars" class="section level3">
+<h3>Scalars</h3>
+<p>The following code explores what happens when you take one of R’s missing values, coerce it into a scalar, and then coerce back to an R vector. Note that this kind of experimentation is a useful way to figure out what any operation does.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>list scalar_missings<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> int_s <span class="op">=</span> NA_INTEGER<span class="op">;</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  r_string chr_s <span class="op">=</span> NA_STRING<span class="op">;</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">bool</span> lgl_s <span class="op">=</span> NA_LOGICAL<span class="op">;</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> num_s <span class="op">=</span> NA_REAL<span class="op">;</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> writable<span class="op">::</span>list<span class="op">({</span>as_sexp<span class="op">(</span>int_s<span class="op">),</span> as_sexp<span class="op">(</span>chr_s<span class="op">),</span> as_sexp<span class="op">(</span>lgl_s<span class="op">),</span> as_sexp<span class="op">(</span>num_s<span class="op">)});</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(<span class="fu">scalar_missings</span>())</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; List of 4</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : int NA</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : chr NA</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : logi TRUE</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : num NA</span></span></code></pre></div>
+<p>With the exception of <code>bool</code>, things look pretty good here: all of the missing values have been preserved. However, as we’ll see in the following sections, things are not quite as straightforward as they seem.</p>
+<div id="integers" class="section level4">
+<h4>Integers</h4>
+<p>With integers, missing values are stored as the smallest integer. If you don’t do anything to them, they’ll be preserved. But, since C++ doesn’t know that the smallest integer has this special behaviour, if you do anything to it you’re likely to get an incorrect value: for example, <code>cpp_eval(&#39;NA_INTEGER + 1&#39;)</code> gives -2147483647.</p>
+<p>So if you want to work with missing values in integers, either use a length 1 <code>integers</code> or be very careful with your code.</p>
+</div>
+<div id="doubles" class="section level4">
+<h4>Doubles</h4>
+<p>With doubles, you may be able to get away with ignoring missing values and working with NaNs (not a number). This is because R’s NA is a special type of IEEE 754 floating point number NaN. So any logical expression that involves a NaN (or in C++, NAN) always evaluates as FALSE:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_eval</span>(<span class="st">&quot;NAN == 1&quot;</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_eval</span>(<span class="st">&quot;NAN &lt; 1&quot;</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_eval</span>(<span class="st">&quot;NAN &gt; 1&quot;</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_eval</span>(<span class="st">&quot;NAN == NAN&quot;</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<p>(Here I’m using <code>cpp_eval()</code> which allows you to see the result of running a single C++ expression, making it excellent for this sort of interactive experimentation.) But be careful when combining them with Boolean values:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_eval</span>(<span class="st">&quot;NAN &amp;&amp; TRUE&quot;</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_eval</span>(<span class="st">&quot;NAN || FALSE&quot;</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>However, in numeric contexts NaNs will propagate NAs:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_eval</span>(<span class="st">&quot;NAN + 1&quot;</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NaN</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_eval</span>(<span class="st">&quot;NAN - 1&quot;</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NaN</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_eval</span>(<span class="st">&quot;NAN / 1&quot;</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NaN</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cpp_eval</span>(<span class="st">&quot;NAN * 1&quot;</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] NaN</span></span></code></pre></div>
+</div>
+</div>
+<div id="strings" class="section level3">
+<h3>Strings</h3>
+<p><code>String</code> is a scalar string class introduced by cpp11, so it knows how to deal with missing values.</p>
+</div>
+<div id="boolean" class="section level3">
+<h3>Boolean</h3>
+<p>C++’s <code>bool</code> has two possible values (<code>true</code> or <code>false</code>), a logical vector in R has three (<code>TRUE</code>, <code>FALSE</code>, and <code>NA</code>). If you coerce a length 1 logical vector, make sure it doesn’t contain any missing values; otherwise they will be converted to TRUE. One way to fix this is to use <code>int</code> instead, as this can represent <code>TRUE</code>, <code>FALSE</code>, and <code>NA</code>.</p>
+</div>
+<div id="vectors-cpp11" class="section level3">
+<h3>Vectors</h3>
+<p>With vectors, you need to use a missing value specific to the type of vector, <code>NA_REAL</code>, <code>NA_INTEGER</code>, <code>NA_LOGICAL</code>, <code>NA_STRING</code>:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> writable <span class="op">=</span> cpp11<span class="op">::</span>writable<span class="op">;</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>list missing_sampler<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> writable<span class="op">::</span>list<span class="op">({</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    writable<span class="op">::</span>doubles<span class="op">({</span>NA_REAL<span class="op">}),</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>    writable<span class="op">::</span>integers<span class="op">({</span>NA_INTEGER<span class="op">}),</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    writable<span class="op">::</span>logicals<span class="op">({</span>r_bool<span class="op">(</span>NA_LOGICAL<span class="op">)}),</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    writable<span class="op">::</span>strings<span class="op">({</span>NA_STRING<span class="op">})</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">});</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(<span class="fu">missing_sampler</span>())</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; List of 4</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : num NA</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : int NA</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : logi NA</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ : chr NA</span></span></code></pre></div>
+</div>
+<div id="exercises-1" class="section level3">
+<h3>Exercises</h3>
+<ol style="list-style-type: decimal">
+<li><p>Rewrite any of the functions from the first exercise to deal with missing values. If <code>na_rm</code> is true, ignore the missing values. If <code>na_rm</code> is false, return a missing value if the input contains any missing values. Some good functions to practice with are <code>min()</code>, <code>max()</code>, <code>range()</code>, <code>mean()</code>, and <code>var()</code>.</p></li>
+<li><p>Rewrite <code>cumsum()</code> and <code>diff()</code> so they can handle missing values. Note that these functions have slightly more complicated behaviour.</p></li>
+</ol>
+</div>
+</div>
+<div id="stl" class="section level2">
+<h2>Standard Template Library</h2>
+<p>The real strength of C++ is revealed when you need to implement more complex algorithms. The standard template library (STL) provides a set of extremely useful data structures and algorithms. This section will explain some of the most important algorithms and data structures and point you in the right direction to learn more. I can’t teach you everything you need to know about the STL, but hopefully the examples will show you the power of the STL, and persuade you that it’s useful to learn more.</p>
+<p>If you need an algorithm or data structure that isn’t implemented in STL, one place to look is <a href="https://www.boost.org/doc/">boost</a>. Installing boost on your computer is beyond the scope of this vignette, but once you have it installed, you can use boost data structures and algorithms by including the appropriate header file with (e.g.) <code>#include &lt;boost/array.hpp&gt;</code>.</p>
+<div id="using-iterators" class="section level3">
+<h3>Using iterators</h3>
+<p>Iterators are used extensively in the STL: many functions either accept or return iterators. They are the next step up from basic loops, abstracting away the details of the underlying data structure. Iterators have three main operators:</p>
+<ol style="list-style-type: decimal">
+<li>Advance with <code>++</code>.</li>
+<li>Get the value they refer to, or <strong>dereference</strong>, with <code>*</code>.</li>
+<li>Compare with <code>==</code>.</li>
+</ol>
+<p>For example we could re-write our sum function using iterators:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> sum2<span class="op">(</span>doubles x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="kw">auto</span> it <span class="op">=</span> x<span class="op">.</span>begin<span class="op">();</span> it <span class="op">!=</span> x<span class="op">.</span>end<span class="op">();</span> <span class="op">++</span>it<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    total <span class="op">+=</span> <span class="op">*</span>it<span class="op">;</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> total<span class="op">;</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The main changes are in the for loop:</p>
+<ul>
+<li><p>We start at <code>x.begin()</code> and loop until we get to <code>x.end()</code>. A small optimization is to store the value of the end iterator so we don’t need to look it up each time. This only saves about 2 ns per iteration, so it’s only important when the calculations in the loop are very simple.</p></li>
+<li><p>Instead of indexing into x, we use the dereference operator to get its current value: <code>*it</code>.</p></li>
+<li><p>Notice we use <code>auto</code> rather than giving the type of the iterator.</p></li>
+</ul>
+<p>This code can be simplified still further through the use of a C++11 feature: range-based for loops.</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> sum3<span class="op">(</span>doubles xs<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="kw">auto</span> x <span class="op">:</span> xs<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    total <span class="op">+=</span> x<span class="op">;</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> total<span class="op">;</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Iterators also allow us to use the C++ equivalents of the apply family of functions. For example, we could again rewrite <code>sum()</code> to use the <code>accumulate()</code> function, which takes a starting and an ending iterator, and adds up all the values in the vector. The third argument to <code>accumulate</code> gives the initial value: it’s particularly important because this also determines the data type that <code>accumulate</code> uses (so we use <code>0.0</code> and not <code>0</code> so that <code>accumulate</code> uses a <code>double</code>, not an <code>int</code>.). To use <code>accumulate()</code> we need to include the <code>&lt;numeric&gt;</code> header.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;numeric&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> sum4<span class="op">(</span>doubles x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">std::</span>accumulate<span class="op">(</span>x<span class="op">.</span>begin<span class="op">(),</span> x<span class="op">.</span>end<span class="op">(),</span> <span class="fl">0.0</span><span class="op">);</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<div id="algorithms" class="section level3">
+<h3>Algorithms</h3>
+<p>The <code>&lt;algorithm&gt;</code> header provides a large number of algorithms that work with iterators. A good reference is available at <a href="https://en.cppreference.com/w/cpp/algorithm" class="uri">https://en.cppreference.com/w/cpp/algorithm</a>. For example, we could write a basic cpp11 version of <code>findInterval()</code> that takes two arguments, a vector of values and a vector of breaks, and locates the bin that each x falls into. This shows off a few more advanced iterator features. Read the code below and see if you can figure out how it works.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;algorithm&gt;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span> integers findInterval2<span class="op">(</span>doubles x<span class="op">,</span> doubles breaks<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  writable<span class="op">::</span>integers out<span class="op">(</span>x<span class="op">.</span>size<span class="op">());</span></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">auto</span> out_it <span class="op">=</span> out<span class="op">.</span>begin<span class="op">();</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="kw">auto</span><span class="op">&amp;&amp;</span> val <span class="op">:</span> x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> pos <span class="op">=</span> <span class="bu">std::</span>upper_bound<span class="op">(</span>breaks<span class="op">.</span>begin<span class="op">(),</span> breaks<span class="op">.</span>end<span class="op">(),</span> val<span class="op">);</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>out_it <span class="op">=</span> <span class="bu">std::</span>distance<span class="op">(</span>breaks<span class="op">.</span>begin<span class="op">(),</span> pos<span class="op">);</span></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">++</span>out_it<span class="op">;</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> out<span class="op">;</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The key points are:</p>
+<ul>
+<li><p>We step through two iterators (input and output) simultaneously.</p></li>
+<li><p>We can assign into an dereferenced iterator (<code>out_it</code>) to change the values in <code>out</code>.</p></li>
+<li><p><code>upper_bound()</code> returns an iterator. If we wanted the value of the <code>upper_bound()</code> we could dereference it; to figure out its location, we use the <code>distance()</code> function.</p></li>
+</ul>
+<p>When in doubt, it is generally better to use algorithms from the STL than hand rolled loops. In <em>Effective STL</em>, Scott Meyers gives three reasons: efficiency, correctness, and maintainability. Algorithms from the STL are written by C++ experts to be extremely efficient, and they have been around for a long time so they are well tested. Using standard algorithms also makes the intent of your code more clear, helping to make it more readable and more maintainable.</p>
+</div>
+<div id="data-structures-cpp11" class="section level3">
+<h3>Data structures</h3>
+<p>The STL provides a large set of data structures: <code>array</code>, <code>bitset</code>, <code>list</code>, <code>forward_list</code>, <code>map</code>, <code>multimap</code>, <code>multiset</code>, <code>priority_queue</code>, <code>queue</code>, <code>deque</code>, <code>set</code>, <code>stack</code>, <code>unordered_map</code>, <code>unordered_set</code>, <code>unordered_multimap</code>, <code>unordered_multiset</code>, and <code>vector</code>. The most important of these data structures are the <code>vector</code>, the <code>unordered_set</code>, and the <code>unordered_map</code>. We’ll focus on these three in this section, but using the others is similar: they just have different performance trade-offs. For example, the <code>deque</code> (pronounced “deck”) has a very similar interface to vectors but a different underlying implementation that has different performance trade-offs. You may want to try it for your problem. A good reference for STL data structures is <a href="https://en.cppreference.com/w/cpp/container" class="uri">https://en.cppreference.com/w/cpp/container</a> — I recommend you keep it open while working with the STL.</p>
+<p>cpp11 knows how to convert from many STL data structures to their R equivalents, so you can return them from your functions without explicitly converting to R data structures.</p>
+</div>
+<div id="vectors-stl" class="section level3">
+<h3>Vectors</h3>
+<p>An STL vector is very similar to an R vector, except that it grows efficiently. This makes STL vectors appropriate to use when you don’t know in advance how big the output will be. Vectors are templated, which means that you need to specify the type of object the vector will contain when you create it: <code>vector&lt;int&gt;</code>, <code>vector&lt;bool&gt;</code>, <code>vector&lt;double&gt;</code>, <code>vector&lt;string&gt;</code>. You can access individual elements of a vector using the standard <code>[]</code> notation, and you can add a new element to the end of the vector using <code>.push_back()</code>. If you have some idea in advance how big the vector will be, you can use <code>.reserve()</code> to allocate sufficient storage.</p>
+<p>The following code implements run length encoding (<code>rle()</code>). It produces two vectors of output: a vector of values, and a vector <code>lengths</code> giving how many times each element is repeated. It works by looping through the input vector <code>x</code> comparing each value to the previous: if it’s the same, then it increments the last value in <code>lengths</code>; if it’s different, it adds the value to the end of <code>values</code>, and sets the corresponding length to 1.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;vector&gt;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> writable <span class="op">=</span> cpp11<span class="op">::</span>writable<span class="op">;</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>list rle_cpp<span class="op">(</span>doubles x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> lengths<span class="op">;</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> values<span class="op">;</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Initialise first value</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> prev <span class="op">=</span> x<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  values<span class="op">.</span>push_back<span class="op">(</span>prev<span class="op">);</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>  lengths<span class="op">.</span>push_back<span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="kw">auto</span> it <span class="op">=</span> x<span class="op">.</span>begin<span class="op">()</span> <span class="op">+</span> <span class="dv">1</span><span class="op">;</span> it <span class="op">!=</span> x<span class="op">.</span>end<span class="op">();</span> <span class="op">++</span>it<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>prev <span class="op">==</span> <span class="op">*</span>it<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>      lengths<span class="op">[</span>i<span class="op">]++;</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>      values<span class="op">.</span>push_back<span class="op">(*</span>it<span class="op">);</span></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>      lengths<span class="op">.</span>push_back<span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>      i<span class="op">++;</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>      prev <span class="op">=</span> <span class="op">*</span>it<span class="op">;</span></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> writable<span class="op">::</span>list<span class="op">({</span></span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;lengths&quot;_nm</span> <span class="op">=</span> lengths<span class="op">,</span></span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;values&quot;_nm</span> <span class="op">=</span> values</span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a>  <span class="op">});</span></span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>(An alternative implementation would be to replace <code>i</code> with the iterator <code>lengths.rbegin()</code> which always points to the last element of the vector. You might want to try implementing that.)</p>
+<p>Other methods of a vector are described at <a href="https://en.cppreference.com/w/cpp/container/vector" class="uri">https://en.cppreference.com/w/cpp/container/vector</a>.</p>
+</div>
+<div id="sets" class="section level3">
+<h3>Sets</h3>
+<p>Sets maintain a unique set of values, and can efficiently tell if you’ve seen a value before. They are useful for problems that involve duplicates or unique values (like <code>unique</code>, <code>duplicated</code>, or <code>in</code>). C++ provides both ordered (<code>std::set</code>) and unordered sets (<code>std::unordered_set</code>), depending on whether or not order matters for you. Unordered sets can somtimes be much faster (because they use a hash table internally rather than a tree). Often even if you need an ordered set, you could consider using an unordered set and then sorting the output. Benchmarking with your expected dataset is the best way to determine which is fastest for your data. Like vectors, sets are templated, so you need to request the appropriate type of set for your purpose: <code>unordered_set&lt;int&gt;</code>, <code>unordered_set&lt;bool&gt;</code>, etc. More details are available at <a href="https://en.cppreference.com/w/cpp/container/set" class="uri">https://en.cppreference.com/w/cpp/container/set</a> and <a href="https://en.cppreference.com/w/cpp/container/unordered_set" class="uri">https://en.cppreference.com/w/cpp/container/unordered_set</a>.</p>
+<p>The following function uses an unordered set to implement an equivalent to <code>duplicated()</code> for integer vectors. Note the use of <code>seen.insert(x[i]).second</code>. <code>insert()</code> returns a pair, the <code>.first</code> value is an iterator that points to element and the <code>.second</code> value is a Boolean that’s true if the value was a new addition to the set.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;unordered_set&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> writable <span class="op">=</span> cpp11<span class="op">::</span>writable<span class="op">;</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>logicals duplicated_cpp<span class="op">(</span>integers x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="bu">std::</span>unordered_set<span class="op">&lt;</span><span class="dt">int</span><span class="op">&gt;</span> seen<span class="op">;</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> n <span class="op">=</span> x<span class="op">.</span>size<span class="op">();</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  writable<span class="op">::</span>logicals out<span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>    out<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> <span class="op">!</span>seen<span class="op">.</span>insert<span class="op">(</span>x<span class="op">[</span>i<span class="op">]).</span>second<span class="op">;</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> out<span class="op">;</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<!--- TODO: Add `as_sexp()` support for maps
+### Map
+
+A map is similar to a set, but instead of storing presence or absence, it can store additional data.
+It's useful for functions like `table()` or `match()` that need to look up a value.
+As with sets, there are ordered (`std::map`) and unordered (`std::unordered_map`) versions.
+Since maps have a value and a key, you need to specify both types when initialising a map: `map<double, int>`, `unordered_map<int, double>`, and so on.
+The following example shows how you could use a `map` to implement `table()` for numeric vectors:
+
+
+```cpp
+#include <map>
+#include "cpp11.hpp"
+using namespace cpp11;
+
+[[cpp11::register]]
+SEXP table_cpp(doubles x) {
+  std::map<double, int> counts;
+  int n = x.size();
+  for (int i = 0; i < n; i++) {
+    counts[x[i]]++;
+  }
+  return as_sexp(counts);
+}
+```
+!-->
+</div>
+<div id="exercises-2" class="section level3">
+<h3>Exercises</h3>
+<p>To practice using the STL algorithms and data structures, implement the following using R functions in C++, using the hints provided:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>median.default()</code> using <code>partial_sort</code>.</p></li>
+<li><p><code>%in%</code> using <code>unordered_set</code> and the <code>find()</code> or <code>count()</code> methods.</p></li>
+<li><p><code>unique()</code> using an <code>unordered_set</code> (challenge: do it in one line!).</p></li>
+<li><p><code>min()</code> using <code>std::min()</code>, or <code>max()</code> using <code>std::max()</code>.</p></li>
+<li><p><code>which.min()</code> using <code>min_element</code>, or <code>which.max()</code> using <code>max_element</code>.</p></li>
+<li><p><code>setdiff()</code>, <code>union()</code>, and <code>intersect()</code> for integers using sorted ranges and <code>set_union</code>, <code>set_intersection</code> and <code>set_difference</code>.</p></li>
+</ol>
+</div>
+</div>
+<div id="case-studies" class="section level2">
+<h2>Case studies</h2>
+<p>The following case studies illustrate some real life uses of C++ to replace slow R code.</p>
+<div id="gibbs-sampler" class="section level3">
+<h3>Gibbs sampler</h3>
+<!-- FIXME: needs more context? -->
+<p>The following case study updates an example <a href="http://dirk.eddelbuettel.com/blog/2011/07/14/">blogged about</a> by Dirk Eddelbuettel, illustrating the conversion of a Gibbs sampler in R to C++. The R and C++ code shown below is very similar (it only took a few minutes to convert the R version to the C++ version), but runs about 30 times faster on my computer. Dirk’s blog post also shows another way to make it even faster: using the faster random number generator functions in GSL (easily accessible from R through the RcppGSL package) can make it another two to three times faster.</p>
+<p>The R code is as follows:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>gibbs_r <span class="ot">&lt;-</span> <span class="cf">function</span>(N, thin) {</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> N, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> y <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>thin) {</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>      x <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, <span class="dv">3</span>, y <span class="sc">*</span> y <span class="sc">+</span> <span class="dv">4</span>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>      y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, <span class="dv">1</span> <span class="sc">/</span> (x <span class="sc">+</span> <span class="dv">1</span>), <span class="dv">1</span> <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">2</span> <span class="sc">*</span> (x <span class="sc">+</span> <span class="dv">1</span>)))</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    mat[i, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(x, y)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  mat</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This is relatively straightforward to convert to C++. We:</p>
+<ul>
+<li><p>Add type declarations to all variables.</p></li>
+<li><p>Use <code>(</code> instead of <code>[</code> to index into the matrix.</p></li>
+<li><p>Include “Rmath.h” and call the functions with <code>Rf_</code>.</p></li>
+</ul>
+<div class="sourceCode" id="cb38"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11/matrix.hpp&quot;</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11/doubles.hpp&quot;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;Rmath.h&quot;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> writable <span class="op">=</span> cpp11<span class="op">::</span>writable<span class="op">;</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span> cpp11<span class="op">::</span>doubles_matrix<span class="op">&lt;&gt;</span> gibbs_cpp<span class="op">(</span><span class="dt">int</span> N<span class="op">,</span> <span class="dt">int</span> thin<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  writable<span class="op">::</span>doubles_matrix<span class="op">&lt;&gt;</span> mat<span class="op">(</span>N<span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> N<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> thin<span class="op">;</span> j<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>      x <span class="op">=</span> Rf_rgamma<span class="op">(</span><span class="fl">3.</span><span class="op">,</span> <span class="fl">1.</span> <span class="op">/</span> <span class="dt">double</span><span class="op">(</span>y <span class="op">*</span> y <span class="op">+</span> <span class="dv">4</span><span class="op">));</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>      y <span class="op">=</span> Rf_rnorm<span class="op">(</span><span class="fl">1.</span> <span class="op">/</span> <span class="op">(</span>x <span class="op">+</span> <span class="fl">1.</span><span class="op">),</span> <span class="fl">1.</span> <span class="op">/</span> sqrt<span class="op">(</span><span class="fl">2.</span> <span class="op">*</span> <span class="op">(</span>x <span class="op">+</span> <span class="fl">1.</span><span class="op">)));</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>    mat<span class="op">(</span>i<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">=</span> x<span class="op">;</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>    mat<span class="op">(</span>i<span class="op">,</span> <span class="dv">1</span><span class="op">)</span> <span class="op">=</span> y<span class="op">;</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> mat<span class="op">;</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Benchmarking the two implementations yields a significant speedup for running the loops in C++:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">r =</span> {</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gibbs_r</span>(<span class="dv">100</span>, <span class="dv">10</span>)</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cpp =</span> {</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gibbs_cpp</span>(<span class="dv">100</span>, <span class="dv">10</span>)</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">check =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">relative =</span> <span class="cn">TRUE</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 6</span></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   expression   min median `itr/sec` mem_alloc `gc/sec`</span></span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;bch:expr&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 r           31.5   33.6       1       1251.      Inf</span></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 cpp          1      1        33.8        1       NaN</span></span></code></pre></div>
+</div>
+<div id="r-vectorisation-versus-c-vectorisation" class="section level3">
+<h3>R vectorisation versus C++ vectorisation</h3>
+<!-- FIXME: needs more context? -->
+<p>This example is adapted from <a href="https://gweissman.github.io/post/rcpp-is-smoking-fast-for-agent-based-models-in-data-frames/">“Rcpp is smoking fast for agent-based models in data frames”</a>. The challenge is to predict a model response from three inputs. The basic R version of the predictor looks like:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>vacc1a <span class="ot">&lt;-</span> <span class="cf">function</span>(age, female, ily) {</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fl">0.25</span> <span class="sc">+</span> <span class="fl">0.3</span> <span class="sc">*</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="fl">0.04</span> <span class="sc">*</span> age)) <span class="sc">+</span> <span class="fl">0.1</span> <span class="sc">*</span> ily</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> p <span class="sc">*</span> <span class="cf">if</span> (female) <span class="fl">1.25</span> <span class="cf">else</span> <span class="fl">0.75</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="dv">0</span>, p)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="dv">1</span>, p)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  p</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>We want to be able to apply this function to many inputs, so we might write a vector-input version using a for loop.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>vacc1 <span class="ot">&lt;-</span> <span class="cf">function</span>(age, female, ily) {</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(age)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(n)) {</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    out[i] <span class="ot">&lt;-</span> <span class="fu">vacc1a</span>(age[i], female[i], ily[i])</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  out</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>If you’re familiar with R, you’ll have a gut feeling that this will be slow, and indeed it is. There are two ways we could attack this problem. If you have a good R vocabulary, you might immediately see how to vectorise the function (using <code>ifelse()</code>, <code>pmin()</code>, and <code>pmax()</code>). Alternatively, we could rewrite <code>vacc1a()</code> and <code>vacc1()</code> in C++, using our knowledge that loops and function calls have much lower overhead in C++.</p>
+<p>Either approach is fairly straightforward. In R:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>vacc2 <span class="ot">&lt;-</span> <span class="cf">function</span>(age, female, ily) {</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fl">0.25</span> <span class="sc">+</span> <span class="fl">0.3</span> <span class="sc">*</span> <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(<span class="fl">0.04</span> <span class="sc">*</span> age)) <span class="sc">+</span> <span class="fl">0.1</span> <span class="sc">*</span> ily</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> p <span class="sc">*</span> <span class="fu">ifelse</span>(female, <span class="fl">1.25</span>, <span class="fl">0.75</span>)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">0</span>, p)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">pmin</span>(<span class="dv">1</span>, p)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  p</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>(If you’ve worked R a lot you might recognise some potential bottlenecks in this code: <code>ifelse</code>, <code>pmin</code>, and <code>pmax</code> are known to be slow, and could be replaced with <code>p * 0.75 + p * 0.5 * female</code>, <code>p[p &lt; 0] &lt;- 0</code>, <code>p[p &gt; 1] &lt;- 1</code>. You might want to try timing those variations.)</p>
+<p>Or in C++:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;cpp11.hpp&quot;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> <span class="kw">namespace</span> cpp11<span class="op">;</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="kw">namespace</span> writable <span class="op">=</span> cpp11<span class="op">::</span>writable<span class="op">;</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> vacc3a<span class="op">(</span><span class="dt">double</span> age<span class="op">,</span> <span class="dt">bool</span> female<span class="op">,</span> <span class="dt">bool</span> ily<span class="op">){</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">double</span> p <span class="op">=</span> <span class="fl">0.25</span> <span class="op">+</span> <span class="fl">0.3</span> <span class="op">*</span> <span class="dv">1</span> <span class="op">/</span> <span class="op">(</span><span class="dv">1</span> <span class="op">-</span> exp<span class="op">(</span><span class="fl">0.04</span> <span class="op">*</span> age<span class="op">))</span> <span class="op">+</span> <span class="fl">0.1</span> <span class="op">*</span> ily<span class="op">;</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  p <span class="op">=</span> p <span class="op">*</span> <span class="op">(</span>female <span class="op">?</span> <span class="fl">1.25</span> <span class="op">:</span> <span class="fl">0.75</span><span class="op">);</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  p <span class="op">=</span> <span class="bu">std::</span>max<span class="op">(</span>p<span class="op">,</span> <span class="fl">0.0</span><span class="op">);</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  p <span class="op">=</span> <span class="bu">std::</span>min<span class="op">(</span>p<span class="op">,</span> <span class="fl">1.0</span><span class="op">);</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> p<span class="op">;</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a><span class="op">[[</span><span class="at">cpp11</span><span class="op">::</span><span class="at">register</span><span class="op">]]</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>doubles vacc3<span class="op">(</span>doubles age<span class="op">,</span> logicals female<span class="op">,</span></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>                    logicals ily<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">int</span> n <span class="op">=</span> age<span class="op">.</span>size<span class="op">();</span></span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>  writable<span class="op">::</span>doubles out<span class="op">(</span>n<span class="op">);</span></span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span><span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> n<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>    out<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> vacc3a<span class="op">(</span>age<span class="op">[</span>i<span class="op">],</span> female<span class="op">[</span>i<span class="op">],</span> ily<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>  <span class="op">}</span></span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> out<span class="op">;</span></span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>We next generate some sample data, and check that all three versions return the same values:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>female <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(T, F), n, <span class="at">rep =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>ily <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(T, F), n, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>), <span class="at">rep =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">all.equal</span>(<span class="fu">vacc1</span>(age, female, ily), <span class="fu">vacc2</span>(age, female, ily)),</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">all.equal</span>(<span class="fu">vacc1</span>(age, female, ily), <span class="fu">vacc3</span>(age, female, ily))</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>The original blog post forgot to do this, and introduced a bug in the C++ version: it used <code>0.004</code> instead of <code>0.04</code>. Finally, we can benchmark our three approaches:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">vacc1 =</span> <span class="fu">vacc1</span>(age, female, ily),</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">vacc2 =</span> <span class="fu">vacc2</span>(age, female, ily),</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">vacc3 =</span> <span class="fu">vacc3</span>(age, female, ily)</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 6</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   expression      min   median `itr/sec` mem_alloc `gc/sec`</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;bch:expr&gt; &lt;bch:tm&gt; &lt;bch:tm&gt;     &lt;dbl&gt; &lt;bch:byt&gt;    &lt;dbl&gt;</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 vacc1        1.67ms   1.86ms      531.    7.86KB    12.6 </span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 vacc2        41.7µs  54.13µs    16926.  148.84KB    26.3 </span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 vacc3       13.77µs  14.36µs    63187.   14.03KB     6.32</span></span></code></pre></div>
+<p>Not surprisingly, our original approach with loops is very slow. Vectorising in R gives a huge speedup, and we can eke out even more performance (about ten times) with the C++ loop. I was a little surprised that the C++ was so much faster, but it is because the R version has to create 11 vectors to store intermediate results, where the C++ code only needs to create 1.</p>
+</div>
+</div>
+<div id="package" class="section level2">
+<h2>Using cpp11 in a package</h2>
+<p>The same C++ code that is used with <code>cpp_source()</code> can also be bundled into a package. There are several benefits of moving code from a stand-alone C++ source file to a package:</p>
+<ol style="list-style-type: decimal">
+<li><p>Your code can be made available to users without C++ development tools.</p></li>
+<li><p>Multiple source files and their dependencies are handled automatically by the R package build system.</p></li>
+<li><p>Packages provide additional infrastructure for testing, documentation, and consistency.</p></li>
+</ol>
+<p>To add <code>cpp11</code> to an existing package first put your C++ files in the <code>src/</code> directory of your package. Then add the following to your <code>DESCRIPTION</code> file:</p>
+<pre><code>```
+LinkingTo: cpp11
+SystemRequirements: C++11
+```</code></pre>
+<p>and add the following <a href="https://roxygen2.r-lib.org/">roxygen</a> directive somewhere in your package’s R files. (A common location is <code>R/pkgname-package.R</code>)</p>
+<pre><code>```
+#&#39; @useDynLib pkgname, .registration = TRUE
+```</code></pre>
+<p>You’ll then need to run <a href="https://devtools.r-lib.org/reference/document.html"><code>devtools::document()</code></a> to update your <code>NAMESPACE</code> file to include the <code>useDynLib</code> statement.</p>
+<p>The easiest way to set this up is to call <code>usethis::use_cpp11()</code>, which will do the above steps for your automatically.</p>
+<p>Before building the package, you’ll need to run <code>cpp11::cpp_register()</code>. This function scans the C++ files for <code>[[cpp11::register]]</code> attributes and generates the binding code required to make the functions available in R. Re-run <code>cpp11::cpp_register()</code> whenever functions are added, removed, or have their signatures changed. If you are using <code>devtools</code> to develop your package this is done automatically by the pkgbuild package when your package has <code>LinkingTo: cpp11</code> in its DESCRIPTION file.</p>
+</div>
+<div id="more" class="section level2">
+<h2>Learning more</h2>
+<p>C++ is a large, complex language that takes years to master. If you would like to dive deeper or write more complex functions other resources I’ve found helpful in learning C++ are:</p>
+<ul>
+<li><p><a href="https://www.aristeia.com/books.html"><em>Effective C++</em></a> and <a href="https://www.aristeia.com/books.html"><em>Effective STL</em></a></p></li>
+<li><p><a href="http://www.icce.rug.nl/documents/cplusplus/cplusplus.html"><em>C++ Annotations</em></a>, aimed at knowledgeable users of C (or any other language using a C-like grammar, like Perl or Java) who would like to know more about, or make the transition to, C++.</p></li>
+<li><p><a href="https://www.cs.helsinki.fi/u/tpkarkka/alglib/k06/"><em>Algorithm Libraries</em></a>, which provides a more technical, but still concise, description of important STL concepts. (Follow the links under notes.)</p></li>
+</ul>
+<p>Writing performant code may also require you to rethink your basic approach: a solid understanding of basic data structures and algorithms is very helpful here. That’s beyond the scope of this vignette, but I’d suggest the <a href="https://www.algorist.com/"><em>Algorithm Design Manual</em></a> MIT’s <a href="https://web.archive.org/web/20200604134756/https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/"><em>Introduction to Algorithms</em></a>, <em>Algorithms</em> by Robert Sedgewick and Kevin Wayne which has a free <a href="http://algs4.cs.princeton.edu/home/">online textbook</a> and a matching <a href="https://www.coursera.org/learn/algorithms-part1">Coursera course</a>.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

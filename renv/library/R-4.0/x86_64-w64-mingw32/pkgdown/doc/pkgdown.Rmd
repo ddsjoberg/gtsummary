@@ -1,0 +1,152 @@
+---
+title: "Introduction to pkgdown"
+description: >
+  Learn how to get started with the basics of pkgdown.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to pkgdown}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The goal of pkgdown is to make it easy to make an elegant and useful package website with a minimum of work. You can get a basic website up and running in just a couple of minutes:
+
+```{r, eval = FALSE}
+# Run once to configure package to use pkgdown
+usethis::use_pkgdown()
+# Run to build the website
+pkgdown::build_site()
+```
+
+While you'll get a decent website without any additional work, if you want a website that really pops, you'll need to read the rest of this vignette. It works through the main components of a pkgdown website:
+
+1. Metadata
+1. Home page
+1. Function reference
+1. Articles
+1. News
+
+## Metadata
+
+You can override pkgdown's defaults with a YAML file called `_pkgdown.yml`[^other-locations]. Options that affect the entire site are documented in `build_site()` and include:
+
+*   A [`bootswatch`](https://bootswatch.com) theme that affects the overall
+    appearance of the whole site. 
+    
+    ```yaml
+    template:
+      params:
+        bootswatch: cerulean
+    ```
+
+*   A Google analytics user ID if you want to track the people who are using your
+    site
+
+    ```yaml
+    template:
+      params:
+        ganalytics: UA-000000-01
+    ```
+    
+*   Customize metadata used for social media cards, as described in 
+    `vignette("metadata")`.
+
+*   Package search, as described in `vignette("search")`.
+
+[^other-locations]: You can also put it in `pkgdown/_pkgdown.yml` if you want to keep the package root clutter free, or in `inst/_pkgdown.yml` if you want to make it available when your package is installed.
+
+## Home page
+
+The contents of home page is automatically generated from `index.md` or `README.md`. pkgdown tries them in order, so if you want a different display for GitHub and pkgdown, you can provide both files. The homepage also includes a sidebar full of useful links; see `?build_home` for how these are generated and how you can customise them.
+
+## Reference
+
+pkgdown creates a function reference in `reference/` that includes one page for each `.Rd` help topic in `man/`. The translation of individual help topics from Rd to HTML is generally straightforward, but there are a couple of things you should bear in mind:
+
+* pkgdown does its best to autolink all references to help topics and 
+  articles described in `vignette("linking")`.
+  
+* pkgdown executes all examples, inserting the rendered results in the 
+  generated HTML files.
+
+By default, pkgdown generates a reference index that is just an alphabetically-ordered list of functions. The index is much more useful with human curation because functions can be grouped and described in categories. To override the default, provide a `reference` field in `_pkgdown.yml`. The `reference` should be an array of three types objects:
+
+* A title, defined by `title` and optional `desc` (description) fields. 
+* A subtitle, defined by `subtitle` and optional `desc` (description) fields.
+* A list of topics defined by a `contents` field.
+
+```yaml
+reference:
+- title: "Connecting to Spark"
+  desc: >
+    Functions for installing Spark components and managing
+    connections to Spark
+- contents: 
+  - spark_config
+  - spark_connect
+  - spark_disconnect
+  - spark_install
+  - spark_log
+- title: "Reading and Writing Data"
+  desc: "Functions for reading and writing Spark DataFrames."
+- contents:
+  - starts_with("spark_read")
+  - starts_with("spark_write")
+  - matches("saveload")
+```
+
+Note the use of `starts_with()` to select all functions with a common prefix. You can also use `ends_with()` and `matches()`. See complete details in `?build_reference`.
+
+While working on the reference index you might want to run `build_reference_index()` instead of `build_site()`; that will considerably reduce your iteration time.
+
+## Articles
+
+pkgdown will automatically build all vignettes found in `vignettes`, translating them to HTML files in `articles/`. Due to the way that pkgdown has to integrate RMarkdown generated HTML with its own HTML, relatively little control is available over the output format.
+
+If you want to include an article on the website but not in the package (e.g., because it's large), you can either place it in a subdirectory of `vignettes/` or add it to `.Rbuildignore` (and make sure that there's  no `vignettes:` section in the yaml header). In the extreme case where you want to produce only articles but not vignettes, you should add the complete `vignettes/` directory to `.Rbuildignore` and ensure that DESCRIPTION does not have a `VignetteBuilder` field.
+
+More details can be found in `?build_articles`.
+
+## News
+
+If `NEWS.md` is present, it will be rendered into a single-page Changelog based on markdown level headings. pkgdown assumes your `NEWS.md` is formatted using level one headings (`#`) to specify package name and version number, and level two headings (`##`) to provide topical organization for each release.
+
+```markdown
+# pkgdown 1.1.0
+
+## Bug Fixes
+
+* Lots of them
+
+# pkgdown 1.0.0
+
+* This is the first release of pkgdown.
+```
+
+See more suggestions for writing news bullets in the [tidyverse style guide](https://style.tidyverse.org/news.html). 
+
+See `?build_news` for more customisation options including how to:
+
+* Create one page for each major version and related minor versions.
+* Add release announcements to the news navbar drop-down.
+
+## Publishing
+
+The easiest way to publish your website is to use GitHub [`docs/` directory][docs] support. If you want to build and publish your package automatically with GitHub actions, try `usethis::use_github_action("pkgdown")`.
+
+## Promoting
+
+Once your finalized site is built and published on the web, you should publicize its URL in a few places:
+
+1. The `URL` field of your package `DESCRIPTION`, alongside a link to 
+    its source:
+
+    ```
+    URL: https://pkgdown.r-lib.org, https://github.com/r-lib/pkgdown
+    ```
+
+1. Your repository description on GitHub.
+
+1. On Twitter (make sure to include `#rstats`).
+
+[docs]: https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch

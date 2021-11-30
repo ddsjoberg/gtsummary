@@ -174,7 +174,9 @@ tbl_uv_ex2 <-
   )
 }
 \seealso{
-See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
+See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples
+
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
 Other tbl_uvregression tools: 
 \code{\link{add_global_p}()},

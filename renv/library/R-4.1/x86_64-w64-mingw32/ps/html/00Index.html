@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: List, Query, Manipulate System Processes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> List, Query, Manipulate System Processes
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;ps&rsquo; version 1.6.0</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="ps_handle.html">as.character.ps_handle</a></td>
+<td>Create a process handle</td></tr>
+<tr><td style="width: 25%;"><a href="CleanupReporter.html">CleanupReporter</a></td>
+<td>testthat reporter that checks if child processes are cleaned up in tests</td></tr>
+<tr><td style="width: 25%;"><a href="errno.html">errno</a></td>
+<td>List of 'errno' error codes</td></tr>
+<tr><td style="width: 25%;"><a href="ps_handle.html">format.ps_handle</a></td>
+<td>Create a process handle</td></tr>
+<tr><td style="width: 25%;"><a href="ps_handle.html">print.ps_handle</a></td>
+<td>Create a process handle</td></tr>
+<tr><td style="width: 25%;"><a href="ps.html">ps</a></td>
+<td>Process table</td></tr>
+<tr><td style="width: 25%;"><a href="ps_boot_time.html">ps_boot_time</a></td>
+<td>Boot time of the system</td></tr>
+<tr><td style="width: 25%;"><a href="ps_children.html">ps_children</a></td>
+<td>List of child processes (process objects) of the process. Note that this typically requires enumerating all processes on the system, so it is a costly operation.</td></tr>
+<tr><td style="width: 25%;"><a href="ps_cmdline.html">ps_cmdline</a></td>
+<td>Command line of the process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_connections.html">ps_connections</a></td>
+<td>List network connections of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_cpu_count.html">ps_cpu_count</a></td>
+<td>Number of logical or physical CPUs</td></tr>
+<tr><td style="width: 25%;"><a href="ps_cpu_times.html">ps_cpu_times</a></td>
+<td>CPU times of the process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_create_time.html">ps_create_time</a></td>
+<td>Start time of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_cwd.html">ps_cwd</a></td>
+<td>Process current working directory as an absolute path.</td></tr>
+<tr><td style="width: 25%;"><a href="ps_descent.html">ps_descent</a></td>
+<td>Query the ancestry of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_disk_partitions.html">ps_disk_partitions</a></td>
+<td>List all mounted partitions</td></tr>
+<tr><td style="width: 25%;"><a href="ps_disk_usage.html">ps_disk_usage</a></td>
+<td>Disk usage statistics, per partition</td></tr>
+<tr><td style="width: 25%;"><a href="ps_environ.html">ps_environ</a></td>
+<td>Environment variables of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_environ.html">ps_environ_raw</a></td>
+<td>Environment variables of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_exe.html">ps_exe</a></td>
+<td>Full path of the executable of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_kill_tree.html">ps_find_tree</a></td>
+<td>Mark a process and its (future) child tree</td></tr>
+<tr><td style="width: 25%;"><a href="ps_get_nice.html">ps_get_nice</a></td>
+<td>Get or set the priority of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_uids.html">ps_gids</a></td>
+<td>User ids and group ids of the process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_handle.html">ps_handle</a></td>
+<td>Create a process handle</td></tr>
+<tr><td style="width: 25%;"><a href="ps_interrupt.html">ps_interrupt</a></td>
+<td>Interrupt a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_is_running.html">ps_is_running</a></td>
+<td>Checks whether a process is running</td></tr>
+<tr><td style="width: 25%;"><a href="ps_os_type.html">ps_is_supported</a></td>
+<td>Query the type of the OS</td></tr>
+<tr><td style="width: 25%;"><a href="ps_kill.html">ps_kill</a></td>
+<td>Kill a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_kill_tree.html">ps_kill_tree</a></td>
+<td>Mark a process and its (future) child tree</td></tr>
+<tr><td style="width: 25%;"><a href="ps_loadavg.html">ps_loadavg</a></td>
+<td>Return the average system load over the last 1, 5 and 15 minutes as a tuple. The “load” represents the processes which are in a runnable state, either using the CPU or waiting to use the CPU (e.g. waiting for disk I/O). On Windows this is emulated by using a Windows API that spawns a thread which keeps running in background and updates results every 5 seconds, mimicking the UNIX behavior. Thus, on Windows, the first time this is called and for the next 5 seconds it will return a meaningless (0.0, 0.0, 0.0) vector. The numbers returned only make sense if related to the number of CPU cores installed on the system. So, for instance, a value of 3.14 on a system with 10 logical CPUs means that the system load was 31.4% percent over the last N minutes.</td></tr>
+<tr><td style="width: 25%;"><a href="ps_kill_tree.html">ps_mark_tree</a></td>
+<td>Mark a process and its (future) child tree</td></tr>
+<tr><td style="width: 25%;"><a href="ps_memory_info.html">ps_memory_info</a></td>
+<td>Memory usage information</td></tr>
+<tr><td style="width: 25%;"><a href="ps_name.html">ps_name</a></td>
+<td>Process name</td></tr>
+<tr><td style="width: 25%;"><a href="ps_num_fds.html">ps_num_fds</a></td>
+<td>Number of open file descriptors</td></tr>
+<tr><td style="width: 25%;"><a href="ps_num_threads.html">ps_num_threads</a></td>
+<td>Number of threads</td></tr>
+<tr><td style="width: 25%;"><a href="ps_open_files.html">ps_open_files</a></td>
+<td>Open files of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_os_type.html">ps_os_type</a></td>
+<td>Query the type of the OS</td></tr>
+<tr><td style="width: 25%;"><a href="ps_ppid.html">ps_parent</a></td>
+<td>Parent pid or parent process of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_pid.html">ps_pid</a></td>
+<td>Pid of a process handle</td></tr>
+<tr><td style="width: 25%;"><a href="ps_pids.html">ps_pids</a></td>
+<td>Ids of all processes on the system</td></tr>
+<tr><td style="width: 25%;"><a href="ps_ppid.html">ps_ppid</a></td>
+<td>Parent pid or parent process of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_resume.html">ps_resume</a></td>
+<td>Resume (continue) a stopped process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_send_signal.html">ps_send_signal</a></td>
+<td>Send signal to a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_get_nice.html">ps_set_nice</a></td>
+<td>Get or set the priority of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_shared_libs.html">ps_shared_libs</a></td>
+<td>List the dynamically loaded libraries of a process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_shared_lib_users.html">ps_shared_lib_users</a></td>
+<td>List all processes that loaded a shared library</td></tr>
+<tr><td style="width: 25%;"><a href="ps_status.html">ps_status</a></td>
+<td>Current process status</td></tr>
+<tr><td style="width: 25%;"><a href="ps_suspend.html">ps_suspend</a></td>
+<td>Suspend (stop) the process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_system_cpu_times.html">ps_system_cpu_times</a></td>
+<td>System CPU times.</td></tr>
+<tr><td style="width: 25%;"><a href="ps_system_memory.html">ps_system_memory</a></td>
+<td>Statistics about system memory usage</td></tr>
+<tr><td style="width: 25%;"><a href="ps_system_swap.html">ps_system_swap</a></td>
+<td>System swap memory statistics</td></tr>
+<tr><td style="width: 25%;"><a href="ps_terminal.html">ps_terminal</a></td>
+<td>Terminal device of the process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_terminate.html">ps_terminate</a></td>
+<td>Terminate a Unix process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_tty_size.html">ps_tty_size</a></td>
+<td>Query the size of the current terminal</td></tr>
+<tr><td style="width: 25%;"><a href="ps_uids.html">ps_uids</a></td>
+<td>User ids and group ids of the process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_username.html">ps_username</a></td>
+<td>Owner of the process</td></tr>
+<tr><td style="width: 25%;"><a href="ps_users.html">ps_users</a></td>
+<td>List users connected to the system</td></tr>
+<tr><td style="width: 25%;"><a href="ps_get_nice.html">ps_windows_nice_values</a></td>
+<td>Get or set the priority of a process</td></tr>
+<tr><td style="width: 25%;"><a href="signals.html">signals</a></td>
+<td>List of all supported signals</td></tr>
+<tr><td style="width: 25%;"><a href="ps_kill_tree.html">with_process_cleanup</a></td>
+<td>Mark a process and its (future) child tree</td></tr>
+</table>
+</body></html>

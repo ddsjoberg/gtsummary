@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Exit knitting early</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for knit_exit {knitr}"><tr><td>knit_exit {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Exit knitting early</h2>
+
+<h3>Description</h3>
+
+<p>Sometimes we may want to exit the knitting process early, and completely
+ignore the rest of the document. This function provides a mechanism to
+terminate <code><a href="../../knitr/help/knit.html">knit</a>()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+knit_exit(append, fully = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>append</code></td>
+<td>
+<p>A character vector to be appended to the results from
+<code>knit()</code> so far. By default, this is <span class="samp">\end{document}</span> for LaTeX
+output, and <span class="samp">&lt;/body&gt;&lt;/html&gt;</span> for HTML output, to make the output
+document complete. For other types of output, it is an empty string.</p>
+</td></tr>
+<tr valign="top"><td><code>fully</code></td>
+<td>
+<p>Whether to fully exit the knitting process if <code>knit_exit()</code>
+is called from a child document. If <code>FALSE</code>, only exit the knitting
+process of the child document.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Invisible <code>NULL</code>. An internal signal is set up (as a side
+effect) to notify <code>knit()</code> to quit as if it had reached the end of the
+document.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# see https://github.com/yihui/knitr-examples/blob/master/096-knit-exit.Rmd
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

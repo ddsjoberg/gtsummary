@@ -1,0 +1,51 @@
+NEWS/Changelog
+
+0.1-9	2021-07-24
+    o	use R_ClearExternalPtr() instead of CAR()=0 to
+	be more API-compliant
+
+    o	minor R API compliance cleanup
+
+    o	added native symbol registration
+
+
+0.1-8	2014-01-23
+    o	more compatibility fixes for jpeg versions that 
+	have broken header files
+
+0.1-6	2013-06-03
+    o	fix LOCAL_SOFT support on Windows
+
+
+0.1-5	2013-06-03
+    o	work around issues in jpeg-9 which re-defines boolean
+
+    o	add support for LOCAL_SOFT on Windows
+
+
+0.1-4	2013-04-26
+    o	use PKG_CPPFLAGS on Windows such that the presence
+	of external jpeg headers does not conflict with
+	the internal ones.
+
+
+0.1-3	2013-04-18
+    o	work around a problem in libjpeg-turbo 1.2.90
+
+    o	fix a bug in writeJPEG() for nativeRaster
+
+
+0.1-2	2011-12-10
+    o	allow conections as target for writeJPEG()
+
+    o	make raw() the default target in writeJPEG()
+
+    o	support CMYK JPEG images both in readJPEG() and
+	writeJPEG(). Images in color spaces other than RGB and
+	Grayscale will have a "color.space" attribute attached
+	designating the image color space.
+
+
+0.1-1	2011-09-03
+    o	initial release (based on the png 0.1-3 package)
+

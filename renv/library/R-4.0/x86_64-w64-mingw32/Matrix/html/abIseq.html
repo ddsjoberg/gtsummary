@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Sequence Generation of &quot;abIndex&quot;, Abstract Index Vectors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for abIseq {Matrix}"><tr><td>abIseq {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Sequence Generation of &quot;abIndex&quot;, Abstract Index Vectors</h2>
+
+<h3>Description</h3>
+
+<p>Generation of abstract index vectors, i.e., objects of class
+<code>"<a href="abIndex-class.html">abIndex</a>"</code>.
+</p>
+<p><code>abIseq()</code> is designed to work entirely like <code><a href="../../base/html/seq.html">seq</a></code>,
+but producing <code>"abIndex"</code> vectors.<br />
+<code>abIseq1()</code> is its basic building block, where
+<code>abIseq1(n,m)</code> corresponds to <code>n:m</code>.
+</p>
+<p><code>c(x, ...)</code> will return an <code>"abIndex"</code> vector, when <code>x</code>
+is one.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+abIseq1(from = 1, to = 1)
+abIseq (from = 1, to = 1, by = ((to - from)/(length.out - 1)),
+        length.out = NULL, along.with = NULL)
+
+## S3 method for class 'abIndex'
+c(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>from, to</code></td>
+<td>
+<p>the starting and (maximal) end value of the sequence.</p>
+</td></tr>
+<tr valign="top"><td><code>by</code></td>
+<td>
+<p>number: increment of the sequence.</p>
+</td></tr>
+<tr valign="top"><td><code>length.out</code></td>
+<td>
+<p>desired length of the sequence.  A
+non-negative number, which for <code>seq</code> and <code>seq.int</code> will be
+rounded up if fractional.</p>
+</td></tr>
+<tr valign="top"><td><code>along.with</code></td>
+<td>
+<p>take the length from the length of this argument.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>in general an arbitrary number of <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> objects; here,
+when the first is an <code>"<a href="abIndex-class.html">abIndex</a>"</code> vector, these
+arguments will be concatenated to a new <code>"abIndex"</code> object.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An abstract index vector, i.e., object of class
+<code>"<a href="abIndex-class.html">abIndex</a>"</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>the class <code><a href="abIndex-class.html">abIndex</a></code> documentation;
+<code><a href="rep2abI.html">rep2abI</a>()</code> for another constructor;
+<code><a href="../../base/html/rle.html">rle</a></code> (<span class="pkg">base</span>).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+stopifnot(identical(-3:20,
+                    as(abIseq1(-3,20), "vector")))
+
+try( ## (arithmetic) not yet implemented
+abIseq(1, 50, by = 3)
+)
+
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,76 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string fcnname="weightedMean"%>
+<% fcnname <- "<%@string name="fcnname"%>" %>
+<%@meta title="${fcnname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-12-09"%>
+
+<%@include file="${header}"%>
+<%
+weighted.mean <- stats:::weighted.mean
+weighted.mean.default <- stats:::weighted.mean.default
+%>
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=fcnname%>() against alternative methods.
+
+## Alternative methods
+
+* stats::weighted.mean()
+* stats:::weighted.mean.default()
+
+
+<% for (mode in c("integer", "double")) { %>
+
+## Data type "<%=mode%>"
+### Data
+```r
+<%=withCapture({
+<%@include file="R/random-vectors.R"%>
+data <- rvectors(mode = mode)
+data <- data[1:4]
+})%>
+```
+
+## Results
+
+<% for (ii in seq_along(data)) { %>
+<%
+dataLabel <- names(data)[ii]
+mprintf("%s: %s\n", mode, dataLabel)
+x <- data[[dataLabel]]
+gc()
+%>
+### <%=dataLabel%> vector
+
+```r
+<%=withCapture({
+x <- data[[.dataLabel.]]
+w <- runif(length(x))
+gc()
+
+stats <- microbenchmark(
+ "weightedMean"                  = weightedMean(x, w = w, na.rm = FALSE),
+ "stats::weighted.mean"          = weighted.mean(x, w = w, na.rm = FALSE),
+ "stats:::weighted.mean.default" = weighted.mean.default(x, w = w, na.rm = FALSE),
+  unit = "ms"
+)
+})%>
+```
+
+<% benchmarkResults(stats, tags=c(mode, dataLabel)) %>
+
+<% } # for (ii ...) %>
+
+<% } # for (mode ...) %>
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-12-09
+o Created.
+---------------------------------------------------------------------------%>

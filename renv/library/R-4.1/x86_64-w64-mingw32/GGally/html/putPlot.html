@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Insert a plot into a 'ggmatrix' object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for putPlot {GGally}"><tr><td>putPlot {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Insert a plot into a <code><a href="../../GGally/help/ggmatrix.html">ggmatrix</a></code> object</h2>
+
+<h3>Description</h3>
+
+<p>Function to place your own plot in the layout.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+putPlot(pm, value, i, j)
+
+## S3 replacement method for class 'ggmatrix'
+pm[i, j, ...] &lt;- value
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pm</code></td>
+<td>
+<p>ggally object to be altered</p>
+</td></tr>
+<tr valign="top"><td><code>value</code></td>
+<td>
+<p>ggplot object to be placed</p>
+</td></tr>
+<tr valign="top"><td><code>i</code></td>
+<td>
+<p>row from the top</p>
+</td></tr>
+<tr valign="top"><td><code>j</code></td>
+<td>
+<p>column from the left</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>ignored</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Barret Schloerke
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../GGally/help/getPlot.html">getPlot</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+custom_car &lt;- ggpairs(mtcars[, c("mpg", "wt", "cyl")], upper = "blank", title = "Custom Example")
+# ggplot example taken from example(geom_text)
+  plot &lt;- ggplot2::ggplot(mtcars, ggplot2::aes(x=wt, y=mpg, label=rownames(mtcars)))
+  plot &lt;- plot +
+    ggplot2::geom_text(ggplot2::aes(colour=factor(cyl)), size = 3) +
+    ggplot2::scale_colour_discrete(l=40)
+custom_car[1, 2] &lt;- plot
+personal_plot &lt;- ggally_text(
+  "ggpairs allows you\nto put in your\nown plot.\nLike that one.\n &lt;---"
+)
+custom_car[1, 3] &lt;- personal_plot
+# custom_car
+
+# remove plots after creating a plot matrix
+custom_car[2,1] &lt;- NULL
+custom_car[3,1] &lt;- "blank" # the same as storing null
+custom_car[3,2] &lt;- NULL
+p_(custom_car)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

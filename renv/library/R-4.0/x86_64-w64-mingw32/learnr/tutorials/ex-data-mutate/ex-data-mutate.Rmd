@@ -1,0 +1,291 @@
+---
+title: "Create new variables"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to select, create, and mutate variables in a data frame.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(tidyverse)
+library(nycflights13)
+library(Lahman)
+
+tutorial_options(exercise.timelimit = 60)
+knitr::opts_chunk$set(error = TRUE)
+```
+
+## Welcome
+
+In this tutorial, you will learn how to derive new variables from a data frame, including:
+
+* How to create new variables with `mutate()`
+* How to recognize the most useful families of functions to use with `mutate()`
+
+The readings in this tutorial follow [_R for Data Science_](http://r4ds.had.co.nz/), section 5.5.
+
+### Setup
+
+To practice these skills, we will use the `flights` data set from the nycflights13 package, which you met in [Data Basics](../01-data-basics/01-data-basics.html). This data frame comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0) and contains all `r format(nrow(nycflights13::flights), big.mark = ",")` flights that departed from New York City in 2013. It is documented in `?flights`.
+
+To visualize the data, we will use the ggplot2 package that you met in [Data Visualization Basics](../02-data-vis-basics/02-data-vis-basics.html). 
+
+I've preloaded the packages for this tutorial with 
+
+```{r eval = FALSE}
+library(tidyverse) # loads dplyr, ggplot2, and others
+library(nycflights13)
+```
+
+## Add new variables with mutate()
+
+A data set often contains information that you can use to compute new variables. `mutate()` helps you compute those variables. Since `mutate()` always adds new columns to the end of a dataset, we'll start by creating a narrow dataset which will let us see the new variables (If we added new variables to `flights`, the new columns would run off the side of your screen, which would make them hard to see). 
+
+### select()
+
+You can select a subset of variables by name with the `select()` function in dplyr. Run the code below to see the narrow data set that `select()` creates.
+
+```{r select, exercise = TRUE, exercise.eval = FALSE}
+flights_sml <- select(flights, 
+  arr_delay, 
+  dep_delay,
+  distance, 
+  air_time
+)
+```
+
+### mutate()
+
+The code below creates two new variables with dplyr's `mutate()` function. `mutate()` returns a new data frame that contains the new variables appended to a copy of the original data set. Take a moment to imagine what this will look like, and then click "Run Code" to find out.
+
+```{r mutate1-setup}
+flights_sml <- select(flights, 
+  arr_delay, 
+  dep_delay,
+  distance, 
+  air_time
+)
+```
+
+```{r mutate1, exercise = TRUE, exercise.eval = FALSE}
+mutate(flights_sml,
+  gain = arr_delay - dep_delay,
+  speed = distance / air_time * 60
+)
+```
+
+Note that when you use `mutate()` you can create multiple variables at once, and you can even refer to variables that are created earlier in the call to create other variables later in the call:
+
+```{r echo = FALSE}
+flights_sml <- select(flights, 
+  arr_delay, 
+  dep_delay,
+  distance, 
+  air_time
+)
+```
+
+```{r}
+mutate(flights_sml,
+  gain = arr_delay - dep_delay,
+  hours = air_time / 60,
+  gain_per_hour = gain / hours
+)
+```
+
+### transmute()
+
+`mutate()` will always return the new variables appended to a copy of the original data. If you want to return only the new variables, use `transmute()`. In the code below, replace `mutate()` with `transmute()` and then spot the difference in the results.
+
+```{r transmute, exercise = TRUE, exercise.eval = FALSE}
+mutate(flights,
+  gain = arr_delay - dep_delay,
+  hours = air_time / 60,
+  gain_per_hour = gain / hours
+)
+```
+
+```{r transmute-solution}
+transmute(flights,
+  gain = arr_delay - dep_delay,
+  hours = air_time / 60,
+  gain_per_hour = gain / hours
+)
+```
+
+```{r transmute-check}
+"Excellent job! `transmute()` and `mutate()` do the same thing, but `transmute()` only returnsd the new variables. `mutate()` returns a copy of the original data set with the new variables appended."
+```
+
+## Useful mutate functions
+
+You can use any function inside of `mutate()` so long as the function is **vectorised**. A vectorised function takes a vector of values as input and returns a vector with the same number of values as output. 
+
+Over time, I've found that several families of vectorised functions are particularly useful with `mutate()`: 
+
+*   **Arithmetic operators**: `+`, `-`, `*`, `/`, `^`. These are all vectorised, using the so called "recycling rules". If one parameter is shorter than the other, it will automatically be repeated multiple times to create a vector of the same length. This is most useful when one of the arguments is a single number: `air_time / 60`, `hours * 60 + minute`, etc.
+    
+*   **Modular arithmetic**: `%/%` (integer division) and `%%` (remainder), where `x == y * (x %/% y) + (x %% y)`. Modular arithmetic is a handy tool because it allows you to break integers up into pieces. For example, in the flights dataset, you can compute `hour` and `minute` from `dep_time` with:
+    
+    ```{r}
+    transmute(flights,
+      dep_time,
+      hour = dep_time %/% 100,
+      minute = dep_time %% 100
+    )
+    ```
+  
+*   **Logs**: `log()`, `log2()`, `log10()`. Logarithms are an incredibly useful transformation for dealing with data that ranges across multiple orders of magnitude. They also convert multiplicative relationships to additive, a feature we'll come back to in modelling.
+    
+    All else being equal, I recommend using `log2()` because it's easy to interpret: a difference of 1 on the log scale corresponds to doubling on the original scale and a difference of -1 corresponds to halving.
+
+*   **Offsets**: `lead()` and `lag()` allow you to refer to leading or lagging values. This allows you to compute running differences (e.g. `x - lag(x)`) or find when values change (`x != lag(x))`. They are most useful in conjunction with `group_by()`, which you'll learn about shortly.
+    
+    ```{r}
+    (x <- 1:10)
+    lag(x)
+    lead(x)
+    ```
+  
+*   **Cumulative and rolling aggregates**: R provides functions for running sums, products, mins and maxes: `cumsum()`, `cumprod()`, `cummin()`, `cummax()`; and dplyr provides `cummean()` for cumulative means. If you need rolling aggregates (i.e. a sum computed over a rolling window), try the RcppRoll package.
+    
+    ```{r}
+    x
+    cumsum(x)
+    cummean(x)
+    ```
+
+*   **Logical comparisons**, `<`, `<=`, `>`, `>=`, `!=`, which you learned about earlier. If you're doing a complex sequence of logical operations it's often a good idea to store the interim values in new variables so you can check that each step is working as expected.
+
+*   **Ranking**: there are a number of ranking functions, but you should start with `min_rank()`. It does the most usual type of ranking (e.g. 1st, 2nd, 2nd, 4th). The default gives smallest values the small ranks; use `desc(x)` to give the largest values the smallest ranks. 
+    
+    ```{r}
+    y <- c(1, 2, 2, NA, 3, 4)
+    min_rank(y)
+    min_rank(desc(y))
+    ```
+    
+    If `min_rank()` doesn't do what you need, look at the variants
+    `row_number()`, `dense_rank()`, `percent_rank()`, `cume_dist()`,
+    `ntile()`.  See their help pages for more details.
+    
+    ```{r}
+    row_number(y)
+    dense_rank(y)
+    percent_rank(y)
+    cume_dist(y)
+    ```
+
+## Exercises
+
+```{r, eval = FALSE, echo = FALSE}
+flights <- flights %>% mutate(
+  dep_time = hour * 60 + minute,
+  arr_time = (arr_time %/% 100) * 60 + (arr_time %% 100),
+  airtime2 = arr_time - dep_time,
+  dep_sched = dep_time + dep_delay
+)
+
+ggplot(flights, aes(dep_sched)) + geom_histogram(binwidth = 60)
+ggplot(flights, aes(dep_sched %% 60)) + geom_histogram(binwidth = 1)
+ggplot(flights, aes(air_time - airtime2)) + geom_histogram()
+```
+
+### Exercise 1
+
+Currently `dep_time` and `sched_dep_time` are convenient to look at, but hard to compute with because they're not really continuous numbers. Convert them to a more convenient representation of number of minutes since midnight.
+
+```{r mutateex1, exercise = TRUE}
+    
+```
+```{r mutateex1-solution}
+mutate(flights, dep_time = dep_time %/% 100 * 60 + dep_time %% 100,
+       sched_dep_time = sched_dep_time %/% 100 * 60 + sched_dep_time %% 100)
+```
+    
+<div id="mutateex1-hint">
+**Hint:** `423 %% 100` returns `23`, `423 %/% 100` returns `4`.
+</div>
+
+```{r mutateex1-check}
+"Good Job!"
+```
+    
+### Exercise 2
+
+Compare `air_time` with `arr_time - dep_time`. What do you expect to see? What do you see? How do you explain this?
+    
+```{r mutateex2, exercise = TRUE}
+# flights <- mutate(flights, total_time = _____________)
+# flight_times <- select(airtime, total_time)
+# filter(flight_times, air_time != total_time)
+```
+```{r mutateex2-solution}
+flights <- mutate(flights, total_time = arr_time - dep_time)
+flight_times <- select(airtime, total_time)
+filter(flight_times, air_time != total_time)
+```
+
+```{r mutateex2-check}
+"Good Job! it doesn't make sense to do math with `arr_time` and `dep_time` until you convert the values to minutes past midnight (as you did with `dep_time` and `sched_dep_time` in the previous exercise)."
+```
+    
+### Exercise 3    
+  
+Compare `dep_time`, `sched_dep_time`, and `dep_delay`. How would you expect those three numbers to be related?
+
+```{r mutateex3, exercise = TRUE}
+    
+```
+    
+### Exercise 4
+
+Find the 10 most delayed flights (`dep_delay`) using a ranking function. How do you want to handle ties? Carefully read the documentation for `min_rank()`.
+    
+```{r mutateex4, exercise = TRUE}
+    
+```
+```{r mutateex4-solution}
+?min_rank
+flights <- mutate(flights, delay_rank = min_rank(dep_delay))
+filter(flights, delay_rank <= 10)
+```
+    
+<div id="mutateex4-hint">
+**Hint:** Once you compute a rank, you can filter the data set based on the ranks.
+</div>
+    
+```{r mutateex4-check}
+"Excellent! It's not possible to choose exactly 10 flights unless you pick an arbitrary method to choose between ties."
+```
+ 
+### Exercise 5
+
+What does `1:3 + 1:10` return? Why?
+
+```{r mutateex5, exercise = TRUE}
+    
+```
+```{r mutateex5-solution}
+1:3 + 1:10
+```
+        
+<div id="mutateex5-hint">
+**Hint:** Remember R's recycling rules.
+</div>
+
+```{r mutateex5-check}
+"Nice! R repeats 1:3 three times to create a vector long enough to add to 1:10. Since the length of the new vector is not exactly the length of 1:10, R also returns a warning message."
+```
+
+### Exercise 6
+
+What trigonometric functions does R provide? Hint: look up the help page for `Trig`.
+
+```{r mutateex6, exercise = TRUE}
+    
+```

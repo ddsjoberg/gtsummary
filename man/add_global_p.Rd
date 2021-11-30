@@ -83,6 +83,8 @@ tbl_uv_global_ex2 <-
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_uvregression tools: 
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},

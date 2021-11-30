@@ -1,0 +1,29 @@
+Package: globals
+Version: 0.14.0
+Depends: R (>= 3.1.2)
+Imports: codetools
+Title: Identify Global Objects in R Expressions
+Authors@R: c(
+    person("Henrik", "Bengtsson", role=c("aut", "cre", "cph"),
+           email="henrikb@braju.com"),
+    person("Davis","Vaughan", role="ctb",
+           email="davis@rstudio.com"))
+Description: Identifies global ("unknown" or "free") objects in R expressions
+    by code inspection using various strategies (ordered, liberal, or
+    conservative).  The objective of this package is to make it as simple as
+    possible to identify global objects for the purpose of exporting them in
+    parallel, distributed compute environments.
+License: LGPL (>= 2.1)
+LazyLoad: TRUE
+ByteCompile: TRUE
+URL: https://github.com/HenrikBengtsson/globals
+BugReports: https://github.com/HenrikBengtsson/globals/issues
+RoxygenNote: 7.1.1
+NeedsCompilation: no
+Packaged: 2020-11-22 16:11:06 UTC; hb
+Author: Henrik Bengtsson [aut, cre, cph],
+  Davis Vaughan [ctb]
+Maintainer: Henrik Bengtsson <henrikb@braju.com>
+Repository: CRAN
+Date/Publication: 2020-11-22 17:00:02 UTC
+Built: R 4.1.0; ; 2021-05-17 03:39:39 UTC; windows

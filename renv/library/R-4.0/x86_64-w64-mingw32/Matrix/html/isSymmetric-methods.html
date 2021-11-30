@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Methods for Function isSymmetric in Package 'Matrix'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for isSymmetric-methods {Matrix}"><tr><td>isSymmetric-methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Methods for Function isSymmetric in Package 'Matrix'</h2>
+
+<h3>Description</h3>
+
+<p><code>isSymmetric(M)</code> returns a <code><a href="../../base/html/logical.html">logical</a></code> indicating
+if <code>M</code> is a symmetric matrix.  This (now) is a <span class="pkg">base</span> function
+with a default method for the traditional matrices of <code><a href="../../base/html/class.html">class</a></code>
+<code>"matrix"</code>.  Methods here are defined for virtual Matrix classes
+such that it works for all objects inheriting from class
+<code><a href="Matrix-class.html">Matrix</a></code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="forceSymmetric.html">forceSymmetric</a></code>, <code><a href="symmpart.html">symmpart</a></code>, and the
+formal class (and subclasses) <code>"<a href="symmetricMatrix-class.html">symmetricMatrix</a>"</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+isSymmetric(Diagonal(4)) # TRUE of course
+M &lt;- Matrix(c(1,2,2,1), 2,2)
+isSymmetric(M) # TRUE (*and* of formal class "dsyMatrix")
+isSymmetric(as(M, "dgeMatrix")) # still symmetric, even if not "formally"
+isSymmetric(triu(M)) # FALSE
+
+## Look at implementations:
+showMethods("isSymmetric", includeDefs=TRUE)# "ANY": base's S3 generic; 6 more
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

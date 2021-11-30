@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;Schur&quot; of Schur Matrix Factorizations</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for Schur-class {Matrix}"><tr><td>Schur-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;Schur&quot; of Schur Matrix Factorizations</h2>
+
+<h3>Description</h3>
+
+<p>Class <code>"Schur"</code> is the class of Schur matrix
+factorizations.  These are a generalization of eigen value (or
+&ldquo;spectral&rdquo;) decompositions for general (possibly asymmmetric)
+square matrices, see the <code><a href="Schur.html">Schur</a>()</code> function.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects of class <code>"Schur"</code> are typically created by
+<code><a href="Schur.html">Schur</a>()</code>.
+</p>
+
+
+<h3>Slots</h3>
+
+<p><code>"Schur"</code> has slots
+</p>
+
+<dl>
+<dt><code>T</code>:</dt><dd><p>Upper Block-triangular <code><a href="Matrix-class.html">Matrix</a></code>
+object.</p>
+</dd>
+<dt><code>Q</code>:</dt><dd><p>Square <em>orthogonal</em> <code>"Matrix"</code>.</p>
+</dd>
+<dt><code>EValues</code>:</dt><dd><p>numeric or complex vector of eigenvalues of <code>T</code>.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>the matrix dimension: equal to <code>c(n,n)</code> of
+class <code>"integer"</code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"<a href="MatrixFactorization-class.html">MatrixFactorization</a>"</code>, directly.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Schur.html">Schur</a>()</code> for object creation;
+<code><a href="MatrixFactorization-class.html">MatrixFactorization</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("Schur")
+Schur(M &lt;- Matrix(c(1:7, 10:2), 4,4))
+## Trivial, of course:
+str(Schur(Diagonal(5)))
+
+## for more examples, see Schur()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

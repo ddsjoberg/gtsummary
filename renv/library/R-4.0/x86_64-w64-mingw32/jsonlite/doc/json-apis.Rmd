@@ -1,0 +1,260 @@
+---
+title: "Fetching JSON data from REST APIs"
+date: "2020-06-25"
+output:
+  html_document
+vignette: >
+  %\VignetteIndexEntry{Fetching JSON data from REST APIs}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+
+
+This section lists some examples of public HTTP APIs that publish data in JSON format. These are great to get a sense of the complex structures that are encountered in real world JSON data. All services are free, but some require registration/authentication. Each example returns lots of data, therefore not all output is printed in this document.
+
+
+```r
+library(jsonlite)
+```
+
+## Github
+
+Github is an online code repository and has APIs to get live data on almost all activity. Below some examples from a well known R package and author:
+
+
+```r
+hadley_orgs <- fromJSON("https://api.github.com/users/hadley/orgs")
+hadley_repos <- fromJSON("https://api.github.com/users/hadley/repos")
+gg_commits <- fromJSON("https://api.github.com/repos/hadley/ggplot2/commits")
+gg_issues <- fromJSON("https://api.github.com/repos/hadley/ggplot2/issues")
+
+#latest issues
+paste(format(gg_issues$user$login), ":", gg_issues$title)
+```
+
+```
+ [1] "ds-jim          : Nothing plotted with manual_scale when a named vector is used as the input."                  
+ [2] "thomasp85       : Should ggsave use ragg if available?"                                                         
+ [3] "jdsher          : Cannot override.aes with guide_bins?"                                                         
+ [4] "karawoo         : Combined facet labels aren't parsed when .multi_line = FALSE"                                 
+ [5] "mevers          : `coord_polar` causes error with `ggtext::element_markdown`"                                   
+ [6] "yutannihilation : WIP: Deprecate qplot()"                                                                       
+ [7] "tdhock          : Fix aes(groupS)"                                                                              
+ [8] "tdhock          : same argument/param in both stat and geom?"                                                   
+ [9] "tdhock          : undefined columns selected with groupS aes in custom geom"                                    
+[10] "SimonDedman     : geom_violin default adjust value for integers"                                                
+[11] "tdhock          : group column in built data even when aes(group) absent"                                       
+[12] "TylerGrantSmith : Add layer names"                                                                              
+[13] "krlmlr          : Support ptype argument for scale() functions"                                                 
+[14] "clauswilke      : Annotate all facets with axis ticks and labels for fixed scales"                              
+[15] "evodevosys      : theme_void() removes geom_segments (at least visually) when an alpha aesthetic is used"       
+[16] "hadley          : ggsave should use plot theme for default background"                                          
+[17] "yqgchen         : strip.text.y = element_blank() yields an error when there are multiple layers of strip labels"
+[18] "DrrDom          : Points fill in legend"                                                                        
+[19] "xvrdm           : WIP: Add scale_color_viridis_b"                                                               
+[20] "thomas-neitmann : `ggsave()` produces aliased png files on Windows"                                             
+[21] "atusy           : Export pch_table"                                                                             
+[22] "moodymudskipper : default xlim and ylim in qplot are not supportd when non missing"                             
+[23] "yutannihilation : Can geom_abline() draw lines a bit longer than the actual Coord range?"                       
+[24] "vitor-mendes-iq : scale_*_reverse() is ignored when limits are set on Coord"                                    
+[25] "LiRogers        : Justifying the legend with respect to the full plot area rather than the panel"               
+[26] "Shians          : scale_fill_steps produces unevenly spaced legend when limits are set"                         
+[27] "SimonDedman     : Add 'reverse' option to scale_y_date?"                                                        
+[28] "echasnovski     : Add `bounds` argument to `geom_density()`"                                                    
+[29] "swebs           : timezone parameter for scale_x_datetime has no effect"                                        
+[30] "jgjl            : Update stat_ecdf to work either on the x or the y aesthetic."                                 
+```
+
+## CitiBike NYC
+
+A single public API that shows location, status and current availability for all stations in the New York City bike sharing imitative.
+
+
+```r
+citibike <- fromJSON("http://citibikenyc.com/stations/json")
+stations <- citibike$stationBeanList
+colnames(stations)
+```
+
+```
+ [1] "id"                    "stationName"           "availableDocks"        "totalDocks"           
+ [5] "latitude"              "longitude"             "statusValue"           "statusKey"            
+ [9] "availableBikes"        "stAddress1"            "stAddress2"            "city"                 
+[13] "postalCode"            "location"              "altitude"              "testStation"          
+[17] "lastCommunicationTime" "landMark"             
+```
+
+```r
+nrow(stations)
+```
+
+```
+[1] 973
+```
+
+## Ergast
+
+The Ergast Developer API is an experimental web service which provides a historical record of motor racing data for non-commercial purposes.
+
+
+```r
+res <- fromJSON('http://ergast.com/api/f1/2004/1/results.json')
+drivers <- res$MRData$RaceTable$Races$Results[[1]]$Driver
+colnames(drivers)
+```
+
+```
+[1] "driverId"        "code"            "url"             "givenName"       "familyName"      "dateOfBirth"    
+[7] "nationality"     "permanentNumber"
+```
+
+```r
+drivers[1:10, c("givenName", "familyName", "code", "nationality")]
+```
+
+```
+   givenName    familyName code nationality
+1    Michael    Schumacher  MSC      German
+2     Rubens   Barrichello  BAR   Brazilian
+3   Fernando        Alonso  ALO     Spanish
+4       Ralf    Schumacher  SCH      German
+5       Juan Pablo Montoya  MON   Colombian
+6     Jenson        Button  BUT     British
+7      Jarno        Trulli  TRU     Italian
+8      David     Coulthard  COU     British
+9     Takuma          Sato  SAT    Japanese
+10 Giancarlo    Fisichella  FIS     Italian
+```
+
+
+## ProPublica
+
+Below an example from the [ProPublica Nonprofit Explorer API](https://projects.propublica.org/nonprofits/api) where we retrieve the first 10 pages of tax-exempt organizations in the USA, ordered by revenue. The `rbind_pages` function is used to combine the pages into a single data frame.
+
+
+
+```r
+#store all pages in a list first
+baseurl <- "https://projects.propublica.org/nonprofits/api/v2/search.json?order=revenue&sort_order=desc"
+pages <- list()
+for(i in 0:10){
+  mydata <- fromJSON(paste0(baseurl, "&page=", i), flatten=TRUE)
+  message("Retrieving page ", i)
+  pages[[i+1]] <- mydata$organizations
+}
+
+#combine all into one
+organizations <- rbind_pages(pages)
+
+#check output
+nrow(organizations)
+```
+
+```
+[1] 1100
+```
+
+```r
+organizations[1:10, c("name", "city", "strein")]
+```
+
+```
+                            name        city     strein
+1           0 DEBT EDUCATION INC  SANTA ROSA 46-4744976
+2                0 TOLERANCE INC     SUWANEE 27-2620044
+3                  0 U R PASSION   KENNEWICK 81-4045228
+4                00 MOVEMENT INC   PENSACOLA 82-4704419
+5                    00006 LOCAL       MEDIA 22-6062777
+6             0003 POSTAL FAMILY  CINCINNATI 31-0240910
+7                        0005 GA   HEPHZIBAH 58-1514574
+8  0005 WRIGHT-PATT CREDIT UNION BEAVERCREEK 31-0278870
+9                        0009 DE   GREENWOOD 26-4507405
+10               0011 CALIFORNIA      REDWAY 36-4654777
+```
+
+
+## New York Times
+
+The New York Times has several APIs as part of the NYT developer network. These interface to data from various departments, such as news articles, book reviews, real estate, etc. Registration is required (but free) and a key can be obtained at [here](http://developer.nytimes.com/signup). The code below includes some example keys for illustration purposes.
+
+
+```r
+#search for articles
+article_key <- "&api-key=b75da00e12d54774a2d362adddcc9bef"
+url <- "http://api.nytimes.com/svc/search/v2/articlesearch.json?q=obamacare+socialism"
+req <- fromJSON(paste0(url, article_key))
+articles <- req$response$docs
+colnames(articles)
+```
+
+```
+ [1] "abstract"         "web_url"          "snippet"          "lead_paragraph"   "print_section"   
+ [6] "print_page"       "source"           "multimedia"       "headline"         "keywords"        
+[11] "pub_date"         "document_type"    "news_desk"        "section_name"     "byline"          
+[16] "type_of_material" "_id"              "word_count"       "uri"              "subsection_name" 
+```
+
+```r
+#search for best sellers
+books_key <- "&api-key=76363c9e70bc401bac1e6ad88b13bd1d"
+url <- "http://api.nytimes.com/svc/books/v2/lists/overview.json?published_date=2013-01-01"
+req <- fromJSON(paste0(url, books_key))
+bestsellers <- req$results$list
+category1 <- bestsellers[[1, "books"]]
+subset(category1, select = c("author", "title", "publisher"))
+```
+
+```
+           author                title                  publisher
+1   Gillian Flynn            GONE GIRL           Crown Publishing
+2    John Grisham        THE RACKETEER Knopf Doubleday Publishing
+3       E L James FIFTY SHADES OF GREY Knopf Doubleday Publishing
+4 Nicholas Sparks           SAFE HAVEN   Grand Central Publishing
+5  David Baldacci        THE FORGOTTEN   Grand Central Publishing
+```
+
+## Twitter
+
+The twitter API requires OAuth2 authentication. Some example code:
+
+
+```r
+#Create your own appication key at https://dev.twitter.com/apps
+consumer_key = "EZRy5JzOH2QQmVAe9B4j2w";
+consumer_secret = "OIDC4MdfZJ82nbwpZfoUO4WOLTYjoRhpHRAWj6JMec";
+
+#Use basic auth
+secret <- jsonlite::base64_enc(paste(consumer_key, consumer_secret, sep = ":"))
+req <- httr::POST("https://api.twitter.com/oauth2/token",
+  httr::add_headers(
+    "Authorization" = paste("Basic", gsub("\n", "", secret)),
+    "Content-Type" = "application/x-www-form-urlencoded;charset=UTF-8"
+  ),
+  body = "grant_type=client_credentials"
+);
+
+#Extract the access token
+httr::stop_for_status(req, "authenticate with twitter")
+token <- paste("Bearer", httr::content(req)$access_token)
+
+#Actual API call
+url <- "https://api.twitter.com/1.1/statuses/user_timeline.json?count=10&screen_name=Rbloggers"
+req <- httr::GET(url, httr::add_headers(Authorization = token))
+json <- httr::content(req, as = "text")
+tweets <- fromJSON(json)
+substring(tweets$text, 1, 100)
+```
+
+```
+ [1] "https://t.co/Jac2KxZJkv in R: How to Make a Computer Vision Model within an R Environment  {https://"
+ [2] "Estimating Group Differences in Network Models using Moderation  {https://t.co/3ViArl9OZ2} #rstats #"
+ [3] "Deep attractors: Where deep learning meets chaos  {https://t.co/u3HniDkjWw} #rstats #DataScience"    
+ [4] "R Communities in South Africa  {https://t.co/cRBfDMPtBE} #rstats #DataScience"                       
+ [5] "Interactively perform a spatial interpolation with the GUInterp Shiny interface  {https://t.co/jzidD"
+ [6] "Advanced Modelling in R with CARET – a focus on supervised machine learning  {https://t.co/TSQtoxWrb"
+ [7] "Color Bars  {https://t.co/HJ2Ip24rnb} #rstats #DataScience"                                          
+ [8] "Why R? Webinar – Neural Networks for Modelling Molecular Interactions with Tensorflow  {https://t.co"
+ [9] "COVID-19: False Positive Alarm  {https://t.co/0ufxeYAPQc} #rstats #DataScience"                      
+[10] "#27: R and CRAN Binaries for Ubuntu  {https://t.co/yi5Xi9xQT9} #rstats #DataScience"                 
+```

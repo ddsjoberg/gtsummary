@@ -1,0 +1,186 @@
+Changes in Version 0.6-18
+
+ o combineLimits() fixed to work with empty panels
+
+Changes in Version 0.6-15
+
+ o graphical parameters vectorized in panel.3dbars().
+
+ o new panel function panel.ellipse().
+
+Changes in Version 0.6-15
+
+ o panel.xyarea() gains a 'horizontal' argument.
+
+ o layer() now works with splom.
+
+ o panel.ellipse() [was introduced previously but not mentioned here].
+
+ o changes to panel.smoother,quantile,xyarea to work with the new 
+   'col' default in panel.superpose(): now "black" rather than NA.
+
+Changes in Version 0.6-14
+
+ o new combineLimits() function for per-row and per-column limits.
+
+ o new functions xscale.components.* and yscale.components.*
+   where * is in {logpower,fractions,log10ticks,log10.3,subticks}.
+
+ o horizonplot substantially revised, with an argument 'horizonscale'
+   (actually for prepanel), "free" scales and colorkey support. 
+   Also the default colors are better now (thanks to Joseph Guillaume).
+
+ o new functions ggplot2like(), ggplot2like.opts() and axis.grid().
+
+ o new functions theEconomist.opts() and theEconomist.axis().
+
+ o panel.mapplot() now takes an 'exact' argument, similar to map().
+
+ o new function panel.key().
+
+ o c.trellis() and doubleYScale() now have an option to merge legends.
+
+ o c.trellis(), as.layer() and doubleYScale() now try to combine 
+   'par.settings' from multiple plots.
+
+ o doubleYScale() now accepts an 'under' argument (applies to 2nd plot).
+
+ o marginal.plot() now has a default cut = 0.
+
+ o layer() failed on expressions with missing arguments, like x[,1].
+
+ o removed the deprecated arguments to layer(), 'eval' and 'etc'.
+
+ o simpleSmoothTs() and panel.tskernel() used an incorrect (reversed)
+   filter in the case of sides = 1 and c > 1.
+
+ o as.layer() was not keeping existing scales if x.same or y.same = FALSE.
+
+ o xyplot.list() now applies 'FUN' directly, avoiding some evaluation issues.
+
+ o the 'style' argument to layer() now applies to the "superpose" styles
+   also, which fixes some cases with xyplot.ts.
+
+ o the 'zoo' methods for panel.xblocks() and panel.xyarea() now use 
+   coredata() rather than as.vector(), so can keep factors intact.
+
+Changes in Version 0.6-10
+
+ o support arrows with panel.segplot.
+
+ o several changes to panel.xblocks().
+
+ o layer() now has a 'magicdots' argument, which is TRUE by default.
+
+ o use of the 'eval' and 'etc' arguments to layer() are now deprecated.
+
+ o new function simpleSmoothTs (calculations as in panel.tskernel).
+
+ o panel.tskernel() gains a new argument 'n' (default 300) to reduce the
+   number of plotted points.
+
+ o panel.qqmath.tails() is now deprecated as its main functionality
+   has been moved into panel.qqmath() (in lattice 0.18-4, from R 2.11.0).
+
+ o glayer() was failing on plots with an existing 'panel.groups'.
+
+ o panel.smoother() now omits non-finite values and converts to numeric.
+
+ o panel.xyarea() (and thus horizonplot()) now handles missing values.
+
+Changes in Version 0.6-6
+
+ o xyplot.ts actually removed now (forgot to delete it after lattice release).
+ 
+ o new function horizonplot().
+
+ o fixed rescaling bug in panel.tskernel(..., sides = 1).
+
+ o mapplot can now take colramp = NULL to use the current theme.
+
+Changes in Version 0.6-5
+
+ o new panel functions panel.smoother() and panel.quantile().
+   The latter requires the quantreg package.
+
+ o new panel function panel.tskernel().
+
+ o layer() rewritten and now has several new arguments.
+   New convenience functions layer_(), glayer(), etc.
+
+ o new functions theEconomist.theme() and asTheEconomist().
+
+ o custom.theme() gains a `...` argument passed to simpleTheme.
+   Added a variant custom.theme.2() with different defaults.
+
+ o expanded xyplot.ts() and moved it to the lattice package.
+
+ o improved handling of colours in panel.xblocks().
+   Added several more examples to the help page.
+
+ o fixed panel.xblocks() to handle cases of no missing data.
+
+Changes in Version 0.6-4
+
+ o as.layer() gains arguments x.same and y.same.
+
+Changes in Version 0.6-2
+
+ o new functions 'panel.xblocks', 'panel.qqmath.tails',
+   'panel.xyarea' and 'panel.qqmath.xyarea'.
+
+ o added explicit 'layout' argument to 'marginal.plot'
+   (was clobbered by the default NULL in 'c.trellis').
+
+ o 'c.trellis' handles 'subscripts' argument to prepanel functions.
+
+Changes in Version 0.6-1
+
+ o fixed 'layout' argument to 'xyplot.list' and 'c.trellis'.
+
+Changes in Version 0.6-0
+
+ o new function xyplot.list, to create and merge multiple plots
+   (and not just xyplots).
+
+ o c.trellis will now set same scales properly when x/y.same=TRUE.
+
+ o new function doubleYScale, to easily overlay two plot series.
+
+ o new functions panel.lmlineq and panel.ablineq for line equations.
+
+ o marginal.plot handles non-syntactic variable names;
+   also now coerces to data.frame (so e.g. works with a matrix).
+
+ o changes to default axis style in marginal.plot.
+
+ o new dataset EastAuClimate.
+
+Changes in Version 0.5-4
+
+ o marginal.plot now handles table objects sensibly.
+
+ o marginal.plot now applies 'subset' to 'groups', as it should.
+
+Changes in Version 0.5-3
+
+ o improvements to marginal.plot including support for groups.
+
+ o fix to marginal.plot: failed with only numeric variables.
+
+ o fix to panel.voronoi (with use.tripack = FALSE):
+   wrong colors were used when xlim/ylim enclosed a data subset.
+
+ o new function 'as.layer' and a method 'as.layer.trellis'.
+   This allows panels to be overlaid with independent x/y scales.
+
+Previous Changes
+
+ o several new data sets and a few utility functions
+
+ o dendrogramGrob to produce a dendrogram that can be used as a legend
+
+ o new generic function 'gplot' -- like 'plot', but meant to produce a
+   `grouped' Trellis plot.  Methods can be defined for objects that
+    already have a 'plot' method.  API Currently unstable.
+

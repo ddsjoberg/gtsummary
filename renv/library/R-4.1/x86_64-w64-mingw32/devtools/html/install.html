@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Install a local development package.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for install {devtools}"><tr><td>install {devtools}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Install a local development package.</h2>
+
+<h3>Description</h3>
+
+<p>Uses <code style="white-space: pre;">R CMD INSTALL</code> to install the package. Will also try to install
+dependencies of the package from CRAN, if they're not already installed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+install(
+  pkg = ".",
+  reload = TRUE,
+  quick = FALSE,
+  build = !quick,
+  args = getOption("devtools.install.args"),
+  quiet = FALSE,
+  dependencies = NA,
+  upgrade = "default",
+  build_vignettes = FALSE,
+  keep_source = getOption("keep.source.pkgs"),
+  force = FALSE,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pkg</code></td>
+<td>
+<p>The package to use, can be a file path to the package or a
+package object.  See <code><a href="../../devtools/help/as.package.html">as.package()</a></code> for more information.</p>
+</td></tr>
+<tr valign="top"><td><code>reload</code></td>
+<td>
+<p>if <code>TRUE</code> (the default), will automatically reload the
+package after installing.</p>
+</td></tr>
+<tr valign="top"><td><code>quick</code></td>
+<td>
+<p>if <code>TRUE</code> skips docs, multiple-architectures,
+demos, and vignettes, to make installation as fast as possible.</p>
+</td></tr>
+<tr valign="top"><td><code>build</code></td>
+<td>
+<p>if <code>TRUE</code> <code><a href="../../pkgbuild/help/build.html">pkgbuild::build()</a></code>s the package first:
+this ensures that the installation is completely clean, and prevents any
+binary artefacts (like &lsquo;<span class="file">.o</span>&rsquo;, <code>.so</code>) from appearing in your local
+package directory, but is considerably slower, because every compile has
+to start from scratch.</p>
+</td></tr>
+<tr valign="top"><td><code>args</code></td>
+<td>
+<p>An optional character vector of additional command line
+arguments to be passed to <code style="white-space: pre;">R CMD INSTALL</code>. This defaults to the
+value of the option <code>"devtools.install.args"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>If <code>TRUE</code>, suppress output.</p>
+</td></tr>
+<tr valign="top"><td><code>dependencies</code></td>
+<td>
+<p>Which dependencies do you want to check?
+Can be a character vector (selecting from &quot;Depends&quot;, &quot;Imports&quot;,
+&quot;LinkingTo&quot;, &quot;Suggests&quot;, or &quot;Enhances&quot;), or a logical vector.
+</p>
+<p><code>TRUE</code> is shorthand for &quot;Depends&quot;, &quot;Imports&quot;, &quot;LinkingTo&quot; and
+&quot;Suggests&quot;. <code>NA</code> is shorthand for &quot;Depends&quot;, &quot;Imports&quot; and &quot;LinkingTo&quot;
+and is the default. <code>FALSE</code> is shorthand for no dependencies (i.e.
+just check this package, not its dependencies).
+</p>
+<p>The value &quot;soft&quot; means the same as <code>TRUE</code>, &quot;hard&quot; means the same as <code>NA</code>.
+</p>
+<p>You can also specify dependencies from one or more additional fields,
+common ones include:
+</p>
+
+<ul>
+<li><p> Config/Needs/website - for dependencies used in building the pkgdown site.
+</p>
+</li>
+<li><p> Config/Needs/coverage for dependencies used in calculating test coverage.
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>upgrade</code></td>
+<td>
+<p>Should package dependencies be upgraded? One of &quot;default&quot;, &quot;ask&quot;, &quot;always&quot;, or &quot;never&quot;. &quot;default&quot;
+respects the value of the <code>R_REMOTES_UPGRADE</code> environment variable if set,
+and falls back to &quot;ask&quot; if unset. &quot;ask&quot; prompts the user for which out of
+date packages to upgrade. For non-interactive sessions &quot;ask&quot; is equivalent
+to &quot;always&quot;. <code>TRUE</code> and <code>FALSE</code> are also accepted and correspond to
+&quot;always&quot; and &quot;never&quot; respectively.</p>
+</td></tr>
+<tr valign="top"><td><code>build_vignettes</code></td>
+<td>
+<p>if <code>TRUE</code>, will build vignettes. Normally it is
+<code>build</code> that's responsible for creating vignettes; this argument makes
+sure vignettes are built even if a build never happens (i.e. because
+<code>build = FALSE</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>keep_source</code></td>
+<td>
+<p>If <code>TRUE</code> will keep the srcrefs from an installed
+package. This is useful for debugging (especially inside of RStudio).
+It defaults to the option <code>"keep.source.pkgs"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>force</code></td>
+<td>
+<p>Force installation, even if the remote state has not changed
+since the previous install.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional arguments passed to <code><a href="../../remotes/help/install_deps.html">remotes::install_deps()</a></code>
+when installing dependencies.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If <code>quick = TRUE</code>, installation takes place using the current package
+directory. If you have compiled code, this means that artefacts of
+compilation will be created in the <code style="white-space: pre;">src/</code> directory. If you want to avoid
+this, you can use <code>build = TRUE</code> to first build a package bundle and then
+install it from a temporary directory. This is slower, but keeps the source
+directory pristine.
+</p>
+<p>If the package is loaded, it will be reloaded after installation. This is
+not always completely possible, see <code><a href="../../devtools/help/reload.html">reload()</a></code> for caveats.
+</p>
+<p>To install a package in a non-default library, use <code><a href="../../withr/help/with_libpaths.html">withr::with_libpaths()</a></code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../devtools/help/update_packages.html">update_packages()</a></code> to update installed packages from the
+source location and <code><a href="../../devtools/help/with_debug.html">with_debug()</a></code> to install packages with
+debugging flags set.
+</p>
+<p>Other package installation: 
+<code><a href="../../devtools/help/uninstall.html">uninstall</a>()</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>devtools</em> version 2.4.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Packed Triangular Dense Matrices - &quot;dtpMatrix&quot;</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for dtpMatrix-class {Matrix}"><tr><td>dtpMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Packed Triangular Dense Matrices - &quot;dtpMatrix&quot;</h2>
+
+<h3>Description</h3>
+
+<p>The <code>"dtpMatrix"</code> class is the class of triangular,
+dense, numeric matrices in packed storage.  The <code>"dtrMatrix"</code>
+class is the same except in nonpacked storage.</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("dtpMatrix",
+    ...)</code> or by coercion from other classes of matrices.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>uplo</code>:</dt><dd><p>Object of class <code>"character"</code>. Must be
+either &quot;U&quot;, for upper triangular, and &quot;L&quot;, for lower triangular.</p>
+</dd>
+<dt><code>diag</code>:</dt><dd><p>Object of class <code>"character"</code>. Must be
+either <code>"U"</code>, for unit triangular (diagonal is all ones), or
+<code>"N"</code>; see <code><a href="triangularMatrix-class.html">triangularMatrix</a></code>.</p>
+</dd>
+<dt><code>x</code>:</dt><dd><p>Object of class <code>"numeric"</code>. The numeric
+values that constitute the matrix, stored in column-major order.
+For a packed square matrix of dimension <i>d * d</i>,
+<code>length(x)</code> is of length <i>d(d+1)/2</i> (also when
+<code>diag == "U"</code>!).</p>
+</dd>
+<dt><code>Dim</code>,<code>Dimnames</code>:</dt><dd><p>The dimension (a length-2
+<code>"integer"</code>) and corresponding names (or <code>NULL</code>),
+inherited from the <code><a href="Matrix-class.html">Matrix</a></code>, see there.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"ddenseMatrix"</code>, directly.
+Class <code>"triangularMatrix"</code>, directly.
+Class <code>"dMatrix"</code> and more by class <code>"ddenseMatrix"</code> etc, see
+the examples.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>%*%</dt><dd><p><code>signature(x = "dtpMatrix", y = "dgeMatrix")</code>:
+Matrix multiplication; ditto for several other signature
+combinations, see <code>showMethods("%*%", class = "dtpMatrix")</code>.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dtpMatrix", to = "dtrMatrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dtpMatrix", to = "matrix")</code></p>
+</dd>
+<dt>determinant</dt><dd><p><code>signature(x = "dtpMatrix", logarithm = "logical")</code>:
+the <code><a href="../../base/html/det.html">determinant</a>(x)</code> trivially is
+<code>prod(diag(x))</code>, but computed on log scale to prevent over-
+and underflow.</p>
+</dd>
+<dt>diag</dt><dd><p><code>signature(x = "dtpMatrix")</code>: ... </p>
+</dd>
+<dt>norm</dt><dd><p><code>signature(x = "dtpMatrix", type = "character")</code>: ... </p>
+</dd>
+<dt>rcond</dt><dd><p><code>signature(x = "dtpMatrix", norm = "character")</code>: ... </p>
+</dd>
+<dt>solve</dt><dd><p><code>signature(a = "dtpMatrix", b = "...")</code>:
+efficiently using internal backsolve or forwardsolve, see
+<code><a href="solve-methods.html">solve-methods</a></code>.</p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "dtpMatrix")</code>: <code>t(x)</code> remains
+a <code>"dtpMatrix"</code>, lower triangular if <code>x</code> is upper
+triangular, and vice versa.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>Class <code><a href="dtrMatrix-class.html">dtrMatrix</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("dtrMatrix")
+
+example("dtrMatrix-class", echo=FALSE)
+(p1 &lt;- as(T2, "dtpMatrix"))
+str(p1)
+(pp &lt;- as(T, "dtpMatrix"))
+ip1 &lt;- solve(p1)
+stopifnot(length(p1@x) == 3, length(pp@x) == 3,
+          p1 @ uplo == T2 @ uplo, pp @ uplo == T @ uplo,
+	  identical(t(pp), p1), identical(t(p1), pp),
+	  all((l.d &lt;- p1 - T2) == 0), is(l.d, "dtpMatrix"),
+	  all((u.d &lt;- pp - T ) == 0), is(u.d, "dtpMatrix"),
+	  l.d@uplo == T2@uplo, u.d@uplo == T@uplo,
+	  identical(t(ip1), solve(pp)), is(ip1, "dtpMatrix"),
+	  all.equal(as(solve(p1,p1), "diagonalMatrix"), Diagonal(2)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

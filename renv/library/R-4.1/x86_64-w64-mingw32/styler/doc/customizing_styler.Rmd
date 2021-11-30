@@ -1,0 +1,351 @@
+---
+title: "Customizing styler"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Customizing styler}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette provides a high-level overview of how styler works and how you can
+define your own style guide and format code according to it.
+
+# How styler works
+
+There are three major steps that styler performs in order to style code:
+
+1. Create an abstract syntax tree (AST) from `utils::getParseData()` that
+   contains positional information for every token. We call this a nested parse
+   table. You can learn more about how exactly this is done in the vignettes
+   "Data Structures" and "Manipulating the nested parse table".
+
+2. Apply transformer functions at each level of the nested parse table. We use a
+   visitor approach, i.e. a function that takes functions as arguments and
+   applies them to every level of nesting. You can find out more about it on the
+   help file for `visit()`. Note that the function is not exported by styler.
+   The visitor will take care of applying the functions on every level of
+   nesting - and we can supply transformer functions that operate on one level
+   of nesting. In the sequel, we use the term *nest* to refer to such a parse
+   table at one level of nesting. A *nest* always represents a complete
+   expression. Before we apply the transformers, we have to initialize two
+   columns `lag_newlines` and `spaces`, which contain the number of line breaks
+   before the token and the number of spaces after the token. These will be the
+   columns that most of our transformer functions will modify.
+
+3. Serialize the nested parse table, that is, extract the terminal tokens from
+   the nested parse table and add spaces and line breaks between them as
+   specified in the nested parse table.
+
+The `transformers` argument is, apart from the code to style, the key argument
+of functions such as `style_text()` and friends. By default, it is created via
+the `style` argument. The transformers are a named list of transformer functions
+and other arguments passed to styler. To use the default style guide of styler
+([the tidyverse style guide](https://style.tidyverse.org/)), call
+`tidyverse_style()` to get the list of the transformer functions. Let's quickly
+look at what those are.
+
+```{r, message = FALSE}
+library("styler")
+cache_deactivate()
+library("dplyr")
+names(tidyverse_style())
+str(tidyverse_style(), give.attr = FALSE, list.len = 3)
+```
+
+We note that there are different types of transformer functions. `initialize`
+initializes some variables in the nested parse table (so it is not actually a
+transformer), and the other elements modify either spacing, line breaks or
+tokens. `use_raw_indention` is not a function, it is just an option. All
+transformer functions have a similar structure. Let's take a look at one:
+
+```{r}
+tidyverse_style()$space$remove_space_after_opening_paren
+```
+
+As the name says, this function removes spaces after the opening parenthesis.
+But how? Its input is a *nest*. Since the visitor will go through all levels of
+nesting, we just need a function that can be applied to a *nest*, that is, to a
+parse table at one level of nesting. We can compute the nested parse table and
+look at one of the levels of nesting that is interesting for us (more on the
+data structure in the vignettes "Data structures" and "Manipulating the parse
+table"):
+
+```{r}
+string_to_format <- "call( 3)"
+pd <- styler:::compute_parse_data_nested(string_to_format) %>%
+  styler:::pre_visit(c(default_style_guide_attributes))
+pd$child[[1]] %>%
+  select(token, terminal, text, newlines, spaces)
+```
+
+`default_style_guide_attributes()` is called to initialize some variables, it
+does not actually transform the parse table.
+
+All the function `remove_space_after_opening_paren()` now does is to look for
+the opening bracket and set the column `spaces` of the token to zero. Note that
+it is very important to check whether there is also a line break following after
+that token. If so, `spaces` should not be touched because of the way `spaces`
+and `newlines` are defined. `spaces` are the number of spaces after a token and
+`newlines`. Hence, if a line break follows, spaces are not EOL spaces, but
+rather the spaces directly before the next token. If there was a line break
+after the token and the rule did not check for that, indention for the token
+following `(` would be removed. This would be unwanted for example if
+`use_raw_indention` is set to `TRUE` (which means indention should not be
+touched). If we apply the rule to our parse table, we can see that the column
+`spaces` changes and is now zero for all tokens:
+
+```{r}
+styler:::remove_space_after_opening_paren(pd$child[[1]]) %>%
+  select(token, terminal, text, newlines, spaces)
+```
+
+All top-level styling functions have a `style` argument (which defaults to
+`tidyverse_style`). If you check out the help file, you can see that the
+argument `style` is only used to create the default `transformers` argument,
+which defaults to `style(...)`. This allows for the styling options to be set
+without having to specify them inside the function passed to `transformers`.
+
+Let's clarify this with an example. The following yields the same result:
+
+```{r}
+all.equal(
+  style_text(string_to_format, transformers = tidyverse_style(strict = FALSE)),
+  style_text(string_to_format, style = tidyverse_style, strict = FALSE),
+  style_text(string_to_format, strict = FALSE),
+)
+```
+
+Now let's do the whole styling of a string with just this one transformer
+introduced above. We do this by first creating a style guide with the designated
+wrapper function `create_style_guide()`. It takes transformer functions as input
+and returns them in a named list that meets the formal requirements for styling
+functions. We also set a name and version of the style guide according to the
+convention outlined in `create_style_guide()`.
+
+```{r}
+space_after_opening_style <- function(are_you_sure) {
+  create_style_guide(
+    space = tibble::lst(remove_space_after_opening_paren = 
+    if (are_you_sure) styler:::remove_space_after_opening_paren),
+    style_guide_name = "styler::space_after_opening_style@https://github.com/r-lib/styler",
+    style_guide_version = read.dcf(here::here("DESCRIPTION"))[, "Version"]
+  )
+}
+```
+
+Make sure to also disable caching during development with `cache_deactivate()`
+because styling the same text with a different style guide that has the same
+version and name will fool the cache invalidation in the case your style guide
+has transformer functions with different function bodies. Make sure to increment
+the version number of your style guide with every release. It should correspond
+to the version of the package from which you export your style guide.
+
+We can not try the style guide:
+
+```{r}
+style_text("call( 1,1)", style = space_after_opening_style, are_you_sure = TRUE)  
+```
+
+Note that the return value of your `style` function may not contain `NULL`
+elements.
+
+I hope you have acquired a basic understanding of how styler transforms code.
+You can provide your own transformer functions and use `create_style_guide()` to
+create customized code styling. If you do so, there are a few more things you
+should be aware of, which are described in the next section.
+
+# Implementation details
+
+For both spaces and line break information in the nested parse table, we use
+four attributes in total: `newlines`, `lag_newlines`, `spaces`, and
+`lag_spaces`. `lag_spaces` is created from `spaces` only just before the parse
+table is serialized, so it is not relevant for manipulating the parse table as
+described above. These columns are to some degree redundant, but with just lag
+or lead, we would lose information on the first or the last element
+respectively, so we need both.
+
+The sequence in which styler applies rules on each level of nesting is given in
+the list below:
+
+* call `default_style_guide_attributes()` to initialize some variables.
+
+* modify the line breaks (modifying `lag_newlines` only based on `token`,
+  `token_before`, `token_after` and `text`).
+
+* modify the spaces (modifying `spaces` only based on `lag_newlines`,
+  `newlines`, `multi_line`, `token`, `token_before`, `token_after` and `text`).
+
+* modify the tokens (based on `newlines` `lag_newlines`, `spaces` `multi_line`,
+  `token`, `token_before`, `token_after` and `text`).
+
+* modify the indention by changing `indention_ref_id` (based on `newlines`
+  `lag_newlines`, `spaces` `multi_line`, `token`, `token_before`, `token_after`
+  and `text`).
+
+You can also look this up in the function that applies the transformers:
+`apply_transformers()`:
+
+```{r}
+styler:::apply_transformers
+```
+
+This means that the order of the styling is clearly defined and it is for
+example not possible to modify line breaks based on spacing, because spacing
+will be set after line breaks are set. Do not rely on the column `col1`, `col2`,
+`line1` and `line2` in the parse table in any of your functions since these
+columns only reflect the position of tokens at the point of parsing,
+
+i.e. they are not kept up to date throughout the process of styling.
+
+Also, as indicated above, work with `lag_newlines` only in your line break
+rules. For development purposes, you may also want to use the unexported
+function `test_collection()` to help you with testing your style guide. You can
+find more information in the help file for the function.
+
+If you write functions that modify spaces, don't forget to make sure that you
+don't modify EOL spacing, since that is needed for `use_raw_indention`, as
+highlighted previously.
+
+Finally, take note of the naming convention. All function names starting with
+`set-*` correspond to the `strict` option, that is, setting some value to an
+exact number. `add-*` is softer. For example, `add_spaces_around_op()`, only
+makes sure that there is at least one space around operators, but if the code to
+style contains multiple, the transformer will not change that.
+
+# Showcasing the development of a styling rule
+
+For illustrative purposes, we create a new style guide that has one rule only:
+Curly braces are always on a new line. So for example:
+
+```{r}
+add_one <- function(x) {
+  x + 1
+}
+```
+
+Should be transformed to:
+
+```{r}
+add_one <- function(x) 
+{
+  x + 1
+}
+```
+
+We first need to get familiar with the structure of the nested parse table. Note
+that the structure of the nested parse table is not affected by the position of
+line breaks and spaces. Let's first create the nested parse table.
+
+```{r}
+code <- c("add_one <- function(x) { x + 1 }")
+```
+
+``` r
+styler:::create_tree(code)
+```
+
+     ##                                              levelName
+     ## 1  ROOT (token: short_text [lag_newlines/spaces] {id})
+     ## 2   °--expr:  [0/0] {23}                              
+     ## 3       ¦--expr:  [0/1] {3}                           
+     ## 4       ¦   °--SYMBOL: add_o [0/0] {1}                
+     ## 5       ¦--LEFT_ASSIGN: <- [0/1] {2}                  
+     ## 6       °--expr:  [0/0] {22}                          
+     ## 7           ¦--FUNCTION: funct [0/0] {4}              
+     ## 8           ¦--'(': ( [0/0] {5}                       
+     ## 9           ¦--SYMBOL_FORMALS: x [0/0] {6}            
+     ## 10          ¦--')': ) [0/1] {7}                       
+     ## 11          °--expr:  [0/0] {19}                      
+     ## 12              ¦--'{': { [0/1] {9}                   
+     ## 13              ¦--expr:  [0/1] {16}                  
+     ## 14              ¦   ¦--expr:  [0/1] {12}              
+     ## 15              ¦   ¦   °--SYMBOL: x [0/0] {10}       
+     ## 16              ¦   ¦--'+': + [0/1] {11}              
+     ## 17              ¦   °--expr:  [0/0] {14}              
+     ## 18              ¦       °--NUM_CONST: 1 [0/0] {13}    
+     ## 19              °--'}': } [0/0] {15}
+
+```{r}
+pd <- styler:::compute_parse_data_nested(code)
+```
+
+The token of interest here has id number 10. Let's navigate there. Since line
+break rules manipulate the lags *before* the token, we need to change
+`lag_newlines` at the token "'{'".
+
+```{r}
+pd$child[[1]]$child[[3]]$child[[5]]
+```
+
+Remember what we said above: A transformer takes a flat parse table as input,
+updates it and returns it. So here it's actually simple:
+
+```{r}
+set_line_break_before_curly_opening <- function(pd_flat) {
+  op <- pd_flat$token %in% "'{'"
+  pd_flat$lag_newlines[op] <- 1L
+  pd_flat
+}
+```
+
+Almost done. Now, the last thing we need to do is to use `create_style_guide()`
+to create our style guide consisting of that function.
+
+```{r}
+set_line_break_before_curly_opening_style <- function() {
+  create_style_guide(
+    line_break = lst(set_line_break_before_curly_opening),
+    style_guide_name = "styler::set_line_break_before_curly_opening_style@https://github.com/r-lib/styler",
+    style_guide_version = read.dcf(here::here("DESCRIPTION"))[, "Version"]
+  )
+}
+```
+
+Now you can style your string according to it.
+
+```{r}
+style_text(code, style = set_line_break_before_curly_opening_style)
+```
+
+Note that when removing line breaks, always take care of comments, since you
+don't want:
+
+```{r, eval = FALSE}
+a <- function() # comments should remain EOL
+{ 
+  3
+}
+```
+
+To become:
+
+```{r, eval = FALSE}
+a <- function() # comments should remain EOL { 
+  3
+}
+```
+
+The easiest way of taking care of that is not applying the rule if there is a
+comment before the token of interest, which can be checked for within your
+transformer function. The transformer function from the tidyverse style that
+removes line breaks before the round closing bracket that comes after a curly
+brace looks as follows:
+
+```{r}
+styler:::remove_line_break_before_round_closing_after_curly
+```
+
+With our example function `set_line_break_before_curly_opening()` we don't need
+to worry about that as we are only adding line breaks, but we don't remove
+them.
+
+# Cache invalidation
+
+Note that it if you re-distribute the style guide, it's your responsibility to
+set the version and the style guide name in `create_style_guide()` correctly. If
+you distribute a new version of your style guide and you don't increment the
+version number, it might have drastic consequences for your user: Under some
+circumstances (see `help("cache_make_key")`), your new style guide won't
+invalidate the cache although it should and applying your style guide to code
+that has previously been styled won't result in any change. There is currently 
+no mechanism in styler that prevents you from making this mistake.

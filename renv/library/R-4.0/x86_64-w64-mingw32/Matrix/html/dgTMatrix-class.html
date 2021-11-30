@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Sparse matrices in triplet form</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for dgTMatrix-class {Matrix}"><tr><td>dgTMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Sparse matrices in triplet form</h2>
+
+<h3>Description</h3>
+
+<p>The <code>"dgTMatrix"</code> class is the class of sparse
+matrices stored as (possibly redundant) triplets.  The internal
+representation is not at all unique, contrary to the one for class
+<code><a href="dgCMatrix-class.html">dgCMatrix</a></code>.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("dgTMatrix",
+    ...)</code>, but more typically via <code>as(*, "dgTMatrix")</code>,
+<code><a href="spMatrix.html">spMatrix</a>()</code>, or
+<code><a href="sparseMatrix.html">sparseMatrix</a>(*, repr = "T")</code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>i</code>:</dt><dd><p><code><a href="../../base/html/integer.html">integer</a></code> row indices of non-zero
+entries <em>in 0-base</em>, i.e., must be in <code>0:(nrow(.)-1)</code>.</p>
+</dd>
+<dt><code>j</code>:</dt><dd><p><code><a href="../../base/html/integer.html">integer</a></code> column indices of non-zero
+entries.  Must be the same length as slot <code>i</code> and
+<em>0-based</em> as well, i.e., in <code>0:(ncol(.)-1)</code>.</p>
+</dd>
+<dt><code>x</code>:</dt><dd><p><code><a href="../../base/html/numeric.html">numeric</a></code> vector - the (non-zero)
+entry at position <code>(i,j)</code>.  Must be the same length as slot
+<code>i</code>.  If an index pair occurs more than once, the corresponding
+values of slot <code>x</code> are added to form the element of the matrix.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>Object of class <code>"integer"</code> of length 2 -
+the dimensions of the matrix.</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>+</dt><dd><p><code>signature(e1 = "dgTMatrix", e2 = "dgTMatrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dgTMatrix", to = "dgCMatrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dgTMatrix", to = "dgeMatrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dgTMatrix", to = "matrix")</code>,
+and typically coercion methods for more specific signatures, we
+are not mentioning here.
+</p>
+<p>Note that these are not guaranteed to continue to exist,
+but rather you should use calls like <code>as(x,
+	"CsparseMatrix")</code>, <code>as(x, "generalMatrix")</code>,
+<code>as(x, "dMatrix")</code>, i.e. coercion to higher level virtual classes.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "matrix", to = "dgTMatrix")</code>,
+(direct coercion from tradition matrix).</p>
+</dd>
+<dt>image</dt><dd><p><code>signature(x = "dgTMatrix")</code>: plots an image of
+<code>x</code> using the <code><a href="../../lattice/html/levelplot.html">levelplot</a></code> function</p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "dgTMatrix")</code>: returns the transpose of
+<code>x</code></p>
+</dd>
+</dl>
+
+
+
+<h3>Note</h3>
+
+<p>Triplet matrices are a convenient form in which to construct sparse
+matrices after which they can be coerced to
+<code><a href="dgCMatrix-class.html">dgCMatrix</a></code> objects.
+</p>
+<p>Note that both <code>new(.)</code> and <code><a href="spMatrix.html">spMatrix</a></code> constructors
+for <code>"dgTMatrix"</code> (and other <code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code>
+classes) implicitly add <i>x_k</i>'s that belong to identical
+<i>(i_k, j_k)</i> pairs.
+</p>
+<p>However this means that a matrix typically can be stored in more than
+one possible <code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code> representations.
+Use <code><a href="uniqTsparse.html">uniqTsparse</a>()</code> in order to ensure uniqueness of the
+internal representation of such a matrix.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Class <code><a href="dgCMatrix-class.html">dgCMatrix</a></code> or the superclasses
+<code><a href="dsparseMatrix-class.html">dsparseMatrix</a></code> and
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>; <code><a href="uniqTsparse.html">uniqTsparse</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+m &lt;- Matrix(0+1:28, nrow = 4)
+m[-3,c(2,4:5,7)] &lt;- m[ 3, 1:4] &lt;- m[1:3, 6] &lt;- 0
+(mT &lt;- as(m, "dgTMatrix"))
+str(mT)
+mT[1,]
+mT[4, drop = FALSE]
+stopifnot(identical(mT[lower.tri(mT)],
+                    m [lower.tri(m) ]))
+mT[lower.tri(mT,diag=TRUE)] &lt;- 0
+mT
+
+## Triplet representation with repeated (i,j) entries
+## *adds* the corresponding x's:
+T2 &lt;- new("dgTMatrix",
+          i = as.integer(c(1,1,0,3,3)),
+          j = as.integer(c(2,2,4,0,0)), x=10*1:5, Dim=4:5)
+str(T2) # contains (i,j,x) slots exactly as above, but
+T2 ## has only three non-zero entries, as for repeated (i,j)'s,
+   ## the corresponding x's are "implicitly" added
+stopifnot(nnzero(T2) == 3)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,214 @@
+% \VignetteIndexEntry{Users guide to geepack}
+% \VignetteKeyword{Generalized Estimating Equation}
+% \VignetteKeyword{Working correlation matrix}
+
+\documentclass{article}
+\usepackage{boxedminipage,color,a4,shortvrb,hyperref}
+%\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\MakeShortVerb|
+
+\def\pkg#1{{\bf #1}}
+
+
+<<echo=FALSE,print=FALSE>>=
+require( geepack )
+prettyVersion <- packageDescription("geepack")$Version
+prettyDate <- format(Sys.Date())
+@
+
+\SweaveOpts{keep.source=T,prefix.string=figures/LSmeans}
+
+\title{On the usage of the \texttt{geepack} }
+\author{S\o ren H\o jsgaard and Ulrich Halekoh}
+\date{\pkg{geepack} version \Sexpr{prettyVersion} as of \Sexpr{prettyDate}}
+
+
+\begin{document}
+
+\parindent0pt\parskip4pt
+
+%% Efter preamble
+\definecolor{myGray}{rgb}{0.95,0.95,0.95}
+\makeatletter
+\renewenvironment{Schunk}{
+  \begin{lrbox}{\@tempboxa}
+    \begin{boxedminipage}
+      {\columnwidth}\scriptsize}
+    {\end{boxedminipage}
+  \end{lrbox}%
+  \colorbox{myGray}{\usebox{\@tempboxa}}
+}
+\makeatother
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+\label{sec:introduction}
+This note contains a few extra examples. We illustrate the usage of a
+the |waves| argument and the |zcor| argument together with a fixed
+working correlation matrix for the |geeglm()| function. 
+
+
+\label{sec:intro}
+
+
+\section{Citing \texttt{geepack}}
+
+
+The primary reference for the |geepack| package is
+\begin{quote}
+Halekoh, U.,
+H\o jsgaard, S., Yan, J. (2006) 
+{\em The R Package geepack for Generalized Estimating Equations (2006)}
+Journal of Statistical
+Software \url{https://www.jstatsoft.org/article/view/v015i02}
+\end{quote}
+
+@
+<<>>=
+library(geepack)
+citation("geepack")
+@ %def
+
+If you use |geepack| in your own work, please do cite the above
+reference.
+
+
+\section{Simulating a dataset}
+\label{sec:simulating}
+
+
+To illustrate the usage of 
+the |waves| argument and the |zcor| argument together with a fixed
+working correlation matrix for the |geeglm()|
+ we simulate some data suitable for a regression model.
+
+@
+<<>>=
+library(geepack)
+timeorder <- rep(1:5, 6)
+tvar      <- timeorder + rnorm(length(timeorder))
+idvar <- rep(1:6, each=5)
+uuu   <- rep(rnorm(6), each=5)
+yvar  <- 1 + 2*tvar + uuu + rnorm(length(tvar))
+simdat <- data.frame(idvar, timeorder, tvar, yvar)
+head(simdat,12)
+@ %def
+
+Notice that clusters of data appear together in |simdat| and that
+observations are ordered (according to |timeorder|) within clusters.
+
+We can fit a model with an AR(1) error structure as
+
+@
+<<>>=
+mod1 <- geeglm(yvar~tvar, id=idvar, data=simdat, corstr="ar1")
+mod1
+@ %def
+
+This works because observations are ordered according to time within
+each subject in the dataset.
+
+
+\section{Using the \texttt{waves} argument}
+\label{sec:xxx}
+
+
+If observatios were not ordered according to cluster and time within
+cluster we would get the
+wrong result:
+
+@
+<<>>=
+set.seed(123)
+## library(doBy)
+simdatPerm <- simdat[sample(nrow(simdat)),]
+## simdatPerm <- orderBy(~idvar, simdatPerm)
+simdatPerm <- simdatPerm[order(simdatPerm$idvar),]
+head(simdatPerm)
+@ %def
+
+Notice that in |simdatPerm| data is ordered according to subject but
+the time ordering within subject is random.
+
+Fitting the model as
+before gives
+
+@
+<<>>=
+mod2 <- geeglm(yvar~tvar, id=idvar, data=simdatPerm, corstr="ar1")
+mod2
+@ %def
+
+Likewise if clusters do not appear contigously in data we also get the
+wrong result (the clusters are not recognized):
+
+@
+<<>>=
+## simdatPerm2 <- orderBy(~timeorder, data=simdat)
+simdatPerm2 <- simdat[order(simdat$timeorder),]
+geeglm(yvar~tvar, id=idvar, data=simdatPerm2, corstr="ar1")
+@ %def
+
+
+To obtain the right result we must give the |waves| argument:
+
+@
+<<>>=
+wav <- simdatPerm$timeorder
+wav
+mod3 <- geeglm(yvar~tvar, id=idvar, data=simdatPerm, corstr="ar1", waves=wav)
+mod3
+@ %def
+
+\section{Using a fixed correlation matrix and the \texttt{zcor} argument}
+\label{sec:xxx}
+
+Suppose we want to use a fixed working correlation matrix:
+
+@
+<<>>=
+cor.fixed <- matrix(c(1    , 0.5  , 0.25,  0.125, 0.125,
+                      0.5  , 1    , 0.25,  0.125, 0.125,
+                      0.25 , 0.25 , 1   ,  0.5  , 0.125,
+                      0.125, 0.125, 0.5  , 1    , 0.125,
+                      0.125, 0.125, 0.125, 0.125, 1     ), 5, 5)
+cor.fixed
+@ %def
+
+Such a working correlation matrix has to be passed to |geeglm()| as a
+vector in the |zcor| argument. This vector can be created using the
+|fixed2Zcor()| function:
+
+@
+<<>>=
+zcor <- fixed2Zcor(cor.fixed, id=simdatPerm$idvar, waves=simdatPerm$timeorder)
+zcor
+@ %def
+
+Notice that |zcor| contains correlations between measurements within
+the same cluster. Hence if a cluster contains only one observation,
+then there will be generated no entry in |zcor| for that cluster. Now
+we can fit the model with:
+
+@
+<<>>=
+mod4 <- geeglm(yvar~tvar, id=idvar, data=simdatPerm, corstr="fixed", zcor=zcor)
+mod4
+@ %def
+
+
+\section{When do GEE's work best?}
+\label{sec:when-do-gees}
+
+GEEs work best when you have relatively many relativly small clusters in your data. 
+
+
+
+
+\end{document}

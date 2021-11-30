@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: List the names of installed TeX Live packages</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tl_pkgs {tinytex}"><tr><td>tl_pkgs {tinytex}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>List the names of installed TeX Live packages</h2>
+
+<h3>Description</h3>
+
+<p>Calls <code>tlmgr info --list --data name</code> to obtain the names of all
+(installed) TeX Live packages. Platform-specific strings in package names are
+removed, e.g., <code>"tex"</code> is returned for the package
+<span class="pkg">tex.x86_64-darwin</span>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tl_pkgs(only_installed = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>only_installed</code></td>
+<td>
+<p>Whether to list installed packages only.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector of package names.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>tinytex</em> version 0.34 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Parse a character vector.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for parse_vector {readr}"><tr><td>parse_vector {readr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Parse a character vector.</h2>
+
+<h3>Description</h3>
+
+<p>Parse a character vector.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+parse_vector(
+  x,
+  collector,
+  na = c("", "NA"),
+  locale = default_locale(),
+  trim_ws = TRUE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Character vector of elements to parse.</p>
+</td></tr>
+<tr valign="top"><td><code>collector</code></td>
+<td>
+<p>Column specification.</p>
+</td></tr>
+<tr valign="top"><td><code>na</code></td>
+<td>
+<p>Character vector of strings to interpret as missing values. Set this
+option to <code>character()</code> to indicate no missing values.</p>
+</td></tr>
+<tr valign="top"><td><code>locale</code></td>
+<td>
+<p>The locale controls defaults that vary from place to place.
+The default locale is US-centric (like R), but you can use
+<code><a href="../../readr/help/locale.html">locale()</a></code> to create your own locale that controls things like
+the default time zone, encoding, decimal mark, big mark, and day/month
+names.</p>
+</td></tr>
+<tr valign="top"><td><code>trim_ws</code></td>
+<td>
+<p>Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
+each field before parsing it?</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p>Other parsers: 
+<code><a href="../../readr/help/col_skip.html">col_skip</a>()</code>,
+<code><a href="../../readr/help/cols_condense.html">cols_condense</a>()</code>,
+<code><a href="../../readr/help/cols.html">cols</a>()</code>,
+<code><a href="../../readr/help/parse_datetime.html">parse_datetime</a>()</code>,
+<code><a href="../../readr/help/parse_factor.html">parse_factor</a>()</code>,
+<code><a href="../../readr/help/parse_guess.html">parse_guess</a>()</code>,
+<code><a href="../../readr/help/parse_logical.html">parse_logical</a>()</code>,
+<code><a href="../../readr/help/parse_number.html">parse_number</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- c("1", "2", "3", "NA")
+parse_vector(x, col_integer())
+parse_vector(x, col_double())
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>readr</em> version 2.0.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

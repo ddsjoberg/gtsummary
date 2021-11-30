@@ -1,0 +1,332 @@
+---
+title: "Effect Sizes for Simple Hypothesis Tests"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, effect size, rules of thumb, guidelines, conversion]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Effect Sizes for Simple Hypothesis Tests}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = "")
+knitr::opts_chunk$set(comment = ">")
+options(digits = 3)
+
+pkgs <- c("effectsize", "BayesFactor")
+if (!all(sapply(pkgs, require, quietly = TRUE, character.only = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+set.seed(7)
+```
+
+This vignette provides a short review of effect sizes for common hypothesis
+tests (in **`R`** these are usually achieved with various `*.test()`
+functions).
+
+```{r}
+library(effectsize)
+library(BayesFactor)
+```
+
+In most cases, the effect sizes can be automagically extracted from the `htest`
+object via the `effectsize()` function.
+
+# Standardized Differences
+
+For *t*-tests, it is common to report an effect size representing a standardized
+difference between the two compared samples' means. These measures range from
+$-\infty$ to $+\infty$, with negative values indicating the second group's mean
+is larger (and vice versa).
+
+## Two Independent Samples
+
+For two independent samples, the difference between the means is standardized
+based on the pooled standard deviation of both samples (assumed to be equal in
+the population):
+
+```{r}
+t.test(mpg ~ am, data = mtcars, var.equal = TRUE)
+
+cohens_d(mpg ~ am, data = mtcars)
+```
+
+Hedges' *g* provides a bias correction for small sample sizes ($N < 20$).
+
+```{r}
+hedges_g(mpg ~ am, data = mtcars)
+```
+
+If variances cannot be assumed to be equal, it is possible to get estimates that
+are not based on the pooled standard deviation:
+
+```{r}
+t.test(mpg ~ am, data = mtcars, var.equal = FALSE)
+
+cohens_d(mpg ~ am, data = mtcars, pooled_sd = FALSE)
+
+hedges_g(mpg ~ am, data = mtcars, pooled_sd = FALSE)
+```
+
+In cases where the differences between the variances are substantial, it is also
+common to standardize the difference based only on the standard deviation of one
+of the groups (usually the "control" group); this effect size is known as Glass'
+$\Delta$ (delta)
+
+```{r}
+glass_delta(mpg ~ am, data = mtcars)
+```
+
+(Note that the standard deviation is taken from the *second* sample.)
+
+## One Sample and Paired Samples
+
+In the case of a one-sample test, the effect size represents the standardized
+distance of the mean of the sample from the null value. For paired-samples, the
+difference between the paired samples is used:
+
+```{r}
+t.test(extra ~ group, data = sleep, paired = TRUE)
+
+cohens_d(extra ~ group, data = sleep, paired = TRUE)
+
+hedges_g(extra ~ group, data = sleep, paired = TRUE)
+```
+
+## For a Bayesian *t*-test
+
+```{r}
+(BFt <- ttestBF(mtcars$mpg[mtcars$am == 0], mtcars$mpg[mtcars$am == 1]))
+
+effectsize(BFt, test = NULL)
+```
+
+# One way ANOVA
+
+For more details, see [ANOVA
+vignette](https://easystats.github.io/effectsize/articles/anovaES.html).
+
+```{r, message=FALSE}
+onew <- oneway.test(mpg ~ gear, data = mtcars, var.equal = TRUE)
+
+eta_squared(onew)
+```
+
+# Contingency Tables and Proportions
+
+For contingency tables Cramér's *V* and $\phi$ (Phi, also known as Cohen's *w*)
+indicate the strength of association with 0 indicating no association between
+the variables. While Cramér's *V* is capped at 1 (perfect association), $\phi$
+can be larger than 1.
+
+```{r}
+(Music <- matrix(
+  c(
+    150, 130, 35, 55,
+    100, 50, 10, 40,
+    165, 65, 2, 25
+  ),
+  byrow = TRUE, nrow = 3,
+  dimnames = list(
+    Study = c("Psych", "Econ", "Law"),
+    Music = c("Pop", "Rock", "Jazz", "Classic")
+  )
+))
+
+chisq.test(Music)
+
+cramers_v(Music)
+
+phi(Music)
+```
+
+These are also applicable to tests of goodness-of-fit, where small values
+indicate no deviation from the hypothetical probabilities and large values
+indicate... large deviation from the hypothetical probabilities.
+
+```{r}
+O <- c(89, 37, 30, 28, 2) # observed group sizes
+E <- c(40, 20, 20, 15, 6) # expected group sizes
+
+chisq.test(O, p = E, rescale.p = TRUE)
+
+cramers_v(O, p = E, rescale.p = TRUE)
+
+phi(O, p = E, rescale.p = TRUE)
+```
+
+These can also be extracted from the equivalent Bayesian test:
+
+```{r}
+(BFX <- contingencyTableBF(Music, sampleType = "jointMulti"))
+
+effectsize(BFX, type = "cramers_v", test = NULL)
+
+effectsize(BFX, type = "phi", test = NULL)
+```
+
+## Comparing Two Proportions (2x2 tables)
+
+For $2\times 2$ tables, in addition to Cramér's *V* and $\phi$, we can also
+compute the Odds-ratio (OR), where each column represents a different group.
+Values larger than 1 indicate that the odds are higher in the first group (and
+vice versa).
+
+```{r}
+(RCT <- matrix(
+  c(
+    71, 30,
+    50, 100
+  ),
+  nrow = 2, byrow = TRUE,
+  dimnames = list(
+    Diagnosis = c("Sick", "Recovered"),
+    Group = c("Treatment", "Control")
+  )
+))
+
+chisq.test(RCT) # or fisher.test(RCT)
+
+oddsratio(RCT)
+```
+
+We can also compute the Risk-ratio (RR), which is the ratio between the
+proportions of the two groups - a measure which some claim is more intuitive.
+
+```{r}
+riskratio(RCT)
+```
+
+Additionally, Cohen's *h* can also be computed, which uses the *arcsin*
+transformation. Negative values indicate smaller proportion in the first group
+(and vice versa).
+
+```{r}
+cohens_h(RCT)
+```
+
+## Paired Contingency Tables
+
+For dependent (paired) contingency tables, Cohen's *g* represents the symmetry
+of the table, ranging between 0 (perfect symmetry) and 0.5 (perfect asymmetry).
+
+```{r}
+(Performance <- matrix(
+  c(
+    794, 86,
+    150, 570
+  ),
+  nrow = 2, byrow = TRUE,
+  dimnames = list(
+    "1st Survey" = c("Approve", "Disapprove"),
+    "2nd Survey" = c("Approve", "Disapprove")
+  )
+))
+
+mcnemar.test(Performance)
+
+cohens_g(Performance)
+```
+
+# Rank Based tests
+
+Rank based tests get rank based effect sizes!
+
+## Difference in Ranks
+
+For two independent samples, the rank-biserial correlation ($r_{rb}$) is a
+measure of relative superiority - i.e., larger values indicate a higher
+probability of a randomly selected observation from *X* being larger than
+randomly selected observation from *Y*. A value of $(-1)$ indicates that all
+observations in the second group are larger than the first, and a value of
+$(+1)$ indicates that all observations in the first group are larger than the
+second.
+
+```{r, warning=FALSE}
+A <- c(48, 48, 77, 86, 85, 85)
+B <- c(14, 34, 34, 77)
+
+wilcox.test(A, B) # aka Mann–Whitney U test
+
+rank_biserial(A, B)
+```
+
+For one sample, $r_{rb}$ measures the symmetry around $\mu$ (mu; the null
+value), with 0 indicating perfect symmetry, $(-1)$ indicates that all
+observations fall below $\mu$, and $(+1)$ indicates that all observations fall
+above $\mu$. For paired samples the difference between the paired samples is
+used:
+
+```{r}
+x <- c(1.15, 0.88, 0.90, 0.74, 1.21)
+
+wilcox.test(x, mu = 1) # aka Signed-Rank test
+
+rank_biserial(x, mu = 1)
+
+
+x <- c(1.83, 0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+
+wilcox.test(x, y, paired = TRUE) # aka Signed-Rank test
+
+rank_biserial(x, y, paired = TRUE)
+```
+
+## Rank One way ANOVA
+
+The Rank-Epsilon-Squared ($\varepsilon^2$) is a measure of association
+for the rank based one-way ANOVA. Values range between 0 (no relative
+superiority between any of the groups) to 1 (complete separation - with no
+overlap in ranks between the groups).
+
+```{r}
+group_data <- list(
+  g1 = c(2.9, 3.0, 2.5, 2.6, 3.2), # normal subjects
+  g2 = c(3.8, 2.7, 4.0, 2.4), # with obstructive airway disease
+  g3 = c(2.8, 3.4, 3.7, 2.2, 2.0) # with asbestosis
+)
+
+kruskal.test(group_data)
+
+rank_epsilon_squared(group_data)
+```
+
+## Rank One way Repeated-Measures ANOVA
+
+For a rank based repeated measures one-way ANOVA, Kendall's *W* is a measure of
+agreement on the effect of condition between various "blocks" (the subjects), or
+more often conceptualized as a measure of reliability of the rating / scores of
+observations (or "groups") between "raters" ("blocks").
+
+```{r}
+# Subjects are COLUMNS
+(ReactionTimes <- matrix(
+  c(398, 338, 520,
+    325, 388, 555,
+    393, 363, 561,
+    367, 433, 470,
+    286, 492, 536,
+    362, 475, 496,
+    253, 334, 610),
+  nrow = 7, byrow = TRUE,
+  dimnames = list(
+    paste0("Subject", 1:7),
+    c("Congruent", "Neutral", "Incongruent")
+  )
+))
+
+friedman.test(ReactionTimes)
+
+kendalls_w(ReactionTimes)
+```
+
+# References

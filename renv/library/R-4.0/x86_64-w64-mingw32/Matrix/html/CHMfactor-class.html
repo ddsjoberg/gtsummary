@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: CHOLMOD-based Cholesky Factorizations</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for CHMfactor-class {Matrix}"><tr><td>CHMfactor-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>CHOLMOD-based Cholesky Factorizations</h2>
+
+<h3>Description</h3>
+
+<p>The virtual class <code>"CHMfactor"</code> is a class of
+CHOLMOD-based Cholesky factorizations of symmetric, sparse,
+compressed, column-oriented matrices.  Such a factorization is
+simplicial (virtual class <code>"CHMsimpl"</code>) or supernodal (virtual
+class <code>"CHMsuper"</code>).  Objects that inherit from these classes are
+either numeric factorizations (classes <code>"dCHMsimpl"</code> and
+<code>"dCHMsuper"</code>) or symbolic factorizations (classes
+<code>"nCHMsimpl"</code> and <code>"nCHMsuper"</code>).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+isLDL(x)
+
+## S4 method for signature 'CHMfactor'
+update(object, parent, mult = 0, ...)
+.updateCHMfactor(object, parent, mult)
+
+## and many more methods, notably,
+##   solve(a, b, system = c("A","LDLt","LD","DLt","L","Lt","D","P","Pt"), ...)
+##   -----    see below
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x,object,a</code></td>
+<td>
+<p>a <code>"CHMfactor"</code> object (almost always the result
+of <code><a href="Cholesky.html">Cholesky</a>()</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>parent</code></td>
+<td>
+<p>a <code>"<a href="dsCMatrix-class.html">dsCMatrix</a>"</code> or
+<code>"<a href="dgCMatrix-class.html">dgCMatrix</a>"</code> matrix object with the same nonzero
+pattern as the matrix that generated <code>object</code>.  If <code>parent</code>
+is symmetric, of class <code>"<a href="dsCMatrix-class.html">dsCMatrix</a>"</code>, then
+<code>object</code> should be a decomposition of a matrix with the same
+nonzero pattern as <code>parent</code>.  If <code>parent</code> is not symmetric then <code>object</code>
+should be the decomposition of a matrix with the same nonzero
+pattern as <code>tcrossprod(parent)</code>.
+</p>
+<p>Since Matrix version 1.0-8, other <code>"<a href="sparseMatrix-class.html">sparseMatrix</a>"</code> matrices are
+coerced to <code><a href="dsparseMatrix-class.html">dsparseMatrix</a></code> and
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> if needed.</p>
+</td></tr>
+<tr valign="top"><td><code>mult</code></td>
+<td>
+<p>a numeric scalar (default 0).  <code>mult</code> times the
+identity matrix is (implicitly) added to <code>parent</code> or
+<code>tcrossprod(parent)</code> before updating the decomposition
+<code>object</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>potentially further arguments to the methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("dCHMsuper", ...)</code>
+but are more commonly created via <code><a href="Cholesky.html">Cholesky</a>()</code>,
+applied to  <code><a href="dsCMatrix-class.html">dsCMatrix</a></code> or
+<code><a href="lsparseMatrix-classes.html">lsCMatrix</a></code> objects.
+</p>
+<p>For an introduction, it may be helpful to look at the <code>expand()</code>
+method and examples below.
+</p>
+
+
+<h3>Slots</h3>
+
+<p>of <code>"CHMfactor"</code> and all classes inheriting from it:
+</p>
+
+<dl>
+<dt><code>perm</code>:</dt><dd><p>An integer vector giving the 0-based
+permutation of the rows and columns chosen to reduce fill-in and
+for post-ordering.</p>
+</dd>
+<dt><code>colcount</code>:</dt><dd><p>Object of class <code>"integer"</code> .... </p>
+</dd></dl>
+
+<dl>
+<dt><code>type</code>:</dt><dd><p>Object of class <code>"integer"</code> .... </p>
+</dd>
+</dl>
+
+<p>Slots of the non virtual classes &ldquo;[dl]CHM(super|simpl)&rdquo;:
+</p>
+
+<dl>
+<dt><code>p</code>:</dt><dd><p>Object of class <code>"integer"</code> of pointers, one
+for each column, to the initial (zero-based) index of elements in
+the column. Only present in classes that contain <code>"CHMsimpl"</code>.</p>
+</dd>
+<dt><code>i</code>:</dt><dd><p>Object of class <code>"integer"</code> of length nnzero
+(number of non-zero elements).  These are the row numbers for
+each non-zero element in the matrix.  Only present in classes that
+contain <code>"CHMsimpl"</code>.</p>
+</dd>
+<dt><code>x</code>:</dt><dd><p>For the <code>"d*"</code> classes: <code>"numeric"</code> - the
+non-zero elements of the matrix.</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>isLDL</dt><dd><p><code>(x)</code> returns a <code><a href="../../base/html/logical.html">logical</a></code> indicating if
+<code>x</code> is an <i>LDL'</i> decomposition or (when <code>FALSE</code>) an
+<i>LL'</i> one.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "CHMfactor", to = "sparseMatrix")</code> 
+(or equivalently, <code>to = "Matrix"</code> or <code>to = "triangularMatrix"</code>)
+</p>
+<p><code>as(*, "sparseMatrix")</code> returns the lower triangular factor
+<i>L</i> from the <i>LL'</i> form of the Cholesky factorization.
+Note that (currently) the factor from the <i>LL'</i> form is always
+returned, even if the <code>"CHMfactor"</code> object represents an
+<i>LDL'</i> decomposition.
+Furthermore, this is the factor after any fill-reducing
+permutation has been applied.  See the <code>expand</code> method for
+obtaining both the permutation matrix, <i>P</i>, and the lower
+Cholesky factor, <i>L</i>.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "CHMfactor", to = "pMatrix")</code>
+returns the permutation matrix <i>P</i>, representing the
+fill-reducing permutation used in the decomposition.</p>
+</dd>
+<dt>expand</dt><dd><p><code>signature(x = "CHMfactor")</code> returns a list with
+components <code>P</code>, the matrix representing the fill-reducing
+permutation, and <code>L</code>, the lower triangular Cholesky factor.
+The original positive-definite matrix <i>A</i> corresponds to the product
+<i>A = P'LL'P</i>.  Because of fill-in during the decomposition the
+product may apparently have more non-zeros than the original
+matrix, even after applying <code><a href="drop0.html">drop0</a></code> to it.  However,
+the extra &quot;non-zeros&quot; should be very small in magnitude.</p>
+</dd>
+<dt>image</dt><dd><p><code>signature(x = "CHMfactor"):</code> Plot the image of the
+lower triangular factor, <i>L</i>, from the decomposition.  This method
+is equivalent to <code>image(as(x, "sparseMatrix"))</code> so the
+comments in the above description of the <code>coerce</code> method
+apply here too.</p>
+</dd>
+<dt>solve</dt><dd><p><code>signature(a = "CHMfactor", b = "ddenseMatrix"), system= *</code>:
+
+The <code>solve</code> methods for a <code>"CHMfactor"</code> object take an
+optional third argument <code>system</code> whose value can be one of the
+character strings <code>"A"</code>, <code>"LDLt"</code>, <code>"LD"</code>,
+<code>"DLt"</code>, <code>"L"</code>, <code>"Lt"</code>, <code>"D"</code>, <code>"P"</code> or
+<code>"Pt"</code>.  This argument describes the system to be solved.  The
+default,  <code>"A"</code>, is to solve <i>Ax = b</i> for <i>x</i> where
+<code>A</code> is the sparse, positive-definite matrix that was factored
+to produce <code>a</code>.  Analogously, <code>system = "L"</code> returns the
+solution <i>x</i>, of <i>Lx = b</i>.
+Similarly, for all system codes <b>but</b> <code>"P"</code> and <code>"Pt"</code>
+where, e.g., <code>x &lt;- solve(a, b, system="P")</code> is equivalent to
+<code>x &lt;- P %*% b</code>.
+</p>
+<p>See also <code><a href="solve-methods.html">solve-methods</a></code>.
+</p>
+</dd>
+<dt>determinant</dt><dd><p><code>signature(x = "CHMfactor", logarithm =
+      "logical")</code> returns the determinant (or the logarithm of the
+determinant, if <code>logarithm = TRUE</code>, the default) of the
+factor <i>L</i> from the <i>LL'</i> decomposition (even if the
+decomposition represented by <code>x</code> is of the <i>LDL'</i>
+form (!)).  This is the square root of the determinant (half the
+logarithm of the determinant when <code>logarithm = TRUE</code>) of the
+positive-definite matrix that was decomposed.</p>
+</dd>
+</dl>
+
+<dl>
+<dt>update</dt><dd><p><code>signature(object = "CHMfactor"), parent</code>.  The
+<code><a href="../../stats/html/update.html">update</a></code> method requires an additional argument
+<code>parent</code>, which is <em>either</em> a
+<code>"<a href="dsCMatrix-class.html">dsCMatrix</a>"</code> object, say <i>A</i>, (with the
+same structure of nonzeros as the matrix that was decomposed to
+produce <code>object</code>) or a general <code>"<a href="dgCMatrix-class.html">dgCMatrix</a>"</code>,
+say <i>M</i>, where <i>A := M M'</i> (<code>== tcrossprod(parent)</code>)
+is used for <i>A</i>.
+Further it provides an optional argument <code>mult</code>, a numeric
+scalar.  This method updates the numeric values in <code>object</code>
+to the decomposition of <i>A+mI</i> where <i>A</i> is the matrix
+above (either the <code>parent</code> or <i>M M'</i>) and <i>m</i> is
+the scalar <code>mult</code>.  Because only the numeric values are
+updated this method should be faster than creating and decomposing
+<i>A+mI</i>.  It is not uncommon to want, say, the determinant of
+<i>A+mI</i> for many different values of <i>m</i>.  This method
+would be the preferred approach in such cases.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Cholesky.html">Cholesky</a></code>, also for examples;
+class <code><a href="dgCMatrix-class.html">dgCMatrix</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## An example for the expand() method
+n &lt;- 1000; m &lt;- 200; nnz &lt;- 2000
+set.seed(1)
+M1 &lt;- spMatrix(n, m,
+               i = sample(n, nnz, replace = TRUE),
+               j = sample(m, nnz, replace = TRUE),
+               x = round(rnorm(nnz),1))
+XX &lt;- crossprod(M1) ## = M1'M1  = M M'  where M &lt;- t(M1)
+CX &lt;- Cholesky(XX)
+isLDL(CX)
+str(CX) ## a "dCHMsimpl" object
+r &lt;- expand(CX)
+L.P &lt;- with(r, crossprod(L,P))  ## == L'P
+PLLP &lt;- crossprod(L.P)          ## == (L'P)' L'P == P'LL'P  = XX = M M'
+b &lt;- sample(m)
+stopifnot(all.equal(PLLP, XX), 
+          all(as.vector(solve(CX, b, system="P" )) == r$P %*% b),
+          all(as.vector(solve(CX, b, system="Pt")) == t(r$P) %*% b) )
+
+u1 &lt;- update(CX, XX,    mult=pi)
+u2 &lt;- update(CX, t(M1), mult=pi) # with the original M, where XX = M M'
+stopifnot(all.equal(u1,u2, tol=1e-14))
+
+   ## [ See  help(Cholesky)  for more examples ]
+   ##        -------------
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

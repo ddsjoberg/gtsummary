@@ -1,0 +1,916 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Convert Statistical Objects into Tidy Tibbles</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Convert Statistical Objects into Tidy Tibbles
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;broom&rsquo; version 0.7.9</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<p style="text-align: center;">
+<a href="#A">A</a>
+<a href="#B">B</a>
+<a href="#C">C</a>
+<a href="#D">D</a>
+<a href="#E">E</a>
+<a href="#F">F</a>
+<a href="#G">G</a>
+<a href="#H">H</a>
+<a href="#I">I</a>
+<a href="#J">J</a>
+<a href="#K">K</a>
+<a href="#L">L</a>
+<a href="#M">M</a>
+<a href="#N">N</a>
+<a href="#O">O</a>
+<a href="#P">P</a>
+<a href="#Q">Q</a>
+<a href="#R">R</a>
+<a href="#S">S</a>
+<a href="#T">T</a>
+<a href="#V">V</a>
+<a href="#X">X</a>
+<a href="#Z">Z</a>
+</p>
+
+
+<h2><a name="A">-- A --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.aareg.html">aareg_tidiers</a></td>
+<td>Tidy a(n) aareg object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.ivreg.html">aer_tidiers</a></td>
+<td>Tidy a(n) ivreg object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.Arima.html">Arima_tidiers</a></td>
+<td>Tidy a(n) Arima object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.roc.html">auc_tidiers</a></td>
+<td>Tidy a(n) roc object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.betamfx.html">augment.betamfx</a></td>
+<td>Augment data with information from a(n) betamfx object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.betareg.html">augment.betareg</a></td>
+<td>Augment data with information from a(n) betareg object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.clm.html">augment.clm</a></td>
+<td>Augment data with information from a(n) clm object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.coxph.html">augment.coxph</a></td>
+<td>Augment data with information from a(n) coxph object</td></tr>
+<tr><td style="width: 25%;"><a href="data.frame_tidiers.html">augment.data.frame</a></td>
+<td>Tidiers for data.frame objects</td></tr>
+<tr><td style="width: 25%;"><a href="augment.decomposed.ts.html">augment.decomposed.ts</a></td>
+<td>Augment data with information from a(n) decomposed.ts object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.drc.html">augment.drc</a></td>
+<td>Augment data with information from a(n) drc object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.factanal.html">augment.factanal</a></td>
+<td>Augment data with information from a(n) factanal object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.felm.html">augment.felm</a></td>
+<td>Augment data with information from a(n) felm object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.fixest.html">augment.fixest</a></td>
+<td>Augment data with information from a(n) fixest object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.gam.html">augment.gam</a></td>
+<td>Augment data with information from a(n) gam object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.glm.html">augment.glm</a></td>
+<td>Augment data with information from a(n) glm object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.glmRob.html">augment.glmRob</a></td>
+<td>Augment data with information from a(n) glmRob object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.robustbase.glmrob.html">augment.glmrob</a></td>
+<td>Augment data with information from a(n) glmrob object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.htest.html">augment.htest</a></td>
+<td>Augment data with information from a(n) htest object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.ivreg.html">augment.ivreg</a></td>
+<td>Augment data with information from a(n) ivreg object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.kmeans.html">augment.kmeans</a></td>
+<td>Augment data with information from a(n) kmeans object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.lm.html">augment.lm</a></td>
+<td>Augment data with information from a(n) lm object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.lmRob.html">augment.lmRob</a></td>
+<td>Augment data with information from a(n) lmRob object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.robustbase.lmrob.html">augment.lmrob</a></td>
+<td>Augment data with information from a(n) lmrob object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.loess.html">augment.loess</a></td>
+<td>Tidy a(n) loess object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.mfx.html">augment.logitmfx</a></td>
+<td>Augment data with information from a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.Mclust.html">augment.Mclust</a></td>
+<td>Augment data with information from a(n) Mclust object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.mfx.html">augment.mfx</a></td>
+<td>Augment data with information from a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.mjoint.html">augment.mjoint</a></td>
+<td>Augment data with information from a(n) mjoint object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.mlogit.html">augment.mlogit</a></td>
+<td>Augment data with information from a(n) mlogit object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.mfx.html">augment.negbinmfx</a></td>
+<td>Augment data with information from a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.nlrq.html">augment.nlrq</a></td>
+<td>Tidy a(n) nlrq object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.nls.html">augment.nls</a></td>
+<td>Augment data with information from a(n) nls object</td></tr>
+<tr><td style="width: 25%;"><a href="null_tidiers.html">augment.NULL</a></td>
+<td>Tidiers for NULL inputs</td></tr>
+<tr><td style="width: 25%;"><a href="augment.pam.html">augment.pam</a></td>
+<td>Augment data with information from a(n) pam object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.plm.html">augment.plm</a></td>
+<td>Augment data with information from a(n) plm object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.mfx.html">augment.poissonmfx</a></td>
+<td>Augment data with information from a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.poLCA.html">augment.poLCA</a></td>
+<td>Augment data with information from a(n) poLCA object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.polr.html">augment.polr</a></td>
+<td>Augment data with information from a(n) polr object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.prcomp.html">augment.prcomp</a></td>
+<td>Augment data with information from a(n) prcomp object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.mfx.html">augment.probitmfx</a></td>
+<td>Augment data with information from a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.rlm.html">augment.rlm</a></td>
+<td>Augment data with information from a(n) rlm object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.rma.html">augment.rma</a></td>
+<td>Augment data with information from a(n) rma object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.rq.html">augment.rq</a></td>
+<td>Augment data with information from a(n) rq object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.rqs.html">augment.rqs</a></td>
+<td>Augment data with information from a(n) rqs object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.sarlm.html">augment.sarlm</a></td>
+<td>Augment data with information from a(n) spatialreg object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.smooth.spline.html">augment.smooth.spline</a></td>
+<td>Tidy a(n) smooth.spline object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.speedlm.html">augment.speedlm</a></td>
+<td>Augment data with information from a(n) speedlm object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.stl.html">augment.stl</a></td>
+<td>Augment data with information from a(n) stl object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.survreg.html">augment.survreg</a></td>
+<td>Augment data with information from a(n) survreg object</td></tr>
+<tr><td style="width: 25%;"><a href="augment_columns.html">augment_columns</a></td>
+<td>Add fitted values, residuals, and other common outputs to an augment call</td></tr>
+</table>
+
+<h2><a name="B">-- B --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.mle2.html">bbmle_tidiers</a></td>
+<td>Tidy a(n) mle2 object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.betareg.html">betareg_tidiers</a></td>
+<td>Tidy a(n) betareg object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.binDesign.html">bindesign_tidiers</a></td>
+<td>Tidy a(n) binDesign object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.binWidth.html">binwidth_tidiers</a></td>
+<td>Tidy a(n) binWidth object</td></tr>
+<tr><td style="width: 25%;"><a href="bootstrap.html">bootstrap</a></td>
+<td>Set up bootstrap replicates of a dplyr operation</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.boot.html">boot_tidiers</a></td>
+<td>Tidy a(n) boot object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.btergm.html">btergm_tidiers</a></td>
+<td>Tidy a(n) btergm object</td></tr>
+</table>
+
+<h2><a name="C">-- C --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.confusionMatrix.html">caret_tidiers</a></td>
+<td>Tidy a(n) confusionMatrix object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.cch.html">cch_tidiers</a></td>
+<td>Tidy a(n) cch object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.lavaan.html">cfa_tidiers</a></td>
+<td>Tidy a(n) lavaan object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.crr.html">cmprsk_tidiers</a></td>
+<td>Tidy a(n) cmprsk object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.coeftest.html">coeftest_tidiers</a></td>
+<td>Tidy a(n) coeftest object</td></tr>
+<tr><td style="width: 25%;"><a href="confint_tidy.html">confint_tidy</a></td>
+<td>(Deprecated) Calculate confidence interval as a tidy data frame</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.confusionMatrix.html">confusionMatrix_tidiers</a></td>
+<td>Tidy a(n) confusionMatrix object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.coxph.html">coxph_tidiers</a></td>
+<td>Tidy a(n) coxph object</td></tr>
+</table>
+
+<h2><a name="D">-- D --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="data.frame_tidiers.html">data.frame_tidiers</a></td>
+<td>Tidiers for data.frame objects</td></tr>
+<tr><td style="width: 25%;"><a href="augment.decomposed.ts.html">decompose_tidiers</a></td>
+<td>Augment data with information from a(n) decomposed.ts object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.drc.html">drc_tidiers</a></td>
+<td>Tidy a(n) drc object</td></tr>
+<tr><td style="width: 25%;"><a href="durbinWatsonTest_tidiers.html">durbinWatsonTest_tidiers</a></td>
+<td>Tidy/glance a(n) durbinWatsonTest object</td></tr>
+</table>
+
+<h2><a name="E">-- E --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.lsmobj.html">emmeans_tidiers</a></td>
+<td>Tidy a(n) lsmobj object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.epi.2by2.html">epiR_tidiers</a></td>
+<td>Tidy a(n) epi.2by2 object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.ergm.html">ergm_tidiers</a></td>
+<td>Tidy a(n) ergm object</td></tr>
+</table>
+
+<h2><a name="F">-- F --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.factanal.html">factanal_tidiers</a></td>
+<td>Tidy a(n) factanal object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.felm.html">felm_tidiers</a></td>
+<td>Tidy a(n) felm object</td></tr>
+<tr><td style="width: 25%;"><a href="finish_glance.html">finish_glance</a></td>
+<td>(Deprecated) Add logLik, AIC, BIC, and other common measurements to a glance of a prediction</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.fitdistr.html">fitdistr_tidiers</a></td>
+<td>Tidy a(n) fitdistr object</td></tr>
+<tr><td style="width: 25%;"><a href="fix_data_frame.html">fix_data_frame</a></td>
+<td>Ensure an object is a data frame, with rownames moved into a column</td></tr>
+</table>
+
+<h2><a name="G">-- G --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy_gam_hastie.html">Gam_tidiers</a></td>
+<td>Tidy a(n) Gam object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.gam.html">gam_tidiers</a></td>
+<td>Tidy a(n) gam object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.garch.html">garch_tidiers</a></td>
+<td>Tidy a(n) garch object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.geeglm.html">geeglm_tidiers</a></td>
+<td>Tidy a(n) geeglm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.geeglm.html">geepack_tidiers</a></td>
+<td>Tidy a(n) geeglm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.aareg.html">glance.aareg</a></td>
+<td>Glance at a(n) aareg object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.aov.html">glance.aov</a></td>
+<td>Glance at a(n) lm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.Arima.html">glance.Arima</a></td>
+<td>Glance at a(n) Arima object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.betamfx.html">glance.betamfx</a></td>
+<td>Glance at a(n) betamfx object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.betareg.html">glance.betareg</a></td>
+<td>Glance at a(n) betareg object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.biglm.html">glance.biglm</a></td>
+<td>Glance at a(n) biglm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.binDesign.html">glance.binDesign</a></td>
+<td>Glance at a(n) binDesign object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.cch.html">glance.cch</a></td>
+<td>Glance at a(n) cch object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.clm.html">glance.clm</a></td>
+<td>Glance at a(n) clm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.clmm.html">glance.clmm</a></td>
+<td>Glance at a(n) clmm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.coeftest.html">glance.coeftest</a></td>
+<td>Glance at a(n) coeftest object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.coxph.html">glance.coxph</a></td>
+<td>Glance at a(n) coxph object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.crr.html">glance.crr</a></td>
+<td>Glance at a(n) crr object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.cv.glmnet.html">glance.cv.glmnet</a></td>
+<td>Glance at a(n) cv.glmnet object</td></tr>
+<tr><td style="width: 25%;"><a href="data.frame_tidiers.html">glance.data.frame</a></td>
+<td>Tidiers for data.frame objects</td></tr>
+<tr><td style="width: 25%;"><a href="glance.drc.html">glance.drc</a></td>
+<td>Glance at a(n) drc object</td></tr>
+<tr><td style="width: 25%;"><a href="durbinWatsonTest_tidiers.html">glance.durbinWatsonTest</a></td>
+<td>Tidy/glance a(n) durbinWatsonTest object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.ergm.html">glance.ergm</a></td>
+<td>Glance at a(n) ergm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.factanal.html">glance.factanal</a></td>
+<td>Glance at a(n) factanal object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.felm.html">glance.felm</a></td>
+<td>Glance at a(n) felm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.fitdistr.html">glance.fitdistr</a></td>
+<td>Glance at a(n) fitdistr object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.fixest.html">glance.fixest</a></td>
+<td>Glance at a(n) fixest object</td></tr>
+<tr><td style="width: 25%;"><a href="glance_gam_hastie.html">glance.Gam</a></td>
+<td>Glance at a(n) Gam object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.gam.html">glance.gam</a></td>
+<td>Glance at a(n) gam object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.garch.html">glance.garch</a></td>
+<td>Tidy a(n) garch object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.geeglm.html">glance.geeglm</a></td>
+<td>Glance at a(n) geeglm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.glm.html">glance.glm</a></td>
+<td>Glance at a(n) glm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.glmnet.html">glance.glmnet</a></td>
+<td>Glance at a(n) glmnet object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.glmRob.html">glance.glmRob</a></td>
+<td>Glance at a(n) glmRob object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.gmm.html">glance.gmm</a></td>
+<td>Glance at a(n) gmm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.htest.html">glance.htest</a></td>
+<td>Tidy/glance a(n) htest object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.ivreg.html">glance.ivreg</a></td>
+<td>Glance at a(n) ivreg object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.kmeans.html">glance.kmeans</a></td>
+<td>Glance at a(n) kmeans object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.lavaan.html">glance.lavaan</a></td>
+<td>Glance at a(n) lavaan object</td></tr>
+<tr><td style="width: 25%;"><a href="list_tidiers.html">glance.list</a></td>
+<td>Tidying methods for lists / returned values that are not S3 objects</td></tr>
+<tr><td style="width: 25%;"><a href="glance.lm.html">glance.lm</a></td>
+<td>Glance at a(n) lm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.lmodel2.html">glance.lmodel2</a></td>
+<td>Glance at a(n) lmodel2 object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.lmRob.html">glance.lmRob</a></td>
+<td>Glance at a(n) lmRob object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.robustbase.lmrob.html">glance.lmrob</a></td>
+<td>Glance at a(n) lmrob object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.mfx.html">glance.logitmfx</a></td>
+<td>Glance at a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.margins.html">glance.margins</a></td>
+<td>Glance at a(n) margins object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.Mclust.html">glance.Mclust</a></td>
+<td>Glance at a(n) Mclust object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.mfx.html">glance.mfx</a></td>
+<td>Glance at a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.mjoint.html">glance.mjoint</a></td>
+<td>Glance at a(n) mjoint object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.mlogit.html">glance.mlogit</a></td>
+<td>Glance at a(n) mlogit object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.muhaz.html">glance.muhaz</a></td>
+<td>Glance at a(n) muhaz object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.multinom.html">glance.multinom</a></td>
+<td>Glance at a(n) multinom object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.negbin.html">glance.negbin</a></td>
+<td>Glance at a(n) negbin object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.mfx.html">glance.negbinmfx</a></td>
+<td>Glance at a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.nlrq.html">glance.nlrq</a></td>
+<td>Glance at a(n) nlrq object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.nls.html">glance.nls</a></td>
+<td>Glance at a(n) nls object</td></tr>
+<tr><td style="width: 25%;"><a href="null_tidiers.html">glance.NULL</a></td>
+<td>Tidiers for NULL inputs</td></tr>
+<tr><td style="width: 25%;"><a href="glance_optim.html">glance.optim</a></td>
+<td>Tidy a(n) optim object masquerading as list</td></tr>
+<tr><td style="width: 25%;"><a href="glance.orcutt.html">glance.orcutt</a></td>
+<td>Glance at a(n) orcutt object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.pam.html">glance.pam</a></td>
+<td>Glance at a(n) pam object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.plm.html">glance.plm</a></td>
+<td>Glance at a(n) plm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.mfx.html">glance.poissonmfx</a></td>
+<td>Glance at a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.poLCA.html">glance.poLCA</a></td>
+<td>Glance at a(n) poLCA object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.polr.html">glance.polr</a></td>
+<td>Glance at a(n) polr object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.mfx.html">glance.probitmfx</a></td>
+<td>Glance at a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.pyears.html">glance.pyears</a></td>
+<td>Glance at a(n) pyears object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.ridgelm.html">glance.ridgelm</a></td>
+<td>Glance at a(n) ridgelm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.rlm.html">glance.rlm</a></td>
+<td>Glance at a(n) rlm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.rma.html">glance.rma</a></td>
+<td>Glance at a(n) rma object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.rq.html">glance.rq</a></td>
+<td>Glance at a(n) rq object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.sarlm.html">glance.sarlm</a></td>
+<td>Glance at a(n) spatialreg object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.smooth.spline.html">glance.smooth.spline</a></td>
+<td>Tidy a(n) smooth.spine object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.speedglm.html">glance.speedglm</a></td>
+<td>Glance at a(n) speedglm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.speedlm.html">glance.speedlm</a></td>
+<td>Glance at a(n) speedlm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.summary.lm.html">glance.summary.lm</a></td>
+<td>Glance at a(n) summary.lm object</td></tr>
+<tr><td style="width: 25%;"><a href="summary_tidiers.html">glance.summaryDefault</a></td>
+<td>(Deprecated) Tidy summaryDefault objects</td></tr>
+<tr><td style="width: 25%;"><a href="glance.survdiff.html">glance.survdiff</a></td>
+<td>Glance at a(n) survdiff object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.survexp.html">glance.survexp</a></td>
+<td>Glance at a(n) survexp object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.survfit.html">glance.survfit</a></td>
+<td>Glance at a(n) survfit object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.survreg.html">glance.survreg</a></td>
+<td>Glance at a(n) survreg object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.svyglm.html">glance.svyglm</a></td>
+<td>Glance at a(n) svyglm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.svyolr.html">glance.svyolr</a></td>
+<td>Glance at a(n) svyolr object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.varest.html">glance.varest</a></td>
+<td>Glance at a(n) varest object</td></tr>
+<tr><td style="width: 25%;"><a href="glance_optim.html">glance_optim</a></td>
+<td>Tidy a(n) optim object masquerading as list</td></tr>
+<tr><td style="width: 25%;"><a href="glance.negbin.html">glm.nb_tidiers</a></td>
+<td>Glance at a(n) negbin object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.glmnet.html">glmnet_tidiers</a></td>
+<td>Tidy a(n) glmnet object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.gmm.html">gmm_tidiers</a></td>
+<td>Tidy a(n) gmm object</td></tr>
+</table>
+
+<h2><a name="H">-- H --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.rcorr.html">Hmisc_tidiers</a></td>
+<td>Tidy a(n) rcorr object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.htest.html">htest_tidiers</a></td>
+<td>Tidy/glance a(n) htest object</td></tr>
+</table>
+
+<h2><a name="I">-- I --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy_irlba.html">irlba_tidiers</a></td>
+<td>Tidy a(n) irlba object masquerading as list</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.ivreg.html">ivreg_tidiers</a></td>
+<td>Tidy a(n) ivreg object</td></tr>
+</table>
+
+<h2><a name="J">-- J --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.mjoint.html">joinerml_tidiers</a></td>
+<td>Tidy a(n) mjoint object</td></tr>
+</table>
+
+<h2><a name="K">-- K --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.kappa.html">kappa_tidiers</a></td>
+<td>Tidy a(n) kappa object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.kde.html">kde_tidiers</a></td>
+<td>Tidy a(n) kde object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.Kendall.html">Kendall_tidiers</a></td>
+<td>Tidy a(n) Kendall object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.Kendall.html">kendall_tidiers</a></td>
+<td>Tidy a(n) Kendall object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.kmeans.html">kmeans_tidiers</a></td>
+<td>Tidy a(n) kmeans object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.kde.html">ks_tidiers</a></td>
+<td>Tidy a(n) kde object</td></tr>
+</table>
+
+<h2><a name="L">-- L --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.lavaan.html">lavaan_tidiers</a></td>
+<td>Tidy a(n) lavaan object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.regsubsets.html">leaps_tidiers</a></td>
+<td>Tidy a(n) regsubsets object</td></tr>
+<tr><td style="width: 25%;"><a href="leveneTest_tidiers.html">leveneTest_tidiers</a></td>
+<td>Tidy/glance a(n) leveneTest object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.felm.html">lfe_tidiers</a></td>
+<td>Tidy a(n) felm object</td></tr>
+<tr><td style="width: 25%;"><a href="list_tidiers.html">list_tidiers</a></td>
+<td>Tidying methods for lists / returned values that are not S3 objects</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.lmodel2.html">lmodel2_tidiers</a></td>
+<td>Tidy a(n) lmodel2 object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.coeftest.html">lmtest_tidiers</a></td>
+<td>Tidy a(n) coeftest object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.lm.html">lm_tidiers</a></td>
+<td>Tidy a(n) lm object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.loess.html">loess_tidiers</a></td>
+<td>Tidy a(n) loess object</td></tr>
+</table>
+
+<h2><a name="M">-- M --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.map.html">maps_tidiers</a></td>
+<td>Tidy a(n) map object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.margins.html">margins_tidiers</a></td>
+<td>Tidy a(n) margins object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.Mclust.html">mclust_tidiers</a></td>
+<td>Tidy a(n) Mclust object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mediate.html">mediate_tidiers</a></td>
+<td>Tidy a(n) mediate object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.gam.html">mgcv_tidiers</a></td>
+<td>Tidy a(n) gam object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mjoint.html">mjoint_tidiers</a></td>
+<td>Tidy a(n) mjoint object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mle2.html">mle2_tidiers</a></td>
+<td>Tidy a(n) mle2 object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mlogit.html">mlogit_tidiers</a></td>
+<td>Tidying methods for logit models</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.muhaz.html">muhaz_tidiers</a></td>
+<td>Tidy a(n) muhaz object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.glht.html">multcomp_tidiers</a></td>
+<td>Tidy a(n) glht object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.multinom.html">multinom_tidiers</a></td>
+<td>Tidying methods for multinomial logistic regression models</td></tr>
+</table>
+
+<h2><a name="N">-- N --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.nlrq.html">nlrq_tidiers</a></td>
+<td>Tidy a(n) nlrq object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.nls.html">nls_tidiers</a></td>
+<td>Tidy a(n) nls object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.multinom.html">nnet_tidiers</a></td>
+<td>Tidying methods for multinomial logistic regression models</td></tr>
+<tr><td style="width: 25%;"><a href="null_tidiers.html">null_tidiers</a></td>
+<td>Tidiers for NULL inputs</td></tr>
+</table>
+
+<h2><a name="O">-- O --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy_optim.html">optim_tidiers</a></td>
+<td>Tidy a(n) optim object masquerading as list</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.orcutt.html">orcutt_tidiers</a></td>
+<td>Tidy a(n) orcutt object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.clm.html">ordinal_tidiers</a></td>
+<td>Tidy a(n) clm object</td></tr>
+</table>
+
+<h2><a name="P">-- P --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.pam.html">pam_tidiers</a></td>
+<td>Tidy a(n) pam object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.plm.html">plm_tidiers</a></td>
+<td>Tidy a(n) plm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.poLCA.html">poLCA_tidiers</a></td>
+<td>Tidy a(n) poLCA object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.polr.html">polr_tidiers</a></td>
+<td>Tidy a(n) polr object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.prcomp.html">prcomp_tidiers</a></td>
+<td>Tidy a(n) prcomp object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.kappa.html">psych_tidiers</a></td>
+<td>Tidy a(n) kappa object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.pyears.html">pyears_tidiers</a></td>
+<td>Tidy a(n) pyears object</td></tr>
+</table>
+
+<h2><a name="Q">-- Q --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.rq.html">quantreg_tidiers</a></td>
+<td>Tidy a(n) rq object</td></tr>
+</table>
+
+<h2><a name="R">-- R --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.rcorr.html">rcorr_tidiers</a></td>
+<td>Tidy a(n) rcorr object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.ridgelm.html">ridgelm_tidiers</a></td>
+<td>Tidy a(n) ridgelm object</td></tr>
+<tr><td style="width: 25%;"><a href="glance.rlm.html">rlm_tidiers</a></td>
+<td>Glance at a(n) rlm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.robustbase.lmrob.html">robustbase_tidiers</a></td>
+<td>Tidy a(n) lmrob object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.lmRob.html">robust_tidiers</a></td>
+<td>Tidy a(n) lmRob object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.roc.html">roc_tidiers</a></td>
+<td>Tidy a(n) roc object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.rqs.html">rqs_tidiers</a></td>
+<td>Tidy a(n) rqs object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.rq.html">rq_tidiers</a></td>
+<td>Tidy a(n) rq object</td></tr>
+</table>
+
+<h2><a name="S">-- S --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.lavaan.html">sem_tidiers</a></td>
+<td>Tidy a(n) lavaan object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.survexp.html">sexpfit_tidiers</a></td>
+<td>Tidy a(n) survexp object</td></tr>
+<tr><td style="width: 25%;"><a href="augment.smooth.spline.html">smooth.spline_tidiers</a></td>
+<td>Tidy a(n) smooth.spline object</td></tr>
+<tr><td style="width: 25%;"><a href="sparse_tidiers.html">sparse_tidiers</a></td>
+<td>Tidy a sparseMatrix object from the Matrix package</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.sarlm.html">spatialreg_tidiers</a></td>
+<td>Tidying methods for spatially autoregressive models</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.speedglm.html">speedglm_tidiers</a></td>
+<td>Tidy a(n) speedglm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.speedlm.html">speedlm_tidiers</a></td>
+<td>Tidy a(n) speedlm object</td></tr>
+<tr><td style="width: 25%;"><a href="sp_tidiers.html">sp_tidiers</a></td>
+<td>Tidy a(n) SpatialPolygonsDataFrame object</td></tr>
+<tr><td style="width: 25%;"><a href="summary_tidiers.html">summary_tidiers</a></td>
+<td>(Deprecated) Tidy summaryDefault objects</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.survdiff.html">survdiff_tidiers</a></td>
+<td>Tidy a(n) survdiff object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.survexp.html">survexp_tidiers</a></td>
+<td>Tidy a(n) survexp object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.survfit.html">survfit_tidiers</a></td>
+<td>Tidy a(n) survfit object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.survreg.html">survreg_tidiers</a></td>
+<td>Tidy a(n) survreg object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_svd.html">svd_tidiers</a></td>
+<td>Tidy a(n) svd object masquerading as list</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.svyolr.html">svyolr_tidiers</a></td>
+<td>Tidy a(n) svyolr object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.systemfit.html">systemfit_tidiers</a></td>
+<td>Tidy a(n) systemfit object</td></tr>
+</table>
+
+<h2><a name="T">-- T --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.aareg.html">tidy.aareg</a></td>
+<td>Tidy a(n) aareg object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.acf.html">tidy.acf</a></td>
+<td>Tidy a(n) acf object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.anova.html">tidy.anova</a></td>
+<td>Tidy a(n) anova object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.aov.html">tidy.aov</a></td>
+<td>Tidy a(n) aov object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.aovlist.html">tidy.aovlist</a></td>
+<td>Tidy a(n) aovlist object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.Arima.html">tidy.Arima</a></td>
+<td>Tidy a(n) Arima object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.betamfx.html">tidy.betamfx</a></td>
+<td>Tidy a(n) betamfx object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.betareg.html">tidy.betareg</a></td>
+<td>Tidy a(n) betareg object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.biglm.html">tidy.biglm</a></td>
+<td>Tidy a(n) biglm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.binDesign.html">tidy.binDesign</a></td>
+<td>Tidy a(n) binDesign object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.binWidth.html">tidy.binWidth</a></td>
+<td>Tidy a(n) binWidth object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.boot.html">tidy.boot</a></td>
+<td>Tidy a(n) boot object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.btergm.html">tidy.btergm</a></td>
+<td>Tidy a(n) btergm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.cch.html">tidy.cch</a></td>
+<td>Tidy a(n) cch object</td></tr>
+<tr><td style="width: 25%;"><a href="vector_tidiers.html">tidy.character</a></td>
+<td>Tidy atomic vectors</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.cld.html">tidy.cld</a></td>
+<td>Tidy a(n) cld object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.clm.html">tidy.clm</a></td>
+<td>Tidy a(n) clm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.clmm.html">tidy.clmm</a></td>
+<td>Tidy a(n) clmm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.coeftest.html">tidy.coeftest</a></td>
+<td>Tidy a(n) coeftest object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.confint.glht.html">tidy.confint.glht</a></td>
+<td>Tidy a(n) confint.glht object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.confusionMatrix.html">tidy.confusionMatrix</a></td>
+<td>Tidy a(n) confusionMatrix object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.coxph.html">tidy.coxph</a></td>
+<td>Tidy a(n) coxph object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.crr.html">tidy.crr</a></td>
+<td>Tidy a(n) cmprsk object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.cv.glmnet.html">tidy.cv.glmnet</a></td>
+<td>Tidy a(n) cv.glmnet object</td></tr>
+<tr><td style="width: 25%;"><a href="data.frame_tidiers.html">tidy.data.frame</a></td>
+<td>Tidiers for data.frame objects</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.density.html">tidy.density</a></td>
+<td>(Deprecated) Tidy density objects</td></tr>
+<tr><td style="width: 25%;"><a href="sparse_tidiers.html">tidy.dgCMatrix</a></td>
+<td>Tidy a sparseMatrix object from the Matrix package</td></tr>
+<tr><td style="width: 25%;"><a href="sparse_tidiers.html">tidy.dgTMatrix</a></td>
+<td>Tidy a sparseMatrix object from the Matrix package</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.dist.html">tidy.dist</a></td>
+<td>(Deprecated) Tidy dist objects</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.drc.html">tidy.drc</a></td>
+<td>Tidy a(n) drc object</td></tr>
+<tr><td style="width: 25%;"><a href="durbinWatsonTest_tidiers.html">tidy.durbinWatsonTest</a></td>
+<td>Tidy/glance a(n) durbinWatsonTest object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.emmGrid.html">tidy.emmGrid</a></td>
+<td>Tidy a(n) emmGrid object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.epi.2by2.html">tidy.epi.2by2</a></td>
+<td>Tidy a(n) epi.2by2 object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.ergm.html">tidy.ergm</a></td>
+<td>Tidy a(n) ergm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.factanal.html">tidy.factanal</a></td>
+<td>Tidy a(n) factanal object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.felm.html">tidy.felm</a></td>
+<td>Tidy a(n) felm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.fitdistr.html">tidy.fitdistr</a></td>
+<td>Tidy a(n) fitdistr object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.fixest.html">tidy.fixest</a></td>
+<td>Tidy a(n) fixest object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.ftable.html">tidy.ftable</a></td>
+<td>(Deprecated) Tidy ftable objects</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_gam_hastie.html">tidy.Gam</a></td>
+<td>Tidy a(n) Gam object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.gam.html">tidy.gam</a></td>
+<td>Tidy a(n) gam object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.garch.html">tidy.garch</a></td>
+<td>Tidy a(n) garch object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.geeglm.html">tidy.geeglm</a></td>
+<td>Tidy a(n) geeglm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.glht.html">tidy.glht</a></td>
+<td>Tidy a(n) glht object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.glm.html">tidy.glm</a></td>
+<td>Tidy a(n) glm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.glmnet.html">tidy.glmnet</a></td>
+<td>Tidy a(n) glmnet object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.glmRob.html">tidy.glmRob</a></td>
+<td>Tidy a(n) glmRob object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.robustbase.glmrob.html">tidy.glmrob</a></td>
+<td>Tidy a(n) glmrob object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.gmm.html">tidy.gmm</a></td>
+<td>Tidy a(n) gmm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.htest.html">tidy.htest</a></td>
+<td>Tidy/glance a(n) htest object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_irlba.html">tidy.irlba</a></td>
+<td>Tidy a(n) irlba object masquerading as list</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.ivreg.html">tidy.ivreg</a></td>
+<td>Tidy a(n) ivreg object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.kappa.html">tidy.kappa</a></td>
+<td>Tidy a(n) kappa object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.kde.html">tidy.kde</a></td>
+<td>Tidy a(n) kde object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.Kendall.html">tidy.Kendall</a></td>
+<td>Tidy a(n) Kendall object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.kmeans.html">tidy.kmeans</a></td>
+<td>Tidy a(n) kmeans object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.lavaan.html">tidy.lavaan</a></td>
+<td>Tidy a(n) lavaan object</td></tr>
+<tr><td style="width: 25%;"><a href="leveneTest_tidiers.html">tidy.leveneTest</a></td>
+<td>Tidy/glance a(n) leveneTest object</td></tr>
+<tr><td style="width: 25%;"><a href="sp_tidiers.html">tidy.Line</a></td>
+<td>Tidy a(n) SpatialPolygonsDataFrame object</td></tr>
+<tr><td style="width: 25%;"><a href="sp_tidiers.html">tidy.Lines</a></td>
+<td>Tidy a(n) SpatialPolygonsDataFrame object</td></tr>
+<tr><td style="width: 25%;"><a href="list_tidiers.html">tidy.list</a></td>
+<td>Tidying methods for lists / returned values that are not S3 objects</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.lm.html">tidy.lm</a></td>
+<td>Tidy a(n) lm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.lm.beta.html">tidy.lm.beta</a></td>
+<td>Tidy a(n) lm.beta object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.lmodel2.html">tidy.lmodel2</a></td>
+<td>Tidy a(n) lmodel2 object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.lmRob.html">tidy.lmRob</a></td>
+<td>Tidy a(n) lmRob object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.robustbase.lmrob.html">tidy.lmrob</a></td>
+<td>Tidy a(n) lmrob object</td></tr>
+<tr><td style="width: 25%;"><a href="vector_tidiers.html">tidy.logical</a></td>
+<td>Tidy atomic vectors</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mfx.html">tidy.logitmfx</a></td>
+<td>Tidy a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.lsmobj.html">tidy.lsmobj</a></td>
+<td>Tidy a(n) lsmobj object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.manova.html">tidy.manova</a></td>
+<td>Tidy a(n) manova object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.map.html">tidy.map</a></td>
+<td>Tidy a(n) map object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.margins.html">tidy.margins</a></td>
+<td>Tidy a(n) margins object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.Mclust.html">tidy.Mclust</a></td>
+<td>Tidy a(n) Mclust object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mediate.html">tidy.mediate</a></td>
+<td>Tidy a(n) mediate object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mfx.html">tidy.mfx</a></td>
+<td>Tidy a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mjoint.html">tidy.mjoint</a></td>
+<td>Tidy a(n) mjoint object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mle2.html">tidy.mle2</a></td>
+<td>Tidy a(n) mle2 object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mlm.html">tidy.mlm</a></td>
+<td>Tidy a(n) mlm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mlogit.html">tidy.mlogit</a></td>
+<td>Tidying methods for logit models</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.muhaz.html">tidy.muhaz</a></td>
+<td>Tidy a(n) muhaz object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.multinom.html">tidy.multinom</a></td>
+<td>Tidying methods for multinomial logistic regression models</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.negbin.html">tidy.negbin</a></td>
+<td>Tidy a(n) negbin object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mfx.html">tidy.negbinmfx</a></td>
+<td>Tidy a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.nlrq.html">tidy.nlrq</a></td>
+<td>Tidy a(n) nlrq object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.nls.html">tidy.nls</a></td>
+<td>Tidy a(n) nls object</td></tr>
+<tr><td style="width: 25%;"><a href="null_tidiers.html">tidy.NULL</a></td>
+<td>Tidiers for NULL inputs</td></tr>
+<tr><td style="width: 25%;"><a href="vector_tidiers.html">tidy.numeric</a></td>
+<td>Tidy atomic vectors</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_optim.html">tidy.optim</a></td>
+<td>Tidy a(n) optim object masquerading as list</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.orcutt.html">tidy.orcutt</a></td>
+<td>Tidy a(n) orcutt object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.pairwise.htest.html">tidy.pairwise.htest</a></td>
+<td>Tidy a(n) pairwise.htest object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.pam.html">tidy.pam</a></td>
+<td>Tidy a(n) pam object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.plm.html">tidy.plm</a></td>
+<td>Tidy a(n) plm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mfx.html">tidy.poissonmfx</a></td>
+<td>Tidy a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.poLCA.html">tidy.poLCA</a></td>
+<td>Tidy a(n) poLCA object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.polr.html">tidy.polr</a></td>
+<td>Tidy a(n) polr object</td></tr>
+<tr><td style="width: 25%;"><a href="sp_tidiers.html">tidy.Polygon</a></td>
+<td>Tidy a(n) SpatialPolygonsDataFrame object</td></tr>
+<tr><td style="width: 25%;"><a href="sp_tidiers.html">tidy.Polygons</a></td>
+<td>Tidy a(n) SpatialPolygonsDataFrame object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.power.htest.html">tidy.power.htest</a></td>
+<td>Tidy a(n) power.htest object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.prcomp.html">tidy.prcomp</a></td>
+<td>Tidy a(n) prcomp object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.mfx.html">tidy.probitmfx</a></td>
+<td>Tidy a(n) mfx object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.pyears.html">tidy.pyears</a></td>
+<td>Tidy a(n) pyears object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.rcorr.html">tidy.rcorr</a></td>
+<td>Tidy a(n) rcorr object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.ref.grid.html">tidy.ref.grid</a></td>
+<td>Tidy a(n) ref.grid object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.regsubsets.html">tidy.regsubsets</a></td>
+<td>Tidy a(n) regsubsets object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.ridgelm.html">tidy.ridgelm</a></td>
+<td>Tidy a(n) ridgelm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.rlm.html">tidy.rlm</a></td>
+<td>Tidy a(n) rlm object</td></tr>
+<tr><td style="width: 25%;"><a href="metafor_tidiers.html">tidy.rma</a></td>
+<td>Tidy a(n) rma object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.roc.html">tidy.roc</a></td>
+<td>Tidy a(n) roc object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.rq.html">tidy.rq</a></td>
+<td>Tidy a(n) rq object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.rqs.html">tidy.rqs</a></td>
+<td>Tidy a(n) rqs object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.sarlm.html">tidy.sarlm</a></td>
+<td>Tidying methods for spatially autoregressive models</td></tr>
+<tr><td style="width: 25%;"><a href="sparse_tidiers.html">tidy.sparseMatrix</a></td>
+<td>Tidy a sparseMatrix object from the Matrix package</td></tr>
+<tr><td style="width: 25%;"><a href="sp_tidiers.html">tidy.SpatialLinesDataFrame</a></td>
+<td>Tidy a(n) SpatialPolygonsDataFrame object</td></tr>
+<tr><td style="width: 25%;"><a href="sp_tidiers.html">tidy.SpatialPolygons</a></td>
+<td>Tidy a(n) SpatialPolygonsDataFrame object</td></tr>
+<tr><td style="width: 25%;"><a href="sp_tidiers.html">tidy.SpatialPolygonsDataFrame</a></td>
+<td>Tidy a(n) SpatialPolygonsDataFrame object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.spec.html">tidy.spec</a></td>
+<td>Tidy a(n) spec object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.speedglm.html">tidy.speedglm</a></td>
+<td>Tidy a(n) speedglm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.speedlm.html">tidy.speedlm</a></td>
+<td>Tidy a(n) speedlm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.summary.glht.html">tidy.summary.glht</a></td>
+<td>Tidy a(n) summary.glht object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.summary.lm.html">tidy.summary.lm</a></td>
+<td>Tidy a(n) summary.lm object</td></tr>
+<tr><td style="width: 25%;"><a href="summary_tidiers.html">tidy.summaryDefault</a></td>
+<td>(Deprecated) Tidy summaryDefault objects</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.summary_emm.html">tidy.summary_emm</a></td>
+<td>Tidy a(n) summary_emm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.survdiff.html">tidy.survdiff</a></td>
+<td>Tidy a(n) survdiff object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.survexp.html">tidy.survexp</a></td>
+<td>Tidy a(n) survexp object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.survfit.html">tidy.survfit</a></td>
+<td>Tidy a(n) survfit object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.survreg.html">tidy.survreg</a></td>
+<td>Tidy a(n) survreg object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.svyglm.html">tidy.svyglm</a></td>
+<td>Tidy a(n) svyglm object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.svyolr.html">tidy.svyolr</a></td>
+<td>Tidy a(n) svyolr object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.systemfit.html">tidy.systemfit</a></td>
+<td>Tidy a(n) systemfit object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.table.html">tidy.table</a></td>
+<td>Tidy a(n) table object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.ts.html">tidy.ts</a></td>
+<td>Tidy a(n) ts object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.TukeyHSD.html">tidy.TukeyHSD</a></td>
+<td>Tidy a(n) TukeyHSD object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.varest.html">tidy.varest</a></td>
+<td>Tidy a(n) varest object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy.zoo.html">tidy.zoo</a></td>
+<td>Tidy a(n) zoo object</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_irlba.html">tidy_irlba</a></td>
+<td>Tidy a(n) irlba object masquerading as list</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_optim.html">tidy_optim</a></td>
+<td>Tidy a(n) optim object masquerading as list</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_svd.html">tidy_svd</a></td>
+<td>Tidy a(n) svd object masquerading as list</td></tr>
+<tr><td style="width: 25%;"><a href="tidy_xyz.html">tidy_xyz</a></td>
+<td>Tidy a(n) xyz object masquerading as list</td></tr>
+</table>
+
+<h2><a name="V">-- V --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.varest.html">vars_tidiers</a></td>
+<td>Tidy a(n) varest object</td></tr>
+</table>
+
+<h2><a name="X">-- X --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy_xyz.html">xyz_tidiers</a></td>
+<td>Tidy a(n) xyz object masquerading as list</td></tr>
+</table>
+
+<h2><a name="Z">-- Z --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="tidy.zoo.html">zoo_tidiers</a></td>
+<td>Tidy a(n) zoo object</td></tr>
+</table>
+</body></html>

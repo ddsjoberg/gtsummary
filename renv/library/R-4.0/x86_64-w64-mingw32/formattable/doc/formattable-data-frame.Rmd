@@ -1,0 +1,182 @@
+---
+title: "Formattable data frame"
+author: "Kun Ren"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Formattable data frame}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE, include=FALSE}
+set.seed(123)
+```
+
+Formattable data frames are data frames to be rendered as HTML table with formatter functions applied, which resembles conditional formatting in Microsoft Excel. 
+
+## Simple examples
+
+Suppose we have the following data frame:
+
+```{r}
+scores <- data.frame(id = 1:5,
+  prev_score = c(10, 8, 6, 8, 8),
+  cur_score = c(8, 9, 7, 8, 9),
+  change = c(-2, 1, 1, 0, 1))
+```
+
+In the console, it is printed as plain texts:
+
+```{r}
+scores
+```
+
+Using `knitr::kable()` or `formattable()`, the data frame can be rendered as HTML table which looks more friendly.
+
+```{r}
+library(formattable)
+formattable(scores)
+```
+
+In fact, `formattable()` calls `knitr::kable()` internally to translate data frame to HTML code. In addition, `formattable()` supports formatter functions to customize the transformation between values in the data frame to HTML code to generate.
+
+```{r}
+plain_formatter <- formatter("span")
+plain_formatter(c(1, 2, 3))
+```
+
+```{r}
+width_formatter <- formatter("span",
+  style = x ~ style(width = suffix(x, "px")))
+width_formatter(c(10, 11, 12))
+```
+
+The values of `change` can be positive, negative or zero. We can make positives green, negatives red, and zeros black by creating a formatter function that performs conditional transformation from value to HTML code.
+
+```{r}
+sign_formatter <- formatter("span", 
+  style = x ~ style(color = ifelse(x > 0, "green", 
+    ifelse(x < 0, "red", "black"))))
+sign_formatter(c(-1, 0, 1))
+```
+
+Note that we don't have to write HTML but use helper functions like `style()` and `ifelse()` to make it easier to specify conditions. Then we call `formattable()` on the data frame with a list of formatter functions so as to apply conditional formatting.
+
+```{r}
+formattable(scores, list(change = sign_formatter))
+```
+
+We can also create another formatter function that makes above-average values bold while leaving others unchanged.
+
+```{r}
+above_avg_bold <- formatter("span", 
+  style = x ~ style("font-weight" = ifelse(x > mean(x), "bold", NA)))
+formattable(scores, list(
+  prev_score = above_avg_bold,
+  cur_score = above_avg_bold,
+  change = sign_formatter))
+```
+
+## Cross formatting
+
+Sometimes, we need to format one column based on the values of another column. This can be easily done with one-sided formula in `formatter()`. When using `formatter("span", style = ~ expr)`, `expr` is evaluated in the data frame so that all columns are available for use.
+
+```{r}
+formattable(scores, list(
+  cur_score = formatter("span", 
+    style = ~ style(color = ifelse(change >= 0, "green", "red")))))
+```
+
+## Hiding columns
+
+To hide columns, use `FALSE` formatter.
+
+```{r}
+formattable(scores, list(prev_score = FALSE))
+```
+
+## Using built-in formatters
+
+To making formatting easier, formattable package provides a group of built-in formatter functions. Suppose we have the following data on a number of products. Some columns are already formattable vectors.
+
+```{r}
+products <- data.frame(id = 1:5, 
+  price = c(10, 15, 12, 8, 9),
+  rating = c(5, 4, 4, 3, 4),
+  market_share = percent(c(0.1, 0.12, 0.05, 0.03, 0.14)),
+  revenue = accounting(c(55000, 36400, 12000, -25000, 98100)),
+  profit = accounting(c(25300, 11500, -8200, -46000, 65000)))
+products
+```
+
+Without any formatter functions applied, the formattable data frame is directly rendered as an HTML table.
+
+```{r}
+formattable(products)
+```
+
+We can supply a list of formatter functions to make it look more colorful. For example, we apply `sign_formatter` to `profit` column so that values of different signs are displayed in different colors.
+
+```{r}
+formattable(products, list(profit = sign_formatter))
+```
+
+Using built-in functions like `color_tile()` and `color_bar()` makes it easier to compare the magnitute of values of specified columns.
+
+```{r}
+formattable(products, list(
+  price = color_tile("transparent", "lightpink"),
+  rating = color_bar("lightgreen"),
+  market_share = color_bar("lightblue"),
+  revenue = sign_formatter,
+  profit = sign_formatter))
+```
+
+## Area formatting
+
+Sometimes, it is useful to apply a formatter function to an area so that all cells in the area share one benchmark. Area formatting is supported through the syntax of `area(row, col) ~ formatter` in the formatter list.
+
+The following example renders the three columns altogether so that they share the same benchmark, not independently.
+
+```{r}
+set.seed(123)
+df <- data.frame(id = 1:10, 
+  a = rnorm(10), b = rnorm(10), c = rnorm(10))
+formattable(df, list(area(col = a:c) ~ color_tile("transparent", "pink")))
+```
+
+If a one-sided formula is supplied, the function will be applied to all cells.
+
+```{r}
+formattable(df[, -1], list(~ percent))
+```
+
+# Dynamically generating formatters
+
+Since `formattable()` accepts a list of formatter functions, the list can be dynamically generated. For example, the following code applies row-wise formatting, that is, each row is colored independently.
+
+```{r}
+df <- cbind(data.frame(id = 1:10), 
+  do.call(cbind, lapply(1:8, function(x) rnorm(10))))
+formattable(df, lapply(1:nrow(df), function(row) {
+  area(row, col = -1) ~ color_tile("lightpink", "lightblue")
+}))
+```
+
+# Converting to `DT::datatables`
+
+`as.datatable()` is designed to convert a formattable data frame to `DT::datatables`.
+
+```{r, screenshot.force = FALSE}
+as.datatable(formattable(products))
+```
+
+Some formatters can be preserved well after the conversion.
+
+```{r, screenshot.force = FALSE}
+as.datatable(formattable(products, list(
+  price = color_tile("transparent", "lightpink"),
+  revenue = sign_formatter,
+  profit = sign_formatter)))
+```

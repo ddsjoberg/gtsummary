@@ -1,0 +1,37 @@
+Package: gdtools
+Version: 0.2.3
+License: GPL-3 | file LICENSE
+Title: Utilities for Graphical Rendering
+Description: Useful tools for writing vector graphics devices.
+Authors@R: c(
+    person("David", "Gohel", , "david.gohel@ardata.fr", c("aut", "cre")),
+    person("Hadley", "Wickham", , "hadley@rstudio.com", "aut"),
+    person("Lionel", "Henry", , "lionel@rstudio.com", "aut"),
+    person("Jeroen", "Ooms", role = "aut", email = "jeroen@berkeley.edu",
+      comment = c(ORCID = "0000-0002-4035-0289")),
+    person("Yixuan", "Qiu", role = "ctb"),
+    person("R Core Team", role = "cph", comment = "Cairo code from X11 device"),
+    person("RStudio", role = "cph")
+  )
+LazyData: TRUE
+Imports: Rcpp (>= 0.12.12), systemfonts (>= 0.1.1)
+Suggests: htmltools, testthat, fontquiver (>= 0.2.0), curl
+Encoding: UTF-8
+LinkingTo: Rcpp
+SystemRequirements: cairo, freetype2, fontconfig
+BugReports: https://github.com/davidgohel/gdtools/issues
+RoxygenNote: 7.1.1
+NeedsCompilation: yes
+Packaged: 2021-01-06 15:26:40 UTC; davidgohel
+Author: David Gohel [aut, cre],
+  Hadley Wickham [aut],
+  Lionel Henry [aut],
+  Jeroen Ooms [aut] (<https://orcid.org/0000-0002-4035-0289>),
+  Yixuan Qiu [ctb],
+  R Core Team [cph] (Cairo code from X11 device),
+  RStudio [cph]
+Maintainer: David Gohel <david.gohel@ardata.fr>
+Repository: CRAN
+Date/Publication: 2021-01-06 18:20:05 UTC
+Built: R 4.1.0; x86_64-w64-mingw32; 2021-06-12 08:44:10 UTC; windows
+Archs: i386, x64

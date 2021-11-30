@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Adds p-values to summary tables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add_p.tbl_summary {gtsummary}"><tr><td>add_p.tbl_summary {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Adds p-values to summary tables</h2>
+
+<h3>Description</h3>
+
+<p>Adds p-values to tables created by <code>tbl_summary</code> by comparing values across groups.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'tbl_summary'
+add_p(
+  x,
+  test = NULL,
+  pvalue_fun = NULL,
+  group = NULL,
+  include = everything(),
+  test.args = NULL,
+  exclude = NULL,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object with class <code>tbl_summary</code> from the <a href="tbl_summary.html">tbl_summary</a> function</p>
+</td></tr>
+<tr valign="top"><td><code>test</code></td>
+<td>
+<p>List of formulas specifying statistical tests to perform for each
+variable,
+e.g. <code>list(all_continuous() ~ "t.test", all_categorical() ~ "fisher.test")</code>.
+Common tests include <code>"t.test"</code>, <code>"aov"</code>, <code>"wilcox.test"</code>, <code>"kruskal.test"</code>,
+<code>"chisq.test"</code>, <code>"fisher.test"</code>, and <code>"lme4"</code> (for clustered data). See <a href="tests.html">tests</a>
+for details, more tests, and instruction for implementing a custom test.
+</p>
+<p>Tests default to <code>"kruskal.test"</code> for continuous variables (<code>"wilcox.test"</code>
+when &quot;<code>by</code>&quot; variable has two levels), <code>"chisq.test.no.correct"</code> for
+categorical variables with all expected cell counts &gt;=5, and <code>"fisher.test"</code>
+for categorical variables with any expected cell count &lt;5.</p>
+</td></tr>
+<tr valign="top"><td><code>pvalue_fun</code></td>
+<td>
+<p>Function to round and format p-values.
+Default is <a href="style_pvalue.html">style_pvalue</a>.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
+<code>purrr::partial(style_pvalue, digits = 2)</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>group</code></td>
+<td>
+<p>Column name (unquoted or quoted) of an ID or grouping variable.
+The column can be used to calculate p-values with correlated data.
+Default is <code>NULL</code>. See <a href="tests.html">tests</a> for methods that utilize the <code style="white-space: pre;">group=</code> argument.</p>
+</td></tr>
+<tr valign="top"><td><code>include</code></td>
+<td>
+<p>Variables to include in output. Input may be a vector of
+quoted variable names, unquoted variable names, or tidyselect select helper
+functions. Default is <code>everything()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>test.args</code></td>
+<td>
+<p>List of formulas containing additional arguments to pass to
+tests that accept arguments. For example, add an argument for all t-tests,
+use <code>test.args = all_tests("t.test") ~ list(var.equal = TRUE)</code></p>
+</td></tr>
+<tr valign="top"><td><code>exclude</code></td>
+<td>
+<p>DEPRECATED</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Not used</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A <code>tbl_summary</code> object
+</p>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/add_p_ex1.png" width=60% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/add_p_ex2.png" width=60% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg, Emily C. Zabor
+</p>
+
+
+<h3>See Also</h3>
+
+<p>See tbl_summary <a href="http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html">vignette</a> for detailed examples
+</p>
+<p>Other tbl_summary tools: 
+<code><a href="add_n.tbl_summary.html">add_n.tbl_summary</a>()</code>,
+<code><a href="add_overall.html">add_overall</a>()</code>,
+<code><a href="add_q.html">add_q</a>()</code>,
+<code><a href="add_stat_label.html">add_stat_label</a>()</code>,
+<code><a href="bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="inline_text.tbl_summary.html">inline_text.tbl_summary</a>()</code>,
+<code><a href="inline_text.tbl_survfit.html">inline_text.tbl_survfit</a>()</code>,
+<code><a href="modify.html">modify</a></code>,
+<code><a href="tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="tbl_summary.html">tbl_summary</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Example 1 ----------------------------------
+add_p_ex1 &lt;-
+  trial[c("age", "grade", "trt")] %&gt;%
+  tbl_summary(by = trt) %&gt;%
+  add_p()
+
+# Example 2 ----------------------------------
+add_p_ex2 &lt;-
+  trial %&gt;%
+  select(trt, age, marker) %&gt;%
+  tbl_summary(by = trt, missing = "no") %&gt;%
+  add_p(
+    # perform t-test for all variables
+    test = everything() ~ "t.test",
+    # assume equal variance in the t-test
+    test.args = all_tests("t.test") ~ list(var.equal = TRUE)
+  )
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.0.9006 <a href="00Index.html">Index</a>]</div>
+</body></html>

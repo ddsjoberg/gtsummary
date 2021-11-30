@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Construct a Block Diagonal Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for bdiag {Matrix}"><tr><td>bdiag {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Construct a Block Diagonal Matrix</h2>
+
+<h3>Description</h3>
+
+<p>Build a block diagonal matrix given several building block matrices.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+bdiag(...)
+.bdiag(lst)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>individual matrices or a <code><a href="../../base/html/list.html">list</a></code> of matrices.</p>
+</td></tr>
+<tr valign="top"><td><code>lst</code></td>
+<td>
+<p>non-empty <code><a href="../../base/html/list.html">list</a></code> of matrices.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>For non-trivial argument list, <code>bdiag()</code> calls <code>.bdiag()</code>.
+The latter maybe useful to programmers.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <em>sparse</em> matrix obtained by combining the arguments into a
+block diagonal matrix.
+</p>
+<p>The value of <code>bdiag()</code> inherits from class
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>, whereas
+<code>.bdiag()</code> returns a <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function has been written and is efficient for the case of
+relatively few block matrices which are typically sparse themselves.
+</p>
+<p>It is currently <em>inefficient</em> for the case of many small dense
+block matrices.
+For the case of <em>many</em> dense <i>k * k</i> matrices,
+the <code>bdiag_m()</code> function in the &lsquo;Examples&rsquo; is an order of
+magnitude faster.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler, built on a version posted by Berton Gunter to
+R-help; earlier versions have been posted by other authors, notably
+Scott Chasalow to S-news.  Doug Bates's faster implementation builds
+on <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code> objects.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Diagonal.html">Diagonal</a></code> for constructing matrices of
+class <code><a href="diagonalMatrix-class.html">diagonalMatrix</a></code>, or <code><a href="../../base/html/kronecker.html">kronecker</a></code>
+which also works for <code>"Matrix"</code> inheriting matrices.
+</p>
+<p><code><a href="bandSparse.html">bandSparse</a></code> constructs a <em>banded</em> sparse matrix from
+its non-zero sub-/super - diagonals.
+</p>
+<p>Note that other CRAN <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> packages have own versions of <code>bdiag()</code>
+which return traditional matrices.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+bdiag(matrix(1:4, 2), diag(3))
+## combine "Matrix" class and traditional matrices:
+bdiag(Diagonal(2), matrix(1:3, 3,4), diag(3:2))
+
+mlist &lt;- list(1, 2:3, diag(x=5:3), 27, cbind(1,3:6), 100:101)
+bdiag(mlist)
+stopifnot(identical(bdiag(mlist), 
+                    bdiag(lapply(mlist, as.matrix))))
+
+ml &lt;- c(as(matrix((1:24)%% 11 == 0, 6,4),"nMatrix"),
+        rep(list(Diagonal(2, x=TRUE)), 3))
+mln &lt;- c(ml, Diagonal(x = 1:3))
+stopifnot(is(bdiag(ml), "lsparseMatrix"),
+          is(bdiag(mln),"dsparseMatrix") )
+
+## random (diagonal-)block-triangular matrices:
+rblockTri &lt;- function(nb, max.ni, lambda = 3) {
+   .bdiag(replicate(nb, {
+         n &lt;- sample.int(max.ni, 1)
+         tril(Matrix(rpois(n*n, lambda=lambda), n,n)) }))
+}
+
+(T4 &lt;- rblockTri(4, 10, lambda = 1))
+image(T1 &lt;- rblockTri(12, 20))
+
+
+##' Fast version of Matrix :: .bdiag() -- for the case of *many*  (k x k) matrices:
+##' @param lmat list(&lt;mat1&gt;, &lt;mat2&gt;, ....., &lt;mat_N&gt;)  where each mat_j is a  k x k 'matrix'
+##' @return a sparse (N*k x N*k) matrix of class  \code{"\linkS4class{dgCMatrix}"}.
+bdiag_m &lt;- function(lmat) {
+    ## Copyright (C) 2016 Martin Maechler, ETH Zurich
+    if(!length(lmat)) return(new("dgCMatrix"))
+    stopifnot(is.list(lmat), is.matrix(lmat[[1]]),
+              (k &lt;- (d &lt;- dim(lmat[[1]]))[1]) == d[2], # k x k
+              all(vapply(lmat, dim, integer(2)) == k)) # all of them
+    N &lt;- length(lmat)
+    if(N * k &gt; .Machine$integer.max)
+        stop("resulting matrix too large; would be  M x M, with M=", N*k)
+    M &lt;- as.integer(N * k)
+    ## result: an   M x M  matrix
+    new("dgCMatrix", Dim = c(M,M),
+        ## 'i :' maybe there's a faster way (w/o matrix indexing), but elegant?
+        i = as.vector(matrix(0L:(M-1L), nrow=k)[, rep(seq_len(N), each=k)]),
+        p = k * 0L:M,
+        x = as.double(unlist(lmat, recursive=FALSE, use.names=FALSE)))
+}
+
+l12 &lt;- replicate(12, matrix(rpois(16, lambda = 6.4), 4,4), simplify=FALSE)
+dim(T12 &lt;- bdiag_m(l12))# 48 x 48
+T12[1:20, 1:20]
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Find smooth terms from a model object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for find_smooth {insight}"><tr><td>find_smooth {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Find smooth terms from a model object</h2>
+
+<h3>Description</h3>
+
+<p>Return the names of smooth terms from a model object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+find_smooth(x, flatten = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A (gam) model.</p>
+</td></tr>
+<tr valign="top"><td><code>flatten</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, the values are returned
+as character vector, not as list. Duplicated values are removed.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector with the name(s) of the smooth terms.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (require("mgcv")) {
+  data(iris)
+  model &lt;- gam(Petal.Length ~ Petal.Width + s(Sepal.Length), data = iris)
+  find_smooth(model)
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

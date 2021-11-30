@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Estimate the Reciprocal Condition Number</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for rcond {Matrix}"><tr><td>rcond {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Estimate the Reciprocal Condition Number</h2>
+
+<h3>Description</h3>
+
+<p>Estimate the reciprocal of the condition number of a matrix.
+</p>
+<p>This is a generic function with several methods, as seen by
+<code><a href="../../methods/html/showMethods.html">showMethods</a>(rcond)</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rcond(x, norm, ...)
+
+## S4 method for signature 'sparseMatrix,character'
+rcond(x, norm, useInv=FALSE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object that inherits from the <code>Matrix</code> class.</p>
+</td></tr>
+<tr valign="top"><td><code>norm</code></td>
+<td>
+<p>character string indicating the type of norm to be used in
+the estimate. The default is <code>"O"</code> for the 1-norm (<code>"O"</code> is
+equivalent to <code>"1"</code>).  For sparse matrices, when <code>useInv=TRUE</code>,
+<code>norm</code> can be any of the <code>kind</code>s allowed for <code><a href="norm.html">norm</a></code>;
+otherwise, the other possible value is <code>"I"</code> for the infinity
+norm, see also <code><a href="norm.html">norm</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>useInv</code></td>
+<td>
+<p>logical (or <code>"Matrix"</code> containing
+<code><a href="solve-methods.html">solve</a>(x)</code>).  If not false, compute the reciprocal
+condition number as <i>1/(||x|| * ||x^(-1)||)</i>,
+where <i>x^(-1)</i> is the inverse of <i>x</i>, <code>solve(x)</code>.
+</p>
+<p>This may be an efficient alternative (only) in situations where
+<code>solve(x)</code> is fast (or known), e.g., for (very) sparse or
+triangular matrices.
+</p>
+<p>Note that the <em>result</em> may differ depending on <code>useInv</code>,
+as per default, when it is false, an <em>approximation</em> is
+computed.
+</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An estimate of the reciprocal condition number of <code>x</code>.
+</p>
+
+
+<h3>BACKGROUND</h3>
+
+<p>The condition number of a regular (square) matrix is the product of
+the <code><a href="norm.html">norm</a></code> of the matrix and the norm of its inverse (or
+pseudo-inverse).
+</p>
+<p>More generally, the condition number is defined (also for
+non-square matrices <i>A</i>) as
+</p>
+<p style="text-align: center;"><i>
+    kappa(A) = (max_(||v|| = 1; || Av ||)) /(min_(||v|| = 1; || Av ||)).</i></p>
+
+<p>Whenever <code>x</code> is <em>not</em> a square matrix, in our method
+definitions, this is typically computed via <code>rcond(qr.R(qr(X)), ...)</code>
+where <code>X</code> is <code>x</code> or <code>t(x)</code>.
+</p>
+<p>The condition number takes on values between 1 and infinity,
+inclusive, and can be viewed as a factor by which errors in solving
+linear systems with this matrix as coefficient matrix could be
+magnified.
+</p>
+<p><code>rcond()</code> computes the <em>reciprocal</em> condition number
+<i>1/&kappa;</i> with values in <i>[0,1]</i> and can be viewed as a
+scaled measure of how close a matrix is to being rank deficient (aka
+&ldquo;singular&rdquo;).
+</p>
+<p>Condition numbers are usually estimated, since exact computation is
+costly in terms of floating-point operations.  An (over) estimate of
+reciprocal condition number is given, since by doing so overflow is
+avoided.  Matrices are well-conditioned if the reciprocal condition
+number is near 1 and ill-conditioned if it is near zero.
+</p>
+
+
+<h3>References</h3>
+
+<p>Golub, G., and Van Loan, C. F. (1989).
+<em>Matrix Computations,</em>
+2nd edition, Johns Hopkins, Baltimore.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="norm.html">norm</a></code>, <code><a href="../../base/html/kappa.html">kappa</a>()</code> from package
+<span class="pkg">base</span> computes an <em>approximate</em> condition number of a
+&ldquo;traditional&rdquo; matrix, even non-square ones, with respect to the
+<i>p=2</i> (Euclidean) <code><a href="norm.html">norm</a></code>.
+<code><a href="../../base/html/solve.html">solve</a></code>.
+</p>
+<p><code><a href="condest.html">condest</a></code>, a newer <em>approximate</em> estimate of
+the (1-norm) condition number, particularly efficient for large sparse
+matrices.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- Matrix(rnorm(9), 3, 3)
+rcond(x)
+## typically "the same" (with more computational effort):
+1 / (norm(x) * norm(solve(x)))
+rcond(Hilbert(9))  # should be about 9.1e-13
+
+## For non-square matrices:
+rcond(x1 &lt;- cbind(1,1:10))# 0.05278
+rcond(x2 &lt;- cbind(x1, 2:11))# practically 0, since x2 does not have full rank
+
+## sparse
+(S1 &lt;- Matrix(rbind(0:1,0, diag(3:-2))))
+rcond(S1)
+m1 &lt;- as(S1, "denseMatrix")
+all.equal(rcond(S1), rcond(m1))
+
+## wide and sparse
+rcond(Matrix(cbind(0, diag(2:-1))))
+
+## Large sparse example ----------
+m &lt;- Matrix(c(3,0:2), 2,2)
+M &lt;- bdiag(kronecker(Diagonal(2), m), kronecker(m,m))
+36*(iM &lt;- solve(M)) # still sparse
+MM &lt;- kronecker(Diagonal(10), kronecker(Diagonal(5),kronecker(m,M)))
+dim(M3 &lt;- kronecker(bdiag(M,M),MM)) # 12'800 ^ 2
+if(interactive()) ## takes about 2 seconds if you have &gt;= 8 GB RAM
+  system.time(r &lt;- rcond(M3))
+## whereas this is *fast* even though it computes  solve(M3)
+system.time(r. &lt;- rcond(M3, useInv=TRUE))
+if(interactive()) ## the values are not the same
+  c(r, r.)  # 0.05555 0.013888
+## for all 4 norms available for sparseMatrix :
+cbind(rr &lt;- sapply(c("1","I","F","M"),
+             function(N) rcond(M3, norm=N, useInv=TRUE)))
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

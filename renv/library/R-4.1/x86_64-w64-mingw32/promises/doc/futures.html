@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Launching tasks with future</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Launching tasks with <code>future</code></h1>
+
+
+
+<p>The <code>future</code> package provides a lightweight way to launch R tasks that don’t block the current R session. It was created by Henrik Bengtsson long before the <code>promises</code> package existed—the first CRAN release of <code>future</code> predates development of <code>promises</code> by almost two years.</p>
+<p>The <code>promises</code> package provides the API for working with the results of async tasks, but it totally abdicates responsibility for actually launching/creating async tasks. The idea is that any number of different packages could be capable of launching async tasks, using whatever techniques they want, but all of them would either return promise objects (or objects that can be converted to promise objects, as is the case for <code>future</code>). However, for now, <code>future</code> is likely to be the primary or even exclusive way that async tasks are created.</p>
+<p>This document will give an introduction to the parts of <code>future</code> that are most relevant to promises. For more information, please consult the vignettes that come with <code>future</code>, especially the <a href="https://CRAN.R-project.org/package=future/vignettes/future-1-overview.html">Comprehensive Overview</a>.</p>
+<div id="how-future-works" class="section level2">
+<h2>How future works</h2>
+<p>The main API that <code>future</code> provides couldn’t be simpler. You call <code>future()</code> and pass it the code that you want executed asynchronously:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>f &lt;-<span class="st"> </span><span class="kw">future</span>({</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  <span class="co"># expensive operations go here...</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>  df &lt;-<span class="st"> </span><span class="kw">download_lots_of_data</span>()</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="kw">fit_model</span>(df)</span>
+<span id="cb1-5"><a href="#cb1-5"></a>})</span></code></pre></div>
+<p>The object that’s returned is a future, which for all intents and purposes is a promise object<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, which will eventually resolve to the return value of the code block (i.e. the last expression) or an error if the code does not complete executing successfully. The important thing is that no matter how long the expensive operation takes, these lines will execute almost instantly, while the operation continues in the background.</p>
+<p>But we know that R is single-threaded, so how does <code>future</code> accomplish this? The answer: by utilizing another R process. <code>future</code> delegates the execution of the expensive operation to a totally different R process, so that the original R process can move on.</p>
+</div>
+<div id="choosing-a-launch-method" class="section level2">
+<h2>Choosing a launch method</h2>
+<p>There are several different methods we could use for launching R processes or attaching to existing R processes, and each method has its own advantages, disadvantages, limitations, and requirements. Rather than prescribing a single method, the <code>future</code> package provides an extensible mechanism that lets you, the R user, decide what method to use. Call the <code>plan()</code> function with one of the following values (without quotes—these are function names, not strings):</p>
+<ul>
+<li><code>multisession</code>: Launches up to <em>n</em> background R processes on the same machine (where <em>n</em> is the number of processor cores on the system, minus 1). These background processes will be used/recycled for the life of the originating R process. If a future is launched while all the background R processes are busy executing, then the new future will be queued until one of the background processes free up.</li>
+<li><code>multicore</code>: Each new task executes in its own forked child process. Forking is generally much faster than launching a new process from scratch, and most of the state of the original process is available to the child process without having to go through any extra effort (see the section about Globals below). The biggest limitation of forking is that it doesn’t work at all on Windows operating systems, which is what the majority of R users use. There are also some dangerous edge cases with this style of execution (Google “fork without exec” for more information), though popular frameworks like RServe and OpenCPU rely heavily on this and don’t seem to suffer for it.</li>
+<li><code>multiprocess</code>: This is a meta-method that uses <code>multicore</code> on platforms where it’s available, and <code>multisession</code> on Windows. In theory this means that you get the best performance available for each platform. In practice, since the two implementations are so different, it’s very important that you test your app on all of the platforms you intend your app to be used on (or, if your development machine is non-Windows, test with both <code>multicore</code> (or <code>multiprocess</code>) and <code>multisession</code>).</li>
+</ul>
+<p>The <code>future</code> package includes several other methods. Two of them, <code>sequential</code> and <code>transparent</code>, execute synchronously and are therefore not relevant for our purposes. There are also <code>cluster</code> and <code>remote</code> methods, as well as a separate <code>future.batchtools</code> package, for doing distributed execution; those may work with promises, but have not been tested by our team and are not described further in this document.</p>
+</div>
+<div id="caveats-and-limitations" class="section level2">
+<h2>Caveats and limitations</h2>
+<p>The abstractions that <code>future</code> presents are simple, but <a href="https://en.wikipedia.org/wiki/Leaky_abstraction">leaky</a>. You can’t make effective use of <code>future</code> without understanding its various strategies for running R tasks asynchronously. Please read this entire section carefully before proceeding.</p>
+<div id="globals-providing-input-to-future-code-chunks" class="section level3">
+<h3>Globals: Providing input to future code chunks</h3>
+<p>Most future code chunks will need to reference data from the original process, e.g. data to be fitted, URLs to be requested, file paths to read from. The future package goes to some lengths to try to make this process seamless for you, by inspecting your code chunk and predicting which variables from the original process should be copied to the child process. In our testing this works fairly reliably with multicore, somewhat less reliably with multisession.</p>
+<p>Multisession also has the distinct disadvantage that any identified variables must be physically (though automatically) copied between the main and child processes, which can be extremely time-consuming if the data is large. (The multicore strategy does not need to do this, because every forked process starts out with its memory in the same state as its parent at the time of the fork.)</p>
+<p>In summary, it’s possible for both false positives (data copied that doesn’t need to be) and false negatives (data not available when it’s needed) to occur. Therefore, for all but the simplest cases, we suggest suppressing future’s automated variable copying and instead manually specifying the relevant variables, using the <code>future()</code> function’s <code>globals</code> parameter. You can pass it a character vector (<code>globals = c(&quot;var_a&quot;, &quot;var_b&quot;)</code>) or a named list (<code>globals = c(data = mtcars, iterations = n)</code>).</p>
+<p>One final note about globals: as a safety measure, <code>future()</code> will error if the size of the data to be shuttled between the processes exceeds 500MB. This is true whether the variables to copy were identified by automatic detection, or explicitly via the <code>globals</code> parameter; and it’s even true if you’re using the multicore strategy, where no copies are actually made. If your data is potentially large, you’ll want to increase the limit by setting the <code>future.globals.maxSize</code> option to a suitably high number of bytes, e.g. <code>options(future.globals.maxSize=1e9)</code> for a billion bytes.</p>
+</div>
+<div id="package-loading" class="section level3">
+<h3>Package loading</h3>
+<p>Besides variables, <code>future()</code> also tries to automatically infer what R packages need to be loaded in the child process. If the automatic detection is not sufficient, you can use the <code>future()</code> function’s <code>packages</code> parameter to pass in a character vector of package names, e.g. <code>packages = c(&quot;dplyr&quot;, &quot;ggplot2&quot;)</code>.</p>
+<p>Again, this is especially important for multisession, because multicore will inherit all of the attached packages of the parent process.</p>
+</div>
+<div id="native-resources" class="section level3">
+<h3>Native resources</h3>
+<p>Future code blocks cannot use resources such as database connections and network sockets that were created in the parent process. This is true regardless of what future implementation you use! Even if it seems to work with a simple test, you are asking for crashes or worse by sharing these kinds of resources across processes.</p>
+<p>Instead, make sure you create, use, and destroy such resources entirely within the scope of the future code block.</p>
+</div>
+<div id="mutation" class="section level3">
+<h3>Mutation</h3>
+<p>Reference class objects (including R6 objects and data.table objects) and environments are among the few “native” R object types that are mutable, that is, can be modified in-place. Unless they contain native resources (see previous section), there’s nothing wrong with using mutable objects from within future code blocks, even objects created in the parent process. However, note that any changes you make to these objects will not be visible from the parent process; the future code is operating on a copy of the object, not the original.</p>
+</div>
+<div id="returning-values" class="section level3">
+<h3>Returning values</h3>
+<p>Future code blocks can return a value—they’d be a lot less useful if they couldn’t! Like everywhere else in R, the return value is determined by the last expression in the code block, unless <code>return()</code> is explicitly called earlier.</p>
+<p>Regardless of future method, the return value will be copied back into the parent process. This matters for two reasons.</p>
+<p>First, if the return value is very large, the copying process can take some time—and because the data must essentially be serialized to and deserialized from rds format, it can take a surprising amount of time. In the case of future blocks that execute fairly quickly but return huge amounts of data, you may be better off not using future/async techniques at all.</p>
+<p>Second, objects that refer to native resources are unlikely to work in this direction either; just as you can’t use the parent’s database connections in the child process, you also cannot have the child process return a database connection for the parent to use.</p>
+<div style="display:flex;">
+<div style="font-size: 20px; margin-top: 40px; margin-left: auto;">
+<p>Next:</p>
+<ul>
+<li><p><a href="future_promise.html">Advanced <code>future</code> and <code>promises</code> usage</a></p></li>
+<li><p><a href="shiny.html">Using <code>promises</code> with Shiny</a></p>
+</div></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>(The <code>future</code> package provides several functions for working with future objects, but they are not relevant for our purposes.)<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

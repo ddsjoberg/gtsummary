@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Albers' example Matrix with &quot;Difficult&quot; Eigen Factorization</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for CAex {Matrix}"><tr><td>CAex {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Albers' example Matrix with &quot;Difficult&quot; Eigen Factorization</h2>
+
+<h3>Description</h3>
+
+<p>An example of a sparse matrix for which <code><a href="../../base/html/eigen.html">eigen</a>()</code> seemed
+to be difficult, an unscaled version of this has been posted to the
+web, accompanying an E-mail to R-help
+(<a href="https://stat.ethz.ch/mailman/listinfo/r-help">https://stat.ethz.ch/mailman/listinfo/r-help</a>), by
+Casper J Albers, Open University, UK.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>data(CAex)</pre>
+
+
+<h3>Format</h3>
+
+<p>This is a <i>72 * 72</i> symmetric matrix with 216
+non-zero entries in five bands, stored as sparse matrix of class
+<code><a href="dgCMatrix-class.html">dgCMatrix</a></code>.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Historical note (2006-03-30):
+In earlier versions of <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>, <code><a href="../../base/html/eigen.html">eigen</a>(CAex)</code> fell into an
+infinite loop whereas <code><a href="../../base/html/eigen.html">eigen</a>(CAex, EISPACK=TRUE)</code> had been okay.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(CAex)
+str(CAex) # of class "dgCMatrix"
+
+image(CAex)# -&gt; it's a simple band matrix with 5 bands
+## and the eigen values are basically 1 (42 times) and 0 (30 x):
+zapsmall(ev &lt;- eigen(CAex, only.values=TRUE)$values)
+## i.e., the matrix is symmetric, hence
+sCA &lt;- as(CAex, "symmetricMatrix")
+## and
+stopifnot(class(sCA) == "dsCMatrix",
+          as(sCA, "matrix") == as(CAex, "matrix"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

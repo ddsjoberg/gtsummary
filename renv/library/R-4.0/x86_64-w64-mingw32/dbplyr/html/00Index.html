@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: A 'dplyr' Back End for Databases</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> A 'dplyr' Back End for Databases
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;dbplyr&rsquo; version 2.1.1</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="join.tbl_sql.html">anti_join.tbl_lazy</a></td>
+<td>Join SQL tables</td></tr>
+<tr><td style="width: 25%;"><a href="arrange.tbl_lazy.html">arrange.tbl_lazy</a></td>
+<td>Arrange rows by column values</td></tr>
+<tr><td style="width: 25%;"><a href="sql.html">as.sql</a></td>
+<td>SQL escaping.</td></tr>
+<tr><td style="width: 25%;"><a href="collapse.tbl_sql.html">collapse.tbl_sql</a></td>
+<td>Compute results of a query</td></tr>
+<tr><td style="width: 25%;"><a href="collapse.tbl_sql.html">collect.tbl_sql</a></td>
+<td>Compute results of a query</td></tr>
+<tr><td style="width: 25%;"><a href="complete.tbl_lazy.html">complete.tbl_lazy</a></td>
+<td>Complete a SQL table with missing combinations of data</td></tr>
+<tr><td style="width: 25%;"><a href="collapse.tbl_sql.html">compute.tbl_sql</a></td>
+<td>Compute results of a query</td></tr>
+<tr><td style="width: 25%;"><a href="copy_to.src_sql.html">copy_to.src_sql</a></td>
+<td>Copy a local data frame to a remote database</td></tr>
+<tr><td style="width: 25%;"><a href="count.tbl_lazy.html">count.tbl_lazy</a></td>
+<td>Count observations by group</td></tr>
+<tr><td style="width: 25%;"><a href="dbplyr_uncount.html">dbplyr_uncount</a></td>
+<td>"Uncount" a database table</td></tr>
+<tr><td style="width: 25%;"><a href="distinct.tbl_lazy.html">distinct.tbl_lazy</a></td>
+<td>Subset distinct/unique rows</td></tr>
+<tr><td style="width: 25%;"><a href="do.tbl_sql.html">do.tbl_sql</a></td>
+<td>Perform arbitrary computation on remote backend</td></tr>
+<tr><td style="width: 25%;"><a href="escape.html">escape</a></td>
+<td>Escape/quote a string.</td></tr>
+<tr><td style="width: 25%;"><a href="escape.html">escape_ansi</a></td>
+<td>Escape/quote a string.</td></tr>
+<tr><td style="width: 25%;"><a href="expand.tbl_lazy.html">expand.tbl_lazy</a></td>
+<td>Expand SQL tables to include all possible combinations of values</td></tr>
+<tr><td style="width: 25%;"><a href="fill.tbl_lazy.html">fill.tbl_lazy</a></td>
+<td>Fill in missing values with previous or next value</td></tr>
+<tr><td style="width: 25%;"><a href="filter.tbl_lazy.html">filter.tbl_lazy</a></td>
+<td>Subset rows using column values</td></tr>
+<tr><td style="width: 25%;"><a href="join.tbl_sql.html">full_join.tbl_lazy</a></td>
+<td>Join SQL tables</td></tr>
+<tr><td style="width: 25%;"><a href="group_by.tbl_lazy.html">group_by.tbl_lazy</a></td>
+<td>Group by one or more variables</td></tr>
+<tr><td style="width: 25%;"><a href="head.tbl_lazy.html">head.tbl_lazy</a></td>
+<td>Subset the first rows</td></tr>
+<tr><td style="width: 25%;"><a href="ident.html">ident</a></td>
+<td>Flag a character vector as SQL identifiers</td></tr>
+<tr><td style="width: 25%;"><a href="join.tbl_sql.html">inner_join.tbl_lazy</a></td>
+<td>Join SQL tables</td></tr>
+<tr><td style="width: 25%;"><a href="intersect.tbl_lazy.html">intersect.tbl_lazy</a></td>
+<td>SQL set operations</td></tr>
+<tr><td style="width: 25%;"><a href="in_schema.html">in_schema</a></td>
+<td>Refer to a table in a schema</td></tr>
+<tr><td style="width: 25%;"><a href="ident.html">is.ident</a></td>
+<td>Flag a character vector as SQL identifiers</td></tr>
+<tr><td style="width: 25%;"><a href="sql.html">is.sql</a></td>
+<td>SQL escaping.</td></tr>
+<tr><td style="width: 25%;"><a href="join.tbl_sql.html">join.tbl_sql</a></td>
+<td>Join SQL tables</td></tr>
+<tr><td style="width: 25%;"><a href="join.tbl_sql.html">left_join.tbl_lazy</a></td>
+<td>Join SQL tables</td></tr>
+<tr><td style="width: 25%;"><a href="memdb_frame.html">memdb_frame</a></td>
+<td>Create a database table in temporary in-memory database.</td></tr>
+<tr><td style="width: 25%;"><a href="mutate.tbl_lazy.html">mutate.tbl_lazy</a></td>
+<td>Create, modify, and delete columns</td></tr>
+<tr><td style="width: 25%;"><a href="pivot_longer.tbl_lazy.html">pivot_longer.tbl_lazy</a></td>
+<td>Pivot data from wide to long</td></tr>
+<tr><td style="width: 25%;"><a href="pivot_wider.tbl_lazy.html">pivot_wider.tbl_lazy</a></td>
+<td>Pivot data from long to wide</td></tr>
+<tr><td style="width: 25%;"><a href="pull.tbl_sql.html">pull.tbl_sql</a></td>
+<td>Extract a single column</td></tr>
+<tr><td style="width: 25%;"><a href="select.tbl_lazy.html">relocate.tbl_lazy</a></td>
+<td>Subset, rename, and reorder columns using their names</td></tr>
+<tr><td style="width: 25%;"><a href="remote_name.html">remote_con</a></td>
+<td>Metadata about a remote table</td></tr>
+<tr><td style="width: 25%;"><a href="remote_name.html">remote_name</a></td>
+<td>Metadata about a remote table</td></tr>
+<tr><td style="width: 25%;"><a href="remote_name.html">remote_query</a></td>
+<td>Metadata about a remote table</td></tr>
+<tr><td style="width: 25%;"><a href="remote_name.html">remote_query_plan</a></td>
+<td>Metadata about a remote table</td></tr>
+<tr><td style="width: 25%;"><a href="remote_name.html">remote_src</a></td>
+<td>Metadata about a remote table</td></tr>
+<tr><td style="width: 25%;"><a href="select.tbl_lazy.html">rename.tbl_lazy</a></td>
+<td>Subset, rename, and reorder columns using their names</td></tr>
+<tr><td style="width: 25%;"><a href="select.tbl_lazy.html">rename_with.tbl_lazy</a></td>
+<td>Subset, rename, and reorder columns using their names</td></tr>
+<tr><td style="width: 25%;"><a href="replace_na.tbl_lazy.html">replace_na.tbl_lazy</a></td>
+<td>Replace NAs with specified values</td></tr>
+<tr><td style="width: 25%;"><a href="join.tbl_sql.html">right_join.tbl_lazy</a></td>
+<td>Join SQL tables</td></tr>
+<tr><td style="width: 25%;"><a href="select.tbl_lazy.html">select.tbl_lazy</a></td>
+<td>Subset, rename, and reorder columns using their names</td></tr>
+<tr><td style="width: 25%;"><a href="join.tbl_sql.html">semi_join.tbl_lazy</a></td>
+<td>Join SQL tables</td></tr>
+<tr><td style="width: 25%;"><a href="intersect.tbl_lazy.html">setdiff.tbl_lazy</a></td>
+<td>SQL set operations</td></tr>
+<tr><td style="width: 25%;"><a href="backend-access.html">simulate_access</a></td>
+<td>Backend: MS Access</td></tr>
+<tr><td style="width: 25%;"><a href="backend-hana.html">simulate_hana</a></td>
+<td>Backend: SAP HANA</td></tr>
+<tr><td style="width: 25%;"><a href="backend-mysql.html">simulate_mysql</a></td>
+<td>Backend: MySQL/MariaDB</td></tr>
+<tr><td style="width: 25%;"><a href="backend-odbc.html">simulate_odbc</a></td>
+<td>Backend: ODBC</td></tr>
+<tr><td style="width: 25%;"><a href="backend-oracle.html">simulate_oracle</a></td>
+<td>Backend: Oracle</td></tr>
+<tr><td style="width: 25%;"><a href="backend-postgres.html">simulate_postgres</a></td>
+<td>Backend: PostgreSQL</td></tr>
+<tr><td style="width: 25%;"><a href="backend-redshift.html">simulate_redshift</a></td>
+<td>Backend: Redshift</td></tr>
+<tr><td style="width: 25%;"><a href="backend-snowflake.html">simulate_snowflake</a></td>
+<td>Backend: Snowflake</td></tr>
+<tr><td style="width: 25%;"><a href="backend-sqlite.html">simulate_sqlite</a></td>
+<td>Backend: SQLite</td></tr>
+<tr><td style="width: 25%;"><a href="backend-teradata.html">simulate_teradata</a></td>
+<td>Backend: Teradata</td></tr>
+<tr><td style="width: 25%;"><a href="dbplyr-slice.html">slice_max.tbl_lazy</a></td>
+<td>Subset rows using their positions</td></tr>
+<tr><td style="width: 25%;"><a href="dbplyr-slice.html">slice_min.tbl_lazy</a></td>
+<td>Subset rows using their positions</td></tr>
+<tr><td style="width: 25%;"><a href="dbplyr-slice.html">slice_sample.tbl_lazy</a></td>
+<td>Subset rows using their positions</td></tr>
+<tr><td style="width: 25%;"><a href="sql.html">sql</a></td>
+<td>SQL escaping.</td></tr>
+<tr><td style="width: 25%;"><a href="escape.html">sql_vector</a></td>
+<td>Escape/quote a string.</td></tr>
+<tr><td style="width: 25%;"><a href="memdb_frame.html">src_memdb</a></td>
+<td>Create a database table in temporary in-memory database.</td></tr>
+<tr><td style="width: 25%;"><a href="summarise.tbl_lazy.html">summarise.tbl_lazy</a></td>
+<td>Summarise each group to one row</td></tr>
+<tr><td style="width: 25%;"><a href="count.tbl_lazy.html">tally.tbl_lazy</a></td>
+<td>Count observations by group</td></tr>
+<tr><td style="width: 25%;"><a href="tbl.src_dbi.html">tbl.src_dbi</a></td>
+<td>Use dplyr verbs with a remote database table</td></tr>
+<tr><td style="width: 25%;"><a href="tbl.src_dbi.html">tbl_dbi</a></td>
+<td>Use dplyr verbs with a remote database table</td></tr>
+<tr><td style="width: 25%;"><a href="memdb_frame.html">tbl_memdb</a></td>
+<td>Create a database table in temporary in-memory database.</td></tr>
+<tr><td style="width: 25%;"><a href="translate_sql.html">translate_sql</a></td>
+<td>Translate an expression to sql</td></tr>
+<tr><td style="width: 25%;"><a href="translate_sql.html">translate_sql_</a></td>
+<td>Translate an expression to sql</td></tr>
+<tr><td style="width: 25%;"><a href="intersect.tbl_lazy.html">union.tbl_lazy</a></td>
+<td>SQL set operations</td></tr>
+<tr><td style="width: 25%;"><a href="intersect.tbl_lazy.html">union_all.tbl_lazy</a></td>
+<td>SQL set operations</td></tr>
+<tr><td style="width: 25%;"><a href="window_order.html">window_frame</a></td>
+<td>Override window order and frame</td></tr>
+<tr><td style="width: 25%;"><a href="window_order.html">window_order</a></td>
+<td>Override window order and frame</td></tr>
+</table>
+</body></html>

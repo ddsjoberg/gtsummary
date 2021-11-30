@@ -1,0 +1,24 @@
+on:
+  push:
+    branches: master
+    paths:
+      - DESCRIPTION
+      - .github/workflows/main.yml
+
+name: Render codemeta
+jobs:
+  render:
+    name: Render codemeta
+    runs-on: macOS-latest
+    if: "!contains(github.event.head_commit.message, 'cm-skip')"
+    steps:
+      - uses: actions/checkout@v1
+      - uses: r-lib/actions/setup-r@v1
+      - name: Install codemetar
+        run: Rscript -e 'install.packages("codemetar")'
+      - name: Render codemeta
+        run: Rscript -e 'codemetar::write_codemeta()'
+      - name: Commit results
+        run: |
+          git commit codemeta.json -m 'Re-build codemeta.json' || echo "No changes to commit"
+          git push https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"

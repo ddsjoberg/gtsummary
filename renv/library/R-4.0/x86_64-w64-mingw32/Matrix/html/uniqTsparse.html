@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Unique (Sorted) TsparseMatrix Representations</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for uniqTsparse {Matrix}"><tr><td>uniqTsparse {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Unique (Sorted) TsparseMatrix Representations</h2>
+
+<h3>Description</h3>
+
+<p>Detect or &ldquo;unify&rdquo; (or &ldquo;standardize&rdquo;) non-unique
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code> matrices, prducing unique
+<i>(i,j,x)</i> triplets which are <em>sorted</em>, first in <i>j</i>, then
+in <i>i</i> (in the sense of <code><a href="../../base/html/order.html">order</a>(j,i)</code>).
+</p>
+<p>Note that <code>new(.)</code>, <code><a href="spMatrix.html">spMatrix</a></code> or
+<code><a href="sparseMatrix.html">sparseMatrix</a></code> constructors for <code>"dgTMatrix"</code> (and
+other <code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code> classes) implicitly add
+<i>x_k</i>'s that belong to identical <i>(i_k, j_k)</i> pairs.
+</p>
+<p><code>anyDuplicatedT()</code> reports the index of the first duplicated
+pair, or <code>0</code> if there is none.
+</p>
+<p><code>uniqTsparse(x)</code> replaces duplicated index pairs <i>(i,j)</i> and their
+corresponding <code>x</code> slot entries by the triple <i>(i,j, sx)</i>
+where <code>sx = sum(x [&lt;all pairs matching (i,j)&gt;])</code>, and for logical
+<code>x</code>, addition is replaced by logical <i>or</i>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+uniqTsparse(x, class.x = c(class(x)))
+anyDuplicatedT(x, di = dim(x))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a sparse matrix stored in triplet form, i.e., inheriting
+from class <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>class.x</code></td>
+<td>
+<p>optional character string specifying <code>class(x)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>di</code></td>
+<td>
+<p>the matrix dimension of <code>x</code>, <code><a href="../../base/html/dim.html">dim</a>(x)</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code>uniqTsparse(x)</code> returns a <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>
+&ldquo;like x&rdquo;, of the same class and with the same elements, just
+internally possibly changed to &ldquo;unique&rdquo; <i>(i,j,x)</i> triplets
+in <em>sorted</em> order.
+</p>
+<p><code>anyDuplicatedT(x)</code> returns an <code><a href="../../base/html/integer.html">integer</a></code> as
+<code><a href="../../base/html/duplicated.html">anyDuplicated</a></code>, the <em>index</em>
+of the first duplicated entry (from the <i>(i,j)</i> pairs)
+if there is one, and <code>0</code> otherwise.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>, for uniqueness, notably
+<code><a href="dgTMatrix-class.html">dgTMatrix</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+example("dgTMatrix-class", echo=FALSE)
+## -&gt; 'T2'  with (i,j,x) slots of length 5 each
+T2u &lt;- uniqTsparse(T2)
+stopifnot(## They "are" the same (and print the same):
+          all.equal(T2, T2u, tol=0),
+          ## but not internally:
+          anyDuplicatedT(T2)  == 2,
+          anyDuplicatedT(T2u) == 0,
+          length(T2 @x) == 5,
+          length(T2u@x) == 3)
+
+## is 'x' a "uniq Tsparse" Matrix ?  [requires x to be TsparseMatrix!]
+non_uniqT &lt;- function(x, di = dim(x))
+  is.unsorted(x@j) || anyDuplicatedT(x, di)
+non_uniqT(T2 ) # TRUE
+non_uniqT(T2u) # FALSE
+
+T3 &lt;- T2u
+T3[1, c(1,3)] &lt;- 10; T3[2, c(1,5)] &lt;- 20
+T3u &lt;- uniqTsparse(T3)
+str(T3u) # sorted in 'j', and within j, sorted in i
+stopifnot(!non_uniqT(T3u))
+
+## Logical l.TMatrix and n.TMatrix :
+(L2 &lt;- T2 &gt; 0)
+validObject(L2u &lt;- uniqTsparse(L2))
+(N2 &lt;- as(L2, "nMatrix"))
+validObject(N2u &lt;- uniqTsparse(N2))
+stopifnot(N2u@i == L2u@i, L2u@i == T2u@i,  N2@i == L2@i, L2@i == T2@i,
+          N2u@j == L2u@j, L2u@j == T2u@j,  N2@j == L2@j, L2@j == T2@j)
+# now with a nasty NA  [partly failed in Matrix 1.1-5]:
+L2.N &lt;- L2; L2.N@x[2] &lt;- NA; L2.N
+validObject(L2.N)
+(m2N &lt;- as.matrix(L2.N)) # looks "ok"
+iL &lt;- as.integer(m2N)
+stopifnot(identical(10L, which(is.na(match(iL, 0:1)))))
+symnum(m2N)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

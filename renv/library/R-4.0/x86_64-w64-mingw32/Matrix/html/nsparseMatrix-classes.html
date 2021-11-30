@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Sparse &quot;pattern&quot; Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for nsparseMatrix-classes {Matrix}"><tr><td>nsparseMatrix-classes {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Sparse &quot;pattern&quot; Matrices</h2>
+
+<h3>Description</h3>
+
+<p>The <code>nsparseMatrix</code> class is a virtual class of sparse
+<em>&ldquo;pattern&rdquo;</em> matrices, i.e., binary matrices conceptually
+with <code>TRUE</code>/<code>FALSE</code> entries.  Only the positions of the
+elements that are <code>TRUE</code> are stored.
+</p>
+<p>These can be stored in the &ldquo;triplet&rdquo; form
+(<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>, subclasses <code>ngTMatrix</code>,
+<code>nsTMatrix</code>, and <code>ntTMatrix</code> which really contain pairs, not
+triplets) or in compressed column-oriented form (class
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>, subclasses <code>ngCMatrix</code>,
+<code>nsCMatrix</code>, and <code>ntCMatrix</code>) or&ndash;<em>rarely</em>&ndash;in
+compressed row-oriented form (class <code><a href="RsparseMatrix-class.html">RsparseMatrix</a></code>,
+subclasses <code>ngRMatrix</code>, <code>nsRMatrix</code>, and <code>ntRMatrix</code>).
+The second letter in the name of these non-virtual classes indicates
+<code>g</code>eneral, <code>s</code>ymmetric, or <code>t</code>riangular.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("ngCMatrix",
+    ...)</code> and so on.  More frequently objects are created by coercion of
+a numeric sparse matrix to the pattern form for use in
+the symbolic analysis phase
+of an algorithm involving sparse matrices.  Such algorithms often
+involve two phases: a symbolic phase wherein the positions of the
+non-zeros in the result are determined and a numeric phase wherein the
+actual results are calculated.  During the symbolic phase only the
+positions of the non-zero elements in any operands are of interest,
+hence numeric sparse matrices can be treated as sparse pattern
+matrices.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>uplo</code>:</dt><dd><p>Object of class <code>"character"</code>. Must be
+either &quot;U&quot;, for upper triangular, and &quot;L&quot;, for lower
+triangular. Present in the triangular and symmetric classes but not
+in the general class.</p>
+</dd>
+<dt><code>diag</code>:</dt><dd><p>Object of class <code>"character"</code>. Must be
+either <code>"U"</code>, for unit triangular (diagonal is all ones), or
+<code>"N"</code> for non-unit.  The implicit diagonal elements are not
+explicitly stored when <code>diag</code> is <code>"U"</code>.  Present in the
+triangular classes only.</p>
+</dd>
+<dt><code>p</code>:</dt><dd><p>Object of class <code>"integer"</code> of pointers, one
+for each column (row), to the initial (zero-based) index of elements in
+the column.  Present in compressed column-oriented and compressed
+row-oriented forms only.</p>
+</dd>
+<dt><code>i</code>:</dt><dd><p>Object of class <code>"integer"</code> of length nnzero
+(number of non-zero elements).  These are the row numbers for
+each TRUE element in the matrix.  All other elements are FALSE.
+Present in triplet and compressed column-oriented forms only.</p>
+</dd>
+<dt><code>j</code>:</dt><dd><p>Object of class <code>"integer"</code> of length nnzero
+(number of non-zero elements).  These are the column numbers for
+each TRUE element in the matrix.  All other elements are FALSE.
+Present in triplet and compressed column-oriented forms only.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>Object of class <code>"integer"</code> - the dimensions
+of the matrix.</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>coerce</dt><dd><p><code>signature(from = "dgCMatrix", to =
+	"ngCMatrix")</code>, and many similar ones; typically you should
+coerce to <code>"nsparseMatrix"</code> (or <code>"nMatrix"</code>).  Note that
+coercion to a sparse pattern matrix records all the potential
+non-zero entries, i.e., explicit (&ldquo;non-structural&rdquo;) zeroes
+are coerced to <code>TRUE</code>, not <code>FALSE</code>, see the example.
+</p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "ngCMatrix")</code>: returns the transpose
+of <code>x</code></p>
+</dd>
+<dt>which</dt><dd><p><code>signature(x = "lsparseMatrix")</code>, semantically
+equivalent to <span class="pkg">base</span> function <code><a href="../../base/html/which.html">which</a>(x, arr.ind)</code>;
+for details, see the <code><a href="dMatrix-class.html">lMatrix</a></code> class documentation.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>the class <code><a href="dgCMatrix-class.html">dgCMatrix</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(m &lt;- Matrix(c(0,0,2:0), 3,5, dimnames=list(LETTERS[1:3],NULL)))
+## ``extract the nonzero-pattern of (m) into an nMatrix'':
+nm &lt;- as(m, "nsparseMatrix") ## -&gt; will be a "ngCMatrix"
+str(nm) # no 'x' slot
+nnm &lt;- !nm     # no longer sparse
+(nnm &lt;- as(nnm, "sparseMatrix"))# "lgCMatrix"
+## consistency check:
+stopifnot(xor(as( nm, "matrix"),
+              as(nnm, "matrix")))
+
+## low-level way of adding "non-structural zeros" :
+nnm@x[2:4] &lt;- c(FALSE,NA,NA)
+nnm
+as(nnm, "nMatrix") # NAs *and* non-structural 0  |---&gt;  'TRUE'
+
+data(KNex)
+nmm &lt;- as(KNex $ mm, "ngCMatrix")
+str(xlx &lt;- crossprod(nmm))# "nsCMatrix"
+stopifnot(isSymmetric(xlx))
+image(xlx, main=paste("crossprod(nmm) : Sparse", class(xlx)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

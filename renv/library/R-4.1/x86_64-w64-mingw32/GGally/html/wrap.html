@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Wrap a function with different parameter values</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for wrap_fn_with_param_arg {GGally}"><tr><td>wrap_fn_with_param_arg {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Wrap a function with different parameter values</h2>
+
+<h3>Description</h3>
+
+<p>Wraps a function with the supplied parameters to force different default behavior.  This is useful for functions that are supplied to ggpairs.  It allows you to change the behavior of one function, rather than creating multiple functions with different parameter settings.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+wrap_fn_with_param_arg(
+  funcVal,
+  params = NULL,
+  funcArgName = deparse(substitute(funcVal))
+)
+
+wrapp(funcVal, params = NULL, funcArgName = deparse(substitute(funcVal)))
+
+wrap(funcVal, ..., funcArgName = deparse(substitute(funcVal)))
+
+wrap_fn_with_params(funcVal, ..., funcArgName = deparse(substitute(funcVal)))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>funcVal</code></td>
+<td>
+<p>function that the <code>params</code> will be applied to.  The function should follow the api of <code>function(data, mapping, ...){}</code>. <code>funcVal</code> is allowed to be a string of one of the <code>ggally_NAME</code> functions, such as <code>"points"</code> for <code>ggally_points</code> or <code>"facetdensity"</code> for <code>ggally_facetdensity</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>params</code></td>
+<td>
+<p>named vector or list of parameters to be applied to the <code>funcVal</code></p>
+</td></tr>
+<tr valign="top"><td><code>funcArgName</code></td>
+<td>
+<p>name of function to be displayed</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>named parameters to be supplied to <code>wrap_fn_with_param_arg</code></p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>wrap</code> is identical to <code>wrap_fn_with_params</code>.  These function take the new parameters as arguments.
+</p>
+<p><code>wrapp</code> is identical to <code>wrap_fn_with_param_arg</code>.  These functions take the new parameters as a single list.
+</p>
+<p>The <code>params</code> and <code>fn</code> attributes are there for debugging purposes.  If either attribute is altered, the function must be re-wrapped to have the changes take effect.
+</p>
+
+
+<h3>Value</h3>
+
+<p>a <code>function(data, mapping, ...){}</code> that will wrap the original function with the parameters applied as arguments
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ # small function to display plots only if it's interactive
+ p_ &lt;- GGally::print_if_interactive
+
+# example function that prints 'val'
+fn &lt;- function(data, mapping, val = 2) {
+  print(val)
+}
+fn(data = NULL, mapping = NULL) # 2
+
+# wrap function to change default value 'val' to 5 instead of 2
+wrapped_fn1 &lt;- wrap(fn, val = 5)
+wrapped_fn1(data = NULL, mapping = NULL) # 5
+# you may still supply regular values
+wrapped_fn1(data = NULL, mapping = NULL, val = 3) # 3
+
+# wrap function to change 'val' to 5 using the arg list
+wrapped_fn2 &lt;- wrap_fn_with_param_arg(fn, params = list(val = 5))
+wrapped_fn2(data = NULL, mapping = NULL) # 5
+
+# change parameter settings in ggpairs for a particular function
+## Goal output:
+regularPlot &lt;- ggally_points(
+  iris,
+  ggplot2::aes(Sepal.Length, Sepal.Width),
+  size = 5, color = "red"
+)
+p_(regularPlot)
+
+# Wrap ggally_points to have parameter values size = 5 and color = 'red'
+w_ggally_points &lt;- wrap(ggally_points, size = 5, color = "red")
+wrappedPlot &lt;- w_ggally_points(
+  iris,
+  ggplot2::aes(Sepal.Length, Sepal.Width)
+)
+p_(wrappedPlot)
+
+# Double check the aes parameters are the same for the geom_point layer
+identical(regularPlot$layers[[1]]$aes_params, wrappedPlot$layers[[1]]$aes_params)
+
+# Use a wrapped function in ggpairs
+pm &lt;- ggpairs(iris, 1:3, lower = list(continuous = wrap(ggally_points, size = 5, color = "red")))
+p_(pm)
+pm &lt;- ggpairs(iris, 1:3, lower = list(continuous = w_ggally_points))
+p_(pm)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

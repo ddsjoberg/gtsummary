@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get model response</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for model_get_response {broom.helpers}"><tr><td>model_get_response {broom.helpers}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get model response</h2>
+
+<h3>Description</h3>
+
+<p>This function does not cover <code>lavaan</code> models (<code>NULL</code> is returned).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+model_get_response(model)
+
+## Default S3 method:
+model_get_response(model)
+
+## S3 method for class 'glm'
+model_get_response(model)
+
+## S3 method for class 'glmerMod'
+model_get_response(model)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>model</code></td>
+<td>
+<p>a model object</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p>Other model_helpers: 
+<code><a href="../../broom.helpers/help/model_compute_terms_contributions.html">model_compute_terms_contributions</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_assign.html">model_get_assign</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_coefficients_type.html">model_get_coefficients_type</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_contrasts.html">model_get_contrasts</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_model_frame.html">model_get_model_frame</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_model_matrix.html">model_get_model_matrix</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_model.html">model_get_model</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_nlevels.html">model_get_nlevels</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_n.html">model_get_n</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_offset.html">model_get_offset</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_terms.html">model_get_terms</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_weights.html">model_get_weights</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_xlevels.html">model_get_xlevels</a>()</code>,
+<code><a href="../../broom.helpers/help/model_identify_variables.html">model_identify_variables</a>()</code>,
+<code><a href="../../broom.helpers/help/model_list_contrasts.html">model_list_contrasts</a>()</code>,
+<code><a href="../../broom.helpers/help/model_list_terms_levels.html">model_list_terms_levels</a>()</code>,
+<code><a href="../../broom.helpers/help/model_list_variables.html">model_list_variables</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+lm(hp ~ mpg + factor(cyl) + disp:hp, mtcars) %&gt;%
+  model_get_response()
+
+mod &lt;- glm(
+  response ~ stage * grade + trt,
+  gtsummary::trial,
+  family = binomial,
+  contrasts = list(stage = contr.sum, grade = contr.treatment(3, 2), trt = "contr.SAS")
+)
+mod %&gt;% model_get_response()
+
+mod &lt;- glm(
+  Survived ~ Class * Age + Sex,
+  data = Titanic %&gt;% as.data.frame(),
+  weights = Freq,
+  family = binomial
+)
+mod %&gt;% model_get_response()
+
+d &lt;- dplyr::as_tibble(Titanic) %&gt;%
+  dplyr::group_by(Class, Sex, Age) %&gt;%
+  dplyr::summarise(
+    n_survived = sum(n * (Survived == "Yes")),
+    n_dead = sum(n * (Survived == "No"))
+  )
+mod &lt;- glm(cbind(n_survived, n_dead) ~ Class * Age + Sex, data = d, family = binomial, y = FALSE)
+mod %&gt;% model_get_response()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>broom.helpers</em> version 1.3.0.9001 <a href="00Index.html">Index</a>]</div>
+</body></html>

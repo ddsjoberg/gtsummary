@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Fast dcast for data.table</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for dcast.data.table {data.table}"><tr><td>dcast.data.table {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Fast dcast for data.table</h2>
+
+<h3>Description</h3>
+
+<p><code>dcast.data.table</code> is <code>data.table</code>'s long-to-wide reshaping tool. In the spirit of <code>data.table</code>, it is very fast and memory efficient, making it well-suited to handling large data sets in RAM.  More importantly, it is capable of handling very large data quite efficiently in terms of memory usage. <code>dcast.data.table</code> can also cast multiple <code>value.var</code> columns and accepts multiple functions to <code>fun.aggregate</code>. See Examples for more.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'data.table'
+dcast(data, formula, fun.aggregate = NULL, sep = "_",
+    ..., margins = NULL, subset = NULL, fill = NULL,
+    drop = TRUE, value.var = guess(data),
+    verbose = getOption("datatable.verbose"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p> A <code>data.table</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>formula</code></td>
+<td>
+<p>A formula of the form LHS ~ RHS to cast, see Details.</p>
+</td></tr>
+<tr valign="top"><td><code>fun.aggregate</code></td>
+<td>
+<p>Should the data be aggregated before casting? If the formula doesn't identify a single observation for each cell, then aggregation defaults to <code>length</code> with a message.
+</p>
+<p>To use multiple aggregation functions, pass a <code>list</code>; see Examples. </p>
+</td></tr>
+<tr valign="top"><td><code>sep</code></td>
+<td>
+<p>Character vector of length 1, indicating the separating character in variable names generated during casting. Default is <code>_</code> for backwards compatibility. </p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Any other arguments that may be passed to the aggregating function.</p>
+</td></tr>
+<tr valign="top"><td><code>margins</code></td>
+<td>
+<p>Not implemented yet. Should take variable names to compute margins on. A value of <code>TRUE</code> would compute all margins.</p>
+</td></tr>
+<tr valign="top"><td><code>subset</code></td>
+<td>
+<p>Specified if casting should be done on a subset of the data. Ex: <code>subset = .(col1 &lt;= 5)</code> or <code>subset = .(variable != "January")</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>fill</code></td>
+<td>
+<p>Value with which to fill missing cells. If <code>fun.aggregate</code> is present, takes the value by applying the function on a 0-length vector.</p>
+</td></tr>
+<tr valign="top"><td><code>drop</code></td>
+<td>
+<p><code>FALSE</code> will cast by including all missing combinations.
+</p>
+<p><code>c(FALSE, TRUE)</code> will only include all missing combinations of formula <code>LHS</code>; <code>c(TRUE, FALSE)</code> will only include all missing combinations of formula RHS. See Examples.</p>
+</td></tr>
+<tr valign="top"><td><code>value.var</code></td>
+<td>
+<p>Name of the column whose values will be filled to cast. Function <code>guess()</code> tries to, well, guess this column automatically, if none is provided.
+</p>
+<p>Cast multiple <code>value.var</code> columns simultaneously by passing their names as a <code>character</code> vector. See Examples. </p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Not used yet. May be dropped in the future or used to provide informative messages through the console.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The cast formula takes the form <code>LHS ~ RHS</code>, ex: <code>var1 + var2 ~ var3</code>. The order of entries in the formula is essential. There are two special variables: <code>.</code> represents no variable, while <code>...</code> represents all variables not otherwise mentioned in <code>formula</code>; see Examples.
+</p>
+<p>When not all combinations of LHS &amp; RHS values are present in the data, some or all (in accordance with <code>drop</code>) missing combinations will replaced with the value specified by <code>fill</code>. Note that <code>fill</code> will be converted to the class of <code>value.var</code>; see Examples.
+</p>
+<p><code>dcast</code> also allows <code>value.var</code> columns of type <code>list</code>.
+</p>
+<p>When variable combinations in <code>formula</code> don't identify a unique value, <code>fun.aggregate</code> will have to be specified, which defaults to <code>length</code>. For the formula <code>var1 ~ var2</code>, this means there are some <code>(var1, var2)</code> combinations in the data corresponding to multiple rows (i.e. <code>x</code> is not unique by <code>(var1, var2)</code>.
+</p>
+<p>The aggregating function should take a vector as input and return a single value (or a list of length one) as output. In cases where <code>value.var</code> is a list, the function should be able to handle a list input and provide a single value or list of length one as output.
+</p>
+<p>If the formula's LHS contains the same column more than once, ex: <code>dcast(DT, x+x~ y)</code>, then the answer will have duplicate names. In those cases, the duplicate names are renamed using <code>make.unique</code> so that key can be set without issues.
+</p>
+<p>Names for columns that are being cast are generated in the same order (separated by an underscore, <code>_</code>) from the (unique) values in each column mentioned in the formula RHS.
+</p>
+<p>From <code>v1.9.4</code>, <code>dcast</code> tries to preserve attributes wherever possible.
+</p>
+<p>From <code>v1.9.6</code>, it is possible to cast multiple <code>value.var</code> columns and also cast by providing multiple <code>fun.aggregate</code> functions. Multiple <code>fun.aggregate</code> functions should be provided as a <code>list</code>, for e.g., <code>list(mean, sum, function(x) paste(x, collapse="")</code>. <code>value.var</code> can be either a character vector or list of length one, or a list of length equal to <code>length(fun.aggregate)</code>. When <code>value.var</code> is a character vector or a list of length one, each function mentioned under <code>fun.aggregate</code> is applied to every column specified under <code>value.var</code> column. When <code>value.var</code> is a list of length equal to <code>length(fun.aggregate)</code> each element of <code>fun.aggregate</code> is applied to each element of <code>value.var</code> column.
+</p>
+<p>Historical note: <code>dcast.data.table</code> was originally designed as an enhancement to <code>reshape2::dcast</code> in terms of computing and memory efficiency. <code>reshape2</code> has since been deprecated, and <code>dcast</code> has had a generic defined within <code>data.table</code> since <code>v1.9.6</code> in 2015, at which point the dependency between the packages became more etymological than programmatic. We thank the <code>reshape2</code> authors for the inspiration.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A keyed <code>data.table</code> that has been cast. The key columns are equal to the variables in the <code>formula</code> LHS in the same order.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../data.table/help/melt.data.table.html">melt.data.table</a></code>, <code><a href="../../data.table/help/rowid.html">rowid</a></code>, <a href="https://cran.r-project.org/package=reshape">https://cran.r-project.org/package=reshape</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ChickWeight = as.data.table(ChickWeight)
+setnames(ChickWeight, tolower(names(ChickWeight)))
+DT &lt;- melt(as.data.table(ChickWeight), id=2:4) # calls melt.data.table
+
+# dcast is an S3 method in data.table from v1.9.6
+dcast(DT, time ~ variable, fun=mean) # using partial matching of argument
+dcast(DT, diet ~ variable, fun=mean)
+dcast(DT, diet+chick ~ time, drop=FALSE)
+dcast(DT, diet+chick ~ time, drop=FALSE, fill=0)
+
+# using subset
+dcast(DT, chick ~ time, fun=mean, subset=.(time &lt; 10 &amp; chick &lt; 20))
+
+# drop argument, #1512
+DT &lt;- data.table(v1 = c(1.1, 1.1, 1.1, 2.2, 2.2, 2.2),
+                 v2 = factor(c(1L, 1L, 1L, 3L, 3L, 3L), levels=1:3),
+                 v3 = factor(c(2L, 3L, 5L, 1L, 2L, 6L), levels=1:6),
+                 v4 = c(3L, 2L, 2L, 5L, 4L, 3L))
+# drop=TRUE
+dcast(DT, v1 + v2 ~ v3)                      # default is drop=TRUE
+dcast(DT, v1 + v2 ~ v3, drop=FALSE)          # all missing combinations of both LHS and RHS
+dcast(DT, v1 + v2 ~ v3, drop=c(FALSE, TRUE)) # all missing combinations of only LHS
+dcast(DT, v1 + v2 ~ v3, drop=c(TRUE, FALSE)) # all missing combinations of only RHS
+
+# using . and ...
+DT &lt;- data.table(v1 = rep(1:2, each = 6),
+                 v2 = rep(rep(1:3, 2), each = 2),
+                 v3 = rep(1:2, 6),
+                 v4 = rnorm(6))
+dcast(DT, ... ~ v3, value.var = "v4") #same as v1 + v2 ~ v3, value.var = "v4"
+dcast(DT, v1 + v2 + v3 ~ ., value.var = "v4")
+
+## for each combination of (v1, v2), add up all values of v4
+dcast(DT, v1 + v2 ~ ., value.var = "v4", fun.aggregate = sum)
+
+# fill and types
+dcast(DT, v2 ~ v3, value.var = 'v1', fill = 0L)  #  0L --&gt; 0
+dcast(DT, v2 ~ v3, value.var = 'v4', fill = 1.1) # 1.1 --&gt; 1L
+
+# multiple value.var and multiple fun.aggregate
+DT = data.table(x=sample(5,20,TRUE), y=sample(2,20,TRUE),
+                z=sample(letters[1:2], 20,TRUE), d1 = runif(20), d2=1L)
+# multiple value.var
+dcast(DT, x + y ~ z, fun=sum, value.var=c("d1","d2"))
+# multiple fun.aggregate
+dcast(DT, x + y ~ z, fun=list(sum, mean), value.var="d1")
+# multiple fun.agg and value.var (all combinations)
+dcast(DT, x + y ~ z, fun=list(sum, mean), value.var=c("d1", "d2"))
+# multiple fun.agg and value.var (one-to-one)
+dcast(DT, x + y ~ z, fun=list(sum, mean), value.var=list("d1", "d2"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

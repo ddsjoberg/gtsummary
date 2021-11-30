@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Fast column reordering of a data.table by reference</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for setcolorder {data.table}"><tr><td>setcolorder {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Fast column reordering of a data.table by reference</h2>
+
+<h3>Description</h3>
+
+<p>In <code>data.table</code> parlance, all <code>set*</code> functions change their input <em>by reference</em>. That is, no copy is made at all, other than temporary working memory, which is as large as one column. The only other <code>data.table</code> operator that modifies input by reference is <code><a href="../../data.table/help/:=.html">:=</a></code>. Check out the <code>See Also</code> section below for other <code>set*</code> function <code>data.table</code> provides.
+</p>
+<p><code>setcolorder</code> reorders the columns of data.table, <em>by reference</em>, to the new order provided.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+setcolorder(x, neworder=key(x))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p> A <code>data.table</code>. </p>
+</td></tr>
+<tr valign="top"><td><code>neworder</code></td>
+<td>
+<p> Character vector of the new column name ordering. May also be column numbers. If <code>length(neworder) &lt; length(x)</code>, the specified columns are moved in order to the &quot;front&quot; of <code>x</code>. By default, <code>setcolorder</code> without a specified <code>neworder</code> moves the key columns in order to the &quot;front&quot; of <code>x</code>. </p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>To reorder <code>data.table</code> columns, the idiomatic way is to use <code>setcolorder(x, neworder)</code>, instead of doing <code>x &lt;- x[, neworder, with=FALSE]</code>. This is because the latter makes an entire copy of the <code>data.table</code>, which maybe unnecessary in most situations. <code>setcolorder</code> also allows column numbers instead of names for <code>neworder</code> argument, although we recommend using names as a good programming practice.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The input is modified by reference, and returned (invisibly) so it can be used in compound statements. If you require a copy, take a copy first (using <code>DT2 = copy(DT)</code>). See <code>?copy</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+ <p><code><a href="../../data.table/help/setkey.html">setkey</a></code>, <code><a href="../../data.table/help/setorder.html">setorder</a></code>, <code><a href="../../data.table/help/setattr.html">setattr</a></code>, <code><a href="../../data.table/help/setnames.html">setnames</a></code>, <code><a href="../../data.table/help/set.html">set</a></code>, <code><a href="../../data.table/help/:=.html">:=</a></code>, <code><a href="../../data.table/help/setDT.html">setDT</a></code>, <code><a href="../../data.table/help/setDF.html">setDF</a></code>, <code><a href="../../data.table/help/copy.html">copy</a></code>, <code><a href="../../data.table/help/getNumericRounding.html">getNumericRounding</a></code>, <code><a href="../../data.table/help/setNumericRounding.html">setNumericRounding</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+set.seed(45L)
+DT = data.table(A=sample(3, 10, TRUE),
+         B=sample(letters[1:3], 10, TRUE), C=sample(10))
+
+setcolorder(DT, c("C", "A", "B"))
+
+#incomplete specification
+setcolorder(DT, "A")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

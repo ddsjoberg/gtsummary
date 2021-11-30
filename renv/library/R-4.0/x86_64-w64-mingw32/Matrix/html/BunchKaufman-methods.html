@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Bunch-Kaufman Decomposition Methods</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for BunchKaufman-methods {Matrix}"><tr><td>BunchKaufman-methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Bunch-Kaufman Decomposition Methods</h2>
+
+<h3>Description</h3>
+
+<p>The Bunch-Kaufman Decomposition of a square symmetric matrix <i>A</i>
+is <i>A = P LDL' P'</i> where <i>P</i> is a permutation matrix, <i>L</i>
+is <em>unit</em>-lower triangular and <i>D</i> is <em>block</em>-diagonal
+with blocks of dimension <i>1 x 1</i> or <i>2 x 2</i>.
+</p>
+<p>This is generalization of a pivoting <i>LDL'</i> Cholesky decomposition.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S4 method for signature 'dsyMatrix'
+BunchKaufman(x, ...)
+## S4 method for signature 'dspMatrix'
+BunchKaufman(x, ...)
+## S4 method for signature 'matrix'
+BunchKaufman(x, uplo = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a symmetric square matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>uplo</code></td>
+<td>
+<p>optional string, <code>"U"</code> or <code>"L"</code> indicating which
+&ldquo;triangle&rdquo; half of <code>x</code> should determine the result.  The
+default is <code>"U"</code> unless <code>x</code> has a <code>uplo</code> slot which is
+the case for those inheriting from class <code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>,
+where <code>x@uplo</code> will be used.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>potentially further arguments passed to methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>FIXME: We really need an <code>expand()</code> method in order to <em>work</em> with the result!
+</p>
+
+
+<h3>Value</h3>
+
+<p>an object of class <code><a href="Cholesky-class.html">BunchKaufman</a></code>, which can also
+be used as a (triangular) matrix directly.  Somewhat amazingly,
+it inherits its <code>uplo</code> slot from <code>x</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>Currently, only methods for <b>dense</b> numeric symmetric matrices
+are implemented.  To compute the Bunch-Kaufman decomposition, the methods
+use either one of two Lapack routines:
+</p>
+
+<dl>
+<dt><code>x = "dspMatrix"</code></dt><dd><p>routine <code>dsptrf()</code>; whereas</p>
+</dd>
+<dt><code>x = "dsyMatrix"</code></dt><dd><p>, and</p>
+</dd>
+<dt><code>x = "matrix"</code></dt><dd><p>use <code>dsytrf()</code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>References</h3>
+
+<p>The original LAPACK source code, including documentation;
+<a href="https://www.netlib.org/lapack/double/dsytrf.f">https://www.netlib.org/lapack/double/dsytrf.f</a>
+and
+<a href="https://www.netlib.org/lapack/double/dsptrf.f">https://www.netlib.org/lapack/double/dsptrf.f</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The resulting class, <code><a href="Cholesky-class.html">BunchKaufman</a></code>.
+Related decompositions are the LU,  <code><a href="lu.html">lu</a></code>, and the Cholesky,
+<code><a href="chol.html">chol</a></code> (and for <em>sparse</em> matrices,
+<code><a href="Cholesky.html">Cholesky</a></code>).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(CAex)
+dim(CAex)
+isSymmetric(CAex)# TRUE
+CAs &lt;- as(CAex, "symmetricMatrix")
+if(FALSE) # no method defined yet for *sparse* :
+   bk. &lt;- BunchKaufman(CAs)
+## does apply to *dense* symmetric matrices:
+bkCA &lt;- BunchKaufman(as(CAs, "denseMatrix"))
+bkCA
+
+image(bkCA)# shows how sparse it is, too
+str(R.CA &lt;- as(bkCA, "sparseMatrix"))
+## an upper triangular 72x72 matrix with only 144 non-zero entries
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -21,6 +21,7 @@
 #' @param footnote string with text for column footnote
 #' @param spanning_header string with text for spanning header
 #' @export
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @keywords internal
 
 modify_table_header <- function(x, column, label = NULL, hide = NULL, align = NULL,

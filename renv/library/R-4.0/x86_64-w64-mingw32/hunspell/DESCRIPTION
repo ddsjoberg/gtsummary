@@ -1,0 +1,36 @@
+Package: hunspell
+Type: Package
+Title: High-Performance Stemmer, Tokenizer, and Spell Checker
+Version: 3.0.1
+Depends: R (>= 3.0.2)
+Encoding: UTF-8
+Authors@R: c(
+    person("Jeroen", "Ooms", ,"jeroen@berkeley.edu", role = c("aut", "cre")),
+    person("Authors of libhunspell", role = "cph", comment = "see AUTHORS file"))
+Description: Low level spell checker and morphological analyzer based on the 
+    famous 'hunspell' library <https://hunspell.github.io>. The package can analyze
+    or check individual words as well as parse text, latex, html or xml documents.
+    For a more user-friendly interface use the 'spelling' package which builds on
+    this package to automate checking of files, documentation and vignettes in all
+    common formats.
+License: GPL-2 | LGPL-2.1 | MPL-1.1
+URL: https://docs.ropensci.org/hunspell/ (docs),
+        https://github.com/ropensci/hunspell (devel)
+        https://hunspell.github.io (upstream)
+BugReports: https://github.com/ropensci/hunspell/issues
+Imports: Rcpp, digest
+LinkingTo: Rcpp (>= 0.12.12)
+Suggests: spelling, testthat, pdftools, janeaustenr, wordcloud2, knitr,
+        stopwords, rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 6.1.1
+Language: en-US
+NeedsCompilation: yes
+Packaged: 2020-12-09 19:34:32 UTC; jeroen
+Author: Jeroen Ooms [aut, cre],
+  Authors of libhunspell [cph] (see AUTHORS file)
+Maintainer: Jeroen Ooms <jeroen@berkeley.edu>
+Repository: CRAN
+Date/Publication: 2020-12-09 20:20:02 UTC
+Built: R 4.0.5; x86_64-w64-mingw32; 2021-05-07 13:14:35 UTC; windows
+Archs: i386, x64

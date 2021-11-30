@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get statistic associated with estimates</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_statistic {insight}"><tr><td>get_statistic {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get statistic associated with estimates</h2>
+
+<h3>Description</h3>
+
+<p>Returns the statistic (<em>t</em>, <code>z</code>, ...) for model
+estimates. In most cases, this is the related column from
+<code>coef(summary())</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_statistic(x, ...)
+
+## Default S3 method:
+get_statistic(x, column_index = 3, verbose = TRUE, ...)
+
+## S3 method for class 'glmmTMB'
+get_statistic(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  ...
+)
+
+## S3 method for class 'clm2'
+get_statistic(x, component = c("all", "conditional", "scale"), ...)
+
+## S3 method for class 'betamfx'
+get_statistic(
+  x,
+  component = c("all", "conditional", "precision", "marginal"),
+  ...
+)
+
+## S3 method for class 'logitmfx'
+get_statistic(x, component = c("all", "conditional", "marginal"), ...)
+
+## S3 method for class 'mjoint'
+get_statistic(x, component = c("all", "conditional", "survival"), ...)
+
+## S3 method for class 'emmGrid'
+get_statistic(x, ci = 0.95, adjust = "none", merge_parameters = FALSE, ...)
+
+## S3 method for class 'gee'
+get_statistic(x, robust = FALSE, ...)
+
+## S3 method for class 'betareg'
+get_statistic(x, component = c("all", "conditional", "precision"), ...)
+
+## S3 method for class 'DirichletRegModel'
+get_statistic(x, component = c("all", "conditional", "precision"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>column_index</code></td>
+<td>
+<p>For model objects that have no defined <code>get_statistic()</code>
+method yet, the default method is called. This method tries to extract the
+statistic column from <code>coef(summary())</code>, where the index of the column
+that is being pulled is <code>column_index</code>. Defaults to 3, which is the
+default statistic column for most models' summary-output.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle messages and warnings.</p>
+</td></tr>
+<tr valign="top"><td><code>component</code></td>
+<td>
+<p>Should all parameters, parameters for the conditional model,
+or for the zero-inflated part of the model be returned? Applies to models
+with zero-inflated component. <code>component</code> may be one of
+<code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code> or <code>"all"</code>
+(default). For models with smooth terms, <code>component = "smooth_terms"</code>
+is also possible. May be abbreviated. Note that the <em>conditional</em>
+component is also called <em>count</em> or <em>mean</em> component, depending
+on the model.</p>
+</td></tr>
+<tr valign="top"><td><code>ci</code></td>
+<td>
+<p>Confidence Interval (CI) level. Default to 0.95 (95%). Currently
+only applies to objects of class <code>emmGrid</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>adjust</code></td>
+<td>
+<p>Character value naming the method used to adjust p-values or
+confidence intervals. See <code>?emmeans::summary.emmGrid</code> for details.</p>
+</td></tr>
+<tr valign="top"><td><code>merge_parameters</code></td>
+<td>
+<p>Logical, if <code>TRUE</code> and <code>x</code> has multiple
+columns for parameter names (like <code>emmGrid</code> objects may have), these
+are merged into a single parameter column, with parameters names and values
+as values.</p>
+</td></tr>
+<tr valign="top"><td><code>robust</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, test statistic based on robust standard
+errors is returned.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A data frame with the model's parameter names and the related test
+statistic.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+m &lt;- lm(mpg ~ wt + cyl + vs, data = mtcars)
+get_statistic(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

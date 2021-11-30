@@ -1,0 +1,61 @@
+---
+title: 6. Choosing a HTTP request class
+author: Scott Chamberlain
+date: "2020-07-13"
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteIndexEntry{6. Choosing a HTTP request class}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+
+
+There are a number of different crul classes that do HTTP requests. The following table compares features across the classes.
+
+|Class|HTTP verbs|Asynchronous?|Packges using|
+|---|---|---|---|
+|HttpClient|all|no|[bcdata][],[chirps][],[duckduckr][],[gfonts][],[mindicador][],[nsapi][],[tradestatistics][],[viafr][]|
+|Paginator|all except retry|no|---|
+|ok|head,get|no|[dams][]|
+|Async|all except retry|yes|[fulltext][],[rdryad][],[rnoaa][]|
+|AsyncVaried|all except retry|yes|[ropenaq][],[rcrossref][],[taxize][],[rcitoid][],[mstrio][]|
+|AsyncQueue|all except retry|yes|---|
+
+**HttpClient** is the main class for doing synchronous HTTP requests. It supports all HTTP verbs including retry. It was the first class in this package. See also `crul::ok()`, which builds on this class.
+
+**Paginator** is a class for automating pagination. It requires an instance of `HttpClient` as it's first parameter. It does not handle asynchronous requests at this time, but may in the future. `Paginator` may be the right class to use when you don't know the total number of results. Beware however, that if there are A LOT of results (and a lot depends on your internet speed and the server response time) the requests may take a long time to finish - just plan wisely to fit your needs.
+
+**ok** is a convienence function light wrapper around `HttpClient`. It's use case is for determining if a URL is "up", or "okay". You don't have to instantiate an R6 class as you do with the other classes discussed here, but you can pass an `HttpClient` class to it if you like.
+
+With **Async** you can make HTTP requests in parallel. `Async` does not at this time support retry. It's targeted at the use case where you don't mind having request settings the same for all requests - you just pass in any number of URLs and all requests get the same headers, auth, curl options applied, if any.
+
+**AsyncVaried** allows you to customize each request using `HttpRequest` (See below); that is, every HTTP request run asynchronously can have its own curl options, headers, etc. 
+
+**AsyncQueue** is the newest class, inheriting from `AsyncVaried`, introduced in curl v1. The motivation behind this class is: sometimes you may want to do HTTP requests in parallel, but there's rate limiting or some other reason to want to not simply send off all requests immediately. `AsyncQueue` sets up a queue, splitting up requests into buckets, and executes requests based on a `sleep` or `req_per_min` (requests per minute) setting.
+
+## HttpRequest
+
+`HttpRequest` is related here, but not in the table above because it doesn't do actual HTTP requests, but is used to build HTTP requests to pass in to `AsyncVaried`. The simplified class `Async` relative to `AsyncVaried` uses `HttpRequest` internally to build requests. 
+
+## More Async
+
+See the [async with crul](async.html) vignette for more details on asynchronous requests.
+
+[bcdata]: https://bcgov.github.io/bcdata/
+[chirps]: https://docs.ropensci.org/chirps/
+[duckduckr]: https://github.com/dirkschumacher/duckduckr
+[gfonts]: https://dreamrs.github.io/gfonts/
+[mindicador]: https://pacha.dev/mindicador/
+[nsapi]: https://rmhogervorst.nl/nsapi/
+[tradestatistics]: https://docs.ropensci.org/tradestatistics/
+[viafr]: https://github.com/stefanieschneider/viafr
+[fulltext]:https://docs.ropensci.org/fulltext/
+[rdryad]: https://docs.ropensci.org/rdryad/
+[rnoaa]: https://docs.ropensci.org/rnoaa/
+[ropenaq]: https://docs.ropensci.org/ropenaq/
+[rcrossref]: https://docs.ropensci.org/rcrossref/
+[taxize]: https://docs.ropensci.org/taxize/
+[rcitoid]: https://docs.ropensci.org/rcitoid/
+[mstrio]: https://cran.r-project.org/package=mstrio
+[dams]: https://jsta.github.io/dams/

@@ -1,0 +1,153 @@
+---
+title: "Using smd"
+author: "Bradley Saul"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using smd}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+references:
+- id: yang2012unified
+  title: A unified approach to measuring the effect size between two groups using SAS
+  author:
+  - family: Yang
+    given: Dongsheng
+  - family: Dalton
+    given: Jarrod E
+  volume: 335
+  URL: 'http://www.lerner.ccf.org/qhs/software/lib/stddiff.pdf'
+  booktitle: SAS Global Forum
+  page: 1--6
+  type: article-journal
+  issued:
+    year: 2012
+- id: hedges1985
+  title: Statistical Methods for Meta-Analysis
+  author:
+  - family: Hedges
+    given: LV
+  - family: Olkin
+    given: I
+  type: book
+  issued:
+    year: 1985
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+The `smd` package provides the `smd` method to compute standardized mean differences between two groups for continuous values (`numeric` and `integer` data types) and categorical values (`factor`, `character`, and `logical`). The method also works on `matrix`, `list`, and `data.frame` data types by applying `smd()` over the columns of the `matrix` or `data.frame` and each item of the `list`.  The package is based on @yang2012unified.
+
+The `smd` function computes the standardized mean difference for each level $k$ of a grouping variable compared to a reference $r$ level:
+
+\[
+d_k = \sqrt{(\bar{x}_r - \bar{x}_{k})^{\intercal}S_{rk}^{-1}(\bar{x}_r - \bar{x}_{k})}
+\]
+
+where $\bar{x}_{\cdot}$ and $S_{rk}$ are the sample mean and covariances for reference group $r$ and group $k$, respectively. In the case that $x$ is categorical, $\bar{x}$ is the vector of proportions of each category level within a group, and $S_{rk}$ is the multinomial covariance matrix.
+
+Standard errors are computed using the formula described in @hedges1985:
+
+\[
+\sqrt{ \frac{n_r + n_k}{n_rn_k} + \frac{d_k^2}{2(n_r + n_k)} }
+\]
+
+
+# Examples
+
+```{r}
+library(smd)
+```
+
+## Numeric 
+
+```{r numeric}
+set.seed(123)
+xn <- rnorm(90)
+gg2 <- rep(LETTERS[1:2], each = 45)
+gg3 <- rep(LETTERS[1:3], each = 30)
+
+smd(x = xn, g = gg2)
+smd(x = xn, g = gg3)
+smd(x = xn, g = gg2, std.error = TRUE)
+smd(x = xn, g = gg3, std.error = TRUE)
+```
+
+## Integers
+
+```{r integer}
+xi <- sample(1:20, 90, replace = TRUE)
+smd(x = xi, g = gg2)
+```
+
+## Character
+
+```{r character}
+xc <- unlist(replicate(2, sort(sample(letters[1:3], 45, replace = TRUE)), simplify = FALSE))
+smd(x = xc, g = gg2)
+```
+
+## Factors
+
+```{r factor}
+xf <- factor(xc)
+smd(x = xf, g = gg2)
+```
+
+## Logical
+
+```{r logical}
+xl <- as.logical(rbinom(90, 1, prob = 0.5))
+smd(x = xl, g = gg2)
+```
+
+## Matrices
+
+```{r matrix}
+mm <- cbind(xl, xl, xl, xl)
+smd(x = mm, g = gg3, std.error = FALSE)
+```
+
+## Lists
+
+```{r list}
+ll <- list(xn = xn, xi = xi, xf = xf, xl = xl)
+smd(x = ll, g = gg3)
+```
+
+## data.frames
+
+```{r data.frame}
+df <- data.frame(xn, xi, xc, xf, xl)
+smd(x = df, g = gg3)
+```
+
+## Using `smd` with `dplyr`
+
+```{r dplyr}
+library(dplyr, verbose = FALSE)
+df$g <- gg2
+df %>%
+  summarize_at(
+    .vars = vars(dplyr::matches("^x")),
+    .funs = list(smd = ~ smd(., g = g)$estimate))
+```
+
+
+# Other packages
+
+See:
+
+* [tableone](https://CRAN.R-project.org/package=tableone)
+* [stddiff](https://cran.r-project.org/package=stddiff)
+
+# References

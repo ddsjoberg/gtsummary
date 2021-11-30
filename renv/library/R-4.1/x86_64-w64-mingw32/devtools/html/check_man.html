@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Check documentation, as R CMD check does.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for check_man {devtools}"><tr><td>check_man {devtools}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Check documentation, as <code style="white-space: pre;">R CMD check</code> does.</h2>
+
+<h3>Description</h3>
+
+<p>This function attempts to run the documentation related checks in the
+same way that <code style="white-space: pre;">R CMD check</code> does. Unfortunately it can't run them
+all because some tests require the package to be loaded, and the way
+they attempt to load the code conflicts with how devtools does it.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+check_man(pkg = ".")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pkg</code></td>
+<td>
+<p>The package to use, can be a file path to the package or a
+package object.  See <code><a href="../../devtools/help/as.package.html">as.package()</a></code> for more information.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Nothing. This function is called purely for it's side effects: if
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+check_man("mypkg")
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>devtools</em> version 2.4.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Virtual Class &quot;sparseMatrix&quot; - Mother of Sparse Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sparseMatrix-class {Matrix}"><tr><td>sparseMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Virtual Class &quot;sparseMatrix&quot; &mdash; Mother of Sparse Matrices</h2>
+
+<h3>Description</h3>
+
+<p>Virtual Mother Class of All Sparse Matrices</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>Dim</code>:</dt><dd><p>Object of class <code>"integer"</code> - the dimensions
+of the matrix - must be an integer vector with exactly two
+non-negative values.</p>
+</dd>
+<dt><code>Dimnames</code>:</dt><dd><p>a list of length two - inherited from class
+<code>Matrix</code>, see <code><a href="Matrix-class.html">Matrix</a></code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"Matrix"</code>, directly.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>show</dt><dd><p><code>(object = "sparseMatrix")</code>: The
+<code><a href="../../methods/html/show.html">show</a></code> method for sparse matrices prints
+<em>&ldquo;structural&rdquo;</em> zeroes as <code>"."</code> using
+<code><a href="printSpMatrix.html">printSpMatrix</a>()</code> which allows further customization.</p>
+</dd>
+<dt>print</dt><dd><p><code>signature(x = "sparseMatrix")</code>, ....<br />
+The <code><a href="../../base/html/print.html">print</a></code> method for sparse matrices by default is the
+same as <code>show()</code> but can be called with extra optional
+arguments, see <code><a href="printSpMatrix.html">printSpMatrix</a>()</code>.</p>
+</dd>
+<dt>format</dt><dd><p><code>signature(x = "sparseMatrix")</code>, ....<br />
+The <code><a href="../../base/html/format.html">format</a></code> method for sparse matrices, see
+<code><a href="printSpMatrix.html">formatSpMatrix</a>()</code> for details such as the extra
+optional arguments.</p>
+</dd>
+<dt>summary</dt><dd><p><code>(object = "sparseMatrix", uniqT=FALSE)</code>: Returns
+an object of S3 class <code>"sparseSummary"</code> which is basically a
+<code><a href="../../base/html/data.frame.html">data.frame</a></code> with columns <code>(i,j,x)</code> (or just
+<code>(i,j)</code> for <code><a href="nsparseMatrix-classes.html">nsparseMatrix</a></code> class objects)
+with the stored (typically non-zero) entries.  The
+<code><a href="../../base/html/print.html">print</a></code> method resembles Matlab's way of printing
+sparse matrices, and also the MatrixMarket format, see
+<code><a href="externalFormats.html">writeMM</a></code>.</p>
+</dd>
+<dt>cbind2</dt><dd><p><code>(x = *, y = *)</code>: several methods for binding
+matrices together, column-wise, see the basic <code><a href="../../base/html/cbind.html">cbind</a></code>
+and <code><a href="../../base/html/cbind.html">rbind</a></code> functions.<br />
+Note that the result will typically be sparse, even when one
+argument is dense and larger than the sparse one.
+</p>
+</dd>
+<dt>rbind2</dt><dd><p><code>(x = *, y = *)</code>: binding matrices together
+row-wise, see <code>cbind2</code> above.</p>
+</dd>
+<dt>determinant</dt><dd><p><code>(x = "sparseMatrix", logarithm=TRUE)</code>:
+<code><a href="../../base/html/det.html">determinant</a>()</code> methods for sparse matrices typically
+work via <code><a href="Cholesky.html">Cholesky</a></code> or <code><a href="lu.html">lu</a></code> decompositions.</p>
+</dd>
+<dt>diag</dt><dd><p><code>(x = "sparseMatrix")</code>: extracts the diagonal of a
+sparse matrix.</p>
+</dd>
+<dt>dim&lt;-</dt><dd><p><code>signature(x = "sparseMatrix", value = "ANY")</code>:
+allows to <em>reshape</em> a sparse matrix to a sparse matrix with
+the same entries but different dimensions. <code>value</code> must be of
+length two and fulfill <code>prod(value) == prod(dim(x))</code>.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "factor", to = "sparseMatrix")</code>:
+Coercion of a factor to <code>"sparseMatrix"</code> produces the matrix
+of indicator <b>rows</b> stored as an object of class
+<code>"dgCMatrix"</code>.  To obtain columns representing the interaction
+of the factor and a numeric covariate, replace the <code>"x"</code> slot
+of the result by the numeric covariate then take the transpose.
+Missing values (<code><a href="../../base/html/NA.html">NA</a></code>) from the factor are translated
+to columns of all <code>0</code>s.</p>
+</dd>
+</dl>
+
+<p>See also <code><a href="colSums.html">colSums</a></code>, <code><a href="norm.html">norm</a></code>,
+... 
+for methods with separate help pages.
+</p>
+
+
+<h3>Note</h3>
+
+<p>In method selection for multiplication operations (i.e. <code>%*%</code>
+and the two-argument form of <code><a href="../../base/html/crossprod.html">crossprod</a></code>)
+the sparseMatrix class takes precedence in the sense that if one
+operand is a sparse matrix and the other is any type of dense matrix
+then the dense matrix is coerced to a <code>dgeMatrix</code> and the
+appropriate sparse matrix method is used.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="sparseMatrix.html">sparseMatrix</a></code>, and its references, such as
+<code><a href="../../stats/html/xtabs.html">xtabs</a>(*, sparse=TRUE)</code>, or
+<code><a href="sparse.model.matrix.html">sparse.model.matrix</a>()</code>,
+for constructing sparse matrices.
+</p>
+<p><code><a href="graph2T.html">T2graph</a></code> for conversion of <code>"graph"</code> objects
+(package <span class="pkg">graph</span>) to and from sparse matrices.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("sparseMatrix") ## and look at the help() of its subclasses
+M &lt;- Matrix(0, 10000, 100)
+M[1,1] &lt;- M[2,3] &lt;- 3.14
+M  ## show(.) method suppresses printing of the majority of rows
+
+data(CAex); dim(CAex) # 72 x 72 matrix
+determinant(CAex) # works via sparse lu(.)
+
+## factor -&gt; t( &lt;sparse design matrix&gt; ) :
+(fact &lt;- gl(5, 3, 30, labels = LETTERS[1:5]))
+(Xt &lt;- as(fact, "sparseMatrix"))  # indicator rows
+
+## missing values --&gt; all-0 columns:
+f.mis &lt;- fact
+i.mis &lt;- c(3:5, 17)
+is.na(f.mis) &lt;- i.mis
+Xt != (X. &lt;- as(f.mis, "sparseMatrix")) # differ only in columns 3:5,17
+stopifnot(all(X.[,i.mis] == 0), all(Xt[,-i.mis] == X.[,-i.mis]))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

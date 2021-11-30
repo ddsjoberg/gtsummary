@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2021-02-20" />
+
+<title>Importing data.table</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Importing data.table</h1>
+<h4 class="date">2021-02-20</h4>
+
+
+
+<style>
+h2 {
+    font-size: 20px;
+}
+</style>
+<p>This document is focused on using <code>data.table</code> as a dependency in other R packages. If you are interested in using <code>data.table</code> C code from a non-R application, or in calling its C functions directly, jump to the <a href="#non-r-API">last section</a> of this vignette.</p>
+<p>Importing <code>data.table</code> is no different from importing other R packages. This vignette is meant to answer the most common questions arising around that subject; the lessons presented here can be applied to other R packages.</p>
+<div id="why-to-import-data.table" class="section level2">
+<h2>Why to import <code>data.table</code></h2>
+<p>One of the biggest features of <code>data.table</code> is its concise syntax which makes exploratory analysis faster and easier to write and perceive; this convenience can drive packages authors to use <code>data.table</code> in their own packages. Another maybe even more important reason is high performance. When outsourcing heavy computing tasks from your package to <code>data.table</code>, you usually get top performance without needing to re-invent any high of these numerical optimization tricks on your own.</p>
+</div>
+<div id="importing-data.table-is-easy" class="section level2">
+<h2>Importing <code>data.table</code> is easy</h2>
+<p>It is very easy to use <code>data.table</code> as a dependency due to the fact that <code>data.table</code> does not have any of its own dependencies. This statement is valid for both operating system dependencies and R dependencies. It means that if you have R installed on your machine, it already has everything needed to install <code>data.table</code>. This also means that adding <code>data.table</code> as a dependency of your package will not result in a chain of other recursive dependencies to install, making it very convenient for offline installation.</p>
+</div>
+<div id="description-file-description" class="section level2">
+<h2><code>DESCRIPTION</code> file {DESCRIPTION}</h2>
+<p>The first place to define a dependency in a package is the <code>DESCRIPTION</code> file. Most commonly, you will need to add <code>data.table</code> under the <code>Imports:</code> field. Doing so will necessitate an installation of <code>data.table</code> before your package can compile/install. As mentioned above, no other packages will be installed because <code>data.table</code> does not have any dependencies of its own. You can also specify the minimal required version of a dependency; for example, if your package is using the <code>fwrite</code> function, which was introduced in <code>data.table</code> in version 1.9.8, you should incorporate this as <code>Imports: data.table (&gt;= 1.9.8)</code>. This way you can ensure that the version of <code>data.table</code> installed is 1.9.8 or later before your users will be able to install your package. Besides the <code>Imports:</code> field, you can also use <code>Depends: data.table</code> but we strongly discourage this approach (and may disallow it in future) because this loads <code>data.table</code> into your user’s workspace; i.e. it enables <code>data.table</code> functionality in your user’s scripts without them requesting that. <code>Imports:</code> is the proper way to use <code>data.table</code> within your package without inflicting <code>data.table</code> on your user. In fact, we hope the <code>Depends:</code> field is eventually deprecated in R since this is true for all packages.</p>
+</div>
+<div id="namespace-file-namespace" class="section level2">
+<h2><code>NAMESPACE</code> file {NAMESPACE}</h2>
+<p>The next thing is to define what content of <code>data.table</code> your package is using. This needs to be done in the <code>NAMESPACE</code> file. Most commonly, package authors will want to use <code>import(data.table)</code> which will import all exported (i.e., listed in <code>data.table</code>’s own <code>NAMESPACE</code> file) functions from <code>data.table</code>.</p>
+<p>You may also want to use just a subset of <code>data.table</code> functions; for example, some packages may simply make use of <code>data.table</code>’s high-performance CSV reader and writer, for which you can add <code>importFrom(data.table, fread, fwrite)</code> in your <code>NAMESPACE</code> file. It is also possible to import all functions from a package <em>excluding</em> particular ones using <code>import(data.table, except=c(fread, fwrite))</code>.</p>
+<p>Be sure to read also the note about non-standard evaluation in <code>data.table</code> in <a href="#globals">the section on “undefined globals”</a></p>
+</div>
+<div id="usage" class="section level2">
+<h2>Usage</h2>
+<p>As an example we will define two functions in <code>a.pkg</code> package that uses <code>data.table</code>. One function, <code>gen</code>, will generate a simple <code>data.table</code>; another, <code>aggr</code>, will do a simple aggregation of it.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a>gen =<span class="st"> </span><span class="cf">function</span> (<span class="dt">n =</span> 100L) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  dt =<span class="st"> </span><span class="kw">as.data.table</span>(<span class="kw">list</span>(<span class="dt">id =</span> <span class="kw">seq_len</span>(n)))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>  dt[, grp <span class="op">:</span><span class="er">=</span><span class="st"> </span>((id <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%%</span><span class="st"> </span><span class="dv">26</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>     ][, grp <span class="op">:</span><span class="er">=</span><span class="st"> </span>letters[grp]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>       ][]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>aggr =<span class="st"> </span><span class="cf">function</span> (x) {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>  <span class="kw">stopifnot</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    <span class="kw">is.data.table</span>(x),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="st">&quot;grp&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">names</span>(x)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>  )</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>  x[, .N, by =<span class="st"> </span>grp]</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>}</span></code></pre></div>
+</div>
+<div id="testing" class="section level2">
+<h2>Testing</h2>
+<p>Be sure to include tests in your package. Before each major release of <code>data.table</code>, we check reverse dependencies. This means that if any changes in <code>data.table</code> would break your code, we will be able to spot breaking changes and inform you before releasing the new version. This of course assumes you will publish your package to CRAN or Bioconductor. The most basic test can be a plaintext R script in your package directory <code>tests/test.R</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">library</span>(a.pkg)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>dt =<span class="st"> </span><span class="kw">gen</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">stopifnot</span>(<span class="kw">nrow</span>(dt) <span class="op">==</span><span class="st"> </span><span class="dv">100</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>dt2 =<span class="st"> </span><span class="kw">aggr</span>(dt)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">stopifnot</span>(<span class="kw">nrow</span>(dt2) <span class="op">&lt;</span><span class="st"> </span><span class="dv">100</span>)</span></code></pre></div>
+<p>When testing your package, you may want to use <code>R CMD check --no-stop-on-test-error</code>, which will continue after an error and run all your tests (as opposed to stopping on the first line of script that failed) NB this requires R 3.4.0 or greater.</p>
+</div>
+<div id="testing-using-testthat" class="section level2">
+<h2>Testing using <code>testthat</code></h2>
+<p>It is very common to use the <code>testthat</code> package for purpose of tests. Testing a package that imports <code>data.table</code> is no different from testing other packages. An example test script <code>tests/testthat/test-pkg.R</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">context</span>(<span class="st">&quot;pkg tests&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">test_that</span>(<span class="st">&quot;generate dt&quot;</span>, { <span class="kw">expect_true</span>(<span class="kw">nrow</span>(<span class="kw">gen</span>()) <span class="op">==</span><span class="st"> </span><span class="dv">100</span>) })</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="kw">test_that</span>(<span class="st">&quot;aggregate dt&quot;</span>, { <span class="kw">expect_true</span>(<span class="kw">nrow</span>(<span class="kw">aggr</span>(<span class="kw">gen</span>())) <span class="op">&lt;</span><span class="st"> </span><span class="dv">100</span>) })</span></code></pre></div>
+<p>If <code>data.table</code> is in Suggests (but not Imports) then you need to declare <code>.datatable.aware=TRUE</code> in one of the R/* files to avoid “object not found” errors when testing via <code>testthat::test_package</code> or <code>testthat::test_check</code>.</p>
+</div>
+<div id="globals" class="section level2">
+<h2>Dealing with “undefined global functions or variables”</h2>
+<p><code>data.table</code>’s use of R’s deferred evaluation (especially on the left-hand side of <code>:=</code>) is not well-recognised by <code>R CMD check</code>. This results in <code>NOTE</code>s like the following during package check:</p>
+<pre><code>* checking R code for possible problems ... NOTE
+aggr: no visible binding for global variable &#39;grp&#39;
+gen: no visible binding for global variable &#39;grp&#39;
+gen: no visible binding for global variable &#39;id&#39;
+Undefined global functions or variables:
+grp id</code></pre>
+<p>The easiest way to deal with this is to pre-define those variables within your package and set them to <code>NULL</code>, optionally adding a comment (as is done in the refined version of <code>gen</code> below). When possible, you could also use a character vector instead of symbols (as in <code>aggr</code> below):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>gen =<span class="st"> </span><span class="cf">function</span> (<span class="dt">n =</span> 100L) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>  id =<span class="st"> </span>grp =<span class="st"> </span><span class="ot">NULL</span> <span class="co"># due to NSE notes in R CMD check</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  dt =<span class="st"> </span><span class="kw">as.data.table</span>(<span class="kw">list</span>(<span class="dt">id =</span> <span class="kw">seq_len</span>(n)))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>  dt[, grp <span class="op">:</span><span class="er">=</span><span class="st"> </span>((id <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%%</span><span class="st"> </span><span class="dv">26</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>     ][, grp <span class="op">:</span><span class="er">=</span><span class="st"> </span>letters[grp]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>       ][]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>}</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>aggr =<span class="st"> </span><span class="cf">function</span> (x) {</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>  <span class="kw">stopifnot</span>(</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>    <span class="kw">is.data.table</span>(x),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>    <span class="st">&quot;grp&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">names</span>(x)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a>  )</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a>  x[, .N, by =<span class="st"> &quot;grp&quot;</span>]</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a>}</span></code></pre></div>
+<p>The case for <code>data.table</code>’s special symbols (<code>.SD</code>, <code>.BY</code>, <code>.N</code>, <code>.I</code>, <code>.GRP</code>, <code>.NGRP</code>, and <code>.EACHI</code>; see <code>?.N</code>) and assignment operator (<code>:=</code>) is slightly different. You should import whichever of these values you use from <code>data.table</code>’s namespace to protect against any issues arising from the unlikely scenario that we change the exported value of these in the future, e.g. if you want to use <code>.N</code>, <code>.I</code>, and <code>:=</code>, a minimal <code>NAMESPACE</code> would have:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">importFrom</span>(data.table, .N, .I, <span class="st">&#39;:=&#39;</span>)</span></code></pre></div>
+<p>Much simpler is to just use <code>import(data.table)</code> which will greedily allow usage in your package’s code of any object exported from <code>data.table</code>.</p>
+<p>If you don’t mind having <code>id</code> and <code>grp</code> registered as variables globally in your package namespace you can use <code>?globalVariables</code>. Be aware that these notes do not have any impact on the code or its functionality; if you are not going to publish your package, you may simply choose to ignore them.</p>
+</div>
+<div id="care-needed-when-providing-and-using-options" class="section level2">
+<h2>Care needed when providing and using options</h2>
+<p>Common practice by R packages is to provide customization options set by <code>options(name=val)</code> and fetched using <code>getOption(&quot;name&quot;, default)</code>. Function arguments often specify a call to <code>getOption()</code> so that the user knows (from <code>?fun</code> or <code>args(fun)</code>) the name of the option controlling the default for that parameter; e.g. <code>fun(..., verbose=getOption(&quot;datatable.verbose&quot;, FALSE))</code>. All <code>data.table</code> options start with <code>datatable.</code> so as to not conflict with options in other packages. A user simply calls <code>options(datatable.verbose=TRUE)</code> to turn on verbosity. This affects all calls to <code>fun()</code> other the ones which have been provided <code>verbose=</code> explicity; e.g. <code>fun(..., verbose=FALSE)</code>.</p>
+<p>The option mechanism in R is <em>global</em>. Meaning that if a user sets a <code>data.table</code> option for their own use, that setting also affects code inside any package that is using <code>data.table</code> too. For an option like <code>datatable.verbose</code>, this is exactly the desired behavior since the desire is to trace and log all <code>data.table</code> operations from wherever they originate; turning on verbosity does not affect the results. Another unique-to-R and excellent-for-production option is R’s <code>options(warn=2)</code> which turns all warnings into errors. Again, the desire is to affect any warning in any package so as to not missing any warnings in production. There are 6 <code>datatable.print.*</code> options and 3 optimization options which do not affect the result of operations, either. However, there is one <code>data.table</code> option that does and is now a concern: <code>datatable.nomatch</code>. This option changes the default join from outer to inner. [Aside, the default join is outer because outer is safer; it doesn’t drop missing data silently; moreover it is consistent to base R way of matching by names and indices.] Some users prefer inner join to be the default and we provided this option for them. However, a user setting this option can unintentionally change the behavior of joins inside packages that use <code>data.table</code>. Accordingly, in v1.12.4, we have started the process to deprecate the <code>datatable.nomatch</code> option. It is the only <code>data.table</code> option with this concern.</p>
+</div>
+<div id="troubleshooting" class="section level2">
+<h2>Troubleshooting</h2>
+<p>If you face any problems in creating a package that uses data.table, please confirm that the problem is reproducible in a clean R session using the R console: <code>R CMD check package.name</code>.</p>
+<p>Some of the most common issues developers are facing are usually related to helper tools that are meant to automate some package development tasks, for example, using <code>roxygen</code> to generate your <code>NAMESPACE</code> file from metadata in the R code files. Others are related to helpers that build and check the package. Unfortunately, these helpers sometimes have unintended/hidden side effects which can obscure the source of your troubles. As such, be sure to double check using R console (run R on the command line) and ensure the import is defined in the <code>DESCRIPTION</code> and <code>NAMESPACE</code> files following the <a href="#DESCRIPTION">instructions</a> <a href="#NAMESPACE">above</a>.</p>
+<p>If you are not able to reproduce problems you have using the plain R console build and check, you may try to get some support based on past issues we’ve encountered with <code>data.table</code> interacting with helper tools: <a href="https://github.com/r-lib/devtools/issues/192">devtools#192</a> or <a href="https://github.com/r-lib/devtools/issues/1472">devtools#1472</a>.</p>
+</div>
+<div id="license" class="section level2">
+<h2>License</h2>
+<p>Since version 1.10.5 <code>data.table</code> is licensed as Mozilla Public License (MPL). The reasons for the change from GPL should be read in full <a href="https://github.com/Rdatatable/data.table/pull/2456">here</a> and you can read more about MPL on Wikipedia <a href="https://en.wikipedia.org/wiki/Mozilla_Public_License">here</a> and <a href="https://en.wikipedia.org/wiki/Comparison_of_free_and_open-source_software_licenses">here</a>.</p>
+</div>
+<div id="optionally-import-data.table-suggests" class="section level2">
+<h2>Optionally import <code>data.table</code>: Suggests</h2>
+<p>If you want to use <code>data.table</code> conditionally, i.e., only when it is installed, you should use <code>Suggests: data.table</code> in your <code>DESCRIPTION</code> file instead of using <code>Imports: data.table</code>. By default this definition will not force installation of <code>data.table</code> when installing your package. This also requires you to conditionally use <code>data.table</code> in your package code which should be done using the <code>?requireNamespace</code> function. The below example demonstrates conditional use of <code>data.table</code>’s fast CSV writer <code>?fwrite</code>. If the <code>data.table</code> package is not installed, the much-slower base R <code>?write.table</code> function is used instead.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>my.write =<span class="st"> </span><span class="cf">function</span> (x) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>  <span class="cf">if</span>(<span class="kw">requireNamespace</span>(<span class="st">&quot;data.table&quot;</span>, <span class="dt">quietly=</span><span class="ot">TRUE</span>)) {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>    data.table<span class="op">::</span><span class="kw">fwrite</span>(x, <span class="st">&quot;data.csv&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>  } <span class="cf">else</span> {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="kw">write.table</span>(x, <span class="st">&quot;data.csv&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>  }</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>}</span></code></pre></div>
+<p>A slightly more extended version of this would also ensure that the installed version of <code>data.table</code> is recent enough to have the <code>fwrite</code> function available:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>my.write =<span class="st"> </span><span class="cf">function</span> (x) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>  <span class="cf">if</span>(<span class="kw">requireNamespace</span>(<span class="st">&quot;data.table&quot;</span>, <span class="dt">quietly=</span><span class="ot">TRUE</span>) <span class="op">&amp;&amp;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="st">    </span>utils<span class="op">::</span><span class="kw">packageVersion</span>(<span class="st">&quot;data.table&quot;</span>) <span class="op">&gt;=</span><span class="st"> &quot;1.9.8&quot;</span>) {</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>    data.table<span class="op">::</span><span class="kw">fwrite</span>(x, <span class="st">&quot;data.csv&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>  } <span class="cf">else</span> {</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a>    <span class="kw">write.table</span>(x, <span class="st">&quot;data.csv&quot;</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a>  }</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a>}</span></code></pre></div>
+<p>When using a package as a suggested dependency, you should not <code>import</code> it in the <code>NAMESPACE</code> file. Just mention it in the <code>DESCRIPTION</code> file. When using <code>data.table</code> functions in package code (R/* files) you need to use the <code>data.table::</code> prefix because none of them are imported. When using <code>data.table</code> in package tests (e.g. tests/testthat/test* files), you need to declare <code>.datatable.aware=TRUE</code> in one of the R/* files.</p>
+</div>
+<div id="data.table-in-imports-but-nothing-imported" class="section level2">
+<h2><code>data.table</code> in <code>Imports</code> but nothing imported</h2>
+<p>Some users (<a href="https://github.com/Rdatatable/data.table/issues/2341">e.g.</a>) may prefer to eschew using <code>importFrom</code> or <code>import</code> in their <code>NAMESPACE</code> file and instead use <code>data.table::</code> qualification on all internal code (of course keeping <code>data.table</code> under their <code>Imports:</code> in <code>DESCRIPTION</code>).</p>
+<p>In this case, the un-exported function <code>[.data.table</code> will revert to calling <code>[.data.frame</code> as a safeguard since <code>data.table</code> has no way of knowing that the parent package is aware it’s attempting to make calls against the syntax of <code>data.table</code>’s query API (which could lead to unexpected behavior as the structure of calls to <code>[.data.frame</code> and <code>[.data.table</code> fundamentally differ, e.g. the latter has many more arguments).</p>
+<p>If this is anyway your preferred approach to package development, please define <code>.datatable.aware = TRUE</code> anywhere in your R source code (no need to export). This tells <code>data.table</code> that you as a package developer have designed your code to intentionally rely on <code>data.table</code> functionality even though it may not be obvious from inspecting your <code>NAMESPACE</code> file.</p>
+<p><code>data.table</code> determines on the fly whether the calling function is aware it’s tapping into <code>data.table</code> with the internal <code>cedta</code> function (<strong>C</strong>alling <strong>E</strong>nvironment is <strong>D</strong>ata <strong>T</strong>able <strong>A</strong>ware), which, beyond checking the <code>?getNamespaceImports</code> for your package, also checks the existence of this variable (among other things).</p>
+</div>
+<div id="further-information-on-dependencies" class="section level2">
+<h2>Further information on dependencies</h2>
+<p>For more canonical documentation of defining packages dependency check the official manual: <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html">Writing R Extensions</a>.</p>
+</div>
+<div id="importing-data.table-c-routines" class="section level2">
+<h2>Importing data.table C routines</h2>
+<p>Some of internally used C routines are now exported on C level thus can be used in R packages directly from their C code. See <a href="https://rdatatable.gitlab.io/data.table/reference/cdt.html"><code>?cdt</code></a> for details and <a href="https://cran.r-project.org/doc/manuals/r-release/R-exts.html">Writing R Extensions</a> <em>Linking to native routines in other packages</em> section for usage.</p>
+</div>
+<div id="importing-from-non-r-applications-non-r-api" class="section level2">
+<h2>Importing from non-R Applications {non-r-API}</h2>
+<p>Some tiny parts of <code>data.table</code> C code were isolated from the R C API and can now be used from non-R applications by linking to .so / .dll files. More concrete details about this will be provided later; for now you can study the C code that was isolated from the R C API in <a href="https://github.com/Rdatatable/data.table/blob/master/src/fread.c">src/fread.c</a> and <a href="https://github.com/Rdatatable/data.table/blob/master/src/fwrite.c">src/fwrite.c</a>.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

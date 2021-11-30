@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Options for the knitr package</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for opts_knit {knitr}"><tr><td>opts_knit {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Options for the knitr package</h2>
+
+<h3>Description</h3>
+
+<p>Options including whether to use a progress bar when knitting a document, and
+the base directory of images, etc.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+opts_knit
+</pre>
+
+
+<h3>Format</h3>
+
+<p>An object of class <code>list</code> of length 6.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Besides the standard usage (<code>opts_knit$set()</code>), we can also set package
+options prior to loading <code>knitr</code> or calling <code>knit()</code> using
+<code><a href="../../base/html/options.html">options</a>()</code> in base R. A global option <code>knitr.package.foo</code>
+in <code>options()</code> will be set as an option <code>foo</code> in <code>opts_knit</code>,
+i.e. global options in base R with the prefix <code>knitr.package.</code>
+correspond to options in <code>opts_knit</code>. This can be useful to set package
+options in &lsquo;<span class="file">~/.Rprofile</span>&rsquo; without loading <span class="pkg">knitr</span>.
+</p>
+<p>See <code>str(knitr::opts_knit$get())</code> for a list of default package options.
+</p>
+
+
+<h3>References</h3>
+
+<p>Usage: <a href="https://yihui.org/knitr/objects/">https://yihui.org/knitr/objects/</a>
+</p>
+<p>A list of available options:
+<a href="https://yihui.org/knitr/options/#package_options">https://yihui.org/knitr/options/#package_options</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+opts_knit$get("verbose")
+opts_knit$set(verbose = TRUE)  # change it
+if (interactive()) {
+    # for unnamed chunks, use 'fig' as the figure prefix
+    opts_knit$set(unnamed.chunk.label = "fig")
+    knit("001-minimal.Rmd")  # from https://github.com/yihui/knitr-examples
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Read and write external matrix formats</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for externalFormats {Matrix}"><tr><td>externalFormats {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Read and write external matrix formats</h2>
+
+<h3>Description</h3>
+
+<p>Read matrices stored in the Harwell-Boeing or MatrixMarket formats
+or write <code><a href="sparseMatrix-class.html">sparseMatrix</a></code> objects to one of these
+formats.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+readHB(file)
+readMM(file)
+writeMM(obj, file, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>obj</code></td>
+<td>
+<p>a real sparse matrix</p>
+</td></tr>
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>for <code>writeMM</code> - the name of the file to be written.
+For <code>readHB</code> and <code>readMM</code> the name of the file to read, as
+a character scalar.  The names of files storing matrices in the
+Harwell-Boeing format usually end in <code>".rua"</code> or <code>".rsa"</code>.
+Those storing matrices in the MatrixMarket format usually end in
+<code>".mtx"</code>.
+</p>
+<p>Alternatively, <code>readHB</code> and <code>readMM</code> accept connection objects.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>optional additional arguments. Currently none are used in
+any methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The <code>readHB</code> and <code>readMM</code> functions return an object that
+inherits from the <code>"<a href="Matrix-class.html">Matrix</a>"</code> class.  Methods for the
+<code>writeMM</code> generic functions usually return
+<code><a href="../../base/html/NULL.html">NULL</a></code> and, as a side effect, the matrix <code>obj</code> is
+written to <code>file</code> in the MatrixMarket format (writeMM).
+</p>
+
+
+<h3>Note</h3>
+
+<p>The Harwell-Boeing format is older and less flexible than the
+MatrixMarket format.  The function <code>writeHB</code> was deprecated and
+has now been removed.  Please use <code>writeMM</code> instead.
+</p>
+<p>A very simple way to export small sparse matrices <code>S</code>, is to use
+<code>summary(S)</code> which returns a <code><a href="../../base/html/data.frame.html">data.frame</a></code> with
+columns <code>i</code>, <code>j</code>, and possibly <code>x</code>, see <code>summary</code> in
+<code><a href="sparseMatrix-class.html">sparseMatrix-class</a></code>, and an example below.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://math.nist.gov/MatrixMarket/">https://math.nist.gov/MatrixMarket/</a>
+</p>
+<p><a href="https://sparse.tamu.edu/">https://sparse.tamu.edu/</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+str(pores &lt;- readMM(system.file("external/pores_1.mtx",
+                                package = "Matrix")))
+str(utm &lt;- readHB(system.file("external/utm300.rua",
+                               package = "Matrix")))
+str(lundA &lt;- readMM(system.file("external/lund_a.mtx",
+                                package = "Matrix")))
+str(lundA &lt;- readHB(system.file("external/lund_a.rsa",
+                                package = "Matrix")))
+str(jgl009 &lt;- ## https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/counterx/counterx.html
+        readMM(system.file("external/jgl009.mtx", package = "Matrix")))
+## Not run: 
+## NOTE: The following examples take quite some time
+## ----  even on a fast internet connection:
+if(FALSE) # the URL has been corrected, but we need an un-tar step!
+str(sm &lt;-
+ readHB(gzcon(url("https://www.cise.ufl.edu/research/sparse/RB/Boeing/msc00726.tar.gz"))))
+
+## End(Not run)
+data(KNex)
+## Store as MatrixMarket (".mtx") file, here inside temporary dir./folder:
+(MMfile &lt;- file.path(tempdir(), "mmMM.mtx"))
+writeMM(KNex$mm, file=MMfile)
+file.info(MMfile)[,c("size", "ctime")] # (some confirmation of the file's)
+
+## very simple export - in triplet format - to text file:
+data(CAex)
+s.CA &lt;- summary(CAex)
+s.CA # shows  (i, j, x)  [columns of a data frame]
+message("writing to ", outf &lt;- tempfile())
+write.table(s.CA, file = outf, row.names=FALSE)
+## and read it back -- showing off  sparseMatrix():
+str(dd &lt;- read.table(outf, header=TRUE))
+## has columns (i, j, x) -&gt; we can use via do.call() as arguments to sparseMatrix():
+mm &lt;- do.call(sparseMatrix, dd)
+stopifnot(all.equal(mm, CAex, tolerance=1e-15))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

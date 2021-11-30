@@ -1,0 +1,198 @@
+---
+title: "A Note on Transparency"
+author: "Duncan Murdoch"
+date: "24/10/2020"
+output:
+  rmarkdown::html_vignette:
+    fig_height: 5
+    fig_width: 5
+    toc: yes
+  pdf_document:
+    fig_height: 5
+    fig_width: 5
+    toc: yes
+  html_document:
+    default
+vignette: >
+  %\VignetteIndexEntry{A Note on Transparency}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+if (!requireNamespace("rmarkdown", quietly = TRUE) ||
+    !rmarkdown::pandoc_available("1.14")) {
+  warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
+  knitr::knit_exit()
+}
+knitr::opts_chunk$set(echo = TRUE)
+library(rgl)
+options(rgl.useNULL = TRUE)
+setupKnitr(autoprint = TRUE)
+M <- structure(c(0.997410774230957, 0.0707177817821503, -0.0130676832050085, 
+0, -0.0703366547822952, 0.99714070558548, 0.02762770652771, 0, 
+0.0149840852245688, -0.0266370177268982, 0.999532878398895, 0, 
+0, 0, 0, 1), .Dim = c(4L, 4L))
+```
+
+## Introduction
+
+When drawing transparent surfaces, `rgl` tries to sort objects
+from back to front to get better rendering of transparency.
+However, it doesn't sort each pixel separately, so some pixels
+end up drawn in the incorrect order.  This note
+describes the consequences of that error, and 
+suggests remedies.
+
+## Correct Drawing
+
+We'll assume that the standard `glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)` blending is used.  That is,
+when drawing with transparency $\alpha$, the new colour is
+mixed at proportion $\alpha$ with the colour previously
+drawn (which gets weight $1-\alpha$.)
+
+This note is concerned with what happens when two transparent
+objects are drawn at the same location.  We suppose the further
+one has transparency $\alpha_1$, and the closer one 
+has transparency $\alpha_2$.  If they are drawn in the correct
+order (further first), the three colours (background, further
+object, closer object) should end up mixed in proportions
+$C = [(1-\alpha_1)(1-\alpha_2), \alpha_1(1-\alpha_2), \alpha_2]$
+respectively.
+
+## Incorrect sorting
+
+If the objects are drawn in the wrong order, the actual 
+proportions of each colour will be $N = [(1-\alpha_1)(1-\alpha_2),
+\alpha_1, \alpha_2(1-\alpha_1)]$ if no masking occurs. 
+
+`rgl` currently defaults to depth masking using `glDepthMask(GL_TRUE)`.  This means that depths are saved 
+when the objects are drawn, and if an attempt is made to 
+draw the further object after the closer one (i.e. as here),
+the further object will be culled, and the proportions will be
+$M = [(1-\alpha_2), 0, \alpha_2]$.
+
+## Mask or Not?
+
+The question is:  which is better, `glDepthMask(GL_TRUE)` or
+`glDepthMask(GL_FALSE)`?  One way to measure this is to 
+measure the distance between $C$ and the incorrect proportions.
+(This is unlikely to match perceptual distance, which will
+depend on the colours as well, but we need something. Some
+qualitative comments below.)
+
+So we have 
+
+\[|C-N|^2 = 2\alpha_1^2\alpha_2^2\], 
+
+and 
+
+\[|C-M|^2 = 2\alpha_1^2(1-\alpha_2)^2\].
+
+Thus the error is larger with $N$ when $\alpha_2 > 1/2$, and 
+larger with $M$ when $\alpha_2 < 1/2$.  The value of $\alpha_1$
+doesn't affect the preference, though small values of $\alpha_1$ will be associated with smaller errors.  
+
+Depending on the colours of the background and the two
+objects, this recommendation could be modified.  For example,
+if the two objects are the same colour (or very close),
+it doesn't really matter how the 2nd and 3rd proportions
+are divided up, and $N$ will be best because it gets the
+background proportion exactly right.
+
+
+## Recommendation
+
+Typically in `rgl` we don't know which object will be closer 
+and which one will be further, so we can't base our choice on
+a single $\alpha_i$.  The recommendation would be to use
+all small levels of `alpha` and disable masking, or use all
+large values of `alpha` and retain masking.
+
+## Example
+
+The classic example of an impossible to sort scene involves
+three triangles arranged cyclicly so each one is behind one and in front
+of one of the others (based on https://paroj.github.io/gltut/Positioning/Tut05%20Overlap%20and%20Depth%20Buffering.html).
+
+```{r}
+theta <- 2*pi*c(0:2, 4:6, 8:10)/12
+x <- cos(theta)
+y <- sin(theta)
+z <- rep(c(0,0,1), 3)
+xyz <- cbind(x, y, z)
+xyz <- xyz[c(1,2,6, 4,5,9, 7,8,3),]
+open3d()
+par3d(userMatrix = M)
+triangles3d(xyz, col = rep(c("red", "green", "blue"), each = 3))
+```
+
+To see the effect of the calculations above, consider the following four displays.
+
+```{r fig.width=8}
+open3d()
+par3d(userMatrix = M)
+layout3d(matrix(1:9, ncol = 3, byrow=TRUE),
+         widths = c(1,2,2), heights = c(1, 3,3), 
+         sharedMouse = TRUE)
+text3d(0,0,0, " ")
+next3d()
+text3d(0,0,0, "depth_mask = TRUE")
+next3d()
+text3d(0,0,0, "depth_mask = FALSE")
+next3d()
+text3d(0,0,0, "alpha = 0.7")
+next3d()
+triangles3d(xyz, col = rep(c("red", "green", "blue"), each = 3), alpha = 0.7, depth_mask = TRUE)
+next3d()
+triangles3d(xyz, col = rep(c("red", "green", "blue"), each = 3), alpha = 0.7, depth_mask = FALSE)
+next3d()
+text3d(0,0,0, "alpha = 0.3")
+next3d()
+triangles3d(xyz, col = rep(c("red", "green", "blue"), each = 3), alpha = 0.3, depth_mask = TRUE)
+next3d()
+triangles3d(xyz, col = rep(c("red", "green", "blue"), each = 3), alpha = 0.3, depth_mask = FALSE)
+```
+
+As you rotate the figures, you can see imperfections in
+rendering.  On the right, the last drawn appears to be on top,
+while on the left, the first drawn appears more opaque than
+it should.  
+
+In the figure below, the three triangles each have different transparency, and each use the recommended setting:
+
+```{r}
+open3d()
+par3d(userMatrix = M)
+triangles3d(xyz[1:3,], col = "red", alpha = 0.3, depth_mask = FALSE)
+triangles3d(xyz[4:6,], col = "green", alpha = 0.7, depth_mask = TRUE)
+triangles3d(xyz[7:9,], col = "blue", depth_mask = TRUE)
+```
+
+In this figure, all three triangles are the same colour,
+only lighting affects the display:
+```{r fig.width=8}
+open3d()
+par3d(userMatrix = M)
+layout3d(matrix(1:9, ncol = 3, byrow=TRUE),
+         widths = c(1,2,2), heights = c(1, 3,3), 
+         sharedMouse = TRUE)
+text3d(0,0,0, " ")
+next3d()
+text3d(0,0,0, "depth_mask = TRUE")
+next3d()
+text3d(0,0,0, "depth_mask = FALSE")
+next3d()
+text3d(0,0,0, "alpha = 0.7")
+next3d()
+triangles3d(xyz, col = "red", alpha = 0.7, depth_mask = TRUE)
+next3d()
+triangles3d(xyz, col = "red", alpha = 0.7, depth_mask = FALSE)
+next3d()
+text3d(0,0,0, "alpha = 0.3")
+next3d()
+triangles3d(xyz, col = "red", alpha = 0.3, depth_mask = TRUE)
+next3d()
+triangles3d(xyz, col = "red", alpha = 0.3, depth_mask = FALSE)
+```
+
+Here `depth_mask = FALSE` seems to be the right choice in both cases.

@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Melt a delimited file by chunks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for melt_delim_chunked {readr}"><tr><td>melt_delim_chunked {readr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Melt a delimited file by chunks</h2>
+
+<h3>Description</h3>
+
+<p>For certain non-rectangular data formats, it can be useful to parse the data
+into a melted format where each row represents a single token.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+melt_delim_chunked(
+  file,
+  callback,
+  chunk_size = 10000,
+  delim,
+  quote = "\"",
+  escape_backslash = FALSE,
+  escape_double = TRUE,
+  locale = default_locale(),
+  na = c("", "NA"),
+  quoted_na = TRUE,
+  comment = "",
+  trim_ws = FALSE,
+  skip = 0,
+  progress = show_progress(),
+  skip_empty_rows = FALSE
+)
+
+melt_csv_chunked(
+  file,
+  callback,
+  chunk_size = 10000,
+  locale = default_locale(),
+  na = c("", "NA"),
+  quoted_na = TRUE,
+  quote = "\"",
+  comment = "",
+  trim_ws = TRUE,
+  skip = 0,
+  progress = show_progress(),
+  skip_empty_rows = FALSE
+)
+
+melt_csv2_chunked(
+  file,
+  callback,
+  chunk_size = 10000,
+  locale = default_locale(),
+  na = c("", "NA"),
+  quoted_na = TRUE,
+  quote = "\"",
+  comment = "",
+  trim_ws = TRUE,
+  skip = 0,
+  progress = show_progress(),
+  skip_empty_rows = FALSE
+)
+
+melt_tsv_chunked(
+  file,
+  callback,
+  chunk_size = 10000,
+  locale = default_locale(),
+  na = c("", "NA"),
+  quoted_na = TRUE,
+  quote = "\"",
+  comment = "",
+  trim_ws = TRUE,
+  skip = 0,
+  progress = show_progress(),
+  skip_empty_rows = FALSE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>Either a path to a file, a connection, or literal data
+(either a single string or a raw vector).
+</p>
+<p>Files ending in <code>.gz</code>, <code>.bz2</code>, <code>.xz</code>, or <code>.zip</code> will
+be automatically uncompressed. Files starting with <code style="white-space: pre;">http://</code>,
+<code style="white-space: pre;">https://</code>, <code style="white-space: pre;">ftp://</code>, or <code style="white-space: pre;">ftps://</code> will be automatically
+downloaded. Remote gz files can also be automatically downloaded and
+decompressed.
+</p>
+<p>Literal data is most useful for examples and tests. To be recognised as a
+path, it must be wrapped with <code>I()</code>, be a string containing at least one
+new line, or be a vector containing at least one string with a new line.
+</p>
+<p>Using a value of <code><a href="../../readr/help/clipboard.html">clipboard()</a></code> will read from the system clipboard.</p>
+</td></tr>
+<tr valign="top"><td><code>callback</code></td>
+<td>
+<p>A callback function to call on each chunk</p>
+</td></tr>
+<tr valign="top"><td><code>chunk_size</code></td>
+<td>
+<p>The number of rows to include in each chunk</p>
+</td></tr>
+<tr valign="top"><td><code>delim</code></td>
+<td>
+<p>Single character used to separate fields within a record.</p>
+</td></tr>
+<tr valign="top"><td><code>quote</code></td>
+<td>
+<p>Single character used to quote strings.</p>
+</td></tr>
+<tr valign="top"><td><code>escape_backslash</code></td>
+<td>
+<p>Does the file use backslashes to escape special
+characters? This is more general than <code>escape_double</code> as backslashes
+can be used to escape the delimiter character, the quote character, or
+to add special characters like <code style="white-space: pre;">\\n</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>escape_double</code></td>
+<td>
+<p>Does the file escape quotes by doubling them?
+i.e. If this option is <code>TRUE</code>, the value <code style="white-space: pre;">""""</code> represents
+a single quote, <code style="white-space: pre;">\"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>locale</code></td>
+<td>
+<p>The locale controls defaults that vary from place to place.
+The default locale is US-centric (like R), but you can use
+<code><a href="../../readr/help/locale.html">locale()</a></code> to create your own locale that controls things like
+the default time zone, encoding, decimal mark, big mark, and day/month
+names.</p>
+</td></tr>
+<tr valign="top"><td><code>na</code></td>
+<td>
+<p>Character vector of strings to interpret as missing values. Set this
+option to <code>character()</code> to indicate no missing values.</p>
+</td></tr>
+<tr valign="top"><td><code>quoted_na</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt='[Deprecated]' /></a> Should missing values inside quotes be treated as missing
+values (the default) or strings. This parameter is soft deprecated as of readr 2.0.0.</p>
+</td></tr>
+<tr valign="top"><td><code>comment</code></td>
+<td>
+<p>A string used to identify comments. Any text after the
+comment characters will be silently ignored.</p>
+</td></tr>
+<tr valign="top"><td><code>trim_ws</code></td>
+<td>
+<p>Should leading and trailing whitespace (ASCII spaces and tabs) be trimmed from
+each field before parsing it?</p>
+</td></tr>
+<tr valign="top"><td><code>skip</code></td>
+<td>
+<p>Number of lines to skip before reading data. If <code>comment</code> is
+supplied any commented lines are ignored <em>after</em> skipping.</p>
+</td></tr>
+<tr valign="top"><td><code>progress</code></td>
+<td>
+<p>Display a progress bar? By default it will only display
+in an interactive session and not while knitting a document. The automatic
+progress bar can be disabled by setting option <code>readr.show_progress</code> to
+<code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>skip_empty_rows</code></td>
+<td>
+<p>Should blank rows be ignored altogether? i.e. If this
+option is <code>TRUE</code> then blank rows will not be represented at all.  If it is
+<code>FALSE</code> then they will be represented by <code>NA</code> values in all the columns.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>melt_delim_chunked()</code> and the specialisations <code>melt_csv_chunked()</code>,
+<code>melt_csv2_chunked()</code> and <code>melt_tsv_chunked()</code> read files by a chunk of rows
+at a time, executing a given function on one chunk before reading the next.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other chunked: 
+<code><a href="../../readr/help/callback.html">callback</a></code>,
+<code><a href="../../readr/help/read_delim_chunked.html">read_delim_chunked</a>()</code>,
+<code><a href="../../readr/help/read_lines_chunked.html">read_lines_chunked</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Cars with 3 gears
+f &lt;- function(x, pos) subset(x, data_type == "integer")
+melt_csv_chunked(readr_example("mtcars.csv"), DataFrameCallback$new(f), chunk_size = 5)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>readr</em> version 2.0.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

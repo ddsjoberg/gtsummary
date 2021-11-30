@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Change maintainer of the package, in DESCRIPTION</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for desc_change_maintainer {desc}"><tr><td>desc_change_maintainer {desc}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Change maintainer of the package, in DESCRIPTION</h2>
+
+<h3>Description</h3>
+
+<p>Only works with the Authors@R field.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+desc_change_maintainer(
+  given = NULL,
+  family = NULL,
+  email = NULL,
+  comment = NULL,
+  orcid = NULL,
+  file = ".",
+  normalize = FALSE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>given</code></td>
+<td>
+<p>Given name.</p>
+</td></tr>
+<tr valign="top"><td><code>family</code></td>
+<td>
+<p>Family name.</p>
+</td></tr>
+<tr valign="top"><td><code>email</code></td>
+<td>
+<p>Email address.</p>
+</td></tr>
+<tr valign="top"><td><code>comment</code></td>
+<td>
+<p>Comment.</p>
+</td></tr>
+<tr valign="top"><td><code>orcid</code></td>
+<td>
+<p>ORCID.</p>
+</td></tr>
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>DESCRIPTION file to use. By default the DESCRIPTION
+file of the current package (i.e. the package the working directory
+is part of) is used.</p>
+</td></tr>
+<tr valign="top"><td><code>normalize</code></td>
+<td>
+<p>Whether to normalize the write when writing back
+the result. See <code><a href="../../desc/help/desc_normalize.html">desc_normalize</a></code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The current maintainer is kept if they have at least another role.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other Authors@R: 
+<code><a href="../../desc/help/desc_add_author_gh.html">desc_add_author_gh</a>()</code>,
+<code><a href="../../desc/help/desc_add_author.html">desc_add_author</a>()</code>,
+<code><a href="../../desc/help/desc_add_me.html">desc_add_me</a>()</code>,
+<code><a href="../../desc/help/desc_add_orcid.html">desc_add_orcid</a>()</code>,
+<code><a href="../../desc/help/desc_add_role.html">desc_add_role</a>()</code>,
+<code><a href="../../desc/help/desc_coerce_authors_at_r.html">desc_coerce_authors_at_r</a>()</code>,
+<code><a href="../../desc/help/desc_del_author.html">desc_del_author</a>()</code>,
+<code><a href="../../desc/help/desc_del_role.html">desc_del_role</a>()</code>,
+<code><a href="../../desc/help/desc_get_authors.html">desc_get_authors</a>()</code>,
+<code><a href="../../desc/help/desc_get_author.html">desc_get_author</a>()</code>,
+<code><a href="../../desc/help/desc_get_maintainer.html">desc_get_maintainer</a>()</code>,
+<code><a href="../../desc/help/desc_set_authors.html">desc_set_authors</a>()</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>desc</em> version 1.4.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

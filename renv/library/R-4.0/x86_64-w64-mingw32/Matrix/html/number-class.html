@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;number&quot; of Possibly Complex Numbers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for number-class {Matrix}"><tr><td>number-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;number&quot; of Possibly Complex Numbers</h2>
+
+<h3>Description</h3>
+
+<p>The class <code>"number"</code> is a virtual class,
+currently used for vectors of eigen values which can be
+<code>"numeric"</code> or <code>"complex"</code>.
+</p>
+<p>It is a simple class union (<code><a href="../../methods/html/setClassUnion.html">setClassUnion</a></code>) of
+<code>"numeric"</code> and <code>"complex"</code>.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Since it is a virtual Class, no objects
+may be created from it.</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("number")
+stopifnot( is(1i, "number"), is(pi, "number"), is(1:3, "number") )
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

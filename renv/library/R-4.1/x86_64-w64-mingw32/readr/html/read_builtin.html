@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Read built-in object from package</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for read_builtin {readr}"><tr><td>read_builtin {readr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Read built-in object from package</h2>
+
+<h3>Description</h3>
+
+<p>Consistent wrapper around <code><a href="../../utils/html/data.html">data()</a></code> that forces the promise. This is also a
+stronger parallel to loading data from a file.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+read_builtin(x, package = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Name (character string) of data set to read.</p>
+</td></tr>
+<tr valign="top"><td><code>package</code></td>
+<td>
+<p>Name of package from which to find data set. By default, all
+attached packages are searched and then the 'data' subdirectory (if present)
+of the current working directory.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An object of the built-in class of <code>x</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (requireNamespace("dplyr")) {
+  read_builtin("starwars", "dplyr")
+
+  read_builtin("storms", "dplyr")
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>readr</em> version 2.0.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

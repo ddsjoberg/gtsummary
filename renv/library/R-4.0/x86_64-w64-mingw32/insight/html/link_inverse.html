@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get link-inverse function from model object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for link_inverse {insight}"><tr><td>link_inverse {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get link-inverse function from model object</h2>
+
+<h3>Description</h3>
+
+<p>Returns the link-inverse function from a model object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+link_inverse(x, ...)
+
+## S3 method for class 'betareg'
+link_inverse(x, what = c("mean", "precision"), ...)
+
+## S3 method for class 'DirichletRegModel'
+link_inverse(x, what = c("mean", "precision"), ...)
+
+## S3 method for class 'betamfx'
+link_inverse(x, what = c("mean", "precision"), ...)
+
+## S3 method for class 'gamlss'
+link_inverse(x, what = c("mu", "sigma", "nu", "tau"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>what</code></td>
+<td>
+<p>For <code>gamlss</code> models, indicates for which distribution
+parameter the link (inverse) function should be returned; for <code>betareg</code>
+or <code>DirichletRegModel</code>, can be <code>"mean"</code> or <code>"precision"</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A function, describing the inverse-link function from a model-object.
+For multivariate-response models, a list of functions is returned.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# example from ?stats::glm
+counts &lt;- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
+outcome &lt;- gl(3, 1, 9)
+treatment &lt;- gl(3, 3)
+m &lt;- glm(counts ~ outcome + treatment, family = poisson())
+
+link_inverse(m)(.3)
+# same as
+exp(.3)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

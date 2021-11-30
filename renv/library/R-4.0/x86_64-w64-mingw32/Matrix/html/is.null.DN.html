@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Are the Dimnames 'dn' NULL-like ?</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for is.null.DN {Matrix}"><tr><td>is.null.DN {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Are the Dimnames <code>dn</code> NULL-like ?</h2>
+
+<h3>Description</h3>
+
+<p>Are the <code><a href="../../base/html/dimnames.html">dimnames</a></code> <code>dn</code> <code><a href="../../base/html/NULL.html">NULL</a></code>-like?
+</p>
+<p><code>is.null.DN(dn)</code> is less strict than <code><a href="../../base/html/NULL.html">is.null</a>(dn)</code>,
+because it is also true (<code><a href="../../base/html/logical.html">TRUE</a></code>) when the dimnames
+<code>dn</code> are &ldquo;like&rdquo; <code>NULL</code>, or <code>list(NULL,NULL)</code>, as
+they can easily be for the traditional <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> matrices
+(<code><a href="../../base/html/matrix.html">matrix</a></code>) which have no formal <code><a href="../../base/html/class.html">class</a></code>
+definition, and hence much freedom in how their <code><a href="../../base/html/dimnames.html">dimnames</a></code>
+look like.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  is.null.DN(dn)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>dn</code></td>
+<td>
+<p><code><a href="../../base/html/dimnames.html">dimnames</a>()</code> of a <code><a href="../../base/html/matrix.html">matrix</a></code>-like <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>
+object.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code><a href="../../base/html/logical.html">logical</a></code> <code><a href="../../base/html/logical.html">TRUE</a></code> or <code><a href="../../base/html/logical.html">FALSE</a></code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function is really to be used on &ldquo;traditional&rdquo; matrices
+rather than those inheriting from <code><a href="Matrix-class.html">Matrix</a></code>, as
+the latter will always have dimnames <code>list(NULL,NULL)</code> exactly,
+in such a case.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/NULL.html">is.null</a></code>,
+<code><a href="../../base/html/dimnames.html">dimnames</a></code>, <code><a href="../../base/html/matrix.html">matrix</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+m &lt;- matrix(round(100 * rnorm(6)), 2,3); m1 &lt;- m2 &lt;- m3 &lt;- m4 &lt;- m
+dimnames(m1) &lt;- list(NULL, NULL)
+dimnames(m2) &lt;- list(NULL, character())
+dimnames(m3) &lt;- rev(dimnames(m2))
+dimnames(m4) &lt;- rep(list(character()),2)
+
+m4 ## prints absolutely identically to  m
+
+stopifnot(m == m1, m1 == m2, m2 == m3, m3 == m4,
+	  identical(capture.output(m) -&gt; cm,
+		    capture.output(m1)),
+	  identical(cm, capture.output(m2)),
+	  identical(cm, capture.output(m3)),
+	  identical(cm, capture.output(m4)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

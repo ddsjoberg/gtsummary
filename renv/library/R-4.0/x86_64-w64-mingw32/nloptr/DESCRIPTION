@@ -1,0 +1,55 @@
+Package: nloptr
+Type: Package
+Title: R Interface to NLopt
+Version: 1.2.2.2
+Date: 2020-07-02
+Authors@R: c(person("Jelmer", "Ypma", role = c("aut", "cre"),
+                    email = "uctpjyy@ucl.ac.uk"),
+             person(c("Steven", "G."), "Johnson", role = "aut",
+                    comment = "author of the NLopt C library"),
+             person(c("Hans", "W."), "Borchers", role = "ctb",
+                    email = "hwborchers@googlemail.com"),
+             person("Dirk", "Eddelbuettel", role = "ctb",
+                    email = "edd@debian.org"),
+             person("Brian", "Ripley", role = "ctb",
+                    comment = "build process on multiple OS"),
+             person("Kurt", "Hornik", role = "ctb",
+                    comment = "build process on multiple OS"),
+             person("Julien", "Chiquet", role = "ctb"),
+             person(given = "Avraham", family = "Adler", 
+                    role = "ctb", email="Avraham.Adler@gmail.com",
+                    comment = c("removal deprecated calls from tests",
+                      ORCID = "0000-0002-3039-0703")))
+Description: 
+    Solve optimization problems using an R interface to NLopt. NLopt is a 
+    free/open-source library for nonlinear optimization, providing a common
+    interface for a number of different free optimization routines available
+    online as well as original implementations of various other algorithms.
+    See <http://ab-initio.mit.edu/wiki/index.php/NLopt_Introduction> for more
+    information on the available algorithms. During installation of nloptr on 
+    Unix-based systems, the installer checks whether the NLopt library is
+    installed on the system. If the NLopt library cannot be found, the code
+    is compiled using the NLopt source included in the nloptr package.
+SystemRequirements: A system installation of NLopt >= 2.4.0 (with
+        headers) will be used if available.
+License: LGPL-3
+Suggests: testthat (>= 0.8.1), knitr, rmarkdown, inline (>= 0.3.14)
+LazyLoad: yes
+NeedsCompilation: yes
+VignetteBuilder: knitr
+RoxygenNote: 6.1.0
+Packaged: 2020-07-02 17:30:38 UTC; ripley
+Author: Jelmer Ypma [aut, cre],
+  Steven G. Johnson [aut] (author of the NLopt C library),
+  Hans W. Borchers [ctb],
+  Dirk Eddelbuettel [ctb],
+  Brian Ripley [ctb] (build process on multiple OS),
+  Kurt Hornik [ctb] (build process on multiple OS),
+  Julien Chiquet [ctb],
+  Avraham Adler [ctb] (removal deprecated calls from tests,
+    <https://orcid.org/0000-0002-3039-0703>)
+Maintainer: Jelmer Ypma <uctpjyy@ucl.ac.uk>
+Repository: CRAN
+Date/Publication: 2020-07-02 17:32:14 UTC
+Built: R 4.0.5; x86_64-w64-mingw32; 2021-05-07 12:54:38 UTC; windows
+Archs: i386, x64

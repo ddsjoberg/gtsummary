@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+      <h1>Articles</h1>
+    </div>
+
+    {{#sections}}
+    <div class="section {{class}}">
+      <h3>{{title}}</h3>
+      <p class="section-desc">{{{desc}}}</p>
+
+      <dl>
+        {{#contents}}
+        <dt><a href="{{path}}">{{title}}</a></dt>
+        <dd>{{{description}}}</dt>
+        {{/contents}}
+      </dl>
+    </div>
+    {{/sections}}
+  </div>
+</div>

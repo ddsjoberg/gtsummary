@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* All `style_*()` functions will retain attribute, such as the names. (#1035, #1031, #981)
+
+* Added link to the `syntax` help file to functions throughout the package. The `syntax` help file illustrates how to use the gtsummary selectors and details the formula-list notation. (#981)
+
 * Fix in `tbl_merge()` when rows in a merging table are not present in the first table. (#1033)
 
 * The `add_n.tbl_regression()` (which is also utilized in `tbl_uvregression()`) was adding the N column without applying a formatting function. The `style_number()` function has now been added as the default styler. (#1022)

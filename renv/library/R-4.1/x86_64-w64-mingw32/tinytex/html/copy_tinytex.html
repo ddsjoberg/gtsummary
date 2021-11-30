@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Copy TinyTeX to another location and use it in another system</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for copy_tinytex {tinytex}"><tr><td>copy_tinytex {tinytex}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Copy TinyTeX to another location and use it in another system</h2>
+
+<h3>Description</h3>
+
+<p>The function <code>copy_tinytex()</code> copies the existing TinyTeX installation
+to another directory (e.g., a portable device like a USB stick). The function
+<code>use_tinytex()</code> runs <code>tlmgr path add</code> to add the copy of TinyTeX
+in an existing folder to the <code>PATH</code> variable of the current system, so
+that you can use utilities such as <code>tlmgr</code> and <code>pdflatex</code>,
+etc.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+copy_tinytex(
+  from = tinytex_root(),
+  to = select_dir("Select Destination Directory")
+)
+
+use_tinytex(from = select_dir("Select TinyTeX Directory"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>from</code></td>
+<td>
+<p>The root directory of the TinyTeX installation. For
+<code>copy_tinytex()</code>, the default value <code>tinytex_root()</code> should be a
+reasonable guess if you installed TinyTeX via <code>install_tinytex()</code>. For
+<code>use_tinytex()</code>, if <code>from</code> is not provided, a dialog for choosing
+the directory interactively will pop up.</p>
+</td></tr>
+<tr valign="top"><td><code>to</code></td>
+<td>
+<p>The destination directory where you want to make a copy of TinyTeX.
+Like <code>from</code> in <code>use_tinytex()</code>, a dialog will pop up if <code>to</code>
+is not provided in <code>copy_tinytex()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Note</h3>
+
+<p>You can only copy TinyTeX and use it in the same system, e.g., the
+Windows version of TinyTeX only works on Windows.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>tinytex</em> version 0.34 <a href="00Index.html">Index</a>]</div>
+</body></html>

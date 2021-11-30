@@ -1,0 +1,61 @@
+// bs4 navbars require .navbar-expand[-sm|-md|-lg|-xl], but bs3 navbars
+// don't have them. This selector matches .navbar without .navbar-expand
+// and defaults it to .navbar-expand-sm.
+.navbar:not(.navbar-expand):not(.navbar-expand-sm):not(.navbar-expand-md):not(.navbar-expand-lg):not(.navbar-expand-xl) {
+  @extend .navbar-expand-sm;
+}
+
+.navbar {
+  margin-bottom: $navbar-margin-bottom;
+}
+
+// Map BS3 navbar positioning to general utilities
+.navbar-fixed-top {
+  @extend .fixed-top;
+}
+.navbar-fixed-bottom {
+  @extend .fixed-bottom;
+}
+.navbar-sticky-top {
+  @extend .sticky-top;
+}
+
+ul.nav.navbar-nav {
+  flex: 1;
+  -webkit-flex: 1;
+  &.navbar-right {
+    justify-content: flex-end;
+    -webkit-justify-content: flex-end;
+  }
+}
+
+ul.nav.navbar-nav>li:not(.dropdown) {
+  @extend .nav-item;
+}
+ul.nav.navbar-nav>li>a {
+  @extend .nav-link;
+}
+.navbar.navbar-default {
+  @extend .navbar-#{$navbar-default-type};
+  @extend .bg-#{$navbar-default-bg};
+}
+.navbar.navbar-inverse {
+  // TODO: is this needed?
+  //color: $navbar-dark-color;
+  @extend .navbar-#{$navbar-inverse-type};
+  @extend .bg-#{$navbar-inverse-bg};
+}
+
+// Implement bs3 navbar toggler; used in Rmd websites, i.e.
+// https://github.com/rstudio/rmarkdown-website/blob/453e1802b32b5baf1c8a67f80947adcc53e49b7f/_navbar.html
+.navbar-toggle {
+  @extend .navbar-toggler;
+}
+.navbar-toggle {
+  > .icon-bar {
+    display: none;
+    &:last-child {
+      @extend .navbar-toggler-icon;
+    }
+  }
+}

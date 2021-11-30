@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Merge two data.tables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for merge {data.table}"><tr><td>merge {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Merge two data.tables</h2>
+
+<h3>Description</h3>
+
+<p>Fast merge of two <code>data.table</code>s. The <code>data.table</code> method behaves
+very similarly to that of <code>data.frame</code>s except that, by default, it attempts to merge
+</p>
+
+<ul>
+<li><p> at first based on the shared key columns, and if there are none,
+</p>
+</li>
+<li><p> then based on key columns of the first argument <code>x</code>, and if there
+are none,
+</p>
+</li>
+<li><p> then based on the common columns between the two <code>data.table</code>s.
+</p>
+</li></ul>
+
+<p>Set the <code>by</code>, or <code>by.x</code> and <code>by.y</code> arguments explicitly to override this default.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'data.table'
+merge(x, y, by = NULL, by.x = NULL, by.y = NULL, all = FALSE,
+all.x = all, all.y = all, sort = TRUE, suffixes = c(".x", ".y"), no.dups = TRUE,
+allow.cartesian=getOption("datatable.allow.cartesian"),  # default FALSE
+...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x, y</code></td>
+<td>
+<p><code>data table</code>s. <code>y</code> is coerced to a <code>data.table</code> if
+it isn't one already.</p>
+</td></tr>
+<tr valign="top"><td><code>by</code></td>
+<td>
+<p>A vector of shared column names in <code>x</code> and <code>y</code> to merge on.
+This defaults to the shared key columns between the two tables.
+If <code>y</code> has no key columns, this defaults to the key of <code>x</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>by.x, by.y</code></td>
+<td>
+<p>Vectors of column names in <code>x</code> and <code>y</code> to merge on.</p>
+</td></tr>
+<tr valign="top"><td><code>all</code></td>
+<td>
+<p>logical; <code>all = TRUE</code> is shorthand to save setting both
+<code>all.x = TRUE</code> and <code>all.y = TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>all.x</code></td>
+<td>
+<p>logical; if <code>TRUE</code>, then extra rows will be added to the
+output, one for each row in <code>x</code> that has no matching row in <code>y</code>.
+These rows will have 'NA's in those columns that are usually filled with values
+from <code>y</code>.  The default is <code>FALSE</code>, so that only rows with data from both
+<code>x</code> and <code>y</code> are included in the output.</p>
+</td></tr>
+<tr valign="top"><td><code>all.y</code></td>
+<td>
+<p>logical; analogous to <code>all.x</code> above.</p>
+</td></tr>
+<tr valign="top"><td><code>sort</code></td>
+<td>
+<p>logical. If <code>TRUE</code> (default), the merged <code>data.table</code> is
+sorted by setting the key to the <code>by / by.x</code> columns. If <code>FALSE</code>, the
+result is not sorted.</p>
+</td></tr>
+<tr valign="top"><td><code>suffixes</code></td>
+<td>
+<p>A <code>character(2)</code> specifying the suffixes to be used for
+making non-<code>by</code> column names unique. The suffix behaviour works in a similar
+fashion as the <code><a href="../../base/html/merge.html">merge.data.frame</a></code> method does.</p>
+</td></tr>
+<tr valign="top"><td><code>no.dups</code></td>
+<td>
+<p>logical indicating that <code>suffixes</code> are also appended to
+non-<code>by.y</code> column names in <code>y</code> when they have the same column name
+as any <code>by.x</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>allow.cartesian</code></td>
+<td>
+<p>See <code>allow.cartesian</code> in <code><a href="../../data.table/help/[.data.table.html">[.data.table</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Not used at this time.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code><a href="../../data.table/help/merge.html">merge</a></code> is a generic function in base R. It dispatches to either the
+<code>merge.data.frame</code> method or <code>merge.data.table</code> method depending on
+the class of its first argument. Note that, unlike <code>SQL</code>, <code>NA</code> is
+matched against <code>NA</code> (and <code>NaN</code> against <code>NaN</code>) while merging.
+</p>
+<p>In versions <code>&lt;= v1.9.4</code>, if the specified columns in <code>by</code> were not the
+key (or head of the key) of <code>x</code> or <code>y</code>, then a <code><a href="../../data.table/help/copy.html">copy</a></code> is
+first re-keyed prior to performing the merge. This was less performant as well as memory
+inefficient. The concept of secondary keys (implemented in <code>v1.9.4</code>) was
+used to overcome this limitation from <code>v1.9.6</code>+. No deep copies are made
+any more, thereby improving performance and memory efficiency. Also, there is better
+control for providing the columns to merge on with the help of the newly implemented
+<code>by.x</code> and <code>by.y</code> arguments.
+</p>
+<p>For a more <code>data.table</code>-centric way of merging two <code>data.table</code>s, see
+<code><a href="../../data.table/help/[.data.table.html">[.data.table</a></code>; e.g., <code>x[y, ...]</code>. See FAQ 1.11 for a detailed
+comparison of <code>merge</code> and <code>x[y, ...]</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A new <code>data.table</code> based on the merged <code>data table</code>s, and sorted by the
+columns set (or inferred for) the <code>by</code> argument if argument <code>sort</code> is
+set to <code>TRUE</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../data.table/help/data.table.html">data.table</a></code>, <code><a href="../../data.table/help/as.data.table.html">as.data.table</a></code>, <code><a href="../../data.table/help/[.data.table.html">[.data.table</a></code>,
+<code><a href="../../base/html/merge.html">merge.data.frame</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(dt1 &lt;- data.table(A = letters[1:10], X = 1:10, key = "A"))
+(dt2 &lt;- data.table(A = letters[5:14], Y = 1:10, key = "A"))
+merge(dt1, dt2)
+merge(dt1, dt2, all = TRUE)
+
+(dt1 &lt;- data.table(A = letters[rep(1:3, 2)], X = 1:6, key = "A"))
+(dt2 &lt;- data.table(A = letters[rep(2:4, 2)], Y = 6:1, key = "A"))
+merge(dt1, dt2, allow.cartesian=TRUE)
+
+(dt1 &lt;- data.table(A = c(rep(1L, 5), 2L), B = letters[rep(1:3, 2)], X = 1:6, key = "A,B"))
+(dt2 &lt;- data.table(A = c(rep(1L, 5), 2L), B = letters[rep(2:4, 2)], Y = 6:1, key = "A,B"))
+merge(dt1, dt2)
+merge(dt1, dt2, by="B", allow.cartesian=TRUE)
+
+# test it more:
+d1 &lt;- data.table(a=rep(1:2,each=3), b=1:6, key="a,b")
+d2 &lt;- data.table(a=0:1, bb=10:11, key="a")
+d3 &lt;- data.table(a=0:1, key="a")
+d4 &lt;- data.table(a=0:1, b=0:1, key="a,b")
+
+merge(d1, d2)
+merge(d2, d1)
+merge(d1, d2, all=TRUE)
+merge(d2, d1, all=TRUE)
+
+merge(d3, d1)
+merge(d1, d3)
+merge(d1, d3, all=TRUE)
+merge(d3, d1, all=TRUE)
+
+merge(d1, d4)
+merge(d1, d4, by="a", suffixes=c(".d1", ".d4"))
+merge(d4, d1)
+merge(d1, d4, all=TRUE)
+merge(d4, d1, all=TRUE)
+
+# new feature, no need to set keys anymore
+set.seed(1L)
+d1 &lt;- data.table(a=sample(rep(1:3,each=2)), z=1:6)
+d2 &lt;- data.table(a=2:0, z=10:12)
+merge(d1, d2, by="a")
+merge(d1, d2, by="a", all=TRUE)
+
+# new feature, using by.x and by.y arguments
+setnames(d2, "a", "b")
+merge(d1, d2, by.x="a", by.y="b")
+merge(d1, d2, by.x="a", by.y="b", all=TRUE)
+merge(d2, d1, by.x="b", by.y="a")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

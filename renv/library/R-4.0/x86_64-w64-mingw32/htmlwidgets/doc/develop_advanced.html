@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Overview</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h2>Overview</h2>
+
+<p>This article covers several aspects of creating widgets that are not required by all widgets, but are an essential part of getting bindings to certain types of JavaScript libraries to work properly. Topics covered include:</p>
+
+<ul>
+<li><p>Transforming JSON representations of R objects into representations required by JavaScript libraries (e.g. an R data frame to a d3 dataset).</p></li>
+<li><p>Tracking instance-specific widget data within JavaScript bindings.</p></li>
+<li><p>Passing JavaScript functions from R to JavaScript (e.g. a user provided formatting or drawing function)</p></li>
+<li><p>Generating custom HTML to enclose a widget (the default is a <code>&lt;div&gt;</code> but some libraries require a different element e.g. a <code>&lt;span&gt;</code>).</p></li>
+</ul>
+
+<h2>Data transformation</h2>
+
+<p>R objects passed as part of the <code>x</code> parameter to the <code>createWidget()</code> function are transformed to JSON using the internal function <code>htmlwidgets:::toJSON()</code><sup>[N.B.</sup> It is not exported from <strong>htmlwidgets</strong>, so you are not supposed to call this function directly.], which is basically a wrapper function of <code>jsonlite::toJSON()</code> by default. However, sometimes this representation is not what is required by the JavaScript library you are interfacing with. There are two JavaScript functions that you can use to transform the JSON data.</p>
+
+<h3>HTMLWidgets.dataframeToD3()</h3>
+
+<p>R data frames are represented in &ldquo;long&rdquo; form (an array of named vectors) whereas d3 typically requires &ldquo;wide&rdquo; form (an array of objects each of which includes all names and values). Since the R representation is smaller in size and much faster to transmit over the network, we create the long-form representation of R data, and then transform the data in JavaScript using the <code>dataframeToD3()</code> helper function. </p>
+
+<p>Here is an example of the long-form representation of an R data frame:</p>
+
+<pre><code>{
+  &quot;Sepal.Length&quot;: [5.1, 4.9, 4.7],
+  &quot;Sepal.Width&quot;: [3.5, 3, 3.2],
+  &quot;Petal.Length&quot;: [1.4, 1.4, 1.3],
+  &quot;Petal.Width&quot;: [0.2, 0.2, 0.2],
+  &quot;Species&quot;: [&quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;]
+} 
+</code></pre>
+
+<p>After we apply <code>HTMLWidgets.dataframeToD3()</code>, it will become:</p>
+
+<pre><code>[
+  {
+    &quot;Sepal.Length&quot;: 5.1,
+    &quot;Sepal.Width&quot;: 3.5,
+    &quot;Petal.Length&quot;: 1.4,
+    &quot;Petal.Width&quot;: 0.2,
+    &quot;Species&quot;: &quot;setosa&quot;
+  },
+  {
+    &quot;Sepal.Length&quot;: 4.9,
+    &quot;Sepal.Width&quot;: 3,
+    &quot;Petal.Length&quot;: 1.4,
+    &quot;Petal.Width&quot;: 0.2,
+    &quot;Species&quot;: &quot;setosa&quot;
+  },
+  {
+    &quot;Sepal.Length&quot;: 4.7,
+    &quot;Sepal.Width&quot;: 3.2,
+    &quot;Petal.Length&quot;: 1.3,
+    &quot;Petal.Width&quot;: 0.2,
+    &quot;Species&quot;: &quot;setosa&quot;
+  }
+] 
+</code></pre>
+
+<p>As a real example, the <a href="https://christophergandrud.github.io/networkD3/#simple">simpleNetwork</a> widget accepts a data frame containing network links on the R side, then transforms it to a d3 representation within the JavaScript <code>renderValue</code> function:</p>
+
+<pre><code class="javascript">renderValue: function(x) {
+
+  // convert links data frame to d3 friendly format
+  var links = HTMLWidgets.dataframeToD3(x.links);
+
+  // ... use the links, etc ...
+
+}
+</code></pre>
+
+<h3>HTMLWidgets.transposeArray2D()</h3>
+
+<p>Sometimes a 2-dimensional array requires a similar transposition. For this the <code>transposeArray2D()</code> function is provided. Here is an example array:</p>
+
+<pre><code>[
+  [5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5],
+  [3.5, 3, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4],
+  [1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5],
+  [0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2],
+  [&quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;, &quot;setosa&quot;]
+] 
+</code></pre>
+
+<p><code>HTMLWidgets.transposeArray2D()</code> can transpose it to:</p>
+
+<pre><code>[
+  [5.1, 3.5, 1.4, 0.2, &quot;setosa&quot;],
+  [4.9, 3, 1.4, 0.2, &quot;setosa&quot;],
+  [4.7, 3.2, 1.3, 0.2, &quot;setosa&quot;],
+  [4.6, 3.1, 1.5, 0.2, &quot;setosa&quot;],
+  [5, 3.6, 1.4, 0.2, &quot;setosa&quot;],
+  [5.4, 3.9, 1.7, 0.4, &quot;setosa&quot;],
+  [4.6, 3.4, 1.4, 0.3, &quot;setosa&quot;],
+  [5, 3.4, 1.5, 0.2, &quot;setosa&quot;]
+] 
+</code></pre>
+
+<p>As a real example, the <a href="https://rstudio.github.io/dygraphs/">dygraphs</a> widget uses this function to transpose the &ldquo;file&rdquo; (data) argument it gets from the R side before passing it on to the dygraphs library:</p>
+
+<pre><code class="javascript">renderValue: function(x) {
+
+    // ... code excluded ...
+
+    // transpose array
+    x.attrs.file = HTMLWidgets.transposeArray2D(x.attrs.file);
+
+    // ... more code excluded ...
+}
+</code></pre>
+
+<h3>Custom JSON serializer</h3>
+
+<p>You may find it necessary to customize the JSON serialization of widget data when the default serializer in <strong>htmlwidgets</strong> does not work in the way you have expected. For widget package authors, there are two levels of customization for the JSON serialization: you can either customize the default values of arguments for <code>jsonlite::toJSON()</code>, or just customize the whole function.</p>
+
+<ol>
+<li><p><code>jsonlite::toJSON()</code> has a lot of arguments, and we have already changed some of its default values. Below is the JSON serializer we use in <strong>htmlwidgets</strong> at the moment:</p>
+
+<pre><code class="r">function (x, ..., dataframe = &quot;columns&quot;, null = &quot;null&quot;, na = &quot;null&quot;, 
+    auto_unbox = TRUE, digits = getOption(&quot;shiny.json.digits&quot;, 
+        16), use_signif = TRUE, force = TRUE, POSIXt = &quot;ISO8601&quot;, 
+    UTC = TRUE, rownames = FALSE, keep_vec_names = TRUE, strict_atomic = TRUE) 
+{
+    if (strict_atomic) 
+        x &lt;- I(x)
+    jsonlite::toJSON(x, dataframe = dataframe, null = null, na = na, 
+        auto_unbox = auto_unbox, digits = digits, use_signif = use_signif, 
+        force = force, POSIXt = POSIXt, UTC = UTC, rownames = rownames, 
+        keep_vec_names = keep_vec_names, json_verbatim = TRUE, 
+        ...)
+}
+&lt;bytecode: 0x7feac2c686a8&gt;
+</code></pre>
+
+<p>For example, we convert data frames to JSON by columns instead of rows (the latter is <code>jsonlite::toJSON</code>&#39;s default). If you want to change the default values of any arguments, you can attach an attribute <code>TOJSON_ARGS</code> to the widget data to be passed to <code>createWidget()</code>, e.g.</p>
+
+<pre><code class="r">fooWidget &lt;- function(data, name, ...) {
+  # ... process the data ...
+  params &lt;- list(foo = data, bar = TRUE)
+  # customize toJSON() argument values
+  attr(params, &#39;TOJSON_ARGS&#39;) &lt;- list(digits = 7, na = &#39;string&#39;)
+  htmlwidgets::createWidget(name, x = params, ...)
+}
+</code></pre>
+
+<p>We changed the default value of <code>digits</code> from 16 to 7, and <code>na</code> from <code>null</code> to <code>string</code> in the above example. It is up to you, the package author, whether you want to expose such customization to users. For example, you can leave an extra argument in your widget function so that users can customize the behavior of the JSON serializer:</p>
+
+<pre><code class="r">fooWidget &lt;- function(data, name, ..., JSONArgs = list(digits = 7)) {
+  # ... process the data ...
+  params &lt;- list(foo = data, bar = TRUE)
+  # customize toJSON() argument values
+  attr(params, &#39;TOJSON_ARGS&#39;) &lt;- JSONArgs
+  htmlwidgets::createWidget(name, x = params, ...)
+}
+</code></pre>
+
+<p>You can also use a global option <code>htmlwidgets.TOJSON_ARGS</code> to customize the JSON serializer arguments for all widgets in the current R session, e.g.</p>
+
+<pre><code class="r">options(htmlwidgets.TOJSON_ARGS = list(digits = 7, pretty = TRUE))
+</code></pre></li>
+<li><p>If you do not want to use <strong>jsonlite</strong>, you can completely override the serializer function by attaching an attribute <code>TOJSON_FUNC</code> to the widget data, e.g.</p>
+
+<pre><code class="r">fooWidget &lt;- function(data, name, ...) {
+  # ... process the data ...
+  params &lt;- list(foo = data, bar = TRUE)
+  # customize the JSON serializer
+  attr(params, &#39;TOJSON_FUNC&#39;) &lt;- MY_OWN_JSON_FUNCTION
+  htmlwidgets::createWidget(name, x = params, ...)
+}
+</code></pre>
+
+<p>Here <code>MY_OWN_JSON_FUNCTION</code> can be an arbitrary R function that converts R objects to JSON. If you have also specified the <code>TOJSON_ARGS</code> attribute, it will be passed to your custom JSON function as well.</p></li>
+</ol>
+
+<p>Note these features about custom JSON serializers require the <strong>shiny</strong> version to be greater than 0.11.1 if you render the widgets in Shiny apps.</p>
+
+<h2>Passing JavaScript functions</h2>
+
+<p>As you would expect, character vectors passed from R to JavaScript are converted to JavaScript strings. However, what if you want to allow users to provide custom JavaScript functions for formatting, drawing, or event handling? For this case, the <strong>htmlwidgets</strong> package includes a <code>JS()</code> function that allows you to request that a character value is evaluated as JavaScript when it is received on the client.</p>
+
+<p>For example, the <a href="https://rstudio.github.io/dygraphs/">dygraphs</a> widget includes a <code>dyCallbacks</code> function that allows the user to provide callback functions for a variety of contexts. These callbacks are &ldquo;marked&rdquo; as containing JavaScript so that they can be converted to actual JavaScript functions on the client:</p>
+
+<pre><code class="r">callbacks &lt;- list(
+  clickCallback = JS(clickCallback)
+  drawCallback = JS(drawCallback)
+  highlightCallback = JS(highlightCallback)
+  pointClickCallback = JS(pointClickCallback)
+  underlayCallback = JS(underlayCallback)
+)
+</code></pre>
+
+<p>Another example is in the <a href="https://rstudio.github.io/DT/">DT</a> (DataTables) widget, where users can specify an <code>initCallback</code> with JavaScript to execute after the table is loaded and initialized:</p>
+
+<pre><code class="r">datatable(head(iris, 20), options = list(
+  initComplete = JS(
+    &quot;function(settings, json) {&quot;,
+    &quot;$(this.api().table().header()).css({&#39;background-color&#39;: &#39;#000&#39;, &#39;color&#39;: &#39;#fff&#39;});&quot;,
+    &quot;}&quot;)
+))
+</code></pre>
+
+<p>If multiple arguments are passed to <code>JS()</code> (as in the above example), they will be concatenated into a single string separated by <code>\n</code>.</p>
+
+<h2>Custom widget HTML</h2>
+
+<p>Typically the HTML &ldquo;housing&rdquo; for a widget is just a <code>&lt;div&gt;</code> element, and this is correspondingly the default behavior for new widgets that don&#39;t specify otherwise. However, sometimes you need a different element type. For example, the <a href="https://github.com/htmlwidgets/sparkline">sparkline</a> widget requires a <code>&lt;span&gt;</code> element so implements the following custom HTML generation function:</p>
+
+<pre><code class="r">widget_html.sparkline &lt;- function(id, style, class, ...){
+  tags$span(id = id, class = class)
+}
+</code></pre>
+
+<p>Note that this function is looked up within the package implementing the widget by the convention <code>widget_html.<em>widgetname</em></code> so it need not be formally exported from your package or otherwise registered with <strong>htmlwidgets</strong>.</p>
+
+<p>(<strong>htmlwidgets</strong> 1.5.2 and earlier used a convention of <code><em>widgetname</em>_html</code>. This is still supported for now, but the new <code>widget_html.<em>widgetname</em></code> convention is recommended going forward, as it seems less likely to lead to false positives.)</p>
+
+<p>Most widgets won&#39;t need a custom HTML function but if you need to generate custom HTML for your widget (e.g. you need an <code>&lt;input&gt;</code> or a <code>&lt;span&gt;</code> rather than a <code>&lt;div&gt;</code>) then you should use the <strong>htmltools</strong> package (as demonstrated by the code above).</p>
+
+</body>
+
+</html>

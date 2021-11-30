@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get model parameters from Bayesian models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_parameters.BGGM {insight}"><tr><td>get_parameters.BGGM {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get model parameters from Bayesian models</h2>
+
+<h3>Description</h3>
+
+<p>Returns the coefficients (or posterior samples for Bayesian
+models) from a model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'BGGM'
+get_parameters(
+  x,
+  component = c("correlation", "conditional", "intercept", "all"),
+  summary = FALSE,
+  centrality = "mean",
+  ...
+)
+
+## S3 method for class 'MCMCglmm'
+get_parameters(
+  x,
+  effects = c("fixed", "random", "all"),
+  summary = FALSE,
+  centrality = "mean",
+  ...
+)
+
+## S3 method for class 'BFBayesFactor'
+get_parameters(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "extra"),
+  iterations = 4000,
+  progress = FALSE,
+  verbose = TRUE,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+)
+
+## S3 method for class 'stanmvreg'
+get_parameters(
+  x,
+  effects = c("fixed", "random", "all"),
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+)
+
+## S3 method for class 'brmsfit'
+get_parameters(
+  x,
+  effects = "fixed",
+  component = "all",
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+)
+
+## S3 method for class 'stanreg'
+get_parameters(
+  x,
+  effects = c("fixed", "random", "all"),
+  component = c("location", "all", "conditional", "smooth_terms", "sigma",
+    "distributional", "auxiliary"),
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+)
+
+## S3 method for class 'bayesx'
+get_parameters(
+  x,
+  component = c("conditional", "smooth_terms", "all"),
+  summary = FALSE,
+  centrality = "mean",
+  ...
+)
+
+## S3 method for class 'bamlss'
+get_parameters(
+  x,
+  component = c("all", "conditional", "smooth_terms", "location", "distributional",
+    "auxiliary"),
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+)
+
+## S3 method for class 'sim.merMod'
+get_parameters(
+  x,
+  effects = c("fixed", "random", "all"),
+  parameters = NULL,
+  summary = FALSE,
+  centrality = "mean",
+  ...
+)
+
+## S3 method for class 'sim'
+get_parameters(x, parameters = NULL, summary = FALSE, centrality = "mean", ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+<tr valign="top"><td><code>component</code></td>
+<td>
+<p>Which type of parameters to return, such as parameters for the
+conditional model, the zero-inflated part of the model, the dispersion
+term, the instrumental variables or marginal effects be returned? Applies
+to models with zero-inflated and/or dispersion formula, or to models with
+instrumental variables (so called fixed-effects regressions), or models
+with marginal effects from <span class="pkg">mfx</span>. May be abbreviated. Note that the
+<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
+component, depending on the model. There are three convenient shortcuts:
+<code>component = "all"</code> returns all possible parameters.
+If <code>component = "location"</code>, location parameters such as <code>conditional</code>,
+<code>zero_inflated</code>, <code>smooth_terms</code>, or <code>instruments</code> are returned
+(everything that are fixed or random effects - depending on the <code>effects</code>
+argument - but no auxiliary parameters). For <code>component = "distributional"</code>
+(or <code>"auxiliary"</code>), components like <code>sigma</code>, <code>dispersion</code>,
+<code>beta</code> or <code>precision</code> (and other auxiliary parameters) are returned.</p>
+</td></tr>
+<tr valign="top"><td><code>summary</code></td>
+<td>
+<p>Logical, indicates whether the full posterior samples
+(<code>summary = FALSE</code>)) or the summarized centrality indices of
+the posterior samples (<code>summary = TRUE</code>)) should be returned as
+estimates.</p>
+</td></tr>
+<tr valign="top"><td><code>centrality</code></td>
+<td>
+<p>Only for models with posterior samples, and when
+<code>summary = TRUE</code>. In this case, <code>centrality = "mean"</code> would
+calculate means of posterior samples for each parameter, while
+<code>centrality = "median"</code> would use the more robust median value as
+measure of central tendency.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>effects</code></td>
+<td>
+<p>Should parameters for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.</p>
+</td></tr>
+<tr valign="top"><td><code>iterations</code></td>
+<td>
+<p>Number of posterior draws.</p>
+</td></tr>
+<tr valign="top"><td><code>progress</code></td>
+<td>
+<p>Display progress.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle messages and warnings.</p>
+</td></tr>
+<tr valign="top"><td><code>parameters</code></td>
+<td>
+<p>Regular expression pattern that describes the parameters that
+should be returned.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>In most cases when models either return different &quot;effects&quot; (fixed,
+random) or &quot;components&quot; (conditional, zero-inflated, ...), the arguments
+<code>effects</code> and <code>component</code> can be used.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The posterior samples from the requested parameters as data frame.
+If <code>summary = TRUE</code>, returns a data frame with two columns: the
+parameter names and the related point estimates (based on <code>centrality</code>).
+</p>
+
+
+<h3>BFBayesFactor Models</h3>
+
+<p>Note that for <code>BFBayesFactor</code> models (from the <span class="pkg">BayesFactor</span>
+package), posteriors are only extracted from the first numerator model (i.e.,
+<code>model[1]</code>). If you want to apply some function <code>foo()</code> to another
+model stored in the <code>BFBayesFactor</code> object, index it directly, e.g.
+<code>foo(model[2])</code>, <code>foo(1/model[5])</code>, etc.
+See also <code><a href="../../bayestestR/html/weighted_posteriors.html">weighted_posteriors</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+m &lt;- lm(mpg ~ wt + cyl + vs, data = mtcars)
+get_parameters(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

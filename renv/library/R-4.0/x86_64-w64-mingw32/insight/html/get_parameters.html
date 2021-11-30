@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get model parameters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_parameters {insight}"><tr><td>get_parameters {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get model parameters</h2>
+
+<h3>Description</h3>
+
+<p>Returns the coefficients (or posterior samples for Bayesian
+models) from a model. See the documentation for your object's class:
+</p>
+
+<ul>
+<li><p><a href="get_parameters.BGGM.html">Bayesian models</a> (<span class="pkg">rstanarm</span>, <span class="pkg">brms</span>, <span class="pkg">MCMCglmm</span>, ...)
+</p>
+</li>
+<li><p><a href="get_parameters.emmGrid.html">Estimated marginal means</a> (<span class="pkg">emmeans</span>)
+</p>
+</li>
+<li><p><a href="get_parameters.gamm.html">Generalized additive models</a> (<span class="pkg">mgcv</span>, <span class="pkg">VGAM</span>, ...)
+</p>
+</li>
+<li><p><a href="get_parameters.betamfx.html">Marginal effects models</a> (<span class="pkg">mfx</span>)
+</p>
+</li>
+<li><p><a href="get_parameters.glmm.html">Mixed models</a> (<span class="pkg">lme4</span>, <span class="pkg">glmmTMB</span>, <span class="pkg">GLMMadaptive</span>, ...)
+</p>
+</li>
+<li><p><a href="get_parameters.zeroinfl.html">Zero-inflated and hurdle models</a> (<span class="pkg">pscl</span>, ...)
+</p>
+</li>
+<li><p><a href="get_parameters.betareg.html">Models with special components</a> (<span class="pkg">betareg</span>, <span class="pkg">MuMIn</span>, ...)
+</p>
+</li>
+<li><p><a href="get_parameters.htest.html">Hypothesis tests</a> (<code>htest</code>)
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+get_parameters(x, ...)
+
+## Default S3 method:
+get_parameters(x, verbose = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle messages and warnings.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>In most cases when models either return different &quot;effects&quot; (fixed,
+random) or &quot;components&quot; (conditional, zero-inflated, ...), the arguments
+<code>effects</code> and <code>component</code> can be used.
+<br /> <br />
+<code>get_parameters()</code> is comparable to <code>coef()</code>, however, the coefficients
+are returned as data frame (with columns for names and point estimates of
+coefficients). For Bayesian models, the posterior samples of parameters are
+returned.
+</p>
+
+
+<h3>Value</h3>
+
+
+<ul>
+<li><p> for non-Bayesian models, a data frame with two columns: the parameter names and the related point estimates.
+</p>
+</li>
+<li><p> for Anova (<code>aov()</code>) with error term, a list of parameters for the conditional and the random effects parameters
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+m &lt;- lm(mpg ~ wt + cyl + vs, data = mtcars)
+get_parameters(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

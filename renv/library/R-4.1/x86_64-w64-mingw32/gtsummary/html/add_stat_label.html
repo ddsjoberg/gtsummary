@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add statistic labels</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add_stat_label {gtsummary}"><tr><td>add_stat_label {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add statistic labels</h2>
+
+<h3>Description</h3>
+
+<p>Adds labels describing the summary statistics presented for
+each variable in the <a href="../../gtsummary/help/tbl_summary.html">tbl_summary</a> / <a href="../../gtsummary/help/tbl_svysummary.html">tbl_svysummary</a> table.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+add_stat_label(x, location = NULL, label = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object with class <code>tbl_summary</code> from the <a href="../../gtsummary/help/tbl_summary.html">tbl_summary</a> function
+or with class <code>tbl_svysummary</code> from the <a href="../../gtsummary/help/tbl_svysummary.html">tbl_svysummary</a> function</p>
+</td></tr>
+<tr valign="top"><td><code>location</code></td>
+<td>
+<p>location where statistic label will be included.
+<code>"row"</code> (the default) to add the statistic label to the variable label row,
+and <code>"column"</code> adds a column with the statistic label.</p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>a list of formulas or a single formula updating the statistic
+label, e.g. <code>label = all_categorical() ~ "No. (%)"</code></p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A <code>tbl_summary</code> or <code>tbl_svysummary</code> object
+</p>
+
+
+<h3>Tips</h3>
+
+<p>When using <code>add_stat_label(location='row')</code> with subsequent <code>tbl_merge()</code>,
+it's important to have somewhat of an understanding of the underlying
+structure of the gtsummary table.
+<code>add_stat_label(location='row')</code> works by adding a new column called
+<code>"stat_label"</code> to <code>x$table_body</code>. The <code>"label"</code> and <code>"stat_label"</code>
+columns are merged when the gtsummary table is printed.
+The <code>tbl_merge()</code> function merges on the <code>"label"</code> column (among others),
+which is typically the first column you see in a gtsummary table.
+Therefore, when you want to merge a table that has run <code>add_stat_label(location='row')</code>
+you need to match the <code>"label"</code> column values before the <code>"stat_column"</code>
+is merged with it.
+</p>
+<p>For example, the following two tables merge properly<div class="sourceCode r"></p>
+<pre>tbl1 &lt;- trial %&gt;% select(age, grade) %&gt;% tbl_summary() %&gt;% add_stat_label()
+tbl2 &lt;- lm(marker ~ age + grade, trial) %&gt;% tbl_regression()
+
+tbl_merge(list(tbl1, tbl2))
+</pre></div>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/add_stat_label_ex1.png" width=60% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/add_stat_label_ex2.png" width=60% />
+</p>
+<p>Example 3
+</p>
+<p><img src="../help/figures/add_stat_label_ex3.png" width=45% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tbl_summary tools: 
+<code><a href="../../gtsummary/help/add_ci.html">add_ci</a>()</code>,
+<code><a href="../../gtsummary/help/add_n.tbl_summary.html">add_n.tbl_summary</a>()</code>,
+<code><a href="../../gtsummary/help/add_overall.html">add_overall</a>()</code>,
+<code><a href="../../gtsummary/help/add_p.tbl_summary.html">add_p.tbl_summary</a>()</code>,
+<code><a href="../../gtsummary/help/add_q.html">add_q</a>()</code>,
+<code><a href="../../gtsummary/help/bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="../../gtsummary/help/inline_text.tbl_summary.html">inline_text.tbl_summary</a>()</code>,
+<code><a href="../../gtsummary/help/inline_text.tbl_survfit.html">inline_text.tbl_survfit</a>()</code>,
+<code><a href="../../gtsummary/help/modify.html">modify</a></code>,
+<code><a href="../../gtsummary/help/tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="../../gtsummary/help/tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="../../gtsummary/help/tbl_summary.html">tbl_summary</a>()</code>
+</p>
+<p>Other tbl_svysummary tools: 
+<code><a href="../../gtsummary/help/add_n.tbl_summary.html">add_n.tbl_summary</a>()</code>,
+<code><a href="../../gtsummary/help/add_overall.html">add_overall</a>()</code>,
+<code><a href="../../gtsummary/help/add_p.tbl_svysummary.html">add_p.tbl_svysummary</a>()</code>,
+<code><a href="../../gtsummary/help/add_q.html">add_q</a>()</code>,
+<code><a href="../../gtsummary/help/modify.html">modify</a></code>,
+<code><a href="../../gtsummary/help/tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="../../gtsummary/help/tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="../../gtsummary/help/tbl_svysummary.html">tbl_svysummary</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+tbl &lt;- trial %&gt;%
+  dplyr::select(trt, age, grade, response) %&gt;%
+  tbl_summary(by = trt)
+
+# Example 1 ----------------------------------
+# Add statistic presented to the variable label row
+add_stat_label_ex1 &lt;-
+  tbl %&gt;%
+  add_stat_label(
+    # update default statistic label for continuous variables
+    label = all_continuous() ~ "med. (iqr)"
+  )
+
+# Example 2 ----------------------------------
+add_stat_label_ex2 &lt;-
+  tbl %&gt;%
+  add_stat_label(
+    # add a new column with statistic labels
+    location = "column"
+  )
+
+# Example 3 ----------------------------------
+add_stat_label_ex3 &lt;-
+  trial %&gt;%
+  select(age, grade, trt) %&gt;%
+  tbl_summary(
+    by = trt,
+    type = all_continuous() ~ "continuous2",
+    statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
+  ) %&gt;%
+  add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.2.9012 <a href="00Index.html">Index</a>]</div>
+</body></html>

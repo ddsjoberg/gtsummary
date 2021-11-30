@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Jim Hester" />
+
+<meta name="date" content="2020-09-16" />
+
+<title>How does covr work anyway?</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">How does covr work anyway?</h1>
+<h4 class="author">Jim Hester</h4>
+<h4 class="date">2020-09-16</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The <strong>covr</strong> package provides a framework for measuring unit test coverage. Unit testing is one of the cornerstones of software development. Any piece of R code can be thought of as a software application with a certain set of behaviors. Unit testing means creating examples of how the code should behave <em>with a definition of the expected output</em>. This could include normal use, edge cases, and expected error cases. Unit testing is commonly facilitated by frameworks such as <strong>testthat</strong> and <strong>RUnit</strong>. Test <em>coverage</em> is the <em>proportion</em> of the source code that is executed when running these tests. Code coverage consists of:</p>
+<ul>
+<li>instrumenting the source code so that it reports when it is run,</li>
+<li>executing the unit test code to exercise the source code.</li>
+</ul>
+<p>Measuring code coverage allows developers to asses their progress in quality checking their own (or their collaborators) code. Measuring code coverage allows code consumers to have confidence in the measures taken by the package authors to verify high code quality. <strong>covr</strong> provides three functions to calculate test coverage.</p>
+<ul>
+<li><code>package_coverage()</code> performs coverage calculation on an R package. (Unit tests must be contained in the <code>&quot;tests&quot;</code> directory.)</li>
+<li><code>file_coverage()</code> performs coverage calculation on one or more R scripts by executing one or more R scripts.</li>
+<li><code>function_coverage()</code> performs coverage calculation on a single named function, using an expression provided.</li>
+</ul>
+<p>In addition to providing an objective metric of test suite extensiveness, it is often advantageous for developers to have a code level view of their unit tests. An interface for visually marking code with test coverage results allows a clear box view of the unit test suite. The clear box view can be accessed using online tools or a local report can be generated using <code>report()</code>.</p>
+</div>
+<div id="instrumenting-r-source-code" class="section level1">
+<h1>Instrumenting R Source Code</h1>
+<div id="modifying-the-call-tree" class="section level2">
+<h2>Modifying the call tree</h2>
+<p>The core function in <strong>covr</strong> is <code>trace_calls()</code>. This function was adapted from ideas in <a href="http://adv-r.had.co.nz/Expressions.html#ast-funs"><em>Advanced R - Walking the Abstract Syntax Tree with recursive functions</em></a>. This recursive function modifies each of the leaves (atomic or name objects) of an R expression by applying a given function to them. If the expression is not a leaf the walker function calls itself recursively on elements of the expression instead.</p>
+<p>We can use this same framework to instead insert a trace statement before each call by replacing each call with a call to a counting function followed by the previous call. Braces (<code>{</code>) in R may seem like language syntax, but they are actually a Primitive function and you can call them like any other function.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">identical</span>(<span class="dt">x =</span> { <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>; <span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">4</span> },</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="dt">y =</span> <span class="st">`</span><span class="dt">{</span><span class="st">`</span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span>, <span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">4</span>))</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>Remembering that braces always return the value of the last evaluated expression, we can call a counting function followed by the previous function substituting <code>as.call(recurse(x))</code> in our function above with.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="st">`</span><span class="dt">{</span><span class="st">`</span>(<span class="kw">count</span>(), <span class="kw">as.call</span>(<span class="kw">recurse</span>(x)))</span></code></pre></div>
+</div>
+<div id="source-references" class="section level2">
+<h2>Source References</h2>
+<p>Now that we have a way to add a counting function to any call in the Abstract Syntax Tree without changing the output we need a way to determine where in the code source that function came from. Luckily R has a built-in method to provide this information in the form of source references. When <code>option(keep.source = TRUE)</code> (the default for interactive sessions), a reference to the source code for functions is stored along with the function definition. This reference is used to provide the original formatting and comments for the given function source. In particular each call in a function contains a <code>srcref</code> attribute, which can then be used as a key to count just that call.</p>
+<p>The actual source for <code>trace_calls</code> is slightly more complicated because we want to initialize the counter for each call while we are walking the Abstract Syntax Tree and there are a few non-calls we also want to count.</p>
+</div>
+<div id="refining-source-references" class="section level2">
+<h2>Refining Source References</h2>
+<p>Each statement comes with a source reference. Unfortunately, the following is counted as one statement:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="cf">if</span> (x)</span>
+<span id="cb4-2"><a href="#cb4-2"></a> <span class="kw">y</span>()</span></code></pre></div>
+<p>To work around this, detailed parse data (obtained from a refined version of <code>getParseData</code>) is analyzed to impute source references at sub-statement level for <code>if</code>, <code>for</code>, <code>while</code> and <code>switch</code> constructs.</p>
+</div>
+<div id="replacing-source-in-place" class="section level2">
+<h2>Replacing Source In Place</h2>
+<p>After we have our modified function definition, how do we re-define the function to use the updated definition, and ensure that all other functions which call the old function also use the new definition? You might try redefining the function directly.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>f1 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="dv">1</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>f1 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="dv">2</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">f1</span>() <span class="op">==</span><span class="st"> </span><span class="dv">2</span></span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>While this does work for the simple case of calling the new function in the same environment, it fails if another function calls a function in a different environment.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>env &lt;-<span class="st"> </span><span class="kw">new.env</span>()</span>
+<span id="cb7-2"><a href="#cb7-2"></a>f1 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="dv">1</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>env<span class="op">$</span>f2 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">f1</span>() <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a>env<span class="op">$</span>f1 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="dv">2</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a>env<span class="op">$</span><span class="kw">f2</span>() <span class="op">==</span><span class="st"> </span><span class="dv">3</span></span></code></pre></div>
+<pre><code>## [1] FALSE</code></pre>
+<p>As modifying external environments and correctly restoring them can be tricky to get correct, we use the C function <a href="https://github.com/r-lib/covr/blob/9753e0e257b053059b85be90ef6eb614a5af9bba/src/reassign.c#L7-L20"><code>reassign_function</code></a>, which is also used in <code>testthat::with_mock</code>. This function takes a function name, environment, old definition, new definition and copies the formals, body, attributes and environment from the old function to the new function. This allows you to do an in-place replacement of a given function with a new function and ensure that all references to the old function will use the new definition.</p>
+</div>
+</div>
+<div id="object-orientation" class="section level1">
+<h1>Object Orientation</h1>
+<div id="s3-classes" class="section level2">
+<h2>S3 Classes</h2>
+<p>R’s S3 object oriented classes simply define functions directly in the packages namespace, so they can be treated the same as any other function.</p>
+</div>
+<div id="s4-classes" class="section level2">
+<h2>S4 Classes</h2>
+<p>S4 methods have a more complicated implementation than S3 classes. The function definitions are placed in an enclosing environment based on the generic method they implement. This makes getting the function definition more complicated.</p>
+<p><code>replacements_S4</code> first gets all the generic functions for the package environment. Then for each generic function if finds the mangled meta package name and gets the corresponding environment from the base environment. All of the functions within this environment are then traced.</p>
+</div>
+<div id="reference-classes" class="section level2">
+<h2>Reference Classes</h2>
+<p>Similarly to S4 classes reference classes (RC) define their methods in a special environment. A similar method is used to add the tracing calls to the class definition. These calls are then copied to the object methods when the generator function is run.</p>
+</div>
+</div>
+<div id="compiled-code" class="section level1">
+<h1>Compiled code</h1>
+<div id="gcov" class="section level2">
+<h2>Gcov</h2>
+<p>Test coverage of compiled code uses a completely different mechanism than that of R code. Fortunately we can take advantage of <a href="https://gcc.gnu.org/onlinedocs/gcc-4.1.2/gcc/Gcov.html#Gcov">Gcov</a>, the built-in coverage tool for <a href="https://gcc.gnu.org/">gcc</a> and compatible reports from <a href="http://clang.llvm.org/">clang</a> versions 3.5 and greater.</p>
+<p>Both of these compilers track execution coverage when given the <code>--coverage</code> flag. In addition it is necessary to turn off compiler optimization <code>-O0</code>, otherwise the coverage output is difficult or impossible to interpret as multiple lines can be optimized into one, functions can be inlined, etc.</p>
+</div>
+<div id="makevars" class="section level2">
+<h2>Makevars</h2>
+<p>R passes flags defined in <code>PKG_CFLAGS</code> to the compiler, however it also has default flags including <code>-02</code> (defined in <code>$R_HOME/etc/Makeconf</code>), which need to be overridden. Unfortunately it is not possible to override the default flags with environment variables (as the new flags are added to the left of the defaults rather than the right). However if Make variables are defined in <code>~/.R/Makevars</code> they <em>are</em> used in place of the defaults.</p>
+<p>Therefore, we need to temporarily add <code>-O0 --coverage</code> to the Makevars file, then restore the previous state after the coverage is run.</p>
+</div>
+<div id="subprocess" class="section level2">
+<h2>Subprocess</h2>
+<p>The last hurdle to getting compiled code coverage working properly is that the coverage output is only produced when the running process ends. Therefore you cannot run the tests and get the results in the same R process. <strong>covr</strong> runs a separate R process when running tests. However we need to modify the package code first before running the tests.</p>
+<p><strong>covr</strong> installs the package to be tested in a temporary directory. Next, calls are made to the lazy loading code which installs a user hook to modify the code when it is loaded. We also register a finalizer which prints the coverage counts when the namespace is unloaded or the R process exits. These output files are then aggregated together to determine the coverage.</p>
+<p>This procedure works regardless of the number of child R processes used, so therefore also works with parallel code.</p>
+</div>
+</div>
+<div id="output-formats" class="section level1">
+<h1>Output Formats</h1>
+<p>The output format returned by <strong>covr</strong> is an R object of class “coverage” containing the information gathered when executing the test suite. It consists of a named list, where the names are colon-delimited information from the source references (the file, line and columns the traced call is from). The value is the number of times that given expression was called and the source ref of the original call.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># an object to analyze</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>f1 &lt;-<span class="st"> </span><span class="cf">function</span>(x) { x <span class="op">+</span><span class="st"> </span><span class="dv">1</span> }</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co"># get results with no unit tests</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>c1 &lt;-<span class="st"> </span><span class="kw">function_coverage</span>(<span class="dt">fun =</span> f1, <span class="dt">code =</span> <span class="ot">NULL</span>)</span>
+<span id="cb9-5"><a href="#cb9-5"></a>c1</span></code></pre></div>
+<pre><code>## Coverage: 0.00%</code></pre>
+<pre><code>## &lt;text&gt;: 0.00%</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># get results with unit tests</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>c2 &lt;-<span class="st"> </span><span class="kw">function_coverage</span>(<span class="dt">fun =</span> f1, <span class="dt">code =</span> <span class="kw">f1</span>(<span class="dt">x =</span> <span class="dv">1</span>) <span class="op">==</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a>c2</span></code></pre></div>
+<pre><code>## Coverage: 100.00%</code></pre>
+<pre><code>## &lt;text&gt;: 100.00%</code></pre>
+<p>An <code>as.data.frame</code> method is available to make subsetting by various features easy to do.</p>
+<p>While <strong>covr</strong> tracks coverage by expression, typically users expect coverage to be reported by line, so there are functions to convert to line oriented coverage.</p>
+</div>
+<div id="codecov.io-and-coveralls.io" class="section level1">
+<h1>Codecov.io and Coveralls.io</h1>
+<p><a href="https://codecov.io/">Codecov</a> and <a href="https://coveralls.io/">Coveralls</a> are a web services to help you track your code coverage over time, and ensure that all new code is appropriately covered.</p>
+<p>They both have JSON-based APIs to submit and report on coverage. The functions <code>codecov</code> and <code>coveralls</code> create outputs that can be consumed by these services.</p>
+</div>
+<div id="prior-art" class="section level1">
+<h1>Prior Art</h1>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>Prior to writing <strong>covr</strong>, there were a handful of coverage tools for R code. <a href="https://web.archive.org/web/20160611114452/http://r2d2.quartzbio.com/posts/r-coverage-docker.html"><strong>R-coverage</strong></a> by Karl Forner and <a href="https://github.com/MangoTheCat/testCoverage"><strong>testCoverage</strong></a> by Tom Taverner, Chris Campbell &amp; Suchen Jin.</p>
+</div>
+<div id="r-coverage" class="section level2">
+<h2>R-coverage</h2>
+<p><strong>R-coverage</strong> provides a very robust solution by modifying the R source code to instrument the code for each call. Unfortunately this requires you to patch the source of the R application itself. Getting the changes incorporated into the core R distribution would likely be challenging.</p>
+</div>
+<div id="test-coverage" class="section level2">
+<h2>Test Coverage</h2>
+<p><strong>testCoverage</strong> uses <code>getParseData</code>, R’s alternate parser (from 3.0) to analyse the R source code. The package replaces symbols in the code to be tested with a unique identifier. This is then injected into a tracing function that will report each time the symbol is called. The first symbol at each level of the expression tree is traced, allowing the coverage of code branches to be checked. This is a complicated implementation I do not fully understand, which is one of the reasons I decided to write <strong>covr</strong>.</p>
+</div>
+<div id="covr" class="section level2">
+<h2>Covr</h2>
+<p><strong>covr</strong> takes an approach in-between the two previous tools. Function definitions are modified by parsing the abstract syntax tree and inserting trace statements. These modified definitions are then transparently replaced in-place using C. This allows us to correctly instrument every call and function in a package without having to resort to alternate parsing or changes to the R source.</p>
+</div>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p><strong>covr</strong> provides an accessible framework which will ease the communication of R unit test suites. <strong>covr</strong> can be integrated with continuous integration services where R developers are working on larger projects, or as part of multi-disciplinary teams. <strong>covr</strong> aims to be simple to use to make writing high quality code part of every R user’s routine.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

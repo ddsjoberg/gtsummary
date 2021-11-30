@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Knit package documentation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for knit_rd {knitr}"><tr><td>knit_rd {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Knit package documentation</h2>
+
+<h3>Description</h3>
+
+<p>Run examples in a package and insert output into the examples code;
+<code>knit_rd_all()</code> is a wrapper around <code>knit_rd()</code> to build static
+HTML help pages for all packages under the &lsquo;<span class="file">html</span>&rsquo; directory of them.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+knit_rd(pkg, links = tools::findHTMLlinks(), frame = TRUE)
+
+knit_rd_all()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>pkg</code></td>
+<td>
+<p>Package name.</p>
+</td></tr>
+<tr valign="top"><td><code>links</code></td>
+<td>
+<p>A character vector of links to be passed to
+<code>tools::<a href="../../tools/html/Rd2HTML.html">Rd2HTML</a>()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>frame</code></td>
+<td>
+<p>Boolean: whether to put a navigation frame on the left of the
+index page.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>All HTML pages corresponding to topics in the package are written
+under the current working directory. An &lsquo;<span class="file">index.html</span>&rsquo; is also written
+as a table of content.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Ideally the html pages should be put under the &lsquo;<span class="file">html</span>&rsquo; directory of
+an installed package which can be found via <code>system.file('html',
+  package = 'your_package_name')</code>, otherwise some links may not work (e.g.
+the link to the DESCRITION file).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(knitr)
+## Not run: 
+
+knit_rd("maps")
+knit_rd("rpart")
+setwd(system.file("html", package = "ggplot2"))
+knit_rd("ggplot2")  # time-consuming!
+
+knit_rd_all()  # this may take really long time if you have many packages installed
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: 'ggmatrix' default progress bar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggmatrix_progress {GGally}"><tr><td>ggmatrix_progress {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2><code><a href="../../GGally/help/ggmatrix.html">ggmatrix</a></code> default progress bar</h2>
+
+<h3>Description</h3>
+
+<p><code><a href="../../GGally/help/ggmatrix.html">ggmatrix</a></code> default progress bar
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggmatrix_progress(
+  format = " plot: [:plot_i,:plot_j] [:bar]:percent est::eta ",
+  clear = TRUE,
+  show_after = 0,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>format, clear, show_after, ...</code></td>
+<td>
+<p>parameters supplied directly to <code>progress::<a href="../../progress/help/progress_bar.html">progress_bar</a>$new()</code></p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>function that accepts a plot matrix as the first argument and <code>...</code> for future expansion. Internally, the plot matrix is used to determine the total number of plots for the progress bar.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+p_ &lt;- GGally::print_if_interactive
+
+pm &lt;- ggpairs(iris, 1:2, progress = ggmatrix_progress())
+p_(pm)
+
+# does not clear after finishing
+pm &lt;- ggpairs(iris, 1:2, progress = ggmatrix_progress(clear = FALSE))
+p_(pm)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

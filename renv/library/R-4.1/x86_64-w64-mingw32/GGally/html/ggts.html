@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Multiple time series</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggts {GGally}"><tr><td>ggts {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Multiple time series</h2>
+
+<h3>Description</h3>
+
+<p>GGally implementation of ts.plot. Wraps around the ggduo function and removes the column strips
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggts(..., columnLabelsX = NULL, xlab = "time")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>supplied directly to <code><a href="../../GGally/help/ggduo.html">ggduo</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>columnLabelsX</code></td>
+<td>
+<p>remove top strips for the X axis by default</p>
+</td></tr>
+<tr valign="top"><td><code>xlab</code></td>
+<td>
+<p>defaults to &quot;time&quot;</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code><a href="../../GGally/help/ggmatrix.html">ggmatrix</a></code> object
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+p_(ggts(pigs, "time", c("gilts", "profit", "s_per_herdsz", "production", "herdsz")))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

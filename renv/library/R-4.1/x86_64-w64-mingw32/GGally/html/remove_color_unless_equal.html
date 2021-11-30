@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Remove colour mapping unless found in select mapping keys</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for remove_color_unless_equal {GGally}"><tr><td>remove_color_unless_equal {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Remove colour mapping unless found in select mapping keys</h2>
+
+<h3>Description</h3>
+
+<p>Remove colour mapping unless found in select mapping keys
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+remove_color_unless_equal(mapping, to = c("x", "y"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>output of <code>ggplot2::<a href="../../ggplot2/help/aes.html">aes</a>(...)</code></p>
+</td></tr>
+<tr valign="top"><td><code>to</code></td>
+<td>
+<p>set of mapping keys to check</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Aes mapping with colour mapping kept only if found in selected mapping keys.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+mapping &lt;- aes(x = sex, y = age, colour = sex)
+
+mapping &lt;- aes(x = sex, y = age, colour = region)
+remove_color_unless_equal(mapping)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

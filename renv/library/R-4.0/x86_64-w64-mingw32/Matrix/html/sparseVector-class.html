@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Sparse Vector Classes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sparseVector-class {Matrix}"><tr><td>sparseVector-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Sparse Vector Classes</h2>
+
+<h3>Description</h3>
+
+<p>Sparse Vector Classes: The virtual mother class
+<code>"sparseVector"</code> has the five actual daughter classes
+<code>"dsparseVector"</code>, <code>"isparseVector"</code>,
+<code>"lsparseVector"</code>, <code>"nsparseVector"</code>, and
+<code>"zsparseVector"</code>, where we've mainly implemented methods for
+the <code>d*</code>, <code>l*</code> and <code>n*</code> ones.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>length</code>:</dt><dd><p>class <code>"numeric"</code> - the <code><a href="../../base/html/length.html">length</a></code>
+of the sparse vector.  Note that <code>"numeric"</code> can be
+considerably larger than the maximal <code>"integer"</code>,
+<code><a href="../../base/html/zMachine.html">.Machine</a>$integer.max</code>, on purpose.</p>
+</dd>
+<dt><code>i</code>:</dt><dd><p>class <code>"numeric"</code> - the (1-based) indices of
+the non-zero entries.  Must <em>not</em> be <code>NA</code> and strictly
+sorted increasingly.
+</p>
+<p>Note that <code>"integer"</code> is &ldquo;part of&rdquo; <code>"numeric"</code>,
+and can (and often will) be used for non-huge sparseVectors.</p>
+</dd>
+<dt><code>x</code>:</dt><dd><p>(for all but <code>"nsparseVector"</code>):
+the non-zero entries.  This is of class <code>"numeric"</code> for class
+<code>"dsparseVector"</code>,  <code>"logical"</code> for class
+<code>"lsparseVector"</code>, etc.
+</p>
+<p>Note that <code>"nsparseVector"</code>s have no <code>x</code> slot.
+Further, mainly for ease of method definitions, we've defined the
+class union (see <code><a href="../../methods/html/setClassUnion.html">setClassUnion</a></code>) of all sparse vector
+classes which <em>have</em> an <code>x</code> slot, as class <code>"xsparseVector"</code>.
+</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>length</dt><dd><p><code>signature(x = "sparseVector")</code>: simply extracts
+the <code>length</code> slot.</p>
+</dd>
+<dt>show</dt><dd><p><code>signature(object = "sparseVector")</code>: The
+<code><a href="../../methods/html/show.html">show</a></code> method for sparse vectors prints
+<em>&ldquo;structural&rdquo;</em> zeroes as <code>"."</code> using the
+non-exported <code>prSpVector</code> function which allows further
+customization such as replacing <code>"."</code> by <code>" "</code> (blank).
+</p>
+<p>Note that <code><a href="../../base/html/options.html">options</a>(max.print)</code> will influence how many
+entries of large sparse vectors are printed at all.</p>
+</dd>
+<dt>as.vector</dt><dd><p><code>signature(x = "sparseVector", mode = "character")</code>
+coerces sparse vectors to &ldquo;regular&rdquo;, i.e., atomic vectors.
+This is the same as <code>as(x, "vector")</code>.</p>
+</dd>
+<dt>as</dt><dd><p>..: see <code>coerce</code> below</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "sparseVector", to = "sparseMatrix")</code>, and</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "sparseMatrix", to = "sparseVector")</code>,
+etc: coercions to and from sparse matrices (<code><a href="sparseMatrix-class.html">sparseMatrix</a></code>) are
+provided and work analogously as in standard <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>, i.e., a vector is
+coerced to a 1-column matrix.</p>
+</dd>
+<dt>dim&lt;-</dt><dd><p><code>signature(x = "sparseVector", value = "integer")</code>
+coerces a sparse vector to a sparse Matrix, i.e., an object
+inheriting from <code><a href="sparseMatrix-class.html">sparseMatrix</a></code>, of the
+appropriate dimension.</p>
+</dd>
+<dt>head</dt><dd><p><code>signature(x = "sparseVector")</code>: as with <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>'s
+(package <span class="pkg">util</span>) <code><a href="../../utils/html/head.html">head</a></code>, <code>head(x,n)</code> (for
+<i>n &gt;= 1</i>) is equivalent to <code>x[1:n]</code>, but here can be much
+more efficient, see the example.</p>
+</dd>
+<dt>tail</dt><dd><p><code>signature(x = "sparseVector")</code>: analogous to
+<code><a href="../../utils/html/head.html">head</a></code>, see above.</p>
+</dd>
+<dt>toeplitz</dt><dd><p><code>signature(x = "sparseVector")</code>: as
+<code><a href="../../stats/html/toeplitz.html">toeplitz</a>(x)</code>, produce the <i>n \times n</i>
+Toeplitz matrix from <code>x</code>, where <code>n = length(x)</code>.</p>
+</dd>
+<dt>rep</dt><dd><p><code>signature(x = "sparseVector")</code> repeat <code>x</code>,
+with the same argument list <code>(x, times, length.out, each,
+	...)</code> as the default method for rep().</p>
+</dd>
+<dt>which</dt><dd><p><code>signature(x = "nsparseVector")</code> and</p>
+</dd>
+<dt>which</dt><dd><p><code>signature(x = "lsparseVector")</code> return the
+indices of the non-zero entries (which is trivial for sparse vectors).</p>
+</dd>
+<dt>Ops</dt><dd><p><code>signature(e1 = "sparseVector", e2 = "*")</code>: define
+arithmetic, compare and logic operations, (see
+<code><a href="../../methods/html/S4groupGeneric.html">Ops</a></code>).</p>
+</dd>
+<dt>Summary</dt><dd><p><code>signature(x = "sparseVector")</code>: define
+all the <code><a href="../../methods/html/S4groupGeneric.html">Summary</a></code> methods.</p>
+</dd>
+<dt>[</dt><dd><p><code>signature(x = "atomicVector", i = ...)</code>: not only can you
+subset (aka <em>&ldquo;index into&rdquo;</em>) sparseVectors <code>x[i]</code>
+using sparseVectors <code>i</code>, but we also support efficient
+subsetting of traditional vectors <code>x</code> by logical sparse
+vectors (i.e., <code>i</code> of class <code>"nsparseVector"</code> or
+<code>"lsparseVector"</code>).</p>
+</dd>
+<dt>is.na, is.finite, is.infinite</dt><dd><p><code>(x = "sparseVector")</code>, and</p>
+</dd>
+<dt>is.na, is.finite, is.infinite</dt><dd><p><code>(x = "nsparseVector")</code>:
+return <code><a href="../../base/html/logical.html">logical</a></code> or <code>"nsparseVector"</code> of the same
+length as <code>x</code>, indicating if/where <code>x</code> is
+<code><a href="../../base/html/NA.html">NA</a></code> (or <code>NaN</code>), finite or infinite, entirely
+analogously to the corresponding base <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> functions.</p>
+</dd>
+</dl>
+
+<p><code>c.sparseVector()</code> is an S3 method for all
+<code>"sparseVector"</code>s, but automatic dispatch only happens for the
+first argument, so it is useful also as regular <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> function, see the
+examples.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="sparseVector.html">sparseVector</a>()</code> for friendly construction of sparse
+vectors (apart from <code>as(*, "sparseVector")</code>).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+getClass("sparseVector")
+getClass("dsparseVector")
+getClass("xsparseVector")# those with an 'x' slot
+
+sx &lt;- c(0,0,3, 3.2, 0,0,0,-3:1,0,0,2,0,0,5,0,0)
+(ss &lt;- as(sx, "sparseVector"))
+
+ix &lt;- as.integer(round(sx))
+(is &lt;- as(ix, "sparseVector")) ## an "isparseVector" (!)
+(ns &lt;- sparseVector(i= c(7, 3, 2), length = 10)) # "nsparseVector"
+## rep() works too:
+(ri &lt;- rep(is, length.out= 25))
+
+## Using `dim&lt;-`  as in base R :
+r &lt;- ss
+dim(r) &lt;- c(4,5) # becomes a sparse Matrix:
+r
+## or coercion (as as.matrix() in base R):
+as(ss, "Matrix")
+stopifnot(all(ss == print(as(ss, "CsparseMatrix"))))
+
+## currently has "non-structural" FALSE -- printing as ":"
+(lis &lt;- is &amp; FALSE)
+(nn &lt;- is[is == 0]) # all "structural" FALSE
+
+## NA-case
+sN &lt;- sx; sN[4] &lt;- NA
+(svN &lt;- as(sN, "sparseVector"))
+
+v &lt;- as(c(0,0,3, 3.2, rep(0,9),-3,0,-1, rep(0,20),5,0),
+         "sparseVector")
+v &lt;- rep(rep(v, 50), 5000)
+set.seed(1); v[sample(v@i, 1e6)] &lt;- 0
+str(v)
+
+
+
+
+system.time(for(i in 1:4) hv &lt;- head(v, 1e6))
+##   user  system elapsed
+##  0.033   0.000   0.032
+system.time(for(i in 1:4) h2 &lt;- v[1:1e6])
+##   user  system elapsed
+##  1.317   0.000   1.319
+
+stopifnot(identical(hv, h2),
+          identical(is | FALSE, is != 0),
+	  validObject(svN), validObject(lis), as.logical(is.na(svN[4])),
+	  identical(is^2 &gt; 0,	is &amp; TRUE),
+	  all(!lis), !any(lis), length(nn@i) == 0, !any(nn), all(!nn),
+	  sum(lis) == 0, !prod(lis), range(lis) == c(0,0))
+
+## create and use the t(.) method:
+t(x20 &lt;- sparseVector(c(9,3:1), i=c(1:2,4,7), length=20))
+(T20 &lt;- toeplitz(x20))
+stopifnot(is(T20, "symmetricMatrix"), is(T20, "sparseMatrix"),
+	  identical(unname(as.matrix(T20)),
+                    toeplitz(as.vector(x20))))
+
+## c() method for "sparseVector" - also available as regular function
+(c1 &lt;- c(x20, 0,0,0, -10*x20))
+(c2 &lt;- c(ns, is, FALSE))
+(c3 &lt;- c(ns, !ns, TRUE, NA, FALSE))
+(c4 &lt;- c(ns, rev(ns)))
+## here, c() would produce a list {not dispatching to c.sparseVector()}
+(c5 &lt;- c.sparseVector(0,0, x20))
+
+## checking (consistency)
+.v &lt;- as.vector
+.s &lt;- function(v) as(v, "sparseVector")
+stopifnot(
+  all.equal(c1, .s(c(.v(x20), 0,0,0, -10*.v(x20))),      tol=0),
+  all.equal(c2, .s(c(.v(ns), .v(is), FALSE)),            tol=0),
+  all.equal(c3, .s(c(.v(ns), !.v(ns), TRUE, NA, FALSE)), tol=0),
+  all.equal(c4, .s(c(.v(ns), rev(.v(ns)))),              tol=0),
+  all.equal(c5, .s(c(0,0, .v(x20))),                     tol=0)
+)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

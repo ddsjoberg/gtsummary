@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Theming with bslib and thematic</title>
+
+<script src="skeleton_files/header-attrs-2.7.10/header-attrs.js"></script>
+<script src="skeleton_files/jquery-3.5.1/jquery-3.5.1.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<link href="skeleton_files/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
+<script src="skeleton_files/bootstrap-4.6.0/bootstrap.bundle.min.js"></script>
+<link href="skeleton_files/_Prompt-0.3.1.9001/font.css" rel="stylesheet" />
+<link href="skeleton_files/_Proza Libre-0.3.1.9001/font.css" rel="stylesheet" />
+<script src="skeleton_files/bs3compat-0.2.4.9003/tabs.js"></script>
+<script src="skeleton_files/bs3compat-0.2.4.9003/bs3compat.js"></script>
+<script src="skeleton_files/navigation-1.1/tabsets.js"></script>
+<script src="skeleton_files/navigation-1.1/codefolding.js"></script>
+<link href="skeleton_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="skeleton_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Theming with bslib and thematic</h1>
+
+</div>
+
+
+<div id="r-markdown" class="section level2">
+<h2>R Markdown</h2>
+<p>This is an R Markdown document themed with <a href="https://rstudio.github.io/bslib/"><code>{bslib}</code> package</a>. <code>{bslib}</code> makes it easy to customize the main colors and fonts of a <code>html_document</code>, <a href="https://flexdashboard-pkg.netlify.app/articles/articles/theme.html"><code>flexdashboard::flex_dashboard</code></a>, <a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html">shiny::fluidPage()</a>, or more generally any website that uses <a href="https://getbootstrap.com/">Bootstrap</a> for styling. The <code>theme</code> parameter in the yaml front-matter of this Rmd document describes a <a href="https://rstudio.github.io/bslib/reference/bs_theme.html"><code>bslib::bs_theme()</code></a> object, which provides access to 100s of <a href="https://rstudio.github.io/bslib/articles/bs4-variables.html">theming options</a> (via its <code>...</code> argument) in addition to the main options demonstrated here (e.g., <code>bg</code>, <code>fg</code>, <code>primary</code>, etc).</p>
+<p>This particular example uses <code>{bslib}</code>’s default Bootstrap version (which is Bootstrap 4 at the time of writing). If your document has any of the following, you should probably “pin” the Bootstrap version (e.g., add <code>version: 4</code> to the <code>theme</code> definition):</p>
+<ol style="list-style-type: decimal">
+<li>A <code>theme</code> which uses the <code>...</code> of <code>bs_theme()</code> (i.e., pretty much any of these <a href="https://rstudio.github.io/bslib/articles/bs4-variables.html">theming options</a> that aren’t a named <code>bs_theme()</code> argument).</li>
+<li>Custom HTML or CSS that uses Bootstrap-specific features (e.g., <a href="https://rstudio.github.io/bslib/articles/theming.html#utility-classes-1">utility classes</a>)</li>
+</ol>
+</div>
+<div id="themed-plots" class="section level2 tabset tabset-pills">
+<h2 class="tabset tabset-pills">Themed Plots</h2>
+<p>When running this document with <a href="https://rstudio.github.io/thematic/"><code>{thematic}</code></a> installed, the <code>thematic::thematic_rmd(font = "auto")</code> effectively translates <code>theme</code> (CSS) settings to new global theming defaults for <code>{ggplot2}</code>, <code>{lattice}</code>, and <code>{base}</code> R graphics:</p>
+<div id="ggplot2" class="section level3">
+<h3>ggplot2</h3>
+<pre class="r"><code>library(ggplot2)
+
+ggplot(mpg, aes(displ, hwy)) +
+  geom_point() + geom_smooth()</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="skeleton_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+</div>
+<div id="lattice" class="section level3">
+<h3>lattice</h3>
+<pre class="r"><code>lattice::show.settings()</code></pre>
+<p><img src="skeleton_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="base" class="section level3">
+<h3>base</h3>
+<pre class="r"><code>plot(pressure, col = thematic::thematic_get_option(&quot;accent&quot;))</code></pre>
+<p><img src="skeleton_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

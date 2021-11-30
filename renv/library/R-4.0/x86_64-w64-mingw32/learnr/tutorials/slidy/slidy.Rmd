@@ -1,0 +1,22 @@
+---
+output: slidy_presentation
+runtime: shiny_prerendered
+title: "Slidly demo"
+description: >
+  This tutorial demonstrates how one can use dygraphs (with the dygraph package)
+  as part of a learnr tutorial.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(dygraphs)
+```
+
+## Time Series with dygraphs
+
+Modify the dyOptions to customize the graph's appearance:
+
+```{r dygraph-options, exercise=TRUE, exercise.eval=TRUE, fig.height=5.5}
+dygraph(ldeaths) %>%
+  dyOptions(fillGraph = TRUE, drawGrid = TRUE)
+```

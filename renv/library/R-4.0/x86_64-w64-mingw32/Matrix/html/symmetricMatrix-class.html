@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Virtual Class of Symmetric Matrices in Package Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for symmetricMatrix-class {Matrix}"><tr><td>symmetricMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Virtual Class of Symmetric Matrices in Package Matrix</h2>
+
+<h3>Description</h3>
+
+<p>The virtual class of symmetric matrices, <code>"symmetricMatrix"</code>,
+from the package <span class="pkg">Matrix</span> contains numeric and logical, dense and
+sparse matrices, e.g., see the examples with the &ldquo;actual&rdquo;
+subclasses.
+</p>
+<p>The main use is in methods (and C functions) that can deal with
+all symmetric matrices, and in <code>as(*, "symmetricMatrix")</code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>uplo</code>:</dt><dd><p>Object of class <code>"character"</code>.  Must be
+either &quot;U&quot;, for upper triangular, and &quot;L&quot;, for lower triangular.</p>
+</dd>
+</dl>
+
+
+<dl>
+<dt><code>Dim, Dimnames</code>:</dt><dd><p>The dimension (a length-2
+<code>"integer"</code>) and corresponding names (or <code>NULL</code>),
+inherited from the <code><a href="Matrix-class.html">Matrix</a></code>, see there.  See below,
+about storing only one of the two <code>Dimnames</code> components.</p>
+</dd>
+<dt><code>factors</code>:</dt><dd><p>a list of matrix factorizations, also from the
+<code>Matrix</code> class.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"Matrix"</code>, directly.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>coerce</dt><dd><p><code>signature(from = "ddiMatrix", to =
+	"symmetricMatrix")</code>: and many other coercion methods, some of
+which are particularly optimized.</p>
+</dd>
+<dt>dimnames</dt><dd><p><code>signature(object = "symmetricMatrix")</code>:
+returns <em>symmetric</em> <code><a href="../../base/html/dimnames.html">dimnames</a></code>, even when the
+<code>Dimnames</code> slot only has row or column names.  This allows to
+save storage for large (typically sparse) symmetric matrices.</p>
+</dd>
+<dt>isSymmetric</dt><dd><p><code>signature(object = "symmetricMatrix")</code>:
+returns <code>TRUE</code> trivially.</p>
+</dd>
+</dl>
+
+<p>There's a C function <code>symmetricMatrix_validate()</code>
+called by the internal validity checking functions, and also from
+<code><a href="../../methods/html/validObject.html">getValidity</a>(getClass("symmetricMatrix"))</code>.
+</p>
+
+
+<h3>Validity and <code><a href="../../base/html/dimnames.html">dimnames</a></code></h3>
+
+<p>The validity checks do not require a symmetric <code>Dimnames</code> slot,
+so it can be <code>list(NULL, &lt;character&gt;)</code>, e.g., for efficiency.
+However, <code><a href="../../base/html/dimnames.html">dimnames</a>()</code> and other functions and methods
+should behave as if the dimnames were symmetric, i.e., with both list
+components identical.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/isSymmetric.html">isSymmetric</a></code> which has efficient methods
+(<a href="isSymmetric-methods.html">isSymmetric-methods</a>) for the <span class="pkg">Matrix</span> classes.
+Classes <code><a href="triangularMatrix-class.html">triangularMatrix</a></code>, and, e.g.,
+<code><a href="dsyMatrix-class.html">dsyMatrix</a></code> for numeric <em>dense</em> matrices, or
+<code><a href="lsparseMatrix-classes.html">lsCMatrix</a></code> for a logical <em>sparse</em> matrix class.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## An example about the symmetric Dimnames:
+sy &lt;- sparseMatrix(i= c(2,4,3:5), j= c(4,7:5,5), x = 1:5, dims = c(7,7),
+                   symmetric=TRUE, dimnames = list(NULL, letters[1:7]))
+sy # shows symmetrical dimnames
+sy@Dimnames  # internally only one part is stored
+dimnames(sy) # both parts - as sy *is* symmetrical
+
+showClass("symmetricMatrix")
+
+## The names of direct subclasses:
+scl &lt;- getClass("symmetricMatrix")@subclasses
+directly &lt;- sapply(lapply(scl, slot, "by"), length) == 0
+names(scl)[directly]
+
+## Methods -- applicaple to all subclasses above:
+showMethods(classes = "symmetricMatrix")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

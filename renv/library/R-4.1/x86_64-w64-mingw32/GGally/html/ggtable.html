@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Cross-tabulated tables of discrete variables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggtable {GGally}"><tr><td>ggtable {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Cross-tabulated tables of discrete variables</h2>
+
+<h3>Description</h3>
+
+<p><code>ggtable</code> is a variant of <code><a href="../../GGally/help/ggduo.html">ggduo</a></code> for quick
+cross-tabulated tables of discrete variables.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggtable(
+  data,
+  columnsX = 1:ncol(data),
+  columnsY = 1:ncol(data),
+  cells = c("observed", "prop", "row.prop", "col.prop", "expected", "resid",
+    "std.resid"),
+  fill = c("none", "std.resid", "resid"),
+  mapping = NULL,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>dataset to be used, can have both categorical and
+numerical variables</p>
+</td></tr>
+<tr valign="top"><td><code>columnsX, columnsY</code></td>
+<td>
+<p>names or positions of which columns are used to make plots. Defaults to all columns.</p>
+</td></tr>
+<tr valign="top"><td><code>cells</code></td>
+<td>
+<p>Which statistic should be displayed in table cells?</p>
+</td></tr>
+<tr valign="top"><td><code>fill</code></td>
+<td>
+<p>Which statistic should be used for filling table cells?</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>additional aesthetic to be used, for example to indicate
+weights (see examples)</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional arguments passed to <code><a href="../../GGally/help/ggduo.html">ggduo</a></code> (see examples)</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Joseph Larmarange
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+if (require(reshape)) {
+  data(tips, package = "reshape")
+  p_(ggtable(tips, "smoker", c("day", "time", "sex")))
+
+  # displaying row proportions
+  p_(ggtable(tips, "smoker", c("day", "time", "sex"), cells = "row.prop"))
+
+  # filling cells with standardized residuals
+  p_(ggtable(tips, "smoker", c("day", "time", "sex"), fill = "std.resid", legend = 1))
+
+  # if continuous variables are provided, just displaying some summary statistics
+  p_(ggtable(tips, c("smoker", "total_bill"), c("day", "time", "sex", "tip")))
+}
+
+# specifying weights
+d &lt;- as.data.frame(Titanic)
+p_(ggtable(
+  d,
+  "Survived",
+  c("Class", "Sex", "Age"),
+  mapping = aes(weight = Freq),
+  cells = "row.prop",
+  fill = "std.resid"
+))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

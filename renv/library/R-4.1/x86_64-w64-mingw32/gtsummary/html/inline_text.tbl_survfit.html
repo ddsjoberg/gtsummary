@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Report statistics from survfit tables inline</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for inline_text.tbl_survfit {gtsummary}"><tr><td>inline_text.tbl_survfit {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Report statistics from survfit tables inline</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+Extracts and returns statistics from a <code>tbl_survfit</code> object for
+inline reporting in an R markdown document. Detailed examples in the
+<a href="http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html">inline_text vignette</a>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'tbl_survfit'
+inline_text(
+  x,
+  variable = NULL,
+  level = NULL,
+  pattern = NULL,
+  time = NULL,
+  prob = NULL,
+  column = NULL,
+  estimate_fun = x$inputs$estimate_fun,
+  pvalue_fun = NULL,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object created from  <a href="../../gtsummary/help/tbl_survfit.html">tbl_survfit</a></p>
+</td></tr>
+<tr valign="top"><td><code>variable</code></td>
+<td>
+<p>Variable name of statistic to present.</p>
+</td></tr>
+<tr valign="top"><td><code>level</code></td>
+<td>
+<p>Level of the variable to display for categorical variables.
+Can also specify the 'Unknown' row.  Default is <code>NULL</code></p>
+</td></tr>
+<tr valign="top"><td><code>pattern</code></td>
+<td>
+<p>String indicating the statistics to return.</p>
+</td></tr>
+<tr valign="top"><td><code>time</code></td>
+<td>
+<p>time for which to return survival probabilities.</p>
+</td></tr>
+<tr valign="top"><td><code>prob</code></td>
+<td>
+<p>probability with values in (0,1)</p>
+</td></tr>
+<tr valign="top"><td><code>column</code></td>
+<td>
+<p>column to print from <code>x$table_body</code>.
+Columns may be selected with <code style="white-space: pre;">time=</code> or <code style="white-space: pre;">prob=</code> as well.</p>
+</td></tr>
+<tr valign="top"><td><code>estimate_fun</code></td>
+<td>
+<p>Function to round and format estimate and confidence limits.
+Default is the same function used in <code>tbl_survfit()</code></p>
+</td></tr>
+<tr valign="top"><td><code>pvalue_fun</code></td>
+<td>
+<p>Function to round and format p-values.
+Default is <a href="../../gtsummary/help/style_pvalue.html">style_pvalue</a>.
+The function must have a numeric vector input (the numeric, exact p-value),
+and return a string that is the rounded/formatted p-value (e.g.
+<code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
+<code>purrr::partial(style_pvalue, digits = 2)</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Not used</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A string reporting results from a gtsummary table
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tbl_summary tools: 
+<code><a href="../../gtsummary/help/add_ci.html">add_ci</a>()</code>,
+<code><a href="../../gtsummary/help/add_n.tbl_summary.html">add_n.tbl_summary</a>()</code>,
+<code><a href="../../gtsummary/help/add_overall.html">add_overall</a>()</code>,
+<code><a href="../../gtsummary/help/add_p.tbl_summary.html">add_p.tbl_summary</a>()</code>,
+<code><a href="../../gtsummary/help/add_q.html">add_q</a>()</code>,
+<code><a href="../../gtsummary/help/add_stat_label.html">add_stat_label</a>()</code>,
+<code><a href="../../gtsummary/help/bold_italicize_labels_levels.html">bold_italicize_labels_levels</a></code>,
+<code><a href="../../gtsummary/help/inline_text.tbl_summary.html">inline_text.tbl_summary</a>()</code>,
+<code><a href="../../gtsummary/help/modify.html">modify</a></code>,
+<code><a href="../../gtsummary/help/tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="../../gtsummary/help/tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="../../gtsummary/help/tbl_summary.html">tbl_summary</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(survival)
+# fit survfit
+fit1 &lt;- survfit(Surv(ttdeath, death) ~ trt, trial)
+fit2 &lt;- survfit(Surv(ttdeath, death) ~ 1, trial)
+
+# sumarize survfit objects
+tbl1 &lt;-
+  tbl_survfit(
+    fit1,
+    times = c(12, 24),
+    label = "Treatment",
+    label_header = "**{time} Month**"
+  ) %&gt;%
+  add_p()
+
+tbl2 &lt;-
+  tbl_survfit(
+    fit2,
+    probs = 0.5,
+    label_header = "**Median Survival**"
+  )
+
+# report results inline
+inline_text(tbl1, time = 24, level = "Drug B")
+inline_text(tbl1, column = p.value)
+inline_text(tbl2, prob = 0.5)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.2.9012 <a href="00Index.html">Index</a>]</div>
+</body></html>

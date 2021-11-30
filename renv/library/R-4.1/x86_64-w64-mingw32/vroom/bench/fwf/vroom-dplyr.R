@@ -1,0 +1,8 @@
+({ library(vroom); library(dplyr) })
+x <- vroom_fwf(file, fields, col_types = types)
+print(x)
+a <- head(x)
+b <- tail(x)
+c <- sample_n(x, 100)
+d <- filter(x, PERSONS == "06")
+e <- group_by(x, STATE) %>% summarise(avg_TOTPUM5 = mean(TOTPUMA5))

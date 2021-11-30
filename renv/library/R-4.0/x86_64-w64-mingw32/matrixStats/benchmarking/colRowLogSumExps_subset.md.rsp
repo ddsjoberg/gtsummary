@@ -1,0 +1,73 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string colname="colLogSumExps"%>
+<%@string rowname="rowLogSumExps"%>
+<%@string fcnname="colRowLogSumExps_subset"%>
+<%@meta title="${colname}() and ${rowname}() benchmarks on subsetted computation"%>
+<%@meta author="Dongcan Jiang"%>
+<%@meta date="2015-06-06"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=colname%>() and <%=rowname%>() on subsetted computation.
+
+
+## Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = "double")
+})%>
+```
+
+## Results
+
+<% for (dataLabel in names(data)) { %>
+<% message(dataLabel) %>
+### <%=dataLabel%> matrix
+
+
+```r
+<%=withCapture({
+X <- data[[.dataLabel.]]
+rows <- sample.int(nrow(X), size = nrow(X)*0.7)
+cols <- sample.int(ncol(X), size = ncol(X)*0.7)
+X_S <- X[rows, cols]
+gc()
+
+colStats <- microbenchmark(
+ "colLogSumExps_X_S"           = colLogSumExps(X_S, na.rm = FALSE),
+ "colLogSumExps(X, rows, cols)"  = colLogSumExps(X, rows = rows, cols = cols, na.rm = FALSE),
+ "colLogSumExps(X[rows, cols])" = colLogSumExps(X[rows, cols], na.rm = FALSE),
+ unit = "ms"
+)
+
+X <- t(X)
+X_S <- t(X_S)
+gc()
+
+rowStats <- microbenchmark(
+ "rowLogSumExps_X_S"           = rowLogSumExps(X_S, na.rm = FALSE),
+ "rowLogSumExps(X, cols, rows)"  = rowLogSumExps(X, rows = cols, cols = rows, na.rm = FALSE),
+ "rowLogSumExps(X[cols, rows])" = rowLogSumExps(X[cols, rows], na.rm = FALSE),
+ unit = "ms"
+)
+})%>
+```
+
+<% crBenchmarkResults(colStats, rowStats, tags=dataLabel) %>
+
+<% } # for (dataLabel ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2015-06-06
+o Created.
+---------------------------------------------------------------------------%>

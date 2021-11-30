@@ -1,0 +1,118 @@
+---
+title: "Reprex do's and don'ts"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reprex do's and don'ts}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+If you're asking for R help, reporting a bug, or requesting a new feature, you're more likely to succeed if you include a good reprex.
+
+## Main requirements
+
+**Use the smallest, simplest, most [built-in data](https://stat.ethz.ch/R-manual/R-patched/library/datasets/html/00Index.html) possible.**
+
+  - Think: `iris` or `mtcars`. Bore me.
+  - If you must make some objects, minimize their size and complexity.
+  - Many of the functions and packages you already use offer a way to create a small data frame "inline":
+    - `read.table()` and friends have a `text` argument. Example:
+
+        ``` r
+        read.csv(text = "a,b\n1,2\n3,4")
+        #>   a b
+        #> 1 1 2
+        #> 2 3 4
+        ```
+    
+    - `tibble::tribble()` lets you use a natural and readable layout. Example:
+    
+        ``` r
+        tibble::tribble(
+          ~ a, ~ b,
+            1,   2,
+            3,   4
+        )
+        #> # A tibble: 2 x 2
+        #>       a     b
+        #>   <dbl> <dbl>
+        #> 1     1     2
+        #> 2     3     4
+        ```
+            
+  - Get just a bit of something with `head()` or by indexing with the result of `sample()`. If anything is random, consider using `set.seed()` to make it repeatable.
+  - The [datapasta package](https://milesmcbain.github.io/datapasta/) can generate code for `data.frame()`, `tibble::tribble()`, or `data.table::data.table()` based on an existing R data frame. For example, a call to `tribble_format(head(ChickWeight, 3))` leaves this on the clipboard, ready to paste into your reprex:
+  
+    ``` r
+    tibble::tribble(
+     ~weight, ~Time, ~Chick, ~Diet,
+          42,     0,    "1",   "1",
+          51,     2,    "1",   "1",
+          59,     4,    "1",   "1"
+    )
+    
+    ```
+  - `dput()` is a decent last resort, i.e. if you simply cannot make do with built-in or simulated data or inline data creation in a more readable format. But `dput()` output is not very human-readable. Avoid if at all possible.
+  - Look at official examples and try to write in that style. Consider adapting one.
+
+**Include commands on a strict "need to run" basis.**
+
+  - Ruthlessly strip out anything unrelated to the specific matter at hand.
+  - Include every single command that is required, e.g. loading specific packages via `library(foo)`.
+
+**Consider including so-called "session info"**, i.e. your OS and versions of R and add-on packages, if it's conceivable that it matters.
+
+  - Use `reprex(..., session_info = TRUE)` for this.
+
+**Whitespace rationing is not in effect.**
+
+  - Use good [coding style](https://style.tidyverse.org).
+  - Use `reprex(..., style = TRUE)` to request automated styling of your code.
+
+**Pack it in, pack it out, and don't take liberties with other people's computers.** You are asking people to run this code!
+
+  - Don't start with `rm(list = ls())`. It is anti-social to clobber other people's workspaces.
+  - Don't start with `setwd("C:\Users\jenny\path\that\only\I\have")`, because it won't work on anyone else's computer.
+  - Don't mask built-in functions, i.e. don't define a new function named `c` or `mean`.
+  - If you change options, store original values at the start, do your thing, then restore them:
+    ``` r
+    opar <- par(pch = 19)
+    <blah blah blah>
+    par(opar)
+    ```
+  - If you create files, delete them when you're done:
+    ``` r
+    write(x, "foo.txt")
+    <blah blah blah>
+    file.remove("foo.txt")
+    ```
+  - Don't delete files or objects that you didn't create in the first place.
+  - Take advantage of R's built-in ability to create temporary files and directories. Read up on [`tempfile()` and `tempdir()`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/tempfile.html).
+  
+## This seems like a lot of work!
+  
+Yes, creating a great reprex requires work. You are asking other people to do work too. It's a partnership.
+
+80% of the time you will solve your own problem in the course of writing an excellent reprex. YMMV.
+  
+The remaining 20% of the time, you will create a reprex that is more likely to elicit the desired behavior in others.
+
+## Further reading:
+
+[How to make a great R reproducible example?](https://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example/16532098) thread on StackOverflow
+
+## Package philosophy
+
+The reprex code:
+
+  * Must run and, therefore, should be run **by the person posting**. No faking it.
+
+  * Should be easy for others to digest, so **they don't necessarily have to run it**. You are encouraged to include selected bits of output. :scream:
+
+  * Should be easy for others to copy + paste + run, **if and only if they so choose**. Don't let inclusion of output break executability.
+
+Accomplished like so:
+
+  * Use `rmarkdown::render()` to run the code and capture output that you would normally see on your screen. This is done in a separate R process, via [callr](https://callr.r-lib.org), to guarantee it is self-contained.
+
+  * Use chunk option `comment = "#>"` to include the output while retaining executability.

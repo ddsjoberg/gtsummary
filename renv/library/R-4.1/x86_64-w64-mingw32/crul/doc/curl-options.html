@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Scott Chamberlain" />
+
+<meta name="date" content="2021-02-05" />
+
+<title>4. curl options</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">4. curl options</h1>
+<h4 class="author">Scott Chamberlain</h4>
+<h4 class="date">2021-02-05</h4>
+
+
+
+<blockquote>
+<p>adapted in part from the blog post <a href="https://ropensci.org/blog/2014/12/18/curl-options/">Curling - exploring web request options</a></p>
+</blockquote>
+<p>Most times you request data from the web, you should have no problem. However, you eventually will run into problems. In addition, there are advanced things you can do modifying requests to web resources that fall in the <em>advanced stuff</em> category.</p>
+<p>Requests to web resources are served over the <code>http</code> protocol via <a href="https://curl.se/">curl</a>. <code>curl</code> <em>is a command line tool and library for transferring data with URL syntax, supporting (lots of protocols)</em> . <code>curl</code> has many options that you may not know about.</p>
+<p>I’ll go over some of the common and less commonly used curl options, and try to explain why you may want to use some of them.</p>
+<div id="discover-curl-options" class="section level2">
+<h2>Discover curl options</h2>
+<p>You can go to the source, that is the curl book at <a href="https://everything.curl.dev/" class="uri">https://everything.curl.dev/</a>. In R: <code>curl::curl_options()</code> for finding curl options. which gives information for each curl option, including the libcurl variable name (e.g., <code>CURLOPT_CERTINFO</code>) and the type of variable (e.g., logical).</p>
+</div>
+<div id="other-ways-to-use-curl-besides-r" class="section level2">
+<h2>Other ways to use curl besides R</h2>
+<p>Perhaps the canonical way to use curl is on the command line. You can get curl for your operating system at <a href="https://curl.se/download.html" class="uri">https://curl.se/download.html</a>, though hopefully you already have curl. Once you have curl, you can have lots of fun. For example, get the contents of the Google landing page:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">curl</span> https://www.google.com</span></code></pre></div>
+<ul>
+<li>If you like that you may also like <a href="https://github.com/httpie/httpie">httpie</a>, a Python command line tool that is a little more convenient than curl (e.g., JSON output is automatically parsed and colorized).</li>
+<li>Alot of data from the web is in JSON format. A great command line tool to pair with <code>curl</code> is <a href="https://stedolan.github.io/jq/">jq</a>.</li>
+</ul>
+<blockquote>
+<p>Note: if you are on windows you may require extra setup if you want to play with curl on the command line. OSX and linux have it by default. On Windows 8, installing the latest version from here <a href="https://curl.se/download.html#Win64" class="uri">https://curl.se/download.html#Win64</a> worked for me.</p>
+</blockquote>
+</div>
+<div id="general-info" class="section level2">
+<h2>general info</h2>
+<p>With <code>crul</code> you have to set curl options per each object, so not globally across all HTTP requests. We may allow the global curl option setting in the future.</p>
+</div>
+<div id="using-curl-options-in-other-packages" class="section level2">
+<h2>using curl options in other packages</h2>
+<p>We recommend using <code>...</code> to allow users to pass in curl options. For example, lets say you have a function in a package</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>foo &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  z &lt;-<span class="st"> </span>crul<span class="op">::</span>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="dt">url =</span> yoururl)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  z<span class="op">$</span><span class="kw">get</span>()</span>
+<span id="cb2-4"><a href="#cb2-4"></a>}</span></code></pre></div>
+<p>To make it easy for users to pass in curl options use an <code>...</code></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>foo &lt;-<span class="st"> </span><span class="cf">function</span>(...) {</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  z &lt;-<span class="st"> </span>crul<span class="op">::</span>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="dt">url =</span> yoururl, <span class="dt">opts =</span> <span class="kw">list</span>(...))</span>
+<span id="cb3-3"><a href="#cb3-3"></a>  z<span class="op">$</span><span class="kw">get</span>()</span>
+<span id="cb3-4"><a href="#cb3-4"></a>}</span></code></pre></div>
+<p>Then we can pass in any combination of acceptable curl options:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">foo</span>(<span class="dt">verbose =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; verbose curl output</span></span></code></pre></div>
+<p>You can instead make users pass in a list, e.g.:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>foo &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">opts =</span> <span class="kw">list</span>()) {</span>
+<span id="cb5-2"><a href="#cb5-2"></a>  z &lt;-<span class="st"> </span>crul<span class="op">::</span>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="dt">url =</span> yoururl, <span class="dt">opts =</span> opts)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  z<span class="op">$</span><span class="kw">get</span>()</span>
+<span id="cb5-4"><a href="#cb5-4"></a>}</span></code></pre></div>
+<p>Then a user has to pass curl options like:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">foo</span>(<span class="dt">opts =</span> <span class="kw">list</span>(<span class="dt">verbose =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+</div>
+<div id="timeout" class="section level2">
+<h2>timeout</h2>
+<blockquote>
+<p>Set a timeout for a request. If request exceeds timeout, request stops.</p>
+</blockquote>
+<p>relevant commands:</p>
+<ul>
+<li><code>timeout_ms=&lt;integer&gt;</code></li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;https://www.google.com/search&quot;</span>, </span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="dt">opts =</span> <span class="kw">list</span>(<span class="dt">timeout_ms =</span> <span class="dv">1</span>))<span class="op">$</span><span class="kw">get</span>()</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">#&gt; Error in curl::curl_fetch_memory(x$url$url, handle = x$url$handle) :</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt;  Timeout was reached: Operation timed out after 35 milliseconds with 0 bytes received</span></span></code></pre></div>
+<p><em>Why use this?</em> You sometimes are working with a web resource that is somewhat unreliable. For example, if you want to run a script on a server that may take many hours, and the web resource could be down at some point during that time, you could set the timeout and error catch the response so that the script doesn’t hang on a server that’s not responding. Another example could be if you call a web resource in an R package. In your test suite, you may want to test that a web resource is responding quickly, so you could set a timeout, and not test if that fails.</p>
+</div>
+<div id="verbose" class="section level2">
+<h2>verbose</h2>
+<blockquote>
+<p>Print detailed info on a curl call</p>
+</blockquote>
+<p>relevant commands:</p>
+<ul>
+<li><code>verbose=&lt;boolean&gt;</code></li>
+</ul>
+<p>Just do a <code>HEAD</code> request so we don’t have to deal with big output</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;https://httpbin.org&quot;</span>, </span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="dt">opts =</span> <span class="kw">list</span>(<span class="dt">verbose =</span> <span class="ot">TRUE</span>))<span class="op">$</span><span class="kw">head</span>()</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co">#&gt; &gt; HEAD / HTTP/1.1</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; Host: httpbin.org</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">#&gt; User-Agent: libcurl/7.54.0 r-curl/3.2 crul/0.5.4.9521</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt; Accept: */*</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt; Accept-Encoding: gzip, deflate</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; </span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; &lt; HTTP/1.1 200 OK</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; &lt; Connection: keep-alive</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt; &lt; Server: gunicorn/19.8.1</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt; &lt; Date: Fri, 06 Jul 2018 17:56:50 GMT</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt; &lt; Content-Type: text/html; charset=utf-8</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt; &lt; Content-Length: 8344</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; &lt; Access-Control-Allow-Origin: *</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt; &lt; Access-Control-Allow-Credentials: true</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="co">#&gt; &lt; Via: 1.1 vegur</span></span></code></pre></div>
+<p><em>Why use this?</em> As you can see verbose output gives you lots of information that may be useful for debugging a request. You typically don’t need verbose output unless you want to inspect a request.</p>
+</div>
+<div id="headers" class="section level2">
+<h2>headers</h2>
+<blockquote>
+<p>Add headers to modify requests, including authentication, setting content-type, accept type, etc.</p>
+</blockquote>
+<p>relevant commands:</p>
+<ul>
+<li><code>HttpClient$new(headers = list(...))</code></li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>x &lt;-<span class="st"> </span>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;https://httpbin.org&quot;</span>, </span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="dt">headers =</span> <span class="kw">list</span>(</span>
+<span id="cb9-3"><a href="#cb9-3"></a>    <span class="dt">Accept =</span> <span class="st">&quot;application/json&quot;</span>, </span>
+<span id="cb9-4"><a href="#cb9-4"></a>    <span class="dt">foo =</span> <span class="st">&quot;bar&quot;</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>  ), </span>
+<span id="cb9-6"><a href="#cb9-6"></a>  <span class="dt">opts =</span> <span class="kw">list</span>(<span class="dt">verbose =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb9-7"><a href="#cb9-7"></a>)</span>
+<span id="cb9-8"><a href="#cb9-8"></a>x<span class="op">$</span><span class="kw">head</span>()</span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; &gt; HEAD / HTTP/1.1</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; Host: httpbin.org</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt; User-Agent: libcurl/7.54.0 r-curl/3.2 crul/0.5.4.9521</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt; Accept-Encoding: gzip, deflate</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt; Accept: application/json</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt; foo: bar</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt; </span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt; &lt; HTTP/1.1 200 OK</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt; &lt; Connection: keep-alive</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt; &lt; Server: gunicorn/19.8.1</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="co">#&gt; &lt; Date: Fri, 06 Jul 2018 17:59:15 GMT</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">#&gt; &lt; Content-Type: text/html; charset=utf-8</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">#&gt; &lt; Content-Length: 8344</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">#&gt; &lt; Access-Control-Allow-Origin: *</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="co">#&gt; &lt; Access-Control-Allow-Credentials: true</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt; &lt; Via: 1.1 vegur</span></span></code></pre></div>
+<p><em>Why use this?</em> For some web resources, using headers is mandatory, and <code>httr</code> makes including them quite easy. Headers are nice too because e.g., passing authentication in the header instead of the URL string means your private data is not as exposed to prying eyes.</p>
+</div>
+<div id="authenticate" class="section level2">
+<h2>authenticate</h2>
+<blockquote>
+<p>Set authentication details for a resource</p>
+</blockquote>
+<p>relevant commands:</p>
+<ul>
+<li><code>auth()</code></li>
+</ul>
+<p><code>auth()</code> for basic username/password authentication</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">auth</span>(<span class="dt">user =</span> <span class="st">&quot;foo&quot;</span>, <span class="dt">pwd =</span> <span class="st">&quot;bar&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; $userpwd</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; [1] &quot;foo:bar&quot;</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; </span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; $httpauth</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">#&gt; </span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; attr(,&quot;class&quot;)</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; [1] &quot;auth&quot;</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; attr(,&quot;type&quot;)</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt; [1] &quot;basic&quot;</span></span></code></pre></div>
+<p>To use an API key, this depends on the data provider. They may request it one or either of the header</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;https://httpbin.org/get&quot;</span>, <span class="dt">headers =</span> <span class="kw">list</span>(<span class="dt">Authorization =</span> <span class="st">&quot;Bearer 234kqhrlj2342&quot;</span>))</span></code></pre></div>
+<p>or as a query parameter (which is passed in the URL string)</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;https://httpbin.org/get&quot;</span>, <span class="dt">query =</span> <span class="kw">list</span>(<span class="dt">api_key =</span> <span class="st">&quot;&lt;your key&gt;&quot;</span>))</span></code></pre></div>
+<p>Another authentication option is OAuth. OAuth is not supported in <code>crul</code> yet. You can always do OAuth with <code>httr</code> and then take your token and pass it in as a header/etc. with <code>crul</code>.</p>
+</div>
+<div id="cookies" class="section level2">
+<h2>cookies</h2>
+<blockquote>
+<p>Set or get cookies.</p>
+</blockquote>
+<p>relevant commands:</p>
+<ul>
+<li><code>auth()</code></li>
+</ul>
+<p>Set cookies (just showing response headers)</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>x &lt;-<span class="st"> </span>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="dt">url =</span> <span class="st">&quot;https://www.google.com&quot;</span>, <span class="dt">opts =</span> <span class="kw">list</span>(<span class="dt">verbose =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb13-2"><a href="#cb13-2"></a>res &lt;-<span class="st"> </span>x<span class="op">$</span><span class="kw">get</span>()</span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co">#&gt; &lt; HTTP/1.1 200 OK</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">#&gt; &lt; Date: Fri, 06 Jul 2018 23:25:49 GMT</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt; &lt; Expires: -1</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">#&gt; &lt; Cache-Control: private, max-age=0</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">#&gt; &lt; Content-Type: text/html; charset=ISO-8859-1</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="co">#&gt; &lt; P3P: CP=&quot;This is not a P3P policy! See g.co/p3phelp for more info.&quot;</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="co">#&gt; &lt; Content-Encoding: gzip</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="co">#&gt; &lt; Server: gws</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="co">#&gt; &lt; X-XSS-Protection: 1; mode=block</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="co">#&gt; &lt; X-Frame-Options: SAMEORIGIN</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="co">#&gt; * Added cookie 1P_JAR=&quot;2018-07-06-23&quot; for domain google.com, path /, expire 1533511549</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="co">#&gt; &lt; Set-Cookie: 1P_JAR=2018-07-06-23; expires=Sun, 05-Aug-2018 23:25:49 GMT; path=/; domain=.google.com</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a><span class="co">#&gt; * Added cookie NID=&quot;134=yt47WC-2mhTgQpkSCMz_ySTig3MCJD5Bx_lNj_aVLAwKu8SPMX-CCowKfU8zSv2cJ2OjiX2LTrYnhWMGvIDieCC419v0VHvlm4Hl9xln9-r4MZwcnqwTZQPT72VNE0uA&quot; for domain google.com, path /, expire 1546730749</span></span>
+<span id="cb13-16"><a href="#cb13-16"></a><span class="co">#&gt; &lt; Set-Cookie: NID=134=yt47WC-2mhTgQpkSCMz_ySTig3MCJD5Bx_lNj_aVLAwKu8SPMX-CCowKfU8zSv2cJ2OjiX2LTrYnhWMGvIDieCC419v0VHvlm4Hl9xln9-r4MZwcnqwTZQPT72VNE0uA; expires=Sat, 05-Jan-2019 23:25:49 GMT; path=/; domain=.google.com; HttpOnly</span></span>
+<span id="cb13-17"><a href="#cb13-17"></a><span class="co">#&gt; &lt; Alt-Svc: quic=&quot;:443&quot;; ma=2592000; v=&quot;43,42,41,39,35&quot;</span></span>
+<span id="cb13-18"><a href="#cb13-18"></a><span class="co">#&gt; &lt; Transfer-Encoding: chunked</span></span></code></pre></div>
+<p>If there are cookies in a response, you can access them with <code>curl::handle_cookies</code> like:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>curl<span class="op">::</span><span class="kw">handle_cookies</span>(res<span class="op">$</span>handle)</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt;                  domain flag path secure          expiration   name</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt; 1           .google.com TRUE    /  FALSE 2018-08-05 16:25:16 1P_JAR</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt; 2 #HttpOnly_.google.com TRUE    /  FALSE 2019-01-05 15:25:16    NID</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt;   value</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; 1 2018-07-06-23</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt; 2 134=4E_Zo-cY8hRLNSj47jRJQML0CPQ8Ip__ ...</span></span></code></pre></div>
+</div>
+<div id="progress" class="section level2">
+<h2>progress</h2>
+<blockquote>
+<p>Print curl progress</p>
+</blockquote>
+<p>relevant commands:</p>
+<ul>
+<li><code>HttpClient$new(progress = fxn)</code></li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>x &lt;-<span class="st"> </span>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;https://httpbin.org/get&quot;</span>, <span class="dt">progress =</span> httr<span class="op">::</span><span class="kw">progress</span>())</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt; |==================================| 100%</span></span></code></pre></div>
+<p><em>Why use this?</em> As you could imagine, this is increasingly useful as a request for a web resource takes longer and longer. For very long requests, this will help you know approximately when a request will finish.</p>
+</div>
+<div id="proxies" class="section level2">
+<h2>proxies</h2>
+<blockquote>
+<p>When behind a proxy, give authentication details for your proxy.</p>
+</blockquote>
+<p>relevant commands:</p>
+<ul>
+<li><code>HttpClient$new(proxies = proxy(&quot;http://97.77.104.22:3128&quot;, &quot;foo&quot;, &quot;bar&quot;))</code></li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>prox &lt;-<span class="st"> </span><span class="kw">proxy</span>(<span class="st">&quot;125.39.66.66&quot;</span>, <span class="dt">port =</span> <span class="dv">80</span>, <span class="dt">username =</span> <span class="st">&quot;username&quot;</span>, <span class="dt">password =</span> <span class="st">&quot;password&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>HttpClient<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;http://www.google.com/search&quot;</span>, <span class="dt">proxies =</span> prox)</span></code></pre></div>
+<p><em>Why use this?</em> Most of us likely don’t need to worry about this. However, if you are in a work place, or maybe in certain geographic locations, you may have to use a proxy. I haven’t personally used a proxy in R, so any feedback on this is great.</p>
+</div>
+<div id="user-agent" class="section level2">
+<h2>user agent</h2>
+<blockquote>
+<p>Some resources require a user-agent string.</p>
+</blockquote>
+<p>relevant commands:</p>
+<ul>
+<li><code>HttpClient$new(headers = list(</code>User-Agent<code>= &quot;foobar&quot;))</code> OR</li>
+<li><code>HttpClient$new(opts = list(useragent = &quot;foobar&quot;))</code></li>
+</ul>
+<p>both result in the same thing</p>
+<p><em>Why use this?</em> This is set by default in a http request, as you can see in the first example above for user agent. Some web APIs require that you set a specific user agent. For example, the <a href="https://developer.github.com/v3/#user-agent-required">GitHub API</a> requires that you include a user agent string in the header of each request that is your username or the name of your application so they can contact you if there is a problem.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

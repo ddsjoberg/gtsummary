@@ -1,0 +1,218 @@
+Version 1.7.3
+-------------------------------------------------------------------------
+* Correct a unicode error on Latin-1 platforms
+
+Version 1.7.2
+-------------------------------------------------------------------------
+* Fix a breaking unit test, update suffix dataset
+
+Version 1.7.1
+-------------------------------------------------------------------------
+
+DEVELOPMENT
+* Fix a CRAN Makevars issue
+
+Version 1.7.0
+-------------------------------------------------------------------------
+
+FEATURES
+* get_credentials() and strip_credentials() retrieve and remove user authentication info
+from URLs, as appropriate (#64)
+* A small performance improvement to parameter-related functions.
+* The long-deprecated url_parameters has been removed
+* param_get() can retrieve all available parameters.
+* get_param(urls, parameter_names = NULL), scans for all available parameters (#82)
+* Cases like get_param("http://foo.bar/?field=value&amp;more", "field") retrieve the whole field (#82)
+* Cases like get_param("http://foo.bar/?field=value#fragment", "field") don't retrieve the fragment (#82)
+* parameters and other URL components can now be removed by assigning NULL to the component. See the vignettes for an example (#79)
+* Setting components with eg path() is now fully vectorised (#76)
+
+BUGS
+* url_parse now handles URLs with user auth/ident information in them, stripping it out (#64)
+* url_parse now handles URLs that are IPv6 addresses (#65)
+* url_parse now handles URLs with @ characters in query fragments
+* url_parse now handles URLs with fragments, but no parameter or path (#83)
+* url_compose now handles URLs with query strings but no paths (#71)
+* param_set() can now handle parameters with overlapping names
+* url_parse now handles URLs with >6 character schemes (#81)
+* param_get() skips the URL fragment and handles values containing "&amp;".
+* It is no longer possible to duplicate separators with function calls like path(url) <- '/path'. (#78)
+* A small bugfix in url decoding to avoid a situation where URLs that (wrongly) had percentage signs in them decoded the characters behind those signs (#87)
+
+DEVELOPMENT
+* Internal API simplified.
+
+Version 1.6.0
+-------------------------------------------------------------------------
+FEATURES
+* Fully punycode encoding and decoding support, thanks to Drew Schmidt.
+* param_get, param_set and param_remove are all fully capable of handling NA values.
+* component setting functions can now assign even when the previous value was NA.
+
+Version 1.5.2
+-------------------------------------------------------------------------
+
+BUGS
+* Custom suffix lists were not working properly.
+
+Version 1.5.1
+-------------------------------------------------------------------------
+
+BUGS
+* Fixed a bug in which punycode TLDs were excluded from TLD extraction (thanks to
+  Alex Pinto for pointing that out) #51
+* param_get now returns NAs for missing values, rather than empty strings (thanks to Josh Izzard for the report) #49
+* suffix_extract now no longer goofs if the domain+suffix combo overlaps with a valid suffix (thanks to Maryam Khezrzadeh and Alex Pinto) #50
+
+DEVELOPMENT
+* Removed the non-portable -g compiler flag in response to CRAN feedback.
+
+Version 1.5.0
+-------------------------------------------------------------------------
+FEATURES
+
+* Using tries as a data structure (see https://github.com/Ironholds/triebeard), we've increased the speed of suffix_extract() (instead of taking twenty seconds to process a million domains, it now takes..one.)
+* A dataset of top-level domains (TLDs) is now available as data(tld_dataset)
+* suffix_refresh() has been reinstated, and can be used with suffix_extract() to ensure suffix
+extraction is done with the most up-to-date dataset version possible.
+* tld_extract() and tld_refresh() mirrors the functionality of suffix_extract() and suffix_refresh()
+BUG FIXES
+* host_extract() lets you get the host (the lowest-level subdomain, or the domain itself if no subdomain
+is present) from the `domain` fragment of a parsed URL.
+* Code from Jay Jacobs has allowed us to include a best-guess at the org name in the suffix dataset.
+* url_parameters is now deprecated, and has been marked as such.
+
+DEVELOPMENT
+* The instantiation and processing of suffix and TLD datasets on load marginally increases
+the speed of both (if you're calling suffix/TLD related functions more than once a sessions)
+
+Version 1.4.0
+-------------------------------------------------------------------------
+
+BUG FIXES
+* Full NA support is now available!
+
+DEVELOPMENT
+* A substantial (20%) speed increase is now available thanks to internal
+refactoring.
+
+Version 1.3.3
+-------------------------------------------------------------------------
+
+BUG FIXES
+* url_parse no longer lower-cases URLs (case sensitivity is Important) thanks to GitHub user 17843
+
+DOCUMENTATION
+* A note on NAs (as reported by Alex Pinto) added to the vignette
+* Mention Bob Rudis's 'punycode' package.
+
+Version 1.3.2
+-------------------------------------------------------------------------
+
+BUG FIXES
+* Fixed a critical bug impacting URLs with colons in the path
+
+Version 1.3.1
+-------------------------------------------------------------------------
+
+CHANGES
+* suffix_refresh has been removed, since LazyData's parameters prevented it from functioning; thanks to
+  Alex Pinto for the initial bug report and Hadley Wickham for confirming the possible solutions.
+
+BUG FIXES
+* the parser was not properly handling ports; thanks to a report from Rich FitzJohn, this is now fixed.
+
+Version 1.3.0
+-------------------------------------------------------------------------
+
+NEW FEATURES
+* param_set() for inserting or modifying key/value pairs in URL query strings.
+* param_remove() added for stripping key/value pairs out of URL query strings.
+
+CHANGES
+* url_parameters has been renamed param_get() under the new naming scheme - url_parameters still exists, however,
+for the purpose of backwards-compatibiltiy.
+
+BUG FIXES
+* Fixed a bug reported by Alex Pinto whereby URLs with parameters but no paths would not have their domain
+  correctly parsed.
+
+Version 1.2.1
+-------------------------------------------------------------------------
+
+CHANGES
+* Changed "tld" column to "suffix" in return of "suffix_extract" to more
+accurately reflect what it is
+* Switched to "vapply" in "suffix_extract" to give a bit of a speedup to
+an already fast function
+
+BUG FIXES
+* Fixed documentation of "suffix_extract"
+
+DEVELOPMENT
+* More internal documentation added to compiled code.
+* The suffix_dataset dataset was refreshed
+
+Version 1.2.0
+-------------------------------------------------------------------------
+NEW FEATURES
+* Jay Jacobs' "tldextract" functionality has been merged with urltools, and can be accessed
+with "suffix_extract"
+* At Nicolas Coutin's suggestion, url_compose - url_parse in reverse - has been introduced.
+
+BUG FIXES
+
+* To adhere to RfC standards, "query" functions have been renamed "parameter"
+* A bug in which fragments could not be retrieved (and were incorrectly identified as parameters)
+has been fixed. Thanks to Nicolas Coutin for reporting it and providing a reproducible example.
+
+Version 1.1.1
+-------------------------------------------------------------------------
+BUG FIXES
+
+* Parameter parsing now fixed to require a = after the parameter name, thus solving for scenarios where
+the URL would contain the parameter name as part of, say, the domain, and it'd grab the wrong thing. Thanks
+to Jacob Barnett for the bug report and example.
+* URL encoding no longer encodes the slash between the domain and path (thanks to Peter Meissner for pointing
+this bug out).
+
+DEVELOPMENT
+*More unit tests
+
+Version 1.1.0
+-------------------------------------------------------------------------
+NEW FEATURES
+*url_parameters provides the values of specified parameters within a vector of URLs, as a data.frame
+*KeyboardInterrupts are now available for interrupting long computations.
+*url_parse now provides a data.frame, rather than a list, as output.
+
+BUG FIXES
+
+DEVELOPMENT
+*De-static the hell out of all the C++.
+*Internal refactor to store each logical stage of url decomposition as its own method
+*Internal refactor to use references, minimising memory usage; thanks to Mark Greenaway for making this work!
+*Roxygen upgrade
+
+Version 1.0.0
+-------------------------------------------------------------------------
+NEW FEATURES
+*New get/set functionality, mimicking lubridate; see the package vignette.
+
+DEVELOPMENT
+*Internal C++ documentation added and the encoders and parsers refactored.
+
+Version 0.6.0
+-------------------------------------------------------------------------
+NEW FEATURES
+*replace_parameter introduced, to augment extract_parameter (previously simply url_param). This
+allows you to take the value a parameter has associated with it, and replace it with one of your choosing.
+*extract_host allows you to grab the hostname of a site, ignoring other components.
+
+BUG FIXES
+*extract_parameter (now url_extract_param) previously failed with an obfuscated error if the requested
+parameter terminated the URL. This has now been fixed.
+
+DEVELOPMENT
+*unit tests expanded
+*Internal tweaks to improve the speed of url_decode and url_encode.

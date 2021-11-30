@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Tools for Handling Spatial Objects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Tools for Handling Spatial Objects
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;maptools&rsquo; version 1.1-1</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<p style="text-align: center;">
+<a href="#A">A</a>
+<a href="#C">C</a>
+<a href="#D">D</a>
+<a href="#E">E</a>
+<a href="#G">G</a>
+<a href="#H">H</a>
+<a href="#I">I</a>
+<a href="#K">K</a>
+<a href="#L">L</a>
+<a href="#M">M</a>
+<a href="#N">N</a>
+<a href="#O">O</a>
+<a href="#P">P</a>
+<a href="#R">R</a>
+<a href="#S">S</a>
+<a href="#T">T</a>
+<a href="#U">U</a>
+<a href="#W">W</a>
+</p>
+
+
+<h2><a name="A">-- A --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="ContourLines2SLDF.html">ArcObj2SLDF</a></td>
+<td>Converter functions to build SpatialLinesDataFrame objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.im.html">as.im.RasterLayer</a></td>
+<td>Coercion between sp objects and spatstat im objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.im.html">as.im.SpatialGridDataFrame</a></td>
+<td>Coercion between sp objects and spatstat im objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.linnet.SpatialLines.html">as.linnet.SpatialLines</a></td>
+<td>Convert SpatialLines to Linear Network</td></tr>
+<tr><td style="width: 25%;"><a href="as.owin.html">as.owin.SpatialGridDataFrame</a></td>
+<td>Coercion between sp objects and spatstat owin objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.owin.html">as.owin.SpatialPixelsDataFrame</a></td>
+<td>Coercion between sp objects and spatstat owin objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.owin.html">as.owin.SpatialPolygons</a></td>
+<td>Coercion between sp objects and spatstat owin objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.ppp.html">as.ppp.SpatialPoints</a></td>
+<td>Coercion between sp objects and spatstat ppp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.ppp.html">as.ppp.SpatialPointsDataFrame</a></td>
+<td>Coercion between sp objects and spatstat ppp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.psp.html">as.psp.Line</a></td>
+<td>Coercion between sp objects and spatstat psp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.psp.html">as.psp.Lines</a></td>
+<td>Coercion between sp objects and spatstat psp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.psp.html">as.psp.SpatialLines</a></td>
+<td>Coercion between sp objects and spatstat psp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.psp.html">as.psp.SpatialLinesDataFrame</a></td>
+<td>Coercion between sp objects and spatstat psp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.im.html">as.SpatialGridDataFrame.im</a></td>
+<td>Coercion between sp objects and spatstat im objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.ppp.html">as.SpatialGridDataFrame.ppp</a></td>
+<td>Coercion between sp objects and spatstat ppp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.psp.html">as.SpatialLines.psp</a></td>
+<td>Coercion between sp objects and spatstat psp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.ppp.html">as.SpatialPoints.ppp</a></td>
+<td>Coercion between sp objects and spatstat ppp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.ppp.html">as.SpatialPointsDataFrame.ppp</a></td>
+<td>Coercion between sp objects and spatstat ppp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.owin.html">as.SpatialPolygons.owin</a></td>
+<td>Coercion between sp objects and spatstat owin objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.SpatialPolygons.tess.html">as.SpatialPolygons.tess</a></td>
+<td>Coercion of spatstat tess object to sp SpatialPolygons object</td></tr>
+</table>
+
+<h2><a name="C">-- C --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="CCmaps.html">CCmaps</a></td>
+<td>Conditioned choropleth maps</td></tr>
+<tr><td style="width: 25%;"><a href="checkPolygonsHoles.html">checkPolygonsHoles</a></td>
+<td>Check holes in Polygons objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.SpatialPolygons.tess.html">coerce-method</a></td>
+<td>Coercion of spatstat tess object to sp SpatialPolygons object</td></tr>
+<tr><td style="width: 25%;"><a href="as.im.html">coerce-method</a></td>
+<td>Coercion between sp objects and spatstat im objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.linnet.SpatialLines.html">coerce-method</a></td>
+<td>Convert SpatialLines to Linear Network</td></tr>
+<tr><td style="width: 25%;"><a href="as.owin.html">coerce-method</a></td>
+<td>Coercion between sp objects and spatstat owin objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.ppp.html">coerce-method</a></td>
+<td>Coercion between sp objects and spatstat ppp objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.psp.html">coerce-method</a></td>
+<td>Coercion between sp objects and spatstat psp objects</td></tr>
+<tr><td style="width: 25%;"><a href="ContourLines2SLDF.html">ContourLines2SLDF</a></td>
+<td>Converter functions to build SpatialLinesDataFrame objects</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">crepuscule</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">crepuscule-method</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">crepuscule-methods</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+</table>
+
+<h2><a name="D">-- D --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="dotsInPolys.html">dotsInPolys</a></td>
+<td>Put dots in polygons</td></tr>
+</table>
+
+<h2><a name="E">-- E --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="elide-methods.html">elide</a></td>
+<td>Methods for Function elide in Package 'maptools'</td></tr>
+<tr><td style="width: 25%;"><a href="elide-methods.html">elide-method</a></td>
+<td>Methods for Function elide in Package 'maptools'</td></tr>
+<tr><td style="width: 25%;"><a href="elide-methods.html">elide-methods</a></td>
+<td>Methods for Function elide in Package 'maptools'</td></tr>
+</table>
+
+<h2><a name="G">-- G --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="gcDestination.html">gcDestination</a></td>
+<td>Find destination in geographical coordinates</td></tr>
+<tr><td style="width: 25%;"><a href="getinfo.shape.html">getinfo.shape</a></td>
+<td>Get shapefile header information</td></tr>
+<tr><td style="width: 25%;"><a href="getKMLcoordinates.html">getKMLcoordinates</a></td>
+<td>Get a list of coordinates out of a KML file</td></tr>
+<tr><td style="width: 25%;"><a href="Rgshhs.html">getRgshhsMap</a></td>
+<td>Read GSHHS data into sp object</td></tr>
+<tr><td style="width: 25%;"><a href="GE_SpatialGrid.html">GE_SpatialGrid</a></td>
+<td>Create SpatialGrid for PNG output to GE</td></tr>
+<tr><td style="width: 25%;"><a href="holepolys.html">gpcholes</a></td>
+<td>Hisaji Ono's lake/hole problem</td></tr>
+<tr><td style="width: 25%;"><a href="checkPolygonsHoles.html">gpclibPermit</a></td>
+<td>Check holes in Polygons objects</td></tr>
+<tr><td style="width: 25%;"><a href="checkPolygonsHoles.html">gpclibPermitStatus</a></td>
+<td>Check holes in Polygons objects</td></tr>
+<tr><td style="width: 25%;"><a href="gzAzimuth.html">gzAzimuth</a></td>
+<td>Find azimuth for geographical coordinates</td></tr>
+</table>
+
+<h2><a name="H">-- H --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="holepolys.html">h1pl</a></td>
+<td>Hisaji Ono's lake/hole problem</td></tr>
+<tr><td style="width: 25%;"><a href="holepolys.html">h2pl</a></td>
+<td>Hisaji Ono's lake/hole problem</td></tr>
+</table>
+
+<h2><a name="I">-- I --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="ppp.html">im-class</a></td>
+<td>Virtual class "ppp"</td></tr>
+</table>
+
+<h2><a name="K">-- K --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="kmlLine.html">kmlLine</a></td>
+<td>Create and write a KML file on the basis of a given Lines object</td></tr>
+<tr><td style="width: 25%;"><a href="kmlLines.html">kmlLines</a></td>
+<td>Create and write a KML file on the basis of a given Lines object</td></tr>
+<tr><td style="width: 25%;"><a href="kmlOverlay.html">kmlOverlay</a></td>
+<td>Create and write KML file for PNG image overlay</td></tr>
+<tr><td style="width: 25%;"><a href="kmlPoints.html">kmlPoints</a></td>
+<td>Create and write a KML file on the basis of a given Points object</td></tr>
+<tr><td style="width: 25%;"><a href="kmlPolygon.html">kmlPolygon</a></td>
+<td>Create and write a KML file on the basis of a given Polygons object</td></tr>
+<tr><td style="width: 25%;"><a href="kmlPolygons.html">kmlPolygons</a></td>
+<td>Create and write a KML file on the basis of a given Polygons object or list of Polygons or SpatialPolygonsDataFrame</td></tr>
+</table>
+
+<h2><a name="L">-- L --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="lineLabel.html">label</a></td>
+<td>Line label placement with spplot and lattice.</td></tr>
+<tr><td style="width: 25%;"><a href="lineLabel.html">label-method</a></td>
+<td>Line label placement with spplot and lattice.</td></tr>
+<tr><td style="width: 25%;"><a href="lineLabel.html">label-methods</a></td>
+<td>Line label placement with spplot and lattice.</td></tr>
+<tr><td style="width: 25%;"><a href="leglabs.html">leglabs</a></td>
+<td>Make legend labels</td></tr>
+<tr><td style="width: 25%;"><a href="lineLabel.html">lineLabel</a></td>
+<td>Line label placement with spplot and lattice.</td></tr>
+</table>
+
+<h2><a name="M">-- M --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="map2SpatialPolygons.html">map2SpatialLines</a></td>
+<td>Convert map objects to sp classes</td></tr>
+<tr><td style="width: 25%;"><a href="map2SpatialPolygons.html">map2SpatialPolygons</a></td>
+<td>Convert map objects to sp classes</td></tr>
+<tr><td style="width: 25%;"><a href="ContourLines2SLDF.html">MapGen2SL</a></td>
+<td>Converter functions to build SpatialLinesDataFrame objects</td></tr>
+</table>
+
+<h2><a name="N">-- N --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="nearestPointOnLine.html">nearestPointOnLine</a></td>
+<td>Get the nearest point on a line to a given point</td></tr>
+<tr><td style="width: 25%;"><a href="nearestPointOnSegment.html">nearestPointOnSegment</a></td>
+<td>Get the nearest point on a segment to a given point</td></tr>
+<tr><td style="width: 25%;"><a href="nowrapRecenter.html">nowrapRecenter</a></td>
+<td>Break polygons at meridian for recentering</td></tr>
+<tr><td style="width: 25%;"><a href="nowrapSpatialLines.html">nowrapSpatialLines</a></td>
+<td>Split SpatialLines components at offset</td></tr>
+<tr><td style="width: 25%;"><a href="nowrapRecenter.html">nowrapSpatialPolygons</a></td>
+<td>Break polygons at meridian for recentering</td></tr>
+</table>
+
+<h2><a name="O">-- O --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="ppp.html">owin-class</a></td>
+<td>Virtual class "ppp"</td></tr>
+</table>
+
+<h2><a name="P">-- P --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="pal2SpatialPolygons.html">pal2SpatialPolygons</a></td>
+<td>Making SpatialPolygons objects from RArcInfo input</td></tr>
+<tr><td style="width: 25%;"><a href="pointLabelLattice.html">panel.pointLabel</a></td>
+<td>Label placement with spplot and lattice.</td></tr>
+<tr><td style="width: 25%;"><a href="pointLabelBase.html">pointLabel</a></td>
+<td>Label placement for points to avoid overlaps</td></tr>
+<tr><td style="width: 25%;"><a href="SpatialLines2PolySet.html">PolySet2SpatialLines</a></td>
+<td>Convert sp line and polygon objects to PBSmapping PolySet objects</td></tr>
+<tr><td style="width: 25%;"><a href="SpatialLines2PolySet.html">PolySet2SpatialPolygons</a></td>
+<td>Convert sp line and polygon objects to PBSmapping PolySet objects</td></tr>
+<tr><td style="width: 25%;"><a href="ppp.html">ppp-class</a></td>
+<td>Virtual class "ppp"</td></tr>
+<tr><td style="width: 25%;"><a href="getinfo.shape.html">print.shapehead</a></td>
+<td>Get shapefile header information</td></tr>
+<tr><td style="width: 25%;"><a href="map2SpatialPolygons.html">pruneMap</a></td>
+<td>Convert map objects to sp classes</td></tr>
+<tr><td style="width: 25%;"><a href="ppp.html">psp-class</a></td>
+<td>Virtual class "ppp"</td></tr>
+</table>
+
+<h2><a name="R">-- R --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="asciigrid.html">readAsciiGrid</a></td>
+<td>read/write to/from (ESRI) asciigrid format</td></tr>
+<tr><td style="width: 25%;"><a href="readGPS.html">readGPS</a></td>
+<td>GPSbabel read interface</td></tr>
+<tr><td style="width: 25%;"><a href="readShapeLines.html">readShapeLines</a></td>
+<td>Read arc shape files into SpatialLinesDataFrame objects</td></tr>
+<tr><td style="width: 25%;"><a href="readShapePoints.html">readShapePoints</a></td>
+<td>Read points shape files into SpatialPointsDataFrame objects</td></tr>
+<tr><td style="width: 25%;"><a href="readShapePoly.html">readShapePoly</a></td>
+<td>Read polygon shape files into SpatialPolygonsDataFrame objects</td></tr>
+<tr><td style="width: 25%;"><a href="readShapeSpatial.html">readShapeSpatial</a></td>
+<td>Read shape files into Spatial*DataFrame objects</td></tr>
+<tr><td style="width: 25%;"><a href="readSplus.html">readSplus</a></td>
+<td>Read exported WinBUGS maps</td></tr>
+<tr><td style="width: 25%;"><a href="checkPolygonsHoles.html">rgeosStatus</a></td>
+<td>Check holes in Polygons objects</td></tr>
+<tr><td style="width: 25%;"><a href="Rgshhs.html">Rgshhs</a></td>
+<td>Read GSHHS data into sp object</td></tr>
+</table>
+
+<h2><a name="S">-- S --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="snapPointsToLines.html">snapPointsToLines</a></td>
+<td>Snap a set of points to a set of lines</td></tr>
+<tr><td style="width: 25%;"><a href="GE_SpatialGrid.html">Sobj_SpatialGrid</a></td>
+<td>Create SpatialGrid for PNG output to GE</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">solarnoon</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">solarnoon-method</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">solarnoon-methods</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">solarpos</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">solarpos-method</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">solarpos-methods</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="lineLabel.html">sp.lineLabel</a></td>
+<td>Line label placement with spplot and lattice.</td></tr>
+<tr><td style="width: 25%;"><a href="lineLabel.html">sp.lineLabel-method</a></td>
+<td>Line label placement with spplot and lattice.</td></tr>
+<tr><td style="width: 25%;"><a href="lineLabel.html">sp.lineLabel-methods</a></td>
+<td>Line label placement with spplot and lattice.</td></tr>
+<tr><td style="width: 25%;"><a href="pointLabelLattice.html">sp.pointLabel</a></td>
+<td>Label placement with spplot and lattice.</td></tr>
+<tr><td style="width: 25%;"><a href="pointLabelLattice.html">sp.pointLabel-method</a></td>
+<td>Label placement with spplot and lattice.</td></tr>
+<tr><td style="width: 25%;"><a href="pointLabelLattice.html">sp.pointLabel-methods</a></td>
+<td>Label placement with spplot and lattice.</td></tr>
+<tr><td style="width: 25%;"><a href="sp2Mondrian.html">sp2Mondrian</a></td>
+<td>write map data for Mondrian</td></tr>
+<tr><td style="width: 25%;"><a href="sp2tmap.html">sp2tmap</a></td>
+<td>Convert SpatialPolygons object for Stata tmap command</td></tr>
+<tr><td style="width: 25%;"><a href="sp2WB.html">sp2WB</a></td>
+<td>Export SpatialPolygons object as S-Plus map for WinBUGS</td></tr>
+<tr><td style="width: 25%;"><a href="SpatialLines2PolySet.html">SpatialLines2PolySet</a></td>
+<td>Convert sp line and polygon objects to PBSmapping PolySet objects</td></tr>
+<tr><td style="width: 25%;"><a href="SpatialLinesMidPoints.html">SpatialLinesMidPoints</a></td>
+<td>Line midpoints</td></tr>
+<tr><td style="width: 25%;"><a href="SpatialLines2PolySet.html">SpatialPolygons2PolySet</a></td>
+<td>Convert sp line and polygon objects to PBSmapping PolySet objects</td></tr>
+<tr><td style="width: 25%;"><a href="spCbind-methods.html">spCbind</a></td>
+<td>cbind for spatial objects</td></tr>
+<tr><td style="width: 25%;"><a href="spCbind-methods.html">spCbind-method</a></td>
+<td>cbind for spatial objects</td></tr>
+<tr><td style="width: 25%;"><a href="spCbind-methods.html">spCbind-methods</a></td>
+<td>cbind for spatial objects</td></tr>
+<tr><td style="width: 25%;"><a href="SplashDams.html">SplashDams</a></td>
+<td>Data for Splash Dams in western Oregon</td></tr>
+<tr><td style="width: 25%;"><a href="spRbind-methods.html">spRbind</a></td>
+<td>rbind for spatial objects</td></tr>
+<tr><td style="width: 25%;"><a href="spRbind-methods.html">spRbind-method</a></td>
+<td>rbind for spatial objects</td></tr>
+<tr><td style="width: 25%;"><a href="spRbind-methods.html">spRbind-methods</a></td>
+<td>rbind for spatial objects</td></tr>
+<tr><td style="width: 25%;"><a href="state.vbm.html">state.vbm</a></td>
+<td>US State Visibility Based Map</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">sunriset</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">sunriset-method</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="sun-methods.html">sunriset-methods</a></td>
+<td>Methods for sun ephemerides calculations</td></tr>
+<tr><td style="width: 25%;"><a href="symbolsInPolys.html">symbolsInPolys</a></td>
+<td>Place grids of points over polygons</td></tr>
+</table>
+
+<h2><a name="T">-- T --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="thinnedSpatialPoly.html">thinnedSpatialPoly</a></td>
+<td>Douglas-Peuker line generalization for Spatial Polygons</td></tr>
+<tr><td style="width: 25%;"><a href="gzAzimuth.html">trackAzimuth</a></td>
+<td>Find azimuth for geographical coordinates</td></tr>
+</table>
+
+<h2><a name="U">-- U --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="unionSpatialPolygons.html">unionSpatialPolygons</a></td>
+<td>Aggregate Polygons in a SpatialPolygons object</td></tr>
+</table>
+
+<h2><a name="W">-- W --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="asciigrid.html">writeAsciiGrid</a></td>
+<td>read/write to/from (ESRI) asciigrid format</td></tr>
+<tr><td style="width: 25%;"><a href="readShapeLines.html">writeLinesShape</a></td>
+<td>Read arc shape files into SpatialLinesDataFrame objects</td></tr>
+<tr><td style="width: 25%;"><a href="readShapePoints.html">writePointsShape</a></td>
+<td>Read points shape files into SpatialPointsDataFrame objects</td></tr>
+<tr><td style="width: 25%;"><a href="readShapePoly.html">writePolyShape</a></td>
+<td>Read polygon shape files into SpatialPolygonsDataFrame objects</td></tr>
+<tr><td style="width: 25%;"><a href="readShapeSpatial.html">writeSpatialShape</a></td>
+<td>Read shape files into Spatial*DataFrame objects</td></tr>
+<tr><td style="width: 25%;"><a href="wrld_simpl.html">wrld_simpl</a></td>
+<td>Simplified world country polygons</td></tr>
+</table>
+</body></html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get the data that was used to fit the model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_data {insight}"><tr><td>get_data {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get the data that was used to fit the model</h2>
+
+<h3>Description</h3>
+
+<p>This functions tries to get the data that was used to fit the
+model and returns it as data frame.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_data(x, ...)
+
+## S3 method for class 'gee'
+get_data(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
+
+## S3 method for class 'rqss'
+get_data(
+  x,
+  component = c("all", "conditional", "smooth_terms"),
+  verbose = TRUE,
+  ...
+)
+
+## S3 method for class 'hurdle'
+get_data(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  verbose = TRUE,
+  ...
+)
+
+## S3 method for class 'zcpglm'
+get_data(
+  x,
+  component = c("all", "conditional", "zi", "zero_inflated"),
+  verbose = TRUE,
+  ...
+)
+
+## S3 method for class 'glmmTMB'
+get_data(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  verbose = TRUE,
+  ...
+)
+
+## S3 method for class 'merMod'
+get_data(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
+
+## S3 method for class 'glmmadmb'
+get_data(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
+
+## S3 method for class 'rlmerMod'
+get_data(x, effects = c("all", "fixed", "random"), ...)
+
+## S3 method for class 'clmm'
+get_data(x, effects = c("all", "fixed", "random"), ...)
+
+## S3 method for class 'mixed'
+get_data(x, effects = c("all", "fixed", "random"), ...)
+
+## S3 method for class 'lme'
+get_data(x, effects = c("all", "fixed", "random"), ...)
+
+## S3 method for class 'MixMod'
+get_data(
+  x,
+  effects = c("all", "fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  verbose = TRUE,
+  ...
+)
+
+## S3 method for class 'brmsfit'
+get_data(x, effects = "all", component = "all", verbose = TRUE, ...)
+
+## S3 method for class 'stanreg'
+get_data(x, effects = c("all", "fixed", "random"), verbose = TRUE, ...)
+
+## S3 method for class 'MCMCglmm'
+get_data(x, effects = c("all", "fixed", "random"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>effects</code></td>
+<td>
+<p>Should model data for fixed effects, random effects
+or both be returned? Only applies to mixed models.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle messages and warnings.</p>
+</td></tr>
+<tr valign="top"><td><code>component</code></td>
+<td>
+<p>Should all predictor variables, predictor variables for the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
+<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
+component, depending on the model.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The data that was used to fit the model.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Unlike <code>model.frame()</code>, which may contain transformed variables
+(e.g. if <code>poly()</code> or <code>scale()</code> was used inside the formula to
+specify the model), <code>get_data()</code> aims at returning the &quot;original&quot;,
+untransformed data (if possible). Consequently, column names are changed
+accordingly, i.e. <code>"log(x)"</code> will become <code>"x"</code> etc. for all data
+columns with transformed values.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (require("lme4")) {
+  data(cbpp, package = "lme4")
+  cbpp$trials &lt;- cbpp$size - cbpp$incidence
+  m &lt;- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+  head(get_data(m))
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

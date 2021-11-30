@@ -17,6 +17,8 @@
 #' @param ... Additional arguments to be passed to `car::Anova`
 #' @author Daniel D. Sjoberg
 #' @export
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
+#'
 #' @examplesIf assert_package("car", boolean = TRUE)
 #' # Example 1 ----------------------------------
 #' tbl_lm_global_ex1 <-

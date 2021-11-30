@@ -1,0 +1,73 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string colname="colAlls"%>
+<%@string rowname="rowAlls"%>
+<%@meta title="${colname}() and ${rowname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-11-18"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=colname%>() and <%=rowname%>() against alternative methods.
+
+## Alternative methods
+
+* apply() + all()
+* colSums() == n or rowSums() == n
+
+
+## Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = "logical")
+})%>
+```
+
+## Results
+
+<% for (dataLabel in names(data)) { %>
+<% message(dataLabel) %>
+### <%=dataLabel%> matrix
+
+
+```r
+<%=withCapture({
+X <- data[[.dataLabel.]]
+gc()
+
+colStats <- microbenchmark(
+ colAlls      = colAlls(X),
+ "apply+all"  = apply(X, MARGIN = 2L, FUN = all),
+ "colSums==n" = (colSums(X) == nrow(X)),
+ unit = "ms"
+)
+
+X <- t(X)
+gc()
+
+rowStats <- microbenchmark(
+ rowAlls     = rowAlls(X),
+ "apply+all" = apply(X, MARGIN = 1L, FUN = all),
+ "rowSums==n" = (rowSums(X) == ncol(X)),
+ unit = "ms"
+)
+})%>
+```
+
+<% crBenchmarkResults(colStats, rowStats, tags=dataLabel) %>
+
+<% } # for (dataLabel ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-11-18
+o Created.
+---------------------------------------------------------------------------%>

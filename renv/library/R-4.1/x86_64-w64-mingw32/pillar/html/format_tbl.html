@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Formatting of tbl objects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for format_tbl {pillar}"><tr><td>format_tbl {pillar}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Formatting of tbl objects</h2>
+
+<h3>Description</h3>
+
+<p>These functions and methods are responsible for printing objects
+of the <code>"tbl"</code> class, which includes <a href="../../tibble/help/tibble.html">tibble</a>s
+and dbplyr lazy tables.
+See <a href="../../tibble/help/formatting.html">tibble::formatting</a> for user level documentation,
+and <code>vignette("customization")</code> for details.
+</p>
+<p>While it is possible to implement a custom <code><a href="../../base/html/format.html">format()</a></code> or <code><a href="../../base/html/print.html">print()</a></code> method
+for your tibble-like objects, it should never be necessary
+if your class inherits from <code>"tbl"</code>.
+In this case, the default methods offer many customization options
+at every level of detail.
+This means you only need to override or extend implementations for the parts
+that need change.
+</p>
+<p>The output uses color and highlighting according to the <code>"cli.num_colors"</code> option.
+Set it to <code>1</code> to suppress colored and highlighted output.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'tbl'
+print(
+  x,
+  width = NULL,
+  ...,
+  n = NULL,
+  max_extra_cols = NULL,
+  max_footer_lines = NULL
+)
+
+## S3 method for class 'tbl'
+format(
+  x,
+  width = NULL,
+  ...,
+  n = NULL,
+  max_extra_cols = NULL,
+  max_footer_lines = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object to format or print.</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>Width of text output to generate. This defaults to <code>NULL</code>, which
+means use the <code>width</code> <a href="../../pillar/help/pillar_options.html">option</a>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Passed on to <code><a href="../../pillar/help/tbl_format_setup.html">tbl_format_setup()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+<p>Number of rows to show. If <code>NULL</code>, the default, will print all rows
+if less than the <code>print_max</code> <a href="../../pillar/help/pillar_options.html">option</a>.
+Otherwise, will print as many rows as specified by the
+<code>print_min</code> <a href="../../pillar/help/pillar_options.html">option</a>.</p>
+</td></tr>
+<tr valign="top"><td><code>max_extra_cols</code></td>
+<td>
+<p>Number of extra columns to print abbreviated information for,
+if the width is too small for the entire tibble. If <code>NULL</code>,
+the <code>max_extra_cols</code> <a href="../../pillar/help/pillar_options.html">option</a> is used.
+The previously defined <code>n_extra</code> argument is soft-deprecated.</p>
+</td></tr>
+<tr valign="top"><td><code>max_footer_lines</code></td>
+<td>
+<p>Maximum number of footer lines. If <code>NULL</code>,
+the <code>max_footer_lines</code> <a href="../../pillar/help/pillar_options.html">option</a> is used.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+
+<ul>
+<li> <p><code><a href="../../pillar/help/tbl_format_setup.html">tbl_format_setup()</a></code> for preparing an object for formatting
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+print(vctrs::new_data_frame(list(a = 1), class = "tbl"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>pillar</em> version 1.6.3 <a href="00Index.html">Index</a>]</div>
+</body></html>

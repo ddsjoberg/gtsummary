@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Sparse Matrix Constructor From Triplet</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for spMatrix {Matrix}"><tr><td>spMatrix {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Sparse Matrix Constructor From Triplet</h2>
+
+<h3>Description</h3>
+
+<p>User friendly construction of a sparse matrix (inheriting from class
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>) from the triplet representation.
+</p>
+<p>This is much less flexible than <code><a href="sparseMatrix.html">sparseMatrix</a>()</code> and hence
+somewhat <em>deprecated</em>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+spMatrix(nrow, ncol, i = integer(), j = integer(), x = numeric())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>nrow, ncol</code></td>
+<td>
+<p>integers specifying the desired number of rows and
+columns.</p>
+</td></tr>
+<tr valign="top"><td><code>i,j</code></td>
+<td>
+<p>integer vectors of the same length specifying the locations
+of the non-zero (or non-<code>TRUE</code>) entries of the matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>atomic vector of the same length as <code>i</code> and <code>j</code>,
+specifying the values of the non-zero entries.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A sparse matrix in triplet form, as an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object inheriting from both
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code> and
+<code><a href="generalMatrix-class.html">generalMatrix</a></code>.
+</p>
+<p>The matrix <i>M</i> will have
+<code>M[i[k], j[k]] == x[k]</code>, for <i>k = 1,2,&hellip;, n</i>, where
+<code>n = length(i)</code> and
+<code>M[ i', j' ] == 0</code> for all other pairs <i>(i',j')</i>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Matrix.html">Matrix</a>(*, sparse=TRUE)</code> for the more usual
+constructor of such matrices.  Then, <code><a href="sparseMatrix.html">sparseMatrix</a></code>
+is more general and flexible than <code>spMatrix()</code> and by default
+returns a <code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> which is often slightly
+more desirable.   Further, <code><a href="bdiag.html">bdiag</a></code> and
+<code><a href="Diagonal.html">Diagonal</a></code> for (block-)diagonal matrix constructors.
+</p>
+<p>Consider <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code> and similar class
+definition help files.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## simple example
+A &lt;- spMatrix(10,20, i = c(1,3:8),
+                     j = c(2,9,6:10),
+                     x = 7 * (1:7))
+A # a "dgTMatrix"
+summary(A)
+str(A) # note that *internally* 0-based indices (i,j) are used
+
+L &lt;- spMatrix(9, 30, i = rep(1:9, 3), 1:27,
+              (1:27) %% 4 != 1)
+L # an "lgTMatrix"
+
+
+## A simplified predecessor of  Matrix'  rsparsematrix() function :
+
+ rSpMatrix &lt;- function(nrow, ncol, nnz,
+                       rand.x = function(n) round(rnorm(nnz), 2))
+ {
+     ## Purpose: random sparse matrix
+     ## --------------------------------------------------------------
+     ## Arguments: (nrow,ncol): dimension
+     ##          nnz  :  number of non-zero entries
+     ##         rand.x:  random number generator for 'x' slot
+     ## --------------------------------------------------------------
+     ## Author: Martin Maechler, Date: 14.-16. May 2007
+     stopifnot((nnz &lt;- as.integer(nnz)) &gt;= 0,
+               nrow &gt;= 0, ncol &gt;= 0, nnz &lt;= nrow * ncol)
+     spMatrix(nrow, ncol,
+              i = sample(nrow, nnz, replace = TRUE),
+              j = sample(ncol, nnz, replace = TRUE),
+              x = rand.x(nnz))
+ }
+
+ M1 &lt;- rSpMatrix(100000, 20, nnz = 200)
+ summary(M1)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

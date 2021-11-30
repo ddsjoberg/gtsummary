@@ -1,0 +1,543 @@
+---
+title: "Analysing Longitudinal or Panel Data"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+vignette: >
+  %\VignetteIndexEntry{Analysing Longitudinal or Panel Data}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+```{r , include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>",
+  out.width = "100%"
+)
+
+pkgs <- c(
+  "datawizard",
+  "dplyr",
+  "tidyr",
+  "see",
+  "ggplot2",
+  "parameters",
+  "performance",
+  "lme4",
+  "lfe"
+)
+
+if (!all(sapply(pkgs, requireNamespace, quietly = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
+if (!packageVersion("parameters") >= "0.14.1") {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
+set.seed(333)
+```
+
+This vignette explains the rational behind the `demean()` function. 
+
+We give recommendations how to analyze multilevel or hierarchical data
+structures, when macro-indicators (or level-2 predictors, or higher-level units,
+or more general: _group-level predictors_) are used as covariates and the model
+suffers from **heterogeneity bias** [@bell_explaining_2015].
+
+# Sample data used in this vignette
+
+```{r}
+library(parameters)
+data("qol_cancer")
+```
+
+* Variables:
+
+  * `QoL` : Response (quality of life of patient)
+
+  * `phq4` : Patient Health Questionnaire, **time-varying** variable
+
+  * `hospital` : Location of treatment, **time-invariant** variable, co-variate
+
+  * `education`: Educational level, **time-invariant** variable, co-variate
+
+  * `ID` : patient ID
+
+  * `time` : time-point of measurement
+
+# Heterogeneity bias
+
+Heterogeneity bias occurs when group-level predictors vary within and across
+groups, and hence fixed effects may correlate with group (or random) effects.
+This is a typical situation when analyzing longitudinal or panel data: Due to
+the repeated measurements of persons, the "person" (or subject-ID) is now a
+level-2 variable. Predictors at level-1 ("fixed effects"), e.g. self-rated
+health or income, now have an effect at level-1 ("within"-effect) and at
+higher-level units (level-2, the subject-level, which is the "between"-effect)
+(see also [this posting](https://shouldbewriting.netlify.app/posts/2019-10-21-accounting-for-within-and-between-subject-effect/)).
+This inevitably leads to correlating fixed effects and error terms - which, in
+turn, results in biased estimates, because both the within- *and* between-effect
+are captured in *one* estimate.
+
+You can check if your model may suffer from heterogeneity bias using the
+`check_heterogeneity_bias()` function:
+
+```{r}
+check_heterogeneity_bias(qol_cancer, select = c("phq4", "education"), group = "ID")
+```
+
+# Adressing heterogeneity bias: the Fixed Effects Regression (FE) approach
+
+Fixed effects regression models (FE) are a popular approach for panel data
+analysis in particular in econometrics and considered as gold standard. To avoid
+the problem of heterogeneity bias, in FE all higher-level variance (and thus,
+any between-effects), "are controlled out using the higher-level entities
+themselves, included in the model as dummy variables" [@bell_explaining_2015].
+As a consequence, FE models are only able estimate _within-effects_.
+
+To remove between-effects and only model within-effects, the data needs some
+preparation: _de-meaning_. De-meaning, or _person-mean centering_, or _centering
+within clusters_, takes away the higher-level mean from the regression equation,
+and as such, FE avoids estimating a parameter for each higher-level unit.
+
+## Computing the de-meaned and group-meaned variables
+
+```{r}
+qol_cancer <- cbind(
+  qol_cancer,
+  datawizard::demean(qol_cancer, select = c("phq4", "QoL"), group = "ID")
+)
+```
+
+Now we have:
+
+  * `phq4_between`: time-varying variable with the mean of `phq4` across all
+    time-points, for each patient (ID).
+
+  * `phq4_within`: the de-meaned time-varying variable `phq4`.
+
+A FE model is a classical linear model, where
+
+ * Intercept is removed
+
+  * time-invariant predictors are not allowed to be included
+
+  * the group-level factor is included as predictor
+
+  * time-varying predictors are de-meaned ("person-mean centered", indicating
+    the "within-subject" effect)
+
+```{r}
+fe_model1 <- lm(
+  QoL ~ 0 + time + phq4_within + ID,
+  data = qol_cancer
+)
+# we use only the first two rows, because the remaining rows are
+# the estimates for "ID", which is not of interest here...
+model_parameters(fe_model1)[1:2, ]
+
+
+# instead of removing the intercept, we could also use the
+# de-meaned response...
+fe_model2 <- lm(
+  QoL_within ~ time + phq4_within + ID,
+  data = qol_cancer
+)
+model_parameters(fe_model2)[2:3, ]
+
+# we compare the results with those from the "lfe"-package for panel data
+library(lfe)
+fe_model3 <- felm(
+  QoL ~ time + phq4 | ID,
+   data = qol_cancer
+)
+model_parameters(fe_model3)
+```
+
+As we can see, the _within-effect_ of PHQ-4 is `-3.66`, hence the mean of the
+change for an average individual case in our sample (or, the "net" effect), is
+`-3.66`.
+
+But what about the between-effect? How do people with higher PHQ-4 score differ
+from people with lower PHQ-4 score? Or what about educational inequalities? Do
+higher educated people have a higher PHQ-4 score than lower educated people?
+
+This question cannot be answered with FE regression. But: "Can one fit a
+multilevel model with varying intercepts (or coefficients) when the units and
+predictors correlate? The answer is yes. And the solution is simple."
+[@bafumi_fitting_2006]
+
+# Adressing heterogeneity bias: the Mixed Model approach
+
+Mixed models include different levels of sources of variability (i.e. error
+terms at each level). Predictors used at level-1 that are varying across
+higher-level units will thus have residual errors at both level-1 and
+higher-level units. "Such covariates contain two parts: one that is specific to
+the higher-level entity that does not vary between occasions, and one that
+represents the difference between occasions, within higher-level entities"
+[@bell_explaining_2015]. Hence, the error terms will be correlated with the
+covariate, which violates one of the assumptions of mixed models (iid,
+independent and identically distributed error terms) - also known and described
+above as _heterogeneity bias_.
+
+But how can this issue be addressed outside the FE framework?
+
+There are several ways how to address this using a mixed models approach:
+
+  * Correlated group factors and predictors are no problem anyway, because
+    [partial
+    pooling](https://www.tjmahr.com/plotting-partial-pooling-in-mixed-effects-models/)
+    allows estimates of units o borrow strength from the whole sample and shrink
+    toward a common mean (@shor_bayesian_2007).
+
+  * If predictor and group factors correlate, one can remove this correlation by
+    group-meaning [or "mean within clusters", @bafumi_fitting_2006;
+    @gelman_data_2007, Chap. 12.6.].
+
+  * When time-varying predictors are "decomposed" into their time-varying and
+    time-invariant components (demeaning), then mixed models can model **both**
+    within- and between-subject effects [@bell_fixed_2019] - this approach is
+    essentially a further development of a long-known recommendation by Mundlak
+    [@mundlak_pooling_1978].
+
+For now, we will follow the last recommendation and use the within- and
+between-version of `phq4`.
+
+```{r}
+library(lme4)
+mixed_1 <- lmer(
+  QoL ~ time + phq4_within + phq4_between + (1 | ID),
+  data = qol_cancer
+)
+model_parameters(mixed_1)
+
+# compare to FE-model
+model_parameters(fe_model1)[1:2, ]
+```
+
+As we can see, the estimates and standard errors are identical. The argument
+_against_ the use of mixed models, i.e. that using mixed models for panel data
+will yield biased estimates and standard errors, is based on an incorrect model
+specification [@mundlak_pooling_1978]. As such, when the (mixed) model is
+properly specified, the estimator of the mixed model is identical to the
+'within' (i.e. FE) estimator.
+
+As a consequence, we cannot only use the above specified mixed model for panel
+data, we can even specify more complex models including within-effects,
+between-effects or random effects variation. A mixed models approach can model
+the causes of endogeneity explicitly by including the (separated) within- and
+between-effects of time-varying fixed effects and including time-constant fixed
+effects.
+
+```{r}
+mixed_2 <- lmer(
+  QoL ~ time + phq4_within + phq4_between + education + (1 + time | ID),
+  data = qol_cancer
+)
+# effects = "fixed" will not display random effects, but split the
+# fixed effects into its between- and within-effects components.
+model_parameters(mixed_2, effects = "fixed")
+```
+
+For more complex models, within-effects will naturally change slightly and are
+no longer identical to simpler FE models. This is no "bias", but rather the
+result of building more complex models: FE models lack information of variation
+in the group-effects or between-subject effects. Furthermore, FE models cannot
+include random slopes, which means that fixed effects regressions are neglecting
+"cross-cluster differences in the effects of lower-level controls (which)
+reduces the precision of estimated context effects, resulting in (...) low
+statistical power" [@heisig_costs_2017].
+
+# Conclusion: Complex Random Effects Within-Between Models
+
+Depending on the structure of the data, the best approach to analyzing panel
+data would be a so called "complex random effects within-between" model
+[@bell_fixed_2019]:
+
+```{r echo=FALSE}
+f <- "y<sub>it</sub> = &beta;<sub>0</sub> + &beta;<sub>1W</sub> (x<sub>it</sub> - &#x035E;x<sub>i</sub>) + &beta;<sub>2B</sub> &#x035E;x<sub>i</sub> + &beta;<sub>3</sub> z<sub>i</sub> + &upsilon;<sub>i0</sub> + &upsilon;<sub>i1</sub> (x<sub>it</sub> - &#x035E;x<sub>i</sub>) + &epsilon;<sub>it</sub>"
+knitr::asis_output(f)
+```
+
+```{r echo=FALSE}
+f <- "<ul><li>x<sub>it</sub> - &#x035E;x<sub>i</sub> is the de-meaned predictor, <em>phq4_within</em></li><li>&#x035E;x<sub>i</sub> is the group-meaned predictor, <em>phq4_between</em></li><li>&beta;<sub>1W</sub> is the coefficient for phq4_within (within-subject)</li><li>&beta;<sub>2B</sub> is the coefficient for phq4_between (bewteen-subject)</li><li>&beta;<sub>3</sub> is the coefficient for time-constant predictors, such as `hospital` or `education` (bewteen-subject)</li></ul>"
+knitr::asis_output(f)
+```
+
+In R-code, the model is written down like this:
+
+```{r}
+rewb <- lmer(
+  QoL ~ time + phq4_within + phq4_between + education +
+    (1 + time | ID) + (1 + phq4_within | ID),
+  data = qol_cancer
+)
+```
+
+**What about time-constant predictors?**
+
+After demeaning time-varying predictors, "at the higher level, the mean term is
+no longer constrained by Level 1 effects, so it is free to account for all the
+higher-level variance associated with that variable" [@bell_explaining_2015].
+
+Thus, _time-constant **categorical**_ predictors, that only have a
+between-effect, can be simply included as fixed effects predictor (since they’re
+not constrained by level-1 effects). Time-constant _continuous_ **group-level
+predictors** (for instance, GDP of countries) should be group-meaned, to have a
+proper "between"-effect [@gelman_data_2007, Chap. 12.6.].
+
+The benefit of this kind of model is that you have information on within-,
+between- and other time-constant (i.e. between) effects or group-level
+predictors...
+
+```{r}
+model_parameters(rewb, effects = "fixed")
+```
+
+... but you can also model the variation of (group) effects across time (and
+probably space), and you can even include more higher-level units (e.g. nested
+design or cross-classified design with more than two levels):
+
+```{r}
+random_parameters(rewb)
+```
+
+**What about imbalanced groups, i.e. large differences in N per group?**
+
+See little example after this visual example...
+
+# A visual example
+
+First, we generate some fake data that implies a linear relationship between
+outcome and independent variable. The objective is that the amount of typing
+errors depends on how fast (typing speed) you can type, however, the more typing
+experience you have, the faster you can type. Thus, the outcome measure is
+"amount of typing errors", while our predictor is "typing speed". Furthermore,
+we have repeated measurements of people with different "typing experience
+levels".
+
+The results show that we will have two sources of variation: Overall, more
+experienced typists make less mistakes (group-level pattern). When typing
+faster, typists make more mistakes (individual-level pattern).
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(see)
+
+set.seed(123)
+n <- 5
+b <- seq(1, 1.5, length.out = 5)
+x <- seq(2, 2 * n, 2)
+
+d <- do.call(rbind, lapply(1:n, function(i) {
+  data.frame(
+    x = seq(1, n, by = .2),
+    y = 2 * x[i] + b[i] * seq(1, n, by = .2) + rnorm(21),
+    grp = as.factor(2 * i)
+  )
+}))
+
+d <- d %>%
+  group_by(grp) %>%
+  mutate(x = rev(15 - (x + 1.5 * as.numeric(grp)))) %>%
+  ungroup()
+
+labs <- c("very slow", "slow", "average", "fast", "very fast")
+levels(d$grp) <- rev(labs)
+
+d <- cbind(d, datawizard::demean(d, c("x", "y"), group = "grp"))
+```
+
+Let's look at the raw data...
+
+```{r echo=FALSE}
+ggplot(d, aes(x, y)) +
+  geom_point(colour = "#555555", size = 2.5, alpha = .5) +
+  see::theme_modern() +
+  labs(x = "Typing Speed", y = "Typing Errors", colour = "Type Experience")
+```
+
+## Model 1: Linear relationship between typing errors and typing speed
+
+We can now assume a (linear) relationship between typing errors and typing
+speed.
+
+```{r echo=FALSE}
+ggplot(d, aes(x, y)) +
+  geom_point(colour = "#555555", size = 2.5, alpha = .5) +
+  geom_smooth(method = "lm", se = F, colour = "#555555") +
+  see::theme_modern() +
+  labs(x = "Typing Speed", y = "Typing Errors", colour = "Type Experience")
+```
+
+Looking at the coefficients, we have following model with a coefficient of
+`-1.92`.
+
+```{r}
+m1 <- lm(y ~ x, data = d)
+model_parameters(m1)
+```
+
+However, we have ignored the clustered structure in our data, in this example
+due to repeated measurements.
+
+```{r echo=FALSE}
+ggplot(d, aes(x, y)) +
+  geom_point(mapping = aes(colour = grp), size = 2.5, alpha = .5) +
+  geom_smooth(method = "lm", se = F, colour = "#555555") +
+  see::scale_color_flat() +
+  see::theme_modern() +
+  labs(x = "Typing Speed", y = "Typing Errors", colour = "Type Experience")
+```
+
+## Model 2: Within-subject effect of typing speed
+
+A fixed effects regression (FE-regression) would now remove all between-effects
+and include only the within-effects as well as the group-level indicator.
+
+```{r echo=FALSE}
+ggplot(d, aes(x, y)) +
+  geom_smooth(mapping = aes(colour = grp), method = "lm", se = FALSE) +
+  geom_point(mapping = aes(colour = grp), size = 2.2, alpha = .6) +
+  see::scale_color_flat() +
+  see::theme_modern() +
+  labs(x = "Typing Speed", y = "Typing Errors", colour = "Type Experience")
+```
+
+This returns the coefficient of the "within"-effect, which is `1.2`, with a
+standard error of `0.07`. Note that the FE-model does *not* take the variation
+*between* subjects into account, thus resulting in (possibly) biased estimates,
+and biased standard errors.
+
+```{r}
+m2 <- lm(y ~ 0 + x_within + grp, data = d)
+model_parameters(m2)[1, ]
+```
+
+## Model 3: Between-subject effect of typing speed
+
+To understand, why the above model 1 (`m1`) returns a biased estimate, which is
+a "weighted average" of the within- and between-effects, let us look at the
+between-effect now.
+
+```{r echo=FALSE}
+ggplot(d, aes(x, y)) +
+  geom_point(mapping = aes(colour = grp), size = 2.2, alpha = .6) +
+  geom_smooth(mapping = aes(x = x_between, y = y_between), method = "lm", se = F, colour = "#444444") +
+  see::scale_color_flat() +
+  see::theme_modern() +
+  labs(x = "Typing Speed", y = "Typing Errors", colour = "Type Experience")
+```
+
+As we can see, the between-effect is `-2.93`, which is different from the
+`-1.92` estimated in the model `m1`.
+
+```{r}
+m3 <- lm(y ~ x_between, data = d)
+model_parameters(m3)
+```
+
+## Model 4: Mixed model with within- and between-subjects
+
+Since FE-models can only model within-effects, we now use a mixed model with
+within- and between-effects.
+
+```{r echo=FALSE}
+ggplot(d, aes(x, y)) +
+  geom_smooth(mapping = aes(colour = grp), method = "lm", se = FALSE) +
+  geom_point(mapping = aes(colour = grp), size = 2.2, alpha = .6) +
+  geom_smooth(mapping = aes(x = x_between, y = y_between), method = "lm", se = F, colour = "#444444") +
+  see::scale_color_flat() +
+  see::theme_modern() +
+  labs(x = "Typing Speed", y = "Typing Errors", colour = "Type Experience")
+```
+
+We see, the estimate for the within-effects is *not* biased. Furthermore, we get
+the correct between-effect as well (standard errors differ, because the variance
+in the grouping structure is more accurately taken into account).
+
+```{r}
+m4 <- lmer(y ~ x_between + x_within + (1 | grp), data = d)
+model_parameters(m4)
+```
+
+## Model 5: Complex Random-Effects Within-Between Model
+
+Finally, we can also take the variation between subjects into account by adding
+a random slope. This model can be called a complex "REWB" (random-effects
+within-between) model. Due to the variation between subjects, we get larger
+standard errors for the within-effect.
+
+```{r}
+m5 <- lmer(y ~ x_between + x_within + (1 + x_within | grp), data = d)
+model_parameters(m5)
+```
+
+# Balanced versus imbalanced groups
+
+The "simple" linear slope of the between-effect (and also from the
+within-effect) is (almost) identical in "classical" linear regression compared
+to linear mixed models when the groups are balanced, i.e. when the number of
+observation per group is similar or the same.
+
+Whenever group size is imbalanced, the "simple" linear slope will be adjusted.
+This leads to different estimates for between-effects between classical and
+mixed models regressions due to shrinkage - i.e. for larger variation of group
+sizes we find stronger regularization of estimates.
+
+Hence, for mixed models with larger differences in number of observation per
+random effects group, the between-effect will differ from the between-effect
+calculated by "classical" regression models. However, this shrinkage is a
+desired property of mixed models and usually improves the estimates.
+
+```{r}
+set.seed(123)
+n <- 5
+b <- seq(1, 1.5, length.out = 5)
+x <- seq(2, 2 * n, 2)
+
+d <- do.call(rbind, lapply(1:n, function(i) {
+  data.frame(
+    x = seq(1, n, by = .2),
+    y = 2 * x[i] + b[i] * seq(1, n, by = .2) + rnorm(21),
+    grp = as.factor(2 * i)
+  )
+}))
+
+# create imbalanced groups
+d$grp[sample(which(d$grp == 8), 10)] <- 6
+d$grp[sample(which(d$grp == 4), 8)] <- 2
+d$grp[sample(which(d$grp == 10), 9)] <- 6
+
+d <- d %>%
+  group_by(grp) %>%
+  mutate(x = rev(15 - (x + 1.5 * as.numeric(grp)))) %>%
+  ungroup()
+
+labs <- c("very slow", "slow", "average", "fast", "very fast")
+levels(d$grp) <- rev(labs)
+
+d <- cbind(d, datawizard::demean(d, c("x", "y"), group = "grp"))
+
+# Between-subject effect of typing speed
+m1 <- lm(y ~ x_between, data = d)
+model_parameters(m1)
+
+# Between-subject effect of typing speed, accounting for group structure
+m2 <- lmer(y ~ x_between + (1 | grp), data = d)
+model_parameters(m2)
+```
+
+# References

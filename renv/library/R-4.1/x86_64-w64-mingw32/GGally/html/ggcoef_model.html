@@ -1,0 +1,525 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Plot model coefficients</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggcoef_model {GGally}"><tr><td>ggcoef_model {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Plot model coefficients</h2>
+
+<h3>Description</h3>
+
+<p>Plot model coefficients
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggcoef_model(
+  model,
+  tidy_fun = broom::tidy,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  exponentiate = FALSE,
+  variable_labels = NULL,
+  term_labels = NULL,
+  interaction_sep = " * ",
+  categorical_terms_pattern = "{level}",
+  add_reference_rows = TRUE,
+  no_reference_row = NULL,
+  intercept = FALSE,
+  include = dplyr::everything(),
+  significance = 1 - conf.level,
+  significance_labels = NULL,
+  show_p_values = TRUE,
+  signif_stars = TRUE,
+  return_data = FALSE,
+  ...
+)
+
+ggcoef_compare(
+  models,
+  type = c("dodged", "faceted"),
+  tidy_fun = broom::tidy,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  exponentiate = FALSE,
+  variable_labels = NULL,
+  term_labels = NULL,
+  interaction_sep = " * ",
+  categorical_terms_pattern = "{level}",
+  add_reference_rows = TRUE,
+  no_reference_row = NULL,
+  intercept = FALSE,
+  include = dplyr::everything(),
+  significance = 1 - conf.level,
+  significance_labels = NULL,
+  return_data = FALSE,
+  ...
+)
+
+ggcoef_multinom(
+  model,
+  type = c("dodged", "faceted"),
+  y.level_label = NULL,
+  tidy_fun = broom::tidy,
+  conf.int = TRUE,
+  conf.level = 0.95,
+  exponentiate = FALSE,
+  variable_labels = NULL,
+  term_labels = NULL,
+  interaction_sep = " * ",
+  categorical_terms_pattern = "{level}",
+  add_reference_rows = TRUE,
+  no_reference_row = NULL,
+  intercept = FALSE,
+  include = dplyr::everything(),
+  significance = 1 - conf.level,
+  significance_labels = NULL,
+  show_p_values = TRUE,
+  signif_stars = TRUE,
+  return_data = FALSE,
+  ...
+)
+
+ggcoef_plot(
+  data,
+  x = "estimate",
+  y = "label",
+  exponentiate = FALSE,
+  point_size = 2,
+  point_stroke = 2,
+  point_fill = "white",
+  colour = NULL,
+  colour_guide = TRUE,
+  colour_lab = "",
+  colour_labels = ggplot2::waiver(),
+  shape = "significance",
+  shape_values = c(16, 21),
+  shape_guide = TRUE,
+  shape_lab = "",
+  errorbar = TRUE,
+  errorbar_height = 0.1,
+  errorbar_coloured = FALSE,
+  stripped_rows = TRUE,
+  strips_odd = "#11111111",
+  strips_even = "#00000000",
+  vline = TRUE,
+  vline_colour = "grey50",
+  dodged = FALSE,
+  dodged_width = 0.8,
+  facet_row = "var_label",
+  facet_col = NULL,
+  facet_labeller = "label_value"
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>model</code></td>
+<td>
+<p>a regression model object</p>
+</td></tr>
+<tr valign="top"><td><code>tidy_fun</code></td>
+<td>
+<p>option to specify a custom tidier function</p>
+</td></tr>
+<tr valign="top"><td><code>conf.int</code></td>
+<td>
+<p>should confidence intervals be computed? (see <code><a href="../../broom/help/reexports.html">broom::tidy()</a></code>)</p>
+</td></tr>
+<tr valign="top"><td><code>conf.level</code></td>
+<td>
+<p>the confidence level to use for the confidence
+interval if <code>conf.int = TRUE</code>; must be strictly greater than 0
+and less than 1; defaults to 0.95, which corresponds to a 95
+percent confidence interval</p>
+</td></tr>
+<tr valign="top"><td><code>exponentiate</code></td>
+<td>
+<p>if <code>TRUE</code> a logarithmic scale will
+be used for x-axis</p>
+</td></tr>
+<tr valign="top"><td><code>variable_labels</code></td>
+<td>
+<p>a named list or a named vector of custom variable labels</p>
+</td></tr>
+<tr valign="top"><td><code>term_labels</code></td>
+<td>
+<p>a named list or a named vector of custom term labels</p>
+</td></tr>
+<tr valign="top"><td><code>interaction_sep</code></td>
+<td>
+<p>separator for interaction terms</p>
+</td></tr>
+<tr valign="top"><td><code>categorical_terms_pattern</code></td>
+<td>
+<p>a <a href="../../glue/help/glue.html">glue pattern</a> for
+labels of categorical terms with treatment or sum contrasts
+(see <code><a href="../../broom.helpers/help/model_list_terms_levels.html">model_list_terms_levels()</a></code>)</p>
+</td></tr>
+<tr valign="top"><td><code>add_reference_rows</code></td>
+<td>
+<p>should reference rows be added?</p>
+</td></tr>
+<tr valign="top"><td><code>no_reference_row</code></td>
+<td>
+<p>variables (accepts <a href="../../dplyr/help/select.html">tidyselect</a> notation)
+for those no reference row should be added, when <code>add_reference_rows = TRUE</code></p>
+</td></tr>
+<tr valign="top"><td><code>intercept</code></td>
+<td>
+<p>should the intercept(s) be included?</p>
+</td></tr>
+<tr valign="top"><td><code>include</code></td>
+<td>
+<p>variables to include. Accepts <a href="../../dplyr/help/select.html">tidyselect</a>
+syntax. Use <code>-</code> to remove a variable. Default is <code>everything()</code>.
+See also <code><a href="../../broom.helpers/help/select_helpers.html">all_continuous()</a></code>, <code><a href="../../broom.helpers/help/select_helpers.html">all_categorical()</a></code>, <code><a href="../../broom.helpers/help/select_helpers.html">all_dichotomous()</a></code>
+and <code><a href="../../broom.helpers/help/select_helpers.html">all_interaction()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>significance</code></td>
+<td>
+<p>level (between 0 and 1) below which a
+coefficient is consider to be significantly different from 0
+(or 1 if <code>exponentiate = TRUE</code>), <code>NULL</code> for not highlighting
+such coefficients</p>
+</td></tr>
+<tr valign="top"><td><code>significance_labels</code></td>
+<td>
+<p>optional vector with custom labels
+for significance variable</p>
+</td></tr>
+<tr valign="top"><td><code>show_p_values</code></td>
+<td>
+<p>if <code>TRUE</code>, add p-value to labels</p>
+</td></tr>
+<tr valign="top"><td><code>signif_stars</code></td>
+<td>
+<p>if <code>TRUE</code>, add significant stars to labels</p>
+</td></tr>
+<tr valign="top"><td><code>return_data</code></td>
+<td>
+<p>if <code>TRUE</code>, will return the data.frame used
+for plotting instead of the plot</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>parameters passed to <code><a href="../../GGally/help/ggcoef_plot.html">ggcoef_plot()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>models</code></td>
+<td>
+<p>named list of models</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>a dodged plot or a faceted plot?</p>
+</td></tr>
+<tr valign="top"><td><code>y.level_label</code></td>
+<td>
+<p>an optional named vector for labeling <code>y.level</code> (see examples)</p>
+</td></tr>
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data frame containing data to be plotted,
+typically the output of <code><a href="../../GGally/help/ggcoef_model.html">ggcoef_model()</a></code>, <code><a href="../../GGally/help/ggcoef_compare.html">ggcoef_compare()</a></code>
+or <code><a href="../../GGally/help/ggcoef_multinom.html">ggcoef_multinom()</a></code> with the option <code>return_data = TRUE</code></p>
+</td></tr>
+<tr valign="top"><td><code>x, y</code></td>
+<td>
+<p>variables mapped to x and y axis</p>
+</td></tr>
+<tr valign="top"><td><code>point_size</code></td>
+<td>
+<p>size of the points</p>
+</td></tr>
+<tr valign="top"><td><code>point_stroke</code></td>
+<td>
+<p>thickness of the points</p>
+</td></tr>
+<tr valign="top"><td><code>point_fill</code></td>
+<td>
+<p>fill colour for the points</p>
+</td></tr>
+<tr valign="top"><td><code>colour</code></td>
+<td>
+<p>optional variable name to be mapped to
+colour aesthetic</p>
+</td></tr>
+<tr valign="top"><td><code>colour_guide</code></td>
+<td>
+<p>should colour guide be displayed
+in the legend?</p>
+</td></tr>
+<tr valign="top"><td><code>colour_lab</code></td>
+<td>
+<p>label of the colour aesthetic in the legend</p>
+</td></tr>
+<tr valign="top"><td><code>colour_labels</code></td>
+<td>
+<p>labels argument passed to
+<code><a href="../../ggplot2/help/scale_colour_discrete.html">ggplot2::scale_colour_discrete()</a></code> and
+<code><a href="../../ggplot2/help/discrete_scale.html">ggplot2::discrete_scale()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>shape</code></td>
+<td>
+<p>optional variable name to be mapped to the
+shape aesthetic</p>
+</td></tr>
+<tr valign="top"><td><code>shape_values</code></td>
+<td>
+<p>values of the different shapes to use in
+<code><a href="../../ggplot2/help/scale_manual.html">ggplot2::scale_shape_manual()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>shape_guide</code></td>
+<td>
+<p>should shape guide be displayed in the legend?</p>
+</td></tr>
+<tr valign="top"><td><code>shape_lab</code></td>
+<td>
+<p>label of the shape aesthetic in the legend</p>
+</td></tr>
+<tr valign="top"><td><code>errorbar</code></td>
+<td>
+<p>should error bars be plotted?</p>
+</td></tr>
+<tr valign="top"><td><code>errorbar_height</code></td>
+<td>
+<p>height of error bars</p>
+</td></tr>
+<tr valign="top"><td><code>errorbar_coloured</code></td>
+<td>
+<p>should error bars be colored as the points?</p>
+</td></tr>
+<tr valign="top"><td><code>stripped_rows</code></td>
+<td>
+<p>should stripped rows be displayed in the background?</p>
+</td></tr>
+<tr valign="top"><td><code>strips_odd</code></td>
+<td>
+<p>color of the odd rows</p>
+</td></tr>
+<tr valign="top"><td><code>strips_even</code></td>
+<td>
+<p>color of the even rows</p>
+</td></tr>
+<tr valign="top"><td><code>vline</code></td>
+<td>
+<p>should a vertical line be drawn at 0 (or 1 if <code>exponentiate = TRUE</code>)?</p>
+</td></tr>
+<tr valign="top"><td><code>vline_colour</code></td>
+<td>
+<p>colour of vertical line</p>
+</td></tr>
+<tr valign="top"><td><code>dodged</code></td>
+<td>
+<p>should points be dodged (according to the colour aesthetic)?</p>
+</td></tr>
+<tr valign="top"><td><code>dodged_width</code></td>
+<td>
+<p>width value for <code><a href="../../ggplot2/help/position_dodge.html">ggplot2::position_dodge()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>facet_row</code></td>
+<td>
+<p>variable name to be used for row facets</p>
+</td></tr>
+<tr valign="top"><td><code>facet_col</code></td>
+<td>
+<p>optional variable name to be used for column facets</p>
+</td></tr>
+<tr valign="top"><td><code>facet_labeller</code></td>
+<td>
+<p>labeller function to be used for labeling facets;
+if labels are too long, you can use <code><a href="../../ggplot2/help/labellers.html">ggplot2::label_wrap_gen()</a></code> (see examples),
+more information in the documentation of <code><a href="../../ggplot2/help/facet_grid.html">ggplot2::facet_grid()</a></code></p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>ggcoef_model()</code>, <code>ggcoef_multinom()</code> and <code>ggcoef_compare()</code> use
+<code><a href="../../broom.helpers/help/tidy_plus_plus.html">broom.helpers::tidy_plus_plus()</a></code> to obtain a <code>tibble</code> of the model
+coefficients, apply additional data transformation and then pass the
+produced <code>tibble</code> to <code>ggcoef_plot()</code> to generate the plot.
+</p>
+<p>For more control, you can use the argument <code>return_data = TRUE</code> to
+get the produced <code>tibble</code>, apply any transformation of your own and
+then pass your customized <code>tibble</code> to <code>ggcoef_plot()</code>.
+</p>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>ggcoef_model</code>: Redesign of <code><a href="../../GGally/help/ggcoef.html">ggcoef()</a></code> based on <code><a href="../../broom.helpers/help/tidy_plus_plus.html">broom.helpers::tidy_plus_plus()</a></code>.
+</p>
+</li>
+<li> <p><code>ggcoef_compare</code>: Designed for displaying several models on the same plot.
+</p>
+</li>
+<li> <p><code>ggcoef_multinom</code>: A variation of <code><a href="../../GGally/help/ggcoef_model.html">ggcoef_model()</a></code> adapted to multinomial logistic regressions performed with <code><a href="../../nnet/help/multinom.html">nnet::multinom()</a></code>.
+</p>
+</li>
+<li> <p><code>ggcoef_plot</code>: SOME DESCRIPTION HERE
+</p>
+</li></ul>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+if (require(broom.helpers)) {
+  data(tips, package = "reshape")
+  mod_simple &lt;- lm(tip ~ day + time + total_bill, data = tips)
+  p_(ggcoef_model(mod_simple))
+
+  # custom variable labels
+  # you can use the labelled package to define variable labels before computing model
+  if (require(labelled)) {
+    tips_labelled &lt;- tips %&gt;%
+      labelled::set_variable_labels(
+        day = "Day of the week",
+        time = "Lunch or Dinner",
+        total_bill = "Bill's total"
+      )
+    mod_labelled &lt;- lm(tip ~ day + time + total_bill, data = tips_labelled)
+    p_(ggcoef_model(mod_labelled))
+  }
+  # you can provide custom variable labels with 'variable_labels'
+  p_(ggcoef_model(
+    mod_simple,
+    variable_labels = c(
+      day = "Week day",
+      time = "Time (lunch or dinner ?)",
+      total_bill = "Total of the bill"
+    )
+  ))
+  # if labels are too long, you can use 'facet_labeller' to wrap them
+  p_(ggcoef_model(
+    mod_simple,
+    variable_labels = c(
+      day = "Week day",
+      time = "Time (lunch or dinner ?)",
+      total_bill = "Total of the bill"
+    ),
+    facet_labeller = label_wrap_gen(10)
+  ))
+
+  # do not display variable facets but add colour guide
+  p_(ggcoef_model(mod_simple, facet_row = NULL, colour_guide = TRUE))
+
+  # a logistic regression example
+  d_titanic &lt;- as.data.frame(Titanic)
+  d_titanic$Survived &lt;- factor(d_titanic$Survived, c("No", "Yes"))
+  mod_titanic &lt;- glm(
+    Survived ~ Sex * Age + Class,
+    weights = Freq,
+    data = d_titanic,
+    family = binomial
+  )
+
+  # use 'exponentiate = TRUE' to get the Odds Ratio
+  p_(ggcoef_model(mod_titanic, exponentiate = TRUE))
+
+  # display intercepts
+  p_(ggcoef_model(mod_titanic, exponentiate = TRUE, intercept = TRUE))
+
+  # customize terms labels
+  p_(
+    ggcoef_model(
+      mod_titanic,
+      exponentiate = TRUE,
+      show_p_values = FALSE,
+      signif_stars = FALSE,
+      add_reference_rows = FALSE,
+      categorical_terms_pattern = "{level} (ref: {reference_level})",
+      interaction_sep = " x "
+    ) +
+    scale_y_discrete(labels = scales::label_wrap(15))
+  )
+
+  # display only a subset of terms
+  p_(ggcoef_model(mod_titanic, exponentiate = TRUE, include = c("Age", "Class")))
+
+  # do not change points' shape based on significance
+  p_(ggcoef_model(mod_titanic, exponentiate = TRUE, significance = NULL))
+
+  # a black and white version
+  p_(ggcoef_model(
+    mod_titanic, exponentiate = TRUE,
+    colour = NULL, stripped_rows = FALSE
+  ))
+
+  # show dichotomous terms on one row
+  p_(ggcoef_model(
+    mod_titanic,
+    exponentiate = TRUE,
+    no_reference_row = broom.helpers::all_dichotomous(),
+    categorical_terms_pattern =
+      "{ifelse(dichotomous, paste0(level, ' / ', reference_level), level)}",
+    show_p_values = FALSE
+  ))
+
+  # works also with with polynomial terms
+  mod_poly &lt;- lm(
+    tip ~ poly(total_bill, 3) + day,
+    data = tips,
+  )
+  p_(ggcoef_model(mod_poly))
+
+  # or with different type of contrasts
+  # for sum contrasts, the value of the reference term is computed
+  if (require(emmeans)) {
+    mod2 &lt;- lm(
+      tip ~ day + time + sex,
+      data = tips,
+      contrasts = list(time = contr.sum, day = contr.treatment(4, base = 3))
+    )
+    p_(ggcoef_model(mod2))
+  }
+}
+
+if (require(broom.helpers)) {
+  # Use ggcoef_compare() for comparing several models on the same plot
+  mod1 &lt;- lm(Fertility ~ ., data = swiss)
+  mod2 &lt;- step(mod1, trace = 0)
+  mod3 &lt;- lm(Fertility ~ Agriculture + Education * Catholic, data = swiss)
+  models &lt;- list("Full model" = mod1, "Simplified model" = mod2, "With interaction" = mod3)
+
+  p_(ggcoef_compare(models))
+  p_(ggcoef_compare(models, type = "faceted"))
+
+  # you can reverse the vertical position of the point by using a negative value
+  # for dodged_width (but it will produce some warnings)
+## Not run: 
+  p_(ggcoef_compare(models, dodged_width = -.9))
+
+## End(Not run)
+}
+
+# specific function for nnet::multinom models
+if (require(broom.helpers) &amp;&amp; require(nnet)) {
+  data(happy)
+  mod &lt;- multinom(happy ~ age + degree + sex, data = happy)
+  p_(ggcoef_multinom(mod, exponentiate = TRUE))
+  p_(ggcoef_multinom(mod, type = "faceted"))
+  p_(ggcoef_multinom(
+    mod, type = "faceted",
+    y.level_label = c(
+      "pretty happy" = "pretty happy\n(ref: very happy)",
+      "very happy" = "very happy"
+    )
+  ))
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

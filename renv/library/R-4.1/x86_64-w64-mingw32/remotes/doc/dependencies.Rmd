@@ -1,0 +1,95 @@
+---
+title: "Dependency resolution for R package development"
+author: "Jim Hester, Hadley Wickham, Gábor Csárdi"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    keep_md: true
+vignette: >
+  %\VignetteIndexEntry{Dependency resolution for R package development}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Package remotes
+
+Remotes, just like devtools, supports package dependency installation for packages not
+yet in a standard package repository such as [CRAN](https://cran.r-project.org)
+or [Bioconductor](http://bioconductor.org).
+
+You can mark any regular dependency defined in the `Depends`, `Imports`,
+`Suggests` or `Enhances` fields as being installed from a remote location by
+adding the remote location to `Remotes` in your `DESCRIPTION` file. This will
+cause remotes to download and install them from the specified location,
+instead of CRAN.
+
+The remote dependencies specified in `Remotes` should be described in the following form.
+
+```
+Remotes: [type::]<Repository>, [type2::]<Repository2>
+```
+
+The `type` is an optional parameter.  If the type is missing the default is
+to install from GitHub. Additional remote dependencies should be separated by
+commas, just like normal dependencies elsewhere in the `DESCRIPTION` file.
+
+### GitHub
+
+Because GitHub is the most commonly used unofficial package distribution in R, it's the default:
+
+```yaml
+Remotes: r-lib/testthat
+```
+
+You can also specify a specific hash, tag, or pull request (using the same syntax as `install_github()` if you want a particular commit. Otherwise the latest commit on the default branch is used.
+
+```yaml
+Remotes: r-lib/httr@v0.4,
+  klutometis/roxygen#142,
+  r-lib/testthat@c67018fa4970
+```
+
+The special `@*release` syntax will install the latest release:
+
+```yaml
+Remotes: r-lib/testthat@*release
+```
+
+A type of 'github' can be specified, but is not required
+
+```yaml
+Remotes: github::tidyverse/ggplot2
+```
+
+### Other sources
+
+All of the currently supported install sources are available, see the 'See
+Also' section in `?install_github` for a complete list.
+
+```yaml
+# GitLab
+Remotes: gitlab::jimhester/covr
+
+# Git
+Remotes: git::git@bitbucket.org:djnavarro/lsr.git,
+  git::https://github.com/igraph/rigraph.git@master
+
+# Bitbucket
+Remotes: bitbucket::sulab/mygene.r@default, djnavarro/lsr
+
+# Bioconductor
+Remotes: bioc::3.3/SummarizedExperiment#117513, bioc::release/Biobase
+
+# SVN
+Remotes: svn::https://github.com/tidyverse/stringr
+
+# URL
+Remotes: url::https://github.com/tidyverse/stringr/archive/HEAD.zip
+
+# Local
+Remotes: local::/pkgs/testthat
+```
+
+### CRAN submission
+
+When you submit your package to CRAN, all of its dependencies must also be available on CRAN. For this reason, `devtools::release()` will warn you if you try to release a package with a `Remotes` field.

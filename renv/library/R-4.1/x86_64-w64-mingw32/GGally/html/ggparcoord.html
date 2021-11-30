@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Parallel coordinate plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggparcoord {GGally}"><tr><td>ggparcoord {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Parallel coordinate plot</h2>
+
+<h3>Description</h3>
+
+<p>A function for plotting static parallel coordinate plots, utilizing
+the <code>ggplot2</code> graphics package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggparcoord(
+  data,
+  columns = 1:ncol(data),
+  groupColumn = NULL,
+  scale = "std",
+  scaleSummary = "mean",
+  centerObsID = 1,
+  missing = "exclude",
+  order = columns,
+  showPoints = FALSE,
+  splineFactor = FALSE,
+  alphaLines = 1,
+  boxplot = FALSE,
+  shadeBox = NULL,
+  mapping = NULL,
+  title = ""
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>the dataset to plot</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>a vector of variables (either names or indices) to be axes in the plot</p>
+</td></tr>
+<tr valign="top"><td><code>groupColumn</code></td>
+<td>
+<p>a single variable to group (color) by</p>
+</td></tr>
+<tr valign="top"><td><code>scale</code></td>
+<td>
+<p>method used to scale the variables (see Details)</p>
+</td></tr>
+<tr valign="top"><td><code>scaleSummary</code></td>
+<td>
+<p>if scale==&quot;center&quot;, summary statistic to univariately
+center each variable by</p>
+</td></tr>
+<tr valign="top"><td><code>centerObsID</code></td>
+<td>
+<p>if scale==&quot;centerObs&quot;, row number of case plot should
+univariately be centered on</p>
+</td></tr>
+<tr valign="top"><td><code>missing</code></td>
+<td>
+<p>method used to handle missing values (see Details)</p>
+</td></tr>
+<tr valign="top"><td><code>order</code></td>
+<td>
+<p>method used to order the axes (see Details)</p>
+</td></tr>
+<tr valign="top"><td><code>showPoints</code></td>
+<td>
+<p>logical operator indicating whether points should be
+plotted or not</p>
+</td></tr>
+<tr valign="top"><td><code>splineFactor</code></td>
+<td>
+<p>logical or numeric operator indicating whether spline interpolation should be used.  Numeric values will multiplied by the number of columns, <code>TRUE</code> will default to cubic interpolation, <code><a href="../../base/help/AsIs.html">AsIs</a></code> to set the knot count directly and <code>0</code>, <code>FALSE</code>, or non-numeric values will not use spline interpolation.</p>
+</td></tr>
+<tr valign="top"><td><code>alphaLines</code></td>
+<td>
+<p>value of alpha scaler for the lines of the parcoord plot or a column name of the data</p>
+</td></tr>
+<tr valign="top"><td><code>boxplot</code></td>
+<td>
+<p>logical operator indicating whether or not boxplots should
+underlay the distribution of each variable</p>
+</td></tr>
+<tr valign="top"><td><code>shadeBox</code></td>
+<td>
+<p>color of underlying box which extends from the min to the
+max for each variable (no box is plotted if <code>shadeBox == NULL</code>)</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>aes string to pass to ggplot object</p>
+</td></tr>
+<tr valign="top"><td><code>title</code></td>
+<td>
+<p>character string denoting the title of the plot</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>scale</code> is a character string that denotes how to scale the variables
+in the parallel coordinate plot. Options:
+</p>
+
+<ul>
+<li><p><code>std</code>: univariately, subtract mean and divide by standard deviation
+</p>
+</li>
+<li><p><code>robust</code>: univariately, subtract median and divide by median absolute deviation
+</p>
+</li>
+<li><p><code>uniminmax</code>: univariately, scale so the minimum of the variable is zero, and the maximum is one
+</p>
+</li>
+<li><p><code>globalminmax</code>: no scaling is done; the range of the graphs is defined
+by the global minimum and the global maximum
+</p>
+</li>
+<li><p><code>center</code>: use <code>uniminmax</code> to standardize vertical height, then
+center each variable at a value specified by the <code>scaleSummary</code> param
+</p>
+</li>
+<li><p><code>centerObs</code>: use <code>uniminmax</code> to standardize vertical height, then
+center each variable at the value of the observation specified by the <code>centerObsID</code> param
+</p>
+</li></ul>
+
+<p><code>missing</code> is a character string that denotes how to handle missing
+missing values. Options:
+</p>
+
+<ul>
+<li><p><code>exclude</code>: remove all cases with missing values
+</p>
+</li>
+<li><p><code>mean</code>: set missing values to the mean of the variable
+</p>
+</li>
+<li><p><code>median</code>: set missing values to the median of the variable
+</p>
+</li>
+<li><p><code>min10</code>: set missing values to 10% below the minimum of the variable
+</p>
+</li>
+<li><p><code>random</code>: set missing values to value of randomly chosen observation on that variable
+</p>
+</li></ul>
+
+<p><code>order</code> is either a vector of indices or a character string that denotes how to
+order the axes (variables) of the parallel coordinate plot. Options:
+</p>
+
+<ul>
+<li><p><code>(default)</code>: order by the vector denoted by <code>columns</code>
+</p>
+</li>
+<li><p><code>(given vector)</code>: order by the vector specified
+</p>
+</li>
+<li><p><code>anyClass</code>: order variables by their separation between any one class and
+the rest (as opposed to their overall variation between classes). This is accomplished
+by calculating the F-statistic for each class vs. the rest, for each axis variable.
+The axis variables are then ordered (decreasing) by their maximum of k F-statistics,
+where k is the number of classes.
+</p>
+</li>
+<li><p><code>allClass</code>: order variables by their overall F statistic (decreasing) from
+an ANOVA with <code>groupColumn</code> as the explanatory variable (note: it is required
+to specify a <code>groupColumn</code> with this ordering method). Basically, this method
+orders the variables by their variation between classes (most to least).
+</p>
+</li>
+<li><p><code>skewness</code>: order variables by their sample skewness (most skewed to
+least skewed)
+</p>
+</li>
+<li><p><code>Outlying</code>: order by the scagnostic measure, Outlying, as calculated
+by the package <code>scagnostics</code>. Other scagnostic measures available to order
+by are <code>Skewed</code>, <code>Clumpy</code>, <code>Sparse</code>, <code>Striated</code>, <code>Convex</code>, <code>Skinny</code>, <code>Stringy</code>, and
+<code>Monotonic</code>. Note: To use these methods of ordering, you must have the <code>scagnostics</code>
+package loaded.
+</p>
+</li></ul>
+
+
+
+<h3>Value</h3>
+
+<p>ggplot object that if called, will print
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jason Crowley, Barret Schloerke, Di Cook, Heike Hofmann, Hadley Wickham
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+# use sample of the diamonds data for illustrative purposes
+data(diamonds, package="ggplot2")
+diamonds.samp &lt;- diamonds[sample(1:dim(diamonds)[1], 100), ]
+
+# basic parallel coordinate plot, using default settings
+p &lt;- ggparcoord(data = diamonds.samp, columns = c(1, 5:10))
+p_(p)
+
+# this time, color by diamond cut
+p &lt;- ggparcoord(data = diamonds.samp, columns = c(1, 5:10), groupColumn = 2)
+p_(p)
+
+# underlay univariate boxplots, add title, use uniminmax scaling
+p &lt;- ggparcoord(data = diamonds.samp, columns = c(1, 5:10), groupColumn = 2,
+  scale = "uniminmax", boxplot = TRUE, title = "Parallel Coord. Plot of Diamonds Data")
+p_(p)
+
+# utilize ggplot2 aes to switch to thicker lines
+p &lt;- ggparcoord(data = diamonds.samp, columns = c(1, 5:10), groupColumn = 2,
+  title ="Parallel Coord. Plot of Diamonds Data", mapping = ggplot2::aes(size = 1)) +
+  ggplot2::scale_size_identity()
+p_(p)
+
+# basic parallel coord plot of the msleep data, using 'random' imputation and
+# coloring by diet (can also use variable names in the columns and groupColumn
+# arguments)
+data(msleep, package="ggplot2")
+p &lt;- ggparcoord(data = msleep, columns = 6:11, groupColumn = "vore", missing =
+  "random", scale = "uniminmax")
+p_(p)
+
+# center each variable by its median, using the default missing value handler,
+# 'exclude'
+p &lt;- ggparcoord(data = msleep, columns = 6:11, groupColumn = "vore", scale =
+  "center", scaleSummary = "median")
+p_(p)
+
+# with the iris data, order the axes by overall class (Species) separation using
+# the anyClass option
+p &lt;- ggparcoord(data = iris, columns = 1:4, groupColumn = 5, order = "anyClass")
+p_(p)
+
+# add points to the plot, add a title, and use an alpha scalar to make the lines
+# transparent
+p &lt;- ggparcoord(data = iris, columns = 1:4, groupColumn = 5, order = "anyClass",
+  showPoints = TRUE, title = "Parallel Coordinate Plot for the Iris Data",
+  alphaLines = 0.3)
+p_(p)
+
+# color according to a column
+iris2 &lt;- iris
+iris2$alphaLevel &lt;- c("setosa" = 0.2, "versicolor" = 0.3, "virginica" = 0)[iris2$Species]
+p &lt;- ggparcoord(data = iris2, columns = 1:4, groupColumn = 5, order = "anyClass",
+  showPoints = TRUE, title = "Parallel Coordinate Plot for the Iris Data",
+  alphaLines = "alphaLevel")
+p_(p)
+
+## Use splines on values, rather than lines (all produce the same result)
+columns &lt;- c(1, 5:10)
+p &lt;- ggparcoord(diamonds.samp, columns, groupColumn = 2, splineFactor = TRUE)
+p_(p)
+p &lt;- ggparcoord(diamonds.samp, columns, groupColumn = 2, splineFactor = 3)
+p_(p)
+splineFactor &lt;- length(columns) * 3
+p &lt;- ggparcoord(diamonds.samp, columns, groupColumn = 2, splineFactor = I(splineFactor))
+p_(p)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

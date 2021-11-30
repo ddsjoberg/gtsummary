@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Coalescing missing values</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for fcoalesce {data.table}"><tr><td>fcoalesce {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2> Coalescing missing values </h2>
+
+<h3>Description</h3>
+
+<p>Fill in missing values in a vector by successively pulling from candidate vectors in order. As per the ANSI SQL function COALESCE, <code>dplyr::coalesce</code> and <code>hutils::coalesce</code>. Unlike <code>BBmisc::coalesce</code> which just returns the first non-NULL vector.
+Written in C, and multithreaded for numeric and factor types.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  fcoalesce(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p> A set of same-class vectors. These vectors can be supplied as separate arguments or as a single plain list, data.table or data.frame, see examples. </p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Factor type is supported only when the factor levels of each item are equal.
+</p>
+<p><code>NaN</code> is considered missing (note <code>is.na(NaN)</code> and <code>all.equal(NA_real_, NaN)</code> are both <code>TRUE</code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>Atomic vector of the same type and length as the first vector, having <code>NA</code> values replaced by corresponding non-<code>NA</code> values from the other vectors.
+If the first item is <code>NULL</code>, the result is <code>NULL</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../data.table/help/fifelse.html">fifelse</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x = c(11L, NA, 13L, NA, 15L, NA)
+y = c(NA, 12L, 5L, NA, NA, NA)
+z = c(11L, NA, 1L, 14L, NA, NA)
+fcoalesce(x, y, z)
+fcoalesce(list(x,y,z))   # same
+fcoalesce(x, list(y,z))  # same
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

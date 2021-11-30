@@ -1,0 +1,11 @@
+// With no Bootswatch, it makes sense to do  .navbar-default -> .navbar-light .bg-light
+//                                           .navbar-inverse -> .navbar-dark  .bg-dark
+// However, these extensions may be different for different Bootswatch themes
+// (see _navbar_compat.scss and theme_layer_bs3compat_navbar())
+$navbar-default-type: light !default;
+$navbar-default-bg: light !default;
+$navbar-inverse-type: dark !default;
+$navbar-inverse-bg: dark !default;
+
+// BS3 had .navbar { margin-bottom: 20px; }
+$navbar-margin-bottom: 20px !default;

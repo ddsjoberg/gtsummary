@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>Creating animations in Rweb</title>
+</head>
+
+<body>
+<form action="http://data-engine.tama.ac.jp/cgi-bin/Rweb/Rweb.cgi" enctype="multipart/form-data" method="post">
+  <textarea name="Rcode" rows="15" cols="80">
+## Please do not abuse the Rweb service provided by Tama University
+
+## to get over the restriction (don't do anything evil by this trick!!)
+source2 = get("source")
+source2("http://bit.ly/hJVXQb")
+ani.options(outdir = "/tmp")
+
+## see the R package animation for help on saveHTML()
+saveHTML({
+    for (i in 1:30) plot(rnorm(100), pch = 19, ylim = c(-3, 3), col = heat.colors(100))
+}, img.name = sprintf("demo_%s", paste(sample(letters, 3), collapse = '')),
+   ani.height = 600, ani.width = 600, interval = 0.3)
+  </textarea>
+  <p>
+    <input value="Submit" type="submit">
+  </p>
+</form>
+</body>
+</html>

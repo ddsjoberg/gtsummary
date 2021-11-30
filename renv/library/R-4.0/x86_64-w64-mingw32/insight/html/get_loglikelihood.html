@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Log-Likelihood</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_loglikelihood {insight}"><tr><td>get_loglikelihood {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Log-Likelihood</h2>
+
+<h3>Description</h3>
+
+<p>A robust function to compute the log-likelihood of a model, as well as individual log-likelihoods (for each observation) whenever possible. Can be used as a replacement for <code>stats::logLik()</code> out of the box, as the returned object is of the same class (and it gives the same results by default).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_loglikelihood(x, ...)
+
+loglikelihood(x, ...)
+
+## S3 method for class 'lm'
+get_loglikelihood(x, estimator = "ML", REML = FALSE, verbose = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Passed down to <code>logLik()</code>, if possible.</p>
+</td></tr>
+<tr valign="top"><td><code>estimator</code></td>
+<td>
+<p>Corresponds to the different estimators for the standard deviation of the errors. If <code>estimator="ML"</code> (default), the scaling is done by n (the biased ML estimator), which is then equivalent to using <code>stats::logLik()</code>. If <code>estimator="OLS"</code>, it returns the unbiased OLS estimator.</p>
+</td></tr>
+<tr valign="top"><td><code>REML</code></td>
+<td>
+<p>Only for linear models. This argument is present for compatibility with <code>stats::logLik()</code>. Setting it to <code>TRUE</code> will overwrite the <code>estimator</code> argument and is thus equivalent to setting <code>estimator="REML"</code>. It will give the same results as <code>stats::logLik(..., REML=TRUE)</code>. Note that individual log-likelihoods are not available under REML.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle warnings and messages.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>An object of class <code>"logLik"</code>, also containing the log-likelihoods for each observation as a <code>per_observation</code> attribute  (<code>attributes(get_loglikelihood(x))$per_observation</code>) when possible. The code was partly inspired from the <a href="https://CRAN.R-project.org/package=nonnest2"><span class="pkg">nonnest2</span></a> package.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x &lt;- lm(Sepal.Length ~ Petal.Width + Species, data = iris)
+
+get_loglikelihood(x, estimator = "ML") # Equivalent to stats::logLik(x)
+get_loglikelihood(x, estimator = "REML") # Equivalent to stats::logLik(x, REML=TRUE)
+get_loglikelihood(x, estimator = "OLS")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

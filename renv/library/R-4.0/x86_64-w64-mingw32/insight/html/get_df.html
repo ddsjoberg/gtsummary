@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Extract degrees of freedom</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_df {insight}"><tr><td>get_df {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Extract degrees of freedom</h2>
+
+<h3>Description</h3>
+
+<p>Estimate or extract residual or model-based degrees of freedom
+from regression models.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_df(x, ...)
+
+## Default S3 method:
+get_df(x, type = "residual", verbose = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A statistical model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>Can be <code>"residual"</code> or <code>"model"</code>. <code>"residual"</code>
+tries to extract residual degrees of freedoms. If residual degrees of freedom
+could not be extracted, returns <code>n-k</code> (number of observations minus
+number of parameters). <code>"model"</code> returns model-based degrees of freedom,
+i.e. the number of (estimated) parameters.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle warnings.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+model &lt;- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
+get_df(model) # same as df.residual(model)
+get_df(model, type = "model") # same as attr(logLik(model), "df")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

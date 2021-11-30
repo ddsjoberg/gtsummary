@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Pretty print of time taken</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for timetaken {data.table}"><tr><td>timetaken {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2> Pretty print of time taken </h2>
+
+<h3>Description</h3>
+
+<p>Pretty print of time taken since last started.at.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+timetaken(started.at)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>started.at</code></td>
+<td>
+<p> The result of proc.time() taken some time earlier. </p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector of the form HH:MM:SS, or SS.MMMsec if under 60 seconds.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+started.at=proc.time()
+Sys.sleep(1)
+cat("Finished in",timetaken(started.at),"\n")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

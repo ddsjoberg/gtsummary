@@ -25,6 +25,7 @@
 #' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
 #'
 #' @return gtsummary table
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @name add_glance
 #'
 #' @section Default Labels:

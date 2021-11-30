@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Rich FitzJohn" />
+
+<meta name="date" content="2017-05-30" />
+
+<title>ids</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0A%7D%0Apre%20%7B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">ids</h1>
+<h4 class="author"><em>Rich FitzJohn</em></h4>
+<h4 class="date"><em>2017-05-30</em></h4>
+</div>
+
+
+<p>The <code>ids</code> package provides randomly generated ids in a number of different forms with different readability and sizes.</p>
+<div id="random-bytes" class="section level2">
+<h2>Random bytes</h2>
+<p>The <code>random_id</code> function generates random identifiers by generating <code>bytes</code> random bytes and converting to hexadecimal (so each byte becomes a pair of characters). Rather than use R’s random number stream we use the <code>openssl</code> package here.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">random_id</span>()</code></pre></div>
+<pre><code>## [1] &quot;9aa4d8e7fd4fd2d2007c907f2f43262f&quot;</code></pre>
+<p>All <code>ids</code> functions take <code>n</code> as the first argument to be the number of identifiers generated:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">random_id</span>(<span class="dv">5</span>)</code></pre></div>
+<pre><code>## [1] &quot;c9ef83cddb1c01acdd5c4ca1c6f80d65&quot; &quot;ce43343eebc5cd985b60feb2c7d7cb32&quot;
+## [3] &quot;14d2e59fe7af4a6771de5d40c4859460&quot; &quot;03146fbcc3b7c5b1a3a5bf579187a313&quot;
+## [5] &quot;0ef43dce811ecba10daeb85a1212b858&quot;</code></pre>
+<p>The default here is 16 bytes, each of which has 256 values (so 256^16 = 2^128 = 3.4e38 combinations). You can make these larger or smaller with the <code>bytes</code> argument:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">random_id</span>(<span class="dv">5</span>, <span class="dv">8</span>)</code></pre></div>
+<pre><code>## [1] &quot;a2a3873e4d4eb769&quot; &quot;17ef56682957f105&quot; &quot;6ba5316397c06b45&quot;
+## [4] &quot;702caf1aaf2a1b13&quot; &quot;e155a0e71e524e69&quot;</code></pre>
+<p>If <code>NULL</code> is provided as <code>n</code>, then a generating function is returned (all ids functions do this):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span>ids::<span class="kw">random_id</span>(<span class="ot">NULL</span>, <span class="dv">8</span>)
+f</code></pre></div>
+<pre><code>## function (n = 1) 
+## {
+##     random_id(n, bytes, use_openssl)
+## }
+## &lt;environment: 0x2c0def0&gt;</code></pre>
+<p>This function sets all arguments except for <code>n</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">f</span>()</code></pre></div>
+<pre><code>## [1] &quot;a54ebe0cea6d08fd&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">f</span>(<span class="dv">4</span>)</code></pre></div>
+<pre><code>## [1] &quot;bc03e2e830276c4f&quot; &quot;a194b7d74d635a5f&quot; &quot;c5b40b60c0fbd303&quot;
+## [4] &quot;887cd4842022e54a&quot;</code></pre>
+</div>
+<div id="uuids" class="section level2">
+<h2>UUIDs</h2>
+<p>The above look a lot like UUIDs but they are not actually UUIDs. The <code>uuid</code> package provides real UUIDs generated with libuuid, and the <code>ids::uuid</code> function provides an interface to that:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">uuid</span>()</code></pre></div>
+<pre><code>## [1] &quot;34820d25-2632-4200-b0e5-78cf930911fe&quot;</code></pre>
+<p>As above, generate more than one UUID:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">uuid</span>(<span class="dv">4</span>)</code></pre></div>
+<pre><code>## [1] &quot;dbf9c608-24e3-4dcd-b358-43f0a31ebea2&quot;
+## [2] &quot;fe92be0e-add9-443b-a83e-160d2c6988ec&quot;
+## [3] &quot;04235c12-0da1-4bb2-9158-b518aae17c88&quot;
+## [4] &quot;ef58c280-6155-4e20-b7c9-e26d01c78a7b&quot;</code></pre>
+<p>Generate time-based UUIDs:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">uuid</span>(<span class="dv">4</span>, <span class="dt">use_time =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## [1] &quot;24fc48f4-454b-11e7-8967-5065f32b99c0&quot;
+## [2] &quot;24fc4962-454b-11e7-8967-5065f32b99c0&quot;
+## [3] &quot;24fc49b2-454b-11e7-8967-5065f32b99c0&quot;
+## [4] &quot;24fc49f8-454b-11e7-8967-5065f32b99c0&quot;</code></pre>
+<p>and optionally drop the hyphens:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">uuid</span>(<span class="dv">5</span>, <span class="dt">drop_hyphens =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## [1] &quot;64f8abb9462949afb6feaf1c3598ca17&quot; &quot;4d2ae53b4c6a4b60b5e193355205a76f&quot;
+## [3] &quot;2f78096c87df4b11ac3562733bd292c5&quot; &quot;cf0159ebaa66456aa3d9f3b4ee1254b1&quot;
+## [5] &quot;34c2390f6abe4f2a8f2c1e08db458a1f&quot;</code></pre>
+</div>
+<div id="adjective-animal" class="section level2">
+<h2>Adjective animal</h2>
+<p>Generate (somewhat) human readable identifiers by combining one or more adjectives with an animal name.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>()</code></pre></div>
+<pre><code>## [1] &quot;displeasing_fritillarybutterfly&quot;</code></pre>
+<p>The list of adjectives and animals comes from <a href="http://gfycat.com">gfycat.com</a>, via <a href="https://github.com/a-type/adjective-adjective-animal" class="uri">https://github.com/a-type/adjective-adjective-animal</a></p>
+<p>Generate more than one identifier:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">4</span>)</code></pre></div>
+<pre><code>## [1] &quot;nitpicking_whiteeye&quot;      &quot;undivined_nene&quot;          
+## [3] &quot;crazy_mockingbird&quot;        &quot;uncongested_amurstarfish&quot;</code></pre>
+<p>Use more than one adjective for very long idenfiers</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">4</span>, <span class="dv">3</span>)</code></pre></div>
+<pre><code>## [1] &quot;crooked_serpentine_fungoid_nabarlek&quot;                  
+## [2] &quot;conservable_kimberlite_sightly_axisdeer&quot;              
+## [3] &quot;psychopharmacological_releasable_unquenchable_cricket&quot;
+## [4] &quot;gastric_worldlywise_cumbersome_gar&quot;</code></pre>
+<p>There are 1748 animal names and 8946 adjectives so each one you add increases the idenfier space by a factor of 8946. So for 1, 2, and 3 adjectives there are about 15.6 million, 140 billion and 1250 trillion possible combinations.</p>
+<p>This is a much smaller space than the random identifiers above, but these are more readable and memorable.</p>
+<p>Note that here, the random nunbers are coming from R’s random number stream so are affected by <code>set.seed()</code>.</p>
+<p>Because some of the animal and adjective names are very long (e.g. a <em>quasiextraterritorial hexakosioihexekontahexaphobic queenalexandrasbirdwingbutterfly</em>), in order to generate more readable/memorable identifiers it may be useful to restrict the length. Pass <code>max_len</code> in to do this.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">4</span>, <span class="dt">max_len =</span> <span class="dv">6</span>)</code></pre></div>
+<pre><code>## [1] &quot;adored_kawala&quot; &quot;gassy_morpho&quot;  &quot;tame_kiwi&quot;     &quot;flinty_cony&quot;</code></pre>
+<p>A vector of length 2 here can be used to apply to the adjectives and animal respectively:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">20</span>, <span class="dt">max_len =</span> <span class="kw">c</span>(<span class="dv">5</span>, <span class="ot">Inf</span>))</code></pre></div>
+<pre><code>##  [1] &quot;sour_anhinga&quot;             &quot;phony_armyant&quot;           
+##  [3] &quot;slimy_dwarfrabbit&quot;        &quot;brisk_insect&quot;            
+##  [5] &quot;right_neonbluehermitcrab&quot; &quot;heavy_godwit&quot;            
+##  [7] &quot;sooty_urutu&quot;              &quot;other_doctorfish&quot;        
+##  [9] &quot;silt_herculesbeetle&quot;      &quot;manic_emperorshrimp&quot;     
+## [11] &quot;loved_mynah&quot;              &quot;skarn_cormorant&quot;         
+## [13] &quot;alive_howlermonkey&quot;       &quot;kooky_raptors&quot;           
+## [15] &quot;rocky_appaloosa&quot;          &quot;pudgy_tayra&quot;             
+## [17] &quot;kooky_estuarinecrocodile&quot; &quot;swift_sphinx&quot;            
+## [19] &quot;icky_fattaileddunnart&quot;    &quot;dry_englishpointer&quot;</code></pre>
+<p>Note that this decreases the pool size and so increases the chance of collisions.</p>
+<p>In addition to snake_case, the default, the punctuation between words can be changed to:</p>
+<p>kebab-case:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dt">style =</span> <span class="st">&quot;kebab&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;intact-unauthorized-swallowtailbutterfly&quot;</code></pre>
+<p>dot.case:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dt">style =</span> <span class="st">&quot;dot&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;germinable.sighted.wrasse&quot;</code></pre>
+<p>camel-case:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dt">style =</span> <span class="st">&quot;camel&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;holographicRefillableGiantschnauzer&quot;</code></pre>
+<p>PascalCase:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dt">style =</span> <span class="st">&quot;pascal&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;EvadibleSelfhonouredBufflehead&quot;</code></pre>
+<p>CONSTANT_CASE (aka SHOUTY_CASE)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dt">style =</span> <span class="st">&quot;constant&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;RED_CENTAURIAN_COCKERSPANIEL&quot;</code></pre>
+<p>or with spaces, lower case:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dt">style =</span> <span class="st">&quot;lower&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;civic depressed amoeba&quot;</code></pre>
+<p>UPPER CASE</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dt">style =</span> <span class="st">&quot;upper&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;PHANTASMAGORIAL TRICHOPHOBIA RINGTAILEDLEMUR&quot;</code></pre>
+<p>Sentence case</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dt">style =</span> <span class="st">&quot;sentence&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;Sorcerous imaginative goldfinch&quot;</code></pre>
+<p>Title Case</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">adjective_animal</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dt">style =</span> <span class="st">&quot;title&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;Starchy Omnivorous Nandine&quot;</code></pre>
+<p>Again, pass <code>n = NULL</code> here to create a generating function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">aa3 &lt;-<span class="st"> </span>ids::<span class="kw">adjective_animal</span>(<span class="ot">NULL</span>, <span class="dv">3</span>, <span class="dt">style =</span> <span class="st">&quot;kebab&quot;</span>, <span class="dt">max_len =</span> <span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">8</span>))</code></pre></div>
+<p>…which can be used to generate ids on demand.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aa3</span>()</code></pre></div>
+<pre><code>## [1] &quot;former-dry-yester-noctule&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aa3</span>(<span class="dv">4</span>)</code></pre></div>
+<pre><code>## [1] &quot;curt-murky-harsh-blobfish&quot;  &quot;catty-wintry-chuffy-isopod&quot;
+## [3] &quot;jaded-rustic-adored-nymph&quot;  &quot;upper-freaky-rival-yucker&quot;</code></pre>
+</div>
+<div id="random-sentences" class="section level2">
+<h2>Random sentences</h2>
+<p>The <code>sentence</code> function creates a sentence style identifier. This uses the approach described by Asana on <a href="https://blog.asana.com/2011/09/6-sad-squid-snuggle-softly">their blog</a>. This approach encodes 32 bits of information (so 2^32 ~= 4 billion possibilities) and in theory can be remapped to an integer if you really wanted to.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">sentence</span>()</code></pre></div>
+<pre><code>## [1] &quot;17_flippant_chipmunks_striding_jubilantly&quot;</code></pre>
+<p>As with <code>adjective_animal</code>, the case can be changed:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">sentence</span>(<span class="dv">2</span>, <span class="st">&quot;dot&quot;</span>)</code></pre></div>
+<pre><code>## [1] &quot;18.colossal.moles.bursting.unabashedly&quot;
+## [2] &quot;8.groovy.beavers.slurping.obnoxiously&quot;</code></pre>
+<p>If you would rather past tense for the verbs, then pass <code>past = TRUE</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">sentence</span>(<span class="dv">4</span>, <span class="dt">past =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## [1] &quot;19_jolly_porcupines_clamored_gently&quot; 
+## [2] &quot;18_groovy_impalas_twisted_jubilantly&quot;
+## [3] &quot;33_cool_chipmunks_skipped_loftily&quot;   
+## [4] &quot;18_cuddly_pumas_sang_courageously&quot;</code></pre>
+</div>
+<div id="proquints" class="section level2">
+<h2>proquints</h2>
+<p>“proquints” are an identifier that tries to be information dense but still human readable and (somewhat) pronounceable; “proquint” stands for <em>PRO</em>-nouncable <em>QUINT</em>-uplets. They are introduced in <a href="https://arxiv.org/html/0901.4016" class="uri">https://arxiv.org/html/0901.4016</a></p>
+<p><code>ids</code> can generate proquints:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">proquint</span>(<span class="dv">10</span>)</code></pre></div>
+<pre><code>##  [1] &quot;mivij-dataj&quot; &quot;hisir-ginug&quot; &quot;hogom-vihoh&quot; &quot;lamus-sivot&quot; &quot;vajub-kolaf&quot;
+##  [6] &quot;dadij-jilof&quot; &quot;rojak-jinot&quot; &quot;pajof-tisuf&quot; &quot;tosor-kibub&quot; &quot;kajom-vihur&quot;</code></pre>
+<p>By default it generates two-word proquints but that can be changed:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">proquint</span>(<span class="dv">5</span>, <span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;pigud&quot; &quot;rukul&quot; &quot;noruj&quot; &quot;visub&quot; &quot;hosud&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">proquint</span>(<span class="dv">2</span>, <span class="dv">4</span>)</code></pre></div>
+<pre><code>## [1] &quot;gaguk-varov-magip-vafak&quot; &quot;gadov-samig-rojum-zakil&quot;</code></pre>
+<p>Proquints are formed by alternating consonant/vowel/consonant/vowel/consonant using a subset of both (16 consonants and 4 vowels). This yields 2^16 (65,536) possibilities per word. Words are always lower case and always separated by a hyphen. So with 4 words there are 2^64 combinations in 23 characters.</p>
+<p>Proquints are also useful in that they can be tranlated with integers. The proquint <code>kapop</code> has integer value 25258</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">proquint_to_int</span>(<span class="st">&quot;kapop&quot;</span>)</code></pre></div>
+<pre><code>## [1] 25258</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">int_to_proquint</span>(<span class="dv">25258</span>)</code></pre></div>
+<pre><code>## [1] &quot;kapop&quot;</code></pre>
+<p>This makes proquints suitable for creating human-pronouncable identifers out of things like ip addresses, integer primary keys, etc.</p>
+<p>The function <code>ids::int_to_proquint_word</code> will translate between proquint words and integers (and are vectorised)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">w &lt;-<span class="st"> </span>ids::<span class="kw">int_to_proquint_word</span>(<span class="kw">sample</span>(<span class="dv">2</span>^<span class="dv">16</span>, <span class="dv">10</span>) -<span class="st"> </span>1L)
+w</code></pre></div>
+<pre><code>##  [1] &quot;mubuf&quot; &quot;rimuh&quot; &quot;kavav&quot; &quot;dolif&quot; &quot;vujiz&quot; &quot;hofab&quot; &quot;nisos&quot; &quot;dubuz&quot;
+##  [9] &quot;tisoh&quot; &quot;jajog&quot;</code></pre>
+<p>and <code>ids::proquint_word_to_int</code> does the reverse</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">proquint_word_to_int</span>(w)</code></pre></div>
+<pre><code>##  [1] 35890 46644 25486  6610 60767 18560 38700  7231 55076 20835</code></pre>
+<p>whille <code>ids::proquint_to_int</code> and <code>ids::int_to_proquint</code> allows translation of multi-word proquints. Overflow is a real possibility; the maximum integer representable is only about <code>r human_no(.Machine$integer.max)</code> and the maximum floating point number of accuracy of 1 is about 9010 trillion – these are big numbers but fairly small proquints:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">int_to_proquint</span>(.Machine$integer.max -<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] &quot;luzuz-zuzuv&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">int_to_proquint</span>(<span class="dv">2</span> /<span class="st"> </span>.Machine$double.eps)</code></pre></div>
+<pre><code>## [1] &quot;babob-babab-babab-babab&quot;</code></pre>
+<p>But if you had a 6 word proquint this would not work!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p &lt;-<span class="st"> </span>ids::<span class="kw">proquint</span>(<span class="dv">1</span>, <span class="dv">6</span>)</code></pre></div>
+<p>Too big for an integer:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">proquint_to_int</span>(p)</code></pre></div>
+<pre><code>## Error in proquint_combine(idx, len, as): Numeric overflow: cannot represent proquint as numeric</code></pre>
+<p>And too big for an numeric number:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">proquint_to_int</span>(p, <span class="dt">as =</span> <span class="st">&quot;numeric&quot;</span>)</code></pre></div>
+<pre><code>## Error in proquint_combine(idx, len, as): Numeric overflow: cannot represent proquint as numeric</code></pre>
+<p>To allow this, we use <code>openssl</code>’s <code>bignum</code> support:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">proquint_to_int</span>(p, <span class="dt">as =</span> <span class="st">&quot;bignum&quot;</span>)</code></pre></div>
+<pre><code>## [[1]]
+## [b] 62023053643412691785669488225</code></pre>
+<p>This returns a <em>list</em> with one bignum (this is required to allow vectorisation).</p>
+</div>
+<div id="roll-your-own-identifiers" class="section level2">
+<h2>Roll your own identifiers</h2>
+<p>The <code>ids</code> functions can build identifiers in the style of <code>adjective_animal</code> or <code>sentence</code>. It takes as input a list of strings. This works particularly well with the <code>rcorpora</code> package which includes lists of strings.</p>
+<p>Here is a list of Pokemon names:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pokemon &lt;-<span class="st"> </span><span class="kw">tolower</span>(rcorpora::<span class="kw">corpora</span>(<span class="st">&quot;games/pokemon&quot;</span>)$pokemon$name)
+<span class="kw">length</span>(pokemon)</code></pre></div>
+<pre><code>## [1] 663</code></pre>
+<p>…and here is a list of adjectives</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adjectives &lt;-<span class="st"> </span><span class="kw">tolower</span>(rcorpora::<span class="kw">corpora</span>(<span class="st">&quot;words/adjs&quot;</span>)$adjs)
+<span class="kw">length</span>(adjectives)</code></pre></div>
+<pre><code>## [1] 962</code></pre>
+<p>So we have a total pool size of about 638 thousand, which is not huge, but it is at least topical.</p>
+<p>To generate one identifier:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">ids</span>(<span class="dv">1</span>, adjectives, pokemon)</code></pre></div>
+<pre><code>## [1] &quot;long-suffering_beldum&quot;</code></pre>
+<p>All the style-changing code is available:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">ids</span>(<span class="dv">10</span>, adjectives, pokemon, <span class="dt">style =</span> <span class="st">&quot;dot&quot;</span>)</code></pre></div>
+<pre><code>##  [1] &quot;canonical.deino&quot;     &quot;eaten.deino&quot;         &quot;remorseless.mantine&quot;
+##  [4] &quot;veritable.togepi&quot;    &quot;blue-collar.weezing&quot; &quot;seated.heracross&quot;   
+##  [7] &quot;useless.barboach&quot;    &quot;spineless.cubchoo&quot;   &quot;fading.barboach&quot;    
+## [10] &quot;pitching.lanturn&quot;</code></pre>
+<p>Better would be to wrap this so that the constants are not passed around the whole time:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">adjective_pokemon &lt;-<span class="st"> </span>function(<span class="dt">n =</span> <span class="dv">1</span>, <span class="dt">style =</span> <span class="st">&quot;snake&quot;</span>) {
+  pokemon &lt;-<span class="st"> </span><span class="kw">tolower</span>(rcorpora::<span class="kw">corpora</span>(<span class="st">&quot;games/pokemon&quot;</span>)$pokemon$name)
+  adjectives &lt;-<span class="st"> </span><span class="kw">tolower</span>(rcorpora::<span class="kw">corpora</span>(<span class="st">&quot;words/adjs&quot;</span>)$adjs)
+  ids::<span class="kw">ids</span>(n, adjectives, pokemon, <span class="dt">style =</span> style)
+}
+
+<span class="kw">adjective_pokemon</span>(<span class="dv">10</span>, <span class="st">&quot;kebab&quot;</span>)</code></pre></div>
+<pre><code>##  [1] &quot;ancestral-gorebyss&quot;    &quot;hopeless-shroomish&quot;   
+##  [3] &quot;suspended-delcatty&quot;    &quot;fractional-pineco&quot;    
+##  [5] &quot;cardinal-rayquaza&quot;     &quot;goalless-eelektross&quot;  
+##  [7] &quot;peevish-onix&quot;          &quot;gypsy-taillow&quot;        
+##  [9] &quot;progressive-kabuto&quot;    &quot;progressive-shroomish&quot;</code></pre>
+<p>As a second example we can use the word lists in rcorpora to generate identifiers in the form <code>&lt;mood&gt;_&lt;scientist&gt;</code>, like “melancholic_darwin”. These are similar to the names of docker containers.</p>
+<p>First the lists of names themselves:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">moods &lt;-<span class="st"> </span><span class="kw">tolower</span>(rcorpora::<span class="kw">corpora</span>(<span class="st">&quot;humans/moods&quot;</span>)$moods)
+scientists &lt;-<span class="st"> </span><span class="kw">tolower</span>(rcorpora::<span class="kw">corpora</span>(<span class="st">&quot;humans/scientists&quot;</span>)$scientists)</code></pre></div>
+<p>Moods include:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sample</span>(moods, <span class="dv">10</span>)</code></pre></div>
+<pre><code>##  [1] &quot;comfortable&quot; &quot;inquisitive&quot; &quot;vacant&quot;      &quot;satiric&quot;     &quot;unknown&quot;    
+##  [6] &quot;insulted&quot;    &quot;noticed&quot;     &quot;involved&quot;    &quot;censored&quot;    &quot;distant&quot;</code></pre>
+<p>The scientists names contain spaces which is not going to work for us because <code>ids</code> won’t correctly translate all internal spaces to the requested style.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sample</span>(scientists, <span class="dv">10</span>)</code></pre></div>
+<pre><code>##  [1] &quot;james dwight dana&quot;                     
+##  [2] &quot;georges-louis leclerc, comte de buffon&quot;
+##  [3] &quot;ukichiro nakaya&quot;                       
+##  [4] &quot;jane marcet&quot;                           
+##  [5] &quot;francis bacon&quot;                         
+##  [6] &quot;eratosthenes&quot;                          
+##  [7] &quot;pierre de fermat&quot;                      
+##  [8] &quot;mary anning&quot;                           
+##  [9] &quot;brahmagupta&quot;                           
+## [10] &quot;alfred binet&quot;</code></pre>
+<p>To hack around this we’ll just take the last name from the list and remove all hyphens:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scientists &lt;-<span class="st"> </span><span class="kw">vapply</span>(<span class="kw">strsplit</span>(<span class="kw">sub</span>(<span class="st">&quot;(-|jr</span><span class="ch">\\</span><span class="st">.$)&quot;</span>, <span class="st">&quot;&quot;</span>, scientists), <span class="st">&quot; &quot;</span>),
+                     tail, <span class="kw">character</span>(<span class="dv">1</span>), <span class="dv">1</span>)</code></pre></div>
+<p>Which gives strings that are just letters (though there are a few non-ASCII characters here that may cause problems because string handling is just a big pile of awful)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sample</span>(scientists, <span class="dv">10</span>)</code></pre></div>
+<pre><code>##  [1] &quot;dirac&quot;      &quot;foucault&quot;   &quot;bosch&quot;      &quot;binet&quot;      &quot;archimedes&quot;
+##  [6] &quot;cori&quot;       &quot;raman&quot;      &quot;mayr&quot;       &quot;lyell&quot;      &quot;hubble&quot;</code></pre>
+<p>With the word lists, create an identifier:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ids::<span class="kw">ids</span>(<span class="dv">1</span>, moods, scientists)</code></pre></div>
+<pre><code>## [1] &quot;deceived_pavlov&quot;</code></pre>
+<p>Or pass <code>NULL</code> for <code>n</code> and create a function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sci_id &lt;-<span class="st"> </span>ids::<span class="kw">ids</span>(<span class="ot">NULL</span>, moods, scientists, <span class="dt">style =</span> <span class="st">&quot;kebab&quot;</span>)</code></pre></div>
+<p>which takes just the number of identifiers to generate as an argument</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sci_id</span>(<span class="dv">10</span>)</code></pre></div>
+<pre><code>##  [1] &quot;self-assured-bohm&quot;      &quot;aloof-fossey&quot;          
+##  [3] &quot;listless-skinner&quot;       &quot;thankful-hopkins&quot;      
+##  [5] &quot;gullible-hopkins&quot;       &quot;ashamed-watson&quot;        
+##  [7] &quot;complacent-curie&quot;       &quot;fine-leeuwenhoek&quot;      
+##  [9] &quot;content-sommerfeld&quot;     &quot;comfortable-brongniart&quot;</code></pre>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

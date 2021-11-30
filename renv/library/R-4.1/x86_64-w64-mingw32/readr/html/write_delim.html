@@ -1,0 +1,269 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Write a data frame to a delimited file</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for write_delim {readr}"><tr><td>write_delim {readr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Write a data frame to a delimited file</h2>
+
+<h3>Description</h3>
+
+<p>The <code style="white-space: pre;">write_*()</code> family of functions are an improvement to analogous function such
+as <code><a href="../../utils/html/write.table.html">write.csv()</a></code> because they are approximately twice as fast. Unlike <code><a href="../../utils/html/write.table.html">write.csv()</a></code>,
+these functions do not include row names as a column in the written file.
+A generic function, <code>output_column()</code>, is applied to each variable
+to coerce columns to suitable output.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+write_delim(
+  x,
+  file,
+  delim = " ",
+  na = "NA",
+  append = FALSE,
+  col_names = !append,
+  quote = c("needed", "all", "none"),
+  escape = c("double", "backslash", "none"),
+  eol = "\n",
+  num_threads = readr_threads(),
+  progress = show_progress(),
+  path = deprecated(),
+  quote_escape = deprecated()
+)
+
+write_csv(
+  x,
+  file,
+  na = "NA",
+  append = FALSE,
+  col_names = !append,
+  quote = c("needed", "all", "none"),
+  escape = c("double", "backslash", "none"),
+  eol = "\n",
+  num_threads = readr_threads(),
+  progress = show_progress(),
+  path = deprecated(),
+  quote_escape = deprecated()
+)
+
+write_csv2(
+  x,
+  file,
+  na = "NA",
+  append = FALSE,
+  col_names = !append,
+  quote = c("needed", "all", "none"),
+  escape = c("double", "backslash", "none"),
+  eol = "\n",
+  num_threads = readr_threads(),
+  progress = show_progress(),
+  path = deprecated(),
+  quote_escape = deprecated()
+)
+
+write_excel_csv(
+  x,
+  file,
+  na = "NA",
+  append = FALSE,
+  col_names = !append,
+  delim = ",",
+  quote = "all",
+  escape = c("double", "backslash", "none"),
+  eol = "\n",
+  num_threads = readr_threads(),
+  progress = show_progress(),
+  path = deprecated(),
+  quote_escape = deprecated()
+)
+
+write_excel_csv2(
+  x,
+  file,
+  na = "NA",
+  append = FALSE,
+  col_names = !append,
+  delim = ";",
+  quote = "all",
+  escape = c("double", "backslash", "none"),
+  eol = "\n",
+  num_threads = readr_threads(),
+  progress = show_progress(),
+  path = deprecated(),
+  quote_escape = deprecated()
+)
+
+write_tsv(
+  x,
+  file,
+  na = "NA",
+  append = FALSE,
+  col_names = !append,
+  quote = "none",
+  escape = c("double", "backslash", "none"),
+  eol = "\n",
+  num_threads = readr_threads(),
+  progress = show_progress(),
+  path = deprecated(),
+  quote_escape = deprecated()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A data frame or tibble to write to disk.</p>
+</td></tr>
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>File or connection to write to.</p>
+</td></tr>
+<tr valign="top"><td><code>delim</code></td>
+<td>
+<p>Delimiter used to separate values. Defaults to <code>" "</code> for <code>write_delim()</code>, <code>","</code> for <code>write_excel_csv()</code> and
+<code>";"</code> for <code>write_excel_csv2()</code>. Must be a single character.</p>
+</td></tr>
+<tr valign="top"><td><code>na</code></td>
+<td>
+<p>String used for missing values. Defaults to NA. Missing values
+will never be quoted; strings with the same value as <code>na</code> will
+always be quoted.</p>
+</td></tr>
+<tr valign="top"><td><code>append</code></td>
+<td>
+<p>If <code>FALSE</code>, will overwrite existing file. If <code>TRUE</code>,
+will append to existing file. In both cases, if the file does not exist a new
+file is created.</p>
+</td></tr>
+<tr valign="top"><td><code>col_names</code></td>
+<td>
+<p>If <code>FALSE</code>, column names will not be included at the top of the file. If <code>TRUE</code>,
+column names will be included. If not specified, <code>col_names</code> will take the opposite value given to <code>append</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>quote</code></td>
+<td>
+<p>How to handle fields which contain characters that need to be quoted.
+</p>
+
+<ul>
+<li> <p><code>needed</code> - Only quote fields which need them.
+</p>
+</li>
+<li> <p><code>all</code> - Quote all fields.
+</p>
+</li>
+<li> <p><code>none</code> - Never quote fields.
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>escape</code></td>
+<td>
+<p>The type of escape to use when quotes are in the data.
+</p>
+
+<ul>
+<li> <p><code>double</code> - quotes are escaped by doubling them.
+</p>
+</li>
+<li> <p><code>backslash</code> - quotes are escaped by a preceding backslash.
+</p>
+</li>
+<li> <p><code>none</code> - quotes are not escaped.
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>eol</code></td>
+<td>
+<p>The end of line character to use. Most commonly either <code>"\n"</code> for
+Unix style newlines, or <code>"\r\n"</code> for Windows style newlines.</p>
+</td></tr>
+<tr valign="top"><td><code>num_threads</code></td>
+<td>
+<p>Number of threads to use when reading and materializing
+vectors. If your data contains newlines within fields the parser will
+automatically be forced to use a single thread only.</p>
+</td></tr>
+<tr valign="top"><td><code>progress</code></td>
+<td>
+<p>Display a progress bar? By default it will only display
+in an interactive session and not while knitting a document. The display
+is updated every 50,000 values and will only display if estimated reading
+time is 5 seconds or more. The automatic progress bar can be disabled by
+setting option <code>readr.show_progress</code> to <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt='[Deprecated]' /></a>, use the <code>file</code> argument instead.</p>
+</td></tr>
+<tr valign="top"><td><code>quote_escape</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt='[Deprecated]' /></a>, use the <code>escape</code> argument instead.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code style="white-space: pre;">write_*()</code> returns the input <code>x</code> invisibly.
+</p>
+
+
+<h3>Output</h3>
+
+<p>Factors are coerced to character. Doubles are formatted to a decimal string
+using the grisu3 algorithm. <code>POSIXct</code> values are formatted as ISO8601 with a
+UTC timezone <em>Note: <code>POSIXct</code> objects in local or non-UTC timezones will be
+converted to UTC time before writing.</em>
+</p>
+<p>All columns are encoded as UTF-8. <code>write_excel_csv()</code> and <code>write_excel_csv2()</code> also include a
+<a href="https://en.wikipedia.org/wiki/Byte_order_mark">UTF-8 Byte order mark</a>
+which indicates to Excel the csv is UTF-8 encoded.
+</p>
+<p><code>write_excel_csv2()</code> and <code>write_csv2</code> were created to allow users with
+different locale settings to save .csv files using their default settings
+(e.g. <code style="white-space: pre;">;</code> as the column separator and <code style="white-space: pre;">,</code> as the decimal separator).
+This is common in some European countries.
+</p>
+<p>Values are only quoted if they contain a comma, quote or newline.
+</p>
+<p>The <code style="white-space: pre;">write_*()</code> functions will automatically compress outputs if an appropriate extension is given.
+Three extensions are currently supported: <code>.gz</code> for gzip compression, <code>.bz2</code> for bzip2 compression and
+<code>.xz</code> for lzma compression.  See the examples for more information.
+</p>
+
+
+<h3>References</h3>
+
+<p>Florian Loitsch, Printing Floating-Point Numbers Quickly and
+Accurately with Integers, PLDI '10,
+<a href="http://www.cs.tufts.edu/~nr/cs257/archive/florian-loitsch/printf.pdf">http://www.cs.tufts.edu/~nr/cs257/archive/florian-loitsch/printf.pdf</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+# If only a file name is specified, write_()* will write
+# the file to the current working directory.
+write_csv(mtcars, "mtcars.csv")
+write_tsv(mtcars, "mtcars.tsv")
+
+# If you add an extension to the file name, write_()* will
+# automatically compress the output.
+write_tsv(mtcars, "mtcars.tsv.gz")
+write_tsv(mtcars, "mtcars.tsv.bz2")
+write_tsv(mtcars, "mtcars.tsv.xz")
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>readr</em> version 2.0.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

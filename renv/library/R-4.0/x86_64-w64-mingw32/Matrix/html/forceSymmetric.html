@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Force a Matrix to 'symmetricMatrix' Without Symmetry Checks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for forceSymmetric {Matrix}"><tr><td>forceSymmetric {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Force a Matrix to 'symmetricMatrix' Without Symmetry Checks</h2>
+
+<h3>Description</h3>
+
+<p>Force a square matrix <code>x</code> to a <code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>,
+<b>without</b> a symmetry check as it would be applied for <code>as(x,
+    "symmetricMatrix")</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+forceSymmetric(x, uplo)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>any square matrix (of numbers), either &ldquo;&quot;traditional&quot;&rdquo;
+(<code><a href="../../base/html/matrix.html">matrix</a></code>) or inheriting from
+<code><a href="Matrix-class.html">Matrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>uplo</code></td>
+<td>
+<p>optional string, <code>"U"</code> or <code>"L"</code> indicating which
+&ldquo;triangle&rdquo; half of <code>x</code> should determine the result.  The
+default is <code>"U"</code> unless <code>x</code> already has a <code>uplo</code> slot
+(i.e., when it is <code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>, or
+<code><a href="triangularMatrix-class.html">triangularMatrix</a></code>), where the default will be
+<code>x@uplo</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a square matrix inheriting from class
+<code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="symmpart.html">symmpart</a></code> for the symmetric part of a matrix, or
+the coercions <code>as(x, &lt;symmetricMatrix class&gt;)</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ ## Hilbert matrix
+ i &lt;- 1:6
+ h6 &lt;- 1/outer(i - 1L, i, "+")
+ sd &lt;- sqrt(diag(h6))
+ hh &lt;- t(h6/sd)/sd # theoretically symmetric
+ isSymmetric(hh, tol=0) # FALSE; hence
+ try( as(hh, "symmetricMatrix") ) # fails, but this works fine:
+ H6 &lt;- forceSymmetric(hh)
+
+ ## result can be pretty surprising:
+ (M &lt;- Matrix(1:36, 6))
+ forceSymmetric(M) # symmetric, hence very different in lower triangle
+ (tm &lt;- tril(M))
+ forceSymmetric(tm)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

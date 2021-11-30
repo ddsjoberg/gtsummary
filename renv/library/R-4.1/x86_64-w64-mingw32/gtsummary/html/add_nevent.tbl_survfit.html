@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add column with number of observed events</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add_nevent.tbl_survfit {gtsummary}"><tr><td>add_nevent.tbl_survfit {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add column with number of observed events</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+For each <code>survfit()</code> object summarized with <code>tbl_survfit()</code> this function
+will add the total number of events observed in a new column.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'tbl_survfit'
+add_nevent(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>object of class 'tbl_survfit'</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Not used</p>
+</td></tr>
+</table>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/add_nevent.tbl_survfit_ex1.png" width=64% />
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tbl_survfit tools: 
+<code><a href="../../gtsummary/help/add_n.tbl_survfit.html">add_n.tbl_survfit</a>()</code>,
+<code><a href="../../gtsummary/help/add_p.tbl_survfit.html">add_p.tbl_survfit</a>()</code>,
+<code><a href="../../gtsummary/help/modify.html">modify</a></code>,
+<code><a href="../../gtsummary/help/tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="../../gtsummary/help/tbl_stack.html">tbl_stack</a>()</code>,
+<code><a href="../../gtsummary/help/tbl_survfit.html">tbl_survfit</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(survival)
+fit1 &lt;- survfit(Surv(ttdeath, death) ~ 1, trial)
+fit2 &lt;- survfit(Surv(ttdeath, death) ~ trt, trial)
+
+# Example 1 ----------------------------------
+add_nevent.tbl_survfit_ex1 &lt;-
+  list(fit1, fit2) %&gt;%
+  tbl_survfit(times = c(12, 24)) %&gt;%
+  add_n() %&gt;%
+  add_nevent()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.2.9012 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Matrix Exponential</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for expm {Matrix}"><tr><td>expm {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Matrix Exponential</h2>
+
+<h3>Description</h3>
+
+<p>Compute the exponential of a matrix.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+expm(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a matrix, typically inheriting from the
+<code><a href="dMatrix-class.html">dMatrix</a></code> class.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The exponential of a matrix is defined as the infinite Taylor
+series <code>expm(A) = I + A + A^2/2! + A^3/3! + ...</code> (although this is
+definitely not the way to compute it).  The method for the
+<code>dgeMatrix</code> class uses Ward's diagonal Pade' approximation with
+three step preconditioning.
+
+
+</p>
+
+
+<h3>Value</h3>
+
+<p>The matrix exponential of <code>x</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The <a href="https://CRAN.R-project.org/package=expm"><span class="pkg">expm</span></a> package contains newer (partly faster and more
+accurate) algorithms for <code>expm()</code> and includes
+<code><a href="../../expm/html/logm.html">logm</a></code> and <code><a href="../../expm/html/sqrtm.html">sqrtm</a></code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>This is a translation of the implementation of the corresponding
+Octave function contributed to the Octave project by
+A. Scottedward Hodel <a href="mailto:A.S.Hodel@Eng.Auburn.EDU">A.S.Hodel@Eng.Auburn.EDU</a>.  A bug in there
+has been fixed by Martin Maechler.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Matrix_exponential">https://en.wikipedia.org/wiki/Matrix_exponential</a>
+</p>
+<p>Cleve Moler and Charles Van Loan (2003)
+Nineteen dubious ways to compute the exponential of a matrix,
+twenty-five years later. <em>SIAM Review</em> <b>45</b>, 1, 3&ndash;49.
+</p>
+
+<p>Eric W. Weisstein et al. (1999) <em>Matrix Exponential</em>.
+From MathWorld, <a href="https://mathworld.wolfram.com/MatrixExponential.html">https://mathworld.wolfram.com/MatrixExponential.html</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Schur.html">Schur</a></code>; additionally,
+<code><a href="../../expm/html/expm.html">expm</a></code>, <code><a href="../../expm/html/logm.html">logm</a></code>, etc in package <a href="https://CRAN.R-project.org/package=expm"><span class="pkg">expm</span></a>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(m1 &lt;- Matrix(c(1,0,1,1), nc = 2))
+(e1 &lt;- expm(m1)) ; e &lt;- exp(1)
+stopifnot(all.equal(e1@x, c(e,0,e,e), tolerance = 1e-15))
+(m2 &lt;- Matrix(c(-49, -64, 24, 31), nc = 2))
+(e2 &lt;- expm(m2))
+(m3 &lt;- Matrix(cbind(0,rbind(6*diag(3),0))))# sparse!
+(e3 &lt;- expm(m3)) # upper triangular
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

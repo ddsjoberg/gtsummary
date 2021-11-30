@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Order axis variables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for singleClassOrder {GGally}"><tr><td>singleClassOrder {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Order axis variables</h2>
+
+<h3>Description</h3>
+
+<p>Order axis variables by separation between one class and the rest
+(most separation to least).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+singleClassOrder(classVar, axisVars, specClass = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>classVar</code></td>
+<td>
+<p>class variable (vector from original dataset)</p>
+</td></tr>
+<tr valign="top"><td><code>axisVars</code></td>
+<td>
+<p>variables to be plotted as axes (data frame)</p>
+</td></tr>
+<tr valign="top"><td><code>specClass</code></td>
+<td>
+<p>character string matching to level of <code>classVar</code>; instead
+of looking for separation between any class and the rest, will only look for
+separation between this class and the rest</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>character vector of names of axisVars ordered such that the first
+variable has the most separation between one of the classes and the rest, and
+the last variable has the least (as measured by F-statistics from an ANOVA)
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Jason Crowley
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

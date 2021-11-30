@@ -22,6 +22,7 @@
 #' `c("treatment", "sum", "poly", "helmert", "other")`
 #' @name select_helpers
 #' @return A character vector of column names selected
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @examples
 #' select_ex1 <-
 #'   trial %>%

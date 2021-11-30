@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Grab the legend and print it as a plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for grab_legend {GGally}"><tr><td>grab_legend {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Grab the legend and print it as a plot</h2>
+
+<h3>Description</h3>
+
+<p>Grab the legend and print it as a plot
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+grab_legend(p)
+
+## S3 method for class 'legend_guide_box'
+print(x, ..., plotNew = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>p</code></td>
+<td>
+<p>ggplot2 plot object</p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>legend object that has been grabbed from a ggplot2 object</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>ignored</p>
+</td></tr>
+<tr valign="top"><td><code>plotNew</code></td>
+<td>
+<p>boolean to determine if the <code>grid.newpage()</code> command and a new blank rectangle should be printed</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+library(ggplot2)
+histPlot &lt;- qplot(
+  x = Sepal.Length,
+  data = iris,
+  fill = Species,
+  geom = "histogram",
+  binwidth = 1/4
+)
+(right &lt;- histPlot)
+(bottom &lt;- histPlot + theme(legend.position = "bottom"))
+(top &lt;- histPlot + theme(legend.position = "top"))
+(left &lt;- histPlot + theme(legend.position = "left"))
+
+p_(grab_legend(right))
+p_(grab_legend(bottom))
+p_(grab_legend(top))
+p_(grab_legend(left))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

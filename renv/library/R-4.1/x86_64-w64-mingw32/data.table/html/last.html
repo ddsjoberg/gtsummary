@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: First/last item of an object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for last {data.table}"><tr><td>last {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2> First/last item of an object </h2>
+
+<h3>Description</h3>
+
+<p>Returns the first/last item of a vector or list, or the first/last row of a data.frame
+or data.table. The main difference to head/tail is that the default for <code>n</code> is 1
+rather than 6.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+first(x, n=1L, ...)
+last(x, n=1L, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p> A vector, list, data.frame or data.table. Otherwise the S3 method
+of <code>xts::first</code> is deployed. </p>
+</td></tr>
+<tr valign="top"><td><code>n</code></td>
+<td>
+<p> A numeric vector length 1. How many items to select. </p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p> Not applicable for <code>data.table</code> first/last. Any arguments here
+are passed through to <code>xts</code>'s first/last. </p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If no other arguments are supplied it depends on the type of <code>x</code>. The first/last item
+of a vector or list. The first/last row of a <code>data.frame</code> or <code>data.table</code>.
+For other types, or if any argument is supplied in addition to <code>x</code> (such as <code>n</code>, or
+<code>keep</code> in <code>xts</code>) regardless of <code>x</code>'s type, then <code>xts::first</code>/
+<code>xts::last</code> is called if <code>xts</code> has been loaded, otherwise <code>utils::head</code>/<code>utils::tail</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+ <p><code><a href="../../base/html/nrow.html">NROW</a></code>, <code><a href="../../utils/html/head.html">head</a></code>, <code><a href="../../utils/html/head.html">tail</a></code> </p>
+
+
+<h3>Examples</h3>
+
+<pre>
+first(1:5) # [1] 1
+x = data.table(x=1:5, y=6:10)
+first(x) # same as head(x, 1)
+
+last(1:5) # [1] 5
+x = data.table(x=1:5, y=6:10)
+last(x) # same as tail(x, 1)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Format and Print Sparse Matrices Flexibly</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for printSpMatrix {Matrix}"><tr><td>printSpMatrix {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Format and Print Sparse Matrices Flexibly</h2>
+
+<h3>Description</h3>
+
+<p>Format and print sparse matrices flexibly.  These are the &ldquo;workhorses&rdquo; used by
+the <code><a href="../../base/html/format.html">format</a></code>, <code><a href="../../methods/html/show.html">show</a></code> and <code><a href="../../base/html/print.html">print</a></code>
+methods for sparse matrices.  If <code>x</code> is large,
+<code>printSpMatrix2(x)</code> calls <code>printSpMatrix()</code> twice, namely,
+for the first and the last few rows, suppressing those in between, and
+also suppresses columns when <code>x</code> is too wide.
+</p>
+<p><code>printSpMatrix()</code> basically prints the result of
+<code>formatSpMatrix()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+formatSpMatrix(x, digits = NULL, maxp = 1e9,
+               cld = getClassDef(class(x)), zero.print = ".",
+               col.names, note.dropping.colnames = TRUE, uniDiag = TRUE,
+               align = c("fancy", "right"))
+
+printSpMatrix(x, digits = NULL, maxp = max(100L, getOption("max.print")),
+              cld = getClassDef(class(x)),
+              zero.print = ".", col.names, note.dropping.colnames = TRUE,
+              uniDiag = TRUE, col.trailer = "",
+              align = c("fancy", "right"))
+
+printSpMatrix2(x, digits = NULL, maxp = max(100L, getOption("max.print")),
+              zero.print = ".", col.names, note.dropping.colnames = TRUE,
+              uniDiag = TRUE, suppRows = NULL, suppCols = NULL,
+              col.trailer = if(suppCols) "......" else "",
+              align = c("fancy", "right"),
+              width = getOption("width"), fitWidth = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object inheriting from class <code><a href="sparseMatrix-class.html">sparseMatrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>significant digits to use for printing, see
+<code><a href="../../base/html/print.default.html">print.default</a></code>, the default, <code><a href="../../base/html/NULL.html">NULL</a></code>,
+corresponds to using <code><a href="../../base/html/options.html">getOption</a>("digits")</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>maxp</code></td>
+<td>
+<p>integer, default from <code><a href="../../base/html/options.html">options</a>(max.print)</code>,
+influences how many entries of large matrices are printed at all.
+Typically should not be smaller than around 1000; values smaller than
+100 are silently &ldquo;rounded up&rdquo; to 100.</p>
+</td></tr></table>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>cld</code></td>
+<td>
+<p>the class definition of <code>x</code>; must be equivalent to
+<code><a href="../../methods/html/getClass.html">getClassDef</a>(class(x))</code> and exists mainly for possible
+speedup.</p>
+</td></tr>
+<tr valign="top"><td><code>zero.print</code></td>
+<td>
+<p>character which should be printed for
+<em>structural</em> zeroes.  The default <code>"."</code> may occasionally
+be replaced by <code>" "</code> (blank); using <code>"0"</code> would look
+almost like <code>print()</code>ing of non-sparse matrices.</p>
+</td></tr>
+<tr valign="top"><td><code>col.names</code></td>
+<td>
+<p>logical or string specifying if and how column names of
+<code>x</code> should be printed, possibly abbreviated.  The default is
+taken from <code><a href="../../base/html/options.html">options</a>("sparse.colnames")</code> if that is set, otherwise
+<code>FALSE</code> unless there are less than ten columns.  When
+<code>TRUE</code> the full column names are printed.<br />
+When <code>col.names</code> is a string beginning with <code>"abb"</code> or
+<code>"sub"</code> and ending with an integer <code>n</code> (i.e., of the form
+<code>"abb... &lt;n&gt;"</code>),
+the column names are <code><a href="../../base/html/abbreviate.html">abbreviate</a>()</code>d or
+<code><a href="../../base/html/substr.html">substring</a>()</code>ed to (target) length <code>n</code>, see the examples.
+</p>
+</td></tr>
+<tr valign="top"><td><code>note.dropping.colnames</code></td>
+<td>
+<p>logical specifying, when
+<code>col.names</code> is <code>FALSE</code> if the dropping of the column names
+should be noted, <code>TRUE</code> by default.</p>
+</td></tr>
+<tr valign="top"><td><code>uniDiag</code></td>
+<td>
+<p>logical indicating if the diagonal entries of a sparse
+unit triangular or unit-diagonal matrix should be formatted as
+<code>"I"</code> instead of <code>"1"</code> (to emphasize that the 1's are
+&ldquo;structural&rdquo;).</p>
+</td></tr>
+<tr valign="top"><td><code>col.trailer</code></td>
+<td>
+<p>a string to be appended to the right of each
+column; this is typically made use of by <code><a href="../../methods/html/show.html">show</a>(&lt;sparseMatrix&gt;)</code>
+only, when suppressing columns.</p>
+</td></tr>
+<tr valign="top"><td><code>suppRows, suppCols</code></td>
+<td>
+<p>logicals or <code>NULL</code>, for
+<code>printSpMatrix2()</code> specifying if rows or columns should be
+suppressed in printing.  If <code>NULL</code>, sensible defaults are
+determined from <code><a href="../../base/html/dim.html">dim</a>(x)</code> and
+<code><a href="../../base/html/options.html">options</a>(c("width", "max.print"))</code>.
+Setting both to <code>FALSE</code> may be a very bad idea.</p>
+</td></tr>
+<tr valign="top"><td><code>align</code></td>
+<td>
+<p>a string specifying how the <code>zero.print</code> codes
+should be aligned, i.e., padded as strings.  The default,
+<code>"fancy"</code>, takes some effort to align the typical
+<code>zero.print = "."</code> with the position of <code>0</code>, i.e., the
+first decimal (one left of decimal point) of the numbers printed,
+whereas <code>align = "right"</code> just makes use of
+<code><a href="../../base/html/print.html">print</a>(*, right = TRUE)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>number, a positive integer, indicating the approximately
+desired (line) width of the output, see also <code>fitWidth</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>fitWidth</code></td>
+<td>
+<p>logical indicating if some effort should be made to
+match the desired <code>width</code> or temporarily enlarge that if deemed
+necessary.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+
+<dl>
+<dt>formatSpMatrix:</dt><dd>
+<p>If <code>x</code> is large, only the first rows making up the
+approximately first <code>maxp</code> entries is used, otherwise all of <code>x</code>.
+<code><a href="formatSparseM.html">.formatSparseSimple</a>()</code> is applied to (a dense version
+of) the matrix.  Then, <code><a href="formatSparseM.html">formatSparseM</a></code> is used, unless
+in trivial cases or for sparse matrices without <code>x</code> slot.</p>
+</dd>
+</dl>
+
+
+
+<h3>Value</h3>
+
+<table summary="R valueblock">
+<tr valign="top"><td><code>formatSpMatrix()</code></td>
+<td>
+<p>returns a character matrix with possibly empty
+column names, depending on <code>col.names</code> etc, see above.</p>
+</td></tr>
+<tr valign="top"><td><code>printSpMatrix*()</code></td>
+<td>
+<p>return <code>x</code> <em>invisibly</em>, see <code><a href="../../base/html/invisible.html">invisible</a></code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>See Also</h3>
+
+<p>the virtual class <code><a href="sparseMatrix-class.html">sparseMatrix</a></code> and the
+classes extending it;  maybe <code><a href="sparseMatrix.html">sparseMatrix</a></code> or
+<code><a href="spMatrix.html">spMatrix</a></code> as simple constructors of such matrices.
+</p>
+<p>The underlying utilities <code><a href="formatSparseM.html">formatSparseM</a></code> and
+<code>.formatSparseSimple()</code> (on the same page).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+f1 &lt;- gl(5, 3, labels = LETTERS[1:5])
+X &lt;- as(f1, "sparseMatrix")
+X ## &lt;==&gt;  show(X)  &lt;==&gt;  print(X)
+t(X) ## shows column names, since only 5 columns
+
+X2 &lt;- as(gl(12, 3, labels = paste(LETTERS[1:12],"c",sep=".")),
+         "sparseMatrix")
+X2
+## less nice, but possible:
+print(X2, col.names = TRUE) # use [,1] [,2] .. =&gt; does not fit
+
+## Possibilities with column names printing:
+      t(X2) # suppressing column names
+print(t(X2), col.names=TRUE)
+print(t(X2), zero.print = "", col.names="abbr. 1")
+print(t(X2), zero.print = "-", col.names="substring 2")
+
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

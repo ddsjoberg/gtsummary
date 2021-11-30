@@ -1,0 +1,35 @@
+Package: dtplyr
+Title: Data Table Back-End for 'dplyr'
+Version: 1.1.0
+Authors@R: 
+    c(person(given = "Hadley",
+             family = "Wickham",
+             role = c("cre", "aut"),
+             email = "hadley@rstudio.com"),
+      person(given = "RStudio",
+             role = "cph"))
+Description: Provides a data.table backend for 'dplyr'. The goal
+    of 'dtplyr' is to allow you to write 'dplyr' code that is
+    automatically translated to the equivalent, but usually much faster,
+    data.table code.
+License: MIT + file LICENSE
+URL: https://github.com/tidyverse/dtplyr
+BugReports: https://github.com/tidyverse/dtplyr/issues
+Depends: R (>= 3.3)
+Imports: crayon, data.table (>= 1.12.4), dplyr (>= 1.0.3), ellipsis,
+        glue, lifecycle, rlang, tibble, tidyselect, vctrs
+Suggests: bench, covr, knitr, rmarkdown, testthat (>= 3.0.0), tidyr (>=
+        1.1.0)
+VignetteBuilder: knitr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Config/testthat/edition: 3
+NeedsCompilation: no
+Packaged: 2021-02-19 22:29:58 UTC; hadley
+Author: Hadley Wickham [cre, aut],
+  RStudio [cph]
+Maintainer: Hadley Wickham <hadley@rstudio.com>
+Repository: CRAN
+Date/Publication: 2021-02-20 01:50:05 UTC
+Built: R 4.0.5; ; 2021-05-07 18:08:41 UTC; windows

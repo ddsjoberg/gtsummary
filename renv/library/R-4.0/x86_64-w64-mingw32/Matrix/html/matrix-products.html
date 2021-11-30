@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Matrix (Cross) Products (of Transpose)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for matrix-products {Matrix}"><tr><td>matrix-products {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Matrix (Cross) Products (of Transpose)</h2>
+
+<h3>Description</h3>
+
+<p>The basic matrix product, <code>%*%</code> is implemented for all our
+<code><a href="Matrix-class.html">Matrix</a></code> and also for
+<code><a href="sparseVector-class.html">sparseVector</a></code> classes, fully analogously to <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>'s
+base <code>matrix</code> and vector objects.
+</p>
+<p>The functions <code><a href="matrix-products.html">crossprod</a></code> and <code><a href="matrix-products.html">tcrossprod</a></code> are
+matrix products or &ldquo;cross products&rdquo;, ideally implemented
+efficiently without computing <code><a href="../../base/html/t.html">t</a>(.)</code>'s unnecessarily.
+They also return <code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code> classed
+matrices when easily detectable, e.g., in <code>crossprod(m)</code>, the one
+argument case.
+</p>
+<p><code>tcrossprod()</code> takes the cross-product of the transpose of a matrix.
+<code>tcrossprod(x)</code> is formally equivalent to, but faster than, the
+call <code>x %*% t(x)</code>, and so is <code>tcrossprod(x, y)</code> instead of
+<code>x %*% t(y)</code>.
+</p>
+<p><em>Boolean</em> matrix products are computed via either
+<code><a href="boolean-matprod.html">%&amp;%</a></code> or <code>boolArith = TRUE</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S4 method for signature 'CsparseMatrix,diagonalMatrix'
+x %*% y
+
+## S4 method for signature 'dgeMatrix,missing'
+crossprod(x, y = NULL, boolArith = NA, ...)
+## S4 method for signature 'CsparseMatrix,diagonalMatrix'
+crossprod(x, y = NULL, boolArith = NA, ...)
+       ## .... and for many more signatures
+
+## S4 method for signature 'CsparseMatrix,ddenseMatrix'
+tcrossprod(x, y = NULL, boolArith = NA, ...)
+## S4 method for signature 'TsparseMatrix,missing'
+tcrossprod(x, y = NULL, boolArith = NA, ...)
+       ## .... and for many more signatures
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a matrix-like object</p>
+</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+<p>a matrix-like object, or for <code>[t]crossprod()</code>
+<code>NULL</code> (by default); the latter case is formally equivalent to
+<code>y = x</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>boolArith</code></td>
+<td>
+<p><code><a href="../../base/html/logical.html">logical</a></code>, i.e., <code>NA</code>, <code>TRUE</code>,
+or <code>FALSE</code>.  If true the result is (coerced to) a pattern
+matrix, i.e., <code>"<a href="nMatrix-class.html">nMatrix</a>"</code>, unless there are
+<code>NA</code> entries and the result will be a
+<code>"<a href="dMatrix-class.html">lMatrix</a>"</code>.  If false the result is (coerced to)
+numeric.  When <code>NA</code>, currently the default, the
+result is a pattern matrix when <code>x</code> and <code>y</code> are
+<code>"<a href="nsparseMatrix-classes.html">nsparseMatrix</a>"</code> and numeric otherwise.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>potentially more arguments passed to and from methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>For some classes in the <code>Matrix</code> package, such as
+<code><a href="dgCMatrix-class.html">dgCMatrix</a></code>, it is much faster to calculate the
+cross-product of the transpose directly instead of calculating the
+transpose first and then its cross-product.
+</p>
+<p><code>boolArith = TRUE</code> for regular (&ldquo;non cross&rdquo;) matrix
+products, <code>%*%</code> cannot be specified.  Instead, we provide the
+<code><a href="boolean-matprod.html">%&amp;%</a></code> operator for <em>boolean</em> matrix products.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A <code><a href="Matrix-class.html">Matrix</a></code> object, in the one argument case
+of an appropriate <em>symmetric</em> matrix class, i.e., inheriting from
+<code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>%*%</dt><dd><p><code>signature(x = "dgeMatrix", y = "dgeMatrix")</code>:
+Matrix multiplication; ditto for several other signature
+combinations, see <code>showMethods("%*%", class = "dgeMatrix")</code>.</p>
+</dd>
+<dt>%*%</dt><dd><p><code>signature(x = "dtrMatrix", y = "matrix")</code> and other
+signatures (use <code>showMethods("%*%", class="dtrMatrix")</code>):
+matrix multiplication.  Multiplication of (matching) triangular
+matrices now should remain triangular (in the sense of class
+<a href="triangularMatrix-class.html">triangularMatrix</a>).</p>
+</dd>
+<dt>crossprod</dt><dd><p><code>signature(x = "dgeMatrix", y = "dgeMatrix")</code>:
+ditto for several other signatures, use
+<code>showMethods("crossprod", class = "dgeMatrix")</code>, matrix
+crossproduct, an efficient version of <code>t(x) %*% y</code>.</p>
+</dd>
+<dt>crossprod</dt><dd><p><code>signature(x = "CsparseMatrix", y = "missing")</code>
+returns <code>t(x) %*% x</code> as an <code>dsCMatrix</code> object.</p>
+</dd>
+<dt>crossprod</dt><dd><p><code>signature(x = "TsparseMatrix", y = "missing")</code>
+returns <code>t(x) %*% x</code> as an <code>dsCMatrix</code> object.</p>
+</dd>
+<dt>crossprod,tcrossprod</dt><dd><p><code>signature(x = "dtrMatrix", y =
+      "matrix")</code> and other signatures, see <code>"%*%"</code> above.</p>
+</dd>
+</dl>
+
+
+
+<h3>Note</h3>
+
+<p><code>boolArith = TRUE</code>, <code>FALSE</code> or <code>NA</code> has been newly
+introduced for <span class="pkg">Matrix</span> 1.2.0 (March 2015).  Its implementation
+may be incomplete and partly missing.  Please report such omissions if
+detected!
+</p>
+<p>Currently, <code>boolArith = TRUE</code> is implemented via
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> coercions which may be quite
+inefficient for dense matrices.  Contributions for efficiency
+improvements are welcome.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/tcrossprod.html">tcrossprod</a></code> in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>'s base,
+<code><a href="matrix-products.html">crossprod</a></code> and <code><a href="matrix-products.html">%*%</a></code>.</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ ## A random sparse "incidence" matrix :
+ m &lt;- matrix(0, 400, 500)
+ set.seed(12)
+ m[runif(314, 0, length(m))] &lt;- 1
+ mm &lt;- as(m, "dgCMatrix")
+ object.size(m) / object.size(mm) # smaller by a factor of &gt; 200
+
+ ## tcrossprod() is very fast:
+ system.time(tCmm &lt;- tcrossprod(mm))# 0   (PIII, 933 MHz)
+ system.time(cm &lt;- crossprod(t(m))) # 0.16
+ system.time(cm. &lt;- tcrossprod(m))  # 0.02
+
+ stopifnot(cm == as(tCmm, "matrix"))
+
+ ## show sparse sub matrix
+ tCmm[1:16, 1:30]
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

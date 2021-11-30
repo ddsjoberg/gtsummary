@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Sizes of LaTeX packages in TeX Live</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tl_sizes {tinytex}"><tr><td>tl_sizes {tinytex}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Sizes of LaTeX packages in TeX Live</h2>
+
+<h3>Description</h3>
+
+<p>Use the command <code>tlmgr info --list</code> to obtain the sizes of LaTeX
+packages.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tl_sizes(show_total = TRUE, pkgs = NULL, only_installed = TRUE, field = "size")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>show_total</code></td>
+<td>
+<p>Whether to show the total size.</p>
+</td></tr>
+<tr valign="top"><td><code>pkgs</code></td>
+<td>
+<p>A character vector of package names (by default, all packages).</p>
+</td></tr>
+<tr valign="top"><td><code>only_installed</code></td>
+<td>
+<p>Whether to list installed packages only.</p>
+</td></tr>
+<tr valign="top"><td><code>field</code></td>
+<td>
+<p>A character vector of field names in the package information.
+See <a href="https://www.tug.org/texlive/doc/tlmgr.html#info">https://www.tug.org/texlive/doc/tlmgr.html#info</a> for more info.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>By default, a data frame of three columns: <code>package</code> is the
+package names, <code>size</code> is the sizes in bytes, and <code>size_h</code> is the
+human-readable version of sizes. If different field names are provided in
+the <code>field</code> argument, the returned data frame will contain these
+columns.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>tinytex</em> version 0.34 <a href="00Index.html">Index</a>]</div>
+</body></html>

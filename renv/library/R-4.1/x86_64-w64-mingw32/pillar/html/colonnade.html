@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Format multiple vectors in a tabular display</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for colonnade {pillar}"><tr><td>colonnade {pillar}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Format multiple vectors in a tabular display</h2>
+
+<h3>Description</h3>
+
+<p>The vectors are formatted to fit horizontally into a user-supplied number of
+characters per row.
+</p>
+<p>The <code>colonnade()</code> function doesn't process the input but returns an object
+with a <code><a href="../../base/html/format.html">format()</a></code> and a <code><a href="../../base/html/print.html">print()</a></code> method.
+The implementations call <code><a href="../../pillar/help/squeeze.html">squeeze()</a></code> to create <a href="../../pillar/help/pillar.html">pillar</a> objects and fit them to a given width.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+colonnade(x, has_row_id = TRUE, width = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A list, which can contain matrices or data frames.
+If named, the names will be used as title for the pillars. Non-syntactic names
+will be escaped.</p>
+</td></tr>
+<tr valign="top"><td><code>has_row_id</code></td>
+<td>
+<p>Include a column indicating row IDs? Pass <code>"*"</code> to mark
+the row ID column with a star.</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>Default width of the entire output, optional.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>These dots are for future extensions and must be empty.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Pillars may be distributed over multiple tiers if
+<code>width &gt; getOption("width")</code>. In this case each tier is at most
+<code>getOption("width")</code> characters wide. The very first step of formatting
+is to determine how many tiers are shown at most, and the width of each
+tier.
+</p>
+<p>To avoid unnecessary computation for showing very wide colonnades, a first
+pass tries to fit all capitals into the tiers.
+For each pillar whose capital fits, it is then decided in which tier it is
+shown, if at all, and how much horizontal space it may use (either its
+minimum or its maximum width).
+Remaining space is then distributed proportionally to pillars that do not
+use their desired width.
+</p>
+<p>For fitting pillars in one or more tiers, first a check is made
+if all pillars fit with their maximum width (e.g.,
+<code>option(tibble.width = Inf)</code> or narrow colonnade).
+If yes, this is the resulting fit, no more work needs to be done.
+Otherwise, if the maximum width is too wide, the same test
+is carried out with the minimum width.
+If this is still too wide, this is the resulting fit.
+Otherwise, some tiers from the start
+will contain pillars with their maximum width,
+one tier will contain some pillars with maximum and some with minimum width,
+and the remaining tiers contain pillars with their minimum width only.
+</p>
+<p>For this, we compute a &quot;reverse minimum assignment&quot;.
+</p>
+<p>We determine the cut point where minimum and maximum assignment
+agree.
+The following strategy is applied:
+</p>
+
+<ol>
+<li><p> First, we determine the tier in which the cut point lies.
+This is the first instance of a column that ends up in the same tier
+for both minimum and maximum assignment.
+</p>
+</li>
+<li><p> A set of candidate cut points is derived.
+</p>
+</li>
+<li><p> We consult the column offsets. The last column where the minimum assignment
+has a greater or equal offset than the maximum assignment is our latest
+cut point.
+If no such column exists, the cut point is the column just before our
+first candidate.
+</p>
+</li>
+<li><p> Finally, we combine maximum and minimum reverse fits at the cut point.
+We don't need to redistribute anything here.
+</p>
+</li></ol>
+
+<p>Fitting pillars into tiers is very similar to a word-wrapping algorithm.
+In a loop, new tiers are opened if the current tier overflows.
+If a column is too wide to fit a single tier, it will never be
+displayed, and the colonnade will be truncated there.
+This case should never occur with reasonable display widths larger than
+30 characters.
+Truncation also happens if all available tiers are filled.
+</p>
+<p>The remaining space is distributed from left to right.
+Each column gains space proportional to the fraction of missing and
+remaining space,
+rounded down.
+Any space remaining after rounding is distributed from left to right,
+one space per column.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+colonnade(list(a = 1:3, b = letters[1:3]))
+
+long_string &lt;- list(paste(letters, collapse = " "))
+colonnade(long_string, width = 20)
+colonnade(long_string, has_row_id = FALSE, width = 20)
+
+# The width can also be overridden when calling format() or print():
+print(colonnade(long_string), width = 20)
+
+# If width is larger than getOption("width"), multiple tiers are created:
+colonnade(rep(long_string, 4), width = Inf)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>pillar</em> version 1.6.3 <a href="00Index.html">Index</a>]</div>
+</body></html>

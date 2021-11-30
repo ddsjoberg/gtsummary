@@ -1,0 +1,231 @@
+---
+title: "Function translation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Function translation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+```
+
+There are two parts to dbplyr SQL translation: translating dplyr verbs, and translating expressions within those verbs. This vignette describes how individual expressions (function calls) are translated; `vignette("translate-verb")` describes how entire verbs are translated.
+
+
+```{r, message = FALSE}
+library(dbplyr)
+library(dplyr)
+```
+
+`dbplyr::translate_sql()` powers translation of individual function calls, and I'll use it extensively in this vignette to show what's happening. You shouldn't need to use it ordinary code as dbplyr takes care of the translation automatically.
+
+```{r}
+translate_sql((x + y) / 2)
+```
+
+`translate_sql()` takes an optional `con` parameter. If not supplied, this causes dplyr to generate (approximately) SQL-92 compliant SQL. If supplied, dplyr uses `sql_translate_env()` to look up a custom environment which makes it possible for different databases to generate slightly different SQL: see `vignette("new-backend")` for more details.  You can use the various simulate helpers to see the translations used by different backends:
+
+```{r}
+translate_sql(x ^ 2L)
+translate_sql(x ^ 2L, con = simulate_sqlite())
+translate_sql(x ^ 2L, con = simulate_access())
+```
+
+Perfect translation is not possible because databases don't have all the functions that R does. The goal of dplyr is to provide a semantic rather than a literal translation: what you mean, rather than precisely what is done. In fact, even for functions that exist both in databases and R, you shouldn't expect results to be identical; database programmers have different priorities than R core programmers. For example, in R in order to get a higher level of numerical accuracy, `mean()` loops through the data twice. R's `mean()` also provides a `trim` option for computing trimmed means; this is something that databases do not provide. 
+
+If you're interested in how `translate_sql()` is implemented, the basic techniques that underlie the implementation of `translate_sql()` are described in ["Advanced R"](https://adv-r.hadley.nz/translation.html). 
+
+## Basic differences
+
+The following examples work through some of the basic differences between R and SQL.
+
+*   `"` and `'` mean different things
+
+    ```{r}
+    # In SQLite variable names are escaped by double quotes:
+    translate_sql(x)
+    # And strings are escaped by single quotes
+    translate_sql("x")
+    ```
+    
+*   And some functions have different argument orders:
+    
+    ```{r}
+    translate_sql(substr(x, 5, 10))
+    translate_sql(log(x, 10))
+    ```
+
+*   R and SQL have different defaults for integers and reals. 
+    In R, 1 is a real, and 1L is an integer. In SQL, 1 is an integer, and 1.0 is a real
+    
+    ```{r}
+    translate_sql(1)
+    translate_sql(1L)
+    ```
+
+## Known functions
+
+### Mathematics
+
+* basic math operators: `+`, `-`, `*`, `/`, `^`
+* trigonometry: `acos()`, `asin()`, `atan()`, `atan2()`, `cos()`, `cot()`, `tan()`, `sin()`
+* hypergeometric: `cosh()`, `coth()`, `sinh()`, `tanh()`
+* logarithmic: `log()`, `log10()`, `exp()`
+* misc: `abs()`, `ceiling()`, `sqrt()`, `sign()`, `round()`
+
+## Modulo arithmetic
+
+dbplyr translates `%%` to the SQL equivalents but note that it's not precisely the same: most databases use truncated division where the modulo operator takes the sign of the dividend, where R using the mathematically preferred floored division with the modulo sign taking the sign of the divisor.
+
+```{r}
+df <- tibble(
+  x = c(10L, 10L, -10L, -10L), 
+  y = c(3L, -3L, 3L, -3L)
+)
+mf <- tbl_memdb(df)
+
+df %>% mutate(x %% y)
+mf %>% mutate(x %% y)
+```
+
+dbplyr no longer translates `%/%` because there's no robust cross-database translation available.
+
+### Logical comparisons
+
+* logical comparisons: `<`, `<=`, `!=`, `>=`, `>`, `==`, `%in%`
+* boolean operations: `&`, `&&`, `|`, `||`, `!`, `xor()`
+
+### Aggregation
+
+All database provide translation for the basic aggregations: `mean()`, `sum()`, `min()`, `max()`, `sd()`, `var()`. Databases automatically drop NULLs (their equivalent of missing values) whereas in R you have to ask nicely. The aggregation functions warn you about this important difference:
+
+```{r}
+translate_sql(mean(x))
+translate_sql(mean(x, na.rm = TRUE))
+```
+
+Note that, by default, `translate()` assumes that the call is inside a `mutate()` or `filter()` and generates a window translation. If you want to see the equivalent `summarise()`/aggregation translation, use `window = FALSE`:
+
+```{r}
+translate_sql(mean(x, na.rm = TRUE), window = FALSE)
+```
+
+### Conditional evaluation
+
+`if` and `switch()` are translate to `CASE WHEN`:
+
+```{r}
+translate_sql(if (x > 5) "big" else "small")
+translate_sql(switch(x, a = 1L, b = 2L, 3L))
+```
+  
+### String manipulation
+
+### Date/time
+
+* string functions: `tolower`, `toupper`, `trimws`, `nchar`, `substr`
+* coerce types: `as.numeric`, `as.integer`, `as.character`
+
+## Unknown functions
+
+Any function that dplyr doesn't know how to convert is left as is. This means that database functions that are not covered by dplyr can be used directly via `translate_sql()`. Here a couple of examples that will work with [SQLite](https://www.sqlite.org/lang_corefunc.html):
+
+```{r}
+translate_sql(glob(x, y))
+translate_sql(x %like% "ab%")
+```
+
+See `vignette("sql")` for more details.
+
+## Window functions
+
+Things get a little trickier with window functions, because SQL's window functions are considerably more expressive than the specific variants provided by base R or dplyr. They have the form `[expression] OVER ([partition clause] [order clause] [frame_clause])`:
+
+* The __expression__ is a combination of variable names and window functions.
+  Support for window functions varies from database to database, but most
+  support the ranking functions, `lead`, `lag`, `nth`, `first`,
+  `last`, `count`, `min`, `max`, `sum`, `avg` and `stddev`.
+
+* The __partition clause__ specifies how the window function is broken down
+  over groups. It plays an analogous role to `GROUP BY` for aggregate functions,
+  and `group_by()` in dplyr. It is possible for different window functions to 
+  be partitioned into different groups, but not all databases support it, and
+  neither does dplyr.
+  
+* The __order clause__ controls the ordering (when it makes a difference).
+  This is important for the ranking functions since it specifies which 
+  variables to rank by, but it's also needed for cumulative functions and lead.
+  Whenever you're thinking about before and after in SQL, you must always tell 
+  it which variable defines the order. If the order clause is missing when 
+  needed, some databases fail with an error message while others return 
+  non-deterministic results.
+  
+* The __frame clause__ defines which rows, or __frame__, that are passed 
+  to the window function, describing which rows (relative to the current row)
+  should be included. The frame clause provides two offsets which determine
+  the start and end of frame. There are three special values: -Inf means
+  to include all preceding rows (in SQL, "unbounded preceding"), 0 means the
+  current row ("current row"), and Inf means all following rows ("unbounded
+  following"). The complete set of options is comprehensive, but fairly 
+  confusing, and is summarised visually below.
+
+    ```{r echo = FALSE, out.width = "100%"}
+    knitr::include_graphics("windows.png", dpi = 300)
+    ```
+
+    Of the many possible specifications, there are only three that commonly
+    used. They select between aggregation variants:
+
+    * Recycled: `BETWEEN UNBOUND PRECEEDING AND UNBOUND FOLLOWING`
+    
+    * Cumulative: `BETWEEN UNBOUND PRECEEDING AND CURRENT ROW`
+    
+    * Rolling: `BETWEEN 2 PRECEEDING AND 2 FOLLOWING`
+    
+    dplyr generates the frame clause based on whether your using a recycled
+    aggregate or a cumulative aggregate.
+    
+To see how individual window functions are translated to SQL, we can again use `translate_sql()`:
+
+```{r}
+translate_sql(mean(G))
+translate_sql(rank(G))
+translate_sql(ntile(G, 2))
+translate_sql(lag(G))
+```
+
+If the tbl has been grouped or arranged previously in the pipeline, then dplyr will use that information to set the "partition by" and "order by" clauses. For interactive exploration, you can achieve the same effect by setting the `vars_group` and `vars_order` arguments to `translate_sql()`
+
+```{r}
+translate_sql(cummean(G), vars_order = "year")
+translate_sql(rank(), vars_group = "ID")
+```
+
+There are some challenges when translating window functions between R and SQL, because dplyr tries to keep the window functions as similar as possible to both the existing R analogues and to the SQL functions. This means that there are three ways to control the order clause depending on which window function you're using:
+
+* For ranking functions, the ordering variable is the first argument: `rank(x)`,
+  `ntile(y, 2)`. If omitted or `NULL`, will use the default ordering associated 
+  with the tbl (as set by `arrange()`).
+
+* Accumulating aggregates only take a single argument (the vector to aggregate).
+  To control ordering, use `order_by()`.
+  
+* Aggregates implemented in dplyr (`lead`, `lag`, `nth_value`, `first_value`, 
+  `last_value`) have an `order_by` argument. Supply it to override the
+  default ordering.
+
+The three options are illustrated in the snippet below:
+
+```{r, eval = FALSE}
+mutate(players,
+  min_rank(yearID),
+  order_by(yearID, cumsum(G)),
+  lead(G, order_by = yearID)
+)
+```
+
+Currently there is no way to order by multiple variables, except by setting the default ordering with `arrange()`. This will be added in a future release. 
+

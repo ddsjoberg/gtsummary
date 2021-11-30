@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Get started with vroom</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Get started with vroom</h1>
+
+
+
+<p>The vroom package contains one main function <code>vroom()</code> which is used to read all types of delimited files. A delimited file is any file in which the data is separated (delimited) by one or more characters.</p>
+<p>The most common type of delimited files are CSV (Comma Separated Values) or TSV (Tab Separated Values) files, typically these files have a <code>.csv</code> and <code>.tsv</code> suffix respectively.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vroom)</span></code></pre></div>
+<p>This vignette covers the following topics:</p>
+<ul>
+<li>The basics of reading files, including
+<ul>
+<li>single files</li>
+<li>multiple files</li>
+<li>compressed files</li>
+<li>remote files</li>
+</ul></li>
+<li>Skipping particular columns.</li>
+<li>Specifying column types, for additional safety and when the automatic guessing fails.</li>
+<li>Writing regular and compressed files</li>
+</ul>
+<div id="reading-files" class="section level2">
+<h2>Reading files</h2>
+<p>To read a CSV, or other type of delimited file with vroom pass the file to <code>vroom()</code>. The delimiter will be automatically guessed if it is a common delimiter; e.g. (“,” “” &quot; “|” “:” “;”). If the guessing fails or you are using a less common delimiter specify it with the <code>delim</code> parameter. (e.g. <code>delim = &quot;,&quot;</code>).</p>
+<p>We have included an example CSV file in the vroom package for use in examples and tests. Access it with <code>vroom_example(&quot;mtcars.csv&quot;)</code></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># See where the example file is stored on your machine</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">vroom_example</span>(<span class="st">&quot;mtcars.csv&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>file</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;/private/var/folders/9x/_8jnmxwj3rq1t90mlr6_0k1w0000gn/T/RtmpEmCOkS/Rinstaa2b294f414b/vroom/extdata/mtcars.csv&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the file, by default vroom will guess the delimiter automatically.</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(file)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 32 Columns: 12</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: &quot;,&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr  (1): model</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (11): mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 12</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model          mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4     21       6   160   110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 W…  21       6   160   110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710    22.8     4   108    93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># You can also specify it explicitly, which is (slightly) faster, and safer if</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># you know how the file is delimited.</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(file, <span class="at">delim =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 32 Columns: 12</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: &quot;,&quot;</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr  (1): model</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (11): mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 12</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model          mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4     21       6   160   110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 W…  21       6   160   110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710    22.8     4   108    93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+</div>
+<div id="reading-multiple-files" class="section level2">
+<h2>Reading multiple files</h2>
+<p>If you are reading a set of files which all have the same columns, you can pass the filenames directly to <code>vroom()</code> and it will combine them into one result.</p>
+<p>First we will create some files to read by splitting the mtcars dataset by number of cylinders, (it is OK if you don’t currently understand this code).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mt <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(mtcars, <span class="st">&quot;model&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">iwalk</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(mt, mt<span class="sc">$</span>cyl),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">vroom_write</span>(.x, glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">&quot;mtcars_{.y}.csv&quot;</span>), <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Then we can efficiently read them into one table by passing the filenames directly to vroom.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> fs<span class="sc">::</span><span class="fu">dir_ls</span>(<span class="at">glob =</span> <span class="st">&quot;mtcars*csv&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>files</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; mtcars_4.csv mtcars_6.csv mtcars_8.csv</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(files)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 32 Columns: 12</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: &quot;\t&quot;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr  (1): model</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (11): mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 12</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model        mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Datsun 710  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Merc 240D   24.4     4  147.    62  3.69  3.19  20       1     0     4     2</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Merc 230    22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+<p>Often the filename or directory where the files are stored contains information. The <code>id</code> parameter can be used to add an extra column to the result with the full path to each file. (in this case we name the column <code>path</code>).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(files, <span class="at">id =</span> <span class="st">&quot;path&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 32 Columns: 13</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: &quot;\t&quot;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr  (1): model</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (11): mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 13</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   path   model   mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 mtcar… Dats…  22.8     4  108     93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 mtcar… Merc…  24.4     4  147.    62  3.69  3.19  20       1     0     4     2</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 mtcar… Merc…  22.8     4  141.    95  3.92  3.15  22.9     1     0     4     2</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+</div>
+<div id="reading-compressed-files" class="section level2">
+<h2>Reading compressed files</h2>
+<p>vroom supports reading zip, gz, bz2 and xz compressed files automatically, just pass the filename of the compressed file to vroom.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">vroom_example</span>(<span class="st">&quot;mtcars.csv.gz&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(file)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 32 Columns: 12</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: &quot;,&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr  (1): model</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (11): mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 12</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model          mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4     21       6   160   110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 W…  21       6   160   110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710    22.8     4   108    93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+<p><code>vroom()</code> decompresses, indexes and writes the decompressed data to a file in the temp directory in a single stream. The temporary file is used to lazily look up the values and will be automatically cleaned up when all values in the object have been fully read, the object is removed, or the R session ends.</p>
+<div id="reading-single-files-from-multiple-multi-file-zip-archives" class="section level3">
+<h3>Reading single files from multiple multi-file zip archives</h3>
+<p>If you are reading a zip file that contains multiple files with the same format, you can use a wrapper function like this:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>read_all_zip <span class="ot">&lt;-</span> <span class="cf">function</span>(file, ...) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  filenames <span class="ot">&lt;-</span> <span class="fu">unzip</span>(file, <span class="at">list =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>Name</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vroom</span>(purrr<span class="sc">::</span><span class="fu">map</span>(filenames, <span class="sc">~</span> <span class="fu">unz</span>(file, .x)), ...)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div id="reading-remote-files" class="section level2">
+<h2>Reading remote files</h2>
+<p>vroom can read files directly from the internet as well by passing the URL of the file to vroom.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="st">&quot;https://raw.githubusercontent.com/r-lib/vroom/master/inst/extdata/mtcars.csv&quot;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(file)</span></code></pre></div>
+<p>It can even read gzipped files from the internet (although not the other compressed formats).</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="st">&quot;https://raw.githubusercontent.com/r-lib/vroom/master/inst/extdata/mtcars.csv.gz&quot;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(file)</span></code></pre></div>
+</div>
+<div id="column-selection" class="section level2">
+<h2>Column selection</h2>
+<p>vroom provides the same interface for column selection and renaming as <a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a>. This provides very efficient, flexible and readable selections. For example you can select by:</p>
+<ul>
+<li>A character vector of column names</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">vroom_example</span>(<span class="st">&quot;mtcars.csv.gz&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(file, <span class="at">col_select =</span> <span class="fu">c</span>(model, cyl, gear))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 32 Columns: 3</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: &quot;,&quot;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr (1): model</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (2): cyl, gear</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 3</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model           cyl  gear</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4         6     4</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 Wag     6     4</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710        4     4</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+<ul>
+<li>A numeric vector of column indexes, e.g. <code>c(1, 2, 5)</code></li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(file, <span class="at">col_select =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">11</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 32 Columns: 3</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: &quot;,&quot;</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr (1): model</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (2): cyl, gear</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 3</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model           cyl  gear</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4         6     4</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 Wag     6     4</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710        4     4</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+<ul>
+<li>Using the selection helpers such as <code>starts_with()</code> and <code>ends_with()</code></li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(file, <span class="at">col_select =</span> <span class="fu">starts_with</span>(<span class="st">&quot;d&quot;</span>))</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 32 Columns: 2</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: &quot;,&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (2): disp, drat</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 2</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    disp  drat</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1   160  3.9 </span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2   160  3.9 </span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3   108  3.85</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+<ul>
+<li>You can also rename columns</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(file, <span class="at">col_select =</span> <span class="fu">list</span>(<span class="at">car =</span> model, <span class="fu">everything</span>()))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 32 Columns: 12</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Delimiter: &quot;,&quot;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr  (1): model</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; dbl (11): mpg, cyl, disp, hp, drat, wt, qsec, vs, am, gear, carb</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 12</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   car            mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4     21       6   160   110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 W…  21       6   160   110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710    22.8     4   108    93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+</div>
+<div id="reading-fixed-width-files" class="section level2">
+<h2>Reading fixed width files</h2>
+<p>A fixed width file can be a very compact representation of numeric data. Unfortunately, it’s also often painful to read because you need to describe the length of every field. vroom aims to make it as easy as possible by providing a number of different ways to describe the field structure. Use <code>vroom_fwf()</code> in conjunction with one of the following helper functions to read the file.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fwf_sample <span class="ot">&lt;-</span> <span class="fu">vroom_example</span>(<span class="st">&quot;fwf-sample.txt&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">readLines</span>(fwf_sample))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; John Smith          WA        418-Y11-4111 Mary Hartford       CA        319-Z19-4341 Evan Nolan          IL        219-532-c301</span></span></code></pre></div>
+<ul>
+<li><code>fwf_empty()</code> - Guess based on the position of empty columns.</li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_fwf</span>(fwf_sample, <span class="fu">fwf_empty</span>(fwf_sample, <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">&quot;first&quot;</span>, <span class="st">&quot;last&quot;</span>, <span class="st">&quot;state&quot;</span>, <span class="st">&quot;ssn&quot;</span>)))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 3 Columns: 4</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr (4): first, last, state, ssn</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 4</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   first last     state ssn         </span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;       </span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 John  Smith    WA    418-Y11-4111</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mary  Hartford CA    319-Z19-4341</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Evan  Nolan    IL    219-532-c301</span></span></code></pre></div>
+<ul>
+<li><code>fwf_widths()</code> - Use user provided set of field widths.</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_fwf</span>(fwf_sample, <span class="fu">fwf_widths</span>(<span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">10</span>, <span class="dv">12</span>), <span class="fu">c</span>(<span class="st">&quot;name&quot;</span>, <span class="st">&quot;state&quot;</span>, <span class="st">&quot;ssn&quot;</span>)))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 3 Columns: 3</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr (3): name, state, ssn</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   name          state ssn         </span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;       </span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 John Smith    WA    418-Y11-4111</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mary Hartford CA    319-Z19-4341</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Evan Nolan    IL    219-532-c301</span></span></code></pre></div>
+<ul>
+<li><code>fwf_positions()</code> - Use user provided sets of start and end positions.</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_fwf</span>(fwf_sample, <span class="fu">fwf_positions</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">30</span>), <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">42</span>), <span class="fu">c</span>(<span class="st">&quot;name&quot;</span>, <span class="st">&quot;ssn&quot;</span>)))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 3 Columns: 2</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr (2): name, ssn</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   name          ssn         </span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;chr&gt;       </span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 John Smith    418-Y11-4111</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mary Hartford 319-Z19-4341</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Evan Nolan    219-532-c301</span></span></code></pre></div>
+<ul>
+<li><code>fwf_cols()</code> - Use user provided named widths.</li>
+</ul>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_fwf</span>(fwf_sample, <span class="fu">fwf_cols</span>(<span class="at">name =</span> <span class="dv">20</span>, <span class="at">state =</span> <span class="dv">10</span>, <span class="at">ssn =</span> <span class="dv">12</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 3 Columns: 3</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr (3): name, state, ssn</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 3</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   name          state ssn         </span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;       </span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 John Smith    WA    418-Y11-4111</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mary Hartford CA    319-Z19-4341</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Evan Nolan    IL    219-532-c301</span></span></code></pre></div>
+<ul>
+<li><code>fwf_cols()</code> - Use user provided named pairs of positions.</li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_fwf</span>(fwf_sample, <span class="fu">fwf_cols</span>(<span class="at">name =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">20</span>), <span class="at">ssn =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">42</span>)))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Rows: 3 Columns: 2</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; chr (2): name, ssn</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 2</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   name          ssn         </span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;chr&gt;       </span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 John Smith    418-Y11-4111</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mary Hartford 319-Z19-4341</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Evan Nolan    219-532-c301</span></span></code></pre></div>
+</div>
+<div id="column-types" class="section level2">
+<h2>Column types</h2>
+<p>vroom guesses the data types of columns as they are read, however sometimes the guessing fails and it is necessary to explicitly set the type of one or more columns.</p>
+<p>The available specifications are: (with single letter abbreviations in quotes)</p>
+<ul>
+<li><code>col_logical()</code> ‘l’, containing only <code>T</code>, <code>F</code>, <code>TRUE</code>, <code>FALSE</code>, <code>1</code> or <code>0</code>.</li>
+<li><code>col_integer()</code> ‘i’, integer values.</li>
+<li><code>col_big_integer()</code> ‘I’, Big integer values. (64bit integers)</li>
+<li><code>col_double()</code> ‘d’, floating point values.</li>
+<li><code>col_number()</code> ‘n’, numbers containing the <code>grouping_mark</code></li>
+<li><code>col_date(format = &quot;&quot;)</code> ‘D’: with the locale’s <code>date_format</code>.</li>
+<li><code>col_time(format = &quot;&quot;)</code> ‘t’: with the locale’s <code>time_format</code>.</li>
+<li><code>col_datetime(format = &quot;&quot;)</code> ‘T’: ISO8601 date times.</li>
+<li><code>col_factor(levels, ordered)</code> ‘f’, a fixed set of values.</li>
+<li><code>col_character()</code> ‘c’, everything else.</li>
+<li><code>col_skip()</code> ’_, -’, don’t import this column.</li>
+<li><code>col_guess()</code> ‘?’, parse using the “best” type based on the input.</li>
+</ul>
+<p>You can tell vroom what columns to use with the <code>col_types()</code> argument in a number of ways.</p>
+<p>If you only need to override a single column the most concise way is to use a named vector.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the &#39;hp&#39; columns as an integer</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(<span class="fu">vroom_example</span>(<span class="st">&quot;mtcars.csv&quot;</span>), <span class="at">col_types =</span> <span class="fu">c</span>(<span class="at">hp =</span> <span class="st">&quot;i&quot;</span>))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 12</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model          mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4     21       6   160   110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 W…  21       6   160   110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710    22.8     4   108    93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># also skip reading the &#39;cyl&#39; column</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(<span class="fu">vroom_example</span>(<span class="st">&quot;mtcars.csv&quot;</span>), <span class="at">col_types =</span> <span class="fu">c</span>(<span class="at">hp =</span> <span class="st">&quot;i&quot;</span>, <span class="at">cyl =</span> <span class="st">&quot;_&quot;</span>))</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 11</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model           mpg  disp    hp  drat    wt  qsec    vs    am  gear  carb</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4      21     160   110  3.9   2.62  16.5     0     1     4     4</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 Wag  21     160   110  3.9   2.88  17.0     0     1     4     4</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710     22.8   108    93  3.85  2.32  18.6     1     1     4     1</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co"># also read the gears as a factor</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(<span class="fu">vroom_example</span>(<span class="st">&quot;mtcars.csv&quot;</span>), <span class="at">col_types =</span> <span class="fu">c</span>(<span class="at">hp =</span> <span class="st">&quot;i&quot;</span>, <span class="at">cyl =</span> <span class="st">&quot;_&quot;</span>, <span class="at">gear =</span> <span class="st">&quot;f&quot;</span>))</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 11</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model           mpg  disp    hp  drat    wt  qsec    vs    am gear   carb</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4      21     160   110  3.9   2.62  16.5     0     1 4         4</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 Wag  21     160   110  3.9   2.88  17.0     0     1 4         4</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710     22.8   108    93  3.85  2.32  18.6     1     1 4         1</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+<p>You can read all the columns with the same type, by using the <code>.default</code> argument. For example reading everything as a character.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(<span class="fu">vroom_example</span>(<span class="st">&quot;mtcars.csv&quot;</span>), <span class="at">col_types =</span> <span class="fu">c</span>(<span class="at">.default =</span> <span class="st">&quot;c&quot;</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 12</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model        mpg   cyl   disp  hp    drat  wt    qsec  vs    am    gear  carb </span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4    21    6     160   110   3.9   2.62  16.46 0     1     4     4    </span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 W… 21    6     160   110   3.9   2.875 17.02 0     1     4     4    </span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710   22.8  4     108   93    3.85  2.32  18.61 1     1     4     1    </span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+<p>However you can also use the <code>col_*()</code> functions in a list.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vroom_example</span>(<span class="st">&quot;mtcars.csv&quot;</span>),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">list</span>(<span class="at">hp =</span> <span class="fu">col_integer</span>(), <span class="at">cyl =</span> <span class="fu">col_skip</span>(), <span class="at">gear =</span> <span class="fu">col_factor</span>())</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 11</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model           mpg  disp    hp  drat    wt  qsec    vs    am gear   carb</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4      21     160   110  3.9   2.62  16.5     0     1 4         4</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 Wag  21     160   110  3.9   2.88  17.0     0     1 4         4</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710     22.8   108    93  3.85  2.32  18.6     1     1 4         1</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+<p>This is most useful when a column type needs additional information, such as for categorical data when you know all of the levels of a factor.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vroom_example</span>(<span class="st">&quot;mtcars.csv&quot;</span>),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">col_types =</span> <span class="fu">list</span>(<span class="at">gear =</span> <span class="fu">col_factor</span>(<span class="at">levels =</span> <span class="fu">c</span>(<span class="at">gear =</span> <span class="fu">c</span>(<span class="st">&quot;3&quot;</span>, <span class="st">&quot;4&quot;</span>, <span class="st">&quot;5&quot;</span>))))</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 32 × 12</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   model          mpg   cyl  disp    hp  drat    wt  qsec    vs    am gear   carb</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 Mazda RX4     21       6   160   110  3.9   2.62  16.5     0     1 4         4</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 Mazda RX4 W…  21       6   160   110  3.9   2.88  17.0     0     1 4         4</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 Datsun 710    22.8     4   108    93  3.85  2.32  18.6     1     1 4         1</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 29 more rows</span></span></code></pre></div>
+</div>
+<div id="name-repair" class="section level2">
+<h2>Name repair</h2>
+<p>Often the names of columns in the original dataset are not ideal to work with. <code>vroom()</code> uses the same <code>.name_repair</code> argument as tibble, so you can use one of the default name repair strategies or provide a custom function. A great approach is to use the <a href="http://sfirke.github.io/janitor/reference/make_clean_names.html"><code>janitor::make_clean_names()</code></a> function as the input. This will automatically clean the names to use whatever case you specify, here I am setting it to use <code>ALLCAPS</code> names.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom</span>(</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">vroom_example</span>(<span class="st">&quot;mtcars.csv&quot;</span>),</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">.name_repair =</span> <span class="sc">~</span> janitor<span class="sc">::</span><span class="fu">make_clean_names</span>(., <span class="at">case =</span> <span class="st">&quot;all_caps&quot;</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="writing-delimited-files" class="section level2">
+<h2>Writing delimited files</h2>
+<p>Use <code>vroom_write()</code> to write delimited files, the default delimiter is tab, to write TSV files. Writing to TSV by default has the following benefits: - Avoids the issue of whether to use <code>;</code> (common in Europe) or <code>,</code> (common in the US) - Unlikely to require quoting in fields, as very few fields contain tabs - More easily and efficiently ingested by Unix command line tools such as <code>cut</code>, <code>perl</code> and <code>awk</code>.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_write</span>(mtcars, <span class="st">&quot;mtcars.tsv&quot;</span>)</span></code></pre></div>
+<div id="writing-csv-delimited-files" class="section level3">
+<h3>Writing CSV delimited files</h3>
+<p>However you can also use <code>delim = &#39;,&#39;</code> to write CSV files, which are common as inputs to GUI spreadsheet tools like Excel or Google Sheets.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_write</span>(mtcars, <span class="st">&quot;mtcars.csv&quot;</span>, <span class="at">delim =</span> <span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+</div>
+<div id="writing-compressed-files" class="section level3">
+<h3>Writing compressed files</h3>
+<p>For gzip, bzip2 and xz compression the outputs will be automatically compressed if the filename ends in <code>.gz</code>, <code>.bz2</code> or <code>.xz</code>.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_write</span>(mtcars, <span class="st">&quot;mtcars.tsv.gz&quot;</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_write</span>(mtcars, <span class="st">&quot;mtcars.tsv.bz2&quot;</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_write</span>(mtcars, <span class="st">&quot;mtcars.tsv.xz&quot;</span>)</span></code></pre></div>
+<p>It is also possible to use other compressors by using <code>pipe()</code> with <code>vroom_write()</code> to create a pipe connection to command line utilities, such as</p>
+<ul>
+<li><a href="https://zlib.net/pigz/">pigz</a>, a parallel gzip implementation</li>
+<li>lbzip2, a parallel bzip2 implementation</li>
+<li><a href="https://github.com/vasi/pixz">pixz</a>, a parallel xz implementation</li>
+<li><a href="https://facebook.github.io/zstd/">Zstandard</a>, a modern real-time compression algorithm.</li>
+</ul>
+<p>The parallel compression versions can be considerably faster for large output files and generally <code>vroom_write()</code> is fast enough that the compression speed becomes the bottleneck when writing.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">vroom_write</span>(mtcars, <span class="fu">pipe</span>(<span class="st">&quot;pigz &gt; mtcars.tsv.gz&quot;</span>))</span></code></pre></div>
+</div>
+<div id="reading-and-writing-from-standard-input-and-output" class="section level3">
+<h3>Reading and writing from standard input and output</h3>
+<p>vroom supports reading and writing to the C-level <code>stdin</code> and <code>stdout</code> of the R process by using <code>stdin()</code> and <code>stdout()</code>. E.g. from a shell prompt you can pipe to and from vroom directly.</p>
+<pre class="shell"><code>cat inst/extdata/mtcars.csv | Rscript -e &#39;vroom::vroom(stdin())&#39;
+
+Rscript -e &#39;vroom::vroom_write(iris, stdout())&#39; | head</code></pre>
+<p>Note this interpretation of <code>stdin()</code> and <code>stdout()</code> differs from that used elsewhere by R, however we believe it better matches most user’s expectations for this use case.</p>
+</div>
+</div>
+<div id="further-reading" class="section level2">
+<h2>Further reading</h2>
+<ul>
+<li><code>vignette(&quot;benchmarks&quot;)</code> discusses the performance of vroom, how it compares to alternatives and how it achieves its results.</li>
+<li><a href="https://www.youtube.com/watch?v=RA9AjqZXxMU&amp;t=10s">📽 vroom: Because Life is too short to read slow</a> - Presentation of vroom at UseR!2019 (<a href="https://speakerdeck.com/jimhester/vroom">slides</a>)</li>
+<li><a href="https://www.youtube.com/watch?v=ZP_y5eaAc60">📹 vroom: Read and write rectangular data quickly</a> - a video tour of the vroom features.</li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

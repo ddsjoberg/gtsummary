@@ -1,0 +1,30 @@
+Package: spelling
+Title: Tools for Spell Checking in R
+Version: 2.2
+Authors@R: c(
+    person("Jeroen", "Ooms", , "jeroen@berkeley.edu", role = c("cre", "aut"),
+      comment = c(ORCID = "0000-0002-4035-0289")),
+    person("Jim", "Hester", , "james.hester@rstudio.com", role = "aut"))
+Description: Spell checking common document formats including latex, markdown, manual pages,
+    and description files. Includes utilities to automate checking of documentation and 
+    vignettes as a unit test during 'R CMD check'. Both British and American English are 
+    supported out of the box and other languages can be added. In addition, packages may
+    define a 'wordlist' to allow custom terminology without having to abuse punctuation.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+URL: https://docs.ropensci.org/spelling/ (website)
+        https://github.com/ropensci/spelling (devel)
+BugReports: https://github.com/ropensci/spelling/issues
+Imports: commonmark, xml2, hunspell (>= 3.0), knitr
+Suggests: pdftools
+RoxygenNote: 6.1.99.9001
+Language: en-GB
+NeedsCompilation: no
+Packaged: 2020-10-18 21:20:24 UTC; jeroen
+Author: Jeroen Ooms [cre, aut] (<https://orcid.org/0000-0002-4035-0289>),
+  Jim Hester [aut]
+Maintainer: Jeroen Ooms <jeroen@berkeley.edu>
+Repository: CRAN
+Date/Publication: 2020-10-18 22:00:02 UTC
+Built: R 4.0.5; ; 2021-05-07 17:31:38 UTC; windows

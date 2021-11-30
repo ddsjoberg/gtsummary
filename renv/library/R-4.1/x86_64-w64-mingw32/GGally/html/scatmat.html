@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Plots the lowertriangle and density plots of the scatter plot...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for scatmat {GGally}"><tr><td>scatmat {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Plots the lowertriangle and density plots of the scatter plot matrix.</h2>
+
+<h3>Description</h3>
+
+<p>Function for making scatterplots in the lower triangle and diagonal density plots.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+scatmat(data, columns = 1:ncol(data), color = NULL, alpha = 1)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>a data matrix. Should contain numerical (continuous) data.</p>
+</td></tr>
+<tr valign="top"><td><code>columns</code></td>
+<td>
+<p>an option to choose the column to be used in the raw dataset. Defaults to <code>1:ncol(data)</code></p>
+</td></tr>
+<tr valign="top"><td><code>color</code></td>
+<td>
+<p>an option to group the dataset by the factor variable and color them by different colors. Defaults to <code>NULL</code></p>
+</td></tr>
+<tr valign="top"><td><code>alpha</code></td>
+<td>
+<p>an option to set the transparency in scatterplots for large data. Defaults to <code>1</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Mengjia Ni, Di Cook
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+data(flea)
+
+p_(scatmat(flea, columns=2:4))
+p_(scatmat(flea, columns= 2:4, color="species"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

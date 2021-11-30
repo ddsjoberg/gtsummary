@@ -1,0 +1,95 @@
+Type: Package
+Package: lubridate
+Title: Make Dealing with Dates a Little Easier
+Version: 1.7.10
+Authors@R: 
+    c(person(given = "Vitalie",
+             family = "Spinu",
+             role = c("aut", "cre"),
+             email = "spinuvit@gmail.com"),
+      person(given = "Garrett",
+             family = "Grolemund",
+             role = "aut"),
+      person(given = "Hadley",
+             family = "Wickham",
+             role = "aut"),
+      person(given = "Ian",
+             family = "Lyttle",
+             role = "ctb"),
+      person(given = "Imanuel",
+             family = "Costigan",
+             role = "ctb"),
+      person(given = "Jason",
+             family = "Law",
+             role = "ctb"),
+      person(given = "Doug",
+             family = "Mitarotonda",
+             role = "ctb"),
+      person(given = "Joseph",
+             family = "Larmarange",
+             role = "ctb"),
+      person(given = "Jonathan",
+             family = "Boiser",
+             role = "ctb"),
+      person(given = "Chel Hee",
+             family = "Lee",
+             role = "ctb"),
+      person("Google Inc.", role = c("ctb", "cph")))
+Maintainer: Vitalie Spinu <spinuvit@gmail.com>
+Description: Functions to work with date-times and time-spans:
+    fast and user friendly parsing of date-time data, extraction and
+    updating of components of a date-time (years, months, days, hours,
+    minutes, and seconds), algebraic manipulation on date-time and
+    time-span objects. The 'lubridate' package has a consistent and
+    memorable syntax that makes working with dates easy and fun.  Parts of
+    the 'CCTZ' source code, released under the Apache 2.0 License, are
+    included in this package. See <https://github.com/google/cctz> for
+    more details.
+License: GPL (>= 2)
+URL: https://lubridate.tidyverse.org,
+        https://github.com/tidyverse/lubridate
+BugReports: https://github.com/tidyverse/lubridate/issues
+Depends: methods, R (>= 3.2)
+Imports: generics, Rcpp (>= 0.12.13)
+Suggests: covr, knitr, testthat (>= 2.1.0), vctrs (>= 0.3.0), rmarkdown
+Enhances: chron, timeDate, tis, zoo
+LinkingTo: Rcpp
+VignetteBuilder: knitr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+SystemRequirements: A system with zoneinfo data (e.g.
+        /usr/share/zoneinfo) as well as a recent-enough C++11 compiler
+        (such as g++-4.8 or later). On Windows the zoneinfo included
+        with R is used.
+Collate: 'Dates.r' 'POSIXt.r' 'RcppExports.R' 'util.r' 'parse.r'
+        'timespans.r' 'intervals.r' 'difftimes.r' 'durations.r'
+        'periods.r' 'accessors-date.R' 'accessors-day.r'
+        'accessors-dst.r' 'accessors-hour.r' 'accessors-minute.r'
+        'accessors-month.r' 'accessors-quarter.r' 'accessors-second.r'
+        'accessors-tz.r' 'accessors-week.r' 'accessors-year.r'
+        'am-pm.r' 'time-zones.r' 'numeric.r' 'coercion.r' 'constants.r'
+        'cyclic_encoding.r' 'data.r' 'decimal-dates.r' 'deprecated.r'
+        'format_ISO8601.r' 'guess.r' 'hidden.r' 'instants.r'
+        'leap-years.r' 'ops-addition.r' 'ops-compare.r'
+        'ops-division.r' 'ops-integer-division.r' 'ops-m+.r'
+        'ops-modulo.r' 'ops-multiplication.r' 'ops-subtraction.r'
+        'package.r' 'pretty.r' 'round.r' 'stamp.r' 'update.r' 'vctrs.R'
+        'zzz.R'
+NeedsCompilation: yes
+Packaged: 2021-02-26 13:24:01 UTC; vspinu
+Author: Vitalie Spinu [aut, cre],
+  Garrett Grolemund [aut],
+  Hadley Wickham [aut],
+  Ian Lyttle [ctb],
+  Imanuel Costigan [ctb],
+  Jason Law [ctb],
+  Doug Mitarotonda [ctb],
+  Joseph Larmarange [ctb],
+  Jonathan Boiser [ctb],
+  Chel Hee Lee [ctb],
+  Google Inc. [ctb, cph]
+Repository: CRAN
+Date/Publication: 2021-02-26 15:00:09 UTC
+Built: R 4.0.5; x86_64-w64-mingw32; 2021-05-07 12:56:33 UTC; windows
+Archs: i386, x64

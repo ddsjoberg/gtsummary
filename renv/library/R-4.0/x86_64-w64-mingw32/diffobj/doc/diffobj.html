@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Brodie Gaslam" />
+
+
+<title>diffobj - Diffs for R Objects</title>
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">
+
+DIV.diffobj-container PRE.diffobj-content {
+white-space: pre-wrap;
+margin: 0;
+}
+DIV.diffobj-container DIV.diffobj-row {
+width: 100%;
+font-family: monospace;
+display: table;
+table-layout: fixed;
+}
+DIV.diffobj-container DIV.diffobj-line {
+width: auto;
+display: table-cell;
+overflow: hidden;
+}
+DIV.diffobj-container DIV.diffobj-line>DIV {
+width: 100%;
+display: table;
+table-layout: auto;
+}
+DIV.diffobj-container DIV.diffobj-line.banner>DIV {
+display: table;
+table-layout: auto; 
+}
+DIV.diffobj-container DIV.diffobj-text {
+display: table-cell;
+width: 100%;
+}
+DIV.diffobj-container DIV.diffobj-gutter {
+display: table-cell;
+padding: 0 0.2em;
+}
+DIV.diffobj-container DIV.diffobj-gutter DIV {
+display: table-cell;
+}
+#diffobj_content_meta DIV.diffobj-container DIV.diffobj-row {
+width: auto;
+}
+#diffobj_banner_meta DIV.diffobj-container DIV.diffobj-line.banner>DIV {
+table-layout: auto;
+}
+#diffobj_outer {
+overflow: hidden;
+}
+ DIV.diffobj-container DIV.diffobj-summary DIV.map {
+word-wrap: break-word;
+padding-left: 1em;
+}
+DIV.diffobj-container DIV.diffobj-summary DIV.detail {
+padding-left: 1em;
+}
+
+DIV.diffobj-container DIV.diffobj-line.banner {
+font-size: 1.2em;
+font-weight: bold;
+overflow: hidden;
+}
+
+DIV.diffobj-container DIV.diffobj-line.banner DIV.diffobj-text DIV{
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+width: 100%; 
+}
+DIV.diffobj-container DIV.diffobj-gutter,
+DIV.diffobj-container DIV.diffobj-guide,
+DIV.diffobj-container DIV.diffobj-fill,
+DIV.diffobj-container DIV.context_sep,
+DIV.diffobj-container SPAN.diffobj-trim {
+color: #999;
+}
+DIV.diffobj-container DIV.diffobj-header {
+font-size: 1.1em;
+}
+DIV.diffobj-container DIV.diffobj-text>DIV.diffobj-match,
+DIV.diffobj-container DIV.diffobj-text>DIV.diffobj-guide {
+background-color: #ffffff;
+}
+DIV.diffobj-container DIV.diffobj-text>DIV.diffobj-fill {
+background-color: transparent;
+}
+DIV.diffobj-container DIV.diffobj-text>DIV {
+padding-right: 3px;
+}
+DIV.diffobj-container DIV.diffobj-text>DIV {
+border-left: 1px solid #888888;
+}
+DIV.diffobj-container DIV.diffobj-line {
+background-color: #eeeeee;
+}
+DIV.diffobj-container DIV.diffobj-text>DIV,
+DIV.diffobj-container DIV.diffobj-header {
+padding-left: 0.5em;
+}
+DIV.diffobj-container DIV.diffobj-line>DIV.diffobj-match,
+DIV.diffobj-container DIV.diffobj-line>DIV.diffobj-fill,
+DIV.diffobj-container DIV.diffobj-line>DIV.diffobj-guide {
+border-left: 1px solid #888888;
+}
+
+DIV.diffobj-container.light.rgb SPAN.diffobj-word.insert,
+DIV.diffobj-container.light.rgb DIV.diffobj-line>DIV.insert {
+background-color: #a6f3a6;
+}
+DIV.diffobj-container.light.rgb SPAN.diffobj-word.delete,
+DIV.diffobj-container.light.rgb DIV.diffobj-line>DIV.delete {
+background-color: #f8c2c2;
+}
+DIV.diffobj-container.light.rgb DIV.diffobj-text>DIV.insert {
+background-color: #efffef;
+}
+DIV.diffobj-container.light.rgb DIV.diffobj-text>DIV.insert,
+DIV.diffobj-container.light.rgb DIV.diffobj-line>DIV.insert {
+border-left: 1px solid #33bb33;
+}
+DIV.diffobj-container.light.rgb DIV.diffobj-text>DIV.delete {
+background-color: #ffefef;
+}
+DIV.diffobj-container.light.rgb DIV.diffobj-text>DIV.delete,
+DIV.diffobj-container.light.rgb DIV.diffobj-line>DIV.delete {
+border-left: 1px solid #cc6666;
+}
+DIV.diffobj-container.light.rgb DIV.diffobj-header {
+background-color: #e0e6fa;
+border-left: 1px solid #9894b6;
+}
+
+DIV.diffobj-container.light.yb SPAN.diffobj-word.insert,
+DIV.diffobj-container.light.yb DIV.diffobj-line>DIV.insert {
+background-color: #c0cfff;
+}
+DIV.diffobj-container.light.yb SPAN.diffobj-word.delete,
+DIV.diffobj-container.light.yb DIV.diffobj-line>DIV.delete {
+background-color: #e7e780;
+}
+DIV.diffobj-container.light.yb DIV.diffobj-text>DIV.insert {
+background-color: #efefff;
+}
+DIV.diffobj-container.light.yb DIV.diffobj-text>DIV.insert,
+DIV.diffobj-container.light.yb DIV.diffobj-line>DIV.insert {
+border-left: 1px solid #3333bb;
+}
+DIV.diffobj-container.light.yb DIV.diffobj-text>DIV.delete {
+background-color: #fefee5;
+}
+DIV.diffobj-container.light.yb DIV.diffobj-text>DIV.delete,
+DIV.diffobj-container.light.yb DIV.diffobj-line>DIV.delete {
+border-left: 1px solid #aaaa55;
+}
+DIV.diffobj-container.light.yb DIV.diffobj-header {
+background-color: #afafaf;
+border-left: 1px solid #e3e3e3;
+color: #e9e9e9;
+}
+DIV.diffobj-container.light.yb DIV.diffobj-line {
+background-color: #eeeeee;
+}
+</style>
+<style type="text/css">
+body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.5;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+
+padding: 4px;
+width: 100%;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 1em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+h3.subtitle {
+margin-top: -23px;
+}
+pre, code {
+background-color: #EEE;
+color: #333;
+
+}
+pre {
+border: 2px solid #EEE;
+overflow: auto;
+white-space: pre-wrap; 
+
+margin: 5px 0px;
+padding: 5px 10px;
+font-size: 85%;
+}
+pre:not([class]) {
+color: #353;
+
+}
+div.sourceCode pre, div.sourceCode code {
+background-color: #FAFAFA;
+}
+div.sourceCode pre{
+
+}
+div.sourceCode + pre,
+div.sourceCode + div.diffobj-container {
+margin-top: -5px;
+}
+div.diffobj-container pre.diffobj-content {
+line-height: 1.3;
+}
+
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+}
+p > code, li > code, h1 > code, h2 > code, h3 > code,
+h4 > code, h5 > code, h6 > code {
+padding: 2px 0px;
+line-height: 1;
+font-weight: bold;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+padding-bottom: 3px;
+font-size: 35px;
+line-height: 40px;
+border-bottom: 1px solid #999;
+}
+h2 {
+border-bottom: 1px solid #999;
+padding-top: 5px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+padding-top: 5px;
+font-size: 120%;
+}
+h4 {
+
+color: #777;
+font-size: 105%;
+}
+h4.author, h4.date {display: none;}
+h5, h6 {
+
+font-size: 105%;
+}
+a {
+color: #2255dd;
+font-weight: bold;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">diffobj - Diffs for R Objects</h1>
+<h4 class="author">Brodie Gaslam</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#interpreting-diffs">Interpreting Diffs</a><ul>
+<li><a href="#shortest-edit-script">Shortest Edit Script</a></li>
+<li><a href="#diff-structure">Diff Structure</a></li>
+<li><a href="#atomic-vectors">Atomic Vectors</a></li>
+</ul></li>
+<li><a href="#other-diff-functions">Other Diff Functions</a><ul>
+<li><a href="#method-overview">Method Overview</a></li>
+<li><a href="#compare-structure-with-diffstr">Compare Structure with <code>diffStr</code></a></li>
+<li><a href="#compare-vectors-elements-with-diffchr">Compare Vectors Elements with <code>diffChr</code></a></li>
+<li><a href="#why-s4">Why S4?</a></li>
+<li><a href="#return-value">Return Value</a></li>
+</ul></li>
+<li><a href="#controlling-diffs-and-their-appearance">Controlling Diffs and Their Appearance</a><ul>
+<li><a href="#parameters">Parameters</a></li>
+<li><a href="#display-mode">Display Mode</a></li>
+<li><a href="#color-mode">Color Mode</a></li>
+<li><a href="#output-formats">Output Formats</a></li>
+<li><a href="#brightness">Brightness</a></li>
+<li><a href="#pagers">Pagers</a></li>
+<li><a href="#styles">Styles</a></li>
+</ul></li>
+<li><a href="#diff-algorithm">Diff Algorithm</a></li>
+<li><a href="#performance-considerations">Performance Considerations</a><ul>
+<li><a href="#diff">Diff</a></li>
+<li><a href="#capture-and-processing">Capture and Processing</a></li>
+<li><a href="#minimal-diff">Minimal Diff</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p><code>diffobj</code> uses the same comparison mechanism used by <code>git diff</code> and <code>diff</code> to highlight differences between <em>rendered</em> R objects:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">a &lt;-<span class="st"> </span>b &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>, <span class="dt">ncol=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">a &lt;-<span class="st"> </span>a[<span class="op">-</span><span class="dv">20</span>,]</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">b &lt;-<span class="st"> </span>b[<span class="op">-</span><span class="dv">45</span>,]</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">b[<span class="kw">c</span>(<span class="dv">18</span>, <span class="dv">44</span>)] &lt;-<span class="st"> </span><span class="dv">999</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">diffPrint</span>(<span class="dt">target=</span>a, <span class="dt">current=</span>b)</a></code></pre></div>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line banner"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-word delete">a</span></div></div></div></div><div class="diffobj-line banner"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-word insert">b</span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 17,6 @@</div></div><div class="diffobj-line"><div class="diffobj-header">@@ 17,7 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-guide"><div class="diffobj-gutter"><div class="diffobj-guide">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-guide"><span class="diffobj-trim"></span>      [,1] [,2]<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-guide"><div class="diffobj-gutter"><div class="diffobj-guide">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-guide"><span class="diffobj-trim"></span>      [,1] [,2]<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[16,] </span>  16   66<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[16,] </span>  16   66<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[17,] </span>  17   67<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[17,] </span>  17   67<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim">[18,] </span>  <span class="diffobj-word delete">18</span>   68<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">[18,] </span> <span class="diffobj-word insert">999</span>   68<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[19,] </span>  19   69<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[19,] </span>  19   69<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-fill"><div class="diffobj-gutter"><div class="diffobj-fill">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-fill"></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">[20,] </span>  <span class="diffobj-word insert">20</span>   <span class="diffobj-word insert">70</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[20,] </span>  21   71<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[21,] </span>  21   71<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[21,] </span>  22   72<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[22,] </span>  22   72<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 42,6 @@</div></div><div class="diffobj-line"><div class="diffobj-header">@@ 43,5 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[41,] </span>  42   92<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[42,] </span>  42   92<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[42,] </span>  43   93<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[43,] </span>  43   93<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim">[43,] </span>  <span class="diffobj-word delete">44</span>   94<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">[44,] </span> <span class="diffobj-word insert">999</span>   94<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim">[44,] </span>  <span class="diffobj-word delete">45</span>   <span class="diffobj-word delete">95</span><span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-fill"><div class="diffobj-gutter"><div class="diffobj-fill">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-fill"></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[45,] </span>  46   96<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[45,] </span>  46   96<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[46,] </span>  47   97<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[46,] </span>  47   97<span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+<p><code>diffobj</code> comparisons work best when objects have some similarities, or when they are relatively small. The package was originally developed to help diagnose failed unit tests by comparing test results to reference objects in a human-friendly manner.</p>
+<p>If your terminal supports formatting through ANSI escape sequences, <code>diffobj</code> will output colored diffs to the terminal. If not, it will output colored diffs to your IDE viewport if it is supported, or to your browser otherwise.</p>
+</div>
+<div id="interpreting-diffs" class="section level2">
+<h2>Interpreting Diffs</h2>
+<div id="shortest-edit-script" class="section level3">
+<h3>Shortest Edit Script</h3>
+<p>The output from <code>diffobj</code> is a visual representation of the Shortest Edit Script (SES). An SES is the shortest set of deletion and insertion instructions for converting one sequence of elements into another. In our case, the elements are lines of text. We encode the instructions to convert <code>a</code> to <code>b</code> by deleting lines from <code>a</code> (in yellow) and inserting new ones from <code>b</code> (in blue).</p>
+</div>
+<div id="diff-structure" class="section level3">
+<h3>Diff Structure</h3>
+<p>The first line of our diff output acts as a legend to the diff by associating the colors and symbols used to represent differences present in each object with the name of the object:</p>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line banner"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-word delete">a</span></div></div></div></div><div class="diffobj-line banner"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-word insert">b</span></div></div></div></div></div></pre>
+</div>
+<p>After the legend come the hunks, which are portions of the objects that have differences with nearby matching lines provided for context:</p>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 17,6 @@</div></div><div class="diffobj-line"><div class="diffobj-header">@@ 17,7 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-guide"><div class="diffobj-gutter"><div class="diffobj-guide">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-guide"><span class="diffobj-trim"></span>      [,1] [,2]<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-guide"><div class="diffobj-gutter"><div class="diffobj-guide">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-guide"><span class="diffobj-trim"></span>      [,1] [,2]<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[16,] </span>  16   66<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[16,] </span>  16   66<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[17,] </span>  17   67<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[17,] </span>  17   67<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim">[18,] </span>  <span class="diffobj-word delete">18</span>   68<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">[18,] </span> <span class="diffobj-word insert">999</span>   68<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[19,] </span>  19   69<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[19,] </span>  19   69<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-fill"><div class="diffobj-gutter"><div class="diffobj-fill">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-fill"></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">[20,] </span>  <span class="diffobj-word insert">20</span>   <span class="diffobj-word insert">70</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[20,] </span>  21   71<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[21,] </span>  21   71<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[21,] </span>  22   72<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[22,] </span>  22   72<span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+<p>At the top of the hunk is the hunk header: this tells us that the first displayed hunk (including context lines), starts at line 17 and spans 6 lines for <code>a</code> and 7 for <code>b</code>. These are display lines, not object row indices, which is why the first row shown of the matrix is row 16. You might have also noticed that the line after the hunk header is out of place:</p>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-guide"><div class="diffobj-gutter"><div class="diffobj-guide">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-guide"><span class="diffobj-trim"></span>      [,1] [,2]<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-guide"><div class="diffobj-gutter"><div class="diffobj-guide">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-guide"><span class="diffobj-trim"></span>      [,1] [,2]<span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+<p>This is a special context line that is not technically part of the hunk, but is shown nonetheless because it is useful in helping understand the data. The line is styled differently to highlight that it is not part of the hunk. Since it is not part of the hunk, it is not accounted for in the hunk header. See <code>?guideLines</code> for more details.</p>
+<p>The actual mismatched lines are highlighted in the colors of the legend, with additional visual cues in the gutters:</p>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim">[18,] </span>  <span class="diffobj-word delete">18</span>   68<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">[18,] </span> <span class="diffobj-word insert">999</span>   68<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[19,] </span>  19   69<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[19,] </span>  19   69<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-fill"><div class="diffobj-gutter"><div class="diffobj-fill">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-fill"></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">[20,] </span>  <span class="diffobj-word insert">20</span>   <span class="diffobj-word insert">70</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[20,] </span>  21   71<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[21,] </span>  21   71<span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+<p><code>diffobj</code> uses a line by line diff to identify which portions of each of the objects are mismatches, so even if only part of a line mismatches it will be considered different. <code>diffobj</code> then runs a word diff within the hunks and further highlights mismatching words.</p>
+<p>Let’s examine the last two lines from the previous hunk more closely:</p>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-fill"><div class="diffobj-gutter"><div class="diffobj-fill">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-fill"></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">[20,] </span>  <span class="diffobj-word insert">20</span>   <span class="diffobj-word insert">70</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[20,] </span>  21   71<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[21,] </span>  21   71<span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+<p>Here <code>b</code> has an extra line so <code>diffobj</code> adds an empty line to <code>a</code> to maintain the alignment for subsequent matching lines. This additional line is marked with a tilde in the gutter and is shown in a different color to indicate it is not part of the original text.</p>
+<p>If you look closely at the next matching line you will notice that the <code>a</code> and <code>b</code> values are not exactly the same. The row indices are different, but <code>diffobj</code> excludes row indices from the diff so that rows that are identical otherwise are shown as matching. <code>diffobj</code> indicates this is happening by showing the portions of a line that are ignored in the diff in grey.</p>
+<p>See <code>?guides</code> and <code>?trim</code> for details and limitations on guideline detection and unsemantic meta data trimming.</p>
+</div>
+<div id="atomic-vectors" class="section level3">
+<h3>Atomic Vectors</h3>
+<p>Since R can display multiple elements in an atomic vector on the same line, and <code>diffPrint</code> is fundamentally a line diff, we use specialized logic when diffing atomic vectors. Consider:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">state.abb2 &lt;-<span class="st"> </span>state.abb[<span class="op">-</span><span class="dv">16</span>]</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">state.abb2[<span class="dv">37</span>] &lt;-<span class="st"> &quot;Pennsylvania&quot;</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">diffPrint</span>(state.abb, state.abb2)</a></code></pre></div>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line banner"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-word delete">state.abb</span></div></div></div></div><div class="diffobj-line banner"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-word insert">state.abb2</span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 1,5 @@</div></div><div class="diffobj-line"><div class="diffobj-header">@@ 6,5 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"> [1] </span>&quot;AL&quot; &quot;AK&quot; &quot;AZ&quot; &quot;AR&quot; &quot;CA&quot; &quot;CO&quot;<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[11] </span>&quot;HI&quot;           &quot;ID&quot;          <span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"> [7] </span>&quot;CT&quot; &quot;DE&quot; &quot;FL&quot; &quot;GA&quot; &quot;HI&quot; &quot;ID&quot;<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[13] </span>&quot;IL&quot;           &quot;IN&quot;          <span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim">[13] </span>&quot;IL&quot; &quot;IN&quot; &quot;IA&quot; <span class="diffobj-word delete">&quot;KS&quot;</span> &quot;KY&quot; &quot;LA&quot;<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">[15] </span>&quot;IA&quot;           &quot;KY&quot;          <span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[19] </span>&quot;ME&quot; &quot;MD&quot; &quot;MA&quot; &quot;MI&quot; &quot;MN&quot; &quot;MS&quot;<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[17] </span>&quot;LA&quot;           &quot;ME&quot;          <span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[25] </span>&quot;MO&quot; &quot;MT&quot; &quot;NE&quot; &quot;NV&quot; &quot;NH&quot; &quot;NJ&quot;<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[19] </span>&quot;MD&quot;           &quot;MA&quot;          <span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 6,4 @@</div></div><div class="diffobj-line"><div class="diffobj-header">@@ 17,5 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-fill"><div class="diffobj-gutter"><div class="diffobj-fill">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-fill"> </div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[33] </span>&quot;ND&quot;           &quot;OH&quot;          <span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[31] </span>&quot;NM&quot; &quot;NY&quot; &quot;NC&quot; &quot;ND&quot; &quot;OH&quot; &quot;OK&quot;<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[35] </span>&quot;OK&quot;           &quot;OR&quot;          <span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim">[37] </span>&quot;OR&quot; <span class="diffobj-word delete">&quot;PA&quot;</span> &quot;RI&quot; &quot;SC&quot; &quot;SD&quot; &quot;TN&quot;<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">[37] </span><span class="diffobj-word insert">&quot;Pennsylvania&quot;</span> &quot;RI&quot;          <span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[43] </span>&quot;TX&quot; &quot;UT&quot; &quot;VT&quot; &quot;VA&quot; &quot;WA&quot; &quot;WV&quot;<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[39] </span>&quot;SC&quot;           &quot;SD&quot;          <span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[49] </span>&quot;WI&quot; &quot;WY&quot;<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">[41] </span>&quot;TN&quot;           &quot;TX&quot;          <span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+<p>Due to the different wrapping frequency no line in the text display of our two vectors matches. Despite this, <code>diffPrint</code> only highlights the lines that actually contain differences. The side effect is that lines that only contain matching elements are shown as matching even though the actual lines may be different. You can turn off this behavior in favor of a normal line diff with the <code>unwrap.atomic</code> argument to <code>diffPrint</code>.</p>
+<p>Currently this only works for <em>unnamed</em> vectors, and even for them some inputs may produce sub-optimal results. Nested vectors inside lists will not be unwrapped. You can also use <code>diffChr</code> (see below) to do a direct element by element comparison.</p>
+</div>
+</div>
+<div id="other-diff-functions" class="section level2">
+<h2>Other Diff Functions</h2>
+<div id="method-overview" class="section level3">
+<h3>Method Overview</h3>
+<p><code>diffobj</code> defines several S4 generics and default methods to go along with them. Each of them uses a different text representation of the inputs:</p>
+<ul>
+<li><code>diffPrint</code>: use the <code>print</code>/<code>show</code> output and is the one used in the examples so far</li>
+<li><code>diffStr</code>: use the output of <code>str</code></li>
+<li><code>diffObj</code>: picks between <code>print</code>/<code>show</code> and <code>str</code> depending on which provides the “best” overview of differences</li>
+<li><code>diffChr</code>: coerces the inputs to atomic character vectors with <code>as.character</code>, and runs the diff on the character vector</li>
+<li><code>diffFile</code>: compares the text content of two files</li>
+<li><code>diffCsv</code>: loads two CSV files into data frames and compares the data frames with <code>diffPrint</code></li>
+<li><code>diffDeparse</code>: deparses and compares the character vectors produced by the deparsing</li>
+<li><code>ses</code>: computes the element by element shortest edit script on two character vectors</li>
+</ul>
+<p>Note the <code>diff*</code> functions use lowerCamelCase in keeping with S4 method name convention, whereas the package name itself is all lower case.</p>
+</div>
+<div id="compare-structure-with-diffstr" class="section level3">
+<h3>Compare Structure with <code>diffStr</code></h3>
+<p>For complex objects it is often useful to compare structures:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">mdl1 &lt;-<span class="st"> </span><span class="kw">lm</span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Sepal.Width, iris)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">mdl2 &lt;-<span class="st"> </span><span class="kw">lm</span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Sepal.Width <span class="op">+</span><span class="st"> </span>Species, iris)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">diffStr</span>(mdl1<span class="op">$</span>qr, mdl2<span class="op">$</span>qr, <span class="dt">line.limit=</span><span class="dv">15</span>)</a></code></pre></div>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line banner"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-word delete">str(mdl1$qr, max.level = 2L)</span></div></div></div></div><div class="diffobj-line banner"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-word insert">str(mdl2$qr, max.level = 2L)</span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 1,9 @@</div></div><div class="diffobj-line"><div class="diffobj-header">@@ 1,10 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>List of 5<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>List of 5<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim"> $ </span>qr   : num [1:150, <span class="diffobj-word delete">1:2]</span> -12.2474 0.0816 0.0816 0.0816 0.0816 ...<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim"> $ </span>qr   : num [1:150, <span class="diffobj-word insert">1:4]</span> -12.2474 0.0816 0.0816 0.0816 0.0816 ...<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">  ..- </span>attr(*, &quot;dimnames&quot;)=List of 2<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim">  ..- </span>attr(*, &quot;dimnames&quot;)=List of 2<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim">  ..- </span>attr(*, &quot;assign&quot;)= int <span class="diffobj-word delete">[1:2]</span> 0 1<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">  ..- </span>attr(*, &quot;assign&quot;)= int <span class="diffobj-word insert">[1:4]</span> 0 <span class="diffobj-word insert">1</span> <span class="diffobj-word insert">2</span> <span class="diffobj-word insert">2</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-fill"><div class="diffobj-gutter"><div class="diffobj-fill">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-fill"></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim">  ..- </span><span class="diffobj-word insert">attr</span><span class="diffobj-word insert">(*,</span> <span class="diffobj-word insert">&quot;contrasts&quot;</span><span class="diffobj-word insert">)=List</span> <span class="diffobj-word insert">of</span> 1<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim"> $ </span>qraux: num <span class="diffobj-word delete">[1:2]</span> 1.08 1.02<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim"> $ </span>qraux: num <span class="diffobj-word insert">[1:4]</span> 1.08 1.02 <span class="diffobj-word insert">1.05</span> <span class="diffobj-word insert">1.11</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim"> $ </span>pivot: int <span class="diffobj-word delete">[1:2]</span> 1 2<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim"> $ </span>pivot: int <span class="diffobj-word insert">[1:4]</span> 1 2 <span class="diffobj-word insert">3</span> <span class="diffobj-word insert">4</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"> $ </span>tol  : num 1e-07<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"> $ </span>tol  : num 1e-07<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim"> $ </span>rank : int <span class="diffobj-word delete">2</span><span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim"> $ </span>rank : int <span class="diffobj-word insert">4</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"> - </span>attr(*, &quot;class&quot;)= chr &quot;qr&quot;<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"> - </span>attr(*, &quot;class&quot;)= chr &quot;qr&quot;<span class="diffobj-trim"></span></div></div></div></div></div>3 differences are hidden by our use of `max.level`</pre>
+</div>
+<p>If you specify a <code>line.limit</code> with <code>diffStr</code> it will fold nested levels in order to fit under <code>line.limit</code> so long as there remain visible differences. If you prefer to see all the differences you can leave <code>line.limit</code> unspecified.</p>
+</div>
+<div id="compare-vectors-elements-with-diffchr" class="section level3">
+<h3>Compare Vectors Elements with <code>diffChr</code></h3>
+<p>Sometimes it is useful to do a direct element by element comparison:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">diffChr</span>(letters[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>], <span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;c&quot;</span>))</a></code></pre></div>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line banner"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-word delete">letters[1:3]</span></div></div></div></div><div class="diffobj-line banner"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-word insert">c(&quot;a&quot;, &quot;B&quot;, &quot;c&quot;)</span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 1,3 @@</div></div><div class="diffobj-line"><div class="diffobj-header">@@ 1,3 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>a<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>a<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim"></span><span class="diffobj-word delete">b</span><span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim"></span><span class="diffobj-word insert">B</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>c<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>c<span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+<p>Notice how we are comparing the contents of the vectors with one line per element.</p>
+</div>
+<div id="why-s4" class="section level3">
+<h3>Why S4?</h3>
+<p>The <code>diff*</code> functions are defined as S4 generics with default methods (signature <code>c(&quot;ANY&quot;, &quot;ANY&quot;)</code>) so that users can customize behavior for their own objects. For example, a custom method could set many of the default parameters to values more suitable for a particular object. If the objects in question are S3 objects the S3 class will have to be registered with <code>setOldClass</code>.</p>
+</div>
+<div id="return-value" class="section level3">
+<h3>Return Value</h3>
+<p>All the <code>diff*</code> methods return a <code>Diff</code> S4 object. It has a <code>show</code> method which is responsible for rendering the <code>Diff</code> and displaying it to the screen. Because of this you can compute and render diffs in two steps:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">x &lt;-<span class="st"> </span><span class="kw">diffPrint</span>(letters, LETTERS)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">x   <span class="co"># or equivalently: `show(x)`</span></a></code></pre></div>
+<p>This may cause the diff to render funny if you change screen widths, etc., between the two steps.</p>
+<p>There are also <code>summary</code>, <code>any</code>, and <code>as.character</code> methods. The <code>summary</code> method provides a high level overview of where the differences are, which can be helpful for large diffs:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">summary</span>(<span class="kw">diffStr</span>(mdl1, mdl2))</a></code></pre></div>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-summary"><div class="body">Found differences in 12 hunks:<div class="detail">45 insertions, 39 deletions, 18 matches (lines)</div><br />Diff map (line:char scale is 1:1 for single chars, 1-2:1 for char seqs):</div><div class="map"><span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span>.<span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span>.<span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span>.<span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span>..<span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span>.<span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span>.<span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span>.<span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span>..<span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span>..<span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span>.<span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span>..<span class="diffobj-word delete">D</span><span class="diffobj-word delete">D</span><span class="diffobj-word insert">I</span><span class="diffobj-word insert">I</span>.</div></div></pre>
+</div>
+<p><code>any</code> returns TRUE if there are differences, and <code>as.character</code> returns the character representation of the diff.</p>
+</div>
+</div>
+<div id="controlling-diffs-and-their-appearance" class="section level2">
+<h2>Controlling Diffs and Their Appearance</h2>
+<div id="parameters" class="section level3">
+<h3>Parameters</h3>
+<p>The <code>diff*</code> family of methods has an extensive set of parameters that allow you to fine tune how the diff is applied and displayed. We will review some of the major ones in this section. For a full description see <code>?diffPrint</code>.</p>
+<p>While the parameter list is extensive, only the objects being compared are required. All the other parameters have default values, and most of them are for advanced use only. The defaults can all be adjusted via the <code>diffobj.*</code> options.</p>
+</div>
+<div id="display-mode" class="section level3">
+<h3>Display Mode</h3>
+<p>There are three built-in display modes that are similar to those found in GNU <code>diff</code>: “sidebyside”, “unified”, and “context”. For example, by varying the <code>mode</code> parameter with:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">x &lt;-<span class="st"> </span>y &lt;-<span class="st"> </span>letters[<span class="dv">24</span><span class="op">:</span><span class="dv">26</span>]</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">y[<span class="dv">2</span>] &lt;-<span class="st"> &quot;GREMLINS&quot;</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">diffChr</span>(x, y)</a></code></pre></div>
+<p>we get:</p>
+<table>
+<tr>
+<th>
+mode=“sidebyside”
+<th>
+mode=“unified”
+<th>
+mode=“context”
+<tr style="vertical-align: top">
+<td>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line banner"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-word delete">x</span></div></div></div></div><div class="diffobj-line banner"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-word insert">y</span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 1,3 @@</div></div><div class="diffobj-line"><div class="diffobj-header">@@ 1,3 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>x<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>x<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim"></span><span class="diffobj-word delete">y</span><span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim"></span><span class="diffobj-word insert">GREMLINS</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>z<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>z<span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+<td>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line banner"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-word delete">x</span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line banner"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-word insert">y</span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 1,3 / 1,3 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>x<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim"></span><span class="diffobj-word delete">y</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim"></span><span class="diffobj-word insert">GREMLINS</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>z<span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+<td>
+<div class="diffobj-container light yb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line banner"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-word delete">x</span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line banner"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-word insert">y</span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 1,3 / 1,3 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>x<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim"></span><span class="diffobj-word delete">y</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>z<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-fill"><div class="diffobj-gutter"><div class="context_sep ctd">~</div><div class="pad"> </div></div><div class="diffobj-text"><div class="context_sep">----------</div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>x<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim"></span><span class="diffobj-word insert">GREMLINS</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>z<span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+</table>
+<p>By default <code>diffobj</code> will try to use <code>mode=&quot;sidebyside&quot;</code> if reasonable given display width, and otherwise will switch to <code>mode=&quot;unified&quot;</code>. You can always force a particular display style by specifying it with the <code>mode</code> argument.</p>
+</div>
+<div id="color-mode" class="section level3">
+<h3>Color Mode</h3>
+<p>The default color mode uses yellow and blue to symbolize deletions and insertions for accessibility to dichromats. If you prefer the more traditional color mode you can specify <code>color.mode=&quot;rgb&quot;</code> in the parameter list, or use <code>options(diffobj.color.mode=&quot;rgb&quot;)</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">diffChr</span>(x, y, <span class="dt">color.mode=</span><span class="st">&quot;rgb&quot;</span>)</a></code></pre></div>
+<div class="diffobj-container light rgb">
+<pre class="diffobj-content"><div class="diffobj-row"><div class="diffobj-line banner"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-word delete">x</span></div></div></div></div><div class="diffobj-line banner"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-word insert">y</span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-header">@@ 1,3 @@</div></div><div class="diffobj-line"><div class="diffobj-header">@@ 1,3 @@</div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>x<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>x<span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="delete"><div class="diffobj-gutter"><div class="delete">&lt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="delete"><span class="diffobj-trim"></span><span class="diffobj-word delete">y</span><span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="insert"><div class="diffobj-gutter"><div class="insert">&gt;</div><div class="pad"> </div></div><div class="diffobj-text"><div class="insert"><span class="diffobj-trim"></span><span class="diffobj-word insert">GREMLINS</span><span class="diffobj-trim"></span></div></div></div></div></div><div class="diffobj-row"><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>z<span class="diffobj-trim"></span></div></div></div></div><div class="diffobj-line"><div class="diffobj-match"><div class="diffobj-gutter"><div class="diffobj-match"> </div><div class="pad"> </div></div><div class="diffobj-text"><div class="diffobj-match"><span class="diffobj-trim"></span>z<span class="diffobj-trim"></span></div></div></div></div></div></pre>
+</div>
+</div>
+<div id="output-formats" class="section level3">
+<h3>Output Formats</h3>
+<p>If your terminal supports it <code>diffobj</code> will format the output with ANSI escape sequences. <code>diffobj</code> uses Gábor Csárdi’s <a href="https://github.com/r-lib/crayon"><code>crayon</code></a> package to detect ANSI support and to apply ANSI based formatting. If you are using RStudio or another IDE that supports <code>getOption(&quot;viewer&quot;)</code>, <code>diffobj</code> will output an HTML/CSS formatted diff to the viewport. In other terminals that do not support ANSI colors, <code>diffobj</code> will attempt to output to an HTML/CSS formatted diff to your browser using <code>browseURL</code>.</p>
+<p>You can explicitly specify the output format with the <code>format</code> parameter:</p>
+<ul>
+<li><code>format=&quot;raw&quot;</code> for unformatted diffs</li>
+<li><code>format=&quot;ansi8&quot;</code> for standard ANSI 8 color formatting</li>
+<li><code>format=&quot;ansi256&quot;</code> for ANSI 256 color formatting</li>
+<li><code>format=&quot;html&quot;</code> for HTML/CSS output and styling</li>
+</ul>
+<p>See <a href="#pagers">Pagers</a> for more details.</p>
+</div>
+<div id="brightness" class="section level3">
+<h3>Brightness</h3>
+<p>The <code>brightness</code> parameter allows you to pick a color scheme compatible with the background color of your terminal. The options are:</p>
+<ul>
+<li>“light”: for use with light tone terminals</li>
+<li>“dark”: for use with dark tone terminals</li>
+<li>“neutral”: for use with either light or dark terminals</li>
+</ul>
+<p>Here are examples of terminal screen renderings for both “rgb” and “yb” <code>color.mode</code> for the three <code>brightness</code> levels.</p>
+<p><img src="data:image/png;base64,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" /></p>
+<p>The examples for “light” and “dark” have the backgrounds forcefully set to a color compatible with the scheme. In actual use the base background and foreground colors are left unchanged, which will look bad if you use “dark” with light colored backgrounds or vice versa. Since we do not know of a good cross platform way of detecting terminal background color the default <code>brightness</code> value is “neutral”.</p>
+<p>At this time the only <code>format</code> that is affected by this parameter is “ansi256”. If you want to specify your own light/dark/neutral schemes you may do so either by specifying a <a href="#styles">style</a> directly or with <a href="#styles">Palette of Styles</a>.</p>
+</div>
+<div id="pagers" class="section level3">
+<h3>Pagers</h3>
+<p>In interactive mode, if the diff output is very long or if your terminal does not support ANSI colors, <code>diff*</code> methods will pipe output to a pager. This is done by writing the output to a temporary file and passing the file reference to the pager. The default action is to invoke the pager with <code>file.show</code> if your terminal supports ANSI colors and the pager is known to support ANSI colors as well (as of this writing, only <code>less</code> is assumed to support ANSI colors), or if not to use <code>getOption(&quot;viewer&quot;)</code> if available (this outputs to the viewport in RStudio), or if not to use <code>browseURL</code>.</p>
+<p>You can fine tune when, how, and if a pager is used with the <code>pager</code> parameter. See <code>?diffPrint</code> and <code>?Pager</code> for more details.</p>
+</div>
+<div id="styles" class="section level3">
+<h3>Styles</h3>
+<p>You can control almost all aspects of the diff output formatting via the <code>style</code> parameter. To do so, pass an appropriately configured <code>Style</code> object. See <code>?Style</code> for more details on how to do this.</p>
+<p>The default is to auto pick a style based on the values of the <code>format</code>, <code>color.mode</code>, and <code>brightness</code> parameters. This is done by using the computed values for each of those parameters to subset the <code>PaletteOfStyles</code> object passed as the <code>palette.of.styles</code> parameter. This <code>PaletteOfStyles</code> object contains a <code>Style</code> object for all the possible permutations of the <code>style</code>, <code>format</code>, and <code>color.mode</code> parameters. See <code>?PaletteOfStyles</code>.</p>
+<p>If you specify the <code>style</code> parameter the values of the <code>format</code>, <code>brightness</code>, and <code>color.mode</code> parameters will be ignored.</p>
+</div>
+</div>
+<div id="diff-algorithm" class="section level2">
+<h2>Diff Algorithm</h2>
+<p>The primary diff algorithm is Myer’s solution to the shortest edit script / longest common sequence problem with the Hirschberg linear space refinement as described in:</p>
+<blockquote>
+<p>E. Myers, “An O(ND) Difference Algorithm and Its Variations”, Algorithmica 1, 2 (1986), 251-266.</p>
+</blockquote>
+<p>and should be the same algorithm used by GNU diff. The implementation used here is a heavily modified version of Michael B. Allen’s diff program from the <a href="http://www.ioplex.com/~miallen/libmba/dl/libmba-0.9.1.tar.gz"><code>libmba</code></a> <code>C</code> library. Any and all bugs in the C code in this package were most likely introduced by yours truly. Please note that the resulting C code is incompatible with the original <code>libmba</code> library.</p>
+</div>
+<div id="performance-considerations" class="section level2">
+<h2>Performance Considerations</h2>
+<div id="diff" class="section level3">
+<h3>Diff</h3>
+<p>The diff algorithm scales with the <em>square</em> of the number of <em>differences</em>. For reasonably small diffs (&lt; 10K differences), the diff itself is unlikely to be the bottleneck.</p>
+</div>
+<div id="capture-and-processing" class="section level3">
+<h3>Capture and Processing</h3>
+<p>Capture of inputs for <code>diffPrint</code> and <code>diffStr</code>, and processing of output for all <code>diff*</code> methods will account for most of the execution time unless you have large numbers of differences. This input and output processing scales mostly linearly with the input size.</p>
+<p>You can improve performance somewhat by using <code>diffChr</code> since that skips the capture part, and by turning off <code>word.diff</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">v1 &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="fl">5e4</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">v2 &lt;-<span class="st"> </span>v1[<span class="op">-</span><span class="kw">sample</span>(v1, <span class="dv">100</span>)]</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">diffChr</span>(v1, v2, <span class="dt">word.diff=</span><span class="ot">FALSE</span>)</a></code></pre></div>
+<p>will be ~2x as fast as:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">diffPrint</span>(v1, v2)</a></code></pre></div>
+<p><em>Note</em>: turning off <code>word.diff</code> when using <code>diffPrint</code> with unnamed atomic vectors can actually <em>slow down</em> the diff because there may well be fewer element by element differences than line differences as displayed. For example, when comparing <code>1:1e6</code> to <code>2:1e6</code> there is only one element difference, but every line as displayed is different because of the shift. Using <code>word.diff=TRUE</code> (and <code>unwrap.atomic=TRUE</code>) allows <code>diffPrint</code> to compare element by element rather than line by line. <code>diffChr</code> always compares element by element.</p>
+</div>
+<div id="minimal-diff" class="section level3">
+<h3>Minimal Diff</h3>
+<p>If you are looking for the fastest possible diff you can use <code>ses</code> and completely bypass most input and output processing. Inputs will be coerced to character if they are not character.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">ses</span>(letters[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], letters[<span class="kw">c</span>(<span class="dv">2</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">5</span>)])</a></code></pre></div>
+<pre><code>## [1] &quot;1d0&quot; &quot;4d2&quot;</code></pre>
+<p>This will be 10-20x faster than <code>diffChr</code>, at the cost of less useful output.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

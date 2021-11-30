@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Numeric Symmetric Sparse (column compressed) Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for dsCMatrix-class {Matrix}"><tr><td>dsCMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Numeric Symmetric Sparse (column compressed) Matrices</h2>
+
+<h3>Description</h3>
+
+<p>The <code>dsCMatrix</code> class is a class of symmetric, sparse
+numeric matrices in the compressed, <b>c</b>olumn-oriented format.  In
+this implementation the non-zero elements in the columns are sorted
+into increasing row order.
+</p>
+<p>The <code>dsTMatrix</code> class is the class of symmetric, sparse numeric
+matrices in <b>t</b>riplet format.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("dsCMatrix",
+    ...)</code> or <code>new("dsTMatrix", ...)</code>, or automatically via e.g.,
+<code>as(*, "symmetricMatrix")</code>, or (for <code>dsCMatrix</code>) also
+from <code><a href="Matrix.html">Matrix</a>(.)</code>.
+</p>
+<p>Creation &ldquo;from scratch&rdquo; most efficiently happens via
+<code><a href="sparseMatrix.html">sparseMatrix</a>(*, symmetric=TRUE)</code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>uplo</code>:</dt><dd><p>A character object indicating if the upper
+triangle (<code>"U"</code>) or the lower triangle (<code>"L"</code>) is stored.</p>
+</dd>
+<dt><code>i</code>:</dt><dd><p>Object of class <code>"integer"</code> of length nnZ
+(<em>half</em> number of non-zero elements).  These are the row
+numbers for each non-zero element in the lower triangle of the matrix.</p>
+</dd>
+<dt><code>p</code>:</dt><dd><p>(only in class <code>"dsCMatrix"</code>:) an
+<code><a href="../../base/html/integer.html">integer</a></code> vector for providing pointers, one for each
+column, see the detailed description in <code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>.</p>
+</dd>
+<dt><code>j</code>:</dt><dd><p>(only in class <code>"dsTMatrix"</code>:) Object of
+class <code>"integer"</code> of length nnZ (as <code>i</code>).  These are the
+column numbers for each non-zero element in the lower triangle of
+the matrix.</p>
+</dd>
+<dt><code>x</code>:</dt><dd><p>Object of class <code>"numeric"</code> of length nnZ &ndash;
+the non-zero elements of the matrix (to be duplicated for full matrix).</p>
+</dd>
+<dt><code>factors</code>:</dt><dd><p>Object of class <code>"list"</code> - a list
+of factorizations of the matrix. </p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>Object of class <code>"integer"</code> - the dimensions
+of the matrix - must be an integer vector with exactly two
+non-negative values.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Both classes extend classes and <code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>
+<code><a href="dsparseMatrix-class.html">dsparseMatrix</a></code> directly;
+<code>dsCMatrix</code> further directly extends
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>, where
+<code>dsTMatrix</code> does <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>solve</dt><dd><p><code>signature(a = "dsCMatrix", b = "....")</code>: <code>x
+	&lt;- solve(a,b)</code> solves <i>A x = b</i> for <i>x</i>; see
+<code><a href="solve-methods.html">solve-methods</a></code>.</p>
+</dd>
+<dt>chol</dt><dd><p><code>signature(x = "dsCMatrix", pivot = "logical")</code>:
+Returns (and stores) the Cholesky decomposition of <code>x</code>, see
+<code><a href="chol.html">chol</a></code>.</p>
+</dd>
+<dt>Cholesky</dt><dd><p><code>signature(A = "dsCMatrix",...)</code>:
+Computes more flexibly Cholesky decompositions,
+see <code><a href="Cholesky.html">Cholesky</a></code>.</p>
+</dd>
+<dt>determinant</dt><dd><p><code>signature(x = "dsCMatrix", logarithm =
+	"missing")</code>: Evaluate the determinant of <code>x</code> on the
+logarithm scale.  This creates and stores the Cholesky factorization.</p>
+</dd>
+<dt>determinant</dt><dd><p><code>signature(x = "dsCMatrix", logarithm =
+	"logical")</code>: Evaluate the determinant of <code>x</code> on the
+logarithm scale or not, according to the <code>logarithm</code>
+argument.  This creates and stores the Cholesky factorization.</p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "dsCMatrix")</code>: Transpose.  As for all
+symmetric matrices, a matrix for which the upper triangle is
+stored produces a matrix for which the lower triangle is stored
+and vice versa, i.e., the <code>uplo</code> slot is swapped, and the row
+and column indices are interchanged.</p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "dsTMatrix")</code>: Transpose.  The
+<code>uplo</code> slot is swapped from <code>"U"</code> to <code>"L"</code> or vice
+versa, as for a <code>"dsCMatrix"</code>, see above.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dsCMatrix", to = "dgTMatrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dsCMatrix", to = "dgeMatrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dsCMatrix", to = "matrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dsTMatrix", to = "dgeMatrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dsTMatrix", to = "dsCMatrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dsTMatrix", to = "dsyMatrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dsTMatrix", to = "matrix")</code></p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>Classes <code><a href="dgCMatrix-class.html">dgCMatrix</a></code>, <code><a href="dgTMatrix-class.html">dgTMatrix</a></code>,
+<code><a href="dgeMatrix-class.html">dgeMatrix</a></code> and those mentioned above.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+mm &lt;- Matrix(toeplitz(c(10, 0, 1, 0, 3)), sparse = TRUE)
+mm # automatically dsCMatrix
+str(mm)
+
+## how would we go from a manually constructed Tsparse* :
+mT &lt;- as(mm, "dgTMatrix")
+
+## Either
+(symM &lt;- as(mT, "symmetricMatrix"))# dsT
+(symC &lt;- as(symM, "CsparseMatrix"))# dsC
+## or
+sC &lt;- Matrix(mT, sparse=TRUE, forceCheck=TRUE)
+
+sym2 &lt;- as(symC, "TsparseMatrix")
+## --&gt; the same as 'symM', a "dsTMatrix"
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

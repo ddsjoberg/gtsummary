@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;compMatrix&quot; of Composite (Factorizable) Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for compMatrix-class {Matrix}"><tr><td>compMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;compMatrix&quot; of Composite (Factorizable) Matrices</h2>
+
+<h3>Description</h3>
+
+<p>Virtual class of <em>composite</em> matrices; i.e., matrices
+that can be <em>factorized</em>, typically as a product of simpler
+matrices.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>A virtual Class: No objects may be created from it.</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>factors</code>:</dt><dd><p>Object of class <code>"list"</code> - a list of
+factorizations of the matrix.  Note that this is typically empty,
+i.e., <code>list()</code>, initially and is <em>updated
+<b>automagically</b></em> whenever a matrix factorization is computed.</p>
+</dd>
+<dt><code>Dim</code>, <code>Dimnames</code>:</dt><dd><p>inherited from the
+<code><a href="Matrix-class.html">Matrix</a></code> class, see there.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"Matrix"</code>, directly.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>dimnames&lt;-</dt><dd><p><code>signature(x = "compMatrix", value = "list")</code>: set
+the <code>dimnames</code> to a <code><a href="../../base/html/list.html">list</a></code> of length 2, see
+<code><a href="../../base/html/dimnames.html">dimnames&lt;-</a></code>.  The <code>factors</code> slot is currently reset to
+empty, as the factorization <code>dimnames</code> would have to be adapted, too.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>The matrix factorization classes
+<code>"<a href="MatrixFactorization-class.html">MatrixFactorization</a>"</code> and their generators,
+<code><a href="lu.html">lu</a>()</code>,
+<code><a href="qr-methods.html">qr</a>()</code>,
+<code><a href="chol.html">chol</a>()</code> and <code><a href="Cholesky.html">Cholesky</a>()</code>,
+<code><a href="BunchKaufman-methods.html">BunchKaufman</a>()</code>, <code><a href="Schur.html">Schur</a>()</code>.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

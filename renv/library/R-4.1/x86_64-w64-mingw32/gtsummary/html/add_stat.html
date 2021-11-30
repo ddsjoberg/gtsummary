@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add a custom statistic column</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add_stat {gtsummary}"><tr><td>add_stat {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add a custom statistic column</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#maturing"><img src="../help/figures/lifecycle-maturing.svg" alt='[Maturing]' /></a>
+The function allows a user to add a new column (or columns) of statistics to an
+existing <code>tbl_summary</code> or <code>tbl_svysummary</code> object.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+add_stat(x, fns, location = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p><code>tbl_summary</code> or <code>tbl_svysummary</code> object</p>
+</td></tr>
+<tr valign="top"><td><code>fns</code></td>
+<td>
+<p>list of formulas indicating the functions that create the statistic.
+See details below.</p>
+</td></tr>
+<tr valign="top"><td><code>location</code></td>
+<td>
+<p>list of formulas indicating the location the new statistics
+are placed. The RHS of the formula must be one of <code>c("label", "level", "missing")</code>.
+When <code>"label"</code>, a single statistic
+is placed on the variable label row. When <code>"level"</code> the statistics are placed
+on the variable level rows. The length of the vector of statistics returned from the
+<code>fns</code> function must match the dimension of levels. Default is to place the
+new statistics on the label row.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>DEPRECATED</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The returns from custom functions passed in <code style="white-space: pre;">fns=</code> are required to follow a
+specified format. Each of these function will execute on a single variable from
+<code>tbl_summary()</code>/<code>tbl_svysummary()</code>.
+</p>
+
+<ol>
+<li><p> Each function must return a tibble or a vector. If a vector is returned,
+it will be converted to a tibble with one column and number of rows equal
+to the length of the vector.
+</p>
+</li>
+<li><p> When <code>location = "label"</code>, the returned statistic from the custom function
+must be a tibble with one row. When <code>location = "level"</code> the tibble must have
+the same number of rows as there are levels in the variable (excluding the
+row for unknown values).
+</p>
+</li>
+<li><p> Each function may take the following arguments: <code>foo(data, variable, by, tbl, ...)</code>
+</p>
+
+<ul>
+<li> <p><code style="white-space: pre;">data=</code> is the input data frame passed to <code>tbl_summary()</code>
+</p>
+</li>
+<li> <p><code style="white-space: pre;">variable=</code> is a string indicating the variable to perform the calculation on
+</p>
+</li>
+<li> <p><code style="white-space: pre;">by=</code> is a string indicating the by variable from <code style="white-space: pre;">tbl_summary=</code>, if present
+</p>
+</li>
+<li> <p><code style="white-space: pre;">tbl=</code> the original <code>tbl_summary()</code>/<code>tbl_svysummary()</code> object is also available to utilize
+</p>
+</li></ul>
+
+</li></ol>
+
+<p>The user-defined does not need to utilize each of these inputs. It's
+encouraged the user-defined function accept <code>...</code> as each of the arguments
+<em>will</em> be passed to the function, even if not all inputs are utilized by
+the user's function, e.g. <code>foo(data, variable, by, ...)</code>
+</p>
+
+<ul>
+<li><p> Use <code>modify_header()</code> to update the column headers
+</p>
+</li>
+<li><p> Use <code>modify_fmt_fun()</code> to update the functions that format the statistics
+</p>
+</li>
+<li><p> Use <code>modify_footnote()</code> to add a explanatory footnote
+</p>
+</li></ul>
+
+<p>If you return a tibble with column names <code>p.value</code> or <code>q.value</code>, default
+p-value formatting will be applied, and you may take advantage of subsequent
+p-value formatting functions, such as <code>bold_p()</code> or <code>add_q()</code>.
+</p>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/add_stat_ex1.png" width=60% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/add_stat_ex2.png" width=60% />
+</p>
+<p>Example 3
+</p>
+<p><img src="../help/figures/add_stat_ex3.png" width=40% />
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(dplyr, warn.conflicts = FALSE)
+library(stringr)
+# Example 1 ----------------------------------
+# fn returns t-test pvalue
+my_ttest &lt;- function(data, variable, by, ...) {
+  t.test(data[[variable]] ~ as.factor(data[[by]]))$p.value
+}
+
+add_stat_ex1 &lt;-
+  trial %&gt;%
+  select(trt, age, marker) %&gt;%
+  tbl_summary(by = trt, missing = "no") %&gt;%
+  add_stat(fns = everything() ~ my_ttest) %&gt;%
+  modify_header(
+    list(
+      add_stat_1 ~ "**p-value**",
+      all_stat_cols() ~ "**{level}**"
+    )
+  )
+
+# Example 2 ----------------------------------
+# fn returns t-test test statistic and pvalue
+my_ttest2 &lt;- function(data, variable, by, ...) {
+  t.test(data[[variable]] ~ as.factor(data[[by]])) %&gt;%
+    broom::tidy() %&gt;%
+    mutate(
+      stat = str_glue("t={style_sigfig(statistic)}, {style_pvalue(p.value, prepend_p = TRUE)}")
+    ) %&gt;%
+    pull(stat)
+}
+
+add_stat_ex2 &lt;-
+  trial %&gt;%
+  select(trt, age, marker) %&gt;%
+  tbl_summary(by = trt, missing = "no") %&gt;%
+  add_stat(fns = everything() ~ my_ttest2) %&gt;%
+  modify_header(add_stat_1 ~ "**Treatment Comparison**")
+
+# Example 3 ----------------------------------
+# return test statistic and p-value is separate columns
+my_ttest3 &lt;- function(data, variable, by, ...) {
+  t.test(data[[variable]] ~ as.factor(data[[by]])) %&gt;%
+    broom::tidy() %&gt;%
+    select(statistic, p.value)
+}
+
+add_stat_ex3 &lt;-
+  trial %&gt;%
+  select(trt, age, marker) %&gt;%
+  tbl_summary(by = trt, missing = "no") %&gt;%
+  add_stat(fns = everything() ~ my_ttest3) %&gt;%
+  modify_header(
+    list(
+      statistic ~ "**t-statistic**",
+      p.value ~ "**p-value**"
+    )
+  ) %&gt;%
+  modify_fmt_fun(
+    list(
+      statistic ~ style_sigfig,
+      p.value ~ style_pvalue
+    )
+  )
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.2.9012 <a href="00Index.html">Index</a>]</div>
+</body></html>

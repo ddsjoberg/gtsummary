@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Construct Sparse Banded Matrix from (Sup-/Super-) Diagonals</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for bandSparse {Matrix}"><tr><td>bandSparse {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Construct Sparse Banded Matrix from (Sup-/Super-) Diagonals</h2>
+
+<h3>Description</h3>
+
+<p>Construct a sparse banded matrix by specifying its non-zero sup- and
+super-diagonals.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+bandSparse(n, m = n, k, diagonals, symmetric = FALSE,
+           repr = "C", giveCsparse = (repr == "C"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>n,m</code></td>
+<td>
+<p>the matrix dimension <i>(n,m) = (nrow, ncol)</i>.</p>
+</td></tr>
+<tr valign="top"><td><code>k</code></td>
+<td>
+<p>integer vector of &ldquo;diagonal numbers&rdquo;, with identical
+meaning as in <code><a href="band.html">band</a>(*, k)</code>, i.e., relative to the main diagonal,
+which is <code>k=0</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>diagonals</code></td>
+<td>
+<p>optional list of sub-/super- diagonals; if missing,
+the result will be a patter<b>n</b> matrix, i.e., inheriting from
+class <code><a href="nMatrix-class.html">nMatrix</a></code>.
+</p>
+<p><code>diagonals</code> can also be <i>n' x d</i> matrix, where
+<code>d &lt;- length(k)</code> and <i>n' &gt;= min(n,m)</i>.  In that case,
+the sub-/super- diagonals are taken from the columns of
+<code>diagonals</code>, where only the first several rows will be used
+(typically) for off-diagonals.
+</p>
+</td></tr>
+<tr valign="top"><td><code>symmetric</code></td>
+<td>
+<p>logical; if true the result will be symmetric
+(inheriting from class <code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>) and
+only the upper or lower triangle must be specified (via <code>k</code> and
+<code>diagonals</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>repr</code></td>
+<td>
+<p><code><a href="../../base/html/character.html">character</a></code> string, one of <code>"C"</code>,
+<code>"T"</code>, or <code>"R"</code>, specifying the sparse <em>repr</em>esentation to
+be used for the result, i.e., one from the super classes
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>, <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>, or
+<code><a href="RsparseMatrix-class.html">RsparseMatrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>giveCsparse</code></td>
+<td>
+<p>(<b>deprecated</b>, replaced with <code>repr</code>):
+logical indicating if the result should be a
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> or a
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>, where the default was <code>TRUE</code>,
+and now is determined from <code>repr</code>; very often Csparse matrices are
+more efficient subsequently, but not always.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a sparse matrix (of <code><a href="../../base/html/class.html">class</a></code>
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>) of dimension <i>n x m</i>
+with diagonal &ldquo;bands&rdquo; as specified.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="band.html">band</a></code>, for <em>extraction</em> of matrix bands;
+<code><a href="bdiag.html">bdiag</a></code>, <code><a href="../../base/html/diag.html">diag</a></code>,
+<code><a href="sparseMatrix.html">sparseMatrix</a></code>,
+<code><a href="Matrix.html">Matrix</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+diags &lt;- list(1:30, 10*(1:20), 100*(1:20))
+s1 &lt;- bandSparse(13, k = -c(0:2, 6), diag = c(diags, diags[2]), symm=TRUE)
+s1
+s2 &lt;- bandSparse(13, k =  c(0:2, 6), diag = c(diags, diags[2]), symm=TRUE)
+stopifnot(identical(s1, t(s2)), is(s1,"dsCMatrix"))
+
+## a pattern Matrix of *full* (sub-)diagonals:
+bk &lt;- c(0:4, 7,9)
+(s3 &lt;- bandSparse(30, k = bk, symm = TRUE))
+
+## If you want a pattern matrix, but with "sparse"-diagonals,
+## you currently need to go via logical sparse:
+lLis &lt;- lapply(list(rpois(20, 2), rpois(20,1), rpois(20,3))[c(1:3,2:3,3:2)],
+               as.logical)
+(s4 &lt;- bandSparse(20, k = bk, symm = TRUE, diag = lLis))
+(s4. &lt;- as(drop0(s4), "nsparseMatrix"))
+
+n &lt;- 1e4
+bk &lt;- c(0:5, 7,11)
+bMat &lt;- matrix(1:8, n, 8, byrow=TRUE)
+bLis &lt;- as.data.frame(bMat)
+B  &lt;- bandSparse(n, k = bk, diag = bLis)
+Bs &lt;- bandSparse(n, k = bk, diag = bLis, symmetric=TRUE)
+B [1:15, 1:30]
+Bs[1:15, 1:30]
+## can use a list *or* a matrix for specifying the diagonals:
+stopifnot(identical(B,  bandSparse(n, k = bk, diag = bMat)),
+	  identical(Bs, bandSparse(n, k = bk, diag = bMat, symmetric=TRUE))
+          , inherits(B, "dtCMatrix") # triangular!
+)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

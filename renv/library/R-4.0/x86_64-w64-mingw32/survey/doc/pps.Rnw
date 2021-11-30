@@ -1,0 +1,103 @@
+\documentclass{article}
+\usepackage{url}
+\addtolength{\topmargin}{-0.5in}
+\addtolength{\textheight}{0.75in}
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+%\VignetteIndexEntry{Analysing PPS designs}
+\usepackage{Sweave}
+\author{Thomas Lumley}
+\title{Describing PPS designs to R}
+
+\begin{document}
+\maketitle
+
+The survey package has always supported PPS (ie, arbitrary unequal probability) sampling with replacement, or using the with-replacement single-stage approximation to a multistage design.   No special notation is required: just specify the correct sampling weights.
+
+Version 3.11 added an another approximation for PPS sampling without replacement, and version 3.16 added more support.  There are two broad classes of estimators for PPS sampling without replacement: approximations to the Horvitz--Thompson and Yates--Grundy estimators based on approximating the pairwise sampling probabilities, and estimators of H\'ajek type that attempt to recover the extra precision of a without-replacement design by conditioning on the estimated population size. 
+
+\subsection*{Direct approximations}
+Using the standard recursive algorithm for stratified multistage
+sampling when one or more stages are actually PPS gives an
+approximation due to Brewer.  This is simple to compute, always
+non-negative, and appears to be fairly efficient. 
+
+
+
+\subsection*{Approximating $\pi_{ij}$}
+Given the pairwise sampling probabilities $\pi_{ij}$ we can define the weighted covariance of sampling indicators
+$$\check{\Delta}_{ij} = 1-\frac{\pi_i\pi_j}{\pi_{ij}}$$ 
+ and the weighted observations
+ $$\check{x}_i=\frac{1}{\pi_i}x_i.$$
+
+Two unbiased estimators of the variance of the total of $x$ are the Horvitz--Thompson estimator
+$$\hat V_{HT}= \sum_{i,j=1}^n \check{\Delta}\check{x}_i\check{x}_j$$
+and the Yates--Grundy(--Sen) estimator
+$$\hat V_{YG}= \frac{1}{2}\sum_{i,j=1}^n \check{\Delta}(\check{x}_i-\check{x}_j)^2$$
+The Yates--Grundy estimator appears to be preferred in most comparisons. It is always non-negative (up to rounding error, at least).
+
+In principle, $\pi_{ij}$ might not be available and various approximations have been proposed.  The (truncated) Hartley--Rao approximation is
+$$\check{\Delta}_{ij}=1-\frac{n-\pi_i-\pi_j+\sum_{k=1}^N\pi^2_k/n}{n-1}$$
+which requires knowing $\pi_i$ for all units in the population.  The population sum can be estimated from the sample, giving a further approximation
+$$\check{\Delta}_{ij}=1-\frac{n-\pi_i-\pi_j+\sum_{k=1}^n\pi_k/n}{n-1}.$$
+that requires only the sample $\pi_i$. Overton's approximation  is
+$$\check{\Delta}_{ij}=1-\frac{n-(\pi_i+\pi_j)/2}{n-1}$$
+which also requires only the sample $\pi_i$.
+
+In practice, given modern computing power, $\pi_{ij}$ should be available either explicitly or by simulation, so the Hartley--Rao and Overton approximations are not particularly useful.
+
+\subsection{Using the PPS estimators}
+At the moment, only Brewer's approximation can be used as a component of multistage sampling, though for any sampling design it is possible to work out the joint sampling probabilities and use the other approaches.  The other approaches can be used for cluster sampling or for sampling of individual units.  This is likely to change in the future.
+
+To specify a PPS design, the sampling probabilities must be given in the \texttt{prob} argument of \texttt{svydesign}, or in the \texttt{fpc} argument, with \texttt{prob} and \texttt{weight} unspecified.  In addition, it is necessary to specify which PPS computation should be used, with the \texttt{pps} argument. The optional \texttt{variance} argument specifies the Horvitz--Thompson (\texttt{variance="HT"}) or Yates--Grundy (\texttt{variance="YG"}) estimator, with the default being \texttt{"HT"}.
+
+Some estimators require information in addition to the sampling probabilities for units in the sample.  This information is supplied to the \texttt{pps=} argument of \texttt{svydesign} using wrapper functions that create objects with appropriate classes.  To specify the population sum $\sum pi_i^2/n$ needed for the Hartley--Rao approximation, use \texttt{HR()}, and to specify a matrix of pairwise sampling probabilities use \texttt{ppsmat()}.   The function \texttt{HR()} without an argument will use the Hartley--Rao approximation and estimate the population sum from the sample.
+
+The data set \texttt{election} contains county-level voting data from the 2004 US presidential elections, with a PPS sample of size 40 taken using Till\'e's splitting method, from the \texttt{sampling} package. The sampling probabilities vary widely, with Los Angeles County having a probability of 0.9 and many small counties having probabilities less than 0.0005.
+<<>>=
+library(survey)
+data(election)
+summary(election$p)
+summary(election_pps$p)
+@ 
+
+Some possible survey design specifications for these data are:
+<<>>=
+## Hajek type
+dpps_br<- svydesign(id=~1,  fpc=~p, data=election_pps, pps="brewer")
+## Horvitz-Thompson type
+dpps_ov<- svydesign(id=~1,  fpc=~p, data=election_pps, pps="overton")
+dpps_hr<- svydesign(id=~1,  fpc=~p, data=election_pps, pps=HR(sum(election$p^2)/40))
+dpps_hr1<- svydesign(id=~1, fpc=~p, data=election_pps, pps=HR())
+dpps_ht<- svydesign(id=~1,  fpc=~p, data=election_pps, pps=ppsmat(election_jointprob))
+## Yates-Grundy type
+dpps_yg<- svydesign(id=~1,  fpc=~p, data=election_pps, pps=ppsmat(election_jointprob),variance="YG")
+dpps_hryg<- svydesign(id=~1,  fpc=~p, data=election_pps, pps=HR(sum(election$p^2)/40),variance="YG")
+## The with-replacement approximation
+dppswr <-svydesign(id=~1, probs=~p, data=election_pps)
+@ 
+
+All the without-replacement design objects except for Brewer's method include a matrix $\check{\Delta}$. These can be visualized with the \texttt{image()} method. These plots use the \texttt{lattice} package and so need \texttt{show()} to display them inside a program:
+<<fig=TRUE>>=
+show(image(dpps_ht))
+@ 
+<<fig=TRUE>>=
+show(image(dpps_ov))
+@ 
+In this example there are more negative entries in $\check{\Delta}$ with the approximate methods than when the full pairwise sampling matrix is supplied.
+
+The estimated totals are the same with all the methods, but the standard errors are not.  
+
+<<>>=
+svytotal(~Bush+Kerry+Nader, dpps_ht)
+svytotal(~Bush+Kerry+Nader, dpps_yg)
+svytotal(~Bush+Kerry+Nader, dpps_hr)
+svytotal(~Bush+Kerry+Nader, dpps_hryg)
+svytotal(~Bush+Kerry+Nader, dpps_hr1)
+svytotal(~Bush+Kerry+Nader, dpps_br)
+svytotal(~Bush+Kerry+Nader, dpps_ov)
+svytotal(~Bush+Kerry+Nader, dppswr)
+@ 
+
+
+\end{document}

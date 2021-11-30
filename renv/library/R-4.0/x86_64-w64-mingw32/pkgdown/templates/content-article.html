@@ -1,0 +1,66 @@
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+<div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header toc-ignore">
+      <h1 data-toc-skip>$title$</h1>
+      $if(subtitle)$
+      <h3 class="subtitle">$subtitle$</h3>
+      $endif$
+      $for(author)$
+      $if(author.name)$
+      <h4 class="author">$author.name$</h4>
+      $if(author.affiliation)$
+      <address class="author_afil">
+      $author.affiliation$<br>$endif$
+      $if(author.email)$
+      <a class="author_email" href="mailto:#">$author.email$</a>
+      </address>
+      $endif$
+      $else$
+      <h4 class="author">$author$</h4>
+      $endif$
+      $endfor$
+
+      $if(date)$
+      <h4 class="date">$date$</h4>
+      $endif$
+
+      {{#source}}<small class="dont-index">{{{.}}}</small>{{/source}}
+      <div class="hidden name"><code>{{filename}}</code></div>
+
+    </div>
+
+    $for(include-before)$
+    $include-before$
+    $endfor$
+
+    $if(abstract)$
+    <div class="abstract">
+      <p class="abstract">Abstract</p>
+      $abstract$
+    </div>
+    $endif$
+
+$body$
+  </div>
+
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    {{#sidebar}}
+    {{{.}}}
+    {{/sidebar}}
+
+    $if(toc)$
+    <nav id="toc" data-toggle="toc">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
+    $endif$
+  </div>
+
+</div>
+
+$for(include-after)$
+$include-after$
+$endfor$

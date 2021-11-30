@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: isTriangular() and isDiagonal() Checking if Matrix is...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for isTriangular {Matrix}"><tr><td>isTriangular {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>isTriangular() and isDiagonal() Checking if Matrix is Triangular or Diagonal</h2>
+
+<h3>Description</h3>
+
+<p><code>isTriangular(M)</code> returns a <code><a href="../../base/html/logical.html">logical</a></code> indicating
+if <code>M</code> is a triangular matrix.  Analogously,
+<code>isDiagonal(M)</code> is true iff <code>M</code> is a diagonal matrix.
+</p>
+<p>Contrary to <code><a href="../../base/html/isSymmetric.html">isSymmetric</a>()</code>, these two functions are
+generically from package <span class="pkg">Matrix</span>, and hence also define methods
+for traditional (<code><a href="../../base/html/class.html">class</a></code> <code>"matrix"</code>) matrices.
+</p>
+<p>By our definition, triangular, diagonal and symmetric matrices are all
+<em>square</em>, i.e. have the same number of rows and columns.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+isDiagonal(object)
+
+isTriangular(object, upper = NA, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+<p>any <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object, typically a matrix (traditional or Matrix
+package).</p>
+</td></tr>
+<tr valign="top"><td><code>upper</code></td>
+<td>
+<p>logical, one of <code>NA</code> (default), <code>FALSE</code>, or
+<code>TRUE</code> where the last two cases require a lower or upper
+triangular <code>object</code> to result in <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>potentially further arguments for other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a (&ldquo;scalar&rdquo;) logical, <code>TRUE</code> or <code>FALSE</code>, never
+<code><a href="../../base/html/NA.html">NA</a></code>.  For <code>isTriangular()</code>, if the result is
+<code>TRUE</code>, it may contain an attribute (see <code><a href="../../base/html/attributes.html">attributes</a></code>
+<code>"kind"</code>, either   <code>"L"</code> or <code>"U"</code> indicating if it is a
+<b>l</b>ower or <b>u</b>pper triangular matrix.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/isSymmetric.html">isSymmetric</a></code>; formal class (and subclasses)
+<code>"<a href="triangularMatrix-class.html">triangularMatrix</a>"</code> and
+<code>"<a href="diagonalMatrix-class.html">diagonalMatrix</a>"</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+isTriangular(Diagonal(4))
+## is TRUE: a diagonal matrix is also (both upper and lower) triangular
+(M &lt;- Matrix(c(1,2,0,1), 2,2))
+isTriangular(M) # TRUE (*and* of formal class "dtrMatrix")
+isTriangular(as(M, "dgeMatrix")) # still triangular, even if not "formally"
+isTriangular(crossprod(M)) # FALSE
+
+isDiagonal(matrix(c(2,0,0,1), 2,2)) # TRUE
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

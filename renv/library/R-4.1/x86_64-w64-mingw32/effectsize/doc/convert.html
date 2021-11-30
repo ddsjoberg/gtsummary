@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Converting Between Indices of Effect Size</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Converting Between Indices of Effect Size</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#converting-between-r-and-d">Converting Between <em>r</em> and <em>d</em></a>
+<ul>
+<li><a href="#in-multiple-regression">In multiple regression</a></li>
+</ul></li>
+<li><a href="#from-odds-ratios">From Odds ratios</a>
+<ul>
+<li><a href="#odds-ratios-to-risk-ratios">Odds ratios to Risk Ratios</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<p>The <code>effectsize</code> package contains function to convert among indices of effect size. This can be useful for meta-analyses, or any comparison between different types of statistical analyses.</p>
+<div id="converting-between-r-and-d" class="section level2">
+<h2>Converting Between <em>r</em> and <em>d</em></h2>
+<p>The most basic conversion is between <em>r</em> values, a measure of standardized association between two continuous measures, and <em>d</em> values (such as Cohen’s <em>d</em>), a measure of standardized differences between two groups / conditions.</p>
+<p>Let’s simulate some data:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> bayestestR<span class="sc">::</span><span class="fu">simulate_difference</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">10</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> <span class="fl">0.2</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">names =</span> <span class="fu">c</span>(<span class="st">&quot;Group&quot;</span>, <span class="st">&quot;Outcome&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>&gt;    Group Outcome
+&gt; 1      0  -0.942
+&gt; 2      0  -0.485
+&gt; 3      0  -0.100
+&gt; 4      0   0.285
+&gt; 5      0   0.742
+&gt; 6      1  -0.742
+&gt; 7      1  -0.285
+&gt; 8      1   0.100
+&gt; 9      1   0.485
+&gt; 10     1   0.942</code></pre>
+<p>We can compute Cohen’s <em>d</em> between the two groups:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cohens_d</span>(Outcome <span class="sc">~</span> Group, <span class="at">data =</span> data)</span></code></pre></div>
+<pre><code>&gt; Cohen&#39;s d |        95% CI
+&gt; -------------------------
+&gt; -0.31     | [-1.54, 0.95]
+&gt; 
+&gt; - Estimated using pooled SD.</code></pre>
+<p>But we can also treat the 2-level <code>group</code> variable as a numeric variable, and compute Pearson’s <em>r</em>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>correlation<span class="sc">::</span><span class="fu">correlation</span>(data, <span class="at">include_factors =</span> <span class="cn">TRUE</span>)[<span class="dv">2</span>, ]</span></code></pre></div>
+<pre><code>&gt; # Correlation Matrix (pearson-method)
+&gt; 
+&gt; Parameter1 | Parameter2 |     r |        95% CI |  t(8) |      p
+&gt; ----------------------------------------------------------------
+&gt; Group.0    |    Outcome | -0.17 | [-0.72, 0.52] | -0.48 | &gt; .999
+&gt; 
+&gt; p-value adjustment method: Holm (1979)
+&gt; Observations: 10</code></pre>
+<p>But what if we only have summary statistics? Say, we only have <span class="math inline">\(d=-0.37\)</span> and we want to know what the <em>r</em> would have been? We can approximate <em>r</em> using the following formula <span class="citation">(Borenstein et al. 2009)</span>:</p>
+<p><span class="math display">\[
+r \approx \frac{d}{\sqrt{d^2 + 4}}
+\]</span> And indeed, if we use <code>d_to_r()</code>, we get a pretty decent approximation:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">d_to_r</span>(<span class="sc">-</span><span class="fl">0.31</span>)</span></code></pre></div>
+<pre><code>&gt; [1] -0.153</code></pre>
+<p>(Which also works in the other way, with <code>r_to_d(0.17) = <code>r r_to_d(0.17)</code></code>)</p>
+<p>As we can see, these are rough approximations, but they can be useful when we don’t have the raw data on hand.</p>
+<div id="in-multiple-regression" class="section level3">
+<h3>In multiple regression</h3>
+<p>Although not exactly a classic Cohen’s d, we can also approximate a partial-<em>d</em> value (that is, the standardized difference between two groups / conditions, with variance from other predictors partilled out). For example:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> am <span class="sc">+</span> hp, <span class="at">data =</span> mtcars)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>parameters<span class="sc">::</span><span class="fu">model_parameters</span>(fit)</span></code></pre></div>
+<pre><code>&gt; Parameter   | Coefficient |       SE |         95% CI | t(29) |      p
+&gt; ----------------------------------------------------------------------
+&gt; (Intercept) |       26.58 |     1.43 | [23.67, 29.50] | 18.65 | &lt; .001
+&gt; am          |        5.28 |     1.08 | [ 3.07,  7.48] |  4.89 | &lt; .001
+&gt; hp          |       -0.06 | 7.86e-03 | [-0.07, -0.04] | -7.50 | &lt; .001</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A couple of ways to get partial-d:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fl">5.28</span> <span class="sc">/</span> <span class="fu">sigma</span>(fit)</span></code></pre></div>
+<pre><code>&gt; [1] 1.81</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t_to_d</span>(<span class="fl">4.89</span>, <span class="at">df_error =</span> <span class="dv">29</span>)[[<span class="dv">1</span>]]</span></code></pre></div>
+<pre><code>&gt; [1] 1.82</code></pre>
+<p>We can convert these semi-<em>d</em> values to <em>r</em> values, but in this case these represent the <em>partial</em> correlation:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t_to_r</span>(<span class="fl">4.89</span>, <span class="at">df_error =</span> <span class="dv">29</span>)</span></code></pre></div>
+<pre><code>&gt; r    |       95% CI
+&gt; -------------------
+&gt; 0.67 | [0.43, 0.80]</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>correlation<span class="sc">::</span><span class="fu">correlation</span>(mtcars[, <span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;am&quot;</span>, <span class="st">&quot;hp&quot;</span>)], <span class="at">partial =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span>, ]</span></code></pre></div>
+<pre><code>&gt; # Correlation Matrix (pearson-method)
+&gt; 
+&gt; Parameter1 | Parameter2 |    r |       95% CI | t(30) |         p
+&gt; -----------------------------------------------------------------
+&gt; mpg        |         am | 0.67 | [0.42, 0.83] |  4.97 | &lt; .001***
+&gt; 
+&gt; p-value adjustment method: Holm (1979)
+&gt; Observations: 32</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all close to:</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">d_to_r</span>(<span class="fl">1.81</span>)</span></code></pre></div>
+<pre><code>&gt; [1] 0.671</code></pre>
+</div>
+</div>
+<div id="from-odds-ratios" class="section level2">
+<h2>From Odds ratios</h2>
+<p>In binomial regression (more specifically in logistic regression), Odds ratios (OR) are themselves measures of effect size; they indicate the expected change in the odds of a some event.</p>
+<p>In some fields, it is common to dichotomize outcomes in order to be able to analyze them with logistic models. For example, if the outcome is the count of white blood cells, it can be more useful (medically) to predict the crossing of the threshold rather than the raw count itself. And so, where some scientists would maybe analyze the above data with a <em>t</em>-test and present Cohen’s <em>d</em>, others might analyze it with a logistic regression model on the dichotomized outcome, and present OR. So the question can be asked: given such a OR, what would Cohen’s <em>d</em> have been?</p>
+<p>Fortunately, there is a formula to approximate this <span class="citation">(Sánchez-Meca, Marı́n-Martı́nez, and Chacón-Moscoso 2003)</span>:</p>
+<p><span class="math display">\[
+d = log(OR) \times \frac{\sqrt{3}}{\pi}
+\]</span></p>
+<p>which is implemented in the <code>oddsratio_to_d()</code> function.</p>
+<p>Let’s give it a try:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Set a threshold</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>thresh <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. dichotomize the outcome</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Outcome_binom <span class="ot">&lt;-</span> data<span class="sc">$</span>Outcome <span class="sc">&lt;</span> thresh</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Fit a logistic regression:</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(Outcome_binom <span class="sc">~</span> Group,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> data,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="fu">binomial</span>()</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>parameters<span class="sc">::</span><span class="fu">model_parameters</span>(fit)</span></code></pre></div>
+<pre><code>&gt; Parameter   | Log-Odds |   SE |        95% CI |     z |     p
+&gt; -------------------------------------------------------------
+&gt; (Intercept) |     0.41 | 0.91 | [-1.39, 2.43] |  0.44 | 0.657
+&gt; Group [1]   |    -0.81 | 1.29 | [-3.54, 1.70] | -0.63 | 0.530</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert log(OR) (the coefficient) to d</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">oddsratio_to_d</span>(<span class="sc">-</span><span class="fl">0.81</span>, <span class="at">log =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>&gt; [1] -0.447</code></pre>
+<div id="odds-ratios-to-risk-ratios" class="section level3">
+<h3>Odds ratios to Risk Ratios</h3>
+<p>Odds ratio, although popular, are not very intuitive in their interpretations. We don’t often think about the chances of catching a disease in terms of <em>odds</em>, instead we instead tend to think in terms of <em>probability</em> or some event - or the <em>risk</em>. Talking about <em>risks</em> we can also talk about the <em>change in risk</em>, knows as the <em>risk ratio</em> (<em>RR</em>).</p>
+<p>For example, if we find that for individual suffering from a migraine, for every bowl of brussels sprouts they eat, they’re odds of reducing the migraine increase by an <span class="math inline">\(OR = 3.5\)</span> over a period of an hour. So, should people eat brussels sprouts to effectively reduce pain? Well, hard to say… Maybe if we look at <em>RR</em> we’ll get a clue.</p>
+<p>We can convert between <em>OR</em> and <em>RR</em> for the following formula <span class="citation">(Grant 2014)</span>:</p>
+<p><span class="math display">\[
+RR = \frac{OR}{(1 - p0 + (p0 \times OR))}  
+\]</span></p>
+<p>Where <span class="math inline">\(p0\)</span> is the base-rate risk - the probability of the event without the intervention (e.g., what is the probability of the migraine subsiding within an hour without eating any brussels sprouts). If it the base-rate risk is, say, 85%, we get a <em>RR</em> of:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>OR <span class="ot">&lt;-</span> <span class="fl">3.5</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>baserate <span class="ot">&lt;-</span> <span class="fl">0.85</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">oddsratio_to_riskratio</span>(OR, baserate)</span></code></pre></div>
+<pre><code>&gt; [1] 1.12</code></pre>
+<p>That is - for every bowl of brussels sprouts, we increase the chances of reducing the migraine by a mere 12%! Is if worth it? Depends on you affinity to brussels sprouts…</p>
+<p>Note that the base-rate risk is crucial here. If instead of 85% it was only 4%, then the <em>RR</em> would be:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>OR <span class="ot">&lt;-</span> <span class="fl">3.5</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>baserate <span class="ot">&lt;-</span> <span class="fl">0.04</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">oddsratio_to_riskratio</span>(OR, baserate)</span></code></pre></div>
+<pre><code>&gt; [1] 3.18</code></pre>
+<p>That is - for every bowl of brussels sprouts, we increase the chances of reducing the migraine by a whopping 318%! Is if worth it? I guess that still depends on you affinity to brussels sprouts…</p>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-borenstein2009converting" class="csl-entry">
+Borenstein, Michael, Larry V Hedges, JPT Higgins, and Hannah R Rothstein. 2009. <span>“Converting Among Effect Sizes.”</span> <em>Introduction to Meta-Analysis</em>, 45–49.
+</div>
+<div id="ref-grant2014converting" class="csl-entry">
+Grant, Robert L. 2014. <span>“Converting an Odds Ratio to a Range of Plausible Relative Risks for Better Communication of Research Findings.”</span> <em>Bmj</em> 348: f7450.
+</div>
+<div id="ref-sanchez2003effect" class="csl-entry">
+Sánchez-Meca, Julio, Fulgencio Marı́n-Martı́nez, and Salvador Chacón-Moscoso. 2003. <span>“Effect-Size Indices for Dichotomized Outcomes in Meta-Analysis.”</span> <em>Psychological Methods</em> 8 (4): 448.
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
