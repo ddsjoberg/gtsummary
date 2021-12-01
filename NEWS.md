@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updates to the French translations.
+
 * All `style_*()` functions will retain attribute, such as the names. (#1035, #1031, #981)
 
 * Added link to the `syntax` help file to functions throughout the package. The `syntax` help file illustrates how to use the gtsummary selectors and details the formula-list notation. (#981)
