@@ -297,12 +297,6 @@ tbl_custom_summary <- function(
       "and the RHS is a function:\n",
       "everything() ~ continuous_summary(\"var\")"
     ), call. = FALSE)
-  # test if all RHS parts are formulas
-  if (purrr::some(stat_fns, ~ !rlang::is_function(eval(rlang::f_rhs(.)))))
-    stop(
-      "The RHS part of formulas defined in 'stat-fns' should be a function.",
-      call. = FALSE
-    )
 
   tbl_summary_input_checks(
     data, by, label, type, value, statistic,
