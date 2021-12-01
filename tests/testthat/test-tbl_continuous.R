@@ -12,6 +12,11 @@ test_that("tbl_continuous() works", {
     NA
   )
 
+  expect_error(
+    tbl1 %>% add_overall(),
+    NA
+  )
+
   expect_equal(
     names(tbl1),
     c("**Characteristic**", "Drug A, N = 200", "Drug B, N = 200")
