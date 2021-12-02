@@ -217,3 +217,31 @@ test_that("tbl_custom_summary() helpers work as expected", {
       "22.3% (192/862) [20-25]")
   )
 })
+
+
+test_that("character summaries do not cause error", {
+  diff_to_great_mean <- function(data, full_data, ...) {
+    mean <- mean(data$marker, na.rm = TRUE)
+    great_mean <- mean(full_data$marker, na.rm = TRUE)
+    diff <- mean - great_mean
+    dplyr::tibble(
+      mean = mean,
+      great_mean = great_mean,
+      diff = diff,
+      level = ifelse(diff > 0, "high", "low"),
+      date = Sys.Date()
+    )
+  }
+
+  expect_error(
+    trial %>%
+      tbl_custom_summary(
+        include = c("stage"),
+        by = "trt",
+        stat_fns = ~ diff_to_great_mean,
+        statistic = ~ "{mean} ({level}) [{date}]"
+      ),
+    NA
+  )
+
+})
