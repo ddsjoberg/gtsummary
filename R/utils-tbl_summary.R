@@ -1211,7 +1211,8 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
           attr(column, "fmt_fun") <- style_number
         }
 
-        # that should cover everything, but adding this just in case
+        # that should cover everything in `tbl_summary()`,
+        # but these are somtimes used in `tbl_custom_summary()`
         else if (is.numeric(column)) {
           attr(column, "fmt_fun") <- style_sigfig
         }
