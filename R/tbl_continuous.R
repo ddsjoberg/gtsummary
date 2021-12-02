@@ -102,3 +102,33 @@ tbl_continuous <- function(data,
   result
 }
 
+#' @rdname add_overall
+#' @export
+add_overall.tbl_continuous <- function(x, last = FALSE, col_label = NULL) {
+  updated_call_list <- c(x$call_list, list(add_overall = match.call()))
+  # checking that input x has a by var
+  if (is.null(x$inputs[["by"]])) {
+    stop(
+      "Cannot add Overall column when no 'by' variable in original tbl_custom_summary"
+    )
+  }
+
+  x_copy <- x
+
+  # removing 'by' variable from data
+  # (so it won't show up in the overall tbl_summary)
+  x_copy$inputs[["data"]] <- select(x$inputs[["data"]], -x[["by"]])
+  x_copy$inputs$include <- x_copy$inputs$include %>% setdiff(x[["by"]])
+
+  # replacing the function call by variable to NULL to get results overall
+  x_copy$inputs[["by"]] <- NULL
+
+  # calculating stats overall, and adding header row
+  tbl_overall <- do.call(tbl_continuous, x_copy$inputs)
+
+  # merging overall results
+  x <- add_overall_merge(x, tbl_overall, last, col_label)
+
+  x$call_list <- updated_call_list
+  x
+}
