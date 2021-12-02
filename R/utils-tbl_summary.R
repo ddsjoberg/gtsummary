@@ -1111,7 +1111,8 @@ extracting_function_calls_from_stat_display <- function(stat_display, variable) 
 adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
                                       stat_display, digits) {
   # setting the default formatting ---------------------------------------------
-  percent_fun <- get_theme_element("tbl_summary-fn:percent_fun") %||%
+  percent_fun <-
+    get_theme_element("tbl_summary-fn:percent_fun") %||%
     getOption("gtsummary.tbl_summary.percent_fun", default = style_percent)
 
   # extracting statistics requested
@@ -1210,9 +1211,12 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
           attr(column, "fmt_fun") <- style_number
         }
 
-        # that should cove everything, but adding this just in case
+        # that should cover everything, but adding this just in case
+        else if (is.numeric(column)) {
+          attr(column, "fmt_fun") <- style_sigfig
+        }
         else {
-          attr(column, "fmt_fun") <- style_number
+          attr(column, "fmt_fun") <- as.character
         }
 
         # return column
