@@ -13,7 +13,12 @@ test_that("tbl_continuous() works", {
   )
 
   expect_error(
-    tbl1 %>% add_overall(),
+    tbl_continuous(
+      data = trial,
+      variable = age,
+      by = trt,
+      include = c(grade, stage)
+    ) %>% add_overall(),
     NA
   )
 
