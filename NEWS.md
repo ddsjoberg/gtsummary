@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `add_overall.tbl_continuous()` method. (#1037)
+
 * Updated the default formatting functions in `tbl_custom_summary()`. Previously, summaries with character results erred because the default summary function was `style_number()`. This has been updated to `style_sigfig()` for numeric columns, and `as.character()` for everything else. (#983)
 
 * Updates to the French translations.
