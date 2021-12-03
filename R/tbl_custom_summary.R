@@ -287,16 +287,16 @@ tbl_custom_summary <- function(
   if (rlang::is_function(stat_fns)) {
     stat_fns <-
       inject(everything() ~ !!gts_mapper(stat_fns, "tbl_custom_summary(stat_fns=)"))
+    warning(glue::glue(
+      "A function was provided directly to 'stat_fns' instead of a formula.\n",
+      "The correct syntax should be '~ function_name'.\n",
+      "Please change your syntax to remove this warning."
+    ))
   }
-  if (rlang::is_bare_formula(stat_fns))
-    stat_fns <- list(stat_fns)
-  if (!rlang::is_bare_list(stat_fns))
-    stop(paste0(
-      "'stat-fns' argument must be a formula or a list of formulas.\n",
-      "LHS of the formula is the variable specification, ",
-      "and the RHS is a function:\n",
-      "everything() ~ continuous_summary(\"var\")"
-    ), call. = FALSE)
+
+  ## NOTE (to be removed once broom.helpers updated):
+  ## Better error messaging should be included in .formula_list_to_named_list()
+  ## Code to be updated in gtsummary once done
 
   tbl_summary_input_checks(
     data, by, label, type, value, statistic,

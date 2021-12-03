@@ -9,7 +9,7 @@ test_that("tbl_custom_summary() basics", {
       tbl_custom_summary(
         include = c("grade", "response", "marker"),
         by = "trt",
-        stat_fns = mean_age, # it should accept a function and convert into ~ fun
+        stat_fns = ~ mean_age,
         statistic = ~ "{mean_age}",
         digits = ~ 1
       ) %>%
@@ -133,16 +133,15 @@ test_that("tbl_custom_summary() basics", {
     c("1.02 [0.83; 1.20]", "6", "20.2 [19.2; 21.2]")
   )
 
-  # check custom error message
-  expect_error(
+  # check warning if incorrect syntax
+  expect_warning(
     trial %>%
       tbl_custom_summary(
         include = c("marker", "ttdeath"),
         by = "trt",
-        stat_fns = "error",
+        stat_fns = mean_ci, # incorrect, right syntax is '~ mean_ci'
         statistic = everything() ~ "{mean} [{conf.low}; {conf.high}]"
-      ),
-    "RHS is a function"
+      )
   )
 })
 
