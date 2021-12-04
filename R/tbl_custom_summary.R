@@ -162,7 +162,7 @@
 #'     update = all_stat_cols() ~ "mean [95% CI]"
 #'   )
 #'
-#' # Example 2 ----------------------------------
+#' # Example 3 ----------------------------------
 #' # Use `full_data` to access the full datasets
 #' # Returned statistic can also be a character, but you need to
 #' # define `digits` accordingly
