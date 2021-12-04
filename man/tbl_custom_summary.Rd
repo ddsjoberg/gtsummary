@@ -245,8 +245,7 @@ tbl_custom_summary_ex2 <-
 
 # Example 3 ----------------------------------
 # Use `full_data` to access the full datasets
-# Returned statistic can also be a character, but you need to
-# define `digits` accordingly
+# Returned statistic can also be a character
 diff_to_great_mean <- function(data, full_data, ...) {
   mean <- mean(data$marker, na.rm = TRUE)
   great_mean <- mean(full_data$marker, na.rm = TRUE)
@@ -266,7 +265,6 @@ tbl_custom_summary_ex3 <-
     by = "trt",
     stat_fns = ~ diff_to_great_mean,
     statistic = ~ "{mean} ({level}, diff: {diff})",
-    digits = ~ list(1, as.character, 1),
     overall_row = TRUE
   ) \%>\%
   bold_labels()
