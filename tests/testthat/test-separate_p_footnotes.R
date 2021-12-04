@@ -1,6 +1,3 @@
-context("test-separate_p_footnotes")
-
-library(gtsummary)
 gts_tbl <- trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
