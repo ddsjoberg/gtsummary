@@ -110,3 +110,33 @@ test_that("errors produced when expected", {
   tbl$table_body$label[1] <- "Agggge, Years"
   expect_error(tbl %>% add_overall(), "*")
 })
+
+test_that("Users can modify statistics and digits arguments", {
+  expect_equal(
+    trial %>%
+      select(trt, grade, response) %>%
+      tbl_summary(by = trt, missing = "no") %>%
+      add_overall(
+        statistic = ~"{p}% (n={n})",
+        digits = ~ c(3, 0)
+      ) %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull(stat_0),
+    c(NA, "34.000% (n=68)", "34.000% (n=68)", "32.000% (n=64)", "31.606% (n=61)")
+  )
+
+  expect_equal(
+    Titanic %>%
+      as.data.frame() %>%
+      survey::svydesign(data = ., ids = ~1, weights = ~Freq) %>%
+      tbl_svysummary(by = Survived, include = c(Class, Sex)) %>%
+      add_overall.tbl_svysummary(
+        statistic = ~"{p}% (n={n})",
+        digits = ~ c(3, 0)
+      ) %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull(stat_0),
+    c(NA, "14.766% (n=325)", "12.949% (n=285)", "32.076% (n=706)",
+      "40.209% (n=885)", NA, "78.646% (n=1,731)", "21.354% (n=470)")
+  )
+})

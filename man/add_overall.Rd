@@ -11,9 +11,9 @@
 \usage{
 add_overall(x, last, col_label)
 
-\method{add_overall}{tbl_summary}(x, last = FALSE, col_label = NULL)
+\method{add_overall}{tbl_summary}(x, last = FALSE, col_label = NULL, statistic = NULL, digits = NULL)
 
-\method{add_overall}{tbl_svysummary}(x, last = FALSE, col_label = NULL)
+\method{add_overall}{tbl_svysummary}(x, last = FALSE, col_label = NULL, statistic = NULL, digits = NULL)
 
 \method{add_overall}{tbl_continuous}(x, last = FALSE, col_label = NULL)
 
@@ -27,6 +27,12 @@ object with class \code{tbl_svysummary} from the \link{tbl_svysummary} function.
 Default is \code{FALSE}, which will display overall column first.}
 
 \item{col_label}{String indicating the column label. Default is \code{"**Overall**,  N = {N}"}}
+
+\item{statistic}{Override the statistic argument in initial \code{tbl_summary()}
+or \code{tbl_svysummary()} call. Default is \code{NULL}.}
+
+\item{digits}{Override the digits argument in initial \code{tbl_summary()}
+or \code{tbl_svysummary()} call. Default is \code{NULL}.}
 }
 \value{
 A \code{tbl_summary} object or a \code{tbl_svysummary} object

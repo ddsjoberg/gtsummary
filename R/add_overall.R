@@ -8,6 +8,10 @@
 #' @param last Logical indicator to display overall column last in table.
 #' Default is `FALSE`, which will display overall column first.
 #' @param col_label String indicating the column label. Default is `"**Overall**,  N = {N}"`
+#' @param statistic Override the statistic argument in initial `tbl_summary()`
+#' or `tbl_svysummary()` call. Default is `NULL`.
+#' @param digits Override the digits argument in initial `tbl_summary()`
+#' or `tbl_svysummary()` call. Default is `NULL`.
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
 #' @author Daniel D. Sjoberg
@@ -26,7 +30,8 @@ add_overall <- function(x, last, col_label) {
 
 #' @rdname add_overall
 #' @export
-add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL) {
+add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL,
+                                    statistic = NULL, digits = NULL) {
   updated_call_list <- c(x$call_list, list(add_overall = match.call()))
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
@@ -42,8 +47,43 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL) {
   x_copy$inputs[["data"]] <- select(x$inputs[["data"]], -x[["by"]])
   x_copy$inputs$include <- x_copy$inputs$include %>% setdiff(x[["by"]])
 
+  # evaluate statistic and digits args -----------------------------------------
+  statistic <-
+    .formula_list_to_named_list(
+      x = statistic,
+      data = use_data_frame(x_copy$inputs$data),
+      var_info = x_copy$table_body,
+      arg_name = "statistic"
+    )
+  digits <-
+    .formula_list_to_named_list(
+      x = digits,
+      data = use_data_frame(x_copy$inputs$data),
+      var_info = x_copy$table_body,
+      arg_name = "digits"
+    )
+
+  # if user passed updates statistics or digits, update the calls
+  if (!is.null(statistic)) {
+    x_copy$inputs$statistic <-
+      switch(
+        is.null(x_copy$inputs$statistic),
+        statistic
+      ) %||%
+      purrr::list_modify(x_copy$inputs$statistic, !!!statistic)
+  }
+  if (!is.null(digits)) {
+    x_copy$inputs$digits <-
+      switch(
+        is.null(x_copy$inputs$digits),
+        digits
+      ) %||%
+      purrr::list_modify(x_copy$inputs$digits, !!!digits)
+    }
+
   # replacing the function call by variable to NULL to get results overall
   x_copy$inputs[["by"]] <- NULL
+
 
   # calculating stats overall, and adding header row
   tbl_overall <- do.call(tbl_summary, x_copy$inputs)
@@ -58,7 +98,8 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL) {
 
 #' @rdname add_overall
 #' @export
-add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL) {
+add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL,
+                                       statistic = NULL, digits = NULL) {
   updated_call_list <- c(x$call_list, list(add_overall = match.call()))
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
@@ -73,6 +114,40 @@ add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL) {
   # (so it won't show up in the overall tbl_summary)
   x_copy$inputs$data$variables <- select(x$inputs$data$variables, -x$by)
   x_copy$inputs$include <- x_copy$inputs$include %>% setdiff(x[["by"]])
+
+  # evaluate statistic and digits args -----------------------------------------
+  statistic <-
+    .formula_list_to_named_list(
+      x = statistic,
+      data = use_data_frame(x_copy$inputs$data),
+      var_info = x_copy$table_body,
+      arg_name = "statistic"
+    )
+  digits <-
+    .formula_list_to_named_list(
+      x = digits,
+      data = use_data_frame(x_copy$inputs$data),
+      var_info = x_copy$table_body,
+      arg_name = "digits"
+    )
+
+  # if user passed updates statistics or digits, update the calls
+  if (!is.null(statistic)) {
+    x_copy$inputs$statistic <-
+      switch(
+        is.null(x_copy$inputs$statistic),
+        statistic
+      ) %||%
+      purrr::list_modify(x_copy$inputs$statistic, !!!statistic)
+  }
+  if (!is.null(digits)) {
+    x_copy$inputs$digits <-
+      switch(
+        is.null(x_copy$inputs$digits),
+        digits
+      ) %||%
+      purrr::list_modify(x_copy$inputs$digits, !!!digits)
+  }
 
   # replacing the function call by variable to NULL to get results overall
   x_copy$inputs[["by"]] <- NULL
