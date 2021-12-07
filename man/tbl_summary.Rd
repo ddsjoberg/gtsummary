@@ -40,7 +40,7 @@ display for each variable.  The default is
 See below for details.}
 
 \item{digits}{List of formulas specifying the number of decimal
-places to round continuous summary statistics. If not specified,
+places to round summary statistics. If not specified,
 \code{tbl_summary} guesses an appropriate number of decimals to round statistics.
 When multiple statistics are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the
@@ -148,6 +148,7 @@ For continuous variables the following statistics are available to display.
 \item \code{{var}} variance
 \item \code{{min}} minimum
 \item \code{{max}} maximum
+\item \code{{sum}} sum
 \item \verb{\{p##\}} any integer percentile, where \verb{##} is an integer from 0 to 100
 \item \code{{foo}} any function of the form \code{foo(x)} is accepted where \code{x} is a numeric vector
 }
