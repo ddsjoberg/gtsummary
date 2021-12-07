@@ -763,6 +763,7 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
       "{mean}", "Mean",
       "{sd}", "SD",
       "{var}", "Variance",
+      "{sum}", "Sum",
       "{n}", "n",
       "{N}", "N",
       "{p}%", "%",

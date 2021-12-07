@@ -202,3 +202,19 @@ test_that("tbl_cross- test NULL margin argument", {
     FALSE
   )
 })
+
+# digits Argument  -------------------------------------------
+test_that("tbl_cross-digits argument", {
+  expect_equal(
+    tbl_cross(
+      trial,
+      response,
+      stage,
+      statistic = "{n} ({p}%)",
+      digits = c(0, 2)
+    ) %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull(stat_1),
+    c(NA, "34 (17.00%)", "18 (9.00%)", "1 (0.50%)", "53 (26.50%)")
+  )
+})

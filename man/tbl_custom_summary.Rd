@@ -47,7 +47,7 @@ by the functions specified in \code{stat_fns} (see below for details and
 examples).}
 
 \item{digits}{List of formulas specifying the number of decimal
-places to round continuous summary statistics. If not specified,
+places to round summary statistics. If not specified,
 \code{tbl_summary} guesses an appropriate number of decimals to round statistics.
 When multiple statistics are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the

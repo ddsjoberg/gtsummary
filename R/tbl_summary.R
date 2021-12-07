@@ -28,7 +28,7 @@
 #' `list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")`.
 #' See below for details.
 #' @param digits List of formulas specifying the number of decimal
-#' places to round continuous summary statistics. If not specified,
+#' places to round summary statistics. If not specified,
 #' `tbl_summary` guesses an appropriate number of decimals to round statistics.
 #' When multiple statistics are displayed for a single variable, supply a vector
 #' rather than an integer.  For example, if the
@@ -106,6 +106,7 @@
 #'   \item `{var}` variance
 #'   \item `{min}` minimum
 #'   \item `{max}` maximum
+#'   \item `{sum}` sum
 #'   \item `{p##}` any integer percentile, where `##` is an integer from 0 to 100
 #'   \item `{foo}` any function of the form `foo(x)` is accepted where `x` is a numeric vector
 #' }

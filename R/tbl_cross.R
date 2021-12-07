@@ -16,6 +16,15 @@
 #' Default is `c("row", "column")`. Use `margin  = NULL` to suppress both
 #' row and column margins.
 #' @param margin_text Text to display for margin totals. Default is `"Total"`
+#' @param digits Specifies the number of decimal
+#' places to round the summary statistics. By default integers are shown
+#' to the zero decimal places, and percentages are formatted with `style_percent()`.
+#' If you would like to modify either of these, pass a vector of integers
+#' indicating the number of decimal places to round the statistics.
+#' For example, if the
+#' statistic being calculated is `"{n} ({p}%)"` and you want the percent rounded
+#' to 2 decimal places use `digits = c(0, 2)`. User
+#' may also pass a styling function: `digits = style_sigfig`
 #' @inheritParams tbl_summary
 #'
 #' @family tbl_cross tools
@@ -48,6 +57,7 @@ tbl_cross <- function(data,
                       col = NULL,
                       label = NULL,
                       statistic = NULL,
+                      digits = NULL,
                       percent = c("none", "column", "row", "cell"),
                       margin = c("column", "row"),
                       missing = c("ifany", "always", "no"),
@@ -158,6 +168,7 @@ tbl_cross <- function(data,
     tbl_summary(
       by = col,
       statistic = stats::as.formula(glue("everything() ~ '{statistic}'")),
+      digits = everything() ~ digits,
       percent = ifelse(percent == "none", "cell", percent),
       label = new_label,
       missing_text = missing_text,
