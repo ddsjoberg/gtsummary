@@ -1,3 +1,6 @@
+skip_on_cran()
+
+
 test_that("tbl_custom_summary() basics", {
   mean_age <- function(data, ...) {
     dplyr::tibble(mean_age = mean(data$age, na.rm = TRUE))
@@ -56,9 +59,6 @@ test_that("tbl_custom_summary() basics", {
     c(NA, "46.2", "47.5", "48.1", "49.8", "7", "47.0", "10")
   )
 
-  # table with character stat, full_data and using some tbl_summary tools
-  skip_on_cran()
-
   diff_to_great_mean <- function(data, full_data, ...) {
     mean <- mean(data$marker, na.rm = TRUE)
     great_mean <- mean(full_data$marker, na.rm = TRUE)
@@ -72,7 +72,8 @@ test_that("tbl_custom_summary() basics", {
   }
 
   expect_error(
-    tbl <- trial %>%
+    tbl <-
+      trial %>%
       tbl_custom_summary(
         include = c("grade", "stage"),
         by = "trt",

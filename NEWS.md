@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `statistics=` and `digits=` arguments to the `add_overall()` family of functions. (#1047)
+
 * Improved error messaging in `tbl_custom_summary()`
 
 * Added `digits=` argument to `tbl_cross()`. (#1046)
