@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Improved error messaging in `tbl_custom_summary()`
+
 * Added `digits=` argument to `tbl_cross()`. (#1046)
 
 * Added `add_overall.tbl_continuous()` method. (#1037)
