@@ -12,9 +12,9 @@ test_that("tbl_custom_summary() basics", {
       tbl_custom_summary(
         include = c("grade", "response", "marker"),
         by = "trt",
-        stat_fns = everything() ~ mean_age,
-        statistic = everything() ~ "{mean_age}",
-        digits = everything() ~ 1
+        stat_fns = ~ mean_age,
+        statistic = ~ "{mean_age}",
+        digits = ~ 1
       ) %>%
       add_overall(last = TRUE) %>%
       modify_footnote(all_stat_cols() ~ "Mean age") %>%
@@ -132,6 +132,16 @@ test_that("tbl_custom_summary() basics", {
   expect_equal(
     tbl$stat_1,
     c("1.02 [0.83; 1.20]", "6", "20.2 [19.2; 21.2]")
+  )
+
+  expect_error(
+    trial %>%
+      tbl_custom_summary(
+        include = c("marker", "ttdeath"),
+        by = "trt",
+        stat_fns = mean_ci, # incorrect, right syntax is '~ mean_ci'
+        statistic = everything() ~ "{mean} [{conf.low}; {conf.high}]"
+      )
   )
 })
 
