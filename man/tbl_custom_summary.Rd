@@ -294,6 +294,7 @@ Other tbl_summary tools:
 \code{\link{tbl_summary}()}
 
 Other tbl_custom_summary tools: 
+\code{\link{add_overall}()},
 \code{\link{continuous_summary}()},
 \code{\link{proportion_summary}()},
 \code{\link{ratio_summary}()}
