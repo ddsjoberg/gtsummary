@@ -85,6 +85,7 @@ proportion_summary_ex1 <-
 }
 \seealso{
 Other tbl_custom_summary tools: 
+\code{\link{add_overall}()},
 \code{\link{continuous_summary}()},
 \code{\link{ratio_summary}()},
 \code{\link{tbl_custom_summary}()}
