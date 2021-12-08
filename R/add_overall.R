@@ -1,29 +1,57 @@
 #' Add column with overall summary statistics
 #'
 #' Adds a column with overall summary statistics to tables
-#' created by `tbl_summary` or `tbl_svysummary`.
+#' created by `tbl_summary`, `tbl_svysummary`, `tbl_continuous` or
+#' `tbl_custom_summary`.
 #'
-#' @param x Object with class `tbl_summary` from the [tbl_summary] function or
-#' object with class `tbl_svysummary` from the [tbl_svysummary] function.
+#' @param x Object with class `tbl_summary` from the [tbl_summary] function,
+#' object with class `tbl_svysummary` from the [tbl_svysummary] function,
+#' object with class `tbl_continuous` from the [tbl_continuous] function or
+#' object with class `tbl_custom_summary` from the [tbl_custom_summary] function.
 #' @param last Logical indicator to display overall column last in table.
 #' Default is `FALSE`, which will display overall column first.
 #' @param col_label String indicating the column label. Default is `"**Overall**,  N = {N}"`
-#' @param statistic Override the statistic argument in initial `tbl_summary()`
-#' or `tbl_svysummary()` call. Default is `NULL`.
-#' @param digits Override the digits argument in initial `tbl_summary()`
-#' or `tbl_svysummary()` call. Default is `NULL`.
+#' @param statistic Override the statistic argument in initial `tbl_*` function.
+#' call. Default is `NULL`.
+#' @param digits Override the digits argument in initial `tbl_*` function
+#' call. Default is `NULL`.
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
+#' @family tbl_custom_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
-#' @return A `tbl_summary` object or a `tbl_svysummary` object
+#' @return A `tbl_*` of same class as `x`
 #' @examples
-#' tbl_overall_ex <-
-#'   trial[c("age", "grade", "trt")] %>%
-#'   tbl_summary(by = trt) %>%
+#' tbl_overall_ex1 <-
+#'   trial %>%
+#'   tbl_summary(include = c(age, grade), by = trt) %>%
 #'   add_overall()
+#' tbl_overall_ex2 <-
+#'   trial %>%
+#'   tbl_summary(
+#'     include = grade,
+#'     by = trt,
+#'     percent = "row",
+#'     statistic = ~ "{p}%",
+#'     digits = ~ 1
+#'   ) %>%
+#'   add_overall(
+#'     last = TRUE,
+#'     statistic = ~ "{p}% (n={n})",
+#'     digits = ~ c(1, 0)
+#'   )
+#' tbl_overall_ex3 <-
+#'  trial %>%
+#'  tbl_continuous(
+#'    variable = age,
+#'    by = trt,
+#'    include = grade
+#'  ) %>%
+#'  add_overall(last = TRUE)
 #' @section Example Output:
-#' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_overall_ex1.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_overall_ex2.png}{options: width=50\%}}
+#' \if{html}{\figure{tbl_overall_ex3.png}{options: width=50\%}}
 add_overall <- function(x, last, col_label, statistic, digits) {
   UseMethod("add_overall")
 }
