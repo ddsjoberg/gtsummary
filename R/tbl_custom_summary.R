@@ -292,10 +292,6 @@ tbl_custom_summary <- function(
     ))
   }
 
-  ## NOTE (to be removed once broom.helpers updated):
-  ## Better error messaging should be included in .formula_list_to_named_list()
-  ## Code to be updated in gtsummary once done
-
   tbl_summary_input_checks(
     data, by, label, type, value, statistic,
     digits, missing, missing_text, sort = NULL # sort to NULL
@@ -438,7 +434,9 @@ generate_metadata_custom_summary <- function(data, stat_fns, include,
       x = stat_fns,
       data = data %>% select(any_of(include)),
       var_info = meta_data_to_var_info(meta_data),
-      arg_name = "stat_fns"
+      arg_name = "stat_fns",
+      type_check = .is_convertible_as_function,
+      type_check_msg = "The right side of formulas provided in `stat_fns` should be a function."
     )
   label <- .formula_list_to_named_list(
     x = label,
