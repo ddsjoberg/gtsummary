@@ -162,10 +162,9 @@
 #'     update = all_stat_cols() ~ "mean [95% CI]"
 #'   )
 #'
-#' # Example 2 ----------------------------------
+#' # Example 3 ----------------------------------
 #' # Use `full_data` to access the full datasets
-#' # Returned statistic can also be a character, but you need to
-#' # define `digits` accordingly
+#' # Returned statistic can also be a character
 #' diff_to_great_mean <- function(data, full_data, ...) {
 #'   mean <- mean(data$marker, na.rm = TRUE)
 #'   great_mean <- mean(full_data$marker, na.rm = TRUE)
@@ -185,19 +184,21 @@
 #'     by = "trt",
 #'     stat_fns = ~ diff_to_great_mean,
 #'     statistic = ~ "{mean} ({level}, diff: {diff})",
-#'     digits = ~ list(1, as.character, 1),
 #'     overall_row = TRUE
 #'   ) %>%
 #'   bold_labels()
 #' @section Example Output:
 #' \if{html}{Example 1}
-#' \if{html}{\figure{tbl_custom_summary_ex1.png}{options: width=31\%}}
+#'
+#' \if{html}{\figure{tbl_custom_summary_ex1.png}{options: width=45\%}}
 #'
 #' \if{html}{Example 2}
-#' \if{html}{\figure{tbl_custom_summary_ex2.png}{options: width=31\%}}
+#'
+#' \if{html}{\figure{tbl_custom_summary_ex2.png}{options: width=45\%}}
 #'
 #' \if{html}{Example 3}
-#' \if{html}{\figure{tbl_custom_summary_ex3.png}{options: width=31\%}}
+#'
+#' \if{html}{\figure{tbl_custom_summary_ex3.png}{options: width=35\%}}
 
 tbl_custom_summary <- function(
                         data, by = NULL, label = NULL,
@@ -284,7 +285,6 @@ tbl_custom_summary <- function(
   tbl_custom_summary_inputs <- as.list(environment())
 
   # checking function inputs ---------------------------------------------------
-  # verify if checks about stat_fns should be added at this stage
   tbl_summary_input_checks(
     data, by, label, type, value, statistic,
     digits, missing, missing_text, sort = NULL # sort to NULL
@@ -427,7 +427,9 @@ generate_metadata_custom_summary <- function(data, stat_fns, include,
       x = stat_fns,
       data = data %>% select(any_of(include)),
       var_info = meta_data_to_var_info(meta_data),
-      arg_name = "stat_fns"
+      arg_name = "stat_fns",
+      type_check = .is_convertible_as_function,
+      type_check_msg = "The right side of formulas provided in `stat_fns` should be a function."
     )
   label <- .formula_list_to_named_list(
     x = label,

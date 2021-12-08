@@ -43,3 +43,9 @@ gts_mapper <- function(x, context) {
 
   purrr::as_mapper(x)
 }
+
+# test if the element is convertible to a function
+.is_convertible_as_function <- function(f) {
+  tryCatch(rlang::as_function(f), error = function(e) NULL) %>%
+    rlang::is_function()
+}
