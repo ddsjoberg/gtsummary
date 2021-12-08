@@ -133,8 +133,7 @@ test_that("tbl_custom_summary() basics", {
     c("1.02 [0.83; 1.20]", "6", "20.2 [19.2; 21.2]")
   )
 
-  # check warning if incorrect syntax
-  expect_warning(
+  expect_error(
     trial %>%
       tbl_custom_summary(
         include = c("marker", "ttdeath"),

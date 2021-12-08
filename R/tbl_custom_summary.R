@@ -282,16 +282,6 @@ tbl_custom_summary <- function(
   tbl_custom_summary_inputs <- as.list(environment())
 
   # checking function inputs ---------------------------------------------------
-  if (rlang::is_function(stat_fns)) {
-    stat_fns <-
-      inject(everything() ~ !!gts_mapper(stat_fns, "tbl_custom_summary(stat_fns=)"))
-    warning(glue::glue(
-      "A function was provided directly to 'stat_fns' instead of a formula.\n",
-      "The correct syntax should be '~ function_name'.\n",
-      "Please change your syntax to remove this warning."
-    ))
-  }
-
   tbl_summary_input_checks(
     data, by, label, type, value, statistic,
     digits, missing, missing_text, sort = NULL # sort to NULL
