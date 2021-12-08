@@ -130,7 +130,7 @@ test_that("Users can modify statistics and digits arguments", {
       as.data.frame() %>%
       survey::svydesign(data = ., ids = ~1, weights = ~Freq) %>%
       tbl_svysummary(by = Survived, include = c(Class, Sex)) %>%
-      add_overall.tbl_svysummary(
+      add_overall(
         statistic = ~"{p}% (n={n})",
         digits = ~ c(3, 0)
       ) %>%

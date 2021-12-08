@@ -24,7 +24,7 @@
 #'   add_overall()
 #' @section Example Output:
 #' \if{html}{\figure{tbl_overall_ex.png}{options: width=50\%}}
-add_overall <- function(x, last, col_label) {
+add_overall <- function(x, last, col_label, statistic, digits) {
   UseMethod("add_overall")
 }
 
@@ -32,93 +32,60 @@ add_overall <- function(x, last, col_label) {
 #' @export
 add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL,
                                     statistic = NULL, digits = NULL) {
-  updated_call_list <- c(x$call_list, list(add_overall = match.call()))
-  # checking that input x has a by var
-  if (is.null(x$inputs[["by"]])) {
-    stop(
-      "Cannot add Overall column when no 'by' variable in original tbl_summary"
-    )
-  }
-
-  x_copy <- x
-
-  # removing 'by' variable from data
-  # (so it won't show up in the overall tbl_summary)
-  x_copy$inputs[["data"]] <- select(x$inputs[["data"]], -x[["by"]])
-  x_copy$inputs$include <- x_copy$inputs$include %>% setdiff(x[["by"]])
-
-  # evaluate statistic and digits args -----------------------------------------
-  statistic <-
-    .formula_list_to_named_list(
-      x = statistic,
-      data = use_data_frame(x_copy$inputs$data),
-      var_info = x_copy$table_body,
-      arg_name = "statistic"
-    )
-  digits <-
-    .formula_list_to_named_list(
-      x = digits,
-      data = use_data_frame(x_copy$inputs$data),
-      var_info = x_copy$table_body,
-      arg_name = "digits"
-    )
-
-  # if user passed updates statistics or digits, update the calls
-  if (!is.null(statistic)) {
-    x_copy$inputs$statistic <-
-      switch(
-        is.null(x_copy$inputs$statistic),
-        statistic
-      ) %||%
-      purrr::list_modify(x_copy$inputs$statistic, !!!statistic)
-  }
-  if (!is.null(digits)) {
-    x_copy$inputs$digits <-
-      switch(
-        is.null(x_copy$inputs$digits),
-        digits
-      ) %||%
-      purrr::list_modify(x_copy$inputs$digits, !!!digits)
-    }
-
-  # replacing the function call by variable to NULL to get results overall
-  x_copy$inputs[["by"]] <- NULL
-
-
-  # calculating stats overall, and adding header row
-  tbl_overall <- do.call(tbl_summary, x_copy$inputs)
-
-  # merging overall results
-  x <- add_overall_merge(x, tbl_overall, last, col_label)
-
-  x$call_list <- updated_call_list
-  x
+  add_overall_generic(
+    x = x, last = last, col_label = col_label,
+    statistic = statistic, digits = digits,
+    call = c(x$call_list, list(add_overall = match.call()))
+  )
 }
 
 
 #' @rdname add_overall
 #' @export
-add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL,
-                                       statistic = NULL, digits = NULL) {
-  updated_call_list <- c(x$call_list, list(add_overall = match.call()))
+add_overall.tbl_svysummary <- add_overall.tbl_summary
+
+#' @rdname add_overall
+#' @export
+add_overall.tbl_continuous <- add_overall.tbl_summary
+
+
+#' @rdname add_overall
+#' @export
+add_overall.tbl_custom_summary <- add_overall.tbl_summary
+
+
+add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
-    stop(
-      "Cannot add Overall column when no 'by' variable in original tbl_svysummary"
-    )
+    paste("Cannot add Overall column when no `by=` variable in",
+          "original summary table call.") %>%
+      stop(call. = FALSE)
   }
 
   x_copy <- x
 
   # removing 'by' variable from data
   # (so it won't show up in the overall tbl_summary)
-  x_copy$inputs$data$variables <- select(x$inputs$data$variables, -x$by)
-  x_copy$inputs$include <- x_copy$inputs$include %>% setdiff(x[["by"]])
+  # x_copy$inputs[["data"]] <-
+  #   select(use_data_frame(x$inputs[["data"]]), -x[["by"]])
+  x_copy$inputs$include <- x_copy$inputs$include %>% setdiff(x$inputs$by)
+
+  # if overall row, already included in data -----------------------------------
+  if (isTRUE(x$inputs$overall_row)) {
+    x_copy$inputs$overall_row = FALSE
+  }
 
   # evaluate statistic and digits args -----------------------------------------
   statistic <-
     .formula_list_to_named_list(
       x = statistic,
+      data = use_data_frame(x_copy$inputs$data),
+      var_info = x_copy$table_body,
+      arg_name = "statistic"
+    )
+  x_copy$inputs$statistic <-
+    .formula_list_to_named_list(
+      x = x_copy$inputs$statistic,
       data = use_data_frame(x_copy$inputs$data),
       var_info = x_copy$table_body,
       arg_name = "statistic"
@@ -130,7 +97,13 @@ add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL,
       var_info = x_copy$table_body,
       arg_name = "digits"
     )
-
+  x_copy$inputs$digits <-
+    .formula_list_to_named_list(
+      x = x_copy$inputs$digits,
+      data = use_data_frame(x_copy$inputs$data),
+      var_info = x_copy$table_body,
+      arg_name = "digits"
+    )
   # if user passed updates statistics or digits, update the calls
   if (!is.null(statistic)) {
     x_copy$inputs$statistic <-
@@ -153,15 +126,14 @@ add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL,
   x_copy$inputs[["by"]] <- NULL
 
   # calculating stats overall, and adding header row
-  tbl_overall <- do.call(tbl_svysummary, x_copy$inputs)
+  tbl_overall <- do.call(class(x)[1], x_copy$inputs)
 
   # merging overall results
   x <- add_overall_merge(x, tbl_overall, last, col_label)
 
-  x$call_list <- updated_call_list
+  x$call_list <- call
   x
 }
-
 
 
 add_overall_merge <- function(x, tbl_overall, last, col_label) {
@@ -235,3 +207,4 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
 
   x
 }
+
