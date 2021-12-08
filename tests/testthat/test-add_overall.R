@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("survey"))
 library(survival)
 
 test_that("no errors/warnings with standard use", {
