@@ -180,13 +180,16 @@ statistics refer to a third variable.
 \section{Example Output}{
 
 \if{html}{Example 1}
-\if{html}{\figure{tbl_custom_summary_ex1.png}{options: width=31\%}}
+
+\if{html}{\figure{tbl_custom_summary_ex1.png}{options: width=45\%}}
 
 \if{html}{Example 2}
-\if{html}{\figure{tbl_custom_summary_ex2.png}{options: width=31\%}}
+
+\if{html}{\figure{tbl_custom_summary_ex2.png}{options: width=45\%}}
 
 \if{html}{Example 3}
-\if{html}{\figure{tbl_custom_summary_ex3.png}{options: width=31\%}}
+
+\if{html}{\figure{tbl_custom_summary_ex3.png}{options: width=35\%}}
 }
 
 \examples{
