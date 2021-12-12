@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Bug fix in `separate_p_footnotes()` where test names were not being translated when `theme_gtsummary_language()` was set. (#1055)
+
 * Added `digits=` argument to `tbl_cross()`. (#1046)
 
 * Added `add_overall.tbl_continuous()` method. (#1037)
