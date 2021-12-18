@@ -31,7 +31,7 @@ Function uses \code{car::vif()} to calculate the VIF.
 }
 
 \examples{
-\dontshow{if (assert_package("car", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("car", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 add_vif_ex1 <-
   lm(age ~ grade + marker, trial) \%>\%

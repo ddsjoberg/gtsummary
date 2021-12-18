@@ -12,7 +12,7 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #'
-#' @examplesIf assert_package("car", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("car", boolean = TRUE)
 #' # Example 1 ----------------------------------
 #' add_vif_ex1 <-
 #'   lm(age ~ grade + marker, trial) %>%
