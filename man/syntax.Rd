@@ -52,3 +52,4 @@ Selectors can be combined using the \code{c()} function.\if{html}{\out{<div clas
 }\if{html}{\out{</div>}}
 }
 }
+\keyword{internal}

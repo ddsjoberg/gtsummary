@@ -41,5 +41,6 @@
 #'       eval() %>%
 #'       tbl_survfit(times = c(12, 24))
 #'     ```
+#' @keywords internal
 #' @name tbl_survfit_errors
 NULL
