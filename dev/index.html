@@ -45,6 +45,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -57,7 +59,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9015</span>
       </span>
     </div>
 
@@ -105,7 +107,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ddsjoberg/gtsummary">
+  <a href="https://github.com/ddsjoberg/gtsummary" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -130,9 +132,9 @@
   <div class="contents col-md-9">
 
 
-<div id="gtsummary-" class="section level2">
-<h2 class="hasAnchor">
-<a href="#gtsummary-" class="anchor"></a>gtsummary <a href="https://github.com/ddsjoberg/gtsummary"><img src="reference/figures/logo.png" align="right" height="120"></a>
+<div class="section level2">
+<h2 id="gtsummary-">gtsummary <a href="https://github.com/ddsjoberg/gtsummary" class="external-link"><img src="reference/figures/logo.png" align="right" height="120"></a>
+<a class="anchor" aria-label="anchor" href="#gtsummary-"></a>
 </h2>
 <p>The {gtsummary} package provides an elegant and flexible way to create publication-ready analytical and summary tables using the <strong>R</strong> programming language. The {gtsummary} package summarizes data sets, regression models, and more, using sensible defaults with highly customizable capabilities.</p>
 <ul>
@@ -141,32 +143,32 @@
 <li><p><a href="https://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions"><strong>Customize gtsummary tables</strong></a> using a growing list of formatting/styling functions. <strong><a href="https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html">Bold</a></strong> labels, <strong><a href="https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html">italicize</a></strong> levels, <strong><a href="https://www.danieldsjoberg.com/gtsummary/reference/add_p.html">add p-value</a></strong> to summary tables, <strong><a href="https://www.danieldsjoberg.com/gtsummary/reference/style_percent.html">style</a></strong> the statistics however you choose, <strong><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html">merge</a></strong> or <strong><a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html">stack</a></strong> tables to present results side by side… there are so many possibilities to create the table of your dreams!</p></li>
 <li><p><strong><a href="https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html">Report statistics inline</a></strong> from summary tables and regression summary tables in <strong>R markdown</strong>. Make your reports completely reproducible!</p></li>
 </ul>
-<p>By leveraging <a href="https://broom.tidymodels.org/">{broom}</a>, <a href="https://gt.rstudio.com/">{gt}</a>, and <a href="http://larmarange.github.io/labelled/">{labelled}</a> packages, {gtsummary} creates beautifully formatted, ready-to-share summary and result tables in a single line of R code!</p>
+<p>By leveraging <a href="https://broom.tidymodels.org/" class="external-link">{broom}</a>, <a href="https://gt.rstudio.com/" class="external-link">{gt}</a>, and <a href="http://larmarange.github.io/labelled/" class="external-link">{labelled}</a> packages, {gtsummary} creates beautifully formatted, ready-to-share summary and result tables in a single line of R code!</p>
 <p>Check out the examples below, review the <a href="https://www.danieldsjoberg.com/gtsummary/articles/">vignettes</a> for a detailed exploration of the output options, and view the <a href="https://www.danieldsjoberg.com/gtsummary/articles/gallery.html">gallery</a> for various customization examples.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>The {gtsummary} package was written as a companion to the <a href="https://gt.rstudio.com/">{gt}</a> package from RStudio. You can install {gtsummary} with the following code.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>The {gtsummary} package was written as a companion to the <a href="https://gt.rstudio.com/" class="external-link">{gt}</a> package from RStudio. You can install {gtsummary} with the following code.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"gtsummary"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"gtsummary"</span><span class="op">)</span></code></pre></div>
 <p>Install the development version of {gtsummary} with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ddsjoberg/gtsummary"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
-<div id="summary-table" class="section level3">
-<h3 class="hasAnchor">
-<a href="#summary-table" class="anchor"></a>Summary Table</h3>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<div class="section level3">
+<h3 id="summary-table">Summary Table<a class="anchor" aria-label="anchor" href="#summary-table"></a>
+</h3>
 <p>Use <a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html"><code>tbl_summary()</code></a> to summarize a data frame.</p>
-<p><img src="https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_summary_demo1.gif" alt="animated" width="100%"></p>
+<p><img src="https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/misc_files/tbl_summary_demo1.gif" alt="animated" width="100%"></p>
 <p>Example basic table:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary">gtsummary</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span>
 <span class="co"># make dataset with a few variables to summarize</span>
-<span class="va">trial2</span> <span class="op">&lt;-</span> <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">response</span>, <span class="va">trt</span><span class="op">)</span>
+<span class="va">trial2</span> <span class="op">&lt;-</span> <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">response</span>, <span class="va">trt</span><span class="op">)</span>
 
 <span class="co"># summarize the data with our package</span>
 <span class="va">table1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="va">trial2</span><span class="op">)</span></code></pre></div>
@@ -178,83 +180,83 @@
     <span class="va">trial2</span>,
     by <span class="op">=</span> <span class="va">trt</span>, <span class="co"># split table by group</span>
     missing <span class="op">=</span> <span class="st">"no"</span> <span class="co"># don't list missing data separately</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="reference/add_n.html">add_n</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co"># add column with total number of non-missing observations</span>
-  <span class="fu"><a href="reference/add_p.html">add_p</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co"># test for a difference between groups</span>
-  <span class="fu"><a href="reference/modify.html">modify_header</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"**Variable**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="co"># update the column header</span>
+  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="reference/add_n.html">add_n</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># add column with total number of non-missing observations</span>
+  <span class="fu"><a href="reference/add_p.html">add_p</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># test for a difference between groups</span>
+  <span class="fu"><a href="reference/modify.html">modify_header</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"**Variable**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># update the column header</span>
   <span class="fu"><a href="reference/bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
 <p><img src="reference/figures/README-tbl_summary_print_extra-1.png" width="60%"></p>
 </div>
-<div id="regression-models" class="section level3">
-<h3 class="hasAnchor">
-<a href="#regression-models" class="anchor"></a>Regression Models</h3>
+<div class="section level3">
+<h3 id="regression-models">Regression Models<a class="anchor" aria-label="anchor" href="#regression-models"></a>
+</h3>
 <p>Use <a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html"><code>tbl_regression()</code></a> to easily and beautifully display regression model results in a table. See the <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html">tutorial</a> for customization options.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">response</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">mod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">response</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>
 
 <span class="va">t1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">mod1</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-tbl_regression_printa-1.png" width="40%"></p>
 </div>
-<div id="side-by-side-regression-models" class="section level3">
-<h3 class="hasAnchor">
-<a href="#side-by-side-regression-models" class="anchor"></a>Side-by-side Regression Models</h3>
+<div class="section level3">
+<h3 id="side-by-side-regression-models">Side-by-side Regression Models<a class="anchor" aria-label="anchor" href="#side-by-side-regression-models"></a>
+</h3>
 <p>You can also present side-by-side regression model results using <code><a href="reference/tbl_merge.html">tbl_merge()</a></code></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival">survival</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span>
 
 <span class="co"># build survival model table</span>
 <span class="va">t2</span> <span class="op">&lt;-</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">grade</span> <span class="op">+</span> <span class="va">age</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span> <span class="op">+</span> <span class="va">grade</span> <span class="op">+</span> <span class="va">age</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span>exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="co"># merge tables </span>
 <span class="va">tbl_merge_ex1</span> <span class="op">&lt;-</span>
   <span class="fu"><a href="reference/tbl_merge.html">tbl_merge</a></span><span class="op">(</span>
-    tbls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">t1</span>, <span class="va">t2</span><span class="op">)</span>,
-    tab_spanner <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"**Tumor Response**"</span>, <span class="st">"**Time to Death**"</span><span class="op">)</span>
+    tbls <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">t1</span>, <span class="va">t2</span><span class="op">)</span>,
+    tab_spanner <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"**Tumor Response**"</span>, <span class="st">"**Time to Death**"</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-tbl_merge_ex1-1.png" width="60%"></p>
 <p>Review even more output options in the <strong><a href="https://www.danieldsjoberg.com/gtsummary/articles/gallery.html">table gallery</a></strong>.</p>
 </div>
 </div>
-<div id="gtsummary--r-markdown" class="section level2">
-<h2 class="hasAnchor">
-<a href="#gtsummary--r-markdown" class="anchor"></a>gtsummary + R Markdown</h2>
+<div class="section level2">
+<h2 id="gtsummary--r-markdown">gtsummary + R Markdown<a class="anchor" aria-label="anchor" href="#gtsummary--r-markdown"></a>
+</h2>
 <p>The <strong>{gtsummary}</strong> package was written to be a companion to the <strong>{gt}</strong> package from RStudio. But not all output types are supported by the <strong>{gt}</strong> package. Therefore, we have made it possible to print <strong>{gtsummary}</strong> tables with various engines.</p>
 <p>Review the <strong><a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">gtsummary + R Markdown</a></strong> vignette for details.</p>
 <p><a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html"> <img src="reference/figures/gt_output_formats.PNG" width="55%"></a></p>
 </div>
-<div id="save-individual-tables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#save-individual-tables" class="anchor"></a>Save Individual Tables</h2>
+<div class="section level2">
+<h2 id="save-individual-tables">Save Individual Tables<a class="anchor" aria-label="anchor" href="#save-individual-tables"></a>
+</h2>
 <p>{gtsummary} tables can also be saved directly to file as an image, RTF, LaTeX, and Word file.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gtsave.html">gtsave</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"."</span><span class="op">)</span> <span class="co"># use extensions .html .tex .ltx .rtf</span></code></pre></div>
+<code class="sourceCode R"><span class="va">tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gtsave.html" class="external-link">gtsave</a></span><span class="op">(</span>filename <span class="op">=</span> <span class="st">"."</span><span class="op">)</span> <span class="co"># use extensions .html .tex .ltx .rtf</span></code></pre></div>
 <p>For a Word file, use</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="reference/as_flex_table.html">as_flex_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/save_as_docx.html">save_as_docx</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="reference/as_flex_table.html">as_flex_table</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu">flextable</span><span class="fu">::</span><span class="fu"><a href="https://davidgohel.github.io/flextable/reference/save_as_docx.html" class="external-link">save_as_docx</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="additional-resources" class="section level2">
-<h2 class="hasAnchor">
-<a href="#additional-resources" class="anchor"></a>Additional Resources</h2>
+<div class="section level2">
+<h2 id="additional-resources">Additional Resources<a class="anchor" aria-label="anchor" href="#additional-resources"></a>
+</h2>
 <ul>
 <li><p>The best resources are the gtsummary vignettes: <a href="https://www.danieldsjoberg.com/gtsummary/articles/gallery.html">table gallery</a>, <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"><code>tbl_summary()</code> tutorial</a>, <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html"><code>tbl_regression()</code> tutorial</a>, <a href="https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html"><code>inline_text()</code> tutorial</a>, <a href="https://www.danieldsjoberg.com/gtsummary/articles/themes.html">gtsummary themes</a>, <a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">gtsummary+R markdown</a>.</p></li>
-<li><p>The R Journal Article <a href="https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/RJ-2021-053.pdf"><em>Reproducible Summary Tables with the gtsummary Package</em></a>.</p></li>
-<li><p>The <a href="https://education.rstudio.com/blog/2020/07/gtsummary/">RStudio Education Blog</a> includes a post with a brief introduction to the package.</p></li>
+<li><p>The R Journal Article <a href="https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/RJ-2021-053.pdf" class="external-link"><em>Reproducible Summary Tables with the gtsummary Package</em></a>.</p></li>
+<li><p>The <a href="https://education.rstudio.com/blog/2020/07/gtsummary/" class="external-link">RStudio Education Blog</a> includes a post with a brief introduction to the package.</p></li>
 <li>
-<p>A <a href="https://www.youtube.com/watch?v=tANo9E1SYJE">recording of a presentation</a> given to the Weill Cornell Biostatistics Department and the Memorial Sloan Kettering R Users Group.</p>
+<p>A <a href="https://www.youtube.com/watch?v=tANo9E1SYJE" class="external-link">recording of a presentation</a> given to the Weill Cornell Biostatistics Department and the Memorial Sloan Kettering R Users Group.</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/tANo9E1SYJE" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
 </iframe>
 </li>
 </ul>
 </div>
-<div id="cite-gtsummary" class="section level2">
-<h2 class="hasAnchor">
-<a href="#cite-gtsummary" class="anchor"></a>Cite gtsummary</h2>
+<div class="section level2">
+<h2 id="cite-gtsummary">Cite gtsummary<a class="anchor" aria-label="anchor" href="#cite-gtsummary"></a>
+</h2>
 <pre class="text"><code>&gt; citation("gtsummary")
 
 To cite gtsummary in publications use:
@@ -276,83 +278,87 @@ A BibTeX entry for LaTeX users is
     pages = {570-580},
   }</code></pre>
 </div>
-<div id="contributing" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contributing" class="anchor"></a>Contributing</h2>
-<p>Big thank you to <a href="https://www.jeffreybears.com/">@jeffreybears</a> for the hex sticker!</p>
-<p>Please note that the {gtsummary} project is released with a <a href="https://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. Thank you to all contributors!<br><a href="https://github.com/ablack3">@ablack3</a>, <a href="https://github.com/ABorakati">@ABorakati</a>, <a href="https://github.com/aghaynes">@aghaynes</a>, <a href="https://github.com/ahinton-mmc">@ahinton-mmc</a>, <a href="https://github.com/albertostefanelli">@albertostefanelli</a>, <a href="https://github.com/alexis-catherine">@alexis-catherine</a>, <a href="https://github.com/anaavu">@anaavu</a>, <a href="https://github.com/andrader">@andrader</a>, <a href="https://github.com/angelgar">@angelgar</a>, <a href="https://github.com/arbet003">@arbet003</a>, <a href="https://github.com/arnmayer">@arnmayer</a>, <a href="https://github.com/asshah4">@asshah4</a>, <a href="https://github.com/awcm0n">@awcm0n</a>, <a href="https://github.com/barthelmes">@barthelmes</a>, <a href="https://github.com/BeauMeche">@BeauMeche</a>, <a href="https://github.com/benediktclaus">@benediktclaus</a>, <a href="https://github.com/bwiernik">@bwiernik</a>, <a href="https://github.com/bx259">@bx259</a>, <a href="https://github.com/calebasaraba">@calebasaraba</a>, <a href="https://github.com/CarolineXGao">@CarolineXGao</a>, <a href="https://github.com/Chris-M-P">@Chris-M-P</a>, <a href="https://github.com/chrisleitzinger">@chrisleitzinger</a>, <a href="https://github.com/clmawhorter">@clmawhorter</a>, <a href="https://github.com/CodieMonster">@CodieMonster</a>, <a href="https://github.com/coeus-analytics">@coeus-analytics</a>, <a href="https://github.com/coreysparks">@coreysparks</a>, <a href="https://github.com/ctlamb">@ctlamb</a>, <a href="https://github.com/davidgohel">@davidgohel</a>, <a href="https://github.com/davidkane9">@davidkane9</a>, <a href="https://github.com/dax44">@dax44</a>, <a href="https://github.com/ddsjoberg">@ddsjoberg</a>, <a href="https://github.com/DeFilippis">@DeFilippis</a>, <a href="https://github.com/denis-or">@denis-or</a>, <a href="https://github.com/dieuv0">@dieuv0</a>, <a href="https://github.com/discoleo">@discoleo</a>, <a href="https://github.com/djbirke">@djbirke</a>, <a href="https://github.com/eamoncaddigan">@eamoncaddigan</a>, <a href="https://github.com/ElfatihHasabo">@ElfatihHasabo</a>, <a href="https://github.com/emilyvertosick">@emilyvertosick</a>, <a href="https://github.com/ercbk">@ercbk</a>, <a href="https://github.com/erikvona">@erikvona</a>, <a href="https://github.com/eweisbrod">@eweisbrod</a>, <a href="https://github.com/fh-jsnider">@fh-jsnider</a>, <a href="https://github.com/gjones1219">@gjones1219</a>, <a href="https://github.com/gorkang">@gorkang</a>, <a href="https://github.com/GuiMarthe">@GuiMarthe</a>, <a href="https://github.com/hughjonesd">@hughjonesd</a>, <a href="https://github.com/iaingallagher">@iaingallagher</a>, <a href="https://github.com/ilyamusabirov">@ilyamusabirov</a>, <a href="https://github.com/IndrajeetPatil">@IndrajeetPatil</a>, <a href="https://github.com/IsadoraBM">@IsadoraBM</a>, <a href="https://github.com/j-tamad">@j-tamad</a>, <a href="https://github.com/jalavery">@jalavery</a>, <a href="https://github.com/jeanmanguy">@jeanmanguy</a>, <a href="https://github.com/jemus42">@jemus42</a>, <a href="https://github.com/jennybc">@jennybc</a>, <a href="https://github.com/JeremyPasco">@JeremyPasco</a>, <a href="https://github.com/JesseRop">@JesseRop</a>, <a href="https://github.com/jflynn264">@jflynn264</a>, <a href="https://github.com/jjallaire">@jjallaire</a>, <a href="https://github.com/joelgautschi">@joelgautschi</a>, <a href="https://github.com/JonGretar">@JonGretar</a>, <a href="https://github.com/juseer">@juseer</a>, <a href="https://github.com/jwilliman">@jwilliman</a>, <a href="https://github.com/karissawhiting">@karissawhiting</a>, <a href="https://github.com/kmdono02">@kmdono02</a>, <a href="https://github.com/kwakuduahc1">@kwakuduahc1</a>, <a href="https://github.com/larmarange">@larmarange</a>, <a href="https://github.com/leejasme">@leejasme</a>, <a href="https://github.com/loukesio">@loukesio</a>, <a href="https://github.com/lspeetluk">@lspeetluk</a>, <a href="https://github.com/ltin1214">@ltin1214</a>, <a href="https://github.com/lucavd">@lucavd</a>, <a href="https://github.com/maia-sh">@maia-sh</a>, <a href="https://github.com/margarethannum">@margarethannum</a>, <a href="https://github.com/Marsus1972">@Marsus1972</a>, <a href="https://github.com/matthieu-faron">@matthieu-faron</a>, <a href="https://github.com/mbac">@mbac</a>, <a href="https://github.com/MelissaAssel">@MelissaAssel</a>, <a href="https://github.com/michaelcurry1123">@michaelcurry1123</a>, <a href="https://github.com/moleps">@moleps</a>, <a href="https://github.com/MyKo101">@MyKo101</a>, <a href="https://github.com/oranwutang">@oranwutang</a>, <a href="https://github.com/Pascal-Schmidt">@Pascal-Schmidt</a>, <a href="https://github.com/polc1410">@polc1410</a>, <a href="https://github.com/proshano">@proshano</a>, <a href="https://github.com/raphidoc">@raphidoc</a>, <a href="https://github.com/roman2023">@roman2023</a>, <a href="https://github.com/ryzhu75">@ryzhu75</a>, <a href="https://github.com/sachijay">@sachijay</a>, <a href="https://github.com/sammo3182">@sammo3182</a>, <a href="https://github.com/sbalci">@sbalci</a>, <a href="https://github.com/ShixiangWang">@ShixiangWang</a>, <a href="https://github.com/simonpcouch">@simonpcouch</a>, <a href="https://github.com/slb2240">@slb2240</a>, <a href="https://github.com/slobaugh">@slobaugh</a>, <a href="https://github.com/StaffanBetner">@StaffanBetner</a>, <a href="https://github.com/storopoli">@storopoli</a>, <a href="https://github.com/tamytsujimoto">@tamytsujimoto</a>, <a href="https://github.com/TarJae">@TarJae</a>, <a href="https://github.com/THIB20">@THIB20</a>, <a href="https://github.com/tjmeyers">@tjmeyers</a>, <a href="https://github.com/tldrcharlene">@tldrcharlene</a>, <a href="https://github.com/tormodb">@tormodb</a>, <a href="https://github.com/UAB-BST-680">@UAB-BST-680</a>, <a href="https://github.com/uriahf">@uriahf</a>, <a href="https://github.com/xkcococo">@xkcococo</a>, <a href="https://github.com/yonicd">@yonicd</a>, <a href="https://github.com/zabore">@zabore</a>, <a href="https://github.com/zachariae">@zachariae</a>, <a href="https://github.com/zeyunlu">@zeyunlu</a>, <a href="https://github.com/zhengnow">@zhengnow</a>, <a href="https://github.com/zlkrvsm">@zlkrvsm</a>, and <a href="https://github.com/zongell-star">@zongell-star</a></p>
+<div class="section level2">
+<h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
+<p>Big thank you to <a href="https://www.jeffreybears.com/" class="external-link">@jeffreybears</a> for the hex sticker!</p>
+<p>Please note that the {gtsummary} project is released with a <a href="https://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms. Thank you to all contributors!<br><a href="https://github.com/ablack3" class="external-link">@ablack3</a>, <a href="https://github.com/ABorakati" class="external-link">@ABorakati</a>, <a href="https://github.com/aghaynes" class="external-link">@aghaynes</a>, <a href="https://github.com/ahinton-mmc" class="external-link">@ahinton-mmc</a>, <a href="https://github.com/akefley" class="external-link">@akefley</a>, <a href="https://github.com/albertostefanelli" class="external-link">@albertostefanelli</a>, <a href="https://github.com/alexis-catherine" class="external-link">@alexis-catherine</a>, <a href="https://github.com/anaavu" class="external-link">@anaavu</a>, <a href="https://github.com/andrader" class="external-link">@andrader</a>, <a href="https://github.com/angelgar" class="external-link">@angelgar</a>, <a href="https://github.com/arbet003" class="external-link">@arbet003</a>, <a href="https://github.com/arnmayer" class="external-link">@arnmayer</a>, <a href="https://github.com/asshah4" class="external-link">@asshah4</a>, <a href="https://github.com/awcm0n" class="external-link">@awcm0n</a>, <a href="https://github.com/barthelmes" class="external-link">@barthelmes</a>, <a href="https://github.com/BeauMeche" class="external-link">@BeauMeche</a>, <a href="https://github.com/benediktclaus" class="external-link">@benediktclaus</a>, <a href="https://github.com/bwiernik" class="external-link">@bwiernik</a>, <a href="https://github.com/bx259" class="external-link">@bx259</a>, <a href="https://github.com/calebasaraba" class="external-link">@calebasaraba</a>, <a href="https://github.com/CarolineXGao" class="external-link">@CarolineXGao</a>, <a href="https://github.com/Chris-M-P" class="external-link">@Chris-M-P</a>, <a href="https://github.com/chrisleitzinger" class="external-link">@chrisleitzinger</a>, <a href="https://github.com/clmawhorter" class="external-link">@clmawhorter</a>, <a href="https://github.com/CodieMonster" class="external-link">@CodieMonster</a>, <a href="https://github.com/coeus-analytics" class="external-link">@coeus-analytics</a>, <a href="https://github.com/coreysparks" class="external-link">@coreysparks</a>, <a href="https://github.com/ctlamb" class="external-link">@ctlamb</a>, <a href="https://github.com/davidgohel" class="external-link">@davidgohel</a>, <a href="https://github.com/davidkane9" class="external-link">@davidkane9</a>, <a href="https://github.com/dax44" class="external-link">@dax44</a>, <a href="https://github.com/ddsjoberg" class="external-link">@ddsjoberg</a>, <a href="https://github.com/DeFilippis" class="external-link">@DeFilippis</a>, <a href="https://github.com/denis-or" class="external-link">@denis-or</a>, <a href="https://github.com/dieuv0" class="external-link">@dieuv0</a>, <a href="https://github.com/discoleo" class="external-link">@discoleo</a>, <a href="https://github.com/djbirke" class="external-link">@djbirke</a>, <a href="https://github.com/eamoncaddigan" class="external-link">@eamoncaddigan</a>, <a href="https://github.com/ElfatihHasabo" class="external-link">@ElfatihHasabo</a>, <a href="https://github.com/emilyvertosick" class="external-link">@emilyvertosick</a>, <a href="https://github.com/ercbk" class="external-link">@ercbk</a>, <a href="https://github.com/erikvona" class="external-link">@erikvona</a>, <a href="https://github.com/eweisbrod" class="external-link">@eweisbrod</a>, <a href="https://github.com/fh-jsnider" class="external-link">@fh-jsnider</a>, <a href="https://github.com/gjones1219" class="external-link">@gjones1219</a>, <a href="https://github.com/gorkang" class="external-link">@gorkang</a>, <a href="https://github.com/GuiMarthe" class="external-link">@GuiMarthe</a>, <a href="https://github.com/hass91" class="external-link">@hass91</a>, <a href="https://github.com/hughjonesd" class="external-link">@hughjonesd</a>, <a href="https://github.com/iaingallagher" class="external-link">@iaingallagher</a>, <a href="https://github.com/ilyamusabirov" class="external-link">@ilyamusabirov</a>, <a href="https://github.com/IndrajeetPatil" class="external-link">@IndrajeetPatil</a>, <a href="https://github.com/IsadoraBM" class="external-link">@IsadoraBM</a>, <a href="https://github.com/j-tamad" class="external-link">@j-tamad</a>, <a href="https://github.com/jalavery" class="external-link">@jalavery</a>, <a href="https://github.com/jeanmanguy" class="external-link">@jeanmanguy</a>, <a href="https://github.com/jemus42" class="external-link">@jemus42</a>, <a href="https://github.com/jennybc" class="external-link">@jennybc</a>, <a href="https://github.com/JeremyPasco" class="external-link">@JeremyPasco</a>, <a href="https://github.com/JesseRop" class="external-link">@JesseRop</a>, <a href="https://github.com/jflynn264" class="external-link">@jflynn264</a>, <a href="https://github.com/jjallaire" class="external-link">@jjallaire</a>, <a href="https://github.com/joelgautschi" class="external-link">@joelgautschi</a>, <a href="https://github.com/JonGretar" class="external-link">@JonGretar</a>, <a href="https://github.com/juseer" class="external-link">@juseer</a>, <a href="https://github.com/jwilliman" class="external-link">@jwilliman</a>, <a href="https://github.com/karissawhiting" class="external-link">@karissawhiting</a>, <a href="https://github.com/kmdono02" class="external-link">@kmdono02</a>, <a href="https://github.com/kwakuduahc1" class="external-link">@kwakuduahc1</a>, <a href="https://github.com/larmarange" class="external-link">@larmarange</a>, <a href="https://github.com/leejasme" class="external-link">@leejasme</a>, <a href="https://github.com/loukesio" class="external-link">@loukesio</a>, <a href="https://github.com/lspeetluk" class="external-link">@lspeetluk</a>, <a href="https://github.com/ltin1214" class="external-link">@ltin1214</a>, <a href="https://github.com/lucavd" class="external-link">@lucavd</a>, <a href="https://github.com/maia-sh" class="external-link">@maia-sh</a>, <a href="https://github.com/margarethannum" class="external-link">@margarethannum</a>, <a href="https://github.com/Marsus1972" class="external-link">@Marsus1972</a>, <a href="https://github.com/matthieu-faron" class="external-link">@matthieu-faron</a>, <a href="https://github.com/mbac" class="external-link">@mbac</a>, <a href="https://github.com/MelissaAssel" class="external-link">@MelissaAssel</a>, <a href="https://github.com/michaelcurry1123" class="external-link">@michaelcurry1123</a>, <a href="https://github.com/moleps" class="external-link">@moleps</a>, <a href="https://github.com/MyKo101" class="external-link">@MyKo101</a>, <a href="https://github.com/oranwutang" class="external-link">@oranwutang</a>, <a href="https://github.com/Pascal-Schmidt" class="external-link">@Pascal-Schmidt</a>, <a href="https://github.com/polc1410" class="external-link">@polc1410</a>, <a href="https://github.com/proshano" class="external-link">@proshano</a>, <a href="https://github.com/raphidoc" class="external-link">@raphidoc</a>, <a href="https://github.com/roman2023" class="external-link">@roman2023</a>, <a href="https://github.com/ryzhu75" class="external-link">@ryzhu75</a>, <a href="https://github.com/sachijay" class="external-link">@sachijay</a>, <a href="https://github.com/sammo3182" class="external-link">@sammo3182</a>, <a href="https://github.com/sbalci" class="external-link">@sbalci</a>, <a href="https://github.com/shengchaohou" class="external-link">@shengchaohou</a>, <a href="https://github.com/ShixiangWang" class="external-link">@ShixiangWang</a>, <a href="https://github.com/simonpcouch" class="external-link">@simonpcouch</a>, <a href="https://github.com/slb2240" class="external-link">@slb2240</a>, <a href="https://github.com/slobaugh" class="external-link">@slobaugh</a>, <a href="https://github.com/StaffanBetner" class="external-link">@StaffanBetner</a>, <a href="https://github.com/Stephonomon" class="external-link">@Stephonomon</a>, <a href="https://github.com/storopoli" class="external-link">@storopoli</a>, <a href="https://github.com/tamytsujimoto" class="external-link">@tamytsujimoto</a>, <a href="https://github.com/TarJae" class="external-link">@TarJae</a>, <a href="https://github.com/THIB20" class="external-link">@THIB20</a>, <a href="https://github.com/tjmeyers" class="external-link">@tjmeyers</a>, <a href="https://github.com/tldrcharlene" class="external-link">@tldrcharlene</a>, <a href="https://github.com/tormodb" class="external-link">@tormodb</a>, <a href="https://github.com/UAB-BST-680" class="external-link">@UAB-BST-680</a>, <a href="https://github.com/uriahf" class="external-link">@uriahf</a>, <a href="https://github.com/xkcococo" class="external-link">@xkcococo</a>, <a href="https://github.com/yonicd" class="external-link">@yonicd</a>, <a href="https://github.com/zabore" class="external-link">@zabore</a>, <a href="https://github.com/zachariae" class="external-link">@zachariae</a>, <a href="https://github.com/zeyunlu" class="external-link">@zeyunlu</a>, <a href="https://github.com/zhengnow" class="external-link">@zhengnow</a>, <a href="https://github.com/zlkrvsm" class="external-link">@zlkrvsm</a>, and <a href="https://github.com/zongell-star" class="external-link">@zongell-star</a></p>
 </div>
 
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=gtsummary">https://​cloud.r-project.org/​package=gtsummary</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/ddsjoberg/gtsummary/">https://​github.com/​ddsjoberg/​gtsummary/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/ddsjoberg/gtsummary/issues">https://​github.com/​ddsjoberg/​gtsummary/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=gtsummary" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/ddsjoberg/gtsummary/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/ddsjoberg/gtsummary/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
+<li><small><a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing gtsummary</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>
-<a href="https://www.danieldsjoberg.com/">Daniel D. Sjoberg</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0862-2018" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Michael Curry <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-0261-4044" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Joseph Larmarange <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-7097-700X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>
-<a href="http://www.jessicalavery.com/">Jessica Lavery</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-2746-5647" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Karissa Whiting <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4683-1868" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>
-<a href="http://www.emilyzabor.com/">Emily C. Zabor</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-1402-4498" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing gtsummary</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/ddsjoberg/gtsummary/actions"><img src="https://github.com/ddsjoberg/gtsummary/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://cran.r-project.org/package=gtsummary"><img src="https://www.r-pkg.org/badges/version/gtsummary" alt="CRAN status"></a></li>
-<li><a href="https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=master"><img src="https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://cran.r-project.org/package=gtsummary"><img src="https://cranlogs.r-pkg.org/badges/gtsummary"></a></li>
-<li><a href="https://doi.org/10.32614/RJ-2021-053"><img src="https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg" alt="DOI:10.32614/RJ-2021-053"></a></li>
+<li>
+<a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0862-2018" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Michael Curry <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-0261-4044" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Joseph Larmarange <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-7097-700X" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>
+<a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-2746-5647" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Karissa Whiting <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4683-1868" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>
+<a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-1402-4498" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/ddsjoberg/gtsummary/actions" class="external-link"><img src="https://github.com/ddsjoberg/gtsummary/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://cran.r-project.org/package=gtsummary" class="external-link"><img src="https://www.r-pkg.org/badges/version/gtsummary" alt="CRAN status"></a></li>
+<li><a href="https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=main" class="external-link"><img src="https://codecov.io/gh/ddsjoberg/gtsummary/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://cran.r-project.org/package=gtsummary" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/gtsummary"></a></li>
+<li><a href="https://doi.org/10.32614/RJ-2021-053" class="external-link"><img src="https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg" alt="DOI:10.32614/RJ-2021-053"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://www.danieldsjoberg.com/">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/">Emily C. Zabor</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>

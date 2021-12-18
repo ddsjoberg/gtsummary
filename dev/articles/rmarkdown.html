@@ -35,6 +35,8 @@
 </script>
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -47,7 +49,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9015</span>
       </span>
     </div>
 
@@ -95,7 +97,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ddsjoberg/gtsummary">
+  <a href="https://github.com/ddsjoberg/gtsummary" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -122,7 +124,7 @@
       <h1 data-toc-skip>gtsummary + R Markdown</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/master/vignettes/rmarkdown.Rmd"><code>vignettes/rmarkdown.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/HEAD/vignettes/rmarkdown.Rmd" class="external-link"><code>vignettes/rmarkdown.Rmd</code></a></small>
       <div class="hidden name"><code>rmarkdown.Rmd</code></div>
 
     </div>
@@ -130,17 +132,17 @@
     
     
 <p>The <strong>{gtsummary}</strong> package was written to be a companion to the <strong>{gt}</strong> package from RStudio. But not all output types are supported by the <strong>{gt}</strong> package. Therefore, we have made it possible to print <strong>{gtsummary}</strong> tables with various engines.</p>
-<div id="output-types" class="section level2">
-<h2 class="hasAnchor">
-<a href="#output-types" class="anchor"></a>Output Types</h2>
+<div class="section level2">
+<h2 id="output-types">Output Types<a class="anchor" aria-label="anchor" href="#output-types"></a>
+</h2>
 <p>Here’s a summary of the various R Markdown output types and the print engines that support them.</p>
 <!-- Printing table of output types. -->
-<div id="wuxsxbfazg" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="oiqqrbudtx" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#wuxsxbfazg .gt_table {
+#oiqqrbudtx .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -165,7 +167,7 @@
   border-left-color: #D3D3D3;
 }
 
-#wuxsxbfazg .gt_heading {
+#oiqqrbudtx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -177,7 +179,7 @@
   border-right-color: #D3D3D3;
 }
 
-#wuxsxbfazg .gt_title {
+#oiqqrbudtx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -187,7 +189,7 @@
   border-bottom-width: 0;
 }
 
-#wuxsxbfazg .gt_subtitle {
+#oiqqrbudtx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -197,13 +199,13 @@
   border-top-width: 0;
 }
 
-#wuxsxbfazg .gt_bottom_border {
+#oiqqrbudtx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wuxsxbfazg .gt_col_headings {
+#oiqqrbudtx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -218,7 +220,7 @@
   border-right-color: #D3D3D3;
 }
 
-#wuxsxbfazg .gt_col_heading {
+#oiqqrbudtx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -238,7 +240,7 @@
   overflow-x: hidden;
 }
 
-#wuxsxbfazg .gt_column_spanner_outer {
+#oiqqrbudtx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -250,15 +252,15 @@
   padding-right: 4px;
 }
 
-#wuxsxbfazg .gt_column_spanner_outer:first-child {
+#oiqqrbudtx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wuxsxbfazg .gt_column_spanner_outer:last-child {
+#oiqqrbudtx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wuxsxbfazg .gt_column_spanner {
+#oiqqrbudtx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -270,7 +272,7 @@
   width: 100%;
 }
 
-#wuxsxbfazg .gt_group_heading {
+#oiqqrbudtx .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -292,7 +294,7 @@
   vertical-align: middle;
 }
 
-#wuxsxbfazg .gt_empty_group_heading {
+#oiqqrbudtx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -307,15 +309,15 @@
   vertical-align: middle;
 }
 
-#wuxsxbfazg .gt_from_md > :first-child {
+#oiqqrbudtx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wuxsxbfazg .gt_from_md > :last-child {
+#oiqqrbudtx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wuxsxbfazg .gt_row {
+#oiqqrbudtx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -334,7 +336,7 @@
   overflow-x: hidden;
 }
 
-#wuxsxbfazg .gt_stub {
+#oiqqrbudtx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -346,7 +348,7 @@
   padding-left: 12px;
 }
 
-#wuxsxbfazg .gt_summary_row {
+#oiqqrbudtx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -356,7 +358,7 @@
   padding-right: 5px;
 }
 
-#wuxsxbfazg .gt_first_summary_row {
+#oiqqrbudtx .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -366,7 +368,7 @@
   border-top-color: #D3D3D3;
 }
 
-#wuxsxbfazg .gt_grand_summary_row {
+#oiqqrbudtx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -376,7 +378,7 @@
   padding-right: 5px;
 }
 
-#wuxsxbfazg .gt_first_grand_summary_row {
+#oiqqrbudtx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -386,11 +388,11 @@
   border-top-color: #D3D3D3;
 }
 
-#wuxsxbfazg .gt_striped {
+#oiqqrbudtx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wuxsxbfazg .gt_table_body {
+#oiqqrbudtx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -399,7 +401,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#wuxsxbfazg .gt_footnotes {
+#oiqqrbudtx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -413,13 +415,13 @@
   border-right-color: #D3D3D3;
 }
 
-#wuxsxbfazg .gt_footnote {
+#oiqqrbudtx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#wuxsxbfazg .gt_sourcenotes {
+#oiqqrbudtx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -433,47 +435,47 @@
   border-right-color: #D3D3D3;
 }
 
-#wuxsxbfazg .gt_sourcenote {
+#oiqqrbudtx .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#wuxsxbfazg .gt_left {
+#oiqqrbudtx .gt_left {
   text-align: left;
 }
 
-#wuxsxbfazg .gt_center {
+#oiqqrbudtx .gt_center {
   text-align: center;
 }
 
-#wuxsxbfazg .gt_right {
+#oiqqrbudtx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wuxsxbfazg .gt_font_normal {
+#oiqqrbudtx .gt_font_normal {
   font-weight: normal;
 }
 
-#wuxsxbfazg .gt_font_bold {
+#oiqqrbudtx .gt_font_bold {
   font-weight: bold;
 }
 
-#wuxsxbfazg .gt_font_italic {
+#oiqqrbudtx .gt_font_italic {
   font-style: italic;
 }
 
-#wuxsxbfazg .gt_super {
+#oiqqrbudtx .gt_super {
   font-size: 65%;
 }
 
-#wuxsxbfazg .gt_footnote_marks {
+#oiqqrbudtx .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
 }
 </style>
-<table class="table gt_table">
+<table class="table gt_table" style="table-layout: fixed;; width: 0px">
 <colgroup>
 <col style="width:110px;">
 <col style="width:140px;">
@@ -493,7 +495,7 @@
 <tbody class="gt_table_body">
 <tr>
 <td class="gt_row gt_left"><div class="gt_from_md">
-<p><a href="https://gt.rstudio.com/index.html">gt</a></p>
+<p><a href="https://gt.rstudio.com/index.html" class="external-link">gt</a></p>
 </div></td>
 <td class="gt_row gt_left"><div class="gt_from_md">
 <p><code><a href="../reference/as_gt.html">as_gt()</a></code></p>
@@ -505,7 +507,7 @@
 </tr>
 <tr>
 <td class="gt_row gt_left"><div class="gt_from_md">
-<p><a href="https://davidgohel.github.io/flextable/articles/overview.html">flextable</a></p>
+<p><a href="https://davidgohel.github.io/flextable/articles/overview.html" class="external-link">flextable</a></p>
 </div></td>
 <td class="gt_row gt_left"><div class="gt_from_md">
 <p><code><a href="../reference/as_flex_table.html">as_flex_table()</a></code></p>
@@ -517,7 +519,7 @@
 </tr>
 <tr>
 <td class="gt_row gt_left"><div class="gt_from_md">
-<p><a href="https://hughjonesd.github.io/huxtable/">huxtable</a></p>
+<p><a href="https://hughjonesd.github.io/huxtable/" class="external-link">huxtable</a></p>
 </div></td>
 <td class="gt_row gt_left"><div class="gt_from_md">
 <p><code><a href="../reference/as_hux_table.html">as_hux_table()</a></code></p>
@@ -529,7 +531,7 @@
 </tr>
 <tr>
 <td class="gt_row gt_left"><div class="gt_from_md">
-<p><a href="http://haozhu233.github.io/kableExtra/">kableExtra</a></p>
+<p><a href="http://haozhu233.github.io/kableExtra/" class="external-link">kableExtra</a></p>
 </div></td>
 <td class="gt_row gt_left"><div class="gt_from_md">
 <p><code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code></p>
@@ -541,7 +543,7 @@
 </tr>
 <tr>
 <td class="gt_row gt_left"><div class="gt_from_md">
-<p><a href="https://bookdown.org/yihui/rmarkdown-cookbook/kable.html">kable</a></p>
+<p><a href="https://bookdown.org/yihui/rmarkdown-cookbook/kable.html" class="external-link">kable</a></p>
 </div></td>
 <td class="gt_row gt_left"><div class="gt_from_md">
 <p><code><a href="../reference/as_kable.html">as_kable()</a></code></p>
@@ -553,10 +555,10 @@
 </tr>
 <tr>
 <td class="gt_row gt_left"><div class="gt_from_md">
-<p><a href="https://tibble.tidyverse.org/">tibble</a></p>
+<p><a href="https://tibble.tidyverse.org/" class="external-link">tibble</a></p>
 </div></td>
 <td class="gt_row gt_left"><div class="gt_from_md">
-<p><code><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble()</a></code></p>
+<p><code><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble()</a></code></p>
 </div></td>
 <td class="gt_row gt_center" style="background-color: rgba(255,223,186,0.8); color: #000000;"><img src="data:image/png;base64,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" style="height:30px;"></td>
 <td class="gt_row gt_center" style="background-color: rgba(255,223,186,0.8); color: #000000;"><img src="data:image/png;base64,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" style="height:30px;"></td>
@@ -567,12 +569,12 @@
 </table>
 </div>
 <!-- Printing key for table of output types. -->
-<div id="jeyewyglsu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="xikbdxywwu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#jeyewyglsu .gt_table {
+#xikbdxywwu .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -597,7 +599,7 @@
   border-left-color: #D3D3D3;
 }
 
-#jeyewyglsu .gt_heading {
+#xikbdxywwu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -609,7 +611,7 @@
   border-right-color: #D3D3D3;
 }
 
-#jeyewyglsu .gt_title {
+#xikbdxywwu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -619,7 +621,7 @@
   border-bottom-width: 0;
 }
 
-#jeyewyglsu .gt_subtitle {
+#xikbdxywwu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -629,13 +631,13 @@
   border-top-width: 0;
 }
 
-#jeyewyglsu .gt_bottom_border {
+#xikbdxywwu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jeyewyglsu .gt_col_headings {
+#xikbdxywwu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -650,7 +652,7 @@
   border-right-color: #D3D3D3;
 }
 
-#jeyewyglsu .gt_col_heading {
+#xikbdxywwu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -670,7 +672,7 @@
   overflow-x: hidden;
 }
 
-#jeyewyglsu .gt_column_spanner_outer {
+#xikbdxywwu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -682,15 +684,15 @@
   padding-right: 4px;
 }
 
-#jeyewyglsu .gt_column_spanner_outer:first-child {
+#xikbdxywwu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jeyewyglsu .gt_column_spanner_outer:last-child {
+#xikbdxywwu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jeyewyglsu .gt_column_spanner {
+#xikbdxywwu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -702,7 +704,7 @@
   width: 100%;
 }
 
-#jeyewyglsu .gt_group_heading {
+#xikbdxywwu .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -724,7 +726,7 @@
   vertical-align: middle;
 }
 
-#jeyewyglsu .gt_empty_group_heading {
+#xikbdxywwu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -739,15 +741,15 @@
   vertical-align: middle;
 }
 
-#jeyewyglsu .gt_from_md > :first-child {
+#xikbdxywwu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jeyewyglsu .gt_from_md > :last-child {
+#xikbdxywwu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jeyewyglsu .gt_row {
+#xikbdxywwu .gt_row {
   padding-top: 3px;
   padding-bottom: 3px;
   padding-left: 5px;
@@ -766,7 +768,7 @@
   overflow-x: hidden;
 }
 
-#jeyewyglsu .gt_stub {
+#xikbdxywwu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -778,7 +780,7 @@
   padding-left: 12px;
 }
 
-#jeyewyglsu .gt_summary_row {
+#xikbdxywwu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -788,7 +790,7 @@
   padding-right: 5px;
 }
 
-#jeyewyglsu .gt_first_summary_row {
+#xikbdxywwu .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -798,7 +800,7 @@
   border-top-color: #D3D3D3;
 }
 
-#jeyewyglsu .gt_grand_summary_row {
+#xikbdxywwu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -808,7 +810,7 @@
   padding-right: 5px;
 }
 
-#jeyewyglsu .gt_first_grand_summary_row {
+#xikbdxywwu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -818,11 +820,11 @@
   border-top-color: #D3D3D3;
 }
 
-#jeyewyglsu .gt_striped {
+#xikbdxywwu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jeyewyglsu .gt_table_body {
+#xikbdxywwu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -831,7 +833,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#jeyewyglsu .gt_footnotes {
+#xikbdxywwu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -845,13 +847,13 @@
   border-right-color: #D3D3D3;
 }
 
-#jeyewyglsu .gt_footnote {
+#xikbdxywwu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#jeyewyglsu .gt_sourcenotes {
+#xikbdxywwu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -865,41 +867,41 @@
   border-right-color: #D3D3D3;
 }
 
-#jeyewyglsu .gt_sourcenote {
+#xikbdxywwu .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#jeyewyglsu .gt_left {
+#xikbdxywwu .gt_left {
   text-align: left;
 }
 
-#jeyewyglsu .gt_center {
+#xikbdxywwu .gt_center {
   text-align: center;
 }
 
-#jeyewyglsu .gt_right {
+#xikbdxywwu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jeyewyglsu .gt_font_normal {
+#xikbdxywwu .gt_font_normal {
   font-weight: normal;
 }
 
-#jeyewyglsu .gt_font_bold {
+#xikbdxywwu .gt_font_bold {
   font-weight: bold;
 }
 
-#jeyewyglsu .gt_font_italic {
+#xikbdxywwu .gt_font_italic {
   font-style: italic;
 }
 
-#jeyewyglsu .gt_super {
+#xikbdxywwu .gt_super {
   font-size: 65%;
 }
 
-#jeyewyglsu .gt_footnote_marks {
+#xikbdxywwu .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -936,19 +938,19 @@
 </div>
 <p>Any <strong>{gtsummary}</strong> table can be converted to one of the types in the table above. For example, the code below prints a <strong>{gtsummary}</strong> table as a <strong>{flextable}</strong> table, instead of the default <strong>{gt}</strong> table.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/as_flex_table.html">as_flex_table</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="default-printer" class="section level2">
-<h2 class="hasAnchor">
-<a href="#default-printer" class="anchor"></a>Default Printer</h2>
+<div class="section level2">
+<h2 id="default-printer">Default Printer<a class="anchor" aria-label="anchor" href="#default-printer"></a>
+</h2>
 <p>Tables printed with <strong>{gtsummary}</strong> can be seamlessly integrated into R markdown documents. Currently, <strong>{gt}</strong> supports <strong>HTML</strong> output, with <strong>LaTeX</strong> and <strong>RTF</strong> planned for the future. The table below summarizes the default print engine utilized for <strong>{gtsummary}</strong> tables for various R Markdown output formats.</p>
-<div id="ufakbbyjec" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="hszircbjao" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ufakbbyjec .gt_table {
+#hszircbjao .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -973,7 +975,7 @@
   border-left-color: #D3D3D3;
 }
 
-#ufakbbyjec .gt_heading {
+#hszircbjao .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -985,7 +987,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ufakbbyjec .gt_title {
+#hszircbjao .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -995,7 +997,7 @@
   border-bottom-width: 0;
 }
 
-#ufakbbyjec .gt_subtitle {
+#hszircbjao .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1005,13 +1007,13 @@
   border-top-width: 0;
 }
 
-#ufakbbyjec .gt_bottom_border {
+#hszircbjao .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ufakbbyjec .gt_col_headings {
+#hszircbjao .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1026,7 +1028,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ufakbbyjec .gt_col_heading {
+#hszircbjao .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1046,7 +1048,7 @@
   overflow-x: hidden;
 }
 
-#ufakbbyjec .gt_column_spanner_outer {
+#hszircbjao .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1058,15 +1060,15 @@
   padding-right: 4px;
 }
 
-#ufakbbyjec .gt_column_spanner_outer:first-child {
+#hszircbjao .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ufakbbyjec .gt_column_spanner_outer:last-child {
+#hszircbjao .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ufakbbyjec .gt_column_spanner {
+#hszircbjao .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1078,7 +1080,7 @@
   width: 100%;
 }
 
-#ufakbbyjec .gt_group_heading {
+#hszircbjao .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1100,7 +1102,7 @@
   vertical-align: middle;
 }
 
-#ufakbbyjec .gt_empty_group_heading {
+#hszircbjao .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1115,15 +1117,15 @@
   vertical-align: middle;
 }
 
-#ufakbbyjec .gt_from_md > :first-child {
+#hszircbjao .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ufakbbyjec .gt_from_md > :last-child {
+#hszircbjao .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ufakbbyjec .gt_row {
+#hszircbjao .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1142,7 +1144,7 @@
   overflow-x: hidden;
 }
 
-#ufakbbyjec .gt_stub {
+#hszircbjao .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1154,7 +1156,7 @@
   padding-left: 12px;
 }
 
-#ufakbbyjec .gt_summary_row {
+#hszircbjao .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1164,7 +1166,7 @@
   padding-right: 5px;
 }
 
-#ufakbbyjec .gt_first_summary_row {
+#hszircbjao .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1174,7 +1176,7 @@
   border-top-color: #D3D3D3;
 }
 
-#ufakbbyjec .gt_grand_summary_row {
+#hszircbjao .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1184,7 +1186,7 @@
   padding-right: 5px;
 }
 
-#ufakbbyjec .gt_first_grand_summary_row {
+#hszircbjao .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1194,11 +1196,11 @@
   border-top-color: #D3D3D3;
 }
 
-#ufakbbyjec .gt_striped {
+#hszircbjao .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ufakbbyjec .gt_table_body {
+#hszircbjao .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1207,7 +1209,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#ufakbbyjec .gt_footnotes {
+#hszircbjao .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1221,13 +1223,13 @@
   border-right-color: #D3D3D3;
 }
 
-#ufakbbyjec .gt_footnote {
+#hszircbjao .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#ufakbbyjec .gt_sourcenotes {
+#hszircbjao .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1241,41 +1243,41 @@
   border-right-color: #D3D3D3;
 }
 
-#ufakbbyjec .gt_sourcenote {
+#hszircbjao .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#ufakbbyjec .gt_left {
+#hszircbjao .gt_left {
   text-align: left;
 }
 
-#ufakbbyjec .gt_center {
+#hszircbjao .gt_center {
   text-align: center;
 }
 
-#ufakbbyjec .gt_right {
+#hszircbjao .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ufakbbyjec .gt_font_normal {
+#hszircbjao .gt_font_normal {
   font-weight: normal;
 }
 
-#ufakbbyjec .gt_font_bold {
+#hszircbjao .gt_font_bold {
   font-weight: bold;
 }
 
-#ufakbbyjec .gt_font_italic {
+#hszircbjao .gt_font_italic {
   font-style: italic;
 }
 
-#ufakbbyjec .gt_super {
+#hszircbjao .gt_super {
   font-size: 65%;
 }
 
-#ufakbbyjec .gt_footnote_marks {
+#hszircbjao .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -1335,31 +1337,31 @@
 </tbody>
 </table>
 </div>
-<p>When a table is printed with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html">knitr::kable()</a></code> the resulting table is less full featured compared to a table printed with <strong>{gt}</strong>. For example, the table will not contain footnotes, spanning headers, or row indentation.</p>
+<p>When a table is printed with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code> the resulting table is less full featured compared to a table printed with <strong>{gt}</strong>. For example, the table will not contain footnotes, spanning headers, or row indentation.</p>
 </div>
-<div id="example-r-markdown-report" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-r-markdown-report" class="anchor"></a>Example R Markdown Report</h2>
+<div class="section level2">
+<h2 id="example-r-markdown-report">Example R Markdown Report<a class="anchor" aria-label="anchor" href="#example-r-markdown-report"></a>
+</h2>
 <p>An example R markdown report using <strong>{gtsummary}</strong> has been included with the package. To open the example file, run the following command in the R console.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary">gtsummary</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"gtsummary"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="st">"rmarkdown_example/gtsummary_rmarkdown_html.Rmd"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/file.edit.html">file.edit</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"gtsummary"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="st">"rmarkdown_example/gtsummary_rmarkdown_html.Rmd"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/r/utils/file.edit.html" class="external-link">file.edit</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="latex" class="section level2">
-<h2 class="hasAnchor">
-<a href="#latex" class="anchor"></a>LaTeX</h2>
+<div class="section level2">
+<h2 id="latex">LaTeX<a class="anchor" aria-label="anchor" href="#latex"></a>
+</h2>
 <p>To print {gtsummary} tables using LaTeX, utilize one of the supporting print engines.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># build gtsummary table</span>
 <span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="va">trial</span><span class="op">)</span>
 
 <span class="co"># using the {gt} package</span>
-<span class="fu"><a href="../reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/as_latex.html">as_latex</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="../reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/as_latex.html" class="external-link">as_latex</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># using the {huxtable} package</span>
-<span class="fu"><a href="../reference/as_hux_table.html">as_hux_table</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/to_latex.html">to_latex</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="../reference/as_hux_table.html">as_hux_table</a></span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">huxtable</span><span class="fu">::</span><span class="fu"><a href="https://hughjonesd.github.io/huxtable/reference/to_latex.html" class="external-link">to_latex</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># using the {kableExtra} package</span>
 <span class="fu"><a href="../reference/as_kable_extra.html">as_kable_extra</a></span><span class="op">(</span><span class="va">tbl</span>, format <span class="op">=</span> <span class="st">"latex"</span><span class="op">)</span>
@@ -1367,21 +1369,21 @@
 <span class="co"># using the knitr::kable function</span>
 <span class="fu"><a href="../reference/as_kable.html">as_kable</a></span><span class="op">(</span><span class="va">tbl</span>, format <span class="op">=</span> <span class="st">"latex"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="images" class="section level2">
-<h2 class="hasAnchor">
-<a href="#images" class="anchor"></a>Images</h2>
-<p>Use the {gt} package’s <code><a href="https://gt.rstudio.com/reference/gtsave.html">gt::gtsave()</a></code> function to save images of {gtsummary} tables.</p>
+<div class="section level2">
+<h2 id="images">Images<a class="anchor" aria-label="anchor" href="#images"></a>
+</h2>
+<p>Use the {gt} package’s <code><a href="https://gt.rstudio.com/reference/gtsave.html" class="external-link">gt::gtsave()</a></code> function to save images of {gtsummary} tables.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>    <span class="co"># build gtsummary table</span>
-  <span class="fu"><a href="../reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>             <span class="co"># convert to gt table</span>
-  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gtsave.html">gtsave</a></span><span class="op">(</span>             <span class="co"># save table as image</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>    <span class="co"># build gtsummary table</span>
+  <span class="fu"><a href="../reference/as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>             <span class="co"># convert to gt table</span>
+  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/gtsave.html" class="external-link">gtsave</a></span><span class="op">(</span>             <span class="co"># save table as image</span>
     filename <span class="op">=</span> <span class="st">"my_table_image.png"</span>
   <span class="op">)</span></code></pre></div>
 </div>
-<div id="tips" class="section level2">
-<h2 class="hasAnchor">
-<a href="#tips" class="anchor"></a>Tips</h2>
-<p>When printing {gt} or {gtsummary} tables in a loop, use <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> and <code>results = 'asis'</code> in the R markdown chunk.</p>
+<div class="section level2">
+<h2 id="tips">Tips<a class="anchor" aria-label="anchor" href="#tips"></a>
+</h2>
+<p>When printing {gt} or {gtsummary} tables in a loop, use <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> and <code>results = 'asis'</code> in the R markdown chunk.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="st">```</span><span class="dt">{r loop_print, results = 'asis'}</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="dt">for (i in 1) {</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="dt">  tbl &lt;- tbl_summary(trial)   # build gtsummary table</span></span>
@@ -1389,7 +1391,7 @@
 <span id="cb5-5"><a href="#cb5-5"></a><span class="dt">}</span></span>
 <span id="cb5-6"><a href="#cb5-6"></a><span class="st">```</span></span></code></pre></div>
 <p>If <code>print(tbl)</code> does not work for you, try either <code>knitr::knit_print(tbl)</code> or <code>cat(knitr::knit_print(tbl))</code>.</p>
-<p><font size="1" color="grey"> Icons from <a href="https://icons8.com/">icons8</a></font></p>
+<p><font size="1" color="grey"> Icons from <a href="https://icons8.com/" class="external-link">icons8</a></font></p>
 </div>
   </div>
 
@@ -1404,11 +1406,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://www.danieldsjoberg.com/">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/">Emily C. Zabor</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
