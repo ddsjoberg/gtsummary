@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* No longer exporting `assert_package()`. It has been migrated to {broom.helpers} and we now use `broom.helpers::.assert_package()`. (#1051)
+
 * Added `digits=` argument to `tbl_cross()`. (#1046)
 
 * Added `add_overall.tbl_continuous()` method. (#1037)
