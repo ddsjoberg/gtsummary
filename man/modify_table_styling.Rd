@@ -111,8 +111,8 @@ When columns are stack AND when the column-merging is
 defined with a quosure, you may run into issues due to the loss of the
 environment when 2 or more quosures are combined. If the expression
 version of the quosure is the same as the quosure (i.e. no evaluated
-objects), there should be no issues. Regardless, this argumnet is used
-internally under with restrictions, and it's not recommended for users.
+objects), there should be no issues. Regardless, this argument is used
+internally with care, and it is \emph{not} recommended for users.
 }
 
 \seealso{
