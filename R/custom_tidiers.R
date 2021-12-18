@@ -49,7 +49,7 @@
 #' @name custom_tidiers
 #' @rdname custom_tidiers
 #' @export
-#' @examplesIf assert_package("effectsize", boolean = TRUE) && assert_package("parameters", boolean = TRUE) && assert_package("mice", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("effectsize", boolean = TRUE) && broom.helpers::.assert_package("parameters", boolean = TRUE) && broom.helpers::.assert_package("mice", boolean = TRUE)
 #' \donttest{
 #' # Example 1 ----------------------------------
 #' mod <- lm(age ~ marker + grade, trial)

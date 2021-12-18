@@ -7,6 +7,7 @@
 #'
 #' @inheritSection tbl_regression Methods
 #' @name tbl_regression_methods
+#' @keywords internal
 #' @rdname tbl_regression_methods
 #' @param ... arguments passed to `tbl_regression.default()`
 #' @inheritParams tbl_regression

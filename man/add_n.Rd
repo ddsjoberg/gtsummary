@@ -21,3 +21,4 @@ Adds column with N to gtsummary table
 \author{
 Daniel D. Sjoberg
 }
+\keyword{internal}

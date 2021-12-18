@@ -27,3 +27,4 @@ print and knit_print methods for gtsummary objects
 \author{
 Daniel D. Sjoberg
 }
+\keyword{internal}

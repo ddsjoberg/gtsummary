@@ -8,6 +8,7 @@
 #' `tbl_summary(trial, by = trt) %>% add_p(age ~ "t.test", test.args = age ~ list(var.equal = TRUE))`
 #'
 #' @name tests
+#' @keywords internal
 #' @section tbl_summary() %>% add_p():
 #'
 #' ```{r, echo = FALSE}

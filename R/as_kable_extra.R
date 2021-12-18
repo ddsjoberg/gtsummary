@@ -11,7 +11,7 @@
 #' @return A {kableExtra} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf assert_package("kableExtra", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE)
 #' tbl <-
 #'   trial %>%
 #'   tbl_summary(by = trt) %>%

@@ -1,6 +1,7 @@
 #' print and knit_print methods for gtsummary objects
 #'
 #' @name print_gtsummary
+#' @keywords internal
 #' @param x An object created using gtsummary functions
 #' @param print_engine String indicating the print method. Must be one of
 #' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"tibble"`

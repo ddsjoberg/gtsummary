@@ -27,7 +27,7 @@
 #' @return A {huxtable} object
 #' @family gtsummary output types
 #' @author David Hugh-Jones
-#' @examplesIf assert_package("huxtable", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("huxtable", boolean = TRUE)
 #' trial %>%
 #'   dplyr::select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%

@@ -35,7 +35,7 @@
 #' @return A {flextable} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf assert_package("flextable", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("flextable", boolean = TRUE)
 #' as_flex_table_ex1 <-
 #'   trial %>%
 #'   select(trt, age, grade) %>%

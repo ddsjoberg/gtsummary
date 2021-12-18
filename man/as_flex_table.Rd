@@ -70,7 +70,7 @@ column width after calling \code{as_flex_table()}.
 }
 
 \examples{
-\dontshow{if (assert_package("flextable", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("flextable", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 as_flex_table_ex1 <-
   trial \%>\%
   select(trt, age, grade) \%>\%
