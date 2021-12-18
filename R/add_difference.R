@@ -96,7 +96,8 @@ add_difference <- function(x, test = NULL, group = NULL,
       x = test,
       data = select(use_data_frame(x$inputs$data), any_of(include)),
       var_info = x$table_body,
-      arg_name = "test"
+      arg_name = "test",
+      type_check = function(x) is_string(x) || is_function(x)
     )
 
   estimate_fun <-
@@ -104,7 +105,8 @@ add_difference <- function(x, test = NULL, group = NULL,
       x = {{ estimate_fun }},
       data = select(use_data_frame(x$inputs$data), any_of(x$meta_data$variable)),
       var_info = x$table_body,
-      arg_name = "estimate_fun"
+      arg_name = "estimate_fun",
+      type_check = is_function
     )
   estimate_fun <-
     x$meta_data$variable %>%
@@ -204,7 +206,8 @@ add_difference <- function(x, test = NULL, group = NULL,
       x = test.args,
       data = select(use_data_frame(x$inputs$data), any_of(include)),
       var_info = x$table_body,
-      arg_name = "test.args"
+      arg_name = "test.args",
+      type_check = rlang::is_named
     )
 
   x$meta_data <-

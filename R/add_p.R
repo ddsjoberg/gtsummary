@@ -144,7 +144,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       x = test,
       data = select(x$inputs$data, any_of(include)),
       var_info = x$table_body,
-      arg_name = "test"
+      arg_name = "test",
+      type_check = function(x) is_string(x) || is_function(x)
     )
 
   # checking pvalue_fun are functions
@@ -191,7 +192,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       x = test.args,
       data = select(x$inputs$data, any_of(include)),
       var_info = x$table_body,
-      arg_name = "test.args"
+      arg_name = "test.args",
+      type_check = is_named
     )
 
   x$meta_data <-
@@ -548,7 +550,8 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
     .formula_list_to_named_list(
       x = test,
       var_info = x$table_body,
-      arg_name = "test"
+      arg_name = "test",
+      type_check = function(x) is_string(x) || is_function(x)
     )
 
   # adding pvalue to meta data -------------------------------------------------
@@ -578,7 +581,8 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
     .formula_list_to_named_list(
       x = test.args,
       var_info = x$table_body,
-      arg_name = "test.args"
+      arg_name = "test.args",
+      type_check = is_named
     )
 
   # checking the formula and data from survfit object are available
@@ -734,7 +738,8 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
       x = test,
       data = select(x$inputs$data$variables, any_of(x$meta_data$variable)),
       var_info = x$table_body,
-      arg_name = "test"
+      arg_name = "test",
+      type_check = function(x) is_string(x) || is_function(x)
     )
 
   # checking pvalue_fun are functions
@@ -777,7 +782,8 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
       x = test.args,
       data = select(x$inputs$data, any_of(include)),
       var_info = x$table_body,
-      arg_name = "test.args"
+      arg_name = "test.args",
+      type_check = is_named
     )
 
   x$meta_data <-

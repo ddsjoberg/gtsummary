@@ -174,7 +174,8 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
     .formula_list_to_named_list(
       x = label,
       var_info = meta_data_to_var_info(meta_data),
-      arg_name = "label"
+      arg_name = "label",
+      type_check = is_string
     )
 
   meta_data <-

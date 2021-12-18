@@ -183,7 +183,8 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     .formula_list_to_named_list(
       x = label,
       var_info = table_body,
-      arg_name = "label"
+      arg_name = "label",
+      type_check = is_string
     )
 
   func_inputs$show_single_row <-

@@ -239,7 +239,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
       data = switch(is.data.frame(data),
         data
       ) %||% .remove_survey_cols(data),
-      arg_name = "label"
+      arg_name = "label",
+      type_check = is_string
     )
 
   # all specified labels must be a string of length 1

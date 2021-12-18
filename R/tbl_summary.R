@@ -371,7 +371,8 @@ generate_metadata <- function(data, value, by, type, label,
     x = type,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "type"
+    arg_name = "type",
+    type_check = is_string
   )
 
   # updating meta data object with new types
@@ -389,25 +390,29 @@ generate_metadata <- function(data, value, by, type, label,
     x = label,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "label"
+    arg_name = "label",
+    type_check = is_string
   )
   statistic <- .formula_list_to_named_list(
     x = statistic,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "statistic"
+    arg_name = "statistic",
+    type_check = is_character
   )
   digits <- .formula_list_to_named_list(
     x = digits,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "digits"
+    arg_name = "digits",
+    type_check = function(x) rlang::is_integerish(x) || is_function(x) || purrr::every(x, ~rlang::is_integerish(.x) || is_function(.x))
   )
   sort <- .formula_list_to_named_list(
     x = sort,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "sort"
+    arg_name = "sort",
+    type_check = is_string
   )
 
   # assigning variable characteristics -----------------------------------------

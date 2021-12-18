@@ -408,7 +408,8 @@ generate_metadata_custom_summary <- function(data, stat_fns, include,
     x = type,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "type"
+    arg_name = "type",
+    type_check = is_string
   )
 
   # updating meta data object with new types
@@ -427,25 +428,29 @@ generate_metadata_custom_summary <- function(data, stat_fns, include,
       x = stat_fns,
       data = data %>% select(any_of(include)),
       var_info = meta_data_to_var_info(meta_data),
-      arg_name = "stat_fns"
+      arg_name = "stat_fns",
+      type_check = is_function
     )
   label <- .formula_list_to_named_list(
     x = label,
     data = data %>% select(any_of(include)), # adding a select
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "label"
+    arg_name = "label",
+    type_check = is_string
   )
   statistic <- .formula_list_to_named_list(
     x = statistic,
     data = data %>% select(any_of(include)), # adding a select
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "statistic"
+    arg_name = "statistic",
+    type_check = is_character
   )
   digits <- .formula_list_to_named_list(
     x = digits,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "digits"
+    arg_name = "digits",
+    type_check = function(x) rlang::is_integerish(x) || is_function(x) || purrr::every(x, ~rlang::is_integerish(.x) || is_function(.x))
   )
 
   # assigning variable characteristics -----------------------------------------

@@ -161,15 +161,17 @@ add_stat <- function(x, fns, location = NULL, ...) {
     )
     location <- inject(everything() ~ !!location)
   }
-  location <- .formula_list_to_named_list(
-    x = location,
-    data = switch(class(x)[1],
-                  "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
-                  "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
-    ),
-    var_info = x$table_body,
-    arg_name = "location"
-  )
+  location <-
+    .formula_list_to_named_list(
+      x = location,
+      data = switch(class(x)[1],
+                    "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
+                    "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
+      ),
+      var_info = x$table_body,
+      arg_name = "location",
+      type_check = is_string
+    )
   imap(
     location,
     ~ switch(!is_string(.x) || !.x %in% c("label", "level", "missing"),
@@ -185,7 +187,8 @@ add_stat <- function(x, fns, location = NULL, ...) {
                     "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
       ),
       var_info = x$table_body,
-      arg_name = "fns"
+      arg_name = "fns",
+      type_check = is_function
     )
 
   # setting new column name ----------------------------------------------------
