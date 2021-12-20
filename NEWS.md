@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated Spanish translation for Wilcoxon Rank-sum Test.
+
 * Added `digits=` argument to `tbl_cross()`. (#1046)
 
 * Added `add_overall.tbl_continuous()` method. (#1037)
