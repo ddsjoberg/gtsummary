@@ -6,7 +6,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![Codecov test
-coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=master)
+coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=main)
 [![](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![DOI:10.32614/RJ-2021-053](https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg)](https://doi.org/10.32614/RJ-2021-053)
 <!-- badges: end -->
@@ -94,7 +94,7 @@ Use
 [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html)
 to summarize a data frame.
 
-<img src = "https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_summary_demo1.gif" alt = "animated" width = "100%">
+<img src = "https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/misc_files/tbl_summary_demo1.gif" alt = "animated" width = "100%">
 
 Example basic table:
 
@@ -223,7 +223,7 @@ tbl %>%
 
 -   The R Journal Article [*Reproducible Summary Tables with the
     gtsummary
-    Package*](https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/RJ-2021-053.pdf).
+    Package*](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/RJ-2021-053.pdf).
 
 -   The [RStudio Education
     Blog](https://education.rstudio.com/blog/2020/07/gtsummary/)
@@ -275,6 +275,7 @@ you to all contributors!
 [@ABorakati](https://github.com/ABorakati),
 [@aghaynes](https://github.com/aghaynes),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
+[@akefley](https://github.com/akefley),
 [@albertostefanelli](https://github.com/albertostefanelli),
 [@alexis-catherine](https://github.com/alexis-catherine),
 [@anaavu](https://github.com/anaavu),
@@ -317,6 +318,7 @@ you to all contributors!
 [@gjones1219](https://github.com/gjones1219),
 [@gorkang](https://github.com/gorkang),
 [@GuiMarthe](https://github.com/GuiMarthe),
+[@hass91](https://github.com/hass91),
 [@hughjonesd](https://github.com/hughjonesd),
 [@iaingallagher](https://github.com/iaingallagher),
 [@ilyamusabirov](https://github.com/ilyamusabirov),
@@ -363,11 +365,13 @@ you to all contributors!
 [@sachijay](https://github.com/sachijay),
 [@sammo3182](https://github.com/sammo3182),
 [@sbalci](https://github.com/sbalci),
+[@shengchaohou](https://github.com/shengchaohou),
 [@ShixiangWang](https://github.com/ShixiangWang),
 [@simonpcouch](https://github.com/simonpcouch),
 [@slb2240](https://github.com/slb2240),
 [@slobaugh](https://github.com/slobaugh),
 [@StaffanBetner](https://github.com/StaffanBetner),
+[@Stephonomon](https://github.com/Stephonomon),
 [@storopoli](https://github.com/storopoli),
 [@tamytsujimoto](https://github.com/tamytsujimoto),
 [@TarJae](https://github.com/TarJae),
