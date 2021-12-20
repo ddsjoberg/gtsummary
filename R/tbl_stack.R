@@ -162,7 +162,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
     results$table_styling$cols_merge$rows <-
       map(
         results$table_styling$cols_merge$rows,
-        ~ .x %>% purrr::reduce(function(.x1, .y1) expr(!!.x1 | !!.y1))
+        ~ .x %>% purrr::reduce(function(.x1, .y1) expr(!!as_expr(.x1) | !!as_expr(.y1)))
       )
   }
 
@@ -278,4 +278,10 @@ tbl_id_varname <- function(colnames) {
   return(paste0("tbl_id", tbl_max_id + 1L))
 }
 
-
+# this function extracts the expr from a quosure, otherwise returns input
+as_expr <- function(x) {
+  if (inherits(x, "quosure")) {
+    return(rlang::f_rhs(x))
+  }
+  x
+}
