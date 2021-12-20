@@ -59,7 +59,8 @@ and italic styling when \code{TRUE}}
 
 \item{text_interpret}{string, must be one of \code{"md"} or \code{"html"}}
 
-\item{cols_merge_pattern}{glue-syntax string indicating how to merge
+\item{cols_merge_pattern}{\lifecycle{experimental} glue-syntax string
+indicating how to merge
 columns in \code{x$table_body}. For example, to construct a confidence interval
 use \code{"{conf.low}, {conf.high}"}. The first column listed in the pattern
 string must match the single column name passed in \verb{columns=}.}
@@ -103,6 +104,15 @@ Once \code{gt::cols_merge()} gains the \verb{rows=} argument the
 implementation will be updated to use it, which will keep
 numeric columns numeric. For the \emph{vast majority} of users,
 \emph{the planned change will be go unnoticed}.
+
+If this functionality is used in conjunction with \code{tbl_stack()} (which
+includes \code{tbl_uvregression()}), there is potential issue with printing.
+When columns are stack AND when the column-merging is
+defined with a quosure, you may run into issues due to the loss of the
+environment when 2 or more quosures are combined. If the expression
+version of the quosure is the same as the quosure (i.e. no evaluated
+objects), there should be no issues. Regardless, this argument is used
+internally with care, and it is \emph{not} recommended for users.
 }
 
 \seealso{
