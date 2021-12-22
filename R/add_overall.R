@@ -8,7 +8,6 @@
 #' @param last Logical indicator to display overall column last in table.
 #' Default is `FALSE`, which will display overall column first.
 #' @param col_label String indicating the column label. Default is `"**Overall**,  N = {N}"`
-#' @param ... Not used
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
 #' @author Daniel D. Sjoberg
@@ -59,7 +58,7 @@ add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL, ...) {
 
 #' @rdname add_overall
 #' @export
-add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL, ...) {
+add_overall.tbl_svysummary <- function(x, last = FALSE, col_label = NULL) {
   updated_call_list <- c(x$call_list, list(add_overall = match.call()))
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {

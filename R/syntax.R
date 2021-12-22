@@ -1,6 +1,7 @@
 #' Syntax and Notation
 #'
 #' @name syntax
+#' @keywords internal
 #' @description
 #' The gtsummary package also utilizes selectors: selectors from the tidyselect
 #' package and custom selectors. Review their help files for details.
