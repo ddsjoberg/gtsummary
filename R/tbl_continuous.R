@@ -104,7 +104,7 @@ tbl_continuous <- function(data,
 
 #' @rdname add_overall
 #' @export
-add_overall.tbl_continuous <- function(x, last = FALSE, col_label = NULL) {
+add_overall.tbl_continuous <- function(x, last = FALSE, col_label = NULL, ...) {
   updated_call_list <- c(x$call_list, list(add_overall = match.call()))
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
