@@ -142,6 +142,7 @@ test_that("tbl_merge() one table", {
     tbl_only_one <- tbl_merge(list(tbl)),
     NA
   )
+})
 
 test_that("tbl_merge with complicated tbl_stack + cols_merge", {
   theme_gtsummary_journal("jama")
