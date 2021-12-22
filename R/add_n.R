@@ -3,6 +3,8 @@
 #' @param x Object created from a gtsummary function
 #' @param ... Additional arguments passed to other methods.
 #' @author Daniel D. Sjoberg
+#'
+#' @keywords internal
 #' @seealso [add_n.tbl_summary()], [add_n.tbl_svysummary()], [add_n.tbl_survfit()],
 #' [add_n.tbl_regression], [add_n.tbl_uvregression]
 #' @export

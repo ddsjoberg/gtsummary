@@ -132,3 +132,4 @@ The following table describes the argument inputs for each gtsummary table type.
 }
 }
 
+\keyword{internal}

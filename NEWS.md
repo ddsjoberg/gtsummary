@@ -1,5 +1,17 @@
 # gtsummary (development version)
 
+* Updated Spanish translation for Wilcoxon Rank-sum Test.
+
+* Fix in `modify_table_styling(cols_merge_pattern)` when it is used with `tbl_stack()` followed by `tbl_merge()`. (#1057)
+
+* No longer exporting `assert_package()`. It has been migrated to {broom.helpers} and we now use `broom.helpers::.assert_package()`. (#1051)
+
+* Bug fix in `separate_p_footnotes()` where test names were not being translated when `theme_gtsummary_language()` was set. (#1055)
+
+* Added `statistics=` and `digits=` arguments to the `add_overall()` family of functions. (#1047)
+
+* Improved error messaging in `tbl_custom_summary()`
+
 * Added `digits=` argument to `tbl_cross()`. (#1046)
 
 * Added `add_overall.tbl_continuous()` method. (#1037)

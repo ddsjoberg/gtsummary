@@ -25,3 +25,4 @@ Report statistics from gtsummary tables inline
 \author{
 Daniel D. Sjoberg
 }
+\keyword{internal}
