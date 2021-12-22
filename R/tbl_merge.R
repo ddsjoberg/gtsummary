@@ -361,6 +361,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   pattern
 }
 
+# needed for R < 3.5, can be deleted later
 isFALSE <- function(x) {
   is.logical(x) && length(x) == 1L && !is.na(x) && !x
 }
