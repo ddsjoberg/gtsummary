@@ -38,3 +38,4 @@ rlang::expr(survfit(!!formula_arg, !!data_arg)) \%>\%
 }\if{html}{\out{</div>}}
 }
 }
+\keyword{internal}

@@ -31,16 +31,16 @@ covars <- c("trt", "age")
 
 # get model covariates adjusted by stage and grade
 adj_mods <- map(covars, ~
-coxph(
-  as.formula(
-    paste("Surv(ttdeath, death) ~ grade + ", .x)
-  ),
-  trial
-) %>%
-  tbl_regression(
-    include = all_of(.x),
-    exponentiate = TRUE
-  ))
+                  coxph(
+                    as.formula(
+                      paste("Surv(ttdeath, death) ~ grade + ", .x)
+                    ),
+                    trial
+                  ) %>%
+                  tbl_regression(
+                    include = all_of(.x),
+                    exponentiate = TRUE
+                  ))
 
 # now get stage and grade models adjusted for each other
 adj_mods[["grade_mod"]] <- coxph(
@@ -142,4 +142,36 @@ test_that("tbl_merge() one table", {
     tbl_only_one <- tbl_merge(list(tbl)),
     NA
   )
+
+test_that("tbl_merge with complicated tbl_stack + cols_merge", {
+  theme_gtsummary_journal("jama")
+
+  t3 <-
+    trial[c("age", "grade", "response")] %>%
+    tbl_summary(
+      missing = "no",
+      type = list(where(is.numeric) ~ "continuous2"),
+      include = c(age, response)
+    ) %>%
+    add_n() %>%
+    modify_header(stat_0 ~ "**Summary Statistics**")
+
+
+  t4 <-
+    tbl_uvregression(
+      trial[c("ttdeath", "death", "age", "grade", "response")],
+      method = survival::coxph,
+      y = survival::Surv(ttdeath, death),
+      exponentiate = TRUE,
+      hide_n = TRUE,
+      include = c(age, response)
+    )
+
+  expect_error(
+    tbl_merge(tbls = list(t3, t4)) %>%
+      modify_spanning_header(everything() ~ NA) %>%
+      as_gt(),
+    NA
+  )
+  reset_gtsummary_theme()
 })
