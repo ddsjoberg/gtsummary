@@ -25,7 +25,7 @@ tbl_custom_summary."><meta property="og:image" content="https://www.danieldsjobe
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9016</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9017</span>
       </span>
     </div>
 
@@ -99,19 +99,47 @@ created by <code>tbl_summary</code>, <code>tbl_svysummary</code>, <code>tbl_cont
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">add_overall</span><span class="op">(</span><span class="va">x</span>, <span class="va">last</span>, <span class="va">col_label</span>, <span class="va">statistic</span>, <span class="va">digits</span><span class="op">)</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">add_overall</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for tbl_summary</span>
-<span class="fu">add_overall</span><span class="op">(</span><span class="va">x</span>, last <span class="op">=</span> <span class="cn">FALSE</span>, col_label <span class="op">=</span> <span class="cn">NULL</span>, statistic <span class="op">=</span> <span class="cn">NULL</span>, digits <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
+<span class="fu">add_overall</span><span class="op">(</span>
+  <span class="va">x</span>,
+  last <span class="op">=</span> <span class="cn">FALSE</span>,
+  col_label <span class="op">=</span> <span class="cn">NULL</span>,
+  statistic <span class="op">=</span> <span class="cn">NULL</span>,
+  digits <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
 
 <span class="co"># S3 method for tbl_svysummary</span>
-<span class="fu">add_overall</span><span class="op">(</span><span class="va">x</span>, last <span class="op">=</span> <span class="cn">FALSE</span>, col_label <span class="op">=</span> <span class="cn">NULL</span>, statistic <span class="op">=</span> <span class="cn">NULL</span>, digits <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
+<span class="fu">add_overall</span><span class="op">(</span>
+  <span class="va">x</span>,
+  last <span class="op">=</span> <span class="cn">FALSE</span>,
+  col_label <span class="op">=</span> <span class="cn">NULL</span>,
+  statistic <span class="op">=</span> <span class="cn">NULL</span>,
+  digits <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
 
 <span class="co"># S3 method for tbl_continuous</span>
-<span class="fu">add_overall</span><span class="op">(</span><span class="va">x</span>, last <span class="op">=</span> <span class="cn">FALSE</span>, col_label <span class="op">=</span> <span class="cn">NULL</span>, statistic <span class="op">=</span> <span class="cn">NULL</span>, digits <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
+<span class="fu">add_overall</span><span class="op">(</span>
+  <span class="va">x</span>,
+  last <span class="op">=</span> <span class="cn">FALSE</span>,
+  col_label <span class="op">=</span> <span class="cn">NULL</span>,
+  statistic <span class="op">=</span> <span class="cn">NULL</span>,
+  digits <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
 
 <span class="co"># S3 method for tbl_custom_summary</span>
-<span class="fu">add_overall</span><span class="op">(</span><span class="va">x</span>, last <span class="op">=</span> <span class="cn">FALSE</span>, col_label <span class="op">=</span> <span class="cn">NULL</span>, statistic <span class="op">=</span> <span class="cn">NULL</span>, digits <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+<span class="fu">add_overall</span><span class="op">(</span>
+  <span class="va">x</span>,
+  last <span class="op">=</span> <span class="cn">FALSE</span>,
+  col_label <span class="op">=</span> <span class="cn">NULL</span>,
+  statistic <span class="op">=</span> <span class="cn">NULL</span>,
+  digits <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -121,6 +149,8 @@ created by <code>tbl_summary</code>, <code>tbl_svysummary</code>, <code>tbl_cont
 object with class <code>tbl_svysummary</code> from the <a href="tbl_svysummary.html">tbl_svysummary</a> function,
 object with class <code>tbl_continuous</code> from the <a href="tbl_continuous.html">tbl_continuous</a> function or
 object with class <code>tbl_custom_summary</code> from the <a href="tbl_custom_summary.html">tbl_custom_summary</a> function.</p></dd>
+<dt>...</dt>
+<dd><p>Not used</p></dd>
 <dt>last</dt>
 <dd><p>Logical indicator to display overall column last in table.
 Default is <code>FALSE</code>, which will display overall column first.</p></dd>

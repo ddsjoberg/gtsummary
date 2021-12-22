@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9016</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9017</span>
       </span>
     </div>
 
@@ -91,7 +91,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>It is now possible to pass a single tbl to <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>. This is useful when using <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> as a helper in other functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1068" class="external-link">#1068</a>)</p></li>
+<ul><li><p>Updating the <code><a href="../reference/add_overall.html">add_overall()</a></code> S3 method to have a more common structure, e.g. <code>add_overall(x, ....)</code>, where previously, the <code>...</code> were not present. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1066" class="external-link">#1066</a>)</p></li>
+<li><p>It is now possible to pass a single tbl to <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>. This is useful when using <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> as a helper in other functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1068" class="external-link">#1068</a>)</p></li>
 <li><p>Suppress <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> spanning headers by passing <code>tbl_merge(tab_spanner = FALSE)</code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/1067" class="external-link">#1067</a>)</p></li>
 <li><p>Updated Spanish translation for Wilcoxon Rank-sum Test.</p></li>
 <li><p>Fix in <code>modify_table_styling(cols_merge_pattern)</code> when it is used with <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> followed by <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1057" class="external-link">#1057</a>)</p></li>
