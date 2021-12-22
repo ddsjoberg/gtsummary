@@ -15,6 +15,7 @@
 #' call. Default is `NULL`.
 #' @param digits Override the digits argument in initial `tbl_*` function
 #' call. Default is `NULL`.
+#' @param ... Not used
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
 #' @family tbl_custom_summary tools
@@ -52,14 +53,14 @@
 #' \if{html}{\figure{tbl_overall_ex1.png}{options: width=50\%}}
 #' \if{html}{\figure{tbl_overall_ex2.png}{options: width=50\%}}
 #' \if{html}{\figure{tbl_overall_ex3.png}{options: width=50\%}}
-add_overall <- function(x, last, col_label, statistic, digits) {
+add_overall <- function(x, ...) {
   UseMethod("add_overall")
 }
 
 #' @rdname add_overall
 #' @export
 add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL,
-                                    statistic = NULL, digits = NULL) {
+                                    statistic = NULL, digits = NULL, ...) {
   add_overall_generic(
     x = x, last = last, col_label = col_label,
     statistic = statistic, digits = digits,

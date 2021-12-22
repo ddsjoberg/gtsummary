@@ -8,21 +8,51 @@
 \alias{add_overall.tbl_custom_summary}
 \title{Add column with overall summary statistics}
 \usage{
-add_overall(x, last, col_label, statistic, digits)
+add_overall(x, ...)
 
-\method{add_overall}{tbl_summary}(x, last = FALSE, col_label = NULL, statistic = NULL, digits = NULL)
+\method{add_overall}{tbl_summary}(
+  x,
+  last = FALSE,
+  col_label = NULL,
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
 
-\method{add_overall}{tbl_svysummary}(x, last = FALSE, col_label = NULL, statistic = NULL, digits = NULL)
+\method{add_overall}{tbl_svysummary}(
+  x,
+  last = FALSE,
+  col_label = NULL,
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
 
-\method{add_overall}{tbl_continuous}(x, last = FALSE, col_label = NULL, statistic = NULL, digits = NULL)
+\method{add_overall}{tbl_continuous}(
+  x,
+  last = FALSE,
+  col_label = NULL,
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
 
-\method{add_overall}{tbl_custom_summary}(x, last = FALSE, col_label = NULL, statistic = NULL, digits = NULL)
+\method{add_overall}{tbl_custom_summary}(
+  x,
+  last = FALSE,
+  col_label = NULL,
+  statistic = NULL,
+  digits = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function,
 object with class \code{tbl_svysummary} from the \link{tbl_svysummary} function,
 object with class \code{tbl_continuous} from the \link{tbl_continuous} function or
 object with class \code{tbl_custom_summary} from the \link{tbl_custom_summary} function.}
+
+\item{...}{Not used}
 
 \item{last}{Logical indicator to display overall column last in table.
 Default is \code{FALSE}, which will display overall column first.}
