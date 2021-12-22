@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* It is now possible to pass a single tbl to `tbl_merge()`. This is useful when using `tbl_merge()` as a helper in other functions. (#1068)
+
+* Suppress `tbl_merge()` spanning headers by passing `tbl_merge(tab_spanner = FALSE)` (#1067)
+
 * Updated Spanish translation for Wilcoxon Rank-sum Test.
 
 * Fix in `modify_table_styling(cols_merge_pattern)` when it is used with `tbl_stack()` followed by `tbl_merge()`. (#1057)

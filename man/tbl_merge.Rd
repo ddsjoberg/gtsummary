@@ -12,7 +12,8 @@ tbl_merge(tbls, tab_spanner = NULL)
 \item{tab_spanner}{Character vector specifying the spanning headers.
 Must be the same length as \code{tbls}. The
 strings are interpreted with \code{gt::md}.
-Must be same length as \code{tbls} argument}
+Must be same length as \code{tbls} argument. Default is \code{NULL}, and places
+a default spanning header. If \code{FALSE}, no header will be placed.}
 }
 \value{
 A \code{tbl_merge} object
