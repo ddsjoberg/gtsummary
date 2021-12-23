@@ -124,7 +124,9 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # flextable doesn't use the markdown language `__` or `**`
   # to bold and italicize text, so removing them here
   flextable_calls <- table_styling_to_tibble_calls(x, col_labels = FALSE)
-  flextable_calls$tab_style_bold <- flextable_calls$tab_style_italic <- NULL
+  flextable_calls$tab_style_bold <-
+    flextable_calls$tab_style_italic <-
+    flextable_calls$fmt_missing <- NULL
 
   # flextable ------------------------------------------------------------------
   flextable_calls[["flextable"]] <- expr(flextable::flextable())

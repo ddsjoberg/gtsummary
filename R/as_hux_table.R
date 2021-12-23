@@ -110,7 +110,9 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # huxtable doesn't use the markdown language `__` or `**`
   # to bold and italicize text, so removing them here
   huxtable_calls <- table_styling_to_tibble_calls(x, col_labels = FALSE)
-  huxtable_calls$tab_style_bold <- huxtable_calls$tab_style_italic <- NULL
+  huxtable_calls$tab_style_bold <-
+    huxtable_calls$tab_style_italic <-
+    huxtable_calls$fmt_missing <- NULL
 
   huxtable_calls[["huxtable"]] <- expr(huxtable::as_huxtable(add_colnames = FALSE))
 
@@ -256,7 +258,6 @@ table_styling_to_huxtable_calls <- function(x, ...) {
       column_id = map(.data$location_ids, ~ pluck(.x, "column_id") %>% unique())
     )
 
-
   huxtable_calls[["fmt_missing"]] <-
     map(
       seq_len(nrow(df_fmt_missing)),
@@ -268,8 +269,6 @@ table_styling_to_huxtable_calls <- function(x, ...) {
         )
       )
     )
-
-
 
   # insert_row ----------------------------------------------------------
   # we do this last so as to not mess up row indexes before
