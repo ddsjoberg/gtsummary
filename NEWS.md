@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `as_flex_table()` and `as_hux_table()` where reference row was not properly placed after a `tbl_merge()` when the merged tables share common categorical variables but different reference rows. (#1063)
+
 * Updating the `add_overall()` S3 method to have a more common structure, e.g. `add_overall(x, ....)`, where previously, the `...` were not present. (#1066)
 
 * It is now possible to pass a single tbl to `tbl_merge()`. This is useful when using `tbl_merge()` as a helper in other functions. (#1068)

@@ -288,14 +288,14 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # fmt_missing ----------------------------------------------------------------
   df_fmt_missing <-
     x$table_styling$fmt_missing %>%
-    inner_join(x$table_styling$header %>%
-      select(.data$column, column_id = .data$id),
-    by = "column"
+    inner_join(
+      x$table_styling$header %>%
+        select(.data$column, column_id = .data$id),
+      by = "column"
     ) %>%
     select(.data$symbol, .data$row_numbers, .data$column_id) %>%
-    nest(location_ids = c(.data$row_numbers, .data$column_id)) %>%
+    nest(location_ids = .data$column_id) %>%
     mutate(
-      row_numbers = map(.data$location_ids, ~ pluck(.x, "row_numbers") %>% unique()),
       column_id = map(.data$location_ids, ~ pluck(.x, "column_id") %>% unique())
     )
 

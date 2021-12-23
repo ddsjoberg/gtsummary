@@ -251,9 +251,8 @@ table_styling_to_huxtable_calls <- function(x, ...) {
     by = "column"
     ) %>%
     select(.data$symbol, .data$row_numbers, .data$column_id) %>%
-    nest(location_ids = c(.data$row_numbers, .data$column_id)) %>%
+    nest(location_ids = .data$column_id) %>%
     mutate(
-      row_numbers = map(.data$location_ids, ~ pluck(.x, "row_numbers") %>% unique()),
       column_id = map(.data$location_ids, ~ pluck(.x, "column_id") %>% unique())
     )
 
