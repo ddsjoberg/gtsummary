@@ -49,7 +49,7 @@ functions. Default is \code{everything()}.}
 tests that accept arguments. For example, add an argument for all t-tests,
 use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
 
-\item{exclude}{DEPRECATED}
+\item{exclude}{DEPRECATED.}
 
 \item{...}{Not used}
 }

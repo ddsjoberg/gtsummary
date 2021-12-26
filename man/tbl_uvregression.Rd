@@ -21,8 +21,8 @@ tbl_uvregression(
   pvalue_fun = NULL,
   formula = "{y} ~ {x}",
   add_estimate_to_reference_rows = NULL,
-  show_yesno = NULL,
-  exclude = NULL
+  conf.int = TRUE,
+  ...
 )
 }
 \arguments{
@@ -89,9 +89,10 @@ random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gea
 
 \item{add_estimate_to_reference_rows}{add a reference value. Default is FALSE}
 
-\item{show_yesno}{DEPRECATED}
+\item{conf.int}{Logical indicating whether or not to include a confidence
+interval in the output. Defaults to \code{TRUE}.}
 
-\item{exclude}{DEPRECATED}
+\item{...}{Not used}
 }
 \value{
 A \code{tbl_uvregression} object

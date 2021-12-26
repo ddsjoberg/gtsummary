@@ -38,6 +38,9 @@ test_that("glm: logistic and poisson regression", {
     "**log(IRR)**"
   )
 
+  expect_false(
+    "ci" %in% names(tbl_regression(mod_logistic, conf.int = FALSE) %>% as_tibble(col_labels = FALSE))
+  )
   expect_error(tbl_regression(mod_logistic, exponentiate = TRUE), NA)
   expect_warning(tbl_regression(mod_logistic, exponentiate = TRUE), NA)
   expect_error(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt"), NA)

@@ -85,28 +85,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
                              include = everything(), tidy_fun = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL, formula = "{y} ~ {x}",
-                             add_estimate_to_reference_rows = NULL,
-                             show_yesno = NULL, exclude = NULL) {
+                             add_estimate_to_reference_rows = NULL, conf.int = TRUE, ...) {
   # deprecated arguments -------------------------------------------------------
-  if (!is.null(show_yesno)) {
-    lifecycle::deprecate_stop(
-      "1.2.2", "tbl_uvregression(show_yesno = )",
-      "tbl_uvregression(show_single_row = )"
-    )
-  }
-
-  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_stop(
-      "1.2.5",
-      "gtsummary::tbl_uvregression(exclude = )",
-      "tbl_uvregression(include = )",
-      details = paste0(
-        "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "to `dplyr::select()`. To exclude variable, use the minus sign.\n",
-        "For example, `include = -c(age, stage)`"
-      )
-    )
-  }
+  .tbl_regression_deprecated_arguments(...)
 
   # checking input -------------------------------------------------------------
   # data is a data frame
@@ -191,14 +172,6 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
       ) %||% .remove_survey_cols(data),
       arg_name = "include"
     )
-  exclude <-
-    .select_to_varnames(
-      select = {{ exclude }},
-      data = switch(is.data.frame(data),
-        data
-      ) %||% .remove_survey_cols(data),
-      arg_name = "exclude"
-    )
   show_single_row <-
     .select_to_varnames(
       select = {{ show_single_row }},
@@ -267,7 +240,6 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     setdiff(c("x", "y"))
 
   if (!is.null(include)) all_vars <- intersect(all_vars, include)
-  all_vars <- all_vars %>% setdiff(exclude)
   if (length(all_vars) == 0) {
     stop("There were no covariates selected.", call. = FALSE)
   }
@@ -276,7 +248,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   tbl_reg_args <-
     c(
       "exponentiate", "conf.level", "label", "include", "show_single_row",
-      "tidy_fun", "estimate_fun", "pvalue_fun", "add_estimate_to_reference_rows"
+      "tidy_fun", "estimate_fun", "pvalue_fun",
+      "add_estimate_to_reference_rows", "conf.int"
     )
 
   df_model <-
