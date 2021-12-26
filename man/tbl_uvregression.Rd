@@ -21,7 +21,7 @@ tbl_uvregression(
   pvalue_fun = NULL,
   formula = "{y} ~ {x}",
   add_estimate_to_reference_rows = NULL,
-  conf.int = TRUE,
+  conf.int = NULL,
   ...
 )
 }
