@@ -85,7 +85,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
                              include = everything(), tidy_fun = NULL,
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL, formula = "{y} ~ {x}",
-                             add_estimate_to_reference_rows = NULL, conf.int = TRUE, ...) {
+                             add_estimate_to_reference_rows = NULL, conf.int = NULL, ...) {
   # deprecated arguments -------------------------------------------------------
   .tbl_regression_deprecated_arguments(...)
 
@@ -110,6 +110,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
       default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
     ) %>%
     gts_mapper("tbl_uvregression(estimate_fun=)")
+  conf.int <-
+    conf.int %||%
+    get_theme_element("tbl_regression-arg:conf.int", default = TRUE)
   conf.level <-
     conf.level %||%
     getOption("gtsummary.conf.level", default = 0.95)

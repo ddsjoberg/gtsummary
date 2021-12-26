@@ -23,9 +23,8 @@ test_that("lm: no errors/warnings with standard use", {
 
   expect_false(
     "ci" %in%
-      names(
-        tbl_uvregression(mtcars, method = lm, y = mpg, conf.int = FALSE) %>% as_tibble(col_labels = FALSE)
-      )
+      names(tbl_uvregression(mtcars, method = lm, y = mpg, conf.int = FALSE) %>%
+          as_tibble(col_labels = FALSE))
   )
 })
 
