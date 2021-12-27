@@ -562,7 +562,6 @@ add_p_test_tbl_summary_to_tbl_continuous <- function(
   data, variable, by, continuous_variable, test.args = NULL,
   test_name = NULL, group = NULL, ...) {
 
-  browser()
   switch(
     test_name,
     "t.test" = add_p_test_t.test(data = data, variable = continuous_variable,

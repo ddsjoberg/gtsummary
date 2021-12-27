@@ -809,7 +809,20 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
 
 #' P-values for `tbl_continuous`
 #'
+#' @inheritParams add_p.tbl_summary
+#' @param test List of formulas specifying statistical tests to perform for each
+#' variable. See [tests]
+#' for details, more tests, and instruction for implementing a custom test.
 #' @export
+#' @examples
+#' add_p_continuous_ex1 <-
+#'   tbl_continuous(
+#'     data = trial,
+#'     variable = age,
+#'     by = trt,
+#'     include = grade
+#'   ) %>%
+#'   add_p()
 add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
                                  include = everything(), test.args = NULL,
                                  group = NULL, ...) {
@@ -886,7 +899,6 @@ add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
       arg_name = "test.args"
     )
 
-  browser()
   x$meta_data <-
     meta_data %>%
     mutate(
@@ -917,28 +929,4 @@ add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
   add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
 }
 
-.assign_test_tbl_continuous <- function(data, continuous_variable,
-                                        variable, by, group, test) {
-  # if user supplied a test, use that test -------------------------------------
-  if (!is.null(test[[variable]])) {
-    return(test[[variable]])
-  }
 
-  # if not by variable, can calculate the test the same way as in `add_p.tbl_summary`
-  if (is.null(by)) {
-    return(
-      .assign_test_tbl_summary(
-        data = data, variable = continuous_variable, summary_type = "continuous",
-        by = variable, group = group, test = test
-      )
-    )
-  }
-
-  # no default test for correlated data
-  if (!is.null(group)) {
-    stop("There is no default test for correlated data when `by=` is specified.", call. = FALSE)
-  }
-
-  # otherwise, use 2-way ANOVA
-  return("anova_2way")
-}

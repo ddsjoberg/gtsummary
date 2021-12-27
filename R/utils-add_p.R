@@ -327,3 +327,30 @@
     stringr::str_wrap() %>%
     stop(call. = FALSE)
 }
+
+
+.assign_test_tbl_continuous <- function(data, continuous_variable,
+                                        variable, by, group, test) {
+  # if user supplied a test, use that test -------------------------------------
+  if (!is.null(test[[variable]])) {
+    return(test[[variable]])
+  }
+
+  # if not by variable, can calculate the test the same way as in `add_p.tbl_summary`
+  if (is.null(by)) {
+    return(
+      .assign_test_tbl_summary(
+        data = data, variable = continuous_variable, summary_type = "continuous",
+        by = variable, group = group, test = test
+      )
+    )
+  }
+
+  # no default test for correlated data
+  if (!is.null(group)) {
+    stop("There is no default test for correlated data when `by=` is specified.", call. = FALSE)
+  }
+
+  # otherwise, use 2-way ANOVA
+  return("anova_2way")
+}
