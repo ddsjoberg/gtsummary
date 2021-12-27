@@ -1,0 +1,62 @@
+Package: rio
+Type: Package
+Title: A Swiss-Army Knife for Data I/O
+Version: 0.5.12
+Date: 2018-07-06
+Authors@R: c(person("Jason", "Becker", role = "ctb", email = "jason@jbecker.co"),
+             person("Chung-hong", "Chan", role = "aut", email = "chainsawtiney@gmail.com"),
+             person("Geoffrey CH", "Chan", role = "ctb", email = "gefchchan@gmail.com"),
+             person("Thomas J.", "Leeper",
+                    role = c("aut", "cre"), 
+                    email = "thosjleeper@gmail.com",
+                    comment = c(ORCID = "0000-0003-4097-6326")),
+             person("Christopher", "Gandrud", role = "ctb"),
+             person("Andrew", "MacDonald", role = "ctb"),
+             person("Ista", "Zahn", role = "ctb"),
+             person("Stanislaus", "Stadlmann", role = "ctb"),
+             person("Ruaridh", "Williamson", role = "ctb", email = "ruaridh.williamson@gmail.com"),
+             person("Patrick", "Kennedy", role = "ctb"),
+             person("Ryan", "Price", email = "ryapric@gmail.com", role = "ctb"))
+Description: Streamlined data import and export by making assumptions that
+    the user is probably willing to make: 'import()' and 'export()' determine
+    the data structure from the file extension, reasonable defaults are used for
+    data import and export (e.g., 'stringsAsFactors=FALSE'), web-based import is
+    natively supported (including from SSL/HTTPS), compressed files can be read
+    directly without explicit decompression, and fast import packages are used where
+    appropriate. An additional convenience function, 'convert()', provides a simple
+    method for converting between file types.
+URL: https://github.com/leeper/rio
+BugReports: https://github.com/leeper/rio/issues
+Depends:
+    R (>= 2.15.0)
+Imports:
+    tools,
+    stats,
+    utils,
+    foreign,
+    haven (>= 1.1.0),
+    curl (>= 0.6),
+    data.table (>= 1.9.8),
+    readxl (>= 0.1.1),
+    openxlsx,
+    tibble
+Suggests:
+    datasets,
+    bit64,
+    testthat,
+    knitr,
+    magrittr,
+    clipr,
+    csvy,
+    feather,
+    fst,
+    jsonlite,
+    NANTUCKET,
+    readODS (>= 1.6.4),
+    readr,
+    rmatio,
+    xml2 (>= 1.2.0),
+    yaml
+License: GPL-2
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1

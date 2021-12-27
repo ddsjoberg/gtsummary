@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Virtual Class &quot;atomicVector&quot; of Atomic Vectors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for atomicVector-class {Matrix}"><tr><td>atomicVector-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Virtual Class &quot;atomicVector&quot; of Atomic Vectors</h2>
+
+<h3>Description</h3>
+
+<p>The <code><a href="../../base/html/class.html">class</a></code> <code>"atomicVector"</code> is a
+<em>virtual</em> class containing all atomic vector classes of base <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>,
+as also implicitly defined via <code><a href="../../base/html/is.recursive.html">is.atomic</a></code>.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>A virtual Class: No objects may be created from it.</p>
+
+
+<h3>Methods</h3>
+
+<p>In the <span class="pkg">Matrix</span> package, the &quot;atomicVector&quot; is used in signatures
+where typically &ldquo;old-style&rdquo; &quot;matrix&quot; objects can be used and
+can be substituted by simple vectors.
+</p>
+
+
+<h3>Extends</h3>
+
+
+<p>The atomic classes
+<code>"logical"</code>, <code>"integer"</code>, <code>"double"</code>, <code>"numeric"</code>,
+<code>"complex"</code>, <code>"raw"</code> and <code>"character"</code> are extended
+directly.  Note that <code>"numeric"</code> already contains <code>"integer"</code>
+and <code>"double"</code>, but we want all of them to be direct subclasses of
+<code>"atomicVector"</code>.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/is.recursive.html">is.atomic</a></code>, <code><a href="../../base/html/integer.html">integer</a></code>, <code><a href="../../base/html/numeric.html">numeric</a></code>,
+<code><a href="../../base/html/complex.html">complex</a></code>, etc.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("atomicVector")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get model parameters from mixed models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_parameters.glmm {insight}"><tr><td>get_parameters.glmm {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get model parameters from mixed models</h2>
+
+<h3>Description</h3>
+
+<p>Returns the coefficients from a model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'glmm'
+get_parameters(x, effects = c("all", "fixed", "random"), ...)
+
+## S3 method for class 'coxme'
+get_parameters(x, effects = c("fixed", "random"), ...)
+
+## S3 method for class 'merMod'
+get_parameters(x, effects = c("fixed", "random"), ...)
+
+## S3 method for class 'glmmTMB'
+get_parameters(
+  x,
+  effects = c("fixed", "random"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion"),
+  ...
+)
+
+## S3 method for class 'glimML'
+get_parameters(x, effects = c("fixed", "random", "all"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+<tr valign="top"><td><code>effects</code></td>
+<td>
+<p>Should parameters for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>component</code></td>
+<td>
+<p>Which type of parameters to return, such as parameters for the
+conditional model, the zero-inflated part of the model or the dispersion
+term? Applies to models with zero-inflated and/or dispersion formula. Note
+that the <em>conditional</em> component is also called <em>count</em> or <em>mean</em>
+component, depending on the model. There are three convenient shortcuts:
+<code>component = "all"</code> returns all possible parameters.
+If <code>component = "location"</code>, location parameters such as <code>conditional</code>
+or <code>zero_inflated</code> are returned (everything that are fixed or random
+effects - depending on the <code>effects</code> argument - but no auxiliary
+parameters). For <code>component = "distributional"</code> (or <code>"auxiliary"</code>),
+components like <code>sigma</code> or <code>dispersion</code> (and other auxiliary
+parameters) are returned.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>In most cases when models either return different &quot;effects&quot; (fixed,
+random) or &quot;components&quot; (conditional, zero-inflated, ...), the arguments
+<code>effects</code> and <code>component</code> can be used.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>effects = "fixed"</code>, a data frame with two columns: the
+parameter names and the related point estimates. If <code>effects =
+  "random"</code>, a list of data frames with the random effects (as returned by
+<code>ranef()</code>), unless the random effects have the same simplified
+structure as fixed effects (e.g. for models from <span class="pkg">MCMCglmm</span>).
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+m &lt;- lm(mpg ~ wt + cyl + vs, data = mtcars)
+get_parameters(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Find names of model parameters</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for find_parameters {insight}"><tr><td>find_parameters {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Find names of model parameters</h2>
+
+<h3>Description</h3>
+
+<p>Returns the names of model parameters, like they typically
+appear in the <code>summary()</code> output. For Bayesian models, the parameter
+names equal the column names of the posterior samples after coercion
+from <code>as.data.frame()</code>. See the documentation for your object's class:
+</p>
+
+<ul>
+<li><p><a href="find_parameters.BGGM.html">Bayesian models</a> (<span class="pkg">rstanarm</span>, <span class="pkg">brms</span>, <span class="pkg">MCMCglmm</span>, ...)
+</p>
+</li>
+<li><p><a href="find_parameters.gamlss.html">Generalized additive models</a> (<span class="pkg">mgcv</span>, <span class="pkg">VGAM</span>, ...)
+</p>
+</li>
+<li><p><a href="find_parameters.betamfx.html">Marginal effects models</a> (<span class="pkg">mfx</span>)
+</p>
+</li>
+<li><p><a href="find_parameters.emmGrid.html">Estimated marginal means</a> (<span class="pkg">emmeans</span>)
+</p>
+</li>
+<li><p><a href="find_parameters.glmmTMB.html">Mixed models</a> (<span class="pkg">lme4</span>, <span class="pkg">glmmTMB</span>, <span class="pkg">GLMMadaptive</span>, ...)
+</p>
+</li>
+<li><p><a href="find_parameters.zeroinfl.html">Zero-inflated and hurdle models</a> (<span class="pkg">pscl</span>, ...)
+</p>
+</li>
+<li><p><a href="find_parameters.averaging.html">Models with special components</a> (<span class="pkg">betareg</span>, <span class="pkg">MuMIn</span>, ...)
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+find_parameters(x, ...)
+
+## Default S3 method:
+find_parameters(x, flatten = FALSE, verbose = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>flatten</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, the values are returned
+as character vector, not as list. Duplicated values are removed.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle messages and warnings.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A list of parameter names. For simple models, only one list-element,
+<code>conditional</code>, is returned.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+m &lt;- lm(mpg ~ wt + cyl + vs, data = mtcars)
+find_parameters(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

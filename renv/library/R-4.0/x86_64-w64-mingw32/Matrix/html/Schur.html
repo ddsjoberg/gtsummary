@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Schur Decomposition of a Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for Schur {Matrix}"><tr><td>Schur {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Schur Decomposition of a Matrix</h2>
+
+<h3>Description</h3>
+
+<p>Computes the Schur decomposition and eigenvalues of a square matrix;
+see the BACKGROUND information below.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+Schur(x, vectors, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>numeric 
+square Matrix (inheriting from class <code>"Matrix"</code>) or traditional
+<code><a href="../../base/html/matrix.html">matrix</a></code>.  Missing values (NAs) are not allowed.
+</p>
+</td></tr>
+<tr valign="top"><td><code>vectors</code></td>
+<td>
+<p>logical.  When <code>TRUE</code> (the default), the Schur
+vectors are computed, and the result is a proper
+<code><a href="MatrixFactorization-class.html">MatrixFactorization</a></code> of class
+<code><a href="Schur-class.html">Schur</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>further arguments passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Based on the Lapack subroutine <code>dgees</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>If <code>vectors</code> are <code>TRUE</code>, as per default:
+If <code>x</code> is a <code><a href="Matrix-class.html">Matrix</a></code>
+an object of class <code><a href="Schur-class.html">Schur</a></code>, otherwise, for a
+traditional <code><a href="../../base/html/matrix.html">matrix</a></code> <code>x</code>, a <code><a href="../../base/html/list.html">list</a></code> with
+components <code>T</code>, <code>Q</code>, and <code>EValues</code>.
+</p>
+<p>If <code>vectors</code> are <code>FALSE</code>, a list with components
+</p>
+<table summary="R valueblock">
+<tr valign="top"><td><code>T</code></td>
+<td>
+<p>the upper quasi-triangular (square) matrix of the Schur decomposition.</p>
+</td></tr>
+<tr valign="top"><td><code>EValues</code></td>
+<td>
+<p>the vector of <code><a href="../../base/html/numeric.html">numeric</a></code> or
+<code><a href="../../base/html/complex.html">complex</a></code> eigen values of <i>T</i> or <i>A</i>.</p>
+</td></tr>
+</table>
+
+
+<h3>BACKGROUND</h3>
+
+<p>If <code>A</code> is a square matrix, then <code>A = Q T t(Q)</code>, where
+<code>Q</code> is orthogonal, and <code>T</code> is upper block-triangular
+(nearly triangular with either 1 by 1 or 2 by 2 blocks on the
+diagonal) where the 2 by 2 blocks correspond to (non-real) complex
+eigenvalues.
+The eigenvalues of <code>A</code> are the same as those of <code>T</code>,
+which are easy to compute.  The Schur form is used most often for
+computing non-symmetric eigenvalue decompositions, and for computing
+functions of matrices such as matrix exponentials.
+</p>
+
+
+<h3>References</h3>
+
+<p>Anderson, E., et al. (1994).
+<em>LAPACK User's Guide,</em>
+2nd edition, SIAM, Philadelphia.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+Schur(Hilbert(9))              # Schur factorization (real eigenvalues)
+
+(A &lt;- Matrix(round(rnorm(5*5, sd = 100)), nrow = 5))
+(Sch.A &lt;- Schur(A))
+
+eTA &lt;- eigen(Sch.A@T)
+str(SchA &lt;- Schur(A, vectors=FALSE))# no 'T' ==&gt; simple list
+stopifnot(all.equal(eTA$values, eigen(A)$values, tolerance = 1e-13),
+          all.equal(eTA$values,
+                    local({z &lt;- Sch.A@EValues
+                           z[order(Mod(z), decreasing=TRUE)]}), tolerance = 1e-13),
+          identical(SchA$T, Sch.A@T),
+          identical(SchA$EValues, Sch.A@EValues))
+
+## For the faint of heart, we provide Schur() also for traditional matrices:
+
+a.m &lt;- function(M) unname(as(M, "matrix"))
+a &lt;- a.m(A)
+Sch.a &lt;- Schur(a)
+stopifnot(identical(Sch.a, list(Q = a.m(Sch.A @ Q),
+				T = a.m(Sch.A @ T),
+				EValues = Sch.A@EValues)),
+	  all.equal(a, with(Sch.a, Q %*% T %*% t(Q)))
+)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

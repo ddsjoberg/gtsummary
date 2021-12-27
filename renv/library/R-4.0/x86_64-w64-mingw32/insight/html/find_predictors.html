@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Find names of model predictors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for find_predictors {insight}"><tr><td>find_predictors {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Find names of model predictors</h2>
+
+<h3>Description</h3>
+
+<p>Returns the names of the predictor variables for the
+different parts of a model (like fixed or random effects, zero-inflated
+component, ...). Unlike <code><a href="find_parameters.html">find_parameters</a></code>, the names from
+<code>find_predictors()</code> match the original variable names from the data
+that was used to fit the model.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+find_predictors(
+  x,
+  effects = c("fixed", "random", "all"),
+  component = c("all", "conditional", "zi", "zero_inflated", "dispersion",
+    "instruments", "correlation", "smooth_terms"),
+  flatten = FALSE,
+  verbose = TRUE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+<tr valign="top"><td><code>effects</code></td>
+<td>
+<p>Should variables for fixed effects, random effects
+or both be returned? Only applies to mixed models. May be abbreviated.</p>
+</td></tr>
+<tr valign="top"><td><code>component</code></td>
+<td>
+<p>Should all predictor variables, predictor variables for the
+conditional model, the zero-inflated part of the model, the dispersion
+term or the instrumental variables be returned? Applies to models
+with zero-inflated and/or dispersion formula, or to models with instrumental
+variable (so called fixed-effects regressions). May be abbreviated. Note that the
+<em>conditional</em> component is also called <em>count</em> or <em>mean</em>
+component, depending on the model.</p>
+</td></tr>
+<tr valign="top"><td><code>flatten</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, the values are returned
+as character vector, not as list. Duplicated values are removed.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle warnings.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A list of character vectors that represent the name(s) of the
+predictor variables. Depending on the combination of the arguments
+<code>effects</code> and <code>component</code>, the returned list has following
+elements:
+</p>
+
+<ul>
+<li> <p><code>conditional</code>, the &quot;fixed effects&quot; terms from the model
+</p>
+</li>
+<li> <p><code>random</code>, the &quot;random effects&quot; terms from the model
+</p>
+</li>
+<li> <p><code>zero_inflated</code>, the &quot;fixed effects&quot; terms from the zero-inflation component of the model
+</p>
+</li>
+<li> <p><code>zero_inflated_random</code>, the &quot;random effects&quot; terms from the zero-inflation component of the model
+</p>
+</li>
+<li> <p><code>dispersion</code>, the dispersion terms
+</p>
+</li>
+<li> <p><code>instruments</code>, for fixed-effects regressions like <code>ivreg</code>, <code>felm</code> or <code>plm</code>, the instrumental variables
+</p>
+</li>
+<li> <p><code>correlation</code>, for models with correlation-component like <code>gls</code>, the variables used to describe the correlation structure
+</p>
+</li></ul>
+
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+m &lt;- lm(mpg ~ wt + cyl + vs, data = mtcars)
+find_predictors(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

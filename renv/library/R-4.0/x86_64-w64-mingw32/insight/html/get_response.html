@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get the values from the response variable</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_response {insight}"><tr><td>get_response {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get the values from the response variable</h2>
+
+<h3>Description</h3>
+
+<p>Returns the values the response variable(s) from a model object.
+If the model is a multivariate response model, a data frame with values
+from all response variables is returned.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_response(x, select = NULL, verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model.</p>
+</td></tr>
+<tr valign="top"><td><code>select</code></td>
+<td>
+<p>Optional name(s) of response variables for which to extract values.
+Can be used in case of regression models with multiple response variables.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle warnings.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The values of the response variable, as vector, or a data frame if
+<code>x</code> has more than one defined response variable.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (require("lme4")) {
+  data(cbpp)
+  cbpp$trials &lt;- cbpp$size - cbpp$incidence
+
+  m &lt;- glm(cbind(incidence, trials) ~ period, data = cbpp, family = binomial)
+  head(get_response(m))
+  get_response(m, select = "incidence")
+}
+
+data(mtcars)
+m &lt;- lm(mpg ~ wt + cyl + vs, data = mtcars)
+get_response(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

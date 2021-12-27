@@ -65,8 +65,9 @@
 #' @importFrom stats as.formula weights
 #' @return A `tbl_svysummary` object
 #' @family tbl_svysummary tools
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Joseph Larmarange
-#' @examplesIf assert_package("survey", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("survey", boolean = TRUE)
 #' # A simple weighted dataset
 #' tbl_svysummary_ex1 <-
 #'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%

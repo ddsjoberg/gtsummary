@@ -1,0 +1,44 @@
+Package: rlang
+Version: 0.4.11
+Title: Functions for Base Types and Core R and 'Tidyverse' Features
+Description: A toolbox for working with base types, core R features
+  like the condition system, and core 'Tidyverse' features like tidy
+  evaluation.
+Authors@R: c(
+    person("Lionel", "Henry", ,"lionel@rstudio.com", c("aut", "cre")),
+    person("Hadley", "Wickham", ,"hadley@rstudio.com", "aut"),
+    person(given = "mikefc",
+           email = "mikefc@coolbutuseless.com", 
+           role = "cph", 
+           comment = "Hash implementation based on Mike's xxhashlite"),
+    person(given = "Yann",
+           family = "Collet",
+           role = "cph", 
+           comment = "Author of the embedded xxHash library"),
+    person("RStudio", role = "cph")
+    )
+License: MIT + file LICENSE
+ByteCompile: true
+Biarch: true
+Depends: R (>= 3.3.0)
+Imports: utils
+Suggests: cli, covr, crayon, glue, magrittr, methods, pak, pillar,
+        rmarkdown, testthat (>= 3.0.0), vctrs (>= 0.2.3), withr
+Enhances: winch
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+URL: https://rlang.r-lib.org, https://github.com/r-lib/rlang
+BugReports: https://github.com/r-lib/rlang/issues
+Config/testthat/edition: 3
+NeedsCompilation: yes
+Packaged: 2021-04-29 14:15:00 UTC; lionel
+Author: Lionel Henry [aut, cre],
+  Hadley Wickham [aut],
+  mikefc [cph] (Hash implementation based on Mike's xxhashlite),
+  Yann Collet [cph] (Author of the embedded xxHash library),
+  RStudio [cph]
+Maintainer: Lionel Henry <lionel@rstudio.com>
+Repository: CRAN
+Date/Publication: 2021-04-30 23:20:02 UTC
+Built: R 4.1.0; x86_64-w64-mingw32; 2021-06-12 08:30:15 UTC; windows
+Archs: i386, x64

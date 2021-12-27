@@ -1,0 +1,76 @@
+---
+title: "Intro to codemetar, Codemeta creator for R packages"
+author: "Carl Boettiger"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Intro to codemetar, Codemeta creator for R packages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r include=FALSE}
+Sys.setenv("ON_CRAN" = "true")
+knitr::opts_chunk$set(comment="")
+if(grepl("windows", tolower(Sys.info()[["sysname"]])))
+  knitr::opts_chunk$set(comment="", error =TRUE)
+```
+
+
+
+# codemetar: generate codemeta metadata for R packages
+
+```{r child='../man/rmdhunks/goals.Rmd'} 
+```
+
+
+## Why create a codemeta.json for your package?
+
+```{r child='../man/rmdhunks/whybother.Rmd'} 
+```
+
+## Installation and usage requirements
+
+```{r child='../man/rmdhunks/install-instructions.Rmd'} 
+```
+
+
+```{r child='../man/rmdhunks/internet.Rmd'} 
+```
+
+## Create a codemeta.json in one function call
+
+```{r child='../man/rmdhunks/example.Rmd'} 
+```
+
+## Keep codemeta.json up-to-date
+
+```{r child='../man/rmdhunks/uptodate.Rmd'} 
+```
+
+## A brief intro to common terms we'll use:
+
+- [Linked data](https://en.wikipedia.org/wiki/Linked_data): We often use different words to mean the same thing. And sometimes the same word to mean different things.  Linked data seeks to address this issue by using [URIs](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier) (i.e. URLs) to make this explicit.
+
+- context: No one likes typing out long URLs all the time.  So instead, the *context* of a JSON-LD file (`"@context"` element) gives us the context for the terms we use, that is, the root URL.  Usually schema.org but domain specific ones also (eg codemeta)
+
+- [Schema.org](https://schema.org/): A major initiative led by Google and other search engines to define a simple and widely used context to link data on the web through a catalogue of standard metadata fields
+
+- [The CodeMeta Project](https://codemeta.github.io/): an academic led community initiative to formalise the metadata fields included in typical software metadata records and introduce important fields that did not have clear equivalents. The codemeta [crosswalk](https://codemeta.github.io/crosswalk/) provides an explicit map between the metadata fields used by a broad range of software repositories, registries and archives
+
+- [JSON-LD](https://json-ld.org): While 'linked data' can be represented in many different formats, these have consistently proven a bit tricky to use, either for consumers or developers or both.  JSON-LD provides a simple adaptation of the JSON format, which has proven much more popular with both audiences, that allows it to express (most) linked-data concepts.  It is now the format of choice for expressing linked data by Google and many others.  Any JSON-LD file is valid JSON, and any JSON file can be treated as JSON-LD.  
+
+- [codemetar](https://codemeta.github.io/codemetar/): The CodeMeta Project has created tools in several languages to implement the CodeMeta Crosswalk (using JSON-LD) and help extract software metadata into `codemeta.json` records.  `codemetar` is one such tool, focused on R and R packages.
+
+## How to improve your package's codemeta.json?
+
+```{r child='../man/rmdhunks/improvecodemetadata.Rmd'} 
+```
+
+## Going further
+
+Check out all the [codemetar vignettes](https://docs.ropensci.org/codemetar/articles/index.html) for tutorials on other cool stuff you can do with codemeta and json-ld.  
+
+```{r child='../man/rmdhunks/minimeta.Rmd'} 
+```

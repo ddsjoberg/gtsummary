@@ -1,0 +1,117 @@
+---
+title: "Graphs of Hits By Type in MLB"
+author: "Vanessa Foot"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Graphs of Hits By Type in MLB}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r nomessages, echo = FALSE}
+# set some default options for chunks
+knitr::opts_chunk$set(
+  warning = FALSE,   # avoid warnings and messages in the output
+  message = FALSE,
+  collapse = TRUE,   # collapse all output into a single block
+  tidy = FALSE,      # don't tidy our code-- assume we do it ourselves
+  fig.height = 5,
+  fig.width = 7
+)
+options(digits=4)    # number of digits to display in output; can override with chunk option R.options=list(digits=)
+
+set.seed(1234)       # reproducibility
+```
+How has the percentage of various types of hits (singles, doubles, triples, home runs) changed over time in baseball history?  Are there any overall trends?  This vignette examines these questions in a simple analysis of the `Batting` data.
+
+## The `Batting` data
+
+First, we load the `Batting` data from the `Lahman` package. We also need to load the `dplyr` package so that we can sort and organize the data. The batting data has much more than we need. 
+```{r load-data}
+library("dplyr")
+data(Batting, package="Lahman")
+str(Batting) #take a look at the data
+```
+
+### Data munging
+
+We take the full Batting data frame and select what we need to use. We want a data frame that shows us the year, followed by total hits for that year, and then singles, doubles, triples and home runs. 
+
+Singles is not a column in this data frame, so we need to add it by taking total hits (`H`), and subtracting the other types of hits from it. The `mutate` function does the math for us and adds a column in. 
+```{r select-mutate}
+batting <- Batting %>% 
+  # select the variables that we want left after we filter the data
+  select(yearID, H, X2B, X3B, HR) %>%
+  # select the years from 1871+
+  filter(yearID >= 1871) %>% 
+  group_by(yearID) %>%
+#  summarise_each(funs(sum(., na.rm=TRUE))) %>% 
+  summarise_all(funs(sum(., na.rm=TRUE))) %>% 
+  # we summarize by year, and then na.rm takes care of 0's in the data
+  mutate(X1 = H-(X2B+X3B+HR)) %>% #create a column for singles
+  # we eventually want these as a percentage of hits, so we can do the math now 
+  mutate(Single = X1/H*100) %>% 
+  mutate(Double = X2B/H*100) %>% 
+  mutate(Triple = X3B/H*100) %>% 
+  mutate(HomeRun = HR/H*100)
+```
+
+Now, just select the variables we want to plot
+
+```{r select2}
+bat <- batting %>% 
+  select(yearID, Single, Double, Triple, HomeRun)
+#this makes a nice looking data frame before we move on
+```
+We have our data in wide format right now. We need it to be in long format so that we can use ggplot to make a graph. The `reshape2` package does this easily. We want to melt our data frame, but keep YearID as the ID variable (meaning that it stays put in it's own column). Then, we look at the data to make sure it's what we want. 
+```{r} 
+library(reshape2)
+bat_long <- melt(bat, id.vars = c("yearID"))
+head(bat_long)
+```
+## Graphs
+
+To look at hits per year in a line graph, we will use `ggplot2`. The data is called `bat_long`, and our variables of interest are year (`yearID`), the percentage of each type of hit (`value`), and the type of hit (`variable`). 
+
+We can use `geom_line` and then make titles with `xlab`, `ylab`, and `ggtitle`. Instead of using the default scaling, we can set our own `scale_x` and `scale_y`. 
+
+The `guides` function tells ggplot what we want from our legend and overrides the default. We want singles at the bottom (so we reverse the legend which automatically does the opposite), and we want to set our own title for the legend. 
+```{r plot1}
+library(ggplot2)
+hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
+       geom_line() + 
+  xlab("Major League Baseball Season") + 
+  ylab("Percentage") + 
+  ggtitle("Hits by Type in Major League Baseball") + 
+  scale_x_continuous(breaks = c(1870, 1885, 1900, 1915, 1930, 1945, 
+                                1960, 1975, 1990, 2005, 2020 )) + 
+  scale_y_continuous(breaks = c(0, 25, 50, 75, 100))+
+  guides(colour=guide_legend(reverse=TRUE, 
+                             aes(ggtitle= "Type of Hit")))
+hitsperyear
+```
+
+### Add trend lines
+We can see the overall trends more clearly by adding linear regression lines for each
+type of hit.
+```{r plot2}
+hitsperyear + geom_smooth(method="lm")
+
+```
+
+So, the percentage of singles and triples have declined over time, while the percentage of doubles and home runs have increased. Can you think of any reason for this?
+
+## Further analyses: Your turn
+
+Here are some questions to provoke further analyses of these data sets.  If you find something interesting, post it in a [Github Gist](https://gist.github.com/) or forward it to Team Lahman as in a [Lahman issue](https://github.com/cdalzell/Lahman/issues).
+
+* This analysis uses total hits for all players in all teams over time. What problems might there be with this analysis?
+
+    + Examine the data for possible outliers or unusual observations.
+    + Would it make sense to exclude players who have fewer than some number of plate appearances
+    (`AB`) in a given year?
+

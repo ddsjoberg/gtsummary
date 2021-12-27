@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Format messages and warnings</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for format_message {insight}"><tr><td>format_message {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Format messages and warnings</h2>
+
+<h3>Description</h3>
+
+<p>Inserts line breaks into a longer message or warning string.
+Line length is adjusted to maximum length of the console, if the width
+can be accessed. By default, new lines are indented by two whitespace.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+format_message(string, ..., line_length = options()$width)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>string</code></td>
+<td>
+<p>A string.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Further strings that will be concatenated as indented new lines.</p>
+</td></tr>
+<tr valign="top"><td><code>line_length</code></td>
+<td>
+<p>Numeric, the maximum length of a line.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A formatted string.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+msg &lt;- format_message("Much too long string for just one line, I guess!",
+  line_length = 15
+)
+message(msg)
+
+msg &lt;- format_message("Much too long string for just one line, I guess!",
+  "First new line",
+  "Second new line",
+  "(both indented)",
+  line_length = 30
+)
+message(msg)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

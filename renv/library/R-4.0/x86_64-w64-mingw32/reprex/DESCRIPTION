@@ -1,0 +1,61 @@
+Package: reprex
+Title: Prepare Reproducible Example Code via the Clipboard
+Version: 2.0.0
+Authors@R: 
+    c(person(given = "Jennifer",
+             family = "Bryan",
+             role = c("aut", "cre"),
+             email = "jenny@rstudio.com",
+             comment = c(ORCID = "0000-0002-6983-2759")),
+      person(given = "Jim",
+             family = "Hester",
+             role = "aut",
+             email = "james.hester@rstudio.com",
+             comment = c(ORCID = "0000-0002-2739-7082")),
+      person(given = "David",
+             family = "Robinson",
+             role = "aut",
+             email = "admiral.david@gmail.com"),
+      person(given = "Hadley",
+             family = "Wickham",
+             role = "aut",
+             email = "hadley@rstudio.com",
+             comment = c(ORCID = "0000-0003-4757-117X")),
+      person(given = "RStudio",
+             role = c("cph", "fnd")))
+Description: Convenience wrapper that uses the 'rmarkdown'
+    package to render small snippets of code to target formats that
+    include both code and output.  The goal is to encourage the sharing of
+    small, reproducible, and runnable examples on code-oriented websites,
+    such as <https://stackoverflow.com> and <https://github.com>, or in
+    email. The user's clipboard is the default source of input code and
+    the default target for rendered output. 'reprex' also extracts clean,
+    runnable R code from various common formats, such as copy/paste from
+    an R session.
+License: MIT + file LICENSE
+URL: https://reprex.tidyverse.org,
+        https://github.com/tidyverse/reprex#readme
+BugReports: https://github.com/tidyverse/reprex/issues
+Depends: R (>= 3.3)
+Imports: callr (>= 3.6.0), cli (>= 2.3.1), clipr (>= 0.4.0), fs, glue,
+        knitr (>= 1.23), rlang (>= 0.4.0), rmarkdown, rstudioapi,
+        utils, withr (>= 2.3.0)
+Suggests: covr, fortunes, miniUI, mockr, rprojroot, sessioninfo, shiny,
+        spelling, styler (>= 1.2.0), testthat (>= 3.0.2)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en-US
+RoxygenNote: 7.1.1
+SystemRequirements: pandoc (>= 2.0) - http://pandoc.org
+NeedsCompilation: no
+Packaged: 2021-04-02 17:55:31 UTC; jenny
+Author: Jennifer Bryan [aut, cre] (<https://orcid.org/0000-0002-6983-2759>),
+  Jim Hester [aut] (<https://orcid.org/0000-0002-2739-7082>),
+  David Robinson [aut],
+  Hadley Wickham [aut] (<https://orcid.org/0000-0003-4757-117X>),
+  RStudio [cph, fnd]
+Maintainer: Jennifer Bryan <jenny@rstudio.com>
+Repository: CRAN
+Date/Publication: 2021-04-02 18:20:02 UTC
+Built: R 4.0.5; ; 2021-05-07 17:10:31 UTC; windows

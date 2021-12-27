@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Correlation value plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggally_cor_v1_5 {GGally}"><tr><td>ggally_cor_v1_5 {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Correlation value plot</h2>
+
+<h3>Description</h3>
+
+<p>(Deprecated. See <code><a href="../../GGally/help/ggally_cor.html">ggally_cor</a></code>.)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggally_cor_v1_5(
+  data,
+  mapping,
+  alignPercent = 0.6,
+  method = "pearson",
+  use = "complete.obs",
+  corAlignPercent = NULL,
+  corMethod = NULL,
+  corUse = NULL,
+  displayGrid = TRUE,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data set using</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>aesthetics being used</p>
+</td></tr>
+<tr valign="top"><td><code>alignPercent</code></td>
+<td>
+<p>right align position of numbers. Default is 60 percent across the horizontal</p>
+</td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+<p><code>method</code> supplied to cor function</p>
+</td></tr>
+<tr valign="top"><td><code>use</code></td>
+<td>
+<p><code>use</code> supplied to cor function</p>
+</td></tr>
+<tr valign="top"><td><code>corAlignPercent</code></td>
+<td>
+<p>deprecated. Use parameter <code>alignPercent</code></p>
+</td></tr>
+<tr valign="top"><td><code>corMethod</code></td>
+<td>
+<p>deprecated. Use parameter <code>method</code></p>
+</td></tr>
+<tr valign="top"><td><code>corUse</code></td>
+<td>
+<p>deprecated. Use parameter <code>use</code></p>
+</td></tr>
+<tr valign="top"><td><code>displayGrid</code></td>
+<td>
+<p>if TRUE, display aligned panel gridlines</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other arguments being supplied to geom_text</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Estimate correlation from the given data.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Barret Schloerke
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../GGally/help/ggally_cor.html">ggally_cor</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+data(tips, package = "reshape")
+p_(ggally_cor_v1_5(tips, mapping = ggplot2::aes_string(x = "total_bill", y = "tip")))
+
+# display with no grid
+p_(ggally_cor_v1_5(
+  tips,
+  mapping = ggplot2::aes_string(x = "total_bill", y = "tip"),
+  displayGrid = FALSE
+))
+
+# change text attributes
+p_(ggally_cor_v1_5(
+  tips,
+  mapping = ggplot2::aes(x = total_bill, y = tip),
+  size = 15,
+  colour = I("red")
+))
+
+# split by a variable
+p_(ggally_cor_v1_5(
+  tips,
+  mapping = ggplot2::aes_string(x = "total_bill", y = "tip", color = "sex"),
+  size = 5
+))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

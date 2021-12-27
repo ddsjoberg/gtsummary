@@ -1,0 +1,42 @@
+---
+title: "Workflow Stages"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Workflow Stages}
+output:
+  knitr:::html_vignette:
+    toc: yes
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  digits = 3,
+  collapse = TRUE,
+  comment = "#>"
+)
+options(digits = 3)
+```
+
+Workflows encompasses the three main stages of the modeling _process_: pre-processing of data, model fitting, and post-processing of results. This page enumerates the possible operations for each stage that have been implemented to date.
+
+## Pre-processing
+
+The two elements allowed for pre-processing are:
+
+ * A standard [model formula](https://cran.r-project.org/doc/manuals/r-release/R-intro.html#Formulae-for-statistical-models) via `add_formula()`.
+ 
+ * A recipe object via `add_recipe()`.
+ 
+You can use one or the other but not both.
+
+## Model Fitting
+
+`parsnip` model specifications are the only option here, specified via `add_model()`.
+
+When using a preprocessor, you may need an additional formula for special model terms (e.g. for mixed models or generalized linear models). In these cases, specify that formula using `add_model()`'s `formula` argument, which will be passed to the underlying model when `fit()` is called.
+
+## Post-processing
+
+Some examples of post-processing the model predictions would be: adding a probability threshold for two-class problems, calibration of probability estimates, truncating the possible range of predictions, and so on.
+
+None of these are currently implemented but will be in coming versions.

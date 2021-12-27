@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Index Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for indMatrix-class {Matrix}"><tr><td>indMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Index Matrices</h2>
+
+<h3>Description</h3>
+
+<p>The <code>"indMatrix"</code> class is the class of index
+matrices, stored as 1-based integer index vectors.  An index matrix is
+a matrix with exactly one non-zero entry per row.
+Index matrices are useful for mapping observations to unique covariate
+values, for example.
+</p>
+<p>Matrix (vector) multiplication with index matrices is equivalent
+to replicating and permuting rows, or &ldquo;sampling rows with
+replacement&rdquo;, and is implemented that way in the <span class="pkg">Matrix</span> package,
+see the &lsquo;Details&rsquo; below.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Matrix (vector) multiplication with index matrices from the left is
+equivalent to replicating and permuting rows of the matrix on the right
+hand side.  (Similarly, matrix multiplication with the transpose of an
+index matrix from the right corresponds to selecting <em>columns</em>.)
+The crossproduct of an index matrix <i>M</i> with itself is a diagonal
+matrix with the number of entries in each column of <i>M</i> on the
+diagonal, i.e., <i>M'M=</i><code>Diagonal(x=table(M@perm))</code>.
+</p>
+<p>Permutation matrices (of class <code><a href="pMatrix-class.html">pMatrix</a></code>) are special
+cases of index matrices: They are square, of dimension, say, <i>n * n</i>, and their index vectors contain exactly all of <code>1:n</code>.
+</p>
+<p>While &ldquo;row-indexing&rdquo; (of more than one row <em>or</em> using
+<code>drop=FALSE</code>) stays within the <code>"indMatrix"</code> class, all
+other subsetting/indexing operations (&ldquo;column-indexing&rdquo;,
+including, <code><a href="../../base/html/diag.html">diag</a></code>) on <code>"indMatrix"</code> objects treats
+them as nonzero-pattern matrices (<code>"<a href="nsparseMatrix-classes.html">ngTMatrix</a>"</code>
+specifically), such that non-matrix subsetting results in
+<code><a href="../../base/html/logical.html">logical</a></code> vectors.
+Sub-assignment (<code>M[i,j] &lt;- v</code>) is not sensible and hence an error
+for these matrices.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("indMatrix", ...)</code>
+or by coercion from an integer index vector, see below.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>perm</code>:</dt><dd><p>An integer, 1-based index vector, i.e.
+an integer vector of length <code>Dim[1]</code> whose elements are taken from
+<code>1:Dim[2]</code>.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p><code><a href="../../base/html/integer.html">integer</a></code> vector of length two.
+In some applications, the matrix will be skinny, i.e., with at least
+as many rows as columns.</p>
+</dd>
+<dt><code>Dimnames</code>:</dt><dd><p>a <code><a href="../../base/html/list.html">list</a></code> of length two where
+each component is either <code><a href="../../base/html/NULL.html">NULL</a></code> or a
+<code><a href="../../base/html/character.html">character</a></code> vector of length equal to the
+corresponding <code>Dim</code> element.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"<a href="sparseMatrix-class.html">sparseMatrix</a>"</code> and
+<code>"<a href="generalMatrix-class.html">generalMatrix</a>"</code>, directly.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>%*%</dt><dd><p><code>signature(x = "matrix", y = "indMatrix")</code> and other
+signatures (use <code>showMethods("%*%", class="indMatrix")</code>): ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "integer", to = "indMatrix")</code>:
+This enables typical <code>"indMatrix"</code> construction, given
+an index vector from elements in <code>1:Dim[2]</code>, see the first example.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "numeric", to = "indMatrix")</code>:
+a user convenience, to allow <code>as(perm, "indMatrix")</code> for
+numeric <code>perm</code> with integer values.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "list", to = "indMatrix")</code>:
+The list must have two (integer-valued) entries: the first giving
+the index vector with elements in <code>1:Dim[2]</code>, the second giving
+<code>Dim[2]</code>.  This allows <code>"indMatrix"</code> construction for
+cases in which the values represented by the rightmost column(s)
+are not associated with any observations, i.e., in which the index does
+not contain values <code>Dim[2], Dim[2]-1, Dim[2]-2, ...</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "indMatrix", to = "matrix")</code>:
+coercion to a traditional FALSE/TRUE <code><a href="../../base/html/matrix.html">matrix</a></code> of
+<code><a href="../../base/html/mode.html">mode</a></code> <code>logical</code>.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "indMatrix", to = "ngTMatrix")</code>:
+coercion to sparse logical matrix of class <code><a href="nsparseMatrix-classes.html">ngTMatrix</a></code>.</p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "indMatrix")</code>: return the transpose of
+the index matrix (which is no longer an <code>indMatrix</code>,
+but of class <code><a href="nsparseMatrix-classes.html">ngTMatrix</a></code>.</p>
+</dd>
+<dt>colSums, colMeans, rowSums, rowMeans</dt><dd><p><code>signature(x = "indMatrix")</code>:
+return the column or row sums or means.</p>
+</dd>
+<dt>rbind2</dt><dd><p><code>signature(x = "indMatrix", y = "indMatrix")</code>: a
+fast method for rowwise catenation of two index matrices (with the
+same number of columns).</p>
+</dd>
+<dt>kronecker</dt><dd><p><code>signature(X = "indMatrix", Y = "indMatrix")</code>:
+return the kronecker product of two index matrices, which corresponds to
+the index matrix of the interaction of the two.</p>
+</dd>
+</dl>
+
+
+
+<h3>Author(s)</h3>
+
+<p>Fabian Scheipl, Uni Muenchen, building on existing
+<code>"<a href="pMatrix-class.html">pMatrix</a>"</code>, after a nice hike's conversation with
+Martin Maechler; diverse tweaks by the latter.
+The <code><a href="matrix-products.html">crossprod</a>(x,y)</code> and <code><a href="../../base/html/kronecker.html">kronecker</a>(x,y)</code>
+methods when both arguments are <code>"indMatrix"</code> have been made
+considerably faster thanks to a suggestion by Boris Vaillant.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The permutation matrices <code><a href="pMatrix-class.html">pMatrix</a></code> are special
+index matrices.  The &ldquo;pattern&rdquo; matrices,
+<code><a href="nMatrix-class.html">nMatrix</a></code> and its subclasses.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+p1 &lt;- as(c(2,3,1), "pMatrix")
+(sm1 &lt;- as(rep(c(2,3,1), e=3), "indMatrix"))
+stopifnot(all(sm1 == p1[rep(1:3, each=3),]))
+
+## row-indexing of a &lt;pMatrix&gt; turns it into an &lt;indMatrix&gt;:
+class(p1[rep(1:3, each=3),])
+
+set.seed(12) # so we know '10' is in sample
+## random index matrix for 30 observations and 10 unique values:
+(s10 &lt;- as(sample(10, 30, replace=TRUE),"indMatrix"))
+
+## Sample rows of a numeric matrix :
+(mm &lt;- matrix(1:10, nrow=10, ncol=3))
+s10 %*% mm
+
+set.seed(27)
+IM1 &lt;- as(sample(1:20, 100, replace=TRUE), "indMatrix")
+IM2 &lt;- as(sample(1:18, 100, replace=TRUE), "indMatrix")
+(c12 &lt;- crossprod(IM1,IM2))
+## same as cross-tabulation of the two index vectors:
+stopifnot(all(c12 - unclass(table(IM1@perm, IM2@perm)) == 0))
+
+# 3 observations, 4 implied values, first does not occur in sample:
+as(2:4, "indMatrix")
+# 3 observations, 5 values, first and last do not occur in sample:
+as(list(2:4, 5), "indMatrix")
+
+as(sm1, "ngTMatrix")
+s10[1:7, 1:4] # gives an "ngTMatrix" (most economic!)
+s10[1:4, ]  # preserves "indMatrix"-class
+
+I1 &lt;- as(c(5:1,6:4,7:3), "indMatrix")
+I2 &lt;- as(7:1, "pMatrix")
+(I12 &lt;- rbind(I1, I2))
+stopifnot(is(I12, "indMatrix"),
+          identical(I12, rbind(I1, I2)),
+	  colSums(I12) == c(2L,2:4,4:2))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

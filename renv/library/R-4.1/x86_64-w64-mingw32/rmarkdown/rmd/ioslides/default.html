@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html$if(lang)$ lang="$lang$" xml:lang="$lang$"$endif$>
+<head>
+  <title>$if(title-prefix)$$title-prefix$ - $endif$$pagetitle$</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="generator" content="pandoc" />
+
+
+
+$if(date-meta)$
+  <meta name="date" content="$date-meta$" />
+$endif$
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <base target="_blank">
+
+  <script type="text/javascript">
+    var SLIDE_CONFIG = {
+      // Slide settings
+      settings: {
+        $if(title)$
+        title: '$title$',
+        $endif$
+        $if(subtitle)$
+        subtitle: '$subtitle$',
+        $endif$
+        useBuilds: true,
+        usePrettify: true,
+        enableSlideAreas: true,
+        enableTouch: true,
+        $if(analytics)$
+        analytics: '$analytics$',
+        $endif$
+        $if(logo)$
+        favIcon: '$logo$',
+        $endif$
+      },
+
+      // Author information
+      presenters: [
+      $for(author)$
+      {
+        name: $if(author.name)$ '$author.name$' $else$ '$author$' $endif$,
+        company: '$author.company$',
+        gplus: '$author.gplus$',
+        twitter: '$author.twitter$',
+        www: '$author.www$',
+        github: '$author.github$'
+      },
+      $endfor$
+      ]
+    };
+  </script>
+
+$for(header-includes)$
+  $header-includes$
+$endfor$
+$if(shiny-prerendered)$
+  <!-- HEAD_CONTENT -->
+$endif$
+
+  <style type="text/css">
+
+    b, strong {
+      font-weight: bold;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    summary {
+      display: list-item;
+    }
+
+    slides > slide {
+      -webkit-transition: all $transition$s ease-in-out;
+      -moz-transition: all $transition$s ease-in-out;
+      -o-transition: all $transition$s ease-in-out;
+      transition: all $transition$s ease-in-out;
+    }
+
+    .auto-fadein {
+      -webkit-transition: opacity 0.6s ease-in;
+      -webkit-transition-delay: $transition$s;
+      -moz-transition: opacity 0.6s ease-in $transition$s;
+      -o-transition: opacity 0.6s ease-in $transition$s;
+      transition: opacity 0.6s ease-in $transition$s;
+      opacity: 0;
+    }
+/* https://github.com/ropensci/plotly/pull/524#issuecomment-468142578 */
+slide:not(.current) .plotly.html-widget{
+  display: block;
+}
+
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    $if(quotes)$
+    q { quotes: "“" "”" "‘" "’"; }
+    $endif$
+    $if(highlighting-css)$
+    $highlighting-css$
+    $endif$
+    $if(displaymath-css)$
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    $endif$
+
+$if(logo)$
+    slides > slide:not(.nobackground):before {
+      font-size: 12pt;
+      content: "";
+      position: absolute;
+      bottom: 20px;
+      left: 60px;
+      background: url($logo$) no-repeat 0 50%;
+      -webkit-background-size: 30px 30px;
+      -moz-background-size: 30px 30px;
+      -o-background-size: 30px 30px;
+      background-size: 30px 30px;
+      padding-left: 40px;
+      height: 30px;
+      line-height: 1.9;
+    }
+$endif$
+  </style>
+
+$for(css)$
+  <link rel="stylesheet" href="$css$" $if(html5)$$else$type="text/css" $endif$/>
+$endfor$
+
+</head>
+
+<body style="opacity: 0">
+
+$if(widescreen)$
+<slides class="layout-widescreen">
+$else$
+<slides>
+$endif$
+
+$if(include-before)$
+  $for(include-before)$
+    $include-before$
+  $endfor$
+$else$
+  <slide class="title-slide segue nobackground">
+    $if(logo)$
+    <aside class="gdbar"><img src="$logo$"></aside>
+    $endif$
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      $if(subtitle)$<h2 data-config-subtitle><!-- populated from slide_config.json --></h2>$endif$
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+      $if(date)$
+      <p style="margin-top: 6px; margin-left: -2px;">$date$</p>
+      $endif$
+    </hgroup>
+  </slide>
+$endif$
+
+RENDERED_SLIDES
+
+$for(include-after)$
+  $include-after$
+$endfor$
+
+  <slide class="backdrop"></slide>
+
+</slides>
+
+$if(mathjax-url)$
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "$mathjax-url$";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+$endif$
+
+<!-- map slide visiblity events into shiny -->
+<script>
+  (function() {
+    if (window.jQuery) {
+       window.jQuery(document).on('slideleave', function(e) {
+         window.jQuery(e.target).trigger('hidden');
+      });
+       window.jQuery(document).on('slideenter', function(e) {
+         window.jQuery(e.target).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+</body>
+</html>

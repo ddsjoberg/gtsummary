@@ -1,0 +1,34 @@
+.shiny-input-checkboxgroup, .shiny-input-radiogroup {
+  // TODO: this is pretty expensive!
+  .checkbox, .radio {
+    @extend .form-check;
+    label {
+      @extend .form-check-label;
+    }
+    label > input {
+      @extend .form-check-input;
+    }
+  }
+
+  // Since these inline classes don't have a proper div container
+  // (they're labels), we borrow just the styling we need from
+  // .form-check-inline
+  // https://github.com/rstudio/bs4/blob/7aadd19/inst/node_modules/bootstrap/scss/_forms.scss#L227-L240
+  .checkbox-inline, .radio-inline {
+    padding-left: 0;
+    margin-right: $form-check-inline-margin-x;
+
+    label > input {
+      margin-top: 0;
+      margin-right: $form-check-inline-input-margin-x;
+      margin-bottom: 0;
+    }
+  }
+}
+
+.input-daterange .input-group-addon.input-group-prepend.input-group-append {
+  padding: inherit;
+  line-height: inherit;
+  text-shadow: inherit;
+  border-width: 0;
+}

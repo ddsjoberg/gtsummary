@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: (Virtual) Class &quot;dMatrix&quot; of &quot;double&quot; Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for dMatrix-class {Matrix}"><tr><td>dMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>(Virtual) Class &quot;dMatrix&quot; of &quot;double&quot; Matrices</h2>
+
+<h3>Description</h3>
+
+<p>The <code>dMatrix</code> class is a virtual class contained by all actual
+classes of numeric matrices in the <span class="pkg">Matrix</span> package.  Similarly,
+all the actual classes of logical matrices inherit from the
+<code>lMatrix</code> class.
+</p>
+
+
+<h3>Slots</h3>
+
+<p>Common to <em>all</em> matrix object in the package:
+</p>
+
+<dl>
+<dt><code>Dim</code>:</dt><dd><p>Object of class <code>"integer"</code> - the dimensions
+of the matrix - must be an integer vector with exactly two
+non-negative values.</p>
+</dd>
+<dt><code>Dimnames</code>:</dt><dd><p>list of length two; each component
+containing NULL or a <code><a href="../../base/html/character.html">character</a></code> vector length
+equal the corresponding <code>Dim</code> element.</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+<p>There are (relatively simple) group methods (see, e.g., <code><a href="../../methods/html/S4groupGeneric.html">Arith</a></code>)
+</p>
+
+<dl>
+<dt>Arith</dt><dd><p><code>signature(e1 = "dMatrix", e2 = "dMatrix")</code>: ... </p>
+</dd>
+<dt>Arith</dt><dd><p><code>signature(e1 = "dMatrix", e2 = "numeric")</code>: ... </p>
+</dd>
+<dt>Arith</dt><dd><p><code>signature(e1 = "numeric", e2 = "dMatrix")</code>: ... </p>
+</dd>
+<dt>Math</dt><dd><p><code>signature(x = "dMatrix")</code>: ... </p>
+</dd>
+<dt>Math2</dt><dd><p><code>signature(x = "dMatrix", digits = "numeric")</code>:
+this group contains <code><a href="../../base/html/Round.html">round</a>()</code> and <code><a href="../../base/html/Round.html">signif</a>()</code>.</p>
+</dd>
+<dt>Compare</dt><dd><p><code>signature(e1 = "numeric", e2 = "dMatrix")</code>: ... </p>
+</dd>
+<dt>Compare</dt><dd><p><code>signature(e1 = "dMatrix", e2 = "numeric")</code>: ... </p>
+</dd>
+<dt>Compare</dt><dd><p><code>signature(e1 = "dMatrix", e2 = "dMatrix")</code>: ... </p>
+</dd>
+<dt>Summary</dt><dd><p><code>signature(x = "dMatrix")</code>: The <code>"Summary"</code>
+group contains the seven functions
+<code><a href="../../base/html/Extremes.html">max</a>()</code>, <code><a href="../../base/html/Extremes.html">min</a>()</code>, <code><a href="../../base/html/range.html">range</a>()</code>,
+<code><a href="../../base/html/prod.html">prod</a>()</code>, <code><a href="../../base/html/sum.html">sum</a>()</code>,
+<code><a href="../../base/html/any.html">any</a>()</code>, and <code><a href="../../base/html/all.html">all</a>()</code>.</p>
+</dd>
+</dl>
+
+<p>The following methods are also defined for all double matrices:
+</p>
+
+<dl>
+<dt>coerce</dt><dd><p><code>signature(from = "dMatrix", to = "matrix")</code>: ... </p>
+</dd>
+</dl>
+
+<dl>
+<dt>expm</dt><dd><p><code>signature(x = "dMatrix")</code>: computes the
+<em>&ldquo;Matrix Exponential&rdquo;</em>, see <code><a href="expm.html">expm</a></code>.</p>
+</dd>
+<dt>zapsmall</dt><dd><p><code>signature(x = "dMatrix")</code>: ... </p>
+</dd>
+</dl>
+
+<p>The following methods are defined for all logical matrices:
+</p>
+
+<dl>
+<dt>which</dt><dd><p><code>signature(x = "lsparseMatrix")</code> and many other
+subclasses of <code>"lMatrix"</code>: as the <span class="pkg">base</span> function
+<code><a href="../../base/html/which.html">which</a>(x, arr.ind)</code> returns the indices of the
+<code><a href="../../base/html/logical.html">TRUE</a></code> entries in <code>x</code>; if <code>arr.ind</code> is true,
+as a 2-column matrix of row and column indices. Since <span class="pkg">Matrix</span>
+version 1.2-9, if <code>useNames</code> is true, as by default, with
+<code><a href="../../base/html/dimnames.html">dimnames</a></code>, the same as <code>base::which</code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>The nonzero-pattern matrix class <code><a href="nMatrix-class.html">nMatrix</a></code>, which
+can be used to store non-<code><a href="../../base/html/NA.html">NA</a></code> <code><a href="../../base/html/logical.html">logical</a></code>
+matrices even more compactly.
+</p>
+<p>The numeric matrix classes <code><a href="dgeMatrix-class.html">dgeMatrix</a></code>,
+<code><a href="dgCMatrix-class.html">dgCMatrix</a></code>, and <code><a href="Matrix-class.html">Matrix</a></code>.
+</p>
+<p><code><a href="drop0.html">drop0</a>(x, tol=1e-10)</code> is sometimes preferable to (and
+more efficient than) <code>zapsmall(x, digits=10)</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ showClass("dMatrix")
+
+ set.seed(101)
+ round(Matrix(rnorm(28), 4,7), 2)
+ M &lt;- Matrix(rlnorm(56, sd=10), 4,14)
+ (M. &lt;- zapsmall(M))
+ table(as.logical(M. == 0))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

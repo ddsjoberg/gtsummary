@@ -1,0 +1,103 @@
+---
+title: "Performance Improvements"
+author: "Lorenz Walthert"
+date: "7/24/2017"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Performance Improvements}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+
+---
+
+We want to make styler faster.
+
+
+```
+library(styler)
+microbenchmark::microbenchmark(
+  base = style_file("tests/testthat/indention_multiple/overall-in.R"),
+  times = 2
+)
+#> Unit: seconds
+#>  expr      min       lq     mean   median       uq      max neval
+#>  base 4.131253 4.131253 4.172017 4.172017 4.212781 4.212781     2
+```
+
+Replacing mutate statements.
+
+```
+
+microbenchmark::microbenchmark(
+  base = style_file("tests/testthat/indention_multiple/overall-in.R"),
+  times = 2
+)
+#> Unit: seconds
+#>  expr     min      lq     mean   median       uq      max neval
+#>  base 2.13616 2.13616 2.223659 2.223659 2.311158 2.311158     2
+```
+
+Move `opening` argument out of needs indention.
+
+```
+microbenchmark::microbenchmark(
+  base = style_file("tests/testthat/indention_multiple/overall-in.R"),
+  times = 5
+)
+
+#> Unit: seconds
+#>  expr     min       lq     mean   median       uq      max neval
+#>  base 2.18097 2.184721 2.225294 2.200893 2.241799 2.318089     5
+```
+
+Dropping unnecessary select statements and arrange stuff.
+
+```
+microbenchmark::microbenchmark(
+  base = style_file("tests/testthat/indention_multiple/overall-in.R"),
+  times = 5
+)
+#> Unit: seconds
+#>  expr      min       lq     mean   median       uq      max neval
+#>  base 2.109271 2.134377 2.147821 2.158567 2.165384 2.171505     5
+```
+
+
+Some more stuff (early return, purr)
+
+```
+microbenchmark::microbenchmark(
+  base = style_file("tests/testthat/indention_multiple/overall-in.R"),
+  times = 5
+)
+#> Unit: milliseconds
+#>  expr      min       lq     mean   median       uq      max neval
+#>  base 930.4391 944.9253 969.2838 951.4632 951.6571 1067.934     5
+```
+
+Various changes (positive and negative in terms of speed)
+
+```
+microbenchmark::microbenchmark(
+  base = style_file("tests/testthat/indention_multiple/overall-in.R"),
+  times = 10
+)
+#> Unit: seconds
+#> expr      min       lq     mean   median       uq      max neval
+#>  base 1.235749 1.259139 1.269869 1.269396 1.275887 1.330341    10
+
+```
+
+
+Removed tibble bottlenecks (tibble 1.4.2, https://github.com/tidyverse/tibble/pull/348)
+
+```
+microbenchmark::microbenchmark(
+  base = style_file("tests/testthat/indention_multiple/overall-in.R"),
+  times = 10
+)
+#> Unit: milliseconds
+#>  expr      min       lq     mean   median       uq      max neval
+#>  base 514.9392 520.5061 587.6329 530.3154 548.7248 989.3332    10
+
+```

@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Summarize a continuous variable by each value of a discrete...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggally_summarise_by {GGally}"><tr><td>ggally_summarise_by {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Summarize a continuous variable by each value of a discrete variable</h2>
+
+<h3>Description</h3>
+
+<p>Display summary statistics of a continuous variable for each value of a discrete variable.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggally_summarise_by(
+  data,
+  mapping,
+  text_fn = weighted_median_iqr,
+  text_fn_vertical = NULL,
+  ...
+)
+
+weighted_median_iqr(x, weights = NULL)
+
+weighted_mean_sd(x, weights = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data set using</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>aesthetics being used</p>
+</td></tr>
+<tr valign="top"><td><code>text_fn</code></td>
+<td>
+<p>function that takes an x and weights and returns a text string</p>
+</td></tr>
+<tr valign="top"><td><code>text_fn_vertical</code></td>
+<td>
+<p>function that takes an x and weights and returns a text string, used when <code>x</code> is discrete and <code>y</code> is continuous. If not provided, will use <code>text_fn</code>, replacing spaces by carriage returns.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other arguments passed to <code><a href="../../ggplot2/help/geom_text.html">geom_text</a>(...)</code></p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a numeric vector</p>
+</td></tr>
+<tr valign="top"><td><code>weights</code></td>
+<td>
+<p>an optional numeric vectors of weights. If <code>NULL</code>, equal weights of 1 will be taken into account.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>weighted_median_iqr</code> computes weighted median and interquartile range.
+</p>
+<p><code>weighted_mean_sd</code> computes weighted mean and standard deviation.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Joseph Larmarange
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+if (require(Hmisc)) {
+  data(tips, package = "reshape")
+  p_(ggally_summarise_by(tips, mapping = aes(x = total_bill, y = day)))
+  p_(ggally_summarise_by(tips, mapping = aes(x = day, y = total_bill)))
+
+  # colour is kept only if equal to the discrete variable
+  p_(ggally_summarise_by(tips, mapping = aes(x = total_bill, y = day, color = day)))
+  p_(ggally_summarise_by(tips, mapping = aes(x = total_bill, y = day, color = sex)))
+  p_(ggally_summarise_by(tips, mapping = aes(x = day, y = total_bill, color = day)))
+
+  # custom text size
+  p_(ggally_summarise_by(tips, mapping = aes(x = total_bill, y = day), size = 6))
+
+  # change statistic to display
+  p_(ggally_summarise_by(tips, mapping = aes(x = total_bill, y = day), text_fn = weighted_mean_sd))
+
+  # custom stat function
+  weighted_sum &lt;- function(x, weights = NULL) {
+    if (is.null(weights)) weights &lt;- 1
+    paste0("Total : ", round(sum(x * weights, na.rm = TRUE), digits = 1))
+  }
+  p_(ggally_summarise_by(tips, mapping = aes(x = total_bill, y = day), text_fn = weighted_sum))
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

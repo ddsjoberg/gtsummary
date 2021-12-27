@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Parameter table formatting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for format_table {insight}"><tr><td>format_table {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Parameter table formatting</h2>
+
+<h3>Description</h3>
+
+<p>This functions takes a data frame with model parameters as input
+and formats certain columns into a more readable layout (like collapsing
+separate columns for lower and upper confidence interval values). Furthermore,
+column names are formatted as well.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+format_table(
+  x,
+  pretty_names = TRUE,
+  stars = FALSE,
+  digits = 2,
+  ci_width = "auto",
+  ci_brackets = TRUE,
+  ci_digits = 2,
+  p_digits = 3,
+  rope_digits = 2,
+  zap_small = FALSE,
+  preserve_attributes = FALSE,
+  verbose = TRUE,
+  ...
+)
+
+parameters_table(
+  x,
+  pretty_names = TRUE,
+  stars = FALSE,
+  digits = 2,
+  ci_width = "auto",
+  ci_brackets = TRUE,
+  ci_digits = 2,
+  p_digits = 3,
+  rope_digits = 2,
+  zap_small = FALSE,
+  preserve_attributes = FALSE,
+  verbose = TRUE,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A data frame of model's parameters, as returned by various functions
+of the <strong>easystats</strong>-packages. May also be a result from
+<code>broom::tidy()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>pretty_names</code></td>
+<td>
+<p>Return &quot;pretty&quot; (i.e. more human readable) parameter
+names.</p>
+</td></tr>
+<tr valign="top"><td><code>stars</code></td>
+<td>
+<p>Add significance stars (e.g., p &lt; .001***).</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>Number of decimal places for numeric values (except confidence
+intervals and p-values).</p>
+</td></tr>
+<tr valign="top"><td><code>ci_width</code></td>
+<td>
+<p>Minimum width of the returned string for confidence
+intervals. If not <code>NULL</code> and width is larger than the string's length,
+leading whitespaces are added to the string. If <code>width="auto"</code>, width
+will be set to the length of the longest string.</p>
+</td></tr>
+<tr valign="top"><td><code>ci_brackets</code></td>
+<td>
+<p>Logical, if <code>TRUE</code> (default), CI-values are
+encompassed in square brackets (else in parentheses).</p>
+</td></tr>
+<tr valign="top"><td><code>ci_digits</code></td>
+<td>
+<p>Number of decimal places for confidence intervals.</p>
+</td></tr>
+<tr valign="top"><td><code>p_digits</code></td>
+<td>
+<p>Number of decimal places for p-values. May also be <code>"scientific"</code> for scientific notation of p-values.</p>
+</td></tr>
+<tr valign="top"><td><code>rope_digits</code></td>
+<td>
+<p>Number of decimal places for the ROPE percentage values.</p>
+</td></tr>
+<tr valign="top"><td><code>zap_small</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, small values are rounded after
+<code>digits</code> decimal places. If <code>FALSE</code>, values with more decimal
+places than <code>digits</code> are printed in scientific notation.</p>
+</td></tr>
+<tr valign="top"><td><code>preserve_attributes</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, preserves all attributes
+from the input data frame.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle messages and warnings.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A data frame.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (require("parameters")) {
+  x &lt;- model_parameters(lm(Sepal.Length ~ Species * Sepal.Width, data = iris))
+  as.data.frame(format_table(x))
+  as.data.frame(format_table(x, p_digits = "scientific"))
+}
+
+if (require("rstanarm") &amp;&amp; require("parameters")) {
+  model &lt;- stan_glm(Sepal.Length ~ Species, data = iris, refresh = 0, seed = 123)
+  x &lt;- model_parameters(model, ci = c(0.69, 0.89, 0.95))
+  as.data.frame(format_table(x))
+}
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

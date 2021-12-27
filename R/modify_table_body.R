@@ -18,7 +18,7 @@
 #'
 #' @export
 #' @seealso `modify_table_styling()`
-#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
+#' @seealso See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #'
 #' @examples
 #' # Example 1 --------------------------------

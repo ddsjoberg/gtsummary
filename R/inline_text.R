@@ -3,6 +3,7 @@
 #' @param x Object created from a gtsummary function
 #' @param ... Additional arguments passed to other methods.
 #' @return A string reporting results from a gtsummary table
+#' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @seealso [inline_text.tbl_summary], [inline_text.tbl_svysummary],
 #' [inline_text.tbl_regression], [inline_text.tbl_uvregression],
@@ -176,7 +177,7 @@ inline_text.gtsummary <- function(x, variable,
 #'
 #' Extracts and returns statistics from a `tbl_summary` object for
 #' inline reporting in an R markdown document. Detailed examples in the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 #'
 #' @param x Object created from  [tbl_summary]
 #' @param variable Variable name of statistic to present
@@ -267,7 +268,7 @@ inline_text.tbl_svysummary <- inline_text.tbl_summary
 #' Takes an object with class `tbl_regression`, and the
 #' location of the statistic to report and returns statistics for reporting
 #' inline in an R markdown document.  Detailed examples in the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 #'
 #' @param x Object created from  [tbl_regression]
 #' @param variable Variable name of statistics to present
@@ -342,7 +343,7 @@ inline_text.tbl_regression <-
 #' Extracts and returns statistics from a table created by the `tbl_uvregression`
 #' function for inline reporting in an R markdown document.
 #' Detailed examples in the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 #'
 #' @param x Object created from [tbl_uvregression]
 #' @inherit inline_text.tbl_regression
@@ -526,7 +527,7 @@ inline_text.tbl_survival <-
 #' \lifecycle{maturing}
 #' Extracts and returns statistics from a `tbl_survfit` object for
 #' inline reporting in an R markdown document. Detailed examples in the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 #'
 #' @param x Object created from  [tbl_survfit]
 #' @param time time for which to return survival probabilities.
@@ -651,7 +652,7 @@ inline_text.tbl_survfit <-
 #' \lifecycle{maturing}
 #' Extracts and returns statistics from a `tbl_cross` object for
 #' inline reporting in an R markdown document. Detailed examples in the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 #' @param x a `tbl_cross` object
 #' @param row_level Level of the row variable to display.
 #' Can also specify the 'Unknown' row. Default is `NULL`

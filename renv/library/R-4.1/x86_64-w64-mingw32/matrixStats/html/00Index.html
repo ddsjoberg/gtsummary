@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Functions that Apply to Rows and Columns of Matrices (and to
+Vectors)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+<h1> Functions that Apply to Rows and Columns of Matrices (and to
+Vectors)
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;matrixStats&rsquo; version 0.61.0</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+<li><a href="../NEWS">Package NEWS</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="matrixStats-package.html">matrixStats-package</a></td>
+<td>Package matrixStats</td></tr>
+<tr><td style="width: 25%;"><a href="rowAlls.html">allValue</a></td>
+<td>Checks if a value exists / does not exist in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="anyMissing.html">anyMissing</a></td>
+<td>Checks if there are any missing values in an object or not</td></tr>
+<tr><td style="width: 25%;"><a href="rowAlls.html">anyValue</a></td>
+<td>Checks if a value exists / does not exist in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="binCounts.html">binCounts</a></td>
+<td>Fast element counting in non-overlapping bins</td></tr>
+<tr><td style="width: 25%;"><a href="binMeans.html">binMeans</a></td>
+<td>Fast mean calculations in non-overlapping bins</td></tr>
+<tr><td style="width: 25%;"><a href="rowAlls.html">colAlls</a></td>
+<td>Checks if a value exists / does not exist in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="anyMissing.html">colAnyMissings</a></td>
+<td>Checks if there are any missing values in an object or not</td></tr>
+<tr><td style="width: 25%;"><a href="anyMissing.html">colAnyNAs</a></td>
+<td>Checks if there are any missing values in an object or not</td></tr>
+<tr><td style="width: 25%;"><a href="rowAlls.html">colAnys</a></td>
+<td>Checks if a value exists / does not exist in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowCollapse.html">colCollapse</a></td>
+<td>Extracts one cell per row (column) from a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowCounts.html">colCounts</a></td>
+<td>Counts the number of occurrences of a specific value</td></tr>
+<tr><td style="width: 25%;"><a href="rowCumsums.html">colCummaxs</a></td>
+<td>Cumulative sums, products, minima and maxima for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowCumsums.html">colCummins</a></td>
+<td>Cumulative sums, products, minima and maxima for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowCumsums.html">colCumprods</a></td>
+<td>Cumulative sums, products, minima and maxima for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowCumsums.html">colCumsums</a></td>
+<td>Cumulative sums, products, minima and maxima for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowDiffs.html">colDiffs</a></td>
+<td>Calculates difference for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">colIQRDiffs</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="rowIQRs.html">colIQRs</a></td>
+<td>Estimates of the interquartile range for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowLogSumExps.html">colLogSumExps</a></td>
+<td>Accurately computes the logarithm of the sum of exponentials across rows or columns</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">colMadDiffs</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="rowSds.html">colMads</a></td>
+<td>Standard deviation estimates for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowRanges.html">colMaxs</a></td>
+<td>Gets the range of values in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowMeans2.html">colMeans2</a></td>
+<td>Calculates the mean for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowMedians.html">colMedians</a></td>
+<td>Calculates the median for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowRanges.html">colMins</a></td>
+<td>Gets the range of values in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowOrderStats.html">colOrderStats</a></td>
+<td>Gets an order statistic for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowProds.html">colProds</a></td>
+<td>Calculates the product for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowQuantiles.html">colQuantiles</a></td>
+<td>Estimates quantiles for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowRanges.html">colRanges</a></td>
+<td>Gets the range of values in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowRanks.html">colRanks</a></td>
+<td>Gets the rank of the elements in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">colSdDiffs</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="rowSds.html">colSds</a></td>
+<td>Standard deviation estimates for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowSums2.html">colSums2</a></td>
+<td>Calculates the sum for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowTabulates.html">colTabulates</a></td>
+<td>Tabulates the values in a matrix by row (column).</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">colVarDiffs</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="rowVars.html">colVars</a></td>
+<td>Variance estimates for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="weightedMad.html">colWeightedMads</a></td>
+<td>Weighted Median Absolute Deviation (MAD)</td></tr>
+<tr><td style="width: 25%;"><a href="rowWeightedMeans.html">colWeightedMeans</a></td>
+<td>Calculates the weighted means for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowWeightedMedians.html">colWeightedMedians</a></td>
+<td>Calculates the weighted medians for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="weightedVar.html">colWeightedSds</a></td>
+<td>Weighted variance and weighted standard deviation</td></tr>
+<tr><td style="width: 25%;"><a href="weightedVar.html">colWeightedVars</a></td>
+<td>Weighted variance and weighted standard deviation</td></tr>
+<tr><td style="width: 25%;"><a href="rowCounts.html">count</a></td>
+<td>Counts the number of occurrences of a specific value</td></tr>
+<tr><td style="width: 25%;"><a href="indexByRow.html">indexByRow</a></td>
+<td>Translates matrix indices by rows into indices by columns</td></tr>
+<tr><td style="width: 25%;"><a href="rowIQRs.html">iqr</a></td>
+<td>Estimates of the interquartile range for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">iqrDiff</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="logSumExp.html">logSumExp</a></td>
+<td>Accurately computes the logarithm of the sum of exponentials</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">madDiff</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="matrixStats-package.html">matrixStats</a></td>
+<td>Package matrixStats</td></tr>
+<tr><td style="width: 25%;"><a href="rowProds.html">product</a></td>
+<td>Calculates the product for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowAlls.html">rowAlls</a></td>
+<td>Checks if a value exists / does not exist in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="anyMissing.html">rowAnyMissings</a></td>
+<td>Checks if there are any missing values in an object or not</td></tr>
+<tr><td style="width: 25%;"><a href="anyMissing.html">rowAnyNAs</a></td>
+<td>Checks if there are any missing values in an object or not</td></tr>
+<tr><td style="width: 25%;"><a href="rowAlls.html">rowAnys</a></td>
+<td>Checks if a value exists / does not exist in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowCollapse.html">rowCollapse</a></td>
+<td>Extracts one cell per row (column) from a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowCounts.html">rowCounts</a></td>
+<td>Counts the number of occurrences of a specific value</td></tr>
+<tr><td style="width: 25%;"><a href="rowCumsums.html">rowCummaxs</a></td>
+<td>Cumulative sums, products, minima and maxima for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowCumsums.html">rowCummins</a></td>
+<td>Cumulative sums, products, minima and maxima for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowCumsums.html">rowCumprods</a></td>
+<td>Cumulative sums, products, minima and maxima for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowCumsums.html">rowCumsums</a></td>
+<td>Cumulative sums, products, minima and maxima for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowDiffs.html">rowDiffs</a></td>
+<td>Calculates difference for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">rowIQRDiffs</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="rowIQRs.html">rowIQRs</a></td>
+<td>Estimates of the interquartile range for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowLogSumExps.html">rowLogSumExps</a></td>
+<td>Accurately computes the logarithm of the sum of exponentials across rows or columns</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">rowMadDiffs</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="rowSds.html">rowMads</a></td>
+<td>Standard deviation estimates for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowRanges.html">rowMaxs</a></td>
+<td>Gets the range of values in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowMeans2.html">rowMeans2</a></td>
+<td>Calculates the mean for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowMedians.html">rowMedians</a></td>
+<td>Calculates the median for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowRanges.html">rowMins</a></td>
+<td>Gets the range of values in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowOrderStats.html">rowOrderStats</a></td>
+<td>Gets an order statistic for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowProds.html">rowProds</a></td>
+<td>Calculates the product for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowQuantiles.html">rowQuantiles</a></td>
+<td>Estimates quantiles for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowRanges.html">rowRanges</a></td>
+<td>Gets the range of values in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowRanks.html">rowRanks</a></td>
+<td>Gets the rank of the elements in each row (column) of a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">rowSdDiffs</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="rowSds.html">rowSds</a></td>
+<td>Standard deviation estimates for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowSums2.html">rowSums2</a></td>
+<td>Calculates the sum for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowTabulates.html">rowTabulates</a></td>
+<td>Tabulates the values in a matrix by row (column).</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">rowVarDiffs</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="rowVars.html">rowVars</a></td>
+<td>Variance estimates for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="weightedMad.html">rowWeightedMads</a></td>
+<td>Weighted Median Absolute Deviation (MAD)</td></tr>
+<tr><td style="width: 25%;"><a href="rowWeightedMeans.html">rowWeightedMeans</a></td>
+<td>Calculates the weighted means for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rowWeightedMedians.html">rowWeightedMedians</a></td>
+<td>Calculates the weighted medians for each row (column) in a matrix</td></tr>
+<tr><td style="width: 25%;"><a href="weightedVar.html">rowWeightedSds</a></td>
+<td>Weighted variance and weighted standard deviation</td></tr>
+<tr><td style="width: 25%;"><a href="weightedVar.html">rowWeightedVars</a></td>
+<td>Weighted variance and weighted standard deviation</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">sdDiff</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="varDiff.html">varDiff</a></td>
+<td>Estimation of scale based on sequential-order differences</td></tr>
+<tr><td style="width: 25%;"><a href="weightedMad.html">weightedMad</a></td>
+<td>Weighted Median Absolute Deviation (MAD)</td></tr>
+<tr><td style="width: 25%;"><a href="weightedMean.html">weightedMean</a></td>
+<td>Weighted Arithmetic Mean</td></tr>
+<tr><td style="width: 25%;"><a href="weightedMedian.html">weightedMedian</a></td>
+<td>Weighted Median Value</td></tr>
+<tr><td style="width: 25%;"><a href="weightedVar.html">weightedSd</a></td>
+<td>Weighted variance and weighted standard deviation</td></tr>
+<tr><td style="width: 25%;"><a href="weightedVar.html">weightedVar</a></td>
+<td>Weighted variance and weighted standard deviation</td></tr>
+</table>
+</div></body></html>

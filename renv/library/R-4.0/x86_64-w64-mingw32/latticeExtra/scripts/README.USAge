@@ -1,0 +1,66 @@
+
+Original data source: U.S. Census Bureau,
+
+<http://www.census.gov/popest/archives/pre-1980/PE-11.html>
+
+Note: Subsequent to restructuring of the U.S. Census Bureau website, the original URL is no longer valid. However, the data files appear to be available at 
+
+<https://www2.census.gov/programs-surveys/popest/tables/1900-1980/national/asrh/>
+
+
+Steps: 
+
+1. Download CSV files (e.g. using wget)
+
+2. Preprocess using a shell script:
+
+for f in PE-11-19??.csv ; do
+    g=${f/PE-11-/}
+    echo $g
+    grep ^[0-9] $f | sed -e 's/,//g' | sed -e 's/"/ /g' | sed -e 's/ /,/g' | sed -e 's/,,,/,/g' | sed -e 's/,,//g' | cut -d, -f1,3,4 > $g
+done
+
+3. Convert to an R array:
+
+readData <-
+    function(file)
+{
+    ans <-
+        read.table(file,
+                   header = FALSE,
+                   sep = ",",
+                   row.names = 1,
+                   col.names = c("Age", "Male", "Female"),
+                   as.is = TRUE)
+    ans <- as.matrix(ans)
+    upto74 <- ans[1:75, ]
+    above74 <- colSums(ans[-(1:75), , drop = FALSE])
+    ans <- rbind(upto74, `75+` = above74)
+    names(dimnames(ans)) <- c("Age", "Sex")
+    ans
+}
+
+
+Year <- 1900:1979
+
+foo <- lapply(paste(Year, "csv", sep = "."), readData)
+
+USAge.table <-
+    array(do.call(c, foo),
+          dim = c(dim(foo[[1]]), length(Year)),
+          dimnames = c(dimnames(foo[[1]]), list(Year = as.character(Year))))
+
+save(USAge.table, file = "USAge.table.rda", compress = TRUE)
+
+4. Make alternative data frame version (omit 75+ group)
+
+USAge.df <- as.data.frame.table(USAge.table[1:75, , ])
+##levels(USAge.df$Age)[nlevels(USAge.df$Age)] <- "75"
+USAge.df$Age <- as.numeric(as.character(USAge.df$Age))
+USAge.df$Year <- as.numeric(as.character(USAge.df$Year))
+USAge.df$Population <- USAge.df$Freq / 1e6
+USAge.df$Freq <- NULL
+
+save(USAge.df, file = "USAge.df.rda", compress = TRUE)
+
+

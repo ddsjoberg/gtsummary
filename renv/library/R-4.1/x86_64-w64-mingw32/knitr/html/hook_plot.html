@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Default plot hooks for different output formats</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for hook_plot_html {knitr}"><tr><td>hook_plot_html {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Default plot hooks for different output formats</h2>
+
+<h3>Description</h3>
+
+<p>These hook functions define how to mark up graphics output in different
+output formats.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+hook_plot_html(x, options)
+
+hook_plot_asciidoc(x, options)
+
+hook_plot_tex(x, options)
+
+hook_plot_md(x, options)
+
+hook_plot_rst(x, options)
+
+hook_plot_textile(x, options)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Filename for the plot (a character string).</p>
+</td></tr>
+<tr valign="top"><td><code>options</code></td>
+<td>
+<p>A list of the current chunk options.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Depending on the options passed over, <code>hook_plot_tex</code> may return the
+normal <span class="samp">\includegraphics{}</span> command, or <span class="samp">\input{}</span> (for tikz
+files), or <span class="samp">\animategraphics{}</span> (for animations); it also takes many
+other options into consideration to align plots and set figure sizes, etc.
+Similarly, <code>hook_plot_html</code>, <code>hook_plot_md</code> and
+<code>hook_plot_rst</code> return character strings which are HTML, Markdown, reST
+code.
+</p>
+<p>In most cases we do not need to call these hooks explicitly, and they were
+designed to be used internally. Sometimes we may not be able to record R
+plots using <code>grDevices::<a href="../../grDevices/html/recordplot.html">recordPlot</a>()</code>, and we can make use of
+these hooks to insert graphics output in the output document; see
+<code><a href="../../knitr/help/hook_plot_custom.html">hook_plot_custom</a></code> for details.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A character string of code, with plot filenames wrapped.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://yihui.org/knitr/hooks/">https://yihui.org/knitr/hooks/</a>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../knitr/help/hook_plot_custom.html">hook_plot_custom</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# this is what happens for a chunk like this
+
+# &lt;&lt;foo-bar-plot, dev='pdf', fig.align='right'&gt;&gt;=
+hook_plot_tex("foo-bar-plot.pdf", opts_chunk$merge(list(fig.align = "right")))
+
+# &lt;&lt;bar, dev='tikz'&gt;&gt;=
+hook_plot_tex("bar.tikz", opts_chunk$merge(list(dev = "tikz")))
+
+# &lt;&lt;foo, dev='pdf', fig.show='animate', interval=.1&gt;&gt;=
+
+# 5 plots are generated in this chunk
+hook_plot_tex("foo5.pdf", opts_chunk$merge(list(fig.show = "animate", interval = 0.1,
+    fig.cur = 5, fig.num = 5)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,264 @@
+---
+title: "Lua filters in R Markdown"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lua filters in R Markdown}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignettes gives some detailed information regarding the Lua filters including in the **rmarkdown** package. You don't have to do anything to use them usually as they just works usaully. This document presents the features they power.
+
+To know more about Lua filters in general, you can jump directly to [last section](#lua-filter)
+
+## Pagebreaks
+
+This filter is available since **rmarkdown** 1.15 and works with Pandoc 2.1+ (shipped in RStudio >= 1.2).
+
+Adding a pagebreak in document was always possible using custom output specific syntax in a rmarkdown file but one drawback was the compatibility with several output format.
+
+With this Lua filter, it is possible to add a `\newpage` or `\pagebreak` command in a new line to include a pagebreak in any of these formats: `pdf_document()`, `html_document()`, `word_document()` and `odt_document()`. 
+
+```md
+# Header 1
+
+Some text
+
+\newpage
+
+# Header 2 on a new page
+
+Some other text
+
+\pagebreak
+
+# Header 3 on a third page
+
+```
+
+rmarkdown will convert those commands in the correct output format syntax using a [Lua filter](#lua-filter) during pandoc conversion. 
+
+### Using with PDF/ latex documents {#pdf}
+
+As the commands are the ones already used in latex syntax, this works as expected in a tex output document, and thus with pdf. Adding a pagebreak was already possible with rmarkdown when output is `pdf_document()` or `latex_document()`, without any restriction about the version of pandoc.
+
+### Using with HTML documents {#html}
+
+A `\newpage` or `\pagebreak` command in a rmarkdown document with output as HTML will be converted by default in this html code with inline style using CSS rule [`page-break-after`](https://developer.mozilla.org/en-US/docs/Web/CSS/page-break-after)
+
+```html
+<div style="page-break-after: always;"></div>
+```
+
+This will always insert a pagebreak after this div. 
+
+To get more flexibility, you can use a HTML class and some custom CSS instead of an inline style. You need to add a metadata field `newpage_html_class` in your yaml header to set the class.
+
+Then you can control the behavior using custom CSS as in this example
+
+````md
+---
+output: 
+  html_document: default
+newpage_html_class: page-break
+---
+
+```{css, echo = FALSE}`r ''`
+// display the pagebreak only when printing the html page
+@media all {
+    .page-break	{ display: none; }
+}
+@media print {
+    .page-break	{ display: block; break-after: page; }
+}
+```
+
+# Header 1
+
+Some text
+
+\newpage
+
+# Header 2 on a new page
+
+Some other text
+````
+
+`\newpage` will be converted here to 
+
+```html
+<div class="page-break"></div>
+```
+
+and the style will be applied to this class from the CSS included in the chunk. 
+
+This customisation can also be achieved by setting the environnement variable `PANDOC_NEWPAGE_HTML_CLASS` in the R session that will render the document (or in `.Renviron` file for example)
+
+Let's note that in this example we use [`break-after`](https://developer.mozilla.org/en-US/docs/Web/CSS/break-after) property instead of `page-break-after` as it is recommended now to use the former which is the replacement. The latter is kept around for [compatibility reason with browsers](https://caniuse.com/#search=page-break).
+
+### Using with Word documents {#word}
+
+A `\newpage` or `\pagebreak` command in a rmarkdown document with output as Word document will be converted in a pagebreak for word document. Manually, this would mean adding this in your rmarkdown
+
+````md
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+````
+
+For example, using the pagebreak feature, this will add the first header in the second page of the work document
+
+````md
+---
+title: My main title
+output: word_document
+---
+
+\newpage
+
+# First Header
+````
+
+### Using with ODT documents {#odt}
+
+To use the pagebreak feature with `odt_document()`, you need to provide a reference document that includes a paragraph style with, by default, the name _Pagebreak_. This named paragraph style should have no extra space before or after and have a pagebreak after it. (see [libre office documentation](https://help.libreoffice.org/Writer/Text_Flow) on how to create a style). 
+
+The name of the named paragrah style could be customized using `newpage_odt_style` metadata in yaml header or `PANDOC_NEWPAGE_ODT_STYLE` environment variable (as in [html document](#html)).
+
+As the previous one, this example will lead to a two pages document, with first header on the second page.
+
+````md
+---
+title: My main title
+output: 
+  odt_document:
+    reference_odt: reference.odt
+---
+
+\newpage
+
+# First Header
+````
+
+
+
+## Number sections
+
+This filter is available since **rmarkdown** 2.4 and works with Pandoc 2.1+ (shipped in RStudio >= 1.2).
+
+Numbering sections are supported by Pandoc for limited formats (e.g., html and pdf).
+The rmarkdown package adds `number_sections.lua` to support this feature in other formats (e.g., docx, odt, and so on).
+Users do not have to know which formats use the Pandoc's feature or the Lua filter.
+
+```md
+---
+title: My main title
+output: 
+  md_document:
+    number_sections: true # implemented by Lua filter
+  html_document
+    number_sections: true # implemented by Pandoc
+---
+
+# First Header
+
+## A Header Belonging the First Header
+
+# Second Header
+```
+
+In general, numbers and titles of sections are separated by a space.
+An exception is the `word_document` function, which separates them by a tab in order to be consistent with Pandoc's number sections for docx format in Pandoc >= 2.10.1.
+If one wants to have fine controls on the format of section numbers, prepare customized docx file and specify it to the `reference_docx` argument of the `word_document` function.
+
+## Custom environment for LaTeX 
+
+This filter is available since **rmarkdown** 1.15 and works with Pandoc 2.1+ (shipped in RStudio >= 1.2).
+
+Pandoc supports a syntax called [Fenced Divs](https://pandoc.org/MANUAL.html#divs-and-spans) that allows to create `<div>` in HTML. For example, the syntax is 
+
+```markdown
+::: {#special .sidebar}
+Here is a paragraph.
+
+And another.
+:::
+```
+By default, this special syntax will be ignored in LaTeX conversion for PDF output and the content of the block will be used as-is. However, this syntax could be used to create LaTeX environment. 
+
+That is why **rmarkdown** uses a custom Lua filter to allow any Fenced Divs to be converted as a LaTeX environment (`\begin{env}` ... `\end{env}`) when desired by adding a special attribute.
+
+```markdown
+::: {.verbatim data-latex=""}
+We show some _verbatim_ text here.
+:::
+```
+Its LaTeX output will be:
+
+```latex
+\begin{verbatim}
+We show some \emph{verbatim} text here.
+\end{verbatim}
+```
+
+This feature we call _Custom blocks_ is documented in details in the [R Markdown Cookbook](https://bookdown.org/yihui/rmarkdown-cookbook/custom-blocks.html)
+
+## About Lua filters {#lua-filter}
+
+Since pandoc 2.0, it is possible to use Lua filters to add some extra functionality to pandoc document conversion. Adding a pagebreak command in markdown to be compatible with several output documents is one of them. You can find some more informations about Lua filters in [pandoc's documentation](https://pandoc.org/lua-filters.html) and also some examples in [a collection of Lua filters for pandoc](https://github.com/pandoc/lua-filters). These examples, and any other Lua filters, can be use in your Rmarkdown document directly by adding [a pandoc argument](https://bookdown.org/yihui/rmarkdown/html-document.html#pandoc-arguments) in yaml header
+
+```html
+---
+output:
+  html_document:
+    pandoc_args: ["--lua-filter=filter.lua"]
+---
+```
+
+You can also use a special helper using a `!expr` syntax for yaml in your header
+
+The package [rmdfiltr](https://github.com/crsh/rmdfiltr) provides a collection of Lua filters and helpers functions to use them.
+
+Before pandoc 2.0, [using filter](https://pandoc.org/filters.html) with pandoc was already available through programs that modifies the AST. `pandoc-citeproc` is an example used to deal with citations. The package [pandocfilter](https://cran.r-project.org/package=pandocfilters) is useful to create filters using R.
+
+### Using filters with output format
+
+If you want to create a format that uses a special filter, you can add it as a pandoc option if the output format.
+
+Either by modifying an existing format: 
+
+```{r modifying-format}
+custom_format <- function(...) {
+  base_format <- rmarkdown::html_document(...)
+  # prepending a new Lua filter to html_document() ones
+  base_format$pandoc$lua_filters <- c(
+    rmarkdown::pandoc_path_arg("new.lua"), 
+    base_format$pandoc$lua_filters)
+  base_format
+}
+
+basename(custom_format()$pandoc$lua_filters)
+```
+Or by creating a new format :
+
+```{r creating-format}
+custom_format <- function(toc = TRUE, ...) {
+  rmarkdown::output_format(
+    knitr = rmarkdown::knitr_options(),
+    # a new filter will be appended to base_format ones
+    pandoc = rmarkdown::pandoc_options(to = "html", lua_filters = "new.lua"),
+    base_format = rmarkdown::html_document(toc = toc, ...)
+  )
+}
+
+basename(custom_format()$pandoc$lua_filters)
+```
+
+As this is an advanced feature, if you want to go further, we encourage you to look at the examples of formats in packages such as **rmarkdown**, **bookdown** or **pagedown**. 

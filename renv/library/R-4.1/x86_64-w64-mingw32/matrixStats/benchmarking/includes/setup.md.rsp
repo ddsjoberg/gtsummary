@@ -1,0 +1,44 @@
+<%@string header="includes/header.md.rsp"%>
+<%@string footer="includes/footer.md.rsp"%>
+<%@string references="../includes/references.md.rsp"%>
+<%@string appendix="${appendix}" default="true"%>
+<%@string colname=""%>
+<%@string rowname=""%>
+<%@string fcnname=""%>
+<%@string fcntags=""%>
+<%@meta author="Henrik Bengtsson"%>
+
+<%--------------------------------------------------------------
+ RSP specific
+ --------------------------------------------------------------%>
+<%
+R.utils::use("R.utils, R.devices (>= 2.12.0), knitr, ggplot2")
+devOptions("png", width=390)
+options("withCapture/newline"=FALSE)
+options(deparse.cutoff=100)
+kable <- function(...) {
+  t <- knitr::kable(..., format="markdown")
+  print(t)
+}
+%>
+ 
+<%--------------------------------------------------------------
+ Report/package specific
+ --------------------------------------------------------------%>
+<%
+use("matrixStats")
+use("microbenchmark")
+%>
+<%@include file="results.md.rsp"%>
+
+
+<%--------------------------------------------------------------
+ Macros
+ --------------------------------------------------------------%>
+
+
+<%--------------------------------------------------------------
+ Timing
+ --------------------------------------------------------------%>
+<% rspStartTime <- Sys.time() %>
+

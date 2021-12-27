@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Check encoding of new or existing fields</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for check_encoding {desc}"><tr><td>check_encoding {desc}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Check encoding of new or existing fields</h2>
+
+<h3>Description</h3>
+
+<p>If <code>new_fields</code> is <code>NULL</code>, then the existing
+fields are checked. Otherwise <code>new_fields</code> are checked.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+check_encoding(self, private, new_fields)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>self</code></td>
+<td>
+<p>Object.</p>
+</td></tr>
+<tr valign="top"><td><code>private</code></td>
+<td>
+<p>Private env.</p>
+</td></tr>
+<tr valign="top"><td><code>new_fields</code></td>
+<td>
+<p>New fields, or <code>NULL</code> to check existing fields.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Warnings are given for non-ascii fields, if the <code>Encoding</code>
+field is not set.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Object, invisibly.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>desc</em> version 1.4.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

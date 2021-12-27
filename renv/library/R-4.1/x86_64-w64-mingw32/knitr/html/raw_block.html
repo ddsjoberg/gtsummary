@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Mark character strings as raw blocks in R Markdown</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for raw_block {knitr}"><tr><td>raw_block {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Mark character strings as raw blocks in R Markdown</h2>
+
+<h3>Description</h3>
+
+<p>Wraps content in a raw attribute block, which protects it from being escaped
+by Pandoc. See <a href="https://pandoc.org/MANUAL.html#generic-raw-attribute">https://pandoc.org/MANUAL.html#generic-raw-attribute</a>.
+Functions <code>raw_latex()</code> and <code>raw_html()</code> are shorthands of
+<code>raw_block(x, 'latex')</code> and <code>raw_block(x, 'html')</code>, respectively.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+raw_block(x, type = "latex", ...)
+
+raw_latex(x, ...)
+
+raw_html(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>The character vector to be protected.</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>The type of raw blocks (i.e., the Pandoc output format). If you
+are not sure about the Pandoc output format of your document, insert a code
+chunk <code>knitr:::pandoc_to()</code> and see what it returns after the document
+is compiled.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments to be passed to <code><a href="../../knitr/help/asis_output.html">asis_output</a>()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+knitr::raw_latex("\\emph{some text}")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

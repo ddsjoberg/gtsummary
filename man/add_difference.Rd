@@ -100,3 +100,6 @@ add_difference_ex2 <-
   add_n() \%>\%
   add_difference(adj.vars = c(grade, stage))
 }
+\seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+}

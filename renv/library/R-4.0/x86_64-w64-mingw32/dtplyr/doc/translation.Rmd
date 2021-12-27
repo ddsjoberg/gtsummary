@@ -1,0 +1,282 @@
+---
+title: "Translation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{translation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+This vignette shows the details of how dtplyr translates dplyr expressions into the equivalent [data.table](http://r-datatable.com/) code. If you see places where you think I could generate better data.table code, please [let me know](https://github.com/tidyverse/dtplyr/issues)!
+
+This document assumes that you're familiar with the basics of data.table; if you're not, I recommend starting at `vignette("datatable-intro.html")`.
+
+```{r setup, message = FALSE}
+library(dtplyr)
+library(data.table)
+library(dplyr)
+```
+
+## The basics
+
+To get started, I'll create a simple lazy table with `lazy_dt()`:
+
+```{r}
+df <- data.frame(a = 1:5, b = 1:5, c = 1:5, d = 1:5)
+dt <- lazy_dt(df)
+```
+
+The actual data doesn't matter here since we're just looking at the translation.
+
+When you print a lazy frame, it tells you that it's a local data table with four rows. It also prints the call that dtplyr will evaluate when we execute the lazy table. In this case it's very simple: 
+
+```{r}
+dt
+```
+
+If we just want to see the generated code, you can use `show_query()`. I'll use that a lot in this vignette.
+
+```{r}
+dt %>% show_query()
+```
+
+## Simple verbs
+
+Many dplyr verbs have a straightforward translation to either the `i` or `j` component of `[.data.table`. 
+
+### `filter()` and `arrange()`
+
+`filter()` and `arrange()` become elements of `i`:
+
+```{r}
+dt %>% arrange(a, b, c) %>% show_query()
+
+dt %>% filter(b == c) %>% show_query()
+dt %>% filter(b == c, c == d) %>% show_query()
+```
+
+### `select()`, `summarise()`, `transmute()`
+
+`select()`, `summarise()` and `transmute()` all become elements of `j`:
+
+```{r}
+dt %>% select(a:b) %>% show_query()
+dt %>% summarise(a = mean(a)) %>% show_query()
+dt %>% transmute(a2 = a * 2) %>% show_query()
+```
+
+`mutate()` also uses the `j` component with data.table's special `:=` operator:
+
+```{r}
+dt %>% mutate(a2 = a * 2, b2 = b * 2) %>% show_query()
+```
+
+Note that dplyr will not copy the input data by default, see below for more details.
+
+`mutate()` allows to refer to variables that you just created using an "extended `j`" expression:
+
+```{r}
+dt %>% mutate(a2 = a * 2, b2 = b * 2, a4 = a2 * 2) %>% show_query()
+```
+
+`transmute()` works similarly:
+
+```{r}
+dt %>% transmute(a2 = a * 2, b2 = b * 2, a4 = a2 * 2) %>% show_query()
+```
+
+## Other calls
+
+Other verbs require calls to other functions:
+
+### `rename()`
+
+`rename()` uses `setnames()`:
+
+```{r}
+dt %>% rename(x = a, y = b) %>% show_query()
+```
+
+### `distinct()`
+
+`distinct()` uses `unique()`:
+
+```{r}
+dt %>% distinct() %>% show_query()
+dt %>% distinct(a, b) %>% show_query()
+dt %>% distinct(a, b, .keep_all = TRUE) %>% show_query()
+```
+
+`distinct()` on a computed column uses an intermediate mutate:
+
+```{r}
+dt %>% distinct(c = a + b) %>% show_query()
+dt %>% distinct(c = a + b, .keep_all = TRUE) %>% show_query()
+```
+
+### Joins
+
+Most joins use `merge()`:
+
+```{r}
+dt2 <- lazy_dt(data.frame(a = 1))
+
+dt %>% right_join(dt2, by = "a") %>% show_query()
+dt %>% inner_join(dt2, by = "a") %>% show_query()
+dt %>% full_join(dt2, by = "a") %>% show_query()
+```
+
+But `left_join()` will use the `i` position where possible:
+
+```{r}
+dt %>% left_join(dt2, by = "a") %>% show_query()
+```
+
+Anti-joins are easy to translate because data.table has a specific form for them:
+
+```{r}
+dt %>% anti_join(dt2, by = "a") %>% show_query()
+```
+
+Semi-joins are little more complex:
+
+```{r}
+dt %>% semi_join(dt2, by = "a") %>% show_query()
+```
+
+### Set operations
+
+Set operations use the fast data.table alternatives:
+
+```{r}
+dt %>% intersect(dt2) %>% show_query()
+dt %>% setdiff(dt2) %>% show_query()
+dt %>% union(dt2) %>% show_query()
+```
+
+## Grouping
+
+Just like in dplyr, `group_by()` doesn't do anything by itself, but instead modifies the operation of downstream verbs. This generally just involves using the `keyby` argument:
+
+```{r}
+dt %>% group_by(a) %>% summarise(b = mean(b)) %>% show_query()
+```
+
+You may use `by` instead of `keyby` if you set `arrange = FALSE`:
+
+```{r}
+dt %>% group_by(a, arrange = FALSE) %>% summarise(b = mean(b)) %>% show_query()
+```
+
+Often, there won't be too much of a difference between these, but for larger grouped operations, the overhead of reordering data may become significant. In these situations, using `arrange = FALSE` becomes preferable.
+
+The primary exception is grouped `filter()`, which requires the use of `.SD`:
+
+```{r}
+dt %>% group_by(a) %>% filter(b < mean(b)) %>% show_query()
+```
+
+## Combinations
+
+dtplyr tries to generate generate data.table code as close as possible to what you'd write by hand, as this tends to unlock data.table's tremendous speed. For example, if you `filter()` and then `select()`, dtplyr generates a single `[`:
+
+```{r}
+dt %>% 
+  filter(a == 1) %>% 
+  select(-a) %>% 
+  show_query()
+```
+
+And similarly when combining filtering and summarising:
+
+```{r}
+dt %>% 
+  group_by(a) %>% 
+  filter(b < mean(b)) %>% 
+  summarise(c = max(c)) %>% 
+  show_query()
+```
+
+This is particularly nice when joining two tables together because you can select variables after you have joined and data.table will only carry those into the join:
+
+```{r}
+dt3 <- lazy_dt(data.frame(x = 1, y = 2))
+dt4 <- lazy_dt(data.frame(x = 1, a = 2, b = 3, c = 4, d = 5, e = 7))
+
+dt3 %>% 
+  left_join(dt4) %>% 
+  select(x, a:c) %>% 
+  show_query()
+```
+
+Note, however, that `select()`ing and then `filter()`ing must generate two separate calls to `[`, because data.table evaluates `i` before `j`.
+
+```{r}
+dt %>% 
+  select(X = a, Y = b) %>% 
+  filter(X == 1) %>% 
+  show_query()
+```
+
+Similarly, a `filter()` and `mutate()` can't be combined because `dt[a == 1, .(b2 := b * 2)]` would modify the selected rows in place:
+
+```{r}
+dt %>% 
+  filter(a == 1) %>% 
+  mutate(b2 = b * 2) %>% 
+  show_query()
+```
+
+## Copies
+
+By default dtplyr avoids mutating the input data, automatically creating a `copy()` if needed:
+
+```{r}
+dt %>% mutate(a2 = a * 2, b2 = b * 2) %>% show_query()
+```
+
+Note that dtplyr does its best to avoid needless copies, so it won't explicitly copy if there's already an implicit copy produced by `[`, `head()`, `merge()` or similar:
+
+```{r}
+dt %>% 
+  filter(x == 1) %>% 
+  mutate(a2 = a * 2, b2 = b * 2) %>% 
+  show_query()
+```
+
+You can choose to opt out of this copy, and take advantage of data.table's reference semantics (see `vignette("datatable-reference-semantics")` for more details). Do this by setting `immutable = FALSE` on construction:
+
+```{r}
+dt2 <- data.table(a = 1:10)
+
+dt_inplace <- lazy_dt(dt2, immutable = FALSE)
+dt_inplace %>% mutate(a2 = a * 2, b2 = b * 2) %>% show_query()
+```
+
+## Performance
+
+There are two components to the performance of dtplyr: how long it takes to generate the translation, and how well the translation performs. Given my explorations so far, I'm reasonably confident that we're generating high-quality data.table code, so most of the cost should be in the translation itself. 
+
+The following code briefly explores the performance of a few different translations. A signficant amount of work is done by the dplyr verbs, so we benchmark the whole process. 
+
+```{r}
+bench::mark(
+  filter = dt %>% filter(a == b, c == d),
+  mutate = dt %>% mutate(a = a * 2, a4 = a2 * 2, a8 = a4 * 2) %>% show_query(),
+  summarise = dt %>% group_by(a) %>% summarise(b = mean(b)) %>% show_query(),
+  check = FALSE
+)[1:6]
+```
+
+These translations all take less than a millisecond, suggesting that the performance overhead of dtplyr should be negligible for realistic data sizes. Note that dtplyr run-time scales with the complexity of the pipeline, not the size of the data, so these timings should apply regardless of the size of the underlying data[^copy].
+
+[^copy]: Unless a copy is performed.

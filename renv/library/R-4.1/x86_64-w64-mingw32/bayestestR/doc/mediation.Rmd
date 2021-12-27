@@ -1,0 +1,189 @@
+---
+title: "Mediation Analysis using Bayesian Regression Models"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, bayesian, posterior, mediation]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Mediation Analysis using Bayesian Regression Models}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+csl: apa.csl
+---
+
+```{r, SETTINGS-knitr, echo = FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE, 
+  comment = "#>", 
+  dev = "png", 
+  fig.width = 7, 
+  fig.height = 5, 
+  message = FALSE, 
+  warning = FALSE
+)
+options(width = 800)
+if (!requireNamespace("mediation", quietly = TRUE) ||
+    !requireNamespace("httr", quietly = TRUE) ||
+    !requireNamespace("lavaan", quietly = TRUE) ||
+    !requireNamespace("brms", quietly = TRUE) ||
+    !requireNamespace("rstanarm", quietly = TRUE) ||
+    !requireNamespace("insight", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+This vignettes demonstrates the `mediation()`-function. Before we start, we fit
+some models, including a mediation-object from the _mediation_-package and a
+structural equation modelling approach with the _lavaan_-package, both of which
+we use for comparison with _brms_ and _rstanarm_.
+
+## Mediation Analysis in brms and rstanarm
+
+```{r}
+library(bayestestR)
+library(mediation)
+library(brms)
+library(rstanarm)
+
+# load sample data
+data(jobs)
+
+set.seed(123)
+# linear models, for mediation analysis
+b1 <- lm(job_seek ~ treat + econ_hard + sex + age, data = jobs)
+b2 <- lm(depress2 ~ treat + job_seek + econ_hard + sex + age, data = jobs)
+
+# mediation analysis, for comparison with brms
+m1 <- mediate(b1, b2, sims = 1000, treat = "treat", mediator = "job_seek")
+```
+```{r eval=FALSE}
+# Fit Bayesian mediation model in brms
+f1 <- bf(job_seek ~ treat + econ_hard + sex + age)
+f2 <- bf(depress2 ~ treat + job_seek + econ_hard + sex + age)
+m2 <- brm(f1 + f2 + set_rescor(FALSE), data = jobs, cores = 4)
+
+```
+```{r echo=FALSE}
+m2 <- insight::download_model("brms_mv_6")
+```
+```{r eval=FALSE}
+# Fit Bayesian mediation model in rstanarm
+m3 <- stan_mvmer(
+  list(job_seek ~ treat + econ_hard + sex + age + (1 | occp),
+       depress2 ~ treat + job_seek + econ_hard + sex + age + (1 | occp)),
+  data = jobs,
+  cores = 4,
+  refresh = 0
+)
+```
+```{r echo=FALSE}
+m3 <- insight::download_model("stanmvreg_2")
+```
+
+`mediation()` is a summary function, especially for mediation analysis, i.e. for
+multivariate response models with casual mediation effects.
+
+In the models `m2` and `m3`, `treat` is the treatment effect and `job_seek` is
+the mediator effect. For the *brms* model (`m2`), `f1` describes the mediator
+model and `f2` describes the outcome model. This is similar for the *rstanarm*
+model.
+
+`mediation()` returns a data frame with information on the _direct effect_
+(median value of posterior samples from treatment of the outcome model),
+_mediator effect_ (median value of posterior samples from mediator of the
+outcome model), _indirect effect_ (median value of the multiplication of the
+posterior samples from mediator of the outcome model and the posterior samples
+from treatment of the mediation model) and the _total effect_ (median value of
+sums of posterior samples used for the direct and indirect effect). The
+_proportion mediated_ is the indirect effect divided by the total effect.
+
+The simplest call just needs the model-object.
+
+```{r, message=TRUE}
+# for brms
+mediation(m2)
+
+# for rstanarm
+mediation(m3)
+```
+
+Typically, `mediation()` finds the treatment and mediator variables
+automatically. If this does not work, use the `treatment` and `mediator`
+arguments to specify the related variable names. For all values, the 89%
+credible intervals are calculated by default. Use `ci` to calculate a different
+interval.
+
+## Comparison to the mediation package
+
+Here is a comparison with the _mediation_ package. Note that the
+`summary()`-output of the _mediation_ package shows the indirect effect first,
+followed by the direct effect.
+
+```{r}
+summary(m1)
+
+mediation(m2, ci = .95)
+
+mediation(m3, ci = .95)
+```
+
+If you want to calculate mean instead of median values from the posterior
+samples, use the `centrality`-argument. Furthermore, there is a
+`print()`-method, which allows to print more digits.
+
+```{r, message=TRUE}
+m <- mediation(m2, centrality = "mean", ci = .95)
+print(m, digits = 4)
+```
+
+As you can see, the results are similar to what the _mediation_ package produces
+for non-Bayesian models.
+
+## Comparison to SEM from the lavaan package
+
+Finally, we also compare the results to a SEM model, using *lavaan*. This
+example should demonstrate how to "translate" the same model in different
+packages or modeling approached.
+
+```{r}
+library(lavaan)
+data(jobs)
+set.seed(1234)
+
+model <- ' # direct effects
+             depress2 ~ c1*treat + c2*econ_hard + c3*sex + c4*age + b*job_seek
+             
+           # mediation
+             job_seek ~ a1*treat + a2*econ_hard + a3*sex + a4*age
+             
+           # indirect effects (a*b)
+             indirect_treat := a1*b
+             indirect_econ_hard := a2*b
+             indirect_sex := a3*b
+             indirect_age := a4*b
+             
+           # total effects
+             total_treat := c1 + (a1*b)
+             total_econ_hard := c2 + (a2*b)
+             total_sex := c3 + (a3*b)
+             total_age := c4 + (a4*b)
+         '
+m4 <- sem(model, data = jobs)
+summary(m4)
+
+# just to have the numbers right at hand and you don't need to scroll up
+mediation(m2, ci = .95)
+```
+
+The summary output from *lavaan* is longer, but we can find the related numbers
+quite easily:
+
+- the _direct effect_ of treatment is `treat (c1)`, which is `-0.040`
+- the _indirect effect_ of treatment is `indirect_treat`, which is `-0.016`
+- the _mediator effect_ of job_seek is `job_seek (b)`, which is `-0.240`
+- the _total effect_ is `total_treat`, which is `-0.056`

@@ -1,6 +1,7 @@
 #' print and knit_print methods for gtsummary objects
 #'
 #' @name print_gtsummary
+#' @keywords internal
 #' @param x An object created using gtsummary functions
 #' @param print_engine String indicating the print method. Must be one of
 #' `"gt"`, `"kable"`, `"kable_extra"`, `"flextable"`, `"tibble"`
@@ -59,7 +60,7 @@ knit_print.gtsummary <- function(x, ...) {
   else if (is.null(print_engine) && knitr::is_latex_output() == TRUE) {
     rlang::inform(paste(
       "Table printed with `knitr::kable()`, not {gt}. Learn why at",
-      "http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html",
+      "https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html",
       "To suppress this message, include `message = FALSE` in code chunk header.",
       sep = "\n"
     ))
@@ -72,7 +73,7 @@ knit_print.gtsummary <- function(x, ...) {
     if (assert_package("flextable", boolean = TRUE)) {
       rlang::inform(paste(
         "Table printed with {flextable}, not {gt}. Learn why at",
-        "http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html",
+        "https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html",
         "To suppress this message, include `message = FALSE` in the code chunk header.",
         sep = "\n"
       ))
@@ -81,7 +82,7 @@ knit_print.gtsummary <- function(x, ...) {
     else {
       rlang::inform(paste(
         "Table printed with `knitr::kable()`, not {gt}. Learn why at",
-        "http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html",
+        "https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html",
         "To suppress this message, include `message = FALSE` in the code chunk header.",
         sep = "\n"
       ))
@@ -94,7 +95,7 @@ knit_print.gtsummary <- function(x, ...) {
     "rtf" %in% knitr::opts_knit$get("rmarkdown.pandoc.to")) {
     rlang::inform(paste(
       "Table printed with `knitr::kable()`, not {gt}. Learn why at",
-      "http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html",
+      "https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html",
       "To suppress this message, include `message = FALSE` in code chunk header.",
       sep = "\n"
     ))

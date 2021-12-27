@@ -9,6 +9,7 @@
 #'
 #' @param x `tbl_regression` or `tbl_uvregression` object
 #' @param ... Additional arguments passed to or from other methods.
+#' @keywords internal
 #' @export
 #' @author Daniel D. Sjoberg
 #' @seealso [add_nevent.tbl_regression], [add_nevent.tbl_uvregression],

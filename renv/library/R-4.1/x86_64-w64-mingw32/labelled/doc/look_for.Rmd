@@ -1,0 +1,159 @@
+---
+author: "Joseph Larmarange"
+title: "Generate a data dictionnary and search for variables with `look_for()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Generate a data dictionnary and search for variables with `look_for()`}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+## Showing a summary of a data frame
+
+### Default printing of tibbles
+
+It is a common need to easily get a description of all variables in a data frame.
+
+When a data frame is converted into a tibble (e.g. with `dplyr::as_tibble()`), it as a nice printing showing the first rows of the data frame as well as the type of column.
+
+```{r message=FALSE}
+library(dplyr)
+```
+
+
+```{r}
+iris %>% as_tibble()
+```
+
+However, when you have too many variables, all of them cannot be printed and their are just listed.
+
+```{r}
+data(fertility, package = "questionr")
+women
+```
+
+Note: in **R** console, value labels (if defined) are usually printed but they do not appear in a R markdown document like this vignette.
+
+### `dplyr::glimpse()`
+ 
+ The function `dplyr::glimpse()` allows you to have a quick look at all the variables in a data frame.
+ 
+```{r}
+glimpse(iris)
+glimpse(women)
+```
+ 
+It will show you the first values of each variable as well as the type of each variable. However, some important informations are not displayed:
+
+- variable labels, when defined;
+- value labels for labelled vectors;
+- the list of levels for factors;
+- the range of values for numerical variables.
+
+### `labelled::look_for()`
+
+`look_for()` provided by the `labelled` package will print in the console a data dictionary of all variables, showing variable labels when available, the type of variable and a list of values corresponding to:
+ 
+- levels for factors;
+- value labels for labelled vectors;
+- the range of observed values in the vector otherwise (if `details = "full"`).
+
+
+```{r}
+library(labelled)
+look_for(iris)
+look_for(women)
+```
+
+Note that `lookfor()` and `generate_dictionary()` are synonyms of `look_for()` and works exactly in the same way.
+
+If there is not enough space to print full labels in the console, they will be truncated (truncation is indicated by a `~`).
+
+## Searching variables by key
+
+When a data frame has dozens or even hundreds of variables, it could become difficult to find a specific variable. In such case, you can provide an optional list of keywords, which can be simple character strings or regular expression, to search for specific variables.
+
+```{r}
+# Look for a single keyword.
+look_for(iris, "petal")
+look_for(iris, "s")
+
+# Look for with a regular expression
+look_for(iris, "petal|species")
+look_for(iris, "s$")
+
+# Look for with several keywords
+look_for(iris, "pet", "sp")
+
+# Look_for will take variable labels into account
+look_for(women, "read", "level")
+```
+
+By default, `look_for()` will look through both variable names and variables labels. Use `labels = FALSE` to look only through variable names.
+
+```{r}
+look_for(women, "read")
+look_for(women, "read", labels = FALSE)
+```
+Similarly, the search is by default case insensitive. To make the search case sensitive, use `ignore.case = FALSE`.
+
+```{r}
+look_for(iris, "sepal")
+look_for(iris, "sepal", ignore.case = FALSE)
+```
+
+## Level of details
+
+
+If you just want to use the search feature of `look_for()` without computing the details of each variable, simply indicate `details = "none"` or `details = FALSE`.
+
+```{r}
+look_for(women, "id", details = "none")
+```
+
+If you want more details (but can be time consuming for big data frames), indicate `details = "full"` or `details = TRUE`.
+
+
+```{r}
+look_for(women, details = "full")
+look_for(women, details = "full") %>%
+  dplyr::glimpse()
+```
+
+
+## Advanced usages of `look_for()`
+
+`look_for()` returns a detailed tibble which is summarized before printing. To deactivate default printing and see full results, simply use `dplyr::as_tibble()`, `dplyr::glimpse()` or even `utils::View()`.
+
+```{r, eval=FALSE}
+look_for(women) %>% View()
+```
+
+
+```{r}
+look_for(women) %>% as_tibble()
+glimpse(look_for(women))
+```
+
+The tibble returned by `look_for()` could be easily manipulated for advanced programming.
+
+When a column has several values for one variable (e.g. `levels` or `value_labels`), results as stored with nested named list. You can convert named lists into simpler character vectors, you can use `convert_list_columns_to_character()`.
+
+```{r}
+look_for(women) %>% convert_list_columns_to_character()
+```
+
+Alternatively, you can use `lookfor_to_long_format()` to transform results into a long format with one row per factor level and per value label.
+
+```{r}
+look_for(women) %>% lookfor_to_long_format()
+```
+
+Both can be combined:
+
+```{r}
+look_for(women) %>%
+  lookfor_to_long_format() %>%
+  convert_list_columns_to_character()
+```
+

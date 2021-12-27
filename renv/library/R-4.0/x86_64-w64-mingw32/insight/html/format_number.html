@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Convert number to words</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for format_number {insight}"><tr><td>format_number {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert number to words</h2>
+
+<h3>Description</h3>
+
+<p>Convert number to words. The code has been adapted from here https://github.com/ateucher/useful_code/blob/master/R/numbers2words.r
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+format_number(x, textual = TRUE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Number.</p>
+</td></tr>
+<tr valign="top"><td><code>textual</code></td>
+<td>
+<p>Return words. If <code>FALSE</code>, will run <code><a href="format_value.html">format_value</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments to be passed to <code><a href="format_value.html">format_value</a></code> if <code>textual</code> is <code>FALSE</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A formatted string.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+format_number(2)
+format_number(45)
+format_number(324.68765)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

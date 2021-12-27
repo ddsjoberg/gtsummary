@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Replicate Vectors into 'abIndex' Result</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for rep2abI {Matrix}"><tr><td>rep2abI {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Replicate Vectors into 'abIndex' Result</h2>
+
+<h3>Description</h3>
+
+<p><code>rep2abI(x, times)</code> conceptually computes
+<code><a href="../../base/html/rep.html">rep.int</a>(x, times)</code> but with an
+<code><a href="abIndex-class.html">abIndex</a></code> class result.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rep2abI(x, times)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>numeric vector</p>
+</td></tr>
+<tr valign="top"><td><code>times</code></td>
+<td>
+<p>integer (valued) scalar: the number of repetitions</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a vector of <code><a href="../../base/html/class.html">class</a></code> <code><a href="abIndex-class.html">abIndex</a></code>
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/rep.html">rep.int</a>()</code>, the base function;
+<code><a href="abIseq.html">abIseq</a></code>, <code><a href="abIndex-class.html">abIndex</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(ab &lt;- rep2abI(2:7, 4))
+stopifnot(identical(as(ab, "numeric"),
+	   rep(2:7, 4)))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

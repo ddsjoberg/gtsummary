@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Manipulate DESCRIPTION Files</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Manipulate DESCRIPTION Files
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;desc&rsquo; version 1.4.0</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="check_field.html">check_field</a></td>
+<td>Syntactical check of a DESCRIPTION field</td></tr>
+<tr><td style="width: 25%;"><a href="cran_ascii_fields.html">cran_ascii_fields</a></td>
+<td>The DESCRIPTION fields that are supposed to be in plain ASCII encoding</td></tr>
+<tr><td style="width: 25%;"><a href="cran_valid_fields.html">cran_valid_fields</a></td>
+<td>A list of DESCRIPTION fields that are valid according to the CRAN checks</td></tr>
+<tr><td style="width: 25%;"><a href="dep_types.html">dep_types</a></td>
+<td>DESCRIPTION fields that denote package dependencies</td></tr>
+<tr><td style="width: 25%;"><a href="desc.html">desc</a></td>
+<td>Read a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="description.html">description</a></td>
+<td>Read, write, update, validate DESCRIPTION files</td></tr>
+<tr><td style="width: 25%;"><a href="desc_add_author.html">desc_add_author</a></td>
+<td>Add an author to Authors@R in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_add_author_gh.html">desc_add_author_gh</a></td>
+<td>Add a GitHub user as an author to DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_add_me.html">desc_add_me</a></td>
+<td>Add the current user as an author to DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_add_orcid.html">desc_add_orcid</a></td>
+<td>Add an ORCID to one or more authors in Authors@R, in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_add_remotes.html">desc_add_remotes</a></td>
+<td>Add locations in the Remotes field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_add_role.html">desc_add_role</a></td>
+<td>Add a role to one or more authors in Authors@R, in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_add_to_collate.html">desc_add_to_collate</a></td>
+<td>Add one or more files to the Collate field, in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_add_urls.html">desc_add_urls</a></td>
+<td>Add URLs to the URL field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_bump_version.html">desc_bump_version</a></td>
+<td>Increase the version number in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_change_maintainer.html">desc_change_maintainer</a></td>
+<td>Change maintainer of the package, in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_clear_remotes.html">desc_clear_remotes</a></td>
+<td>Remove all locations from the Remotes field of DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_clear_urls.html">desc_clear_urls</a></td>
+<td>Remove all URLs from the URL field of DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_coerce_authors_at_r.html">desc_coerce_authors_at_r</a></td>
+<td>Coerce Author Field to Authors@R</td></tr>
+<tr><td style="width: 25%;"><a href="desc_del.html">desc_del</a></td>
+<td>Remove fields from a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_del_author.html">desc_del_author</a></td>
+<td>Remove one or more authors from DESCRIPTION.</td></tr>
+<tr><td style="width: 25%;"><a href="desc_del_collate.html">desc_del_collate</a></td>
+<td>Delete the Collate field from DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_del_dep.html">desc_del_dep</a></td>
+<td>Remove a package dependency from DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_del_deps.html">desc_del_deps</a></td>
+<td>Remove all dependencies from DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_del_from_collate.html">desc_del_from_collate</a></td>
+<td>Remove files from the Collate field.</td></tr>
+<tr><td style="width: 25%;"><a href="desc_del_remotes.html">desc_del_remotes</a></td>
+<td>Delete locations from the Remotes field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_del_role.html">desc_del_role</a></td>
+<td>Delete a role of an author, in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_del_urls.html">desc_del_urls</a></td>
+<td>Delete URLs from the URL field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_fields.html">desc_fields</a></td>
+<td>List all fields in a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get.html">desc_get</a></td>
+<td>Get a field from a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_author.html">desc_get_author</a></td>
+<td>Query authors by role in Authors@R, in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_authors.html">desc_get_authors</a></td>
+<td>Query all authors in Authors@R, in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_built.html">desc_get_built</a></td>
+<td>Query the built field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_collate.html">desc_get_collate</a></td>
+<td>Query the Collate field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_deps.html">desc_get_deps</a></td>
+<td>List all package dependencies from a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_field.html">desc_get_field</a></td>
+<td>Get a single field from a DESCRIPTION file, fail if not found</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_field.html">desc_get_list</a></td>
+<td>Get a single field from a DESCRIPTION file, fail if not found</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_maintainer.html">desc_get_maintainer</a></td>
+<td>Query the package maintainer in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_field.html">desc_get_or_fail</a></td>
+<td>Get a single field from a DESCRIPTION file, fail if not found</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_remotes.html">desc_get_remotes</a></td>
+<td>List the locations in the Remotes field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_urls.html">desc_get_urls</a></td>
+<td>Query the URL field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_get_version.html">desc_get_version</a></td>
+<td>Query the package version in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_has_dep.html">desc_has_dep</a></td>
+<td>Check for a dependency</td></tr>
+<tr><td style="width: 25%;"><a href="desc_has_fields.html">desc_has_fields</a></td>
+<td>Check if some fields are present in a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_normalize.html">desc_normalize</a></td>
+<td>Normalize a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_print.html">desc_print</a></td>
+<td>Print the contents of a DESCRIPTION file to the screen</td></tr>
+<tr><td style="width: 25%;"><a href="desc_reformat_fields.html">desc_reformat_fields</a></td>
+<td>Reformat fields in a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_reorder_fields.html">desc_reorder_fields</a></td>
+<td>Reorder fields in a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_set.html">desc_set</a></td>
+<td>Set one or more fields in a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_set_authors.html">desc_set_authors</a></td>
+<td>Set authors in Authors@R, in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_set_collate.html">desc_set_collate</a></td>
+<td>Set the Collate field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_set_dep.html">desc_set_dep</a></td>
+<td>Add a package dependency to a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_set_deps.html">desc_set_deps</a></td>
+<td>Set all package dependencies in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_set.html">desc_set_list</a></td>
+<td>Set one or more fields in a DESCRIPTION file</td></tr>
+<tr><td style="width: 25%;"><a href="desc_set_remotes.html">desc_set_remotes</a></td>
+<td>Set the Remotes field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_set_urls.html">desc_set_urls</a></td>
+<td>Set the URL field in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_set_version.html">desc_set_version</a></td>
+<td>Set the package version in DESCRIPTION</td></tr>
+<tr><td style="width: 25%;"><a href="desc_to_latex.html">desc_to_latex</a></td>
+<td>Converts a DESCRIPTION file to LaTeX</td></tr>
+<tr><td style="width: 25%;"><a href="desc_validate.html">desc_validate</a></td>
+<td>Validate a DESCRIPTION file</td></tr>
+</table>
+</body></html>

@@ -1,0 +1,62 @@
+---
+title: "Search"
+description: >
+  Learn how to set up search for your pkgdown site using 
+  [DocSearch](https://community.algolia.com/docsearch/) from Algolia.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Search}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+pkgdown websites can integrate search capability using [DocSearch](https://community.algolia.com/docsearch/) from Algolia. DocSearch is a powerful search engine that is free for documentation websites. There are only two steps needed to enable DocSearch on a pkgdown website.
+
+## Indexing
+
+Once you have published your pkgdown website, submit the [pkgdown site URL to Docsearch](https://community.algolia.com/docsearch/). Docsearch will contact you via e-mail to confirm you are the website owner.
+
+Docsearch will set up a crawler configuration that indexes your site every 24 hours. pkgdown builds a suggested Docsearch crawler configuration in `docsearch.json` and you should point the Docsearch team to this configuration as a starting point. If you want to optimize your search, Docsearch will accept pull requests to the configuration that incorporate [additional options](https://github.com/algolia/docsearch-configs#introduction) to fine tune the scraping.
+
+## Configuration
+
+The Docsearch team will e-mail you some JavaScript to integrate into your website.
+
+```js
+<script type="text/javascript">
+  docsearch({ 
+    apiKey: 'API_KEY',  // a long hex string
+    indexName: 'INDEX_NAME', 
+    inputSelector: '### REPLACE ME ####', 
+    debug: false // Set debug to true if you want to inspect the dropdown 
+}); 
+```
+
+Put the value of the `apiKey` and `indexName` parameters into your site `_pkgdown.yml` under `template: params`:
+
+```yaml
+template:
+  params:
+    docsearch:
+      api_key: API_KEY
+      index_name: INDEX_NAME
+```
+
+You also need to add a `url:` field to `_pkgdown.yml` that specifies the location of your documentation on the web. For pkgdown, the URL field is:
+
+```yaml
+url: https://pkgdown.r-lib.org
+```
+
+If you are building your own custom Docsearch index, you can also include your Docsearch `app_id` in `_pkgdown.yml`.
+
+See the [pkgdown configuration](https://github.com/r-lib/pkgdown/blob/master/pkgdown/_pkgdown.yml#L7-L11) for a functional search configuration.
+
+Once this configuration is complete, you should find a search bar after re-building your site. After search is enabled, pressing `shift` + `/` (i.e., "?") will move the focus to the search bar.

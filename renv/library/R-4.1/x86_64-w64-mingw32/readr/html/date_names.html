@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create or retrieve date names</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for date_names {readr}"><tr><td>date_names {readr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create or retrieve date names</h2>
+
+<h3>Description</h3>
+
+<p>When parsing dates, you often need to know how weekdays of the week and
+months are represented as text. This pair of functions allows you to either
+create your own, or retrieve from a standard list. The standard list is
+derived from ICU (<code style="white-space: pre;">http://site.icu-project.org</code>) via the stringi package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+date_names(mon, mon_ab = mon, day, day_ab = day, am_pm = c("AM", "PM"))
+
+date_names_lang(language)
+
+date_names_langs()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>mon, mon_ab</code></td>
+<td>
+<p>Full and abbreviated month names.</p>
+</td></tr>
+<tr valign="top"><td><code>day, day_ab</code></td>
+<td>
+<p>Full and abbreviated week day names. Starts with Sunday.</p>
+</td></tr>
+<tr valign="top"><td><code>am_pm</code></td>
+<td>
+<p>Names used for AM and PM.</p>
+</td></tr>
+<tr valign="top"><td><code>language</code></td>
+<td>
+<p>A BCP 47 locale, made up of a language and a region,
+e.g. <code>"en"</code> for American English. See <code>date_names_langs()</code>
+for a complete list of available locales.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+date_names_lang("en")
+date_names_lang("ko")
+date_names_lang("fr")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>readr</em> version 2.0.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

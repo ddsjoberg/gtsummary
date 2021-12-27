@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Set a gtsummary theme</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for set_gtsummary_theme {gtsummary}"><tr><td>set_gtsummary_theme {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Set a gtsummary theme</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+Use this function to set preferences for the display of gtsummary tables.
+The default formatting and styling throughout the gtsummary package are
+taken from the published reporting guidelines of the top four urology
+journals: European Urology, The Journal of Urology, Urology and
+the British Journal of Urology International. Use this function to change
+the default reporting style to match another journal, or your own
+personal style.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+set_gtsummary_theme(x)
+
+reset_gtsummary_theme()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A gtsummary theme function, e.g. <code>theme_gtsummary_journal()</code>, or a
+named list defining a gtsummary theme. See details below.</p>
+</td></tr>
+</table>
+
+
+<h3>Example Output</h3>
+
+<p>Example
+</p>
+<p><img src="../help/figures/set_gtsummary_theme_ex1.png" width=70% />
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="http://www.danieldsjoberg.com/gtsummary/articles/themes.html">Themes vignette</a>
+</p>
+<p>Available <a href="../../gtsummary/help/theme_gtsummary.html">gtsummary themes</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Setting JAMA theme for gtsummary
+set_gtsummary_theme(theme_gtsummary_journal("jama"))
+# Themes can be combined by including more than one
+set_gtsummary_theme(theme_gtsummary_compact())
+
+set_gtsummary_theme_ex1 &lt;-
+  trial %&gt;%
+  dplyr::select(age, grade, trt) %&gt;%
+  tbl_summary(by = trt) %&gt;%
+  add_stat_label() %&gt;%
+  as_gt()
+
+# reset gtsummary theme
+reset_gtsummary_theme()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.2.9012 <a href="00Index.html">Index</a>]</div>
+</body></html>

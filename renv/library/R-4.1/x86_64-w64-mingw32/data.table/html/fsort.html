@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Fast parallel sort</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for fsort {data.table}"><tr><td>fsort {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Fast parallel sort</h2>
+
+<h3>Description</h3>
+
+<p>Similar to <code>base::sort</code> but fast using parallelism. Experimental.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+fsort(x, decreasing = FALSE, na.last = FALSE, internal=FALSE, verbose=FALSE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p> A vector. Type double, currently. </p>
+</td></tr>
+<tr valign="top"><td><code>decreasing</code></td>
+<td>
+<p> Decreasing order? </p>
+</td></tr>
+<tr valign="top"><td><code>na.last</code></td>
+<td>
+<p> Control treatment of <code>NA</code>s. If <code>TRUE</code>, missing values in the data are put last; if <code>FALSE</code>, they are put first; if <code>NA</code>, they are removed; if <code>"keep"</code> they are kept with rank <code>NA</code>. </p>
+</td></tr>
+<tr valign="top"><td><code>internal</code></td>
+<td>
+<p> Internal use only. Temporary variable. Will be removed. </p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p> Print tracing information. </p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p> Not sure yet. Should be consistent with base R.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Process will raise error if <code>x</code> contains negative values.
+Unless <code>x</code> is already sorted <code>fsort</code> will redirect processing to slower single threaded <em>order</em> followed by <em>subset</em> in following cases:
+</p>
+
+<ul>
+<li><p>data type other than <em>double</em> (<em>numeric</em>)
+</p>
+</li>
+<li><p>data having <code>NA</code>s
+</p>
+</li>
+<li><p><code>decreasing==FALSE</code>
+</p>
+</li></ul>
+
+
+
+<h3>Value</h3>
+
+<p>The input in sorted order.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+x = runif(1e6)
+system.time(ans1 &lt;- sort(x, method="quick"))
+system.time(ans2 &lt;- fsort(x))
+identical(ans1, ans2)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

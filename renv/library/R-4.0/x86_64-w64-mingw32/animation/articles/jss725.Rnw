@@ -1,0 +1,1329 @@
+%% LyX 2.0.4 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[article]{jss}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{esint}
+\usepackage[authoryear]{natbib}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+ %\usepackage{Sweave}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\title{\pkg{animation}: An \proglang{R} Package for Creating Animations and Demonstrating Statistical Methods}
+
+
+\author{Yihui Xie\\
+Department of Statistics \& Statistical Laboratory, Iowa State
+University}
+
+\Plaintitle{animation: An R Package for Creating Animations and Demonstrating Statistical Methods}
+\Shorttitle{An R Package for Creating Animations and Demonstrating Statistical Methods}
+
+\Plainauthor{Yihui Xie}
+
+\Abstract{Animated graphs that demonstrate statistical ideas and methods can both attract interest and assist understanding.  In this paper we first discuss how animations can be related to some statistical topics such as iterative algorithms, random simulations, (re)sampling methods and dynamic trends, then we describe the approaches that may be used to create animations, and give an overview to the \proglang{R} package \pkg{animation} \citep{animation}, including its design, usage and the statistical topics in the package. With the \pkg{animation} package, we can export the animations produced by \proglang{R} into a variety of formats, such as a web page, a GIF animation, a Flash movie, a PDF document, or an MP4/AVI video, so that users can publish the animations fairly easily. The design of this package is flexible enough to be readily incorporated into web applications, e.g., we can generate animations online with Rweb \citep{Rweb}, which means we do not even need \proglang{R} to be installed locally to create animations. We will show examples of the use of animations in teaching statistics and in the presentation of statistical reports using Sweave \citep{Sweave} or \pkg{knitr} \citep{knitr}. In fact, this paper itself was written with the \pkg{knitr} and  \pkg{animation} package, and the animations are embedded in the PDF document, so that readers can watch the animations in real time when they read the paper (the Adobe Reader is required).
+
+Animations can add insight and interest to traditional static approaches to teaching statistics and reporting, making statistics a more interesting and appealing subject.}
+
+\Keywords{animation, statistical demonstration, simulation, web application, reproducible research, \proglang{R}}
+
+\Plainkeywords{animation, statistical demonstration, simulation, web application, reproducible research, R}
+
+\Address{Yihui Xie\\
+Department of Statistics \& Statistical Laboratory\\
+Iowa State University\\
+102 Snedecor Hall, Ames, IA 50011\\
+United States of America\\
+E-mail: \email{xie@yihui.name}\\
+URL: \url{http://yihui.name}}
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{}
+%% \Issue{}
+%% \Month{}
+%% \Year{}
+%% \Submitdate{}
+%% \Acceptdate{}
+
+\usepackage[buttonsize=1em]{animate}
+%\VignetteIndexEntry{animation: An R Package for Creating Animations and Demonstrating Statistical Methods}
+\hypersetup{pdfstartview=FitH}
+
+\makeatother
+
+\begin{document}
+
+<<setup,cache=FALSE,include=FALSE>>=
+opts_chunk$set(echo=FALSE, fig.path='figure/Rfig-', cache.path='cache-jss725/', dev='tikz', cache=TRUE, out.width='.49\\linewidth', aniopts='controls,autoplay,loop', fig.show='animate', results='asis', fig.width=5, fig.height=5)
+render_sweave() # use boring Sweave environments
+set_header(highlight = '') # do not use the Sweave.sty package
+pdf.options(family = 'Palatino')
+options(width = 84, digits=3, prompt='R> ', continue = "+  ")
+library(animation); library(formatR)
+set.seed(31415)  # for reproducibility
+knit_hooks$set(custom.plot = hook_plot_custom)
+@
+
+
+\section{Introduction}
+
+The range of statistical methods, models and computer implementations
+now available is very wide. Both students in statistics, and application
+area specialists who find that they need to master and use statistical
+methodology, require effective means of entrance into this extensive
+body of ideas, theories, and practical computer implementations. Effective
+visual demonstrations can be useful aids in the mastering of concepts.
+Statistical analysis uses computer algorithms to process data, with
+the user then required to interpret results. Even with a good training
+in mathematics, it can be hard to understand the motivation for a
+statistical algorithm, or how it works in processing data.
+
+An obvious application is the simulation of limiting distributions.
+Not only is it possible to illustrate the central limit theorem (CLT);
+one can show how the CLT fails if the observations come from a population
+with infinite variance. This can be done moreover, both in a simulation
+(sampling from a theoretical distribution) and resampling (sampling
+from an empirical distribution) context. The bootstrap sampling distribution
+of the mean is a simple use of sampling from an empirical distribution.
+
+Technological advances in data capture and deployment have led to
+large increases in the size and complexity of data sets. This creates
+new challenges those who work on the analysis of such data. Often,
+as for example in the analysis of gene expression data, the challenges
+have substantial statistical novelty. Consider, as an example, methods
+that select, on the basis of a measure of discriminatory power, a
+few genes from among a large group of genes, in order to discriminate
+between previously assigned groups. Simulation, and associated animations,
+can be an excellent tool for conveying the process of selection.
+
+Traditional static printed statistical reports have severe limitations,
+for conveying results with some degree of complexity to an audience
+that is not trained to understand the statistical ideas. Here, an
+active animated way to present results can help greatly. The human
+visual cortex is arguably the most powerful computing system to which
+we have access. Visualization puts information in a form that uses
+the power of this computing system. By virtue of our visual system,
+we may be able to quickly understand a complicated method or result,
+or at least a simplified case. \citet{Wender03} showed the advantages
+of animations in teaching statistical topics like least squares and
+type I \& II errors. \citet{Velleman96} discussed a set of animation
+ideas that can be effective for a student to learn concepts actively.
+Animation can be helpful only if it is used appropriately; \citet{Fisher10}
+mentioned several successful applications of animations such as GapMinder
+\citep{Rosling09}, but also argued animation could be very bad when
+used poorly -- it is usually good for presentation but not for exploration.
+
+The \pkg{animation} package \citep{animation} was designed mainly
+for two purposes: 
+\begin{enumerate}
+\item to demonstrate ideas, concepts, theories and methods in statistics
+through animations;
+\item to provide utilities to export animations to other formats (e.g.,
+GIF, Flash and various video formats) or write animations into other
+files such as HTML pages and Sweave documents;
+\end{enumerate}
+There has been active research in the area of dynamic and interactive
+graphics for decades, which is mainly focused on data analysis. The
+most similar project to the \pkg{animation} package in the literature
+might be the GASP (Globally Accessible Statistical Procedures, available
+at \url{http://www.stat.sc.edu/rsrch/gasp/}), which is a very early
+collection of statistical routines for data analysis and statistical
+education. Most of these routines were based on Java Applets and HTML
+forms using CGI to handle user's input. These techniques have become
+rare nowadays over the Internet, and as we know, it is much more convenient
+to use \proglang{R} to do statistical computing and graphics than
+Java today.
+
+In terms of conveying statistical ideas, there are two similar packages
+to the \pkg{animation} package: the \pkg{TeachingDemos} package
+\citep{TeachingDemos} and the \pkg{rpanel} package \citep{rpanel},
+both of which are based on \pkg{tcltk} \citep{tcltk} to create graphical
+user interfaces (GUI) for interactive graphics. There are a number
+of other sophisticated packages focused on building GUI's, e.g., \pkg{RGtk2}
+\citep{RGtk2} and \pkg{gWidgets} \citep{Verzani07,gWidgets}. At
+the same time, several \proglang{R} packages are especially designed
+for interactive statistical graphics, such as \pkg{iplots} \citep{iplots}
+and \pkg{playwith} \citep{playwith} -- basic operations like brushing
+and identifying can be done in these packages. Moreover, there are
+also standalone dynamic and interactive graphics systems like GGobi
+\citep{Cook2007} with the corresponding \proglang{R} package \pkg{rggobi}
+\citep{rggobi}. This list of GUI-related packages and dynamic graphics
+systems is still far from exhaustive, however, we will see significant
+distinctions between them and the \pkg{animation} package. As mentioned
+before, most of them are focused on data analysis, whereas the \pkg{animation}
+package puts more emphasis on illustrating statistical ideas -- these
+illustrations may or may not involve with data. At least so far the
+package has been mainly dealing with statistical methods and theories
+for pedagogical purposes. Another major difference is, the \pkg{animation}
+package has flexible utilities to export \proglang{R} animations
+to other formats, among which we need to point out two formats especially:
+the first one is the HTML pages -- we can record the animation frames
+in \proglang{R} and embed images into an HTML page to create an animation;
+this process does not depend on any third-party software and the output
+is like a common movie player (with navigation buttons), so it is
+an ideal tool to record a whole plotting process and demonstrate later
+to the audience; the other format is the animation in PDF documents,
+which is essentially created by the \LaTeX{} package \textbf{animate}.
+With this approach, we can easily insert animations into Sweave or
+other literate programming documents, producing ``reproducible animations''
+in our reports or papers. 
+
+This paper provides both a conceptual framework on how animations
+can be effectively related to statistical theories and ideas, and
+an introduction on the approaches to implement animations, in the
+\proglang{R} language environment \citep{Rlang}. Before we move
+on, we need to point out that this paper was written in a reproducible
+document compiled by the \pkg{knitr} package \citep{knitr} with
+animations created by the \pkg{animation} package automatically;
+later we will see that we can actually watch the animations in this
+document with the Adobe Reader. There was an editorial in the Journal
+of Computational and Graphical Statistics (JCGS) by \citet{Levine10},
+encouraging authors to submit supplements containing animations, interactive
+3D graphics and movies, and finally ``embed these dynamic graphics
+in the online articles themselves''. Apparently the \pkg{animation}
+package can be a helpful tool for these authors.
+
+
+\section[Statistics and animations]{Statistics and animations\label{sec:connection}}
+
+An animation is a rapid display of a sequence of images of 1D, 2D
+or 3D artwork or model positions in order to create an illusion of
+movement. It is an optical illusion of motion due to the phenomenon
+of persistence of vision, and can be created and demonstrated in a
+number of ways.
+
+Animations can assist in a number of areas. For example, we can monitor
+the steps of K-Means cluster algorithm in multivariate statistics,
+simulate the approximation of the sampling distribution of $\bar{X}_{n}$
+to normal distribution as the sample size $n$ increases, or simply
+show the dynamic trends of the time-series data as time passes by,
+etc. The common characteristic of these examples is that they all
+involve with multiple steps and we may use a \emph{sequence} of images
+to illustrate the process. The sequence of images forms the base of
+an animation. Figure \ref{fig:rotation} is a primitive illustration
+of how a rotation in an animation is constructed based on a sequence
+of images.
+
+\begin{figure}
+<<rotation, fig.height=2.5, fig.width=6, out.width='\\linewidth', fig.align='center', fig.show='asis'>>=
+palette(c("black", "red"))
+op = par(mar = rep(0, 4))
+plot(x <- c(1:4, 4:1), y <- rep(2:1, each = 4), ann = F,
+    type = "n", axes = F, xlim = c(0.55, 4.45), ylim = c(0.55,
+        2.45), xaxs = "i", yaxs = "i")
+rect(x - 0.45, y - 0.45, x + 0.45, y + 0.45, border = "darkgray")
+s = seq(0, 360, length = 8)
+for (i in 1:8) {
+    text(x[i], y[i], "Animation", srt = s[i], col = i,
+        cex = 0.5 + 40 * i/360)
+}
+text(x, y - 0.45, paste("00:0", 1:8, sep = ""), adj = c(0.5,
+    -0.2), col = "darkgray", cex = 0.75, font = 2)
+arrows(c(1:3 + 0.35, 4:2 - 0.35), rep(2:1, each = 3),
+    c(1:3 + 0.65, 4:2 - 0.65), rep(2:1, each = 3), length = 0.15,
+    col = "darkgray")
+arrows(4, 1.55, 4, 1.45, length = 0.1, col = "darkgray")
+par(op)
+palette("default")
+@
+
+%
+\caption{An illustration of a sequence of images: the basic constitution of
+an animation. See \code{demo("wordrotation", package = "animation")}
+for the real animation.\label{fig:rotation}}
+\end{figure}
+
+
+After a review of some common statistical theories and applications,
+we think there are generally four types of scenarios as follows in
+which animations may play a useful and interesting role.
+
+
+\subsection{Iterative algorithms}
+
+\begin{figure}
+<<grad-desc-a,interval=0.2,warning=FALSE>>=
+ani.options(interval = 0.2, nmax = 40)
+par(mar=c(4,4,2,.1),mgp=c(2,.9,0))
+grad.desc()
+<<grad-desc-b,interval=0.2,warning=FALSE>>=
+ani.options(interval = 0.2, nmax = 50)
+par(mar=c(4,4,2,.1),mgp=c(2,1,0))
+f2 = function(x, y) sin(1/2 * x^2 - 1/4 * y^2 + 3) * 
+    cos(2 * x + 1 - exp(y))
+grad.desc(f2, c(-2, -2, 2, 2), c(-1, 0.5), gamma = 0.3, 
+    tol = 1e-04)
+@
+
+%
+\caption{The gradient descent algorithm applied to two bivariate objective
+functions with different step lengths. The arrows indicate the direction
+of iterations. See the function \code{grad.desc()} in the \pkg{animation}
+package.\label{fig:grad-desc} }
+\end{figure}
+
+
+Iterative algorithms are widely used to derive estimates. Animation
+can help us monitor the detailed progress, inserting pauses as may
+be needed for the readers to follow the changes. 
+
+Figure \ref{fig:grad-desc} is a demonstration of the ``gradient
+descent algorithm'' for bivariate functions $z=f(x,y)$. Generally,
+to minimize a real-valued differentiable function $F(\mathbf{x})$
+($\mathbf{x}$ can be a vector), one can start with a guess $\mathbf{x}_{0}$
+for a local minimum of $F$, and consider the sequence $\mathbf{x}_{0},\,\mathbf{x}_{1},\,\mathbf{x}_{2},\,\dots$
+such that
+\[
+\mathbf{x}_{n+1}=\mathbf{x}_{n}-\gamma\nabla F(\mathbf{x}_{n}),\ n=0,1,2,\cdots
+\]
+$\nabla F(\cdot)$ is the gradient of the function $F$. This algorithm
+has an intuitive interpretation: at each iteration, move the current
+location of the minimum along the negative gradient by an amount of
+$\gamma$. Specifically, for a bivariate function, we know the gradient
+at a point is orthogonal to the contour line going through this point.
+Note \proglang{R} is almost immediately ready for an animation: we
+can draw the contour plot by \code{contour()}, calculate the gradient
+by \code{deriv()} and use arrows to indicate the process of the iterations,
+which is the way Figure \ref{fig:grad-desc} was constructed. The
+left animation was set to automatically begin to play when the page
+is loaded (otherwise we have to click on the animation to play), and
+we can see the arrows are moving in directions which are orthogonal
+to the contour lines. Since $z=x^{2}+2y^{2}$ is a trivial example,
+we will not be surprised if the arrows finally reach the global minimum
+$(0,0)$.
+
+One condition for the gradient descent algorithm to work is that the
+step length $\gamma$ has to be small enough. The right animation
+in Figure \ref{fig:grad-desc} can demonstrate the importance of this
+condition especially when the objective function is complicated, e.g.,
+it has multiple local minima. We need to be careful in choosing the
+initial guess and the step length in this case. In the animation,
+the step length is 0.3, which is a large value; although the arrows
+went to the direction of a local minimum in the beginning, it could
+not really reach that minimum. At the 12th iteration, the arrow suddenly
+``jumped'' away, because $\gamma$ was too large for it to approach
+the minimum. After wiggling for a while near the local minimum, the
+arrows moved to another area and tried to get close to the local minimum
+there. This clearly gives us an impression on how the algorithm performs
+under various conditions; we can further change the location of the
+initial guess or the value of the step length to improve the process.
+
+There are still a large amount of iterative algorithms that can be
+animated in this way such as the Newton-Raphson method or the bisection
+method for finding the roots of an equation $f(x)=0$, the Gibbs sampling
+algorithm, and the k-Means clustering algorithm and so on. The iterative
+nature of these methods makes them suitable candidates for animations,
+due to the duality between the computationally step-by-step results
+and the graphically step-by-step animations.
+
+
+\subsection[Random numbers and simulations]{Random numbers and simulations\label{sec:simulations}}
+
+\begin{figure}
+<<sampling-methods-a>>=
+ani.options(interval = 1, nmax = 20)
+par(mar=rep(.5,4))
+sample.simple()
+<<sampling-methods-b>>=
+par(mar=rep(.5,4))
+sample.strat(col = c("bisque", "white")) 
+@
+
+<<sampling-methods-c>>=
+par(mar=rep(.5,4))
+sample.cluster(col = c("bisque", "white"))
+<<sampling-methods-d>>=
+par(mar=rep(.5,4))
+sample.system() 
+@
+
+%
+\caption{Four basic types of sampling methods: (1) top-left: the simple random
+sampling without replacement; (2) top-right: stratified sampling --
+simple random sampling within each stratum with possibly different
+sample sizes, and the strata are denoted by colored bands; (3) bottom-left:
+cluster sampling -- the population consist of several clusters and
+we sample the clusters instead of individual points; and (4) bottom-right:
+systematic sampling -- randomly decide the first sample point and
+find the rest of samples by a fixed increment (e.g., sample every
+6th element). The solid dots represent the population, and the circles
+mark the samples. See functions \code{sample.simple()}, \code{sample.strat()},
+\code{sample.cluster()} and \code{sample.system()} in the \pkg{animation}
+package.\label{fig:sampling-methods}}
+\end{figure}
+
+
+\begin{figure}
+<<buffon-needle,interval=.1,dev='pdf',fig.width=7,fig.height=7,out.width='.95\\linewidth'>>=
+set.seed(365)
+ani.options(interval = .1, nmax = 50)
+par(mar = c(3, 2.5, 1, 0.2), pch = 20, mgp = c(1.5, 0.5, 0)) 
+buffon.needle() 
+@
+
+%
+\caption{Simulation of Buffon's Needle: (1) top-left: simulation of randomly
+dropping needles with length $L$: the crossing angle is $\phi$ and
+the distance between parallel lines is $D$; (2) top-right: corresponding
+point pairs $(\phi,y)$, where $y$ is the distance from the center
+of the needle to the nearest parallel line; the needle crosses the
+lines if and only if $y\leq\frac{L}{2}\sin(\phi)$ for a given $\phi$
+-- this is translated in the plot as ``if and only if the point falls
+below the sine curve'', and we know the probability of this event
+is $\left(\int_{0}^{\pi}\frac{L}{2}\sin(\phi)d\phi\right)/\left(\pi\frac{D}{2}\right)=\frac{2L}{\pi D}$
+which can be approximated by the proportion of points below the curve;
+(3) bottom: values of $\hat{\pi}$ calculated from the above simulations.
+Note we only dropped the needle for 50 times in this example; in general
+this is not sufficient to obtain a reliable estimate of $\pi$. See
+the function \code{buffon.needle()} in the \pkg{animation} package.\label{fig:buffon-needle}}
+\end{figure}
+
+
+We often need to generate random numbers to do simulations, either
+to validate whether our theories can behave well in a simulated scenario,
+or to compute estimates based on random numbers. For example, we already
+know from the CLT that the standardized sample mean $\sqrt{n}(\bar{X}_{n}-\mu)/\sigma$
+has a limiting standard normal distribution under proper conditions,
+so we may check how perfectly the distribution of the sample mean
+approximates to the normal distribution as the sample size $n$ increases
+to a very large number (theoretically infinity). On the other hand,
+we can also demonstrate effects of departure from theories, e.g.,
+the behavior of the sample mean when the population variance is infinite,
+which we will discuss later.
+
+Many numerical experiments, concepts and theorems in probability theory
+and mathematical statistics can be expressed in the form of animations,
+including the classical Buffon's Needle \citep{Ramaley69}, the Law
+of Large Numbers (LLN), the CLT, the Brownian Motion, coin tosses,
+confidence intervals and so on. The basic idea is to display the result
+graphically each time we get a random sample. For instance, in the
+LLN, we show how the sample means are distributed as we increase the
+sample size, i.e., for a specific sample size $n$, we generate $m$
+batches of random numbers with each batch of size $n$, compute the
+$m$ sample means and plot them; finally we can observe that the sample
+means will approach to the population mean.
+
+Some elementary animations can be applied to the subject of survey
+sampling \citep{Cochran77} to demonstrate basic sampling methods,
+such as the simple random sampling, stratified sampling, and systematic
+sampling, etc (see Figure \ref{fig:sampling-methods}), and one slightly
+advanced animation in survey sampling is about the ratio estimation
+-- we can show the ratio estimate of the population mean tends to
+be better than a simple sample average. 
+
+The above ideas can be extended to fit into a broader context -- to
+show the sampling variation. This is not well-recognized by the general
+audience. We often draw conclusions based on a specific dataset and
+ignore the variation behind the data-generating mechanism. \citet{Wild10}
+elaborated this point with a rich collection of illustrations. Animations
+can help the audience build up the ``desired habit of mind'' advocated
+there, i.e., whenever I see {[}this dataset{]}, I remember {[}the
+possible variation behind it{]}. Later we will see Example 1 in Section
+\ref{sec:examples} which demonstrates the ``desired habit of reading
+QQ plots''.
+
+Figure \ref{fig:buffon-needle} is a demonstration of the classical
+Buffon's Needle problem for approximating the value of $\pi$. As
+we drop more and more needles on the plane, the approximation will
+be closer to the true value of $\pi$ in general. This demonstration
+not only shows the estimate of $\pi$ each time the needle was dropped
+in a cumulative manner, but also draws the actual scenario (dropping
+needles) and the corresponding mathematical interpretation to assist
+understanding.
+
+
+\subsection{Resampling methods}
+
+\begin{figure}[tb]
+<<boot-iid, interval=.5, out.width='.75\\linewidth', fig.width=7, fig.height=6, sanitize=TRUE,fig.align='center'>>=
+set.seed(365)
+ani.options(interval = .5, nmax = 40)
+par(mar = c(3, 2.5, .1, 0.1), mgp = c(1.5, 0.5, 0)) 
+boot.iid(faithful$eruptions, main=c('',''),breaks=15) 
+@
+
+%
+\caption{Bootstrapping for the variable \code{eruptions} of the \code{faithful}
+data: the original data is denoted by open circles, while the resampled
+data is marked by red points with ``leaves''; the number of leaves
+in the sunflower scatter plot means how many times these points are
+picked out, as bootstrap methods always sample \emph{with} replacement.
+Note the x-axis in the top plot matches the x-axis in the bottom histogram
+of the bootstrapped sample mean. See the function \code{boot.iid()}
+in the \pkg{animation} package.\label{fig:boot-iid} }
+\end{figure}
+
+
+Instead of sampling from a theoretical distribution, which is usually
+a common case in Section \ref{sec:simulations}, there are also a
+lot of statistical methods that focus on sampling from the empirical
+distribution. This is often referred to as ``resampling'' in the
+literature. Typical methods include cross-validation, bootstrapping,
+and permutation methods \citep{Boot94}, etc.
+
+Again, we may use animations to investigate the resampling effects
+if we keep on sampling from the empirical distribution and demonstrate
+the corresponding output each time we have obtained a new sample $X^{*}$.
+For example, under certain conditions, the standardized sample mean
+will converge in distribution to a normal random variable \citep{Lahiri06},
+so we may generate several bootstrap replications of the sample mean
+and examine its convergence to normality as the sample size grows,
+or failing to converge when the original sample comes from a distribution
+with infinite variance; this is similar to the LLN case in Section
+\ref{sec:simulations}. In the bootstrap literature, perhaps the moving
+blocks bootstrap is a better candidate for animations: each time we
+have selected some blocks of sample points, we can mark these blocks
+up one by one to emphasize the block structure, then show the output
+based on these sample blocks. There are also inappropriate uses of
+resampling, e.g., the jackknife estimate the standard error of the
+median, which has proved to be inconsistent; or the sampling distribution
+of extreme quantiles such as the maximum \citep{Miller64}. These
+phenomena can be demonstrated graphically, as the simplest case in
+Figure \ref{fig:boot-iid} will show.
+
+Figure \ref{fig:boot-iid} is an illustration of the resampling nature
+of bootstrapping, using the sunflower scatter plot. Each animation
+frame shows one replication of bootstrapping, and the density curve
+indicates the distribution of the bootstrapping sample mean; the short
+ticks on the x-axis of the histogram denote the value of the current
+sample mean. We keep on resampling from the original data and get
+a number of bootstrapping samples, from which we can make inference
+about the population mean.
+
+
+\subsection{Dynamic trends}
+
+\begin{figure}
+<<ObamaSpeech,interval=.5, out.width='.6\\linewidth', fig.width=6, fig.height=3.5,fig.align='center'>>=
+ani.options(interval = 0.5,nmax=40)
+data('ObamaSpeech')
+par(mar = c(3, 2.5, .1, 0.1), mgp = c(1.5, 0.5, 0)) 
+moving.block(dat = ObamaSpeech, FUN = function(..., dat = dat, 
+    i = i, block = block) {
+    plot(..., x = i + 1:block, xlab = "paragraph index", ylim = range(dat), 
+        ylab = sprintf("ObamaSpeech[%s:%s]", i + 1, i + block))
+}, type = "o", pch = 20)
+@
+
+%
+\caption{Obama's acceptance speech in Chicago: the word counts from the 1st
+to the 59th paragraph. The animation can emphasize a pattern along
+with time -- longer paragraphs and shorter paragraphs often appear
+alternatively. See the dataset \texttt{ObamaSpeech} in this package.\label{fig:ObamaSpeech}}
+\end{figure}
+
+
+The idea of animations for dynamic trends is perhaps the most natural
+one. For example, we can be show the values of a time series as time
+passes by. This is usually not enough in practical applications, so
+we need to characterize patterns in the data and illustrate their
+changes via an animation. The definition of the trends in data can
+be quite flexible, e.g., the relationship between income and expenditure
+(say, the regression coefficient) in a time span, or the cluster membership
+of all countries in the world using two socioeconomic indicators as
+cluster variables. An influential product for this type of animations
+is Google's ``Motion Chart'' (originally from GapMinder), which
+is often used to show the changes of two or three variables over time
+using the so-called ``bubble chart''.
+
+Dynamic trends can be observed more clearly with the help of animations,
+and sometimes we can draw preliminary conclusions from the animation,
+e.g., there may be a ``breakpoint'' in a certain year because we
+feel a sudden change in the animation. After this kind of exploratory
+data analysis, we can do formal modeling and hypothesis testing such
+as the Chow breakpoint test \citep{Chow60} to justify these findings. 
+
+Figure \ref{fig:ObamaSpeech} is a simple example illustrating a pattern
+in Obama's acceptance speech in Chicago in 2008; we can watch the
+data in successive chunks.
+
+In an even more general sense, the meaning of ``dynamic'' does not
+have to involve with a time variable -- we may as well extend this
+``time'' variable to any variables as long as they can be sorted,
+which essentially means conditioning on a variable. In that case,
+animations can be created along with the ascending or descending values
+of this conditioning variable.
+
+
+\section[Design and contents]{Design and contents\label{sec:design}}
+
+The \proglang{R} package \pkg{animation} \citep{animation} was
+initially written based on the above ideas in statistics, and later
+the package was also developed to be a comprehensive collection of
+tools to create animations using \proglang{R}. In this section, we
+first explain the basic schema to create an animation in \proglang{R},
+then we introduce the utilities to export animations, and finally
+we give a brief overview of existing statistical topics covered by
+this package, as well as the demos in the package. The package is
+currently available on the Comprehensive R Archive Network (CRAN).
+
+
+\subsection{The basic schema}
+
+The approach to create animations in \proglang{R} with the \pkg{animation}
+package is fairly straightforward -- just draw plots one by one with
+a pause between these plots. Below is the basic schema for all the
+animation functions in the package:
+
+<<schema,eval=FALSE,echo=TRUE,results='markup'>>=
+library('animation')
+oopt <- ani.options(interval = 0.2, nmax = 10)
+for (i in 1:ani.options("nmax")) {
+    ## draw your plots here, then pause for a while with
+    ani.pause() 
+}
+ani.options(oopt)
+@
+
+%
+The functions \code{ani.pause()} and \code{ani.options()} are in
+the \pkg{animation} package; the function \code{ani.pause()}, based
+on \code{Sys.sleep()}, was used to insert pause in the animation
+when it is played in an \emph{interactive} graphics device (typically
+a window device), because it is simply a waste of time to pause under
+a non-interactive off-screen device when we cannot actually see the
+plots; \code{ani.options()} can be used to specify many animation
+options. For example, \code{ani.options("interval")} sets the time
+interval to pause between animation frames, and \code{ani.options("nmax")}
+is used to set the maximum number of iterations or repetitions. Then
+we use a loop to draw plots one by one with a pause in each step.
+In the end we restore the animation options. We can see from below
+how to use these options to design a simple demonstration for the
+Brownian motion, which is included in this package as the function
+\code{brownian.motion()}:
+
+<<brownian-motion-source,echo=TRUE,results='markup'>>=
+brownian.motion
+@
+
+%
+The basic idea is to keep on adding an increment in the horizontal
+and vertical direction respectively, and these increments are independently
+and identically distributed as $N(0,1)$. Brownian motion is a model
+describing the random drifting of particles suspended in a fluid.
+It is important to set the axes limits (\texttt{xlim} and \texttt{ylim})
+as fixed -- not only for this particular animation, but also for other
+animations in which the range of the coordinates is changing -- otherwise
+we can hardly perceive the motion correctly without a frame of reference.
+Figure \ref{fig:brownian-motion} is an output of this function.
+
+Note that although the for-loop is straightforward to create an animation,
+there are also many cases in which a while-loop becomes useful. Consider,
+for instance, the gradient descent algorithm: there are multiple conditions
+to break the loop, one of which is the absolute value of changes between
+two successive iterations (e.g., $|f(x_{k+1})-f(x_{k})|<\delta$).
+In this case, \code{ani.options("nmax")} might be smaller than the
+exact number of animation frames in the output.
+
+\begin{figure}
+<<brownian-motion,fig.width=5,fig.height=5,out.width='.5\\linewidth',interval=.1,fig.align='center'>>=
+set.seed(321)
+ani.options(interval = 0.1,nmax=50)
+par(mar = c(3, 3, .1, 0.1), mgp = c(2, 0.5, 0), tcl = -0.3, 
+        cex.axis = 0.8, cex.lab = 0.8)
+brownian.motion(pch = 21, cex = 4, col = "red", bg = "yellow",xlim=c(-12,12),ylim=c(-12,12))
+@
+
+%
+\caption{A demonstration of the Brownian motion. Points are moving randomly
+on the plane; in each step, their locations change by i.i.d random
+numbers from $N(0,1)$.\label{fig:brownian-motion}}
+\end{figure}
+
+
+
+\subsection[Tools for exporting animations]{Tools for exporting animations\label{sub:tools}}
+
+Many software packages can produce animations, however, as for statistics,
+the power of statistical computations and graphics plays a more crucial
+role than animation technologies. The \proglang{R} language is a
+natural choice as the infrastructure of this \pkg{animation} package,
+since it provides flexible computing routines and graphical facilities,
+among which those low-level plotting commands are especially useful
+for generating basic elements of animations \citep{Murrell05}.
+
+We can watch animations in \proglang{R}'s screen devices: the Windows
+graphics devices (under Windows) or X Window System graphics devices
+(under Linux) or Mac OS X Quartz devices (under Mac OS X). This looks
+like a natural choice to play animations, but there are two drawbacks:
+\begin{enumerate}
+\item each time we want to replay the animation, \proglang{R} has to go
+through all the computations again and redraw the plots; besides,
+the animations can only be watched in \proglang{R};
+\item before R 2.14.0, \proglang{R}'s screen devices lack the capability
+of double buffering, so the animations can be flickering on the screen;
+the performance is better under Windows than Linux and Mac OS (after
+R 2.14.0, we can use the new functions \code{dev.hold()} and \code{dev.flush()}
+so the plots will not flicker).
+\end{enumerate}
+Therefore we need to export animations from \proglang{R} for better
+performance, portability and to save time. The \pkg{animation} package
+provides five approaches to export animations in other formats: HTML
+pages, \LaTeX{}/PDF animations, GIF animations, Flash animations,
+and videos. Table \ref{tab:export} is an overview of these utilities.
+We have also provided an ``animation recorder'' to capture all the
+changes in the graphics device, and this can be helpful when we only
+use low-level plotting commands to create animations.
+
+\begin{table}
+\begin{centering}
+\begin{tabular}{c|c|c|c}
+\hline 
+Function & Software dependence & Viewer & Interface\tabularnewline
+\hline 
+\code{saveHTML()} & SciAnimator (JavaScript) & any web browser & very flexible\tabularnewline
+\hline 
+\code{saveLatex()} & (pdf)\LaTeX{} & Adobe Reader & flexible\tabularnewline
+\hline 
+\code{saveGIF()} & GraphicsMagick/ImageMagick & most image viewers & relies on the viewer\tabularnewline
+\hline 
+\code{saveSWF()} & SWF Tools & Flash players & relies on the viewer\tabularnewline
+\hline 
+\code{saveVideo()} & FFmpeg & Movie players & relies on the viewer\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+
+\caption{The exporting utilities in the \pkg{animation} package.\label{tab:export}}
+\end{table}
+
+
+
+\subsubsection{HTML pages}
+
+\begin{figure}
+\begin{centering}
+\includegraphics[width=4in]{figure/html-interface}
+\par\end{centering}
+
+\caption{The interface of the animation in the HTML page (under the Firefox
+browser).\label{fig:html-interface}}
+\end{figure}
+
+
+We can use the function \code{saveHTML()} to create an HTML page
+containing the animations. Figure \ref{fig:html-interface} shows
+the interface of the animation; basically it is just like a movie
+player -- it has buttons to play/stop the animation and navigate through
+the images, and we can change the loop mode as well as the speed.
+The animation player is based on a JavaScript library named \textbf{SciAnimator};
+the bottom part of Figure \ref{fig:html-interface} shows the code
+to produce the animation with some session information for the sake
+of reproducibility. The \proglang{R} code is automatically added
+by \code{saveHTML()} and highlighted by the JavaScript library \textbf{SyntaxHighlighter}
+for better readability. See the help page of \code{saveHTML()} for
+download addresses of these libraries; they are built-in with the
+\pkg{animation} package so the users do not need to manually install
+them.
+
+The usage of \code{saveHTML()} is:
+
+<<usage-saveHTML,echo=FALSE,results='markup',comment=NA>>=
+usage(saveHTML) 
+@
+
+%
+We only need to provide an \proglang{R} expression \texttt{expr}
+which can produce a sequence of images (it does not have to use a
+loop); \texttt{img.name} specifies the base filename of images to
+be created, and other arguments can be used to tune more details of
+the animation (see the help page). This function will record the images
+using \proglang{R}'s off-screen graphics devices (\code{png()} by
+default; specified in \code{ani.options("ani.dev")}), and insert
+them into the HTML page by JavaScript. Most of the relevant options
+can be specified by \code{ani.options()}, e.g., the width and height
+of images; the options related to the player can be found in the reference
+of \textbf{SciAnimator}. This function allows multiple animations
+to be embedded into the same HTML file -- we only need to specify
+the option \code{ani.options("htmlfile")} to be the same each time
+we call \code{saveHTML()}.
+
+Below is the code corresponding to Figure \ref{fig:html-interface}.
+Remember the first argument of \code{saveHTML()} is an R expression
+to create plots, and the curly brackets \texttt{\{\}} in the code
+is used to wrap several lines of R code into one expression to be
+passed to the argument \texttt{expr}:
+
+<<saveHTML,eval=FALSE,echo=TRUE,tidy=FALSE,results='markup'>>=
+saveHTML({
+    ani.options(interval = 0.05, nmax = 50)
+    par(mar = c(4, 4, .1, 0.1), mgp = c(2, 0.7, 0))
+    brownian.motion(pch = 21, cex = 5, col = "red", bg = "yellow")
+}, img.name = "bm_plot", ani.height=300, ani.width=550,
+    title = "Demonstration of the Brownian Motion", 
+    description = c("Random walk on the 2D plane: for each point", 
+        "(x, y), x = x + rnorm(1) and y = y + rnorm(1)."))
+@
+
+%
+We have built a website (\url{http://animation.yihui.name}) based
+on the function \code{saveHTML()} to show the animations online,
+so that they can be watched by the general audience.
+
+In fact we can easily extend this function for web applications, because
+what \code{saveHTML()} essentially does is to write HTML and JavaScript
+in files. These code can also be written to users' web browsers as
+the response from a web server. We have succeeded in getting Rweb
+\citep{Rweb} to work with this function, so that the user only needs
+to submit \proglang{R} code in a web browser to the Rweb server,
+and the server will generate the images and return an animation page
+to the user. This make it possible for users to create animations
+without \proglang{R} locally installed. There is a demo file in the
+package that can show this idea (it depends on the availability of
+the Rweb server):
+
+<<Rweb-demo,echo=TRUE,eval=FALSE,results='markup'>>=
+system.file('misc', 'Rweb', 'demo.html', package = 'animation')
+@
+
+%
+
+\subsubsection[PDF animations]{PDF animations via \protect\LaTeX{}}
+
+The \LaTeX{} package \textbf{animate} by \citet{animate} is capable
+of inserting animations into a PDF document, and the animations are
+also driven by JavaScript. This can be quite helpful, yet is not widely
+used in our papers or reports. There was an editorial in the JCGS
+by \citet{Levine10} encouraging authors to take the advantage of
+animations and movies when publishing electronic papers; the function
+\code{saveLatex()} in the \pkg{animation} package is one tool to
+fulfill this mission. This function can be used either as a standalone
+utility to create PDF animations, or in a Sweave document to insert
+animations dynamically. It will automatically detect if it is called
+in Sweave and output \LaTeX{} code accordingly.
+
+The usage of \code{saveLatex()} is similar to \code{saveHTML()},
+except that it involves with several \LaTeX{}-related arguments:
+
+<<saveLatex-usage,echo=FALSE,results='markup',comment=NA>>=
+usage(saveLatex, width=.7)
+@
+
+%
+Again, the most important argument is \texttt{expr} (an R expression),
+and the rest of arguments are optional. This function will first open
+a graphical device (specified in \code{ani.options("ani.dev")}) to
+record all the plots created by \texttt{expr}, then write out the
+\LaTeX{} code based on the syntax of the \textbf{animate} package,
+e.g., \texttt{\textbackslash{}animategraphics{[}controls{]}\{5\}\{Rplot\}\{1\}\{50\}},
+which can produce an animation from a plot file ``\texttt{Rplot.pdf}''
+using the pages from 1 to 50 (or from \texttt{Rplot1.png}, ..., \texttt{Rplot50.png},
+depending the graphics device we use), and the time interval between
+animation frames is $1/5=0.2$ seconds. See the documentation of the
+\textbf{animate} package for details.
+
+The \code{saveLatex()} function can also be used with Sweave directly.
+There is a demo in this package, \code{demo("Sweave_animation", package = "animation")},
+which is a complete example to show how to use this function with
+Sweave (the Sweave source document is \code{system.file("misc", "Sweave_animation.Rnw", package = "animation")}).
+
+Generally we recommend using PDF graphics because of the high quality,
+but the file size can easily get too large, since \proglang{R}'s
+\code{pdf()} device does not support compression of PDF graphics
+before 2.14.0. To solve this problem, we wrote two wrappers, \code{qpdf()}
+and \code{pdftk()}, for two additional software packages \textbf{qpdf}
+(\url{http://qpdf.sourceforge.net/}) and \textbf{pdftk} (\url{http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/})
+respectively; if either of them is available in the system, the PDF
+graphics will be compressed before being processed to animations.
+
+
+\subsubsection{GIF animations, Flash animations and videos}
+
+Both JavaScript and \LaTeX{} are common tools, so users can easily
+create the HTML and PDF animations, and we still have other three
+approaches: \code{saveGIF()}, \code{saveSWF()} and \code{saveVideo()},
+which rely on three less common third-party software packages GraphicsMagick
+(\url{http://www.graphicsmagick.org})/ImageMagick (\url{http://www.imagemagick.org/}),
+SWF Tools (\url{http://www.swftools.org}), and FFmpeg (\url{http://ffmpeg.org}),
+respectively. These functions are merely wrappers to these tools,
+i.e., they will use the function \code{system()} to call these external
+tools to convert \proglang{R} images to other animation formats.
+Specifically, \code{saveGIF()} calls the external command \texttt{gm
+convert} (GraphicsMagick) or \texttt{convert} (ImageMagick) to create
+GIF animations; \code{saveSWF()} calls \texttt{png2swf}, \texttt{jpeg2swf}
+or \texttt{pdf2swf} in SWF Tools to convert images to Flash animations;
+\code{saveVideo()} calls the command \texttt{ffmpeg} in the FFmpeg
+library to convert images to a video (some common formats include
+Ogg, MP4 and AVI). For these functions to work, they have to know
+the paths of the tools, which can be set up in the function arguments.
+
+All of the three functions share a similar usage to \code{saveHTML()}
+or \code{saveLatex()}, and the difference is that we may need to
+specify the location of these tools especially under Windows (using
+arguments \code{convert}, \code{swftools} and \code{ffmpeg} in
+three functions respectively):
+
+<<saveGIF-usage,results='markup',comment=NA>>=
+usage(saveGIF)
+usage(saveSWF)
+usage(saveVideo)
+@
+
+%
+A large amount of work was done for Windows to search for the location
+of these software packages automatically, so that Windows users do
+not have to be familiar with command lines. The paths of these tools
+can also be pre-specified in \code{ani.options()}.
+
+
+\subsubsection{The animation recorder}
+
+There is a difficulty in exporting the animations made purely by low-level
+plotting commands, because the off-screen graphics devices (e.g.,
+the \code{png()} device) can only capture high-level plotting changes
+as new image files. For instance, even if we keep on adding points
+to a plot and it seems to be changing on screen, but when we put the
+code under an off-screen device, we will only get one image in the
+end. To solve this problem, we can use the function \code{recordPlot()}
+in the \pkg{grDevices} package to record all the changes as a list,
+then replay them using \code{replayPlot()}. There are two functions
+\code{ani.record()} and \code{ani.replay()} based on these functions
+in this package, which can act as an ``animation recorder''. Here
+is an example that shows the a one-dimensional random walk by adding
+points on an empty plot; the changes are recorded and replayed:
+
+<<ani-record,echo=TRUE,eval=FALSE,results='markup'>>=
+oopt <- ani.options(nmax = 50, interval = .1)
+x <- cumsum(rnorm(n=ani.options('nmax')))
+ani.record(reset=TRUE)
+par(bg = 'white', mar=c(4,4,.1,.1))
+plot(x, type = 'n')
+for (i in 1:length(x)) {
+points(i, x[i])
+ani.record()
+}
+ani.replay()
+ani.options(oopt)
+@
+
+%
+We can also replay inside a \code{saveXXX()} function introduced
+before to export the animation, e.g., \code{saveHTML(ani.replay())}.
+
+
+\subsubsection[Other R packages]{Other \proglang{R} packages}
+
+There are a few other \proglang{R} packages to export animations;
+for example, the \pkg{SVGAnnotation} package by \citet{SVGAnnotation}
+can create a simple SVG (Scalable Vector Graphics) animation using
+the function \code{animate()} to animate scatter plots like the Google
+Motion Chart, and the \pkg{R2SWF} package by \citet{R2SWF} can create
+a Flash animation by converting bitmap images to a SWF (ShockWave
+Flash) file based on the \textbf{swfmill} library. These packages
+can be run on their own, i.e., they are not simply command line wrappers
+for third-party software packages. There is yet another package named
+\pkg{swfDevice} to create Flash animations, which has not been released
+to CRAN but looks useful as well (currently on R-Forge).
+
+
+\subsection{Topics in statistics}
+
+This package contains a large variety of functions for animations
+in statistics, covering topics in several areas such as probability
+theory, mathematical statistics, multivariate statistics, nonparametric
+statistics, sampling survey, linear models, time series, computational
+statistics, data mining and machine learning, etc. These functions
+might be of help both in teaching statistics and in data analysis.
+
+As of version 2.0-7, there are nearly 30 functions related to statistics
+in this package: 
+\begin{description}
+\item [{\code{bisection.method()}}] the bisection method for root-finding
+on an interval;
+\item [{\code{boot.iid()}}] bootstrapping for i.i.d data (demonstrate
+the idea of sampling with replacement);
+\item [{\code{boot.lowess()}}] fit LOWESS curves based on resampled data;
+\item [{\code{brownian.motion()}\emph{,\ }\code{BM.circle()},\ \code{g.brownian.motion()}}] different
+demonstrations of the Brownian motion on the 2D plane;
+\item [{\code{buffon.needle()}}] simulation of the Buffon's needle problem
+to approximate $\pi$;
+\item [{\code{clt.ani()}}] demonstration of the Central Limit Theorem
+(also shows the goodness-of-fit to the Normal distribution as the
+sample size increases);
+\item [{\code{conf.int()}}] demonstration of the concept of confidence
+intervals;
+\item [{\code{cv.ani()}}] demonstration of the concept of cross-validation;
+\item [{\code{flip.coin()}}] simulation of flipping coins;
+\item [{\code{grad.desc()}}] the gradient descent algorithm;
+\item [{\code{kmeans.ani()}}] the k-Means cluster algorithm (show the
+changes of cluster labels and the move of cluster centers);
+\item [{\code{knn.ani()}}] the kNN classification algorithm;
+\item [{\code{least.squares()}}] demonstration of least squares estimation
+(show how the residual sum of squares changes when the coefficients
+change);
+\item [{\code{lln.ani()}}] the Law of Large Numbers;
+\item [{\code{MC.hitormiss()}\emph{,\,}\code{MC.samplemean()}}] two
+approaches of the Monte Carlo integration;
+\item [{\code{mwar.ani()}}] the moving window auto-regression;
+\item [{\code{newton.method()}}] the Newton-Raphson method for root-finding;
+\item [{\code{quincunx()}}] demonstration of the Quincunx (i.e., the Bean
+Machine) to show the Normal distribution coming from the falling beans;
+\item [{\code{sample.cluster()}}] the cluster sampling;
+\item [{\code{sample.simple()}}] the simple random sampling without replacement;
+\item [{\code{sample.strat()}}] the stratified sampling;
+\item [{\code{sample.system()}}] the systematic sampling;
+\item [{\code{sample.ratio()}}] the demonstration of advantages of the
+ratio estimation in survey sampling;
+\item [{\code{sim.qqnorm()}}] the simulation of QQ plots to show how they
+look like if the data really comes from the Normal distribution;
+\end{description}
+
+\subsection{Demos}
+
+\begin{figure}
+<<rgl-animation, custom.plot=TRUE, fig.ext='png', out.width='2.5in', fig.num=20, interval=.4, results='hide', fig.align='center', background='white'>>=
+library(animation) # adapted from demo('rgl_animation')
+data(pollen)
+uM = matrix(c(-0.37, -0.51, -0.77, 0, -0.73, 0.67, -0.1, 0, 0.57, 0.53, -0.63, 0, 0, 0, 0, 1), 4, 4)
+library(rgl)
+open3d(userMatrix = uM, windowRect = c(0, 0, 400, 400))
+plot3d(pollen[, 1:3])
+zm = seq(1, 0.05, length = 20)
+par3d(zoom = 1)  # change the zoom factor gradually later
+for (i in 1:length(zm)) {
+    par3d(zoom = zm[i]); Sys.sleep(.05)
+    rgl.snapshot(paste(fig_path(i), 'png', sep = '.'))
+}
+@
+
+\caption{A 3D animation demo (created by the \pkg{rgl} package): the classical
+\texttt{pollen} data. The hidden letters will emerge as we gradually
+zoom into the point cloud.\label{fig:rgl-animation}}
+\end{figure}
+
+
+Demos are an important part of this package. They can be divided into
+two groups: some are purely for entertaining purposes, and the others
+can demonstrate additional capabilities and applications of this package.
+Here we introduce a selective subset of these demos.
+
+For the \code{saveXXX()} functions in Section \ref{sub:tools}, we
+can extend them in flexible ways. For example, we do not have to restrict
+ourselves by the common \proglang{R} graphics devices; we can use
+arbitrary devices, as long as we follow the ``naming template''
+for image files. This is explained in detail in the options \texttt{use.dev}
+and \texttt{img.fmt} in the help page of \code{ani.options()}. The
+\code{demo("rgl_animation")} shows how to capture the 3D plots created
+by the \pkg{rgl} package \citep{rgl}; see Figure \ref{fig:rgl-animation}
+for the animation, which was embedded in this paper using the \textbf{knitr}
+package. This demo is actually a quick summary of the 1986 ASA Data
+Expo -- looking for patterns in a synthetic dataset. The original
+plot seems to be nothing but a point cloud, but there is actually
+a word ``EUREKA'' hidden in it; we can clearly see them by zooming
+into the points. A similar demo is \code{demo("ggobi_animation")}
+-- it shows how to record plots in GGobi and create an HTML animation
+page accordingly.
+
+Another demo shows that we can even download images from the Internet,
+and wrap them into an animation with \code{saveHTML()}; see \code{demo("flowers")}.
+This again indicates the flexibility of the \pkg{animation} package.
+To learn how these two demos work, we can take a look at the source
+code:
+
+<<demo-rgl,eval=FALSE,echo=TRUE>>=
+file.show(system.file('demo', 'rgl_animation.R', package='animation'))
+file.show(system.file('demo', 'flowers.R', package='animation'))
+@
+
+%
+Some entertaining demos include \code{demo("game_of_life")} (three
+types of the famous ``Game of Life''), \code{demo("hanoi")} (the
+recursive algorithm of the classical game ``Tower of Hanoi''), and
+\code{demo("fire")} (a simulation of the fire flames) and so on.
+Finally, we can also demonstrate interesting datasets in animations,
+e.g., \code{demo("CLEvsLAL")} is a ``playback'' of an NBA game
+between Cavaliers and Lakers on Dec 25, 2009; at each time point,
+we can clearly see the location of the current player, and whether
+he made the goal or not.
+
+
+\section[Examples]{Examples\label{sec:examples}}
+
+In this section we give three examples illustrating the application
+of animations to both statistical theories and data analysis. The
+first example shows we can construct simple but convincing animations
+to explain how to interpret QQ plots reasonably; the second example
+quickly shows how the sample mean behaves when the conditions for
+CLT are not satisfied; the third one gives the process of cross-validation.
+
+\textbf{Example 1 (QQ plots for different sample sizes)} QQ plots
+are often used to check the normality of residuals in linear regressions.
+In practice, we may over-interpret these plots -- departure of the
+points from a straight line does not necessarily mean a severe contradiction
+with normality. Figure \ref{fig:sim-qqnorm} shows several QQ plots
+for different batches of random numbers which are really from the
+standard Normal distribution, however, we can clearly see that few
+of them really fall on the diagonal (i.e., the line $y=x$) in the
+left plot, and there are almost always a few points in the tails which
+are far away from the diagonal in the right plot. The animation gives
+the readers an impression of ``deviation'' because the diagnal is
+fixed in all frames while the points are ``wiggling'' around it,
+and the animation can also hold more plots than a static $m\times n$
+display of individual plots.
+
+These two animations correspond to the sample size 20 and 100 respectively.
+When the sample size is small, QQ plots might give us a fairly high
+Type I error rate (reject normality even if the sample really comes
+from the Normal distribution); on the other hand, we should not pay
+too much attention to ``outliers'' in the tails in QQ plots when
+the sample size is large.
+
+To see how quickly and easily we can write such an animation function,
+we may look at the source code of the function \code{sim.qqnorm()},
+which created the animations in Figure \ref{fig:sim-qqnorm}. It is
+basically a loop creating QQ plots with \code{qqnorm()} based different
+batches of random numbers:
+
+<<sim-qqnorm-source,echo=TRUE,results='markup'>>=
+sim.qqnorm
+@
+
+%
+\begin{figure}
+<<sim-qqnorm-a,interval=.2,out.width='.49\\linewidth'>>=
+set.seed(127)
+ani.options(nmax = 30)
+par(mar = c(3, 3, 1, 0.1), mgp = c(1.5, 0.5, 0), tcl = -0.3) 
+sim.qqnorm(20,last.plot = expression(abline(0, 1)),asp=1,xlim=c(-3,3),ylim=c(-3,3))
+<<sim-qqnorm-b,interval=.2,out.width='.49\\linewidth'>>=
+par(mar = c(3, 3, 1, 0.1), mgp = c(1.5, 0.5, 0), tcl = -0.3) 
+sim.qqnorm(100,last.plot = expression(abline(0, 1)),asp=1,xlim=c(-3.3,3.5),ylim=c(-3.3,3.5))
+@
+
+%
+\centering{}\caption{The QQ plot for random numbers from $N(0,1)$ with a sample size 20
+(left) and 100 (right) respectively. The points may not strictly stick
+to the diagonal even they are really from the Normal distribution.\label{fig:sim-qqnorm} }
+\end{figure}
+
+
+\textbf{Example 2 (Limiting distribution of the sample mean)} The
+function \code{clt.ani()} was designed to demonstrate the Central
+Limit Theorem, i.e., to illustrate the limiting distribution of $\bar{X}_{n}$
+as $n$ increases. In the animation, the density of $\bar{X}_{n}$
+is estimated from a number of simulated mean values based on a given
+sample size $n$. 
+
+Figure \ref{fig:clt-ani} is a comparison for the distributions of
+the sample means when $n=50$. The population distributions in the
+left and right animations are the Uniform and Cauchy distributions
+respectively. We know the latter one does not satisfy the condition
+of finite variance in CLT, hence it should not give us any bell-shaped
+density curves no matter how large the sample size is, which is true
+according to the right animation in Figure \ref{fig:clt-ani}. The
+upper plot is the histogram overlaid with a density curve to show
+the distribution of $\bar{X}_{n}$ (the dashed line denotes the theoretical
+limiting distribution), and the lower plot shows the corresponding
+P-values from the Shapiro-Wilk test of normality -- if normality holds,
+the P-values should be uniformly distributed, so if P-values are systematically
+small, normality can be questionable. The demonstration of CLT is
+an extremely old idea, and there exists a large number of demos, but
+very few of them emphasized the goodness-of-fit to normality -- usually
+they merely show how the density curve of the sample mean can become
+bell-shaped, but ``being bell-shaped'' alone could be far from normality.
+Therefore we especially added the theoretical limiting density curve
+as well as the P-values in order that readers have an idea about the
+departure from the theoretical normality. For example, we know for
+$Unif(0,1)$, $\bar{X}_{n}\overset{d}{\rightarrow}N(\frac{1}{2},\frac{1}{12n})$,
+so we can draw the limiting density curve to compare with the empirical
+density curve of $\bar{X}_{n}$. Note we used P-values only as one
+measure of goodness-of-fit, and large P-values do not necessarily
+indicate normality (we just cannot reject it).
+
+\begin{figure}
+<<clt-ani-a,interval=.5,out.width='.49\\linewidth'>>=
+set.seed(721)
+ani.options(interval = .5, nmax = 50)
+par(mar = c(3, 3, .2, 0.1), mgp = c(1.5, 0.5, 0), tcl = -0.3) 
+clt.ani(FUN=runif, mean=.5, sd=sqrt(1/12))
+<<clt-ani-b,interval=.5,out.width='.49\\linewidth'>>=
+par(mar = c(3, 3, .2, 0.1), mgp = c(1.5, 0.5, 0), tcl = -0.3) 
+clt.ani(FUN=rcauchy, mean=NULL)
+@
+
+%
+\caption{The normality of the sample mean $\bar{X}_{n}$ as the sample size
+$n$ increases from 1 to 50 with $X\sim Unif(0,1)$ (left) and $Cauchy(0,1)$
+(right); the dashed line is the theoretical limiting density curve.
+The conditions for CLT are satisfied in the left plot, and we see
+the P-values will no longer be systematically small as the sample
+size grows; but the right plot can never give us a bell-shaped density,
+because the variance of the Cauchy distribution does not exist.\label{fig:clt-ani} }
+\end{figure}
+
+
+\begin{figure}
+<<gene-expr-data,out.width='.8\\linewidth',fig.width=7,fig.height=4,results='hide',message=FALSE,sanitize=TRUE,fig.align='center'>>=
+set.seed(130)
+library('hddplot')
+data('Golub')
+data('golubInfo')
+ani.options(nmax=10)
+par(mar = c(3, 3, 0.2, 0.7), mgp = c(1.5, 0.5, 0))
+res=cv.nfeaturesLDA(t(Golub), cl=golubInfo$cancer,k=5,cex.rg=c(0,3),pch=19)
+@
+
+%
+\caption{An illustration of the 5-fold cross-validation for finding the optimum
+number of gene features based on LDA. The left plot shows the correct
+rate (denoted by the size of dots); the right plot shows the test
+data on the first 2 discriminant axes (only 1 axis when $g=1$ so
+the first 5 frames are different with latter frames); correct predictions
+and misclassified cases are marked by different colors.\label{fig:golub}}
+\end{figure}
+
+
+\textbf{Example 3 (Classification of gene expression data)} It is
+very common that the gene expression data is high-dimensional with
+variables far more than observations. We may hope to use as few variables
+as possible to build predictive models, since too many variables can
+bring the problem of overfitting. The main ideas in this example are
+borrowed from \citet[pp. 400]{Maindonald07}, but here we only illustrate
+the process of cross-validation and the corresponding results.
+
+Suppose we want to find out the optimum number (say, less than $g_{\mathrm{max}}=10$)
+of features using the linear discriminant analysis (LDA) with a 5-fold
+cross-validation. The procedure is:
+\begin{quote}
+Split the whole data randomly into 5 folds: 
+\begin{quote}
+For the number of features $g=1,2,\cdots,10$, choose $g$ features
+that have the largest discriminatory power individually (measured
+by the $F$-statistic in ANOVA of one feature against the cancer types): 
+\begin{quote}
+For the fold $i$ ($i=1,2,\cdots,5$): 
+\begin{quote}
+Train a LDA model without the $i$-th fold data, and predict with
+the $i$-th fold for a proportion of correct predictions $\bar{p}_{gi}$; 
+\end{quote}
+\end{quote}
+Average the 5 proportions to get an average rate of correct prediction
+$\bar{p}_{g\cdot}$; 
+\end{quote}
+Determine the optimum number of features as $\arg\underset{g}{\max}\bar{p}_{g\cdot}$. 
+\end{quote}
+This procedure was implemented in the function \code{cv.nfeaturesLDA()}
+in the \pkg{animation} package, and we use the datasets \texttt{Golub}
+and \texttt{golubInfo} from the \textbf{hddplot} package. The goal
+is to correctly classify three cancer types (\texttt{allB}, \texttt{allT}
+and \texttt{aml}) using as less variables as possible from all the
+7129 features; the sample size is 72, and we want to restrict the
+maximal number of features to be 10.
+
+In Figure \ref{fig:golub}, points with sizes proportional to the
+rates of correct predictions are moving from bottom to top and left
+to right, which demonstrates the process of $k$-fold cross-validation
+(1 to $k$ on the y-axis) and the increasing number of features (1
+to $g_{\mathrm{max}}$ on the x-axis), respectively. For a fixed number
+$g$, we denote the rate of correct predictions $p_{gi}$ for $i=1,2,\cdots,k$
+one by one in the vertical direction, and then move to the next number
+$g+1$. The average rates are computed and denoted at the bottom of
+the graph; points that marked by ``\texttt{?}'' denote unknown $p_{gi}$,
+i.e., they have not been computed yet. In the end, we only have to
+find out the number $g$ corresponding to the biggest point in the
+bottom. The results are as follows:
+
+<<gene-results,echo=TRUE,eval=FALSE,results='markup',ref.label='gene-expr-data'>>=
+<<accuracy, echo=TRUE, results='markup'>>=
+res$accuracy
+res$optimum
+@
+
+%
+We achieved the maximum prediction accuracy when the number of features
+is 9 (\code{res$optimum}); the matrix \code{res$accuracy} shows
+the prediction accuracy for $g=1,2,\cdots,10$ in the column and fold
+1 to 5 in the 5-fold cross-validation. In fact, this example is more
+a ``slide show'' than a real animation, but it can be a helpful
+tool to explain the procedure.
+
+
+\section{Conclusions}
+
+The goal of the \proglang{S} language was ``to turn ideas into software,
+quickly and faithfully'' \citep{Chambers98}; for the \pkg{animation}
+package, the goal is ``to turn ideas into animations (quickly and
+faithfully)''. This package won the John M. Chambers Statistical
+Software Award (\url{http://stat-computing.org/awards/jmc/}) in 2009.
+
+In Section \ref{sec:connection}, we have reviewed the close relationship
+between animations and statistics in certain aspects. We can use animations
+to illustrate every single step of iterative algorithms, show all
+the results from simulations or resampling methods in detail, and
+characterize dynamic trends in the data.
+
+Section \ref{sec:design} introduced the design and contents of this
+package. The programming schema for the animation functions is quite
+simple but effective, and animations made from this schema can help
+us better understand statistical methods and concepts, and gain insights
+into data. This package contains nearly 30 demonstrations for statistical
+topics, as well as more than 20 demos for other topics such as computer
+games or novel applications of some functions in this package.
+
+The examples in Section \ref{sec:examples} have shown the advantage
+of animations in both demonstrating statistical theories and results
+of data analysis: the procedures illustrated step by step are fairly
+clear, and the results can be observed on the fly. In traditional
+static printed reports and papers, these dynamic information cannot
+be conveyed conveniently.
+
+We have also introduced the reproducibility of animations in this
+paper, and the \pkg{animation} package has functions to incorporate
+with reproducibility. For example, the \code{saveHTML()} function
+can write the \proglang{R} code as well as the \proglang{R} session
+information into an HTML page, so that users can copy and paste the
+code to reproduce the animations; \code{saveLatex()} can be used
+in the Sweave environment to insert animations into \LaTeX{} documents,
+which usually will be compiled to PDF documents, so that we can watch
+animations in the PDF documents. The source file of this paper can
+be found under \code{system.file("articles", "jss725.Rnw", package = "animation")}
+and this paper can be reproduced by:
+
+<<reproduce-jss725, eval=FALSE, echo=TRUE>>=
+install.packages(c('hddplot', 'rgl', 'tikzDevice', 'animation', 'knitr'))
+library(knitr)
+knit('jss725.Rnw')
+@
+
+\citet{Xie08} is an introductory article for this package in the
+\emph{R News}, and since then, there have been a large amount of improvements
+in terms of usability, consistency, documentation, new topics in statistics,
+and additional utilities. Currently we have included comprehensive
+utilities for exporting animations in \proglang{R}, and in future
+the main direction is to contribute more functions related to statistics.
+Depending on the demand of users, we may also consider developing
+a GUI for this package using, for example, the \pkg{gWidgets} package.
+
+
+\section*{Acknowledgments}
+
+I'm grateful to John Maindonald for his generous help on the manuscript
+and suggestions to this package ever since early 2008. I'd also like
+to thank Di Cook and the anonymous reviewers for the helpful comments.
+Besides, I appreciate all the suggestions and feedback from the users,
+without whom this package would not have achieved its current quality
+and flexibility (see \code{news(package = "animation")}). I thank
+the authors of open source software packages ImageMagick, GraphicsMagick,
+SWF Tools, FFmpeg, the \LaTeX{} package \textbf{animate}, the JavaScript
+libraries \textbf{SciAnimator} and \textbf{SyntaxHighlighter}, \textbf{qpdf}
+and \textbf{pdftk}. Finally, the 2009 John M. Chambers Statistical
+Software Award was a substantial encouragement to the development
+of this package, and I thank Dr Chambers as well as the award committee.
+This work has been partly supported by the National Science Foundation
+grant DMS0706949.
+
+\bibliography{jss725}
+
+
+\end{document}

@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Virtual Class &quot;ldenseMatrix&quot; of Dense Logical Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ldenseMatrix-class {Matrix}"><tr><td>ldenseMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Virtual Class &quot;ldenseMatrix&quot; of Dense Logical Matrices</h2>
+
+<h3>Description</h3>
+
+<p><code>ldenseMatrix</code> is the virtual class of all dense <b>l</b>ogical
+(S4) matrices.  It extends both <code><a href="denseMatrix-class.html">denseMatrix</a></code>
+and <code><a href="dMatrix-class.html">lMatrix</a></code> directly.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>x</code>:</dt><dd><p>logical vector containing the entries of the matrix.</p>
+</dd>
+<dt><code>Dim</code>, <code>Dimnames</code>:</dt><dd><p>see <code><a href="Matrix-class.html">Matrix</a></code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"lMatrix"</code>, directly.
+Class <code>"denseMatrix"</code>, directly.
+Class <code>"Matrix"</code>, by class <code>"lMatrix"</code>.
+Class <code>"Matrix"</code>, by class <code>"denseMatrix"</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>coerce</dt><dd><p><code>signature(from = "matrix", to = "ldenseMatrix")</code>: ... </p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "ldenseMatrix", to = "matrix")</code>: ... </p>
+</dd>
+<dt>as.vector</dt><dd><p><code>signature(x = "ldenseMatrix", mode = "missing")</code>: ...</p>
+</dd>
+<dt>which</dt><dd><p><code>signature(x = "ndenseMatrix")</code>, semantically
+equivalent to <span class="pkg">base</span> function <code><a href="../../base/html/which.html">which</a>(x, arr.ind)</code>;
+for details, see the <code><a href="dMatrix-class.html">lMatrix</a></code> class documentation.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>Class <code><a href="lgeMatrix-class.html">lgeMatrix</a></code> and the other subclasses.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("ldenseMatrix")
+
+as(diag(3) &gt; 0, "ldenseMatrix")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

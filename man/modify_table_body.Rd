@@ -58,7 +58,7 @@ modify_table_body_ex1 <-
 \seealso{
 \code{modify_table_styling()}
 
-See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
+See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 
 Other Advanced modifiers: 
 \code{\link{modify_cols_merge}()},

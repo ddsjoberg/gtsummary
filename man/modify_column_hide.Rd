@@ -35,6 +35,8 @@ modify_column_hide_ex1 <-
   modify_column_unhide(columns = std.error)
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other Advanced modifiers: 
 \code{\link{modify_cols_merge}()},
 \code{\link{modify_fmt_fun}()},

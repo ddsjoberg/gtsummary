@@ -14,6 +14,7 @@
 #' @inheritParams tbl_summary
 #'
 #' @return a gtsummary table
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #'
 #' @examples
@@ -100,4 +101,3 @@ tbl_continuous <- function(data,
   class(result) <- c("tbl_continuous", "gtsummary")
   result
 }
-

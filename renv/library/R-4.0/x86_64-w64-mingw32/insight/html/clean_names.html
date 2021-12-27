@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get clean names of model terms</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for clean_names {insight}"><tr><td>clean_names {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get clean names of model terms</h2>
+
+<h3>Description</h3>
+
+<p>This function &quot;cleans&quot; names of model terms (or a character
+vector with such names) by removing patterns like <code>log()</code> or
+<code>as.factor()</code> etc.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+clean_names(x, ...)
+
+## S3 method for class 'character'
+clean_names(x, include_names = FALSE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A fitted model, or a character vector.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>include_names</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, returns a named vector where
+names are the original values of <code>x</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The &quot;cleaned&quot; variable names as character vector, i.e. pattern
+like <code>s()</code> for splines or <code>log()</code> are removed from
+the model terms.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Typically, this method is intended to work on character vectors,
+in order to remove patterns that obscure the variable names. For
+convenience reasons it is also possible to call <code>clean_names()</code>
+also on a model object. If <code>x</code> is a regression model, this
+function is (almost) equal to calling <code>find_variables()</code>. The
+main difference is that <code>clean_names()</code> always returns a character
+vector, while <code>find_variables()</code> returns a list of character
+vectors, unless <code>flatten = TRUE</code>. See 'Examples'.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# example from ?stats::glm
+counts &lt;- c(18, 17, 15, 20, 10, 20, 25, 13, 12)
+outcome &lt;- as.numeric(gl(3, 1, 9))
+treatment &lt;- gl(3, 3)
+m &lt;- glm(counts ~ log(outcome) + as.factor(treatment), family = poisson())
+clean_names(m)
+
+# difference "clean_names()" and "find_variables()"
+if (require("lme4")) {
+  m &lt;- glmer(
+    cbind(incidence, size - incidence) ~ period + (1 | herd),
+    data = cbpp,
+    family = binomial
+  )
+
+  clean_names(m)
+  find_variables(m)
+  find_variables(m, flatten = TRUE)
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

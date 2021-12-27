@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: is.na(), is.infinite() Methods for 'Matrix' Objects</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for is.na-methods {Matrix}"><tr><td>is.na-methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>is.na(), is.infinite() Methods for 'Matrix' Objects</h2>
+
+<h3>Description</h3>
+
+<p>Methods for function <code><a href="../../base/html/NA.html">is.na</a>()</code>, <code><a href="../../base/html/is.finite.html">is.finite</a>()</code>,
+and <code><a href="../../base/html/is.finite.html">is.infinite</a>()</code> for all Matrices (objects
+extending the <code><a href="Matrix-class.html">Matrix</a></code> class):
+</p>
+
+<dl>
+<dt>x = &quot;denseMatrix&quot;</dt><dd><p>returns a <code>"nMatrix"</code> object of same
+dimension as <code>x</code>, with TRUE's whenever <code>x</code> is
+<code><a href="../../base/html/NA.html">NA</a></code>, finite, or infinite, respectively.</p>
+</dd>
+<dt>x = &quot;sparseMatrix&quot;</dt><dd><p>ditto.</p>
+</dd>
+</dl>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+## S4 method for signature 'sparseMatrix'
+is.na(x)
+## S4 method for signature 'dsparseMatrix'
+is.finite(x)
+## S4 method for signature 'ddenseMatrix'
+is.infinite(x)
+## ...
+## and for other classes
+
+## S4 method for signature 'xMatrix'
+anyNA(x)
+## S4 method for signature 'nsparseMatrix'
+anyNA(x)
+## S4 method for signature 'sparseVector'
+anyNA(x)
+## S4 method for signature 'nsparseVector'
+anyNA(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>sparse or dense matrix or sparse vector (here; any <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object in general).</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/NA.html">NA</a></code>, <code><a href="../../base/html/NA.html">is.na</a></code>;
+<code><a href="../../base/html/is.finite.html">is.finite</a></code>, <code><a href="../../base/html/is.finite.html">is.infinite</a></code>;
+<code><a href="nMatrix-class.html">nMatrix</a></code>,
+<code><a href="denseMatrix-class.html">denseMatrix</a></code>, <code><a href="sparseMatrix-class.html">sparseMatrix</a></code>.
+</p>
+<p>The <code><a href="sparseVector-class.html">sparseVector</a></code> class.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+M &lt;- Matrix(1:6, nrow=4, ncol=3,
+       dimnames = list(c("a", "b", "c", "d"), c("A", "B", "C")))
+stopifnot(all(!is.na(M)))
+M[2:3,2] &lt;- NA
+is.na(M)
+if(exists("anyNA", mode="function"))
+anyNA(M)
+
+A &lt;- spMatrix(10,20, i = c(1,3:8),
+                     j = c(2,9,6:10),
+                     x = 7 * (1:7))
+stopifnot(all(!is.na(A)))
+
+A[2,3] &lt;- A[1,2] &lt;- A[5, 5:9] &lt;- NA
+inA &lt;- is.na(A)
+stopifnot(sum(inA) == 1+1+5)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

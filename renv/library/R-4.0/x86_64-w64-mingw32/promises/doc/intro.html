@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>An informal introduction to async programming</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">An informal introduction to async programming</h1>
+
+
+
+<p>Hello, R and/or Shiny user! Let’s talk about async programming!</p>
+<p><strong>Async programming? Sounds complicated.</strong></p>
+<p>It is, very! You may want to grab some coffee.</p>
+<p><strong>Ugh. Tell me why I even need to know this?</strong></p>
+<p>Async programming is a major new addition to Shiny that can make certain classes of apps dramatically more responsive under load.</p>
+<p>Because R is single threaded (i.e. it can only do one thing at a time), a given Shiny app process can also only do one thing at a time: if it is fitting a linear model for one client, it can’t simultaneously serve up a CSV download for another client.</p>
+<p>For many Shiny apps, this isn’t a big problem; if no one processing step takes very long, then no client has to wait an undue amount of time before they start seeing results. But for apps that perform long-running operations — either expensive computations that take a while to complete, or waiting on slow network operations like database or web API queries — your users’ experience can suffer dramatically as traffic ramps up. Operations that normally are lightning quick, like downloading a small JavaScript file, can get stuck in traffic behind something slow.</p>
+<p><strong>Oh, OK—more responsiveness is always good. But you said this’ll only help for certain classes of Shiny apps?</strong></p>
+<p>It’s mostly helpful for apps that have a few specific operations that take a long time, rather than lots of little operations that are all a bit slow on their own and add up to one big slow mess. We’re looking for watermelons, not blueberries.</p>
+<p><strong>Watermelons… sure. So then, how does this all work?</strong></p>
+<p>It all starts with <em>async functions</em>. An async function is one that performs an operation that takes a long time, yet returns control to you immediately. Whereas a normal function like <code>read.csv</code> will not return until its work is done and it has the value you requested, an asynchronous <code>read.csv.async</code> function would kick off the CSV reading operation, but then return immediately, long before the real work has actually completed.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(future)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">plan</span>(multisession)</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a>read.csv.async &lt;-<span class="st"> </span><span class="cf">function</span>(file, <span class="dt">header =</span> <span class="ot">TRUE</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>) {</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="kw">future_promise</span>({</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="kw">read.csv</span>(file, <span class="dt">header =</span> header, <span class="dt">stringsAsFactors =</span> stringsAsFactors)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>  })</span>
+<span id="cb1-8"><a href="#cb1-8"></a>}</span></code></pre></div>
+<p>(Don’t worry about what this definition means for now. You’ll learn more about defining async functions in <a href="futures.html">Launching tasks</a> and <a href="future_promise.html">Advanced <code>future</code> and <code>promises</code> usage</a>.)</p>
+<p><strong>So instead of “read this CSV file” it’s more like “begin reading this CSV file”?</strong></p>
+<p>Yes! That’s what async functions do: they start things, and give you back a special object called a <em>promise</em>. If it doesn’t return a promise, it’s not an async function.</p>
+<p><strong>Oh, I’ve heard of promises in R! From <a href="http://adv-r.had.co.nz/Computing-on-the-language.html">the NSE chapter</a> in Hadley’s Advanced R book!</strong></p>
+<p>Ah… this is awkward, but no. I’m using the word “promise”, but I’m not referring to <em>that</em> kind of promise. For the purposes of async programming, try to forget that you’ve ever heard of that kind of promise, OK?</p>
+<p>I know it seems needlessly confusing, but the promises we’re talking about here are <del>shamelessly copied from</del> directly inspired by a central abstraction in modern JavaScript, and the JS folks named them “promises”.</p>
+<p><strong>Fine, whatever. So what are these promises?</strong></p>
+<p>Conceptually, they’re a stand-in for the <em>eventual result</em> of the operation. For example, in the case of our <code>read.csv.async</code> function, the promise is a stand-in for a data frame. At some point, the operation is going to finish, and a data frame is going to become available. The promise gives us a way to get at that value.</p>
+<p><strong>Let me guess: it’s an object that has <code>has_completed()</code> and <code>get_value()</code> methods?</strong></p>
+<p>Good guess, but no. Promises are <em>not</em> a way to directly inquire about the status of an operation, nor to directly retrieve the result value. That is probably the simplest and most obvious way to build an async framework, but in practice it’s very difficult to build deeply async programs with an API like that.</p>
+<p>Instead, a promise lets you <em>chain together operations</em> that should be performed whenever the operation completes. These operations might have side effects (like plotting, or writing to disk, or printing to the console) or they might transform the result values somehow.</p>
+<p><strong>Chain together operations? Using the <code>%&gt;%</code> operator?</strong></p>
+<p>A lot like that! You can’t use the <code>%&gt;%</code> operator itself, but we provide a promise-compatible version of it: <code>%...&gt;%</code>. So whereas you might do this to a regular data frame:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">read.csv</span>(<span class="st">&quot;https://rstudio.github.io/promises/data.csv&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="st">  </span><span class="kw">filter</span>(state <span class="op">==</span><span class="st"> &quot;NY&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="st">  </span><span class="kw">View</span>()</span></code></pre></div>
+<p>The async version would look like:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">read.csv.async</span>(<span class="st">&quot;https://rstudio.github.io/promises/data.csv&quot;</span>) <span class="op">%...&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="st">  </span><span class="kw">filter</span>(state <span class="op">==</span><span class="st"> &quot;NY&quot;</span>) <span class="op">%...&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  </span><span class="kw">View</span>()</span></code></pre></div>
+<p>The <code>%...&gt;%</code> operator here is the secret sauce. It’s called the <em>promise pipe</em>; the <code>...</code> stands for promise, and <code>&gt;</code> mimics the standard pipe operator.</p>
+<p><strong>What a strange looking operator. Does it work just like a regular pipe?</strong></p>
+<p>In many ways <code>%...&gt;%</code> does work like a regular pipe: it rewrites each stage’s function call to take the previous stage’s output as the first argument. (All the <a href="https://CRAN.R-project.org/package=magrittr/vignettes/magrittr.html">standard magrittr tricks</a> apply here: <code>.</code>, <code>{</code>, parenthesized lambdas, etc.) But the differences, while subtle, are profound.</p>
+<p>The first and most important difference is that <code>%...&gt;%</code> <em>must</em> take a promise as input; that is, the left-hand side of the operator must be an expression that yields a promise. The <code>%...&gt;%</code> will do the work of “extracting” the result value from the promise, and passing that (unwrapped) result to the function call on the right-hand side.</p>
+<p>This last fact—that <code>%...&gt;%</code> passes an unwrapped, plain old, not-a-promise value to the right-hand side—is critically important. It means we can use promise objects with non-promise-aware functions, with <code>%...&gt;%</code> serving as the bridge between asynchronous and synchronous code.</p>
+<p><strong>So the left-hand side of <code>%...&gt;%</code> needs to be one of these special promise objects, but the right-hand side can be regular R base functions?</strong></p>
+<p>Yes! R base functions, dplyr, ggplot2, or whatever.</p>
+<p>However, that work often can’t be done in the present, since the whole point of a promise is that it represents work that hasn’t completed yet. So <code>%...&gt;%</code> does the work of extracting and piping not at the time that it’s called, but rather, sometime in the future.</p>
+<p><strong>You lost me.</strong></p>
+<p>OK, let’s slow down and take this step by step. We’ll generate a promise by calling an async function:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df_promise &lt;-<span class="st"> </span><span class="kw">read.csv.async</span>(<span class="st">&quot;https://rstudio.github.io/promises/data.csv&quot;</span>)</span></code></pre></div>
+<p>Even if <code>data.csv</code> is many gigabytes, <code>read.csv.async</code> returns immediately with a new promise. We store it as <code>df_promise</code>. Eventually, when the CSV reading operation successfully completes, the promise will contain a data frame, but for now it’s just an empty placeholder.</p>
+<p>One thing we definitely <em>can’t</em> do is treat <code>df_promise</code> as if it’s simply a data frame:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># Doesn&#39;t work!</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>dplyr<span class="op">::</span><span class="kw">filter</span>(df_promise, state <span class="op">==</span><span class="st"> &quot;NY&quot;</span>)</span></code></pre></div>
+<p>Try this and you’ll get an error like <code>no applicable method for &#39;filter_&#39; applied to an object of class &quot;promise&quot;</code>. And the pipe won’t help you either; <code>df_promise %&gt;% filter(state == &quot;NY&quot;)</code> will give you the same error.</p>
+<p><strong>Right, that makes sense. <code>filter</code> is designed to work on data frames, and <code>df_promise</code> isn’t a data frame.</strong></p>
+<p>Exactly. Now let’s try something that actually works:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>df_promise <span class="op">%...&gt;%</span><span class="st"> </span><span class="kw">filter</span>(state <span class="op">==</span><span class="st"> &quot;NY&quot;</span>)</span></code></pre></div>
+<p>At the moment it’s called, this code won’t appear to do much of anything, really. But whenever the <code>df_promise</code> operation actually completes successfully, then the result of that operation—the plain old data frame—will be passed to <code>filter(., state = &quot;NY&quot;)</code>.</p>
+<p><strong>OK, so that’s good. I see what you mean about <code>%...&gt;%</code> letting you use non-promise functions with promises. But the whole point of using the <code>filter</code> function is to get a data frame back. If <code>filter</code> isn’t even going to be called until some random time in the future, how do we get its value back?</strong></p>
+<p>I’ll tell you the answer, but it’s not going to be satisfying at first.</p>
+<p>When you use a regular <code>%&gt;%</code>, the result you get back is the return value from the right-hand side:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>df_filtered &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(state <span class="op">==</span><span class="st"> &quot;NY&quot;</span>)</span></code></pre></div>
+<p>When you use <code>%...&gt;%</code>, the result you get back is a promise, whose <em>eventual</em> result will be the return value from the right-hand side:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>df_filtered_promise &lt;-<span class="st"> </span>df_promise <span class="op">%...&gt;%</span><span class="st"> </span><span class="kw">filter</span>(state <span class="op">==</span><span class="st"> &quot;NY&quot;</span>)</span></code></pre></div>
+<p><strong>Wait, what? If I have a promise, I can do stuff to it using <code>%...&gt;%</code>, but then I just end up with another promise? Why not just have <code>%...&gt;%</code> return a regular value instead of a promise?</strong></p>
+<p>Remember, the whole point of a promise is that we don’t know its value yet! So to write a function that uses a promise as input and returns some non-promise value as output, you’d need to either be a time traveler or an oracle.</p>
+<p>To summarize, once you start working with a promise, any calculations and actions that are “downstream” of that promise will need to become promise-oriented. Generally, this means once you have a promise, you need to use <code>%...&gt;%</code> and keep using it until your pipeline terminates.</p>
+<p><strong>I guess that makes sense. Still, if the only thing you can do with promises is make more promises, that limits their usefulness, doesn’t it?</strong></p>
+<p>It’s a different way of thinking about things, to be sure, but it turns out there’s not much limit in usefulness—especially in the context of a Shiny app.</p>
+<p>First, you can use promises with Shiny outputs. If you’re using an async-compatible version of Shiny (version &gt;=1.1), all of the built-in <code>renderXXX</code> functions can deal with either regular values or promises. An example of the latter:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>output<span class="op">$</span>table &lt;-<span class="st"> </span><span class="kw">renderTable</span>({</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="kw">read.csv.async</span>(<span class="st">&quot;https://rstudio.github.io/promises/data.csv&quot;</span>) <span class="op">%...&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="st">    </span><span class="kw">filter</span>(state <span class="op">==</span><span class="st"> &quot;NY&quot;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a>})</span></code></pre></div>
+<p>When <code>output$table</code> executes the <code>renderTable</code> code block, it will notice that the result is a promise, and wait for it to complete before continuing with the table rendering. While it’s waiting, the R process can move on to do other things.</p>
+<p>Second, you can use promises with reactive expressions. Reactive expressions treat promises about the same as they treat other values, actually. But this works perfectly fine:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># A reactive expression that returns a promise</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>filtered_df &lt;-<span class="st"> </span><span class="kw">reactive</span>({</span>
+<span id="cb10-3"><a href="#cb10-3"></a>  <span class="kw">read.csv.async</span>(<span class="st">&quot;https://rstudio.github.io/promises/data.csv&quot;</span>) <span class="op">%...&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="st">    </span><span class="kw">filter</span>(state <span class="op">==</span><span class="st"> &quot;NY&quot;</span>) <span class="op">%...&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="st">    </span><span class="kw">arrange</span>(median_income)</span>
+<span id="cb10-6"><a href="#cb10-6"></a>})</span>
+<span id="cb10-7"><a href="#cb10-7"></a></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co"># A reactive expression that reads the previous</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co"># (promise-returning) reactive, and returns a</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co"># new promise</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a>top_n_by_income &lt;-<span class="st"> </span><span class="kw">reactive</span>({</span>
+<span id="cb10-12"><a href="#cb10-12"></a>  <span class="kw">filtered_df</span>() <span class="op">%...&gt;%</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="st">    </span><span class="kw">head</span>(input<span class="op">$</span>n)</span>
+<span id="cb10-14"><a href="#cb10-14"></a>})</span>
+<span id="cb10-15"><a href="#cb10-15"></a></span>
+<span id="cb10-16"><a href="#cb10-16"></a>output<span class="op">$</span>table &lt;-<span class="st"> </span><span class="kw">renderTable</span>({</span>
+<span id="cb10-17"><a href="#cb10-17"></a>  <span class="kw">top_n_by_income</span>()</span>
+<span id="cb10-18"><a href="#cb10-18"></a>})</span></code></pre></div>
+<p>Third, you can use promises in reactive observers. Use them to perform asynchronous tasks in response to reactivity.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">observeEvent</span>(input<span class="op">$</span>save, {</span>
+<span id="cb11-2"><a href="#cb11-2"></a>  <span class="kw">filtered_df</span>() <span class="op">%...&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="st">    </span><span class="kw">write.csv</span>(<span class="st">&quot;ny_data.csv&quot;</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a>})</span></code></pre></div>
+<p><strong>Alright, I think I see what you mean. You can’t escape from promise-land, but there’s no need to, because Shiny knows what to do with them.</strong></p>
+<p>Yes, that’s basically right. You just need to keep track of which functions and reactive expressions return promises instead of regular values, and be sure to interact with them using <code>%...&gt;%</code> or other promise-aware operators and functions.</p>
+<p><strong>Wait, there are other promise-aware operators and functions?</strong></p>
+<p>Yes. The <code>%...&gt;%</code> is the one you’ll most commonly use, but there is a variant <code>%...T&gt;%</code>, which we call the <em>promise tee</em> operator (it’s analogous to the magrittr <code>%T&gt;%</code> operator). The <code>%...T&gt;%</code> operator mostly acts like <code>%...&gt;%</code>, but instead of returning a promise for the result value, it returns the original value instead. Meaning <code>p %...T&gt;% cat(&quot;\n&quot;)</code> won’t return a promise for the return value of <code>cat()</code> (which is always <code>NULL</code>) but instead the value of <code>p</code>. This is useful for logging, or other “side effecty” operations.</p>
+<p>There’s also <code>%...!%</code>, and its tee version, <code>%...T!%</code>, which are used for error handling. I won’t confuse you with more about that now, but you can read more <a href="overview.html#error-handling">here</a>.</p>
+<p>The <code>promises</code> package is where all of these operators live, and it also comes with some additional functions for working with promises.</p>
+<p>So far, the only actual async function we’ve talked about has been <code>read.csv.async</code>, which doesn’t actually exist. To learn where actual async functions come from, read <a href="futures.html">this guide to the <code>future</code> package</a>.</p>
+<p>There are the lower-level functions <code>then</code>, <code>catch</code>, and <code>finally</code>, which are the non-pipe, non-operator equivalents of the promise operators we’ve been discussing. See <a href="overview.html#accessing-results-with-then">reference</a>.</p>
+<p>And finally, there are <code>promise_all</code>, <code>promise_race</code>, and <code>promise_lapply</code>, used to combine multiple promises into a single promise. Learn more about them <a href="../reference/promise_all.html">here</a>.</p>
+<p><strong>OK, looks like I have a lot of stuff to read up on. And I’ll probably have to reread this conversation a few times before it fully sinks in.</strong></p>
+<p>Sorry. I told you it was complicated. If you make it through the rest of the guide, you’ll be 95% of the way there.</p>
+<div style="font-size: 20px; margin-top: 40px; text-align: right;">
+<p>Next: <a href="overview.html">Working with promises</a></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Find missing LaTeX packages from a LaTeX log file</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for parse_packages {tinytex}"><tr><td>parse_packages {tinytex}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Find missing LaTeX packages from a LaTeX log file</h2>
+
+<h3>Description</h3>
+
+<p>Analyze the error messages in a LaTeX log file to figure out the names of
+missing LaTeX packages that caused the errors. These packages can be
+installed via <code><a href="../../tinytex/help/tlmgr_install.html">tlmgr_install</a>()</code>. Searching for missing packages
+is based on <code><a href="../../tinytex/help/tlmgr_search.html">tlmgr_search</a>()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+parse_packages(
+  log,
+  text = readLines(log),
+  files = detect_files(text),
+  quiet = rep(FALSE, 3)
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>log</code></td>
+<td>
+<p>Path to the LaTeX log file (typically named &lsquo;<span class="file">*.log</span>&rsquo;).</p>
+</td></tr>
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>A character vector of the error log (read from the file provided
+by the <code>log</code> argument by default).</p>
+</td></tr>
+<tr valign="top"><td><code>files</code></td>
+<td>
+<p>A character vector of names of the missing files (automatically
+detected from the <code>log</code> by default).</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>Whether to suppress messages when finding packages. It should be
+a logical vector of length 3: the first element indicates whether to
+suppress the message when no missing LaTeX packages could be detected from
+the log, the second element indicate whether to suppress the message when
+searching for packages via <code>tlmgr_search()</code>, and the third element
+indicates whether to warn if no packages could be found via
+<code>tlmgr_search()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector of LaTeX package names.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>tinytex</em> version 0.34 <a href="00Index.html">Index</a>]</div>
+</body></html>

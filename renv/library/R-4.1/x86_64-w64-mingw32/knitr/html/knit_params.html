@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Extract knit parameters from a document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for knit_params {knitr}"><tr><td>knit_params {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Extract knit parameters from a document</h2>
+
+<h3>Description</h3>
+
+<p>This function reads the YAML front-matter section of a document and returns a
+list of any parameters declared there. This function exists primarily to
+support the parameterized reports feature of the <span class="pkg">rmarkdown</span> package,
+however is also used by the knitr <code><a href="../../knitr/help/purl.html">purl</a></code> function to include
+the default parameter values in the R code it emits.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+knit_params(text, evaluate = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>Character vector containing the document text.</p>
+</td></tr>
+<tr valign="top"><td><code>evaluate</code></td>
+<td>
+<p>Boolean. If <code>TRUE</code> (the default), expression values embedded
+within the YAML will be evaluated. If <code>FALSE</code>, parameters defined with an
+expression will have the parsed but unevaluated expression in their <code>value</code>
+field.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Parameters are included in YAML front matter using the <code>params</code> key.
+This key can have any number of subkeys each of which represents a
+parameter. For example:
+</p>
+<pre>
+---
+title: My Document
+output: html_document
+params:
+  frequency: 10
+  show_details: true
+---
+</pre>
+<p>Parameter values can be provided inline as illustrated above or can be
+included in a <code>value</code> sub-key. For example:
+</p>
+<pre>
+---
+title: My Document
+output: html_document
+params:
+  frequency:
+    value: 10
+---
+</pre>
+<p>This second form is useful when you need to provide additional details
+about the parameter (e.g. a <code>label</code> field as describe above).
+</p>
+<p>You can also use R code to yield the value of a parameter by prefacing the value
+with <code>!r</code>, for example:
+</p>
+<pre>
+---
+title: My Document
+output: html_document
+params:
+  start: !r Sys.Date()
+---
+</pre>
+
+
+<h3>Value</h3>
+
+<p>List of objects of class <code>knit_param</code> that correspond to the
+parameters declared in the <code>params</code> section of the YAML front matter.
+These objects have the following fields:
+</p>
+
+<dl>
+<dt><code>name</code></dt><dd><p>The parameter name.</p>
+</dd>
+<dt><code>value</code></dt><dd><p>The default value for the parameter.</p>
+</dd>
+<dt><code>expr</code></dt><dd><p>The R expression (if any) that yielded the default value.</p>
+</dd>
+</dl>
+
+<p>In addition, other fields included in the YAML may also be present
+alongside the name, type, and value fields (e.g. a <code>label</code> field
+that provides front-ends with a human readable name for the parameter).
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

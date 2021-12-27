@@ -1,0 +1,101 @@
+---
+title: "Writing SQL with dbplyr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Writing SQL with dbplyr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette discusses why you might use dbplyr instead of writing SQL yourself, and what to do when dbplyr's built-in translations can't create the SQL that you need.
+
+```{r setup, message = FALSE}
+library(dplyr)
+library(dbplyr)
+
+mf <- memdb_frame(x = 1, y = 2)
+```
+
+## Why use dbplyr?
+
+One simple nicety of dplyr is that it will automatically generate subqueries if you want to use a freshly created variable in `mutate()`: 
+
+```{r}
+mf %>% 
+  mutate(
+    a = y * x, 
+    b = a ^ 2,
+  ) %>% 
+  show_query()
+```
+
+In general, it's much easier to work iteratively in dbplyr. You can easily give intermediate queries names, and reuse them in multiple places. Or if you have a common operation that you want to do to many queries, you can easily wrap it up in a function. It's also easy to chain `count()` to the end of any query to check the results are about what you expect.
+
+## What happens when dbplyr fails?
+
+dbplyr aims to translate the most common R functions to their SQL equivalents, allowing you to ignore the vagaries of the SQL dialect that you're working with, so you can focus on the data analysis problem at hand. But different backends have different capabilities, and sometimes there are SQL functions that don't have exact equivalents in R. In those cases, you'll need to write SQL code directly. This section shows you how you can do so.
+
+### Prefix functions
+
+Any function that dbplyr doesn't know about will be left as is:
+
+```{r}
+mf %>% 
+  mutate(z = foofify(x, y)) %>% 
+  show_query()
+```
+
+Because SQL functions are general case insensitive, I recommend using upper case when you're using SQL functions in R code. That makes it easier to spot that you're doing something unusual:
+
+```{r}
+mf %>% 
+  mutate(z = FOOFIFY(x, y)) %>% 
+  show_query()
+```
+
+### Infix functions
+
+As well as prefix functions (where the name of the function comes before the arguments), dbplyr also translates infix functions. That allows you to use expressions like `LIKE` which does a limited form of pattern matching:
+
+```{r}
+mf %>% 
+  filter(x %LIKE% "%foo%") %>% 
+  show_query()
+```
+
+Or use `||` for string concatenation (note that backends should translate `paste()` and `paste0()` for you):
+
+```{r}
+mf %>% 
+  transmute(z = x %||% y) %>% 
+  show_query()
+```
+
+### Special forms
+
+SQL functions tend to have a greater variety of syntax than R. That means there are a number of expressions that can't be translated directly from R code. To insert these in your own queries, you can use literal SQL inside `sql()`:
+
+```{r}
+mf %>% 
+  transmute(factorial = sql("x!")) %>% 
+  show_query()
+
+mf %>% 
+  transmute(factorial = sql("CAST(x AS FLOAT)")) %>% 
+  show_query()
+```
+
+Note that you can use `sql()` at any depth inside the expression:
+
+```{r}
+mf %>% 
+  filter(x == sql("ANY VALUES(1, 2, 3)")) %>% 
+  show_query()
+```

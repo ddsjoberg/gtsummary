@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Plot Regression Coefficients</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for plot {gtsummary}"><tr><td>plot {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Plot Regression Coefficients</h2>
+
+<h3>Description</h3>
+
+<p>The <code>plot()</code> function extracts <code>x$table_body</code> and passes the it to
+<code>GGally::ggcoef_plot()</code> along with a formatting options.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'tbl_regression'
+plot(x, remove_header_rows = TRUE, remove_reference_rows = FALSE, ...)
+
+## S3 method for class 'tbl_uvregression'
+plot(x, remove_header_rows = TRUE, remove_reference_rows = FALSE, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>'tbl_regression' or 'tbl_uvregression' object</p>
+</td></tr>
+<tr valign="top"><td><code>remove_header_rows</code></td>
+<td>
+<p>logical indicating whether to remove header rows
+for categorical variables. Default is <code>TRUE</code></p>
+</td></tr>
+<tr valign="top"><td><code>remove_reference_rows</code></td>
+<td>
+<p>logical indicating whether to remove reference rows
+for categorical variables. Default is <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>arguments passed to <code>GGally::ggcoef_plot(...)</code></p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+</p>
+
+
+<h3>Value</h3>
+
+<p>a ggplot
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (requireNamespace("GGally")) {
+  glm(response ~ marker + grade, trial, family = binomial) %&gt;%
+    tbl_regression(
+      add_estimate_to_reference_rows = TRUE,
+      exponentiate = TRUE
+    ) %&gt;%
+    plot()
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.0.9006 <a href="00Index.html">Index</a>]</div>
+</body></html>

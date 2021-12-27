@@ -1,0 +1,527 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Read, write, update, validate DESCRIPTION files</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for description {desc}"><tr><td>description {desc}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Read, write, update, validate DESCRIPTION files</h2>
+
+<h3>Description</h3>
+
+<p>Read, write, update, validate DESCRIPTION files
+</p>
+
+
+<h3>Format</h3>
+
+<p>An R6 class.
+</p>
+
+
+<h3>Constructors</h3>
+
+<p>There are two ways of creating a description object. The first
+is reading an already existing <code>DESCRIPTION</code> file; simply give
+the name of the file as an argument. The default is
+<code>DESCRIPTION</code>: </p>
+<pre>  x &lt;- description$new()
+  x2 &lt;- description$new("path/to/DESCRIPTION")</pre>
+<p>The second way is creating a description object from scratch,
+supply <code>"!new"</code> as an argument to do this.
+</p>
+<pre>  x3 &lt;- description$new("!new")</pre>
+<p>The complete API reference:
+</p>
+<pre>description$new(cmd = NULL, file = NULL, text = NULL,
+    package = NULL)</pre>
+
+<dl>
+<dt>cmd:</dt><dd><p>A command to create a description from scratch.
+Currently only <code>"!new"</code> is implemented. If it does not start
+with an exclamation mark, it will be interpreted as a &lsquo;file&rsquo;
+argument.</p>
+</dd>
+<dt>file:</dt><dd><p>Name of the <code>DESCRIPTION</code> file to load. If it is
+a directory, then we assume that it is inside an R package and
+conduct a search for the package root directory, i.e. the first
+directory up the tree that contains a <code>DESCRIPTION</code> file.
+If &lsquo;cmd&rsquo;, &lsquo;file&rsquo;, &lsquo;text&rsquo; and &lsquo;package&rsquo;
+are all <code>NULL</code> (the default), then the search is started from
+the working directory. The file can also be an R package (source, or
+binary), in which case the DESCRIPTION file is extracted from it,
+but note that in this case <code>$write()</code> cannot write the file
+back in the package archive.</p>
+</dd>
+<dt>text:</dt><dd><p>A character scalar containing the full DESCRIPTION.
+Character vectors are collapsed into a character scalar, with
+newline as the separator.</p>
+</dd>
+<dt>package</dt><dd><p>If not NULL, then the name of an installed package
+and the DESCRIPTION file of this package will be loaded.</p>
+</dd>
+</dl>
+
+
+
+<h3>Setting and Querying fields</h3>
+
+<p>Set a field with <code>$set</code> and query it with <code>$get</code>:
+</p>
+<pre>  x &lt;- description$new("!new")
+  x$get("Package)
+  x$set("Package", "foobar")
+  x$set(Title = "Example Package for 'description'")
+  x$get("Package")</pre>
+<p>Note that <code>$set</code> has two forms. You can either give the field name
+and new value as two arguments; or you can use a single named argument,
+the argument name is the field name, the argument value is the field
+value.
+</p>
+<p>The <code>$fields</code> method simply lists the fields in the object:
+</p>
+<pre>  x$fields()</pre>
+<p>The <code>$has_fields</code> method checks if one or multiple fields are
+present in a description object: </p>
+<pre>  x$has_fields("Package")
+  x$has_fields(c("Title", "foobar"))</pre>
+<p>The <code>$del</code> method removes the specified fields:
+</p>
+<pre>  x$set(foo = "bar")
+  x$del("foo")</pre>
+<p><code>$get_field</code> is similar to <code>$get</code>, but it queries a single
+field, it returns an unnamed vector if found, and returns the
+specified <code>default</code> value if not. By default it throws an error
+if the field is not found.
+</p>
+<p>The complete API reference:
+</p>
+<pre>  description$get(keys)
+  description$get_field(key, default, trim_ws = TRUE, squish_ws = trim_ws)
+  description$set(...)
+  description$fields()
+  description$has_fields(keys)
+  description$del(keys)</pre>
+
+<dl>
+<dt>key:</dt><dd><p>A character string (length one), the key to query.</p>
+</dd>
+<dt>default:</dt><dd><p>If specified and <code>key</code> is missing, this value
+is returned. If not specified, an error is thrown.</p>
+</dd>
+<dt>trim_ws:</dt><dd><p>Whether to trim leading and trailing whitespace
+from the returned value.</p>
+</dd>
+<dt>squish_ws:</dt><dd><p>Whether to reduce repeated whitespace in the
+returned value.</p>
+</dd>
+<dt>keys:</dt><dd><p>A character vector of keys to query, check or delete.</p>
+</dd>
+<dt>...:</dt><dd><p>This must be either two unnamed arguments, the key and
+and the value to set; or an arbitrary number of named arguments,
+names are used as keys, values as values to set.</p>
+</dd>
+</dl>
+
+
+
+<h3>Normalizing</h3>
+
+<p>Format DESCRIPTION in a standard way. <code>$str</code> formats each
+field in a standard way and returns them (it does not change the
+object itself), <code>$print</code> is used to print it to the
+screen. The <code>$normalize</code> function normalizes each field (i.e.
+it changes the object). Normalization means reformatting the fields,
+via <code>$reformat_fields()</code> and also reordering them via
+<code>$reorder_fields()</code>. The format of the various fields is
+opinionated and you might like it or not. Note that <code>desc</code> only
+re-formats fields that it updates, and only on demand, so if your
+formatting preferences differ, you can still manually edit
+<code>DESCRIPTION</code> and <code>desc</code> will respect your edits.
+</p>
+<pre>  description$str(by_field = FALSE, normalize = TRUE,
+    mode = c("file", "screen"))
+  description$normalize()
+  description$reformat_fields()
+  description$reorder_fields()
+  description$print()
+</pre>
+
+<dl>
+<dt>by_field:</dt><dd><p>Whether to return the normalized format
+by field, or collapsed into a character scalar.</p>
+</dd>
+<dt>normalize:</dt><dd><p>Whether to reorder and reformat the fields.</p>
+</dd>
+<dt>mode:</dt><dd><p>&lsquo;file&rsquo; mode formats the fields as they are
+written to a file with the <code>write</code> method. &lsquo;screen&rsquo;
+mode adds extra markup to some fields, e.g. formats the
+<code>Authors@R</code> field in a readable way.</p>
+</dd>
+</dl>
+
+
+
+<h3>Writing it to file</h3>
+
+<p>The <code>$write</code> method writes the description to a file.
+By default it writes it to the file it was created from, if it was
+created from a file. Otherwise giving a file name is compulsory:
+</p>
+<pre>  x$write(file = "DESCRIPTION")</pre>
+<p>The <code>normalize</code> argument controls whether the fields are
+reformatted according to a standard style. By default they are not.
+</p>
+<p>The API:
+</p>
+<pre>  description$write(file = NULL, normalize = NULL)</pre>
+
+<dl>
+<dt>file:</dt><dd><p>Path to write the description to. If it was created
+from a file in the first place, then it is written to the same
+file. Otherwise this argument must be specified.</p>
+</dd>
+<dt>normalize:</dt><dd><p>Whether to reformat the fields in a standard way.</p>
+</dd>
+</dl>
+
+
+
+<h3>Version numbers</h3>
+
+<pre>  description$get_version()
+  description$set_version(version)
+  description$bump_version(which = c("patch", "minor", "major", "dev"))
+</pre>
+
+<dl>
+<dt>version:</dt><dd><p>A string or a <code><a href="../../base/help/package_version.html">package_version</a></code>
+object.</p>
+</dd>
+<dt>which:</dt><dd><p>Which component of the version number to increase.
+See details just below.</p>
+</dd>
+</dl>
+
+<p>These functions are simple helpers to make it easier to query, set and
+increase the version number of a package.
+</p>
+<p><code>$get_version()</code> returns the version number as a
+<code><a href="../../base/help/package_version.html">package_version</a></code> object. It throws an error if the
+package does not have a &lsquo;Version&rsquo; field.
+</p>
+<p><code>$set_version()</code> takes a string or a
+<code><a href="../../base/help/package_version.html">package_version</a></code> object and sets the &lsquo;Version&rsquo;
+field to it.
+</p>
+<p><code>$bump_version()</code> increases the version number. The <code>which</code>
+parameter specifies which component to increase.
+It can be a string referring to a component: &lsquo;major&rsquo;,
+&lsquo;minor&rsquo;, &lsquo;patch&rsquo; or &lsquo;dev&rsquo;, or an integer
+scalar, for the latter components are counted from one, and the
+beginning. I.e. component one is equivalent to &lsquo;major&rsquo;.
+</p>
+<p>If a component is bumped, then the ones after it are zeroed out.
+Trailing zero components are omitted from the new version number,
+but if the old version number had at least two or three components, then
+the one will also have two or three.
+</p>
+<p>The bumping of the &lsquo;dev&rsquo; version (the fourth component) is
+special: if the original version number had less than four components,
+and the &lsquo;dev&rsquo; version is bumped, then it is set to <code>9000</code>
+instead of <code>1</code>. This is a convention often used by R developers,
+it was originally invented by Winston Chang.
+</p>
+<p>Both <code>$set_version()</code> and <code>$bump_version()</code> use dots to
+separate the version number components.
+</p>
+
+
+<h3>Dependencies</h3>
+
+<p>These functions handle the fields that define how the R package
+uses another R packages. See <code><a href="../../desc/help/dep_types.html">dep_types</a></code> for the
+list of fields in this group.
+</p>
+<p>The <code>$get_deps</code> method returns all declared dependencies, in a
+data frame with columns: <code>type</code>, <code>package</code> and <code>version</code>.
+<code>type</code> is the name of the dependency field, <code>package</code> is the
+name of the R package, and <code>version</code> is the required version. If
+no specific versions are required, then this is a <code>"\*"</code>.
+</p>
+<p>The <code>$set_deps</code> method is the opposite of <code>$get_deps</code> and
+it sets all dependencies. The input is a data frame, with the same
+structure as the return value of <code>$get_deps</code>.
+</p>
+<p>The <code>$has_dep</code> method checks if a package is included in the
+dependencies. It returns a logical scalar. If <code>type</code> is not
+&lsquo;any&rsquo;, then it has to match as well.
+</p>
+<p>The <code>$del_deps</code> method removes all declared dependencies.
+</p>
+<p>The <code>$set_dep</code> method adds or updates a single dependency. By
+default it adds the package to the <code>Imports</code> field.
+</p>
+<p>The API:
+</p>
+<pre>  description$set_dep(package, type = dep_types, version = "\*")
+  description$set_deps(deps)
+  description$get_deps()
+  description$has_dep(package, type = c("any", dep_types))
+  description$del_dep(package, type = c("all", dep_types))
+  description$del_deps()
+</pre>
+
+<dl>
+<dt>package:</dt><dd><p>Name of the package to add to or remove from the
+dependencies.</p>
+</dd>
+<dt>type:</dt><dd><p>Dependency type, see <code><a href="../../desc/help/dep_types.html">dep_types</a></code>. For
+<code>$del_dep</code> it may also be <code>"all"</code>, and then the package
+will be deleted from all dependency types.</p>
+</dd>
+<dt>version:</dt><dd><p>Required version. Defaults to <code>"\*"</code>, which means
+no explicit version requirements.</p>
+</dd>
+<dt>deps:</dt><dd><p>A data frame with columns <code>type</code>, <code>package</code> and
+<code>version</code>. <code>$get_deps</code> returns the same format.</p>
+</dd>
+</dl>
+
+
+
+<h3>Collate fields</h3>
+
+<p>Collate fields contain lists of file names with R source code,
+and the package has a separate API for them. In brief, you can
+use <code>$add_to_collate</code> to add one or more files to the main or
+other collate field. You can use <code>$del_from_collate</code> to remove
+it from there.
+</p>
+<p>The API:
+</p>
+<pre>  description$set_collate(files, which = c("main", "windows", "unix"))
+  description$get_collate(which = c("main", "windows", "unix"))
+  description$del_collate(which = c("all", "main", "windows", "unix"))
+  description$add_to_collate(files, which = c("default", "all", "main",
+    "windows", "unix"))
+  description$del_from_collate(files, which = c("all", "main",
+    "windows", "unix"))
+</pre>
+
+<dl>
+<dt>files:</dt><dd><p>The files to add or remove, in a character vector.</p>
+</dd>
+<dt>which:</dt><dd><p>Which collate field to manipulate. <code>"default"</code> for
+<code>$add_to_collate</code> means all existing collate fields, or the
+main one if none exist.</p>
+</dd>
+</dl>
+
+
+
+<h3>Authors</h3>
+
+<p>There is a specialized API for the <code>Authors@R</code> field,
+to add and remove authors, update their roles, change the maintainer,
+etc.
+</p>
+<p>The API:
+</p>
+<pre>  description$get_authors()
+  description$set_authors(authors)
+  description$get_author(role)
+  description$get_maintainer()
+  description$coerce_authors_at_r()
+</pre>
+
+<dl>
+<dt>authors:</dt><dd><p>A <code>person</code> object, a list of authors.</p>
+</dd>
+<dt>role:</dt><dd><p>The role to query. See <code>person</code> for details.</p>
+</dd>
+</dl>
+
+<p><code>$get_authors</code> returns a <code>person</code> object, the parsed
+authors. See <code><a href="../../utils/help/person.html">person</a></code> for details.
+</p>
+<p><code>$get_author</code> returns a <code>person</code> object, all authors with
+the specified role.
+</p>
+<p><code>$get_maintainer</code> returns the maintainer of the package. It works
+with <code>Authors@R</code> fields and with traditional <code>Maintainer</code>
+fields as well.
+</p>
+<p><code>$coerce_authors_at_r</code> converts an <code>Author</code> field to one with
+a <code>person</code> object. This coercion may be necessary for other
+functions such as <code>$get_authors</code>.
+</p>
+<pre>  description$add_author(given = NULL, family = NULL, email = NULL,
+    role = NULL, comment = NULL, orcid = NULL)
+  description$add_me(role = "ctb", comment = NULL, orcid = NULL)
+  description$add_author_gh(username, role = "ctb", comment = NULL, orcid = NULL)
+</pre>
+<p>Add a new author. The arguments correspond to the arguments of the
+<code><a href="../../utils/help/person.html">person</a></code> function. <code>add_me</code> is a convenience
+function, it adds the current user as an author, and it needs the
+<code>whoami</code> package to be installed. It'll add your ORCID ID
+if you provide it as argument or save it as <code>ORCID_ID</code> environment
+variable in .Renviron.
+The full name is parsed by <code>add_me</code> and <code>add_author_gh</code> using
+<code>as.person</code> and collapsing the given name and the family name
+in order to e.g. have the first and middle names together as given
+name. This approach might be limited to some full name structures.
+</p>
+<pre>  description$del_author(given = NULL, family = NULL, email = NULL,
+    role = NULL, comment = NULL, orcid = NULL)
+</pre>
+<p>Remove an author, or multiple authors. The author(s) to be removed
+can be specified via any field(s). All authors matching all
+specifications will be removed. E.g. if only <code>given = "Joe"</code>
+is supplied, then all authors whole given name matches <code>Joe</code> will
+be removed. The specifications can be (PCRE) regular expressions.
+</p>
+<pre>  description$add_role(role, given = NULL, family = NULL, email = NULL,
+    comment = NULL, orcid = NULL)
+    description$add_orcid(orcid, given = NULL, family = NULL, email = NULL,
+    comment = NULL, role = NULL)
+  description$del_role(role, given = NULL, family = NULL, email = NULL,
+     comment = NULL, orcid = NULL)
+  description$change_maintainer(given = NULL, family = NULL,
+    email = NULL, comment = NULL, orcid = NULL)
+</pre>
+<p><code>role</code> is the role to add or delete. The other arguments
+are used to select a subset of the authors, on which the operation
+is performed, similarly to <code>$del_author</code>.
+</p>
+
+
+<h3>URLs</h3>
+
+<p>We provide helper functions for manipulating URLs in the <code>URL</code>
+field:
+</p>
+<pre>  description$get_urls()
+  description$set_urls(urls)
+  description$add_urls(urls)
+  description$del_urls(pattern)
+  description$clear_urls()
+</pre>
+
+<dl>
+<dt>urls:</dt><dd><p>Character vector of URLs to set or add.</p>
+</dd>
+<dt>pattern:</dt><dd><p>Perl compatible regular expression to specify the
+URLs to be removed.</p>
+</dd>
+</dl>
+
+<p><code>$get_urls()</code> returns all urls in a character vector. If no URL
+fields are present, a zero length vector is returned.
+</p>
+<p><code>$set_urls()</code> sets the URL field to the URLs specified in the
+character vector argument.
+</p>
+<p><code>$add_urls()</code> appends the specified URLs to the URL field. It
+creates the field if it does not exists. Duplicate URLs are removed.
+</p>
+<p><code>$del_urls()</code> deletes the URLs that match the specified pattern.
+</p>
+<p><code>$clear_urls()</code> deletes all URLs.
+</p>
+
+
+<h3>Remotes</h3>
+
+<p><code>devtools</code>, <code>remotes</code> and some other packages support the
+non-standard <code>Remotes</code> field in <code>DESCRIPTION</code>. This field
+can be used to specify locations of dependent packages: GitHub or
+BitBucket repositories, generic git repositories, etc. Please see the
+&lsquo;Package remotes&rsquo; vignette in the <code>devtools</code> package.
+</p>
+<p><code>desc</code> has helper functions for manipulating the <code>Remotes</code>
+field:
+</p>
+<pre>  description$get_remotes()
+  description$get_remotes()
+  description$set_remotes(remotes)
+  description$add_remotes(remotes)
+  description$del_remotes(pattern)
+  description$clear_remotes()
+</pre>
+
+<dl>
+<dt>remotes:</dt><dd><p>Character vector of remote dependency locations to
+set or add.</p>
+</dd>
+<dt>pattern:</dt><dd><p>Perl compatible regular expression to specify the
+remote dependency locations to remove.</p>
+</dd>
+</dl>
+
+<p><code>$get_remotes()</code> returns all remotes in a character vector.
+If no URL fields are present, a zero length vector is returned.
+</p>
+<p><code>$set_remotes()</code> sets the URL field to the Remotes specified in the
+character vector argument.
+</p>
+<p><code>$add_remotes()</code> appends the specified remotes to the
+<code>Remotes</code> field. It creates the field if it does not exists.
+Duplicate remotes are removed.
+</p>
+<p><code>$del_remotes()</code> deletes the remotes that match the specified
+pattern.
+</p>
+<p><code>$clear_remotes()</code> deletes all remotes.
+</p>
+
+
+<h3>Built</h3>
+
+<p>The &lsquo;Built&rsquo; field is used in binary packages to store information
+about when and how a binary package was built.
+</p>
+<p><code>$get_built()</code> returns the built information as a list with fields
+&lsquo;R&rsquo;, &lsquo;Platform&rsquo;, &lsquo;Date&rsquo;, &lsquo;OStype&rsquo;. It throws an
+error if the package does not have a &lsquo;Built&rsquo; field.
+</p>
+
+
+<h3>Encodings</h3>
+
+<p>When creating a 'description' object, 'desc' observes the 'Encoding'
+field, if present, and uses the specified encoding to parse the file.
+Internally, it converts all fields to UTF-8.
+</p>
+<p>When writing a 'description' object to a file, 'desc' uses the
+'Encoding' field (if present), and converts all fields to the specified
+encoding.
+</p>
+<p>We suggest that whenever you need to use non-ASCII characters in your
+package, you use the UTF-8 encoding, for maximum portability.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Create a template
+desc &lt;- description$new("!new")
+desc
+
+## Read a file
+desc2 &lt;- description$new(file = system.file("DESCRIPTION",
+                           package = "desc"))
+desc2
+
+## Remove a field
+desc2$del("LazyData")
+
+## Add another one
+desc2$set(VignetteBuilder = "knitr")
+desc2$get("VignetteBuilder")
+desc2
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>desc</em> version 1.4.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

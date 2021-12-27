@@ -1,0 +1,280 @@
+---
+title: "How gargle gets tokens"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How gargle gets tokens}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette explains the purpose and usage of `token_fetch()` and the functions it subsequently calls. The goal of `token_fetch()` is to secure a token for use in downstream requests.
+  
+The target audience is someone who works directly with a Google API. These people roughly fall into two camps:
+
+  * The author of an R package that wraps a Google API.
+  * The useR who is writing a script or app, without using such a wrapper,
+    either because the wrapper does not exist or there's a reason to avoid the
+    dependency.
+
+`token_fetch()` is aimed at whoever is going to manage the returned token, e.g., incorporate it into downstream requests. It can be very nice for users if wrapper packages assume this responsibility, as opposed to requiring users to explicitly acquire and manage their tokens. We give a few design suggestions here and cover this in more depth in [How to use gargle for auth in a client package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html).
+
+```{r setup}
+library(gargle)
+```
+
+## `token_fetch()`
+
+`token_fetch()` is a rather magical function for getting a token. The goal is to make auth relatively painless for users, while allowing developers and power users to take control when and if they need to. Most users will presumably interact with `token_fetch()` only in an indirect way, mediated through an API wrapper package. That is not because the interface of `token_fetch()` is unfriendly -- it's very flexible! The objective of `token_fetch()` is to allow package developers to take responsibility for *managing* the user's token, without having to implement all the different ways of *obtaining* that token in the first place.
+
+The signature of `token_fetch()` is very simple and, therefore, not very informative:
+
+```{r, eval = FALSE}
+token_fetch(scopes, ...)
+```
+
+Under the hood, `token_fetch()` calls a sequence of much more specific credential functions, each wrapped in a `tryCatch()` and returning `NULL` if unsuccessful. The only formal argument these functions have in common is `scopes`, with the rest being passed via `...`.
+
+This gives a sense of the credential functions and reflects the order in which they are called:
+
+```{r}
+names(cred_funs_list())
+```
+
+It is possible to manipulate this registry of functions. The help for `cred_funs_list()` is a good place to learn more.
+
+From now on, however, we assume you're working with the default registry that ships with gargle.
+
+Note also that these credential functions are exported and can be called directly.
+
+## Get verbose output
+
+To see more information about what gargle is up to, set the option named "gargle_verbosity" to "debug". Read more in the docs for `gargle_verbosity()`.
+
+## `credentials_service_account()`
+
+The first function tried is `credentials_service_account()`. Here's how a call to `token_fetch()` with service account inputs plays out:
+
+```{r, eval = FALSE}
+token_fetch(scopes = <SCOPES>, path = "/path/to/your/service-account.json")
+
+# leads to this call:
+credentials_service_account(
+  scopes = <SCOPES>,
+  path = "/path/to/your/service-account.json"
+)
+```
+
+The `scopes` are often provided by the API wrapper function that is mediating the calls to `token_fetch()` and `credential_service_account()`. The `path` argument is presumably coming from the user. It is treated as a JSON representation of service account credentials, in any form that is acceptable to `jsonlite::fromJSON()`. In the above example, that is a file path, but it could also be a JSON string. If there is no named `path` argument or if it can't be parsed as a service account credential, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
+
+Here is some Google documentation about service accounts:
+
+* [Cloud Identity and Access Management > Understanding service accounts](https://cloud.google.com/iam/docs/understanding-service-accounts)
+
+For R users, a service account is a great option for credentials that will be used in a script or application running remotely or in an unattended fashion. In particular, this is a better approach than trying to move OAuth2 credentials from one machine to another. For example, a service account is the preferred method of auth when testing and documenting a package on a continuous integration service. 
+
+The JSON key file must be managed securely. In particular, it should not be kept in, e.g., a GitHub repository (unless it is encrypted). The encryption strategy used by gargle and other packages is described in the article [Managing tokens securely](https://gargle.r-lib.org/articles/articles/managing-tokens-securely.html).
+
+## `credentials_app_default()`
+
+The second function tried is `credentials_app_default()`. Here's how a call to `token_fetch()` might work:
+
+```{r, eval = FALSE}
+token_fetch(scopes = <SCOPES>)
+
+# credentials_service_account() fails because no `path`,
+# which leads to this call:
+credentials_app_default(
+  scopes = <SCOPES>
+)
+```
+
+`credentials_app_default()` loads credentials from a file identified via a search strategy known as [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/production#providing_credentials_to_your_application). The credentials themselves are conventional service account or user credentials that happen to be stored in a pre-ordained location and format.
+
+The hope is to make auth "just work" for someone working on Google-provided infrastructure or who has used Google tooling to get started. A sequence of paths is consulted, which we describe here, with some abuse of notation. ALL_CAPS represents the value of an environment variable.
+
+```{r, eval = FALSE}
+${GOOGLE_APPLICATION_CREDENTIALS}
+${CLOUDSDK_CONFIG}/application_default_credentials.json
+
+# on Windows:
+%APPDATA%\gcloud\application_default_credentials.json
+%SystemDrive%\gcloud\application_default_credentials.json
+C:\gcloud\application_default_credentials.json
+
+# on not-Windows:
+~/.config/gcloud/application_default_credentials.json
+```
+
+If the above search successfully identifies a JSON file, it is parsed and
+ingested either as a service account token or an OAuth2 user credential. In the case of an OAuth2 credential, the requested `scopes` must also meet certain criteria. Note that this will NOT work for OAuth2 credentials initiated by gargle, which are stored on disk in `.rds` files. The storage of OAuth2 user credentials as JSON is unique to certain Google tools -- possibly just the [`gcloud` CLI](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login) -- and should probably be regarded as deprecated.  It is recommended to use ADC with a service account. If this quest is unsuccessful, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
+
+The main takeaway lesson:
+
+  * You can make auth "just work" by storing a service account token JSON key file at one of the filepaths listed above. It will be automagically discovered when `token_fetch()` is called with only the `scopes` argument specified.
+  
+Again, remember that the JSON key file must be managed securely and should NOT live in a directory that syncs to the cloud.
+
+## `credentials_gce()`
+
+The third function tried is `credentials_gce()`. Here's how a call to `token_fetch()` might work:
+
+```{r, eval = FALSE}
+token_fetch(scopes = <SCOPES>)
+# or perhaps
+token_fetch(scopes = <SCOPES>, service_account = <SERVICE_ACCOUNT>)
+
+# credentials_service_account() fails because no `path`,
+# credentials_app_default() fails because no ADC found,
+# which leads to one of these calls:
+credentials_gce(
+  scopes = <SCOPES>,
+  service_account = "default"
+)
+# or
+credentials_gce(
+  scopes = <SCOPES>,
+  service_account = <SERVICE_ACCOUNT>
+)
+```
+
+`credentials_gce()` retrieves service account credentials from a metadata service that is specific to virtual machine instances running on Google Cloud Engine (GCE). Basically, if you have to ask what this is about, this is not the auth method for you. Let us move on.
+
+## `credentials_byo_oauth2()`
+  
+The fourth function tried is `credentials_byo_oauth2()`. Here's how a call to `token_fetch()` might work:
+
+```{r, eval = FALSE}
+token_fetch(token = <TOKEN2.0>)
+
+# credentials_service_account() fails because no `path`,
+# credentials_app_default() fails because no ADC found,
+# credentials_gce() fails because not on GCE,
+# which leads to this call:
+credentials_byo_oauth2(
+  token = <TOKEN2.0>
+)
+```
+
+`credentials_byo_oauth2()` provides a back door for a "bring your own token" workflow. This function accounts for the scenario where an OAuth token has been obtained through external means and it's convenient to be able to put it into force.
+
+`credentials_byo_oauth2()` checks that `token` is of class `httr::Token2.0` and that it appears to be associated with Google. A `token` of class `request` is also acceptable, in which case the `auth_token` component is extracted and treated as the input. This is how a `Token2.0` object would present, if processed with `httr::config()`, as functions like `googledrive::drive_token()` and `bigrquery::bq_token()` do.
+
+If `token` is not provided or if it doesn't satisfy these requirements, we fail and `token_fetch()`'s execution moves on to the next function in the registry.
+
+## `credentials_user_oauth2()`
+  
+The fifth and final function tried is `credentials_user_oauth2()`. Here's how a call to `token_fetch()` might work:
+
+```{r, eval = FALSE}
+token_fetch(scopes = <SCOPES>)
+
+# credentials_service_account() fails because no `path`,
+# credentials_app_default() fails because no ADC found,
+# credentials_gce() fails because not on GCE,
+# credentials_byo_oauth2() fails because no `token`,
+# which leads to this call:
+credentials_user_oauth2(
+  scopes = <SCOPES>,
+  app = <OAUTH_APP>,
+  package = "<PACKAGE>"
+)
+```
+
+`credentials_user_oauth2()` is where the vast majority of users will end up. This is the function that choreographs the traditional "OAuth dance" in the browser. User credentials are cached locally, at the user level, by default. Therefore, after first use, there are scenarios in which gargle can determine unequivocally that it already has a suitable token on hand and can load (and possibly refresh) it, without additional user intervention.
+
+The `scopes`, `app`, and `package` are generally provided by the API wrapper function that is mediating the calls to `token_fetch()`. Do not "borrow" an OAuth app (OAuth client ID and secret) from gargle or any other package; always use credentials associated with your package or provided by your user. Per the Google User Data Policy <https://developers.google.com/terms/api-services-user-data-policy>, your application must accurately represent itself when authenticating to Google API services.
+
+The wrapper package would presumably also declare itself as the package requesting a token (this is used in messages). So here's how a call to `token_fetch()` and `credentials_user_oauth2()` might look when initiated from `THINGY_auth()`, a function in the fictional thingyr wrapper package:
+
+```{r, eval = FALSE}
+# user initiates auth or does something that triggers it indirectly
+THINGY_auth()
+
+# which then calls
+gargle::token_fetch(
+  scopes  = <SCOPES_NEEDED_FOR_THE_THINGY_API>,
+  app     = thingy_app(),
+  package = "thingyr"
+)
+
+# which leads to this call:
+credentials_user_oauth2(
+  scopes  = <SCOPES_NEEDED_FOR_THE_THINGY_API>,
+  app     = thingy_app(),
+  package = "thingyr"
+)
+```
+
+See [How to use gargle for auth in a client package](https://gargle.r-lib.org/articles/gargle-auth-in-client-package.html) for design ideas for a function like `THINGY_auth()`.
+
+What happens tomorrow or next week? Do we make this user go through the browser dance again? How do we get to that happy place where we don't bug them constantly about auth?
+
+First, we define "suitable", i.e. what it means to find a matching token in the cache. `credentials_user_oauth2()` is a thin wrapper around `gargle2.0_token()` which is the constructor for the `gargle::Gargle2.0` class used to hold an OAuth2 token. And that call might look something like this (simplified for communication purposes):
+
+```{r, eval = FALSE}
+gargle2.0_token(
+  email   = gargle_oauth_email(),
+  app     = thingy_app(),
+  package = "thingyr",
+  scope   = <SCOPES_NEEDED_FOR_THE_THINGY_API>,
+  cache   = gargle_oauth_cache()
+)
+```
+
+gargle looks in the cache specified by `gargle_oauth_cache()` for a token that has these scopes, this app, and the Google identity specified by `email`. By default `email` is `NA`, so we might find one or more tokens that have the necessary scopes and app. In that case, gargle reveals the `email` associated with the matching token(s) and asks the user for explicit instructions about how to proceed. That looks something like this:
+
+```{r, eval = FALSE}
+The thingyr package is requesting access to your Google account. Select a
+pre-authorised account or enter '0' to obtain a new token. Press Esc/Ctrl + C to
+abort.
+
+1: janedoe_personal@gmail.com
+2: janedoe@example.com
+3: janedoe_work@gmail.com
+
+Selection: 3
+```
+
+If none of the tokens has the right scopes and app (or if the user declines to use a pre-existing token), we head to the browser to initiate OAuth2 flow *de novo*.
+
+A user can reduce the need for interaction by passing the target `email` to `thingy_auth()`:
+
+```{r, eval = FALSE}
+thingy_auth(email = "janedoe_work@gmail.com")
+```
+
+or by specifying same in the `gargle_oauth_email` option. A value of `email = TRUE`, passed directly or via the option, is an alternative strategy: `TRUE` means that gargle is allowed to use a matching token whenever there is exactly one match.
+
+The elevated status of `email` for `gargle::Gargle2.0` tokens is motivated by the fact that many of us have multiple Google identities and need them to be very prominent when working with Google APIs. This is one of the main motivations for `gargle::Gargle2.0`, which extends `httr::Token2.0`. The `gargle::Gargle2.0` class also defaults to a user-level token cache, as opposed to project-level. An overview of the current OAuth cache is available via `gargle_oauth_cache()` and the output looks something like this:
+
+```{r, eval = FALSE}
+gargle_oauth_sitrep()
+#' gargle OAuth cache path:
+#' /Users/janedoe/.R/gargle/gargle-oauth
+#' 
+#' 14 tokens found
+#' 
+#' email                         app         scope                          hash...   
+#' ----------------------------- ----------- ------------------------------ ----------
+#' abcdefghijklm@gmail.com       thingy      ...bigquery, ...cloud-platform 128f9cc...
+#' buzzy@example.org             gargle-demo                                15acf95...
+#' stella@example.org            gargle-demo ...drive                       4281945...
+#' abcdefghijklm@gmail.com       gargle-demo ...drive                       48e7e76...
+#' abcdefghijklm@gmail.com       tidyverse                                  69a7353...
+#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets.readonly       86a70b9...
+#' abcdefghijklm@gmail.com       tidyverse   ...drive                       d9443db...
+#' nopqr@HIJKLMN.com             tidyverse   ...drive                       d9443db...
+#' nopqr@ABCDEFG.com             tidyverse   ...drive                       d9443db...
+#' stuvwzyzabcd@gmail.com        tidyverse   ...drive                       d9443db...
+#' efghijklmnopqrtsuvw@gmail.com tidyverse   ...drive                       d9443db...
+#' abcdefghijklm@gmail.com       tidyverse   ...drive.readonly              ecd11fa...
+#' abcdefghijklm@gmail.com       tidyverse   ...bigquery, ...cloud-platform ece63f4...
+#' nopqr@ABCDEFG.com             tidyverse   ...spreadsheets                f178dd8...
+```

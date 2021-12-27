@@ -1,0 +1,93 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string fcnname="binCounts_subset"%>
+<%@string subname="binCounts"%>
+<%@meta title="${subname}() benchmarks on subsetted computation"%>
+<%@meta author="Dongcan Jiang"%>
+<%@meta date="2015-06-04"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=subname%>() on subsetted computation.
+
+
+<% for (mode in c("integer", "double")) { %>
+
+## Data type "<%=mode%>"
+
+### Non-sorted simulated data
+```r
+<%=withCapture({
+set.seed(0xBEEF)
+nx <- 100e3 # Number of data points
+xmax <- 0.01*nx
+x <- runif(nx, min = 0, max = xmax)
+storage.mode(x) <- mode
+str(x)
+
+# Uniformely distributed bins
+nb <- 10e3 # Number of bins
+bx <- seq(from = 0, to = xmax, length.out = nb+1L)
+bx <- c(-1, bx, xmax+1)
+
+# indices for subsetting
+idxs <- sample.int(length(x), size = length(x)*0.7)
+})%>
+```
+
+### Results
+
+<% benchmark <- function() { %>
+<% dataLabel <- if (is.unsorted(x)) "unsorted" else "sorted" %>
+<% mprintf("%s: %s\n", mode, dataLabel) %>
+```r
+<%=withCapture({
+x_S <- x[idxs]
+gc()
+
+stats <- microbenchmark(
+ "binCounts_x_S"      = binCounts(x_S, bx = bx),
+ "binCounts(x, idxs)"  = binCounts(x, idxs = idxs, bx = bx),
+ "binCounts(x[idxs])" = binCounts(x[idxs], bx = bx),
+ unit = "ms"
+)
+})%>
+```
+
+<% benchmarkResults(stats, tags=c(mode, dataLabel)) %>
+
+<%
+# Sanity checks
+n1 <- binCounts(x, idxs = idxs, bx = bx)
+n1r <- rev(binCounts(-x, idxs = idxs, bx = rev(-bx), right = TRUE))
+stopifnot(identical(n1r, n1))
+%>
+<% } # benchmark() %>
+
+<% benchmark() %>
+
+
+### Sorted simulated data
+```r
+<%=withCapture({
+  x <- sort(x)
+  idxs <- sort(idxs)
+})%>
+```
+<% benchmark() %>
+
+
+<% } # for (mode ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-06-04
+o Created.
+---------------------------------------------------------------------------%>

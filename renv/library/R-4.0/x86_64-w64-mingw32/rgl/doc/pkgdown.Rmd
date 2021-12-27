@@ -1,0 +1,140 @@
+---
+title: "Using RGL in pkgdown web sites"
+author: "Duncan Murdoch"
+output:
+  rmarkdown::html_vignette:
+    fig_height: 5
+    fig_width: 5
+    toc: yes
+  pdf_document:
+    fig_height: 5
+    fig_width: 5
+    toc: yes
+  html_document:
+    default
+vignette: >
+  %\VignetteIndexEntry{Using RGL in pkgdown web sites}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r setup, include=FALSE}
+if (!requireNamespace("rmarkdown", quietly = TRUE) ||
+    !rmarkdown::pandoc_available("1.14")) {
+  warning(call. = FALSE, "These vignettes assume rmarkdown and pandoc version 1.14.  These were not found. Older versions will not work.")
+  knitr::knit_exit()
+}
+knitr::opts_chunk$set(echo = TRUE)
+library(rgl)
+options(rgl.useNULL = TRUE)
+setupKnitr(autoprint = TRUE)
+```
+
+
+## What is the problem?
+
+[pkgdown](https://pkgdown.r-lib.org/) is an R package that
+makes it easy to build a web site for your package.  However, the current version 1.6.1 on CRAN doesn't work so well for
+packages whose examples use RGL or other packages like [leaflet](http://rstudio.github.io/leaflet/) that use
+[htmlwidgets](http://www.htmlwidgets.org).  This document
+describes current progress in supporting both of these.
+
+The main problem for [pkgdown](https://pkgdown.r-lib.org/) support
+is that RGL and other [htmlwidgets](http://www.htmlwidgets.org)
+users require multiple Javascript libraries to be linked to
+each web page.  `pkgdown` 1.6.1 can't do this, but the 
+current development version on Github
+adds support for additional dependent libraries.  This 
+also requires changes to [downlit](https://downlit.r-lib.org/), and
+for other widgets, [changes to htmlwidgets](https://github.com/ramnathv/htmlwidgets/pull/404).
+
+## Installing the changes
+
+Installing the changes is fairly easy.  Make sure you have the
+[remotes](https://remotes.r-lib.org/) package installed, then 
+run
+
+```{r eval=FALSE}
+remotes::install_github(c("r-lib/downlit",
+                          "r-lib/pkgdown",
+                          "dmurdoch/rgl",
+                          "dmurdoch/htmlwidgets@rglpatch"))
+```
+
+With these development version packages installed, you should 
+see RGL or `leaflet` output appear automatically in examples.
+The RGL output is set up to mimic what would happen in a
+`knitr` document that uses 
+```{r eval=FALSE}
+setupKnitr(autoprint = TRUE)
+```
+i.e. the output RGL commands will automatically be 
+included in the display.  Low-level changes will be collected
+into a single display:
+```{r}
+# Show regression plane with z as dependent variable
+library(rgl)
+open3d()
+x <- rnorm(100)
+y <- rnorm(100)
+z <- 0.2*x - 0.3*y + rnorm(100, sd = 0.3)
+fit <- lm(z ~ x + y)
+
+plot3d(x, y, z, type = "s", col = "red", size = 1)
+
+# No plot here, because of the planes3d() call below
+
+coefs <- coef(fit)
+a <- coefs["x"]
+b <- coefs["y"]
+c <- -1
+d <- coefs["(Intercept)"]
+planes3d(a, b, c, d, alpha = 0.5)
+```
+
+## Specifying the size of figures
+
+By default, pkgdown generates standard plots which are wider
+than they are high (according to the golden ratio).  Often
+RGL plots look better with equal width and height, since
+the contents may be rotated by the user.
+
+To specify the size of plots in pkgdown, you use the `figures`
+entry in `_pkgdown.yml`.  The defaults are similar to
+```
+figures:
+  dev: ragg::agg_png
+  dpi: 96
+  dev.args: []
+  fig.ext: png
+  fig.width: 7
+  fig.height: ~
+  fig.retina: 2
+  fig.asp: 1.618
+  bg: NA
+  other.parameters: []
+```
+
+By default RGL uses these parameters as well, but allows you 
+to override any of `fig.width`, `fig.height` and `fig.asp` by
+specifying an `rgl` entry in `other.parameters`.  For example:
+```
+figures:
+  fig.width: 5
+  other.parameters:
+    rgl:
+      fig.asp: 1
+```
+This will make all plots have a width of 5 inches
+and will make RGL plots square.
+
+## Is this safe to use?
+
+These are development versions of the packages, so they may
+contain bugs, either in my changes or in other unreleased 
+changes.  I don't recommend you use them in regular production
+code.  To re-install released versions of the packages, run
+```{r eval=FALSE}
+install.packages(c("downlit", "pkgdown", "htmlwidgets", "rgl"))
+```
+
+If you do use them and notice any bugs, please [report them](https://github.com/dmurdoch/rgl/issues)!

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Bayes Factor formatting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for format_bf {insight}"><tr><td>format_bf {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Bayes Factor formatting</h2>
+
+<h3>Description</h3>
+
+<p>Bayes Factor formatting
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+format_bf(
+  bf,
+  stars = FALSE,
+  stars_only = FALSE,
+  name = "BF",
+  protect_ratio = FALSE,
+  na_reference = NA,
+  exact = FALSE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>bf</code></td>
+<td>
+<p>Bayes Factor.</p>
+</td></tr>
+<tr valign="top"><td><code>stars</code></td>
+<td>
+<p>Add significance stars (e.g., p &lt; .001***).</p>
+</td></tr>
+<tr valign="top"><td><code>stars_only</code></td>
+<td>
+<p>Return only significance stars.</p>
+</td></tr>
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p>Name prefixing the text. Can be <code>NULL</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>protect_ratio</code></td>
+<td>
+<p>Should values smaller than 1 be represented as ratios?</p>
+</td></tr>
+<tr valign="top"><td><code>na_reference</code></td>
+<td>
+<p>How to format missing values (<code>NA</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>exact</code></td>
+<td>
+<p>Should very large or very small values be reported with a
+scientific format (e.g., 4.24e5), or as truncated values (as &quot;&gt; 1000&quot; and
+&quot;&lt; 1/1000&quot;).</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A formatted string.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+format_bf(bfs &lt;- c(0.000045, 0.033, NA, 1557, 3.54))
+format_bf(bfs, exact = TRUE, name = NULL)
+format_bf(bfs, stars = TRUE)
+format_bf(bfs, protect_ratio = TRUE)
+format_bf(bfs, protect_ratio = TRUE, exact = TRUE)
+format_bf(bfs, na_reference = 1)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

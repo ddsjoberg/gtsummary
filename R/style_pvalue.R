@@ -9,7 +9,7 @@
 #' @export
 #' @return A character vector of styled p-values
 #' @family style tools
-#' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
+#' @seealso See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for examples
 #' @author Daniel D. Sjoberg
 #' @examples
 #' pvals <- c(
@@ -107,5 +107,6 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
     )
   }
 
+  attributes(p_fmt) <- attributes(x)
   return(p_fmt)
 }

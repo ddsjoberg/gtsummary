@@ -1,0 +1,22 @@
+// Restore .btn-default et al.
+// We do this in _declarations.scss instead of up in _variables.scss because
+// it's important that the `default` color come first in the $theme-colors map,
+// so .btn-default comes before .btn-primary in the generated CSS and thus has
+// lower priority.
+
+// I don't like the default secondary color, as it's too big a departure from
+// the bootstrap 3 coloring (dark instead of light grey). But secondary is
+// semantically the closes match to default. So if secondary hasn't changed, use
+// a lighter grey for default; but if a custom secondary is in use, then use
+// that for default. (Another option would be to simply change the secondary
+// color.)
+@if $secondary == #6c757d {
+  $theme-colors: map-merge(("default": #dee2e6), $theme-colors) !global;
+} @else {
+  $theme-colors: map-merge(("default": $secondary), $theme-colors) !global;
+}
+
+// Cards are white by default, but we want a smarter default for .well
+// that it appears gray by default
+$well-bg: $card-cap-bg !default;
+$well-color: $body-color !default;

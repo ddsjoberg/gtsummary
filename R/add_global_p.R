@@ -17,7 +17,9 @@
 #' @param ... Additional arguments to be passed to `car::Anova`
 #' @author Daniel D. Sjoberg
 #' @export
-#' @examplesIf assert_package("car", boolean = TRUE)
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
+#'
+#' @examplesIf broom.helpers::.assert_package("car", boolean = TRUE)
 #' # Example 1 ----------------------------------
 #' tbl_lm_global_ex1 <-
 #'   lm(marker ~ age + grade, trial) %>%

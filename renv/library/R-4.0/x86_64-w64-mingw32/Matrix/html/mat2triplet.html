@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Map Matrix to its Triplet Representation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for mat2triplet {Matrix}"><tr><td>mat2triplet {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Map Matrix to its Triplet Representation</h2>
+
+<h3>Description</h3>
+
+<p>From an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object coercible to <code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code>,
+typically a (sparse) matrix, produce its triplet representation which may
+collapse to a &ldquo;Duplet&rdquo; in the case of binary aka pattern, such as
+<code>"<a href="nMatrix-class.html">nMatrix</a>"</code> objects.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+mat2triplet(x, uniqT = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>any <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object for which <code>as(x, "<a href="TsparseMatrix-class.html">TsparseMatrix</a>")</code>
+works; typically a <code><a href="../../base/html/matrix.html">matrix</a></code> of one of the <span class="pkg">Matrix</span>
+package matrices.</p>
+</td></tr>
+<tr valign="top"><td><code>uniqT</code></td>
+<td>
+<p><code><a href="../../base/html/logical.html">logical</a></code> indicating if the triplet
+representation should be &lsquo;unique&rsquo; in the sense of
+<code><a href="uniqTsparse.html">uniqTsparse</a>()</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A <code><a href="../../base/html/list.html">list</a></code>, typically with three components,
+</p>
+<table summary="R valueblock">
+<tr valign="top"><td><code>i</code></td>
+<td>
+<p>vector of   row   indices for all non-zero entries of <code>x</code></p>
+</td></tr>
+<tr valign="top"><td><code>i</code></td>
+<td>
+<p>vector of columns indices for all non-zero entries of <code>x</code></p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>vector of all non-zero entries of <code>x</code>; exists <b>only</b>
+when <code>as(x, "TsparseMatrix")</code> is <b>not</b> a
+<code>"<a href="nsparseMatrix-classes.html">nsparseMatrix</a>"</code>.</p>
+</td></tr>
+</table>
+<p>Note that the <code><a href="../../base/html/order.html">order</a></code> of the entries is determined by the
+coercion to <code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code> and hence typically
+with increasing <code>j</code> (and increasing <code>i</code> within ties of <code>j</code>).
+</p>
+
+
+<h3>Note</h3>
+
+<p>The <code>mat2triplet()</code> utility was created to be a more efficient and
+more predictable substitute for <code><a href="../../base/html/summary.html">summary</a>(&lt;sparseMatrix&gt;)</code>.
+UseRs have wrongly expected the latter to return a data frame with
+columns <code>i</code> and <code>j</code> which however is wrong for a
+<code>"<a href="diagonalMatrix-class.html">diagonalMatrix</a>"</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The <code>summary()</code> method for <code>"sparseMatrix"</code>,
+<code><a href="sparseMatrix-class.html">summary,sparseMatrix-method</a></code>.
+</p>
+<p><code>mat2triplet()</code> is conceptually the <em>inverse</em> function of
+<code><a href="spMatrix.html">spMatrix</a></code> and (one case of) <code><a href="sparseMatrix.html">sparseMatrix</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if(FALSE) ## The function is defined (don't redefine here!), simply as
+mat2triplet &lt;- function(x, uniqT = FALSE) {
+    T &lt;- as(x, "TsparseMatrix")
+    if(uniqT &amp;&amp; anyDuplicatedT(T)) T &lt;- .uniqTsparse(T)
+    if(is(T, "nsparseMatrix"))
+         list(i = T@i + 1L, j = T@j + 1L)
+    else list(i = T@i + 1L, j = T@j + 1L, x = T@x)
+}
+
+i &lt;- c(1,3:8); j &lt;- c(2,9,6:10); x &lt;- 7 * (1:7)
+(Ax &lt;- sparseMatrix(i, j, x = x)) ##  8 x 10 "dgCMatrix"
+str(trA &lt;- mat2triplet(Ax))
+stopifnot(i == sort(trA$i),  sort(j) == trA$j,  x == sort(trA$x))
+
+D &lt;- Diagonal(x=4:2)
+summary(D)
+str(mat2triplet(D))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

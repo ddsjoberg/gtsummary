@@ -40,7 +40,7 @@ display for each variable.  The default is
 See below for details.}
 
 \item{digits}{List of formulas specifying the number of decimal
-places to round continuous summary statistics. If not specified,
+places to round summary statistics. If not specified,
 \code{tbl_summary} guesses an appropriate number of decimals to round statistics.
 When multiple statistics are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the
@@ -170,7 +170,7 @@ argument, e.g. \code{value = list(varname ~ "level to show")}
 
 \section{select helpers}{
 
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
 from the \\{tidyselect\\} package and \\{gtsummary\\} package are available to
 modify default behavior for groups of variables.
 For example, by default continuous variables are reported with the median
@@ -189,7 +189,7 @@ Read more on the \link{syntax} used through the package.
 }
 
 \examples{
-\dontshow{if (assert_package("survey", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("survey", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # A simple weighted dataset
 tbl_svysummary_ex1 <-
   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%
@@ -204,6 +204,8 @@ tbl_svysummary_ex2 <-
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_svysummary tools: 
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},

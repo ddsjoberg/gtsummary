@@ -1,0 +1,81 @@
+Package: mice
+Type: Package
+Version: 3.13.0
+Title: Multivariate Imputation by Chained Equations
+Date: 2021-01-26
+Authors@R: c(person("Stef", "van Buuren", role = c("aut","cre"),
+    email = "stef.vanbuuren@tno.nl"),
+    person("Karin", "Groothuis-Oudshoorn", role = "aut",
+    email = "c.g.m.oudshoorn@utwente.nl"),
+    person("Gerko","Vink", role = "ctb",
+    email = "g.vink@uu.nl"),
+    person("Rianne","Schouten", role = "ctb",
+    email = "R.M.Schouten@uu.nl"),
+    person("Alexander", "Robitzsch", role = "ctb",
+    email = "robitzsch@ipn.uni-kiel.de"),
+    person("Patrick", "Rockenschaub", role = "ctb",
+    email = "rockenschaub.patrick@gmail.com"),
+    person("Lisa","Doove", role = "ctb",
+    email = "lisa.doove@ppw.kuleuven.be"),
+    person("Shahab","Jolani", role = "ctb",
+    email = "s.jolani@maastrichtuniversity.nl"),
+    person("Margarita","Moreno-Betancur", role="ctb",
+    email = "margarita.moreno@mcri.edu.au"),
+    person("Ian", "White", role="ctb",
+    email = "ian.white@ucl.ac.uk"),
+    person("Philipp","Gaffert", role = "ctb",
+    email = "philipp.gaffert@gfk.com"),
+    person("Florian","Meinfelder", role = "ctb",
+    email = "florian.meinfelder@uni-bamberg.de"),
+    person("Bernie","Gray", role = "ctb",
+    email = "bfgray3@gmail.com"),
+    person("Vincent", "Arel-Bundock", role = "ctb",
+    email = "vincent.arel-bundock@umontreal.ca"))
+Maintainer: Stef van Buuren <stef.vanbuuren@tno.nl>
+Depends: R (>= 2.10.0)
+Imports: broom, dplyr, generics, graphics, lattice, methods, Rcpp,
+        rlang, stats, tidyr, utils
+Suggests: broom.mixed, haven, knitr, lme4, MASS, metafor, mitml,
+        miceadds, nnet, pan, randomForest, rmarkdown, rpart, survival,
+        testthat, lmtest
+Description: Multiple imputation using Fully Conditional Specification (FCS)
+    implemented by the MICE algorithm as described in Van Buuren and
+    Groothuis-Oudshoorn (2011) <doi:10.18637/jss.v045.i03>. Each variable has
+    its own imputation model. Built-in imputation models are provided for
+    continuous data (predictive mean matching, normal), binary data (logistic
+    regression), unordered categorical data (polytomous logistic regression)
+    and ordered categorical data (proportional odds). MICE can also impute
+    continuous two-level data (normal model, pan, second-level variables).
+    Passive imputation can be used to maintain consistency between variables.
+    Various diagnostic plots are available to inspect the quality of the
+    imputations.
+Encoding: UTF-8
+License: GPL-2 | GPL-3
+LazyLoad: yes
+LazyData: yes
+URL: https://github.com/amices/mice, https://amices.org/mice/,
+        https://stefvanbuuren.name/fimd/
+BugReports: https://github.com/amices/mice/issues
+RoxygenNote: 7.1.1
+LinkingTo: cpp11, Rcpp
+SystemRequirements: C++11
+NeedsCompilation: yes
+Packaged: 2021-01-27 09:52:17 UTC; buurensv
+Author: Stef van Buuren [aut, cre],
+  Karin Groothuis-Oudshoorn [aut],
+  Gerko Vink [ctb],
+  Rianne Schouten [ctb],
+  Alexander Robitzsch [ctb],
+  Patrick Rockenschaub [ctb],
+  Lisa Doove [ctb],
+  Shahab Jolani [ctb],
+  Margarita Moreno-Betancur [ctb],
+  Ian White [ctb],
+  Philipp Gaffert [ctb],
+  Florian Meinfelder [ctb],
+  Bernie Gray [ctb],
+  Vincent Arel-Bundock [ctb]
+Repository: CRAN
+Date/Publication: 2021-01-27 10:40:12 UTC
+Built: R 4.1.0; x86_64-w64-mingw32; 2021-06-12 19:30:12 UTC; windows
+Archs: i386, x64

@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Checks if model is a null-model (intercept-only)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for is_nullmodel {insight}"><tr><td>is_nullmodel {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Checks if model is a null-model (intercept-only)</h2>
+
+<h3>Description</h3>
+
+<p>Checks if model is a null-model (intercept-only), i.e. if
+the conditional part of the model has no predictors.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+is_nullmodel(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A model object.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code>TRUE</code> if <code>x</code> is a null-model, <code>FALSE</code> otherwise.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+model &lt;- lm(mpg ~ 1, data = mtcars)
+is_nullmodel(model)
+
+model &lt;- lm(mpg ~ gear, data = mtcars)
+is_nullmodel(model)
+
+if (require("lme4")) {
+  model &lt;- lmer(Reaction ~ 1 + (Days | Subject), data = sleepstudy)
+  is_nullmodel(model)
+
+  model &lt;- lmer(Reaction ~ Days + (Days | Subject), data = sleepstudy)
+  is_nullmodel(model)
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

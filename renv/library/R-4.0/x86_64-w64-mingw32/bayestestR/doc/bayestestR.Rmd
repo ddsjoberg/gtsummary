@@ -1,0 +1,221 @@
+---
+title: "Get Started with Bayesian Analysis"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, bayesian, posterior, test]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Get Started with Bayesian Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+csl: apa.csl
+---
+
+This vignette can be referred to by citing the package:
+
+- Makowski, D., Ben-Shachar, M. S., \& Lüdecke, D. (2019). *bayestestR: Describing Effects and their Uncertainty, Existence and Significance within the Bayesian Framework*. Journal of Open Source Software, 4(40), 1541. https://doi.org/10.21105/joss.01541
+
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+
+knitr::opts_chunk$set(comment = ">")
+options(knitr.kable.NA = "")
+options(digits = 2)
+
+if (!requireNamespace("rstanarm", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+} else {
+  library(rstanarm)
+  library(bayestestR)
+}
+```
+
+
+## Why use the Bayesian Framework?
+
+The Bayesian framework for statistics is quickly gaining in popularity among scientists, associated with the general shift towards **open and honest science**. Reasons to prefer this approach are:
+
+- **reliability** [@etz2016bayesian]
+- **accuracy** (in noisy data and small samples) [@kruschke2012time]
+- the possibility of introducing **prior knowledge** into the analysis [@andrews2013prior; @kruschke2012time]
+- critically, **intuitive nature of results** and their **straightforward interpretation** [@kruschke2010believe; @wagenmakers2018bayesian]
+
+In general, the frequentist approach has been associated with the focus on the
+null hypothesis testing, and the misuse of *p*-values has been shown to
+critically contribute to the reproducibility crisis in social and psychological
+sciences [@chambers2014instead; @szucs2016empirical]. There is an emerging
+consensus that the generalization of the Bayesian approach is *one* way of
+overcoming these issues [@benjamin2018redefine; @etz2016bayesian].
+
+Once we agree that the Bayesian framework is the right way to go, you might
+wonder *what* exactly is this framework.
+
+**What's all the fuss about?**
+
+## What is the Bayesian Framework?
+
+Adopting the Bayesian framework is more of a shift in the paradigm than a change
+in the methodology. Indeed, all the common statistical procedures (*t*-tests,
+correlations, ANOVAs, regressions, etc.) can be achieved using the Bayesian
+framework. The key difference is that in the **frequentist framework** (the
+"classical" approach to statistics, with *p* and *t* values, as well as some
+weird *degrees of freedom*), **the effects are fixed** (but unknown) and **data
+are random**. In other words, it assumes that the unknown parameter has a
+**unique** value that we are trying to estimate/guess using our sample data. On
+the other hand, in the **Bayesian framework**, instead of estimating the "true
+effect", the probability of different effects *given the observed data* is
+computed, resulting in a **distribution** of possible values for the parameters,
+called the **posterior distribution**.
+
+The uncertainty in Bayesian inference can be summarized, for instance, by the **median** of the distribution, as well as a range of values of the posterior distribution that includes the 95\% most probable values (the 95\% **credible interval**). *Cum grano salis*, these are considered the counterparts to the point-estimate and confidence interval in a frequentist framework. To illustrate the difference of interpretation, the Bayesian framework allows to say *"given the observed data, the effect has 95\% probability of falling within this range"*, while the frequentist (less intuitive) alternative would be *"when repeatedly computing confidence intervals from data of this sort, there is a 95\% probability that the effect falls within a given range"*. In essence, the Bayesian sampling algorithms (such as MCMC sampling) return a probability distribution (*the posterior*) of an effect that is compatible with the observed data. Thus, an effect can be described by [characterizing its posterior distribution](https://easystats.github.io/bayestestR/articles/guidelines.html) in relation to its centrality (point-estimates), uncertainty, as well as its existence and significance
+
+In other words, putting the maths behind it aside for a moment, we can say that:
+
+- The frequentist approach tries to estimate the **real effect**. For instance,
+the "real" value of the correlation between *x* and *y*. Hence, the frequentist
+models return a **point-estimate** (i.e., a **single** value and not a
+distribution) of the "real" correlation (e.g., $r = 0.42$) estimated under a
+number of obscure assumptions (at a minimum, considering that the data is
+sampled at random from a "parent", usually normal distribution).
+
+- **The Bayesian framework assumes no such thing**. The data are what they are.
+Based on the observed data (and a **prior** belief about the result), the
+Bayesian sampling algorithm (**MCMC** sampling is one example) returns a
+probability distribution (called **the posterior**) of the effect that is
+compatible with the observed data. For the correlation between *x* and *y*, it
+will return a **distribution** that says, for example, "the most probable effect
+is 0.42, but this data is also compatible with correlations of 0.12 and 0.74
+with certain probabilities".
+
+- To characterize statistical significance of our effects, we do not need
+*p*-values, or any other such indices. We simply *describe* the posterior
+distribution of the effect. For example, we can report the median, the [89% Credible Interval](https://easystats.github.io/bayestestR/articles/credible_interval.html)
+or [other indices](https://easystats.github.io/bayestestR/articles/guidelines.html).
+
+```{r echo=FALSE, fig.cap="Accurate depiction of a regular Bayesian user estimating a credible interval.", fig.align='center', out.width="50%"}
+knitr::include_graphics("https://github.com/easystats/easystats/raw/master/man/figures/bayestestR/bayesianMaster.jpg")
+```
+
+*Note: Altough the very purpose of this package is to advocate for the use of Bayesian statistics, please note that there are serious arguments supporting frequentist indices (see for instance [this thread](https://discourse.datamethods.org/t/language-for-communicating-frequentist-results-about-treatment-effects/934/16)). As always, the world is not black and white (p \< .001).*
+
+**So... how does it work?**
+
+## A simple example
+
+### `bayestestR` installation
+
+You can install `bayestestR` along with the whole [**easystats**](https://github.com/easystats/easystats) suite by running the following:
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+install.packages("remotes")
+remotes::install_github("easystats/easystats")
+```
+
+<!-- Now that it's done, we can *load* the packages we need, in this case [`report`](https://github.com/easystats/report), which combines `bayestestR` and other packages together. -->
+
+<!-- ```{r message=FALSE, warning=FALSE} -->
+<!-- library(report)  # Calling library(...) enables you to use the package's functions -->
+<!-- ``` -->
+
+
+Let's also install and load the [`rstanarm`](https://mc-stan.org/rstanarm/), that allows fitting Bayesian models, as well as [`bayestestR`](https://github.com/easystats/bayestestR), to describe them.
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+install.packages("rstanarm")
+library(rstanarm)
+```
+
+### Traditional linear regression
+
+Let's start by fitting a simple frequentist linear regression (the `lm()` function stands for *linear model*) between two numeric variables, `Sepal.Length` and `Petal.Length` from the famous [`iris`](https://en.wikipedia.org/wiki/Iris_flower_data_set) dataset, included by default in R.
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+model <- lm(Sepal.Length ~ Petal.Length, data = iris)
+summary(model)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, comment=NA}
+model <- lm(Sepal.Length ~ Petal.Length, data = iris)
+summary(model)
+```
+
+<!-- ```{r message=FALSE, warning=FALSE, eval=FALSE} -->
+<!-- model <- lm(Sepal.Length ~ Petal.Length, data=iris) -->
+<!-- report(model) -->
+<!-- ``` -->
+<!-- ```{r echo=FALSE, message=FALSE, warning=FALSE, comment=NA} -->
+<!-- library(dplyr) -->
+
+<!-- lm(Sepal.Length ~ Petal.Length, data=iris) %>%  -->
+<!--   report() %>%  -->
+<!--   to_text(width=100) -->
+<!-- ``` -->
+
+This analysis suggests that there is a statistically **significant** (whatever
+that means) and **positive** (with a coefficient of `0.41`) linear relationship
+between the two variables.
+
+Fitting and interpreting the frequentist models is so easy that it is obvious
+that people use it instead of the Bayesian framework... right?
+
+**Not anymore.**
+
+### Bayesian linear regression
+
+<!-- ```{r message=FALSE, warning=FALSE, eval=FALSE} -->
+<!-- model <- stan_glm(Sepal.Length ~ Petal.Length, data=iris) -->
+<!-- report(model) -->
+<!-- ``` -->
+<!-- ```{r echo=FALSE, message=FALSE, warning=FALSE, comment=NA, results='hide'} -->
+<!-- library(rstanarm) -->
+<!-- set.seed(333) -->
+
+<!-- model <- stan_glm(Sepal.Length ~ Petal.Length, data=iris) -->
+<!-- ``` -->
+<!-- ```{r echo=FALSE, message=FALSE, warning=FALSE, comment=NA} -->
+<!-- model %>%  -->
+<!--   report() %>%  -->
+<!--   to_text(width=100) -->
+<!-- ``` -->
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+model <- stan_glm(Sepal.Length ~ Petal.Length, data = iris)
+posteriors <- describe_posterior(model)
+# for a nicer table
+print_md(posteriors, digits = 2)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, comment=NA}
+set.seed(333)
+model <- stan_glm(Sepal.Length ~ Petal.Length, data = iris, refresh = 0)
+posteriors <- describe_posterior(model)
+# for a nicer table
+print_md(posteriors, digits = 2)
+```
+
+
+**That's it!** 
+
+You just fitted a Bayesian version of the model by simply using the
+[`stan_glm()`](https://mc-stan.org/rstanarm/reference/stan_glm.html) function
+instead of `lm()` and described the posterior distributions of the parameters!
+
+The conclusion we draw, for this example, are very similar. The effect (*the median of the effect's posterior distribution*) is about `0.41`, and it can be
+also be considered as *significant* in the Bayesian sense (more on that later).
+
+**So, ready to learn more?**
+
+Check out the [**next tutorial**](https://easystats.github.io/bayestestR/articles/example1.html)!
+
+And, if you want even more, you can check out other articles describing all the functionality the package has to offer!
+
+<https://easystats.github.io/bayestestR/articles/>
+
+## References

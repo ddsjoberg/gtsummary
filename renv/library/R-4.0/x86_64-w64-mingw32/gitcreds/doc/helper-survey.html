@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>git credential helpers</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">git credential helpers</h1>
+
+
+
+<div id="general-remarks" class="section level1">
+<h1>General remarks</h1>
+<ul>
+<li><p>For <code>git credential approve</code> git (2.28.0 macOS) does not even call the credential helper if no username is supplied:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a>❯ <span class="bu">export</span> <span class="va">GIT_TRACE=</span>true</span>
+<span id="cb1-2"><a href="#cb1-2"></a>❯ <span class="kw">(</span><span class="bu">echo</span> url=https://github.com<span class="kw">;</span> <span class="bu">echo</span> password=secret<span class="kw">;</span> <span class="bu">echo</span> <span class="kw">)</span> <span class="kw">|</span> <span class="fu">git</span> credential approve</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="ex">10</span>:43:36.712290 git.c:444               trace: built-in: git credential approve</span>
+<span id="cb1-4"><a href="#cb1-4"></a>❯</span></code></pre></div></li>
+<li><p>The <code>credential.helper</code> key has a multi-set value, so if you add a new value, the old values are still kept. From git 2.9 specifying an empty string removes the previously defined helpers.</p></li>
+</ul>
+</div>
+<div id="credential-helper-survey" class="section level1">
+<h1>Credential helper survey</h1>
+<p>We do this with an eye of supporting usernames and multiple users.</p>
+<div id="cache" class="section level2">
+<h2><code>cache</code></h2>
+<ul>
+<li><p>Docs: <a href="https://git-scm.com/docs/git-credential-cache" class="uri">https://git-scm.com/docs/git-credential-cache</a></p></li>
+<li><p>This helper is not included in the default git installer on Windows . :(</p></li>
+<li><p>This is how we can set up <code>cache</code> for a particular repository:</p>
+<pre><code>❯ mkdir foo
+❯ cd foo
+❯ git init .
+11:43:28.618841 git.c:444               trace: built-in: git init .
+Initialized empty Git repository in /private/tmp/foo/.git/
+
+❯ git config --add credential.helper &quot;&quot;
+11:43:50.682962 git.c:444               trace: built-in: git config --add credential.helper &#39;&#39;
+
+❯ git config --add credential.helper cache
+11:43:54.577707 git.c:444               trace: built-in: git config --add credential.helper cache
+
+❯ cat .git/config
+[core]
+    repositoryformatversion = 0
+    filemode = true
+    bare = false
+    logallrefupdates = true
+    ignorecase = true
+    precomposeunicode = true
+[credential]
+    helper =
+    helper = cache</code></pre></li>
+<li><p>Now let’s add credentials:</p>
+<pre><code>❯  (echo url=https://github.com; echo username=token; echo password=secret; echo ) | git credential approve
+11:45:16.813913 git.c:444               trace: built-in: git credential approve
+11:45:16.814431 run-command.c:663       trace: run_command: &#39;git credential-cache store&#39;
+11:45:16.823008 git.c:704               trace: exec: git-credential-cache store
+11:45:16.823637 run-command.c:663       trace: run_command: git-credential-cache store
+11:45:16.842902 run-command.c:663       trace: run_command: git-credential-cache--daemon /Users/gaborcsardi/.cache/git/credential/socket
+
+❯  (echo url=https://github.com; echo username=token2; echo password=secret2; echo ) | git credential approve
+11:45:28.927712 git.c:444               trace: built-in: git credential approve
+11:45:28.928108 run-command.c:663       trace: run_command: &#39;git credential-cache store&#39;
+11:45:28.937087 git.c:704               trace: exec: git-credential-cache store
+11:45:28.937695 run-command.c:663       trace: run_command: git-credential-cache store</code></pre></li>
+<li><p>Query with username works correctly:</p>
+<pre><code>❯ (echo url=https://token@github.com; echo ) | git credential fill
+11:46:40.689122 git.c:444               trace: built-in: git credential fill
+11:46:40.689638 run-command.c:663       trace: run_command: &#39;git credential-cache get&#39;
+11:46:40.696784 git.c:704               trace: exec: git-credential-cache get
+11:46:40.697333 run-command.c:663       trace: run_command: git-credential-cache get
+protocol=https
+host=github.com
+username=token
+password=secret
+
+❯ (echo url=https://token2@github.com; echo ) | git credential fill
+11:46:43.767002 git.c:444               trace: built-in: git credential fill
+11:46:43.767676 run-command.c:663       trace: run_command: &#39;git credential-cache get&#39;
+11:46:43.778637 git.c:704               trace: exec: git-credential-cache get
+11:46:43.779201 run-command.c:663       trace: run_command: git-credential-cache get
+protocol=https
+host=github.com
+username=token2
+password=secret2</code></pre></li>
+<li><p>Query without username works, and returns <em>some</em> credential:</p>
+<pre><code>❯ (echo url=https://github.com; echo ) | git credential fill
+11:45:58.200272 git.c:444               trace: built-in: git credential fill
+11:45:58.200667 run-command.c:663       trace: run_command: &#39;git credential-cache get&#39;
+11:45:58.208372 git.c:704               trace: exec: git-credential-cache get
+11:45:58.208919 run-command.c:663       trace: run_command: git-credential-cache get
+protocol=https
+host=github.com
+username=token
+password=secret
+
+❯ (echo url=https://token@github.com; echo ) | git credential reject
+11:47:03.921697 git.c:444               trace: built-in: git credential reject
+11:47:03.922530 run-command.c:663       trace: run_command: &#39;git credential-cache erase&#39;
+11:47:03.935858 git.c:704               trace: exec: git-credential-cache erase
+11:47:03.936400 run-command.c:663       trace: run_command: git-credential-cache erase
+
+❯ (echo url=https://github.com; echo ) | git credential fill
+11:47:10.018877 git.c:444               trace: built-in: git credential fill
+11:47:10.019386 run-command.c:663       trace: run_command: &#39;git credential-cache get&#39;
+11:47:10.027990 git.c:704               trace: exec: git-credential-cache get
+11:47:10.028572 run-command.c:663       trace: run_command: git-credential-cache get
+protocol=https
+host=github.com
+username=token2
+password=secret2</code></pre></li>
+</ul>
+</div>
+<div id="store" class="section level2">
+<h2><code>store</code></h2>
+<ul>
+<li><p>Docs: <a href="https://git-scm.com/docs/git-credential-store" class="uri">https://git-scm.com/docs/git-credential-store</a></p></li>
+<li><p>Configure for a repo:</p>
+<pre><code>❯ mkdir foo
+❯ cd foo
+❯ git init .
+11:53:48.042569 git.c:444               trace: built-in: git init .
+Initialized empty Git repository in /private/tmp/foo/.git/
+
+❯ git config --add credential.helper &quot;&quot;
+11:53:52.949914 git.c:444               trace: built-in: git config --add credential.helper &#39;&#39;
+
+❯ git config --add credential.helper store
+11:53:56.682348 git.c:444               trace: built-in: git config --add credential.helper store
+
+❯ cat .git/config
+[core]
+    repositoryformatversion = 0
+    filemode = true
+    bare = false
+    logallrefupdates = true
+    ignorecase = true
+    precomposeunicode = true
+[credential]
+    helper =
+    helper = store</code></pre></li>
+<li><p>Add credentials:</p>
+<pre><code>❯  (echo url=https://github.com; echo username=token; echo password=secret; echo ) | git credential approve
+11:54:44.184929 git.c:444               trace: built-in: git credential approve
+11:54:44.185729 run-command.c:663       trace: run_command: &#39;git credential-store store&#39;
+11:54:44.197920 git.c:704               trace: exec: git-credential-store store
+11:54:44.198471 run-command.c:663       trace: run_command: git-credential-store store
+
+/tmp/foo master
+❯  (echo url=https://github.com; echo username=token2; echo password=secret2; echo ) | git credential approve
+11:54:48.452942 git.c:444               trace: built-in: git credential approve
+11:54:48.453399 run-command.c:663       trace: run_command: &#39;git credential-store store&#39;
+11:54:48.463535 git.c:704               trace: exec: git-credential-store store
+11:54:48.464004 run-command.c:663       trace: run_command: git-credential-store store</code></pre></li>
+<li><p>Query with username:</p>
+<pre><code>❯ (echo url=https://token@github.com; echo ) | git credential fill
+11:55:21.191654 git.c:444               trace: built-in: git credential fill
+11:55:21.192357 run-command.c:663       trace: run_command: &#39;git credential-store get&#39;
+11:55:21.204279 git.c:704               trace: exec: git-credential-store get
+11:55:21.205063 run-command.c:663       trace: run_command: git-credential-store get
+protocol=https
+host=github.com
+username=token
+password=secret
+
+❯ (echo url=https://token2@github.com; echo ) | git credential fill
+11:55:24.194096 git.c:444               trace: built-in: git credential fill
+11:55:24.194654 run-command.c:663       trace: run_command: &#39;git credential-store get&#39;
+11:55:24.207028 git.c:704               trace: exec: git-credential-store get
+11:55:24.207643 run-command.c:663       trace: run_command: git-credential-store get
+protocol=https
+host=github.com
+username=token2
+password=secret2</code></pre></li>
+<li><p>Query without username returns <em>some</em> credentials, apparently not the ones that were set first:</p>
+<pre><code>❯ (echo url=https://github.com; echo ) | git credential fill
+11:56:12.394594 git.c:444               trace: built-in: git credential fill
+11:56:12.394949 run-command.c:663       trace: run_command: &#39;git credential-store get&#39;
+11:56:12.403303 git.c:704               trace: exec: git-credential-store get
+11:56:12.403863 run-command.c:663       trace: run_command: git-credential-store get
+protocol=https
+host=github.com
+username=token2
+password=secret2
+
+❯ (echo url=https://token2@github.com; echo ) | git credential reject
+11:56:24.065910 git.c:444               trace: built-in: git credential reject
+11:56:24.066314 run-command.c:663       trace: run_command: &#39;git credential-store erase&#39;
+11:56:24.074851 git.c:704               trace: exec: git-credential-store erase
+11:56:24.076875 run-command.c:663       trace: run_command: git-credential-store erase
+
+❯ (echo url=https://github.com; echo ) | git credential fill
+11:56:26.438444 git.c:444               trace: built-in: git credential fill
+11:56:26.438839 run-command.c:663       trace: run_command: &#39;git credential-store get&#39;
+11:56:26.446181 git.c:704               trace: exec: git-credential-store get
+11:56:26.446721 run-command.c:663       trace: run_command: git-credential-store get
+protocol=https
+host=github.com
+username=token
+password=secret</code></pre></li>
+</ul>
+</div>
+<div id="osxkeychain" class="section level2">
+<h2><code>osxkeychain</code></h2>
+<ul>
+<li><p>Some docs: <a href="https://docs.github.com/en/github/using-git/updating-credentials-from-the-osx-keychain" class="uri">https://docs.github.com/en/github/using-git/updating-credentials-from-the-osx-keychain</a></p></li>
+<li><p>This is the default helper on macOS currently (git 2.28.0).</p></li>
+<li><p>This is how it stores a credential:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1"></a><span class="ex">Name</span>: github.com</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="ex">Kind</span>: Internet password</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="ex">Account</span>: token</span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="ex">Where</span>: https://github.com</span></code></pre></div></li>
+<li><p>It installs as a git subcommand, so it is possible to call its internal api directly:</p>
+<pre><code>❯ git credential-osxkeychain
+11:50:56.325499 git.c:704               trace: exec: git-credential-osxkeychain
+11:50:56.325783 run-command.c:663       trace: run_command: git-credential-osxkeychain
+usage: git credential-osxkeychain &lt;get|store|erase&gt;</code></pre></li>
+<li><p>As always, needs <code>username</code> when setting the credential.</p></li>
+<li><p>No need to supply <code>username</code> to get <em>some</em> token that matches the host. This is in a clean keychain. First we set two credentials:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1"></a>❯ <span class="kw">(</span><span class="bu">echo</span> url=https://github.com<span class="kw">;</span> <span class="bu">echo</span> username=token<span class="kw">;</span> <span class="bu">echo</span> password=secret<span class="kw">;</span> <span class="bu">echo</span> <span class="kw">)</span> <span class="kw">|</span> <span class="fu">git</span> credential approve</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="ex">10</span>:48:47.187164 git.c:444               trace: built-in: git credential approve</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="ex">10</span>:48:47.187691 run-command.c:663       trace: run_command: <span class="st">&#39;git credential-osxkeychain store&#39;</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="ex">10</span>:48:47.197964 git.c:704               trace: exec: git-credential-osxkeychain store</span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="ex">10</span>:48:47.198518 run-command.c:663       trace: run_command: git-credential-osxkeychain store</span>
+<span id="cb12-6"><a href="#cb12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7"></a>❯ <span class="kw">(</span><span class="bu">echo</span> url=https://github.com<span class="kw">;</span> <span class="bu">echo</span> username=token2<span class="kw">;</span> <span class="bu">echo</span> password=secret2<span class="kw">;</span> <span class="bu">echo</span> <span class="kw">)</span> <span class="kw">|</span> <span class="fu">git</span> credential approve</span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="ex">10</span>:48:55.299933 git.c:444               trace: built-in: git credential approve</span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="ex">10</span>:48:55.300282 run-command.c:663       trace: run_command: <span class="st">&#39;git credential-osxkeychain store&#39;</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="ex">10</span>:48:55.308568 git.c:704               trace: exec: git-credential-osxkeychain store</span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="ex">10</span>:48:55.309276 run-command.c:663       trace: run_command: git-credential-osxkeychain store</span></code></pre></div>
+<p>If we don’t supply a username, then we’ll just get one of them:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a>❯ <span class="kw">(</span><span class="bu">echo</span> url=https://github.com<span class="kw">;</span> <span class="bu">echo</span> <span class="kw">)</span> <span class="kw">|</span> <span class="fu">git</span> credential fill</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="ex">10</span>:49:17.371636 git.c:444               trace: built-in: git credential fill</span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="ex">10</span>:49:17.372021 run-command.c:663       trace: run_command: <span class="st">&#39;git credential-osxkeychain get&#39;</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="ex">10</span>:49:17.378688 git.c:704               trace: exec: git-credential-osxkeychain get</span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="ex">10</span>:49:17.379164 run-command.c:663       trace: run_command: git-credential-osxkeychain get</span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="va">protocol=</span>https</span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="va">host=</span>github.com</span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="va">username=</span>token</span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="va">password=</span>secret</span></code></pre></div>
+<p>If we supply the username, then we’ll get the correct one:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1"></a>❯ <span class="kw">(</span><span class="bu">echo</span> url=https://token2@github.com<span class="kw">;</span> <span class="bu">echo</span> <span class="kw">)</span> <span class="kw">|</span> <span class="fu">git</span> credential fill</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="ex">10</span>:49:28.613779 git.c:444               trace: built-in: git credential fill</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="ex">10</span>:49:28.614108 run-command.c:663       trace: run_command: <span class="st">&#39;git credential-osxkeychain get&#39;</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="ex">10</span>:49:28.621440 git.c:704               trace: exec: git-credential-osxkeychain get</span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="ex">10</span>:49:28.621979 run-command.c:663       trace: run_command: git-credential-osxkeychain get</span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="va">protocol=</span>https</span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="va">host=</span>github.com</span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="va">username=</span>token2</span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="va">password=</span>secret2</span></code></pre></div>
+<p>To check that without a username we get an arbitrary one, let’s remove <code>token</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1"></a>❯ <span class="kw">(</span><span class="bu">echo</span> url=https://token@github.com<span class="kw">;</span> <span class="bu">echo</span> <span class="kw">)</span> <span class="kw">|</span> <span class="fu">git</span> credential reject</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="ex">10</span>:49:58.584332 git.c:444               trace: built-in: git credential reject</span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="ex">10</span>:49:58.586880 run-command.c:663       trace: run_command: <span class="st">&#39;git credential-osxkeychain erase&#39;</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="ex">10</span>:49:58.598463 git.c:704               trace: exec: git-credential-osxkeychain erase</span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="ex">10</span>:49:58.599214 run-command.c:663       trace: run_command: git-credential-osxkeychain erase</span>
+<span id="cb15-6"><a href="#cb15-6"></a></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="kw">```</span><span class="fu">sh</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a>❯ <span class="kw">(</span><span class="bu">echo</span> url=https://github.com<span class="kw">;</span> <span class="bu">echo</span> <span class="kw">)</span> <span class="kw">|</span> <span class="fu">git</span> credential fill</span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="ex">10</span>:50:07.468385 git.c:444               trace: built-in: git credential fill</span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="ex">10</span>:50:07.468728 run-command.c:663       trace: run_command: <span class="st">&#39;git credential-osxkeychain get&#39;</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="ex">10</span>:50:07.478398 git.c:704               trace: exec: git-credential-osxkeychain get</span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="ex">10</span>:50:07.478832 run-command.c:663       trace: run_command: git-credential-osxkeychain get</span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="va">protocol=</span>https</span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="va">host=</span>github.com</span>
+<span id="cb15-15"><a href="#cb15-15"></a><span class="va">username=</span>token2</span>
+<span id="cb15-16"><a href="#cb15-16"></a><span class="va">password=</span>secret2</span></code></pre></div>
+<p>Now let’s re-add token to make sure that <code>osxkeychain</code> does not prefer <code>token</code>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1"></a>❯ <span class="kw">(</span><span class="bu">echo</span> url=https://github.com<span class="kw">;</span> <span class="bu">echo</span> username=token<span class="kw">;</span> <span class="bu">echo</span> password=secret<span class="kw">;</span> <span class="bu">echo</span> <span class="kw">)</span> <span class="kw">|</span> <span class="fu">git</span> credential approve</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="ex">10</span>:58:52.302066 git.c:444               trace: built-in: git credential approve</span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="ex">10</span>:58:52.311063 run-command.c:663       trace: run_command: <span class="st">&#39;git credential-osxkeychain store&#39;</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="ex">10</span>:58:52.321633 git.c:704               trace: exec: git-credential-osxkeychain store</span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="ex">10</span>:58:52.322108 run-command.c:663       trace: run_command: git-credential-osxkeychain store</span>
+<span id="cb16-6"><a href="#cb16-6"></a></span>
+<span id="cb16-7"><a href="#cb16-7"></a>❯ <span class="kw">(</span><span class="bu">echo</span> url=https://github.com<span class="kw">;</span> <span class="bu">echo</span> <span class="kw">)</span> <span class="kw">|</span> <span class="fu">git</span> credential fill</span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="ex">10</span>:58:57.316418 git.c:444               trace: built-in: git credential fill</span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="ex">10</span>:58:57.317630 run-command.c:663       trace: run_command: <span class="st">&#39;git credential-osxkeychain get&#39;</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="ex">10</span>:58:57.330142 git.c:704               trace: exec: git-credential-osxkeychain get</span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="ex">10</span>:58:57.330697 run-command.c:663       trace: run_command: git-credential-osxkeychain get</span>
+<span id="cb16-12"><a href="#cb16-12"></a><span class="va">protocol=</span>https</span>
+<span id="cb16-13"><a href="#cb16-13"></a><span class="va">host=</span>github.com</span>
+<span id="cb16-14"><a href="#cb16-14"></a><span class="va">username=</span>token2</span>
+<span id="cb16-15"><a href="#cb16-15"></a><span class="va">password=</span>secret2</span></code></pre></div>
+<p>So it seems that <code>osxkeychain</code> will just find an arbitrary one, or the one that was added first.</p></li>
+</ul>
+</div>
+<div id="manager-core-on-macos-before-version-2.0.246-beta" class="section level2">
+<h2><code>manager-core</code> (on macOS), before version 2.0.246-beta</h2>
+<ul>
+<li><p>Not installed by default (git 2.28.0).</p></li>
+<li><p>Install from brew, according to the instructions: <a href="https://github.com/microsoft/Git-Credential-Manager-Core#macos-homebrew" class="uri">https://github.com/microsoft/Git-Credential-Manager-Core#macos-homebrew</a></p></li>
+<li><p>If updates your global git config, adding these lines:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1"></a>[<span class="ex">credential</span>]</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    <span class="ex">helper</span> = <span class="st">&quot;&quot;</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>[<span class="ex">credential</span> <span class="st">&quot;https://dev.azure.com&quot;</span>]</span>
+<span id="cb17-4"><a href="#cb17-4"></a>    <span class="ex">useHttpPath</span> = true</span>
+<span id="cb17-5"><a href="#cb17-5"></a>[<span class="ex">credential</span>]</span>
+<span id="cb17-6"><a href="#cb17-6"></a>    <span class="ex">helper</span> = manager-core</span></code></pre></div>
+<p>The <code>helper = &quot;&quot;</code> line deletes previous handlers. The system helper is kept as <code>osxkeychain</code>.</p></li>
+<li><p>It installs as a git subcommand, and you can call its internal API directly:</p>
+<pre><code>❯ git credential-manager-core
+11:51:56.434300 git.c:704               trace: exec: git-credential-manager-core
+11:51:56.434496 run-command.c:663       trace: run_command: git-credential-manager-core
+Missing command.
+
+usage: git-credential-manager-core &lt;command&gt;
+
+  Available commands:
+    erase
+    get
+    store
+
+    configure [--system]
+    unconfigure [--system]
+
+    --version, version
+    --help, -h, -?</code></pre></li>
+<li><p>It is not compatible with the <code>osxkeychain</code> helper, because it uses different keys in the keychain.</p></li>
+<li><p>It supports different <em>providers</em>. Providers are auto-detected by default. GitHub has its own provider, detected via the <code>github.com</code> URL. The provider can be configured user a git config key or an environment variable: <a href="https://github.com/microsoft/Git-Credential-Manager-Core/blob/master/docs/configuration.md#credentialprovider" class="uri">https://github.com/microsoft/Git-Credential-Manager-Core/blob/master/docs/configuration.md#credentialprovider</a></p></li>
+<li><p>It does not currently supports namepaces (like <code>manager</code>).</p></li>
+<li><p>This is how it stores a credential:</p>
+<pre><code>Name: git:https://github.com
+Kind: application password
+Account: token
+Where: git:https://github.com</code></pre></li>
+<li><p>No need to supply <code>username</code> to get <em>some</em> credential:</p>
+<pre><code>❯ (echo url=https://github.com; echo ) | git credential fill
+11:24:47.750966 git.c:444               trace: built-in: git credential fill
+11:24:47.753268 run-command.c:663       trace: run_command: &#39;git credential-manager-core get&#39;
+11:24:47.762249 git.c:704               trace: exec: git-credential-manager-core get
+11:24:47.762917 run-command.c:663       trace: run_command: git-credential-manager-core get
+protocol=https
+host=github.com
+username=token
+password=secret</code></pre></li>
+<li><p>If there are multiple credentials, a random one (or the one set first?) is returned:</p>
+<pre><code>❯  (echo url=https://github.com; echo username=token2; echo password=secret2; echo ) | git credential approve
+11:25:41.553761 git.c:444               trace: built-in: git credential approve
+11:25:41.554242 run-command.c:663       trace: run_command: &#39;git credential-manager-core store&#39;
+11:25:41.565748 git.c:704               trace: exec: git-credential-manager-core store
+11:25:41.566218 run-command.c:663       trace: run_command: git-credential-manager-core store</code></pre></li>
+<li><p>In fact the username is completely ignored when getting credentials, at least for the GitHub provider:</p>
+<pre><code>❯ (echo url=https://token2@github.com; echo ) | git credential fill
+11:29:49.274574 git.c:444               trace: built-in: git credential fill
+11:29:49.275020 run-command.c:663       trace: run_command: &#39;git credential-manager-core get&#39;
+11:29:49.283563 git.c:704               trace: exec: git-credential-manager-core get
+11:29:49.284236 run-command.c:663       trace: run_command: git-credential-manager-core get
+protocol=https
+host=github.com
+username=token
+password=secret</code></pre>
+<p>This is because the username is not stored as part of the URL by the GitHub provider. Related issue: <a href="https://github.com/microsoft/Git-Credential-Manager-Core/issues/160" class="uri">https://github.com/microsoft/Git-Credential-Manager-Core/issues/160</a> <code>manager</code> has a similar problem, it is linked from this GitHub issue.</p></li>
+<li><p>If you set the provider to Generic, then usernames work as expected. In this case, this is stored in the keychain:</p>
+<pre><code>Name: git:https://token@github.com/
+Kind: application password
+Account: token
+Where: git:https://token@github.com/</code></pre>
+<p>These credentials are not compatible with the ones set by the GitHub provider.</p>
+<pre><code>❯ export GCM_PROVIDER=generic
+
+❯  (echo url=https://github.com; echo username=token; echo password=secret; echo ) | git credential approve
+11:34:15.998644 git.c:444               trace: built-in: git credential approve
+11:34:15.998992 run-command.c:663       trace: run_command: &#39;git credential-manager-core store&#39;
+11:34:16.008178 git.c:704               trace: exec: git-credential-manager-core store
+11:34:16.008834 run-command.c:663       trace: run_command: git-credential-manager-core store
+
+❯  (echo url=https://github.com; echo username=token2; echo password=secret2; echo ) | git credential approve
+11:35:52.629963 git.c:444               trace: built-in: git credential approve
+11:35:52.637966 run-command.c:663       trace: run_command: &#39;git credential-manager-core store&#39;
+11:35:52.648058 git.c:704               trace: exec: git-credential-manager-core store
+11:35:52.648514 run-command.c:663       trace: run_command: git-credential-manager-core store
+
+❯ (echo url=https://token@github.com; echo ) | git credential fill
+11:35:58.336428 git.c:444               trace: built-in: git credential fill
+11:35:58.336881 run-command.c:663       trace: run_command: &#39;git credential-manager-core get&#39;
+11:35:58.345187 git.c:704               trace: exec: git-credential-manager-core get
+11:35:58.345729 run-command.c:663       trace: run_command: git-credential-manager-core get
+protocol=https
+host=github.com
+username=token
+password=secret
+
+❯ (echo url=https://token2@github.com; echo ) | git credential fill
+11:36:02.550339 git.c:444               trace: built-in: git credential fill
+11:36:02.550695 run-command.c:663       trace: run_command: &#39;git credential-manager-core get&#39;
+11:36:02.557777 git.c:704               trace: exec: git-credential-manager-core get
+11:36:02.558359 run-command.c:663       trace: run_command: git-credential-manager-core get
+protocol=https
+host=github.com
+username=token2
+password=secret2</code></pre></li>
+</ul>
+</div>
+<div id="manager-core-macos-2.0.246-beta-or-later" class="section level2">
+<h2><code>manager-core</code> (macOS), 2.0.246-beta or later</h2>
+<ul>
+<li>This version adds better support for multiple credentials for the same host.</li>
+<li>It does not save the <code>username</code> as part of the service any more, for the generic provider.</li>
+<li>It does save the <code>username</code> as <code>account</code> and it uses it when searching for credentials, both for the <code>generic</code> and the <code>github</code> provider.</li>
+</ul>
+</div>
+<div id="manager-github-authority" class="section level2">
+<h2><code>manager</code> (GitHub authority)</h2>
+<ul>
+<li><p>This was Git Credential Manager for Windows, and it is the default helper on Windows for git 2.28.0. In git 2.29.0 it is not the default any more, and it is deprecated in favor of <code>manager-core</code>. It is still installed, though.</p></li>
+<li><p>Docs: <a href="https://github.com/Microsoft/Git-Credential-Manager-for-Windows" class="uri">https://github.com/Microsoft/Git-Credential-Manager-for-Windows</a></p></li>
+<li><p>It is installed as a git subcommand, so it can be called directly:</p>
+<pre><code>❯ $env:GIT_TRACE=&quot;true&quot;
+❯ git credential-manager
+12:15:45.554298 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+12:15:45.556249 git.c:704               trace: exec: git-credential-manager
+12:15:45.556249 run-command.c:663       trace: run_command: git-credential-manager
+usage: git-credential-manager.exe [approve|clear|config|delete|deploy|erase|fill|get|install|reject|remove|store|uninstall|version] [&lt;args&gt;]
+fatal: Unable to open help documentation.</code></pre></li>
+<li><p>Setting credentials. The <code>username</code> must be provided, and it is stored in the credential, but the GitHub provider overwrites credentials with the same host name, even if they have a different <code>username</code>. I.e. after this, there will be only one credential:</p>
+<pre><code>❯  %  { echo url=https://github.com; echo username=token; echo password=secret; echo &quot;&quot; } | git credential approve
+13:16:58.118611 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+13:16:58.120617 git.c:444               trace: built-in: git credential approve
+13:16:58.122612 run-command.c:663       trace: run_command: &#39;git credential-manager store&#39;
+13:16:58.170625 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+13:16:58.173087 git.c:704               trace: exec: git-credential-manager store
+13:16:58.173087 run-command.c:663       trace: run_command: git-credential-manager store
+
+❯  %  { echo url=https://github.com; echo username=token2; echo password=secret2; echo &quot;&quot; } | git credential approve
+13:17:30.925970 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+13:17:30.928134 git.c:444               trace: built-in: git credential approve
+13:17:30.928987 run-command.c:663       trace: run_command: &#39;git credential-manager store&#39;
+13:17:30.968981 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+13:17:30.970974 git.c:704               trace: exec: git-credential-manager store
+13:17:30.970974 run-command.c:663       trace: run_command: git-credential-manager store</code></pre></li>
+<li><p>It stores credentials in the following format:</p>
+<pre><code>Internet or network address: git:https://github.com
+User name: token
+Password: ****
+Persistence: Local computer</code></pre></li>
+</ul>
+<p>&lt;!- - –&gt;</p>
+<ul>
+<li><p>It has multiple authorities, (like providers for <code>manager-core</code>). The GitHub authority is used for <code>github.com</code> URLs by default. The authority can be set with a config option or an env var.</p></li>
+<li><p>We need to set the <code>GCM_VALIDATE</code> env var to <code>false</code> , otherwise it tries to validate the GitHub token every time we query it.</p>
+<pre><code>❯ $env:GCM_VALIDATE=&quot;false&quot;</code></pre></li>
+<li><p>No <code>username</code> is needed for getting <em>the</em> credential, for the GitHub provider.</p>
+<pre><code>❯  %  { echo url=https://github.com; echo &quot;&quot; } | git credential fill
+13:24:43.831089 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+13:24:43.833666 git.c:444               trace: built-in: git credential fill
+13:24:43.834092 run-command.c:663       trace: run_command: &#39;git credential-manager get&#39;
+13:24:43.872087 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+13:24:43.874092 git.c:704               trace: exec: git-credential-manager get
+13:24:43.874092 run-command.c:663       trace: run_command: git-credential-manager get
+protocol=https
+host=github.com
+path=
+username=token2
+password=secret2</code></pre>
+<p>In fact the <code>username</code> is ignored for the GitHub provider:</p>
+<pre><code>❯ %  { echo url=https://token@github.com; echo &quot;&quot; } | git credential fill
+13:25:06.029084 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+13:25:06.031084 git.c:444               trace: built-in: git credential fill
+13:25:06.032081 run-command.c:663       trace: run_command: &#39;git credential-manager get&#39;
+13:25:06.069085 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+13:25:06.070086 git.c:704               trace: exec: git-credential-manager get
+13:25:06.070086 run-command.c:663       trace: run_command: git-credential-manager get
+protocol=https
+host=github.com
+path=
+username=token2
+password=secret2</code></pre></li>
+<li><p>Supports namespaces, the default namespace is <code>git</code>. The namespace is included in the name of the credential: <code>namespace:URL</code>.</p></li>
+<li><p>There is a pull request to include the <code>username</code> in the URL as well: <a href="https://github.com/microsoft/Git-Credential-Manager-for-Windows/pull/891" class="uri">https://github.com/microsoft/Git-Credential-Manager-for-Windows/pull/891</a></p></li>
+</ul>
+</div>
+<div id="manager-basic-authority" class="section level2">
+<h2><code>manager</code> (Basic authority)</h2>
+<ul>
+<li><p><code>Basic</code> authority can be configured with an env var or config option:</p>
+<pre><code>❯ $env:GCM_AUTHORITY=&quot;Basic&quot;</code></pre></li>
+<li><p>It is compatible with the credentials set by the <code>GitHub</code> authority:</p>
+<pre><code>❯  %  { echo url=https://github.com; echo &quot;&quot; } | git credential fill
+13:27:17.344396 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+13:27:17.346397 git.c:444               trace: built-in: git credential fill
+13:27:17.347388 run-command.c:663       trace: run_command: &#39;git credential-manager get&#39;
+13:27:17.386388 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+13:27:17.388386 git.c:704               trace: exec: git-credential-manager get
+13:27:17.388386 run-command.c:663       trace: run_command: git-credential-manager get
+protocol=https
+host=github.com
+path=
+username=token2
+password=secret2</code></pre></li>
+<li><p>But it supports usernames as well. Note that since the username is stored in the URL, it does not return some arbitrary credentials if we query the URL without a username. We need to tell GCM here not to ask for a password, but just fall back to the next credential helper.</p>
+<pre><code>❯ $env:GCM_INTERACTIVE=&quot;Never&quot;
+
+❯ % { echo url=https://token2@github.com; echo &quot;&quot; } | git -c credential.helper=&quot;! echo protocol=dummy; echo host=dummy;
+ echo username=dummy; echo password=dummy&quot; credential fill
+13:31:16.682545 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+13:31:16.684473 git.c:444               trace: built-in: git credential fill
+13:31:16.685471 run-command.c:663       trace: run_command: &#39;git credential-manager get&#39;
+13:31:16.725486 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+13:31:16.727472 git.c:704               trace: exec: git-credential-manager get
+13:31:16.727472 run-command.c:663       trace: run_command: git-credential-manager get
+Logon failed, use ctrl+c to cancel basic credential prompt.
+13:31:16.948468 run-command.c:663       trace: run_command: &#39; echo protocol=dummy; echo host=dummy; echo username=dummy; echo password=dummy get&#39;
+protocol=dummy
+host=dummy
+username=dummy
+password=dummy get</code></pre></li>
+<li><p>When setting credentials, usernames are included in the URL:</p>
+<pre><code>❯ % { echo url=https://github.com; echo username=token; echo password=secret; echo &quot;&quot; } | git credential approve
+13:34:37.937934 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+13:34:37.940820 git.c:444               trace: built-in: git credential approve
+13:34:37.940995 run-command.c:663       trace: run_command: &#39;git credential-manager store&#39;
+13:34:37.983372 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+13:34:37.984737 git.c:704               trace: exec: git-credential-manager store
+13:34:37.984737 run-command.c:663       trace: run_command: git-credential-manager store</code></pre>
+<p>will create this record in the credential store:</p>
+<pre><code>Internet or network address: git:https://token@github.com
+User name: token
+Password: ****
+Persistence: Local computer</code></pre>
+<p>and then this can be queried with an explicit username:</p>
+<pre><code>❯  %  { echo url=https://token@github.com; echo &quot;&quot; } | git -c credential.helper=&quot;! echo protocol=dummy; echo host=dummy; echo username=dummy; echo password=dummy&quot; credential fill
+13:36:42.789268 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/bin
+13:36:42.791270 git.c:444               trace: built-in: git credential fill
+13:36:42.792266 run-command.c:663       trace: run_command: &#39;git credential-manager get&#39;
+13:36:42.830475 exec-cmd.c:237          trace: resolved executable dir: C:/Program Files/Git/mingw64/libexec/git-core
+13:36:42.832279 git.c:704               trace: exec: git-credential-manager get
+13:36:42.832279 run-command.c:663       trace: run_command: git-credential-manager get
+protocol=https
+host=github.com
+path=
+username=token
+password=secret</code></pre></li>
+</ul>
+</div>
+<div id="manager-core-on-windows-before-version-2.0.246-beta" class="section level2">
+<h2><code>manager-core</code> (on Windows, before version 2.0.246-beta)</h2>
+<ul>
+<li><p>Not installed by default (git 2.28.0), but this is supposed to be the future canonical implementation. See above for the macOS version.</p></li>
+<li><p>It works similarly to <code>manager</code> , I haven’t seen any differences in behavior (version was 2.0.194.40577). Instead of authorities, we need to set up providers: <a href="https://github.com/microsoft/Git-Credential-Manager-Core/blob/master/docs/migration.md#gcm_authority." class="uri">https://github.com/microsoft/Git-Credential-Manager-Core/blob/master/docs/migration.md#gcm_authority.</a> The <code>Generic</code> provider works the same way as the <code>Basic</code> authority in <code>manager</code>.</p></li>
+<li><p>Unfortunately setting <code>GCM_AUTHORITY</code> will make <code>manager-core</code> break, so it is not possible to use both <code>manager</code> and <code>manager-core</code> if you need to set this environment variable.</p></li>
+</ul>
+</div>
+<div id="manager-core-on-windows-from-2.0.246-beta" class="section level2">
+<h2><code>manager-core</code> (on Windows, from 2.0.246-beta)</h2>
+<ul>
+<li>This is now the version that is the default helper in git 2.29.0 and later. <code>manager</code> is still installed, but the default system config sets <code>manager-core</code>.</li>
+<li>It supports multiple users better: <a href="https://github.com/microsoft/Git-Credential-Manager-Core/issues/160#issuecomment-700544889" class="uri">https://github.com/microsoft/Git-Credential-Manager-Core/issues/160#issuecomment-700544889</a></li>
+<li>When storing a credential, it first checks if there is a target name without a username. If there is, then it uses the target name without the username. It stores the username in the <code>username</code> field of the credential, still. so it is not lost.</li>
+<li>When looking up a credential without a username, it will return the first credential it can find, even if the target name contains a username, and there is another credential without a username in the target name.</li>
+<li>When looking up a credential with a username, it may return any credential with a matching username, and a target name that matches the host. The username inside the target name does not actually matter.</li>
+</ul>
+</div>
+</div>
+<div id="recommendations-for-multiple-accounts" class="section level1">
+<h1>Recommendations for multiple accounts</h1>
+<div id="macos" class="section level2">
+<h2>macOS</h2>
+<ol style="list-style-type: decimal">
+<li><p>Use the <code>osxkeychain</code> helper.</p></li>
+<li><p>FIrst remove all your current credentials for the host you are targeting. E.g. for GitHub, search for “Internet Passwords” for github.com, or use <code>gitcreds::gitcreds_list()</code> and the oskeyring package to remove them. You can also use the oskeyring package to back up the tokens and passwords.</p></li>
+<li><p>Then add the credential that you want to use for “generic access”. This is the credential that will be used for URLs without user names. The user name for this credential does not matter, but you can choose something descriptive, e.g. “PersonalAccessToken”, “token”, or “generic”.</p></li>
+<li><p>Configure git to use this username by default. E.g. if you chose “generic”, then run</p>
+<pre><code>git config --global crendetial.username generic</code></pre></li>
+<li><p>Add all the other credentials, with appropriate user names. These are the user names that you need to put in the URLs for the repositories or operations you want to use them for. (GitHub does not actually use the user names if the password is a PAT.)</p></li>
+</ol>
+</div>
+<div id="windows-with-git-2.29.0-or-later-and-manager-core" class="section level2">
+<h2>Windows, with git 2.29.0 or later and manager-core</h2>
+<ol style="list-style-type: decimal">
+<li><p>We suggest that you update to the latest git version, but at least 2.29.0, and use the <code>manager-core</code> helper which is now default. If you installed <code>manager-core</code> separately from git, we suggest that you remove it, because it might cause confusion as to which helper is actually used.</p></li>
+<li><p>Remove all current credentials first, for the host you are targeting. You can do this in ‘Credential Manager’ or <code>gitcreds::gitcreds_list()</code> to find them and the oskeyring package to remove them. You can also use the oskeyring packaeg to back up the tokens and passwords.</p></li>
+<li><p>Then add the credential that you want to use for “generic access”. This is the credential that will be used for URLs without user names. The user name for this credential does not matter, but you can choose something descriptive, e.g. “PersonalAccessToken”, “token”, or “generic”.</p></li>
+<li><p>Configure git to use this username by default. E.g. if you chose “generic”, then run</p>
+<p>git config –global crendetial.username generic</p></li>
+<li><p>Add all the other credentials, with appropriate user names. These are the user names that you need to put in the URLs for the repositories or operations you want to use them for. (GitHub does not actually use the user names if the password is a PAT.)</p></li>
+</ol>
+</div>
+<div id="windows-with-older-git-versions" class="section level2">
+<h2>Windows with older git versions</h2>
+<div id="at-most-one-github.com-credential" class="section level3">
+<h3>At most one github.com credential</h3>
+<p>If you only need to manage a single github.com credential, together with possibly multiple credentials to other hosts (including GitHub Enterprise hosts), then you can use the default <code>manager</code> helper, and get away with the default auto-detected GCM authority setting.</p>
+<p>In this case, you can add you github.com credential with an arbitrary user name, and for each other host you can add configure a default user name, and/or include user names in the URLs to these hosts. This is how to set a default user name for a host:</p>
+<pre><code>git config --global credential.https://example.com.username myusername</code></pre>
+</div>
+<div id="multiple-github-credentials" class="section level3">
+<h3>Multiple GitHub credentials</h3>
+<p>If you need to manage multiple github.com credentials, then you can still use the <code>manager</code> helper, but you need to change the GCM authority by setting an option or an environment variable, see <a href="https://github.com/microsoft/Git-Credential-Manager-for-Windows/blob/master/Docs/Configuration.md#authority." class="uri">https://github.com/microsoft/Git-Credential-Manager-for-Windows/blob/master/Docs/Configuration.md#authority.</a> Once <a href="https://github.com/microsoft/Git-Credential-Manager-for-Windows/pull/891" class="uri">https://github.com/microsoft/Git-Credential-Manager-for-Windows/pull/891</a> is merged, you won’t need to do this. (At least in recent git versions, that contain a GCM build with the fix.)</p>
+<p>This is how to change the config for this:</p>
+<pre><code>git config --global credential.authority Basic</code></pre>
+<p>You can also change it only for github.com:</p>
+<pre><code>git config --global credential.github.com.authority Basic</code></pre>
+<p>Then you can configure a default user name, this will be used for URLs without a user name:</p>
+<pre><code>git config --global credential.username generic</code></pre>
+<p>Now you can add you credentials, the default one with the “generic” user name, and all the others with their specific user and host names.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

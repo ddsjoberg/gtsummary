@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;rleDiff&quot; of rle(diff(.)) Stored Vectors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for rleDiff-class {Matrix}"><tr><td>rleDiff-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;rleDiff&quot; of  rle(diff(.))  Stored Vectors</h2>
+
+<h3>Description</h3>
+
+<p>Class <code>"rleDiff"</code> is for compactly storing long vectors
+which mainly consist of <em>linear</em> stretches.  For such a vector
+<code>x</code>, <code><a href="../../base/html/diff.html">diff</a>(x)</code> consists of <em>constant</em> stretches
+and is hence well compressable via <code><a href="../../base/html/rle.html">rle</a>()</code>.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("rleDiff", ...)</code>.
+</p>
+<p>Currently experimental, see below.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>first</code>:</dt><dd><p>A single number (of class <code>"numLike"</code>,
+a class union of <code>"numeric"</code> and <code>"logical"</code>).</p>
+</dd>
+<dt><code>rle</code>:</dt><dd><p>Object of class <code>"rle"</code>, basically a
+<code><a href="../../base/html/list.html">list</a></code> with components <code>"lengths"</code> and
+<code>"values"</code>, see <code><a href="../../base/html/rle.html">rle</a>()</code>.  As this is used to
+encode potentially huge index vectors, <code>lengths</code> may be of
+type <code><a href="../../base/html/double.html">double</a></code> here.</p>
+</dd>
+</dl>
+
+
+
+<h3>Methods</h3>
+
+<p>There is a simple <code><a href="../../methods/html/show.html">show</a></code> method only.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This is currently an <em>experimental</em> auxiliary class
+for the class <code><a href="abIndex-class.html">abIndex</a></code>, see there.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../base/html/rle.html">rle</a></code>, <code><a href="abIndex-class.html">abIndex</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("rleDiff")
+
+ab &lt;- c(abIseq(2, 100), abIseq(20, -2))
+ab@rleD  # is "rleDiff"
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,256 @@
+---
+title: 5. API package best practices
+author: Scott Chamberlain
+date: "2020-07-09"
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteIndexEntry{5. API package best practices}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+
+The `crul` package documentation mostly documents how to work
+with any particular function or class, but does not detail 
+how you would use the package in a more realistic context. This
+vignette outlines what we think of as best practices for using
+`crul` in scripts or an R package.
+
+## Importing crul
+
+In most cases you'll only need to import one thing from `crul`: 
+`HttpClient`. Add crul to `Imports` in your `DESCRIPTION` file,
+and ad an entry like `@importFrom crul HttpClient` somewhere in 
+your package documentation, for example:
+
+```r
+#' Some function
+#' 
+#' @export
+#' @importFrom crul HttpClient
+#' ...
+```
+
+## HTTP request function
+
+If you have more than one function that needs to make an HTTP request
+it's probably useful to have a function for doing HTTP requests. The
+following is an example of a function.
+
+
+```r
+xGET <- function(url, path, args = list(), ...) {
+  cli <- crul::HttpClient$new(url, opts = list(...))
+  res <- cli$get(path = path, query = args)
+  res$raise_for_status()
+  res$raise_for_ct_json()
+  res$parse("UTF-8")
+}
+```
+
+There's some features to note in the above function:
+
+* `url`: this really depends on your setup. In some cases the base URL 
+doesn't change, so you can remove the `url` parameter and define the 
+url in the `crul::HttpClient$new()` call. 
+* `path`: this likely will hold anything after the base path
+* `args`: named list of query arguments. the default of `list()` 
+means you can then use the function and not have to pass `args` 
+in cases where no query args are needed.
+* `...`: it's called an ellipsis. see example and discussion below.
+
+You can use the function like:
+
+
+```r
+x <- xGET("https://httpbin.org", "get", args = list(foo = "bar"))
+# parse the JSON to a list
+jsonlite::fromJSON(x)
+# more parsing
+```
+
+Because we used an ellipsis, anyone can pass in curl options like:
+
+
+```r
+xGET("https://xxx.org", args = list(foo = "bar"), verbose = TRUE)
+```
+
+Curl options are important for digging into the details of HTTP 
+requests, and go a long way towards users being able to sort out 
+their own problems, and help you diagnose problems as well.
+
+Alternatively, you can just do the HTTP request in your `xGET` function
+and return the response object - and line by line, or with 
+another function, parse results as needed.
+
+## Failing with fauxpas
+
+[fauxpas][] is in Suggests in this package. If you don't have it
+installed, no worries, but if you do have it installed, we use
+fauxpas.
+
+There is not much difference with the default `raise_for_status()`
+between using fauxpas and not using it. 
+
+However, you can construct your own replacement with fauxpas that 
+gives you more flexibility in how you deal with HTTP status codes.
+
+First, make an HTTP request:
+
+
+```r
+con <- HttpClient$new("https://httpbin.org/status/404")
+res <- con$get()
+```
+
+Then use `fauxpas::find_error_class` to get the correct R6 error 
+class for the status code, in this case `404`
+
+
+```r
+x <- fauxpas::find_error_class(res$status_code)$new()
+#> <HTTPNotFound>
+#>  behavior: stop
+#>  message_template: {{reason}} (HTTP {{status}})
+#>  message_template_verbose: {{reason}} (HTTP {{status}}).\n - {{message}}
+```
+
+We can then do one of two things: use `$do()` or `$do_verbose()`. `$do()` 
+is simpler and gives you thhe same thing `$raise_for_status()` gives, but
+allows you to change behavior (stop vs. warning vs. message), and how the 
+message is formatted. By default we get:
+
+
+```r
+x$do(res)
+#> Error: Not Found (HTTP 404)
+```
+
+We can change the template using `whisker` templating
+
+
+```r
+x$do(res, template = "{{status}}\n  --> {{reason}}")
+#> Error: 404
+#>  --> Not Found
+```
+
+`$do_verbose()` gives you a lot more detail about the status code, possibly more
+than you want:
+
+
+```r
+x$do_verbose(res)
+#> Error: Not Found (HTTP 404).
+#>  - The server has not found anything matching the Request-URI. No indication
+#>  is given of whether the condition is temporary or permanent. The 410 (Gone)
+#>  status code SHOULD be used if the server knows, through some internally configurable
+#>  mechanism, that an old resource is permanently unavailable and has no forwarding
+#>  address. This status code is commonly used when the server does not wish to
+#>  reveal exactly why the request has been refused, or when no other response
+#> is applicable.
+```
+
+You can change behavior to either `warning` or `message`:
+
+
+```r
+x$behavior <- "warning"
+x$do(res)
+#> Warning message:
+#> Not Found (HTTP 404)
+x$behavior <- "message"
+x$do(res)
+#> Not Found (HTTP 404)
+```
+
+## Retrying requests
+
+In some failure scenarios it may make sense to retry the same request. 
+For example, if a 429 "Too many requests" http status is returned, you
+can retry the request after a certain amount of time (that time should
+be supplied by the server). We suggest using RETRY if you are in these
+scenarios. See [`HttpClient$retry()`](https://docs.ropensci.org/crul/reference/HttpClient.html#method-retry)
+for more information.
+
+
+## Mocking with webmockr
+
+[webmockr][] is a package for stubbing and setting expectations on 
+HTTP requests. It has support for working with two HTTP request 
+packages: [crul][] and [httr][]. 
+
+There are a variety of use cases for `webmockr`. 
+
+* Use it in an interactive R session where you're working 
+on a project and want to mock HTTP requests and set certain responses. 
+* You can be on a plane and still allow requests to work without an 
+internet connection by setting a response to give back. 
+* Test hard to test scenarios in your code or package. `webmockr` 
+allows you to give back exact responses just as you describe and 
+even fail with certain HTTP conditions. Getting certain failures 
+to happen with a remote server can sometimes be difficult. 
+* Package test suite: you can use `webmockr` in a test suite, 
+although the next section covers `vcr` which builds on top of 
+`webmockr` and is ideal for tests.
+
+See the book [HTTP mocking and testing in R][book] for more.
+
+
+## Testing with vcr
+
+[vcr][] records and replays HTTP requests. Its main use case is for 
+caching HTTP requests in test suites in R packages. It has support 
+for working with two HTTP request packages: [crul][] and [httr][]. 
+
+To use `vcr` for testing the setup is pretty easy. 
+
+1. Add `vcr` to Suggests in your DESCRIPTION file
+2. Make a file in your `tests/testthat/` directory called 
+`helper-yourpackage.R` (or skip if as similar file already exists). 
+In that file use the following lines to setup your path for storing 
+cassettes (change path to whatever you want):
+
+```r
+library("vcr")
+invisible(vcr::vcr_configure())
+```
+
+3. In your tests, for whichever tests you want to use `vcr`, wrap 
+the tests in a `vcr::use_cassette()` call like:
+
+```r
+library(testthat)
+test_that("my test", {
+  vcr::use_cassette("rl_citation", {
+    aa <- rl_citation()
+
+    expect_is(aa, "character")
+    expect_match(aa, "IUCN")
+    expect_match(aa, "www.iucnredlist.org")
+  })
+})
+```
+
+That's it! Just run your tests are you normally would and any HTTP 
+requests done by `crul` or `httr` will be cached on the first test run
+then the cached responses used every time thereafter. 
+
+See the book [HTTP mocking and testing in R][book] for more.
+
+## What else?
+
+Let us know if there's anything else you'd like to see in this 
+document and/or if there's anything that can be explained better.
+
+Last, the httr package has a similar article on best practices, see 
+<https://httr.r-lib.org/articles/api-packages.html>
+
+
+[crul]: https://github.com/ropensci/crul
+[webmockr]: https://github.com/ropensci/webmockr
+[vcr]: https://github.com/ropensci/vcr
+[httr]: https://github.com/r-lib/httr
+[fauxpas]: https://github.com/ropensci/fauxpas
+[book]: https://books.ropensci.org/http-testing/

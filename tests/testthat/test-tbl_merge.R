@@ -31,16 +31,16 @@ covars <- c("trt", "age")
 
 # get model covariates adjusted by stage and grade
 adj_mods <- map(covars, ~
-coxph(
-  as.formula(
-    paste("Surv(ttdeath, death) ~ grade + ", .x)
-  ),
-  trial
-) %>%
-  tbl_regression(
-    include = .x,
-    exponentiate = TRUE
-  ))
+                  coxph(
+                    as.formula(
+                      paste("Surv(ttdeath, death) ~ grade + ", .x)
+                    ),
+                    trial
+                  ) %>%
+                  tbl_regression(
+                    include = all_of(.x),
+                    exponentiate = TRUE
+                  ))
 
 # now get stage and grade models adjusted for each other
 adj_mods[["grade_mod"]] <- coxph(
@@ -95,7 +95,6 @@ test_that("number of rows the same after joining", {
 test_that("tbl_merge throws errors", {
   expect_error(tbl_merge(t1), NULL)
   expect_error(tbl_merge(list(mtcars)), NULL)
-  expect_error(tbl_merge(tbls = list(t5)), NULL)
   expect_error(tbl_merge(tbls = list(t5, t6), tab_spanner = c("Table")), NULL)
 })
 
@@ -109,4 +108,71 @@ test_that("tbl_merge throws errors", {
       unique(),
     c(NA, "Drug A", "Drug B")
   )
+})
+
+test_that("tbl_merge() column ordering", {
+  t1 <- lm(marker ~ age, trial) %>% tbl_regression()
+  t2 <- lm(marker ~ response, trial) %>% tbl_regression()
+  t3 <- lm(marker ~ age, trial) %>% tbl_regression()
+
+  expect_equal(
+    tbl_merge(list(t1, t2, t3)) %>% as_tibble(col_labels = FALSE),
+    tbl_merge(list(t1, t2, t3)) %>%
+      as_tibble(col_labels = FALSE) %>%
+      select(label, ends_with("_1"), ends_with("_2"), ends_with("_3"))
+  )
+})
+
+test_that("tbl_merge() no spanning header", {
+  tbl <- lm(mpg ~ factor(cyl) + am, mtcars) %>% tbl_regression()
+
+  expect_error(
+    tbl_no_spanning <- tbl_merge(list(tbl, tbl), tab_spanner = FALSE),
+    NA
+  )
+  expect_true(
+    is.na(tbl_no_spanning$table_styling$header$spanning_header) %>% all()
+  )
+})
+
+test_that("tbl_merge() one table", {
+  tbl <- lm(mpg ~ factor(cyl) + am, mtcars) %>% tbl_regression()
+
+  expect_error(
+    tbl_only_one <- tbl_merge(list(tbl)),
+    NA
+  )
+})
+
+test_that("tbl_merge with complicated tbl_stack + cols_merge", {
+  theme_gtsummary_journal("jama")
+
+  t3 <-
+    trial[c("age", "grade", "response")] %>%
+    tbl_summary(
+      missing = "no",
+      type = list(where(is.numeric) ~ "continuous2"),
+      include = c(age, response)
+    ) %>%
+    add_n() %>%
+    modify_header(stat_0 ~ "**Summary Statistics**")
+
+
+  t4 <-
+    tbl_uvregression(
+      trial[c("ttdeath", "death", "age", "grade", "response")],
+      method = survival::coxph,
+      y = survival::Surv(ttdeath, death),
+      exponentiate = TRUE,
+      hide_n = TRUE,
+      include = c(age, response)
+    )
+
+  expect_error(
+    tbl_merge(tbls = list(t3, t4)) %>%
+      modify_spanning_header(everything() ~ NA) %>%
+      as_gt(),
+    NA
+  )
+  reset_gtsummary_theme()
 })

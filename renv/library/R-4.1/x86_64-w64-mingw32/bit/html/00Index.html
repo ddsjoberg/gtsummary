@@ -1,0 +1,708 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Classes and Methods for Fast Memory-Efficient Boolean Selections</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Classes and Methods for Fast Memory-Efficient Boolean Selections
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;bit&rsquo; version 4.0.4</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+<li><a href="../NEWS">Package NEWS</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<p style="text-align: center;">
+<a href="# "> </a>
+<a href="#A">A</a>
+<a href="#B">B</a>
+<a href="#C">C</a>
+<a href="#E">E</a>
+<a href="#F">F</a>
+<a href="#G">G</a>
+<a href="#I">I</a>
+<a href="#K">K</a>
+<a href="#L">L</a>
+<a href="#M">M</a>
+<a href="#N">N</a>
+<a href="#P">P</a>
+<a href="#Q">Q</a>
+<a href="#R">R</a>
+<a href="#S">S</a>
+<a href="#U">U</a>
+<a href="#V">V</a>
+<a href="#X">X</a>
+<a href="#misc">misc</a>
+</p>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="bit-package.html">bit-package</a></td>
+<td>bit: Classes and methods for fast memory-efficient boolean selections</td></tr>
+</table>
+
+<h2><a name="A">-- A --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="Summaries.html">all.bit</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">all.bitwhich</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">all.booltype</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">all.ri</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">all.which</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">any.bit</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">any.bitwhich</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">any.booltype</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">any.ri</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">any.which</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="rlepack.html">anyDuplicated.rlepack</a></td>
+<td>Hybrid Index, rle-pack utilities</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">anyNA.bit</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">anyNA.bitwhich</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">anyNA.booltype</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">anyNA.ri</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">anyNA.which</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="as.bit.html">as.bit</a></td>
+<td>Coercing to bit</td></tr>
+<tr><td style="width: 25%;"><a href="as.bit.html">as.bit.bit</a></td>
+<td>Coercing to bit</td></tr>
+<tr><td style="width: 25%;"><a href="as.bit.html">as.bit.bitwhich</a></td>
+<td>Coercing to bit</td></tr>
+<tr><td style="width: 25%;"><a href="as.bit.html">as.bit.double</a></td>
+<td>Coercing to bit</td></tr>
+<tr><td style="width: 25%;"><a href="as.bit.html">as.bit.integer</a></td>
+<td>Coercing to bit</td></tr>
+<tr><td style="width: 25%;"><a href="as.bit.html">as.bit.logical</a></td>
+<td>Coercing to bit</td></tr>
+<tr><td style="width: 25%;"><a href="as.bit.html">as.bit.NULL</a></td>
+<td>Coercing to bit</td></tr>
+<tr><td style="width: 25%;"><a href="as.bit.html">as.bit.ri</a></td>
+<td>Coercing to bit</td></tr>
+<tr><td style="width: 25%;"><a href="as.bit.html">as.bit.which</a></td>
+<td>Coercing to bit</td></tr>
+<tr><td style="width: 25%;"><a href="as.bitwhich.html">as.bitwhich</a></td>
+<td>Coercing to bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="as.bitwhich.html">as.bitwhich.bit</a></td>
+<td>Coercing to bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="as.bitwhich.html">as.bitwhich.bitwhich</a></td>
+<td>Coercing to bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="as.bitwhich.html">as.bitwhich.double</a></td>
+<td>Coercing to bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="as.bitwhich.html">as.bitwhich.integer</a></td>
+<td>Coercing to bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="as.bitwhich.html">as.bitwhich.logical</a></td>
+<td>Coercing to bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="as.bitwhich.html">as.bitwhich.NULL</a></td>
+<td>Coercing to bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="as.bitwhich.html">as.bitwhich.ri</a></td>
+<td>Coercing to bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="as.bitwhich.html">as.bitwhich.which</a></td>
+<td>Coercing to bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="as.booltype.html">as.booltype</a></td>
+<td>Coerce to booltype (generic)</td></tr>
+<tr><td style="width: 25%;"><a href="as.booltype.html">as.booltype.default</a></td>
+<td>Coerce to booltype (generic)</td></tr>
+<tr><td style="width: 25%;"><a href="as.character.bit.html">as.character.bit</a></td>
+<td>Coerce bit to character</td></tr>
+<tr><td style="width: 25%;"><a href="as.character.bitwhich.html">as.character.bitwhich</a></td>
+<td>Coerce bitwhich to character</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">as.double.bit</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">as.double.bitwhich</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">as.double.ri</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">as.integer.bit</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">as.integer.bitwhich</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">as.integer.ri</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">as.logical.bit</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">as.logical.bitwhich</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">as.logical.ri</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">as.logical.which</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="as.ri.html">as.ri</a></td>
+<td>Coerce to ri</td></tr>
+<tr><td style="width: 25%;"><a href="as.ri.html">as.ri.default</a></td>
+<td>Coerce to ri</td></tr>
+<tr><td style="width: 25%;"><a href="as.ri.html">as.ri.ri</a></td>
+<td>Coerce to ri</td></tr>
+<tr><td style="width: 25%;"><a href="as.which.html">as.which</a></td>
+<td>Coercion to (positive) integer positions</td></tr>
+<tr><td style="width: 25%;"><a href="as.which.html">as.which.bit</a></td>
+<td>Coercion to (positive) integer positions</td></tr>
+<tr><td style="width: 25%;"><a href="as.which.html">as.which.bitwhich</a></td>
+<td>Coercion to (positive) integer positions</td></tr>
+<tr><td style="width: 25%;"><a href="as.which.html">as.which.integer</a></td>
+<td>Coercion to (positive) integer positions</td></tr>
+<tr><td style="width: 25%;"><a href="as.which.html">as.which.logical</a></td>
+<td>Coercion to (positive) integer positions</td></tr>
+<tr><td style="width: 25%;"><a href="as.which.html">as.which.NULL</a></td>
+<td>Coercion to (positive) integer positions</td></tr>
+<tr><td style="width: 25%;"><a href="as.which.html">as.which.numeric</a></td>
+<td>Coercion to (positive) integer positions</td></tr>
+<tr><td style="width: 25%;"><a href="as.which.html">as.which.ri</a></td>
+<td>Coercion to (positive) integer positions</td></tr>
+<tr><td style="width: 25%;"><a href="as.which.html">as.which.which</a></td>
+<td>Coercion to (positive) integer positions</td></tr>
+</table>
+
+<h2><a name="B">-- B --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="bbatch.html">bbatch</a></td>
+<td>Balanced Batch sizes</td></tr>
+<tr><td style="width: 25%;"><a href="bit.html">bit</a></td>
+<td>Create empty bit vector</td></tr>
+<tr><td style="width: 25%;"><a href="bitsort.html">bitsort</a></td>
+<td>Low-level sorting: bit sort</td></tr>
+<tr><td style="width: 25%;"><a href="bitwhich.html">bitwhich</a></td>
+<td>Create bitwhich vector (skewed boolean)</td></tr>
+<tr><td style="width: 25%;"><a href="bitwhich_representation.html">bitwhich_representation</a></td>
+<td>Diagnose representation of bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="bit_unidup.html">bit_anyDuplicated</a></td>
+<td>bit unique and duplicated</td></tr>
+<tr><td style="width: 25%;"><a href="bit_init.html">bit_done</a></td>
+<td>Initializing bit masks</td></tr>
+<tr><td style="width: 25%;"><a href="bit_unidup.html">bit_duplicated</a></td>
+<td>bit unique and duplicated</td></tr>
+<tr><td style="width: 25%;"><a href="bit_in.html">bit_in</a></td>
+<td>bit %in%</td></tr>
+<tr><td style="width: 25%;"><a href="bit_init.html">bit_init</a></td>
+<td>Initializing bit masks</td></tr>
+<tr><td style="width: 25%;"><a href="bit_setops.html">bit_intersect</a></td>
+<td>bit set operations</td></tr>
+<tr><td style="width: 25%;"><a href="bit_rangediff.html">bit_rangediff</a></td>
+<td>bit range difference</td></tr>
+<tr><td style="width: 25%;"><a href="bit_setops.html">bit_setdiff</a></td>
+<td>bit set operations</td></tr>
+<tr><td style="width: 25%;"><a href="bit_setops.html">bit_setequal</a></td>
+<td>bit set operations</td></tr>
+<tr><td style="width: 25%;"><a href="bit_setops.html">bit_setops</a></td>
+<td>bit set operations</td></tr>
+<tr><td style="width: 25%;"><a href="bit_sort.html">bit_sort</a></td>
+<td>bit sort</td></tr>
+<tr><td style="width: 25%;"><a href="bit_sort_unique.html">bit_sort_unique</a></td>
+<td>bit sort unique</td></tr>
+<tr><td style="width: 25%;"><a href="bit_unidup.html">bit_sumDuplicated</a></td>
+<td>bit unique and duplicated</td></tr>
+<tr><td style="width: 25%;"><a href="bit_setops.html">bit_symdiff</a></td>
+<td>bit set operations</td></tr>
+<tr><td style="width: 25%;"><a href="bit_unidup.html">bit_unidup</a></td>
+<td>bit unique and duplicated</td></tr>
+<tr><td style="width: 25%;"><a href="bit_setops.html">bit_union</a></td>
+<td>bit set operations</td></tr>
+<tr><td style="width: 25%;"><a href="bit_unidup.html">bit_unique</a></td>
+<td>bit unique and duplicated</td></tr>
+<tr><td style="width: 25%;"><a href="booltype.html">booltype</a></td>
+<td>Diagnosing boolean types</td></tr>
+<tr><td style="width: 25%;"><a href="booltypes.html">booltypes</a></td>
+<td>Boolean types</td></tr>
+</table>
+
+<h2><a name="C">-- C --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="c.booltype.html">c.bit</a></td>
+<td>Concatenating booltype vectors</td></tr>
+<tr><td style="width: 25%;"><a href="c.booltype.html">c.bitwhich</a></td>
+<td>Concatenating booltype vectors</td></tr>
+<tr><td style="width: 25%;"><a href="c.booltype.html">c.booltype</a></td>
+<td>Concatenating booltype vectors</td></tr>
+<tr><td style="width: 25%;"><a href="chunk.html">chunk</a></td>
+<td>Methods for chunked range index</td></tr>
+<tr><td style="width: 25%;"><a href="chunk.html">chunk.default</a></td>
+<td>Methods for chunked range index</td></tr>
+<tr><td style="width: 25%;"><a href="chunks.html">chunks</a></td>
+<td>Function for chunked range index</td></tr>
+<tr><td style="width: 25%;"><a href="clone.html">clone</a></td>
+<td>Cloning ff and ram objects</td></tr>
+<tr><td style="width: 25%;"><a href="clone.html">clone.default</a></td>
+<td>Cloning ff and ram objects</td></tr>
+<tr><td style="width: 25%;"><a href="CoercionToStandard.html">CoercionToStandard</a></td>
+<td>Coercion from bit, bitwhich, which and ri to logical, integer, double</td></tr>
+<tr><td style="width: 25%;"><a href="copy_vector.html">copy_vector</a></td>
+<td>Copy atomic R vector</td></tr>
+<tr><td style="width: 25%;"><a href="countsort.html">countsort</a></td>
+<td>Low-level sorting: counting sort</td></tr>
+</table>
+
+<h2><a name="E">-- E --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="Extract.html">Extract</a></td>
+<td>Extract or replace part of an boolean vector</td></tr>
+</table>
+
+<h2><a name="F">-- F --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="firstNA.html">firstNA</a></td>
+<td>Position of first NA</td></tr>
+</table>
+
+<h2><a name="G">-- G --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="getsetattr.html">getsetattr</a></td>
+<td>Attribute setting by reference</td></tr>
+<tr><td style="width: 25%;"><a href="get_length.html">get_length</a></td>
+<td>Get C length of a vector</td></tr>
+</table>
+
+<h2><a name="I">-- I --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="in.bitwhich.html">in.bitwhich</a></td>
+<td>Check existence of integers in table</td></tr>
+<tr><td style="width: 25%;"><a href="intrle.html">intisasc</a></td>
+<td>Hybrid Index, C-coded utilities</td></tr>
+<tr><td style="width: 25%;"><a href="intrle.html">intisdesc</a></td>
+<td>Hybrid Index, C-coded utilities</td></tr>
+<tr><td style="width: 25%;"><a href="intrle.html">intrle</a></td>
+<td>Hybrid Index, C-coded utilities</td></tr>
+<tr><td style="width: 25%;"><a href="is.booltype.html">is.bit</a></td>
+<td>Testing for boolean types</td></tr>
+<tr><td style="width: 25%;"><a href="is.booltype.html">is.bitwhich</a></td>
+<td>Testing for boolean types</td></tr>
+<tr><td style="width: 25%;"><a href="is.booltype.html">is.booltype</a></td>
+<td>Testing for boolean types</td></tr>
+<tr><td style="width: 25%;"><a href="is.booltype.html">is.hi</a></td>
+<td>Testing for boolean types</td></tr>
+<tr><td style="width: 25%;"><a href="is.na.bit.html">is.na.bit</a></td>
+<td>Test for NA in bit and bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="is.na.bit.html">is.na.bitwhich</a></td>
+<td>Test for NA in bit and bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="is.booltype.html">is.ri</a></td>
+<td>Testing for boolean types</td></tr>
+<tr><td style="width: 25%;"><a href="Metadata.html">is.sorted</a></td>
+<td>Generics related to cache access</td></tr>
+<tr><td style="width: 25%;"><a href="Metadata.html">is.sorted&lt;-</a></td>
+<td>Generics related to cache access</td></tr>
+<tr><td style="width: 25%;"><a href="is.booltype.html">is.which</a></td>
+<td>Testing for boolean types</td></tr>
+</table>
+
+<h2><a name="K">-- K --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="Sorting.html">keyorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">keysort</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">keysortorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+</table>
+
+<h2><a name="L">-- L --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="length.bit.html">length.bit</a></td>
+<td>Getting and setting length of bit, bitwhich and ri objects</td></tr>
+<tr><td style="width: 25%;"><a href="length.bit.html">length.bitwhich</a></td>
+<td>Getting and setting length of bit, bitwhich and ri objects</td></tr>
+<tr><td style="width: 25%;"><a href="length.bit.html">length.ri</a></td>
+<td>Getting and setting length of bit, bitwhich and ri objects</td></tr>
+<tr><td style="width: 25%;"><a href="length.bit.html">length&lt;-.bit</a></td>
+<td>Getting and setting length of bit, bitwhich and ri objects</td></tr>
+<tr><td style="width: 25%;"><a href="length.bit.html">length&lt;-.bitwhich</a></td>
+<td>Getting and setting length of bit, bitwhich and ri objects</td></tr>
+</table>
+
+<h2><a name="M">-- M --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="Summaries.html">max.bit</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">max.bitwhich</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">max.booltype</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">max.ri</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">max.which</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">maxindex</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">maxindex.bit</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">maxindex.bitwhich</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">maxindex.default</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">maxindex.logical</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">maxindex.ri</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">maxindex.which</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">mergeorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">mergesort</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">mergesortorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_anyDuplicated</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_duplicated</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_first</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_firstin</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_firstnotin</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_in</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_intersect</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_last</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_lastin</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_lastnotin</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_match</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_notin</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_rangediff</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_rangein</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_rangenotin</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_rangesect</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_rev</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_setdiff</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_setequal</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_sumDuplicated</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_symdiff</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_union</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="merge_rev.html">merge_unique</a></td>
+<td>Fast functions for sorted sets of integer</td></tr>
+<tr><td style="width: 25%;"><a href="Metadata.html">Metadata</a></td>
+<td>Generics related to cache access</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">min.bit</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">min.bitwhich</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">min.booltype</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">min.ri</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">min.which</a></td>
+<td>Summaries of boolean vectors</td></tr>
+</table>
+
+<h2><a name="N">-- N --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="Metadata.html">na.count</a></td>
+<td>Generics related to cache access</td></tr>
+<tr><td style="width: 25%;"><a href="Metadata.html">na.count&lt;-</a></td>
+<td>Generics related to cache access</td></tr>
+<tr><td style="width: 25%;"><a href="Metadata.html">nties</a></td>
+<td>Generics related to cache access</td></tr>
+<tr><td style="width: 25%;"><a href="Metadata.html">nties&lt;-</a></td>
+<td>Generics related to cache access</td></tr>
+<tr><td style="width: 25%;"><a href="Metadata.html">nunique</a></td>
+<td>Generics related to cache access</td></tr>
+<tr><td style="width: 25%;"><a href="Metadata.html">nunique&lt;-</a></td>
+<td>Generics related to cache access</td></tr>
+<tr><td style="width: 25%;"><a href="Metadata.html">nvalid</a></td>
+<td>Generics related to cache access</td></tr>
+</table>
+
+<h2><a name="P">-- P --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="PhysVirt.html">physical</a></td>
+<td>Physical and virtual attributes</td></tr>
+<tr><td style="width: 25%;"><a href="PhysVirt.html">physical.default</a></td>
+<td>Physical and virtual attributes</td></tr>
+<tr><td style="width: 25%;"><a href="PhysVirt.html">physical&lt;-</a></td>
+<td>Physical and virtual attributes</td></tr>
+<tr><td style="width: 25%;"><a href="PhysVirt.html">physical&lt;-.default</a></td>
+<td>Physical and virtual attributes</td></tr>
+<tr><td style="width: 25%;"><a href="PhysVirt.html">PhysVirt</a></td>
+<td>Physical and virtual attributes</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">poslength</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">poslength.bit</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">poslength.bitwhich</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">poslength.default</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">poslength.logical</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">poslength.ri</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="maxindex.html">poslength.which</a></td>
+<td>Get maxindex (length of boolean vector) and poslength (number of 'selected' elements)</td></tr>
+<tr><td style="width: 25%;"><a href="print.bit.html">print.bit</a></td>
+<td>Print method for bit</td></tr>
+<tr><td style="width: 25%;"><a href="print.bitwhich.html">print.bitwhich</a></td>
+<td>Print method for bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="PhysVirt.html">print.physical</a></td>
+<td>Physical and virtual attributes</td></tr>
+<tr><td style="width: 25%;"><a href="ri.html">print.ri</a></td>
+<td>Range index</td></tr>
+<tr><td style="width: 25%;"><a href="PhysVirt.html">print.virtual</a></td>
+<td>Physical and virtual attributes</td></tr>
+</table>
+
+<h2><a name="Q">-- Q --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="Sorting.html">quickorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">quicksort</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="quicksort2.html">quicksort2</a></td>
+<td>Low-level sorting: binary quicksort</td></tr>
+<tr><td style="width: 25%;"><a href="quicksort3.html">quicksort3</a></td>
+<td>Low-level sorting: threeway quicksort</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">quicksortorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+</table>
+
+<h2><a name="R">-- R --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="Sorting.html">radixorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">radixsort</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">radixsortorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">ramorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">ramsort</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">ramsortorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">range.bit</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">range.bitwhich</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">range.booltype</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">range.ri</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">range.which</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="range_na.html">range_na</a></td>
+<td>Get range and number of NAs</td></tr>
+<tr><td style="width: 25%;"><a href="range_nanozero.html">range_nanozero</a></td>
+<td>Remove zeros and get range and number of NAs</td></tr>
+<tr><td style="width: 25%;"><a href="range_sortna.html">range_sortna</a></td>
+<td>Prepare for sorting and get range, number of NAs and unsortedness</td></tr>
+<tr><td style="width: 25%;"><a href="rep.booltype.html">rep.bit</a></td>
+<td>Replicating bit and bitwhich vectors</td></tr>
+<tr><td style="width: 25%;"><a href="rep.booltype.html">rep.bitwhich</a></td>
+<td>Replicating bit and bitwhich vectors</td></tr>
+<tr><td style="width: 25%;"><a href="rep.booltype.html">rep.booltype</a></td>
+<td>Replicating bit and bitwhich vectors</td></tr>
+<tr><td style="width: 25%;"><a href="repeat.time.html">repeat.time</a></td>
+<td>Adaptive timer</td></tr>
+<tr><td style="width: 25%;"><a href="repfromto.html">repfromto</a></td>
+<td>Virtual recycling</td></tr>
+<tr><td style="width: 25%;"><a href="repfromto.html">repfromto&lt;-</a></td>
+<td>Virtual recycling</td></tr>
+<tr><td style="width: 25%;"><a href="rev.booltype.html">rev.bit</a></td>
+<td>Reversing bit and bitwhich vectors</td></tr>
+<tr><td style="width: 25%;"><a href="rev.booltype.html">rev.bitwhich</a></td>
+<td>Reversing bit and bitwhich vectors</td></tr>
+<tr><td style="width: 25%;"><a href="rev.booltype.html">rev.booltype</a></td>
+<td>Reversing bit and bitwhich vectors</td></tr>
+<tr><td style="width: 25%;"><a href="rlepack.html">rev.rlepack</a></td>
+<td>Hybrid Index, rle-pack utilities</td></tr>
+<tr><td style="width: 25%;"><a href="reverse_vector.html">reverse_vector</a></td>
+<td>Reverse atomic vector</td></tr>
+<tr><td style="width: 25%;"><a href="ri.html">ri</a></td>
+<td>Range index</td></tr>
+<tr><td style="width: 25%;"><a href="rlepack.html">rlepack</a></td>
+<td>Hybrid Index, rle-pack utilities</td></tr>
+<tr><td style="width: 25%;"><a href="rlepack.html">rlepack.integer</a></td>
+<td>Hybrid Index, rle-pack utilities</td></tr>
+<tr><td style="width: 25%;"><a href="rlepack.html">rleunpack</a></td>
+<td>Hybrid Index, rle-pack utilities</td></tr>
+<tr><td style="width: 25%;"><a href="rlepack.html">rleunpack.rlepack</a></td>
+<td>Hybrid Index, rle-pack utilities</td></tr>
+</table>
+
+<h2><a name="S">-- S --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="getsetattr.html">setattr</a></td>
+<td>Attribute setting by reference</td></tr>
+<tr><td style="width: 25%;"><a href="getsetattr.html">setattributes</a></td>
+<td>Attribute setting by reference</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">shellorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">shellsort</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">shellsortorder</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="Sorting.html">Sorting</a></td>
+<td>Generics for in-RAM sorting and ordering</td></tr>
+<tr><td style="width: 25%;"><a href="still.identical.html">still.identical</a></td>
+<td>Test for C-level identity of two atomic vectors</td></tr>
+<tr><td style="width: 25%;"><a href="str.bit.html">str.bit</a></td>
+<td>Str method for bit</td></tr>
+<tr><td style="width: 25%;"><a href="str.bitwhich.html">str.bitwhich</a></td>
+<td>Str method for bitwhich</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">sum.bit</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">sum.bitwhich</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">sum.booltype</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">sum.ri</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">sum.which</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">Summaries</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">summary.bit</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">summary.bitwhich</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">summary.booltype</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">summary.ri</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="Summaries.html">summary.which</a></td>
+<td>Summaries of boolean vectors</td></tr>
+<tr><td style="width: 25%;"><a href="symdiff.html">symdiff</a></td>
+<td>Symmetric set complement</td></tr>
+</table>
+
+<h2><a name="U">-- U --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="unattr.html">unattr</a></td>
+<td>Attribute removal</td></tr>
+<tr><td style="width: 25%;"><a href="rlepack.html">unique.rlepack</a></td>
+<td>Hybrid Index, rle-pack utilities</td></tr>
+</table>
+
+<h2><a name="V">-- V --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="vecseq.html">vecseq</a></td>
+<td>Vectorized Sequences</td></tr>
+<tr><td style="width: 25%;"><a href="PhysVirt.html">virtual</a></td>
+<td>Physical and virtual attributes</td></tr>
+<tr><td style="width: 25%;"><a href="PhysVirt.html">virtual.default</a></td>
+<td>Physical and virtual attributes</td></tr>
+<tr><td style="width: 25%;"><a href="PhysVirt.html">virtual&lt;-</a></td>
+<td>Physical and virtual attributes</td></tr>
+<tr><td style="width: 25%;"><a href="PhysVirt.html">virtual&lt;-.default</a></td>
+<td>Physical and virtual attributes</td></tr>
+</table>
+
+<h2><a name="X">-- X --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="xor.html">xor</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">xor.bit</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">xor.bitwhich</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">xor.booltype</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">xor.default</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">xor.logical</a></td>
+<td>Boolean operators and functions</td></tr>
+</table>
+
+<h2><a name="misc">-- misc --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="xor.html">!.bit</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">!.bitwhich</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">!=.bit</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">!=.bitwhich</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">!=.booltype</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">&amp;.bit</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">&amp;.bitwhich</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">&amp;.booltype</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="bit_init.html">.BITS</a></td>
+<td>Initializing bit masks</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">==.bit</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">==.bitwhich</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">==.booltype</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="Extract.html">[.bit</a></td>
+<td>Extract or replace part of an boolean vector</td></tr>
+<tr><td style="width: 25%;"><a href="Extract.html">[.bitwhich</a></td>
+<td>Extract or replace part of an boolean vector</td></tr>
+<tr><td style="width: 25%;"><a href="Extract.html">[&lt;-.bit</a></td>
+<td>Extract or replace part of an boolean vector</td></tr>
+<tr><td style="width: 25%;"><a href="Extract.html">[&lt;-.bitwhich</a></td>
+<td>Extract or replace part of an boolean vector</td></tr>
+<tr><td style="width: 25%;"><a href="Extract.html">[[.bit</a></td>
+<td>Extract or replace part of an boolean vector</td></tr>
+<tr><td style="width: 25%;"><a href="Extract.html">[[.bitwhich</a></td>
+<td>Extract or replace part of an boolean vector</td></tr>
+<tr><td style="width: 25%;"><a href="Extract.html">[[&lt;-.bit</a></td>
+<td>Extract or replace part of an boolean vector</td></tr>
+<tr><td style="width: 25%;"><a href="Extract.html">[[&lt;-.bitwhich</a></td>
+<td>Extract or replace part of an boolean vector</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">|.bit</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">|.bitwhich</a></td>
+<td>Boolean operators and functions</td></tr>
+<tr><td style="width: 25%;"><a href="xor.html">|.booltype</a></td>
+<td>Boolean operators and functions</td></tr>
+</table>
+</body></html>

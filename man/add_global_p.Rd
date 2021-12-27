@@ -63,7 +63,7 @@ Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }
 
 \examples{
-\dontshow{if (assert_package("car", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("car", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 tbl_lm_global_ex1 <-
   lm(marker ~ age + grade, trial) \%>\%
@@ -83,6 +83,8 @@ tbl_uv_global_ex2 <-
 \dontshow{\}) # examplesIf}
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_uvregression tools: 
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},

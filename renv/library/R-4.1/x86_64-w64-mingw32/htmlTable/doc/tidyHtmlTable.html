@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Stephen Gragg" />
+
+<meta name="date" content="2021-05-18" />
+
+<title>Using tidyHtmlTable</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Using tidyHtmlTable</h1>
+<h4 class="author">Stephen Gragg</h4>
+<h4 class="date">2021-05-18</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p><code>tidyHtmlTable</code> acts as a wrapper function for the <code>htmlTable</code> function allowing columns to be mapped from the input data to specific htmlTable parameters in a manner similar to ggplot2.</p>
+</div>
+<div id="some-examples" class="section level1">
+<h1>Some Examples</h1>
+<div id="prepare-data" class="section level2">
+<h2>Prepare Data</h2>
+<p>We’ll begin by turning the <code>mtcars</code> data into a tidy dataset. The <code>pivot_longer</code> function is called to collect 3 performance metrics into a pair of key and value columns.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(magrittr)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(tidyr)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(htmlTable)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(tibble)</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>td &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="st">  </span><span class="kw">as_tibble</span>(<span class="dt">rownames =</span> <span class="st">&quot;rnames&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">names_to =</span> <span class="st">&quot;per_metric&quot;</span>, </span>
+<span id="cb1-10"><a href="#cb1-10"></a>               <span class="dt">cols =</span> <span class="kw">c</span>(hp, mpg, qsec))</span></code></pre></div>
+<p>Now we will compute 4 summary statistics for each of the 3 performance metrics. This will be further grouped by number of cylinders and gears.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>tidy_summary &lt;-<span class="st"> </span>td <span class="op">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="st">  </span><span class="kw">group_by</span>(cyl, gear, per_metric) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Mean =</span> <span class="kw">round</span>(<span class="kw">mean</span>(value), <span class="dv">1</span>),</span>
+<span id="cb2-4"><a href="#cb2-4"></a>            <span class="dt">SD =</span> <span class="kw">round</span>(<span class="kw">sd</span>(value), <span class="dv">1</span>),</span>
+<span id="cb2-5"><a href="#cb2-5"></a>            <span class="dt">Min =</span> <span class="kw">round</span>(<span class="kw">min</span>(value), <span class="dv">1</span>),</span>
+<span id="cb2-6"><a href="#cb2-6"></a>            <span class="dt">Max =</span> <span class="kw">round</span>(<span class="kw">max</span>(value), <span class="dv">1</span>),</span>
+<span id="cb2-7"><a href="#cb2-7"></a>            <span class="dt">.groups =</span> <span class="st">&#39;drop&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="dt">names_to =</span> <span class="st">&quot;summary_stat&quot;</span>, </span>
+<span id="cb2-9"><a href="#cb2-9"></a>               <span class="dt">cols =</span> <span class="kw">c</span>(Mean, SD, Min, Max)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">gear =</span> <span class="kw">paste</span>(gear, <span class="st">&quot;Gears&quot;</span>),</span>
+<span id="cb2-12"><a href="#cb2-12"></a>         <span class="dt">cyl =</span> <span class="kw">paste</span>(cyl, <span class="st">&quot;Cylinders&quot;</span>))</span></code></pre></div>
+<p>At this point, we are ready to implement the <code>htmlTable</code> function. Essentially, this constructs an html table using arguments similar to the <code>htmlTable</code> function. However, whereas <code>htmlTable</code> required the user to manually arrange the data and specify the column groups, headers, row names, row-groups, etc., each of these components of the table is mapped to a column within the input data.</p>
+</div>
+<div id="output-html-table" class="section level2">
+<h2>Output html table</h2>
+<div id="example-1" class="section level3">
+<h3>Example 1</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>tidy_summary  <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span><span class="kw">arrange</span>(per_metric, summary_stat) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">align =</span> <span class="st">&quot;r&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  </span><span class="kw">tidyHtmlTable</span>(<span class="dt">header =</span> gear,</span>
+<span id="cb3-5"><a href="#cb3-5"></a>                <span class="dt">cgroup =</span> cyl,</span>
+<span id="cb3-6"><a href="#cb3-6"></a>                <span class="dt">rnames =</span> summary_stat,</span>
+<span id="cb3-7"><a href="#cb3-7"></a>                <span class="dt">rgroup =</span> per_metric)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-top: 2px solid grey;">
+</th>
+<th colspan="3" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+4 Cylinders
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th colspan="3" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+6 Cylinders
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th colspan="2" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+8 Cylinders
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+3 Gears
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+4 Gears
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+5 Gears
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+3 Gears
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+4 Gears
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+5 Gears
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+3 Gears
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+5 Gears
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="13" style="margin: 0; padding: 0; font-weight: normal;">
+hp
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  Max
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+97
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+109
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+113
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+110
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+123
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+175
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+245
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+335
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  Mean
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+97
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+76
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+102
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+107.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+116.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+175
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+194.2
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+299.5
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  Min
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+97
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+52
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+91
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+105
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+110
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+175
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+150
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+264
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  SD
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+20.1
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.6
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+3.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+7.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+33.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+50.2
+</td>
+</tr>
+<tr>
+<td colspan="13" style="margin: 0; padding: 0; font-weight: normal;">
+mpg
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  Max
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+33.9
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+30.4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.7
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.2
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.8
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  Mean
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+26.9
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+28.2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.7
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.1
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.4
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  Min
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+26
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+18.1
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+17.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.7
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+10.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  SD
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+4.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+3.1
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+2.3
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+1.6
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+2.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+0.6
+</td>
+</tr>
+<tr>
+<td colspan="13" style="margin: 0; padding: 0; font-weight: normal;">
+qsec
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  Max
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+20
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+22.9
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+16.9
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+20.2
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+18.9
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+18
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+14.6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  Mean
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+20
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.6
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+16.8
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+17.7
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+17.1
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+14.6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  Min
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+20
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+18.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+16.7
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+16.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+14.5
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+  SD
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+1.5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+0.1
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+0.6
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+1.1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+0.8
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+0.1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="example-2" class="section level3">
+<h3>Example 2</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>tidy_summary  <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="st">  </span><span class="kw">arrange</span>(cyl, gear) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">align =</span> <span class="st">&quot;r&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span><span class="kw">tidyHtmlTable</span>(<span class="dt">header =</span> summary_stat,</span>
+<span id="cb4-5"><a href="#cb4-5"></a>                <span class="dt">cgroup =</span> per_metric,</span>
+<span id="cb4-6"><a href="#cb4-6"></a>                <span class="dt">rnames =</span> gear,</span>
+<span id="cb4-7"><a href="#cb4-7"></a>                <span class="dt">rgroup =</span> cyl)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-top: 2px solid grey;">
+</th>
+<th colspan="4" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+hp
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th colspan="4" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+mpg
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th colspan="4" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+qsec
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Max
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Mean
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Min
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+SD
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Max
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Mean
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Min
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+SD
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Max
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Mean
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Min
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+SD
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="17" style="margin: 0; padding: 0; font-weight: normal;">
+4 Cylinders
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  3 Gears
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+97
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+97
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+97
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+20
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+20
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+20
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  4 Gears
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+109
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+76
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+52
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+20.1
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+33.9
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+26.9
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+4.8
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+22.9
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.6
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+18.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+1.5
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  5 Gears
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+113
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+102
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+91
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.6
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+30.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+28.2
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+26
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+3.1
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+16.9
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+16.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+16.7
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+0.1
+</td>
+</tr>
+<tr>
+<td colspan="17" style="margin: 0; padding: 0; font-weight: normal;">
+6 Cylinders
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  3 Gears
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+110
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+107.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+105
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+3.5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+18.1
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+2.3
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+20.2
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+0.6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  4 Gears
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+123
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+116.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+110
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+7.5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+21
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+17.8
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+1.6
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+18.9
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+17.7
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+16.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+1.1
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  5 Gears
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+175
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+175
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+175
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.7
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.7
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.7
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.5
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+</td>
+</tr>
+<tr>
+<td colspan="17" style="margin: 0; padding: 0; font-weight: normal;">
+8 Cylinders
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  3 Gears
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+245
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+194.2
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+150
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+33.4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+19.2
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.1
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+10.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+2.8
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+18
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+17.1
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+15.4
+</td>
+<td style="margin: 0; padding: 0; text-align: right;">
+0.8
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+  5 Gears
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+335
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+299.5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+264
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+50.2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+15.8
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+15.4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+15
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+0.6
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+14.6
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+14.6
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+14.5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+0.1
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string colname="colLogSumExps"%>
+<%@string rowname="rowLogSumExps"%>
+<%@meta title="${colname}() and ${rowname}() benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-06-09"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=colname%>() and <%=rowname%>() against alternative methods.
+
+## Alternative methods
+
+* apply() + matrixStats::logSumExp()
+* apply() + logSumExp0()
+
+where
+
+```r
+<%=withCapture({
+logSumExp0 <- function(lx, ...) {
+  iMax <- which.max(lx)
+  log1p(sum(exp(lx[-iMax] - lx[iMax]))) + lx[iMax]
+} # logSumExp0() 
+})%>
+```
+
+
+
+## Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = "double")
+})%>
+```
+
+## Results
+
+<% for (dataLabel in names(data)) { %>
+<% message(dataLabel) %>
+### <%=dataLabel%> matrix
+
+
+```r
+<%=withCapture({
+X <- data[[.dataLabel.]]
+gc()
+
+colStats <- microbenchmark(
+ colLogSumExps      = colLogSumExps(X, na.rm = FALSE),
+ "apply+logSumExp"  = apply(X, MARGIN = 2L, FUN = logSumExp, na.rm = FALSE),
+ "apply+logSumExp0" = apply(X, MARGIN = 2L, FUN = logSumExp0, na.rm = FALSE),
+ unit = "ms"
+)
+
+X <- t(X)
+gc()
+
+rowStats <- microbenchmark(
+ rowLogSumExps      = rowLogSumExps(X, na.rm = FALSE),
+ "apply+logSumExp"  = apply(X, MARGIN = 1L, FUN = logSumExp, na.rm = FALSE),
+ "apply+logSumExp0" = apply(X, MARGIN = 1L, FUN = logSumExp0, na.rm = FALSE),
+ unit = "ms"
+)
+})%>
+```
+
+<% crBenchmarkResults(colStats, rowStats, tags=dataLabel) %>
+
+<% } # for (dataLabel ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2014-06-09
+o Created.
+---------------------------------------------------------------------------%>

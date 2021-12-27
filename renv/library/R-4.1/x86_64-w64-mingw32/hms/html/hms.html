@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: A simple class for storing time-of-day values</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for hms {hms}"><tr><td>hms {hms}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>A simple class for storing time-of-day values</h2>
+
+<h3>Description</h3>
+
+<p>The values are stored as a <a href="../../base/html/difftime.html">difftime</a> vector with a custom class,
+and always with &quot;seconds&quot; as unit for robust coercion to numeric.
+Supports construction from time values, coercion to and from
+various data types, and formatting.  Can be used as a regular column in a
+data frame.
+</p>
+<p><code>hms()</code> is a high-level constructor that accepts second, minute, hour and day components
+as numeric vectors.
+</p>
+<p><code>new_hms()</code> is a low-level constructor that only checks that its input has the correct base type, <a href="../../base/html/numeric.html">numeric</a>.
+</p>
+<p><code>is_hms()</code> checks if an object is of class <code>hms</code>.
+</p>
+<p><code>as_hms()</code> is a generic that supports conversions beyond casting.
+The default method forwards to <code><a href="../../vctrs/html/vec_cast.html">vec_cast()</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+hms(seconds = NULL, minutes = NULL, hours = NULL, days = NULL)
+
+new_hms(x = numeric())
+
+is_hms(x)
+
+as_hms(x, ...)
+
+## S3 method for class 'hms'
+as.POSIXct(x, ...)
+
+## S3 method for class 'hms'
+as.POSIXlt(x, ...)
+
+## S3 method for class 'hms'
+as.character(x, ...)
+
+## S3 method for class 'hms'
+format(x, ...)
+
+## S3 method for class 'hms'
+print(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>seconds, minutes, hours, days</code></td>
+<td>
+<p>Time since midnight. No bounds checking is
+performed.</p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>An object.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>additional arguments to be passed to or from methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>For <code>hms</code>, all arguments must have the same length or be
+<code>NULL</code>.  Odd combinations (e.g., passing only <code>seconds</code> and
+<code>hours</code> but not <code>minutes</code>) are rejected.
+</p>
+<p>For arguments of type <a href="../../base/html/DateTimeClasses.html">POSIXct</a> and <a href="../../base/html/DateTimeClasses.html">POSIXlt</a>, <code>as_hms()</code> does not perform timezone
+conversion.
+Use <code><a href="../../lubridate/help/with_tz.html">lubridate::with_tz()</a></code> and <code><a href="../../lubridate/help/force_tz.html">lubridate::force_tz()</a></code> as necessary.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+hms(56, 34, 12)
+hms()
+
+new_hms(as.numeric(1:3))
+# Supports numeric only!
+try(new_hms(1:3))
+
+as_hms(1)
+as_hms("12:34:56")
+as_hms(Sys.time())
+as.POSIXct(hms(1))
+data.frame(a = hms(1))
+d &lt;- data.frame(hours = 1:3)
+d$hours &lt;- hms(hours = d$hours)
+d
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>hms</em> version 1.1.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

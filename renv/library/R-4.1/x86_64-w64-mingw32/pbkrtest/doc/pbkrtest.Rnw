@@ -1,0 +1,265 @@
+%\VignetteIndexEntry{pbkrtest-introduction: Introduction to pbkrtest}
+%\VignettePackage{pbkrtest}
+
+\documentclass[11pt]{article}
+\usepackage{url,a4}
+
+\usepackage[latin1]{inputenc}
+%\usepackage{inputenx}
+\usepackage{boxedminipage,color}
+\usepackage[noae]{Sweave}
+
+\parindent0pt\parskip5pt
+\def\code#1{{\texttt{#1}}}
+\def\pkg#1{{\texttt{#1}}}
+\def\R{\texttt{R}}
+
+
+
+<<echo=FALSE,print=FALSE>>=
+require( pbkrtest )
+prettyVersion <- packageDescription("pbkrtest")$Version
+prettyDate <- format(Sys.Date())
+@
+
+
+\title{On the usage of the  \pkg{pbkrtest} package}
+\author{S{\o}ren H{\o}jsgaard and Ulrich Halekoh}
+\date{\pkg{pbkrtest} version \Sexpr{prettyVersion} as of \Sexpr{prettyDate}}
+
+\SweaveOpts{prefix.string=figures/pbkr, keep.source=T, height=4}
+
+\begin{document}
+
+\definecolor{darkred}{rgb}{.7,0,0}
+\definecolor{midnightblue}{rgb}{0.098,0.098,0.439}
+
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{
+  fontfamily=tt,
+  %%fontseries=b,
+  %% xleftmargin=2em,
+  formatcom={\color{midnightblue}}
+}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{
+  fontfamily=tt,
+  %%fontseries=b,
+  %% xleftmargin=2em,
+  formatcom={\color{darkred}}
+}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{
+  fontfamily=tt,
+  %%fontseries=b,
+  %% xleftmargin=2em,
+  formatcom={\color{blue}}
+}
+
+\fvset{listparameters={\setlength{\topsep}{-2pt}}}
+\renewenvironment{Schunk}{\linespread{.90}}{}
+
+
+
+\maketitle
+\tableofcontents
+
+@
+<<echo=F,results=hide>>=
+options(prompt = "R> ", continue = "+  ", width = 80, useFancyQuotes=FALSE)
+dir.create("figures")
+@ %def
+
+%% useFancyQuotes = FALSE
+@
+<<echo=FALSE>>=
+library(pbkrtest)
+@ %def
+
+\section{Introduction}
+
+The \code{shoes} data is a list of two vectors, giving the wear of
+shoes of materials A and B for one foot each of ten boys.
+
+@
+<<>>=
+data(shoes, package="MASS")
+shoes
+@ %def
+
+A plot clearly reveals that boys wear their shoes differently.
+
+@
+<<fig=T>>=
+plot(A~1, data=shoes, col="red",lwd=2, pch=1, ylab="wear", xlab="boy")
+points(B~1, data=shoes, col="blue", lwd=2, pch=2)
+points(I((A+B)/2)~1, data=shoes, pch="-", lwd=2)
+@ %def
+
+
+One option for testing the effect of materials is to make a paired
+$t$--test. The following forms are equivalent:
+
+@
+<<>>=
+r1<-t.test(shoes$A, shoes$B, paired=T)
+r2<-t.test(shoes$A-shoes$B)
+r1
+@ %def
+
+
+To work with data in a mixed model setting we create a dataframe, and
+for later use we also create an imbalanced version of data:
+
+@
+<<>>=
+boy <- rep(1:10,2)
+boyf<- factor(letters[boy])
+mat <- factor(c(rep("A", 10), rep("B",10)))
+## Balanced data:
+shoe.b <- data.frame(wear=unlist(shoes), boy=boy, boyf=boyf, mat=mat)
+head(shoe.b)
+## Imbalanced data; delete (boy=1, mat=1) and (boy=2, mat=b)
+shoe.i <-  shoe.b[-c(1,12),]
+@ %def
+
+We fit models to the two datasets:
+
+@
+<<>>=
+lmm1.b  <- lmer( wear ~ mat + (1|boyf), data=shoe.b )
+lmm0.b  <- update( lmm1.b, .~. - mat)
+lmm1.i  <- lmer( wear ~ mat + (1|boyf), data=shoe.i )
+lmm0.i  <- update(lmm1.i, .~. - mat)
+@ %def
+
+The asymptotic likelihood ratio test shows stronger significance than
+the $t$--test:
+
+@
+<<>>=
+anova( lmm1.b, lmm0.b, test="Chisq" ) ## Balanced data
+anova( lmm1.i, lmm0.i, test="Chisq" ) ## Imbalanced data
+@ %def
+
+\section{Kenward--Roger approach}
+\label{sec:kenw-roger-appr}
+
+
+The Kenward--Roger approximation is exact for the balanced data in the
+sense that it produces the same result as the paired $t$--test.
+
+@
+<<>>=
+( kr.b<-KRmodcomp(lmm1.b, lmm0.b) )
+@ %def
+
+@
+<<>>=
+summary( kr.b )
+@ %def
+
+Relevant information can be retrieved with
+
+@
+<<>>=
+getKR(kr.b, "ddf")
+@ %def
+
+For the imbalanced data we get
+@
+<<>>=
+( kr.i<-KRmodcomp(lmm1.i, lmm0.i) )
+@ %def
+
+Notice that this result is similar to but not identical to the paired
+$t$--test when the two relevant boys are removed:
+
+@
+<<>>=
+shoes2 <- list(A=shoes$A[-(1:2)], B=shoes$B[-(1:2)])
+t.test(shoes2$A, shoes2$B, paired=T)
+@ %def
+
+
+\section{Parametric bootstrap}
+\label{sec:parametric-bootstrap}
+
+Parametric bootstrap provides an alternative but many simulations are
+often needed to provide credible results (also many more than shown
+here; in this connection it can be useful to exploit that computings
+can be made en parallel, see the documentation):
+
+@
+<<>>=
+( pb.b <- PBmodcomp(lmm1.b, lmm0.b, nsim=500, cl=2) )
+@ %def
+
+@
+<<>>=
+summary( pb.b )
+@ %def
+
+
+For the imbalanced data, the result is similar to the result from the
+paired $t$ test.
+
+@
+<<>>=
+( pb.i<-PBmodcomp(lmm1.i, lmm0.i, nsim=500, cl=2) )
+@ %def
+
+@
+<<>>=
+summary( pb.i )
+@ %def
+
+
+\appendix
+
+\section{Matrices for random effects}
+\label{sec:matr-rand-effects}
+
+The matrices involved in the random effects can be obtained with
+
+@
+<<>>=
+shoe3 <- subset(shoe.b, boy<=5)
+shoe3 <- shoe3[order(shoe3$boy), ]
+lmm1  <- lmer( wear ~ mat + (1|boyf), data=shoe3 )
+str( SG <- get_SigmaG( lmm1 ), max=2)
+@ %def
+
+@
+<<>>=
+round( SG$Sigma*10 )
+@ %def
+
+@
+<<>>=
+SG$G
+@ %def
+
+
+
+
+\end{document}
+
+
+
+% \section{With linear models}
+% \label{sec:with-linear-models}
+
+
+% @
+% <<>>=
+% lm1.b <- lm( wear ~ mat + boyf, data=shoe.b )
+% lm0.b <- update( lm1.b, .~. - mat )
+% anova( lm1.b, lm0.b )
+% @ %def
+
+
+% @
+% <<>>=
+% lm1.i <- lm( wear ~ mat + boyf, data=shoedf2 )
+% lm0.i <- update( lm1.i, .~. - mat )
+% anova( lm1.i, lm0.i )
+% @ %def
+

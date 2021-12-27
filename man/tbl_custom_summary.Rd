@@ -47,7 +47,7 @@ by the functions specified in \code{stat_fns} (see below for details and
 examples).}
 
 \item{digits}{List of formulas specifying the number of decimal
-places to round continuous summary statistics. If not specified,
+places to round summary statistics. If not specified,
 \code{tbl_summary} guesses an appropriate number of decimals to round statistics.
 When multiple statistics are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the
@@ -180,13 +180,16 @@ statistics refer to a third variable.
 \section{Example Output}{
 
 \if{html}{Example 1}
-\if{html}{\figure{tbl_custom_summary_ex1.png}{options: width=31\%}}
+
+\if{html}{\figure{tbl_custom_summary_ex1.png}{options: width=45\%}}
 
 \if{html}{Example 2}
-\if{html}{\figure{tbl_custom_summary_ex2.png}{options: width=31\%}}
+
+\if{html}{\figure{tbl_custom_summary_ex2.png}{options: width=45\%}}
 
 \if{html}{Example 3}
-\if{html}{\figure{tbl_custom_summary_ex3.png}{options: width=31\%}}
+
+\if{html}{\figure{tbl_custom_summary_ex3.png}{options: width=35\%}}
 }
 
 \examples{
@@ -243,10 +246,9 @@ tbl_custom_summary_ex2 <-
     update = all_stat_cols() ~ "mean [95\% CI]"
   )
 
-# Example 2 ----------------------------------
+# Example 3 ----------------------------------
 # Use `full_data` to access the full datasets
-# Returned statistic can also be a character, but you need to
-# define `digits` accordingly
+# Returned statistic can also be a character
 diff_to_great_mean <- function(data, full_data, ...) {
   mean <- mean(data$marker, na.rm = TRUE)
   great_mean <- mean(full_data$marker, na.rm = TRUE)
@@ -266,12 +268,13 @@ tbl_custom_summary_ex3 <-
     by = "trt",
     stat_fns = ~ diff_to_great_mean,
     statistic = ~ "{mean} ({level}, diff: {diff})",
-    digits = ~ list(1, as.character, 1),
     overall_row = TRUE
   ) \%>\%
   bold_labels()
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_summary tools: 
 \code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},
@@ -291,6 +294,7 @@ Other tbl_summary tools:
 \code{\link{tbl_summary}()}
 
 Other tbl_custom_summary tools: 
+\code{\link{add_overall}()},
 \code{\link{continuous_summary}()},
 \code{\link{proportion_summary}()},
 \code{\link{ratio_summary}()}

@@ -1,0 +1,62 @@
+import("stats", "graphics", "zoo")
+
+useDynLib("lmtest")
+
+export(
+  ## generic tools
+  "coefci",
+  "coefci.default",
+  "coeftest",
+  "coeftest.default",
+  "lrtest",
+  "lrtest.default",
+  "waldtest",
+  "waldtest.default",
+
+  ## linear regression model under test
+  "bgtest",
+  "bptest",
+  "coxtest",
+  "dwtest",
+  "encomptest",
+  "gqtest",
+  "grangertest",
+  "grangertest.default",
+  "harvtest",
+  "hmctest",
+  "jtest",
+  "petest",
+  "raintest",
+  "resettest",
+  "reset"
+)
+
+S3method("coefci", "default")
+S3method("coefci", "glm")
+S3method("coefci", "mlm")
+S3method("coefci", "survreg")
+
+S3method("coeftest", "default")
+S3method("coeftest", "glm")
+S3method("coeftest", "mlm")
+S3method("coeftest", "survreg")
+S3method("coeftest", "breakpointsfull")
+S3method("print", "coeftest")
+S3method("coef", "coeftest")
+S3method("df.residual", "coeftest")
+S3method("nobs", "coeftest")
+S3method("logLik", "coeftest")
+S3method("confint", "coeftest")
+
+S3method("grangertest", "default")
+S3method("grangertest", "formula")
+
+S3method("lrtest", "default")
+S3method("lrtest", "formula")
+
+S3method("waldtest", "default")
+S3method("waldtest", "formula")
+S3method("waldtest", "lm")
+
+S3method("df.residual", "bgtest")
+S3method("vcov", "bgtest")

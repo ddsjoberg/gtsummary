@@ -1,0 +1,233 @@
+---
+title: "Alignment detection"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Alignment detection}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+Sometimes, you deliberately align code to make it more readable.
+
+```{r}
+call(
+  a =       3,
+  b = 3213232
+)
+
+```
+
+Until styler 1.1.1.9002 (with `strict = TRUE`, e.g. as in
+`styler::style_file(..., strict = TRUE)`), this was formatted as follows:
+
+```{r}
+call(
+  a = 3,
+  b = 3213232
+)
+
+```
+
+because no alignment detection was built in.^[With `strict = FALSE`, the spacing
+would have been kept, however, `strict = FALSE` has a number of other
+implications because it is in general less invasive. For example, it would not
+add braces and line breaks to "if (TRUE) return()".]
+
+styler >= 1.1.1.9003 detects aforementioned alignment for function calls. This
+vignette describes how aligned code is defined in styler and gives some examples
+so users can format their aligned code to match the definition styler uses to
+ensure their code is not unintentionally reformatted.
+
+An important definition used in the remainder is the one of a **column**. All
+arguments of a function call that have the same position but are placed on
+different lines form a column. The below call shows a call with two columns and
+two rows. Columns separate arguments of the function call, so the separator is
+the comma. The first row is named because all arguments are named, the second is
+unnamed:
+
+```{r}
+call(
+  # column 1  | column 2 |
+  abkj = f(2),         7,
+  more_ = "a", 2 # more
+)
+```
+
+## Function calls
+
+### Non-technical definition
+
+Below, we try to explain in an intuitive way how your code should look like to
+be recognized as aligned.
+
+**If all arguments in the first column are named**: Make commas match position
+vertically and right align everything between commas:
+
+```{r}
+# all arguments of first column named -> must right align
+# aligned if the (imaginary) comma on the last line is in line with the commas 
+# from the two top lines.
+fell(
+  x  =    1, 
+  y  =   23,
+  zz = NULL
+)
+
+# this works also with more than one column
+fell(
+  x  =    1, annoying = 3, 
+  y  =   23, # nothing in column 2 for row 2
+  zz = NULL, finally = ""
+)
+```
+
+**If not all arguments of the first column are named:**^[In the below example,
+the first argument of the first column is named (`p = 2`). The second argument
+of the first column is not (`31`).] Make **all except the first column's
+commas** match position
+
+- vertically
+
+- right align everything between the commas
+
+- except before the first comma on a line
+
+- give priority to correctly indent (i.e. left align):
+
+```{r}
+# not all arguments of first column named, hence, only 
+# commas of all but the first column must agree.
+gell(
+  p = 2,   g = gg(x),  n = 3 * 3, #
+  31,    fds =    -1, gz = f / 3,
+)
+
+```
+
+By *align everything in between the commas*, we mean put zero space before a
+comma and at least one after. Note that the arguments on the first line are
+ignored when detecting alignment, which is best shown when code is formatted
+such that no line breaks will be modified by _styler_. This applies if all names
+on the first line are unnamed and all subsequent are named:
+
+```{r}
+map(x, f, 
+ arg1 =  121,
+ arg2 =    1
+)
+```
+
+**Examples**
+
+These typical examples match _styler_'s definition of alignment.
+
+```{r}
+tibble::tribble(
+  ~key_here,  ~value_here,
+  "left",         "right", # comments are allowed
+  "long string",   "shrt" # columns can overlap ('~' above ',')
+)
+
+purrr::map(x, fun, # arguments on same line as opening brace are not considered
+  arg2  =    2, 
+  ar    = f(x)
+)
+```
+
+### Technical definition
+
+This section closely follows the implementation of the alignment detection and
+is mostly aimed at developers for understanding _styler_ internals.
+
+Function calls are aligned if **all** of the following conditions hold (for all
+but the very first line (i.e. `call(` below):
+
+* all rows in first column have the same number of lag spaces. This basically
+  means that the indention is identical for all columns (except for the closing
+  brace if it is on its own line). The below example has one column, because the
+  maximal number of commas on one line is one.
+
+```{r}
+# holds
+call(
+  a =  3,
+  b = 32
+)
+
+# doesn't hold
+call(
+  a =  3,
+   b = 32
+)
+```
+
+* spacing around comma (0 before, > 1 after, >= 0 after last column on line) and
+  spacing around `=` (at least one before and after).
+
+```{r}
+# holds
+call(
+  a =  3, k  = 3,
+  b = 32,    222
+)
+
+# doesn't hold
+call(
+  a =  3 ,
+  b = 32
+)
+```
+
+* All commas from all columns are aligned. This means that for every column, all
+  commas must be on the same positions as the commas from the other lines. If
+  not all arguments are named in the first column, this column is not
+  considered. The reason to exclude the first column is that, as in the example
+  below, it is possible that some arguments are named while others are not.
+  Then, it is not generally possible to keep the first rule (i.e. indention
+  identical across lines). Also ensuring that the comma does not have any spaces
+  before it and its alignment with other lines does not hold true. This is shown
+  below with the line `f(x, y),`. For this reason, the requirements exclude the
+  first column in such cases. The *holds* example shows that is is possible (but
+  not required) for named arguments to also have the commas separating the first
+  and second column aligned.
+
+```{r}
+# holds
+call(
+  a =  ff("pk"), k  = 3, x =  2,
+  b =     f(-g), 22 + 1, yy = 1,
+  c =         1,
+  f(x, y), 
+  k
+)
+
+# doesn't hold
+call(
+  a =   3,
+  b = 32, c = 2
+)
+```
+
+Note that the above definition does not check alignment of `=`, so _styler_ will
+treat the following as aligned:
+
+```{r}
+rge(
+  x  = 99, x =  2,
+  fs =  1,  y = 1,
+)
+```
+
+## Comments
+
+not supported yet.
+
+## Assignment
+
+not supported yet.
+
+

@@ -1,0 +1,376 @@
+---
+title: "Vroom Benchmarks"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vroom Benchmarks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(ggplot2)
+library(forcats)
+library(dplyr)
+library(tidyr)
+library(fs)
+
+pretty_sec <- function(x) {
+  x[!is.na(x)] <- prettyunits::pretty_sec(x[!is.na(x)])
+  x
+}
+
+pretty_lgl <- function(x) {
+  case_when(
+    x == TRUE ~ "TRUE",
+    x == FALSE ~ "FALSE",
+    TRUE ~ ""
+  )
+}
+
+read_benchmark <- function(file, desc) {
+  vroom::vroom(file, col_types = c("ccccddddd")) %>%
+    filter(op != "setup") %>%
+    mutate(
+      altrep = case_when(
+        grepl("^vroom_no_altrep", reading_package) ~ FALSE,
+        grepl("^vroom", reading_package) ~ TRUE,
+        TRUE ~ NA
+      ),
+      reading_package = case_when(
+        grepl("^vroom", reading_package) ~ "vroom",
+        TRUE ~ reading_package
+      ),
+    label = fct_reorder(
+      glue::glue("{reading_package}{altrep}\n{manip_package}",
+        altrep = ifelse(is.na(altrep), "", glue::glue("(altrep = {altrep})"))
+      ),
+      case_when(type == "real" ~ time, TRUE ~ 0),
+      sum),
+    op = factor(op, desc)
+  )
+}
+
+generate_subtitle <- function(data) {
+  rows <- scales::comma(data$rows[[1]])
+  cols <- scales::comma(data$cols[[1]])
+  size <- fs_bytes(data$size[[1]])
+  glue::glue("{rows} x {cols} - {size}B")
+}
+
+plot_benchmark <- function(data, title) {
+
+  subtitle <- generate_subtitle(data)
+  data <- data %>%
+    filter(reading_package != "read.delim", type == "real")
+
+  p1 <- data %>%
+    ggplot() +
+    geom_bar(aes(x = label, y = time, fill = op, group = label), stat = "identity") +
+    scale_fill_brewer(type = "qual", palette = "Set2") +
+    scale_y_continuous(labels = scales::number_format(suffix = "s")) +
+    coord_flip() +
+    labs(title = title, subtitle = subtitle, x = NULL, y = NULL, fill = NULL) +
+    theme(legend.position = "bottom")
+
+  p2 <- data %>%
+    group_by(label) %>%
+    summarise(max_memory = max(max_memory)) %>%
+    ggplot() +
+    geom_bar(aes(x = label, y = max_memory / (1024 * 1024)), stat = "identity") +
+    scale_y_continuous(labels = scales::number_format(suffix = "Mb")) +
+    coord_flip() +
+    labs(title = "Maximum memory usage", x = NULL, y = NULL) +
+    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+
+  library(patchwork)
+  p1 + p2 + plot_layout(widths = c(2, 1))
+}
+
+make_table <- function(data) {
+  data %>%
+    filter(type == "real") %>%
+    select(-label, -size, -type, -rows, -cols) %>%
+    spread(op, time) %>%
+    mutate(
+      total = read + print + head + tail + sample + filter + aggregate,
+      max_memory = as.character(bench::as_bench_bytes(max_memory))
+    ) %>%
+    arrange(desc(total)) %>%
+    mutate_if(is.numeric, pretty_sec) %>%
+    mutate_if(is.logical, pretty_lgl) %>%
+    select(reading_package, manip_package, altrep, max_memory, everything()) %>%
+    rename(
+      "reading\npackage" = reading_package,
+      "manipulating\npackage" = manip_package,
+      memory = max_memory
+    ) %>%
+    knitr::kable(digits = 2, align = "r", format = "html")
+}
+
+desc <- c("setup", "read", "print", "head", "tail", "sample", "filter", "aggregate")
+```
+vroom is a new approach to reading delimited and fixed width data into R.
+
+It stems from the observation that when parsing files reading data from disk
+and finding the delimiters is generally not the main bottle neck. Instead
+(re)-allocating memory and parsing the values into R data types (particularly
+for characters) takes the bulk of the time.
+
+Therefore you can obtain very rapid input by first performing a fast indexing
+step and then using the Altrep framework available in R versions 3.5+ to
+access the values in a lazy / delayed fashion.
+
+## How it works
+
+The initial reading of the file simply records the locations of each individual
+record, the actual values are not read into R. Altrep vectors are
+created for each column in the data which hold a pointer to the index and the
+memory mapped file. When these vectors are indexed the value is read from the
+memory mapping.
+
+This means initial reading is extremely fast, in the real world dataset below
+it is ~ 1/4 the time of the multi-threaded `data.table::fread()`. Sampling
+operations are likewise extremely fast, as only the data actually included in
+the sample is read. This means things like the tibble print method, calling
+`head()`, `tail()` `x[sample(), ]` etc. have very low overhead. Filtering also
+can be fast, only the columns included in the filter selection have to be fully
+read and only the data in the filtered rows needs to be read from the remaining
+columns. Grouped aggregations likewise only need to read the grouping
+variables and the variables aggregated.
+
+Once a particular vector is fully materialized the speed for all subsequent
+operations should be identical to a normal R vector.
+
+This approach potentially also allows you to work with data that is larger than
+memory. As long as you are careful to avoid materializing the entire dataset at
+once it can be efficiently queried and subset.
+
+# Reading delimited files
+
+The following benchmarks all measure reading delimited files of various sizes
+and data types. Because vroom delays reading the benchmarks also do some
+manipulation of the data afterwards to try and provide a more realistic
+performance comparison.
+
+Because the `read.delim` results are so much slower than the others they are
+excluded from the plots, but are retained in the tables.
+
+## Taxi Trip Dataset
+
+This real world dataset is from Freedom of Information Law (FOIL)
+Taxi Trip Data from the NYC Taxi and Limousine Commission 2013, originally
+posted at <https://chriswhong.com/open-data/foil_nyc_taxi/>. It is also hosted
+on [archive.org](https://archive.org/details/nycTaxiTripData2013).
+
+The first table trip_fare_1.csv is 1.55G in size.
+
+    #> Observations: 14,776,615
+    #> Variables: 11
+    #> $ medallion       <chr> "89D227B655E5C82AECF13C3F540D4CF4", "0BD7C8F5B...
+    #> $ hack_license    <chr> "BA96DE419E711691B9445D6A6307C170", "9FD8F69F0...
+    #> $ vendor_id       <chr> "CMT", "CMT", "CMT", "CMT", "CMT", "CMT", "CMT...
+    #> $ pickup_datetime <chr> "2013-01-01 15:11:48", "2013-01-06 00:18:35", ...
+    #> $ payment_type    <chr> "CSH", "CSH", "CSH", "CSH", "CSH", "CSH", "CSH...
+    #> $ fare_amount     <dbl> 6.5, 6.0, 5.5, 5.0, 9.5, 9.5, 6.0, 34.0, 5.5, ...
+    #> $ surcharge       <dbl> 0.0, 0.5, 1.0, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, 0...
+    #> $ mta_tax         <dbl> 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0...
+    #> $ tip_amount      <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0...
+    #> $ tolls_amount    <dbl> 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.8, 0.0, 0...
+    #> $ total_amount    <dbl> 7.0, 7.0, 7.0, 6.0, 10.5, 10.0, 6.5, 39.3, 7.0...
+
+### Taxi Benchmarks
+
+code: [bench/taxi](https://github.com/r-lib/vroom/tree/master/inst/bench/taxi)
+
+All benchmarks were run on a Amazon EC2
+[m5.4xlarge](https://aws.amazon.com/ec2/instance-types/m5/) instance with 16
+vCPUs and an [EBS](https://aws.amazon.com/ebs/) volume type.
+
+The benchmarks labeled `vroom_base` uses `vroom` with base functions for
+manipulation. `vroom_dplyr` uses `vroom` to read the file and dplyr functions to
+manipulate. `data.table` uses `fread()` to read the file and `data.table`
+functions to manipulate and `readr` uses `readr` to read the file and `dplyr` to
+manipulate. By default vroom only uses Altrep for character vectors, these are
+labeled `vroom(altrep: normal)`. The benchmarks labeled `vroom(altrep: full)`
+instead use Altrep vectors for all supported types and `vroom(altrep: none)`
+disable Altrep entirely.
+
+The following operations are performed.
+
+  - The data is read
+  - `print()` - _N.B. read.delim uses `print(head(x, 10))` because printing the whole dataset takes > 10 minutes_
+  - `head()`
+  - `tail()`
+  - Sampling 100 random rows
+  - Filtering for "UNK" payment, this is 6434 rows (0.0435% of total).
+  - Aggregation of mean fare amount per payment type.
+
+```{r, fig.height = 8, fig.width=10, warning = FALSE, echo = FALSE, message = FALSE}
+taxi <- read_benchmark(path_package("vroom", "bench", "taxi.tsv"), desc)
+
+plot_benchmark(taxi, "Time to analyze taxi trip data")
+
+make_table(taxi)
+```
+
+(*N.B. Rcpp used in the dplyr implementation
+fully materializes all the Altrep numeric vectors when using `filter()` or `sample_n()`,
+which is why the first of these cases have additional overhead when using full Altrep.*).
+
+## All numeric data
+
+All numeric data is really a worst case scenario for vroom. The index takes
+about as much memory as the parsed data. Also because parsing doubles can be
+done quickly in parallel and text representations of doubles are only ~25
+characters at most there isn't a great deal of savings for delayed parsing.
+
+For these reasons (and because the data.table implementation is very fast)
+vroom is a bit slower than fread for pure numeric data.
+
+However because vroom is multi-threaded it is a bit quicker than readr and
+read.delim for this type of data.
+
+### Long
+code: [bench/all_numeric-long](https://github.com/r-lib/vroom/tree/master/inst/bench/all_numeric-long)
+
+```{r, fig.height = 8, fig.width=10, warning = FALSE, message = FALSE, echo = FALSE}
+all_num <- read_benchmark(path_package("vroom", "bench", "all_numeric-long.tsv"), desc)
+
+plot_benchmark(all_num, "Time to analyze long all numeric data")
+
+make_table(all_num)
+```
+
+### Wide
+
+code: [bench/all_numeric-wide](https://github.com/r-lib/vroom/tree/master/inst/bench/all_numeric-wide)
+
+```{r, fig.height = 8, fig.width=10, warning = FALSE, message = FALSE, echo = FALSE}
+all_num_wide <- read_benchmark(path_package("bench", "all_numeric-wide.tsv", package = "vroom"), desc)
+
+plot_benchmark(all_num_wide, "Time to analyze wide all numeric data")
+
+make_table(all_num_wide)
+```
+
+## All character data
+
+code: [bench/all_character-long](https://github.com/r-lib/vroom/tree/master/inst/bench/all_character-long)
+
+All character data is a best case scenario for vroom when using Altrep, as it takes full advantage of the lazy reading.
+
+### Long
+
+```{r, fig.height = 8, fig.width=10, warning = FALSE, message = FALSE, echo = FALSE}
+all_chr <- read_benchmark(path_package("vroom", "bench", "all_character-long.tsv"), desc)
+
+plot_benchmark(all_chr, "Time to analyze long all character data")
+
+make_table(all_chr)
+```
+
+### Wide
+
+code: [bench/all_character-wide](https://github.com/r-lib/vroom/tree/master/inst/bench/all_character-wide)
+
+```{r, fig.height = 8, fig.width=10, warning = FALSE, message = FALSE, echo = FALSE}
+all_chr_wide <- read_benchmark(path_package("vroom", "bench", "all_character-wide.tsv"), desc)
+
+plot_benchmark(all_chr_wide, "Time to analyze wide all character data")
+
+make_table(all_chr_wide)
+```
+
+# Reading multiple delimited files
+
+code: [bench/taxi_multiple](https://github.com/r-lib/vroom/tree/master/inst/bench/taxi_multiple)
+
+```{r, echo = FALSE, message = FALSE, eval = TRUE}
+mult <- read_benchmark(path_package("vroom", "bench", "taxi_multiple.tsv"), desc)
+```
+
+The benchmark reads all 12 files in the taxi trip fare data, totaling `r scales::comma(mult$rows[[1]])` rows 
+and `r mult$cols[[1]]` columns for a total file size of `r format(fs_bytes(mult$size[[1]]))`.
+
+```{r, fig.height = 8, fig.width=10, warning = FALSE, message = FALSE, echo = FALSE}
+plot_benchmark(mult, "Time to analyze multiple file data")
+
+make_table(mult)
+```
+
+# Reading fixed width files
+
+## United States Census 5-Percent Public Use Microdata Sample files
+
+```{r, echo = FALSE, message = FALSE, eval = TRUE}
+fwf <- read_benchmark(path_package("vroom", "bench", "fwf.tsv"), desc)
+```
+
+This fixed width dataset contains individual records of the characteristics of a 5 percent sample of people and housing units from the year 2000 and is freely available at <https://web.archive.org/web/20150908055439/https://www2.census.gov/census_2000/datasets/PUMS/FivePercent/California/all_California.zip>. The data is split into files by state, and the state of California was used in this benchmark.
+
+The data totals `r scales::comma(fwf$rows[[1]])` rows 
+and `r fwf$cols[[1]]` columns with a total file size of `r format(fs_bytes(fwf$size[[1]]))`.
+
+## Census data benchmarks
+
+code: [bench/fwf](https://github.com/r-lib/vroom/tree/master/inst/bench/fwf)
+
+```{r, fig.height = 8, fig.width=10, warning = FALSE, message = FALSE, echo = FALSE}
+plot_benchmark(fwf, "Time to analyze fixed width data")
+
+make_table(fwf)
+```
+
+# Writing delimited files
+
+code: [bench/taxi_writing](https://github.com/r-lib/vroom/tree/master/inst/bench/taxi_writing)
+
+The benchmarks write out the taxi trip dataset in a few different ways.
+
+- An uncompressed file
+- A gzip compressed file using `gzfile()` _(readr and vroom do this automatically for files ending in `.gz`)_
+- A gzip compressed file compressed with multiple threads (natively for data.table and using a `pipe()` connection to [pigz](https://zlib.net/pigz/) for the rest).
+- A [Zstandard](https://facebook.github.io/zstd/) compressed file (data.table does not support this format).
+
+```{r, fig.height = 8, fig.width=10, warning = FALSE, message = FALSE, echo = FALSE}
+taxi_writing <- read_benchmark(path_package("vroom", "bench", "taxi_writing.tsv"), c("setup", "writing")) %>%
+  rename(
+    package = reading_package,
+    compression = manip_package
+  ) %>% mutate(
+    package = factor(package, c("base", "readr", "data.table", "vroom")),
+    compression = factor(compression, rev(c("gzip", "multithreaded_gzip", "zstandard", "uncompressed")))
+  ) %>% filter(type == "real")
+
+subtitle <- generate_subtitle(taxi_writing)
+
+taxi_writing %>%
+  ggplot(aes(x = compression, y = time, fill = package)) +
+  geom_bar(stat = "identity", position = position_dodge2(reverse = TRUE, padding = .05)) +
+  scale_fill_brewer(type = "qual", palette = "Set2") +
+  scale_y_continuous(labels = scales::number_format(suffix = "s")) +
+  theme(legend.position = "bottom") +
+  coord_flip() +
+  labs(title = "Writing taxi trip data", subtitle = subtitle, x = NULL, y = NULL, fill = NULL)
+
+taxi_writing %>%
+  select(-size, -op, -rows, -cols, -type, -altrep, -label, -max_memory) %>%
+  mutate_if(is.numeric, pretty_sec) %>%
+  pivot_wider(names_from = package, values_from = time) %>%
+  arrange(desc(compression)) %>%
+  knitr::kable(digits = 2, align = "r", format = "html")
+```
+
+## Session and package information
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+si <- vroom::vroom(path_package("vroom", "bench", "session_info.tsv"))
+class(si) <- c("packages_info", "data.frame")
+select(as.data.frame(si), package, version = ondiskversion, date, source) %>%
+  knitr::kable()
+```

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Knit R Markdown using the classic Docco style</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for rocco {knitr}"><tr><td>rocco {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Knit R Markdown using the classic Docco style</h2>
+
+<h3>Description</h3>
+
+<p>The classic Docco style is a two-column layout, with text in the left and
+code in the right column.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rocco(input, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>input</code></td>
+<td>
+<p>Path of the input R Markdown file.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments to be passed to <code><a href="../../knitr/help/knit2html.html">knit2html</a></code></p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The output HTML page supports resizing and hiding/showing the two columns.
+Move the cursor to the center of the page, and it will change to a
+bidirectional resize cursor; drag the cursor to resize the two columns. Press
+the key <code>t</code> to hide the code column (show the text column only), and
+press again to hide the text column (show code).
+</p>
+
+
+<h3>Value</h3>
+
+<p>An HTML file is written, and its name is returned.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Weicheng Zhu and Yihui Xie
+</p>
+
+
+<h3>References</h3>
+
+<p>The Docco package by Jeremy Ashkenas:
+<a href="https://github.com/jashkenas/docco">https://github.com/jashkenas/docco</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+rocco_view = function(input) {
+    owd = setwd(tempdir())
+    on.exit(setwd(owd))
+    if (!file.exists(input))
+        return()
+    o = rocco(input, header = "", quiet = TRUE)
+    if (interactive())
+        browseURL(o)
+}
+# knit these two vignettes using the docco style
+rocco_view(system.file("doc", "docco-classic.Rmd", package = "knitr"))
+rocco_view(system.file("doc", "knit_expand.Rmd", package = "knitr"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

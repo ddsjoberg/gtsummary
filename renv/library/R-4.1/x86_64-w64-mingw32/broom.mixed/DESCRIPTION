@@ -1,0 +1,65 @@
+Package: broom.mixed
+Type: Package
+Title: Tidying Methods for Mixed Models
+Version: 0.2.7
+Authors@R: c(
+    person("Ben", "Bolker", email = "bolker@mcmaster.ca",
+        role = c("aut", "cre"),
+        comment=c(ORCID="0000-0002-2127-0443")),
+    person("David", "Robinson", email = "admiral.david@gmail.com",
+    	role = "aut"),
+    person("Dieter", "Menne", role = "ctb"),
+    person("Jonah", "Gabry", role = "ctb"),
+    person("Paul", "Buerkner", role = "ctb"),
+    person("Christopher", "Hua", role = "ctb"),
+    person("William", "Petry", role = "ctb",
+       comment=c(ORCID="0000-0002-5230-5987")),
+    person("Joshua", "Wiley", role = "ctb",
+       comment=c(ORCID="0000-0002-0271-6702")),
+    person("Patrick", "Kennedy", role = "ctb"),
+    person("Eduard", "Szöcs", role = "ctb",
+       comment=c(ORCID = "0000-0001-5376-1194", sponsor = "BASF SE")),
+    person("Indrajeet", "Patil", role="ctb"),
+    person("Vincent", "Arel-Bundock", 
+          email = "vincent.arel-bundock@umontreal.ca", 
+          role = "ctb",
+      comment = c(ORCID = "0000-0003-2042-7063"))
+    )
+Maintainer: Ben Bolker <bolker@mcmaster.ca>
+Description: Convert fitted objects from various R mixed-model packages
+    into tidy data frames along the lines of the 'broom' package.
+    The package provides three
+    S3 generics for each model: tidy(), which summarizes a model's statistical findings such as
+    coefficients of a regression; augment(), which adds columns to the original
+    data such as predictions, residuals and cluster assignments; and glance(), which
+    provides a one-row summary of model-level statistics.
+Imports: broom, coda, dplyr, methods, nlme, purrr, stringr, tibble,
+        tidyr
+Suggests: brms, dotwhisker, knitr, testthat, gamlss, gamlss.data,
+        ggplot2, GLMMadaptive, glmmADMB, glmmTMB, lmerTest, lme4,
+        Matrix, MCMCglmm, mgcv, pander, pbkrtest, rstan, rstanarm,
+        R2jags, TMB, rmarkdown
+URL: https://github.com/bbolker/broom.mixed
+BugReports: https://github.com/bbolker/broom.mixed/issues
+License: GPL-3
+RoxygenNote: 7.1.1
+Encoding: UTF-8
+Additional_repositories: http://bbolker.github.io/drat
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2021-07-05 19:30:59 UTC; bolker
+Author: Ben Bolker [aut, cre] (<https://orcid.org/0000-0002-2127-0443>),
+  David Robinson [aut],
+  Dieter Menne [ctb],
+  Jonah Gabry [ctb],
+  Paul Buerkner [ctb],
+  Christopher Hua [ctb],
+  William Petry [ctb] (<https://orcid.org/0000-0002-5230-5987>),
+  Joshua Wiley [ctb] (<https://orcid.org/0000-0002-0271-6702>),
+  Patrick Kennedy [ctb],
+  Eduard Szöcs [ctb] (<https://orcid.org/0000-0001-5376-1194>, BASF SE),
+  Indrajeet Patil [ctb],
+  Vincent Arel-Bundock [ctb] (<https://orcid.org/0000-0003-2042-7063>)
+Repository: CRAN
+Date/Publication: 2021-07-07 15:20:02 UTC
+Built: R 4.1.0; ; 2021-08-05 11:58:13 UTC; windows

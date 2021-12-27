@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Inverse from Choleski or QR Decomposition - Matrix Methods</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for chol2inv-methods {Matrix}"><tr><td>chol2inv-methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Inverse from Choleski or QR Decomposition &ndash; Matrix Methods</h2>
+
+<h3>Description</h3>
+
+<p>Invert a symmetric, positive definite square matrix from its Choleski
+decomposition.  Equivalently, compute <i>(X'X)^(-1)</i>
+from the (<i>R</i> part) of the QR decomposition of <i>X</i>.
+<br />
+Even more generally, given an upper triangular matrix <i>R</i>,
+compute <i>(R'R)^(-1)</i>.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>x = &quot;ANY&quot;</dt><dd><p>the default method from <span class="pkg">base</span>, see
+<code><a href="../../base/html/chol2inv.html">chol2inv</a></code>, for traditional matrices.</p>
+</dd>
+<dt>x = &quot;dtrMatrix&quot;</dt><dd><p>method for the numeric triangular matrices,
+built on the same LAPACK <code>DPOTRI</code> function as the base
+method.</p>
+</dd>
+<dt>x = &quot;denseMatrix&quot;</dt><dd><p>if <code>x</code> is coercable to a
+<code><a href="triangularMatrix-class.html">triangularMatrix</a></code>, call the <code>"dtrMatrix"</code>
+method above.</p>
+</dd>
+<dt>x = &quot;sparseMatrix&quot;</dt><dd><p>if <code>x</code> is coercable to a
+<code><a href="triangularMatrix-class.html">triangularMatrix</a></code>, use <code><a href="solve-methods.html">solve</a>()</code>
+currently.</p>
+</dd> </dl>
+
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="chol.html">chol</a></code> (for <code><a href="Matrix-class.html">Matrix</a></code> objects);
+further, <code><a href="../../base/html/chol2inv.html">chol2inv</a></code> (from the <span class="pkg">base</span> package),
+<code><a href="solve-methods.html">solve</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(M  &lt;- Matrix(cbind(1, 1:3, c(1,3,7))))
+(cM &lt;- chol(M)) # a "Cholesky" object, inheriting from "dtrMatrix"
+chol2inv(cM) %*% M # the identity
+stopifnot(all(chol2inv(cM) %*% M - Diagonal(nrow(M))) &lt; 1e-10)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

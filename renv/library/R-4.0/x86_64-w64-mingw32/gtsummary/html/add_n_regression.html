@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add N to regression table</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for add_n_regression {gtsummary}"><tr><td>add_n_regression {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add N to regression table</h2>
+
+<h3>Description</h3>
+
+<p>Add N to regression table
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'tbl_regression'
+add_n(x, location = NULL, ...)
+
+## S3 method for class 'tbl_uvregression'
+add_n(x, location = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a <code>tbl_regression</code> or <code>tbl_uvregression</code> table</p>
+</td></tr>
+<tr valign="top"><td><code>location</code></td>
+<td>
+<p>location to place Ns. When <code>"label"</code> total Ns are placed
+on each variable's label row. When <code>"level"</code> level counts are placed on the
+variable level for categorical variables, and total N on the variable's label
+row for continuous.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Not used</p>
+</td></tr>
+</table>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/add_n.tbl_regression_ex1.png" width=64% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/add_n.tbl_regression_ex2.png" width=64% />
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Example 1 ----------------------------------
+add_n.tbl_regression_ex1 &lt;-
+  trial %&gt;%
+  select(response, age, grade) %&gt;%
+  tbl_uvregression(
+    y = response,
+    method = glm,
+    method.args = list(family = binomial),
+    hide_n = TRUE
+  ) %&gt;%
+  add_n(location = "label")
+
+# Example 2 ----------------------------------
+add_n.tbl_regression_ex2 &lt;-
+  glm(response ~ age + grade, trial, family = binomial) %&gt;%
+  tbl_regression(exponentiate = TRUE) %&gt;%
+  add_n(location = "level")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.0.9006 <a href="00Index.html">Index</a>]</div>
+</body></html>

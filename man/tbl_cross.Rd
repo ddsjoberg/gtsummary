@@ -10,6 +10,7 @@ tbl_cross(
   col = NULL,
   label = NULL,
   statistic = NULL,
+  digits = NULL,
   percent = c("none", "column", "row", "cell"),
   margin = c("column", "row"),
   missing = c("ifany", "always", "no"),
@@ -34,6 +35,16 @@ attribute label is \code{NULL}, the variable name will be used.}
 be replaced with the numeric statistic (see glue::glue).
 The default is \code{{n}}. If percent argument is \code{"column"}, \code{"row"}, or \code{"cell"},
 default is \code{"{n} ({p}\%)"}.}
+
+\item{digits}{Specifies the number of decimal
+places to round the summary statistics. By default integers are shown
+to the zero decimal places, and percentages are formatted with \code{style_percent()}.
+If you would like to modify either of these, pass a vector of integers
+indicating the number of decimal places to round the statistics.
+For example, if the
+statistic being calculated is \code{"{n} ({p}\%)"} and you want the percent rounded
+to 2 decimal places use \code{digits = c(0, 2)}. User
+may also pass a styling function: \code{digits = style_sigfig}}
 
 \item{percent}{Indicates the type of percentage to return.
 Must be one of "none", "column", "row", or "cell". Default is "cell" when
@@ -83,6 +94,8 @@ tbl_cross_ex2 <-
   add_p()
 }
 \seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
 Other tbl_cross tools: 
 \code{\link{add_p.tbl_cross}()},
 \code{\link{inline_text.tbl_cross}()}

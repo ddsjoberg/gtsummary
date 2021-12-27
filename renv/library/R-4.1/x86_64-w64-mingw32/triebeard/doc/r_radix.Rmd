@@ -1,0 +1,122 @@
+---
+title: "Radix trees in R"
+author: "Oliver Keyes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Radix trees in R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+A **radix tree**, or **trie**, is a data structure optimised for storing key-value pairs in a way optimised for searching. This makes them very, very good for efficiently matching data against keys, and retrieving the values *associated* with those keys.
+
+`triebeard` provides an implementation of tries for R (and one that can be used in Rcpp development, too, if that's your thing) so that useRs can take advantage of the fast, efficient and user-friendly matching that they allow.
+
+## Radix usage
+
+Suppose we have observations in a dataset that are labelled, with a 2-3 letter code that identifies the facility the sample came from:
+
+```{r, eval=FALSE}
+labels <- c("AO-1002", "AEO-1004", "AAI-1009", "AFT-1403", "QZ-9065", "QZ-1021", "RF-0901",
+            "AO-1099", "AFT-1101", "QZ-4933")
+```
+
+We know the facility each code maps to, and we want to be able to map the labels to that - not over 10 entries but over hundreds, or thousands, or hundreds *of* thousands. Tries are a great way of doing that: we treat the codes as *keys* and the full facility names as *values*. So let's make a trie to do this matching, and then, well, match:
+
+```{r, eval=FALSE}
+library(triebeard)
+trie <- trie(keys = c("AO", "AEO", "AAI", "AFT", "QZ", "RF"),
+             values = c("Audobon", "Atlanta", "Ann Arbor", "Austin", "Queensland", "Raleigh"))
+
+longest_match(trie = trie, to_match = labels)
+
+ [1] "Audobon"    "Atlanta"    "Ann Arbor"  "Austin"     "Queensland" "Queensland" "Raleigh"    "Audobon"    "Austin"    
+[10] "Queensland"
+````
+
+This pulls out, for each label, the trie value where the associated key has the longest prefix-match to the label. We can also just grab all the values where the key starts with, say, A:
+
+```{r, eval=FALSE}
+prefix_match(trie = trie, to_match = "A")
+
+[[1]]
+[1] "Ann Arbor" "Atlanta"   "Austin"    "Audobon"  
+```
+
+And finally if we want we can match very, very fuzzily using "greedy" matching:
+
+```{r, eval=FALSE}
+greedy_match(trie = trie, to_match = "AO")
+
+[[1]]
+[1] "Ann Arbor" "Atlanta"   "Austin"    "Audobon"  
+```
+
+These operations are very, very efficient. If we use longest-match as an example, since that's the most useful thing, with a one-million element vector of things to match against:
+
+```{r, eval=FALSE}
+library(triebeard)
+library(microbenchmark)
+
+trie <- trie(keys = c("AO", "AEO", "AAI", "AFT", "QZ", "RF"),
+             values = c("Audobon", "Atlanta", "Ann Arbor", "Austin", "Queensland", "Raleigh"))
+
+labels <- rep(c("AO-1002", "AEO-1004", "AAI-1009", "AFT-1403", "QZ-9065", "QZ-1021", "RF-0901",
+                "AO-1099", "AFT-1101", "QZ-4933"), 100000)
+
+microbenchmark({longest_match(trie = trie, to_match = labels)})
+
+Unit: milliseconds
+                                                  expr      min       lq     mean   median       uq      max neval
+ {     longest_match(trie = trie, to_match = labels) } 284.6457 285.5902 289.5342 286.8775 288.4564 327.3878   100
+```
+
+I think we can call <300 milliseconds for a million matches against an entire set of possible values pretty fast.
+
+## Radix modification
+
+There's always the possibility that (horror of horrors) you'll have to add or remove entries from the trie. Fear not; you can do just that with `trie_add` and `trie_remove` respectively, both of which silently modify the trie they're provided with to add or remove whatever key-value pairs you provide:
+
+```{r, eval=FALSE}
+to_match = "198.0.0.1"
+trie_inst <- trie(keys = "197", values = "fake range")
+
+longest_match(trie_inst, to_match)
+[1] NA
+
+trie_add(trie_inst, keys = "198", values = "home range")
+longest_match(trie_inst, to_match)
+[1] "home range"
+
+trie_remove(trie_inst, keys = "198")
+longest_match(trie_inst, to_match)
+[1] NA
+```
+
+## Metadata and coercion
+
+You can also extract information from tries without using them. `dim`, `str`, `print` and `length` all work for tries, and you can use `get_keys(trie)` and `get_values(trie)` to extract, respectively, the keys and values from a trie object.
+
+In addition, you can also coerce tries into other R data structures, specifically lists and data.frames:
+
+```{r, eval=FALSE}
+trie <- trie(keys = c("AO", "AEO", "AAI", "AFT", "QZ", "RF"),
+             values = c("Audobon", "Atlanta", "Ann Arbor", "Austin", "Queensland", "Raleigh"))
+
+str(as.data.frame(trie))
+'data.frame':	6 obs. of  2 variables:
+ $ keys  : chr  "AAI" "AEO" "AFT" "AO" ...
+ $ values: chr  "Ann Arbor" "Atlanta" "Austin" "Audobon" ...
+
+str(as.list(trie))
+
+List of 2
+ $ keys  : chr [1:6] "AAI" "AEO" "AFT" "AO" ...
+ $ values: chr [1:6] "Ann Arbor" "Atlanta" "Austin" "Audobon" ...
+```
+
+### Other trie operations
+
+If you have ideas for other trie-like structures, or functions that would be useful with *these* tries, the best approach
+is to either [request it](https://github.com/Ironholds/triebeard/issues) or [add it](https://github.com/Ironholds/triebeard/pulls)!

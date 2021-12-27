@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Generic export of data frames into formatted tables</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for display {insight}"><tr><td>display {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Generic export of data frames into formatted tables</h2>
+
+<h3>Description</h3>
+
+<p><code>display()</code> is a generic function to export data frames
+into various table formats (like plain text, markdown, ...). <code>print_md()</code>
+usually is a convenient wrapper for <code>display(format = "markdown")</code>.
+Similar, <code>print_html()</code> is a shortcut for <code>display(format = "html")</code>.
+See the documentation for the specific objects' classes.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+display(object, ...)
+
+print_md(x, ...)
+
+print_html(x, ...)
+
+## S3 method for class 'data.frame'
+display(object, format = "markdown", ...)
+
+## S3 method for class 'data.frame'
+print_md(x, ...)
+
+## S3 method for class 'data.frame'
+print_html(x, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object, x</code></td>
+<td>
+<p>A data frame.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments passed to other methods.</p>
+</td></tr>
+<tr valign="top"><td><code>format</code></td>
+<td>
+<p>String, indicating the output format. Can be <code>"markdown"</code> or <code>"html"</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Depending on <code>format</code>, either an object of class <code>gt_tbl</code>
+or a character vector of class <code>knitr_kable</code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+display(iris[1:5, ])
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

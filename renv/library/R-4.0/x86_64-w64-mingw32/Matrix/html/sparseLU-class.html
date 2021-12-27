@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Sparse LU decomposition of a square sparse matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sparseLU-class {Matrix}"><tr><td>sparseLU-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Sparse LU decomposition of a square sparse matrix</h2>
+
+<h3>Description</h3>
+
+<p>Objects of this class contain the components of the LU
+decomposition of a sparse square matrix.</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("sparseLU",
+    ...)</code> but are more commonly created by function <code><a href="lu.html">lu</a>()</code>
+applied to a sparse matrix, such as a matrix of class
+<code><a href="dgCMatrix-class.html">dgCMatrix</a></code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>L</code>:</dt><dd><p>Object of class <code>"<a href="dtCMatrix-class.html">dtCMatrix</a>"</code>, the lower
+triangular factor from the left.</p>
+</dd>
+<dt><code>U</code>:</dt><dd><p>Object of class <code>"<a href="dtCMatrix-class.html">dtCMatrix</a>"</code>, the upper
+triangular factor from the right.</p>
+</dd>
+<dt><code>p</code>:</dt><dd><p>Object of class <code>"integer"</code>, permutation
+applied from the left. </p>
+</dd>
+<dt><code>q</code>:</dt><dd><p>Object of class <code>"integer"</code>, permutation
+applied from the right.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>the dimension of the original matrix; inherited
+from class <code><a href="MatrixFactorization-class.html">MatrixFactorization</a></code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"<a href="LU-class.html">LU</a>"</code>, directly.
+Class <code>"<a href="MatrixFactorization-class.html">MatrixFactorization</a>"</code>, by class <code>"LU"</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>expand</dt><dd><p><code>signature(x = "sparseLU")</code> Returns a list with
+components <code>P</code>, <code>L</code>, <code>U</code>, and <code>Q</code>,
+where <i>P</i> and <i>Q</i> represent fill-reducing
+permutations, and <i>L</i>, and <i>U</i> the lower and upper
+triangular matrices of the decomposition.  The original matrix
+corresponds to the product <i>P'LUQ</i>.</p>
+</dd>
+</dl>
+
+
+
+<h3>Note</h3>
+
+<p>The decomposition is of the form
+</p>
+<p style="text-align: center;"><i>A = P'LUQ,</i></p>
+
+
+<p>or equivalently  <i>PAQ' = LU</i>,
+where all matrices are sparse and of size <i>n by n</i>.
+The matrices <i>P</i> and <i>Q</i>, and their transposes <i>P'</i> and
+<i>Q'</i> are permutation matrices,
+<i>L</i> is lower triangular and <i>U</i> is upper triangular.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="lu.html">lu</a></code>, <code><a href="../../base/html/solve.html">solve</a></code>, <code><a href="dgCMatrix-class.html">dgCMatrix</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Extending the one in   examples(lu), calling the matrix  A,
+## and confirming the factorization identities :
+A &lt;- as(readMM(system.file("external/pores_1.mtx",
+                            package = "Matrix")),
+         "CsparseMatrix")
+## with dimnames(.) - to see that they propagate to L, U :
+dimnames(A) &lt;- dnA &lt;- list(paste0("r", seq_len(nrow(A))),
+                           paste0("C", seq_len(ncol(A))))
+str(luA &lt;- lu(A)) # p is a 0-based permutation of the rows
+                  # q is a 0-based permutation of the columns
+xA &lt;- expand(luA)
+## which is simply doing
+stopifnot(identical(xA$ L, luA@L),
+          identical(xA$ U, luA@U),
+          identical(xA$ P, as(luA@p +1L, "pMatrix")),
+          identical(xA$ Q, as(luA@q +1L, "pMatrix")))
+
+P.LUQ &lt;- with(xA, t(P) %*% L %*% U %*% Q)
+stopifnot(all.equal(A, P.LUQ, tolerance = 1e-12),
+          identical(dimnames(P.LUQ), dnA))
+## permute rows and columns of original matrix
+pA &lt;- A[luA@p + 1L, luA@q + 1L]
+stopifnot(identical(pA, with(xA, P %*% A %*% t(Q))))
+
+pLU &lt;- drop0(luA@L %*% luA@U) # L %*% U -- dropping extra zeros
+stopifnot(all.equal(pA, pLU, tolerance = 1e-12))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

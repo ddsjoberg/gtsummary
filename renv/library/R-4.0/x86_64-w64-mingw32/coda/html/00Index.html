@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Output Analysis and Diagnostics for MCMC</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Output Analysis and Diagnostics for MCMC
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;coda&rsquo; version 0.19-4</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="coda.options.html">.Coda.Options</a></td>
+<td>Options settings for the codamenu driver</td></tr>
+<tr><td style="width: 25%;"><a href="coda.options.html">.Coda.Options.Default</a></td>
+<td>Options settings for the codamenu driver</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">acfplot</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">acfplot.mcmc</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">acfplot.mcmc.list</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.convert.html">as.array.mcmc.list</a></td>
+<td>Conversions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.convert.html">as.matrix.mcmc</a></td>
+<td>Conversions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.convert.html">as.matrix.mcmc.list</a></td>
+<td>Conversions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.html">as.mcmc</a></td>
+<td>Markov Chain Monte Carlo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.html">as.mcmc.default</a></td>
+<td>Markov Chain Monte Carlo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.list.html">as.mcmc.list</a></td>
+<td>Replicated Markov Chain Monte Carlo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.list.html">as.mcmc.list.default</a></td>
+<td>Replicated Markov Chain Monte Carlo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.convert.html">as.mcmc.mcmc.list</a></td>
+<td>Conversions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="as.ts.mcmc.html">as.ts.mcmc</a></td>
+<td>Coerce mcmc object to time series</td></tr>
+<tr><td style="width: 25%;"><a href="autocorr.html">autocorr</a></td>
+<td>Autocorrelation function for Markov chains</td></tr>
+<tr><td style="width: 25%;"><a href="autocorr.diag.html">autocorr.diag</a></td>
+<td>Autocorrelation function for Markov chains</td></tr>
+<tr><td style="width: 25%;"><a href="autocorr.diag.html">autocorr.diag.mcmc</a></td>
+<td>Autocorrelation function for Markov chains</td></tr>
+<tr><td style="width: 25%;"><a href="autocorr.diag.html">autocorr.diag.mcmc.list</a></td>
+<td>Autocorrelation function for Markov chains</td></tr>
+<tr><td style="width: 25%;"><a href="autocorr.plot.html">autocorr.plot</a></td>
+<td>Plot autocorrelations for Markov Chains</td></tr>
+<tr><td style="width: 25%;"><a href="batchSE.html">batchSE</a></td>
+<td>Batch Standard Error</td></tr>
+<tr><td style="width: 25%;"><a href="bugs2jags.html">bugs2jags</a></td>
+<td>Convert WinBUGS data file to JAGS data file</td></tr>
+<tr><td style="width: 25%;"><a href="varnames.html">chanames</a></td>
+<td>Named dimensions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="varnames.html">chanames&lt;-</a></td>
+<td>Named dimensions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="coda.options.html">coda.options</a></td>
+<td>Options settings for the codamenu driver</td></tr>
+<tr><td style="width: 25%;"><a href="codamenu.html">codamenu</a></td>
+<td>Main menu driver for the coda package</td></tr>
+<tr><td style="width: 25%;"><a href="crosscorr.html">crosscorr</a></td>
+<td>Cross correlations for MCMC output</td></tr>
+<tr><td style="width: 25%;"><a href="crosscorr.plot.html">crosscorr.plot</a></td>
+<td>Plot image of correlation matrix</td></tr>
+<tr><td style="width: 25%;"><a href="cumuplot.html">cumuplot</a></td>
+<td>Cumulative quantile plot</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">densityplot.mcmc</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">densityplot.mcmc.list</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="densplot.html">densplot</a></td>
+<td>Probability density function estimate from MCMC output</td></tr>
+<tr><td style="width: 25%;"><a href="coda.options.html">display.coda.options</a></td>
+<td>Options settings for the codamenu driver</td></tr>
+<tr><td style="width: 25%;"><a href="effectiveSize.html">effectiveSize</a></td>
+<td>Effective sample size for estimating the mean</td></tr>
+<tr><td style="width: 25%;"><a href="time.mcmc.html">end.mcmc</a></td>
+<td>Time attributes for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="time.mcmc.html">end.mcmc.list</a></td>
+<td>Time attributes for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="time.mcmc.html">frequency.mcmc</a></td>
+<td>Time attributes for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="gelman.diag.html">gelman.diag</a></td>
+<td>Gelman and Rubin's convergence diagnostic</td></tr>
+<tr><td style="width: 25%;"><a href="gelman.plot.html">gelman.plot</a></td>
+<td>Gelman-Rubin-Brooks plot</td></tr>
+<tr><td style="width: 25%;"><a href="geweke.diag.html">geweke.diag</a></td>
+<td>Geweke's convergence diagnostic</td></tr>
+<tr><td style="width: 25%;"><a href="geweke.plot.html">geweke.plot</a></td>
+<td>Geweke-Brooks plot</td></tr>
+<tr><td style="width: 25%;"><a href="heidel.diag.html">heidel.diag</a></td>
+<td>Heidelberger and Welch's convergence diagnostic</td></tr>
+<tr><td style="width: 25%;"><a href="HPDinterval.html">HPDinterval</a></td>
+<td>Highest Posterior Density intervals</td></tr>
+<tr><td style="width: 25%;"><a href="HPDinterval.html">HPDinterval.mcmc</a></td>
+<td>Highest Posterior Density intervals</td></tr>
+<tr><td style="width: 25%;"><a href="HPDinterval.html">HPDinterval.mcmc.list</a></td>
+<td>Highest Posterior Density intervals</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.html">is.mcmc</a></td>
+<td>Markov Chain Monte Carlo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.list.html">is.mcmc.list</a></td>
+<td>Replicated Markov Chain Monte Carlo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">levelplot.mcmc</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">levelplot.mcmc.list</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="linepost.html">line</a></td>
+<td>Simple linear regression example</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.html">mcmc</a></td>
+<td>Markov Chain Monte Carlo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.list.html">mcmc.list</a></td>
+<td>Replicated Markov Chain Monte Carlo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmcUpgrade.html">mcmcUpgrade</a></td>
+<td>Upgrade mcmc objects in obsolete format</td></tr>
+<tr><td style="width: 25%;"><a href="mcpar.html">mcpar</a></td>
+<td>Mcpar attribute of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="multi.menu.html">multi.menu</a></td>
+<td>Choose multiple options from a menu</td></tr>
+<tr><td style="width: 25%;"><a href="nchain.html">nchain</a></td>
+<td>Dimensions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="nchain.html">niter</a></td>
+<td>Dimensions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="nchain.html">nvar</a></td>
+<td>Dimensions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="Cramer.html">pcramer</a></td>
+<td>The Cramer-von Mises Distribution</td></tr>
+<tr><td style="width: 25%;"><a href="plot.mcmc.html">plot.mcmc</a></td>
+<td>Summary plots of mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.list.html">plot.mcmc.list</a></td>
+<td>Replicated Markov Chain Monte Carlo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.html">print.mcmc</a></td>
+<td>Markov Chain Monte Carlo Objects</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">qqmath.mcmc</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">qqmath.mcmc.list</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="raftery.diag.html">raftery.diag</a></td>
+<td>Raftery and Lewis's diagnostic</td></tr>
+<tr><td style="width: 25%;"><a href="read.and.check.html">read.and.check</a></td>
+<td>Read data interactively and check that it satisfies conditions</td></tr>
+<tr><td style="width: 25%;"><a href="read.coda.html">read.coda</a></td>
+<td>Read output files in CODA format</td></tr>
+<tr><td style="width: 25%;"><a href="read.coda.interactive.html">read.coda.interactive</a></td>
+<td>Read CODA output files interactively</td></tr>
+<tr><td style="width: 25%;"><a href="read.coda.html">read.jags</a></td>
+<td>Read output files in CODA format</td></tr>
+<tr><td style="width: 25%;"><a href="read.openbugs.html">read.openbugs</a></td>
+<td>Read CODA output files produced by OpenBUGS</td></tr>
+<tr><td style="width: 25%;"><a href="rejectionRate.html">rejectionRate</a></td>
+<td>Rejection Rate for Metropolis-Hastings chains</td></tr>
+<tr><td style="width: 25%;"><a href="rejectionRate.html">rejectionRate.mcmc</a></td>
+<td>Rejection Rate for Metropolis-Hastings chains</td></tr>
+<tr><td style="width: 25%;"><a href="rejectionRate.html">rejectionRate.mcmc.list</a></td>
+<td>Rejection Rate for Metropolis-Hastings chains</td></tr>
+<tr><td style="width: 25%;"><a href="spectrum0.html">spectrum0</a></td>
+<td>Estimate spectral density at zero</td></tr>
+<tr><td style="width: 25%;"><a href="spectrum0.ar.html">spectrum0.ar</a></td>
+<td>Estimate spectral density at zero</td></tr>
+<tr><td style="width: 25%;"><a href="time.mcmc.html">start.mcmc</a></td>
+<td>Time attributes for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="time.mcmc.html">start.mcmc.list</a></td>
+<td>Time attributes for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="summary.mcmc.html">summary.mcmc</a></td>
+<td>Summary statistics for Markov Chain Monte Carlo chains</td></tr>
+<tr><td style="width: 25%;"><a href="summary.mcmc.html">summary.mcmc.list</a></td>
+<td>Summary statistics for Markov Chain Monte Carlo chains</td></tr>
+<tr><td style="width: 25%;"><a href="thin.html">thin</a></td>
+<td>Thinning interval</td></tr>
+<tr><td style="width: 25%;"><a href="time.mcmc.html">thin.mcmc</a></td>
+<td>Time attributes for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="time.mcmc.html">thin.mcmc.list</a></td>
+<td>Time attributes for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="time.mcmc.html">time.mcmc</a></td>
+<td>Time attributes for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="time.mcmc.html">time.mcmc.list</a></td>
+<td>Time attributes for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="traceplot.html">traceplot</a></td>
+<td>Trace plot of MCMC output</td></tr>
+<tr><td style="width: 25%;"><a href="varnames.html">varnames</a></td>
+<td>Named dimensions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="varnames.html">varnames&lt;-</a></td>
+<td>Named dimensions of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="window.mcmc.html">window.mcmc</a></td>
+<td>Time windows for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="window.mcmc.html">window.mcmc.list</a></td>
+<td>Time windows for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">xyplot.mcmc</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="trellisplots.html">xyplot.mcmc.list</a></td>
+<td>Trellis plots for mcmc objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.subset.html">[.mcmc</a></td>
+<td>Extract or replace parts of MCMC objects</td></tr>
+<tr><td style="width: 25%;"><a href="mcmc.subset.html">[.mcmc.list</a></td>
+<td>Extract or replace parts of MCMC objects</td></tr>
+</table>
+</body></html>

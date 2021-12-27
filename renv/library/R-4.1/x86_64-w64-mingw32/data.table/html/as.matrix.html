@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Convert a data.table to a matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for as.matrix {data.table}"><tr><td>as.matrix {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert a data.table to a matrix</h2>
+
+<h3>Description</h3>
+
+<p>Converts a <code>data.table</code> into a <code>matrix</code>, optionally using one
+of the columns in the <code>data.table</code> as the <code>matrix</code> <code>rownames</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'data.table'
+as.matrix(x, rownames=NULL, rownames.value=NULL, ...)</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a <code>data.table</code></p>
+</td></tr>
+<tr valign="top"><td><code>rownames</code></td>
+<td>
+<p>optional, a single column name or column number to use as
+the <code>rownames</code> in the returned <code>matrix</code>. If <code>TRUE</code> the
+<code><a href="../../data.table/help/key.html">key</a></code> of the <code>data.table</code> will be used if it is a
+single column, otherwise the first column in the <code>data.table</code> will
+be used.</p>
+</td></tr>
+<tr valign="top"><td><code>rownames.value</code></td>
+<td>
+<p>optional, a vector of values to be used as the
+<code>rownames</code> in the returned <code>matrix</code>. It must be the same length
+as <code>nrow(x)</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p> Required to be present because the generic 'as.matrix' generic has it. Arguments here are not currently used or passed on by this method. </p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code><a href="../../data.table/help/as.matrix.html">as.matrix</a></code> is a generic function in base R. It dispatches to
+<code>as.matrix.data.table</code> if its <code>x</code> argument is a <code>data.table</code>.
+</p>
+<p>The method for <code>data.table</code>s will return a character matrix if there
+are only atomic columns and any non-(numeric/logical/complex) column,
+applying <code><a href="../../base/html/vector.html">as.vector</a></code> to factors and <code><a href="../../base/html/format.html">format</a></code> to other
+non-character columns. Otherwise, the usual coercion hierarchy (logical &lt;
+integer &lt; double &lt; complex) will be used, e.g., all-logical data frames
+will be coerced to a logical matrix, mixed logical-integer will give an
+integer matrix, etc.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A new <code>matrix</code> containing the contents of <code>x</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../data.table/help/data.table.html">data.table</a></code>, <code><a href="../../data.table/help/as.matrix.html">as.matrix</a></code>, <code><a href="../../base/html/data.matrix.html">data.matrix</a></code>
+<code><a href="../../base/html/array.html">array</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+DT &lt;- data.table(A = letters[1:10], X = 1:10, Y = 11:20)
+as.matrix(DT) # character matrix
+as.matrix(DT, rownames = "A")
+as.matrix(DT, rownames = 1)
+as.matrix(DT, rownames = TRUE)
+
+setkey(DT, A)
+as.matrix(DT, rownames = TRUE)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

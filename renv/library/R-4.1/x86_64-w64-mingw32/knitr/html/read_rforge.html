@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Read source code from R-Forge</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for read_rforge {knitr}"><tr><td>read_rforge {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Read source code from R-Forge</h2>
+
+<h3>Description</h3>
+
+<p>This function reads source code from the SVN repositories on R-Forge.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+read_rforge(path, project, extra = "")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p>Relative path to the source script on R-Forge.</p>
+</td></tr>
+<tr valign="top"><td><code>project</code></td>
+<td>
+<p>Name of the R-Forge project.</p>
+</td></tr>
+<tr valign="top"><td><code>extra</code></td>
+<td>
+<p>Extra parameters to be passed to the URL (e.g. <code>extra =
+'&amp;revision=48'</code> to check out the source of revision 48).</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector of the source code.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Yihui Xie and Peter Ruckdeschel
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(knitr)
+
+# relies on r-forge.r-project.org being accessible
+read_rforge("rgl/R/axes.R", project = "rgl")
+read_rforge("rgl/R/axes.R", project = "rgl", extra = "&amp;revision=519")
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

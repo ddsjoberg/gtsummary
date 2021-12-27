@@ -1,0 +1,119 @@
+---
+title: "Metadata"
+description: >
+  Customise metadata and social media cards for pkgdown websites.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Metadata}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Package authors can customize the metadata used by Twitter and the [Open Graph protocol][ogp] for rich social media cards. In addition to specifying an alternate description for the package and any individual articles, you may also choose the preview image shown and the style of card used on Twitter.
+
+You can preview and validate the appearance of the social media cards with online tools:
+
+* [Twitter Card Validator][twitter-validator]
+* [Google Structured Data Testing Tool][ogp-validator]
+
+## Site-wide customization
+
+Metadata for the entire pkgdown website can be specified in the site's `_pkgdown.yml` configuration file in the `home` and `template: opengraph` sections:
+
+```yaml
+home:
+  title: An R package for pool-noodle discovery
+  description: Discover and add pool-noodles to your growing collection.
+  
+template:
+  opengraph:
+    image:
+      src: man/figures/card.png
+      alt: "Pool noodles configured to form the word poolnoodlr"
+    twitter:
+      creator: "@hadleywickham"
+      site: "@rstudio"
+      card: summary_large_image
+```
+
+The `home: title` and `home: description` fields override the `Title` and `Description` fields in the package `DESCRIPTION`. It's good practice to set these fields to make your package documentation easier to find via search, rather than sticking with the title and description needed by CRAN.
+
+The `template: opengraph` section allows you to further customize the social media card.
+
+*   `image`: By default, pkgdown uses the package's logo for the card image 
+    (if one exists). Use `image` to specify an alternative image for the social 
+    media cards of pages in your pkgdown site.
+
+    * `src`: A fully qualified URL to a media card image, or a relative path to 
+      an image stored in the package. The `src` field is required if
+      `image` is specified.
+    
+    * `alt`: Alternative text describing the image for screen readers and 
+      other situations where your social media card image cannot be displayed.
+
+*  `twitter`: You can specify the Twitter accounts associated with your package
+    and the [style of social media card][twitter-card] that Twitter will 
+    display.
+    
+    * `creator`: Typically, the Twitter handle of the author of the package or 
+      article.
+    
+    * `site`: The Twitter handle of the organization affiliated with the
+      package author or sponsoring the package development. 
+      
+    * If only one of `creator` or `site` are included, the provided value will 
+      be used for both fields.
+    
+    * `card`: The [style of social media card][twitter-card] that Twitter will 
+      display. For pkgdown sites, the most relevant options are 
+      `summary_large_image`, featuring a large image over the page title and
+      description, or `summary`, featuring a small square image inline and to
+      the left of the page title and description.
+
+## Article metadata
+
+Articles and vignettes rendered as articles by pkgdown can have individually customized metadata and social media cards.
+
+```yaml
+title: "Introduction to poolnoodlr"
+description: "A brief introduction to pool noodles in R."
+author: "Mara Averick"
+opengraph:
+  image: 
+    src: "https://example.com/pkg/batpig.png"
+  twitter:
+    card: summary
+    creator: "@dataandme"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to poolnoodlr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+```
+
+Use the `title`, `description`, and `author` fields to specify the title, description, and (optional) author of the vignette or article.
+
+* The `title` field is used as the title of your article in your pkgdown site
+  and should always be included.
+
+* Both `title` and `description` are used by pkgdown for the page's social 
+  media card. If `description` is not included in the article's YAML front 
+  matter, then the name of the package is used instead. The `description`
+  is also displayed on the articles index.
+
+- The `author` field is only used in the text of the vignette or article.
+  How the author name is displayed depends on the `output` format.
+
+In articles, the `opengraph` section works in the same way as the site-wide `template: opengraph` settings, but is only applied to the article or vignette. This allows you to specify social media card preview images for individual articles, or to associate an article with a particular Twitter account. If not specified, the `opengraph` settings from the site-wide configuration are used.
+
+[ogp]: https://ogp.me/
+[twitter-validator]: https://cards-dev.twitter.com/validator
+[ogp-validator]: https://search.google.com/structured-data/testing-tool
+[twitter-card]: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards

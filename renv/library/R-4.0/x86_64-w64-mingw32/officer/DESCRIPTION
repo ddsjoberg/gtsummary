@@ -1,0 +1,43 @@
+Package: officer
+Type: Package
+Title: Manipulation of Microsoft Word and PowerPoint Documents
+Version: 0.3.18
+Authors@R: c(
+    person("David", "Gohel", role = c("aut", "cre"),
+    email = "david.gohel@ardata.fr"),
+    person("Frank", "Hangler", role = "ctb", email = "frank@plotandscatter.com", comment = "function body_replace_all_text"),
+    person("Liz", "Sander", role = "ctb", email = 'lsander@civisanalytics.com', comment = "several documentation fixes"),
+    person("Anton", "Victorson", role = "ctb", email = 'anton@victorson.se',comment = "fixes xml structures"),
+    person("Jon", "Calder", role = "ctb", email = 'jonmcalder@gmail.com', comment = "update vignettes"),
+    person("John", "Harrold", role = "ctb", email = 'john.m.harrold@gmail.com', comment = "function annotate_base"),
+    person("John", "Muschelli", role = "ctb", email = 'muschellij2@gmail.com', comment = "google doc compatibility")
+    )
+Description: Access and manipulate 'Microsoft Word' and 'Microsoft PowerPoint' documents from R. 
+  The package focuses on tabular and graphical reporting from R; it also provides two functions
+  that let users get document content into data objects. A set of functions 
+  lets add and remove images, tables and paragraphs of text in new or existing documents. 
+  The package does not require any installation of Microsoft products to be able to write Microsoft 
+  files.
+License: GPL-3
+Imports: R6, grDevices, stats, graphics, utils, zip (>= 2.1.0), uuid
+        (>= 0.1-4), xml2 (>= 1.1.0)
+URL: https://ardata-fr.github.io/officeverse/,
+        https://davidgohel.github.io/officer/
+Encoding: UTF-8
+BugReports: https://github.com/davidgohel/officer/issues
+RoxygenNote: 7.1.1
+Suggests: testthat, devEMF, ggplot2, rmarkdown, base64enc, knitr, rsvg
+VignetteBuilder: knitr
+NeedsCompilation: no
+Packaged: 2021-04-02 14:23:33 UTC; davidgohel
+Author: David Gohel [aut, cre],
+  Frank Hangler [ctb] (function body_replace_all_text),
+  Liz Sander [ctb] (several documentation fixes),
+  Anton Victorson [ctb] (fixes xml structures),
+  Jon Calder [ctb] (update vignettes),
+  John Harrold [ctb] (function annotate_base),
+  John Muschelli [ctb] (google doc compatibility)
+Maintainer: David Gohel <david.gohel@ardata.fr>
+Repository: CRAN
+Date/Publication: 2021-04-02 15:10:02 UTC
+Built: R 4.0.5; ; 2021-05-07 13:06:56 UTC; windows

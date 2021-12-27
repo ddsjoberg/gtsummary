@@ -1,0 +1,57 @@
+Package: ragg
+Type: Package
+Title: Graphic Devices Based on AGG
+Version: 1.1.2
+Authors@R: 
+    c(person(given = "Thomas Lin",
+             family = "Pedersen",
+             role = c("cre", "aut"),
+             email = "thomas.pedersen@rstudio.com",
+             comment = c(ORCID = "0000-0002-5147-4711")),
+      person(given = "Maxim",
+             family = "Shemanarev",
+             role = c("aut", "cph"),
+             comment = "Author of AGG"),
+      person(given = "Tony",
+             family = "Juricic",
+             role = c("ctb", "cph"),
+             email = "tonygeek@yahoo.com",
+             comment = "Contributor to AGG"),
+      person(given = "Milan",
+             family = "Marusinec",
+             role = c("ctb", "cph"),
+             email = "milan@marusinec.sk",
+             comment = "Contributor to AGG"),
+      person(given = "Spencer",
+             family = "Garrett",
+             role = "ctb",
+             comment = "Contributor to AGG"),
+      person(given = "RStudio",
+             role = "cph"))
+Maintainer: Thomas Lin Pedersen <thomas.pedersen@rstudio.com>
+Description: Anti-Grain Geometry (AGG) is a high-quality and high-performance
+    2D drawing library. The 'ragg' package provides a set of graphic devices 
+    based on AGG to use as alternative to the raster devices provided through
+    the 'grDevices' package.
+License: MIT + file LICENSE
+URL: https://ragg.r-lib.org, https://github.com/r-lib/ragg
+BugReports: https://github.com/r-lib/ragg/issues
+Encoding: UTF-8
+RoxygenNote: 7.1.1
+SystemRequirements: C++11, freetype2, libpng, libtiff, libjpeg
+Suggests: covr, testthat, grid, graphics
+Imports: systemfonts (>= 1.0.0), textshaping (>= 0.3.0)
+LinkingTo: systemfonts, textshaping
+NeedsCompilation: yes
+Packaged: 2021-03-11 07:01:32 UTC; thomas
+Author: Thomas Lin Pedersen [cre, aut]
+    (<https://orcid.org/0000-0002-5147-4711>),
+  Maxim Shemanarev [aut, cph] (Author of AGG),
+  Tony Juricic [ctb, cph] (Contributor to AGG),
+  Milan Marusinec [ctb, cph] (Contributor to AGG),
+  Spencer Garrett [ctb] (Contributor to AGG),
+  RStudio [cph]
+Repository: CRAN
+Date/Publication: 2021-03-17 10:10:02 UTC
+Built: R 4.0.5; x86_64-w64-mingw32; 2021-05-07 15:50:13 UTC; windows
+Archs: i386, x64

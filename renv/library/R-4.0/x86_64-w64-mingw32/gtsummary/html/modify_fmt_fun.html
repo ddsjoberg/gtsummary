@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Modify Formatting Functions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for modify_fmt_fun {gtsummary}"><tr><td>modify_fmt_fun {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Modify Formatting Functions</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+Use this function to update the way numeric columns and rows of <code>.$table_body</code>
+are formatted
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+modify_fmt_fun(x, update, rows = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>gtsummary object</p>
+</td></tr>
+<tr valign="top"><td><code>update</code></td>
+<td>
+<p>list of formulas or a single formula specifying the updated
+formatting function.
+The LHS specifies the column(s) to be updated,
+and the RHS is the updated formatting function.</p>
+</td></tr>
+<tr valign="top"><td><code>rows</code></td>
+<td>
+<p>predicate expression to select rows in <code>x$table_body</code>.
+Default is <code>NULL</code>. See details below.</p>
+</td></tr>
+</table>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/modify_fmt_fun_ex1.png" width=45% />
+</p>
+
+
+<h3>rows argument</h3>
+
+<p>The rows argument accepts a predicate expression that is used to specify
+rows to apply formatting. The expression must evaluate to a logical when
+evaluated in <code>x$table_body</code>. For example, to apply formatting to the age rows
+pass <code>rows = variable == "age"</code>. A vector of row numbers is NOT acceptable.
+</p>
+<p>A couple of things to note when using the <code style="white-space: pre;">rows=</code> argument.
+</p>
+
+<ol>
+<li><p> You can use saved objects to create the predicate argument, e.g.
+<code>rows = variable == letters[1]</code>.
+</p>
+</li>
+<li><p> The saved object cannot share a name with a column in <code>x$table_body</code>.
+The reason for this is that in <code>tbl_merge()</code> the columns are renamed,
+and the renaming process cannot disambiguate the <code>variable</code> column from
+an external object named <code>variable</code> in the following expression
+<code>rows = .data$variable = .env$variable</code>.
+</p>
+</li></ol>
+
+
+
+<h3>See Also</h3>
+
+<p>Other Advanced modifiers: 
+<code><a href="modify_column_hide.html">modify_column_hide</a>()</code>,
+<code><a href="modify_table_body.html">modify_table_body</a>()</code>,
+<code><a href="modify_table_styling.html">modify_table_styling</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Example 1 ----------------------------------
+# show 'grade' p-values to 3 decimal places
+modify_fmt_fun_ex1 &lt;-
+  lm(age ~ marker + grade, trial) %&gt;%
+  tbl_regression() %&gt;%
+  modify_fmt_fun(
+    update = p.value ~ function(x) style_pvalue(x, digits = 3),
+    rows = variable == "grade"
+  )
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.0.9006 <a href="00Index.html">Index</a>]</div>
+</body></html>

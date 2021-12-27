@@ -1,0 +1,62 @@
+---
+title: "Anatomy of a Lockfile"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Anatomy of a Lockfile}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+`renv` uses a **lockfile** to capture the state of your \R library at some point
+in time. It is stored as a collection of *records*, with different records
+defining:
+
+- The version of `renv` used when generating the lockfile;
+- The version of `R` used in that project;
+- The R repositories that were active when the lockfile was created;
+- *Package records* defining each R package, their version, and their
+  installation source.
+
+Here is an example lockfile, including the packages `markdown` and `mime`:
+
+```
+{
+  "R": {
+    "Version": "`r getRversion()`",
+    "Repositories": [
+      {
+        "Name": "CRAN",
+        "URL": "https://cloud.r-project.org"
+      }
+    ]
+  },
+  "Packages": {
+    "markdown": {
+      "Package": "markdown",
+      "Version": "1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "4584a57f565dd7987d59dda3a02cfb41"
+    },
+    "mime": {
+      "Package": "mime",
+      "Version": "0.7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "908d95ccbfd1dd274073ef07a7c93934"
+    }
+  }
+}
+```
+
+The function `renv::snapshot()` is used to create this lockfile, and by default
+writes these records to the file `renv.lock`. Later, if you need to re-install
+the specific package versions as recorded in `renv.lock`, you can use
+`renv::restore()`.

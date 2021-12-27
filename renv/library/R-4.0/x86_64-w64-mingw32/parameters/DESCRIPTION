@@ -1,0 +1,95 @@
+Package: parameters
+Type: Package
+Title: Processing of Model Parameters
+Version: 0.13.0
+Authors@R: 
+  c(
+    person("Daniel", 
+           "Lüdecke", 
+           role = c("aut", "cre"), 
+           email = "d.luedecke@uke.de", 
+           comment = c(ORCID = "0000-0002-8895-3206", Twitter = "@strengejacke")),
+    person("Dominique", 
+           "Makowski", 
+           email = "dom.makowski@gmail.com",
+           role = c("aut"), 
+           comment = c(ORCID = "0000-0001-5375-9967")),
+    person("Mattan S.", 
+           "Ben-Shachar", 
+           role = c("aut"), 
+           email = "matanshm@post.bgu.ac.il", 
+           comment = c(ORCID = "0000-0002-4287-4801")),
+    person(given = "Indrajeet",
+           family = "Patil",
+           role = c("aut"),
+           email = "patilindrajeet.science@gmail.com",
+           comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
+    person(given = "Søren",
+           family = "Højsgaard",
+           role = c("aut"),
+           email = "sorenh@math.aau.dk"),
+    person(given = "Zen J.",
+           family = "Lau",
+           role = c("ctb"),
+           email = "zenjuen.lau@ntu.edu.sg"),
+    person(given = "Vincent",
+           family = "Arel-Bundock",
+           role = c("ctb"),
+           email = "vincent.arel-bundock@umontreal.ca",
+           comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@vincentab")),
+    person(given = "Jeffrey",
+           family = "Girard",
+           role = c("ctb"),
+           email = "me@jmgirard.com",
+           comment = c(ORCID = "0000-0002-7359-3746", Twitter = "@jeffreymgirard"))
+  )
+Description: Utilities for processing the parameters of various
+    statistical models. Beyond computing p values, CIs, and other indices
+    for a wide variety of models (see support list of insight; Lüdecke,
+    Waggoner & Makowski (2019) <doi:10.21105/joss.01412>), this package
+    implements features like bootstrapping or simulating of parameters and
+    models, feature reduction (feature extraction and variable selection)
+    as well as functions to describe data and variable characteristics
+    (e.g. skewness, kurtosis, smoothness or distribution).
+License: GPL-3
+URL: https://easystats.github.io/parameters/
+BugReports: https://github.com/easystats/parameters/issues
+Depends: R (>= 3.4)
+Imports: bayestestR (>= 0.8.2), insight (>= 0.13.2), methods, stats,
+        utils
+Suggests: AER, afex, aod, BayesFactor, BayesFM, bbmle, betareg, blme,
+        boot, brglm2, brms, broom, cAIC4, car, cgam, clubSandwich,
+        cluster, cplm, dplyr, DRR, effectsize (>= 0.4.3), emmeans (>=
+        1.4), EGAnet (>= 0.7), FactoMineR, fastICA, gam, gamlss, gee,
+        geepack, ggplot2, GLMMadaptive, glmmTMB, GPArotation, gt,
+        lavaan, lavaSearch2, lme4, lmerTest, logspline, lqmm, knitr,
+        MASS, magrittr, Matrix, mclust, MCMCglmm, mediation, metaBMA,
+        metafor, mice, mfx, mgcv, multcomp, multimode, MuMIn, M3C,
+        NbClust, nFactors, nlme, panelr, performance (>= 0.7.0), plm,
+        PMCMRplus, pbkrtest, projpred, pscl, psych, quantreg,
+        randomForest, rmarkdown, rstanarm, sandwich, see, sjstats,
+        spelling, survey, survival, testthat, TMB, tripack, truncreg,
+        VGAM, WRS2
+Encoding: UTF-8
+Language: en-US
+RoxygenNote: 7.1.1
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+NeedsCompilation: no
+Packaged: 2021-04-08 20:44:16 UTC; Daniel
+Author: Daniel Lüdecke [aut, cre] (<https://orcid.org/0000-0002-8895-3206>,
+    @strengejacke),
+  Dominique Makowski [aut] (<https://orcid.org/0000-0001-5375-9967>),
+  Mattan S. Ben-Shachar [aut] (<https://orcid.org/0000-0002-4287-4801>),
+  Indrajeet Patil [aut] (<https://orcid.org/0000-0003-1995-6531>,
+    @patilindrajeets),
+  Søren Højsgaard [aut],
+  Zen J. Lau [ctb],
+  Vincent Arel-Bundock [ctb] (<https://orcid.org/0000-0003-1995-6531>,
+    @vincentab),
+  Jeffrey Girard [ctb] (<https://orcid.org/0000-0002-7359-3746>,
+    @jeffreymgirard)
+Maintainer: Daniel Lüdecke <d.luedecke@uke.de>
+Repository: CRAN
+Date/Publication: 2021-04-08 21:30:03 UTC
+Built: R 4.0.5; ; 2021-05-07 15:04:48 UTC; windows

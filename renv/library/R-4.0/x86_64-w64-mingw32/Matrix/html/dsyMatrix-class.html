@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Symmetric Dense (Packed | Non-packed) Numeric Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for dsyMatrix-class {Matrix}"><tr><td>dsyMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Symmetric Dense (Packed | Non-packed) Numeric Matrices</h2>
+
+<h3>Description</h3>
+
+
+<ul>
+<li><p>The <code>"dsyMatrix"</code> class is the class of symmetric, dense matrices
+in <em>non-packed</em> storage and
+</p>
+</li>
+<li><p><code>"dspMatrix"</code> is the class of symmetric dense matrices in
+<em>packed</em> storage.  Only the upper triangle or the lower
+triangle is stored.
+</p>
+</li></ul>
+
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("dsyMatrix",
+    ...)</code> or <code>new("dspMatrix", ...)</code>, respectively.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>uplo</code>:</dt><dd><p>Object of class <code>"character"</code>. Must be
+either &quot;U&quot;, for upper triangular, and &quot;L&quot;, for lower triangular.</p>
+</dd>
+<dt><code>x</code>:</dt><dd><p>Object of class <code>"numeric"</code>. The numeric
+values that constitute the matrix, stored in column-major order.</p>
+</dd>
+<dt><code>Dim</code>,<code>Dimnames</code>:</dt><dd><p>The dimension (a length-2
+<code>"integer"</code>) and corresponding names (or <code>NULL</code>), see the
+<code><a href="Matrix-class.html">Matrix</a></code>.</p>
+</dd>
+<dt><code>factors</code>:</dt><dd><p>Object of class <code>"list"</code>.  A named
+list of factorizations that have been computed for the matrix.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p><code>"dsyMatrix"</code> extends class <code>"dgeMatrix"</code>, directly, whereas<br />
+<code>"dspMatrix"</code> extends class <code>"ddenseMatrix"</code>, directly.
+</p>
+<p>Both extend class <code>"symmetricMatrix"</code>, directly,
+and class <code>"Matrix"</code> and others, <em>in</em>directly, use
+<code><a href="../../methods/html/RClassUtils.html">showClass</a>("dsyMatrix")</code>, e.g., for details.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>coerce</dt><dd><p><code>signature(from = "ddenseMatrix", to = "dgeMatrix")</code></p>
+</dd>
+</dl>
+
+<dl>
+<dt>coerce</dt><dd><p><code>signature(from = "dspMatrix", to = "matrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dsyMatrix", to = "matrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dsyMatrix", to = "dspMatrix")</code></p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dspMatrix", to = "dsyMatrix")</code></p>
+</dd>
+<dt>norm</dt><dd><p><code>signature(x = "dspMatrix", type = "character")</code>, or
+<code>x = "dsyMatrix"</code> or <code>type = "missing"</code>: Computes the
+matrix norm of the desired type, see, <code><a href="norm.html">norm</a></code>.</p>
+</dd>
+<dt>rcond</dt><dd><p><code>signature(x = "dspMatrix", type = "character")</code>, or
+<code>x = "dsyMatrix"</code> or <code>type = "missing"</code>: Computes the
+reciprocal condition number, <code><a href="rcond.html">rcond</a>()</code>.</p>
+</dd>
+<dt>solve</dt><dd><p><code>signature(a = "dspMatrix", b = "....")</code>, and</p>
+</dd>
+<dt>solve</dt><dd><p><code>signature(a = "dsyMatrix", b = "....")</code>: <code>x
+	&lt;- solve(a,b)</code> solves <i>A x = b</i> for <i>x</i>; see
+<code><a href="solve-methods.html">solve-methods</a></code>.</p>
+</dd>
+<dt>t</dt><dd><p><code>signature(x = "dsyMatrix")</code>: Transpose; swaps from
+upper triangular to lower triangular storage, i.e., the uplo slot
+from <code>"U"</code> to <code>"L"</code> or vice versa, the same as for all
+symmetric matrices.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>The <em>positive (Semi-)definite</em> dense (packed or non-packed
+numeric matrix classes <code><a href="dpoMatrix-class.html">dpoMatrix</a></code>,
+<code><a href="dpoMatrix-class.html">dppMatrix</a></code> and <code><a href="dpoMatrix-class.html">corMatrix</a></code>,
+</p>
+<p>Classes <code><a href="dgeMatrix-class.html">dgeMatrix</a></code> and <code><a href="Matrix-class.html">Matrix</a></code>;
+<code><a href="../../base/html/solve.html">solve</a></code>, <code><a href="norm.html">norm</a></code>, <code><a href="rcond.html">rcond</a></code>,
+<code><a href="../../base/html/t.html">t</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Only upper triangular part matters (when uplo == "U" as per default)
+(sy2 &lt;- new("dsyMatrix", Dim = as.integer(c(2,2)), x = c(14, NA,32,77)))
+str(t(sy2)) # uplo = "L", and the lower tri. (i.e. NA is replaced).
+
+chol(sy2) #-&gt; "Cholesky" matrix
+(sp2 &lt;- pack(sy2)) # a "dspMatrix"
+
+## Coercing to dpoMatrix gives invalid object:
+sy3 &lt;- new("dsyMatrix", Dim = as.integer(c(2,2)), x = c(14, -1, 2, -7))
+try(as(sy3, "dpoMatrix")) # -&gt; error: not positive definite
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

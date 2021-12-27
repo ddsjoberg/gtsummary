@@ -2,7 +2,7 @@
 #'
 #' The `tbl_summary` function calculates descriptive statistics for
 #' continuous, categorical, and dichotomous variables.  Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 #' for detailed examples.
 #'
 #' @param data A data frame
@@ -28,7 +28,7 @@
 #' `list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")`.
 #' See below for details.
 #' @param digits List of formulas specifying the number of decimal
-#' places to round continuous summary statistics. If not specified,
+#' places to round summary statistics. If not specified,
 #' `tbl_summary` guesses an appropriate number of decimals to round statistics.
 #' When multiple statistics are displayed for a single variable, supply a vector
 #' rather than an integer.  For example, if the
@@ -50,7 +50,7 @@
 #' @param include variables to include in the summary table. Default is `everything()`
 #'
 #' @section select helpers:
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
 #' from the \\{tidyselect\\} package and \\{gtsummary\\} package are available to
 #' modify default behavior for groups of variables.
 #' For example, by default continuous variables are reported with the median
@@ -106,6 +106,7 @@
 #'   \item `{var}` variance
 #'   \item `{min}` minimum
 #'   \item `{max}` maximum
+#'   \item `{sum}` sum
 #'   \item `{p##}` any integer percentile, where `##` is an integer from 0 to 100
 #'   \item `{foo}` any function of the form `foo(x)` is accepted where `x` is a numeric vector
 #' }
@@ -132,6 +133,7 @@
 #' @family tbl_summary tools
 #' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette} for detailed tutorial
 #' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Daniel D. Sjoberg
 #' @examples
 #' # Example 1 ----------------------------------

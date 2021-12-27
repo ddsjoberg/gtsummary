@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Locales</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Locales</h1>
+
+
+
+<p>The goal of readr’s locales is to encapsulate common options that vary between languages and localities. This includes:</p>
+<ul>
+<li>The names of months and days, used when parsing dates.</li>
+<li>The default time zone, used when parsing datetimes.</li>
+<li>The character encoding, used when reading non-ASCII strings.</li>
+<li>Default date format, used when guessing column types.</li>
+<li>The decimal and grouping marks, used when reading numbers.</li>
+</ul>
+<p>(Strictly speaking these are not locales in the usual technical sense of the word because they also contain information about time zones and encoding.)</p>
+<p>To create a new locale, you use the <code>locale()</code> function:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">locale</span>()</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">#&gt; &lt;locale&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#&gt; Numbers:  123,456.78</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">#&gt; Formats:  %AD / %AT</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">#&gt; Timezone: UTC</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt; Encoding: UTF-8</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt; &lt;date_names&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt; Days:   Sunday (Sun), Monday (Mon), Tuesday (Tue), Wednesday (Wed), Thursday</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt;         (Thu), Friday (Fri), Saturday (Sat)</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt; Months: January (Jan), February (Feb), March (Mar), April (Apr), May (May),</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt;         June (Jun), July (Jul), August (Aug), September (Sep), October</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt;         (Oct), November (Nov), December (Dec)</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co">#&gt; AM/PM:  AM/PM</span></span></code></pre></div>
+<p>This rest of this vignette will explain what each of the options do.</p>
+<p>All of the parsing function in readr take a <code>locale</code> argument. You’ll most often use it with <code>read_csv()</code>, <code>read_fwf()</code> or <code>read_table()</code>. Readr is designed to work the same way across systems, so the default locale is English centric like R. If you’re not in an English speaking country, this makes initial import a little harder, because you have to override the defaults. But the payoff is big: you can share your code and know that it will work on any other system. Base R takes a different philosophy. It uses system defaults, so typical data import is a little easier, but sharing code is harder.</p>
+<p>Rather than demonstrating the use of locales with <code>read_csv()</code> and fields, in this vignette I’m going to use the <code>parse_*()</code> functions. These work with a character vector instead of a file on disk, so they’re easier to use in examples. They’re also useful in their own right if you need to do custom parsing. See <code>type_convert()</code> if you need to apply multiple parsers to a data frame.</p>
+<div id="dates-and-times" class="section level2">
+<h2>Dates and times</h2>
+<div id="names-of-months-and-days" class="section level3">
+<h3>Names of months and days</h3>
+<p>The first argument to <code>locale()</code> is <code>date_names</code>, and it controls what values are used for month and day names. The easiest way to specify it is with a ISO 639 language code:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">locale</span>(<span class="st">&quot;ko&quot;</span>) <span class="co"># Korean</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; &lt;locale&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">#&gt; Numbers:  123,456.78</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; Formats:  %AD / %AT</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; Timezone: UTC</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt; Encoding: UTF-8</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt; &lt;date_names&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; Days:   일요일 (일), 월요일 (월), 화요일 (화), 수요일 (수), 목요일 (목), 금요일</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt;         (금), 토요일 (토)</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; Months: 1월, 2월, 3월, 4월, 5월, 6월, 7월, 8월, 9월, 10월, 11월, 12월</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; AM/PM:  오전/오후</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="kw">locale</span>(<span class="st">&quot;fr&quot;</span>) <span class="co"># French</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt; &lt;locale&gt;</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; Numbers:  123,456.78</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; Formats:  %AD / %AT</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt; Timezone: UTC</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; Encoding: UTF-8</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt; &lt;date_names&gt;</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="co">#&gt; Days:   dimanche (dim.), lundi (lun.), mardi (mar.), mercredi (mer.), jeudi</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="co">#&gt;         (jeu.), vendredi (ven.), samedi (sam.)</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="co">#&gt; Months: janvier (janv.), février (févr.), mars (mars), avril (avr.), mai (mai),</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="co">#&gt;         juin (juin), juillet (juil.), août (août), septembre (sept.),</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="co">#&gt;         octobre (oct.), novembre (nov.), décembre (déc.)</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="co">#&gt; AM/PM:  AM/PM</span></span></code></pre></div>
+<p>If you don’t already know the code for your language, <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">Wikipedia</a> has a good list. Currently readr has 185 languages available. You can list them all with <code>date_names_langs()</code>.</p>
+<p>Specifying a locale allows you to parse dates in other languages:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">parse_date</span>(<span class="st">&quot;1 janvier 2015&quot;</span>, <span class="st">&quot;%d %B %Y&quot;</span>, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="st">&quot;fr&quot;</span>))</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt; [1] &quot;2015-01-01&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="kw">parse_date</span>(<span class="st">&quot;14 oct. 1979&quot;</span>, <span class="st">&quot;%d %b %Y&quot;</span>, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="st">&quot;fr&quot;</span>))</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; [1] &quot;1979-10-14&quot;</span></span></code></pre></div>
+<p>For many languages, it’s common to find that diacritics have been stripped so they can be stored as ASCII. You can tell the locale that with the <code>asciify</code> option:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">parse_date</span>(<span class="st">&quot;1 août 2015&quot;</span>, <span class="st">&quot;%d %B %Y&quot;</span>, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="st">&quot;fr&quot;</span>))</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; [1] &quot;2015-08-01&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw">parse_date</span>(<span class="st">&quot;1 aout 2015&quot;</span>, <span class="st">&quot;%d %B %Y&quot;</span>, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="st">&quot;fr&quot;</span>, <span class="dt">asciify =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; [1] &quot;2015-08-01&quot;</span></span></code></pre></div>
+<p>Note that the quality of the translations is variable, especially for the rarer languages. If you discover that they’re not quite right for your data, you can create your own with <code>date_names()</code>. The following example creates a locale with Māori date names:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>maori &lt;-<span class="st"> </span><span class="kw">locale</span>(<span class="kw">date_names</span>(</span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="dt">day =</span> <span class="kw">c</span>(<span class="st">&quot;Rātapu&quot;</span>, <span class="st">&quot;Rāhina&quot;</span>, <span class="st">&quot;Rātū&quot;</span>, <span class="st">&quot;Rāapa&quot;</span>, <span class="st">&quot;Rāpare&quot;</span>, <span class="st">&quot;Rāmere&quot;</span>, <span class="st">&quot;Rāhoroi&quot;</span>),</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="dt">mon =</span> <span class="kw">c</span>(<span class="st">&quot;Kohi-tātea&quot;</span>, <span class="st">&quot;Hui-tanguru&quot;</span>, <span class="st">&quot;Poutū-te-rangi&quot;</span>, <span class="st">&quot;Paenga-whāwhā&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    <span class="st">&quot;Haratua&quot;</span>, <span class="st">&quot;Pipiri&quot;</span>, <span class="st">&quot;Hōngongoi&quot;</span>, <span class="st">&quot;Here-turi-kōkā&quot;</span>, <span class="st">&quot;Mahuru&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    <span class="st">&quot;Whiringa-ā-nuku&quot;</span>, <span class="st">&quot;Whiringa-ā-rangi&quot;</span>, <span class="st">&quot;Hakihea&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6"></a>))</span></code></pre></div>
+</div>
+<div id="timezones" class="section level3">
+<h3>Timezones</h3>
+<p>Unless otherwise specified, readr assumes that times are in UTC, the Universal Coordinated Time (this is a successor to GMT and for almost all intents is identical). UTC is most suitable for data because it doesn’t have daylight savings - this avoids a whole class of potential problems. If your data isn’t already in UTC, you’ll need to supply a <code>tz</code> in the locale:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">parse_datetime</span>(<span class="st">&quot;2001-10-10 20:10&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt; [1] &quot;2001-10-10 20:10:00 UTC&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="kw">parse_datetime</span>(<span class="st">&quot;2001-10-10 20:10&quot;</span>, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="dt">tz =</span> <span class="st">&quot;Pacific/Auckland&quot;</span>))</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; [1] &quot;2001-10-10 20:10:00 NZDT&quot;</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">parse_datetime</span>(<span class="st">&quot;2001-10-10 20:10&quot;</span>, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="dt">tz =</span> <span class="st">&quot;Europe/Dublin&quot;</span>))</span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; [1] &quot;2001-10-10 20:10:00 IST&quot;</span></span></code></pre></div>
+<p>You can see a complete list of time zones with <code>OlsonNames()</code>.</p>
+<p>If you’re American, note that “EST” is a Canadian time zone that does not have DST. It’s not Eastern Standard Time! Instead use:</p>
+<ul>
+<li>PST/PDT = “US/Pacific”</li>
+<li>CST/CDT = “US/Central”</li>
+<li>MST/MDT = “US/Mountain”</li>
+<li>EST/EDT = “US/Eastern”</li>
+</ul>
+<p>(Note that there are more specific time zones for smaller areas that don’t follow the same rules. For example, “US/Arizona”, which follows mostly follows mountain time, but doesn’t have daylight savings. If you’re dealing with historical data, you might need an even more specific zone like “America/North_Dakota/New_Salem” - that will get you the most accurate time zones.)</p>
+<p>Note that these are only used as defaults. If individual times have timezones and you’re using “%Z” (as name, e.g. “America/Chicago”) or “%z” (as offset from UTC, e.g. “+0800”), they’ll override the defaults. There’s currently no good way to parse times that use US abbreviations.</p>
+<p>Note that once you have the date in R, changing the time zone just changes its printed representation - it still represents the same instants of time. If you’ve loaded non-UTC data, and want to display it as UTC, try this snippet of code:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>is_datetime &lt;-<span class="st"> </span><span class="kw">sapply</span>(df, inherits, <span class="st">&quot;POSIXct&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>df[is_datetime] &lt;-<span class="st"> </span><span class="kw">lapply</span>(df[is_datetime], <span class="cf">function</span>(x) {</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  <span class="kw">attr</span>(x, <span class="st">&quot;tzone&quot;</span>) &lt;-<span class="st"> &quot;UTC&quot;</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>  x</span>
+<span id="cb7-5"><a href="#cb7-5"></a>})</span></code></pre></div>
+</div>
+<div id="default-formats" class="section level3">
+<h3>Default formats</h3>
+<p>Locales also provide default date and time formats. The date format is used when guessing column types. The default date format is <code>%AD</code>, a flexible YMD parser (see <code>?parse_date</code>):</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">str</span>(<span class="kw">parse_guess</span>(<span class="st">&quot;2010-10-10&quot;</span>))</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt;  Date[1:1], format: &quot;2010-10-10&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="kw">str</span>(<span class="kw">parse_guess</span>(<span class="st">&quot;2010/10/10&quot;</span>))</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt;  Date[1:1], format: &quot;2010-10-10&quot;</span></span></code></pre></div>
+<p>If you’re an American, you might want to use your illogical date system::</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">str</span>(<span class="kw">parse_guess</span>(<span class="st">&quot;01/31/2013&quot;</span>))</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt;  chr &quot;01/31/2013&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="kw">str</span>(<span class="kw">parse_guess</span>(<span class="st">&quot;01/31/2013&quot;</span>, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="dt">date_format =</span> <span class="st">&quot;%m/%d/%Y&quot;</span>)))</span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt;  Date[1:1], format: &quot;2013-01-31&quot;</span></span></code></pre></div>
+<p>The time format is also used when guessing column types. The default time format is <code>%AT</code>, a flexible HMS parser (see <code>?parse_time</code>):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">str</span>(<span class="kw">parse_guess</span>(<span class="st">&quot;17:55:14&quot;</span>))</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt;  &#39;hms&#39; num 17:55:14</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt;  - attr(*, &quot;units&quot;)= chr &quot;secs&quot;</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="kw">str</span>(<span class="kw">parse_guess</span>(<span class="st">&quot;5:55:14 PM&quot;</span>))</span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt;  &#39;hms&#39; num 17:55:14</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt;  - attr(*, &quot;units&quot;)= chr &quot;secs&quot;</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co"># Example of a non-standard time</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="kw">str</span>(<span class="kw">parse_guess</span>(<span class="st">&quot;h5m55s14 PM&quot;</span>))</span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt;  chr &quot;h5m55s14 PM&quot;</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="kw">str</span>(<span class="kw">parse_guess</span>(<span class="st">&quot;h5m55s14 PM&quot;</span>, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="dt">time_format =</span> <span class="st">&quot;h%Hm%Ms%S %p&quot;</span>)))</span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt;  &#39;hms&#39; num 17:55:14</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt;  - attr(*, &quot;units&quot;)= chr &quot;secs&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="character" class="section level2">
+<h2>Character</h2>
+<p>All readr functions yield strings encoded in UTF-8. This encoding is the most likely to give good results in the widest variety of settings. By default, readr assumes that your input is also in UTF-8. This is less likely to be the case, especially when you’re working with older datasets.</p>
+<p>The following code illustrates the problems with encodings:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">library</span>(stringi)</span>
+<span id="cb11-2"><a href="#cb11-2"></a>x &lt;-<span class="st"> &quot;Émigré cause célèbre déjà vu.</span><span class="ch">\n</span><span class="st">&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>y &lt;-<span class="st"> </span><span class="kw">stri_conv</span>(x, <span class="st">&quot;UTF-8&quot;</span>, <span class="st">&quot;latin1&quot;</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co"># These strings look like they&#39;re identical:</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a>x</span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; [1] &quot;Émigré cause célèbre déjà vu.\n&quot;</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a>y</span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; [1] &quot;Émigré cause célèbre déjà vu.\n&quot;</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="kw">identical</span>(x, y)</span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co"># But they have difference encodings:</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="kw">Encoding</span>(x)</span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt; [1] &quot;UTF-8&quot;</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="kw">Encoding</span>(y)</span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt; [1] &quot;latin1&quot;</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="co"># That means while they print the same, their raw (binary)</span></span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="co"># representation is actually quite different:</span></span>
+<span id="cb11-21"><a href="#cb11-21"></a><span class="kw">charToRaw</span>(x)</span>
+<span id="cb11-22"><a href="#cb11-22"></a><span class="co">#&gt;  [1] c3 89 6d 69 67 72 c3 a9 20 63 61 75 73 65 20 63 c3 a9 6c c3 a8 62 72 65 20</span></span>
+<span id="cb11-23"><a href="#cb11-23"></a><span class="co">#&gt; [26] 64 c3 a9 6a c3 a0 20 76 75 2e 0a</span></span>
+<span id="cb11-24"><a href="#cb11-24"></a><span class="kw">charToRaw</span>(y)</span>
+<span id="cb11-25"><a href="#cb11-25"></a><span class="co">#&gt;  [1] c9 6d 69 67 72 e9 20 63 61 75 73 65 20 63 e9 6c e8 62 72 65 20 64 e9 6a e0</span></span>
+<span id="cb11-26"><a href="#cb11-26"></a><span class="co">#&gt; [26] 20 76 75 2e 0a</span></span>
+<span id="cb11-27"><a href="#cb11-27"></a></span>
+<span id="cb11-28"><a href="#cb11-28"></a><span class="co"># readr expects strings to be encoded as UTF-8. If they&#39;re</span></span>
+<span id="cb11-29"><a href="#cb11-29"></a><span class="co"># not, you&#39;ll get weird characters</span></span>
+<span id="cb11-30"><a href="#cb11-30"></a><span class="kw">parse_character</span>(x)</span>
+<span id="cb11-31"><a href="#cb11-31"></a><span class="co">#&gt; [1] &quot;Émigré cause célèbre déjà vu.\n&quot;</span></span>
+<span id="cb11-32"><a href="#cb11-32"></a><span class="kw">parse_character</span>(y)</span>
+<span id="cb11-33"><a href="#cb11-33"></a><span class="co">#&gt; [1] &quot;\xc9migr\xe9 cause c\xe9l\xe8bre d\xe9j\xe0 vu.\n&quot;</span></span>
+<span id="cb11-34"><a href="#cb11-34"></a></span>
+<span id="cb11-35"><a href="#cb11-35"></a><span class="co"># If you know the encoding, supply it:</span></span>
+<span id="cb11-36"><a href="#cb11-36"></a><span class="kw">parse_character</span>(y, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="dt">encoding =</span> <span class="st">&quot;latin1&quot;</span>))</span>
+<span id="cb11-37"><a href="#cb11-37"></a><span class="co">#&gt; [1] &quot;Émigré cause célèbre déjà vu.\n&quot;</span></span></code></pre></div>
+<p>If you don’t know what encoding the file uses, try <code>guess_encoding()</code>. It’s not 100% perfect (as it’s fundamentally a heuristic), but should at least get you pointed in the right direction:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">guess_encoding</span>(x)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; # A tibble: 3 x 2</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt;   encoding     confidence</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt;   &lt;chr&gt;             &lt;dbl&gt;</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; 1 UTF-8              1   </span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; 2 windows-1250       0.34</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; 3 windows-1252       0.26</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="kw">guess_encoding</span>(y)</span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt; # A tibble: 2 x 2</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co">#&gt;   encoding   confidence</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co">#&gt; 1 ISO-8859-2        0.4</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="co">#&gt; 2 ISO-8859-1        0.3</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="co"># Note that the first guess produces a valid string, but isn&#39;t correct:</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="kw">parse_character</span>(y, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="dt">encoding =</span> <span class="st">&quot;ISO-8859-2&quot;</span>))</span>
+<span id="cb12-17"><a href="#cb12-17"></a><span class="co">#&gt; [1] &quot;Émigré cause célčbre déjŕ vu.\n&quot;</span></span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="co"># But ISO-8859-1 is another name for latin1</span></span>
+<span id="cb12-19"><a href="#cb12-19"></a><span class="kw">parse_character</span>(y, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="dt">encoding =</span> <span class="st">&quot;ISO-8859-1&quot;</span>))</span>
+<span id="cb12-20"><a href="#cb12-20"></a><span class="co">#&gt; [1] &quot;Émigré cause célèbre déjà vu.\n&quot;</span></span></code></pre></div>
+</div>
+<div id="numbers" class="section level2">
+<h2>Numbers</h2>
+<p>Some countries use the decimal point, while others use the decimal comma. The <code>decimal_mark</code> option controls which readr uses when parsing doubles:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">parse_double</span>(<span class="st">&quot;1,23&quot;</span>, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="dt">decimal_mark =</span> <span class="st">&quot;,&quot;</span>))</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; [1] 1.23</span></span></code></pre></div>
+<p>Additionally, when writing out big numbers, you might have <code>1,000,000</code>, <code>1.000.000</code>, <code>1 000 000</code>, or <code>1&#39;000&#39;000</code>. The grouping mark is ignored by the more flexible number parser:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">parse_number</span>(<span class="st">&quot;$1,234.56&quot;</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt; [1] 1234.56</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="kw">parse_number</span>(<span class="st">&quot;$1.234,56&quot;</span>, </span>
+<span id="cb14-4"><a href="#cb14-4"></a>  <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="dt">decimal_mark =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">grouping_mark =</span> <span class="st">&quot;.&quot;</span>)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>)</span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; [1] 1234.56</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co"># readr is smart enough to guess that if you&#39;re using , for decimals then</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co"># you&#39;re probably using . for grouping:</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="kw">parse_number</span>(<span class="st">&quot;$1.234,56&quot;</span>, <span class="dt">locale =</span> <span class="kw">locale</span>(<span class="dt">decimal_mark =</span> <span class="st">&quot;,&quot;</span>))</span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt; [1] 1234.56</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -40,7 +40,7 @@ display for each variable.  The default is
 See below for details.}
 
 \item{digits}{List of formulas specifying the number of decimal
-places to round continuous summary statistics. If not specified,
+places to round summary statistics. If not specified,
 \code{tbl_summary} guesses an appropriate number of decimals to round statistics.
 When multiple statistics are displayed for a single variable, supply a vector
 rather than an integer.  For example, if the
@@ -81,12 +81,12 @@ A \code{tbl_summary} object
 \description{
 The \code{tbl_summary} function calculates descriptive statistics for
 continuous, categorical, and dichotomous variables.  Review the
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette}
 for detailed examples.
 }
 \section{select helpers}{
 
-\href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html#select_helpers}{Select helpers}
 from the \\{tidyselect\\} package and \\{gtsummary\\} package are available to
 modify default behavior for groups of variables.
 For example, by default continuous variables are reported with the median
@@ -148,6 +148,7 @@ For continuous variables the following statistics are available to display.
 \item \code{{var}} variance
 \item \code{{min}} minimum
 \item \code{{max}} maximum
+\item \code{{sum}} sum
 \item \verb{\{p##\}} any integer percentile, where \verb{##} is an integer from 0 to 100
 \item \code{{foo}} any function of the form \code{foo(x)} is accepted where \code{x} is a numeric vector
 }
@@ -233,6 +234,8 @@ tbl_summary_ex4 <-
 See \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette} for detailed tutorial
 
 See \href{http://www.danieldsjoberg.com/gtsummary/articles/gallery.html}{table gallery} for additional examples
+
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
 Other tbl_summary tools: 
 \code{\link{add_ci}()},

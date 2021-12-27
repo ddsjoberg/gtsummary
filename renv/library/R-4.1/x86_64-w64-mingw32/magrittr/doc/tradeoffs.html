@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Hadley Wickham" />
+<meta name="author" content="Lionel Henry" />
+
+
+<title>Design tradeoffs</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+ul > li > .anchor-section {display: none;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '' || x.matches(':empty')) {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Design tradeoffs</h1>
+<h4 class="author">Hadley Wickham</h4>
+<h4 class="author">Lionel Henry</h4>
+
+
+
+<p>There are many different ways that magrittr could implement the pipe. The goal of this document is to elucidate the variations, and the various pros and cons of each approach. This document is primarily aimed at the magrittr developers (so we don’t forget about important considerations), but will be of interest to anyone who wants to understand pipes better, or to create their own pipe that makes different tradeoffs</p>
+<div id="code-transformation" class="section level2">
+<h2>Code transformation</h2>
+<p>There are three main options for how we might transform a pipeline in base R expressions. Here they are illustrated with <code>x %&gt;% foo() %&gt;% bar()</code>:</p>
+<ul>
+<li><p><strong>Nested</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">bar</span>(<span class="kw">foo</span>(x))</span></code></pre></div></li>
+<li><p><strong>Eager (mask)</strong>, masking environment</p>
+<p>This is essentially how <code>%&gt;%</code> has been implemented prior to magrittr 2.0:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">local</span>({</span>
+<span id="cb2-2"><a href="#cb2-2"></a>  . &lt;-<span class="st"> </span>x</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  . &lt;-<span class="st"> </span><span class="kw">foo</span>(.)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="kw">bar</span>(.)</span>
+<span id="cb2-5"><a href="#cb2-5"></a>})</span></code></pre></div></li>
+<li><p><strong>Eager (mask-num)</strong>: masking environment, numbered placeholder</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">local</span>({</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  ...<span class="dv">1</span> &lt;-<span class="st"> </span>x</span>
+<span id="cb3-3"><a href="#cb3-3"></a>  ...<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">foo</span>(...<span class="dv">1</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="kw">bar</span>(...<span class="dv">2</span>)</span>
+<span id="cb3-5"><a href="#cb3-5"></a>})</span></code></pre></div></li>
+<li><p><strong>Eager (lexical)</strong>: lexical environment</p>
+<p>This variant assigns pipe expressions to the placeholder <code>.</code> in the current environment. This assignment is temporary: once the pipe has returned, the placeholder binding is reset to its previous state.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>with_dot_cleanup &lt;-<span class="st"> </span><span class="cf">function</span>(expr) {</span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="co"># Initialises `.` in the caller environment and resets it on exit.</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="co"># (We use `:=` instead of `=` to avoid partial matching.)</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>  rlang<span class="op">::</span><span class="kw">local_bindings</span>(<span class="dt">. :=</span> <span class="ot">NULL</span>, <span class="dt">.env =</span> <span class="kw">parent.frame</span>())</span>
+<span id="cb4-5"><a href="#cb4-5"></a>  expr</span>
+<span id="cb4-6"><a href="#cb4-6"></a>}</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="kw">with_dot_cleanup</span>({</span>
+<span id="cb4-8"><a href="#cb4-8"></a>  . &lt;-<span class="st"> </span>x</span>
+<span id="cb4-9"><a href="#cb4-9"></a>  . &lt;-<span class="st"> </span><span class="kw">foo</span>(.)</span>
+<span id="cb4-10"><a href="#cb4-10"></a>  <span class="kw">bar</span>(.)</span>
+<span id="cb4-11"><a href="#cb4-11"></a>})</span></code></pre></div></li>
+<li><p><strong>Lazy (mask)</strong>: masking environments</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>mask1 &lt;-<span class="st"> </span><span class="kw">new.env</span>(<span class="dt">parent =</span> env)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>mask2 &lt;-<span class="st"> </span><span class="kw">new.env</span>(<span class="dt">parent =</span> env)</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">delayedAssign</span>(<span class="st">&quot;.&quot;</span>, x, mask1)</span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">delayedAssign</span>(<span class="st">&quot;.&quot;</span>, <span class="kw">foo</span>(.), mask2)</span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="kw">with</span>(mask2, <span class="kw">bar</span>(.))</span></code></pre></div></li>
+<li><p><strong>Lazy (mask-num)</strong>: masking environment, numbered placeholder</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">local</span>({</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="kw">delayedAssign</span>(<span class="st">&quot;...1&quot;</span>, x)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="kw">delayedAssign</span>(<span class="st">&quot;...2&quot;</span>, <span class="kw">foo</span>(...<span class="dv">1</span>))</span>
+<span id="cb6-4"><a href="#cb6-4"></a>  <span class="kw">bar</span>(...<span class="dv">2</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a>})</span></code></pre></div></li>
+<li><p><strong>Lazy (lexical-num)</strong>: lexical environment, numbered placeholder</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">delayedAssign</span>(<span class="st">&quot;...1&quot;</span>, x)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">delayedAssign</span>(<span class="st">&quot;...2&quot;</span>, <span class="kw">foo</span>(.))</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw">bar</span>(...<span class="dv">2</span>)</span></code></pre></div></li>
+</ul>
+<p>We’ll first explore the desired properties we might want a pipe to possess and then see how each of the three variants does.</p>
+</div>
+<div id="desired-properties" class="section level2">
+<h2>Desired properties</h2>
+<p>These are the properties that we might want a pipe to possess, roughly ordered from most important to least important.</p>
+<ul>
+<li><p><strong>Visibility</strong>: the visibility of the final function in the pipe should be preserved. This is important so that pipes that end in a side-effect function (which generally returns its first argument invisibly) do not print.</p></li>
+<li><p><strong>Multiple placeholders</strong>: each component of the pipe should only be evaluated once even when there are multiple placeholders, so that <code>sample(10) %&gt;% cbind(., .)</code> yields two columns with the same value. Relatedly, <code>sample(10) %T&gt;% print() %T&gt;% print()</code> must print the same values twice.</p></li>
+<li><p><strong>Lazy evaluation</strong>: steps of the pipe should only be evaluated when actually needed. This is a useful property as it means that pipes can handle code like <code>stop(&quot;!&quot;) %&gt;% try()</code>, making pipes capable of capturing a wider range of R expressions.</p>
+<p>On the other hand, it might have surprising effects. For instance if a function that suppresses warnings is added to the end of a pipeline, the suppression takes effect for the whole pipeline.</p></li>
+<li><p><strong>Persistence of piped values</strong>: arguments are not necessarily evaluated right away by the piped function. Sometimes they are evaluated long after the pipeline has returned, for example when a function factory is piped. With persistent piped values, the constructed function can be called at any time:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>factory &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="cf">function</span>() x</span>
+<span id="cb8-2"><a href="#cb8-2"></a>fn &lt;-<span class="st"> </span><span class="ot">NA</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factory</span>()</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="kw">fn</span>()</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">#&gt; [1] NA</span></span></code></pre></div></li>
+<li><p><strong>Refcount neutrality</strong>: the return value of the pipeline should have a reference count of 1 so it can be mutated in place in further manipulations.</p></li>
+<li><p><strong>Eager unbinding</strong>: pipes are often used with large data objects, so intermediate objects in the pipeline should be unbound as soon as possible so they are available for garbage collection.</p></li>
+<li><p><strong>Progressive stack</strong>: using the pipe should add as few entries to the call stack as possible, so that <code>traceback()</code> is maximally useful.</p></li>
+<li><p><strong>Lexical side effects</strong>: side effects should occur in the current lexical environment. This way, <code>NA %&gt;% { foo &lt;- . }</code> assigns the piped value in the current environment and <code>NA %&gt;% { return(.) }</code> returns from the function that contains the pipeline.</p></li>
+<li><p><strong>Continuous stack</strong>: the pipe should not affect the chain of parent frames. This is important for tree representations of the call stack.</p></li>
+</ul>
+<p>It is possible to have proper visibility and a neutral impact on refcounts with all implementations by being a bit careful, so we’ll only consider the other properties:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="15%"></col>
+<col width="7%"></col>
+<col width="11%"></col>
+<col width="13%"></col>
+<col width="13%"></col>
+<col width="10%"></col>
+<col width="13%"></col>
+<col width="15%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th align="center">Nested</th>
+<th align="center">Eager<br>(mask)</th>
+<th align="center">Eager<br>(mask-num)</th>
+<th align="center">Eager<br>(lexical)</th>
+<th align="center">Lazy<br>(mask)</th>
+<th align="center">Lazy<br>(mask-num)</th>
+<th align="center">Lazy<br>(lexical-num)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Multiple placeholders</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr class="even">
+<td>Lazy evaluation</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr class="odd">
+<td>Persistence</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+</tr>
+<tr class="even">
+<td>Eager unbinding</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr class="odd">
+<td>Progressive stack</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+</tr>
+<tr class="even">
+<td>Lexical effects</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+</tr>
+<tr class="odd">
+<td>Continuous stack</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+<td align="center">❌</td>
+<td align="center">❌</td>
+<td align="center">✅</td>
+</tr>
+</tbody>
+</table>
+<div id="implications-of-design-decisions" class="section level3">
+<h3>Implications of design decisions</h3>
+<p>Some properties are a direct reflection of the high level design decisions.</p>
+<div id="placeholder-binding" class="section level4">
+<h4>Placeholder binding</h4>
+<p>The nested pipe does not assign piped expressions to a placeholder. All the other variants perform this assignment. This means that with a nested rewrite approach, it isn’t possible to have multiple placeholders unless the piped expression is pasted multiple times. This would cause multiple evaluations with deleterious effects:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">sample</span>(<span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">list</span>(., .)</span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co"># Becomes</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="kw">list</span>(<span class="kw">sample</span>(<span class="dv">10</span>), <span class="kw">sample</span>(<span class="dv">10</span>))</span></code></pre></div>
+<p>Assigning to the placeholder within an argument would preserve the nestedness and lazyness. However that wouldn’t work properly because there’s no guarantee that the first argument will be evaluated before the second argument.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">sample</span>(<span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">foo</span>(., .)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">foo</span>(. &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">10</span>), .)</span></code></pre></div>
+<p>For these reasons, the nested pipe does not support multiple placeholders. By contrast, all the other variants assign the result of pipe expressions to the placeholder. There are variations in how the placeholder binding is created (lazily or eagerly, in a mask or in the current environment, with numbered symbols or with a unique symbol) but all these variants allow multiple placeholders.</p>
+</div>
+<div id="masking-environment" class="section level4">
+<h4>Masking environment</h4>
+<p>Because the local variants of the pipe evaluate in a mask, they do not have lexical effects or a continuous stack. This is unlike the lexical variants that evaluate in the current environment.</p>
+</div>
+<div id="laziness" class="section level4">
+<h4>Laziness</h4>
+<p>Unlike the lazy variants, all eager versions implementing the pipe with iterated evaluation do not pass the lazy evaluation criterion.</p>
+<p>Secondly, no lazy variant passes the progressive stack criterion. By construction, lazy evaluation requires pushing all the pipe expressions on the stack before evaluation starts. Conversely, all eager variants have a progressive stack.</p>
+</div>
+<div id="numbered-placeholders" class="section level4">
+<h4>Numbered placeholders</h4>
+<p>None of the variants that use numbered placeholders can unbind piped values eagerly. This is how they achieve persistence of these bindings.</p>
+</div>
+</div>
+</div>
+<div id="three-implementations" class="section level2">
+<h2>Three implementations</h2>
+<p>The GNU R team is considering implementing the nested approach in base R with a parse-time code transformation (just like <code>-&gt;</code> is transformed to <code>&lt;-</code> by the parser).</p>
+<p>We have implemented three approaches in magrittr:</p>
+<ul>
+<li>The nested pipe</li>
+<li>The eager lexical pipe</li>
+<li>The lazy masking pipe</li>
+</ul>
+<p>These approaches have complementary strengths and weaknesses.</p>
+<div id="nested-pipe" class="section level3">
+<h3>Nested pipe</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="st">`</span><span class="dt">%|&gt;%</span><span class="st">`</span> &lt;-<span class="st"> </span>magrittr<span class="op">::</span>pipe_nested</span></code></pre></div>
+<div id="multiple-placeholders" class="section level4">
+<h4>Multiple placeholders ❌</h4>
+<p>The nested pipe does not bind expressions to a placeholder and so can’t support multiple placeholders.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="st">&quot;foo&quot;</span> <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">list</span>(., .)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt; Error: Can&#39;t use multiple placeholders.</span></span></code></pre></div>
+</div>
+<div id="lazy-evaluation" class="section level4">
+<h4>Lazy evaluation ✅</h4>
+<p>Because it relies on the usual rules of argument application, the nested pipe is lazy.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>{</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="kw">stop</span>(<span class="st">&quot;oh no&quot;</span>) <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">try</span>(<span class="dt">silent =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>  <span class="st">&quot;success&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>}</span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">#&gt; [1] &quot;success&quot;</span></span></code></pre></div>
+</div>
+<div id="persistence-and-eager-unbinding" class="section level4">
+<h4>Persistence and eager unbinding ✅</h4>
+<p>The pipe expressions are binded as promises within the execution environment of each function. This environment persists as long as a promise holds onto it. Evaluating the promise discards the reference to the environment which becomes available for garbage collection.</p>
+<p>For instance, here is a function factory that creates a function. The constructed function returns the value supplied at the time of creation:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>factory &lt;-<span class="st"> </span><span class="cf">function</span>(x) <span class="cf">function</span>() x</span>
+<span id="cb14-2"><a href="#cb14-2"></a>fn &lt;-<span class="st"> </span><span class="kw">factory</span>(<span class="ot">TRUE</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="kw">fn</span>()</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>This does not cause any issue with the nested pipe:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>fn &lt;-<span class="st"> </span><span class="ot">TRUE</span> <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">factory</span>()</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">fn</span>()</span></code></pre></div>
+</div>
+<div id="progressive-stack" class="section level4">
+<h4>Progressive stack ❌</h4>
+<p>Because the piped expressions are lazily evaluated, the whole pipeline is pushed on the stack before execution starts. This results in a more complex backtrace than necessary:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>faulty &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">stop</span>(<span class="st">&quot;tilt&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>f &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a>g &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">+</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>h &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">+</span><span class="st"> </span><span class="dv">3</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="kw">faulty</span>() <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">f</span>() <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">g</span>() <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">h</span>()</span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="co">#&gt; Error in faulty() : tilt</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="kw">traceback</span>()</span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="co">#&gt; 7: stop(&quot;tilt&quot;)</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="co">#&gt; 6: faulty()</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a><span class="co">#&gt; 5: f(faulty())</span></span>
+<span id="cb16-13"><a href="#cb16-13"></a><span class="co">#&gt; 4: g(f(faulty()))</span></span>
+<span id="cb16-14"><a href="#cb16-14"></a><span class="co">#&gt; 3: h(g(f(faulty())))</span></span>
+<span id="cb16-15"><a href="#cb16-15"></a><span class="co">#&gt; 2: .External2(magrittr_pipe) at pipe.R#181</span></span>
+<span id="cb16-16"><a href="#cb16-16"></a><span class="co">#&gt; 1: faulty() %|&gt;% f() %|&gt;% g() %|&gt;% h()</span></span></code></pre></div>
+<p>Also note how the expressions in the backtrace look different from the actual code. This is because of the nested rewrite of the pipeline.</p>
+</div>
+<div id="lexical-effects" class="section level4">
+<h4>Lexical effects ✅</h4>
+<p>This is a benefit of using the normal R rules of evaluation. Side effects occur in the correct environment:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>foo &lt;-<span class="st"> </span><span class="ot">FALSE</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="ot">TRUE</span> <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">assign</span>(<span class="st">&quot;foo&quot;</span>, .)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>foo</span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>Control flow has the correct behaviour:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>fn &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="ot">TRUE</span> <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">return</span>()</span>
+<span id="cb18-3"><a href="#cb18-3"></a>  <span class="ot">FALSE</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>}</span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="kw">fn</span>()</span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
+<div id="continuous-stack" class="section level4">
+<h4>Continuous stack ✅</h4>
+<p>Because evaluation occurs in the current environment, the stack is continuous. Let’s instrument errors with a structured backtrace to see what that means:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">options</span>(<span class="dt">error =</span> rlang<span class="op">::</span>entrace)</span></code></pre></div>
+<p>The tree representation of the backtrace correctly represents the hierarchy of execution frames:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>foobar &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">quux</span>()</span>
+<span id="cb20-2"><a href="#cb20-2"></a>quux &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">stop</span>()</span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="st">&quot;tilt&quot;</span> <span class="op">%|&gt;%</span><span class="st"> </span><span class="kw">foobar</span>()</span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="co">#&gt; Error in x %|&gt;% stop() : tilt</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a></span>
+<span id="cb20-7"><a href="#cb20-7"></a>rlang<span class="op">::</span><span class="kw">last_trace</span>()</span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#&gt; &lt;error/rlang_error&gt;</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#&gt; tilt</span></span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#&gt; Backtrace:</span></span>
+<span id="cb20-11"><a href="#cb20-11"></a><span class="co">#&gt;     █</span></span>
+<span id="cb20-12"><a href="#cb20-12"></a><span class="co">#&gt;  1. ├─&quot;tilt&quot; %|&gt;% foobar()</span></span>
+<span id="cb20-13"><a href="#cb20-13"></a><span class="co">#&gt;  2. └─global::foobar(&quot;tilt&quot;)</span></span>
+<span id="cb20-14"><a href="#cb20-14"></a><span class="co">#&gt;  3.   ├─x %|&gt;% quux()</span></span>
+<span id="cb20-15"><a href="#cb20-15"></a><span class="co">#&gt;  4.   └─global::quux(x)</span></span>
+<span id="cb20-16"><a href="#cb20-16"></a><span class="co">#&gt;  5.     └─x %|&gt;% stop()</span></span></code></pre></div>
+</div>
+</div>
+<div id="eager-lexical-pipe" class="section level3">
+<h3>Eager lexical pipe</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="st">`</span><span class="dt">%!&gt;%</span><span class="st">`</span> &lt;-<span class="st"> </span>magrittr<span class="op">::</span>pipe_eager_lexical</span></code></pre></div>
+<div id="multiple-placeholders-1" class="section level4">
+<h4>Multiple placeholders ✅</h4>
+<p>Pipe expressions are eagerly assigned to the placeholder. This makes it possible to use the placeholder multiple times without causing multiple evaluations.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="st">&quot;foo&quot;</span> <span class="op">%!&gt;%</span><span class="st"> </span><span class="kw">list</span>(., .)</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="co">#&gt; [1] &quot;foo&quot;</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="co">#&gt; </span></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a><span class="co">#&gt; [1] &quot;foo&quot;</span></span></code></pre></div>
+</div>
+<div id="lazy-evaluation-1" class="section level4">
+<h4>Lazy evaluation ❌</h4>
+<p>Assignment forces eager evaluation of each step.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>{</span>
+<span id="cb23-2"><a href="#cb23-2"></a>  <span class="kw">stop</span>(<span class="st">&quot;oh no&quot;</span>) <span class="op">%!&gt;%</span><span class="st"> </span><span class="kw">try</span>(<span class="dt">silent =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="st">&quot;success&quot;</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a>}</span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="co">#&gt; Error in stop(&quot;oh no&quot;) %!&gt;% try(silent = TRUE): oh no</span></span></code></pre></div>
+</div>
+<div id="persistence" class="section level4">
+<h4>Persistence: ❌</h4>
+<p>Because we’re updating the value of <code>.</code> at each step, the piped expressions are not persistent. This has subtle effects when the piped expressions are not evaluated right away.</p>
+<p>With the eager pipe we get rather confusing results with the factory function if we try to call the constructed function in the middle of the pipeline. In the following snippet the placeholder <code>.</code> is binded to the constructed function itself rather than the initial value <code>TRUE</code>, by the time the function is called:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>fn &lt;-<span class="st"> </span><span class="ot">TRUE</span> <span class="op">%!&gt;%</span><span class="st"> </span><span class="kw">factory</span>() <span class="op">%!&gt;%</span><span class="st"> </span>{ .() }</span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="kw">fn</span>()</span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="co">#&gt; function() x</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="co">#&gt; &lt;bytecode: 0x7ffec67af6d8&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="co">#&gt; &lt;environment: 0x7ffec671e0e8&gt;</span></span></code></pre></div>
+<p>Also, since we’re binding <code>.</code> in the current environment, we need to clean it up once the pipeline has returned. At that point, the placeholder no longer exists:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>fn &lt;-<span class="st"> </span><span class="ot">TRUE</span> <span class="op">%!&gt;%</span><span class="st"> </span><span class="kw">factory</span>()</span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="kw">fn</span>()</span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="co">#&gt; Error in fn(): object &#39;.&#39; not found</span></span></code></pre></div>
+<p>Or it has been reset to its previous value, if any:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>. &lt;-<span class="st"> &quot;wrong&quot;</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>fn &lt;-<span class="st"> </span><span class="ot">TRUE</span> <span class="op">%!&gt;%</span><span class="st"> </span><span class="kw">factory</span>()</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="kw">fn</span>()</span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="co">#&gt; [1] &quot;wrong&quot;</span></span></code></pre></div>
+</div>
+<div id="eager-unbinding" class="section level4">
+<h4>Eager unbinding: ✅</h4>
+<p>This is the flip side of updating the value of the placeholder at each step. The previous intermediary values can be collected right away.</p>
+</div>
+<div id="progressive-stack-1" class="section level4">
+<h4>Progressive stack: ✅</h4>
+<p>Since pipe expressions are evaluated one by one as they come, only the relevant part of the pipeline is on the stack when an error is thrown:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>faulty &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">stop</span>(<span class="st">&quot;tilt&quot;</span>)</span>
+<span id="cb27-2"><a href="#cb27-2"></a>f &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a>g &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">+</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb27-4"><a href="#cb27-4"></a>h &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">+</span><span class="st"> </span><span class="dv">3</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a></span>
+<span id="cb27-6"><a href="#cb27-6"></a><span class="kw">faulty</span>() <span class="op">%!&gt;%</span><span class="st"> </span><span class="kw">f</span>() <span class="op">%!&gt;%</span><span class="st"> </span><span class="kw">g</span>() <span class="op">%!&gt;%</span><span class="st"> </span><span class="kw">h</span>()</span>
+<span id="cb27-7"><a href="#cb27-7"></a><span class="co">#&gt; Error in faulty() : tilt</span></span>
+<span id="cb27-8"><a href="#cb27-8"></a></span>
+<span id="cb27-9"><a href="#cb27-9"></a><span class="kw">traceback</span>()</span>
+<span id="cb27-10"><a href="#cb27-10"></a><span class="co">#&gt; 4: stop(&quot;tilt&quot;)</span></span>
+<span id="cb27-11"><a href="#cb27-11"></a><span class="co">#&gt; 3: faulty()</span></span>
+<span id="cb27-12"><a href="#cb27-12"></a><span class="co">#&gt; 2: .External2(magrittr_pipe) at pipe.R#163</span></span>
+<span id="cb27-13"><a href="#cb27-13"></a><span class="co">#&gt; 1: faulty() %!&gt;% f() %!&gt;% g() %!&gt;% h()</span></span></code></pre></div>
+</div>
+<div id="lexical-effects-and-continuous-stack" class="section level4">
+<h4>Lexical effects and continuous stack: ✅</h4>
+<p>Evaluating in the current environment rather than in a mask produces the correct side effects:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>foo &lt;-<span class="st"> </span><span class="ot">FALSE</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="ot">NA</span> <span class="op">%!&gt;%</span><span class="st"> </span>{ foo &lt;-<span class="st"> </span><span class="ot">TRUE</span>; . }</span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="co">#&gt; [1] NA</span></span>
+<span id="cb28-4"><a href="#cb28-4"></a></span>
+<span id="cb28-5"><a href="#cb28-5"></a>foo</span>
+<span id="cb28-6"><a href="#cb28-6"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>fn &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb29-2"><a href="#cb29-2"></a>  <span class="ot">TRUE</span> <span class="op">%!&gt;%</span><span class="st"> </span><span class="kw">return</span>()</span>
+<span id="cb29-3"><a href="#cb29-3"></a></span>
+<span id="cb29-4"><a href="#cb29-4"></a>  <span class="ot">FALSE</span></span>
+<span id="cb29-5"><a href="#cb29-5"></a>}</span>
+<span id="cb29-6"><a href="#cb29-6"></a><span class="kw">fn</span>()</span>
+<span id="cb29-7"><a href="#cb29-7"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
+</div>
+<div id="lazy-masking-pipe" class="section level3">
+<h3>Lazy masking pipe</h3>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="st">`</span><span class="dt">%?&gt;%</span><span class="st">`</span> &lt;-<span class="st"> </span>magrittr<span class="op">::</span>pipe_lazy_masking</span></code></pre></div>
+<div id="multiple-placeholders-2" class="section level4">
+<h4>Multiple placeholders ✅</h4>
+<p>Pipe expressions are lazily assigned to the placeholder. This makes it possible to use the placeholder multiple times without causing multiple evaluations.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="st">&quot;foo&quot;</span> <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">list</span>(., .)</span>
+<span id="cb31-2"><a href="#cb31-2"></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb31-3"><a href="#cb31-3"></a><span class="co">#&gt; [1] &quot;foo&quot;</span></span>
+<span id="cb31-4"><a href="#cb31-4"></a><span class="co">#&gt; </span></span>
+<span id="cb31-5"><a href="#cb31-5"></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb31-6"><a href="#cb31-6"></a><span class="co">#&gt; [1] &quot;foo&quot;</span></span></code></pre></div>
+</div>
+<div id="lazy-evaluation-2" class="section level4">
+<h4>Lazy evaluation ✅</h4>
+<p>Arguments are assigned with <code>delayedAssign()</code> and lazily evaluated:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>{</span>
+<span id="cb32-2"><a href="#cb32-2"></a>  <span class="kw">stop</span>(<span class="st">&quot;oh no&quot;</span>) <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">try</span>(<span class="dt">silent =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb32-3"><a href="#cb32-3"></a>  <span class="st">&quot;success&quot;</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a>}</span>
+<span id="cb32-5"><a href="#cb32-5"></a><span class="co">#&gt; [1] &quot;success&quot;</span></span></code></pre></div>
+</div>
+<div id="persistence-1" class="section level4">
+<h4>Persistence: ✅</h4>
+<p>The lazy masking pipe uses one masking environment per pipe expression. This allows persistence of the intermediary values and out of order evaluation. The factory function works as expected for instance:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>fn &lt;-<span class="st"> </span><span class="ot">TRUE</span> <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">factory</span>()</span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="kw">fn</span>()</span>
+<span id="cb33-3"><a href="#cb33-3"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
+<div id="eager-unbinding-1" class="section level4">
+<h4>Eager unbinding: ✅</h4>
+<p>Because we use one mask environment per pipe expression, the intermediary values can be collected as soon as they are no longer needed.</p>
+</div>
+<div id="progressive-stack-2" class="section level4">
+<h4>Progressive stack: ❌</h4>
+<p>With a lazy pipe the whole pipeline is pushed onto the stack before evaluation.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>faulty &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">stop</span>(<span class="st">&quot;tilt&quot;</span>)</span>
+<span id="cb34-2"><a href="#cb34-2"></a>f &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb34-3"><a href="#cb34-3"></a>g &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">+</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a>h &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">+</span><span class="st"> </span><span class="dv">3</span></span>
+<span id="cb34-5"><a href="#cb34-5"></a></span>
+<span id="cb34-6"><a href="#cb34-6"></a><span class="kw">faulty</span>() <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">f</span>() <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">g</span>() <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">h</span>()</span>
+<span id="cb34-7"><a href="#cb34-7"></a><span class="co">#&gt; Error in faulty() : tilt</span></span>
+<span id="cb34-8"><a href="#cb34-8"></a></span>
+<span id="cb34-9"><a href="#cb34-9"></a><span class="kw">traceback</span>()</span>
+<span id="cb34-10"><a href="#cb34-10"></a><span class="co">#&gt; 7: stop(&quot;tilt&quot;)</span></span>
+<span id="cb34-11"><a href="#cb34-11"></a><span class="co">#&gt; 6: faulty()</span></span>
+<span id="cb34-12"><a href="#cb34-12"></a><span class="co">#&gt; 5: f(.)</span></span>
+<span id="cb34-13"><a href="#cb34-13"></a><span class="co">#&gt; 4: g(.)</span></span>
+<span id="cb34-14"><a href="#cb34-14"></a><span class="co">#&gt; 3: h(.)</span></span>
+<span id="cb34-15"><a href="#cb34-15"></a><span class="co">#&gt; 2: .External2(magrittr_pipe) at pipe.R#174</span></span>
+<span id="cb34-16"><a href="#cb34-16"></a><span class="co">#&gt; 1: faulty() %?&gt;% f() %?&gt;% g() %?&gt;% h()</span></span></code></pre></div>
+<p>Note however how the backtrace is less cluttered than with the nested pipe approach, thanks to the placeholder.</p>
+</div>
+<div id="lexical-effects-1" class="section level4">
+<h4>Lexical effects ❌</h4>
+<p>The lazy pipe evaluates in a mask. This causes lexical side effects to occur in the incorrect environment.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>foo &lt;-<span class="st"> </span><span class="ot">FALSE</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="ot">TRUE</span> <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">assign</span>(<span class="st">&quot;foo&quot;</span>, .)</span>
+<span id="cb35-3"><a href="#cb35-3"></a>foo</span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+<p>Stack-sensitive functions like <code>return()</code> function cannot find the proper frame environment:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>fn &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
+<span id="cb36-2"><a href="#cb36-2"></a>  <span class="ot">TRUE</span> <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">return</span>()</span>
+<span id="cb36-3"><a href="#cb36-3"></a>  <span class="ot">FALSE</span></span>
+<span id="cb36-4"><a href="#cb36-4"></a>}</span>
+<span id="cb36-5"><a href="#cb36-5"></a><span class="kw">fn</span>()</span>
+<span id="cb36-6"><a href="#cb36-6"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+</div>
+<div id="continuous-stack-1" class="section level4">
+<h4>Continuous stack ❌</h4>
+<p>The masking environment causes a discontinuous stack tree:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>foobar &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">quux</span>()</span>
+<span id="cb37-2"><a href="#cb37-2"></a>quux &lt;-<span class="st"> </span><span class="cf">function</span>(x) x <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">stop</span>()</span>
+<span id="cb37-3"><a href="#cb37-3"></a></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="st">&quot;tilt&quot;</span> <span class="op">%?&gt;%</span><span class="st"> </span><span class="kw">foobar</span>()</span>
+<span id="cb37-5"><a href="#cb37-5"></a><span class="co">#&gt; Error in x %?&gt;% stop() : tilt</span></span>
+<span id="cb37-6"><a href="#cb37-6"></a></span>
+<span id="cb37-7"><a href="#cb37-7"></a>rlang<span class="op">::</span><span class="kw">last_trace</span>()</span>
+<span id="cb37-8"><a href="#cb37-8"></a><span class="co">#&gt; &lt;error/rlang_error&gt;</span></span>
+<span id="cb37-9"><a href="#cb37-9"></a><span class="co">#&gt; tilt</span></span>
+<span id="cb37-10"><a href="#cb37-10"></a><span class="co">#&gt; Backtrace:</span></span>
+<span id="cb37-11"><a href="#cb37-11"></a><span class="co">#&gt;     █</span></span>
+<span id="cb37-12"><a href="#cb37-12"></a><span class="co">#&gt;  1. ├─&quot;tilt&quot; %?&gt;% foobar()</span></span>
+<span id="cb37-13"><a href="#cb37-13"></a><span class="co">#&gt;  2. ├─global::foobar(.)</span></span>
+<span id="cb37-14"><a href="#cb37-14"></a><span class="co">#&gt;  3. │ └─x %?&gt;% quux()</span></span>
+<span id="cb37-15"><a href="#cb37-15"></a><span class="co">#&gt;  4. └─global::quux(.)</span></span>
+<span id="cb37-16"><a href="#cb37-16"></a><span class="co">#&gt;  5.   └─x %?&gt;% stop()</span></span></code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

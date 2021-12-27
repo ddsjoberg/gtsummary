@@ -1,0 +1,5019 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Max Gordon" />
+
+<meta name="date" content="2021-05-18" />
+
+<title>How-to use htmlTable</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+}
+pre {
+white-space: pre-wrap; 
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } </style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">How-to use htmlTable</h1>
+<h4 class="author">Max Gordon</h4>
+<h4 class="date">2021-05-18</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#basics">Basics</a><ul>
+<li><a href="#table-caption">Table caption</a></li>
+<li><a href="#cell-alignment">Cell alignment</a></li>
+</ul></li>
+<li><a href="#advanced">Advanced</a><ul>
+<li><a href="#row-groups">Row groups</a></li>
+<li><a href="#column-spanners">Column spanners</a></li>
+<li><a href="#table-spanners">Table spanners</a></li>
+<li><a href="#total-row">Total row</a></li>
+<li><a href="#table-numbering">Table numbering</a></li>
+<li><a href="#table-footer">Table footer</a></li>
+<li><a href="#zebra-coloring-or-banded-colors">Zebra coloring (or banded colors)</a></li>
+<li><a href="#putting-it-all-together">Putting it all together</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="basics" class="section level1">
+<h1>Basics</h1>
+<p>The <strong>htmlTable</strong> package is intended for generating tables using <a href="https://en.wikipedia.org/wiki/HTML">HTML</a> formatting. This format is compatible with <a href="https://rmarkdown.rstudio.com/">Markdown</a> when used for HTML-output. The most basic table can easily be created by just passing a <code>matrix</code> or a <code>data.frame</code> to the <code>htmlTable</code>-function:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(htmlTable)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(magrittr)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co"># A simple output</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>       <span class="dt">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb1-6"><a href="#cb1-6"></a>       <span class="dt">dimnames =</span> <span class="kw">list</span>(<span class="kw">c</span>(<span class="st">&quot;Row 1&quot;</span>, <span class="st">&quot;Row 2&quot;</span>),</span>
+<span id="cb1-7"><a href="#cb1-7"></a>                       <span class="kw">c</span>(<span class="st">&quot;Column 1&quot;</span>, <span class="st">&quot;Column 2&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="st">  </span>htmlTable</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Column 1
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Column 2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+Row 1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+Row 2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+4
+</td>
+</tr>
+</tbody>
+</table>
+<p>The function is also aware of the dimnames:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># A simple output</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,</span>
+<span id="cb2-3"><a href="#cb2-3"></a>       <span class="dt">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb2-4"><a href="#cb2-4"></a>       <span class="dt">dimnames =</span> <span class="kw">list</span>(<span class="dt">rows =</span> <span class="kw">c</span>(<span class="st">&quot;Row 1&quot;</span>, <span class="st">&quot;Row 2&quot;</span>),</span>
+<span id="cb2-5"><a href="#cb2-5"></a>                       <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;Column 1&quot;</span>, <span class="st">&quot;Column 2&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="st">  </span>htmlTable</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-top: 2px solid grey;">
+</th>
+<th colspan="2" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+cols
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Column 1
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Column 2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="3" style="margin: 0; padding: 0; font-weight: normal;">
+rows
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  Row 1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+  Row 2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+4
+</td>
+</tr>
+</tbody>
+</table>
+<p>This can be convenient when working with the <code>base::table</code> function:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">data</span>(<span class="st">&quot;mtcars&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">with</span>(mtcars,</span>
+<span id="cb3-3"><a href="#cb3-3"></a>     <span class="kw">table</span>(cyl, gear)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  </span>addmargins <span class="op">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="st">  </span>htmlTable</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-top: 2px solid grey;">
+</th>
+<th colspan="3" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+gear
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th colspan="1" style="font-weight: 900; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+3
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+4
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+5
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+Sum
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: normal;">
+cyl
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+8
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+11
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  6
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  8
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+12
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+0
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+14
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: left;">
+  Sum
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;">
+15
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;">
+12
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;">
+5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;">
+32
+</td>
+</tr>
+</tbody>
+</table>
+<p>As of version 1.1 you <strong>no longer need</strong> to specify <code>results=&#39;asis&#39;</code> for each <code>knitr</code> chunk.</p>
+<p><strong>Tip</strong>: If you are working a lot with <code>dplyr</code> and the <code>tidyverse</code> approach to exploring data you can make your life much easier using the <code>tidyHtmlTable()</code> function included in this package that automatically calculates the <code>rgroup</code>, <code>cgroup</code> and other parameters that make <code>htmlTable</code> so useful.</p>
+<div id="table-caption" class="section level2">
+<h2>Table caption</h2>
+<p>The table caption is simply the table description and can be either located above or below:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>output &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,</span>
+<span id="cb4-2"><a href="#cb4-2"></a>                 <span class="dt">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb4-3"><a href="#cb4-3"></a>                 <span class="dt">dimnames =</span> <span class="kw">list</span>(<span class="kw">c</span>(<span class="st">&quot;Row 1&quot;</span>, <span class="st">&quot;Row 2&quot;</span>),</span>
+<span id="cb4-4"><a href="#cb4-4"></a>                                 <span class="kw">c</span>(<span class="st">&quot;Column 1&quot;</span>, <span class="st">&quot;Column 2&quot;</span>)))</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">htmlTable</span>(output,</span>
+<span id="cb4-6"><a href="#cb4-6"></a>          <span class="dt">ctable =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;double&quot;</span>),</span>
+<span id="cb4-7"><a href="#cb4-7"></a>          <span class="dt">caption =</span> <span class="st">&quot;A table caption above and ctable borders&quot;</span>)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Column 1
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Column 2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+Row 1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 4px double grey; text-align: left;">
+Row 2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 4px double grey; text-align: center;">
+2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 4px double grey; text-align: center;">
+4
+</td>
+</tr>
+</tbody>
+<tr>
+<td colspan="3" style="text-align: left;">
+A table caption above and ctable borders
+</td>
+</tr>
+</table>
+<p>The caption defaults to above but by setting the <code>pos.caption</code> argument to “bottom” it appears below the table.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>output <span class="op">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">pos.caption =</span> <span class="st">&quot;bottom&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="st">  </span><span class="kw">htmlTable</span>(<span class="dt">caption =</span> <span class="st">&quot;A table caption below&quot;</span>)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Column 1
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+Column 2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+Row 1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+Row 2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+4
+</td>
+</tr>
+</tbody>
+<tr>
+<td colspan="3" style="text-align: left;">
+A table caption below
+</td>
+</tr>
+</table>
+</div>
+<div id="cell-alignment" class="section level2">
+<h2>Cell alignment</h2>
+<p>Cell alignment is specified through the <code>align</code>, <code>align.header</code>, <code>align.cgroup</code> arguments. For aligning the cell values just use <code>align</code>. The argument can accept either a vector or a string, although supplying it with a string is the simplest option as in the example below:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="dv">1</span><span class="op">:</span><span class="dv">3</span> <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">align =</span> <span class="st">&quot;lcr&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span><span class="kw">htmlTable</span>(<span class="dt">rnames =</span> <span class="st">&quot;Row 1&quot;</span>,</span>
+<span id="cb6-4"><a href="#cb6-4"></a>            <span class="dt">header =</span> <span class="kw">c</span>(<span class="st">&quot;&#39;l&#39; = left&quot;</span>, <span class="st">&quot;&#39;c&#39; = center&quot;</span>, <span class="st">&quot;&#39;r&#39; = right&quot;</span>),</span>
+<span id="cb6-5"><a href="#cb6-5"></a>            <span class="dt">caption =</span> <span class="st">&quot;The alignment is set through the align options. Available alternatives are l, r, c as designated by the below table.&quot;</span>)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+‘l’ = left
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+‘c’ = center
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+‘r’ = right
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+Row 1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+3
+</td>
+</tr>
+</tbody>
+<tr>
+<td colspan="4" style="text-align: left;">
+The alignment is set through the align options. Available alternatives are l, r, c as designated by the below table.
+</td>
+</tr>
+</table>
+<p>Note that you can specify a string shorter than the number of columns. This can be useful if you have plenty of columns and you simply want all remaining columns to keep the alignment of the last column. To align the row name you can just add another letter to the string while the header is aligned through the <code>align.header</code> argument:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="dv">1</span><span class="op">:</span><span class="dv">3</span> <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">align =</span> <span class="st">&quot;clcr&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3"></a>                    <span class="dt">align.header =</span> <span class="st">&quot;lcr&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="st">  </span><span class="kw">htmlTable</span>(<span class="dt">rnames =</span> <span class="st">&quot;Row 1&quot;</span>,</span>
+<span id="cb7-5"><a href="#cb7-5"></a>            <span class="dt">header =</span> <span class="kw">c</span>(<span class="st">&quot;&#39;l&#39; = left&quot;</span>, <span class="st">&quot;&#39;c&#39; = center&quot;</span>, <span class="st">&quot;&#39;r&#39; = right&quot;</span>),</span>
+<span id="cb7-6"><a href="#cb7-6"></a>            <span class="dt">caption =</span> <span class="st">&quot;The alignment is set through the align options. Available alternatives are l, r, c as designated by the below table.&quot;</span>)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: left;">
+‘l’ = left
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+‘c’ = center
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: right;">
+‘r’ = right
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+Row 1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: right;">
+3
+</td>
+</tr>
+</tbody>
+<tr>
+<td colspan="4" style="text-align: left;">
+The alignment is set through the align options. Available alternatives are l, r, c as designated by the below table.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="advanced" class="section level1">
+<h1>Advanced</h1>
+<p>While it may be sufficient for basic tables a more advanced layout is often needed in medical articles with elements such as:</p>
+<ul>
+<li>row groups</li>
+<li>column spanners</li>
+<li>table spanners</li>
+<li>total row</li>
+<li>table footer</li>
+<li>zebra coloring (also known as <em>banding</em>):
+<ul>
+<li>rows</li>
+<li>columns</li>
+</ul></li>
+</ul>
+<p>As many journals require that a MS Word-document is submitted it is furthermore also important that the table imports correctly to a word processor, i.e. that the table also looks nice in the final document not only in the browser. The <code>htmlTable</code>-function is written for all these purposes.</p>
+<p>For demonstration purposes we will setup a basic matrix:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>mx &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">ncol =</span> <span class="dv">6</span>, <span class="dt">nrow =</span> <span class="dv">8</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">rownames</span>(mx) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">c</span>(<span class="st">&quot;1st&quot;</span>, <span class="st">&quot;2nd&quot;</span>,</span>
+<span id="cb8-3"><a href="#cb8-3"></a>                        <span class="st">&quot;3rd&quot;</span>,</span>
+<span id="cb8-4"><a href="#cb8-4"></a>                        <span class="kw">paste0</span>(<span class="dv">4</span><span class="op">:</span><span class="dv">8</span>, <span class="st">&quot;th&quot;</span>)),</span>
+<span id="cb8-5"><a href="#cb8-5"></a>                      <span class="st">&quot;row&quot;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="kw">colnames</span>(mx) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="kw">c</span>(<span class="st">&quot;1st&quot;</span>, <span class="st">&quot;2nd&quot;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7"></a>                        <span class="st">&quot;3rd&quot;</span>, </span>
+<span id="cb8-8"><a href="#cb8-8"></a>                        <span class="kw">paste0</span>(<span class="dv">4</span><span class="op">:</span><span class="dv">6</span>, <span class="st">&quot;th&quot;</span>)),</span>
+<span id="cb8-9"><a href="#cb8-9"></a>                      <span class="st">&quot;hdr&quot;</span>)</span>
+<span id="cb8-10"><a href="#cb8-10"></a></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="cf">for</span> (nr <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mx)) {</span>
+<span id="cb8-12"><a href="#cb8-12"></a>  <span class="cf">for</span> (nc <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(mx)) {</span>
+<span id="cb8-13"><a href="#cb8-13"></a>    mx[nr, nc] &lt;-</span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="st">      </span><span class="kw">paste0</span>(nr, <span class="st">&quot;:&quot;</span>, nc)</span>
+<span id="cb8-15"><a href="#cb8-15"></a>  }</span>
+<span id="cb8-16"><a href="#cb8-16"></a>}</span></code></pre></div>
+<div id="row-groups" class="section level2">
+<h2>Row groups</h2>
+<p>The purpose of the row groups is to group variables that belong to the same group, e.g. a factored variable with more than two levels often benefit from grouping variables together.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">htmlTable</span>(mx, </span>
+<span id="cb9-2"><a href="#cb9-2"></a>          <span class="dt">rgroup =</span> <span class="kw">paste</span>(<span class="st">&quot;Group&quot;</span>, LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]),</span>
+<span id="cb9-3"><a href="#cb9-3"></a>          <span class="dt">n.rgroup =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="kw">nrow</span>(mx) <span class="op">-</span><span class="st"> </span><span class="dv">6</span>))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: normal;">
+Group A
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: normal;">
+Group B
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  6th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: normal;">
+Group C
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+  8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>We can easily mix row groups with regular variables by having an empty row group name <code>&quot;&quot;</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">htmlTable</span>(mx, </span>
+<span id="cb10-2"><a href="#cb10-2"></a>          <span class="dt">rgroup =</span> <span class="kw">c</span>(<span class="kw">paste</span>(<span class="st">&quot;Group&quot;</span>, LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]), <span class="st">&quot;&quot;</span>),</span>
+<span id="cb10-3"><a href="#cb10-3"></a>          <span class="dt">n.rgroup =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="kw">nrow</span>(mx) <span class="op">-</span><span class="st"> </span><span class="dv">6</span>))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: normal;">
+Group A
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: normal;">
+Group B
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  6th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>When mixing row groups with variables without row groups we may want to omit the bold formatting of the row group label:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>mx <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">css.rgroup =</span> <span class="st">&quot;&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="st">  </span><span class="kw">htmlTable</span>(<span class="dt">rgroup =</span> <span class="kw">c</span>(<span class="kw">paste</span>(<span class="st">&quot;Group&quot;</span>, LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]), <span class="st">&quot;&quot;</span>),</span>
+<span id="cb11-4"><a href="#cb11-4"></a>            <span class="dt">n.rgroup =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="kw">nrow</span>(mx) <span class="op">-</span><span class="st"> </span><span class="dv">6</span>))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0;">
+Group A
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0;">
+Group B
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  6th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>rgroup</code> is most commonly a single row without any additional cells but sometimes you may want to have a p-value or similar at the end of the row. This can be achieved by setting the ‘add’ attribute to the <code>rgroup</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>rgroup &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste</span>(<span class="st">&quot;Group&quot;</span>, LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]), <span class="st">&quot;&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="kw">attr</span>(rgroup, <span class="st">&quot;add&quot;</span>) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">`</span><span class="dt">2</span><span class="st">`</span> =<span class="st"> &quot;More&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="kw">htmlTable</span>(mx, </span>
+<span id="cb12-4"><a href="#cb12-4"></a>          <span class="dt">rgroup =</span> rgroup,</span>
+<span id="cb12-5"><a href="#cb12-5"></a>          <span class="dt">n.rgroup =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="kw">nrow</span>(mx) <span class="op">-</span><span class="st"> </span><span class="dv">6</span>))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: normal;">
+Group A
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td colspan="6" style="margin: 0; padding: 0; font-weight: normal;">
+Group B
+</td>
+<td style="margin: 0; padding: 0; font-weight: normal; text-align: center;">
+More
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  6th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="column-spanners" class="section level2">
+<h2>Column spanners</h2>
+<p>A column spanner spans 2 or more columns:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">htmlTable</span>(mx,</span>
+<span id="cb13-2"><a href="#cb13-2"></a>          <span class="dt">cgroup =</span> <span class="kw">c</span>(<span class="st">&quot;Cgroup 1&quot;</span>, <span class="st">&quot;Cgroup 2&quot;</span>),</span>
+<span id="cb13-3"><a href="#cb13-3"></a>          <span class="dt">n.cgroup =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-top: 2px solid grey;">
+</th>
+<th colspan="2" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Cgroup 1
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th colspan="4" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Cgroup 2
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+6th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>It can sometimes be convenient to have column spanners in multiple levels:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">htmlTable</span>(mx,</span>
+<span id="cb14-2"><a href="#cb14-2"></a>          <span class="dt">cgroup =</span> <span class="kw">rbind</span>(<span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;Column spanners&quot;</span>, <span class="ot">NA</span>),</span>
+<span id="cb14-3"><a href="#cb14-3"></a>                         <span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;Cgroup 1&quot;</span>, <span class="st">&quot;Cgroup 2&quot;</span>)),</span>
+<span id="cb14-4"><a href="#cb14-4"></a>          <span class="dt">n.cgroup =</span> <span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="ot">NA</span>),</span>
+<span id="cb14-5"><a href="#cb14-5"></a>                           <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>)))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-top: 2px solid grey;">
+</th>
+<th colspan="2" style="font-weight: 900; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th colspan="6" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Column spanners
+</th>
+</tr>
+<tr>
+<th style>
+</th>
+<th colspan="2" style="font-weight: 900; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th colspan="2" style="font-weight: 900; border-bottom: 1px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Cgroup 1
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th colspan="2" style="font-weight: 900; border-bottom: 1px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Cgroup 2
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+6th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>Above example allows the column spanner to be a sum of the underlying cgroups (see n.cgroup), this is not required by the function and you can also provide a <code>list</code> with elements that allows you to skip the <code>NA</code> at the end of the matrix:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">htmlTable</span>(mx,</span>
+<span id="cb15-2"><a href="#cb15-2"></a>          <span class="dt">cgroup =</span> <span class="kw">list</span>(<span class="kw">c</span>(<span class="st">&quot;Super column spanner&quot;</span>, <span class="st">&quot;&quot;</span>),</span>
+<span id="cb15-3"><a href="#cb15-3"></a>                        <span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;Another cgroup&quot;</span>),</span>
+<span id="cb15-4"><a href="#cb15-4"></a>                        <span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;Cgroup 1&quot;</span>, <span class="st">&quot;Cgroup 2&quot;</span>)),</span>
+<span id="cb15-5"><a href="#cb15-5"></a>          <span class="dt">n.cgroup =</span> <span class="kw">list</span>(<span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">1</span>),</span>
+<span id="cb15-6"><a href="#cb15-6"></a>                          <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),</span>
+<span id="cb15-7"><a href="#cb15-7"></a>                          <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>)))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-top: 2px solid grey;">
+</th>
+<th colspan="9" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Super column spanner
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th colspan="1" style="font-weight: 900; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+</th>
+</tr>
+<tr>
+<th style>
+</th>
+<th colspan="2" style="font-weight: 900; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th colspan="8" style="font-weight: 900; border-bottom: 1px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Another cgroup
+</th>
+</tr>
+<tr>
+<th style>
+</th>
+<th colspan="2" style="font-weight: 900; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th colspan="2" style="font-weight: 900; border-bottom: 1px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Cgroup 1
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th colspan="4" style="font-weight: 900; border-bottom: 1px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Cgroup 2
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+6th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="width: 2px; margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;" colspan="1">
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="table-spanners" class="section level2">
+<h2>Table spanners</h2>
+<p>A table spanner is similar to rgroup but has the primary purpose of combining 2 or more tables with the same columns into one:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">htmlTable</span>(mx, </span>
+<span id="cb16-2"><a href="#cb16-2"></a>          <span class="dt">tspanner =</span> <span class="kw">paste</span>(<span class="st">&quot;Spanner&quot;</span>, LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]),</span>
+<span id="cb16-3"><a href="#cb16-3"></a>          <span class="dt">n.tspanner =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="kw">nrow</span>(mx) <span class="op">-</span><span class="st"> </span><span class="dv">6</span>))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: 900; text-align: left;">
+Spanner A
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: 900; text-align: left; border-top: 1px solid #BEBEBE;">
+Spanner B
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+6th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: 900; text-align: left; border-top: 1px solid #BEBEBE;">
+Spanner C
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>Note that you actually don’t need the last <code>n.tspanner</code>, i.e. you can simplify the above to:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">htmlTable</span>(mx, </span>
+<span id="cb17-2"><a href="#cb17-2"></a>          <span class="dt">tspanner =</span> <span class="kw">paste</span>(<span class="st">&quot;Spanner&quot;</span>, LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]),</span>
+<span id="cb17-3"><a href="#cb17-3"></a>          <span class="dt">n.tspanner =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: 900; text-align: left;">
+Spanner A
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: 900; text-align: left; border-top: 1px solid #BEBEBE;">
+Spanner B
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+6th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: 900; text-align: left; border-top: 1px solid #BEBEBE;">
+Spanner C
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>Similarly you can use the number rgroups included in each tspanner instead of actual rows. This is convenient as the tspannners must align with underlying rgroups.</p>
+</div>
+<div id="total-row" class="section level2">
+<h2>Total row</h2>
+<p>Many financial tables use the concept of a total row at the end that sums the above elements:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">htmlTable</span>(mx[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,], <span class="dt">total =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: left;">
+3rd row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid #BEBEBE; font-weight: 900; text-align: center;">
+3:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>This can also be combined with table spanners:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>mx <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">css.total =</span> <span class="kw">c</span>(<span class="st">&quot;border-top: 1px dashed grey;&quot;</span>,</span>
+<span id="cb19-3"><a href="#cb19-3"></a>                                  <span class="st">&quot;border-top: 1px dashed grey;&quot;</span>,</span>
+<span id="cb19-4"><a href="#cb19-4"></a>                                  <span class="st">&quot;border-top: 1px solid grey; font-weight: 900&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="st">  </span><span class="kw">htmlTable</span>(<span class="dt">total =</span> <span class="st">&quot;tspanner&quot;</span>,</span>
+<span id="cb19-6"><a href="#cb19-6"></a>            <span class="dt">tspanner =</span> <span class="kw">paste</span>(<span class="st">&quot;Spanner&quot;</span>, LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]),</span>
+<span id="cb19-7"><a href="#cb19-7"></a>            <span class="dt">n.tspanner =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>,<span class="kw">nrow</span>(mx) <span class="op">-</span><span class="st"> </span><span class="dv">6</span>))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: 900; text-align: left;">
+Spanner A
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: 900; text-align: left; border-top: 1px solid #BEBEBE;">
+Spanner B
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: left;">
+6th row
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; border-top: 1px dashed grey; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: 900; text-align: left; border-top: 1px solid #BEBEBE;">
+Spanner C
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid grey; font-weight: 900; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid grey; font-weight: 900; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid grey; font-weight: 900; text-align: center;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid grey; font-weight: 900; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid grey; font-weight: 900; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid grey; font-weight: 900; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; border-top: 1px solid grey; font-weight: 900; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="table-numbering" class="section level2">
+<h2>Table numbering</h2>
+<p>The htmlTable has built-in numbering, initialized by:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="kw">options</span>(<span class="dt">table_counter =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="kw">htmlTable</span>(mx[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], </span>
+<span id="cb21-2"><a href="#cb21-2"></a>          <span class="dt">caption =</span> <span class="st">&quot;A table caption with a numbering&quot;</span>)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;" id="table_1">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2:2
+</td>
+</tr>
+</tbody>
+<tr>
+<td colspan="3" style="text-align: left;">
+Table 1: A table caption with a numbering
+</td>
+</tr>
+</table>
+<p>As we often want to reference the table number in the text there are two associated functions:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">tblNoLast</span>()</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">tblNoNext</span>()</span></code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="kw">htmlTable</span>(mx[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], </span>
+<span id="cb26-2"><a href="#cb26-2"></a>          <span class="dt">caption =</span> <span class="st">&quot;Another table with numbering&quot;</span>)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;" id="table_2">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2:2
+</td>
+</tr>
+</tbody>
+<tr>
+<td colspan="3" style="text-align: left;">
+Table 2: Another table with numbering
+</td>
+</tr>
+</table>
+<p>If you want to start the counter at 2 you can instead of setting table_counter to <code>TRUE</code> set it to 1. Note that you need to set the value to one less as each time the table is called the counter is incremented by one. You can also turn off the feature by:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="kw">options</span>(<span class="dt">table_counter =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+</div>
+<div id="table-footer" class="section level2">
+<h2>Table footer</h2>
+<p>The footer usually contains specifics regarding variables and is always located at the foot of the table:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="kw">htmlTable</span>(mx[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>], </span>
+<span id="cb28-2"><a href="#cb28-2"></a>          <span class="dt">tfoot =</span> <span class="st">&quot;A table footer&quot;</span>)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+2:2
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td colspan="3">
+A table footer
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div id="zebra-coloring-or-banded-colors" class="section level2">
+<h2>Zebra coloring (or banded colors)</h2>
+<p>Zebra coloring is also know as an alternating color pattern or row shading. It is most commonly applied to rows:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>mx <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-2"><a href="#cb29-2"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">col.rgroup =</span> <span class="kw">c</span>(<span class="st">&quot;none&quot;</span>, <span class="st">&quot;#F7F7F7&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-3"><a href="#cb29-3"></a><span class="st">  </span>htmlTable</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:6
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: left;">
+4th row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: left;">
+6th row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>The zebra coloring in <code>htmlTable</code> is unique in that it follows the rgroups. The zebra striping is centered around the rgroup although rows with no set rgroup, i.e. &quot;&quot; will have alternating colors event though they programatically are within the same group:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>mx <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">col.rgroup =</span> <span class="kw">c</span>(<span class="st">&quot;none&quot;</span>, <span class="st">&quot;#F7F7F7&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-3"><a href="#cb30-3"></a><span class="st">  </span><span class="kw">htmlTable</span>(<span class="dt">rgroup =</span> <span class="kw">c</span>(<span class="kw">paste</span>(<span class="st">&quot;Group&quot;</span>, LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]), <span class="st">&quot;&quot;</span>),</span>
+<span id="cb30-4"><a href="#cb30-4"></a>            <span class="dt">n.rgroup =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="kw">nrow</span>(mx) <span class="op">-</span><span class="st"> </span><span class="dv">4</span>))</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: normal;">
+Group A
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+  2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td colspan="7" style="margin: 0; padding: 0; font-weight: normal; background-color: #f7f7f7;">
+Group B
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: left;">
+  3rd row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+3:6
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: left;">
+  4th row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:6
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: left;">
+6th row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:6
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; border-bottom: 2px solid grey; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>We can also color the columns:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>mx <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-2"><a href="#cb31-2"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">col.columns =</span> <span class="kw">c</span>(<span class="st">&quot;none&quot;</span>, <span class="st">&quot;#F7F7F7&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb31-3"><a href="#cb31-3"></a><span class="st">  </span>htmlTable</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; background-color: #f7f7f7; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; background-color: #f7f7f7; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; background-color: #f7f7f7; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+2:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+3:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+4th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+5:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+6th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+6:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f7f7f7; text-align: center;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; background-color: #f7f7f7; text-align: center;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; background-color: #f7f7f7; text-align: center;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; background-color: #f7f7f7; text-align: center;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+<p>Or do both (note that the colors blend at the intersections):</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>mx <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">col.rgroup =</span> <span class="kw">c</span>(<span class="st">&quot;none&quot;</span>, <span class="st">&quot;#F9FAF0&quot;</span>),</span>
+<span id="cb32-3"><a href="#cb32-3"></a>                    <span class="dt">col.columns =</span> <span class="kw">c</span>(<span class="st">&quot;none&quot;</span>, <span class="st">&quot;#F1F0FA&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb32-4"><a href="#cb32-4"></a><span class="st">  </span>htmlTable</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-bottom: 1px solid grey; border-top: 2px solid grey;">
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; background-color: #f1f0fa; text-align: center;">
+2nd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+3rd hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; background-color: #f1f0fa; text-align: center;">
+4th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center;">
+5th hdr
+</th>
+<th style="margin: 0; padding: 0; font-weight: 900; vertical-align: middle; border-bottom: 1px solid grey; border-top: 2px solid grey; background-color: #f1f0fa; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+1st row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+1:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+1:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+1:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+1:6
+</td>
+</tr>
+<tr style="background-color: #f9faf0;">
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: left;">
+2nd row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: center;">
+2:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center; background-color: #F4F4F4;">
+2:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: center;">
+2:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center; background-color: #F4F4F4;">
+2:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: center;">
+2:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center; background-color: #F4F4F4;">
+2:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+3rd row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+3:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+3:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+3:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+3:6
+</td>
+</tr>
+<tr style="background-color: #f9faf0;">
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: left;">
+4th row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: center;">
+4:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center; background-color: #F4F4F4;">
+4:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: center;">
+4:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center; background-color: #F4F4F4;">
+4:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: center;">
+4:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center; background-color: #F4F4F4;">
+4:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+5th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+5:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+5:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+5:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+5:6
+</td>
+</tr>
+<tr style="background-color: #f9faf0;">
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: left;">
+6th row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: center;">
+6:1
+</td>
+<td style="margin: 0; padding: 0; text-align: center; background-color: #F4F4F4;">
+6:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: center;">
+6:3
+</td>
+<td style="margin: 0; padding: 0; text-align: center; background-color: #F4F4F4;">
+6:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; text-align: center;">
+6:5
+</td>
+<td style="margin: 0; padding: 0; text-align: center; background-color: #F4F4F4;">
+6:6
+</td>
+</tr>
+<tr>
+<td style="margin: 0; padding: 0; text-align: left;">
+7th row
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:1
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+7:2
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:3
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+7:4
+</td>
+<td style="margin: 0; padding: 0; text-align: center;">
+7:5
+</td>
+<td style="margin: 0; padding: 0; background-color: #f1f0fa; text-align: center;">
+7:6
+</td>
+</tr>
+<tr style="background-color: #f9faf0;">
+<td style="margin: 0; padding: 0; background-color: #f9faf0; border-bottom: 2px solid grey; text-align: left;">
+8th row
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; border-bottom: 2px solid grey; text-align: center;">
+8:1
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center; background-color: #F4F4F4;">
+8:2
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; border-bottom: 2px solid grey; text-align: center;">
+8:3
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center; background-color: #F4F4F4;">
+8:4
+</td>
+<td style="margin: 0; padding: 0; background-color: #f9faf0; border-bottom: 2px solid grey; text-align: center;">
+8:5
+</td>
+<td style="margin: 0; padding: 0; border-bottom: 2px solid grey; text-align: center; background-color: #F4F4F4;">
+8:6
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="putting-it-all-together" class="section level2">
+<h2>Putting it all together</h2>
+<p>Now if we want to do everything in one table it may look like this:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>rgroup =<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;Group&quot;</span>, LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="kw">attr</span>(rgroup, <span class="st">&quot;add&quot;</span>) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">`</span><span class="dt">3</span><span class="st">`</span> =<span class="st"> &quot;Group p-value &lt; 0.001&quot;</span>)</span>
+<span id="cb33-3"><a href="#cb33-3"></a></span>
+<span id="cb33-4"><a href="#cb33-4"></a>mx <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb33-5"><a href="#cb33-5"></a><span class="st">  </span><span class="kw">addHtmlTableStyle</span>(<span class="dt">align =</span> <span class="st">&quot;rr|r&quot;</span>,</span>
+<span id="cb33-6"><a href="#cb33-6"></a>                    <span class="dt">align.header =</span> <span class="st">&quot;cc|c&quot;</span>,</span>
+<span id="cb33-7"><a href="#cb33-7"></a>                    <span class="dt">spacer.celltype =</span> <span class="st">&quot;double_cell&quot;</span>,</span>
+<span id="cb33-8"><a href="#cb33-8"></a>                    <span class="dt">col.columns =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;none&quot;</span>, <span class="dv">2</span>),</span>
+<span id="cb33-9"><a href="#cb33-9"></a>                                    <span class="kw">rep</span>(<span class="st">&quot;#F5FBFF&quot;</span>, <span class="dv">4</span>)),</span>
+<span id="cb33-10"><a href="#cb33-10"></a>                    <span class="dt">col.rgroup =</span> <span class="kw">c</span>(<span class="st">&quot;none&quot;</span>, <span class="st">&quot;#F7F7F7&quot;</span>),</span>
+<span id="cb33-11"><a href="#cb33-11"></a>                    <span class="dt">css.cell =</span> <span class="st">&quot;padding-left: .5em; padding-right: .2em;&quot;</span>,</span>
+<span id="cb33-12"><a href="#cb33-12"></a>                    <span class="dt">css.header =</span> <span class="st">&quot;font-weight: normal&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb33-13"><a href="#cb33-13"></a><span class="st">  </span><span class="kw">htmlTable</span>(<span class="dt">rgroup =</span> rgroup,</span>
+<span id="cb33-14"><a href="#cb33-14"></a>            <span class="dt">n.rgroup =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span>),</span>
+<span id="cb33-15"><a href="#cb33-15"></a>            <span class="dt">tspanner =</span> <span class="kw">paste</span>(<span class="st">&quot;Spanner&quot;</span>, LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]),</span>
+<span id="cb33-16"><a href="#cb33-16"></a>            <span class="dt">n.tspanner =</span> <span class="kw">c</span>(<span class="dv">1</span>),</span>
+<span id="cb33-17"><a href="#cb33-17"></a>            <span class="dt">cgroup =</span> <span class="kw">list</span>(<span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;Column spanners&quot;</span>),</span>
+<span id="cb33-18"><a href="#cb33-18"></a>                          <span class="kw">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;Cgroup 1&quot;</span>, <span class="st">&quot;Cgroup 2&amp;dagger;&quot;</span>)),</span>
+<span id="cb33-19"><a href="#cb33-19"></a>            <span class="dt">n.cgroup =</span> <span class="kw">list</span>(<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">5</span>),</span>
+<span id="cb33-20"><a href="#cb33-20"></a>                            <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">2</span>)),</span>
+<span id="cb33-21"><a href="#cb33-21"></a>            <span class="dt">caption =</span> <span class="st">&quot;A table with column spanners, row groups, and zebra striping&quot;</span>,</span>
+<span id="cb33-22"><a href="#cb33-22"></a>            <span class="dt">tfoot =</span> <span class="st">&quot;&amp;dagger; A table footer commment&quot;</span>,</span>
+<span id="cb33-23"><a href="#cb33-23"></a>            <span class="dt">cspan.rgroup =</span> <span class="dv">2</span>)</span></code></pre></div>
+<table class="gmisc_table" style="border-collapse: collapse; margin-top: 1em; margin-bottom: 1em;">
+<thead>
+<tr>
+<th style="border-top: 2px solid grey;">
+</th>
+<th colspan="1" style="font-weight: 900; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white; border-top: 2px solid grey;" colspan="1">
+</th>
+<th colspan="9" style="font-weight: 900; border-bottom: 1px solid grey; border-top: 2px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Column spanners
+</th>
+</tr>
+<tr>
+<th style>
+</th>
+<th colspan="4" style="font-weight: 900; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th colspan="2" style="font-weight: 900; border-bottom: 1px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Cgroup 1
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th style="width: 2px; border-bottom: 1px solid white;" colspan="1">
+</th>
+<th colspan="2" style="font-weight: 900; border-bottom: 1px solid grey; text-align: center; margin: 0; padding: 0; vertical-align: middle;">
+Cgroup 2†
+</th>
+</tr>
+<tr>
+<th style="border-bottom: 1px solid grey;">
+</th>
+<th style="font-weight: normal; border-bottom: 1px solid grey; text-align: center;">
+1st hdr
+</th>
+<th style="width: 2px; font-weight: normal; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="width: 2px; font-weight: normal; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="font-weight: normal; border-bottom: 1px solid grey; text-align: center;">
+2nd hdr
+</th>
+<th style="width: 2px; font-weight: normal; border-bottom: 1px solid grey; text-align: center;border-right: 1px solid black" colspan="1">
+</th>
+<th style="width: 2px; font-weight: normal; border-bottom: 1px solid grey; text-align: center;" colspan="1">
+</th>
+<th style="font-weight: normal; border-bottom: 1px solid grey; background-color: #f5fbff; text-align: center;">
+3rd hdr
+</th>
+<th style="font-weight: normal; border-bottom: 1px solid grey; background-color: #f5fbff; text-align: center;">
+4th hdr
+</th>
+<th style="width: 2px; font-weight: normal; border-bottom: 1px solid grey; text-align: center; background-color: #f5fbff;" colspan="1">
+</th>
+<th style="width: 2px; font-weight: normal; border-bottom: 1px solid grey; text-align: center; background-color: #f5fbff;" colspan="1">
+</th>
+<th style="font-weight: normal; border-bottom: 1px solid grey; background-color: #f5fbff; text-align: center;">
+5th hdr
+</th>
+<th style="font-weight: normal; border-bottom: 1px solid grey; background-color: #f5fbff; text-align: center;">
+6th hdr
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="13" style="padding-left: .5em; padding-right: .2em; font-weight: 900; text-align: left;">
+Spanner A
+</td>
+</tr>
+<tr>
+<td colspan="4" style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0;">
+Group A
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right;">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; background-color: #f5fbff; text-align: right;">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; background-color: #f5fbff; text-align: right;">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; background-color: #f5fbff; text-align: right;">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; background-color: #f5fbff; text-align: right;">
+</td>
+</tr>
+<tr>
+<td style="padding-left: .5em; padding-right: .2em; text-align: left;">
+  1st row
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right;">
+1:1
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right;">
+1:2
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+1:3
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+1:4
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+1:5
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+1:6
+</td>
+</tr>
+<tr>
+<td style="padding-left: .5em; padding-right: .2em; text-align: left;">
+  2nd row
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right;">
+2:1
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right;">
+2:2
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+2:3
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+2:4
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+2:5
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+2:6
+</td>
+</tr>
+<tr>
+<td colspan="13" style="padding-left: .5em; padding-right: .2em; font-weight: 900; text-align: left; border-top: 1px solid #BEBEBE;">
+Spanner B
+</td>
+</tr>
+<tr>
+<td colspan="4" style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; background-color: #f7f7f7;">
+Group B
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; background-color: #f7f7f7; text-align: right;">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #F7F7F7;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #F6F9FB;">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #F6F9FB;">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #F6F8F9;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #F6F8F9;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #F6F9FB;">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #F6F9FB;">
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: left;">
+  3rd row
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: right;">
+3:1
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: right;">
+3:2
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+3:3
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+3:4
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F8F9;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F8F9;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+3:5
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+3:6
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: left;">
+  4th row
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: right;">
+4:1
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: right;">
+4:2
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+4:3
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+4:4
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F8F9;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F8F9;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+4:5
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+4:6
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: left;">
+  5th row
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: right;">
+5:1
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: right;">
+5:2
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+5:3
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+5:4
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F8F9;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F8F9;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+5:5
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+5:6
+</td>
+</tr>
+<tr style="background-color: #f7f7f7;">
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: left;">
+  6th row
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: right;">
+6:1
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f7f7f7; text-align: right;">
+6:2
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F7F7F7;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+6:3
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+6:4
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F8F9;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F8F9;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+6:5
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right; background-color: #F6F9FB;">
+6:6
+</td>
+</tr>
+<tr>
+<td colspan="4" style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0;">
+Group C
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right;">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; background-color: #f5fbff; text-align: right;">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; background-color: #f5fbff; text-align: right;">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; background-color: #f5fbff; text-align: right;">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; font-weight: normal; margin: 0; padding: 0; background-color: #f5fbff; text-align: right;">
+Group p-value &lt; 0.001
+</td>
+</tr>
+<tr>
+<td style="padding-left: .5em; padding-right: .2em; text-align: left;">
+  7th row
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right;">
+7:1
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; text-align: right;">
+7:2
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+7:3
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+7:4
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+7:5
+</td>
+<td style="padding-left: .5em; padding-right: .2em; background-color: #f5fbff; text-align: right;">
+7:6
+</td>
+</tr>
+<tr>
+<td style="padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; text-align: left;">
+  8th row
+</td>
+<td style="padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; text-align: right;">
+8:1
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; text-align: right;">
+8:2
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; text-align: right;border-right: 1px solid black" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; text-align: right;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; background-color: #f5fbff; text-align: right;">
+8:3
+</td>
+<td style="padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; background-color: #f5fbff; text-align: right;">
+8:4
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="width: 2px; padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; text-align: right; background-color: #f5fbff;" colspan="1">
+</td>
+<td style="padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; background-color: #f5fbff; text-align: right;">
+8:5
+</td>
+<td style="padding-left: .5em; padding-right: .2em; border-bottom: 2px solid grey; background-color: #f5fbff; text-align: right;">
+8:6
+</td>
+</tr>
+</tbody>
+<tr>
+<td colspan="13" style="text-align: left;">
+A table with column spanners, row groups, and zebra striping
+</td>
+</tr>
+<tfoot>
+<tr>
+<td colspan="13">
+† A table footer commment
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

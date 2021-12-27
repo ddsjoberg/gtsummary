@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Print 'ggmatrix' object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for print.ggmatrix {GGally}"><tr><td>print.ggmatrix {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Print <code><a href="../../GGally/help/ggmatrix.html">ggmatrix</a></code> object</h2>
+
+<h3>Description</h3>
+
+<p>Print method taken from <code>ggplot2:::print.ggplot</code> and altered for a <code><a href="../../GGally/help/ggmatrix.html">ggmatrix</a></code> object
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'ggmatrix'
+print(x, newpage = is.null(vp), vp = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>plot to display</p>
+</td></tr>
+<tr valign="top"><td><code>newpage</code></td>
+<td>
+<p>draw new (empty) page first?</p>
+</td></tr>
+<tr valign="top"><td><code>vp</code></td>
+<td>
+<p>viewport to draw plot in</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>arguments passed onto <code><a href="../../GGally/help/ggmatrix_gtable.html">ggmatrix_gtable</a></code></p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Barret Schloerke
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ data(tips, package = "reshape")
+ pMat &lt;- ggpairs(tips, c(1,3,2), mapping = ggplot2::aes_string(color = "sex"))
+ pMat # calls print(pMat), which calls print.ggmatrix(pMat)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

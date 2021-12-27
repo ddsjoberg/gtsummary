@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Symmetric Dense Nonzero-Pattern Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for nsyMatrix-class {Matrix}"><tr><td>nsyMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Symmetric Dense Nonzero-Pattern Matrices</h2>
+
+<h3>Description</h3>
+
+<p>The <code>"nsyMatrix"</code> class is the class of symmetric, dense nonzero-pattern
+matrices in non-packed storage and <code>"nspMatrix"</code> is the class of
+of these in packed storage.  Only the upper triangle or the
+lower triangle is stored.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("nsyMatrix", ...)</code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>uplo</code>:</dt><dd><p>Object of class <code>"character"</code>. Must be
+either &quot;U&quot;, for upper triangular, and &quot;L&quot;, for lower triangular.</p>
+</dd>
+<dt><code>x</code>:</dt><dd><p>Object of class <code>"logical"</code>. The logical
+values that constitute the matrix, stored in column-major order.</p>
+</dd>
+<dt><code>Dim</code>,<code>Dimnames</code>:</dt><dd><p>The dimension (a length-2
+<code>"integer"</code>) and corresponding names (or <code>NULL</code>), see the
+<code><a href="Matrix-class.html">Matrix</a></code> class.</p>
+</dd>
+<dt><code>factors</code>:</dt><dd><p>Object of class <code>"list"</code>.  A named
+list of factorizations that have been computed for the matrix.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p><code>"nsyMatrix"</code> extends class <code>"ngeMatrix"</code>, directly, whereas<br />
+<code>"nspMatrix"</code> extends class <code>"ndenseMatrix"</code>, directly.
+</p>
+<p>Both extend class <code>"symmetricMatrix"</code>, directly,
+and class <code>"Matrix"</code> and others, <em>in</em>directly, use
+<code><a href="../../methods/html/RClassUtils.html">showClass</a>("nsyMatrix")</code>, e.g., for details.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>Currently, mainly <code><a href="../../base/html/t.html">t</a>()</code> and coercion methods (for
+<code><a href="../../methods/html/as.html">as</a>(.)</code>; use, e.g.,
+<code><a href="../../methods/html/showMethods.html">showMethods</a>(class="dsyMatrix")</code> for details.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="ngeMatrix-class.html">ngeMatrix</a></code>, <code><a href="Matrix-class.html">Matrix</a></code>,
+<code><a href="../../base/html/t.html">t</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(s0 &lt;- new("nsyMatrix"))
+
+(M2 &lt;- Matrix(c(TRUE, NA,FALSE,FALSE), 2,2)) # logical dense (ltr)
+(sM &lt;- M2 &amp; t(M2))      # "lge"
+class(sM &lt;- as(sM, "nMatrix")) # -&gt; "nge"
+     (sM &lt;- as(sM, "nsyMatrix")) # -&gt; "nsy"
+str ( sM &lt;- as(sM, "nspMatrix")) # -&gt; "nsp": packed symmetric
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

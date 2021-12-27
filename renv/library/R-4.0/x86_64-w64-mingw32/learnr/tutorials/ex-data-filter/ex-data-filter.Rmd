@@ -1,0 +1,351 @@
+---
+title: "Filter observations"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+runtime: shiny_prerendered
+description: >
+  Learn how to filter observations in a data frame. Use `filter()` to extract
+  observations from a data frame, and use `&`, `|`, and `!` to write logical
+  tests.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(tidyverse)
+library(nycflights13)
+library(Lahman)
+
+tutorial_options(exercise.timelimit = 60)
+knitr::opts_chunk$set(error = TRUE)
+```
+
+## Welcome
+
+This is a demo tutorial. Compare it to the [source code](https://github.com/rstudio/learnr/tree/master/inst/tutorials/ex-data-filter/ex-data-filter.Rmd) that made it.
+
+###  
+
+In this tutorial, you will learn how to:
+
+* use `filter()` to extract observations from a data frame or tibble
+* write logical tests in R
+* combine logical tests with Boolean operators
+* handle missing values within logical tests
+
+The readings in this tutorial follow [_R for Data Science_](http://r4ds.had.co.nz/), section 5.2. 
+
+### Prerequisites
+
+To practice these skills, we will use the `flights` data set from the nycflights13 package. This data frame comes from the US [Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0) and contains all `r format(nrow(nycflights13::flights), big.mark = ",")` flights that departed from New York City in 2013. It is documented in `?flights`.
+
+We will also use the ggplot2 package to visualize the data. 
+
+If you are ready to begin, click on!
+
+## Filter rows with `filter()`
+
+### filter()
+
+`filter()` lets you use a logical test to extract specific rows from a data frame. To use `filter()`, pass it the data frame followed by one or more logical tests. `filter()` will return every row that passes each logical test.
+
+So for example, we can use `filter()` to select every flight in flights that departed on January 1st. Click Submit Answer to give it a try:
+
+```{r filter1, exercise = TRUE, exercise.eval = FALSE}
+filter(flights, month == 1, day == 1)
+```
+
+
+###  output
+
+Like all dplyr functions, `filter()` returns a new data frame for you to save or use. It doesn't overwrite the old data frame. 
+
+If you want to save the output of `filter()`, you'll need to use the assignment operator, `<-`. 
+
+Rerun the command in the code chunk below, but first arrange to save the output to an object named `jan1`.
+
+```{r filter2, exercise = TRUE, exercise.eval = FALSE}
+filter(flights, month == 1, day == 1)
+```
+
+```{r filter2-solution}
+jan1 <- filter(flights, month == 1, day == 1)
+```
+
+###  
+
+Good job! You can now see the results by running the name jan1 by itself. Or you can pass `jan1` to a function that takes data frames as input.
+
+Did you notice that this code used the double assignment operator, `==`? `==` is one of R's logical comparison operators. Comparison operators are key to using `filter()` let's take a look at them.
+
+## Logical Comparisons
+
+### Comparison operators
+
+R provides a suite of comparison operators that you can use to compare values: `>`, `>=`, `<`, `<=`, `!=` (not equal), and `==` (equal). Each creates a logical test. For example, is `pi` greater than three?
+
+```{r}
+pi > 3
+```
+
+###  
+
+When you place a logical test inside of `filter()`, filter applies the test to each row in the data frame and then returns the rows that pass, as a new data frame.
+
+Our code above returned every row whose month value was equal to one _and_ whose day value was equal to one.
+
+### Watch out!
+
+When you start out with R, the easiest mistake to make is to test for equality with `=` instead of `==`. When this happens you'll get an informative error:
+
+```{r, error = TRUE}
+filter(flights, month = 1)
+```
+
+### Multiple tests
+
+If you give `filter()` more than one logical test, `filter()` will combine the tests with an implied "and."In other words, `filter()` will return only the rows that return `TRUE` for every test. You can combine tests in other ways with Boolean operators... 
+
+## Boolean operators
+
+### &, |, and !
+
+R uses boolean operators to combine multiple logical comparisons into a single logical test. These include `&` (_and_), `|` (_or_), `!` (_not_ or _negation_), and `xor()` (_exactly or_). 
+
+Both `|` and `xor()` will return TRUE is one or the other logical comparison returns TRUE. `xor()` differs from `|` in that it will return FALSE if both logical comparisons return TRUE. The name _xor_ stands for _exactly or_.
+
+Study the diagram below to get a feel for how these operators work.
+
+```{r fig1, echo = FALSE, out.width = "100%", fig.cap = "In the figure above, `x` is the left-hand circle, `y` is the right-hand circle, and the shaded region show which parts each operator selects."}
+knitr::include_graphics("images/transform-logical.png")
+```
+
+### Test Your Knowledge
+
+```{r logicals, echo = FALSE}
+question(" What will the following code return? `filter(flights, month == 11 | month == 12)`",
+         answer("Every flight that departed in November _or_ December", correct = TRUE),
+         answer("Every flight that departed in November _and_ December", message = "Technically a flight could not have departed in November _and_ December unless it departed twice."),
+         answer("Every flight _except for_ those that departed in November or December"),
+         answer("An error. This is an incorrect way to combine tests.", message = "The next section will say a little more about combining tests."),
+         allow_retry = TRUE
+)
+```
+
+### Common mistakes
+
+In R, the order of operations doesn't work like English. You can't write `filter(flights, month == 11 | 12)`, even though you might say  "finds all flights that departed in November or December". Be sure to write oue a _complete_ test on each side of a boolean operator.
+
+Here are four more tips to help you use logical tests and Boolean operators in R:
+
+###  
+
+1. A useful short-hand for this problem is `x %in% y`. This will select every row where `x` is one of the values in `y`. We could use it to rewrite the code in the question above:
+
+    ```{r, eval = FALSE}
+    nov_dec <- filter(flights, month %in% c(11, 12))
+    ```
+
+###  
+
+2. Sometimes you can simplify complicated subsetting by remembering De Morgan's law: `!(x & y)` is the same as `!x | !y`, and `!(x | y)` is the same as `!x & !y`. For example, if you wanted to find flights that weren't delayed (on arrival or departure) by more than two hours, you could use either of the following two filters:
+
+    ```{r, eval = FALSE}
+    filter(flights, !(arr_delay > 120 | dep_delay > 120))
+    filter(flights, arr_delay <= 120, dep_delay <= 120)
+    ```
+
+###  
+
+3. As well as `&` and `|`, R also has `&&` and `||`. Don't use them with `filter()`! You'll learn when you should use them later.
+
+###  
+
+4. Whenever you start using complicated, multipart expressions in `filter()`, consider making them explicit variables instead. That makes it much easier to check your work. You'll learn how to create new variables shortly.
+
+## Missing values
+
+### NA
+
+Missing values can make comparisons tricky in R. R uses `NA` to represent missing or unknown values. `NA`s are "contagious" because almost any operation involving an unknown value (`NA`) will also be unknown (`NA`). For example, can you determine what value these expressions that use missing values shoudl evaluate to? Make a prediction and then click "Submit Answer".
+
+```{r nas, exercise = TRUE, evaluate.exercise = FALSE}
+NA > 5
+10 == NA
+NA + 10
+NA / 2
+```
+
+```{r nas-check}
+"In every case, R does not have enough information to compute a result. Hence, each result is an unknown value, `NA`."
+```
+
+### is.na()
+
+The most confusing result above is this one:
+
+```{r}
+NA == NA
+```
+
+It's easiest to understand why this is true with a bit more context:
+
+```{r}
+# Let x be Mary's age. We don't know how old she is.
+x <- NA
+
+# Let y be John's age. We don't know how old he is.
+y <- NA
+
+# Are John and Mary the same age?
+x == y
+# We don't know!
+```
+
+If you want to determine if a value is missing, use `is.na()`:
+
+```{r}
+is.na(x)
+```
+
+### filter() and NAs
+
+`filter()` only includes rows where the condition is `TRUE`; it excludes both `FALSE` and `NA` values. If you want to preserve missing values, ask for them explicitly:
+
+```{r}
+df <- tibble(x = c(1, NA, 3))
+filter(df, x > 1)
+filter(df, is.na(x) | x > 1)
+```
+
+## Exercises
+
+### Exercise 1
+
+Use the code chunks below to find all flights that
+
+1. Had an arrival delay of two or more hours
+
+    ```{r filterex1, exercise = TRUE}
+    
+    ```
+    ```{r filterex1-solution}
+    filter(flights, arr_delay >= 2)
+    ```
+
+1. Flew to Houston (`IAH` or `HOU`)
+
+    ```{r filterex2, exercise = TRUE}
+    
+    ```
+    ```{r filterex2-solution}
+    filter(flights, dest %in% c("IAH", "HOU"))
+    ```
+    
+    <div id="filterex2-hint">
+    **Hint:** This is a good case for the `%in%` operator.
+    </div>
+
+1. Were operated by United (`UA`), American (`AA`), or Delta (`DL`)
+
+    ```{r filterex3, exercise = TRUE}
+    
+    ```
+    ```{r filterex3-solution}
+    filter(flights, carrier %in% c("UA", "AA", "DL"))
+    ```
+    
+    <div id="filterex3-hint">
+    **Hint:** The `carrier` variable lists the airline that operated each flight. This is another good case for the `%in%` operator.
+    </div>
+    
+1. Departed in summer (July, August, and September)
+    
+    ```{r filterex4, exercise = TRUE}
+    
+    ```
+    ```{r filterex4-solution}
+    filter(flights, 6 < month, month < 10)
+    ```
+    
+    <div id="filterex4-hint">
+    **Hint:** When converted to numbers, July, August, and September become 7, 8, and 9.
+    </div>
+
+1. Arrived more than two hours late, but didn't leave late
+
+    ```{r filterex5, exercise = TRUE}
+    
+    ```
+    ```{r filterex5-solution}
+    filter(flights, arr_delay > 120, dep_delay < 0)
+    ```
+    
+    <div id="filterex5-hint">
+    **Hint:** Remember that departure and arrival delays are recorded in     _minutes_.
+    </div>
+
+1. Were delayed by at least an hour, but made up over 30 minutes in flight
+    
+    ```{r filterex6, exercise = TRUE}
+    
+    ```
+    ```{r filterex6-solution}
+    filter(flights, dep_delay > 60, (dep_delay - arr_delay) >= 30)
+    ```
+
+    <div id="filterex6-hint">
+    **Hint:** The time a plane makes up is `dep_delay - arr_delay`.
+    </div>
+        
+1. Departed between midnight and 6am (inclusive)
+
+    ```{r filterex7, exercise = TRUE}
+    
+    ```
+    ```{r filterex7-solution}
+    filter(flights, dep_time <= 600 | dep_time == 2400)
+    ```
+    
+    <div id="filterex7-hint">
+    **Hint:** Don't forget flights thsat left at eactly midnight (`2400`). This is a good case for an "or" operator.
+    </div>
+
+### Exercise 2
+
+Another useful dplyr filtering helper is `between()`. What does it do? Can you use `between()` to simplify the code needed to answer the previous challenges?
+
+```{r filterex8, exercise = TRUE}
+?between
+```
+
+### Exercise 3
+
+How many flights have a missing `dep_time`? What other variables are missing? What might these rows represent?
+
+```{r filterex9, exercise = TRUE}
+    
+```
+```{r filterex9-solution}
+filter(flights, is.na(dep_time))
+```
+    
+<div id="filterex7-hint">
+**Hint:** This is a good case for `is.na()`.
+</div>
+
+```{r filterex9-check}
+"Good Job! these look like they might be cancelled flights."
+```
+
+### Exercise 4
+
+Why is `NA ^ 0` not missing? Why is `NA | TRUE` not missing?
+Why is `FALSE & NA` not missing? Can you figure out the general
+rule?  (`NA * 0` is a tricky counterexample!)
+    
+```{r filterex10, exercise = TRUE}
+    
+```
+

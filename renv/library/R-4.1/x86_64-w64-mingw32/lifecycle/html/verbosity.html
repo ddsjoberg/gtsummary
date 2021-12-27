@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Control the verbosity of deprecation signals</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for verbosity {lifecycle}"><tr><td>verbosity {lifecycle}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Control the verbosity of deprecation signals</h2>
+
+<h3>Description</h3>
+
+<p>There are 3 levels of verbosity for deprecated functions: silence,
+warning, and error. Since the lifecycle package avoids disruptive
+warnings, the default level of verbosity depends on the lifecycle
+stage of the deprecated function, on the context of the caller
+(global environment or testthat unit tests cause more warnings),
+and whether the warning was already issued (see the help for
+<a href="../../lifecycle/help/deprecate_soft.html">deprecation functions</a>).
+</p>
+<p>You can control the level of verbosity with the global option
+<code>lifecycle_verbosity</code>. It can be set to:
+</p>
+
+<ul>
+<li> <p><code>"default"</code> or <code>NULL</code> for the default non-disruptive settings.
+</p>
+</li>
+<li> <p><code>"quiet"</code>, <code>"warning"</code> or <code>"error"</code> to force silence, warnings or
+errors for deprecated functions.
+</p>
+</li></ul>
+
+<p>Note that functions calling <code><a href="../../lifecycle/help/deprecate_stop.html">deprecate_stop()</a></code> invariably throw
+errors.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (rlang::is_installed("testthat")) {
+  library(testthat)
+
+  mytool &lt;- function() {
+    deprecate_soft("1.0.0", "mytool()")
+    10 * 10
+  }
+
+  # Forcing the verbosity level is useful for unit testing. You can
+  # force errors to test that the function is indeed deprecated:
+  test_that("mytool is deprecated", {
+    rlang::with_options(lifecycle_verbosity = "error", {
+      expect_error(mytool(), class = "defunctError")
+    })
+  })
+
+  # Or you can enforce silence to safely test that the function
+  # still works:
+  test_that("mytool still works", {
+    rlang::with_options(lifecycle_verbosity = "quiet", {
+      expect_equal(mytool(), 100)
+    })
+  })
+}
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lifecycle</em> version 1.0.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

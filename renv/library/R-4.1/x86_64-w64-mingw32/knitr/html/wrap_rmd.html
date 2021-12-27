@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Wrap long lines in Rmd files</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for wrap_rmd {knitr}"><tr><td>wrap_rmd {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Wrap long lines in Rmd files</h2>
+
+<h3>Description</h3>
+
+<p>This function wraps long paragraphs in an R Markdown file. Other elements are
+not wrapped: the YAML preamble, fenced code blocks, section headers and
+indented elements. The main reason for wrapping long lines is to make it
+easier to review differences in version control.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+wrap_rmd(file, width = 80, text = NULL, backup)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>file</code></td>
+<td>
+<p>The input Rmd file.</p>
+</td></tr>
+<tr valign="top"><td><code>width</code></td>
+<td>
+<p>The expected line width.</p>
+</td></tr>
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>A character vector of text lines, as an alternative to <code>file</code>. If
+<code>text</code> is not <code>NULL</code>, <code>file</code> is ignored.</p>
+</td></tr>
+<tr valign="top"><td><code>backup</code></td>
+<td>
+<p>Path to back up the original file in case anything goes
+wrong. If set to <code>NULL</code>, no backup is made. The default value is constructed
+from <code>file</code> by adding <code>__</code> before the base filename.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>If <code>file</code> is provided, it is overwritten; if <code>text</code> is
+provided, a character vector is returned.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Currently it does not wrap blockquotes or lists (ordered or unordered).
+This feature may or may not be added in the future.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+wrap_rmd(text = c("```", "1+1", "```", "- a list item", "&gt; a quote", "",
+    paste(rep("this is a normal paragraph", 5), collapse = " ")))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

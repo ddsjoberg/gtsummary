@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Creates table of survival probabilities</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tbl_survfit {gtsummary}"><tr><td>tbl_survfit {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Creates table of survival probabilities</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+Function takes a <code>survfit</code> object as an argument, and provides a
+formatted summary table of the results
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tbl_survfit(x, ...)
+
+## S3 method for class 'list'
+tbl_survfit(
+  x,
+  times = NULL,
+  probs = NULL,
+  statistic = NULL,
+  label = NULL,
+  label_header = NULL,
+  estimate_fun = NULL,
+  missing = NULL,
+  conf.level = 0.95,
+  reverse = FALSE,
+  quiet = NULL,
+  ...
+)
+
+## S3 method for class 'survfit'
+tbl_survfit(x, ...)
+
+## S3 method for class 'data.frame'
+tbl_survfit(x, y, include = everything(), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a survfit object, list of survfit objects, or a data frame.
+If a data frame is passed, a list of survfit objects is constructed using
+each variable as a stratifying variable.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>For <code><a href="../../gtsummary/help/tbl_survfit.data.frame.html">tbl_survfit.data.frame()</a></code>  and <code><a href="../../gtsummary/help/tbl_survfit.survfit.html">tbl_survfit.survfit()</a></code> the arguments
+are passed to <code><a href="../../gtsummary/help/tbl_survfit.list.html">tbl_survfit.list()</a></code>. They are not used when <code><a href="../../gtsummary/help/tbl_survfit.list.html">tbl_survfit.list()</a></code>
+is called directly.</p>
+</td></tr>
+<tr valign="top"><td><code>times</code></td>
+<td>
+<p>numeric vector of times for which to return survival probabilities.</p>
+</td></tr>
+<tr valign="top"><td><code>probs</code></td>
+<td>
+<p>numeric vector of probabilities with values in (0,1)
+specifying the survival quantiles to return</p>
+</td></tr>
+<tr valign="top"><td><code>statistic</code></td>
+<td>
+<p>string defining the statistics to present in the table.
+Default is <code>"{estimate} ({conf.low}, {conf.high})"</code></p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>List of formulas specifying variables labels,
+e.g. <code>list(age ~ "Age, yrs", stage ~ "Path T Stage")</code>, or a string for a
+single variable table.</p>
+</td></tr>
+<tr valign="top"><td><code>label_header</code></td>
+<td>
+<p>string specifying column labels above statistics. Default
+is <code>"{prob} Percentile"</code> for survival percentiles, and <code>"Time {time}"</code> for n-year
+survival estimates</p>
+</td></tr>
+<tr valign="top"><td><code>estimate_fun</code></td>
+<td>
+<p>function to format the Kaplan-Meier estimates. Default
+is <code><a href="../../gtsummary/help/style_percent.html">style_percent()</a></code> for survival probabilities and <a href="../../gtsummary/help/style_sigfig.html">style_sigfig</a> for
+survival times</p>
+</td></tr>
+<tr valign="top"><td><code>missing</code></td>
+<td>
+<p>text to fill when estimate is not estimable. Default is <code>"--"</code></p>
+</td></tr>
+<tr valign="top"><td><code>conf.level</code></td>
+<td>
+<p>Confidence level for confidence intervals. Default is 0.95</p>
+</td></tr>
+<tr valign="top"><td><code>reverse</code></td>
+<td>
+<p>Flip the probability reported, i.e. <code>1 - estimate</code>.
+Default is <code>FALSE</code>.  Does not apply to survival quantile requests</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>Logical indicating whether to print messages in console. Default is
+<code>FALSE</code></p>
+</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+<p>outcome call, e.g. <code>y = Surv(ttdeath, death)</code></p>
+</td></tr>
+<tr valign="top"><td><code>include</code></td>
+<td>
+<p>Variable to include as stratifying variables.</p>
+</td></tr>
+</table>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/tbl_survfit_ex1.png" width=55% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/tbl_survfit_ex2.png" width=45% />
+</p>
+<p>Example 3
+</p>
+<p><img src="../help/figures/tbl_survfit_ex3.png" width=55% />
+</p>
+<p>Example 4
+</p>
+<p><img src="../help/figures/survfit_cr_ex4.png" width=55% />
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Daniel D. Sjoberg
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tbl_survfit tools: 
+<code><a href="../../gtsummary/help/add_n.tbl_survfit.html">add_n.tbl_survfit</a>()</code>,
+<code><a href="../../gtsummary/help/add_nevent.tbl_survfit.html">add_nevent.tbl_survfit</a>()</code>,
+<code><a href="../../gtsummary/help/add_p.tbl_survfit.html">add_p.tbl_survfit</a>()</code>,
+<code><a href="../../gtsummary/help/modify.html">modify</a></code>,
+<code><a href="../../gtsummary/help/tbl_merge.html">tbl_merge</a>()</code>,
+<code><a href="../../gtsummary/help/tbl_stack.html">tbl_stack</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(survival)
+
+# Example 1 ----------------------------------
+# Pass single survfit() object
+tbl_survfit_ex1 &lt;- tbl_survfit(
+  survfit(Surv(ttdeath, death) ~ trt, trial),
+  times = c(12, 24),
+  label_header = "**{time} Month**"
+)
+
+# Example 2 ----------------------------------
+# Pass a data frame
+tbl_survfit_ex2 &lt;- tbl_survfit(
+  trial,
+  y = Surv(ttdeath, death),
+  include = c(trt, grade),
+  probs = 0.5,
+  label_header = "**Median Survival**"
+)
+
+# Example 3 ----------------------------------
+# Pass a list of survfit() objects
+tbl_survfit_ex3 &lt;-
+  list(
+    survfit(Surv(ttdeath, death) ~ 1, trial),
+    survfit(Surv(ttdeath, death) ~ trt, trial)
+  ) %&gt;%
+  tbl_survfit(times = c(12, 24))
+
+# Example 4 Competing Events Example ---------
+# adding a competing event for death (cancer vs other causes)
+set.seed(1123)
+library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
+trial2 &lt;- trial %&gt;%
+  mutate(
+    death_cr = case_when(
+      death == 0 ~ "censor",
+      runif(n()) &lt; 0.5 ~ "death from cancer",
+      TRUE ~ "death other causes"
+    ) %&gt;% factor()
+  )
+
+survfit_cr_ex4 &lt;-
+  survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2) %&gt;%
+  tbl_survfit(times = c(12, 24), label = "Tumor Grade")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.2.9012 <a href="00Index.html">Index</a>]</div>
+</body></html>

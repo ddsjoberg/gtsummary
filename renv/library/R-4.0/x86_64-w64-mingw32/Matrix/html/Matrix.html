@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Construct a Classed Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for Matrix {Matrix}"><tr><td>Matrix {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Construct a Classed Matrix</h2>
+
+<h3>Description</h3>
+
+<p>Construct a Matrix of a class that inherits from <code>Matrix</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+Matrix(data=NA, nrow=1, ncol=1, byrow=FALSE, dimnames=NULL,
+       sparse = NULL, doDiag = TRUE, forceCheck = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>an optional numeric data vector or matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>nrow</code></td>
+<td>
+<p>when <code>data</code> is not a matrix, the desired number of rows</p>
+</td></tr>
+<tr valign="top"><td><code>ncol</code></td>
+<td>
+<p>when <code>data</code> is not a matrix, the desired number of columns</p>
+</td></tr>
+<tr valign="top"><td><code>byrow</code></td>
+<td>
+<p>logical.  If <code>FALSE</code> (the default) the matrix is
+filled by columns, otherwise the matrix is filled by rows.</p>
+</td></tr>
+<tr valign="top"><td><code>dimnames</code></td>
+<td>
+<p>a <code><a href="../../base/html/dimnames.html">dimnames</a></code> attribute for the matrix: a
+<code>list</code> of two character components.  They are set if not
+<code><a href="../../base/html/NULL.html">NULL</a></code> (as per default).</p>
+</td></tr>
+<tr valign="top"><td><code>sparse</code></td>
+<td>
+<p>logical or <code>NULL</code>, specifying if the result should
+be sparse or not.  By default, it is made sparse when more than half
+of the entries are 0.</p>
+</td></tr>
+<tr valign="top"><td><code>doDiag</code></td>
+<td>
+<p>logical indicating if a <code><a href="diagonalMatrix-class.html">diagonalMatrix</a></code>
+object should be returned when the resulting matrix is diagonal
+(<em>mathematically</em>).  As class <code><a href="diagonalMatrix-class.html">diagonalMatrix</a></code>
+<code><a href="../../methods/html/is.html">extends</a></code> <code><a href="sparseMatrix-class.html">sparseMatrix</a></code>, this is a
+natural default for all values of <code>sparse</code>.
+</p>
+<p>Otherwise, if <code>doDiag</code> is false, a dense or sparse (depending on
+<code>sparse</code>) <em>symmetric</em> matrix will be returned.</p>
+</td></tr>
+<tr valign="top"><td><code>forceCheck</code></td>
+<td>
+<p>logical indicating if the checks for structure
+should even happen when <code>data</code> is already a <code>"Matrix"</code>
+object.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If either of <code>nrow</code> or <code>ncol</code> is not given, an attempt is
+made to infer it from the length of <code>data</code> and the other
+parameter.
+Further, <code>Matrix()</code> makes efforts to keep <code><a href="../../base/html/logical.html">logical</a></code>
+matrices logical, i.e., inheriting from class <code><a href="dMatrix-class.html">lMatrix</a></code>,
+and to determine specially structured matrices such as symmetric,
+triangular or diagonal ones.  Note that a <em>symmetric</em> matrix also
+needs symmetric <code><a href="../../base/html/dimnames.html">dimnames</a></code>, e.g., by specifying
+<code>dimnames = list(NULL,NULL)</code>, see the examples.
+</p>
+<p>Most of the time, the function works via a traditional (<em>full</em>)
+<code><a href="../../base/html/matrix.html">matrix</a></code>.  However, <code>Matrix(0, nrow,ncol)</code> directly
+constructs an &ldquo;empty&rdquo; <a href="sparseMatrix-class.html">sparseMatrix</a>, as does
+<code>Matrix(FALSE, *)</code>.
+</p>
+<p>Although it is sometime possible to mix unclassed matrices (created
+with <code>matrix</code>) with ones of class <code>"Matrix"</code>, it is much
+safer to always use carefully constructed ones of class
+<code>"Matrix"</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Returns matrix of a class that inherits from <code>"Matrix"</code>.
+Only if <code>data</code> is not a <code><a href="../../base/html/matrix.html">matrix</a></code> and does not already inherit
+from class <code><a href="Matrix-class.html">Matrix</a></code> are the arguments
+<code>nrow</code>, <code>ncol</code> and <code>byrow</code> made use of.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>The classes <code><a href="Matrix-class.html">Matrix</a></code>,
+<code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>,
+<code><a href="triangularMatrix-class.html">triangularMatrix</a></code>, and
+<code><a href="diagonalMatrix-class.html">diagonalMatrix</a></code>; further,
+<code><a href="../../base/html/matrix.html">matrix</a></code>.
+</p>
+<p>Special matrices can be constructed, e.g., via
+<code><a href="sparseMatrix.html">sparseMatrix</a></code> (sparse), <code><a href="bdiag.html">bdiag</a></code>
+(block-diagonal), <code><a href="bandSparse.html">bandSparse</a></code> (banded sparse), or
+<code><a href="Diagonal.html">Diagonal</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+Matrix(0, 3, 2)             # 3 by 2 matrix of zeros -&gt; sparse
+Matrix(0, 3, 2, sparse=FALSE)# -&gt; 'dense'
+
+## 4 cases - 3 different results :
+Matrix(0, 2, 2)              # diagonal !
+Matrix(0, 2, 2, sparse=FALSE)# (ditto)
+Matrix(0, 2, 2,               doDiag=FALSE)# -&gt; sparse symm. "dsCMatrix"
+Matrix(0, 2, 2, sparse=FALSE, doDiag=FALSE)# -&gt; dense  symm. "dsyMatrix"
+
+Matrix(1:6, 3, 2)           # a 3 by 2 matrix (+ integer warning)
+Matrix(1:6 + 1, nrow=3)
+
+## logical ones:
+Matrix(diag(4) &gt;  0) # -&gt; "ldiMatrix" with diag = "U"
+Matrix(diag(4) &gt;  0, sparse=TRUE) #  (ditto)
+Matrix(diag(4) &gt;= 0) # -&gt; "lsyMatrix" (of all 'TRUE')
+## triangular
+l3 &lt;- upper.tri(matrix(,3,3))
+(M &lt;- Matrix(l3))   # -&gt; "ltCMatrix"
+Matrix(! l3)        # -&gt; "ltrMatrix"
+as(l3, "CsparseMatrix")# "lgCMatrix"
+
+Matrix(1:9, nrow=3,
+       dimnames = list(c("a", "b", "c"), c("A", "B", "C")))
+(I3 &lt;- Matrix(diag(3)))# identity, i.e., unit "diagonalMatrix"
+str(I3) # note  'diag = "U"' and the empty 'x' slot
+
+(A &lt;- cbind(a=c(2,1), b=1:2))# symmetric *apart* from dimnames
+Matrix(A)                    # hence 'dgeMatrix'
+(As &lt;- Matrix(A, dimnames = list(NULL,NULL)))# -&gt; symmetric
+forceSymmetric(A) # also symmetric, w/ symm. dimnames
+stopifnot(is(As, "symmetricMatrix"),
+          is(Matrix(0, 3,3), "sparseMatrix"),
+          is(Matrix(FALSE, 1,1), "sparseMatrix"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

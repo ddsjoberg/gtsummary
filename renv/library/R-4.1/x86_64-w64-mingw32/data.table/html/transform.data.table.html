@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Data table utilities</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for transform.data.table {data.table}"><tr><td>transform.data.table {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2> Data table utilities </h2>
+
+<h3>Description</h3>
+
+<p>Utilities for <code>data.table</code> transformation.
+</p>
+<p><strong><code>transform</code> by group is particularly slow. Please use <code>:=</code> by group instead.</strong>
+</p>
+<p><code>within</code>, <code>transform</code> and other similar functions in <code>data.table</code> are not just provided for users who expect them to work, but for non-data.table-aware packages to retain keys, for example. Hopefully the (much) faster and more convenient <code>data.table</code> syntax will be used in time. See examples.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+## S3 method for class 'data.table'
+transform(`_data`, ...)
+## S3 method for class 'data.table'
+within(data, expr, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data, _data</code></td>
+<td>
+<p> data.table to be transformed.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p> for <code>transform</code>, Further arguments of the form
+<code>tag=value</code>. Ignored for <code>within</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>expr</code></td>
+<td>
+<p> expression to be evaluated within the data.table.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>within</code> is like <code>with</code>, but modifications (columns changed,
+added, or removed) are updated in the returned data.table.
+</p>
+<p>Note that <code>transform</code> will keep the key of the
+<code>data.table</code> provided the <em>targets</em> of the transform (i.e. the
+columns that appear in ...) are not in the key of the data.table.
+<code>within</code> also retains the key provided the key columns are not <em>touched</em>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The modified value of a copy of <code>data</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+ <p><code><a href="../../base/help/transform.html">transform</a></code>, <code><a href="../../base/help/with.html">within</a></code> and <code><a href="../../data.table/help/:=.html">:=</a></code> </p>
+
+
+<h3>Examples</h3>
+
+<pre>
+DT &lt;- data.table(a=rep(1:3, each=2), b=1:6)
+
+DT2 &lt;- transform(DT, c = a^2)
+DT[, c:=a^2]
+identical(DT,DT2)
+
+DT2 &lt;- within(DT, {
+  b &lt;- rev(b)
+  c &lt;- a*2
+  rm(a)
+})
+DT[,`:=`(b = rev(b),
+         c = a*2,
+         a = NULL)]
+identical(DT,DT2)
+
+DT$d = ave(DT$b, DT$c, FUN=max)               # copies entire DT, even if it is 10GB in RAM
+DT = DT[, transform(.SD, d=max(b)), by="c"]   # same, but even worse as .SD is copied for each group
+DT[, d:=max(b), by="c"]                       # same result, but much faster, shorter and scales
+
+# Multiple update by group. Convenient, fast, scales and easy to read.
+DT[, `:=`(minb = min(b),
+          meanb = mean(b),
+          bplusd = sum(b+d)),  by=c%/%5]
+DT
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

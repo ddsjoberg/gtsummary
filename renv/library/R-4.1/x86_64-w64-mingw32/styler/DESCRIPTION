@@ -1,0 +1,50 @@
+Type: Package
+Package: styler
+Title: Non-Invasive Pretty Printing of R Code
+Version: 1.4.1
+Authors@R: 
+    c(person(given = "Kirill",
+             family = "Müller",
+             role = "aut",
+             email = "krlmlr+r@mailbox.org"),
+      person(given = "Lorenz",
+             family = "Walthert",
+             role = c("cre", "aut"),
+             email = "lorenz.walthert@icloud.com"))
+Description: Pretty-prints R code without changing the user's formatting
+    intent.
+License: MIT + file LICENSE
+URL: https://github.com/r-lib/styler, https://styler.r-lib.org
+BugReports: https://github.com/r-lib/styler/issues
+Imports: backports (>= 1.1.0), cli (>= 1.1.0), magrittr (>= 2.0.0),
+        purrr (>= 0.2.3), R.cache (>= 0.14.0), rematch2 (>= 2.0.1),
+        rlang (>= 0.1.1), rprojroot (>= 1.1), tibble (>= 1.4.2), tools,
+        withr (>= 1.0.0), xfun (>= 0.1)
+Suggests: data.tree (>= 0.1.6), digest, dplyr, here, knitr, prettycode,
+        rmarkdown, roxygen2, rstudioapi (>= 0.7), testthat (>= 2.1.0)
+VignetteBuilder: knitr
+Encoding: UTF-8
+RoxygenNote: 7.1.1.9001
+Collate: 'addins.R' 'communicate.R' 'compat-dplyr.R' 'compat-tidyr.R'
+        'detect-alignment-utils.R' 'detect-alignment.R'
+        'environments.R' 'expr-is.R' 'indent.R' 'initialize.R' 'io.R'
+        'nest.R' 'nested-to-tree.R' 'parse.R' 'reindent.R'
+        'token-define.R' 'relevel.R' 'roxygen-examples-add-remove.R'
+        'roxygen-examples-find.R' 'roxygen-examples-parse.R'
+        'roxygen-examples.R' 'rules-indention.R' 'rules-line-breaks.R'
+        'rules-spaces.R' 'rules-tokens.R' 'serialize.R'
+        'set-assert-args.R' 'style-guides.R' 'styler.R'
+        'stylerignore.R' 'testing-mocks.R' 'testing-public-api.R'
+        'ui-caching.R' 'testing.R' 'token-create.R' 'transform-block.R'
+        'transform-code.R' 'transform-files.R' 'ui-styling.R'
+        'unindent.R' 'utils-cache.R' 'utils-files.R'
+        'utils-navigate-nest.R' 'utils-strings.R' 'utils.R'
+        'vertical.R' 'visit.R' 'zzz.R'
+NeedsCompilation: no
+Packaged: 2021-03-30 11:24:26 UTC; lorenz
+Author: Kirill Müller [aut],
+  Lorenz Walthert [cre, aut]
+Maintainer: Lorenz Walthert <lorenz.walthert@icloud.com>
+Repository: CRAN
+Date/Publication: 2021-03-30 16:10:02 UTC
+Built: R 4.1.0; ; 2021-06-12 15:43:30 UTC; windows

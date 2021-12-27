@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Add header rows variables with several terms</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tidy_add_header_rows {broom.helpers}"><tr><td>tidy_add_header_rows {broom.helpers}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Add header rows variables with several terms</h2>
+
+<h3>Description</h3>
+
+<p>For variables with several terms (usually categorical variables but
+could also be the case of continuous variables with polynomial terms
+or splines), <code>tidy_add_header_rows()</code> will add an additional row
+per variable, where <code>label</code> will be equal to <code>var_label</code>.
+These additional rows could be identified with <code>header_row</code> column.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tidy_add_header_rows(
+  x,
+  show_single_row = NULL,
+  model = tidy_get_model(x),
+  quiet = FALSE,
+  strict = FALSE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a tidy tibble</p>
+</td></tr>
+<tr valign="top"><td><code>show_single_row</code></td>
+<td>
+<p>a vector indicating the names of binary
+variables that should be displayed on a single row.
+Accepts <a href="../../dplyr/help/select.html">tidyselect</a> syntax. Default is <code>NULL</code>.
+See also <code><a href="../../broom.helpers/help/all_dichotomous.html">all_dichotomous()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>model</code></td>
+<td>
+<p>the corresponding model, if not attached to <code>x</code></p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>logical argument whether broom.helpers should not return a message
+when requested output cannot be generated. Default is FALSE</p>
+</td></tr>
+<tr valign="top"><td><code>strict</code></td>
+<td>
+<p>logical argument whether broom.helpers should return an error
+when requested output cannot be generated. Default is FALSE</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The <code>show_single_row</code> argument allows to specify a list
+of dichotomous variables that should be displayed on a single row
+instead of two rows.
+</p>
+<p>The added <code>header_row</code> column will be equal to:
+</p>
+
+<ul>
+<li> <p><code>TRUE</code> for an header row;
+</p>
+</li>
+<li> <p><code>FALSE</code> for a normal row of a variable with an header row;
+</p>
+</li>
+<li> <p><code>NA</code> for variables without an header row.
+</p>
+</li></ul>
+
+<p>If the <code>label</code> column is not yet available in <code>x</code>,
+<code><a href="../../broom.helpers/help/tidy_add_term_labels.html">tidy_add_term_labels()</a></code> will be automatically applied.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other tidy_helpers: 
+<code><a href="../../broom.helpers/help/tidy_add_coefficients_type.html">tidy_add_coefficients_type</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_contrasts.html">tidy_add_contrasts</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_estimate_to_reference_rows.html">tidy_add_estimate_to_reference_rows</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_n.html">tidy_add_n</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_reference_rows.html">tidy_add_reference_rows</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_term_labels.html">tidy_add_term_labels</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_add_variable_labels.html">tidy_add_variable_labels</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_attach_model.html">tidy_attach_model</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_disambiguate_terms.html">tidy_disambiguate_terms</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_identify_variables.html">tidy_identify_variables</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_plus_plus.html">tidy_plus_plus</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_remove_intercept.html">tidy_remove_intercept</a>()</code>,
+<code><a href="../../broom.helpers/help/tidy_select_variables.html">tidy_select_variables</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+df &lt;- Titanic %&gt;%
+  dplyr::as_tibble() %&gt;%
+  dplyr::mutate(Survived = factor(Survived, c("No", "Yes")))
+
+res &lt;- df %&gt;%
+  glm(
+    Survived ~ Class + Age + Sex,
+    data = ., weights = .$n, family = binomial,
+    contrasts = list(Age = contr.sum, Class = "contr.SAS")
+  ) %&gt;%
+  tidy_and_attach() %&gt;%
+  tidy_add_variable_labels(labels = list(Class = "Custom label for Class")) %&gt;%
+  tidy_add_reference_rows()
+res %&gt;% tidy_add_header_rows()
+res %&gt;% tidy_add_header_rows(show_single_row = all_dichotomous())
+
+if (requireNamespace("gtsummary")) {
+  glm(
+    response ~ stage + grade * trt,
+    gtsummary::trial,
+    family = binomial,
+    contrasts = list(
+      stage = contr.treatment(4, base = 3),
+      grade = contr.treatment(3, base = 2),
+      trt = contr.treatment(2, base = 2)
+    )
+  ) %&gt;%
+    tidy_and_attach() %&gt;%
+    tidy_add_reference_rows() %&gt;%
+    tidy_add_header_rows()
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>broom.helpers</em> version 1.3.0.9001 <a href="00Index.html">Index</a>]</div>
+</body></html>

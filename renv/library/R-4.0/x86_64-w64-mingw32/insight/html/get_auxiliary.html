@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get auxiliary parameters from models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_auxiliary {insight}"><tr><td>get_auxiliary {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get auxiliary parameters from models</h2>
+
+<h3>Description</h3>
+
+<p>Returns the requested auxiliary parameters from models, like
+dispersion, sigma, or beta...
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_auxiliary(
+  x,
+  type = "sigma",
+  summary = TRUE,
+  centrality = "mean",
+  verbose = TRUE,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A model.</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>The name of the auxiliary parameter that should be retrieved.
+<code>"sigma"</code> is available for most models, <code>"dispersion"</code> for models
+of class <code>glm</code>, <code>glmerMod</code> or <code>glmmTMB</code> as well as <code>brmsfit</code>.
+<code>"beta"</code> and other parameters are currently only returned for <code>brmsfit</code>
+models. See 'Details'.</p>
+</td></tr>
+<tr valign="top"><td><code>summary</code></td>
+<td>
+<p>Logical, indicates whether the full posterior samples
+(<code>summary = FALSE</code>)) or the summarized centrality indices of
+the posterior samples (<code>summary = TRUE</code>)) should be returned as
+estimates.</p>
+</td></tr>
+<tr valign="top"><td><code>centrality</code></td>
+<td>
+<p>Only for models with posterior samples, and when
+<code>summary = TRUE</code>. In this case, <code>centrality = "mean"</code> would
+calculate means of posterior samples for each parameter, while
+<code>centrality = "median"</code> would use the more robust median value as
+measure of central tendency.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle warnings.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Currently, only sigma and the dispersion parameter are returned, and
+only for a limited set of models.
+</p>
+
+
+<h4>Sigma Parameter</h4>
+
+<p>See <code><a href="get_sigma.html">get_sigma</a></code>.
+</p>
+
+
+
+<h4>Dispersion Parameter</h4>
+
+<p>There are many different definitions of &quot;dispersion&quot;, depending on the context.
+<code>get_auxiliary()</code> returns the dispersion parameters that usually can
+be considered as variance-to-mean ratio for generalized (linear) mixed
+models. Exceptions are models of class <code>glmmTMB</code>, where the dispersion
+equals &sigma;<sup>2</sup>.
+In detail, the computation of the dispersion parameter for generalized linear
+models is the ratio of the sum of the squared working-residuals and the
+residual degrees of freedom. For mixed models of class <code>glmer</code>, the
+dispersion parameter is also called &phi;
+and is the ratio of the sum of the squared Pearson-residuals and the residual
+degrees of freedom. For models of class <code>glmmTMB</code>, dispersion is
+&sigma;<sup>2</sup>.
+</p>
+
+
+
+<h4><span class="pkg">brms</span> models</h4>
+
+<p>For models of class <code>brmsfit</code>, there are different options for the
+<code>type</code> argument. See a list of supported auxiliary parameters here:
+<code><a href="find_parameters.BGGM.html">find_parameters.BGGM</a></code>.
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>The requested auxiliary parameter, or <code>NULL</code> if this information
+could not be accessed.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# from ?glm
+clotting &lt;- data.frame(
+  u = c(5, 10, 15, 20, 30, 40, 60, 80, 100),
+  lot1 = c(118, 58, 42, 35, 27, 25, 21, 19, 18),
+  lot2 = c(69, 35, 26, 21, 18, 16, 13, 12, 12)
+)
+model &lt;- glm(lot1 ~ log(u), data = clotting, family = Gamma())
+get_auxiliary(model, type = "dispersion") # same as summary(model)$dispersion
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

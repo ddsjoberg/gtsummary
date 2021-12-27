@@ -1,0 +1,222 @@
+---
+title: "Frequently Asked Questions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Frequently Asked Questions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>",
+  eval     = FALSE
+)
+```
+
+
+## Why isn't my package being snapshotted into the lockfile?
+
+By default, `renv` uses the intersection of:
+
+1. Packages installed into your project library, and
+
+2. Packages which appear to be used in your project, as discovered by
+   `renv::dependencies()`,
+
+in determining which packages should enter the lockfile. The intention is that
+only the packages you truly require for your project should enter the lockfile;
+development dependencies (e.g. `devtools`) normally should not.
+
+If you find a package is not entering the lockfile, you can check the output of:
+
+```{r eval=FALSE}
+renv::dependencies()
+```
+
+and see whether usages of your package are reported in the output.
+
+Note that `renv`'s dependency discovery machinery relies on static analysis of
+your R code, and does not understand all of the different ways in which a
+package might be used in a project. For example, `renv` will detect the
+following usages:
+
+```{r eval=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+But it will be unable to detect these kinds of usages:
+
+```{r eval=FALSE}
+for (package in c("dplyr", "ggplot2")) {
+  library(package, character.only = TRUE)
+}
+```
+
+If you use a custom package loader in your project that `renv` could feasibly
+support, please feel free to [file a feature request](https://github.com/rstudio/renv/issues).
+
+
+### Capturing all dependencies
+
+If you'd instead prefer to capture _all_ packages installed into your project
+library (and eschew dependency discovery altogether), you can do so with:
+
+```{r eval=FALSE}
+renv::settings$snapshot.type("all")
+```
+
+Packages can also be explicitly ignored through a project setting, e.g. with:
+
+```{r eval=FALSE}
+renv::settings$ignored.packages("<package>")
+```
+
+You might also want to double-check the set of ignored packages
+(`renv::settings$ignored.packages()`) and confirm that you aren't
+unintentionally ignoring a package you actually require.
+
+See the documentation in `?snapshot` for more details.
+
+
+### Capturing explicit dependencies
+
+If you'd like to explicitly declare which packages your project depends on,
+you can do so by telling `renv` to form "explicit" snapshots:
+
+```{r eval=FALSE}
+renv::settings$snapshot.type("explicit")
+```
+
+In this mode, `renv` will only include packages which are explicitly listed
+in the project's `DESCRIPTION` file as dependencies.
+
+
+## How should I handle development dependencies?
+
+This is related to the above question: by design, `renv.lock` normally only
+captures build-time or deploy-time dependencies; it may not capture the packages
+that you use in iterative workflows (e.g. `devtools`). However, you may want
+some way of still ensuring these development dependencies get installed when
+trying to restore a project library.
+
+For cases like these, we recommend tracking these packages in a project
+DESCRIPTION file; typically, within the `Suggests:` field. Then, you can
+execute:
+
+```{r eval=FALSE}
+renv::install()
+```
+
+to request that `renv` install the packages as described in the DESCRIPTION
+file. In addition, the `Remotes:` fields will be parsed and used, to ensure
+packages are installed from their declared remote source as appropriate.
+
+
+## I'm returning to an older renv project. What do I do?
+
+Suppose you were using `renv` to manage an older project's dependencies. You
+have an older lockfile, capturing the dependencies in use when you were last
+working with that project. You now need to resume work on this project --
+what do you do?
+
+The answer depends on how exactly you want to use the project. Do you want
+to treat it as a "time capsule", with dependencies frozen in time? Or are
+the dependencies in this project fluid, and you are primarily using `renv`
+just for isolation of project dependencies?
+
+For time capsules, the solution is to use `renv::restore()` to reinstall the
+exact packages as declared in the project lockfile `renv.lock`. You may also
+need to find and install the older version of R used previously with that
+project, unless your intention is to upgrade R.
+
+For projects with fluid dependencies, one solution is to use `renv::init()`
+to re-initialize the project with a brand new project library. When
+`renv::init()` is invoked, you may see a question such as:
+
+```
+> renv::init()
+This project already has a lockfile. What would you like to do?
+
+1: Restore the project from the lockfile.
+2: Discard the lockfile and re-initialize the project.
+3: Activate the project without snapshotting or installing any packages.
+4: Abort project initialization.
+```
+
+You can select option (2) to instruct `renv` to re-initialize the project,
+effectively discarding the old lockfile and initializing the project with a new
+project library. You may also want to call `renv::upgrade()` to ensure all
+packages in the new project library are updated to the latest-available
+versions, as well.
+
+If you prefer a more managed approach, you might also consider the following
+approach:
+
+1. Use `renv::restore()` to restore the project state as defined in the
+   lockfile,
+
+2. Install and update packages deliberately, e.g. via `renv::install()`,
+   `install.packages()`, or other relevant tools,
+
+3. Call `renv::snapshot()` after you've finished updating the requisite
+   packages, to generate a new lockfile.
+
+
+## Why aren't packages installed in the system library visible in my renv projects?
+
+By default, `renv` generates a "sandboxed" version of the system library,
+containing only the base set of packages normally bundled and distributed with
+R. If you'd prefer that packages installed into the system library remain
+visible to `renv` projects, you can set:
+
+```{r eval=FALSE}
+RENV_CONFIG_SANDBOX_ENABLED = FALSE
+```
+
+in an appropriate `.Renviron` file. See the entry for
+`renv.config.sandbox.enabled` in `?renv::config` for more details.
+
+
+## Why are package downloads failing?
+
+Some issues ultimately boil down to a lack of connectivity between your machine
+and the R package repositories and remote sources you are trying to use. If
+you are working in a corporate environment, it may be worth confirming whether
+you have a corporate proxy in place inhibiting internet access, or whether R
+and `renv` need to be configured in a way compatible with your working
+environment. This is often true on Windows machines in enterprise environments,
+where the default "wininet" download method may work more reliably than others.
+
+Note that by default `renv` attempts to use the `curl` command line utility
+in order to download files and communicate with remote web services. This is
+done to enable authentication with private web services (e.g. private
+GitHub repositories).
+
+If you find that downloads work outside of `renv` projects, but not within
+`renv` projects, you may need to tell `renv` to use the same download file
+method that R has been configured to use. You can check which download method
+R is currently configured to use with:
+
+```{r eval=FALSE}
+getOption("download.file.method")
+```
+
+And the downloader currently used by `renv` can be queried with:
+
+```{r eval=FALSE}
+renv:::renv_download_method()
+```
+
+You can force `renv` to use the same download method as R by setting:
+
+```{r eval=FALSE}
+Sys.setenv(RENV_DOWNLOAD_FILE_METHOD = getOption("download.file.method"))
+```
+
+and, if necessary, you could also set this environment variable within e.g. your
+`~/.Renviron`, so that it is visible to all R sessions. See `?Startup` for more
+details.
+

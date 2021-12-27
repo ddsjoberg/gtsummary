@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Legacy name repair</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tidyr_legacy {tidyr}"><tr><td>tidyr_legacy {tidyr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Legacy name repair</h2>
+
+<h3>Description</h3>
+
+<p>Ensures all column names are unique using the approach found in
+tidyr 0.8.3 and earlier. Only use this function if you want to preserve
+the naming strategy, otherwise you're better off adopting the new
+tidyverse standard with <code>name_repair = "universal"</code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tidyr_legacy(nms, prefix = "V", sep = "")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>prefix</code></td>
+<td>
+<p>prefix Prefix to use for unnamed column</p>
+</td></tr>
+<tr valign="top"><td><code>sep</code></td>
+<td>
+<p>Separator to use between name and unique suffix</p>
+</td></tr>
+<tr valign="top"><td><code>nm</code></td>
+<td>
+<p>Character vector of names</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+df &lt;- tibble(x = 1:2, y = list(tibble(x = 3:5), tibble(x = 4:7)))
+
+# Doesn't work because it would produce a data frame with two
+# columns called x
+## Not run: unnest(df, y)
+
+# The new tidyverse standard:
+unnest(df, y, names_repair = "universal")
+
+# The old tidyr approach
+unnest(df, y, names_repair = tidyr_legacy)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>tidyr</em> version 1.1.4 <a href="00Index.html">Index</a>]</div>
+</body></html>

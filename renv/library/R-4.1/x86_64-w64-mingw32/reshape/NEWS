@@ -1,0 +1,51 @@
+Reshape 0.8.8 ------------------------------------------------
+
+* fix outstanding R CMD check problems
+
+Reshape 0.8.7 ------------------------------------------------
+
+* fix outstanding R CMD check problems
+
+Reshape 0.8.6 ------------------------------------------------
+
+* fix outstanding R CMD check problems
+
+Reshape 0.8.5 ---------------------------------------------------
+
+* fix outstanding R CMD check problems
+
+Reshape 0.8.4 ---------------------------------------------------
+
+* fix spelling mistake (indicies -> indices), thanks to Stavros Macrakis
+
+Reshape 0.8.3 (2009-04-27) ---------------------------------------------------
+
+* better rename example
+* When removing missing values in melt, look only at measured variables, not id variables
+* Fixes to documentation bugs revealed by new parser
+
+Reshape 0.8.2 (2008-11-04) --------------------------
+
+  * fixed bug where missing fill values where not getting correctly filled
+
+  * fill value defaults to fun.aggregate applied to zero-length vector.  This produces better values in a wide variety of situations, for example missings will be filled with 0's when length or sum is used.  This may require setting fill = NA for aggregation functions that previously return NA, like sd and var.
+
+
+Reshape 0.8.1 (2008-05-01) --------------------------
+
+Melt
+
+  * character dimension names are processed by type.convert
+  * by default, treat character and factor variables as id variables (i.e. integer variables no longer default to being id vars)
+  * ... now passed on to melt in melt.list (thanks to Charles Naylor)
+
+Cast
+
+  * missing values in subsetting are now correctly dropped to match behaviour of subset()
+  * tweaks to cast and recast to make it easier to pass in formulas created elsewhere
+  * allow user to specify column used for values, guessing if necessary, and giving a warning message if value column does not exist
+  * improve error messages when melt or casting parameters incorrectly specified
+
+General
+
+  * now depends on the new plyr package for many of the workhorse functions

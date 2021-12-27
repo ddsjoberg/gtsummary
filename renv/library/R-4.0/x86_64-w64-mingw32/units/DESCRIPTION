@@ -1,0 +1,43 @@
+Package: units
+Version: 0.7-1
+Title: Measurement Units for R Vectors
+Authors@R: c(person("Edzer", "Pebesma", role = c("aut", "cre"), email = "edzer.pebesma@uni-muenster.de", comment = c(ORCID = "0000-0001-8049-7069")),
+    person("Thomas", "Mailund", role = "aut", email = "mailund@birc.au.dk"),
+    person("Tomasz", "Kalinowski", role = "aut"),
+    person("James", "Hiebert", role = "ctb"),
+    person("Iñaki", "Ucar", role = "aut", email = "iucar@fedoraproject.org", comment = c(ORCID = "0000-0001-6403-5550"))
+    )
+Depends: R (>= 3.0.2)
+Imports: Rcpp
+LinkingTo: Rcpp (>= 0.12.10)
+Suggests: udunits2, NISTunits, measurements, xml2, magrittr, pillar (>=
+        1.3.0), dplyr (>= 1.0.0), vctrs (>= 0.3.1), knitr, testthat,
+        ggforce, rmarkdown
+VignetteBuilder: knitr
+Description: Support for measurement units in R vectors, matrices
+    and arrays: automatic propagation, conversion, derivation
+    and simplification of units; raising errors in case of unit
+    incompatibility. Compatible with the POSIXct, Date and difftime 
+    classes. Uses the UNIDATA udunits library and unit database for 
+    unit compatibility checking and conversion.
+    Documentation about 'units' is provided in the paper by Pebesma, Mailund &
+    Hiebert (2016, <doi:10.32614/RJ-2016-061>), included in this package as a
+    vignette; see 'citation("units")' for details.
+SystemRequirements: udunits-2
+License: GPL-2
+URL: https://github.com/r-quantities/units/
+BugReports: https://github.com/r-quantities/units/issues/
+RoxygenNote: 7.1.1
+Encoding: UTF-8
+NeedsCompilation: yes
+Packaged: 2021-03-11 11:58:14 UTC; edzer
+Author: Edzer Pebesma [aut, cre] (<https://orcid.org/0000-0001-8049-7069>),
+  Thomas Mailund [aut],
+  Tomasz Kalinowski [aut],
+  James Hiebert [ctb],
+  Iñaki Ucar [aut] (<https://orcid.org/0000-0001-6403-5550>)
+Maintainer: Edzer Pebesma <edzer.pebesma@uni-muenster.de>
+Repository: CRAN
+Date/Publication: 2021-03-16 13:40:02 UTC
+Built: R 4.0.5; x86_64-w64-mingw32; 2021-05-07 14:56:22 UTC; windows
+Archs: i386, x64

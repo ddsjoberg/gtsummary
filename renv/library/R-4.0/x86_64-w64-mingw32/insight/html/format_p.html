@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: p-values formatting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for format_p {insight}"><tr><td>format_p {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>p-values formatting</h2>
+
+<h3>Description</h3>
+
+<p>Format p-values.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+format_p(
+  p,
+  stars = FALSE,
+  stars_only = FALSE,
+  name = "p",
+  missing = "",
+  digits = 3,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>p</code></td>
+<td>
+<p>value or vector of p-values.</p>
+</td></tr>
+<tr valign="top"><td><code>stars</code></td>
+<td>
+<p>Add significance stars (e.g., p &lt; .001***).</p>
+</td></tr>
+<tr valign="top"><td><code>stars_only</code></td>
+<td>
+<p>Return only significance stars.</p>
+</td></tr>
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p>Name prefixing the text. Can be <code>NULL</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>missing</code></td>
+<td>
+<p>Value by which <code>NA</code> values are replaced. By default, an
+empty string (i.e. <code>""</code>) is returned for <code>NA</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>Number of significant digits. May also be <code>"scientific"</code>
+to return exact p-values in scientific notation, or <code>"apa"</code> to use
+an APA-style for p-values (e.g., p &lt; .01, p &lt; .05, etc.). If
+<code>"scientific"</code>, control the number of digits by adding the value as
+suffix, e.g. <code>digits = "scientific4"</code> to have scientific notation
+with 4 decimal places.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A formatted string.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+format_p(c(.02, .065, 0, .23))
+format_p(c(.02, .065, 0, .23), name = NULL)
+format_p(c(.02, .065, 0, .23), stars_only = TRUE)
+
+model &lt;- lm(mpg ~ wt + cyl, data = mtcars)
+p &lt;- coef(summary(model))[, 4]
+format_p(p, digits = "apa")
+format_p(p, digits = "scientific")
+format_p(p, digits = "scientific2")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

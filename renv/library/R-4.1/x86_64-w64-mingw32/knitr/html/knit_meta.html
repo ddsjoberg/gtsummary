@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Metadata about objects to be printed</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for knit_meta {knitr}"><tr><td>knit_meta {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Metadata about objects to be printed</h2>
+
+<h3>Description</h3>
+
+<p>As an object is printed, <span class="pkg">knitr</span> will collect metadata about it (if
+available). After knitting is done, all the metadata is accessible via this
+function. You can manually add metadata to the <span class="pkg">knitr</span> session via
+<code>knit_meta_add()</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+knit_meta(class = NULL, clean = TRUE)
+
+knit_meta_add(meta, label = "")
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>class</code></td>
+<td>
+<p>Optionally return only metadata entries that inherit from the
+specified class. The default, <code>NULL</code>, returns all entries.</p>
+</td></tr>
+<tr valign="top"><td><code>clean</code></td>
+<td>
+<p>Whether to clean the collected metadata. By default, the
+metadata stored in <span class="pkg">knitr</span> is cleaned up once retrieved, because we may
+not want the metadata to be passed to the next <code>knit()</code> call; to be
+defensive (i.e. not to have carryover metadata), you can call
+<code>knit_meta()</code> before <code>knit()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>meta</code></td>
+<td>
+<p>A metadata object to be added to the session.</p>
+</td></tr>
+<tr valign="top"><td><code>label</code></td>
+<td>
+<p>A chunk label to indicate which chunk the metadata belongs to.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code>knit_meta()</code> returns the matched metadata specified by
+<code>class</code>; <code>knit_meta_add()</code> returns all current metadata.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

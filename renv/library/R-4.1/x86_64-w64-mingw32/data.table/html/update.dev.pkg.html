@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Perform update of development version of a package</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for update.dev.pkg {data.table}"><tr><td>update.dev.pkg {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Perform update of development version of a package</h2>
+
+<h3>Description</h3>
+
+<p>It will download and install package from devel repository only when new commit is available there, otherwise only PACKAGES file is transferred. Defaults are set to update <code>data.table</code>, other packages can be used as well. Their repository has to include git commit information in PACKAGES file.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>## S3 method for class 'dev.pkg'
+update(object="data.table",
+       repo="https://Rdatatable.gitlab.io/data.table",
+       field="Revision", type=getOption("pkgType"), lib=NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>object</code></td>
+<td>
+<p> character scalar, package name. </p>
+</td></tr>
+<tr valign="top"><td><code>repo</code></td>
+<td>
+<p> character scalar, url of package devel repository. </p>
+</td></tr>
+<tr valign="top"><td><code>field</code></td>
+<td>
+<p> character scalar, metadata field to use in PACKAGES file and
+DESCRIPTION file, default <code>"Revision"</code>. </p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p> character scalar, default <code>getOption("pkgType")</code>, used
+to define if package has to be installed from sources, binaries or both. </p>
+</td></tr>
+<tr valign="top"><td><code>lib</code></td>
+<td>
+<p> character scalar, library location where package is meant to
+be upgraded. </p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p> passed to <code><a href="../../utils/help/install.packages.html">install.packages</a></code>. </p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>In case if a devel repository does not provide binaries user will need development tools installed for package compilation, like <em>Rtools</em> on Windows, and eventually set <code>type="source"</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>NULL.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Package namespace is unloaded before attempting to install newer version.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../data.table/help/data.table.html">data.table</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+  # data.table::update.dev.pkg()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Display last deprecation warnings</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for last_lifecycle_warnings {lifecycle}"><tr><td>last_lifecycle_warnings {lifecycle}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Display last deprecation warnings</h2>
+
+<h3>Description</h3>
+
+<p><code>last_lifecycle_warnings()</code> returns a list of all warnings that
+occurred during the last top-level R command, along with a
+backtrace.
+</p>
+<p>Use <code>print(last_lifecycle_warnings(), simplify = level)</code> to control
+the verbosity of the backtrace. The <code>simplify</code> argument supports
+one of <code>"branch"</code> (the default), <code>"collapse"</code>, and <code>"none"</code> (in
+increasing order of verbosity).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+last_lifecycle_warnings()
+</pre>
+
+
+<h3>Examples</h3>
+
+<pre>
+# These examples are not run because `last_lifecycle_warnings()` does not
+# work well within knitr and pkgdown
+## Not run: 
+
+f &lt;- function() invisible(g())
+g &lt;- function() list(h(), i())
+h &lt;- function() deprecate_warn("1.0.0", "this()")
+i &lt;- function() deprecate_warn("1.0.0", "that()")
+f()
+
+# Print all the warnings that occurred during the last command:
+last_lifecycle_warnings()
+
+
+# By default, the backtraces are printed in their simplified form.
+# Use `simplify` to control the verbosity:
+print(last_lifecycle_warnings(), simplify = "none")
+
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>lifecycle</em> version 1.0.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

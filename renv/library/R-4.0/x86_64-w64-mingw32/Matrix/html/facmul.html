@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Multiplication by Decomposition Factors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for facmul {Matrix}"><tr><td>facmul {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Multiplication by Decomposition Factors</h2>
+
+<h3>Description</h3>
+
+<p>Performs multiplication by factors for certain decompositions (and
+allows explicit formation of those factors).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+facmul(x, factor, y, transpose, left, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>a matrix decomposition. 
+No missing values or IEEE special values are allowed.
+</p>
+</td></tr>
+<tr valign="top"><td><code>factor</code></td>
+<td>
+
+<p>an indicator for selecting a particular factor for multiplication.
+</p>
+</td></tr>
+<tr valign="top"><td><code>y</code></td>
+<td>
+
+<p>a matrix or vector to be multiplied by the factor or its transpose.
+No missing values or IEEE special values are allowed.
+</p>
+</td></tr>
+<tr valign="top"><td><code>transpose</code></td>
+<td>
+
+<p>a logical value.  When <code>FALSE</code> (the default) the factor is
+applied.  When <code>TRUE</code> the transpose of the factor is applied.
+</p>
+</td></tr>
+<tr valign="top"><td><code>left</code></td>
+<td>
+
+<p>a logical value.  When <code>TRUE</code> (the default) the factor is
+applied from the left.  When <code>FALSE</code> the factor is applied
+from the right.
+</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+
+<p>the method for <code>"qr.Matrix"</code> has additional arguments.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>the product of the selected factor (or its transpose) and <code>y</code>
+</p>
+
+
+<h3>NOTE</h3>
+
+<p>Factors for decompositions such as <code>lu</code> and <code>qr</code> can be
+stored in a compact form.
+The function <code>facmul</code> allows multiplication without explicit
+formation of the factors, saving both storage and operations.
+</p>
+
+
+<h3>References</h3>
+
+<p>Golub, G., and Van Loan, C. F. (1989).
+<em>Matrix Computations,</em>
+2nd edition, Johns Hopkins, Baltimore.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(Matrix)
+x &lt;- Matrix(rnorm(9), 3, 3)
+## Not run: 
+qrx &lt;- qr(x)                      # QR factorization of x
+y &lt;- rnorm(3)
+facmul( qr(x), factor = "Q", y)   # form Q y
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

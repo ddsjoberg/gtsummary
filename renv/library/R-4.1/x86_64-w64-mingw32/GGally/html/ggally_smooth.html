@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Scatter plot with a smoothed line</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggally_smooth {GGally}"><tr><td>ggally_smooth {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Scatter plot with a smoothed line</h2>
+
+<h3>Description</h3>
+
+<p>Add a smoothed condition mean with a given scatter plot.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggally_smooth(
+  data,
+  mapping,
+  ...,
+  method = "lm",
+  formula = y ~ x,
+  se = TRUE,
+  shrink = TRUE
+)
+
+ggally_smooth_loess(data, mapping, ...)
+
+ggally_smooth_lm(data, mapping, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data set using</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>aesthetics being used</p>
+</td></tr>
+<tr valign="top"><td><code>method, se</code></td>
+<td>
+<p>parameters supplied to <code><a href="../../ggplot2/help/geom_smooth.html">geom_smooth</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>formula, ...</code></td>
+<td>
+<p>other arguments to add to geom_smooth</p>
+</td></tr>
+<tr valign="top"><td><code>shrink</code></td>
+<td>
+<p>boolean to determine if y range is reduced to range of points or points and error ribbon</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Y limits are reduced to match original Y range with the goal of keeping the Y axis the same across plots.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Barret Schloerke
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+data(tips, package = "reshape")
+p_(ggally_smooth(tips, mapping = ggplot2::aes(x = total_bill, y = tip)))
+p_(ggally_smooth(tips, mapping = ggplot2::aes_string(x = "total_bill", y = "tip")))
+p_(ggally_smooth(tips, mapping = ggplot2::aes_string(x = "total_bill", y = "tip", color = "sex")))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

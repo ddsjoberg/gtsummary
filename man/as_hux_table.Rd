@@ -56,7 +56,7 @@ Any one of these commands may be omitted using the \verb{include=} argument.
 }
 
 \examples{
-\dontshow{if (assert_package("huxtable", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("huxtable", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 trial \%>\%
   dplyr::select(trt, age, grade) \%>\%
   tbl_summary(by = trt) \%>\%

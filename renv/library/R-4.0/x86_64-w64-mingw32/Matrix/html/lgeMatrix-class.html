@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;lgeMatrix&quot; of General Dense Logical Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for lgeMatrix-class {Matrix}"><tr><td>lgeMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;lgeMatrix&quot; of General Dense Logical Matrices</h2>
+
+<h3>Description</h3>
+
+<p>This is the class of general dense <code><a href="../../base/html/logical.html">logical</a></code>
+matrices.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>x</code>:</dt><dd><p>Object of class <code>"logical"</code>. The logical
+values that constitute the matrix, stored in column-major order.</p>
+</dd>
+<dt><code>Dim</code>,<code>Dimnames</code>:</dt><dd><p>The dimension (a length-2
+<code>"integer"</code>) and corresponding names (or <code>NULL</code>), see the
+<code><a href="Matrix-class.html">Matrix</a></code> class.</p>
+</dd>
+<dt><code>factors</code>:</dt><dd><p>Object of class <code>"list"</code>.  A named
+list of factorizations that have been computed for the matrix.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"ldenseMatrix"</code>, directly.
+Class <code>"lMatrix"</code>, by class <code>"ldenseMatrix"</code>.
+Class <code>"denseMatrix"</code>, by class <code>"ldenseMatrix"</code>.
+Class <code>"Matrix"</code>, by class <code>"ldenseMatrix"</code>.
+Class <code>"Matrix"</code>, by class <code>"ldenseMatrix"</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>Currently, mainly <code><a href="../../base/html/t.html">t</a>()</code> and coercion methods (for
+<code><a href="../../methods/html/as.html">as</a>(.)</code>); use, e.g.,
+<code><a href="../../methods/html/showMethods.html">showMethods</a>(class="lgeMatrix")</code> for details.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Non-general logical dense matrix classes such as
+<code><a href="ltrMatrix-class.html">ltrMatrix</a></code>, or <code><a href="lsyMatrix-class.html">lsyMatrix</a></code>;
+<em>sparse</em> logical classes such as <code><a href="lsparseMatrix-classes.html">lgCMatrix</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+showClass("lgeMatrix")
+str(new("lgeMatrix"))
+set.seed(1)
+(lM &lt;- Matrix(matrix(rnorm(28), 4,7) &gt; 0))# a simple random lgeMatrix
+set.seed(11)
+(lC &lt;- Matrix(matrix(rnorm(28), 4,7) &gt; 0))# a simple random lgCMatrix
+as(lM, "lgCMatrix")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

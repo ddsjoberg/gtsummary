@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Symmetric Sparse Compressed Row Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for dsRMatrix-class {Matrix}"><tr><td>dsRMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Symmetric Sparse Compressed Row Matrices</h2>
+
+<h3>Description</h3>
+
+<p>The <code>dsRMatrix</code> class is a class of symmetric, sparse
+matrices in the compressed, row-oriented format.  In this
+implementation the non-zero elements in the rows are sorted into
+increasing column order.
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>These <code>"..RMatrix"</code> classes are currently still mostly unimplemented!
+</p>
+<p>Objects can be created by calls of the form <code>new("dsRMatrix", ...)</code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>uplo</code>:</dt><dd><p>A character object indicating if the upper
+triangle (<code>"U"</code>) or the lower triangle (<code>"L"</code>) is
+stored.  At present only the lower triangle form is allowed.</p>
+</dd>
+<dt><code>j</code>:</dt><dd><p>Object of class <code>"integer"</code> of length
+<code>nnzero</code> (number of non-zero elements).  These are the row
+numbers for each non-zero element in the matrix.</p>
+</dd>
+<dt><code>p</code>:</dt><dd><p>Object of class <code>"integer"</code> of pointers, one
+for each row, to the initial (zero-based) index of elements in
+the row.</p>
+</dd>
+<dt><code>factors</code>:</dt><dd><p>Object of class <code>"list"</code> - a list
+of factorizations of the matrix.</p>
+</dd>
+<dt><code>x</code>:</dt><dd><p>Object of class <code>"numeric"</code> - the non-zero
+elements of the matrix.</p>
+</dd>
+<dt><code>Dim</code>:</dt><dd><p>Object of class <code>"integer"</code> - the dimensions
+of the matrix - must be an integer vector with exactly two
+non-negative values.</p>
+</dd>
+<dt><code>Dimnames</code>:</dt><dd><p>List of length two, see <code><a href="Matrix.html">Matrix</a></code>.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Classes <code><a href="RsparseMatrix-class.html">RsparseMatrix</a></code>, <code><a href="dsparseMatrix-class.html">dsparseMatrix</a></code> and
+<code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>, directly.
+</p>
+<p>Class <code>"dMatrix"</code>, by class <code>"dsparseMatrix"</code>,
+class <code>"sparseMatrix"</code>, by class <code>"dsparseMatrix"</code> or
+<code>"RsparseMatrix"</code>;
+class <code>"compMatrix"</code> by class <code>"symmetricMatrix"</code> and of course,
+class <code>"Matrix"</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt>forceSymmetric</dt><dd><p><code>signature(x = "dsRMatrix", uplo = "missing")</code>:
+a trivial method just returning <code>x</code></p>
+</dd>
+<dt>forceSymmetric</dt><dd><p><code>signature(x = "dsRMatrix", uplo = "character")</code>:
+if <code>uplo == x@uplo</code>, this trivially returns <code>x</code>;
+otherwise <code>t(x)</code>.</p>
+</dd>
+<dt>coerce</dt><dd><p><code>signature(from = "dsCMatrix", to = "dsRMatrix")</code></p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>the classes <code><a href="dgCMatrix-class.html">dgCMatrix</a></code>,
+<code><a href="dgTMatrix-class.html">dgTMatrix</a></code>, and <code><a href="dgeMatrix-class.html">dgeMatrix</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(m0 &lt;- new("dsRMatrix"))
+m2 &lt;- new("dsRMatrix", Dim = c(2L,2L),
+          x = c(3,1), j = c(1L,1L), p = 0:2)
+m2
+stopifnot(colSums(as(m2, "TsparseMatrix")) == 3:4)
+str(m2)
+(ds2 &lt;- forceSymmetric(diag(2))) # dsy*
+dR &lt;- as(ds2, "RsparseMatrix")
+dR # dsRMatrix
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,101 @@
+---
+title: "Verb translation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Verb translation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+There are two parts to dbplyr SQL translation: translating dplyr verbs, and translating expressions within those verbs. This vignette describes how entire verbs are translated; `vignette("translate-function")` describes how individual expressions within those verbs are translated.
+
+All dplyr verbs generate a `SELECT` statement. To demonstrate we'll make a temporary database with a couple of tables
+
+```{r, message = FALSE}
+library(dplyr)
+
+con <- DBI::dbConnect(RSQLite::SQLite(), ":memory:")
+flights <- copy_to(con, nycflights13::flights)
+airports <- copy_to(con, nycflights13::airports)
+```
+
+## Single table verbs
+
+*  `select()` and `mutate()` modify the `SELECT` clause:
+
+    ```{r}
+    flights %>%
+      select(contains("delay")) %>%
+      show_query()
+    
+    flights %>%
+      select(distance, air_time) %>%  
+      mutate(speed = distance / (air_time / 60)) %>%
+      show_query()
+    ```
+    
+    (As you can see here, the generated SQL isn't always as minimal as you
+    might generate by hand.)
+    
+*  `filter()` generates a `WHERE` clause:
+    
+    ```{r}
+    flights %>% 
+      filter(month == 1, day == 1) %>%
+      show_query()
+    ```
+
+*  `arrange()` generates an `ORDER BY` clause:
+
+    ```{r}
+    flights %>% 
+      arrange(carrier, desc(arr_delay)) %>%
+      show_query()
+    ```
+
+*  `summarise()` and `group_by()` work together to generate a `GROUP BY` clause:
+
+    ```{r}
+    flights %>%
+      group_by(month, day) %>%
+      summarise(delay = mean(dep_delay)) %>%
+      show_query()
+    ```
+
+## Dual table verbs
+
+| R                | SQL
+|------------------|------------------------------------------------------------
+| `inner_join()`   | `SELECT * FROM x JOIN y ON x.a = y.a`
+| `left_join()`    | `SELECT * FROM x LEFT JOIN y ON x.a = y.a`
+| `right_join()`   | `SELECT * FROM x RIGHT JOIN y ON x.a = y.a`
+| `full_join()`    | `SELECT * FROM x FULL JOIN y ON x.a = y.a`
+| `semi_join()`    | `SELECT * FROM x WHERE EXISTS (SELECT 1 FROM y WHERE x.a = y.a)`
+| `anti_join()`    | `SELECT * FROM x WHERE NOT EXISTS (SELECT 1 FROM y WHERE x.a = y.a)`
+| `intersect(x, y)`| `SELECT * FROM x INTERSECT SELECT * FROM y`
+| `union(x, y)`    | `SELECT * FROM x UNION SELECT * FROM y`
+| `setdiff(x, y)`  | `SELECT * FROM x EXCEPT SELECT * FROM y`
+
+`x` and `y` don't have to be tables in the same database. If you specify `copy = TRUE`, dplyr will copy the `y` table into the same location as the `x` variable. This is useful if you've downloaded a summarised dataset and determined a subset of interest that you now want the full data for. You can use `semi_join(x, y, copy = TRUE)` to upload the indices of interest to a temporary table in the same database as `x`, and then perform a efficient semi join in the database. 
+
+If you're working with large data, it maybe also be helpful to set `auto_index = TRUE`. That will automatically add an index on the join variables to the temporary table.
+
+## Behind the scenes
+
+The verb level SQL translation is implemented on top of `tbl_lazy`, which basically tracks the operations you perform in a pipeline (see `lazy-ops.R`). Turning that into a SQL query takes place in three steps:
+
+* `sql_build()` recurses over the lazy op data structure building up query 
+  objects (`select_query()`, `join_query()`, `set_op_query()` etc) 
+  that represent the different subtypes of `SELECT` queries that we might
+  generate.
+
+* `sql_optimise()` takes a pass over these SQL objects, looking for potential
+  optimisations. Currently this only involves removing subqueries where
+  possible.
+
+* `sql_render()` calls an SQL generation function (`sql_query_select()`,
+  `sql_query_join()`, `sql_query_semi_join()`, `sql_query_set_op()`, ...)
+  to produce the actual SQL. Each of these functions is a generic, taking 
+  the connection as an argument, so that the translation can be customised 
+  for different databases.

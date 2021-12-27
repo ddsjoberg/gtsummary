@@ -5,7 +5,7 @@
 #' gtsummary table by directly modifying `.$table_styling`
 #'
 #' Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary definition}
 #' vignette for information on `.$table_styling` objects.
 #'
 #' @param x gtsummary object
@@ -30,13 +30,15 @@
 #' @param missing_symbol string indicating how missing values are formatted.
 #' @param undo_text_format rarely used. Logical that undoes the indent, bold,
 #' and italic styling when `TRUE`
-#' @param cols_merge_pattern glue-syntax string indicating how to merge
+#' @param cols_merge_pattern \lifecycle{experimental} glue-syntax string
+#' indicating how to merge
 #' columns in `x$table_body`. For example, to construct a confidence interval
 #' use `"{conf.low}, {conf.high}"`. The first column listed in the pattern
 #' string must match the single column name passed in `columns=`.
 #'
 #' @seealso `modify_table_body()`
 #' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #' @family Advanced modifiers
 #'
@@ -64,6 +66,15 @@
 #' implementation will be updated to use it, which will keep
 #' numeric columns numeric. For the _vast majority_ of users,
 #' _the planned change will be go unnoticed_.
+#'
+#' If this functionality is used in conjunction with `tbl_stack()` (which
+#' includes `tbl_uvregression()`), there is potential issue with printing.
+#' When columns are stack AND when the column-merging is
+#' defined with a quosure, you may run into issues due to the loss of the
+#' environment when 2 or more quosures are combined. If the expression
+#' version of the quosure is the same as the quosure (i.e. no evaluated
+#' objects), there should be no issues. Regardless, this argument is used
+#' internally with care, and it is _not_ recommended for users.
 
 
 modify_table_styling <- function(x,

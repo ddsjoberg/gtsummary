@@ -1,0 +1,99 @@
+---
+title: "dplyr 2.0.0 backend API"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{dplyr 2.0.0 backend API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This transition guide is aimed at backend authors.
+dbplyr 2.0.0 is an important release for backends because it starts the process of moving all backend generics into dbplyr (instead of some living in dplyr).
+This move has been designed to occur in phases to avoid sudden breakages and give backend authors plenty of time to make changes.
+
+The current timeline is something like this:
+
+-   dbplyr 2.0.0 adds a new interface for database backends.
+    The old interface remains so all existing backends continue to work, but new packages should use the new interface, and existing backends should start the update process. 
+
+-   dbplyr 2.1.0 (to be released \>= 6 months after dbplyr 2.0.0) deprecates the old interface, so that users are encouraged to upgrade backends.
+
+-   dbplyr 2.2.0 (to be released \>= 12 months after dbplyr 2.0.0) removes the old interface so user must upgrade backends.
+
+-   A future version of dplyr will deprecate then remove the database generics.
+
+## Unused generics
+
+A number of generics are no longer used so you can delete the corresponding methods:
+
+-   `db_write_table()` calls `DBI::dbWriteTable()` instead of nine individual generics: `db_create_indexes()`, `db_begin()`, `db_rollback()`, `db_commit()`, `db_list_tables()`, `db_drop_table()`, `db_has_table()`, `db_create_table()`, and `db_data_types()`.
+
+-   `sql_escape_ident()` and `sql_escape_string()` are no longer used in favour of calling `dbQuoteIdentifier()` and `dbQuoteString()` directly.
+
+-   `db_query_rows()` was never actually used.
+
+Making these changes are important because they ensure your backend works consistently whether you use it through DBI or dplyr.
+
+## 2nd edition
+
+dbplyr 2.0.0 draws inspiration from the idea of an [edition](https://testthat.r-lib.org/articles/third-edition.html) so that to tell dbplyr to use the new generics, you need to do two things:
+
+-   Depend on dbplyr 2.0.0 in your `DESCRIPTION`, e.g.
+    `Imports: dbplyr (>= 2.0.0)`.
+    This ensures that when someone installs your package they get the latest version of dbplyr.
+
+-   Provide a method for the `dbplyr_edition` generic:
+
+    ```{r}
+    #' @importFrom dbplyr dbplyr_edition
+    #' @export
+    dbplyr_edition.myConnectionClass <- function(con) 2L
+    ```
+
+    This tells dbplyr to use the new generics instead of the old generics.
+
+Then you'll need to update your methods, following the advice below.
+
+## SQL generation
+
+There are a number of dplyr generics that generate then execute SQL.
+These have been replaced by dbplyr generics that just generate the SQL (and dbplyr takes care of executing it):
+
+-   `dplyr::db_analyze()` -\> `dbplyr::sql_table_analyze()`
+-   `dplyr::db_create_index()` -\> `dbplyr::sql_table_index()`
+-   `dplyr::db_explain()` -\> `dbplyr::sql_query_explain()`
+-   `dplyr::db_query_fields()` -\> `dbplyr::sql_query_fields()`
+-   `dplyr::db_save_query()` -\> `dbplyr::sql_query_save()`
+
+If you have methods for any of those generics, you'll need to extract the SQL generation code into a new `sql_` method.
+
+## Renamed generics
+
+A number of other generics have been renamed:
+
+-   `dplyr::sql_select()` -\> `dbplyr::sql_query_select()`
+-   `dplyr::sql_join()` -\> `dbplyr::sql_query_join()`
+-   `dplyr::sql_semi_join()` -\> `dbplyr::sql_query_semi_join()`
+-   `dplyr::sql_set_op()` -\> `dbplyr::sql_query_set_op()`
+-   `dplyr::sql_subquery()` -\> `dbplyr::sql_query_wrap()`
+-   `dplyr::sql_translate_env()` -\> `dbplyr::sql_translation()`
+-   `dplyr::db_desc()` -\> `dbplyr::db_connection_describe()`
+
+If you have methods for any of these generics, you'll need to rename.
+
+## New generics
+
+You may also want to consider methods for the new generics in dbplyr 2.0.0:
+
+-   Provide a method for `db_temporary_table()` if your backend requires that temporary tables have special names.
+
+-   Provide a method for `sql_expr_matches()` if your database has special syntax for matching two values (see <https://modern-sql.com/feature/is-distinct-from>).
+
+-   Provide a method for `sql_join_suffix()` if your backend can't use the usual `.x` and `.y` suffixes in joins.

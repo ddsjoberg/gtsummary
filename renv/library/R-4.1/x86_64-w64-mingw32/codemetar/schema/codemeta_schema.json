@@ -1,0 +1,288 @@
+{
+   "$schema":"http://json-schema.org/draft-04/schema#",
+   "title":"Software",
+   "description":"A CodeMeta Software Description",
+   "type":"object",
+   "properties":{
+     "@context": {
+         "description":"The CodeMeta JSON-LD context",
+         "type":"string"
+      },
+      "@type":{
+         "description":"The catagory of this JSON object, must be 'SoftwareSourceCode'",
+         "type":"string"
+      },
+      "agents":{
+         "type":["array", "object"],
+         "description": "A person or organization that has a role in designing, authoring, funding, maintaining or licensing the software.",
+         "properties":{
+            "@id":{
+               "description":"A universally unique character string that is associated with the software agent.",
+               "type":"string"
+            },
+            "@type":{
+               "description":"The catagory of agent, for example 'person' or 'organization'",
+               "type":"string"
+            },
+            "email":{
+               "description":"The email address associated with the agent of the software.",
+               "type":"string"
+            },
+            "name":{
+               "description":"The name of the institution, organization, individuals or other entities that had a role in the creation of the software.",
+               "type":"string"
+            },
+            "affiliation":{
+               "description":"The institution, organization or other group that the agent is associated with.",
+               "type":"string"
+            },
+            "mustBeCited":{
+               "description":"A logical value (true/false) indicating that an agent must be included in a citation of the software.",
+               "type":"boolean"
+            },
+            "isMaintainer":{
+               "description":"A logical value (true/false) indicating whether an agent (SoftwareAuthor, SoftwareContributor, etc.) is the active maintainer of the software.",
+               "type":"boolean"
+            },
+            "isRightsHolder":{
+               "description":" logical value (true/false) indicating whether an agent is the current agent that is the rights holder of the software, for example, does the user own the account related to the software in a source code repository, etc.",
+               "type":"boolean"
+            },
+            "role":{
+               "type":"object",
+               "description": "The function assumed or part played by a person or organization in relation to creation of the software.",
+               "properties":{
+                  "namespace":{
+                     "description":"The URL where the namespace for the roleCodes is located.",
+                     "type":"string"
+                  },
+                  "roleCode":{
+                     "description":"A text string indicating the catagory of the role, for example 'author', 'contributor', 'funder', etc.",
+                     "type":"string"
+                  }
+               },
+               "required": ["namespace", "roleCode"]
+            }
+         },
+         "required": ["@id", "role"]
+      },
+      "depends":{
+        "type": ["array", "object"],
+        "description": "The computer hardware and software required to run the software.",
+        "properties": {
+            "identifier": {
+                "description":"A text string uniquely identifying the required software package.",
+                "type":"string"
+            },
+            "name": {
+                "description":"The text string identifying a software package within a packageSystem.",
+                "type":"string"
+            },
+            "version": {
+                "description":"A text string indicating the development stage of the software package",
+                "type":"string"
+            },
+            "packageSystem": {
+                "description":"The repository system that contains a software package.",
+                "type":"string"
+            },
+            "operatingSystem": {
+                "description":"The computer system types that the software successfully operates on, i.e. 'Mac OS X 10.5', 'Windows 7'.",
+                "type":"string"
+            }
+         }
+      },
+      "identifier": {
+          "description":"A universally unique character string associated with the software.",
+          "type":"string"
+      },
+      "name": {
+          "description":"A universally unique character string associated with the software.",
+          "type": "string"
+      },
+      "codeRepository": {
+          "description":"A URL for the source code repository that contains the software source files.",
+          "type":"string"
+      },
+      "controlledTerms": {
+          "description":"Keywords associated with the software (i.e. fixed vocabulary by which to describe a category or community of softwarecontrolled terms",
+          "type":["string", "array"]
+      },
+      "datePublished": {
+          "description":"he date the software was first made available  publicly by the publisher.",
+          "type":"string"
+      },
+      "dateModified": {
+          "description":"The date that a published version of the software was updated by the software author.",
+          "type":"string"
+      },
+      "dateCreated": {
+          "description":"The date that a published version of the software was created by the software author.",
+          "type":"string"
+      },
+      "description":{
+          "description":"A character string conveying the purpose and scope of the software.",
+          "type":"string"
+      },
+      "developmentStatus":{
+          "description":"A designation of the current state of the software in the development lifecycle, e.g. (“active”, “inactive”) or (“beta”, “candidate release”, “release”), etc.",
+          "type":"string"
+      },
+      "embargoDate":{
+          "description":"A calendar date specifying the end of a restricted access period, i.e. the date that the software may be made publicly available.",
+          "type":"string"
+      },
+      "isAutomatedBuild": {
+          "description":"A logical value (true/false) indicating whether an update to the *CodeRepository* will trigger a new executable version of the software to be generated. ",
+          "type":"boolean"
+      },
+      "publisher": {
+          "description":"The institution, organization or other entity that has made a distributable version of the software publicly available.",
+          "type":"string"
+      },
+      "tags": {
+          "description":"Terms used to describe the software that facilitate discovery of the software.",
+          "type":["array", "string"]
+      },
+      "licenseId": {
+          "description":"The name of the license agreement governing the use and redistribution of the software. e.g. 'Apache-2.0', 'GPL-3.0', 'LGPL-3.0'",
+          "type":"string"
+      },
+      "title":{
+          "description":"he distinguishing name associated with the software.",
+          "type":"string"
+      },
+      "version":{
+          "description":"A unique string indicating a specific state of the software, i.e. an initial public release, an update or bug fix release, etc. No version format or schema is enforced for this value.",
+          "type":"string"
+      },
+      "uploadedBy": {
+         "description": "The user identity that uploaded the software to an online repository.",
+         "type": "object",
+         "properties": {
+             "@id": {
+                "description":"A universally unique string identifying the agent that uploaded the software to a repository.",
+                "type":"string"
+             },
+             "@type": {
+                "description":"The category of agent that performed the upload, for example 'person'",
+                "type":"string"
+             },
+             "email":{
+                "description":"The email address associated with the agent that uploaded the software.",
+                "type":"string"
+             },
+             "name":{
+                "description":"A name associated with the agent.",
+                "type":"string"
+             }
+         },
+         "required": ["@id"]
+      },
+      "buildInstructions":{
+          "description":"A URL for the instructions to create an executable version of the software from source code.",
+          "type":"string"
+      },
+      "contIntegration":{
+          "description":"A URL for the continuous integration system used to build the software automatically after updates to the source code repository.",
+          "type":"string"
+      },
+      "downloadLink":{
+          "description":"The URL to obtain the distribution of the software from.",
+          "type":"string"
+      },
+      "funding":{
+          "description":"An institution, organization or other entity that has provided monetary resources needed to develop, test, distribute or support the software.",
+          "type":["string", "array"]
+      },
+      "programmingLanguage":{
+         "type": "object",
+         "description": "The computer language that the software is implemented with.",
+         "properties": {
+             "name": {
+                "description":"A name associated with the programming language.",
+                "type":"string"
+             },
+             "version": {
+                "description":"A text string describing the development stage of the software.",
+                "type":"string"
+             },
+             "URL": {
+                "description":"A URL where the software can be obtained.",
+                "type":"string"
+             }
+         },
+         "required": ["name"]
+      },
+      "readme":{
+          "description":"A URL for the file that provides general information about the software.",
+          "type":"string"
+      },
+      "issueTracker":{
+          "description":"A URL for the issue tracking system used to report problems and request features, etc., for the software.",
+          "type":"string"
+      },
+      "relatedLink":{
+          "description":"A URL that provides additional information or resources related to the software.",
+          "type":["array", "string"]
+      },
+      "relatedPublications":{
+          "description":"Publications that cite the software or describe some related aspect of it.",
+          "type":["string", "array"]
+      },
+      "relationships":{
+        "type": ["array", "object"],
+        "description": "Relationship of the software to other related resources. For example, this relationship might be how one software package relates to a larger suite, or how a software package version supercedes a previous version.",
+        "properties": {
+          "relationshipType":{
+             "description":"The category of relationship, for example 'IspartOf', 'IsCitedBy', 'Cites', 'IsSupplementTo'",
+             "type":"string"
+          },
+          "relatedIdentifier": {
+             "description":"A universally unique text string containing the identifier.",
+             "type":"string"
+          },
+          "relatedIdentifierType": {
+             "description":"The category of the identifier, for example: 'DOI', 'LSID', 'UUID'",
+             "type":"string"
+          }
+        }
+      },
+      "suggests":{
+          "description":"External software components that could enhance operation of or enable advanced functionality of the software package but are not strictly required.",
+          "type":["array", "object"],
+          "properties": {
+              "identifier": {
+                  "description":"A text string uniquely identifying the required software package.",
+                  "type":"string"
+              },
+              "name": {
+                  "description":"The text string identifying a software package within a packageSystem.",
+                  "type":"string"
+              },
+              "version": {
+                  "description":"A text string indicating the development stage of the software package",
+                  "type":"string"
+              },
+              "packageSystem": {
+                  "description":"The repository system that contains a software package.",
+                  "type":"string"
+              },
+              "operatingSystem": {
+                  "description":"The computer system types that the software successfully operates on, i.e. 'Mac OS X 10.5', 'Windows 7'.",
+                  "type":["array", "string"]
+              }
+           }
+      },
+      "softwarePaperCitationIdentifiers":{
+          "description":"A text string that can be used to authoritatively cite a research paper, conference proceedings or other scholarly work that describes the design, development, usage, significance or other aspect of the software.",
+          "type":["string", "array"]
+      },
+      "zippedCode":{
+          "description":"A URL for the software distribution in compressed form.",
+          "type":"string"
+      }
+   },
+   "required": ["identifier", "title", "description", "@context"],
+   "additionalProperties": false
+}

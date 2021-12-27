@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Collection of custom tidiers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for custom_tidiers {gtsummary}"><tr><td>custom_tidiers {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Collection of custom tidiers</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental"><img src="../help/figures/lifecycle-experimental.svg" alt='[Experimental]' /></a>
+Collection of tidiers that can be passed to <code>tbl_regression()</code>
+and <code>tbl_uvregression()</code> to obtain modified results. See examples below.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tidy_standardize(
+  x,
+  exponentiate = FALSE,
+  conf.level = 0.95,
+  conf.int = TRUE,
+  ...,
+  quiet = FALSE
+)
+
+tidy_bootstrap(
+  x,
+  exponentiate = FALSE,
+  conf.level = 0.95,
+  conf.int = TRUE,
+  ...,
+  quiet = FALSE
+)
+
+pool_and_tidy_mice(x, pool.args = NULL, ..., quiet = FALSE)
+
+tidy_gam(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a regression model object</p>
+</td></tr>
+<tr valign="top"><td><code>exponentiate</code></td>
+<td>
+<p>Logical indicating whether or not to exponentiate the
+the coefficient estimates. This is typical for logistic and multinomial
+regressions, but a bad idea if there is no log or logit link. Defaults
+to <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>conf.level</code></td>
+<td>
+<p>The confidence level to use for the confidence interval
+if <code>conf.int = TRUE</code>. Must be strictly greater than 0 and less than 1.
+Defaults to 0.95, which corresponds to a 95 percent confidence interval.</p>
+</td></tr>
+<tr valign="top"><td><code>conf.int</code></td>
+<td>
+<p>Logical indicating whether or not to include a confidence
+interval in the tidied output. Defaults to <code>FALSE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>arguments passed to method;
+</p>
+
+<ul>
+<li> <p><code>pool_and_tidy_mice()</code>: <code>mice::tidy(x, ...)</code>
+</p>
+</li>
+<li> <p><code>tidy_standardize()</code>: <code>effectsize::standardize_parameters(x, ...)</code>
+</p>
+</li>
+<li> <p><code>tidy_bootstrap()</code>: <code>parameters::bootstrap_parameters(x, ...)</code>
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>Logical indicating whether to print messages in console. Default is
+<code>FALSE</code></p>
+</td></tr>
+<tr valign="top"><td><code>pool.args</code></td>
+<td>
+<p>named list of arguments passed to <code>mice::pool()</code> in
+<code>pool_and_tidy_mice()</code>. Default is <code>NULL</code></p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+
+<ul>
+<li> <p><code>tidy_standardize()</code> tidier to report standardized coefficients. The
+<a href="https://easystats.github.io/effectsize/reference/standardize_parameters.html">effectsize</a>
+package includes a wonderful function to estimate standardized coefficients.
+The tidier uses the output from <code>effectsize::standardize_parameters()</code>, and
+merely takes the result and puts it in <code>broom::tidy()</code> format.
+</p>
+</li>
+<li> <p><code>tidy_bootstrap()</code> tidier to report bootstrapped coefficients. The
+<a href="https://easystats.github.io/parameters/reference/model_parameters.default.html">parameters</a>
+package includes a wonderful function to estimate bootstrapped coefficients.
+The tidier uses the output from <code>parameters::bootstrap_parameters(test = "p")</code>, and
+merely takes the result and puts it in <code>broom::tidy()</code> format.
+</p>
+</li>
+<li> <p><code>pool_and_tidy_mice()</code> tidier to report models resulting from multiply imputed data
+using the mice package. Pass the mice model object <em>before</em> the model results
+have been pooled. See example.
+</p>
+</li></ul>
+
+<p>Ensure your model type is compatible with the methods/functions used to estimate
+the model parameters before attempting to use the tidier with <code>tbl_regression()</code>
+</p>
+
+
+<h3>Example Output</h3>
+
+<p>Example 1
+</p>
+<p><img src="../help/figures/tidy_standardize_ex1.png" width=65% />
+</p>
+<p>Example 2
+</p>
+<p><img src="../help/figures/tidy_standardize_ex2.png" width=47% />
+</p>
+<p>Example 3
+</p>
+<p><img src="../help/figures/pool_and_tidy_mice_ex3.png" width=47% />
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+# Example 1 ----------------------------------
+mod &lt;- lm(age ~ marker + grade, trial)
+
+tbl_stnd &lt;- tbl_regression(mod, tidy_fun = tidy_standardize)
+tbl &lt;- tbl_regression(mod)
+
+if (requireNamespace("effectsize")) {
+  tidy_standardize_ex1 &lt;-
+    tbl_merge(
+      list(tbl_stnd, tbl),
+      tab_spanner = c("**Standardized Model**", "**Original Model**")
+    )
+}
+
+# Example 2 ----------------------------------
+# use "posthoc" method for coef calculation
+if (requireNamespace("parameters")) {
+  tidy_standardize_ex2 &lt;-
+    tbl_regression(mod, tidy_fun = purrr::partial(tidy_standardize, method = "posthoc"))
+}
+
+# Example 3 ----------------------------------
+# Multiple Imputation using the mice package
+set.seed(1123)
+if (requireNamespace("mice")) {
+  pool_and_tidy_mice_ex3 &lt;-
+    suppressWarnings(mice::mice(trial, m = 2)) %&gt;%
+    with(lm(age ~ marker + grade)) %&gt;%
+    tbl_regression()
+} # mice method called that uses `pool_and_tidy_mice()` as tidier
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.2.9012 <a href="00Index.html">Index</a>]</div>
+</body></html>

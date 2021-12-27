@@ -1,0 +1,348 @@
+---
+title: "Get started with vroom"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started with vroom}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_knit$set(root.dir = tempdir())
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(tibble.print_min = 3)
+```
+
+The vroom package contains one main function `vroom()` which is used to read all types of delimited files. A delimited file is any file in which the data is separated (delimited) by one or more characters.
+
+The most common type of delimited files are CSV (Comma Separated Values) or TSV (Tab Separated Values) files, typically these files have a `.csv` and `.tsv` suffix respectively.
+
+```{r}
+library(vroom)
+```
+
+This vignette covers the following topics:
+
+- The basics of reading files, including
+  - single files
+  - multiple files
+  - compressed files
+  - remote files
+- Skipping particular columns.
+- Specifying column types, for additional safety and when the automatic guessing
+  fails.
+- Writing regular and compressed files
+
+## Reading files
+To read a CSV, or other type of delimited file with vroom pass the file to `vroom()`.
+The delimiter will be automatically guessed if it is a common delimiter; e.g. ("," "\t" " " "|" ":" ";").
+If the guessing fails or you are using a less common delimiter specify it with the `delim` parameter. (e.g. `delim = ","`).
+
+We have included an example CSV file in the vroom package for use in examples and tests.
+Access it with `vroom_example("mtcars.csv")`
+
+```{r}
+# See where the example file is stored on your machine
+file <- vroom_example("mtcars.csv")
+file
+
+# Read the file, by default vroom will guess the delimiter automatically.
+vroom(file)
+
+# You can also specify it explicitly, which is (slightly) faster, and safer if
+# you know how the file is delimited.
+vroom(file, delim = ",")
+```
+
+## Reading multiple files
+
+If you are reading a set of files which all have the same columns, you can pass the filenames directly to `vroom()` and it will combine them into one result.
+
+First we will create some files to read by splitting the mtcars dataset by number of cylinders, (it is OK if you don't currently understand this code).
+```{r}
+mt <- tibble::rownames_to_column(mtcars, "model")
+purrr::iwalk(
+  split(mt, mt$cyl),
+  ~ vroom_write(.x, glue::glue("mtcars_{.y}.csv"), "\t")
+)
+```
+
+Then we can efficiently read them into one table by passing the filenames directly to vroom.
+
+```{r}
+files <- fs::dir_ls(glob = "mtcars*csv")
+files
+vroom(files)
+```
+
+Often the filename or directory where the files are stored contains information.
+The `id` parameter can be used to add an extra column to the result with the full path to each file.
+(in this case we name the column `path`).
+
+```{r}
+vroom(files, id = "path")
+```
+
+```{r, include = FALSE}
+# just to clear .Last.value
+1 + 1
+gc()
+unlink(files)
+```
+
+## Reading compressed files
+
+vroom supports reading zip, gz, bz2 and xz compressed files automatically, just pass the filename of the compressed file to vroom.
+
+```{r}
+file <- vroom_example("mtcars.csv.gz")
+
+vroom(file)
+```
+
+`vroom()` decompresses, indexes and writes the decompressed data to a file in the temp directory in a single stream.
+The temporary file is used to lazily look up the values and will be automatically cleaned up when all values in the object have been fully read, the object is removed, or the R session ends.
+
+### Reading single files from multiple multi-file zip archives
+
+If you are reading a zip file that contains multiple files with the same format, you can use a wrapper function like this:
+
+```{r}
+read_all_zip <- function(file, ...) {
+  filenames <- unzip(file, list = TRUE)$Name
+  vroom(purrr::map(filenames, ~ unz(file, .x)), ...)
+}
+```
+
+## Reading remote files
+
+vroom can read files directly from the internet as well by passing the URL of the file to vroom.
+
+```{r, eval = as.logical(Sys.getenv("NOT_CRAN", "false"))}
+file <- "https://raw.githubusercontent.com/r-lib/vroom/master/inst/extdata/mtcars.csv"
+vroom(file)
+```
+
+It can even read gzipped files from the internet (although not the other compressed formats).
+
+```{r, eval = as.logical(Sys.getenv("NOT_CRAN", "false"))}
+file <- "https://raw.githubusercontent.com/r-lib/vroom/master/inst/extdata/mtcars.csv.gz"
+vroom(file)
+```
+
+## Column selection
+
+vroom provides the same interface for column selection and renaming as [dplyr::select()](https://dplyr.tidyverse.org/reference/select.html).
+This provides very efficient, flexible and readable selections. For example you can select by:
+
+- A character vector of column names
+```{r}
+file <- vroom_example("mtcars.csv.gz")
+
+vroom(file, col_select = c(model, cyl, gear))
+```
+- A numeric vector of column indexes, e.g. `c(1, 2, 5)`
+```{r}
+vroom(file, col_select = c(1, 3, 11))
+```
+- Using the selection helpers such as `starts_with()` and `ends_with()`
+```{r}
+vroom(file, col_select = starts_with("d"))
+```
+- You can also rename columns
+```{r}
+vroom(file, col_select = list(car = model, everything()))
+```
+
+## Reading fixed width files
+
+ A fixed width file can be a very compact representation of numeric data.
+ Unfortunately, it's also often painful to read because you need to describe the length of every field.
+ vroom aims to make it as easy as possible by providing a number of different ways to describe the field structure.
+ Use `vroom_fwf()` in conjunction with one of the following helper functions to read the file.
+
+```{r}
+fwf_sample <- vroom_example("fwf-sample.txt")
+cat(readLines(fwf_sample))
+```
+
+- `fwf_empty()` - Guess based on the position of empty columns.
+```{r}
+vroom_fwf(fwf_sample, fwf_empty(fwf_sample, col_names = c("first", "last", "state", "ssn")))
+```
+
+- `fwf_widths()` - Use user provided set of field widths.
+```{r}
+vroom_fwf(fwf_sample, fwf_widths(c(20, 10, 12), c("name", "state", "ssn")))
+```
+
+- `fwf_positions()` - Use user provided sets of start and end positions.
+```{r}
+vroom_fwf(fwf_sample, fwf_positions(c(1, 30), c(20, 42), c("name", "ssn")))
+```
+
+- `fwf_cols()` - Use user provided named widths.
+```{r}
+vroom_fwf(fwf_sample, fwf_cols(name = 20, state = 10, ssn = 12))
+```
+
+- `fwf_cols()` - Use user provided named pairs of positions.
+```{r}
+vroom_fwf(fwf_sample, fwf_cols(name = c(1, 20), ssn = c(30, 42)))
+```
+
+## Column types
+
+vroom guesses the data types of columns as they are read, however sometimes the guessing fails and it is necessary to explicitly set the type of one or more columns.
+
+The available specifications are: (with single letter abbreviations in quotes)
+
+* `col_logical()` 'l', containing only `T`, `F`, `TRUE`, `FALSE`, `1` or `0`.
+* `col_integer()` 'i', integer values.
+* `col_big_integer()` 'I', Big integer values. (64bit integers)
+* `col_double()` 'd', floating point values.
+* `col_number()` 'n', numbers containing the `grouping_mark`
+* `col_date(format = "")` 'D': with the locale's `date_format`.
+* `col_time(format = "")` 't': with the locale's `time_format`.
+* `col_datetime(format = "")` 'T': ISO8601 date times.
+* `col_factor(levels, ordered)` 'f', a fixed set of values.
+* `col_character()` 'c', everything else.
+* `col_skip()` '_, -', don't import this column.
+* `col_guess()` '?', parse using the "best" type based on the input.
+
+You can tell vroom what columns to use with the `col_types()` argument in a number of ways.
+
+If you only need to override a single column the most concise way is to use a named vector.
+
+```{r}
+# read the 'hp' columns as an integer
+vroom(vroom_example("mtcars.csv"), col_types = c(hp = "i"))
+
+# also skip reading the 'cyl' column
+vroom(vroom_example("mtcars.csv"), col_types = c(hp = "i", cyl = "_"))
+
+# also read the gears as a factor
+vroom(vroom_example("mtcars.csv"), col_types = c(hp = "i", cyl = "_", gear = "f"))
+```
+
+You can read all the columns with the same type, by using the `.default`
+argument. For example reading everything as a character.
+
+```{r}
+vroom(vroom_example("mtcars.csv"), col_types = c(.default = "c"))
+```
+
+However you can also use the `col_*()` functions in a list.
+
+```{r}
+vroom(
+  vroom_example("mtcars.csv"),
+  col_types = list(hp = col_integer(), cyl = col_skip(), gear = col_factor())
+)
+```
+
+This is most useful when a column type needs additional information, such as for categorical data when you know all of the levels of a factor.
+
+```{r}
+vroom(
+  vroom_example("mtcars.csv"),
+  col_types = list(gear = col_factor(levels = c(gear = c("3", "4", "5"))))
+)
+```
+
+## Name repair
+
+Often the names of columns in the original dataset are not ideal to work with.
+`vroom()` uses the same `.name_repair` argument as tibble, so you can use one of the default name repair strategies or provide a custom function.
+A great approach is to use the [`janitor::make_clean_names()`](http://sfirke.github.io/janitor/reference/make_clean_names.html) function as the input.
+This will automatically clean the names to use whatever case you specify, here I am setting it to use `ALLCAPS` names.
+
+```{r, eval = FALSE}
+vroom(
+  vroom_example("mtcars.csv"),
+  .name_repair = ~ janitor::make_clean_names(., case = "all_caps")
+)
+```
+
+
+## Writing delimited files
+
+Use `vroom_write()` to write delimited files, the default delimiter is tab, to write TSV files. Writing to TSV by default has the following benefits:
+  - Avoids the issue of whether to use `;` (common in Europe) or `,` (common in the US)
+  - Unlikely to require quoting in fields, as very few fields contain tabs
+  - More easily and efficiently ingested by Unix command line tools such as `cut`, `perl` and `awk`.
+
+```{r}
+vroom_write(mtcars, "mtcars.tsv")
+```
+
+```{r, include = FALSE}
+unlink("mtcars.tsv")
+```
+
+### Writing CSV delimited files
+
+However you can also use `delim = ','` to write CSV files, which are common as inputs to GUI spreadsheet tools like Excel or Google Sheets.
+
+```{r}
+vroom_write(mtcars, "mtcars.csv", delim = ",")
+```
+
+```{r, include = FALSE}
+unlink("mtcars.csv")
+```
+
+### Writing compressed files
+
+For gzip, bzip2 and xz compression the outputs will be automatically compressed if the filename ends in `.gz`, `.bz2` or `.xz`.
+
+```{r}
+vroom_write(mtcars, "mtcars.tsv.gz")
+
+vroom_write(mtcars, "mtcars.tsv.bz2")
+
+vroom_write(mtcars, "mtcars.tsv.xz")
+```
+
+```{r, include = FALSE}
+unlink(c("mtcars.tsv.gz", "mtcars.tsv.bz2", "mtcars.tsv.xz"))
+```
+
+It is also possible to use other compressors by using `pipe()` with `vroom_write()` to create a pipe connection to command line utilities, such as
+
+- [pigz](https://zlib.net/pigz/), a parallel gzip implementation
+- lbzip2, a parallel bzip2 implementation
+- [pixz](https://github.com/vasi/pixz), a parallel xz implementation
+- [Zstandard](https://facebook.github.io/zstd/), a modern real-time compression algorithm.
+
+The parallel compression versions can be considerably faster for large output files and generally `vroom_write()` is fast enough that the compression speed becomes the bottleneck when writing.
+
+```{r, eval = nzchar(Sys.which("pigz"))}
+vroom_write(mtcars, pipe("pigz > mtcars.tsv.gz"))
+```
+
+```{r, include = FALSE}
+unlink("mtcars.tsv.gz")
+```
+
+### Reading and writing from standard input and output
+
+vroom supports reading and writing to the C-level `stdin` and `stdout` of the R process by using `stdin()` and `stdout()`. E.g. 
+from a shell prompt you can pipe to and from vroom directly.
+
+```shell
+cat inst/extdata/mtcars.csv | Rscript -e 'vroom::vroom(stdin())'
+
+Rscript -e 'vroom::vroom_write(iris, stdout())' | head
+```
+
+Note this interpretation of `stdin()` and `stdout()` differs from that used elsewhere by R, however we believe it better matches most user's expectations for this use case.
+
+## Further reading
+
+- `vignette("benchmarks")` discusses the performance of vroom, how it compares to alternatives and how it achieves its results.
+- [📽 vroom: Because Life is too short to read slow](https://www.youtube.com/watch?v=RA9AjqZXxMU&t=10s) - Presentation of vroom at UseR!2019 ([slides](https://speakerdeck.com/jimhester/vroom))
+- [📹 vroom: Read and write rectangular data quickly](https://www.youtube.com/watch?v=ZP_y5eaAc60) - a video tour of the vroom features.

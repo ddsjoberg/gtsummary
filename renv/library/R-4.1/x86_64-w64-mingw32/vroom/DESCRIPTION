@@ -1,0 +1,66 @@
+Package: vroom
+Title: Read and Write Rectangular Text Data Quickly
+Version: 1.5.5
+Authors@R: 
+    c(person(given = "Jim",
+             family = "Hester",
+             role = c("aut", "cre"),
+             email = "jim.hester@rstudio.com",
+             comment = c(ORCID = "0000-0002-2739-7082")),
+      person(given = "Hadley",
+             family = "Wickham",
+             role = "aut",
+             email = "hadley@rstudio.com",
+             comment = c(ORCID = "0000-0003-4757-117X")),
+      person(given = "https://github.com/mandreyel/",
+             role = "cph",
+             comment = "mio library"),
+      person(given = "Jukka",
+             family = "Jylänki",
+             role = "cph",
+             comment = "grisu3 implementation"),
+      person(given = "Mikkel",
+             family = "Jørgensen",
+             role = "cph",
+             comment = "grisu3 implementation"),
+      person(given = "RStudio",
+             role = c("cph", "fnd")))
+Description: The goal of 'vroom' is to read and write data (like
+    'csv', 'tsv' and 'fwf') quickly. When reading it uses a quick initial
+    indexing step, then reads the values lazily , so only the data you
+    actually use needs to be read.  The writer formats the data in
+    parallel and writes to disk asynchronously from formatting.
+License: MIT + file LICENSE
+URL: https://vroom.r-lib.org, https://github.com/r-lib/vroom
+BugReports: https://github.com/r-lib/vroom/issues
+Depends: R (>= 3.1)
+Imports: bit64, crayon, cli, glue, hms, lifecycle, methods, rlang (>=
+        0.4.2), stats, tibble (>= 2.0.0), tzdb (>= 0.1.1), vctrs (>=
+        0.2.0), tidyselect, withr
+Suggests: archive, bench (>= 1.1.0), covr, curl, dplyr, forcats, fs,
+        ggplot2, knitr, patchwork, prettyunits, purrr, rmarkdown,
+        rstudioapi, scales, spelling, testthat (>= 2.1.0), tidyr,
+        waldo, xml2
+LinkingTo: progress (>= 1.2.1), cpp11 (>= 0.2.0), tzdb (>= 0.1.1)
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Config/testthat/parallel: false
+Config/Needs/website: nycflights13
+Copyright: file COPYRIGHTS
+Encoding: UTF-8
+Language: en-US
+RoxygenNote: 7.1.1
+SystemRequirements: C++11
+NeedsCompilation: yes
+Packaged: 2021-09-14 13:55:59 UTC; jhester
+Author: Jim Hester [aut, cre] (<https://orcid.org/0000-0002-2739-7082>),
+  Hadley Wickham [aut] (<https://orcid.org/0000-0003-4757-117X>),
+  https://github.com/mandreyel/ [cph] (mio library),
+  Jukka Jylänki [cph] (grisu3 implementation),
+  Mikkel Jørgensen [cph] (grisu3 implementation),
+  RStudio [cph, fnd]
+Maintainer: Jim Hester <jim.hester@rstudio.com>
+Repository: CRAN
+Date/Publication: 2021-09-14 14:20:02 UTC
+Built: R 4.1.1; x86_64-w64-mingw32; 2021-09-24 04:35:57 UTC; windows
+Archs: i386, x64

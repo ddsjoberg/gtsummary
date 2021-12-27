@@ -1,0 +1,76 @@
+<%@include file="includes/setup.md.rsp"%>
+<%@meta title="Benchmarks"%>
+<%@meta author="Henrik Bengtsson"%>
+<%@meta date="2014-06-05"%>
+
+<%@include file="${header}"%>
+
+<%
+use("matrixStats")
+use("R.utils (>= 1.34.0)")
+
+## Assert that all third-party packages to be benchmarked
+## are available and can be loaded/installed already here
+R.utils::use("cwhmisc, ergm, laeken, genefilter", how = "load")
+
+# Simple logging function
+lenter <- function(...) {
+  s <- mprintf(...)
+  s <- gsub("[.][.][.](\n)*", "...done\\1", s)
+  lexit <<- function() mprintf(s)
+}
+%>
+
+# <%@meta name="title"%>
+
+List of benchmark report for some of the functions available in the [matrixStats] package.
+
+<%
+path <- cmdArg(path = system.file("benchmarking", package = "matrixStats"))
+path <- getAbsolutePath(path)
+message("Processing benchmark report directory: ", path)
+pattern <- "[.]md[.]rsp$"
+filenames <- list.files(path = path, pattern = pattern)
+filenames <- setdiff(filenames, "index.md.rsp")
+names <- gsub(pattern, "", filenames)
+# col- and rowAnyMissing() does not really exist
+names <- setdiff(names, c("colAnyMissing", "rowAnyMissing"))
+message("Number of reports found: ", length(names))
+mprintf("Report #%d: %s\n", seq_along(names), names)
+%>
+
+<% for (ii in seq_along(names)) { %>
+<%
+name <- names[ii]
+if (regexpr("^colRow", name) != -1L) {
+  label <- gsub("^colRow", "", name)
+  label <- sprintf("col%s() and row%s()", label, label)
+} else {
+  label <- sprintf("%s()", name)
+}
+%>
+* [<%=label%>](<%={
+  lenter("%d of %d. Benchmarking %s...\n", ii, length(names), label)
+  html <- sprintf("%s.html", name)
+  if (!file_test("-f", html)) {
+    html <- matrixStats:::benchmark(name, path = path, workdir = ".", envir = new.env())
+    html <- getRelativePath(html)
+    gc()
+  }
+  lexit()
+  html
+}%>)
+<% } # for (ii ...) %>
+
+
+## Appendix
+To reproduce this page and all of its reports, do:
+```r
+path <- system.file("benchmarking", package = "matrixStats")
+R.rsp::rfile("index.md.rsp", path = path)
+```
+_Note: Each of the above reports takes up to several minutes to complete._
+
+<%@string appendix="false"%>
+<%@include file="${footer}"%>
+<%@string appendix="true"%>

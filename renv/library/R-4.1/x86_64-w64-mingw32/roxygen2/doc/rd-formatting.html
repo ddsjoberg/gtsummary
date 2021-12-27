@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Rd formatting</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Rd formatting</h1>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Starting from version 6.0.0, roxygen supports markdown markup within most roxygen tags. Roxygen uses the <a href="https://github.com/r-lib/commonmark">commonmark package</a>, which is based on the CommonMark Reference Implementation to parse these tags. See <a href="https://commonmark.org/help/" class="uri">https://commonmark.org/help/</a> for more about the parser and the markdown language it supports. You can also still use the <code>.Rd</code> syntax, some of which we will present below in the <a href="#rd-syntax">Rd syntax</a> section.</p>
+</div>
+<div id="turning-on-markdown-support" class="section level1">
+<h1>Turning on markdown support</h1>
+<p>There are two ways to turn on markdown support for a package: globally, at the package level, and locally at the block level.</p>
+<p>To turn on markdown for the whole package, insert this entry into the <code>DESCRIPTION</code> file of the package:</p>
+<pre><code>Roxygen: list(markdown = TRUE)</code></pre>
+<p>The position of the entry in the file does not matter. After this, all Roxygen documentation will be parsed as markdown.</p>
+<p>Alternatively, you can use the <code>@md</code> tag to turn on markdown support for a single documentation chunk. This is a good option to write any new documentation for existing packages in markdown.</p>
+<p>There is also a new <code>@noMd</code> tag. Use this if you turned on markdown parsing globally, but need to avoid it for a single chunk. This tag is handy if the markdown parser interferes with more complex Rd syntax.</p>
+<p>Here is an example roxygen chunk that uses markdown.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Use roxygen to document a package</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; This function is a wrapper for the [roxygen2::roxygenize()] function from</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; the roxygen2 package. See the documentation and vignettes of</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; that package to learn how to use roxygen.</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param pkg package description, can be path or package name.  See</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   [as.package()] for more information</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param clean,reload Deprecated.</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @inheritParams roxygen2::roxygenise</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @seealso [roxygen2::roxygenize()], `browseVignettes(&quot;roxygen2&quot;)`</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @export</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @md</span></span></code></pre></div>
+</div>
+<div id="syntax" class="section level1">
+<h1>Syntax</h1>
+<div id="sections" class="section level2">
+<h2>Sections</h2>
+<p>The usual markdown heading markup creates sections and subsections. Top level headings, i.e. ‘<code>#</code>’ create sections, via the <code>\section{}</code> Rd tag. ‘<code>#</code>’ may only appear after the <code>@description</code> and <code>@details</code> tags. Since <code>@details</code> can appear multiple times in a block, you can always precede a ‘<code>#</code>’ section with <code>@details</code>, if you prefer to place it towards the end of the block, after <code>@return</code> for example:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @details</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Trim the leading and trailing whitespace from a character vector.</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param x Character vector.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @return Character vector, with the whitespace trimmed.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @details # This will be a new section</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ...</span></span></code></pre></div>
+<p>Top level sections are always placed at a fixed position in the manual page, after the parameters and the details, but before <code>\note{}</code>, <code>\seealso{}</code> and the <code>\examples{}</code>. Their order will be the same as in the roxygen block.</p>
+</div>
+<div id="subsections" class="section level2">
+<h2>Subsections</h2>
+<p>Headings at level two and above may appear inside any roxygen tag that formats lines of text. E.g. <code>@description</code>, <code>@details</code>, <code>@return</code>, etc. They create subsections, via the <code>\subsection{}</code> Rd tag. They are allowed within top level sections as well, i.e. after ‘<code>#</code>’. Subsections can be nested. Example:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @details</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ## Subsection within details</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; </span><span class="al">###</span><span class="co"> Sub-subsection</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ... text ...</span></span></code></pre></div>
+</div>
+<div id="emphasis" class="section level2">
+<h2>Emphasis</h2>
+<p><em>Emphasis</em> and <strong>strong</strong> (bold) text are supported. For emphasis, put the text between asterisks or underline characters. For strong text, use two asterisks at both sides.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @references</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Robert E Tarjan and Mihalis Yannakakis. (1984). Simple</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; linear-time algorithms to test chordality of graphs, test acyclicity</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; of hypergraphs, and selectively reduce acyclic hypergraphs.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; *SIAM Journal of Computation* **13**, 566-579.</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; See `::is_falsy` for the definition of what is _falsy_</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; and what is _truthy_.</span></span></code></pre></div>
+</div>
+<div id="code" class="section level2">
+<h2>Code</h2>
+<p>Inline code is supported via backticks.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @param ns Optionally, a named vector giving prefix-url pairs, as</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   produced by `xml_ns`. If provided, all names will be explicitly</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   qualified with the ns prefix, i.e. if the element `bar` is defined ...</span></span></code></pre></div>
+<p>You can also use this syntax to run custom R code and insert its output into the manual page. See section ‘Dynamic R code’ below.</p>
+<p>For blocks of code, put your code between triple backticks:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ```</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; pkg &lt;- make_packages(</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   foo1 = { f &lt;- function() print(&quot;hello!&quot;) ; d &lt;- 1:10 },</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   foo2 = { f &lt;- function() print(&quot;hello again!&quot;) ; d &lt;- 11:20 }</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; )</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; foo1::f()</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; foo2::f()</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; foo1::d</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; foo2::d</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; dispose_packages(pkg)</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ```</span></span></code></pre></div>
+<p>Note that this is not needed in <code>@examples</code>, since its contents are formatted as R code, anyway.</p>
+<p>You can use similar syntax to include a block of R code and/or its output in the manual page. See section ‘Dynamic R code’ below.</p>
+</div>
+<div id="lists" class="section level2">
+<h2>Lists</h2>
+<p>Regular Markdown lists are recognized and converted to <code>\enumerate{}</code> or <code>\itemize{}</code> lists:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; There are two ways to use this function:</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; 1. If its first argument is not named, then it returns a function</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;    that can be used to color strings.</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; 1. If its first argument is named, then it also creates a</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;    style with the given name. This style can be used in</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;    `style`. One can still use the return value</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;    of the function, to create a style function.</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; The style (the `...` argument) can be anything of the</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; following:</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; * An R color name, see `colors()`.</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; * A 6- or 8-digit hexa color string, e.g. `#ff0000` means</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   red. Transparency (alpha channel) values are ignored.</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; * A one-column matrix with three rows for the red, green</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   and blue channels, as returned by [grDevices::col2rgb()]</span></span></code></pre></div>
+<p>Nested lists are also supported.</p>
+<p>Note that you do not have to leave an empty line before the list. This is different from some markdown parsers.</p>
+</div>
+<div id="tables" class="section level2">
+<h2>Tables</h2>
+<p>Use <a href="https://github.github.com/gfm/#tables-extension-">GFM table formatting</a>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span> foo <span class="sc">|</span> bar <span class="sc">|</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="er">|</span> <span class="sc">---</span> <span class="er">|</span> <span class="sc">---</span> <span class="er">|</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="er">|</span> baz <span class="sc">|</span> bim <span class="sc">|</span></span></code></pre></div>
+<p>By default, columns are left-aligned. Use colons to generate right and center aligned columns:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="sc">|</span> left <span class="sc">|</span> center <span class="sc">|</span> right <span class="sc">|</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="er">|</span> <span class="er">:</span><span class="sc">---</span> <span class="er">|</span> <span class="er">:</span><span class="sc">----</span><span class="er">:</span> <span class="er">|</span> <span class="sc">----</span><span class="er">:</span> <span class="er">|</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="er">|</span> <span class="dv">1</span>    <span class="sc">|</span> <span class="dv">2</span>      <span class="sc">|</span> <span class="dv">3</span>     <span class="sc">|</span></span></code></pre></div>
+</div>
+<div id="links" class="section level2">
+<h2>Links</h2>
+<p>Markdown hyperlinks work as usual:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; See more about the markdown markup at the</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; [Commonmark web site](http://commonmark.org/help)</span></span></code></pre></div>
+<p>URLs inside angle brackets are also automatically converted to hyperlinks:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; The main R web site is at &lt;https://r-project.org&gt;.</span></span></code></pre></div>
+<p>Markdown notation can also be used to create links to other help topics. There are two basic forms:</p>
+<ul>
+<li><code>[ref]</code>: The target topic and the link text are one and the same.</li>
+<li><code>[text][ref]</code>: Link text differs from the target.</li>
+</ul>
+<p>First we explore the simplest form: <code>[ref]</code>. The presence of trailing parentheses, e.g., <code>[func()]</code>, signals that the target <code>func</code> is a function, which causes two things to happen:</p>
+<ul>
+<li>The link text <code>func()</code> is automatically typeset as code.</li>
+<li>The parentheses are stripped in the derived Rd link target.</li>
+</ul>
+<table>
+<colgroup>
+<col width="22%" />
+<col width="27%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"><code>[ref]</code><br />
+examples</th>
+<th align="left">Links to help<br />
+topic for …</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>[func()]</code><br />
+<code>[pkg::func()]</code></td>
+<td align="left">a function in same<br />
+package or in <code>pkg</code></td>
+<td align="left">Always typeset as code.<br />
+Produces Rd: <code>\code{\link[=func]{func()}}</code><br />
+or <code>\code{\link[pkg:func]{pkg::func()}}</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>[thing]</code><br />
+<code>[pkg::thing]</code></td>
+<td align="left">a topic in same<br />
+package or in <code>pkg</code></td>
+<td align="left">Use for a topic that documents <code>NULL</code> and name is set<br />
+via <code>@name</code>, e.g., a dataset or concept.<br />
+Not typeset as code.<br />
+Produces Rd: <code>\link{thing}</code> or<br />
+<code>\link[pkg:thing]{pkg::thing}</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>[`thing`]</code><br />
+<code>[`pkg::thing`]</code></td>
+<td align="left">a topic in same<br />
+package or in <code>pkg</code></td>
+<td align="left">Same as above, but explicit backticks<br />
+mean that it <strong>is</strong> typeset as code.<br />
+Good for documenting a class.<br />
+Produces Rd: <code>\code{\link{thing}}</code> or<br />
+<code>\code{\link[pkg:thing]{pkg::thing}</code>}</td>
+</tr>
+</tbody>
+</table>
+<p>Use the second form <code>[text][ref]</code> to link to the topic specified by <code>ref</code>, but with <code>text</code> as the link text.</p>
+<table>
+<colgroup>
+<col width="30%" />
+<col width="31%" />
+<col width="37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"><code>[text][ref]</code><br />
+examples</th>
+<th align="left">Links to help<br />
+topic for …</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>[text][func()]</code><br />
+<code>[text][pkg::func()]</code></td>
+<td align="left">a function in same<br />
+package or in <code>pkg</code></td>
+<td align="left">Text is not typeset as code.<br />
+Produces Rd: <code>\link[=func]{text}</code> or<br />
+<code>\link[pkg:func]{text}</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>[text][thing]</code><br />
+<code>[text][pkg::thing]</code></td>
+<td align="left">a topic in same<br />
+package or in <code>pkg</code></td>
+<td align="left">Text is not typeset as code.<br />
+Use for a topic that documents <code>NULL</code><br />
+and name is set via <code>@name</code>,<br />
+e.g., a dataset or concept.<br />
+Produces Rd: <code>\link[=thing]{text}</code> or<br />
+<code>\link[pkg:thing]{text}</code></td>
+</tr>
+</tbody>
+</table>
+<p>In the <code>[text][ref]</code>, the link text is treated like normal text by default.</p>
+<ul>
+<li>Use backticks to typeset the link text as code: <code>[`text`][ref]</code>.</li>
+</ul>
+<p>It is never appropriate to use backticks around the <code>ref</code> in this form.</p>
+<ul>
+<li>No, do not do this: <code>[text][`blah-blah`]</code></li>
+<li>Yes, do this instead: <code>[text][blah-blah]</code></li>
+</ul>
+<p>S3 and S4 class <em>not done yet</em></p>
+<table>
+<colgroup>
+<col width="31%" />
+<col width="32%" />
+<col width="35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Examples</th>
+<th align="left">Help topic<br />
+for what?</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>[abc-class]</code><br />
+<code>[pkg::abc-class]</code></td>
+<td align="left">an S4 class named<br />
+“abc” in same package<br />
+or in <code>pkg</code></td>
+<td align="left">In Rd: <code>\linkS4class{abc}</code> or<br />
+<code>\link[pkg:abc-class]{pkg::abc}</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>[abc][abc-class]</code></td>
+<td align="left">*is this a thing?</td>
+<td align="left">??? <code>\link[=abc-class]{abc}</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="images" class="section level2">
+<h2>Images</h2>
+<p>Markdown syntax for inline images works. The image files must be in the <code>man/figures</code> directory:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Here is an example plot:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ![](example-plot.jpg &quot;Example Plot Title&quot;)</span></span></code></pre></div>
+</div>
+</div>
+<div id="dynamic-r-code" class="section level1">
+<h1>Dynamic R code</h1>
+<p>Similarly to the knitr package, you can use the markdown inline code markup or markdown code blocks to evaluate R code and insert its output into the manual page.</p>
+<div id="inline-code" class="section level2">
+<h2>Inline code</h2>
+<p>To do this, prefix the code with <code>r</code>, i.e. the lowercase letter ‘r’ and a space character. Roxygen will interpret the rest of the text within backticks as R code and evaluate it, and replace the backtick expression with its value. After all such substitutions, the text of the whole tag is interpreted as markdown, as usual.</p>
+<p>For example, the following will insert the date and the R version of the roxygen run.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; Roxygen created this manual page on `r Sys.Date()` using R version</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; `r getRversion()`.</span></span></code></pre></div>
+<p>The value of the R expression is converted to a character string, with <code>paste(collapse = &quot;\n&quot;)</code>. So you don’t need explicitly convert to a character value, numeric values or any R object with an <code>as.character()</code> S3 method is fine. Also, you can insert multiple lines by returning a character vector. If you want to run R code without inserting any output, return an empty string or <code>NULL</code>.</p>
+<p>The value of the expression is inserted into the text of the tag without interpreting it, before the markdown to <code>.Rd</code> conversion, so you can create markdown markup dynamically:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; The `iris` data set has `r ncol(iris)` columns:</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; `r paste0(&quot;``&quot;, colnames(iris), &quot;``&quot;, collapse = &quot;, &quot;)`.</span></span></code></pre></div>
+<p>Note that you need to escape backtick characters, if they appear in the R expression, by doubling them, like above. The result after the dynamic R code evaluation will be:</p>
+<pre><code>The `iris` data set has 5 columns:
+`Sepal.Length`, `Sepal.Width`, `Petal.Length`, `Petal.Width`, `Species`.</code></pre>
+<p>And the final result in the <code>.Rd</code> file will look as:</p>
+<pre><code>The \code{iris} data set has 5 columns:
+\code{Sepal.Length}, \code{Sepal.Width}, \code{Petal.Length}, \code{Petal.Width}, \code{Species}.</code></pre>
+<p>The R code is evaluated in a new environment that is the child of the package environment of the package you are documenting. This means that you can call (internal or exported) functions of the package. <code>packageName()</code> will also report the name of the package:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; To insert the name of the current package: `r packageName()`.</span></span></code></pre></div>
+<p>A new evaluation environment is created for each roxygen <em>block</em>. So the output of this code:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @title ... `r myvar &lt;- &quot;foo&quot;; NULL` `r myvar`</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @description ... `r myvar`</span></span></code></pre></div>
+<p>will be:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @title ... foo</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; @description ... foo</span></span></code></pre></div>
+<p>Currently the whole code expression must be on the same line, multi-line expressions are not supported.</p>
+</div>
+<div id="code-blocks" class="section level2">
+<h2>Code blocks</h2>
+<p>Markdown code blocks can be dynamic as well, if you use ```{r} to start them, just like in knitr documents.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ```{r}</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; # This block of code will be evaluated</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; summary(iris)</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ```</span></span></code></pre></div>
+<p>Within a roxygen block, code blocks and inline code use the same evaluation environment, so variables created in one of them can be used in others.</p>
+<p>Code blocks support knitr chunk options, e.g. to keep the output of several expressions together, you can specify <code>results= &quot;hold&quot;</code>:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ```{r results = &quot;hold&quot;}</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; names(mtcars)</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; nrow(mtcars)</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ```</span></span></code></pre></div>
+<p>Plots will create <code>.png</code> files in the <code>man/figures</code> directory. The file names are created from the chunk names:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ```{r iris-pairs-plot}</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; pairs(iris[1:4], main = &quot;Anderson&#39;s Iris Data -- 3 species&quot;,</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   pch = 21, bg = c(&quot;red&quot;, &quot;green3&quot;, &quot;blue&quot;)[unclass(iris$Species)])</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; ```</span></span></code></pre></div>
+<p>Note that the generated <code>.png</code> files will be added to the package, and they can considerably increase the size of the package.</p>
+<p>Note that code block support is currently experimental, and somewhat limited. Some of the known limitations:</p>
+<ul>
+<li>Because the code blocks are evaluated individually, they cannot refer to each other.</li>
+<li>Some knitr chunk options are reset at the start of every code block, so if you want to change these, you’ll have to specify them for every chunk. These are currently <code>error</code>, <code>fig.path</code>, <code>fig.process</code>.</li>
+<li>Some knitr options might not create meaningful output.</li>
+<li>The markdown code runs every time you call <code>roxygenize()</code> (or <code>devtools::document()</code>) to generated the Rd files. This potentially makes <code>roxygenize()</code> (much) slower. You can turn on knitr caching as usual, but make sure to omit the cache from the package.</li>
+</ul>
+</div>
+</div>
+<div id="roxygen-and-rd-tags-not-parsed-as-markdown" class="section level1">
+<h1>Roxygen and Rd tags <em>not</em> parsed as markdown</h1>
+<p>Some of the roxygen tags are not parsed as markdown. Most of these are unlikely to contain text that needs markup, so this is not an important restriction. Tags without markdown support: <code>@aliases</code>, <code>@backref</code>, <code>@docType</code>, <code>@encoding</code>, <code>@evalRd</code>, <code>@example</code>, <code>@examples</code>, <code>@family</code>, <code>@inheritParams</code>, <code>@keywords</code>, <code>@method</code> <code>@name</code>, <code>@md</code>, <code>@noMd</code>, <code>@noRd</code>, <code>@rdname</code>, <code>@rawRd</code>, <code>@usage</code>.</p>
+<p>When mixing <code>Rd</code> and markdown notation, most <code>Rd</code> tags may contain markdown markup, the ones that can <em>not</em> are: <code>\acronym</code>, <code>\code</code>, <code>\command</code>, <code>\CRANpkg</code>, <code>\deqn</code>, <code>\doi</code>, <code>\dontrun</code>, <code>\dontshow</code>, <code>\donttest</code>, <code>\email</code>, <code>\env</code>, <code>\eqn</code>, <code>\figure</code>, <code>\file</code>, <code>\if</code>, <code>\ifelse</code>, <code>\kbd</code>, <code>\link</code>, <code>\linkS4class</code>, <code>\method</code>, <code>\newcommand</code>, <code>\option</code>, <code>\out</code>, <code>\packageAuthor</code>, <code>\packageDescription</code>, <code>\packageDESCRIPTION</code>, <code>\packageIndices</code>, <code>\packageMaintainer</code>, <code>\packageTitle</code>, <code>\pkg</code>, <code>\PR</code>, <code>\preformatted</code>, <code>\renewcommand</code>, <code>\S3method</code>, <code>\S4method</code>, <code>\samp</code>, <code>\special</code>, <code>\testonly</code>, <code>\url</code>, <code>\var</code>, <code>\verb</code>.</p>
+</div>
+<div id="possible-problems" class="section level1">
+<h1>Possible problems</h1>
+<div id="mixing-markdown-and-rd-markup" class="section level2">
+<h2>Mixing markdown and <code>Rd</code> markup</h2>
+<p>Note that turning on markdown does <em>not</em> turn off the standard <code>Rd</code> syntax. We suggest that you use the regular <code>Rd</code> tags in a markdown roxygen chunk only if necessary. The two parsers do occasionally interact, and the markdown parser can pick up and reformat Rd syntax, causing an error, or corrupted manuals.</p>
+</div>
+<div id="leading-whitespace" class="section level2">
+<h2>Leading whitespace</h2>
+<p>Leading whitespace is interpreted by the commonmark parser, whereas it is ignored by the <code>Rd</code> parser (except in <code>\preformatted{}</code>). Make sure that you only include leading whitespace intentionally, for example for nested lists.</p>
+</div>
+<div id="spurious-lists" class="section level2">
+<h2>Spurious lists</h2>
+<p>The Commonmark parser does not require an empty line before lists, and this might lead to unintended lists if a line starts with a number followed by a dot, or with an asterisk followed by whitespace:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; You can see more about this topic in the book cited below, on page</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; 42. Clearly, the numbered list that starts here is not intentional.</span></span></code></pre></div>
+</div>
+<div id="links-to-operators" class="section level2">
+<h2>Links to operators</h2>
+<p>Links to operators or objects that contain special characters, do not work currently. E.g. to link to the <code>%&gt;%</code> operator in the <code>magrittr</code> package, instead of <code>[magrittr::%&gt;%]</code>, you will need to use the <code>Rd</code> notation: <code>\code{\link[magrittr]{\%&gt;\%}}</code>.</p>
+</div>
+</div>
+<div id="rd-syntax" class="section level1">
+<h1>Rd syntax</h1>
+<p>Within roxygen tags, you can use <code>.Rd</code> syntax to format text. Below we show you examples of the most important <code>.Rd</code> markup commands. The full details are described in <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Marking-text">R extensions</a>. Before roxygen version 6.0.0 this was the only supported syntax. Now all of the formatting described below can be achived more easily with markdown syntax, with the important exception of <a href="https://cran.r-project.org/doc/manuals/R-exts.html#Mathematics">mathematical expressions</a>.</p>
+<p>Note that <code>\</code> and <code>%</code> are special characters. To insert literals, escape with a backslash: <code>\\</code>, <code>\%</code>.</p>
+<div id="character-formatting" class="section level2">
+<h2>Character formatting</h2>
+<ul>
+<li><p><code>\emph{italics}</code></p></li>
+<li><p><code>\strong{bold}</code></p></li>
+<li><p><code>\code{r_function_call(with = &quot;arguments&quot;)}</code>, <code>\code{NULL}</code>, <code>\code{TRUE}</code></p></li>
+<li><p><code>\pkg{package_name}</code></p></li>
+</ul>
+</div>
+<div id="links-1" class="section level2">
+<h2>Links</h2>
+<p>To other documentation:</p>
+<ul>
+<li><p><code>\code{\link{function}}</code>: function in this package</p></li>
+<li><p><code>\code{\link[MASS]{abbey}}</code>: function in another package</p></li>
+<li><p><code>\link[=dest]{name}</code>: link to dest, but show name</p></li>
+<li><p><code>\code{\link[MASS:abbey]{name}}</code>: link to function in another package, but show name.</p></li>
+<li><p><code>\linkS4class{abc}</code>: link to an S4 class</p></li>
+</ul>
+<p>To the web:</p>
+<ul>
+<li><p><code>\url{http://rstudio.com}</code></p></li>
+<li><p><code>\href{http://rstudio.com}{Rstudio}</code></p></li>
+<li><p><code>\email{hadley@@rstudio.com}</code> (note the doubled <code>@</code>)</p></li>
+</ul>
+</div>
+<div id="lists-1" class="section level2">
+<h2>Lists</h2>
+<ul>
+<li><p>Ordered (numbered) lists:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; \enumerate{</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   \item First item</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   \item Second item</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; }</span></span></code></pre></div></li>
+<li><p>Unordered (bulleted) lists</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; \itemize{</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   \item First item</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   \item Second item</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; }</span></span></code></pre></div></li>
+<li><p>Definition (named) lists</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; \describe{</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   \item{One}{First item}</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39;   \item{Two}{Second item}</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&#39; }</span></span></code></pre></div></li>
+</ul>
+</div>
+<div id="mathematics" class="section level2">
+<h2>Mathematics</h2>
+<p>Standard LaTeX (with no extensions):</p>
+<ul>
+<li><p><code>\eqn{a + b}</code>: inline equation</p></li>
+<li><p><code>\deqn{a + b}</code>: display (block) equation</p></li>
+</ul>
+</div>
+<div id="tables-1" class="section level2">
+<h2>Tables</h2>
+<p>Tables are created with <code>\tabular{}</code>. It has two arguments:</p>
+<ol style="list-style-type: decimal">
+<li><p>Column alignment, specified by letter for each column (<code>l</code> = left, <code>r</code> = right, <code>c</code> = centre.)</p></li>
+<li><p>Table contents, with columns separated by <code>\tab</code> and rows by <code>\cr</code>.</p></li>
+</ol>
+<p>The following function turns an R data frame into the correct format, adding a row consisting of the (bolded) column names and prepending each row with <code>#&#39;</code> for pasting directly into the documentation.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>tabular <span class="ot">&lt;-</span> <span class="cf">function</span>(df, ...) {</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">is.data.frame</span>(df))</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  align <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="cf">if</span> (<span class="fu">is.numeric</span>(x)) <span class="st">&quot;r&quot;</span> <span class="cf">else</span> <span class="st">&quot;l&quot;</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  col_align <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">map_chr</span>(df, align)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  cols <span class="ot">&lt;-</span> <span class="fu">lapply</span>(df, format, ...)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  contents <span class="ot">&lt;-</span> <span class="fu">do.call</span>(<span class="st">&quot;paste&quot;</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(cols, <span class="fu">list</span>(<span class="at">sep =</span> <span class="st">&quot; </span><span class="sc">\\</span><span class="st">tab &quot;</span>, <span class="at">collapse =</span> <span class="st">&quot;</span><span class="sc">\\</span><span class="st">cr</span><span class="sc">\n</span><span class="st">#&#39;   &quot;</span>)))</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(<span class="st">&quot;#&#39; </span><span class="sc">\\</span><span class="st">tabular{&quot;</span>, <span class="fu">paste</span>(col_align, <span class="at">collapse =</span> <span class="st">&quot;&quot;</span>), <span class="st">&quot;}{</span><span class="sc">\n</span><span class="st">#&#39;   &quot;</span>,</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste0</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">strong{&quot;</span>, <span class="fu">names</span>(df), <span class="st">&quot;}&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>, <span class="at">collapse =</span> <span class="st">&quot; </span><span class="sc">\\</span><span class="st">tab &quot;</span>), <span class="st">&quot; </span><span class="sc">\\</span><span class="st">cr</span><span class="sc">\n</span><span class="st">#&#39;   &quot;</span>,</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>    contents, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">#&#39; }</span><span class="sc">\n</span><span class="st">&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">tabular</span>(mtcars[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]))</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #&#39; \tabular{rrrrr}{</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #&#39;   \strong{mpg} \tab \strong{cyl} \tab \strong{disp} \tab \strong{hp} \tab \strong{drat} \cr</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #&#39;   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #&#39;   21.0 \tab 6 \tab 160 \tab 110 \tab 3.90\cr</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #&#39;   22.8 \tab 4 \tab 108 \tab  93 \tab 3.85\cr</span></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #&#39;   21.4 \tab 6 \tab 258 \tab 110 \tab 3.08\cr</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #&#39;   18.7 \tab 8 \tab 360 \tab 175 \tab 3.15</span></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #&#39; }</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

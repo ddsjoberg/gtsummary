@@ -1,0 +1,209 @@
+---
+title: "Data basics"
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: true
+    df_print: default
+runtime: shiny_prerendered
+description: >
+  Learn about the base data types in R. Explore R's data frames, and learn how
+  to interact with data frames and their columns.
+---
+
+```{r setup, include=FALSE}
+library(learnr)
+library(tidyverse)
+library(nycflights13)
+tutorial_options(exercise.timelimit = 60)
+```
+
+## Welcome
+
+In this tutorial, you will learn how to use R to inspect the contents of a data frame or tibble. Data frames and tibbles are R's structures for storing tabular data; if you inherit a tabular dataset in R, it will almost certainly come as one of these structures. 
+
+Here, you will learn how to do three things with data frames and tibbles:
+
+1. Look at the contents of a data frame or tibble
+2. Open a help page that describes a data frame or tibble
+3. Identify the variables and their types in a tibble 
+
+You will also meet the `mpg` and `flights` datasets. These datasets appear frequently in R examples. 
+
+The readings in this tutorial follow [_R for Data Science_](http://r4ds.had.co.nz/), sections 3.2 and 5.1. 
+
+## Data frames
+
+### What is a data frame?
+
+A __data frame__ is a rectangular collection of values, usually organized so that variables appear in the columns and observations appear in rows. 
+
+Here is an example: the `mpg` data frame contains observations collected by the US Environmental Protection Agency on 38 models of cars. To see the `mpg` data frame, type `mpg` in the code chunk below and then click "Submit Answer."
+
+```{r mpg-setup}
+mpg <- as.data.frame(mpg)
+```
+
+```{r mpg, exercise = TRUE}
+
+```
+
+<div id="mpg-hint">
+**Hint:** Type `mpg` and then click the Submit Answer button.
+</div>
+
+```{r mpg-check, echo = FALSE}
+# checking code
+```
+
+### A note about mpg
+
+The code above worked because I've already loaded the ggplot2 package for you in this tutorial: `mpg` comes in the ggplot2 package. If you would like to look at `mpg` on your own computer, you will need to first load ggplot2. You can do that in two steps:
+
+1. Run `install.packages('ggplot2')` to install ggplot2 if you do not yet have it.
+2. Load ggplot2 with the `library(ggplot2)` command
+
+After that, you will be able to access any object in ggplot2—including `mpg`—until you close R. 
+
+###  
+
+Did you notice how much information was inside `mpg`? Me too. Sometimes the contents of a data frame do not fit on a single screen, which makes them difficult to inspect. We'll look at an alternative to using and examining data frames soon. But first let's get some help...
+
+## Help pages
+
+### How to open a help page
+
+You can learn more about `mpg` by opening its help page. The help page will explain where the `mpg`dataset comes from and what each variable in `mpg` describes. To open the help page, type `?mpg` in the code chunk below and then click "Submit Answer".
+
+```{r help, exercise = TRUE}
+
+```
+
+<div id="help-hint">
+**Hint:** Type `?mpg` and then click the Submit Answer button.
+</div>
+
+```{r help-check, echo = FALSE}
+# checking code
+```
+
+### ? syntax
+
+You can open a help page for any object that comes with R or with an R package. To open the help page, type a `?` before the object's name and then run the command, as you did with `?mpg`. This technique works for functions, packages, and more. 
+
+Notice that objects created by you or your colleagues will not have a help page (unless you make one).
+
+### Exercises
+
+Use the code chunk below to answer the following questions.
+
+```{r exercises1, exercise = TRUE}
+
+```
+
+```{r quiz1, echo = FALSE}
+quiz(caption = "Quiz",
+  question("What does the `drv` variable of `mpg` describe?  Read the help for `?mpg` to find out.",
+           answer("Whether or not the vehicle has driver side airbags"), 
+           answer("Whether a car is automatic or manual transmission"),
+           answer("The number of cylinders in the car's engine"),
+           answer("Something else", correct = TRUE, message = "`drv` describes the type of drivetrain in a car: front wheel drive, rear wheel drive, or four wheel drive."), 
+           allow_retry = TRUE
+  ),
+  question("How many rows are in the data frame named `cars`?",
+           answer("2"), 
+           answer("25"),
+           answer("50", correct = TRUE),
+           answer("100"),
+           incorrect = "Incorrect.\nHint: R numbers the rows of a data frame when it displays the contents of a data frame. As a result, you can spot the number of rows in `cars` by examining `cars` in the code block above.", 
+           allow_retry = TRUE
+  ),
+  question("How many columns are in the data frame named `cars`?",
+           answer("1"), 
+           answer("2", correct = TRUE),
+           answer("4"),
+           answer("more than four"),
+           incorrect = "Incorrect.\nHint: If you inspect the contents of `cars` in the code block above, it should be pretty easy to count the number of columns.", 
+           allow_retry = TRUE
+  )
+)
+```
+
+## Tibbles
+
+### What is a tibble?
+
+The `flights` data frame in the nycflights13 package is an example of a _tibble_. Tibbles are a data frames with some extra properties. 
+
+To see what I mean, use the code chunk below to print the contents of `flights`.
+
+```{r flights, exercise = TRUE}
+
+```
+
+<div id="flights-hint">
+**Hint:** Type the name of the data frame that you want to print and then click the Submit Answer button. I've already loaded the nycflight13 package for you.
+</div>
+
+###  
+
+Good Job. `flights` describes every flight that departed from New York City in 2013. The data comes from the [US Bureau of Transportation Statistics](http://www.transtats.bts.gov/DatabaseInfo.asp?DB_ID=120&Link=0), and is documented in `?flights`.
+
+
+### The tibble display
+
+You might notice that `flights` looks a little differently than `mpg`. `flights` shows only the first few rows of the data frame and only the columns that fit on one screen.
+
+`flights` prints differently because it's a __tibble__. Tibbles are data frames that are slightly tweaked to be more user-friendly. For example, R doesn't try to show you all of a tibble at once (but it will try to show you all of a data frame that is not a tibble).
+
+You can use `as_tibble()` to return a tibble version of any data frame. For example, this would return a tibble version of `mpg`: `as_tibble(mpg)`. 
+
+
+## Data types
+
+### Type codes
+ 
+```{r flights3, echo = FALSE}
+flights
+``` 
+ 
+Did you notice that a row of three (or four) letter abbreviations appears under the column names of `flights`? These abbreviations describe the _type_ of data that is stored in each column of `flights`:
+
+* `int` stands for integers.
+
+* `dbl` stands for doubles, or real numbers.
+
+* `chr` stands for character vectors, or strings.
+
+* `dttm` stands for date-times (a date + a time).
+
+There are three other common types of variables that aren't used in this dataset but are used in other datasets:
+
+* `lgl` stands for logical, vectors that contain only `TRUE` or `FALSE`.
+
+* `fctr` stands for factors, which R uses to represent categorical variables
+  with fixed possible values.
+
+* `date` stands for dates.
+
+This row of data types is unique to tibbles and is one of the ways that tibbles try to be more user-friendly than data frames.
+
+### Test your knowledge
+
+```{r quiz2, echo=FALSE}
+question("Which types of variables does `flights` contain? Check all that apply.",
+         type = "multiple",
+         allow_retry = TRUE,
+         incorrect = "Not quite right. Look a little closer at `flights`.",
+         answer("integers", correct = TRUE),
+         answer("doubles", correct = TRUE),
+         answer("factors"),
+         answer("characters", correct = TRUE),
+         correct = "Great Job!"
+)
+```
+
+### Congratulations
+
+You've met R's basic table structures—data frames and tibbles; and you have learned how to inspect their contents. When you are ready, go on to the next tutorial to begin visualizing your data.
+

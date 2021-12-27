@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Formatting Sparse Numeric Matrices Utilities</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for formatSparseM {Matrix}"><tr><td>formatSparseM {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Formatting Sparse Numeric Matrices Utilities</h2>
+
+<h3>Description</h3>
+
+<p>Utilities for formatting sparse numeric matrices in a flexible way.
+These functions are used by the <code><a href="../../base/html/format.html">format</a></code> and <code>print</code>
+methods for sparse matrices and can be applied as well to standard <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>
+matrices.  Note that <em>all</em> arguments but the first are optional.
+</p>
+<p><code>formatSparseM()</code> is the main &ldquo;workhorse&rdquo; of
+<code><a href="printSpMatrix.html">formatSpMatrix</a></code>, the <code>format</code> method for sparse
+matrices.
+</p>
+<p><code>.formatSparseSimple()</code> is a simple helper function, also dealing
+with (short/empty) column names construction.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+formatSparseM(x, zero.print = ".", align = c("fancy", "right"),
+              m = as(x,"matrix"), asLogical=NULL, uniDiag=NULL,
+              digits=NULL, cx, iN0, dn = dimnames(m))
+
+.formatSparseSimple(m, asLogical=FALSE, digits=NULL,
+		    col.names, note.dropping.colnames = TRUE,
+                    dn=dimnames(m))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object inheriting from class <code><a href="sparseMatrix-class.html">sparseMatrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>zero.print</code></td>
+<td>
+<p>character which should be used for
+<em>structural</em> zeroes.  The default <code>"."</code> may occasionally
+be replaced by <code>" "</code> (blank); using <code>"0"</code> would look
+almost like <code>print()</code>ing of non-sparse matrices.</p>
+</td></tr>
+<tr valign="top"><td><code>align</code></td>
+<td>
+<p>a string specifying how the <code>zero.print</code> codes
+should be aligned, see <code><a href="printSpMatrix.html">formatSpMatrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>m</code></td>
+<td>
+<p>(optional) a (standard <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>) <code><a href="../../base/html/matrix.html">matrix</a></code> version of <code>x</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>asLogical</code></td>
+<td>
+<p>should the matrix be formatted as a logical matrix
+(or rather as a numeric one); mostly for <code>formatSparseM()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>uniDiag</code></td>
+<td>
+<p>logical indicating if the diagonal entries of a sparse
+unit triangular or unit-diagonal matrix should be formatted as
+<code>"I"</code> instead of <code>"1"</code> (to emphasize that the 1's are
+&ldquo;structural&rdquo;).</p>
+</td></tr>
+<tr valign="top"><td><code>digits</code></td>
+<td>
+<p>significant digits to use for printing, see
+<code><a href="../../base/html/print.default.html">print.default</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>cx</code></td>
+<td>
+<p>(optional) character matrix; a formatted version of <code>x</code>, still
+with strings such as <code>"0.00"</code> for the zeros.</p>
+</td></tr>
+<tr valign="top"><td><code>iN0</code></td>
+<td>
+<p>(optional) integer vector, specifying the location of the
+<em>non</em>-zeroes of <code>x</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>col.names, note.dropping.colnames</code></td>
+<td>
+<p>see <code><a href="printSpMatrix.html">formatSpMatrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>dn</code></td>
+<td>
+<p><code><a href="../../base/html/dimnames.html">dimnames</a></code> to be used; a list (of length two)
+with row and column names (or <code><a href="../../base/html/NULL.html">NULL</a></code>).</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a character matrix like <code>cx</code>, where the zeros have been replaced
+with (padded versions of) <code>zero.print</code>.
+As this is a <em>dense</em> matrix, do not use these functions for
+really large (really) sparse matrices!
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Martin Maechler</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="printSpMatrix.html">formatSpMatrix</a></code> which calls <code>formatSparseM()</code> and is
+the <code><a href="../../base/html/format.html">format</a></code> method for sparse matrices.<br />
+<code><a href="printSpMatrix.html">printSpMatrix</a></code> which is used by the (typically
+implicitly called) <code><a href="../../methods/html/show.html">show</a></code> and <code><a href="../../base/html/print.html">print</a></code> methods
+for sparse matrices.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+m &lt;- suppressWarnings(matrix(c(0, 3.2, 0,0, 11,0,0,0,0,-7,0), 4,9))
+fm &lt;- formatSparseM(m)
+noquote(fm)
+## nice, but this is nicer {with "units" vertically aligned}:
+print(fm, quote=FALSE, right=TRUE)
+## and "the same" as :
+Matrix(m)
+
+## align = "right" is cheaper --&gt;  the "." are not aligned:
+noquote(f2 &lt;- formatSparseM(m,align="r"))
+stopifnot(f2 == fm   |   m == 0, dim(f2) == dim(m),
+         (f2 == ".") == (m == 0))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

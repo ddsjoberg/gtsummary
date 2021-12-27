@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get residual standard deviation from models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_sigma {insight}"><tr><td>get_sigma {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get residual standard deviation from models</h2>
+
+<h3>Description</h3>
+
+<p>Returns <code>sigma</code>, which corresponds the estimated standard deviation of the residuals. This function extends the <code>sigma()</code> base R generic for models that don't have implemented it. It also computes the confidence interval (CI), which is stored as an attribute.
+</p>
+<p>Sigma is a key-component of regression models, and part of the so-called auxiliary parameters that are estimated. Indeed, linear models for instance assume that the residuals comes from a normal distribution with mean 0 and standard deviation <code>sigma</code>. See the details section below for more information about its interpretation and calculation.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_sigma(x, ci = NULL, verbose = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A model.</p>
+</td></tr>
+<tr valign="top"><td><code>ci</code></td>
+<td>
+<p>Scalar, the CI level. The default (<code>NULL</code>) returns no CI.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle messages and warnings.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+
+
+<h4>Interpretation of Sigma</h4>
+
+<p>The residual standard deviation, &sigma;,
+indicates that the predicted outcome will be within +/- &sigma;
+units of the linear predictor for approximately 68% of the data points
+(<cite>Gelman, Hill &amp; Vehtari 2020, p.84</cite>). In other words, the residual
+standard deviation indicates the accuracy for a model to predict scores,
+thus it can be thought of as &ldquo;a measure of the average distance
+each observation falls from its prediction from the model&rdquo;
+(<cite>Gelman, Hill &amp; Vehtari 2020, p.168</cite>). &sigma;
+can be considered as a measure of the unexplained variation in the data,
+or of the precision of inferences about regression coefficients.
+</p>
+
+
+
+<h4>Calculation of Sigma</h4>
+
+<p>By default, <code>get_sigma()</code> tries to extract sigma by calling
+<code>stats::sigma()</code>. If the model-object has no <code>sigma()</code> method,
+the next step is calculating sigma as square-root of the model-deviance
+divided by the residual degrees of freedom. Finally, if even this approach
+fails, and <code>x</code> is a mixed model, the residual standard deviation is
+accessed using the square-root from <code>get_variance_residual()</code>.
+</p>
+
+
+
+<h3>Value</h3>
+
+<p>The residual standard deviation (sigma), or <code>NULL</code> if this information could not be accessed.
+</p>
+
+
+<h3>References</h3>
+
+<p>Gelman, A., Hill, J., &amp; Vehtari, A. (2020). Regression and Other Stories. Cambridge University Press.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+m &lt;- lm(mpg ~ wt + cyl + vs, data = mtcars)
+get_sigma(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

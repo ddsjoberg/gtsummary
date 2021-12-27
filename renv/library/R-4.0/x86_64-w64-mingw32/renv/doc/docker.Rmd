@@ -1,0 +1,181 @@
+---
+title: "Using renv with Docker"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using renv with Docker}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+While `renv` can help capture the state of your R library at some point in time,
+there are still other aspects of the system that can influence the runtime
+behavior of your R application. In particular, the same R code can produce
+different results depending on:
+
+- The operating system in use,
+- The compiler flags used when R and packages are built,
+- The LAPACK / BLAS system(s) in use,
+- The versions of system libraries installed and in use,
+
+And so on. [Docker](https://www.docker.com/) is a tool that helps solve this
+problem through the use of __containers__. Very roughly speaking, one can think
+of a container as a small, self-contained system within which different
+applications can be run. Using Docker, one can declaratively state how a
+container should be built (what operating system it should use, and what system
+software should be installed within), and use that system to run applications.
+(For more details, please see <https://environments.rstudio.com/docker>.)
+
+Using Docker and `renv` together, one can then ensure that both the underlying
+system, alongside the required R packages, are fixed and constant for a
+particular application.
+
+The main challenges in using Docker with `renv` are:
+
+- Ensuring that the `renv` cache is visible to Docker containers, and
+- Ensuring that `renv` restores the R packages as required when the
+  container is run.
+
+This vignette will assume you are already familiar with Docker; if you are not
+yet familiar with Docker, the [Docker Documentation](https://docs.docker.com/)
+provides a thorough introduction. To learn more about using Docker to manage R
+environments, visit
+[environments.rstudio.com](https://environments.rstudio.com/docker.html). We'll
+discuss two strategies for using `renv` with Docker:
+
+1. Using `renv` to install packages when the Docker image is generated;
+2. Using `renv` to install packages when Docker containers are run.
+
+We'll explore the pros and cons of each strategy.
+
+## Creating Docker Images with renv
+
+With Docker, [Dockerfiles](https://docs.docker.com/engine/reference/builder/)
+are used to define new images. Dockerfiles can be used to declaratively specify
+how a Docker image should be created. A Docker image captures the state of a
+machine at some point in time -- e.g., an Ubuntu operating system after
+downloading and installing R 3.5. Docker containers can be created using that
+image as a base, allowing isolated applications to run using the same
+pre-defined machine state.
+
+First, you'll need to get `renv` installed on your Docker image. The easiest
+way to accomplish this is with the `remotes` package. For example:
+
+```
+ENV RENV_VERSION `r renv:::renv_package_version("renv")`
+RUN R -e "install.packages('remotes', repos = c(CRAN = 'https://cloud.r-project.org'))"
+RUN R -e "remotes::install_github('rstudio/renv@${RENV_VERSION}')"
+```
+
+Now, `renv` can be used to install packages on the image. If you'd like the
+`renv.lock` lockfile to be used to install R packages when the Docker image is
+built, you can include something of the form:
+
+```
+WORKDIR /project
+COPY renv.lock renv.lock
+RUN R -e 'renv::restore()'
+```
+
+With this, `renv` will download and install packages from CRAN and other
+external sources as appropriate when the image is created.
+
+There are two main downsides to this approach:
+
+1. The set of R packages used is pre-baked into the image, so different
+   applications or containers built from this image will either have to
+   re-use the aforementioned set of packages, or reinstall the packages
+   they need to update as required.
+
+2. With this approach, the `renv` package cache will not be used. This
+   implies that package installation through `renv::restore()` may be
+   very slow, as all packages will have to be installed.
+
+Both of these issues can be solved if package installation can be
+deferred to container runtime.
+
+
+## Running Docker Containers with renv
+
+If you'd like to leverage the `renv` package cache alongside Docker, then
+you'll need to alter how your containers are created so that `renv` can
+ensure the project library is initialized before your application is run.
+
+One can control the `renv` cache directory with the environment variable
+`RENV_PATHS_CACHE`. For example:
+
+```{r}
+Sys.setenv(RENV_PATHS_CACHE = "~/path/to/cache")
+renv:::renv_paths_cache()
+```
+
+Note that the platform and R version in use are appended to the requested
+cache directory. This ensures that a single directory can act a base of
+cached packages for multiple different platforms and R versions.
+
+Next, we need to figure out how to tell the Docker containers we create
+to use this cache. The most common option here is to mount a directory
+in the container that maps to persistent storage on the host system, and
+then set the aforementioned `RENV_PATHS_CACHE` environment variable to
+point to this mount. You can specify this when the container is launched.
+For example, if you had a container running a Shiny application:
+
+```
+# the path to an renv cache on the host machine
+RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
+
+# the path to the cache within the container
+RENV_PATHS_CACHE_CONTAINER=/renv/cacheA
+
+# run the container with the host cache mounted in the container
+docker run --rm \
+    -e "RENV_PATHS_CACHE=${RENV_PATHS_CACHE_CONTAINER}" \
+    -v "${RENV_PATHS_CACHE_HOST}:${RENV_PATHS_CACHE_CONTAINER}" \
+    -p 14618:14618 \
+    R --vanilla -s -e 'renv::restore(); shiny::runApp(host = "0.0.0.0", port = 14618)'
+```
+
+With this, any calls to `renv` APIs within the created docker container will
+have access to the mounted cache. The first time you run a container, `renv`
+will likely need to populate the cache, and so some time will be spent
+downloading and installing the required packages. Subsequent runs should be much
+faster, as `renv` will be able to reuse the global package cache.
+
+The primary downside with this approach compared to the image-based approach
+is that it requires you to modify how containers are created, and requires
+a bit of extra orchestration in how containers are launched. However, once
+the `renv` cache is active, newly-created containers will launch very quickly,
+and a single image can then be used as a base for a myriad of different
+containers and applications, each with their own private R library.
+
+
+## Handling the renv Autoloader
+
+When \R is launched within a project folder, he `renv` auto-loader (if present)
+will attempt to download and install `renv` into the project library. Depending
+on how your Docker container is configured, this could fail. For example:
+
+```
+Error installing renv:
+======================
+ERROR: unable to create ‘/usr/local/pipe/renv/library/master/R-4.0/x86_64-pc-linux-gnu/renv’
+Warning messages:
+1: In system2(r, args, stdout = TRUE, stderr = TRUE) :
+  running command ''/usr/lib/R/bin/R' --vanilla CMD INSTALL -l 'renv/library/master/R-4.0/x86_64-pc-linux-gnu' '/tmp/RtmpwM7ooh/renv_0.12.2.tar.gz' 2>&1' had status 1
+2: Failed to find an renv installation: the project will not be loaded.
+Use `renv::activate()` to re-initialize the project.
+```
+
+Bootstrapping `renv` into the project library might be un-necessary for you. If
+that is the case, then you can avoid this behavior by launching R with the
+`--vanilla` flag set; for example:
+
+```
+R --vanilla -s -e 'renv::restore()'
+```

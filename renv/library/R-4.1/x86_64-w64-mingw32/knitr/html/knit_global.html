@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: The global environment in which code chunks are evaluated</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for knit_global {knitr}"><tr><td>knit_global {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>The global environment in which code chunks are evaluated</h2>
+
+<h3>Description</h3>
+
+<p>This function makes the environment of a code chunk accessible inside a
+chunk.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+knit_global()
+</pre>
+
+
+<h3>Details</h3>
+
+<p>It returns the <code>envir</code> argument of <code><a href="../../knitr/help/knit.html">knit</a></code>, e.g. if we call
+<code><a href="../../knitr/help/knit.html">knit</a>()</code> in the global environment, <code>knit_global()</code> returns
+R's global environment by default. You can call functions like
+<code><a href="../../base/html/ls.html">ls</a>()</code> on this environment.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

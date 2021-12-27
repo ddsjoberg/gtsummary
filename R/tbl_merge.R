@@ -7,7 +7,8 @@
 #' @param tab_spanner Character vector specifying the spanning headers.
 #' Must be the same length as `tbls`. The
 #' strings are interpreted with `gt::md`.
-#' Must be same length as `tbls` argument
+#' Must be same length as `tbls` argument. Default is `NULL`, and places
+#' a default spanning header. If `FALSE`, no header will be placed.
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @family tbl_summary tools
@@ -77,29 +78,32 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   # at least two objects must be passed
   tbls_length <- length(tbls)
-  if (tbls_length < 2) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
+  # if (tbls_length < 2) stop("Supply 2 or more gtsummary regression objects to 'tbls ='")
 
-  # if tab spanner is null, default is Table 1, Table 2, etc....
-  if (is.null(tab_spanner)) {
-    tab_spanner <- paste0(c("**Table "), seq_len(length(tbls)), "**")
-  }
+  # adding tab spanners if requested
+  if (!isFALSE(tab_spanner)) {
+    # if tab spanner is null, default is Table 1, Table 2, etc....
+    if (is.null(tab_spanner)) {
+      tab_spanner <- paste0(c("**Table "), seq_len(length(tbls)), "**")
+    }
 
-  # length of spanning header matches number of models passed
-  if (tbls_length != length(tab_spanner)) {
-    stop("'tbls' and 'tab_spanner' must be the same length")
-  }
+    # length of spanning header matches number of models passed
+    if (tbls_length != length(tab_spanner)) {
+      stop("'tbls' and 'tab_spanner' must be the same length")
+    }
 
-  # adding tab_spanners
-  tbls <-
-    map2(
-      tbls, seq_along(tbls),
-      ~ modify_spanning_header(
-        .x, vars(
-          everything(),
-          -any_of(c("variable", "row_type", "var_label", "label"))
-        ) ~ tab_spanner[.y]
+    # adding tab_spanners
+    tbls <-
+      map2(
+        tbls, seq_along(tbls),
+        ~ modify_spanning_header(
+          .x, vars(
+            everything(),
+            -any_of(c("variable", "row_type", "var_label", "label"))
+          ) ~ tab_spanner[.y]
+        )
       )
-    )
+  }
 
 
   # merging tables -------------------------------------------------------------
@@ -126,8 +130,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     purrr::some(
       ~ nrow(.x) !=
         select(.x, all_of(c("variable", "row_type", "var_label", "label"))) %>%
-          distinct() %>%
-          nrow()
+        distinct() %>%
+        nrow()
     ) %>%
     switch(paste(
       "The merging columns (variable name, variable label, row type, and label column)",
@@ -150,36 +154,41 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
     nested_table[[1]] %>%
     rename(table = .data$data)
 
-  # cycling through all tbls, merging results into a column tibble
-  for (i in 2:tbls_length) {
-    merged_table <-
-      merged_table %>%
-      full_join(
-        nested_table[[i]],
-        by = c("variable", "var_label")
-      ) %>%
-      mutate(
-        table = map2(
-          .data$table, .data$data,
-          function(table, data) {
-            if (is.null(table)) {
-              return(data)
+  if (tbls_length > 1) {
+    # cycling through all tbls, merging results into a column tibble
+    for (i in 2:tbls_length) {
+      merged_table <-
+        merged_table %>%
+        full_join(
+          nested_table[[i]],
+          by = c("variable", "var_label")
+        ) %>%
+        mutate(
+          table = map2(
+            .data$table, .data$data,
+            function(table, data) {
+              if (is.null(table)) {
+                return(data)
+              }
+              if (is.null(data)) {
+                return(table)
+              }
+              full_join(table, data, by = c("row_type", "label"))
             }
-            if (is.null(data)) {
-              return(table)
-            }
-            full_join(table, data, by = c("row_type", "label"))
-          }
-        )
-      ) %>%
-      select(-c("data", "table"), "table")
+          )
+        ) %>%
+        select(-c("data", "table"), "table")
+    }
   }
 
   # unnesting results from within variable column tibbles
+  ends_with_selectors <-
+    map(seq_len(tbls_length), ~rlang::expr(ends_with(!!paste0("_", .x))))
   table_body <-
     merged_table %>%
     unnest("table") %>%
-    select(.data$variable, .data$var_label, .data$row_type, .data$label, everything())
+    select(.data$variable, .data$var_label, .data$row_type, .data$label,
+           !!!ends_with_selectors, everything())
 
   # renaming columns in stylings and updating ----------------------------------
   x <- .create_gtsummary_object(
@@ -251,29 +260,6 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
               )
           }
 
-
-
-          # style_updated <-
-          #   tbls[[i]]$table_styling[[style_type]] %>%
-          #   filter(!(.data$column %in% c("label", "variable", "var_label", "row_type") & i != 1)) %>%
-          #   rowwise() %>%
-          #   mutate(
-          #     rows =
-          #       switch(nrow(.) == 0, list()) %||%
-          #       .rename_variables_in_expression(.data$rows, i, tbls[[i]]) %>% list(),
-          #     column = ifelse(
-          #       .data$column %in% c("label", "variable", "var_label", "row_type") & i == 1,
-          #       .data$column,
-          #       paste0(.data$column, "_", i)
-          #     ) %>%
-          #       as.character()
-          #   ) %>%
-          #   ungroup()
-
-          # if ("pattern" %in% names(style_updated)) {
-          #   style_updated$pattern <-
-          #     .rename_variables_in_pattern(style_updated$pattern, i, tbls[[i]])
-          # }
           style_updated
         }
       )
@@ -312,7 +298,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
 
   # convert rows to proper expression
   expr <- switch(inherits(rows, "quosure"),
-    rlang::f_rhs(rows)
+                 rlang::f_rhs(rows)
   ) %||% rows
 
   # get all variable names in expression to be renamed
@@ -373,4 +359,9 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   }
 
   pattern
+}
+
+# needed for R < 3.5, can be deleted later
+isFALSE <- function(x) {
+  is.logical(x) && length(x) == 1L && !is.na(x) && !x
 }

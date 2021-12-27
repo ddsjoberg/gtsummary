@@ -1,0 +1,28 @@
+description             string  Description of this method.
+etagRequired            boolean Whether this method requires an ETag to be
+                                specified. The ETag is sent as an HTTP If-
+                                Match or If-None-Match header.
+httpMethod              string  HTTP method used by this method.
+id                      string  A unique ID for this method. This property
+                                can be used to match methods between
+                                different versions of Discovery.
+mediaUpload             object  Media upload parameters.
+parameterOrder          array   Ordered list of required parameters, serves
+                                as a hint to clients on how to structure
+                                their method signatures. The array is ordered
+                                such that the "most-significant" parameter
+                                appears first.
+parameters              object  Details for all parameters in this method.
+path                    string  The URI path of this REST method. Should
+                                be used in conjunction with the basePath
+                                property at the api-level.
+request                 object  The schema for the request.
+response                object  The schema for the response.
+scopes                  array   OAuth 2.0 scopes applicable to this method.
+supportsMediaDownload   boolean Whether this method supports media downloads.
+supportsMediaUpload     boolean Whether this method supports media uploads.
+supportsSubscription    boolean Whether this method supports subscriptions.
+useMediaDownloadService boolean Indicates that downloads from this method
+                                should use the download service URL (i.e.
+                                "/download"). Only applies if the method
+                                supports media download.

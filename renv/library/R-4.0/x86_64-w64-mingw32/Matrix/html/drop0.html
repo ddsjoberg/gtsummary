@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Drop &quot;Explicit Zeroes&quot; from a Sparse Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for drop0 {Matrix}"><tr><td>drop0 {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Drop &quot;Explicit Zeroes&quot; from a Sparse Matrix</h2>
+
+<h3>Description</h3>
+
+<p>Returns a sparse matrix with no &ldquo;explicit zeroes&rdquo;, i.e., all
+zero or <code>FALSE</code> entries are dropped from the explicitly indexed
+matrix entries.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+drop0(x, tol = 0, is.Csparse = NA)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>a Matrix, typically sparse, i.e., inheriting from
+<code><a href="sparseMatrix-class.html">sparseMatrix</a></code>.</p>
+</td></tr>
+</table>
+
+
+
+
+<table summary="R argblock">
+<tr valign="top"><td><code>tol</code></td>
+<td>
+<p>non-negative number to be used as tolerance for checking if
+an entry <i>x[i,j]</i> should be considered to be zero.</p>
+</td></tr>
+<tr valign="top"><td><code>is.Csparse</code></td>
+<td>
+<p>logical indicating prior knowledge about the
+&ldquo;Csparseness&rdquo; of <code>x</code>.  This exists for possible speedup
+reasons only.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>a Matrix like <code>x</code> but with no explicit zeros, i.e.,
+<code>!any(x@x == 0)</code>, always inheriting from
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>When a sparse matrix is the result of matrix multiplications, you
+may want to consider combining <code>drop0()</code> with
+<code><a href="../../base/html/zapsmall.html">zapsmall</a>()</code>,
+see the example.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="spMatrix.html">spMatrix</a></code>, class
+<code><a href="sparseMatrix-class.html">sparseMatrix</a></code>; <code><a href="nnzero.html">nnzero</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+m &lt;- spMatrix(10,20, i= 1:8, j=2:9, x = c(0:2,3:-1))
+m
+drop0(m)
+
+## A larger example:
+t5 &lt;- new("dtCMatrix", Dim = c(5L, 5L), uplo = "L",
+          x = c(10, 1, 3, 10, 1, 10, 1, 10, 10),
+	  i = c(0L,2L,4L, 1L, 3L,2L,4L, 3L, 4L),
+	  p = c(0L, 3L, 5L, 7:9))
+TT &lt;- kronecker(t5, kronecker(kronecker(t5,t5), t5))
+IT &lt;- solve(TT)
+I. &lt;- TT %*% IT ;  nnzero(I.) # 697 ( = 625 + 72 )
+I.0 &lt;- drop0(zapsmall(I.))
+## which actually can be more efficiently achieved by
+I.. &lt;- drop0(I., tol = 1e-15)
+stopifnot(all(I.0 == Diagonal(625)),
+          nnzero(I..) == 625)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

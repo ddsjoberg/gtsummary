@@ -1,0 +1,82 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string colname="colProds"%>
+<%@string rowname="rowProds"%>
+<%@string fcnname="colRowProds_subset"%>
+<%@meta title="${colname}() and ${rowname}() benchmarks on subsetted computation"%>
+<%@meta author="Dongcan Jiang"%>
+<%@meta date="2015-06-07"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=colname%>() and <%=rowname%>() on subsetted computation.
+
+
+## Data
+```r
+<%=withCapture({
+<%@include file="R/random-matrices.R"%>
+data <- rmatrices(mode = "double")
+})%>
+```
+
+## Results
+
+<% for (dataLabel in names(data)) { %>
+<% message(dataLabel) %>
+### <%=dataLabel%> matrix
+
+
+```r
+<%=withCapture({
+X <- data[[.dataLabel.]]
+rows <- sample.int(nrow(X), size = nrow(X)*0.7)
+cols <- sample.int(ncol(X), size = ncol(X)*0.7)
+X_S <- X[rows, cols]
+})%>
+<% gc() %>
+<%=withCapture({
+colStats <- microbenchmark(
+ "colProds_X_S w/ direct"    		   = colProds(X_S, method = "direct", na.rm = FALSE),
+ "colProds_X_S w/ expSumLog"           = colProds(X_S, method = "expSumLog", na.rm = FALSE),
+ "colProds(X, rows, cols) w/ direct"     = colProds(X, rows = rows, cols = cols, method = "direct", na.rm = FALSE),
+ "colProds(X, rows, cols) w/ expSumLog"  = colProds(X, rows = rows, cols = cols, method = "expSumLog", na.rm = FALSE),
+ "colProds(X[rows, cols]) w/ direct"    = colProds(X[rows, cols], method = "direct", na.rm = FALSE),
+ "colProds(X[rows, cols]) w/ expSumLog" = colProds(X[rows, cols], method = "expSumLog", na.rm = FALSE), 
+ unit = "ms"
+)
+})%>
+<%=withCapture({
+X <- t(X)
+X_S <- t(X_S)
+})%>
+<% gc() %>
+<%=withCapture({
+rowStats <- microbenchmark(
+ "rowProds_X_S w/ direct"    		   = rowProds(X_S, method = "direct", na.rm = FALSE),
+ "rowProds_X_S w/ expSumLog"           = rowProds(X_S, method = "expSumLog", na.rm = FALSE),
+ "rowProds(X, cols, rows) w/ direct"     = rowProds(X, rows = cols, cols = rows, method = "direct", na.rm = FALSE),
+ "rowProds(X, cols, rows) w/ expSumLog"  = rowProds(X, rows = cols, cols = rows, method = "expSumLog", na.rm = FALSE),
+ "rowProds(X[cols, rows]) w/ direct"    = rowProds(X[cols, rows], method = "direct", na.rm = FALSE),
+ "rowProds(X[cols, rows]) w/ expSumLog" = rowProds(X[cols, rows], method = "expSumLog", na.rm = FALSE), 
+ unit = "ms"
+)
+})%>
+```
+
+<% crBenchmarkResults(colStats, rowStats, tags=dataLabel) %>
+
+<% } # for (dataLabel ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2015-06-07
+o Created.
+---------------------------------------------------------------------------%>

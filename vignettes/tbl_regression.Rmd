@@ -39,7 +39,7 @@ if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
     !tolower(as.list(Sys.info())$user) %in% c("sjobergd", "currym", "whitingk", "whiting")) {
   msg <- 
     paste("View this vignette on the",
-          "[package website](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html).")
+          "[package website](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html).")
   cat(msg)
   knitr::knit_exit()
 }
@@ -47,15 +47,15 @@ if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
 
 ## Introduction
 
-The [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) function takes a **regression model object** in **R** and returns a **formatted table of regression model results** that is publication-ready.
+The [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) function takes a **regression model object** in **R** and returns a **formatted table of regression model results** that is publication-ready.
 It is a simple way to summarize and present your analysis results using **R**!
-Like [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html), `tbl_regression()` creates highly customizable analytic tables with sensible defaults. 
+Like [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html), `tbl_regression()` creates highly customizable analytic tables with sensible defaults. 
 
 This vignette will walk a reader through the `tbl_regression()` function, and the various functions available to modify and make additions to an existing formatted regression table.
 
-<img src = "https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_mvregression_demo.gif" alt = "animated" width = "100%">
+<img src = "https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/misc_files/tbl_mvregression_demo.gif" alt = "animated" width = "100%">
 
-*Behind the scenes:* `tbl_regression()` uses `broom::tidy()` to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `survival::coxph()`, `survival::survreg()` and other are [vetted models](http://www.danieldsjoberg.com/gtsummary/reference/vetted_models.html) known to work with {gtsummary}).
+*Behind the scenes:* `tbl_regression()` uses `broom::tidy()` to perform the initial model formatting, and can accommodate many different model types (e.g. `lm()`, `glm()`, `survival::coxph()`, `survival::survreg()` and other are [vetted models](https://www.danieldsjoberg.com/gtsummary/reference/vetted_models.html) known to work with {gtsummary}).
 It is also possible to specify your own function to tidy the model results if needed.  
 
 ## Setup
@@ -69,7 +69,7 @@ library(gtsummary)
 
 ## Example data set
 
-In this vignette we'll be using the [**`trial`**](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set which is included in the {gtsummary package}.
+In this vignette we'll be using the [**`trial`**](https://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set which is included in the {gtsummary package}.
 
 * This data set contains information from `r nrow(trial)` patients who received one of two types of chemotherapy (Drug A or Drug B).
 
@@ -94,7 +94,7 @@ trial %>%
 
 The default output from `tbl_regression()` is meant to be publication ready.  
 
-* Let's start by creating a **logistic regression model** to **predict tumor response** using the variables age and grade from the [`trial`](http://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set. 
+* Let's start by creating a **logistic regression model** to **predict tumor response** using the variables age and grade from the [`trial`](https://www.danieldsjoberg.com/gtsummary/reference/trial.html) data set. 
 ```{r, message=FALSE}
 # build logistic regression model
 m1 <- glm(response ~ age + stage, trial, family = binomial)
@@ -261,4 +261,4 @@ If you, however, would like to change the defaults there are a few options.
 The default options can be changed using the {gtsummary} themes function `set_gtsummary_theme()`.
 The package includes pre-specified themes, and you can also create your own.
 Themes can control baseline behavior, for example, how p-values are rounded, coefficients are rounded, default headers, confidence levels, etc.
-For details on creating a theme and setting personal defaults, visit the [themes vignette](http://www.danieldsjoberg.com/gtsummary/articles/themes.html).
+For details on creating a theme and setting personal defaults, visit the [themes vignette](https://www.danieldsjoberg.com/gtsummary/articles/themes.html).

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Effect Size from Test Statistics</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+/* for pandoc --citeproc since 2.11 */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Effect Size from Test Statistics</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a>
+<ul>
+<li><a href="#partial-percent-variance-explained">(Partial) Percent Variance Explained</a>
+<ul>
+<li><a href="#in-simple-effect-and-contrast-analysis">In Simple Effect and Contrast Analysis</a></li>
+<li><a href="#in-linear-mixed-models">In Linear Mixed Models</a></li>
+<li><a href="#bias-corrected-indices">Bias-Corrected Indices</a></li>
+</ul></li>
+<li><a href="#measure-of-association">Measure of Association</a>
+<ul>
+<li><a href="#for-slopes">For Slopes</a></li>
+<li><a href="#in-contrast-analysis">In Contrast Analysis</a></li>
+</ul></li>
+<li><a href="#measures-of-difference">Measures of Difference</a>
+<ul>
+<li><a href="#between-subject-contrasts">Between-Subject Contrasts</a></li>
+<li><a href="#within-subject-contrasts">Within-Subject Contrasts</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>In many real world applications there are no straightforward ways of obtaining standardized effect sizes. However, it is possible to get approximations of most of the effect size indices (<span class="math inline">\(d\)</span>, <span class="math inline">\(r\)</span>, <span class="math inline">\(\eta^2_p\)</span>…) with the use of test statistics. These conversions are based on the idea that <strong>test statistics are a function of effect size and sample size</strong>. Thus information about samples size (or more often of degrees of freedom) is used to reverse-engineer indices of effect size from test statistics. This idea and these functions also power our <a href="https://easystats4u.shinyapps.io/statistic2effectsize/"><strong><em>Effect Sizes From Test Statistics</em></strong> <em>shiny app</em></a>.</p>
+<p>The measures discussed here are, in one way or another, <strong><em>signal to noise ratios</em></strong>, with the “noise” representing the unaccounted variance in the outcome variable<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<p>The indices are:</p>
+<ul>
+<li><p>Percent variance explained (<span class="math inline">\(\eta^2_p\)</span>, <span class="math inline">\(\omega^2_p\)</span>, <span class="math inline">\(\epsilon^2_p\)</span>).</p></li>
+<li><p>Measure of association (<span class="math inline">\(r\)</span>).</p></li>
+<li><p>Measure of difference (<span class="math inline">\(d\)</span>).</p></li>
+</ul>
+<div id="partial-percent-variance-explained" class="section level2">
+<h2>(Partial) Percent Variance Explained</h2>
+<p>These measures represent the ratio of <span class="math inline">\(Signal^2 / (Signal^2 + Noise^2)\)</span>, with the “noise” having all other “signals” partial-ed out (be they of other fixed or random effects). The most popular of these indices is <span class="math inline">\(\eta^2_p\)</span> (Eta; which is equivalent to <span class="math inline">\(R^2\)</span>).</p>
+<p>The conversion of the <span class="math inline">\(F\)</span>- or <span class="math inline">\(t\)</span>-statistic is based on <span class="citation">Friedman (1982)</span>.</p>
+<p>Let’s look at an example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(afex)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(md_12<span class="fl">.1</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>aov_fit <span class="ot">&lt;-</span> <span class="fu">aov_car</span>(rt <span class="sc">~</span> angle <span class="sc">*</span> noise <span class="sc">+</span> <span class="fu">Error</span>(id <span class="sc">/</span> (angle <span class="sc">*</span> noise)),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> md_12<span class="fl">.1</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">anova_table =</span> <span class="fu">list</span>(<span class="at">correction =</span> <span class="st">&quot;none&quot;</span>, <span class="at">es =</span> <span class="st">&quot;pes&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>aov_fit</span></code></pre></div>
+<pre><code>&gt; Anova Table (Type 3 tests)
+&gt; 
+&gt; Response: rt
+&gt;        Effect    df     MSE         F  pes p.value
+&gt; 1       angle 2, 18 3560.00 40.72 *** .819   &lt;.001
+&gt; 2       noise  1, 9 8460.00 33.77 *** .790   &lt;.001
+&gt; 3 angle:noise 2, 18 1160.00 45.31 *** .834   &lt;.001
+&gt; ---
+&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;+&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Let’s compare the <span class="math inline">\(\eta^2_p\)</span> (the <code>pes</code> column) obtained here with ones recovered from <code>F_to_eta2()</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effectsize)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">F_to_eta2</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">f =</span> <span class="fu">c</span>(<span class="fl">40.72</span>, <span class="fl">33.77</span>, <span class="fl">45.31</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">df_error =</span> <span class="fu">c</span>(<span class="dv">18</span>, <span class="dv">9</span>, <span class="dv">18</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>&gt; Eta2 (partial) |       90% CI
+&gt; -----------------------------
+&gt; 0.82           | [0.66, 0.89]
+&gt; 0.79           | [0.49, 0.89]
+&gt; 0.83           | [0.69, 0.90]</code></pre>
+<p><strong>They are identical!</strong><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> (except for the fact that <code>F_to_eta2()</code> also provides confidence intervals<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> :)</p>
+<p>In this case we were able to easily obtain the effect size (thanks to <code>afex</code>!), but in other cases it might not be as easy, and using estimates based on test statistic offers a good approximation.</p>
+<p>For example:</p>
+<div id="in-simple-effect-and-contrast-analysis" class="section level3">
+<h3>In Simple Effect and Contrast Analysis</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">joint_tests</span>(aov_fit, <span class="at">by =</span> <span class="st">&quot;noise&quot;</span>)</span></code></pre></div>
+<pre><code>&gt; noise = absent:
+&gt;  model term df1 df2 F.ratio p.value
+&gt;  angle        2  29       5 0.0144 
+&gt; 
+&gt; noise = present:
+&gt;  model term df1 df2 F.ratio p.value
+&gt;  angle        2  29      79 &lt;.0001</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">F_to_eta2</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">f =</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">79</span>),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> <span class="dv">2</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">df_error =</span> <span class="dv">29</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>&gt; Eta2 (partial) |       90% CI
+&gt; -----------------------------
+&gt; 0.26           | [0.04, 0.44]
+&gt; 0.84           | [0.75, 0.89]</code></pre>
+<p>We can also use <code>t_to_eta2()</code> for contrast analysis:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(<span class="fu">emmeans</span>(aov_fit, <span class="sc">~</span>angle))</span></code></pre></div>
+<pre><code>&gt; NOTE: Results may be misleading due to involvement in interactions</code></pre>
+<pre><code>&gt;  contrast estimate   SE df t.ratio p.value
+&gt;  X0 - X4      -108 18.9 18 -5.700  0.0001 
+&gt;  X0 - X8      -168 18.9 18 -8.900  &lt;.0001 
+&gt;  X4 - X8       -60 18.9 18 -3.200  0.0137 
+&gt; 
+&gt; Results are averaged over the levels of: noise 
+&gt; P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t_to_eta2</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">t =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">5.7</span>, <span class="sc">-</span><span class="fl">8.9</span>, <span class="sc">-</span><span class="fl">3.2</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">df_error =</span> <span class="dv">18</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>&gt; Eta2 (partial) |       90% CI
+&gt; -----------------------------
+&gt; 0.64           | [0.39, 0.78]
+&gt; 0.81           | [0.66, 0.88]
+&gt; 0.36           | [0.09, 0.58]</code></pre>
+</div>
+<div id="in-linear-mixed-models" class="section level3">
+<h3>In Linear Mixed Models</h3>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>fit_lmm <span class="ot">&lt;-</span> <span class="fu">lmer</span>(Reaction <span class="sc">~</span> Days <span class="sc">+</span> (Days <span class="sc">|</span> Subject), sleepstudy)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit_lmm)</span></code></pre></div>
+<pre><code>&gt; Type III Analysis of Variance Table with Satterthwaite&#39;s method
+&gt;      Sum Sq Mean Sq NumDF DenDF F value  Pr(&gt;F)    
+&gt; Days  30031   30031     1    17    45.9 3.3e-06 ***
+&gt; ---
+&gt; Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">F_to_eta2</span>(<span class="fl">45.8</span>, <span class="dv">1</span>, <span class="dv">17</span>)</span></code></pre></div>
+<pre><code>&gt; Eta2 (partial) |       90% CI
+&gt; -----------------------------
+&gt; 0.73           | [0.51, 0.83]</code></pre>
+<p>We can also use <code>t_to_eta2()</code> for the slope of <code>Days</code> (which in this case gives the same result).</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>parameters<span class="sc">::</span><span class="fu">model_parameters</span>(fit_lmm, <span class="at">df_method =</span> <span class="st">&quot;satterthwaite&quot;</span>)</span></code></pre></div>
+<pre><code>&gt; Parameter   | Coefficient |   SE |           95% CI | t(17.00) |      p
+&gt; -----------------------------------------------------------------------
+&gt; (Intercept) |      251.41 | 6.82 | [238.03, 264.78] |    36.84 | &lt; .001
+&gt; Days        |       10.47 | 1.55 | [  7.44,  13.50] |     6.77 | &lt; .001</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t_to_eta2</span>(<span class="fl">6.77</span>, <span class="at">df_error =</span> <span class="dv">17</span>)</span></code></pre></div>
+<pre><code>&gt; Eta2 (partial) |       90% CI
+&gt; -----------------------------
+&gt; 0.73           | [0.51, 0.83]</code></pre>
+</div>
+<div id="bias-corrected-indices" class="section level3">
+<h3>Bias-Corrected Indices</h3>
+<p>Alongside <span class="math inline">\(\eta^2_p\)</span> there are also the less biased <span class="math inline">\(\omega_p^2\)</span> (Omega) and <span class="math inline">\(\epsilon^2_p\)</span> (Epsilon; sometimes called <span class="math inline">\(\text{Adj. }\eta^2_p\)</span>, which is equivalent to <span class="math inline">\(R^2_{adj}\)</span>; <span class="citation">Albers and Lakens (2018)</span>, <span class="citation">Mordkoff (2019)</span>).</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">F_to_eta2</span>(<span class="fl">45.8</span>, <span class="dv">1</span>, <span class="dv">17</span>)</span></code></pre></div>
+<pre><code>&gt; Eta2 (partial) |       90% CI
+&gt; -----------------------------
+&gt; 0.73           | [0.51, 0.83]</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">F_to_epsilon2</span>(<span class="fl">45.8</span>, <span class="dv">1</span>, <span class="dv">17</span>)</span></code></pre></div>
+<pre><code>&gt; Epsilon2 (partial) |       90% CI
+&gt; ---------------------------------
+&gt; 0.71               | [0.48, 0.82]</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">F_to_omega2</span>(<span class="fl">45.8</span>, <span class="dv">1</span>, <span class="dv">17</span>)</span></code></pre></div>
+<pre><code>&gt; Omega2 (partial) |       90% CI
+&gt; -------------------------------
+&gt; 0.70             | [0.47, 0.82]</code></pre>
+</div>
+</div>
+<div id="measure-of-association" class="section level2">
+<h2>Measure of Association</h2>
+<p>Similar to <span class="math inline">\(\eta^2_p\)</span>, <span class="math inline">\(r\)</span> is a signal to noise ratio, and is in fact equal to <span class="math inline">\(\sqrt{\eta^2_p}\)</span> (so it’s really a <em>partial</em> <span class="math inline">\(r\)</span>). It is often used instead of <span class="math inline">\(\eta^2_p\)</span> when discussing the <em>strength</em> of association (but I suspect people use it instead of <span class="math inline">\(\eta^2_p\)</span> because it gives a bigger number, which looks better).</p>
+<div id="for-slopes" class="section level3">
+<h3>For Slopes</h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>parameters<span class="sc">::</span><span class="fu">model_parameters</span>(fit_lmm, <span class="at">df_method =</span> <span class="st">&quot;satterthwaite&quot;</span>)</span></code></pre></div>
+<pre><code>&gt; Parameter   | Coefficient |   SE |           95% CI | t(17.00) |      p
+&gt; -----------------------------------------------------------------------
+&gt; (Intercept) |      251.41 | 6.82 | [238.03, 264.78] |    36.84 | &lt; .001
+&gt; Days        |       10.47 | 1.55 | [  7.44,  13.50] |     6.77 | &lt; .001</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t_to_r</span>(<span class="fl">6.77</span>, <span class="at">df_error =</span> <span class="dv">17</span>)</span></code></pre></div>
+<pre><code>&gt; r    |       95% CI
+&gt; -------------------
+&gt; 0.85 | [0.67, 0.92]</code></pre>
+<p>In a fixed-effect linear model, this returns the <strong>partial</strong> correlation. Compare:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>fit_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(rating <span class="sc">~</span> complaints <span class="sc">+</span> critical, <span class="at">data =</span> attitude)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>parameters<span class="sc">::</span><span class="fu">model_parameters</span>(fit_lm)</span></code></pre></div>
+<pre><code>&gt; Parameter   | Coefficient |    SE |         95% CI | t(27) |      p
+&gt; -------------------------------------------------------------------
+&gt; (Intercept) |       14.25 | 11.17 | [-8.67, 37.18] |  1.28 | 0.213 
+&gt; complaints  |        0.75 |  0.10 | [ 0.55,  0.96] |  7.46 | &lt; .001
+&gt; critical    |    1.91e-03 |  0.14 | [-0.28,  0.28] |  0.01 | 0.989</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t_to_r</span>(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">t =</span> <span class="fu">c</span>(<span class="fl">7.46</span>, <span class="fl">0.01</span>),</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">df_error =</span> <span class="dv">27</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>&gt; r        |        95% CI
+&gt; ------------------------
+&gt; 0.82     | [ 0.67, 0.89]
+&gt; 1.92e-03 | [-0.35, 0.35]</code></pre>
+<p>to:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>correlation<span class="sc">::</span><span class="fu">correlation</span>(attitude[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>)], <span class="at">partial =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">8</span>)]</span></code></pre></div>
+<pre><code>&gt; Parameter2 |        r | t(28)
+&gt; -----------------------------
+&gt; complaints |     0.82 |  7.60
+&gt; critical   | 2.70e-03 |  0.01</code></pre>
+</div>
+<div id="in-contrast-analysis" class="section level3">
+<h3>In Contrast Analysis</h3>
+<p>This measure is also sometimes used in contrast analysis, where it is called the point bi-serial correlation - <span class="math inline">\(r_{pb}\)</span> <span class="citation">(Cohen and others 1965; Rosnow, Rosenthal, and Rubin 2000)</span>:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(<span class="fu">emmeans</span>(aov_fit, <span class="sc">~</span>angle))</span></code></pre></div>
+<pre><code>&gt; NOTE: Results may be misleading due to involvement in interactions</code></pre>
+<pre><code>&gt;  contrast estimate   SE df t.ratio p.value
+&gt;  X0 - X4      -108 18.9 18 -5.700  0.0001 
+&gt;  X0 - X8      -168 18.9 18 -8.900  &lt;.0001 
+&gt;  X4 - X8       -60 18.9 18 -3.200  0.0137 
+&gt; 
+&gt; Results are averaged over the levels of: noise 
+&gt; P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t_to_r</span>(</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">t =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">5.7</span>, <span class="sc">-</span><span class="fl">8.9</span>, <span class="sc">-</span><span class="fl">3.2</span>),</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">df_error =</span> <span class="dv">18</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>&gt; r     |         95% CI
+&gt; ----------------------
+&gt; -0.80 | [-0.89, -0.57]
+&gt; -0.90 | [-0.95, -0.78]
+&gt; -0.60 | [-0.79, -0.22]</code></pre>
+</div>
+</div>
+<div id="measures-of-difference" class="section level2">
+<h2>Measures of Difference</h2>
+<p>These indices represent <span class="math inline">\(Signal/Noise\)</span> with the “signal” representing the difference between two means. This is akin to Cohen’s <span class="math inline">\(d\)</span>, and is a close approximation when comparing two groups of equal size <span class="citation">(Wolf 1986; Rosnow, Rosenthal, and Rubin 2000)</span>.</p>
+<p>These can be useful in contrast analyses.</p>
+<div id="between-subject-contrasts" class="section level3">
+<h3>Between-Subject Contrasts</h3>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">lm</span>(breaks <span class="sc">~</span> tension, <span class="at">data =</span> warpbreaks)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>em_tension <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(m, <span class="sc">~</span>tension)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(em_tension)</span></code></pre></div>
+<pre><code>&gt;  contrast estimate SE df t.ratio p.value
+&gt;  L - M        10.0  4 51 2.500   0.0400 
+&gt;  L - H        14.7  4 51 3.700   &lt;.0001 
+&gt;  M - H         4.7  4 51 1.200   0.4600 
+&gt; 
+&gt; P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t_to_d</span>(</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">t =</span> <span class="fu">c</span>(<span class="fl">2.53</span>, <span class="fl">3.72</span>, <span class="fl">1.20</span>),</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">df_error =</span> <span class="dv">51</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>&gt; d    |        95% CI
+&gt; --------------------
+&gt; 0.71 | [ 0.14, 1.27]
+&gt; 1.04 | [ 0.45, 1.62]
+&gt; 0.34 | [-0.22, 0.89]</code></pre>
+<p>However, these are merely approximations of a <em>true</em> Cohen’s <em>d</em>. It is advised to directly estimate Cohen’s <em>d</em>, whenever possible. For example, here with <code>emmeans::eff_size()</code>:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">eff_size</span>(em_tension, <span class="at">sigma =</span> <span class="fu">sigma</span>(m), <span class="at">edf =</span> <span class="fu">df.residual</span>(m))</span></code></pre></div>
+<pre><code>&gt;  contrast effect.size   SE df lower.CL upper.CL
+&gt;  L - M           0.84 0.34 51     0.15     1.53
+&gt;  L - H           1.24 0.36 51     0.53     1.95
+&gt;  M - H           0.40 0.34 51    -0.28     1.07
+&gt; 
+&gt; sigma used for effect sizes: 11.88 
+&gt; Confidence level used: 0.95</code></pre>
+</div>
+<div id="within-subject-contrasts" class="section level3">
+<h3>Within-Subject Contrasts</h3>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(<span class="fu">emmeans</span>(aov_fit, <span class="sc">~</span>angle))</span></code></pre></div>
+<pre><code>&gt; NOTE: Results may be misleading due to involvement in interactions</code></pre>
+<pre><code>&gt;  contrast estimate   SE df t.ratio p.value
+&gt;  X0 - X4      -108 18.9 18 -5.700  0.0001 
+&gt;  X0 - X8      -168 18.9 18 -8.900  &lt;.0001 
+&gt;  X4 - X8       -60 18.9 18 -3.200  0.0137 
+&gt; 
+&gt; Results are averaged over the levels of: noise 
+&gt; P value adjustment: tukey method for comparing a family of 3 estimates</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t_to_d</span>(</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">t =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">5.7</span>, <span class="sc">-</span><span class="fl">5.9</span>, <span class="sc">-</span><span class="fl">3.2</span>),</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">df_error =</span> <span class="dv">18</span>,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">paired =</span> <span class="cn">TRUE</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>&gt; d     |         95% CI
+&gt; ----------------------
+&gt; -1.34 | [-1.97, -0.70]
+&gt; -1.39 | [-2.03, -0.74]
+&gt; -0.75 | [-1.27, -0.22]</code></pre>
+<p>(Note set <code>paired = TRUE</code> to not over estimate the size of the effect; <span class="citation">Rosenthal (1991)</span>; <span class="citation">Rosnow, Rosenthal, and Rubin (2000)</span>)</p>
+</div>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-albers2018power" class="csl-entry">
+Albers, Casper, and Daniël Lakens. 2018. <span>“When Power Analyses Based on Pilot Data Are Biased: Inaccurate Effect Size Estimators and Follow-up Bias.”</span> <em>Journal of Experimental Social Psychology</em> 74: 187–95.
+</div>
+<div id="ref-cohen1965some" class="csl-entry">
+Cohen, Jacob, and others. 1965. <span>“Some Statistical Issues in Psychological Research.”</span> <em>Handbook of Clinical Psychology</em>, 95–121.
+</div>
+<div id="ref-friedman1982simplified" class="csl-entry">
+Friedman, Herbert. 1982. <span>“Simplified Determinations of Statistical Power, Magnitude of Effect and Research Sample Sizes.”</span> <em>Educational and Psychological Measurement</em> 42 (2): 521–26.
+</div>
+<div id="ref-mordkoff2019simple" class="csl-entry">
+Mordkoff, J Toby. 2019. <span>“A Simple Method for Removing Bias from a Popular Measure of Standardized Effect Size: Adjusted Partial Eta Squared.”</span> <em>Advances in Methods and Practices in Psychological Science</em> 2 (3): 228–32.
+</div>
+<div id="ref-rosenthal1991meta" class="csl-entry">
+Rosenthal, Robert. 1991. <span>“Meta-Analytic Procedures for Social Sciences.”</span> <em>Newbury Park, CA: Sage</em> 10: 9781412984997.
+</div>
+<div id="ref-rosnow2000contrasts" class="csl-entry">
+Rosnow, Ralph L, Robert Rosenthal, and Donald B Rubin. 2000. <span>“Contrasts and Correlations in Effect-Size Estimation.”</span> <em>Psychological Science</em> 11 (6): 446–53.
+</div>
+<div id="ref-wolf1986meta" class="csl-entry">
+Wolf, Fredric M. 1986. <em>Meta-Analysis: Quantitative Methods for Research Synthesis</em>. Vol. 59. Sage.
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Note that for generalized linear models (Poisson, Logistic…), where the outcome is never on an arbitrary scale, estimates themselves <strong>are</strong> indices of effect size! Thus this vignette is relevant only to general linear models.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Note that these are <em>partial</em> percent variance explained, and so their sum can be larger than 1.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Confidence intervals for all indices are estimated using the non-centrality parameter method; These methods search for a the best non-central parameter of the non-central <span class="math inline">\(F\)</span>/<span class="math inline">\(t\)</span> distribution for the desired tail-probabilities, and then convert these ncps to the corresponding effect sizes.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

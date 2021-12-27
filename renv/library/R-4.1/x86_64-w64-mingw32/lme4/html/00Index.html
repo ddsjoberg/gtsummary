@@ -1,0 +1,574 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Linear Mixed-Effects Models using 'Eigen' and S4</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Linear Mixed-Effects Models using 'Eigen' and S4
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;lme4&rsquo; version 1.1-27.1</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+<li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
+<li><a href="../NEWS">Package NEWS</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<p style="text-align: center;">
+<a href="# "> </a>
+<a href="#A">A</a>
+<a href="#B">B</a>
+<a href="#C">C</a>
+<a href="#D">D</a>
+<a href="#E">E</a>
+<a href="#F">F</a>
+<a href="#G">G</a>
+<a href="#H">H</a>
+<a href="#I">I</a>
+<a href="#L">L</a>
+<a href="#M">M</a>
+<a href="#N">N</a>
+<a href="#O">O</a>
+<a href="#P">P</a>
+<a href="#Q">Q</a>
+<a href="#R">R</a>
+<a href="#S">S</a>
+<a href="#T">T</a>
+<a href="#U">U</a>
+<a href="#V">V</a>
+<a href="#W">W</a>
+<a href="#X">X</a>
+<a href="#misc">misc</a>
+</p>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="lme4-package.html">lme4-package</a></td>
+<td>Linear, generalized linear, and nonlinear mixed models</td></tr>
+</table>
+
+<h2><a name="A">-- A --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="allFit.html">allFit</a></td>
+<td>Refit a fitted model with all available optimizers</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">anova.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="Arabidopsis.html">Arabidopsis</a></td>
+<td>Arabidopsis clipping/fertilization data</td></tr>
+<tr><td style="width: 25%;"><a href="ranef.html">as.data.frame.ranef.mer</a></td>
+<td>Extract the modes of the random effects</td></tr>
+<tr><td style="width: 25%;"><a href="profile-methods.html">as.data.frame.thpr</a></td>
+<td>Profile method for merMod objects</td></tr>
+<tr><td style="width: 25%;"><a href="VarCorr.html">as.data.frame.VarCorr.merMod</a></td>
+<td>Extract Variance and Correlation Components</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">as.function.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+</table>
+
+<h2><a name="B">-- B --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="bootMer.html">bootMer</a></td>
+<td>Model-based (Semi-)Parametric Bootstrap for Mixed Models</td></tr>
+</table>
+
+<h2><a name="C">-- C --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="cake.html">cake</a></td>
+<td>Breakage Angle of Chocolate Cakes</td></tr>
+<tr><td style="width: 25%;"><a href="cbpp.html">cbpp</a></td>
+<td>Contagious bovine pleuropneumonia</td></tr>
+<tr><td style="width: 25%;"><a href="checkConv.html">checkConv</a></td>
+<td>Extended Convergence Checking</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">coef.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="confint.merMod.html">confint.merMod</a></td>
+<td>Compute Confidence Intervals for Parameters of a [ng]lmer Fit</td></tr>
+<tr><td style="width: 25%;"><a href="confint.merMod.html">confint.thpr</a></td>
+<td>Compute Confidence Intervals for Parameters of a [ng]lmer Fit</td></tr>
+<tr><td style="width: 25%;"><a href="convergence.html">convergence</a></td>
+<td>Assessing Convergence for Fitted Models</td></tr>
+<tr><td style="width: 25%;"><a href="influence.merMod.html">cooks.distance.influence.merMod</a></td>
+<td>Influence Diagnostics for Mixed-Effects Models</td></tr>
+<tr><td style="width: 25%;"><a href="influence.merMod.html">cooks.distance.merMod</a></td>
+<td>Influence Diagnostics for Mixed-Effects Models</td></tr>
+<tr><td style="width: 25%;"><a href="vcconv.html">cov2sdcor</a></td>
+<td>Convert between representations of (co-)variance structures</td></tr>
+<tr><td style="width: 25%;"><a href="vcconv.html">Cv_to_Sv</a></td>
+<td>Convert between representations of (co-)variance structures</td></tr>
+<tr><td style="width: 25%;"><a href="vcconv.html">Cv_to_Vv</a></td>
+<td>Convert between representations of (co-)variance structures</td></tr>
+</table>
+
+<h2><a name="D">-- D --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="plots.thpr.html">densityplot.thpr</a></td>
+<td>Mixed-Effects Profile Plots (Regular / Density / Pairs)</td></tr>
+<tr><td style="width: 25%;"><a href="devcomp.html">devcomp</a></td>
+<td>Extract the deviance component list</td></tr>
+<tr><td style="width: 25%;"><a href="devfun2.html">devfun2</a></td>
+<td>Deviance Function in Terms of Standard Deviations/Correlations</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">deviance.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">df.residual.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="influence.merMod.html">dfbeta.influence.merMod</a></td>
+<td>Influence Diagnostics for Mixed-Effects Models</td></tr>
+<tr><td style="width: 25%;"><a href="influence.merMod.html">dfbetas.influence.merMod</a></td>
+<td>Influence Diagnostics for Mixed-Effects Models</td></tr>
+<tr><td style="width: 25%;"><a href="ranef.html">dotplot.ranef.mer</a></td>
+<td>Extract the modes of the random effects</td></tr>
+<tr><td style="width: 25%;"><a href="drop1.merMod.html">drop1.merMod</a></td>
+<td>Drop all possible single fixed-effect terms from a mixed effect model</td></tr>
+<tr><td style="width: 25%;"><a href="dummy.html">dummy</a></td>
+<td>Dummy variables (experimental)</td></tr>
+<tr><td style="width: 25%;"><a href="Dyestuff.html">Dyestuff</a></td>
+<td>Yield of dyestuff by batch</td></tr>
+<tr><td style="width: 25%;"><a href="Dyestuff.html">Dyestuff2</a></td>
+<td>Yield of dyestuff by batch</td></tr>
+</table>
+
+<h2><a name="E">-- E --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="expandDoubleVerts.html">expandDoubleVerts</a></td>
+<td>Expand terms with "||" notation into separate "|" terms</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">extractAIC.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+</table>
+
+<h2><a name="F">-- F --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="factorize.html">factorize</a></td>
+<td>Attempt to convert grouping variables to factors</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">family.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="findbars.html">findbars</a></td>
+<td>Determine random-effects expressions from a formula</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">fitted.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="fixef.html">fixed.effects</a></td>
+<td>Extract fixed-effects estimates</td></tr>
+<tr><td style="width: 25%;"><a href="fixef.html">fixef</a></td>
+<td>Extract fixed-effects estimates</td></tr>
+<tr><td style="width: 25%;"><a href="fixef.html">fixef.merMod</a></td>
+<td>Extract fixed-effects estimates</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">formatVC</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">formula.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="fortify.html">fortify</a></td>
+<td>add information to data based on a fitted model</td></tr>
+<tr><td style="width: 25%;"><a href="fortify.html">fortify.merMod</a></td>
+<td>add information to data based on a fitted model</td></tr>
+</table>
+
+<h2><a name="G">-- G --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="fortify.html">getData</a></td>
+<td>add information to data based on a fitted model</td></tr>
+<tr><td style="width: 25%;"><a href="fortify.html">getData.merMod</a></td>
+<td>add information to data based on a fitted model</td></tr>
+<tr><td style="width: 25%;"><a href="getME.html">getL</a></td>
+<td>Extract or Get Generalized Components from a Fitted Mixed Effects Model</td></tr>
+<tr><td style="width: 25%;"><a href="getME.html">getL-method</a></td>
+<td>Extract or Get Generalized Components from a Fitted Mixed Effects Model</td></tr>
+<tr><td style="width: 25%;"><a href="getME.html">getME</a></td>
+<td>Extract or Get Generalized Components from a Fitted Mixed Effects Model</td></tr>
+<tr><td style="width: 25%;"><a href="getME.html">getME.merMod</a></td>
+<td>Extract or Get Generalized Components from a Fitted Mixed Effects Model</td></tr>
+<tr><td style="width: 25%;"><a href="GHrule.html">GHrule</a></td>
+<td>Univariate Gauss-Hermite quadrature rule</td></tr>
+<tr><td style="width: 25%;"><a href="modular.html">glFormula</a></td>
+<td>Modular Functions for Mixed Model Fits</td></tr>
+<tr><td style="width: 25%;"><a href="glmer.html">glmer</a></td>
+<td>Fitting Generalized Linear Mixed-Effects Models</td></tr>
+<tr><td style="width: 25%;"><a href="glmer.nb.html">glmer.nb</a></td>
+<td>Fitting Negative Binomial GLMMs</td></tr>
+<tr><td style="width: 25%;"><a href="lmerControl.html">glmerControl</a></td>
+<td>Control of Mixed Model Fitting</td></tr>
+<tr><td style="width: 25%;"><a href="glmerLaplaceHandle.html">glmerLaplaceHandle</a></td>
+<td>Handle for 'glmerLaplace'</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">glmerMod-class</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="glmFamily.html">glmFamily</a></td>
+<td>Generator object for the 'glmFamily' class</td></tr>
+<tr><td style="width: 25%;"><a href="glmFamily-class.html">glmFamily-class</a></td>
+<td>Class '"glmFamily"' - a reference class for 'family'</td></tr>
+<tr><td style="width: 25%;"><a href="lmResp.html">glmResp</a></td>
+<td>Generator objects for the response classes</td></tr>
+<tr><td style="width: 25%;"><a href="lmResp-class.html">glmResp-class</a></td>
+<td>Reference Classes for Response Modules, '"(lm|glm|nls|lmer)Resp"'</td></tr>
+<tr><td style="width: 25%;"><a href="golden-class.html">golden</a></td>
+<td>Class '"golden"' and Generator for Golden Search Optimizer Class</td></tr>
+<tr><td style="width: 25%;"><a href="golden-class.html">golden-class</a></td>
+<td>Class '"golden"' and Generator for Golden Search Optimizer Class</td></tr>
+<tr><td style="width: 25%;"><a href="GQdk.html">GQdk</a></td>
+<td>Sparse Gaussian / Gauss-Hermite Quadrature grid</td></tr>
+<tr><td style="width: 25%;"><a href="GQdk.html">GQN</a></td>
+<td>Sparse Gaussian / Gauss-Hermite Quadrature grid</td></tr>
+<tr><td style="width: 25%;"><a href="grouseticks.html">grouseticks</a></td>
+<td>Data on red grouse ticks from Elston et al. 2001</td></tr>
+<tr><td style="width: 25%;"><a href="grouseticks.html">grouseticks_agg</a></td>
+<td>Data on red grouse ticks from Elston et al. 2001</td></tr>
+</table>
+
+<h2><a name="H">-- H --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="hatvalues.merMod.html">hatvalues.merMod</a></td>
+<td>Diagonal elements of the hat matrix</td></tr>
+</table>
+
+<h2><a name="I">-- I --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="influence.merMod.html">influence.merMod</a></td>
+<td>Influence Diagnostics for Mixed-Effects Models</td></tr>
+<tr><td style="width: 25%;"><a href="InstEval.html">InstEval</a></td>
+<td>University Lecture/Instructor Evaluations by Students at ETH</td></tr>
+<tr><td style="width: 25%;"><a href="isREML.html">isGLMM</a></td>
+<td>Check characteristics of models</td></tr>
+<tr><td style="width: 25%;"><a href="isREML.html">isGLMM.merMod</a></td>
+<td>Check characteristics of models</td></tr>
+<tr><td style="width: 25%;"><a href="isREML.html">isLMM</a></td>
+<td>Check characteristics of models</td></tr>
+<tr><td style="width: 25%;"><a href="isREML.html">isLMM.merMod</a></td>
+<td>Check characteristics of models</td></tr>
+<tr><td style="width: 25%;"><a href="isNested.html">isNested</a></td>
+<td>Is f1 nested within f2?</td></tr>
+<tr><td style="width: 25%;"><a href="isREML.html">isNLMM</a></td>
+<td>Check characteristics of models</td></tr>
+<tr><td style="width: 25%;"><a href="isREML.html">isNLMM.merMod</a></td>
+<td>Check characteristics of models</td></tr>
+<tr><td style="width: 25%;"><a href="isREML.html">isREML</a></td>
+<td>Check characteristics of models</td></tr>
+<tr><td style="width: 25%;"><a href="isREML.html">isREML.merMod</a></td>
+<td>Check characteristics of models</td></tr>
+<tr><td style="width: 25%;"><a href="isSingular.html">isSingular</a></td>
+<td>Test Fitted Model for (Near) Singularity</td></tr>
+</table>
+
+<h2><a name="L">-- L --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="modular.html">lFormula</a></td>
+<td>Modular Functions for Mixed Model Fits</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">llikAIC</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="lme4-package.html">lme4</a></td>
+<td>Linear, generalized linear, and nonlinear mixed models</td></tr>
+<tr><td style="width: 25%;"><a href="lme4_testlevel.html">lme4_testlevel</a></td>
+<td>Detect testing level for lme4 examples and tests</td></tr>
+<tr><td style="width: 25%;"><a href="lmer.html">lmer</a></td>
+<td>Fit Linear Mixed-Effects Models</td></tr>
+<tr><td style="width: 25%;"><a href="lmerControl.html">lmerControl</a></td>
+<td>Control of Mixed Model Fitting</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">lmerMod-class</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="lmResp.html">lmerResp</a></td>
+<td>Generator objects for the response classes</td></tr>
+<tr><td style="width: 25%;"><a href="lmResp-class.html">lmerResp-class</a></td>
+<td>Reference Classes for Response Modules, '"(lm|glm|nls|lmer)Resp"'</td></tr>
+<tr><td style="width: 25%;"><a href="lmList.html">lmList</a></td>
+<td>Fit List of lm or glm Objects with a Common Model</td></tr>
+<tr><td style="width: 25%;"><a href="lmList4-class.html">lmList4-class</a></td>
+<td>Class "lmList4" of 'lm' Objects on Common Model</td></tr>
+<tr><td style="width: 25%;"><a href="lmResp.html">lmResp</a></td>
+<td>Generator objects for the response classes</td></tr>
+<tr><td style="width: 25%;"><a href="lmResp-class.html">lmResp-class</a></td>
+<td>Reference Classes for Response Modules, '"(lm|glm|nls|lmer)Resp"'</td></tr>
+<tr><td style="width: 25%;"><a href="profile-methods.html">log.thpr</a></td>
+<td>Profile method for merMod objects</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">logLik.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="profile-methods.html">logProf</a></td>
+<td>Profile method for merMod objects</td></tr>
+</table>
+
+<h2><a name="M">-- M --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="pvalues.html">mcmcsamp</a></td>
+<td>Getting p-values for fitted models</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">merMod-class</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="merPredD.html">merPredD</a></td>
+<td>Generator object for the 'merPredD' class</td></tr>
+<tr><td style="width: 25%;"><a href="merPredD-class.html">merPredD-class</a></td>
+<td>Class '"merPredD"' - a Dense Predictor Reference Class</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">methTitle</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="mkSimulationTemplate.html">mkDataTemplate</a></td>
+<td>Make templates suitable for guiding mixed model simulations</td></tr>
+<tr><td style="width: 25%;"><a href="modular.html">mkGlmerDevfun</a></td>
+<td>Modular Functions for Mixed Model Fits</td></tr>
+<tr><td style="width: 25%;"><a href="modular.html">mkLmerDevfun</a></td>
+<td>Modular Functions for Mixed Model Fits</td></tr>
+<tr><td style="width: 25%;"><a href="mkMerMod.html">mkMerMod</a></td>
+<td>Create a 'merMod' Object</td></tr>
+<tr><td style="width: 25%;"><a href="mkSimulationTemplate.html">mkParsTemplate</a></td>
+<td>Make templates suitable for guiding mixed model simulations</td></tr>
+<tr><td style="width: 25%;"><a href="mkRespMod.html">mkRespMod</a></td>
+<td>Create an lmerResp, glmResp or nlsResp instance</td></tr>
+<tr><td style="width: 25%;"><a href="mkReTrms.html">mkReTrms</a></td>
+<td>Make Random Effect Terms: Create Z, Lambda, Lind, etc.</td></tr>
+<tr><td style="width: 25%;"><a href="mkVarCorr.html">mkVarCorr</a></td>
+<td>Make Variance and Correlation Matrices from 'theta'</td></tr>
+<tr><td style="width: 25%;"><a href="vcconv.html">mlist2vec</a></td>
+<td>Convert between representations of (co-)variance structures</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">model.frame.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">model.matrix.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="modular.html">modular</a></td>
+<td>Modular Functions for Mixed Model Fits</td></tr>
+</table>
+
+<h2><a name="N">-- N --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="glmer.nb.html">negative.binomial</a></td>
+<td>Fitting Negative Binomial GLMMs</td></tr>
+<tr><td style="width: 25%;"><a href="NelderMead-class.html">NelderMead</a></td>
+<td>Class '"NelderMead"' of Nelder-Mead optimizers and its Generator</td></tr>
+<tr><td style="width: 25%;"><a href="NelderMead-class.html">NelderMead-class</a></td>
+<td>Class '"NelderMead"' of Nelder-Mead optimizers and its Generator</td></tr>
+<tr><td style="width: 25%;"><a href="Nelder_Mead.html">Nelder_Mead</a></td>
+<td>Nelder-Mead Optimization of Parameters, Possibly (Box) Constrained</td></tr>
+<tr><td style="width: 25%;"><a href="ngrps.html">ngrps</a></td>
+<td>Number of Levels of a Factor or a "merMod" Model</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">ngrps.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="nlformula.html">nlformula</a></td>
+<td>Manipulate a Nonlinear Model Formula</td></tr>
+<tr><td style="width: 25%;"><a href="nlmer.html">nlmer</a></td>
+<td>Fitting Nonlinear Mixed-Effects Models</td></tr>
+<tr><td style="width: 25%;"><a href="lmerControl.html">nlmerControl</a></td>
+<td>Control of Mixed Model Fitting</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">nlmerMod-class</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="nloptwrap.html">nlminbwrap</a></td>
+<td>Wrappers for additional optimizers</td></tr>
+<tr><td style="width: 25%;"><a href="nloptwrap.html">nloptwrap</a></td>
+<td>Wrappers for additional optimizers</td></tr>
+<tr><td style="width: 25%;"><a href="lmResp.html">nlsResp</a></td>
+<td>Generator objects for the response classes</td></tr>
+<tr><td style="width: 25%;"><a href="lmResp-class.html">nlsResp-class</a></td>
+<td>Reference Classes for Response Modules, '"(lm|glm|nls|lmer)Resp"'</td></tr>
+<tr><td style="width: 25%;"><a href="nobars.html">nobars</a></td>
+<td>Omit terms separated by vertical bars in a formula</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">nobs</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">nobs.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+</table>
+
+<h2><a name="O">-- O --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="modular.html">optimizeGlmer</a></td>
+<td>Modular Functions for Mixed Model Fits</td></tr>
+<tr><td style="width: 25%;"><a href="modular.html">optimizeLmer</a></td>
+<td>Modular Functions for Mixed Model Fits</td></tr>
+</table>
+
+<h2><a name="P">-- P --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="Pastes.html">Pastes</a></td>
+<td>Paste strength by batch and cask</td></tr>
+<tr><td style="width: 25%;"><a href="Penicillin.html">Penicillin</a></td>
+<td>Variation in penicillin testing</td></tr>
+<tr><td style="width: 25%;"><a href="lmList.html">plot.lmList</a></td>
+<td>Fit List of lm or glm Objects with a Common Model</td></tr>
+<tr><td style="width: 25%;"><a href="plot.merMod.html">plot.merMod</a></td>
+<td>Diagnostic Plots for 'merMod' Fits</td></tr>
+<tr><td style="width: 25%;"><a href="predict.merMod.html">predict.merMod</a></td>
+<td>Predictions from a model at new data values</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">print.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">print.summary.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="VarCorr.html">print.VarCorr.merMod</a></td>
+<td>Extract Variance and Correlation Components</td></tr>
+<tr><td style="width: 25%;"><a href="profile-methods.html">profile-methods</a></td>
+<td>Profile method for merMod objects</td></tr>
+<tr><td style="width: 25%;"><a href="profile-methods.html">profile.merMod</a></td>
+<td>Profile method for merMod objects</td></tr>
+<tr><td style="width: 25%;"><a href="pvalues.html">pvalues</a></td>
+<td>Getting p-values for fitted models</td></tr>
+</table>
+
+<h2><a name="Q">-- Q --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="plot.merMod.html">qqmath.merMod</a></td>
+<td>Diagnostic Plots for 'merMod' Fits</td></tr>
+<tr><td style="width: 25%;"><a href="ranef.html">qqmath.ranef.mer</a></td>
+<td>Extract the modes of the random effects</td></tr>
+</table>
+
+<h2><a name="R">-- R --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="ranef.html">ranef</a></td>
+<td>Extract the modes of the random effects</td></tr>
+<tr><td style="width: 25%;"><a href="ranef.html">ranef.merMod</a></td>
+<td>Extract the modes of the random effects</td></tr>
+<tr><td style="width: 25%;"><a href="refit.html">refit</a></td>
+<td>Refit a (merMod) Model with a Different Response</td></tr>
+<tr><td style="width: 25%;"><a href="refit.html">refit.merMod</a></td>
+<td>Refit a (merMod) Model with a Different Response</td></tr>
+<tr><td style="width: 25%;"><a href="refitML.html">refitML</a></td>
+<td>Refit a Model by Maximum Likelihood Criterion</td></tr>
+<tr><td style="width: 25%;"><a href="refitML.html">refitML.merMod</a></td>
+<td>Refit a Model by Maximum Likelihood Criterion</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">REMLcrit</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="rePCA.html">rePCA</a></td>
+<td>PCA of random-effects covariance matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rePos.html">rePos</a></td>
+<td>Generator object for the rePos (random-effects positions) class</td></tr>
+<tr><td style="width: 25%;"><a href="rePos-class.html">rePos-class</a></td>
+<td>Class '"rePos"'</td></tr>
+<tr><td style="width: 25%;"><a href="residuals.merMod.html">residuals.glmResp</a></td>
+<td>residuals of merMod objects</td></tr>
+<tr><td style="width: 25%;"><a href="residuals.merMod.html">residuals.lmResp</a></td>
+<td>residuals of merMod objects</td></tr>
+<tr><td style="width: 25%;"><a href="residuals.merMod.html">residuals.merMod</a></td>
+<td>residuals of merMod objects</td></tr>
+</table>
+
+<h2><a name="S">-- S --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="vcconv.html">sdcor2cov</a></td>
+<td>Convert between representations of (co-)variance structures</td></tr>
+<tr><td style="width: 25%;"><a href="lmList4-class.html">show-method</a></td>
+<td>Class "lmList4" of 'lm' Objects on Common Model</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">show-method</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">show.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">show.summary.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="sigma.html">sigma</a></td>
+<td>Extract Residual Standard Deviation 'Sigma'</td></tr>
+<tr><td style="width: 25%;"><a href="sigma.html">sigma.merMod</a></td>
+<td>Extract Residual Standard Deviation 'Sigma'</td></tr>
+<tr><td style="width: 25%;"><a href="simulate.formula.html">simulate.formula</a></td>
+<td>A 'simulate' Method for 'formula' objects that dispatches based on the Left-Hand Side</td></tr>
+<tr><td style="width: 25%;"><a href="simulate.merMod.html">simulate.merMod</a></td>
+<td>Simulate Responses From 'merMod' Object</td></tr>
+<tr><td style="width: 25%;"><a href="sleepstudy.html">sleepstudy</a></td>
+<td>Reaction times in a sleep deprivation study</td></tr>
+<tr><td style="width: 25%;"><a href="plots.thpr.html">splom.thpr</a></td>
+<td>Mixed-Effects Profile Plots (Regular / Density / Pairs)</td></tr>
+<tr><td style="width: 25%;"><a href="subbars.html">subbars</a></td>
+<td>"Sub[stitute] Bars"</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">summary.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">summary.summary.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="vcconv.html">Sv_to_Cv</a></td>
+<td>Convert between representations of (co-)variance structures</td></tr>
+</table>
+
+<h2><a name="T">-- T --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="merMod-class.html">terms.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="troubleshooting.html">troubleshooting</a></td>
+<td>Troubleshooting</td></tr>
+</table>
+
+<h2><a name="U">-- U --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="merMod-class.html">update.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="modular.html">updateGlmerDevfun</a></td>
+<td>Modular Functions for Mixed Model Fits</td></tr>
+</table>
+
+<h2><a name="V">-- V --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="VarCorr.html">VarCorr</a></td>
+<td>Extract Variance and Correlation Components</td></tr>
+<tr><td style="width: 25%;"><a href="VarCorr.html">VarCorr.merMod</a></td>
+<td>Extract Variance and Correlation Components</td></tr>
+<tr><td style="width: 25%;"><a href="profile-methods.html">varianceProf</a></td>
+<td>Profile method for merMod objects</td></tr>
+<tr><td style="width: 25%;"><a href="vcconv.html">vcconv</a></td>
+<td>Convert between representations of (co-)variance structures</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">vcov.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="merMod-class.html">vcov.summary.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+<tr><td style="width: 25%;"><a href="vcconv.html">vec2mlist</a></td>
+<td>Convert between representations of (co-)variance structures</td></tr>
+<tr><td style="width: 25%;"><a href="vcconv.html">vec2STlist</a></td>
+<td>Convert between representations of (co-)variance structures</td></tr>
+<tr><td style="width: 25%;"><a href="VerbAgg.html">VerbAgg</a></td>
+<td>Verbal Aggression item responses</td></tr>
+<tr><td style="width: 25%;"><a href="vcconv.html">Vv_to_Cv</a></td>
+<td>Convert between representations of (co-)variance structures</td></tr>
+</table>
+
+<h2><a name="W">-- W --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="merMod-class.html">weights.merMod</a></td>
+<td>Class "merMod" of Fitted Mixed-Effect Models</td></tr>
+</table>
+
+<h2><a name="X">-- X --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="plots.thpr.html">xyplot.thpr</a></td>
+<td>Mixed-Effects Profile Plots (Regular / Density / Pairs)</td></tr>
+</table>
+
+<h2><a name="misc">-- misc --</a></h2>
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="lmerControl.html">.makeCC</a></td>
+<td>Control of Mixed Model Fitting</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">.prt.aictab</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">.prt.call</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">.prt.family</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">.prt.grps</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">.prt.methTit</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">.prt.resids</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">.prt.VC</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="utilities.html">.prt.warn</a></td>
+<td>Print and Summary Method Utilities for Mixed Effects</td></tr>
+<tr><td style="width: 25%;"><a href="simulate.merMod.html">.simulateFun</a></td>
+<td>Simulate Responses From 'merMod' Object</td></tr>
+<tr><td style="width: 25%;"><a href="expandDoubleVerts.html">||</a></td>
+<td>Expand terms with "||" notation into separate "|" terms</td></tr>
+</table>
+</body></html>

@@ -19,6 +19,12 @@ test_that("no errors/warnings with standard use", {
   expect_error(style_pvalue(pvals, digits = 3, prepend_p = TRUE), NA)
   expect_warning(style_pvalue(pvals, digits = 3), NA)
   expect_warning(style_pvalue(pvals, digits = 3, prepend_p = TRUE), NA)
+
+  vec2 <- c(one = 0.99, two = 0.0005)
+  expect_equal(
+    attributes(vec2),
+    style_pvalue(vec2) %>% attributes()
+  )
 })
 
 

@@ -1,5 +1,41 @@
 # gtsummary (development version)
 
+* Multinomial models computed using MICE are now supported. (#1065)
+
+* Updating the `add_overall()` S3 method to have a more common structure, e.g. `add_overall(x, ....)`, where previously, the `...` were not present. (#1066)
+
+* It is now possible to pass a single tbl to `tbl_merge()`. This is useful when using `tbl_merge()` as a helper in other functions. (#1068)
+
+* Suppress `tbl_merge()` spanning headers by passing `tbl_merge(tab_spanner = FALSE)` (#1067)
+
+* Updated Spanish translation for Wilcoxon Rank-sum Test.
+
+* Fix in `modify_table_styling(cols_merge_pattern)` when it is used with `tbl_stack()` followed by `tbl_merge()`. (#1057)
+
+* No longer exporting `assert_package()`. It has been migrated to {broom.helpers} and we now use `broom.helpers::.assert_package()`. (#1051)
+
+* Bug fix in `separate_p_footnotes()` where test names were not being translated when `theme_gtsummary_language()` was set. (#1055)
+
+* Added `statistics=` and `digits=` arguments to the `add_overall()` family of functions. (#1047)
+
+* Improved error messaging in `tbl_custom_summary()`
+
+* Added `digits=` argument to `tbl_cross()`. (#1046)
+
+* Added `add_overall.tbl_continuous()` method. (#1037)
+
+* Updated the default formatting functions in `tbl_custom_summary()`. Previously, summaries with character results erred because the default summary function was `style_number()`. This has been updated to `style_sigfig()` for numeric columns, and `as.character()` for everything else. (#983)
+
+* Updates to the French translations.
+
+* All `style_*()` functions will retain attribute, such as the names. (#1035, #1031, #981)
+
+* Added link to the `syntax` help file to functions throughout the package. The `syntax` help file illustrates how to use the gtsummary selectors and details the formula-list notation. (#981)
+
+* Fix in `tbl_merge()` when rows in a merging table are not present in the first table. (#1033)
+
+* The `add_n.tbl_regression()` (which is also utilized in `tbl_uvregression()`) was adding the N column without applying a formatting function. The `style_number()` function has now been added as the default styler. (#1022)
+
 * The `add_stat()` function was updated to accept `tbl_continuous()` tables.
 
 * Fix in `as_tibble()` for `nnet::multinom()` regression models.

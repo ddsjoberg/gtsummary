@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Scott Chamberlain" />
+
+<meta name="date" content="2020-07-13" />
+
+<title>6. Choosing a HTTP request class</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">6. Choosing a HTTP request class</h1>
+<h4 class="author">Scott Chamberlain</h4>
+<h4 class="date">2020-07-13</h4>
+
+
+
+<p>There are a number of different crul classes that do HTTP requests. The following table compares features across the classes.</p>
+<table>
+<colgroup>
+<col width="25%"></col>
+<col width="25%"></col>
+<col width="25%"></col>
+<col width="25%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th>Class</th>
+<th>HTTP verbs</th>
+<th>Asynchronous?</th>
+<th>Packges using</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>HttpClient</td>
+<td>all</td>
+<td>no</td>
+<td><a href="https://bcgov.github.io/bcdata/">bcdata</a>,<a href="https://docs.ropensci.org/chirps/">chirps</a>,<a href="https://github.com/dirkschumacher/duckduckr">duckduckr</a>,<a href="https://dreamrs.github.io/gfonts/">gfonts</a>,<a href="https://pacha.dev/mindicador/">mindicador</a>,<a href="https://rmhogervorst.nl/nsapi/">nsapi</a>,<a href="https://docs.ropensci.org/tradestatistics/">tradestatistics</a>,<a href="https://github.com/stefanieschneider/viafr">viafr</a></td>
+</tr>
+<tr class="even">
+<td>Paginator</td>
+<td>all except retry</td>
+<td>no</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>ok</td>
+<td>head,get</td>
+<td>no</td>
+<td><a href="https://jsta.github.io/dams/">dams</a></td>
+</tr>
+<tr class="even">
+<td>Async</td>
+<td>all except retry</td>
+<td>yes</td>
+<td><a href="https://docs.ropensci.org/fulltext/">fulltext</a>,<a href="https://docs.ropensci.org/rdryad/">rdryad</a>,<a href="https://docs.ropensci.org/rnoaa/">rnoaa</a></td>
+</tr>
+<tr class="odd">
+<td>AsyncVaried</td>
+<td>all except retry</td>
+<td>yes</td>
+<td><a href="https://docs.ropensci.org/ropenaq/">ropenaq</a>,<a href="https://docs.ropensci.org/rcrossref/">rcrossref</a>,<a href="https://docs.ropensci.org/taxize/">taxize</a>,<a href="https://docs.ropensci.org/rcitoid/">rcitoid</a>,<a href="https://cran.r-project.org/package=mstrio">mstrio</a></td>
+</tr>
+<tr class="even">
+<td>AsyncQueue</td>
+<td>all except retry</td>
+<td>yes</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>HttpClient</strong> is the main class for doing synchronous HTTP requests. It supports all HTTP verbs including retry. It was the first class in this package. See also <code>crul::ok()</code>, which builds on this class.</p>
+<p><strong>Paginator</strong> is a class for automating pagination. It requires an instance of <code>HttpClient</code> as it’s first parameter. It does not handle asynchronous requests at this time, but may in the future. <code>Paginator</code> may be the right class to use when you don’t know the total number of results. Beware however, that if there are A LOT of results (and a lot depends on your internet speed and the server response time) the requests may take a long time to finish - just plan wisely to fit your needs.</p>
+<p><strong>ok</strong> is a convienence function light wrapper around <code>HttpClient</code>. It’s use case is for determining if a URL is “up”, or “okay”. You don’t have to instantiate an R6 class as you do with the other classes discussed here, but you can pass an <code>HttpClient</code> class to it if you like.</p>
+<p>With <strong>Async</strong> you can make HTTP requests in parallel. <code>Async</code> does not at this time support retry. It’s targeted at the use case where you don’t mind having request settings the same for all requests - you just pass in any number of URLs and all requests get the same headers, auth, curl options applied, if any.</p>
+<p><strong>AsyncVaried</strong> allows you to customize each request using <code>HttpRequest</code> (See below); that is, every HTTP request run asynchronously can have its own curl options, headers, etc.</p>
+<p><strong>AsyncQueue</strong> is the newest class, inheriting from <code>AsyncVaried</code>, introduced in curl v1. The motivation behind this class is: sometimes you may want to do HTTP requests in parallel, but there’s rate limiting or some other reason to want to not simply send off all requests immediately. <code>AsyncQueue</code> sets up a queue, splitting up requests into buckets, and executes requests based on a <code>sleep</code> or <code>req_per_min</code> (requests per minute) setting.</p>
+<div id="httprequest" class="section level2">
+<h2>HttpRequest</h2>
+<p><code>HttpRequest</code> is related here, but not in the table above because it doesn’t do actual HTTP requests, but is used to build HTTP requests to pass in to <code>AsyncVaried</code>. The simplified class <code>Async</code> relative to <code>AsyncVaried</code> uses <code>HttpRequest</code> internally to build requests.</p>
+</div>
+<div id="more-async" class="section level2">
+<h2>More Async</h2>
+<p>See the <a href="async.html">async with crul</a> vignette for more details on asynchronous requests.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

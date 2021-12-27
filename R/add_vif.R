@@ -9,9 +9,10 @@
 #' @param statistic `"VIF"` (variance inflation factors, for models with no categorical terms) or one of/combination of `"GVIF"` (generalized variance inflation factors), `"aGVIF"` 'adjusted GVIF, i.e. `GVIF^[1/(2*df)]` and/or `"df"` (degrees of freedom).
 #' See `car::vif()` for details.
 #' @param estimate_fun Default is [`style_sigfig()`].
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #'
-#' @examplesIf assert_package("car", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("car", boolean = TRUE)
 #' # Example 1 ----------------------------------
 #' add_vif_ex1 <-
 #'   lm(age ~ grade + marker, trial) %>%

@@ -1,0 +1,84 @@
+---
+title: "flextable example"
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(flextable)
+library(officer)
+library(magrittr)
+library(data.table)
+opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+```{r}
+col_palette <- c("#D73027", "#F46D43", "#FDAE61", "#FEE08B", 
+  "#D9EF8B", "#A6D96A", "#66BD63", "#1A9850")
+cor_matrix <- cor(mtcars)
+mycut <- cut( cor_matrix, 
+  breaks = c(-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1), 
+  include.lowest = TRUE, label = FALSE)
+mycolors <- col_palette[mycut]
+data <- data.frame(rowname = row.names(cor_matrix), stringsAsFactors = FALSE) %>%
+  cbind(cor_matrix)
+```
+
+## An example 
+
+```{r}
+flextable(data) %>%
+  bg(j = colnames(cor_matrix), bg = mycolors) %>%
+  align(align = "center", part = "all") %>%
+  compose(i = 1, j = 1, value = as_paragraph(""), part = "header") %>% 
+  colformat_num(j = colnames(cor_matrix), digits = 2) %>% 
+  autofit()
+```
+
+## Another example 
+
+```{r}
+ft <- flextable(head(iris))
+
+# measure column widths but only for the body part
+w_body <- dim_pretty(ft, part = "body")$widths
+# measure column widths only for the header part and get the max
+# as height value for rotated text
+h_header <- max( dim_pretty(ft, part = "header")$widths )
+
+ft <- rotate(ft, j = 1:4, rotation="btlr",part="header")
+ft <- rotate(ft, j = 5, rotation="tbrl",part="header")
+
+ft <- valign(ft, valign = "center", part = "header")
+ft <- align(ft, align = "center", part = "all")
+
+# Manage header height
+ft <- height(ft, height = h_header * 1.1, part = "header")
+# ... mainly because Word don't handle auto height with rotated headers
+ft <- hrule(ft, i = 1, rule = "exact", part = "header")
+
+ft <- set_caption(ft, caption = "iris dataset", autonum = run_autonum(bkm = "iris"))
+ft
+```
+
+
+## flextable - demo as_grouped_data
+
+```{r tab.cap='mean of carbon dioxide uptake in grass plants', tab.id='CO2-id', label='CO2-label'}
+data_CO2 <- dcast(as.data.table(CO2), 
+  Treatment + conc ~ Type, value.var = "uptake", fun.aggregate = mean)
+data_CO2 <- as_grouped_data(x = data_CO2, groups = c("Treatment"))
+
+as_flextable( data_CO2 ) %>% 
+  bold(j = 1, i = ~ !is.na(Treatment), bold = TRUE, part = "body" ) %>% 
+  bold(part = "header", bold = TRUE ) %>% 
+  width(width = 1.5) %>% 
+  compose(i = ~ !is.na(conc), j = "conc", 
+          value = as_paragraph(
+            as_chunk(conc, formatter = function(x) sprintf("%.0f", x))
+          )
+  ) %>% add_footer_lines("dataset CO2 has been used for this flextable") %>% 
+  bg(bg = "#FFFFFF", part = "footer") %>% 
+  set_header_labels(conc = "Concentration") %>% 
+  width(width = c(1.5, 1, 1)) 
+```
+

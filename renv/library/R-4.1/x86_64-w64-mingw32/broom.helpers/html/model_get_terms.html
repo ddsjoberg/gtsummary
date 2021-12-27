@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get the terms of a model</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for model_get_terms {broom.helpers}"><tr><td>model_get_terms {broom.helpers}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get the terms of a model</h2>
+
+<h3>Description</h3>
+
+<p>Return the result of <code><a href="../../stats/help/terms.html">stats::terms()</a></code> applied to the model
+or <code>NULL</code> if it is not possible to get terms from <code>model</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+model_get_terms(model)
+
+## Default S3 method:
+model_get_terms(model)
+
+## S3 method for class 'brmsfit'
+model_get_terms(model)
+
+## S3 method for class 'glmmTMB'
+model_get_terms(model)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>model</code></td>
+<td>
+<p>a model object</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>For models fitted with <code><a href="../../glmmTMB/help/glmmTMB.html">glmmTMB::glmmTMB()</a></code>, it will return a terms object
+taking into account all components (&quot;cond&quot; and &quot;zi&quot;). For a more
+restricted terms object, please refer to <code><a href="../../glmmTMB/help/glmmTMB_methods.html">glmmTMB::terms.glmmTMB()</a></code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../stats/help/terms.html">stats::terms()</a></code>
+</p>
+<p>Other model_helpers: 
+<code><a href="../../broom.helpers/help/model_compute_terms_contributions.html">model_compute_terms_contributions</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_assign.html">model_get_assign</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_coefficients_type.html">model_get_coefficients_type</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_contrasts.html">model_get_contrasts</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_model_frame.html">model_get_model_frame</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_model_matrix.html">model_get_model_matrix</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_model.html">model_get_model</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_nlevels.html">model_get_nlevels</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_n.html">model_get_n</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_offset.html">model_get_offset</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_response.html">model_get_response</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_weights.html">model_get_weights</a>()</code>,
+<code><a href="../../broom.helpers/help/model_get_xlevels.html">model_get_xlevels</a>()</code>,
+<code><a href="../../broom.helpers/help/model_identify_variables.html">model_identify_variables</a>()</code>,
+<code><a href="../../broom.helpers/help/model_list_contrasts.html">model_list_contrasts</a>()</code>,
+<code><a href="../../broom.helpers/help/model_list_terms_levels.html">model_list_terms_levels</a>()</code>,
+<code><a href="../../broom.helpers/help/model_list_variables.html">model_list_variables</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+lm(hp ~ mpg + factor(cyl), mtcars) %&gt;%
+  model_get_terms()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>broom.helpers</em> version 1.3.0.9001 <a href="00Index.html">Index</a>]</div>
+</body></html>

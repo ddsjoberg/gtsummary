@@ -1,0 +1,82 @@
+---
+title: "Radix trees in Rcpp"
+author: "Oliver Keyes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Radix trees in Rcpp}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+A **radix tree** is a data structure optimised for storing key-value pairs in a way optimised for searching. This makes them very, very good for efficiently matching data against keys, and retrieving the values *associated* with those keys.
+
+`triebeard` provides an implementation of radix trees for Rcpp (and also for use directly in R). To start using radix trees in your Rcpp development, simply modify your C++ file to include at the top:
+
+```{Rcpp, eval=FALSE}
+//[[Rcpp::depends(triebeard)]]
+#include <radix.h>
+```
+
+## Constructing trees
+
+Trees are constructed using the syntax:
+
+```{Rcpp, eval=FALSE}
+radix_tree<type1, type2> radix;
+```
+
+Where `type` represents the type of the keys (for example, `std::string`) and `type2` the type of the values.
+
+Radix trees can have any scalar type as keys, although strings are most typical; they can also have any scalar type for values. Once you've constructed a tree, new entries can be added in a very R-like way: `radix[new_key] = new_value;`. Entries can also be removed, with `radix.erase(key)`.
+
+## Matching against trees
+
+We then move on to the fun bit: matching! As mentioned, radix trees are really good for matching arbitrary values against keys (well, keys of the same type) and retrieving the associated values.
+
+There are three types of supported matching; longest, prefix, and greedy. Longest does exactly what it says on the tin: it finds the key-value pair where the longest initial part of the key matches the arbitrary value:
+
+```{Rcpp, eval=FALSE}
+radix_tree<std::string, std::string> radix;
+radix["turnin"] = "entry the first";
+radix["turin"] = "entry the second";
+
+radix_tree<std::string, std::string>::iterator it;
+
+it = radix.longest_match("turing");
+
+if(it = radix.end()){
+  printf("No match was found :(");
+} else {
+  std::string result = "Key of longest match: " + it->first + " , value of longest match: " + it->second;
+}
+```
+
+Prefix matching provides all trie entries where the value-to-match is a *prefix* of the key:
+
+```{Rcpp, eval=FALSE}
+radix_tree<std::string, std::string> radix;
+radix["turnin"] = "entry the first";
+radix["turin"] = "entry the second";
+
+std::vector<radix_tree<std::string, std::string>::iterator> vec;
+std::vector<radix_tree<std::string, std::string>::iterator>::iterator it;
+
+it = radix.prefix_match("tur");
+
+if(it == vec.end()){
+  printf("No match was found :(");
+} else {
+  for (it = vec.begin(); it != vec.end(); ++it) {
+    std::string result = "Key of a prefix match: " + it->first + " , value of a prefix match: " + it->second;
+  }
+}
+```
+
+Greedy matching matches very, very fuzzily (a value of 'bring', for example, will match 'blind', 'bind' and 'binary') and, syntactically, looks exactly the same as prefix-matching, albeit with `radix.greedy_match()` instead of `radix.prefix_match()`.
+
+
+### Other trie things
+
+If you have ideas for other trie-like structures, or functions that would be useful with *these* tries, the best approach
+is to either [request it](https://github.com/Ironholds/triebeard/issues) or [add it](https://github.com/Ironholds/triebeard/pulls)!

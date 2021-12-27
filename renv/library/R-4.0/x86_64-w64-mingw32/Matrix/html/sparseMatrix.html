@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: General Sparse Matrix Construction from Nonzero Entries</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for sparseMatrix {Matrix}"><tr><td>sparseMatrix {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>General Sparse Matrix Construction from Nonzero Entries</h2>
+
+<h3>Description</h3>
+
+<p>User friendly construction of a compressed, column-oriented, sparse
+matrix, inheriting from <code><a href="../../base/html/class.html">class</a></code>
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> (or
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code> if <code>giveCsparse</code> is false),
+from locations (and values) of its non-zero entries.
+</p>
+<p>This is the recommended user interface rather than direct
+<code><a href="../../methods/html/new.html">new</a>("***Matrix", ....)</code> calls.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+sparseMatrix(i = ep, j = ep, p, x, dims, dimnames,
+             symmetric = FALSE, triangular = FALSE, index1 = TRUE,
+             repr = "C", giveCsparse = (repr == "C"),
+             check = TRUE, use.last.ij = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>i,j</code></td>
+<td>
+<p>integer vectors of the same length specifying the locations
+(row and column indices) of the non-zero (or non-<code>TRUE</code>)
+entries of the matrix.  Note that for <em>repeated</em> pairs
+<i>(i_k,j_k)</i>, when <code>x</code> is not missing, the corresponding
+<i>x_k</i> are <em>added</em>, in consistency with the definition of
+the <code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code> class, unless
+<code>use.last.ij</code> is true, in which case only the <em>last</em> of
+the corresponding <i>(i_k, j_k, x_k)</i> triplet is used.</p>
+</td></tr>
+<tr valign="top"><td><code>p</code></td>
+<td>
+<p>numeric (integer valued) vector of pointers, one for each
+column (or row), to the initial (zero-based) index of elements in the
+column (or row).  Exactly one of <code>i</code>, <code>j</code> or <code>p</code> must
+be missing.</p>
+</td></tr>
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>optional values of the matrix entries.  If specified, must be of
+the same length as <code>i</code> / <code>j</code>, or of
+length one where it will be recycled to full length.  If missing,
+the resulting matrix will be a 0/1 patter<b>n</b> matrix, i.e.,
+extending class <code><a href="nsparseMatrix-classes.html">nsparseMatrix</a></code>.
+</p>
+</td></tr>
+<tr valign="top"><td><code>dims</code></td>
+<td>
+<p>optional, non-negative, integer, dimensions vector of
+length 2.  Defaults to <code>c(max(i), max(j))</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>dimnames</code></td>
+<td>
+<p>optional list of <code><a href="../../base/html/dimnames.html">dimnames</a></code>; if not
+specified, none, i.e., <code><a href="../../base/html/NULL.html">NULL</a></code> ones, are used.</p>
+</td></tr>
+<tr valign="top"><td><code>symmetric</code></td>
+<td>
+<p>logical indicating if the resulting matrix should be
+symmetric.  In that case, only the lower or upper triangle needs to
+be specified via <i>(i/j/p)</i>.</p>
+</td></tr>
+<tr valign="top"><td><code>triangular</code></td>
+<td>
+<p>logical indicating if the resulting matrix should be
+triangular.  In that case, the lower or upper triangle needs to
+be specified via <i>(i/j/p)</i>.</p>
+</td></tr>
+<tr valign="top"><td><code>index1</code></td>
+<td>
+<p>logical scalar.  If <code>TRUE</code>, the default, the index
+vectors <code>i</code> and/or <code>j</code> are 1-based, as is the convention
+in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>.  That is, counting of rows and columns starts at 1.  If
+<code>FALSE</code> the index vectors are 0-based so counting of rows and
+columns starts at 0; this corresponds to the internal representation.</p>
+</td></tr>
+<tr valign="top"><td><code>repr</code></td>
+<td>
+<p><code><a href="../../base/html/character.html">character</a></code> string, one of <code>"C"</code>,
+<code>"T"</code>, or <code>"R"</code>, specifying the sparse <em>repr</em>esentation to
+be used for the result, i.e., one from the super classes
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>, <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>, or
+<code><a href="RsparseMatrix-class.html">RsparseMatrix</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>giveCsparse</code></td>
+<td>
+<p>(<b>deprecated</b>, replaced with <code>repr</code>):
+logical indicating if the result should be a
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> or a
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>, where the default was <code>TRUE</code>,
+and now is determined from <code>repr</code>; very often Csparse matrices are
+more efficient subsequently, but not always.</p>
+</td></tr>
+<tr valign="top"><td><code>check</code></td>
+<td>
+<p>logical indicating if a validity check is performed; do
+not set to <code>FALSE</code> unless you know what you're doing!</p>
+</td></tr>
+<tr valign="top"><td><code>use.last.ij</code></td>
+<td>
+<p>logical indicating if in the case of repeated,
+i.e., duplicated pairs <i>(i_k, j_k)</i> only the last one should be
+used.  The default, <code>FALSE</code>, corresponds to the
+<code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code> definition.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Exactly one of the arguments <code>i</code>, <code>j</code> and <code>p</code> must be
+missing.
+</p>
+<p>In typical usage, <code>p</code> is missing, <code>i</code> and <code>j</code> are
+vectors of positive integers and <code>x</code> is a numeric vector.  These
+three vectors, which must have the same length, form the triplet
+representation of the sparse matrix.
+</p>
+<p>If <code>i</code> or <code>j</code> is missing then <code>p</code> must be a
+non-decreasing integer vector whose first element is zero.  It
+provides the compressed, or &ldquo;pointer&rdquo; representation of the row
+or column indices, whichever is missing.  The expanded form of <code>p</code>,
+<code>rep(seq_along(dp),dp)</code> where <code>dp &lt;- diff(p)</code>, is used as
+the (1-based) row or column indices.
+</p>
+<p>You cannot set both <code>singular</code> and <code>triangular</code> to true;
+rather use <code><a href="Diagonal.html">Diagonal</a>()</code> (or its alternatives, see there).
+</p>
+<p>The values of <code>i</code>, <code>j</code>, <code>p</code> and <code>index1</code> are used
+to create 1-based index vectors <code>i</code> and <code>j</code> from which a
+<code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code> is constructed, with numerical
+values given by <code>x</code>, if non-missing.  Note that in that case,
+when some pairs <i>(i_k,j_k)</i> are repeated (aka
+&ldquo;duplicated&rdquo;), the corresponding <i>x_k</i> are <em>added</em>, in
+consistency with the definition of the
+<code>"<a href="TsparseMatrix-class.html">TsparseMatrix</a>"</code> class, unless <code>use.last.ij</code>
+is set to true.
+
+By default, when <code>repr = "C"</code>, the <code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code>
+derived from this triplet form is returned, where <code>repr = "R"</code> now
+allows to directly get an <code><a href="RsparseMatrix-class.html">RsparseMatrix</a></code> and
+<code>repr = "T"</code> leaves the result as <code><a href="TsparseMatrix-class.html">TsparseMatrix</a></code>.
+</p>
+<p>The reason for returning a <code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> object
+instead of the triplet format by default is that the compressed column
+form is easier to work with when performing matrix operations.  In
+particular, if there are no zeros in <code>x</code> then a
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> is a unique representation of the
+sparse matrix.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A sparse matrix, by default (from <code>repr = "C"</code>) in compressed,
+column-oriented form, as an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object inheriting from both
+<code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> and <code><a href="generalMatrix-class.html">generalMatrix</a></code>.
+</p>
+
+
+<h3>Note</h3>
+
+
+<p>You <em>do</em> need to use <code>index1 = FALSE</code> (or add <code>+ 1</code>
+to <code>i</code> and <code>j</code>) if you want use the 0-based <code>i</code> (and
+<code>j</code>) slots from existing sparse matrices.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Matrix.html">Matrix</a>(*, sparse=TRUE)</code> for the constructor of
+such matrices from a <em>dense</em> matrix.  That is easier in small
+sample, but much less efficient (or impossible) for large matrices,
+where something like <code>sparseMatrix()</code> is needed.
+Further <code><a href="bdiag.html">bdiag</a></code> and <code><a href="Diagonal.html">Diagonal</a></code> for (block-)diagonal and
+<code><a href="bandSparse.html">bandSparse</a></code> for banded sparse matrix constructors.
+</p>
+<p>Random sparse matrices via <code><a href="rsparsematrix.html">rsparsematrix</a>()</code>.
+</p>
+<p>The standard <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> <code><a href="../../stats/html/xtabs.html">xtabs</a>(*, sparse=TRUE)</code>, for sparse tables
+and <code><a href="sparse.model.matrix.html">sparse.model.matrix</a>()</code> for building sparse model
+matrices.
+</p>
+<p>Consider <code><a href="CsparseMatrix-class.html">CsparseMatrix</a></code> and similar class
+definition help files.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## simple example
+i &lt;- c(1,3:8); j &lt;- c(2,9,6:10); x &lt;- 7 * (1:7)
+(A &lt;- sparseMatrix(i, j, x = x))                    ##  8 x 10 "dgCMatrix"
+summary(A)
+str(A) # note that *internally* 0-based row indices are used
+
+(sA &lt;- sparseMatrix(i, j, x = x, symmetric = TRUE)) ## 10 x 10 "dsCMatrix"
+(tA &lt;- sparseMatrix(i, j, x = x, triangular= TRUE)) ## 10 x 10 "dtCMatrix"
+stopifnot( all(sA == tA + t(tA)) ,
+           identical(sA, as(tA + t(tA), "symmetricMatrix")))
+
+## dims can be larger than the maximum row or column indices
+(AA &lt;- sparseMatrix(c(1,3:8), c(2,9,6:10), x = 7 * (1:7), dims = c(10,20)))
+summary(AA)
+
+## i, j and x can be in an arbitrary order, as long as they are consistent
+set.seed(1); (perm &lt;- sample(1:7))
+(A1 &lt;- sparseMatrix(i[perm], j[perm], x = x[perm]))
+stopifnot(identical(A, A1))
+
+## The slots are 0-index based, so
+try( sparseMatrix(i=A@i, p=A@p, x= seq_along(A@x)) )
+## fails and you should say so: 1-indexing is FALSE:
+     sparseMatrix(i=A@i, p=A@p, x= seq_along(A@x), index1 = FALSE)
+
+## the (i,j) pairs can be repeated, in which case the x's are summed
+(args &lt;- data.frame(i = c(i, 1), j = c(j, 2), x = c(x, 2)))
+(Aa &lt;- do.call(sparseMatrix, args))
+## explicitly ask for elimination of such duplicates, so
+## that the last one is used:
+(A. &lt;- do.call(sparseMatrix, c(args, list(use.last.ij = TRUE))))
+stopifnot(Aa[1,2] == 9, # 2+7 == 9
+          A.[1,2] == 2) # 2 was *after* 7
+
+## for a pattern matrix, of course there is no "summing":
+(nA &lt;- do.call(sparseMatrix, args[c("i","j")]))
+
+dn &lt;- list(LETTERS[1:3], letters[1:5])
+## pointer vectors can be used, and the (i,x) slots are sorted if necessary:
+m &lt;- sparseMatrix(i = c(3,1, 3:2, 2:1), p= c(0:2, 4,4,6), x = 1:6, dimnames = dn)
+m
+str(m)
+stopifnot(identical(dimnames(m), dn))
+
+sparseMatrix(x = 2.72, i=1:3, j=2:4) # recycling x
+sparseMatrix(x = TRUE, i=1:3, j=2:4) # recycling x, |--&gt; "lgCMatrix"
+
+## no 'x' --&gt; patter*n* matrix:
+(n &lt;- sparseMatrix(i=1:6, j=rev(2:7)))# -&gt; ngCMatrix
+
+## an empty sparse matrix:
+(e &lt;- sparseMatrix(dims = c(4,6), i={}, j={}))
+
+## a symmetric one:
+(sy &lt;- sparseMatrix(i= c(2,4,3:5), j= c(4,7:5,5), x = 1:5,
+                    dims = c(7,7), symmetric=TRUE))
+stopifnot(isSymmetric(sy),
+          identical(sy, ## switch i &lt;-&gt; j {and transpose }
+    t( sparseMatrix(j= c(2,4,3:5), i= c(4,7:5,5), x = 1:5,
+                    dims = c(7,7), symmetric=TRUE))))
+
+## rsparsematrix() calls sparseMatrix() :
+M1 &lt;- rsparsematrix(1000, 20, nnz = 200)
+summary(M1)
+
+## pointers example in converting from other sparse matrix representations.
+if(require(SparseM) &amp;&amp; packageVersion("SparseM") &gt;= 0.87 &amp;&amp;
+   nzchar(dfil &lt;- system.file("extdata", "rua_32_ax.rua", package = "SparseM"))) {
+  X &lt;- model.matrix(read.matrix.hb(dfil))
+  XX &lt;- sparseMatrix(j = X@ja, p = X@ia - 1L, x = X@ra, dims = X@dimension)
+  validObject(XX)
+
+  ## Alternatively, and even more user friendly :
+  X. &lt;- as(X, "Matrix")  # or also
+  X2 &lt;- as(X, "sparseMatrix")
+  stopifnot(identical(XX, X.), identical(X., X2))
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

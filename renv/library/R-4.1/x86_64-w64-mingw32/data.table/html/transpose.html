@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Efficient transpose of list</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for transpose {data.table}"><tr><td>transpose {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Efficient transpose of list</h2>
+
+<h3>Description</h3>
+
+<p><code>transpose</code> is an efficient way to transpose <code>lists</code>, <code>data frames</code> or <code>data tables</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+transpose(l, fill=NA, ignore.empty=FALSE, keep.names=NULL, make.names=NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>l</code></td>
+<td>
+<p> A list, data.frame or data.table. </p>
+</td></tr>
+<tr valign="top"><td><code>fill</code></td>
+<td>
+<p> Default is <code>NA</code>. It is used to fill shorter list elements so as to return each element of the transposed result of equal lengths. </p>
+</td></tr>
+<tr valign="top"><td><code>ignore.empty</code></td>
+<td>
+<p>Default is <code>FALSE</code>. <code>TRUE</code> will ignore length-0 list elements.</p>
+</td></tr>
+<tr valign="top"><td><code>keep.names</code></td>
+<td>
+<p>The name of the first column in the result containing the names of the input; e.g. <code>keep.names="rn"</code>. By default <code>NULL</code> and the names of the input are discarded.</p>
+</td></tr>
+<tr valign="top"><td><code>make.names</code></td>
+<td>
+<p>The name or number of a column in the input to use as names of the output; e.g. <code>make.names="rn"</code>. By default <code>NULL</code> and default names are given to the output columns.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>The list elements (or columns of <code>data.frame</code>/<code>data.table</code>) should be all <code>atomic</code>. If list elements are of unequal lengths, the value provided in <code>fill</code> will be used so that the resulting list always has all elements of identical lengths. The class of input object is also preserved in the transposed result.
+</p>
+<p>The <code>ignore.empty</code> argument can be used to skip or include length-0 elements.
+</p>
+<p>This is particularly useful in tasks that require splitting a character column and assigning each part to a separate column. This operation is quite common enough that a function <code><a href="../../data.table/help/tstrsplit.html">tstrsplit</a></code> is exported.
+</p>
+<p><code>factor</code> columns are converted to <code>character</code> type. Attributes are not preserved at the moment. This may change in the future.
+</p>
+
+
+<h3>Value</h3>
+
+<p>A transposed <code>list</code>, <code>data.frame</code> or <code>data.table</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../data.table/help/data.table.html">data.table</a></code>, <code><a href="../../data.table/help/tstrsplit.html">tstrsplit</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+ll = list(1:5, 6:8)
+transpose(ll)
+setDT(transpose(ll, fill=0))[]
+
+DT = data.table(x=1:5, y=6:10)
+transpose(DT)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

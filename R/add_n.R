@@ -3,6 +3,8 @@
 #' @param x Object created from a gtsummary function
 #' @param ... Additional arguments passed to other methods.
 #' @author Daniel D. Sjoberg
+#'
+#' @keywords internal
 #' @seealso [add_n.tbl_summary()], [add_n.tbl_svysummary()], [add_n.tbl_survfit()],
 #' [add_n.tbl_regression], [add_n.tbl_uvregression]
 #' @export
@@ -40,6 +42,7 @@ add_n <- function(x, ...) {
 #' @family tbl_svysummary tools
 #' @author Daniel D. Sjoberg
 #' @export
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @rdname add_n.tbl_summary
 #' @return A `tbl_summary` or `tbl_svysummary` object
 #' @examples
@@ -199,6 +202,7 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 #' @param x object of class "`tbl_survfit`"
 #' @param ... Not used
 #' @export
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @family tbl_survfit tools
 #' @examples
 #' library(survival)
@@ -344,7 +348,12 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
       .data$stat_n,
       .after = .data$label
     ) %>%
-    modify_header(stat_n ~ "**N**")
+    modify_table_styling(
+      columns = all_of("stat_n"),
+      label = "**N**",
+      hide = FALSE,
+      fmt_fun = style_number
+    )
 
   x$call_list <- updated_call_list
   x

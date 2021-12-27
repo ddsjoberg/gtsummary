@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Comparison with data frames</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Comparison with data frames</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tibble)</span></code></pre></div>
+<p>Base R offers the <code>&quot;digits&quot;</code> and <code>&quot;scipen&quot;</code> options to control the number of significant digits and the switch to scientific notation. For tibble, the options <code>&quot;pillar.sigfig&quot;</code> and <code>&quot;pillar.max_dec_width&quot;</code> fulfill a similar purpose. This vignette showcases similarities and differences. See <code>?pillar::pillar_options</code> and <code>?tibble_options</code> for an overview over all options.</p>
+<div id="digits" class="section level2">
+<h2>Digits</h2>
+<div id="basic-differences" class="section level3">
+<h3>Basic differences</h3>
+<p>The default for <code>getOption(&quot;digits&quot;)</code> is 7, whereas the <code>&quot;pillar.sigfig&quot;</code> option defaults to 3. In the default setting, pillar prints the first three digits only (i.e. the digits that represent &gt; 99.9% of the value of the number). Another difference is that pillar will show at most the specified number of significant digits, even if space is available. The rationale is to allow a quick glance over the most significant digits of a number, without spending too much horizontal space and without distraction from insignificant digits.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fl">1.2345</span>, <span class="fl">12.345</span>, <span class="fl">123.45</span>, <span class="fl">1234.5</span>, <span class="dv">12345</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1]     1.23    12.35   123.45  1234.50 12345.00
+</code></pre>
+</div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="fl">1.2345</span>, <span class="fl">12.345</span>, <span class="fl">123.45</span>, <span class="fl">1234.5</span>, <span class="dv">12345</span>))</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 5 × 1</span>
+#&gt;          <span style="font-weight: bold;">x</span>
+#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span>     1.23
+#&gt; <span style="color: #BCBCBC;">2</span>    12.3 
+#&gt; <span style="color: #BCBCBC;">3</span>   123.  
+#&gt; <span style="color: #BCBCBC;">4</span>  <span style="text-decoration: underline;">1</span>234.  
+#&gt; <span style="color: #BCBCBC;">5</span> <span style="text-decoration: underline;">12</span>345
+</code></pre>
+</div>
+</div>
+<div id="terminal-zeros" class="section level3">
+<h3>Terminal zeros</h3>
+<p>Terminal zeros are only shown in pillar if there is a nonzero value past the significant digits shown. This is in contrast to base R where terminal zeros are always shown if there is space, but hidden if the value is too insignificant:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">1.00001</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 1 1
+</code></pre>
+</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">1.00001</span>))</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 2 × 1</span>
+#&gt;       <span style="font-weight: bold;">x</span>
+#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span>  1   
+#&gt; <span style="color: #BCBCBC;">2</span>  1.00
+</code></pre>
+</div>
+</div>
+<div id="trailing-dot" class="section level3">
+<h3>Trailing dot</h3>
+<p>A trailing decimal separator is shown if there is a fractional part but the integer part already exceeds the significant digits. The presence of the decimal separator does <strong>not</strong> indicate that the number is larger, only that there exists a nonzero fractional part:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="dv">123</span>, <span class="fl">123.45</span>, <span class="fl">567.89</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 123 123 568
+</code></pre>
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">123</span>, <span class="fl">123.45</span>, <span class="fl">567.89</span>))</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 3 × 1</span>
+#&gt;       <span style="font-weight: bold;">x</span>
+#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span>  123 
+#&gt; <span style="color: #BCBCBC;">2</span>  123.
+#&gt; <span style="color: #BCBCBC;">3</span>  568.
+</code></pre>
+</div>
+</div>
+<div id="showing-more-digits" class="section level3">
+<h3>Showing more digits</h3>
+<p>To show more significant digits, set the <code>&quot;pillar.sigfig&quot;</code> option to a larger value:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">7</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">pillar.sigfig =</span> <span class="dv">7</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fl">1.2345</span>, <span class="fl">12.345</span>, <span class="fl">123.45</span>, <span class="fl">1234.5</span>, <span class="dv">12345</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1]     1.2345    12.3450   123.4500  1234.5000 12345.0000
+</code></pre>
+</div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="fl">1.2345</span>, <span class="fl">12.345</span>, <span class="fl">123.45</span>, <span class="fl">1234.5</span>, <span class="dv">12345</span>))</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 5 × 1</span>
+#&gt;            <span style="font-weight: bold;">x</span>
+#&gt;        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span>     1.234<span style="text-decoration: underline;">5</span>
+#&gt; <span style="color: #BCBCBC;">2</span>    12.345 
+#&gt; <span style="color: #BCBCBC;">3</span>   123.45  
+#&gt; <span style="color: #BCBCBC;">4</span>  <span style="text-decoration: underline;">1</span>234.5   
+#&gt; <span style="color: #BCBCBC;">5</span> <span style="text-decoration: underline;">12</span>345
+</code></pre>
+</div>
+<p>Setting <code>&quot;pillar.sigfig&quot;</code> to a larger value will not enhance the display with digits deemed insignificant:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">7</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">pillar.sigfig =</span> <span class="dv">7</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fl">1.2345</span>, <span class="fl">12.3456</span>, <span class="fl">123.4567</span>, <span class="fl">1234.5678</span>, <span class="fl">12345.6789</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1]     1.2345    12.3456   123.4567  1234.5678 12345.6789
+</code></pre>
+</div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="fl">1.2345</span>, <span class="fl">12.3456</span>, <span class="fl">123.4567</span>, <span class="fl">1234.5678</span>, <span class="fl">12345.6789</span>))</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 5 × 1</span>
+#&gt;            <span style="font-weight: bold;">x</span>
+#&gt;        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span>     1.234<span style="text-decoration: underline;">5</span>
+#&gt; <span style="color: #BCBCBC;">2</span>    12.345<span style="text-decoration: underline;">6</span>
+#&gt; <span style="color: #BCBCBC;">3</span>   123.456<span style="text-decoration: underline;">7</span>
+#&gt; <span style="color: #BCBCBC;">4</span>  <span style="text-decoration: underline;">1</span>234.568 
+#&gt; <span style="color: #BCBCBC;">5</span> <span style="text-decoration: underline;">12</span>345.68
+</code></pre>
+</div>
+</div>
+<div id="fixed-number-of-digits" class="section level3">
+<h3>Fixed number of digits</h3>
+<p>To show a fixed number of decimal digits, use <code>num()</code> with a <code>digits</code> argument:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">num</span>(<span class="fu">c</span>(<span class="fl">1.2345</span>, <span class="fl">12.345</span>, <span class="fl">123.45</span>, <span class="fl">1234.5</span>, <span class="dv">12345</span>), <span class="at">digits =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; &lt;pillar_num:.2![5]&gt;
+#&gt; [1]     1.23    12.35   123.45  1234.50 12345.00
+</code></pre>
+</div>
+<p>See <code>vignette(&quot;numbers&quot;)</code> for details.</p>
+</div>
+</div>
+<div id="scientific-notation" class="section level2">
+<h2>Scientific notation</h2>
+<div id="when-is-it-used" class="section level3">
+<h3>When is it used?</h3>
+<p>Both base R and pillar switch to scientific notation when the decimal representation becomes too wide. The larger <code>getOption(&quot;scipen&quot;)</code>, the stronger the resistance to switching to scientific notation. The default <code>0</code> seems to be anchored at 13 digits for the integer part.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dv">123456789012</span></span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 123456789012
+</code></pre>
+</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fl">123456789012.3</span></span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 123456789012
+</code></pre>
+</div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1234567890123</span></span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 1.234568e+12
+</code></pre>
+</div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1234567890123.4</span></span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 1.234568e+12
+</code></pre>
+</div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">scipen =</span> <span class="dv">1</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="dv">1234567890123</span></span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 1234567890123
+</code></pre>
+</div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="dv">12345678901234</span></span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 1.234568e+13
+</code></pre>
+</div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fl">12345678901234.5</span></span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; [1] 1.234568e+13
+</code></pre>
+</div>
+<p>The <code>&quot;pillar.max_dec_width&quot;</code> option is similar, it indicates the width that must be exceeded for a switch to scientific notation to happen. This width includes the decimal separator.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">123456789012</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 1 × 1</span>
+#&gt;              <span style="font-weight: bold;">x</span>
+#&gt;          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">123</span>456<span style="text-decoration: underline;">789</span>012
+</code></pre>
+</div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fl">123456789012.3</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 1 × 1</span>
+#&gt;               <span style="font-weight: bold;">x</span>
+#&gt;           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">123</span>456<span style="text-decoration: underline;">789</span>012.
+</code></pre>
+</div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">1234567890123</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 1 × 1</span>
+#&gt;               <span style="font-weight: bold;">x</span>
+#&gt;           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> 1<span style="text-decoration: underline;">234</span>567<span style="text-decoration: underline;">890</span>123
+</code></pre>
+</div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fl">1234567890123.4</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 1 × 1</span>
+#&gt;             <span style="font-weight: bold;">x</span>
+#&gt;         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> 1.234<span style="text-decoration: underline;">568</span><span style="color: #949494;">e</span>12
+</code></pre>
+</div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">pillar.max_dec_width =</span> <span class="dv">14</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">1234567890123</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 1 × 1</span>
+#&gt;               <span style="font-weight: bold;">x</span>
+#&gt;           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> 1<span style="text-decoration: underline;">234</span>567<span style="text-decoration: underline;">890</span>123
+</code></pre>
+</div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="dv">12345678901234</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 1 × 1</span>
+#&gt;                <span style="font-weight: bold;">x</span>
+#&gt;            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> 12<span style="text-decoration: underline;">345</span>678<span style="text-decoration: underline;">901</span>234
+</code></pre>
+</div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fl">12345678901234.5</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; <span style="color: #949494;"># A tibble: 1 × 1</span>
+#&gt;             <span style="font-weight: bold;">x</span>
+#&gt;         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>
+#&gt; <span style="color: #BCBCBC;">1</span> 1.234<span style="text-decoration: underline;">568</span><span style="color: #949494;">e</span>13
+</code></pre>
+</div>
+</div>
+<div id="enforce-notation" class="section level3">
+<h3>Enforce notation</h3>
+<p>To avoid switching to scientific notation, set the <code>&quot;pillar.max_dec_width&quot;</code> option to a large value. Note that if the required width is not available to show the column, it will not be shown at all in this case. The <code>notation</code> argument to <code>num()</code> offers more options:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">num</span>(<span class="dv">12345678901234567</span>, <span class="at">notation =</span> <span class="st">&quot;dec&quot;</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; &lt;pillar_num(dec)[1]&gt;
+#&gt; [1] 12345678901234568
+</code></pre>
+</div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">num</span>(<span class="dv">12345678901234567</span>, <span class="at">notation =</span> <span class="st">&quot;sci&quot;</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; &lt;pillar_num(sci)[1]&gt;
+#&gt; [1] 1.234568e16
+</code></pre>
+</div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">num</span>(<span class="dv">12345678901234567</span>, <span class="at">notation =</span> <span class="st">&quot;eng&quot;</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; &lt;pillar_num(eng)[1]&gt;
+#&gt; [1] 12.34568e15
+</code></pre>
+</div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">num</span>(<span class="dv">12345678901234567</span>, <span class="at">notation =</span> <span class="st">&quot;si&quot;</span>)</span></code></pre></div>
+<div class="sourceCode">
+<pre class="sourceCode"><code class="sourceCode">#&gt; &lt;pillar_num(si)[1]&gt;
+#&gt; [1] 12.34568P
+</code></pre>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

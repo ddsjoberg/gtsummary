@@ -1,0 +1,82 @@
+---
+title: "Collaborating with renv"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Collaborating with renv}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+When you want to share a project with other collaborators, you may want to
+ensure everyone is working with the same environment -- otherwise, code in the
+project may unexpectedly fail to run because of changes in behavior between
+different versions of the packages in use. You can use `renv` to help make
+this possible.
+
+
+## Collaborating with renv
+
+If you're planning to collaborate with others using `renv`, we recommend the
+following steps to get started:
+
+1. Select a way to share your project sources. We recommend using a version
+   control system alongside a public repository; e.g. [git](https://git-scm.com/)
+   with [GitHub](https://github.com/), but many other options are available.
+
+2. One user (perhaps yourself) should explicitly initialize `renv` in the
+   project, via `renv::init()`. This will create the initial `renv` lockfile,
+   and also write the `renv` auto-loaders to the project's `.Rprofile` and
+   `renv/activate.R`. These will ensure the right version of `renv` is
+   downloaded and installed for your collaborators when they start \R in this
+   project.
+
+3. Share your project sources, alongside the generated lockfile `renv.lock`.
+   Be sure to also share the generated auto-loaders in `.Rprofile` and
+   `renv/activate.R`.
+
+4. When a collaborator first launches \R in this project, `renv` should
+   automatically bootstrap itself, thereby downloading and installing the
+   appropriate version of `renv` into the project library. After this has
+   completed, they can then use `renv::restore()` to restore the project
+   library locally on their machine.
+
+For more information on collaboration strategies, please visit
+[environments.rstudio.com](https://environments.rstudio.com/).
+
+
+## Updating the Lockfile
+
+While working on a project, you or your collaborators may need to update or
+install new packages in your project. When this occurs, you'll also want to
+ensure your collaborators are then using the same newly-installed packages.
+In general, the process looks like this:
+
+1. A user installs, or updates, one or more packages in their local project library;
+
+2. That user calls `renv::snapshot()` to update the `renv.lock` lockfile;
+
+3. That user then shares the updated version of `renv.lock` with their collaborators;
+
+4. Other collaborators then call `renv::restore()` to install the packages specified
+   in the newly-updated lockfile.
+
+A bit of care is required if collaborators wish to update the shared `renv.lock`
+lockfile concurrently -- in particular, if multiple collaborators are installing
+new packages and updating their own local copy of the lockfile, then conflicts
+would need to be sorted out afterwards.
+
+One way to guard against this it to use a version control system, and have all
+collaborators work off the same branch. This way, if someone needs to update
+`renv.lock` in the public repository, all collaborators will see that updated
+lockfile and will gain access to it next time they pull those changes. Depending
+on the size of your team, you may want to ensure any changes to `renv.lock` are
+communicated so that everyone knows and understands when and why packages have
+been installed or updated.

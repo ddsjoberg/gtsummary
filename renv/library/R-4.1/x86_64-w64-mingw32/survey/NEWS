@@ -1,0 +1,1416 @@
+4.1-1	CRAN
+
+4.1	svyquantile() has been COMPLETELY REWRITTEN. The old version is available
+	as oldsvyquantile() (for David Eduardo Jorquera Petersen)
+
+	svycontrast()'s improvements for statistics with replicates are now also there with
+	svyby(), for domain comparisons (Robert Baskin)
+
+	svyttest() now gives an error message if the binary group variable isn't binary
+	(for StackOverflow 60930323)
+
+	confint.svyglm Wald-type intervals now correctly label the columns (eg 2.5%, 97.5%)
+	(for Molly Petersen)
+
+	svyolr() using linearisation had the wrong standard errors for intercepts
+	other than the first, if extracted using vcov (it was correct in summary() output)
+
+	svyglm() gave deffs that were too large by a factor of nrow(design). (Adrianne Bradford)
+
+	svycoxph() now warns if you try to use frailty or other penalised terms, because they
+	just come from calling coxph and I have no reason to believe they work correctly
+	in complex samples (for Claudia Rivera)
+
+	coef.svyglm() now has a complete= argument to match coef.default(). (for Thomas Leeper)
+
+	summary.svyglm() now gives NA p-values and a warning, rather than Inf standard errors,
+	when the residual df are zero or negative (for Dan Simpson and Lauren Kennedy)
+
+	In the multigroup case, svyranktest() now documents which elements of the 'htest'
+	object have which parts of the result, because it's a bit weird (for Justin Allen)
+
+	svycontrast() gets a new argument add=TRUE to keep the old coefficients as well
+
+	twophase() can now take strata= arguments that are character, not just factor
+	or numeric. (for Pam Shaw)
+
+	add reference to Chen & Lumley on tail probabilities for quadratic forms.
+
+	add reference to Breslow et al for calibrate()
+
+	add svyqqplot and svyqqmath for quantile-quantile plots
+
+	SE.svyby would grab confidence interval limits instead of SEs if vartype=c("ci","se").
+
+	svylogrank(method="small") was wrong (though method="score" and method="large" are ok),
+	because of problems in obtaining the at-risk matrix from coxph.detail. (for Zhiwen Yao)
+
+	added as.svrepdesign.svyimputationList and withReplicates.svyimputationList
+	(for Ángel Rodríguez Laso)
+
+	logLik.svyglm used to return the deviance and now divides it by -2
+
+	svybys() to make multiple tables by separate variables rather than a joint table
+	(for Hannah Evans)
+
+	added predictat= option to svypredmeans for Steven Johnston.
+
+	Fixed bug in postStratify.svyrep.design, was reweighting all reps the same (Steven Johnston)
+
+	Fix date for Thomas & Rao (1987) (Neil Diamond)
+
+	Add svygofchisq() for one-sample chisquared goodness of fit (for Natalie Gallagher)
+
+	confint.svyglm(method="Wald") now uses t distribution with design df by default.
+	(for Ehsan Karim)
+
+	confint.svyglm() checks for zero/negative degrees of freedom
+
+
+	confint.svyglm() checks for zero/negative degrees of freedom
+
+	mrb bootstrap now doesn't throw an error when there's a single PSU in a stratum
+	(Steve White)
+
+	oldsvyquantile() bug with producing replicate-weight confidence intervals for
+	multiple quantiles (Ben Schneider)
+
+	regTermTest(,method="LRT") didn't work if the survey design object and model were
+	defined in a function (for Keiran Shao)
+
+	svyglm() has clearer error message when the subset= argument contains NAs (for Pam Shaw)
+	and when the weights contain NAs (for Paige Johnson)
+
+	regTermTest was dropping the first term for coxph() models (Adam Elder)
+
+	svydesign() is much faster for very large datasets with character ids or strata.
+
+	svyglm() now works with na.action=na.exclude (for Terry Therneau)
+
+	extractAIC.svylm does the design-based AIC for the two-parameter Gaussian model, so
+	estimating the variance parameter as well as the regression parameters.
+	(for Benmei Liu and Barry Graubard)
+
+	svydesign(, pps=poisson_sampling()) for Poisson sampling, and ppscov() for
+	specifying PPS design with weighted or unweighted covariance of sampling indicators
+	(for Claudia Rivera Rodriguez)
+
+
+4.0	Some (and eventually nearly all) functions now return influence functions when
+	called with a survey.design2 object and the influence=TRUE option.  These allow
+	svyby() to estimate covariances between domains, which could previously only be
+	done for replicate-weight designs, and so allow svycontrast() to do domain contrasts
+	 - svymean, svytotal, svyratio, svymle, svyglm, svykappa
+
+	Nonlinear least squares with svynls() now available
+
+	Document that predict.svyglm() doesn't use a rescaled residual mean square
+	to estimate standard errors, and so disagrees with some textbooks. (for Trent Buskirk)
+
+3.38	When given a statistic including replicates, svycontrast() now transforms the replicates
+	and calculates the variance, rather than calculating the variance then using the
+	delta method.  Allows geometric means to exactly match SAS/SUDAAN (for Robert Baskin)
+
+	vcov.svyrep.design to simplify computing variances from replicates (for William Pelham)
+
+	svykm() no longer throws an error with single-observation domains (for Guy Cafri)
+
+	Documentation for svyglm() specifies that it has always returned
+	model-robust standard errors. (for various people wanting to fit relative risk
+	regression models).
+
+3.37	RODBC database connections are no longer supported.
+	Use the DBI-compatible 'odbc' package
+
+	set scale<-1 if it is still NULL after processing, inside svrepdesign()
+        [https://stats.stackexchange.com/questions/409463]
+
+       	Added withPV for replicate-weight designs [for Tomasz Żółtak]
+
+      	svyquantile for replicate-weight designs now uses a supplied alpha to get
+       	confidence intervals and estimates SE by dividing confidence interval length
+       	by twice abs(qnorm(alpha/2)). [For Klaus Ignacio Lehmann Melendez]
+
+       	All the svyquantile methods now take account of design degrees of freedom and
+       	use t distributions for confidence intervals. Specify df=Inf to get a Normal.
+       	[For Klaus Ignacio Lehmann Melendez]
+
+       	svyivreg() for 2-stage least-squares (requires the AER package)
+
+       	warn when rho= is used with type="BRR" in svrepdesign [for Tomasz Żółtak]
+
+	Add "ACS" and "successive-difference" to type= in svrepdesign(),
+	for the American Community Survey weights
+
+	Add "JK2" to type= in svrepdesign
+
+	Warn when scale, rscales are supplied unnecessarily to svyrepdesign
+
+        More explanation of 'symbolically nested' in anova.svyglm
+
+        Link to blog post about design df with replicate weights.
+
+        Chase 'Encyclopedia of Design Theory' link again. 
+
+3.36   Add withPV.survey.design for plausible-value analyses (needs mitools >=2.4)
+
+3.35-3 Warning from svrepdesign() if type="BRR" and scale= is specified, to catch defaulting
+       to BRR (Stas Kolenikov)
+
+       More fixes to svymle() with linear predictors for multiple parameters
+       (no change to results, but gets rid of warning)
+
+       allow svyby() to have a vector as the first argument
+
+       force character vectors to factor in id= argument of svydesign (fixes Stack Overflow 54239063)
+
+3.35-2 The previous (3.34) patch to allow offsets in svymle() didn't work with non-trivial linear predictors
+       for multiple parameters. (reported by Beat Hulliger)
+
+3.35-1 svytable() could give an integer overflow with a replicate-weight design having integer weights,
+       such as CHIS.  (Elizabeth Purdom)
+
+       empty factor levels in the strata= argument to svydesign() no longer create strata
+
+       The twophase() function gave errors when the first phase of sampling had multiple
+       stages (reported by Pedro Luis Baldoni)
+
+3.35   The use of RODBC is DEPRECATED. If possible, I want to move to just supporting the R-DBI
+       interface; you can use ODBC connections with the DBI-compatible 'odbc' package
+
+       Some instances of deparse() needed to be paste(deparse(), collapse=""), notably in svyciprop() (Boris Fazio)
+
+       Fix to svycontrast had broken the no-names case (Brian Miner)
+
+       More helpful error message with missing values in replicate weights (Antony Damico)
+
+       svyglm() now uses match.call() rather than sys.call() for storing the call (for Michael Laviolette)
+
+       svystandardize() now takes over=~1 for the whole population (for Michael Laviolette)
+
+       svycralpha() does Cronbach's alpha (for Franziska Kößler)
+
+       many tests based on the printed output are moved to tests/testoutput because they
+       differ trivially between platforms and so aren't CRAN-compliant.
+
+3.34   removed duplicate definition of svycontrast.svystat
+
+       fix match.names() for the case of all the same names in different order (Sebastien Lucie)
+
+       make rescaling of weights optional in svyglm and svycoxph (Greg Ridgeway)
+
+       USER VISIBLE CHANGE: default rescaling of weights in svyglm and svycoxph with replicate
+       weights is now mean=1, as it always was with svydesign objects, rather than sum=1.
+       This does not affect estimates or tests or comparisons, but the AIC and its effective
+       degrees of freedom will look more plausible, as will the deviance.
+
+       Fix handling of missing data for calibrated designs in svyranktest (for Brad Biggerstaff)
+
+       handle empty subsets in onestage, because svyby().  (for Greg Freedman)
+
+       allow offset() in svymle()   (Patrick Brown)
+
+       svyhist() returns the same as hist(), plus when freq=TRUE a component
+       count_scale giving the scale factor between counts and density (for Ward Kingkade)
+
+       example of geometric means added to ?svycontrast (for Irene van Woerden)
+
+       move check for missing repweights later in the function to pick up more cases (Anthony Damico)
+
+       fix printing of predicted values from predict.svrepglm  (for Anthony Damico)
+
+       added minqa::newuoa and minqa::bobyqa as options for svymle(), and made 'newuoa'
+       the default when a gradient is available
+
+
+3.33-2 confint method for svyttest (for Brian Guay)
+
+       partial fix in start= argument for svyglm() [still doesn't work inside function] 
+
+3.33-1 two minor bug fixes for ABS contributions to calibrate()
+
+3.33   Add explicit family= argument to svyglm() methods because of strange scoping problems (for Thomas Leeper)
+
+       calibrate() now displays differences between sample and population names (for Stas Kolenikov)
+
+       cal_names() displays what the auxiliary variable names will be for a formula
+
+       regTermTest() now does Rao-Scott-type Wald tests, which I think are the same as SUDAAN's
+       "Satterthwaite Adjusted Wald Tests" (but I don't have an example to verify).
+
+3.32-2 Actually add the hyperbolic sine distance function
+
+       Add AIC method for svycoxph
+
+3.32-1 pseudo-rsquared paper is out: update reference
+
+       Add cal.sinh for the hyperbolic sine distance function (used in CALMAR2) with code from Maciej Beręsewicz
+
+       Coerce tbl_dfs to data frames in svydesign, svrepdesign, twophase, because they aren't actually a drop-in replacement.
+
+3.32	Add diffs for calibration from Daniel Oehm at ABS
+
+        - Sparse matrix support
+	- Heteroscedasticity parameters
+        - more flexible boundary constraints
+
+        Update references to AIC/BIC paper, Statistical Science review paper
+
+        More information on accuracy of pchisqsum methods
+
+        svyglm() didn't work with missing values in database-backed designs (Anthony Damico)
+
+3.31-8  Add svysurvreg() (for Pam Shaw and Eric Oh)
+
+        Remove the tests that don't produce character-identical output on all platforms (for CRAN)
+
+3.31-7  Add deff="replace" as an option for svyratio (for Chris Webb)
+
+        Add psrsq() for pseudo-R^2 statistics (for Ward Kinkade)
+
+3.31-6  Make database-backed svydesign work with *no* design variables  (for Anthony Damico and Guilherme Jacob)
+
+3.31-5  predict.svyglm() uses object$xlevels and object$contrasts and so should be able to
+        guess the right factor levels when they aren't supplied in newdata= (for @thosjleeper)
+
+	fix return() without parentheses in svykm.R
+
+3.31-4	svyciprop(,method="like") and confint.svyglm(method="like") work even when the 
+        design effect is large. 
+
+3.31-3  svyciprop has method="xlogit" that reproduces what SUDAAN and SPSS give. (for Rex Dwyer)
+
+	Added reference for svylogrank
+
+	Added example from YRBS for software comparison
+
+	Copied some names from NEWS into THANKS
+
+3.31-2	explicitly dropping dimensions on a 1x1 matrix
+
+3.31-1	Allow for incompatible change in output of CompQuadForm::farebrother()  
+
+3.31	update isIdValid() to dbIsValid() for DBI changes.
+
+	explicitly :: or import ALL THE THINGS.
+
+	mse option for svrepdesign.character and svyrepdesign.imputationList was ignored (Antony Damico)
+
+	confint works on output of svycontrast (for Michael Laviolette)
+
+	denominator df fixed in confint.svyglm (Joey Morris)
+
+	svyboxplot rule for which lower-tail points are outliers was wrong (David Collins)
+
+	calibrate() with variable-specific epsilons and zero sample totals didn't work (Alex Kowarik)
+
+	document that regTermTest(method="LRT") can't handle models with a start= argument
+	and document how to use anova.svyglm instead. (Brad Biggerstaff)
+
+	update tests output for new formatting in current R.
+
+
+3.30-4  svypredmeans() does the same things (together with svycontrast()) as
+        as PREDMARG in SUDAAN (for Thomas Yokota and Anthony Damico)
+
+3.30-4  confint.svystat was handling denominator degrees of freedom wrongly
+	for the Wald method (Jared Smith)
+
+3.30-3  vcov.svrepstat does more sensible things when covariances aren't
+        estimated (eg for quantiles). This fixes issues with svyby
+
+        dropped support for old version of hexbin
+
+
+3.30-1  Fix example(svyplot) now that "hexbin" package no longer loads
+        grid package
+
+3.30	svyranktest() now allows k-sample tests (eg Kruskal-Wallis)
+
+        svylogrank() does the generalised G-rho-gamma logrank tests
+        [methods from Rader and Lipsitz (and probably al)]
+
+	various CRAN fixes
+
+3.29-9 	AIC.svyglm, based on Rao-Scott approximation
+     	BIC.svyglm, based on multivariate Gaussian likelihood for coefficients
+
+        svyglm.svyrep.design checks values are finite before replicating
+
+        calibrate() using a list of margins now allows named vectors for 1-d margins
+
+3.29-8  svyhist(freq=TRUE) works with replicate-weight designs (for Ward Kinkade)
+
+3.29-7  svyranktest() works with replicate-weight designs (for Matthew Soldner)
+
+        reference to the lavaan.survey package in ?svyfactanal
+
+3.29-6  svyby() now always includes within-domain covariances
+
+3.29-5  Change from multicore to parallel.  
+	Parallel processing is now only available with R >=2.14
+
+	ddf argument really works now in confint.svyglm (Anthony Damico)
+
+	colour specification in plot.svykmlist now works (Mark Rosenstein)
+
+        svyplot() documentation explains how to annotate a hexbin plot
+
+3.29-4  add symmetric=TRUE to eigenvalue calculation in anova.svyloglin,
+	to improve numerical stability
+
+	subset.svyimputationList now allows the subsets to end up with 
+ 	different observations in them (for Anthony Damico)
+
+	subset.svyDBimputationList now gives an error if the subsets 
+	have different observations, not just a warning that people
+  	ignored.
+
+	svydesign gives an error if there is only one PSU, to catch
+	omission of tilde in svydesign(id=~1,...) (Milan Bouchet-Valat)
+
+3.29-2  confint.svyglm(method="Wald") wasn't using its ddf= argument, 
+	because confint.default() doesn't (Anthony Damico)
+
+3.29    svystandardize() for direct standardization over domains 
+
+        withReplicates() has a method for svrepstat objects
+
+	added predict.svrepglm(), which can return replicates
+
+        saddlepoint approximation to sum of chisquares works further out into the tails
+
+        fixed bug in rescaling in calibrate() when initial weights are very wrong (Takahiro Tsuchiya)
+
+        documented df= argument in svyciprop(method="mean") (Anthony Damico)
+
+        added df= argument to other svyciprop methods for Stata compatibility (Anthony Damico)
+
+3.28-3  svykappa didn't work for larger than 2x2 tables. (Jeffery Hughes)
+
+        svyby didn't allow deff="replace"  (Francisco Fabuel)
+
+	svrepdesign(,type="other") now warns if scale, rscales arguments are not given
+
+	svystat, svrepstat objects now have a plot method (barplot, currently.)
+
+        svyplot(,type="bubble") now uses the basecol= argument for colors.
+
+        postStratify() now works when some input weights are zero
+
+3.28-2	calibrate() prints out sample and population totals when the lengths disagree
+
+	calibrate() is more stable when the initial weights are wrong by orders of
+	magnitude (for Kirill Mueller)
+
+	calibrate() can now take a list of margins as input, similar to rake()
+  	(for various people including Kirill Mueller)
+
+3.28-1 SE now works with output of predict.svyglm (Kieran Healy)
+
+       make.panel.svysmooth() sometimes had invalid bandwidth choices.
+
+       as.svrepdesign() now allows for fpc information not present in 
+       the design object (Alistair Gray)
+
+       regTermTest(,method="LRT") works for svyolr(), and
+       method="Wald" now doesn't need user-specified df (for Zachary Grinspan)
+
+       svrepdesign() checks the length of the rscales= argument  (Ward Kinkade).
+
+       Document the problem with in-line data-dependent variable construction
+       in svyby()  (Anthony Damico)
+
+       Check for completely-missing groups in svyby 
+
+3.28   svyvar() for replicate-weight designs now returns whole matrix
+   
+       withReplicates() has method for svyvar() output, to simplify multivariate analyses.
+
+       design effect estimate for svytotal with replicate weights was wrong (Daniel Fernandes)
+
+       transform() is now a synonym for update().
+
+       lots of partial argument matching removed to keep CRAN happy.
+
+3.27   added anova.svyglm() for Wald tests and Rao-Scott LRT.
+       anova(model1, model2) works for nested models even if not symbolically nested.
+
+       formula component of svyglm$call is now always named, so update() will work.
+
+       svyboxplot(,all.outliers=TRUE) didn't work for single boxes (Takahiro Tsuchiya)
+
+3.26-1 Better missing-value handling with replicated weights in svyquantile
+
+       svyboxplot() has all.outliers= argument to plot all outliers
+
+3.26   Added Preston's multistage rescaled bootstrap (for Alois Haslinger)
+
+       The multistage bootstrap can use the multicore package if available.
+
+       calibrate() can take a vector of tolerances (for Alois Haslinger)
+       [this actually used to work by accident, but now it's documented]
+
+       Clearer error messages when post-strata contain NAs.
+
+3.25-1 The ... argument to svytable() is now passed to xtabs()
+
+       Clearer documentation about graphing discrete variables.
+
+
+3.25   svyhist() didn't work for two-phase designs.
+
+       added svylogrank() for logrank test for survival data.
+
+       added svyranktest() for two-sample rank tests.
+
+       svrepdesign() and as.svrepdesign() now have mse= argument to request 
+       replicate-weight variances centered around the point estimate rather
+       than the mean of the replicates.  The default is controlled by 
+       options(survey.replicates.mse), which defaults to FALSE, consistent with
+       previous versions. (For Anthony Damico, among others)
+
+3.24-1 CHANGE: svychisq() statistic="lincom" and "saddlepoint" now use the linear combination
+       of F statistics from pFsum().
+
+3.24   Rao-Scott test based on linear combinations of Fs is now also available in regTermTest
+
+       Algorithms from CompQuadForm (AS155 and AS204) now used for method="integration" 
+       in pFsum and pchisqsum.  These are more accurate and faster than the previous
+       implementations. If you use CRAN binary packages you will need at least R 2.12. 
+
+       pFsum() saddlepoint and Satterthwaite methods are also much faster. The 
+       saddlepoint approximation now works for the whole range, not just the right tail.
+       
+
+3.23-3 Some vignettes didn't load the package (Brian Ripley)
+
+       Added pFsum() for linear combination of F distributions with same denominator.
+
+       better example (quantile regression) in withReplicates().
+
+3.23-2 svyhist() didn't handle include.lowest= correctly. (Chris Wild)
+
+       svyby(, return.replicates=TRUE) now returns the replicates in the same
+       order as the printed output, and labelled. (for Bob Fay)
+
+3.23-1 svycdf() wasn't handling replicate weights correctly.
+
+       Change in svyquantile() for replicate weights when using type="quantile". 
+       Point estimate used to be mean of replicates, now is ordinary weighted quantile.
+       (for Bob Fay)
+
+       Small changes in handling of zero weights in svyquantile().
+
+3.23   two-sample svyttest() didn't work with replicate weights. (Richard Valliant)
+
+3.22-4 postStratify now allows 1-d matrix as well as vector in data frame
+       of population counts. (for Jean Opsomer)
+
+       print.summary.pps wasn't being exported (Gonzalo Perez)
+
+       svyhist() ignored right= argument
+
+       predict.svycoxph() was slightly overestimating standard errors for survival curves.
+
+       [.pps and [.twophase2 crashed when no observations were removed (Gonzalo Perez)
+
+3.22-3 bug in trimWeights (Richard Valliant), also add warning for
+       attempts to trim past the mean weight.
+
+3.22-2 bug in the na.rm.by= argument to svyby() (Trevor Thompson)
+
+      regTermTest() now does F tests by default (for Chris Wild)
+
+3.22-1 added df= argument to confint() methods for svystat,
+       svyrepstat, svyby, svyratio (for Richard Valliant)
+
+       added na.rm.by= argument to svyby(), to drop groups defined by
+       missing values of by= variables.
+
+       confint.svyby() uses SE(), not vcov(), so undefined values in replicates
+       are handled on a per-group basis.
+
+       svysmooth(,method="locpoly") now has automatic bandwidth choice, and
+       make.panel.svysmooth() will use this choice by default.
+
+3.22   added stratsample() to take stratified samples.
+
+       fixed bug in design effects for subsets of calibrated or 
+       database-based surveys
+ 
+       changed scaling in biplot.svyprcomp so area is proportional to 
+       weight, rather than height proportional to weight.
+
+3.21-3 svyratio() can now estimate design effects (for Scott Kostyshak)
+
+3.21-2 Rao & Wu bootstrap wasn't sampling n-1 PSUs (Richard Valliant)
+
+3.21-1 bug in printing variances for three or more variables (Corey Sparks)
+
+       svyquantile() reliably returns NA for NAs in data when na.rm=FALSE.
+
+       svymle() was not using analytical gradients with nlm() (Christian Raschke)
+
+3.21   added trimWeights() to trim weights, and trim= option to calibrate
+       (for Richard Valliant)
+
+       clearer documentation that svyquantile() needs ci=TRUE or keep.var=FALSE
+       to work with svyby()
+
+       added a simple random sample to data(api) as promised in book (Djalma Pessoa)
+
+3.20   in svycoxph() modify the rescaling of weights to avoid very small weights 
+       because of convergence problem in coxph() with counting-process data (for Tapan Mehta)
+
+       added some multivariate statistics: 
+           svyprcomp(): principal components, svyfactanal(): factor analysis.
+
+       added heuristic check that combined.weights= has been specified correctly.
+
+       confint.default wouldn't give CIs for multiple parameters with replicate weights, because
+       the vcov matrix didn't have variable names. (Art Burke)
+
+       More of the svyciprop() methods now work for replicate-weight designs.
+
+       The book of the package is now available! (see http://faculty.washington.edu/tlumley/svybook)
+
+
+3.19   svrepdesign() can specify replicate-weight columns with a regular expression
+
+       svrepdesign() can produce database-backed designs
+
+       svyquantile() has a df argument to use a t distribution in
+        Woodruff's method (for Wade Davis)
+
+       calibrate() doesn't require an intercept in the calibration model (for Richard Valliant)
+
+       regTermTest() and model.frame() work with svyolr() (for Michael Donohue)
+
+       better printing of svyvar() output (for Brad Fulton)
+
+       twophase() documents more clearly that method="simple" is preferred for standard epi
+       designs where it works.
+
+       better error messages when a database-backed design has a closed connection
+
+
+3.18-1 documented the need to use quasibinomial/quasipoisson in svyglm
+
+       improved the description of confidence intervals and standard errors for
+       svyquantile.
+ 
+
+3.18   Changed the default to combined.weights=TRUE in svrepdesign()
+       
+       Fixed bug in multiple imputation analysis with multicore package.
+
+       The check for PSUs properly nested in strata had some false negatives.
+
+
+3.17   Under Linux, Mac OS, and most Unix systems, multiple processors can be
+       used for the subgroups in svyby(), the imputed data sets in with.svyimputationList
+       and with.DBsvyimputationList, and the replicate weights in svyglm.svyrep.design
+       and svyolr.svyrep.design.  This requires the 'multicore' package and the 
+       argument multicore=TRUE to the functions (in the absence of the multicore
+       package, the multicore=TRUE option is just ignored).
+
+       svyvar.svyrep.design handled NA values incorrectly (Arthur Burke)
+
+       print.summary.twophase2 wasn't exported, so summary(twophase.object) 
+       gave Too Much Information  (Norman Breslow)
+
+       svytotal.svyrep.design labelled the statistic it computed as 'mean',
+       although it really was the correct total. (Arthur Burke)
+
+       detection of PSUs not nested in strata was incorrect in some cases.
+
+       added xbins= option to svyplot for hexbin styles (for Bryan Shepherd)
+
+       print() method now has strata in a more predictable order (for Norman Breslow)
+
+       regTermTest(,method="LRT") now does Rao-Scott-type tests based on the estimated 
+       loglikelihood ratio, for generalized linear models and the Cox model. Similarly,
+       confint.svyglm(,method="likelihood") does confidence intervals based on the 
+       Rao-Scott-type likelihood ratio test.
+
+       Updated marginpred() to work with survival 2.35-7
+
+       Documentation fixes revealed by the new R pre-2.10 help parser
+
+       Added unwtd.count() to count the raw number of non-missing observations.
+
+       The new PPS designs now work with subset().
+
+
+3.16   PPS designs without replacement, based on the weighted covariance of 
+       sample indicators: Horvitz-Thompson and Yates-Grundy estimators, 
+       Overton's approximation, Hartley-Rao approximation, a modified 
+       Hartley-Rao approximation that depends only on sample data. 
+
+3.15-1 The new two-phase designs added in 3.15 are now exported properly.
+
+3.15   Full multistage sampling now possible at both phases of a
+       two-phase design, and the standard errors now exactly match
+       Sarndal et al.  The underlying algorithms use sparse matrices
+       to store the weighted covariance of sampling indicators, and so
+       require the Matrix package.  Use method="approx" in twophase()
+       to get the old methods, which use less memory.
+
+       added marginpred() for predictive margins, ie, predictions after
+       calibration/direct standardization on confounder distribution.
+
+       standard errors for predict.svyglm(,type="response") were 
+       printing incorrectly.
+
+       as.data.frame.svrepstat now works when the result has 
+       return.replicates=TRUE
+
+       The separate package odfWeave.survey provides methods for odfWeave::odfTable
+       for some survey objects.
+
+       formula() now works correctly on svykmlist objects with standard errors.
+
+3.14   predict.svycoxph() now does fitted survival curves with standard
+       errors for the Cox model. (for Norman Breslow)
+
+       standard errors for svykm use a bit less memory.
+
+       quantile.svykm can do confidence intervals
+
+       added some references on svykm standard errors.
+
+       tidied up some help pages.
+
+3.13   Add standard errors to svykm() (for Norman Breslow)
+
+       fix typo in svyquantile(interval.type="betaWald") and add
+       'degrees of freedom' correction to the effective sample size.
+
+       add 'degrees of freedom' correction to effective sample size
+       in svyciprop, type="beta".
+
+       SE, coef for svyratio objects now optionally convert to a vector
+       and confint() now works on ratios.
+
+3.12   Add svyttest() for t-tests, as a wrapper for svyglm
+
+       Add svyciprop() for confidence intervals for proportions,
+       especially near 0 or 1
+
+       confint() works with svycontrast(), svyquantile(), 
+       svyciprop() output.
+
+       bug fix for updates to ODBCsvydesign objects.
+
+       Add example of PPS sampling to example(svydesign), and link to 
+       help for variance estimation.  Add Berger(2004) reference.
+
+       svyby() now has vartype="ci" to report confidence intervals 
+       (for Ron Burns)
+
+       update survival examples to work with new version of survival
+       package.
+
+
+3.11-2 Document that calibrate() to PSU totals requires at least as
+       many observations as calibration variables
+
+       pchisqsum(,type="saddlepoint") now works down to mean x 1.05 
+       rather than mean x 1.2
+
+       The breaks= argument to svyhist() now works (Stas Kolenikov)
+
+       svyhist() works on database-backed designs.
+
+3.11-1 svyglm() [and svyratio()] gave an error for post-stratified 
+       designs with missing data (Shelby Chartkoff)
+
+       svycoxph() gives a clearer error message for negative weights.
+
+       svyquantile() now has a 'betaWald' option, as proposed  
+       by Korn & Graubard (1998), and has an option for handling 
+       ties that appears similar to (some versions of) SUDAAN
+       (for Melanie Edwards)
+
+       plot.svycdf() has an xlab argument to override the default labels
+
+3.11   as.svrepdesign now has type="subbootweights" for
+       Rao and Wu n-1 bootstrap
+
+       An approximation for PPS without replacement due to Brewer 
+       is available in svydesign()
+
+       svydesign() no longer warns if some fpc are exactly zero, but
+       still warns if they are suspiciously large or small
+
+3.10-1 svycoplot can now pass ... arguments to xyplot(), not just to panel.
+
+       svycontrast() has a 'default' method that assumes only a coef() 
+       and vcov() method are available.
+
+       Fixed example code for anova.svyloglin. 
+
+       Added predict(,type="terms"), termplot(), residuals(,type="partial") 
+       for svyglm.  As a result, the default for se= in
+       predict.svyglm has changed. 
+
+       make.panel.svysmooth() makes a weighted smoother as a slot-in
+       replacement for panel.smooth(), eg in termplot().
+
+       print.summary.svyloglin was broken (Norm Breslow).
+
+       confint() method for svyglm has both Wald-type and
+       likelihood-type confidence intervals (based on Rao-Scott test)
+
+       documented that svykappa() requires factor variables. 
+
+       svysmooth() doesn't fail when data are missing.
+
+       documented that update.svyloglin is faster than fitting a new
+       model.
+
+       dotchart() methods for svyby, svystat, svrepstat
+
+       svyloglin() handles missing data better.
+
+       svymle() didn't work if constant parameters were in any 
+       position other than last.
+
+       svyby() now has a return.replicates argument (for Phil Smith).
+
+       logit and raking calibration could run into NaN problems with
+       impossible bounds.  Step-halving seems to fix the problem.
+
+
+3.10   update() methods for database-backed designs.
+
+       improvements in graphics for subsets of database-backed designs.
+
+       barplot methods for svystat, svrepstat, svyby objects.
+
+       svytable() for database-backed designs
+
+       quantiles work with svyby(covmat=TRUE) for replicate-weight designs.
+
+       fix printing of p-value in svychisq, type="lincom"
+
+       better error messages for misspecified fpc in svydesign()
+
+       database-backed analysis of multiple imputations.
+
+       formatting changes to coef.svyquantile, SE.svyquantile, svyby
+
+       svrepdesign works with multiple imputations (though not with databases)
+
+       fix for missing factor levels in subsets of database-backed designs
+
+       allow svychisq(statistic='lincom') with replicate weights.
+
+       quantile regression smoothers in svysmooth()
+
+       add svychisq.twophase() (for Norm Breslow)
+
+       changed defaults in predict.svyglm so that plot.lm works
+         (for Patricia Berglund)
+ 
+       svyloglin() for loglinear models, with Wald and Rao-Scott tests.
+
+       pchisqsum() (and svychisq, anova.svylogin) have a saddlepoint approximation.
+
+
+3.9-1  improvments in svyby, degf, svyglm for subsets of calibrated designs or 
+       database-backed designs.
+
+       svyboxplot() and svycdf() now work with database-backed designs.
+
+       ODBC support for database-backed designs.
+
+       modified the degrees of freedom calculation in svyglm.
+
+3.9    Added database-backed design objects. The data= argument to svydesign 
+       can be the name of a database table in a relational database with a
+       DBI-compatible interface. Only the meta-data is kept in R, other variables
+       are loaded as necessary.
+
+3.8-2  Added svycoplot()
+
+3.8-1  Added subset.svyimputationList
+
+       coef.svyolr returns intercepts as well (by default).
+
+       svyolr() has a method for replicate-weight designs
+
+       print methods for svykm, svykmlist weren't exported.
+
+3.8    svyolr() for proportional odds and related models.
+
+       license is now GPL 2|3 to accomodate code ripped from MASS package
+
+       svykm() for survival curves (no standard errors yet)
+
+3.7    Added style="transparent" to svyplot().
+
+       svyby() and svytable() work on twophase objects.
+
+       svychisq() has statistic="lincom" for linear combination of chisquare, 
+       the exact asymptotic distribution. 
+
+       Added interface to mitools package for analyzing multiple imputations
+
+       svykappa() for Cohen's kappa (for Tobias Verbeke)
+
+3.6-13 Change in tolerances so that calibrate() works better with collinear
+       calibration variables (Richard Valliant)
+
+       calibrate() can be forced to return an answer even when the specified
+       accuracy was not achieved.
+
+3.6-12 svyhist() handles missing data better.
+
+      Added svycdf() for cumulative distribution function estimate.
+
+3.6-11 postStratify() for repweights was standardizing the replicates to 
+      slightly wrong population totals. (Alistair Gray)
+
+      vcov() for two-phase designs gives the contributions from each phase
+      for a wider range of statistics. (Norman Breslow)
+
+      fixes for codetools warnings.
+
+3.6-10 Added error message for missing sampling indicator in two-phase
+      design (Lucia Hindorff)
+
+      Added tests/kalton.R with reweighting examples.
+
+      make.calfun() for creating user-specified calibration distances. 
+ 
+      NOTE: Calling grake() directly now requires a calfun object rather than 
+      a string: see help(make.calfun).
+
+3.6-9 Bootstrap weights used last stratum size rather than harmonic mean
+      for n/(n-1) factor (Djalma Pessoa)
+
+      method= argument to svycoxph() didn't work (Lisa McShane)
+
+      svyquantile did not treat missing values as a domain
+      (Nicole Glazer)
+
+      fix for change in pmax/pmin (Brian Ripley)
+
+      Add pchisqsum for distribution of quadratic forms.
+
+3.6-8 A fix in 3.6-6 had broken svycoxph when only a single predictor
+      variable was used (Lisa McShane)
+
+3.6-7 svycoxph() is much faster for replicate weights
+
+      degf.svyrep.design uses a cached value rather than
+      recomputing.
+
+3.6-6 svyquantile was not passing method= argument to approxfun() 
+      (Jacques Ferrez)
+ 
+      Documented that svyquantile(interval.type="score") may not be any
+      more accurate
+
+      Broken link due to typo in svyratio.Rd (Giuseppe Antonaci)
+
+      postStratify could overestimate standard errors for post-strata cutting
+      across existing sampling strata. (Ben French)
+
+      svycoxph() would not run for subsets of calibrated designs.
+      (Norman Breslow)
+
+3.6-5 Add return.replicates option to svyratio() (for ine.pt)
+
+      Add amount= option to svyplot
+
+      Design effects for totals were wrong for PPS 
+      sampling.  (Takahiro Tsuchiya)
+
+3.6-4 rownames fix for svyratio with a single statistic.
+
+3.6-3 raking by rake() now has slightly more accurate (smaller)
+      standard errors. As a result, it can't be used on pre-2.9 
+      svydesign objects.
+
+      calibrate() does not warn about name mismatches when population 
+      argument has no names.
+
+      svyCprod, svyrecvar, grake now exported.
+
+3.6-2 covmat=TRUE option for svyratio.
+
+      svycontrast() fix for svyby() with empty groups (ine.pt)
+
+3.6-1 Allow averaged bootstrap weights (as StatCanada sometimes produces) 
+      in svrepdesign()
+
+      Fix derivative to get faster convergence in logit calibration 
+      (Diego Zardetto)
+
+      svycontrast() can take named vectors of just the non-zero coefficients.
+
+      Nonlinear combinations of statistics with svycontrast()
+
+3.6   Allow empty factor levels in calibration (for Diego Zardetto). 
+
+      Work around for strange S4 class/NAMESPACE issue with hexbin
+      plots; actual fix requires more understanding.
+
+      regTermTest handles MIresult objects.
+
+      Add dimnames, colnames, rownames methods (for ine.pt)
+
+      svysmooth for scatterplot smoothers and density estimation 
+      (needs KernSmooth)
+
+      Give a warning when fpc varies within strata. 
+
+      svycontrast() for linear combinations of survey statistics
+
+      covmat=TRUE option to svyby() for replicate-weight designs, so
+      the output can be used in svycontrast().
+
+3.5   Add estWeights for Robins et al way of using auxiliary
+      information (ie AIPW).
+
+      Remove JSS article and survey-vanderbilt.pdf from inst/
+      since they are now seriously out of date.
+
+      paley() now gives matrices of order 2^k(p+1), which are
+      usually of minimal or near-minimal size.
+
+      Drop 72x72 and 256x256 Hadamard matrices, which are easy
+      to recreate, from precomputed set and replace 36x36 with the
+      one from Plackett & Burman, which has full orthogonal balance
+
+      Note that changes to svyby now require R 2.2.0 or later.
+
+      predict.svyglm has option to return just variances (rather
+      than entire variance-covariance matrix)
+
+      drop.empty.groups now works when the grouping variables 
+      are not factors.
+
+      Add a namespace
+
+      Move precomputed Hadamard matrices from inst/hadamard.rda to
+      R/sysdata.rda
+
+3.4-5 Add svyboxplot (for Luke Peterson)
+
+      Add drop.empty.groups option to svyby
+
+3.4-4 Paley construction of Hadamard matrices now knows primes 
+      up to 7919, works for larger sizes if the user supplies
+      a suitable prime.
+
+      calibrate() now reorders elements of 'population' to match
+      column names of model matrix if necessary.
+
+      predict() method for svyglm (for Phil Smith, Andrew Robinson)
+
+      svyratio() for two-phase designs.
+
+      Added vignette on domain estimation.
+
+      svyby() can report multiple vartypes.
+
+3.4-3 make svyratio work with svyby (for Phil Smith)
+
+      increase default number of iterations in calibrate()
+
+3.4-2 Options for residual df for summary.svyglm, default based on degf
+      Default denominator df for svyglm, svycoxph in regTermTest.
+
+      survey.lonely.psu now applies to as.svrepdesign.
+
+      keep up with changes in all.equal() for R 2.3.0
+
+3.4-1 Speed optimizations for JKn weights with self-representing strata
+	- jackknife replicates are not created for these strata
+	- svytotal does not use these strata in variance calculation.
+	- svytotal, svymean, svyratio,svyquantile,svyglm recognize 
+            designs (eg subsets) where all strata are self-representing.
+
+      [.repweights_compressed does less copying and is a lot faster 
+      for large designs
+
+      Added verbose= option to svyby() to monitor slow computations.
+
+      Added vartype="cv","cvpct" options for svyby().
+
+      Two-phase designs gave incorrect variances in some cases [they
+      were correct if the first stage was infinite superpopulation
+      sampling or if all phase 1 ultimate sampling units were
+      represented in phase 2].  These are fixed but twophase() now
+      limits the first phase to single-stage cluster or element
+      sampling. [detailed bug report from Takahiro Tsuchiya]
+
+      added vignette describing estimator of phase-one variance in
+      two-phase designs
+
+      minor speedup in svyrecvar() for self-representing strata
+
+      added make.formula() for convenience with many variables.
+
+
+3.4   twophase() for specifying two-phase designs.
+
+      two vignettes: a simple example and a description of two-phase epi designs
+
+      svyratio handles missing data.
+
+      cv() gives NaN rather than an error when the statistic is zero (for 
+      ana.pmartins@ine.pt)
+
+      oldsvydesign() is officially deprecated
+
+      Jackknife variances for strata with a single population PSU were wrong
+      (non-zero) (ana.pmartins@ine.pt)
+
+      svyglm refused to work on subsets of calibrated designs
+
+3.3-2 Add cv, SE, coef, and deff methods for svyby (for Ana Quiterio)
+
+      as.data.frame methods for svystat, svrepstat
+
+      regTermTest can do F-tests now (Daryl Morris).
+
+      fix documentation of value for as.svrepdesign (Alan Zaslavsky)
+
+3.3-1 Make nest=TRUE in multistage designs work when only some initial 
+      sampling stages are stratified
+      
+      Multistage recursive variances were only going to two stages.
+
+      Add "(with replacement)" to output of print.survey.design2 when
+      no fpc is specified.
+
+3.3   Added more generalized raking estimators: raking ratio, bounded raking 
+      ratio, logit, (for Ana Quiterio)
+
+      svytable() could sometimes leave the class attribute off the result.
+      summary() now gives tests of association for svytable().
+
+      svychisq() works for replicate designs
+
+      degf() gives approximate degrees of freedom for replicate designs.
+
+      Clearer error messages when design information is missing.
+
+3.2-1 Fix ordering bug in ftable.svyby (Stefano Calza)
+
+      The "probability" option added to svyquantile for replicate designs
+      in 3.1 computed standard errors for the wrong tail. (Gillian Raab).
+
+3.2   Add option to calibrate() to make weights constant within clusters.
+
+      Add bounded regression calibration to calibrate()
+
+3.1-1 Rescale svyvar output by n/(n-1) to match Kish, which makes a small
+      difference to design effect computations. (for Takahiro Tsuchiya)   
+
+      Test for presence of intercept in calibrate() was too fussy.
+
+3.1   Quantiles for replicate-weight designs now by default compute confidence
+      intervals on the probability scale and transform, so they are valid for
+      jackknife designs. (as Gillian Raab suggested long ago)
+
+      Analyses on replicate weights should use eg svymean, which has
+      methods for replicate weight designs; the old (eg svrepmean) variants
+      are now deprecated.
+
+      calibrate() can now use regression models with variance proportional 
+      to linear combination of predictors (and so can duplicate ratio 
+      estimators of means and totals)
+
+      Prettier labelling of objects created by postStratify(), calibrate(), 
+      update(), subset()
+
+      svytotal on replicate weight designs was computing means, not totals
+      (probably since 3.0). 
+
+3.0-1 Allow some strata to have an infinite population (zero sampling fraction)
+      (this doesn't happen in reality but is the recommended analysis for
+      handling certainty PSUs in some large NCHS studies). 
+
+      Let svyby() handle vectors that are not in the design object (even 
+      though they are discouraged)
+
+      calibrate() was working only under stratified/simple random sampling.
+
+      Allow user-supplied Hadamard matrix for brrweights.
+
+      as.svrepdesign gave a spurious warning when converting post-2.9-1
+      objects without finite population corrections to BRR.
+
+      Allow multicolumn response variable in svymle() (for survival data)
+
+      Add nlm() as the default optimization method for svymle().
+
+3.0   Added simple GREG (G-calibration) estimators with calibrate() 
+
+      Added deff="replace" option to compute design effects comparing to
+      simple random sampling with replacement, eg for designs where the weights
+      do not sum to the population size. (for Gillian Raab)
+
+      Added more references for median estimation.
+
+      Added separate ratio estimator of totals for stratified
+      samples. (for Renzo Vettori)
+
+      cv.svyratio was inverted.
+
+      rake() on survey design objects was accumulating cruft in the
+      postStrata component on each iteration.
+
+      Subsetting of raked designs without replicate weights was 
+      broken (Steve Roberts)
+
+      Standard errors were wrong for some domain estimates in 
+      post-stratified models without replicate weights.
+      
+      More extensive tests comparing domain estimates to equivalent 
+      ratio and regression formulations.
+
+      Changed default in svyby to keep.var=TRUE
+
+      Prettier stratum labels.
+
+      New homepage at  http://faculty.washington.edu/tlumley/survey/
+
+      svyplot(type="hex") works with both pre1.0 and post1.0 versions 
+      of the hexbin package.
+
+      Fixed svychisq denominator degrees of freedom for stratified designs 
+      for bug introduced by multistage revision. (Takahiro Tsuchiya)
+      
+
+2.9-1 Fixed typo in description of fpc in svydesign.Rd
+  
+      Added inst/twostage.pdf with examples of two-stage analyses.
+
+      Handling of fpc specified as proportion in the absence of weights 
+      was wrong.
+
+2.9   Added full multistage sampling, involving a redesign of the survey.design
+      object.  The old objects are deprecated; they may be converted with 
+      as.svydesign2.   Use options(survey.ultimate.cluster=TRUE) to get 
+      the same one-stage standard errors as earlier versions and
+      options(survey.want.obsolete=TRUE) to turn off the annoying warnings 
+      about old-style survey objects.  If you must create old-style survey
+      objects use oldsvydesign().
+
+      As a consequence of the redesign, most of the svyxxx functions
+      are now generic, with methods for both svydesign and svrepdesign
+      objects. Use svymean instead of svrepmean, for example.
+
+      Added more Hadamard matrices, including the Paley construction. 
+      brrweights() now finds designs of nearly optimal size for most surveys.
+
+      Faster svymean, svytotal for replicates, with less memory use.
+
+      Added "bootstrap" option for as.svrepdesign
+
+      svyby and ftable.svyby now handle Deff (expanded from a suggestion
+      by Tobias Verbeke)
+
+      svyhist() for probability-weighted histograms
+
+      added svycoxph() for replicate weight designs
+
+      The "lonely.psu" corrections will be applied to strata with a single
+      PSU in a subset (domain) if options("survey.adjust.domain.lonely") 
+      is TRUE.  The default is FALSE.
+
+      subset.survey.design was not working for post-stratified designs.
+
+      Added a PDF file with examples from UCLA ATS web site, including 
+      comparisons with WesVar and SUDAAN. (inst/ucla-examples.pdf)
+
+      Added slides from a talk at Vanderbilt University. 
+      (inst/survey-vanderbilt.pdf)
+
+      Fixed Deff to use simple random sampling without replacement. 
+      
+      Much faster confidence intervals for quantiles based on inverting a
+      Wald test are now default. These are less accurate in small
+      samples; the old method is still available.
+      (based on suggestion from Gillian Raab)
+
+
+2.8-4 Added a whole lot more references to the documentation.
+      
+      data(hospital) now has two sets of weights, one matching the
+      UCLA ATS site and one matching the original reference.
+      (from Tobias Verbeke)
+
+      summary.svyrep.design was reporting 1 replicates for compressed 
+      weights (but still computing correctly)
+
+2.8-3 postStratify for svydesign objects was giving too large standard errors
+ 
+      Add deff() to extract design effects.
+
+2.8-2 rewrite cv() to use coef() and SE()
+
+2.8-1 Make Deff estimates work with ftable. (for Gillian Raab)
+
+      ftable.svyby didn't work with a single by() variable (for Gillian Raab)
+
+      Missing values now allowed in svychisq(). (for Lee Sieswerda)
+
+2.8   fix printing of svyby broken in 2.7
+
+      add ftable.svyby
+
+      postStratify for svydesign surveys.
+
+2.7-1 as.svrepdesign was giving the wrong weights for type="Fay" in 2.7
+
+2.7   Option compress=TRUE in as.svrepdesign to reduce size 
+      of replicate weight matrix (and in rake(), postStratify()). Also
+      function compressWeights() to do this to arbitrary replicate designs.
+
+      terms() reorders variables in interactions, which confused regTermTest
+      (Daniel Almirall)
+
+      Added extractor function SE() for standard errors (Andrew Robinson)
+
+      hadamard() now finds smaller Hadamard matrices.
+
+      svyCprod warns if a subset has only one PSU in some stratum 
+      (Gillian Raab)
+      
+      Added tests/lonely.psu.R
+
+      Added another option "average" for lonely.psu (Gillian Raab)
+
+      svydesign can now detect from sampling weights or fpc when a stratum
+      with a single PSU is self-representing, and in these cases 
+      options("survey.lonely.psu") is not used.
+
+      ftable.svystat and ftable.svrepstat to produce better tables of
+      percentages and totals.
+
+      Experimental set of functions to help in computing non-response weights 
+      (see ?nonresponse for details)
+
+2.6-2 Better handling of NAs in svyby
+ 
+      Subsetting didn't work right for single-observation subsets.
+
+      svyglm and svycoxph had scoping problems when run inside a 
+      function (Daniel Almirall)
+ 
+      svyglm and svycoxph now accept weights (to be multiplied by 
+      the sampling weights)
+
+      With R 2.0.0 less copying will occur, especially when variables=
+      is not specified in a design
+
+2.6-1 Totals for factors give cell totals.
+
+2.6   Design effects were broken for multiple means computed at once.
+      
+      Add coefficient of variation for mean, total, ratio,...
+
+      variables= argument of svydesign works with missing data (Tobias Verbeke)
+
+      Fix reference to Binder (1991) (Tobias Verbeke)
+
+      Means for factors now give cell means.
+
+      coef and vcov methods for svystat and svrepstat.
+
+      Another tiny example dataset from the VPLX manual
+      
+      svrepvar was incorrect for multiple variables simultaneously
+
+      Better error messages for missing data in svrVar.
+
+2.5   Wald tests for association in contingency tables.
+
+      svyplot() for weighted graphics (some of these require "hexbin")
+
+      Examples for rake(), postStratify()
+
+      svyby() works for svrepdesign analyses as well
+      added subset.svyrep.design()
+
+      svrepvar() added
+
+      Design effects for means and totals. (Gillian Raab)
+
+2.4   Make regTermTest work with svycoxph()
+
+      Clearer output for print.svycoxph() (Daniella Gollinelli)
+
+      Rao-Scott adjusted tests for contingency tables.
+
+      svyby() for tables of means, medians, etc
+
+2.3-2 Fix for svyquantile confidence intervals.
+
+2.3-1 clearer warnings in svrVar when some replicates give NA . 
+      (for Gillian Raab)
+
+2.3   svyquantile has confidence intervals, added svrepquantile.
+
+2.2-1 as.svrepdesign didn't pass options to brrweights (for Fred Rohde)
+
+2.2   published in Journal of Statistical Software  
+      - If population size is specified, but not weights or probabilities, 
+      work out the probabilities from the population size
+      - Clearer error message when some design information is NA 
+        (for Tobias Verbeke)
+      - better update() methods
+
+2.0  Just a numbering change.
+
+1.9-3  Fix svytotal variance estimate
+       as.svrepdesign wasn't handling unstratified cluster samples right.
+       Check for fpc in multistage samples, which we don't handle.
+       add print method for basic survey statistics
+       add rake()
+       California API data.
+
+1.9-2	Added post-stratification of replicate-weights
+
+1.9-1   Bugfix: jknweights was requiring finite population correction.
+
+1.9 	- "certainty" option for single-PSU strata
+        - Replication weight analyses (alpha version)
+
+1.4	- I think all the possible permutations of arguments 
+	in svydesign now work.
+	- The examples in svyglm incorrectly had a data= argument.	
+
+1.3	svydesign wasn't allowing weights to be a vector.
+
+1.2  	- svydesign(nest=TRUE) now uses less memory
+	- added regTermTest for testing regression terms.	
+
+1.1   	Added subset, update methods.  Variance estimation is now correct for
+ 	subpopulations produced with select or subscripting.
+
+1.0	No changes
+	
+0.9-5   - finite population correction should be done with PSUs not 
+	  individuals
+	- added Cox models
+
+0.9-4	- svyCprod was computing n/(n-1) using number of observations, 
+          not number of PSUs, and was averaging observations rather than 
+ 	  PSU means to compute stratum means. 
+	- Bug in handling multiple levels of cluster id in svydesign
+
+0.9-3:   Finite population correction.
+ 	 Adjustments for stratum with single PSU (Fred Rohde)
+	 Fixed svydesign(nest=TRUE) to work with strata
+
+0.9-1:	First release.
+

@@ -2,6 +2,7 @@
 #'
 #' @param x Object created from a gtsummary function
 #' @param ... Additional arguments passed to other methods.
+#' @keywords internal
 #' @author Daniel D. Sjoberg
 #' @seealso [add_p.tbl_summary], [add_p.tbl_cross], [add_p.tbl_svysummary], [add_p.tbl_survfit]
 #' @export
@@ -36,6 +37,7 @@ add_p <- function(x, ...) {
 #' @inheritParams tbl_summary
 #' @family tbl_summary tools
 #' @seealso See tbl_summary \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #' @return A `tbl_summary` object
 #' @author Daniel D. Sjoberg, Emily C. Zabor
@@ -650,7 +652,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #' @export
 #' @return A `tbl_svysummary` object
 #' @author Joseph Larmarange
-#' @examplesIf assert_package("survey", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("survey", boolean = TRUE)
 #' # Example 1 ----------------------------------
 #' # A simple weighted dataset
 #' add_p_svysummary_ex1 <-

@@ -1,0 +1,445 @@
+---
+title: "User Interaction in WebGL (updated)"
+author: "Duncan Murdoch"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  rmarkdown::html_vignette:
+    toc: yes
+    fig_width: 5
+    fig_height: 5
+vignette: >
+  %\VignetteIndexEntry{User Interaction in WebGL (updated)} 
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
+```{r setup, echo=FALSE, results="asis"}
+source("setup.R")
+setupKnitr(autoprint = FALSE)
+set.seed(123)
+```
+
+## Introduction
+
+This document describes how to embed `rgl` scenes in HTML documents
+and use embedded Javascript to 
+control a WebGL display in an HTML document.  For more 
+general information about `rgl`, see [rgl Overview](rgl.html).
+
+We assume that the HTML document is produced from R markdown
+source using `knitr` or `rmarkdown`.  This format mixes
+text with Markdown markup with chunks of R code.  There
+is a limited amount of discussion of other methods.
+
+There are two ways to embed an `rgl` scene in the document.  The recommended one is to call `r linkfn("rglwidget")` to produce a "widget" which can
+be embedded into your document by printing it.
+
+Older methods (e.g. `writeWebGL`) used before `rgl` version
+0.102.0 are no longer supported.
+
+I have conducted experiments on a
+third method.  This is intended to be similar to the way 
+standard 2D graphics are included by `knitr`,
+i.e. it will detect the fact that you've 
+drawn something, and just include it automatically.
+At present it is not recommended, but that may
+change in the future.
+
+## Browser support
+
+Most browsers now support WebGL, but in some browsers it may be disabled by
+default.  See https://get.webgl.org for help on a number of
+different browsers.  
+
+## Examples
+
+We start with a simple plot of the iris data.  We
+insert a code chunk and call the `r linkfn("rglwidget")` 
+function with optional argument `elementId`.  This allows later
+Javascript code to refer to the image.  We also 
+save the object ids from the plot, so that they
+can be manipulated later.
+```{r}
+library(rgl)
+plotids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  type="s", col=as.numeric(Species)))
+rglwidget(elementId = "plot3drgl")
+```
+
+Next we insert a button to toggle the display of the data.
+```{r}
+toggleWidget(sceneId = "plot3drgl", ids = plotids["data"], label = "Data")
+```
+
+The `sceneId` is the same as the `elementId` we used
+in `rglwidget()`, the `ids` are the object ids of the
+objects that we'd like to toggle, and the `label` is the
+label shown on the button.  To find the names in the 
+`plotids` variable, apply `names()` or `unclass()`:
+```{r}
+names(plotids)
+unclass(plotids)
+```
+
+## Using `magrittr` or base pipes
+
+It can be error-prone to set the `elementId` in the
+`rglwidget()` to match the `sceneId` in the `toggleWidget()` (or `playwidget()`, described below).
+In the usual case where both are intended to appear
+together, [`magrittr`](https://CRAN.R-project.org/package=magrittr)-style pipes can be used quite flexibly:
+the first argument of the control widget accepts 
+the result of `rglwidget()` (or other control widgets),
+and the `controllers` argument of `rglwidget()` accepts
+control widgets.  In R 4.1.0, the new base pipe
+operator `|>` should be usable in the same way.
+
+For example,
+
+```{r}
+rglwidget() %>%
+toggleWidget(ids = plotids["data"], label = "Data")
+```
+
+If you have R 4.1.0 or greater, this should do the same:
+
+```{r eval=FALSE}
+rglwidget() |>
+toggleWidget(ids = plotids["data"], label = "Data")
+```
+
+You can swap the order of button and scene; use the `magrittr` dot (or the `=>` syntax in base pipes)
+to pass the `toggleWidget` to `rglwidget` in the `controllers` argument:
+
+```{r}
+toggleWidget(NA, ids = plotids["data"], label = "Data") %>%
+rglwidget(controllers = .) 
+```
+
+or using R 4.1.0 or later,
+
+```{r eval=FALSE}
+toggleWidget(NA, ids = plotids["data"], label = "Data") |> 
+  w => rglwidget(controllers = w) 
+```
+
+## Controls
+
+We have seen how to change the contents of the plot using `r indexfns("toggleWidget")`.  We can do
+more elaborate displays. 
+For example, we can redo the previous plot, but with the
+three species as separate "spheres" objects and buttons to
+toggle them:
+```{r}
+clear3d() # Remove the earlier display
+
+setosa <- with(subset(iris, Species == "setosa"), 
+     spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  col=as.numeric(Species),
+                  radius = 0.211))
+versicolor <- with(subset(iris, Species == "versicolor"), 
+     spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
+               col=as.numeric(Species),
+     	       radius = 0.211))
+virginica <- with(subset(iris, Species == "virginica"), 
+     spheres3d(Sepal.Length, Sepal.Width, Petal.Length, 
+               col=as.numeric(Species),
+     	       radius = 0.211))
+aspect3d(1,1,1)
+axesid <- decorate3d()
+rglwidget() %>%
+toggleWidget(ids = setosa) %>%
+toggleWidget(ids = versicolor) %>%
+toggleWidget(ids = virginica) %>%
+toggleWidget(ids = axesid) %>% 
+asRow(last = 4)
+```
+
+Since we skipped the `label` argument, the buttons are
+labelled with the name of the variable
+passed as `ids`.  The `asRow` function is discussed `r linkfn("asRow", "below")`.
+
+`toggleWidget()` is actually a convenient wrapper for
+two functions:  `r indexfns("playwidget")` and `r indexfns("subsetControl")`.  `playwidget()` adds
+the button to the web page (and can also add sliders,
+do animations, etc.), while `subsetControl()` chooses
+a subset of objects to display.
+
+### `subsetControl`
+
+For a more general example, we could use a slider to
+select several subsets of the data in the iris display.
+For example,
+
+```{r}
+rglwidget() %>%
+playwidget(start = 0, stop = 3, interval = 1,
+	   subsetControl(1, subsets = list(
+	   			 Setosa = setosa,
+	   			 Versicolor = versicolor,
+	   			 Virginica = virginica,
+	   			 All = c(setosa, versicolor, virginica)
+	   			 )))
+```
+
+There are several other "control" functions.  
+
+### `par3dinterpControl`
+
+`r indexfns("par3dinterpControl")` approximates the result of `r linkfn("par3dinterp")`.
+
+For example, the following code (similar to the `r linkfn("play3d")`
+example) rotates the scene in a complex way.
+
+```{r}
+M <- r3dDefaults$userMatrix
+fn <- par3dinterp(time = (0:2)*0.75, userMatrix = list(M,
+                                      rotate3d(M, pi/2, 1, 0, 0),
+                                      rotate3d(M, pi/2, 0, 1, 0)) )
+rglwidget() %>%
+playwidget(par3dinterpControl(fn, 0, 3, steps=15),
+ 	   step = 0.01, loop = TRUE, rate = 0.5)
+```
+
+Some things to note:  The generated Javascript slider has 300 increments,
+so that motion appears smooth.  However, storing 300 `userMatrix` values
+would take up a lot of space, so we use interpolation
+in the Javascript code.  However, the Javascript code can only do 
+linear interpolation, not the more complex spline-based SO(3)
+interpolation done by `r linkfn("par3dinterp")`.  Because of this,
+we need to output 15 steps from `r linkfn("par3dinterpControl")`
+so that the distortions of linear interpolation are not visible.  
+
+### `propertyControl`
+
+`r indexfns("propertyControl")` is a more general function to set
+the value of properties of the scene. Currently most
+properties are supported, but use does require knowledge
+of the internal implementation.
+
+### `clipplaneControl`
+
+`r indexfns("clipplaneControl")` allows the user to control
+the location of a clipping plane by moving a slider.  
+
+### `vertexControl`
+
+Less general than `r linkfn("propertyControl")` is
+`r indexfns("vertexControl")`.  This function sets attributes
+of individual vertices in a scene.  For example, to set the
+x-coordinate of the closest point in the setosa group, and modify
+its colour from black to white,
+
+```{r}
+setosavals <- subset(iris, Species == "setosa")
+which <- which.min(setosavals$Sepal.Width)
+init <- setosavals$Sepal.Length[which]
+rglwidget() %>%
+playwidget(
+  vertexControl(values = matrix(c(init,   0,   0,   0, 
+                                     8,   1,   1,   1), 
+                                nrow = 2, byrow = TRUE),
+                attributes = c("x", "red", "green", "blue"),
+                vertices = which, objid = setosa),
+	step = 0.01)
+```
+
+### `ageControl`	     
+
+A related function is `r indexfns("ageControl")`, though it uses
+a very different specification of the attributes.
+It is used when the slider controls the "age" of the scene, 
+and attributes of vertices change with their age. 
+
+To illustrate we will
+show a point moving along a curve. We
+give two `ageControl` calls in a list; the first
+one controls the colour of the trail, the second controls
+the position of the point:
+
+```{r}
+time <- 0:500
+xyz <- cbind(cos(time/20), sin(time/10), time)
+lineid <- plot3d(xyz, type="l", col = "black")["data"]
+sphereid <- spheres3d(xyz[1, , drop=FALSE], radius = 8, col = "red")
+rglwidget() %>%
+playwidget(list(
+  ageControl(births = time, ages = c(0, 0, 50),
+		colors = c("gray", "red", "gray"), objids = lineid),
+  ageControl(births = 0, ages = time,
+		vertices = xyz, objids = sphereid)),
+  start = 0, stop = max(time) + 20, rate = 50,
+  components = c("Reverse", "Play", "Slower", "Faster",
+                 "Reset", "Slider", "Label"),
+  loop = TRUE)
+```
+
+### `rglMouse`
+
+While not exactly a control in the sense of the other
+functions in this section, the `r indexfns("rglMouse")`
+function is used to add an HTML control to a display
+to allow the user to select the mouse mode.  
+
+For example, the display below initially allows selection
+of particular points, but the mouse mode may be changed
+to let the user rotate the display for a another 
+view of the scene.
+
+```{r}
+ids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  type="s", col=as.numeric(Species)))
+par3d(mouseMode = "selecting")
+rglwidget(shared = rglShared(ids["data"])) %>% 
+rglMouse()
+```
+
+The `rglShared()` call used here is described `r linkfn("rglShared", "below")`.
+
+## Layout of the display
+
+Many `rgl` displays will contain several elements:  one or more
+`rgl` scenes and controls.  Internally `rgl` uses
+the `combineWidgets` function from the
+[`manipulateWidget`](https://github.com/rte-antares-rpackage/manipulateWidget)
+package.  
+
+The `rgl` package provides 3 convenience functions for arranging
+displays.  We have already met the first:  the `magrittr` pipe, `%>%`.
+When the display is constructed as a
+single object using pipes, the objects in the pipeline
+will be arranged in a single column.   
+
+The second convenience function is  `r indexfns("asRow")`.  This takes
+as input a list of objects or a `combineWidgets` object (perhaps 
+the result of a pipe), and rearranges (some of) them into a 
+horizontal row.  As in the `r linkfn("toggleWidget", "toggleWidget example")`, 
+the `last` argument can be used to limit the actions of `asRow` to the
+specified number of components.  (If `last = 0`, all objects are stacked:  this can be useful if some of them are not from the `rgl`
+package, so piping doesn't work for them.)
+
+Finally, `r indexfns("getWidgetId")` can be used to extract the 
+HTML element ID from an HTML widget.  This is useful when combining
+widgets that are not all elements of the same pipe, as in the
+`crosstalk` example below.
+
+If these convenience functions are not sufficient, you can call
+`r linkfn("combineWidgets", text = "manipulateWidget::combineWidgets", pkg = "manipulateWidget")` or
+other functions from `manipulateWidget` for more flexibility in
+the display arrangements.
+
+
+## Integration with `crosstalk`
+
+The [`crosstalk`](https://rstudio.github.io/crosstalk/) package allows
+widgets to communicate with each other.  Currently it supports selection
+and filtering of observations.
+
+`rgl` can send, receive and display these messages.  An `rgl` display
+may have several subscenes, each displaying different datasets.  Each object in the 
+scene is potentially a shared dataset in the `crosstalk` sense.
+
+The linking depends on the `r indexfns("rglShared")` function.  Calling `rglShared(id)`,
+where `id` is the `rgl` id value for an object in the current scene,
+creates a shared data object containing the coordinates of the vertices of 
+the `rgl` object.  This object is passed to `r linkfn("rglwidget")` in the `shared` 
+argument.  It can also be passed to other widgets that accept shared data,
+linking the two displays.
+
+If a shared data object has been created in some other way, it can be linked to
+a particular `rgl` `id` value by copying its `key` and `group` properties
+as shown in the example below.
+
+```{r}
+library(crosstalk)
+sd <- SharedData$new(mtcars)
+ids <- plot3d(sd$origData(), col = mtcars$cyl, type = "s")
+# Copy the key and group from existing shared data
+rglsd <- rglShared(ids["data"], key = sd$key(), group = sd$groupName())
+rglwidget(shared = rglsd) %>%
+asRow("Mouse mode: ", rglMouse(getWidgetId(.)), 
+      "Subset: ", filter_checkbox("cylinderselector", 
+		                "Cylinders", sd, ~ cyl, inline = TRUE),
+      last = 4, colsize = c(1,2,1,2), height = 60)
+```
+
+If multiple objects in the `rgl` scene need to be considered
+as shared data, you can pass the results of several `rglShared()`
+calls in a list, i.e.  `rglwidget(shared = <list>)`.  The key
+values will be assumed to be shared across datasets; if this is
+not wanted, use a prefix or some other means to make sure they
+differ between objects.
+
+If the same `rgl` id is used in more than one `rglShared()` object,
+it will respond to messages from all of them.  This may lead to
+undesirable behaviour as one message cancels the previous one.
+
+## Low level controls
+
+We repeat the initial plot from this document:
+
+```{r plot3d2}
+plotids <- with(iris, plot3d(Sepal.Length, Sepal.Width, Petal.Length, 
+                  type="s", col=as.numeric(Species)))
+subid <- currentSubscene3d()
+rglwidget(elementId="plot3drgl2")
+```
+
+We might like a button on the web page to cause a change to the
+display, e.g. a rotation of the plot.  First we add buttons, with
+the "onclick" event set to a function described below:
+
+    <button type="button" onclick="rotate(10)">Forward</button>
+    <button type="button" onclick="rotate(-10)">Backward</button>
+
+which produces these buttons: 
+<button type="button" onclick="rotate(10)">Forward</button>
+<button type="button" onclick="rotate(-10)">Backward</button>
+
+We stored the subscene number that is currently active in
+`subid` in the code chunk above, and use it as `r rinline("subid")`
+in the script below.  `knitr` substitutes the value
+when it processes the document.
+
+The `rotate()` function uses the Javascript function `document.getElementById` to retrieve the `<div>` component
+of the web page containing the scene.  It will have a
+component named `rglinstance` which contains information about the scene that we can modify:
+
+    <script type="text/javascript">
+    var rotate = function(angle) {
+      var rgl = document.getElementById("plot3drgl2").rglinstance;
+      rgl.getObj(`r rinline("subid",
+                           script=TRUE)`).par3d.userMatrix.rotate(angle, 0,1,0);
+      rgl.drawScene();
+    };
+    </script>
+    
+<script type="text/javascript">
+var rotate = function(angle) {
+  var rgl = document.getElementById("plot3drgl2").rglinstance;
+  rgl.getObj(`r subid`).par3d.userMatrix.rotate(angle, 0,1,0);
+  rgl.drawScene();
+};
+</script>
+
+If we had used `webGL=TRUE` in the chunk header,
+the `knitr` WebGL support would create a global object with a name of the form `<chunkname>rgl`.  For example,  if the code chunk
+was named `plot3d2`, the object
+would be called `plot3d2rgl`, and this code would work:
+
+    <script type="text/javascript">
+    var rotate = function(angle) {
+      plot3d2rgl.getObj(`r rinline("subid",
+                           script=TRUE)`).par3d.userMatrix.rotate(angle, 0,1,0);
+      plot3d2rgl.drawScene();
+    };
+    </script>
+
+## Index 
+
+The following functions are described in this document:<br>
+
+```{r echo=FALSE, results="asis"}
+writeIndex(cols = 5)
+```
+
+

@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Read chunks from an external script</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for read_chunk {knitr}"><tr><td>read_chunk {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Read chunks from an external script</h2>
+
+<h3>Description</h3>
+
+<p>Chunks can be put in an external script, and this function reads chunks into
+the current <span class="pkg">knitr</span> session; <code>read_demo()</code> is a convenience function
+to read a demo script from a package.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+read_chunk(
+  path,
+  lines = read_utf8(path),
+  labels = NULL,
+  from = NULL,
+  to = NULL,
+  from.offset = 0L,
+  to.offset = 0L,
+  roxygen_comments = TRUE
+)
+
+read_demo(topic, package = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>path</code></td>
+<td>
+<p>Path to the R script.</p>
+</td></tr>
+<tr valign="top"><td><code>lines</code></td>
+<td>
+<p>Character vector of lines of code. By default, this is read from
+<code>path</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>labels</code></td>
+<td>
+<p>Character vector of chunk labels (default <code>NULL</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>from, to</code></td>
+<td>
+<p>Numeric vector specifying the starting/ending line numbers of
+code chunks, or a character vector; see Details.</p>
+</td></tr>
+<tr valign="top"><td><code>from.offset, to.offset</code></td>
+<td>
+<p>Offsets to be added to <code>from</code>/<code>to</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>roxygen_comments</code></td>
+<td>
+<p>Logical dictating whether to keep trailing
+roxygen-style comments from code chunks in addition to whitespace</p>
+</td></tr>
+<tr valign="top"><td><code>topic, package</code></td>
+<td>
+<p>Name of the demo and the package. See
+<code>utils::<a href="../../utils/html/demo.html">demo</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Arguments passed to <code><a href="../../knitr/help/read_chunk.html">read_chunk</a></code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>There are two approaches to read external code into the current session: (1)
+Use a special separator of the from <code>## ---- chunk-label</code> (at least four
+dashes before the chunk label) in the script; (2) Manually specify the
+labels, starting and ending positions of code chunks in the script.
+</p>
+<p>The second approach will be used only when <code>labels</code> is not <code>NULL</code>.
+For this approach, if <code>from</code> is <code>NULL</code>, the starting position is 1;
+if <code>to</code> is <code>NULL</code>, each of its element takes the next element of
+<code>from</code> minus 1, and the last element of <code>to</code> will be the length of
+<code>lines</code> (e.g. when <code>from = c(1, 3, 8)</code> and the script has 10 lines
+in total, <code>to</code> will be <code>c(2, 7, 10)</code>). Alternatively, <code>from</code>
+and <code>to</code> can be character vectors as regular expressions to specify the
+positions; when their length is 1, the single regular expression will be
+matched against the <code>lines</code> vector, otherwise each element of
+<code>from</code>/<code>to</code> is matched against <code>lines</code> and the match is
+supposed to be unique so that the numeric positions returned from
+<code>grep()</code> will be of the same length of <code>from</code>/<code>to</code>. Note
+<code>labels</code> always has to match the length of <code>from</code> and <code>to</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>As a side effect, code chunks are read into the current session so
+that future chunks can (re)use the code by chunk label references. If an
+external chunk has the same label as a chunk in the current session, chunk
+label references by future chunks will refer to the external chunk.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This function can only be used in a chunk which is <em>not</em> cached
+(chunk option <code>cache = FALSE</code>), and the code is read and stored in the
+current session <em>without</em> being executed (to actually run the code,
+you have to use a chunk with a corresponding label).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Yihui Xie; the idea of the second approach came from Peter
+Ruckdeschel (author of the <span class="pkg">SweaveListingUtils</span> package)
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://yihui.org/knitr/demo/externalization/">https://yihui.org/knitr/demo/externalization/</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## put this in foo.R and read_chunk('foo.R')
+
+## ---- my-label ----
+1 + 1
+lm(y ~ x, data = data.frame(x = 1:10, y = rnorm(10)))
+
+## later you can use &lt;&lt;my-label&gt;&gt;= to reference this chunk
+
+## the 2nd approach
+code = c("#@a", "1+1", "#@b", "#@a", "rnorm(10)", "#@b")
+read_chunk(lines = code, labels = "foo")  # put all code into one chunk named foo
+read_chunk(lines = code, labels = "foo", from = 2, to = 2)  # line 2 into chunk foo
+read_chunk(lines = code, labels = c("foo", "bar"), from = c(1, 4), to = c(3, 6))
+# automatically figure out 'to'
+read_chunk(lines = code, labels = c("foo", "bar"), from = c(1, 4))
+read_chunk(lines = code, labels = c("foo", "bar"), from = "^#@a", to = "^#@b")
+read_chunk(lines = code, labels = c("foo", "bar"), from = "^#@a", to = "^#@b",
+    from.offset = 1, to.offset = -1)
+
+## later you can use, e.g., &lt;&lt;foo&gt;&gt;=
+knitr::knit_code$get()  # use this to check chunks in the current session
+knitr::knit_code$restore()  # clean up the session
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

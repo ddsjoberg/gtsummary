@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Boolean data types</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<p>The bit package provides the following S3 functionality:</p>
+
+<ul>
+<li>alternatives to the <code>logical</code> data type which need less memory with methods that are often faster
+
+<ul>
+<li>the <code>bit</code> type for boolean data (without <code>NA</code>, factor 32 smaller)</li>
+<li>the <code>bitwhich</code> type for very skewed boolean data (without <code>NA</code>, potentially even smaller)</li>
+</ul></li>
+<li>further alternatives for representing Boolean selections<br/>
+
+<ul>
+<li>the <code>which</code> type for positive selections maintaining the original vector length</li>
+<li>the <code>ri</code> range index</li>
+</ul></li>
+<li>very fast methods for <code>integer</code>, particularly
+
+<ul>
+<li>methods for <em>unsorted</em> integers leveraging <code>bit</code> vectors rather than <em>hash</em> tables</li>
+<li>methods for <em>sorting</em> integers leveraging \(O(N)\) <em>synthetic</em> sorting rather than \(O(N \log N)\) divide and conquer</li>
+<li>methods for <em>sorted</em> integers leveraging <em>merging</em> rather than <em>hash</em> tables</li>
+</ul></li>
+<li>some foundations for package <code>ff</code>, particularly
+
+<ul>
+<li><code>bit</code> and <code>bitwhich</code> vectors and <code>ri</code> range indices for filtering and subscripting <code>ff</code> objects</li>
+<li><code>rlepack</code> compressing sets of <em>sorted</em> integers for <code>hi</code> hybrid indexing</li>
+<li>methods for <em>chunking</em></li>
+</ul></li>
+<li>helper methods for avoiding unwanted data copies</li>
+</ul>
+
+<hr/>
+
+<h2>Boolean data types</h2>
+
+<p>R&#39;s <code>logical</code> vectors cost 32 bit per element in order to code three states <code>FALSE</code>, <code>TRUE</code> and <code>NA</code>. By contrast <code>bit</code> vectors cost only 1 bit per element and support only the two Boolean states <code>FALSE</code> and <code>TRUE</code>. Internally <code>bit</code> are stored as <code>integer</code>. <code>bitwhich</code> vectors manage very skewed Boolean data as a set of sorted unique integers denoting either <em>included</em> or <em>excluded</em> positions, whatever costs less memory. Internally <code>bitwhich</code> are stored as <code>integer</code> <em>or</em> as <code>logical</code> for the extreme cases <em>all included</em> (<code>TRUE</code>), <em>all excluded</em> (<code>FALSE</code>) or <em>zero length</em> (<code>logical()</code>). Function <code>bitwhich_representation</code> allows to distinguish these five cases without the copying-cost of <code>unclass(bitwhich)</code>. All three Boolean types <code>logical</code>, <code>bit</code>, and <code>bitwhich</code> are unified in a super-class <code>booltype</code> and have <code>is.booltype(x)==TRUE</code>. Classes <code>which</code> and <code>ri</code> can be somewhat considered as a fourth and fifth even more special Boolean types (for skewed data with mostly <code>FALSE</code> that represents the sorted positions of the few <code>TRUE</code>, and as a consecutive series of the latter), and hence have <code>booltype</code> <code>4</code> and <code>5</code> but coerce differently to <code>integer</code> and <code>double</code> and hence are not <code>is.booltype</code>.</p>
+
+<h3>Available classes</h3>
+
+<p>The <code>booltype</code>s <code>bit</code> and <code>bitwhich</code> behave very much like <code>logical</code> with the following exceptions</p>
+
+<ul>
+<li>length is limited to <code>.Machine$integer.max</code></li>
+<li>currently only <code>vector</code> methods are supported, not <code>matrix</code> or <code>array</code></li>
+<li>subscripting from them does return <code>logical</code> rather than returning their own class (like <code>ff</code> <code>boolean</code> vectors do)</li>
+<li>values assigned to them are internally coerced to <code>logical</code> before being processed, hence <code>x[] &lt;- x</code> is a potentially expensive operation</li>
+<li>they do not support <code>names</code> and <code>character</code> subscripts</li>
+<li>only scalar <code>logical</code> subscripts are allowed, i.e. <code>FALSE</code>, <code>TRUE</code></li>
+<li>assigned or coerced <code>NA</code> are silently converted to <code>FALSE</code></li>
+<li>increasing the <code>length</code> of <code>bit</code> has semantics differing from <code>logical</code>: new elements are consistently initialized with <code>FALSE</code> instead of <code>NA</code></li>
+<li>increasing the <code>length</code> of <code>bitwhich</code> has semantics differing from <code>logical</code> and <code>bit</code>: new elements are initialized with the <em>more frequent value</em> of the skewed distribution (<code>FALSE</code> winning in the equally frequent case).</li>
+<li>aggregation methods <code>min</code>, <code>max</code> and <code>range</code> and <code>summary</code> have special meaning, for example <code>min</code> corresponds to <code>which.max</code>.</li>
+</ul>
+
+<p>Note the following features</p>
+
+<ul>
+<li>aggregation functions support a <code>range</code> argument for <em>chunked processing</em></li>
+<li>sorted positive subscripts marked as class <code>which</code> are processed faster than &#39;just positive subscripts&#39;, and unlike the result of the function <code>which</code>, class <code>which</code> retains the length of the Boolean vector as attribute <code>maxindex</code>, but its <code>length</code> is the number of positive positions</li>
+<li><code>ri</code> range indices are allowed as subscripts which supports <em>chunked looping</em> over in-memory <code>bit</code> or <code>bitwhich</code> vectors not unlike <em>chunked looping</em> over on-disk <code>ff</code> objects.</li>
+<li>binary Boolean operations will promote differing data type to the data type implying fewer assumptions, i.e. <code>logical</code> wins over <code>bit</code>, <code>bit</code> wins over <code>bitwhich</code> and <code>which</code> wins over <code>bitwhich</code>.</li>
+</ul>
+
+<p>Note the following warnings</p>
+
+<ul>
+<li>currently <code>bit</code> and <code>bitwhich</code> may answer <code>is.logical</code> and <code>is.integer</code> according to their internal representation. Do not rely on this, it may be subject to change. Do use <code>booltype</code>, <code>is.booltype</code>, <code>is.bit</code>, <code>is.bitwhich</code> and <code>bitwhich_representation</code> for reasoning about the data type.</li>
+</ul>
+
+<hr/>
+
+<h3>Available methods</h3>
+
+<p>Basic methods</p>
+
+<p><code>is as length length&lt;- [ [&lt;- [[ [[&lt;- rev rep c print</code></p>
+
+<p>Boolean operations</p>
+
+<p><code>is.na ! | &amp; == != xor</code></p>
+
+<p>Aggregation methods</p>
+
+<p><code>anyNA any all sum min max range summary</code></p>
+
+<hr/>
+
+<h3>Creating and manipulating</h3>
+
+<p><code>bit</code> and <code>bitwhich</code> vectors are created like <code>logical</code>, for example zero length vectors</p>
+
+<pre><code class="r">logical()
+#&gt; logical(0)
+bit()
+#&gt; bit length=0 occupying only 0 int32
+bitwhich()
+#&gt; bitwhich: 0/0 occupying only 0 int32 in  representation
+</code></pre>
+
+<p>or vectors of a certain length initialized to <code>FALSE</code></p>
+
+<pre><code class="r">logical(3)
+#&gt; [1] FALSE FALSE FALSE
+bit(3)
+#&gt; bit length=3 occupying only 1 int32
+#&gt;     1     2     3 
+#&gt; FALSE FALSE FALSE
+bitwhich(3)
+#&gt; bitwhich: 0/3 occupying only 1 int32 in FALSE representation
+#&gt;     1     2     3 
+#&gt; FALSE FALSE FALSE
+</code></pre>
+
+<p><code>bitwhich</code> can be created initialized to all elements TRUE with</p>
+
+<pre><code class="r">bitwhich(3, TRUE)
+#&gt; bitwhich: 3/3 occupying only 1 int32 in TRUE representation
+#&gt;    1    2    3 
+#&gt; TRUE TRUE TRUE
+</code></pre>
+
+<p>or can be created initialized to a few included or excluded elements</p>
+
+<pre><code class="r">bitwhich(3, 2)
+#&gt; bitwhich: 1/3 occupying only 1 int32 in 1 representation
+#&gt;     1     2     3 
+#&gt; FALSE  TRUE FALSE
+bitwhich(3, -2)
+#&gt; bitwhich: 2/3 occupying only 1 int32 in -1 representation
+#&gt;     1     2     3 
+#&gt;  TRUE FALSE  TRUE
+</code></pre>
+
+<hr/>
+
+<p>Note that <code>logical</code> behaves somewhat inconsistent, when creating it, the default is <code>FALSE</code>, when increasing the length, the default is <code>NA</code>:</p>
+
+<pre><code class="r">l &lt;- logical(3)
+length(l) &lt;- 6
+l
+#&gt; [1] FALSE FALSE FALSE    NA    NA    NA
+</code></pre>
+
+<p>Note that the default in <code>bit</code> is always <code>FALSE</code>, for creating and increasing the length. </p>
+
+<pre><code class="r">b &lt;- bit(3)
+length(b) &lt;- 6
+b
+#&gt; bit length=6 occupying only 1 int32
+#&gt;     1     2     3     4     5     6 
+#&gt; FALSE FALSE FALSE FALSE FALSE FALSE
+</code></pre>
+
+<p>Increasing the length of <code>bitwhich</code> initializes new elements to <em>the majority</em> of the old elements, hence a <code>bitwhich</code> with a few exclusions has majority <code>TRUE</code> and will have new elements initialized to <code>TRUE</code> (if both, <code>TRUE</code> and <code>FALSE</code> have equal frequency the default is <code>FALSE</code>).</p>
+
+<pre><code class="r">w &lt;- bitwhich(3,2)
+length(w) &lt;- 6
+w
+#&gt; bitwhich: 1/6 occupying only 1 int32 in 1 representation
+#&gt;     1     2     3     4     5     6 
+#&gt; FALSE  TRUE FALSE FALSE FALSE FALSE
+w &lt;- bitwhich(3,-2)
+length(w) &lt;- 6
+w
+#&gt; bitwhich: 5/6 occupying only 1 int32 in -1 representation
+#&gt;     1     2     3     4     5     6 
+#&gt;  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
+</code></pre>
+
+<hr/>
+
+<p>Vector subscripting non-existing elements returns <code>NA</code></p>
+
+<pre><code class="r">l &lt;- logical(3); l[6]
+#&gt; [1] NA
+b &lt;- bit(3); b[6]
+#&gt; [1] NA
+#&gt; attr(,&quot;vmode&quot;)
+#&gt; [1] &quot;boolean&quot;
+w &lt;- bitwhich(3); w[6]
+#&gt; [1] NA
+#&gt; attr(,&quot;vmode&quot;)
+#&gt; [1] &quot;boolean&quot;
+</code></pre>
+
+<p>while assigned <code>NA</code> turn into <code>FALSE</code> and assigning to a non-existing element does increase vector length</p>
+
+<pre><code class="r">l[6] &lt;- NA; l
+#&gt; [1] FALSE FALSE FALSE    NA    NA    NA
+b[6] &lt;- NA; b
+#&gt; bit length=6 occupying only 1 int32
+#&gt;     1     2     3     4     5     6 
+#&gt; FALSE FALSE FALSE FALSE FALSE FALSE
+w[6] &lt;- NA; w
+#&gt; bitwhich: 0/6 occupying only 1 int32 in FALSE representation
+#&gt;     1     2     3     4     5     6 
+#&gt; FALSE FALSE FALSE FALSE FALSE FALSE
+</code></pre>
+
+<hr/>
+
+<p>As usual list subscripting is only allowed for existing elements </p>
+
+<pre><code class="r">l[[6]]
+#&gt; [1] NA
+b[[6]]
+#&gt; [1] FALSE
+#&gt; attr(,&quot;vmode&quot;)
+#&gt; [1] &quot;boolean&quot;
+w[[6]]
+#&gt; [1] FALSE
+#&gt; attr(,&quot;vmode&quot;)
+#&gt; [1] &quot;boolean&quot;
+</code></pre>
+
+<p>while assignments to non-existing elements do increase length.</p>
+
+<pre><code class="r">l[[9]] &lt;- TRUE
+b[[9]] &lt;- TRUE
+w[[9]] &lt;- TRUE
+#&gt; Warning in `[[&lt;-.bitwhich`(`*tmp*`, 9, value = TRUE): increasing length of
+#&gt; bitwhich, which has non-standard semantics
+l
+#&gt; [1] FALSE FALSE FALSE    NA    NA    NA    NA    NA  TRUE
+b
+#&gt; bit length=9 occupying only 1 int32
+#&gt;     1     2     3     4     5     6     7     8     9 
+#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
+w
+#&gt; bitwhich: 1/6 occupying only 1 int32 in 1 representation
+#&gt;     1     2     3     4     5     6  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt; 
+#&gt; FALSE FALSE FALSE FALSE FALSE FALSE    NA    NA  TRUE
+</code></pre>
+
+<hr/>
+
+<h3>Coercion</h3>
+
+<p>There are coercion functions between classes <code>logical</code>, <code>bit</code>, <code>bitwhich</code>, <code>which</code>, <code>integer</code> and <code>double</code>. However, only the first three of those represent Boolean vectors, whereas <code>which</code> represents subscript positions, and <code>integer</code> and <code>double</code> are ambiguous in that they can represent both, Booleans or positions.</p>
+
+<p>Remember first that coercing <code>logical</code> to <code>integer</code> (or <code>double</code>) gives <code>0</code> and <code>1</code> and not <code>integer</code> subscript positions:</p>
+
+<pre><code class="r">l &lt;- c(FALSE, TRUE, FALSE)
+i &lt;- as.integer(l)
+as.logical(i)
+#&gt; [1] FALSE  TRUE FALSE
+</code></pre>
+
+<p>To obtain <code>integer</code> subscript positions use <code>which</code> or better <code>as.which</code> because the latter S3 class remembers the original vector length and hence we can go coerce back to logical</p>
+
+<pre><code class="r">l &lt;- c(FALSE, TRUE, FALSE)
+w &lt;- as.which(l)
+w
+#&gt; [1] 2
+#&gt; attr(,&quot;maxindex&quot;)
+#&gt; [1] 3
+#&gt; attr(,&quot;class&quot;)
+#&gt; [1] &quot;booltype&quot; &quot;which&quot;
+as.logical(w)
+#&gt; [1] FALSE  TRUE FALSE
+</code></pre>
+
+<p>coercing back to <code>logical</code> fails using just <code>which</code></p>
+
+<pre><code class="r">l &lt;- c(FALSE, TRUE, FALSE)
+w &lt;- which(l)
+w
+#&gt; [1] 2
+as.logical(w)  # does not coerce back
+#&gt; [1] TRUE
+</code></pre>
+
+<p>Furthermore from class <code>which</code> we can deduce that the positions are sorted which can be leveraged for performance. Note that <code>as.which.integer</code> is a core method for converting integer positions to class <code>which</code> and it enforces sorting</p>
+
+<pre><code class="r">i &lt;- c(7,3)
+w &lt;- as.which(i, maxindex=12)
+w
+#&gt; [1] 3 7
+#&gt; attr(,&quot;maxindex&quot;)
+#&gt; [1] 12
+#&gt; attr(,&quot;class&quot;)
+#&gt; [1] &quot;booltype&quot; &quot;which&quot;
+</code></pre>
+
+<p>and <code>as.integer</code> gives us back those positions (now sorted)</p>
+
+<pre><code class="r">as.integer(w)
+#&gt; [1] 3 7
+</code></pre>
+
+<p>You see that the <code>as.integer</code> generic is ambiguous as the <code>integer</code> data type in giving positions on some, and zeroes and ones on other inputs. The following set of Boolean types can be coerced without loss of information </p>
+
+<pre><code>logical bit bitwhich which
+</code></pre>
+
+<p>The same is true for this set</p>
+
+<pre><code>logical bit bitwhich integer double
+</code></pre>
+
+<p>Furthermore positions are retained in this set</p>
+
+<pre><code>which integer double
+</code></pre>
+
+<p>although the length of the Boolean vector is lost when coercing from <code>which</code> to <code>integer</code> or <code>double</code>, therefore coercing to them is not reversible. Let&#39;s first create all six types and compare their sizes:</p>
+
+<pre><code class="r">r &lt;- ri(1, 2^16, 2^20) # sample(2^20, replace=TRUE, prob=c(.125,875))
+all.as &lt;- list(
+  double = as.double
+, integer= as.integer
+, logical = as.logical
+, bit = as.bit
+, bitwhich = as.bitwhich
+, which = as.which
+, ri = function(x)x
+)
+all.types &lt;- lapply(all.as, function(f)f(r))
+sapply(all.types, object.size)
+#&gt;   double  integer  logical      bit bitwhich    which       ri 
+#&gt;  8388656  4194352  4194352   132584   262832   262656      360
+</code></pre>
+
+<p>Now let&#39;s create all combinations of coercion:</p>
+
+<pre><code class="r">all.comb &lt;- vector(&#39;list&#39;, length(all.types)^2)
+all.id &lt;- rep(NA, length(all.types)^2)
+dim(all.comb)      &lt;- dim(all.id)      &lt;-    c(from=length(all.types),  to=length(all.types))
+dimnames(all.comb) &lt;- dimnames(all.id) &lt;- list(from= names(all.types) , to= names(all.types))
+for (i in seq_along(all.types))
+  for (j in seq_along(all.as)){
+    # coerce all types to all types (FROM -&gt; TO)
+    all.comb[[i,j]] &lt;- all.as[[j]](all.types[[i]])
+    # and test whether coercing back to the FROM type gives the orginal object
+    all.id[i,j] &lt;- identical(all.as[[i]](all.comb[[i,j]]),  all.types[[i]])
+  }
+all.id
+#&gt;           to
+#&gt; from       double integer logical   bit bitwhich which   ri
+#&gt;   double     TRUE    TRUE    TRUE  TRUE     TRUE FALSE TRUE
+#&gt;   integer    TRUE    TRUE    TRUE  TRUE     TRUE FALSE TRUE
+#&gt;   logical    TRUE    TRUE    TRUE  TRUE     TRUE  TRUE TRUE
+#&gt;   bit        TRUE    TRUE    TRUE  TRUE     TRUE  TRUE TRUE
+#&gt;   bitwhich   TRUE    TRUE    TRUE  TRUE     TRUE  TRUE TRUE
+#&gt;   which     FALSE   FALSE    TRUE  TRUE     TRUE  TRUE TRUE
+#&gt;   ri        FALSE   FALSE   FALSE FALSE    FALSE FALSE TRUE
+</code></pre>
+
+<p>Do understand the <code>FALSE</code> above!</p>
+
+<hr/>
+
+<p>The functions <code>booltype</code> and <code>is.booltype</code> diagnose the Boolean type as follows</p>
+
+<pre><code class="r">data.frame(booltype=sapply(all.types, booltype), is.boolean=sapply(all.types, is.booltype), row.names=names(all.types))
+#&gt;          booltype is.boolean
+#&gt; double     nobool      FALSE
+#&gt; integer    nobool      FALSE
+#&gt; logical   logical       TRUE
+#&gt; bit           bit       TRUE
+#&gt; bitwhich bitwhich       TRUE
+#&gt; which       which       TRUE
+#&gt; ri             ri       TRUE
+</code></pre>
+
+<p>Class <code>which</code> and <code>ri</code> are currently not <code>is.boolean</code> (no subscript, assignment and Boolean operators), but since it is even more specialized than <code>bitwhich</code> (assuming skew towards <code>TRUE</code>), we have ranked it as the most specialized <code>booltype</code>.</p>
+
+<hr/>
+
+<h3>Boolean operations</h3>
+
+<p>The usual Boolean operators </p>
+
+<pre><code>! | &amp; == != xor is.na
+</code></pre>
+
+<p>are implemented and the binary operators work for all combinations of <code>logical</code>, <code>bit</code> and <code>bitwhich</code>. </p>
+
+<p>Technically this is achieved in S3 by giving <code>bit</code> and <code>bitwhich</code> another class <code>booltype</code>. Note that this is not inheritance where <code>booltype</code> implements common methods and <code>bit</code> and <code>bitwhich</code> overrule this with more specific methods. Instead the method dispatch to <code>booltype</code> dominates <code>bit</code> and <code>bitwhich</code> and coordinates more specific methods, this was the only way to realize binary logical operators that combine <code>bit</code> and <code>bitwhich</code> in S3, because in this case R dispatches to neither <code>bit</code> nor <code>bitwhich</code>: if both arguments are custom classes R does a non-helpful dispatch to <code>integer</code> or <code>logical</code>.</p>
+
+<p>Anyhow, if a binary Boolean operator meets two different types, argument and result type is promoted to <em>less assumptions</em>, hence <code>bitwhich</code> is promoted to <code>bit</code> dropping the assumption of <em>strong skew</em> and <code>bit</code> is promoted to <code>logical</code> dropping the assumption that no <code>NA</code> are present. </p>
+
+<p>Such promotion comes at the price of increased memory requirements, for example the following multiplies the memory requirement by factor 32</p>
+
+<pre><code class="r">x &lt;- bit(1e6)
+y &lt;- x | c(FALSE, TRUE)
+object.size(y) / object.size(x)
+#&gt; 31.6 bytes
+</code></pre>
+
+<p>Better than lazily relying on automatic propagation is </p>
+
+<pre><code class="r">x &lt;- bit(1e6)
+y &lt;- x | as.bit(c(FALSE, TRUE))
+object.size(y) / object.size(x)
+#&gt; 1 bytes
+</code></pre>
+
+<hr/>
+
+<h3>Manipulation methods</h3>
+
+<p>Concatenation follows the same promotion rules as Boolean operators. Note that <code>c</code> dispatches on the first argument only, hence when concatenating multiple Boolean types the first must not be logical, otherwise we get corrupt results:</p>
+
+<pre><code class="r">l &lt;- logical(6)
+b &lt;- bit(6) 
+c(l,b)
+#&gt; [1] 0 0 0 0 0 0 0
+</code></pre>
+
+<p>because <code>c.logical</code> treats the six bits as a single value. The following expressions work</p>
+
+<pre><code class="r">c(b,l)
+#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+c(l, as.logical(b))
+#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+</code></pre>
+
+<p>and of course the most efficient is</p>
+
+<pre><code class="r">c(as.bit(l), b)
+#&gt; bit length=12 occupying only 1 int32
+#&gt;     1     2     3     4     5     6     7     8     9    10    11    12 
+#&gt; FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+</code></pre>
+
+<p>If you want your code to process any <code>is.booltype</code>, you can use <code>c.booltype</code> directly</p>
+
+<pre><code class="r">c.booltype(l, b)
+#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+</code></pre>
+
+<p>Both, <code>bit</code> and <code>bitwhich</code> also have replication (<code>rep</code>) and reverse (<code>rev</code>) methods that work as expected:</p>
+
+<pre><code class="r">b &lt;- as.bit(c(FALSE,TRUE))
+rev(b)
+#&gt; bit length=2 occupying only 1 int32
+#&gt;     1     2 
+#&gt;  TRUE FALSE
+rep(b, 3)
+#&gt; bit length=6 occupying only 1 int32
+#&gt;     1     2     3     4     5     6 
+#&gt; FALSE  TRUE FALSE  TRUE FALSE  TRUE
+rep(b, length.out=6)
+#&gt; bit length=6 occupying only 1 int32
+#&gt;     1     2     3     4     5     6 
+#&gt; FALSE  TRUE FALSE  TRUE FALSE  TRUE
+</code></pre>
+
+<hr/>
+
+<h3>Aggregation methods for <code>booltype</code></h3>
+
+<p>The usual logical aggregation functions <code>length</code>, <code>all</code>, <code>any</code> and <code>anyNA</code> work as expected. Note the exception that <code>length(which)</code> does not give the length of the Boolean vector but the length of the vector of positive integers (like the result of function <code>which</code>). <code>sum</code> gives the number of <code>TRUE</code> for all Boolean types. For the <code>booltype &gt; 1</code> <code>min</code> gives the first position of a <code>TRUE</code> (i.e. <code>which.max</code>), <code>max</code> gives the last position of a <code>TRUE</code>, <code>range</code> gives both, the range at which we find <code>TRUE</code>, and finally <code>summary</code> gives the the counts of <code>FALSE</code> and <code>TRUE</code> as well as <code>min</code> and <code>max</code>. For example</p>
+
+<pre><code class="r">l &lt;- c(NA,NA,FALSE,TRUE,TRUE)
+b &lt;- as.bit(l)
+length(b)
+#&gt; [1] 5
+anyNA(b)
+#&gt; [1] FALSE
+any(b)
+#&gt; [1] TRUE
+all(b)
+#&gt; [1] FALSE
+sum(b)
+#&gt; [1] 2
+min(b)
+#&gt; [1] 4
+max(b)
+#&gt; [1] 5
+range(b)
+#&gt; [1] 4 5
+summary(b)
+#&gt; FALSE  TRUE  Min.  Max. 
+#&gt;     3     2     4     5
+</code></pre>
+
+<p>These special interpretations of <code>min</code>, <code>max</code>, <code>range</code> and <code>summary</code> can be enforced for type <code>logical</code>, <code>integer</code>, and <code>double</code> by using the <code>booltype</code> methods directly as in </p>
+
+<pre><code class="r"># minimum after coercion to integer
+min(c(FALSE,TRUE))
+#&gt; [1] 0
+# minimum  position of first TRUE
+min.booltype(c(FALSE,TRUE))
+#&gt; [1] 2
+</code></pre>
+
+<p>Except for <code>length</code> and <code>anyNA</code> the aggregation functions support an optional argument <code>range</code> which restricts evaluation the specified range of the Boolean vector. This is useful in the context of <em>chunked processing</em>. For example analyzing the first 30\% of a million Booleans</p>
+
+<pre><code class="r">b &lt;- as.bit(sample(c(FALSE, TRUE), 1e6, TRUE))
+summary(b,range=c(1,3e5))
+#&gt;  FALSE   TRUE   Min.   Max. 
+#&gt; 150256 149744      4 300000
+</code></pre>
+
+<p>and analyzing all such chunks</p>
+
+<pre><code class="r">sapply(chunk(b, by=3e5, method=&quot;seq&quot;), function(i)summary(b, range=i))
+#&gt;       1:300000 300001:600000 600001:900000 900001:1000000
+#&gt; FALSE   150256        149862        150197          50265
+#&gt; TRUE    149744        150138        149803          49735
+#&gt; Min.         4        300003        600002         900002
+#&gt; Max.    300000        599998        899996         999999
+</code></pre>
+
+<p>or better balanced</p>
+
+<pre><code class="r">sapply(chunk(b, by=3e5), function(i)summary(b, range=i))
+#&gt;       1:250000 250001:500000 500001:750000 750001:1000000
+#&gt; FALSE   125135        124897        125194         125354
+#&gt; TRUE    124865        125103        124806         124646
+#&gt; Min.         4        250001        500005         750001
+#&gt; Max.    250000        499998        750000         999999
+</code></pre>
+
+<p>The real use-case for chunking is ff objects, where instead of processing huge objects at once</p>
+
+<pre><code class="r">x &lt;- ff(vmode=&quot;single&quot;, length=length(b))   # create a huge ff vector
+x[as.hi(b)] &lt;- runif(sum(b))      # replace some numbers at filtered positions
+summary(x[])
+#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#&gt;  0.0000  0.0000  0.0000  0.2498  0.4996  1.0000
+</code></pre>
+
+<p>we can process the ff vector in chunks </p>
+
+<pre><code class="r">sapply(chunk(x, by=3e5), function(i)summary(x[i]))
+#&gt;          1:250000 250001:500000 500001:750000 750001:1000000
+#&gt; Min.    0.0000000  0.0000000000     0.0000000      0.0000000
+#&gt; 1st Qu. 0.0000000  0.0000000000     0.0000000      0.0000000
+#&gt; Median  0.0000000  0.0007963628     0.0000000      0.0000000
+#&gt; Mean    0.2502720  0.2499065427     0.2496453      0.2494940
+#&gt; 3rd Qu. 0.4999921  0.5001179874     0.4988354      0.4992141
+#&gt; Max.    0.9999930  0.9999995828     0.9999888      0.9999956
+</code></pre>
+
+<p>and even can process a bit-filtered ff vector in chunks </p>
+
+<pre><code class="r">sapply(chunk(x, by=3e5), function(i)summary(x[as.hi(b, range=i)]))
+#&gt;             1:250000 250001:500000 500001:750000 750001:1000000
+#&gt; Min.    2.003042e-06  1.240987e-06  8.684583e-08   3.883149e-06
+#&gt; 1st Qu. 2.508616e-01  2.494814e-01  2.500706e-01   2.505730e-01
+#&gt; Median  5.007221e-01  4.997281e-01  4.996362e-01   5.005408e-01
+#&gt; Mean    5.010852e-01  4.994016e-01  5.000667e-01   5.004052e-01
+#&gt; 3rd Qu. 7.519348e-01  7.493132e-01  7.503459e-01   7.490826e-01
+#&gt; Max.    9.999930e-01  9.999996e-01  9.999888e-01   9.999956e-01
+</code></pre>
+
+<hr/>
+
+<h2>Fast methods for <code>integer</code> set operations</h2>
+
+<p>R implements <em>set methods</em> using <em>hash tables</em>, namely <code>match</code>, <code>%in%</code>, <code>unique</code>, <code>duplicated</code>, <code>union</code>, <code>intersect</code>, <code>setdiff</code>, <code>setequal</code>. Hashing is a powerful method, but it is costly in terms of random access and memory consumption. For integers package &#39;bit&#39; implements faster set methods using <em>bit vectors</em> (which can be an order of magnitude faster and saves up to factor 64 on temporary memory) and <em>merging</em> (which is about two orders of magnitude faster, needs no temporary memory but requires sorted input). While many set methods return <em>unique</em> sets, the <code>merge_*</code> methods can optionally preserve ties, the <code>range_*</code> methods below allow to specify one of the sets as a <em>range</em>.</p>
+
+<table><thead>
+<tr>
+<th align="left">R hashing</th>
+<th align="left">bit vectors</th>
+<th align="left">merging</th>
+<th align="left">range merging</th>
+<th align="left">rlepack</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left"><code>match</code></td>
+<td align="left"></td>
+<td align="left"><code>merge_match</code></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>%in%</code></td>
+<td align="left"><code>bit_in</code></td>
+<td align="left"><code>merge_in</code></td>
+<td align="left"><code>merge_rangein</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>!(%in%)</code></td>
+<td align="left"><code>!bit_in</code></td>
+<td align="left"><code>merge_notin</code></td>
+<td align="left"><code>merge_rangenotin</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>duplicated</code></td>
+<td align="left"><code>bit_duplicated</code></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>unique</code></td>
+<td align="left"><code>bit_unique</code></td>
+<td align="left"><code>merge_unique</code></td>
+<td align="left"></td>
+<td align="left"><code>unique(rlepack)</code></td>
+</tr>
+<tr>
+<td align="left"><code>union</code></td>
+<td align="left"><code>bit_union</code></td>
+<td align="left"><code>merge_union</code></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>intersect</code></td>
+<td align="left"><code>bit_intersect</code></td>
+<td align="left"><code>merge_intersect</code></td>
+<td align="left"><code>merge_rangesect</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>setdiff</code></td>
+<td align="left"><code>bit_setdiff</code></td>
+<td align="left"><code>merge_setdiff</code></td>
+<td align="left"><code>merge_rangediff</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>(a:b)[-i]</code></td>
+<td align="left"><code>bit_rangediff</code></td>
+<td align="left"><code>merge_rangediff</code></td>
+<td align="left"><code>merge_rangediff</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>bit_symdiff</code></td>
+<td align="left"><code>merge_symdiff</code></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>setequal</code></td>
+<td align="left"><code>bit_setequal</code></td>
+<td align="left"><code>merge_setequal</code></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>anyDuplicated</code></td>
+<td align="left"><code>bit_anyDuplicated</code></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"><code>anyDuplicated(rlepack)</code></td>
+</tr>
+<tr>
+<td align="left"><code>sum(duplicated)</code></td>
+<td align="left"><code>bit_sumDuplicated</code></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+
+<p>Furthermore there are very fast methods for sorting integers (unique or keeping ties), reversals that simultaneously change the sign to preserve ascending order and methods for finding min or max in sorted vectors or within ranges of sorted vectors. </p>
+
+<table><thead>
+<tr>
+<th align="left">R</th>
+<th align="left">bit vectors</th>
+<th align="left">merging</th>
+<th align="left">range merging</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left"><code>sort(unique)</code></td>
+<td align="left"><code>bit_sort_unique</code></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>sort</code></td>
+<td align="left"><code>bit_sort</code></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>rev</code></td>
+<td align="left"><code>rev(bit)</code></td>
+<td align="left"><code>reverse_vector</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>-rev</code></td>
+<td align="left"></td>
+<td align="left"><code>copy_vector(revx=TRUE)</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>min</code></td>
+<td align="left"><code>min(bit)</code></td>
+<td align="left"><code>merge_first</code></td>
+<td align="left"><code>merge_firstin</code></td>
+</tr>
+<tr>
+<td align="left"><code>max</code></td>
+<td align="left"><code>max(bit)</code></td>
+<td align="left"><code>merge_last</code></td>
+<td align="left"><code>merge_lastin</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>min(!bit)</code></td>
+<td align="left"></td>
+<td align="left"><code>merge_firstnotin</code></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><code>max(!bit)</code></td>
+<td align="left"></td>
+<td align="left"><code>merge_lastnotin</code></td>
+</tr>
+</tbody></table>
+
+<hr/>
+
+<h3>Methods using random access to bit vectors</h3>
+
+<p>Set operations using hash tables incur costs for populating and querying the hash table: this is random access cost to a relative large table. In order to avoid <em>hash collisions</em> hash tables need more elements than those being hashed, typically <code>2*N</code> for <code>N</code> elements. That is hashing <code>N</code> integer elements using a int32 hash function costs <em>random access</em> to <code>64*N</code> bits of memory. If the <code>N</code> elements are within a range of <code>N</code> values, it is much (by factor 64) cheaper to register them in a bit-vector of <code>N</code> bits. The <code>bit_*</code> functions first determine the range of the values (and count of <code>NA</code>), and then use an appropriately sized bit vector. Like the original R functions the <code>bit_*</code> functions keep the original order of values (although some implementations could be faster by delivering an undefined order). If <code>N</code> is small relative to the range of the values the <code>bit_*</code> fall back to the standard R functions using hash tables. Where the <code>bit_*</code> functions return Boolean vectors they do so by default as <code>bit</code> vectors, but but you can give a different coercion function as argument <code>retFUN</code>.</p>
+
+<p>Bit vectors cannot communicate positions, hence cannot replace <code>match</code>, however they can replace the <code>%in%</code> operator:</p>
+
+<pre><code class="r">set.seed(1); n &lt;- 9
+x &lt;- sample(n, replace=TRUE); x
+#&gt; [1] 9 4 7 1 2 7 2 3 1
+y &lt;- sample(n, replace=TRUE); y
+#&gt; [1] 5 5 6 7 9 5 5 9 9
+x %in% y
+#&gt; [1]  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE
+bit_in(x,y)
+#&gt; bit length=9 occupying only 1 int32
+#&gt;     1     2     3     4     5     6     7     8     9 
+#&gt;  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE
+bit_in(x,y, retFUN=as.logical)
+#&gt; [1]  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE
+</code></pre>
+
+<p>The <code>bit_in</code> function combines a bit vector optimization with reverse look-up, i.e. if the range of <code>x</code> is smaller than the range of <code>table</code>, we build the bit vector on <code>x</code> instead of the <code>table</code>.</p>
+
+<hr/>
+
+<p>The <code>bit_duplicated</code> function can handle <code>NA</code> in three different ways</p>
+
+<pre><code class="r">x &lt;- c(NA,NA,1L,1L,2L,3L)
+duplicated(x)
+#&gt; [1] FALSE  TRUE FALSE  TRUE FALSE FALSE
+bit_duplicated(x, retFUN=as.logical)
+#&gt; [1] FALSE  TRUE FALSE  TRUE FALSE FALSE
+bit_duplicated(x, na.rm=NA, retFUN=as.logical)
+#&gt; [1] FALSE  TRUE FALSE  TRUE FALSE FALSE
+
+duplicated(x, incomparables = NA)
+#&gt; [1] FALSE FALSE FALSE  TRUE FALSE FALSE
+bit_duplicated(x, na.rm=FALSE, retFUN=as.logical)
+#&gt; [1] FALSE FALSE FALSE  TRUE FALSE FALSE
+
+bit_duplicated(x, na.rm=TRUE, retFUN=as.logical)
+#&gt; [1]  TRUE  TRUE FALSE  TRUE FALSE FALSE
+</code></pre>
+
+<p>The <code>bit_unique</code> function can also handle <code>NA</code> in three different ways</p>
+
+<pre><code class="r">x &lt;- c(NA,NA,1L,1L,2L,3L)
+unique(x)
+#&gt; [1] NA  1  2  3
+bit_unique(x)
+#&gt; [1] NA  1  2  3
+
+unique(x, incomparables = NA)
+#&gt; [1] NA NA  1  2  3
+bit_unique(x, na.rm=FALSE)
+#&gt; [1] NA NA  1  2  3
+
+bit_unique(x, na.rm=TRUE)
+#&gt; [1] 1 2 3
+</code></pre>
+
+<p>The <code>bit_union</code> function build a bit vector spanning the united range of both input sets and filters all unites duplicates:</p>
+
+<pre><code class="r">x &lt;- c(NA,NA,1L,1L,3L)
+y &lt;- c(NA,NA,2L,2L,3L)
+union(x,y)
+#&gt; [1] NA  1  3  2
+bit_union(x,y)
+#&gt; [1] NA  1  3  2
+</code></pre>
+
+<p>The <code>bit_intersect</code> function builds a bit vector spanning only the intersected range of both input sets and filters all elements outside and the duplicates inside:</p>
+
+<pre><code class="r">x &lt;- c(0L,NA,NA,1L,1L,3L)
+y &lt;- c(NA,NA,2L,2L,3L,4L)
+intersect(x,y)
+#&gt; [1] NA  3
+bit_intersect(x,y)
+#&gt; [1] NA  3
+</code></pre>
+
+<hr/>
+
+<p>The <code>bit_setdiff</code> function builds a bit vector spanning the range of the first input set, marks elements of the second set within this range as tabooed, and then outputs the remaining elements of the first set unless they are duplicates:</p>
+
+<pre><code class="r">x &lt;- c(0L,NA,NA,1L,1L,3L)
+y &lt;- c(NA,NA,2L,2L,3L,4L)
+setdiff(x,y)
+#&gt; [1] 0 1
+bit_setdiff(x,y)
+#&gt; [1] 0 1
+</code></pre>
+
+<p>The <code>bit_symdiff</code> function implements symmetric set difference. It builds two bit vectors spanning the full range and then outputs those elements of both sets that are marked at exactly one of the bit vectors. </p>
+
+<pre><code class="r">x &lt;- c(0L,NA,NA,1L,1L,3L)
+y &lt;- c(NA,NA,2L,2L,3L,4L)
+union(setdiff(x,y),setdiff(y,x))
+#&gt; [1] 0 1 2 4
+bit_symdiff(x,y)
+#&gt; [1] 0 1 2 4
+</code></pre>
+
+<p>The <code>bit_setequal</code> function terminates early if the ranges of the two sets (or the presence of <code>NA</code>) differ. Otherwise it builds two bit vectors spanning the identical range; finally it checks the two vectors for being equal with early termination if two unequal integers are found.  </p>
+
+<pre><code class="r">x &lt;- c(0L,NA,NA,1L,1L,3L)
+y &lt;- c(NA,NA,2L,2L,3L,4L)
+setequal(y,x)
+#&gt; [1] FALSE
+bit_setequal(x,y)
+#&gt; [1] FALSE
+</code></pre>
+
+<hr/>
+
+<p>The <code>bit_rangediff</code> function works like <code>bit_setdiff</code> with two differences: the first set is specified as a <em>range</em> of integers, and it has two arguments <code>revx</code> and <code>revy</code> which allow to reverse <em>order</em> and <em>sign</em> of the two sets <em>before</em> the set-diff operation is done. The order of the range is significant, e.g. <code>c(1L,7L)</code> is different from <code>c(7L,1L)</code>, while the order of the second set has no influence:</p>
+
+<pre><code class="r">bit_rangediff(c(1L,7L), (3:5))
+#&gt; [1] 1 2 6 7
+bit_rangediff(c(7L,1L), (3:5))
+#&gt; [1] 7 6 2 1
+bit_rangediff(c(1L,7L), -(3:5), revy=TRUE)
+#&gt; [1] 1 2 6 7
+bit_rangediff(c(1L,7L), -(3:5), revx=TRUE)
+#&gt; [1] -7 -6 -2 -1
+</code></pre>
+
+<p>If the range and the second set don&#39;t overlap, for example due to different signs, the full range is returned: </p>
+
+<pre><code class="r">bit_rangediff(c(1L,7L), (1:7))
+#&gt; integer(0)
+bit_rangediff(c(1L,7L), -(1:7))
+#&gt; [1] 1 2 3 4 5 6 7
+bit_rangediff(c(1L,7L), (1:7), revy=TRUE)
+#&gt; [1] 1 2 3 4 5 6 7
+</code></pre>
+
+<p>Note that <code>bit_rangediff</code> provides faster negative subscripting from a range of integers than the usual phrase <code>(1:n)[-i]</code>:</p>
+
+<pre><code class="r">(1:9)[-7]
+#&gt; [1] 1 2 3 4 5 6 8 9
+bit_rangediff(c(1L,9L), -7L, revy=TRUE)
+#&gt; [1] 1 2 3 4 5 6 8 9
+</code></pre>
+
+<hr/>
+
+<p>Functions <code>bit_anyDuplicated</code> is a faster version of <code>anyDuplicated</code></p>
+
+<pre><code class="r">x &lt;- c(NA,NA,1L,1L,2L,3L)
+    any(duplicated(x))  # full hash work, returns FALSE or TRUE
+#&gt; [1] TRUE
+     anyDuplicated(x)   # early termination of hash work, returns 0 or position of first duplicate
+#&gt; [1] 2
+any(bit_duplicated(x))  # full bit work, returns FALSE or TRUE
+#&gt; [1] TRUE
+ bit_anyDuplicated(x)   # early termination of bit work, returns 0 or position of first duplicate
+#&gt; [1] 2
+</code></pre>
+
+<p>For the meaning of the <code>na.rm</code> parameter see <code>bit_duplicated</code>. Function <code>bit_sumDuplicated</code> is a faster version of <code>sum(bit_duplicated)</code></p>
+
+<pre><code class="r">x &lt;- c(NA,NA,1L,1L,2L,3L)
+    sum(duplicated(x))  # full hash work, returns FALSE or TRUE
+#&gt; [1] 2
+sum(bit_duplicated(x))  # full bit work, returns FALSE or TRUE
+#&gt; [1] 2
+ bit_sumDuplicated(x)   # early termination of bit work, returns 0 or position of first duplicated
+#&gt; [1] 2
+</code></pre>
+
+<hr/>
+
+<h3>Methods using bit vectors for sorting integers</h3>
+
+<p>A bit vector cannot replace a hash table for all possible kind of tasks (when it comes to counting values or to their positions), but on the other hand a bit vector allows something impossible with a hash table: <em>sorting</em> keys (without payload). Sorting a large subset of unique integers in [1,N] using a bit vector has been described in <em>&ldquo;Programming pearls &ndash; cracking the oyster&rdquo;</em> by Jon Bentley (where &#39;uniqueness&#39; is not an input condition but an output feature). This is easily generalized to sorting a large subset of integers in a range [min,max]. A first scan over the data determines the range of the keys, arranges <code>NA</code>s according to the usual <code>na.last=</code> argument and checks for presortedness (see <code>range_sortna</code>), then the range is projected to a bit vector of size <code>max-min+1</code>, all keys are registered causing random access and a final scan over the bit vector sequentially writes out the sorted keys. This is a <em>synthetical sort</em> because unlike a <em>comparison sort</em> the elements are not moved towards their ordered positions, instead they are <em>synthesized</em> from the bit-representation. </p>
+
+<p>For <code>N</code> consecutive permuted integers this is by an order of magnitude faster than <em>quicksort</em>. For a <em>density</em> \(d=N/(max-min) \ge 1\) this sort beats quicksort, but for \(d << 1\) the bit vector becomes too large relative to <code>N</code> and hence quicksort is faster. <code>bit_sort_unique</code> implements a hybrid algorithm automatically choosing the faster of both, hence for integers the following gives identical results</p>
+
+<pre><code class="r">x &lt;- sample(9, 9, TRUE)
+unique(sort(x))
+#&gt; [1] 1 2 3 4 5 6 9
+sort(unique(x))
+#&gt; [1] 1 2 3 4 5 6 9
+bit_sort_unique(x)
+#&gt; [1] 1 2 3 4 5 6 9
+</code></pre>
+
+<p>What if duplicates shall be kept? </p>
+
+<ul>
+<li>A: sort all non-duplicated occurrences using a bit vector</li>
+<li>B: sort the rest</li>
+<li>merge A and B</li>
+</ul>
+
+<p>The crucial question is how to sort the rest? Recursively using a bit-vector can again be faster than quicksort, however it is non-trivial to determine an optimal recursion-depth before falling back to quicksort. Hence a safe bet is using the bit vector only once and sort the rest via quicksort, let&#39;s call that <code>bitsort</code>. Again, using <code>bitsort</code> is fast only at medium density in the data range. For low density quicksort is faster. For high density (duplicates) another synthetic sort is faster: <em>counting sort</em>. <code>bit_sort</code> implements a <em>sandwhich sort</em> algorithm which given density uses <code>bitsort</code> between two complementing algorithms: </p>
+
+<pre><code>low density    medium density    high density
+quicksort   &lt;&lt; bitsort        &lt;&lt; countsort
+</code></pre>
+
+<pre><code class="r">x &lt;- sample(9, 9, TRUE)
+sort(x)
+#&gt; [1] 4 4 6 7 7 8 9 9 9
+bit_sort(x)
+#&gt; [1] 4 4 6 7 7 8 9 9 9
+</code></pre>
+
+<p>Both, <code>bit_sort_unique</code> and <code>bit_sort</code> can sort <em>decreasing</em>, however, currently this requires an extra pass over the data in <code>bit_sort</code> and in the quicksort fallback of <code>bit_sort_unique</code>. So far, <code>bit_sort</code> does not leverage <em>radix sort</em> for very large <code>N</code>. </p>
+
+<hr/>
+
+<h3>Methods for sets of sorted integers</h3>
+
+<p>Efficient handling of sorted sets is backbone of class <code>bitwhich</code>. The <code>merge_*</code> and <code>merge_range*</code> integer functions expect sorted input (non-decreasing sets or increasing ranges) and return sorted sets (some return Boolean vectors or scalars). Exploiting the sortedness makes them even faster than the <code>bit_</code> functions. Many of them have <code>revx</code> or <code>revy</code> arguments, which reverse the scanning direction of an input vector <em>and</em> the  interpreted <em>sign</em> of its elements, hence we can change signs of input vectors in an order-preserving way and without any extra pass over the data. By default these functions return <em>unique</em> sets which have each element not more than once. However, the <em>binary</em> <code>merge_*</code> functions have a <code>method=&quot;exact&quot;</code> which in both sets treats consecutive occurrences of the same value as different. With <code>method=&quot;exact&quot;</code> for example <code>merge_setdiff</code> behaves as if counting the values in the first set and subtraction the respective counts of the second set (and capping the lower end at zero). Assuming positive integers and equal <code>tabulate(, nbins=)</code> with <code>method=&quot;exact&quot;</code> the following is identical:</p>
+
+<table><thead>
+<tr>
+<th align="left">merging then counting</th>
+<th align="left">counting then combining</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left"><code>tabulate(merge_union(x,y))</code></td>
+<td align="left"><code>pmax(tabulate(x) ,tabulate(y))</code></td>
+</tr>
+<tr>
+<td align="left"><code>tabulate(merge_intersect(x,y))</code></td>
+<td align="left"><code>pmin(tabulate(x) ,tabulate(y))</code></td>
+</tr>
+<tr>
+<td align="left"><code>tabulate(merge_setdiff(x,y))</code></td>
+<td align="left"><code>pmax(tabulate(x) -tabulate(y), 0)</code></td>
+</tr>
+<tr>
+<td align="left"><code>tabulate(merge_symdiff(x,y))</code></td>
+<td align="left"><code>abs(tabulate(x) -tabulate(y))</code></td>
+</tr>
+<tr>
+<td align="left"><code>tabulate(merge_setequal(x,y))</code></td>
+<td align="left"><code>all(tabulate(x)==tabulate(y))</code></td>
+</tr>
+</tbody></table>
+
+<p>Note further that <code>method=&quot;exact&quot;</code> delivers <em>unique</em> output if the input is unique, and in this case works faster than <code>method=&quot;unique&quot;</code>.</p>
+
+<p>Note further, that the <code>merge_*</code> and <code>merge_range*</code> functions have no special treatment for <code>NA</code>. If vectors with <code>NA</code> are sorted ith <code>NA</code> in the first positions (<code>na.last=FALSE</code>) and arguments <code>revx=</code> or <code>revy=</code> have not been used, then <code>NAs</code> are treated like ordinary integers. <code>NA</code> sorted elsewhere or using <code>revx=</code> or <code>revy=</code> can cause unexpected results (note for example that <code>revx=</code> switches the sign on all integers but <code>NAs</code>).</p>
+
+<hr/>
+
+<p>The unary <code>merge_unique</code> function transform a sorted set into a unique sorted set:</p>
+
+<pre><code class="r">x = sample(12)
+bit_sort(x)
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+merge_unique(bit_sort(x))
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+bit_sort_unique(x)
+#&gt;  [1]  1  2  3  4  5  6  7  8  9 10 11 12
+</code></pre>
+
+<hr/>
+
+<p>For binary functions let&#39;s start with <em>set equality</em>:</p>
+
+<pre><code class="r">x = as.integer(c(3,4,4,5))
+y = as.integer(c(3,4,5))
+setequal(x,y)
+#&gt; [1] TRUE
+merge_setequal(x,y)
+#&gt; [1] TRUE
+merge_setequal(x,y, method=&quot;exact&quot;)
+#&gt; [1] FALSE
+</code></pre>
+
+<p>For <em>set complement</em> there is also a <code>merge_range*</code> function:</p>
+
+<pre><code class="r">x = as.integer(c(0,1,2,2,3,3,3))
+y = as.integer(c(1,2,3))
+setdiff(x,y)
+#&gt; [1] 0
+merge_setdiff(x,y)
+#&gt; [1] 0
+merge_setdiff(x,y, method=&quot;exact&quot;)
+#&gt; [1] 0 2 3 3
+merge_rangediff(c(0L,4L),y)
+#&gt; [1] 0 4
+merge_rangediff(c(0L,4L),c(-3L,-2L)) # y has no effect due to different sign
+#&gt; [1] 0 1 2 3 4
+merge_rangediff(c(0L,4L),c(-3L,-2L), revy=TRUE)
+#&gt; [1] 0 1 4
+merge_rangediff(c(0L,4L),c(-3L,-2L), revx=TRUE)
+#&gt; [1] -4 -1  0
+</code></pre>
+
+<p><code>merge_symdiff</code> for <em>symmetric set complement</em> is used similar (without a <code>merge_range*</code> function), as is <code>merge_intersect</code>, where the latter is accompanied by a <code>merge_range*</code> function: </p>
+
+<pre><code class="r">x = -2:1
+y = -1:2
+setdiff(x,y)
+#&gt; [1] -2
+union(setdiff(x,y),setdiff(y,x))
+#&gt; [1] -2  2
+merge_symdiff(x,y)
+#&gt; [1] -2  2
+merge_intersect(x,y)
+#&gt; [1] -1  0  1
+merge_rangesect(c(-2L,1L),y)
+#&gt; [1] -1  0  1
+</code></pre>
+
+<p>The <code>merge_union</code> function has a third method <code>all</code> which behaves like <code>c</code> but keeps the output sorted</p>
+
+<pre><code class="r">x = as.integer(c(1,2,2,3,3,3))
+y = 2:4
+union(x,y)
+#&gt; [1] 1 2 3 4
+merge_union(x,y, method=&quot;unique&quot;)
+#&gt; [1] 1 2 3 4
+merge_union(x,y, method=&quot;exact&quot;)
+#&gt; [1] 1 2 2 3 3 3 4
+merge_union(x,y, method=&quot;all&quot;)
+#&gt; [1] 1 2 2 2 3 3 3 3 4
+sort(c(x,y))
+#&gt; [1] 1 2 2 2 3 3 3 3 4
+c(x,y)
+#&gt; [1] 1 2 2 3 3 3 2 3 4
+</code></pre>
+
+<hr/>
+
+<p>Unlike the <code>bit_*</code> functions the <code>merge_*</code> functions have a <code>merge_match</code> function:</p>
+
+<pre><code class="r">x = 2:4
+y = as.integer(c(0,1,2,2,3,3,3))
+match(x,y)
+#&gt; [1]  3  5 NA
+merge_match(x,y)
+#&gt; [1]  3  5 NA
+</code></pre>
+
+<p>and unlike R&#39;s <code>%in%</code> operator the following functions are directly implemented, not on top of merge, and hence save extra passes over the data:</p>
+
+<pre><code class="r">x %in% y
+#&gt; [1]  TRUE  TRUE FALSE
+merge_in(x,y)
+#&gt; [1]  TRUE  TRUE FALSE
+merge_notin(x,y)
+#&gt; [1] FALSE FALSE  TRUE
+</code></pre>
+
+<p>The range versions extract logical vectors from <code>y</code>, but only for the range in <code>rx</code>. </p>
+
+<pre><code class="r">x &lt;- c(2L,4L)
+merge_rangein(x,y)
+#&gt; [1]  TRUE  TRUE FALSE
+merge_rangenotin(x,y)
+#&gt; [1] FALSE FALSE  TRUE
+</code></pre>
+
+<p>Compare this to <code>merge_rangesect</code> above. <code>merge_rangein</code> is useful in the context of chunked processing, see the <code>any</code>, <code>all</code>, <code>sum</code> and <code>[</code> methods of class <code>bitwhich</code>.</p>
+
+<hr/>
+
+<p>The functions <code>merge_first</code> and <code>merge_last</code> give first and last element of a sorted set. By default that is <em>min</em> and <em>max</em>, however these functions also have an <code>revx</code> argument. There are also functions that deliver the first resp. last elements <em>of</em> a certain range that are <em>in</em> or <em>not in</em> a certain set.</p>
+
+<pre><code class="r">x &lt;- bit_sort(sample(1000,10))
+merge_first(x)
+#&gt; [1] 104
+merge_last(x)
+#&gt; [1] 983
+merge_firstnotin(c(300L,600L), x)
+#&gt; [1] 300
+merge_firstin(c(300L,600L), x)
+#&gt; [1] 326
+merge_lastin(c(300L,600L), x)
+#&gt; [1] 499
+merge_lastnotin(c(300L,600L), x)
+#&gt; [1] 600
+</code></pre>
+
+<hr/>
+
+</body>
+
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Convert gtsummary object to a huxtable object</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for as_hux_table {gtsummary}"><tr><td>as_hux_table {gtsummary}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert gtsummary object to a huxtable object</h2>
+
+<h3>Description</h3>
+
+<p>Function converts a gtsummary object to a huxtable object.
+A user can use this function if they wish to add customized formatting
+available via the huxtable functions. The huxtable package supports output
+to PDF via LaTeX, as well as HTML and Word.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+as_hux_table(
+  x,
+  include = everything(),
+  return_calls = FALSE,
+  strip_md_bold = FALSE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>Object created by a function from the gtsummary package
+(e.g. <a href="../../gtsummary/help/tbl_summary.html">tbl_summary</a> or <a href="../../gtsummary/help/tbl_regression.html">tbl_regression</a>)</p>
+</td></tr>
+<tr valign="top"><td><code>include</code></td>
+<td>
+<p>Commands to include in output. Input may be a vector of
+quoted or unquoted names. tidyselect and gtsummary select helper
+functions are also accepted.
+Default is <code>everything()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>return_calls</code></td>
+<td>
+<p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
+as a list of expressions.</p>
+</td></tr>
+<tr valign="top"><td><code>strip_md_bold</code></td>
+<td>
+<p>When TRUE, all double asterisk (markdown language for
+bold weight) in column labels and spanning headers are removed.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A huxtable object
+</p>
+
+
+<h3>Details</h3>
+
+<p>The <code>as_hux_table()</code> takes the data frame that will be printed, converts
+it to a huxtable and formats the table with the following huxtable functions:
+</p>
+
+<ol>
+<li> <p><code>huxtable::huxtable()</code>
+</p>
+</li>
+<li> <p><code>huxtable::insert_row()</code> to insert header rows
+</p>
+</li>
+<li> <p><code>huxtable::set_left_padding()</code> to indent variable levels
+</p>
+</li>
+<li> <p><code>huxtable::add_footnote()</code> to add table footnotes and source notes
+</p>
+</li>
+<li> <p><code>huxtable::set_bold()</code> to bold cells
+</p>
+</li>
+<li> <p><code>huxtable::set_italic()</code> to italicize cells
+</p>
+</li>
+<li> <p><code>huxtable::set_top_border()</code> add horizontal line (when indicated)
+</p>
+</li>
+<li> <p><code>huxtable::set_na_string()</code> to use an em-dash for missing numbers
+</p>
+</li>
+<li> <p><code>huxtable::set_markdown()</code> use markdown for header rows
+</p>
+</li>
+<li> <p><code>huxtable::set_align()</code> to set column alignment
+</p>
+</li></ol>
+
+<p>Any one of these commands may be omitted using the <code style="white-space: pre;">include=</code> argument.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>David Hugh-Jones
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Other gtsummary output types: 
+<code><a href="../../gtsummary/help/as_flex_table.html">as_flex_table</a>()</code>,
+<code><a href="../../gtsummary/help/as_gt.html">as_gt</a>()</code>,
+<code><a href="../../gtsummary/help/as_kable_extra.html">as_kable_extra</a>()</code>,
+<code><a href="../../gtsummary/help/as_kable.html">as_kable</a>()</code>,
+<code><a href="../../gtsummary/help/as_tibble.gtsummary.html">as_tibble.gtsummary</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+if (requireNamespace("huxtable"))
+  trial %&gt;%
+    dplyr::select(trt, age, grade) %&gt;%
+    tbl_summary(by = trt) %&gt;%
+    add_p() %&gt;%
+    as_hux_table()
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>gtsummary</em> version 1.4.2.9012 <a href="00Index.html">Index</a>]</div>
+</body></html>

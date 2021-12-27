@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Coerce to data.table</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for as.data.table {data.table}"><tr><td>as.data.table {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Coerce to data.table</h2>
+
+<h3>Description</h3>
+
+<p>Functions to check if an object is <code>data.table</code>, or coerce it if possible.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+as.data.table(x, keep.rownames=FALSE, ...)
+
+## S3 method for class 'data.table'
+as.data.table(x, ...)
+
+## S3 method for class 'array'
+as.data.table(x, keep.rownames=FALSE, key=NULL, sorted=TRUE,
+              value.name="value", na.rm=TRUE, ...)
+
+is.data.table(x)
+
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>An R object.</p>
+</td></tr>
+<tr valign="top"><td><code>keep.rownames</code></td>
+<td>
+<p>Default is <code>FALSE</code>. If <code>TRUE</code>, adds the input object's names as a separate column named <code>"rn"</code>. <code>keep.rownames = "id"</code> names the column <code>"id"</code> instead.</p>
+</td></tr>
+<tr valign="top"><td><code>key</code></td>
+<td>
+<p> Character vector of one or more column names which is passed to <code><a href="../../data.table/help/setkeyv.html">setkeyv</a></code>. </p>
+</td></tr>
+<tr valign="top"><td><code>sorted</code></td>
+<td>
+<p>logical used in <em>array</em> method, default <code>TRUE</code> is overridden when <code>key</code> is provided. </p>
+</td></tr>
+<tr valign="top"><td><code>value.name</code></td>
+<td>
+<p>character scalar used in <em>array</em> method, default <code>"value"</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>na.rm</code></td>
+<td>
+<p>logical used in <em>array</em> method, default <code>TRUE</code> will remove rows with <code>NA</code> values.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Additional arguments to be passed to or from other methods.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>as.data.table</code> is a generic function with many methods, and other packages can supply further methods.
+</p>
+<p>If a <code>list</code> is supplied, each element is converted to a column in the <code>data.table</code> with shorter elements recycled automatically. Similarly, each column of a <code>matrix</code> is converted separately.
+</p>
+<p><code>character</code> objects are <em>not</em> converted to <code>factor</code> types unlike <code>as.data.frame</code>.
+</p>
+<p>If a <code>data.frame</code> is supplied, all classes preceding <code>"data.frame"</code> are stripped. Similarly, for <code>data.table</code> as input, all classes preceding <code>"data.table"</code> are stripped. <code>as.data.table</code> methods returns a <em>copy</em> of original data. To modify by reference see <code><a href="../../data.table/help/setDT.html">setDT</a></code> and <code><a href="../../data.table/help/setDF.html">setDF</a></code>.
+</p>
+<p><code>keep.rownames</code> argument can be used to preserve the (row)names attribute in the resulting <code>data.table</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../data.table/help/data.table.html">data.table</a></code>, <code><a href="../../data.table/help/setDT.html">setDT</a></code>, <code><a href="../../data.table/help/setDF.html">setDF</a></code>, <code><a href="../../data.table/help/copy.html">copy</a></code>, <code><a href="../../data.table/help/setkey.html">setkey</a></code>, <code><a href="../../data.table/help/J.html">J</a></code>, <code><a href="../../data.table/help/SJ.html">SJ</a></code>, <code><a href="../../data.table/help/CJ.html">CJ</a></code>, <code><a href="../../data.table/help/merge.data.table.html">merge.data.table</a></code>, <code><a href="../../data.table/help/:=.html">:=</a></code>, <code><a href="../../data.table/help/setalloccol.html">setalloccol</a></code>, <code><a href="../../data.table/help/truelength.html">truelength</a></code>, <code><a href="../../data.table/help/rbindlist.html">rbindlist</a></code>, <code><a href="../../data.table/help/setNumericRounding.html">setNumericRounding</a></code>, <code><a href="../../data.table/help/datatable-optimize.html">datatable-optimize</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+nn = c(a=0.1, b=0.2, c=0.3, d=0.4)
+as.data.table(nn)
+as.data.table(nn, keep.rownames=TRUE)
+as.data.table(nn, keep.rownames="rownames")
+
+# char object not converted to factor
+cc = c(X="a", Y="b", Z="c")
+as.data.table(cc)
+as.data.table(cc, keep.rownames=TRUE)
+as.data.table(cc, keep.rownames="rownames")
+
+mm = matrix(1:4, ncol=2, dimnames=list(c("r1", "r2"), c("c1", "c2")))
+as.data.table(mm)
+as.data.table(mm, keep.rownames=TRUE)
+as.data.table(mm, keep.rownames="rownames")
+as.data.table(mm, key="c1")
+
+ll = list(a=1:2, b=3:4)
+as.data.table(ll)
+as.data.table(ll, keep.rownames=TRUE)
+as.data.table(ll, keep.rownames="rownames")
+
+DF = data.frame(x=rep(c("x","y","z"),each=2), y=c(1,3,6), row.names=LETTERS[1:6])
+as.data.table(DF)
+as.data.table(DF, keep.rownames=TRUE)
+as.data.table(DF, keep.rownames="rownames")
+
+DT = data.table(x=rep(c("x","y","z"),each=2), y=c(1:6))
+as.data.table(DT)
+as.data.table(DT, key='x')
+
+ar = rnorm(27)
+ar[sample(27, 15)] = NA
+dim(ar) = c(3L,3L,3L)
+as.data.table(ar)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

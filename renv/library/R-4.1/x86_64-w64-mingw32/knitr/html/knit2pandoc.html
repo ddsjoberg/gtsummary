@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Convert various input files to various output files using...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for knit2pandoc {knitr}"><tr><td>knit2pandoc {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Convert various input files to various output files using <code>knit()</code> and
+Pandoc</h2>
+
+<h3>Description</h3>
+
+<p>Knits the input file and compiles to an output format using Pandoc.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+knit2pandoc(
+  input,
+  output = NULL,
+  tangle = FALSE,
+  text = NULL,
+  quiet = FALSE,
+  envir = parent.frame(),
+  to = "html",
+  pandoc_wrapper = NULL,
+  ...,
+  encoding = "UTF-8"
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>input</code></td>
+<td>
+<p>Path to the input file.</p>
+</td></tr>
+<tr valign="top"><td><code>output</code></td>
+<td>
+<p>Path to the output file for <code>knit()</code>. If <code>NULL</code>, this
+function will try to guess a default, which will be under the current
+working directory.</p>
+</td></tr>
+<tr valign="top"><td><code>tangle</code></td>
+<td>
+<p>Boolean; whether to tangle the R code from the input file (like
+<code>utils::<a href="../../utils/html/Sweave.html">Stangle</a></code>).</p>
+</td></tr>
+<tr valign="top"><td><code>text</code></td>
+<td>
+<p>A character vector. This is an alternative way to provide the
+input file.</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>Boolean; suppress the progress bar and messages?</p>
+</td></tr>
+<tr valign="top"><td><code>envir</code></td>
+<td>
+<p>Environment in which code chunks are to be evaluated, for
+example, <code><a href="../../base/html/sys.parent.html">parent.frame</a>()</code>, <code><a href="../../base/html/environment.html">new.env</a>()</code>, or
+<code><a href="../../base/html/environment.html">globalenv</a>()</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>to</code></td>
+<td>
+<p>Character string giving the Pandoc output format to use.</p>
+</td></tr>
+<tr valign="top"><td><code>pandoc_wrapper</code></td>
+<td>
+<p>An R function used to call Pandoc. If <code>NULL</code> (the
+default), <code>rmarkdown::<a href="../../rmarkdown/help/pandoc_convert.html">pandoc_convert</a>()</code> will be used
+if <span class="pkg">rmarkdown</span> is installed, otherwise <code><a href="../../knitr/help/pandoc.html">pandoc</a>()</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Options to be passed to the <code>pandoc_wrapper</code> function.</p>
+</td></tr>
+<tr valign="top"><td><code>encoding</code></td>
+<td>
+<p>Ignored (always assumes UTF-8).</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Returns the output of the <code>pandoc_wrapper</code> function.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Trevor L. Davis
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

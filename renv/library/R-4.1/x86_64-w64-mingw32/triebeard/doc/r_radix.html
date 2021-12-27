@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Oliver Keyes" />
+
+<meta name="date" content="2016-08-03" />
+
+<title>Radix trees in R</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Radix trees in R</h1>
+<h4 class="author"><em>Oliver Keyes</em></h4>
+<h4 class="date"><em>2016-08-03</em></h4>
+
+
+
+<p>A <strong>radix tree</strong>, or <strong>trie</strong>, is a data structure optimised for storing key-value pairs in a way optimised for searching. This makes them very, very good for efficiently matching data against keys, and retrieving the values <em>associated</em> with those keys.</p>
+<p><code>triebeard</code> provides an implementation of tries for R (and one that can be used in Rcpp development, too, if that’s your thing) so that useRs can take advantage of the fast, efficient and user-friendly matching that they allow.</p>
+<div id="radix-usage" class="section level2">
+<h2>Radix usage</h2>
+<p>Suppose we have observations in a dataset that are labelled, with a 2-3 letter code that identifies the facility the sample came from:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">labels &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AO-1002&quot;</span>, <span class="st">&quot;AEO-1004&quot;</span>, <span class="st">&quot;AAI-1009&quot;</span>, <span class="st">&quot;AFT-1403&quot;</span>, <span class="st">&quot;QZ-9065&quot;</span>, <span class="st">&quot;QZ-1021&quot;</span>, <span class="st">&quot;RF-0901&quot;</span>,
+            <span class="st">&quot;AO-1099&quot;</span>, <span class="st">&quot;AFT-1101&quot;</span>, <span class="st">&quot;QZ-4933&quot;</span>)</code></pre></div>
+<p>We know the facility each code maps to, and we want to be able to map the labels to that - not over 10 entries but over hundreds, or thousands, or hundreds <em>of</em> thousands. Tries are a great way of doing that: we treat the codes as <em>keys</em> and the full facility names as <em>values</em>. So let’s make a trie to do this matching, and then, well, match:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(triebeard)
+trie &lt;-<span class="st"> </span><span class="kw">trie</span>(<span class="dt">keys =</span> <span class="kw">c</span>(<span class="st">&quot;AO&quot;</span>, <span class="st">&quot;AEO&quot;</span>, <span class="st">&quot;AAI&quot;</span>, <span class="st">&quot;AFT&quot;</span>, <span class="st">&quot;QZ&quot;</span>, <span class="st">&quot;RF&quot;</span>),
+             <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Audobon&quot;</span>, <span class="st">&quot;Atlanta&quot;</span>, <span class="st">&quot;Ann Arbor&quot;</span>, <span class="st">&quot;Austin&quot;</span>, <span class="st">&quot;Queensland&quot;</span>, <span class="st">&quot;Raleigh&quot;</span>))
+
+<span class="kw">longest_match</span>(<span class="dt">trie =</span> trie, <span class="dt">to_match =</span> labels)
+
+ [<span class="dv">1</span>] <span class="st">&quot;Audobon&quot;</span>    <span class="st">&quot;Atlanta&quot;</span>    <span class="st">&quot;Ann Arbor&quot;</span>  <span class="st">&quot;Austin&quot;</span>     <span class="st">&quot;Queensland&quot;</span> <span class="st">&quot;Queensland&quot;</span> <span class="st">&quot;Raleigh&quot;</span>    <span class="st">&quot;Audobon&quot;</span>    <span class="st">&quot;Austin&quot;</span>    
+[<span class="dv">10</span>] <span class="st">&quot;Queensland&quot;</span></code></pre></div>
+<p>This pulls out, for each label, the trie value where the associated key has the longest prefix-match to the label. We can also just grab all the values where the key starts with, say, A:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">prefix_match</span>(<span class="dt">trie =</span> trie, <span class="dt">to_match =</span> <span class="st">&quot;A&quot;</span>)
+
+[[<span class="dv">1</span>]]
+[<span class="dv">1</span>] <span class="st">&quot;Ann Arbor&quot;</span> <span class="st">&quot;Atlanta&quot;</span>   <span class="st">&quot;Austin&quot;</span>    <span class="st">&quot;Audobon&quot;</span>  </code></pre></div>
+<p>And finally if we want we can match very, very fuzzily using “greedy” matching:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">greedy_match</span>(<span class="dt">trie =</span> trie, <span class="dt">to_match =</span> <span class="st">&quot;AO&quot;</span>)
+
+[[<span class="dv">1</span>]]
+[<span class="dv">1</span>] <span class="st">&quot;Ann Arbor&quot;</span> <span class="st">&quot;Atlanta&quot;</span>   <span class="st">&quot;Austin&quot;</span>    <span class="st">&quot;Audobon&quot;</span>  </code></pre></div>
+<p>These operations are very, very efficient. If we use longest-match as an example, since that’s the most useful thing, with a one-million element vector of things to match against:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(triebeard)
+<span class="kw">library</span>(microbenchmark)
+
+trie &lt;-<span class="st"> </span><span class="kw">trie</span>(<span class="dt">keys =</span> <span class="kw">c</span>(<span class="st">&quot;AO&quot;</span>, <span class="st">&quot;AEO&quot;</span>, <span class="st">&quot;AAI&quot;</span>, <span class="st">&quot;AFT&quot;</span>, <span class="st">&quot;QZ&quot;</span>, <span class="st">&quot;RF&quot;</span>),
+             <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Audobon&quot;</span>, <span class="st">&quot;Atlanta&quot;</span>, <span class="st">&quot;Ann Arbor&quot;</span>, <span class="st">&quot;Austin&quot;</span>, <span class="st">&quot;Queensland&quot;</span>, <span class="st">&quot;Raleigh&quot;</span>))
+
+labels &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;AO-1002&quot;</span>, <span class="st">&quot;AEO-1004&quot;</span>, <span class="st">&quot;AAI-1009&quot;</span>, <span class="st">&quot;AFT-1403&quot;</span>, <span class="st">&quot;QZ-9065&quot;</span>, <span class="st">&quot;QZ-1021&quot;</span>, <span class="st">&quot;RF-0901&quot;</span>,
+                <span class="st">&quot;AO-1099&quot;</span>, <span class="st">&quot;AFT-1101&quot;</span>, <span class="st">&quot;QZ-4933&quot;</span>), <span class="dv">100000</span>)
+
+<span class="kw">microbenchmark</span>({<span class="kw">longest_match</span>(<span class="dt">trie =</span> trie, <span class="dt">to_match =</span> labels)})
+
+Unit:<span class="st"> </span>milliseconds
+                                                  expr      min       lq     mean   median       uq      max neval
+ {     <span class="kw">longest_match</span>(<span class="dt">trie =</span> trie, <span class="dt">to_match =</span> labels) } <span class="fl">284.6457</span> <span class="fl">285.5902</span> <span class="fl">289.5342</span> <span class="fl">286.8775</span> <span class="fl">288.4564</span> <span class="fl">327.3878</span>   <span class="dv">100</span></code></pre></div>
+<p>I think we can call &lt;300 milliseconds for a million matches against an entire set of possible values pretty fast.</p>
+</div>
+<div id="radix-modification" class="section level2">
+<h2>Radix modification</h2>
+<p>There’s always the possibility that (horror of horrors) you’ll have to add or remove entries from the trie. Fear not; you can do just that with <code>trie_add</code> and <code>trie_remove</code> respectively, both of which silently modify the trie they’re provided with to add or remove whatever key-value pairs you provide:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">to_match =<span class="st"> &quot;198.0.0.1&quot;</span>
+trie_inst &lt;-<span class="st"> </span><span class="kw">trie</span>(<span class="dt">keys =</span> <span class="st">&quot;197&quot;</span>, <span class="dt">values =</span> <span class="st">&quot;fake range&quot;</span>)
+
+<span class="kw">longest_match</span>(trie_inst, to_match)
+[<span class="dv">1</span>] <span class="ot">NA</span>
+
+<span class="kw">trie_add</span>(trie_inst, <span class="dt">keys =</span> <span class="st">&quot;198&quot;</span>, <span class="dt">values =</span> <span class="st">&quot;home range&quot;</span>)
+<span class="kw">longest_match</span>(trie_inst, to_match)
+[<span class="dv">1</span>] <span class="st">&quot;home range&quot;</span>
+
+<span class="kw">trie_remove</span>(trie_inst, <span class="dt">keys =</span> <span class="st">&quot;198&quot;</span>)
+<span class="kw">longest_match</span>(trie_inst, to_match)
+[<span class="dv">1</span>] <span class="ot">NA</span></code></pre></div>
+</div>
+<div id="metadata-and-coercion" class="section level2">
+<h2>Metadata and coercion</h2>
+<p>You can also extract information from tries without using them. <code>dim</code>, <code>str</code>, <code>print</code> and <code>length</code> all work for tries, and you can use <code>get_keys(trie)</code> and <code>get_values(trie)</code> to extract, respectively, the keys and values from a trie object.</p>
+<p>In addition, you can also coerce tries into other R data structures, specifically lists and data.frames:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trie &lt;-<span class="st"> </span><span class="kw">trie</span>(<span class="dt">keys =</span> <span class="kw">c</span>(<span class="st">&quot;AO&quot;</span>, <span class="st">&quot;AEO&quot;</span>, <span class="st">&quot;AAI&quot;</span>, <span class="st">&quot;AFT&quot;</span>, <span class="st">&quot;QZ&quot;</span>, <span class="st">&quot;RF&quot;</span>),
+             <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Audobon&quot;</span>, <span class="st">&quot;Atlanta&quot;</span>, <span class="st">&quot;Ann Arbor&quot;</span>, <span class="st">&quot;Austin&quot;</span>, <span class="st">&quot;Queensland&quot;</span>, <span class="st">&quot;Raleigh&quot;</span>))
+
+<span class="kw">str</span>(<span class="kw">as.data.frame</span>(trie))
+<span class="st">'data.frame'</span>:<span class="st">   </span><span class="dv">6</span> obs. of  <span class="dv">2</span> variables:
+<span class="st"> </span><span class="er">$</span><span class="st"> </span>keys  :<span class="st"> </span>chr  <span class="st">&quot;AAI&quot;</span> <span class="st">&quot;AEO&quot;</span> <span class="st">&quot;AFT&quot;</span> <span class="st">&quot;AO&quot;</span> ...
+ $<span class="st"> </span>values:<span class="st"> </span>chr  <span class="st">&quot;Ann Arbor&quot;</span> <span class="st">&quot;Atlanta&quot;</span> <span class="st">&quot;Austin&quot;</span> <span class="st">&quot;Audobon&quot;</span> ...
+
+<span class="kw">str</span>(<span class="kw">as.list</span>(trie))
+
+List of <span class="dv">2</span>
+ $<span class="st"> </span>keys  :<span class="st"> </span>chr [<span class="dv">1</span>:<span class="dv">6</span>] <span class="st">&quot;AAI&quot;</span> <span class="st">&quot;AEO&quot;</span> <span class="st">&quot;AFT&quot;</span> <span class="st">&quot;AO&quot;</span> ...
+ $<span class="st"> </span>values:<span class="st"> </span>chr [<span class="dv">1</span>:<span class="dv">6</span>] <span class="st">&quot;Ann Arbor&quot;</span> <span class="st">&quot;Atlanta&quot;</span> <span class="st">&quot;Austin&quot;</span> <span class="st">&quot;Audobon&quot;</span> ...</code></pre></div>
+<div id="other-trie-operations" class="section level3">
+<h3>Other trie operations</h3>
+<p>If you have ideas for other trie-like structures, or functions that would be useful with <em>these</em> tries, the best approach is to either <a href="https://github.com/Ironholds/triebeard/issues">request it</a> or <a href="https://github.com/Ironholds/triebeard/pulls">add it</a>!</p>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

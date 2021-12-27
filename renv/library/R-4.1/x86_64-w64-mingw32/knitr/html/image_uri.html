@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Encode an image file to a data URI</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for image_uri {knitr}"><tr><td>image_uri {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Encode an image file to a data URI</h2>
+
+<h3>Description</h3>
+
+<p>This function is the same as <code>xfun::<a href="../../xfun/html/base64_uri.html">base64_uri</a>()</code> (only with a
+different function name). It can encode an image file as a base64 string,
+which can be used in the <code>img</code> tag in HTML.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+image_uri(f)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>f</code></td>
+<td>
+<p>Path to the image file.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The data URI as a character string.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Wush Wu and Yihui Xie
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://en.wikipedia.org/wiki/Data_URI_scheme">https://en.wikipedia.org/wiki/Data_URI_scheme</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+uri = image_uri(file.path(R.home("doc"), "html", "logo.jpg"))
+if (interactive()) {
+    cat(sprintf("&lt;img src=\"%s\" /&gt;", uri), file = "logo.html")
+    browseURL("logo.html")  # you can check its HTML source
+}
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Methods for &quot;[&quot;: Extraction or Subsetting in Package 'Matrix'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for [-methods {Matrix}"><tr><td>[-methods {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Methods for &quot;[&quot;: Extraction or Subsetting in Package 'Matrix'</h2>
+
+<h3>Description</h3>
+
+<p>Methods for <code>"["</code>, i.e., extraction or subsetting mostly of
+matrices, in package <span class="pkg">Matrix</span>.
+</p>
+
+
+<h3>Methods</h3>
+
+<p>There are more than these:
+</p>
+
+<dl>
+<dt>x = &quot;Matrix&quot;, i = &quot;missing&quot;, j = &quot;missing&quot;, drop= &quot;ANY&quot;</dt><dd><p> ... </p>
+</dd>
+<dt>x = &quot;Matrix&quot;, i = &quot;numeric&quot;, j = &quot;missing&quot;, drop= &quot;missing&quot;</dt><dd><p> ... </p>
+</dd>
+<dt>x = &quot;Matrix&quot;, i = &quot;missing&quot;, j = &quot;numeric&quot;, drop= &quot;missing&quot;</dt><dd><p> ... </p>
+</dd>
+<dt>x = &quot;dsparseMatrix&quot;, i = &quot;missing&quot;, j = &quot;numeric&quot;, drop= &quot;logical&quot;</dt><dd><p> ... </p>
+</dd>
+<dt>x = &quot;dsparseMatrix&quot;, i = &quot;numeric&quot;, j = &quot;missing&quot;, drop= &quot;logical&quot;</dt><dd><p> ... </p>
+</dd>
+<dt>x = &quot;dsparseMatrix&quot;, i = &quot;numeric&quot;, j = &quot;numeric&quot;, drop= &quot;logical&quot;</dt><dd><p> ... </p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Subassign-methods.html">[&lt;&ndash;methods</a></code> for sub<em>assign</em>ment to <code>"Matrix"</code>
+objects.
+<code><a href="../../base/html/Extract.html">Extract</a></code> about the standard extraction.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+
+str(m &lt;- Matrix(round(rnorm(7*4),2), nrow = 7))
+stopifnot(identical(m, m[]))
+m[2, 3]   # simple number
+m[2, 3:4] # simple numeric of length 2
+m[2, 3:4, drop=FALSE] # sub matrix of class 'dgeMatrix'
+## rows or columns only:
+m[1,]     # first row, as simple numeric vector
+m[,1:2]   # sub matrix of first two columns
+
+showMethods("[", inherited = FALSE)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

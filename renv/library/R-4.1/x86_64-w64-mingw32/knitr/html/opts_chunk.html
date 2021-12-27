@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Default and current chunk options</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for opts_chunk {knitr}"><tr><td>opts_chunk {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Default and current chunk options</h2>
+
+<h3>Description</h3>
+
+<p>Options for R code chunks. When running R code, the object <code>opts_chunk</code>
+(default options) is not modified by chunk headers (local chunk options are
+merged with default options), whereas <code>opts_current</code> (current options)
+changes with different chunk headers and it always reflects the options for
+the current chunk.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+opts_chunk
+
+opts_current
+</pre>
+
+
+<h3>Format</h3>
+
+<p>An object of class <code>list</code> of length 6.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Normally we set up the global options once in the first code chunk in a
+document using <code>opts_chunk$set()</code>, so that all <em>latter</em> chunks will
+use these options. Note the global options set in one chunk will not affect
+the options in this chunk itself, and that is why we often need to set global
+options in a separate chunk.
+</p>
+<p>See <code>str(knitr::opts_chunk$get())</code> for a list of default chunk options.
+</p>
+
+
+<h3>Note</h3>
+
+<p><code>opts_current</code> should be treated as read-only and you are supposed
+to only query its values via <code>opts_current$get()</code>. Technically you
+could also call <code>opts_current$set()</code> to change the values, but you are
+not recommended to do so unless you understand the consequences.
+</p>
+
+
+<h3>References</h3>
+
+<p>Usage: <a href="https://yihui.org/knitr/objects/">https://yihui.org/knitr/objects/</a>
+</p>
+<p>A list of available options:
+<a href="https://yihui.org/knitr/options/#chunk-options">https://yihui.org/knitr/options/#chunk-options</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+opts_chunk$get("prompt")
+opts_chunk$get("fig.keep")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

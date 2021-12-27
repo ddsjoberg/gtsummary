@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Programming with dplyr</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Programming with dplyr</h1>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Most dplyr verbs use <strong>tidy evaluation</strong> in some way. Tidy evaluation is a special type of non-standard evaluation used throughout the tidyverse. There are two basic forms found in dplyr:</p>
+<ul>
+<li><p><code>arrange()</code>, <code>count()</code>, <code>filter()</code>, <code>group_by()</code>, <code>mutate()</code>, and <code>summarise()</code> use <strong>data masking</strong> so that you can use data variables as if they were variables in the environment (i.e. you write <code>my_variable</code> not <code>df$myvariable</code>).</p></li>
+<li><p><code>across()</code>, <code>relocate()</code>, <code>rename()</code>, <code>select()</code>, and <code>pull()</code> use <strong>tidy selection</strong> so you can easily choose variables based on their position, name, or type (e.g. <code>starts_with(&quot;x&quot;)</code> or <code>is.numeric</code>).</p></li>
+</ul>
+<p>To determine whether a function argument uses data masking or tidy selection, look at the documentation: in the arguments list, you’ll see <code>&lt;data-masking&gt;</code> or <code>&lt;tidy-select&gt;</code>.</p>
+<p>Data masking and tidy selection make interactive data exploration fast and fluid, but they add some new challenges when you attempt to use them indirectly such as in a for loop or a function. This vignette shows you how to overcome those challenges. We’ll first go over the basics of data masking and tidy selection, talk about how to use them indirectly, and then show you a number of recipes to solve common problems.</p>
+<p>This vignette will give you the minimum knowledge you need to be an effective programmer with tidy evaluation. If you’d like to learn more about the underlying theory, or precisely how it’s different from non-standard evaluation, we recommend that you read the Metaprogramming chapters in <a href="https://adv-r.hadley.nz"><em>Advanced R</em></a>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(dplyr)</span></code></pre></div>
+</div>
+<div id="data-masking" class="section level2">
+<h2>Data masking</h2>
+<p>Data masking makes data manipulation faster because it requires less typing. In most (but not all<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>) base R functions you need to refer to variables with <code>$</code>, leading to code that repeats the name of the data frame many times:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>starwars[starwars<span class="op">$</span>homeworld <span class="op">==</span><span class="st"> &quot;Naboo&quot;</span> <span class="op">&amp;</span><span class="st"> </span>starwars<span class="op">$</span>species <span class="op">==</span><span class="st"> &quot;Human&quot;</span>, ,]</span></code></pre></div>
+<p>The dplyr equivalent of this code is more concise because data masking allows you to need to type <code>starwars</code> once:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(homeworld <span class="op">==</span><span class="st"> &quot;Naboo&quot;</span>, species <span class="op">==</span><span class="st"> &quot;Human&quot;</span>)</span></code></pre></div>
+<div id="data--and-env-variables" class="section level3">
+<h3>Data- and env-variables</h3>
+<p>The key idea behind data masking is that it blurs the line between the two different meanings of the word “variable”:</p>
+<ul>
+<li><p><strong>env-variables</strong> are “programming” variables that live in an environment. They are usually created with <code>&lt;-</code>.</p></li>
+<li><p><strong>data-variables</strong> are “statistical” variables that live in a data frame. They usually come from data files (e.g. <code>.csv</code>, <code>.xls</code>), or are created manipulating existing variables.</p></li>
+</ul>
+<p>To make those definitions a little more concrete, take this piece of code:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">runif</span>(<span class="dv">3</span>), <span class="dt">y =</span> <span class="kw">runif</span>(<span class="dv">3</span>))</span>
+<span id="cb4-2"><a href="#cb4-2"></a>df<span class="op">$</span>x</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; [1] 0.08075014 0.83433304 0.60076089</span></span></code></pre></div>
+<p>It creates a env-variable, <code>df</code>, that contains two data-variables, <code>x</code> and <code>y</code>. Then it extracts the data-variable <code>x</code> out of the env-variable <code>df</code> using <code>$</code>.</p>
+<p>I think this blurring of the meaning of “variable” is a really nice feature for interactive data analysis because it allows you to refer to data-vars as is, without any prefix. And this seems to be fairly intuitive since many newer R users will attempt to write <code>diamonds[x == 0 | y == 0, ]</code>.</p>
+<p>Unfortunately, this benefit does not come for free. When you start to program with these tools, you’re going to have to grapple with the distinction. This will be hard because you’ve never had to think about it before, so it’ll take a while for your brain to learn these new concepts and categories. However, once you’ve teased apart the idea of “variable” into data-variable and env-variable, I think you’ll find it fairly straightforward to use.</p>
+</div>
+<div id="indirection" class="section level3">
+<h3>Indirection</h3>
+<p>The main challenge of programming with functions that use data masking arises when you introduce some indirection, i.e. when you want to get the data-variable from an env-variable instead of directly typing the data-variable’s name. There are two main cases:</p>
+<ul>
+<li><p>When you have the data-variable in a function argument (i.e. an env-variable that holds a promise<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>), you need to <strong>embrace</strong> the argument by surrounding it in doubled braces, like <code>filter(df, {{ var }})</code>.</p>
+<p>The following function uses embracing to create a wrapper around <code>summarise()</code> that computes the minimum and maximum values of a variable, as well as the number of observations that were summarised:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>var_summary &lt;-<span class="st"> </span><span class="cf">function</span>(data, var) {</span>
+<span id="cb5-2"><a href="#cb5-2"></a>  data <span class="op">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>(), <span class="dt">min =</span> <span class="kw">min</span>({{ var }}), <span class="dt">max =</span> <span class="kw">max</span>({{ var }}))</span>
+<span id="cb5-4"><a href="#cb5-4"></a>}</span>
+<span id="cb5-5"><a href="#cb5-5"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="st">  </span><span class="kw">group_by</span>(cyl) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="st">  </span><span class="kw">var_summary</span>(mpg)</span></code></pre></div></li>
+<li><p>When you have an env-variable that is a character vector, you need to index into the <code>.data</code> pronoun with <code>[[</code>, like <code>summarise(df, mean = mean(.data[[var]]))</code>.</p>
+<p>The following example uses <code>.data</code> to count the number of unique values in each variable of <code>mtcars</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">for</span> (var <span class="cf">in</span> <span class="kw">names</span>(mtcars)) {</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(.data[[var]]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>()</span>
+<span id="cb6-3"><a href="#cb6-3"></a>}</span></code></pre></div>
+<p>Note that <code>.data</code> is not a data frame; it’s a special construct, a pronoun, that allows you to access the current variables either directly, with <code>.data$x</code> or indirectly with <code>.data[[var]]</code>. Don’t expect other functions to work with it.</p></li>
+</ul>
+</div>
+</div>
+<div id="tidy-selection" class="section level2">
+<h2>Tidy selection</h2>
+<p>Data masking makes it easy to compute on values within a dataset. Tidy selection is a complementary tool that makes it easy to work with the columns of a dataset.</p>
+<div id="the-tidyselect-dsl" class="section level3">
+<h3>The tidyselect DSL</h3>
+<p>Underneath all functions that use tidy selection is the <a href="https://tidyselect.r-lib.org/">tidyselect</a> package. It provides a miniature domain specific language that makes it easy to select columns by name, position, or type. For example:</p>
+<ul>
+<li><p><code>select(df, 1)</code> selects the first column; <code>select(df, last_col())</code> selects the last column.</p></li>
+<li><p><code>select(df, c(a, b, c))</code> selects columns <code>a</code>, <code>b</code>, and <code>c</code>.</p></li>
+<li><p><code>select(df, starts_with(&quot;a&quot;))</code> selects all columns whose name starts with “a”; <code>select(df, ends_with(&quot;z&quot;))</code> selects all columns whose name ends with “z”.</p></li>
+<li><p><code>select(df, where(is.numeric))</code> selects all numeric columns.</p></li>
+</ul>
+<p>You can see more details in <code>?dplyr_tidy_select</code>.</p>
+</div>
+<div id="indirection-1" class="section level3">
+<h3>Indirection</h3>
+<p>As with data masking, tidy selection makes a common task easier at the cost of making a less common task harder. When you want to use tidy select indirectly with the column specification stored in an intermediate variable, you’ll need to learn some new tools. Again, there are two forms of indirection:</p>
+<ul>
+<li><p>When you have the data-variable in an env-variable that is a function argument, you use the same technique as data masking: you <strong>embrace</strong> the argument by surrounding it in doubled braces.</p>
+<p>The following function summarises a data frame by computing the mean of all variables selected by the user:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>summarise_mean &lt;-<span class="st"> </span><span class="cf">function</span>(data, vars) {</span>
+<span id="cb7-2"><a href="#cb7-2"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>(), <span class="kw">across</span>({{ vars }}, mean))</span>
+<span id="cb7-3"><a href="#cb7-3"></a>}</span>
+<span id="cb7-4"><a href="#cb7-4"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="st">  </span><span class="kw">group_by</span>(cyl) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="st">  </span><span class="kw">summarise_mean</span>(<span class="kw">where</span>(is.numeric))</span></code></pre></div></li>
+<li><p>When you have an env-variable that is a character vector, you need to use <code>all_of()</code> or <code>any_of()</code> depending on whether you want the function to error if a variable is not found.</p>
+<p>The following code uses <code>all_of()</code> to select all of the variables found in a character vector; then <code>!</code> plus <code>all_of()</code> to select all of the variables <em>not</em> found in a character vector:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>vars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;vs&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">all_of</span>(vars))</span>
+<span id="cb8-3"><a href="#cb8-3"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">!</span><span class="kw">all_of</span>(vars))</span></code></pre></div></li>
+</ul>
+</div>
+</div>
+<div id="how-tos" class="section level2">
+<h2>How tos</h2>
+<p>The following examples solve a grab bag of common problems. We show you the minimum amount of code so that you can get the basic idea; most real problems will require more code or combining multiple techniques.</p>
+<div id="user-supplied-data" class="section level3">
+<h3>User-supplied data</h3>
+<p>If you check the documentation, you’ll see that <code>.data</code> never uses data masking or tidy select. That means you don’t need to do anything special in your function:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>mutate_y &lt;-<span class="st"> </span><span class="cf">function</span>(data) {</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  <span class="kw">mutate</span>(data, <span class="dt">y =</span> a <span class="op">+</span><span class="st"> </span>x)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>}</span></code></pre></div>
+</div>
+<div id="eliminating-r-cmd-check-notes" class="section level3">
+<h3>Eliminating <code>R CMD check</code> <code>NOTE</code>s</h3>
+<p>If you’re writing a package and you have a function that uses data-variables:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>my_summary_function &lt;-<span class="st"> </span><span class="cf">function</span>(data) {</span>
+<span id="cb10-2"><a href="#cb10-2"></a>  data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="st">    </span><span class="kw">filter</span>(x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="st">    </span><span class="kw">group_by</span>(grp) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">y =</span> <span class="kw">mean</span>(y), <span class="dt">n =</span> <span class="kw">n</span>())</span>
+<span id="cb10-6"><a href="#cb10-6"></a>}</span></code></pre></div>
+<p>You’ll get an <code>R CMD CHECK</code> <code>NOTE</code>:</p>
+<pre><code>N  checking R code for possible problems
+   my_summary_function: no visible binding for global variable ‘x’, ‘grp’, ‘y’
+   Undefined global functions or variables:
+     x grp y</code></pre>
+<p>You can eliminate this by using <code>.data$var</code> and importing <code>.data</code> from its source in the <a href="https://rlang.r-lib.org/">rlang</a> package (the underlying package that implements tidy evaluation):</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co">#&#39; @importFrom rlang .data</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>my_summary_function &lt;-<span class="st"> </span><span class="cf">function</span>(data) {</span>
+<span id="cb12-3"><a href="#cb12-3"></a>  data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="st">    </span><span class="kw">filter</span>(.data<span class="op">$</span>x <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="st">    </span><span class="kw">group_by</span>(.data<span class="op">$</span>grp) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">y =</span> <span class="kw">mean</span>(.data<span class="op">$</span>y), <span class="dt">n =</span> <span class="kw">n</span>())</span>
+<span id="cb12-7"><a href="#cb12-7"></a>}</span></code></pre></div>
+</div>
+<div id="one-or-more-user-supplied-expressions" class="section level3">
+<h3>One or more user-supplied expressions</h3>
+<p>If you want the user to supply an expression that’s passed onto an argument which uses data masking or tidy select, embrace the argument:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>my_summarise &lt;-<span class="st"> </span><span class="cf">function</span>(data, group_var) {</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  data <span class="op">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="st">    </span><span class="kw">group_by</span>({{ group_var }}) <span class="op">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(mass))</span>
+<span id="cb13-5"><a href="#cb13-5"></a>}</span></code></pre></div>
+<p>This generalises in a straightforward way if you want to use one user-supplied expression in multiple places:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>my_summarise2 &lt;-<span class="st"> </span><span class="cf">function</span>(data, expr) {</span>
+<span id="cb14-2"><a href="#cb14-2"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(</span>
+<span id="cb14-3"><a href="#cb14-3"></a>    <span class="dt">mean =</span> <span class="kw">mean</span>({{ expr }}),</span>
+<span id="cb14-4"><a href="#cb14-4"></a>    <span class="dt">sum =</span> <span class="kw">sum</span>({{ expr }}),</span>
+<span id="cb14-5"><a href="#cb14-5"></a>    <span class="dt">n =</span> <span class="kw">n</span>()</span>
+<span id="cb14-6"><a href="#cb14-6"></a>  )</span>
+<span id="cb14-7"><a href="#cb14-7"></a>}</span></code></pre></div>
+<p>If you want the user to provide multiple expressions, embrace each of them:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>my_summarise3 &lt;-<span class="st"> </span><span class="cf">function</span>(data, mean_var, sd_var) {</span>
+<span id="cb15-2"><a href="#cb15-2"></a>  data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>({{ mean_var }}), <span class="dt">sd =</span> <span class="kw">sd</span>({{ sd_var }}))</span>
+<span id="cb15-4"><a href="#cb15-4"></a>}</span></code></pre></div>
+<p>If you want to use the names of variables in the output, you can use glue syntax in conjunction with <code>:=</code>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>my_summarise4 &lt;-<span class="st"> </span><span class="cf">function</span>(data, expr) {</span>
+<span id="cb16-2"><a href="#cb16-2"></a>  data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(</span>
+<span id="cb16-3"><a href="#cb16-3"></a>    <span class="st">&quot;mean_{{expr}}&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">mean</span>({{ expr }}),</span>
+<span id="cb16-4"><a href="#cb16-4"></a>    <span class="st">&quot;sum_{{expr}}&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">sum</span>({{ expr }}),</span>
+<span id="cb16-5"><a href="#cb16-5"></a>    <span class="st">&quot;n_{{expr}}&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">n</span>()</span>
+<span id="cb16-6"><a href="#cb16-6"></a>  )</span>
+<span id="cb16-7"><a href="#cb16-7"></a>}</span>
+<span id="cb16-8"><a href="#cb16-8"></a>my_summarise5 &lt;-<span class="st"> </span><span class="cf">function</span>(data, mean_var, sd_var) {</span>
+<span id="cb16-9"><a href="#cb16-9"></a>  data <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="st">    </span><span class="kw">summarise</span>(</span>
+<span id="cb16-11"><a href="#cb16-11"></a>      <span class="st">&quot;mean_{{mean_var}}&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">mean</span>({{ mean_var }}), </span>
+<span id="cb16-12"><a href="#cb16-12"></a>      <span class="st">&quot;sd_{{sd_var}}&quot;</span> <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">sd</span>({{ sd_var }})</span>
+<span id="cb16-13"><a href="#cb16-13"></a>    )</span>
+<span id="cb16-14"><a href="#cb16-14"></a>}</span></code></pre></div>
+</div>
+<div id="any-number-of-user-supplied-expressions" class="section level3">
+<h3>Any number of user-supplied expressions</h3>
+<p>If you want to take an arbitrary number of user supplied expressions, use <code>...</code>. This is most often useful when you want to give the user full control over a single part of the pipeline, like a <code>group_by()</code> or a <code>mutate()</code>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>my_summarise &lt;-<span class="st"> </span><span class="cf">function</span>(.data, ...) {</span>
+<span id="cb17-2"><a href="#cb17-2"></a>  .data <span class="op">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="st">    </span><span class="kw">group_by</span>(...) <span class="op">%&gt;%</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mass =</span> <span class="kw">mean</span>(mass, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dt">height =</span> <span class="kw">mean</span>(height, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb17-5"><a href="#cb17-5"></a>}</span>
+<span id="cb17-6"><a href="#cb17-6"></a></span>
+<span id="cb17-7"><a href="#cb17-7"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">my_summarise</span>(homeworld)</span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co">#&gt; # A tibble: 49 x 3</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a><span class="co">#&gt;   homeworld    mass height</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co">#&gt; 1 Alderaan       64   176.</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="co">#&gt; 2 Aleen Minor    15    79 </span></span>
+<span id="cb17-13"><a href="#cb17-13"></a><span class="co">#&gt; 3 Bespin         79   175 </span></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="co">#&gt; 4 Bestine IV    110   180 </span></span>
+<span id="cb17-15"><a href="#cb17-15"></a><span class="co">#&gt; # … with 45 more rows</span></span>
+<span id="cb17-16"><a href="#cb17-16"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">my_summarise</span>(sex, gender)</span>
+<span id="cb17-17"><a href="#cb17-17"></a><span class="co">#&gt; `summarise()` has grouped output by &#39;sex&#39;. You can override using the `.groups` argument.</span></span>
+<span id="cb17-18"><a href="#cb17-18"></a><span class="co">#&gt; # A tibble: 6 x 4</span></span>
+<span id="cb17-19"><a href="#cb17-19"></a><span class="co">#&gt; # Groups:   sex [5]</span></span>
+<span id="cb17-20"><a href="#cb17-20"></a><span class="co">#&gt;   sex            gender      mass height</span></span>
+<span id="cb17-21"><a href="#cb17-21"></a><span class="co">#&gt;   &lt;chr&gt;          &lt;chr&gt;      &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb17-22"><a href="#cb17-22"></a><span class="co">#&gt; 1 female         feminine    54.7   169.</span></span>
+<span id="cb17-23"><a href="#cb17-23"></a><span class="co">#&gt; 2 hermaphroditic masculine 1358     175 </span></span>
+<span id="cb17-24"><a href="#cb17-24"></a><span class="co">#&gt; 3 male           masculine   81.0   179.</span></span>
+<span id="cb17-25"><a href="#cb17-25"></a><span class="co">#&gt; 4 none           feminine   NaN      96 </span></span>
+<span id="cb17-26"><a href="#cb17-26"></a><span class="co">#&gt; # … with 2 more rows</span></span></code></pre></div>
+<p>When you use <code>...</code> in this way, make sure that any other arguments start with <code>.</code> to reduce the chances of argument clashes; see <a href="https://design.tidyverse.org/dots-prefix.html" class="uri">https://design.tidyverse.org/dots-prefix.html</a> for more details.</p>
+</div>
+<div id="transforming-user-supplied-variables" class="section level3">
+<h3>Transforming user-supplied variables</h3>
+<p>If you want the user to provide a set of data-variables that are then transformed, use <code>across()</code>:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>my_summarise &lt;-<span class="st"> </span><span class="cf">function</span>(data, summary_vars) {</span>
+<span id="cb18-2"><a href="#cb18-2"></a>  data <span class="op">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="kw">across</span>({{ summary_vars }}, <span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(., <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)))</span>
+<span id="cb18-4"><a href="#cb18-4"></a>}</span>
+<span id="cb18-5"><a href="#cb18-5"></a>starwars <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="st">  </span><span class="kw">group_by</span>(species) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="st">  </span><span class="kw">my_summarise</span>(<span class="kw">c</span>(mass, height))</span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#&gt; # A tibble: 38 x 3</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#&gt;   species   mass height</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#&gt; 1 Aleena      15     79</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="co">#&gt; 2 Besalisk   102    198</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="co">#&gt; 3 Cerean      82    198</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a><span class="co">#&gt; 4 Chagrian   NaN    196</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a><span class="co">#&gt; # … with 34 more rows</span></span></code></pre></div>
+<p>You can use this same idea for multiple sets of input data-variables:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>my_summarise &lt;-<span class="st"> </span><span class="cf">function</span>(data, group_var, summarise_var) {</span>
+<span id="cb19-2"><a href="#cb19-2"></a>  data <span class="op">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="st">    </span><span class="kw">group_by</span>(<span class="kw">across</span>({{ group_var }})) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="kw">across</span>({{ summarise_var }}, mean))</span>
+<span id="cb19-5"><a href="#cb19-5"></a>}</span></code></pre></div>
+<p>Use the <code>.names</code> argument to <code>across()</code> to control the names of the output.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>my_summarise &lt;-<span class="st"> </span><span class="cf">function</span>(data, group_var, summarise_var) {</span>
+<span id="cb20-2"><a href="#cb20-2"></a>  data <span class="op">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="st">    </span><span class="kw">group_by</span>(<span class="kw">across</span>({{ group_var }})) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="st">    </span><span class="kw">summarise</span>(<span class="kw">across</span>({{ summarise_var }}, mean, <span class="dt">.names =</span> <span class="st">&quot;mean_{.col}&quot;</span>))</span>
+<span id="cb20-5"><a href="#cb20-5"></a>}</span></code></pre></div>
+</div>
+<div id="loop-over-multiple-variables" class="section level3">
+<h3>Loop over multiple variables</h3>
+<p>If you have a character vector of variable names, and want to operate on them with a for loop, index into the special <code>.data</code> pronoun:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="cf">for</span> (var <span class="cf">in</span> <span class="kw">names</span>(mtcars)) {</span>
+<span id="cb21-2"><a href="#cb21-2"></a>  mtcars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(.data[[var]]) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>()</span>
+<span id="cb21-3"><a href="#cb21-3"></a>}</span></code></pre></div>
+<p>This same technique works with for loop alternatives like the base R <code>apply()</code> family and the purrr <code>map()</code> family:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>mtcars <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="st">  </span><span class="kw">names</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="st">  </span>purrr<span class="op">::</span><span class="kw">map</span>(<span class="op">~</span><span class="st"> </span><span class="kw">count</span>(mtcars, .data[[.x]]))</span></code></pre></div>
+</div>
+<div id="use-a-variable-from-an-shiny-input" class="section level3">
+<h3>Use a variable from an Shiny input</h3>
+<p>Many Shiny input controls return character vectors, so you can use the same approach as above: <code>.data[[input$var]]</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">library</span>(shiny)</span>
+<span id="cb23-2"><a href="#cb23-2"></a>ui &lt;-<span class="st"> </span><span class="kw">fluidPage</span>(</span>
+<span id="cb23-3"><a href="#cb23-3"></a>  <span class="kw">selectInput</span>(<span class="st">&quot;var&quot;</span>, <span class="st">&quot;Variable&quot;</span>, <span class="dt">choices =</span> <span class="kw">names</span>(diamonds)),</span>
+<span id="cb23-4"><a href="#cb23-4"></a>  <span class="kw">tableOutput</span>(<span class="st">&quot;output&quot;</span>)</span>
+<span id="cb23-5"><a href="#cb23-5"></a>)</span>
+<span id="cb23-6"><a href="#cb23-6"></a>server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session) {</span>
+<span id="cb23-7"><a href="#cb23-7"></a>  data &lt;-<span class="st"> </span><span class="kw">reactive</span>(<span class="kw">filter</span>(diamonds, .data[[input<span class="op">$</span>var]] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>))</span>
+<span id="cb23-8"><a href="#cb23-8"></a>  output<span class="op">$</span>output &lt;-<span class="st"> </span><span class="kw">renderTable</span>(<span class="kw">head</span>(<span class="kw">data</span>()))</span>
+<span id="cb23-9"><a href="#cb23-9"></a>}</span></code></pre></div>
+<p>See <a href="https://mastering-shiny.org/action-tidy.html" class="uri">https://mastering-shiny.org/action-tidy.html</a> for more details and case studies.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>dplyr’s <code>filter()</code> is inspired by base R’s <code>subset()</code>. <code>subset()</code> provides data masking, but not with tidy evaluation, so the techniques described in this chapter don’t apply to it.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>In R, arguments are lazily evaluated which means that until you attempt to use, they don’t hold a value, just a <strong>promise</strong> that describes how to compute the value. You can learn more at <a href="https://adv-r.hadley.nz/functions.html#lazy-evaluation" class="uri">https://adv-r.hadley.nz/functions.html#lazy-evaluation</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

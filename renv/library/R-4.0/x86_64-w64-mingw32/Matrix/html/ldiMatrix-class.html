@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Class &quot;ldiMatrix&quot; of Diagonal Logical Matrices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ldiMatrix-class {Matrix}"><tr><td>ldiMatrix-class {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Class &quot;ldiMatrix&quot; of Diagonal Logical Matrices</h2>
+
+<h3>Description</h3>
+
+<p>The class <code>"ldiMatrix"</code> of logical diagonal matrices.
+
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>Objects can be created by calls of the form <code>new("ldiMatrix", ...)</code>
+but typically rather via <code><a href="Diagonal.html">Diagonal</a></code>.
+</p>
+
+
+<h3>Slots</h3>
+
+
+<dl>
+<dt><code>x</code>:</dt><dd><p><code>"logical"</code> vector.</p>
+</dd>
+<dt><code>diag</code>:</dt><dd><p><code>"character"</code> string, either &quot;U&quot; or &quot;N&quot;,
+see <code><a href="ddiMatrix-class.html">ddiMatrix</a></code>.</p>
+</dd>
+<dt><code>Dim</code>,<code>Dimnames</code>:</dt><dd><p>matrix dimension and
+<code><a href="../../base/html/dimnames.html">dimnames</a></code>, see the <code><a href="Matrix-class.html">Matrix</a></code> class
+description.</p>
+</dd>
+</dl>
+
+
+
+<h3>Extends</h3>
+
+<p>Class <code>"<a href="diagonalMatrix-class.html">diagonalMatrix</a>"</code> and
+class <code>"<a href="dMatrix-class.html">lMatrix</a>"</code>, directly.
+</p>
+<p>Class <code>"<a href="sparseMatrix-class.html">sparseMatrix</a>"</code>, by class <code>"diagonalMatrix"</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p>Classes <code><a href="ddiMatrix-class.html">ddiMatrix</a></code> and
+<code><a href="diagonalMatrix-class.html">diagonalMatrix</a></code>; function <code><a href="Diagonal.html">Diagonal</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+(lM &lt;- Diagonal(x = c(TRUE,FALSE,FALSE)))
+str(lM)#&gt; gory details (slots)
+
+crossprod(lM) # numeric
+(nM &lt;- as(lM, "nMatrix"))# -&gt; sparse (not formally ``diagonal'')
+crossprod(nM) # logical sparse
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -7,6 +7,7 @@
 #'
 #' @inheritSection tbl_regression Methods
 #' @name tbl_regression_methods
+#' @keywords internal
 #' @rdname tbl_regression_methods
 #' @param ... arguments passed to `tbl_regression.default()`
 #' @inheritParams tbl_regression
@@ -50,7 +51,14 @@ tbl_regression.survreg <- function(x, tidy_fun = function(x, ...) broom::tidy(x,
 #' @export
 #' @rdname tbl_regression_methods
 tbl_regression.mira <- function(x, tidy_fun = pool_and_tidy_mice, ...) {
-  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
+  tbl <- tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
+
+  # adding outcome levels to multinomial models
+  if (inherits(x$analyses[[1]], "multinom")) {
+    tbl <- .multinom_modifations(tbl)
+  }
+
+  tbl
 }
 
 #' @export
@@ -110,19 +118,23 @@ tbl_regression.gam <- function(x, tidy_fun = tidy_gam, ...) {
 tbl_regression.multinom <- function(x, ...) {
   result <- tbl_regression.default(x = x, ...)
 
+  # grouping by outcome, and printing warning message
+  .multinom_modifations(result)
+}
+
+.multinom_modifations <- function(x) {
   # adding a grouped header for the outcome levels
-  result$table_body <-
-    result$table_body %>%
+  x$table_body <-
+    x$table_body %>%
     mutate(groupname_col = .data$y.level, .before = 1)
-  result <-
+  x <-
     modify_table_styling(
-      x = result,
-      column = groupname_col,
+      x = x,
+      columns = all_of("groupname_col"),
       hide= FALSE,
       label = "**Outcome**",
       align = "left"
     )
-
 
   # warning about multinomial models
   paste(
@@ -135,5 +147,5 @@ tbl_regression.multinom <- function(x, ...) {
     str_wrap() %>%
     cli_alert_info()
 
-  result
+  x
 }

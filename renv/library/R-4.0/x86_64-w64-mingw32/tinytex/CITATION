@@ -1,0 +1,31 @@
+citHeader("To cite the 'tinytex' package in publications use:")
+
+year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta$Date, perl = TRUE)
+vers = paste('R package version', meta$Version)
+
+citEntry(
+  entry = 'manual',
+  title = paste('tinytex:', meta$Title),
+  author = Filter(function(p) 'aut' %in% p$role, as.person(meta$Author)),
+  year = year,
+  note = vers,
+  url = meta$URL,
+  textVersion = paste('Yihui Xie (', year, '). tinytex: ', meta$Title, '. ', vers, '.', sep = '')
+)
+
+citEntry(
+  entry = 'article',
+  title = 'TinyTeX: A lightweight, cross-platform, and easy-to-maintain LaTeX distribution based on TeX Live',
+  author = 'Yihui Xie',
+  journal = 'TUGboat',
+  year = '2019',
+  volumne = '40',
+  number = '1',
+  pages = '30--32',
+  url = 'http://tug.org/TUGboat/Contents/contents40-1.html',
+  textVersion = paste(
+    'Yihui Xie (2019)',
+    'TinyTeX: A lightweight, cross-platform, and easy-to-maintain LaTeX distribution based on TeX Live.',
+    'TUGboat 40 (1): 30--32. http://tug.org/TUGboat/Contents/contents40-1.html'
+  )
+)

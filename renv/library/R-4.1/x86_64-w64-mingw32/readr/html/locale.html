@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create locales</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for locale {readr}"><tr><td>locale {readr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create locales</h2>
+
+<h3>Description</h3>
+
+<p>A locale object tries to capture all the defaults that can vary between
+countries. You set the locale in once, and the details are automatically
+passed on down to the columns parsers. The defaults have been chosen to
+match R (i.e. US English) as closely as possible. See
+<code>vignette("locales")</code> for more details.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+locale(
+  date_names = "en",
+  date_format = "%AD",
+  time_format = "%AT",
+  decimal_mark = ".",
+  grouping_mark = ",",
+  tz = "UTC",
+  encoding = "UTF-8",
+  asciify = FALSE
+)
+
+default_locale()
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>date_names</code></td>
+<td>
+<p>Character representations of day and month names. Either
+the language code as string (passed on to <code><a href="../../readr/help/date_names_lang.html">date_names_lang()</a></code>)
+or an object created by <code><a href="../../readr/help/date_names.html">date_names()</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>date_format, time_format</code></td>
+<td>
+<p>Default date and time formats.</p>
+</td></tr>
+<tr valign="top"><td><code>decimal_mark, grouping_mark</code></td>
+<td>
+<p>Symbols used to indicate the decimal
+place, and to chunk larger numbers. Decimal mark can only be <code style="white-space: pre;">,</code> or
+<code>.</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>tz</code></td>
+<td>
+<p>Default tz. This is used both for input (if the time zone isn't
+present in individual strings), and for output (to control the default
+display). The default is to use &quot;UTC&quot;, a time zone that does not use
+daylight savings time (DST) and hence is typically most useful for data.
+The absence of time zones makes it approximately 50x faster to generate
+UTC times than any other time zone.
+</p>
+<p>Use <code>""</code> to use the system default time zone, but beware that this
+will not be reproducible across systems.
+</p>
+<p>For a complete list of possible time zones, see <code><a href="../../base/html/timezones.html">OlsonNames()</a></code>.
+Americans, note that &quot;EST&quot; is a Canadian time zone that does not have
+DST. It is <em>not</em> Eastern Standard Time. It's better to use
+&quot;US/Eastern&quot;, &quot;US/Central&quot; etc.</p>
+</td></tr>
+<tr valign="top"><td><code>encoding</code></td>
+<td>
+<p>Default encoding. This only affects how the file is
+read - readr always converts the output to UTF-8.</p>
+</td></tr>
+<tr valign="top"><td><code>asciify</code></td>
+<td>
+<p>Should diacritics be stripped from date names and converted to
+ASCII? This is useful if you're dealing with ASCII data where the correct
+spellings have been lost. Requires the <span class="pkg">stringi</span> package.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+locale()
+locale("fr")
+
+# South American locale
+locale("es", decimal_mark = ",")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>readr</em> version 2.0.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

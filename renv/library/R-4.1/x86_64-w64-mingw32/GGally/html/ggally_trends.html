@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Trends line plot</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for ggally_trends {GGally}"><tr><td>ggally_trends {GGally}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Trends line plot</h2>
+
+<h3>Description</h3>
+
+<p>Plot trends using line plots.
+For continuous y variables, plot the evolution of the mean.
+For binary y variables, plot the evolution of the proportion.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+ggally_trends(data, mapping, ..., include_zero = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>data</code></td>
+<td>
+<p>data set using</p>
+</td></tr>
+<tr valign="top"><td><code>mapping</code></td>
+<td>
+<p>aesthetics being used</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>other arguments passed to <code><a href="../../ggplot2/help/geom_path.html">ggplot2::geom_line()</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>include_zero</code></td>
+<td>
+<p>Should 0 be included on the y-axis?</p>
+</td></tr>
+</table>
+
+
+<h3>Author(s)</h3>
+
+<p>Joseph Larmarange
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# Small function to display plots only if it's interactive
+p_ &lt;- GGally::print_if_interactive
+
+data(tips, package = "reshape")
+tips_f &lt;- tips
+tips_f$day &lt;- factor(tips$day, c("Thur", "Fri", "Sat", "Sun"))
+
+# Numeric variable
+p_(ggally_trends(tips_f, mapping = aes(x = day, y = total_bill)))
+p_(ggally_trends(tips_f, mapping = aes(x = day, y = total_bill, colour = time)))
+
+# Binary variable
+p_(ggally_trends(tips_f, mapping = aes(x = day, y = smoker)))
+p_(ggally_trends(tips_f, mapping = aes(x = day, y = smoker, colour = sex)))
+
+# Discrete variable with 3 or more categories
+p_(ggally_trends(tips_f, mapping = aes(x = smoker, y = day)))
+p_(ggally_trends(tips_f, mapping = aes(x = smoker, y = day, color = sex)))
+
+# Include zero on Y axis
+p_(ggally_trends(tips_f, mapping = aes(x = day, y = total_bill), include_zero = TRUE))
+p_(ggally_trends(tips_f, mapping = aes(x = day, y = smoker), include_zero = TRUE))
+
+# Change line size
+p_(ggally_trends(tips_f, mapping = aes(x = day, y = smoker, colour = sex), size = 3))
+
+# Define weights with the appropriate aesthetic
+d &lt;- as.data.frame(Titanic)
+p_(ggally_trends(
+  d,
+  mapping = aes(x = Class, y = Survived, weight = Freq, color = Sex),
+  include_zero = TRUE
+))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>GGally</em> version 2.1.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

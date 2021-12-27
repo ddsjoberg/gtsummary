@@ -68,10 +68,13 @@ test_that("no errors/warnings with tbl_regression.gam", {
 })
 
 test_that("no errors/warnings with tidy_robust()", {
-  skip_if(!require("paramters") || !require("insight"))
-  expect_output(
+  skip_if(!require("parameters") || !require("insight"))
+  expect_error(
     glm(response ~ age + trt, trial, family = binomial) %>%
-      tbl_regression(tidy_fun = purrr::partial(tidy_robust, vcov_estimation = "CL"),
-                     exponentiate = TRUE)
+      tbl_regression(
+        tidy_fun = purrr::partial(tidy_robust, vcov_estimation = "CL"),
+        exponentiate = TRUE
+      ),
+    NA
   )
 })

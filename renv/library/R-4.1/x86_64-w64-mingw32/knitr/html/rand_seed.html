@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: An unevaluated expression to return .Random.seed if exists</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for rand_seed {knitr}"><tr><td>rand_seed {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>An unevaluated expression to return .Random.seed if exists</h2>
+
+<h3>Description</h3>
+
+<p>This expression returns <code>.Random.seed</code> when <code>eval(rand_seed)</code> and
+<code>NULL</code> otherwise.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+rand_seed
+</pre>
+
+
+<h3>Details</h3>
+
+<p>It is designed to work with <code>opts_chunk$set(cache.extra = rand_seed)</code>
+for reproducibility of chunks that involve with random number generation. See
+references.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://yihui.org/knitr/demo/cache/">https://yihui.org/knitr/demo/cache/</a>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+eval(rand_seed)
+rnorm(1)  # .Random.seed is created (or modified)
+eval(rand_seed)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

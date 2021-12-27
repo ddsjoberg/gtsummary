@@ -1,0 +1,313 @@
+---
+title: 4. curl options
+author: Scott Chamberlain
+date: "2021-02-05"
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteIndexEntry{4. curl options}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+
+
+> adapted in part from the blog post [Curling - exploring web request options][post]
+
+
+Most times you request data from the web, you should have no problem. However, you eventually will run into problems. In addition, there are advanced things you can do modifying requests to web resources that fall in the _advanced stuff_ category.
+
+Requests to web resources are served over the `http` protocol via [curl][]. `curl` _is a command line tool and library for transferring data with URL syntax, supporting (lots of protocols)_ . `curl` has many options that you may not know about.
+
+I'll go over some of the common and less commonly used curl options, and try to explain why you may want to use some of them.
+
+## Discover curl options
+
+You can go to the source, that is the curl book at <https://everything.curl.dev/>. In R: `curl::curl_options()` for finding curl options. which gives information for each curl option, including the libcurl variable name (e.g., `CURLOPT_CERTINFO`) and the type of variable (e.g., logical).
+
+## Other ways to use curl besides R
+
+Perhaps the canonical way to use curl is on the command line. You can get curl for your operating system at <https://curl.se/download.html>, though hopefully you already have curl. Once you have curl, you can have lots of fun. For example, get the contents of the Google landing page:
+
+```sh
+curl https://www.google.com
+```
+
+* If you like that you may also like [httpie][], a Python command line tool that is a little more convenient than curl (e.g., JSON output is automatically parsed and colorized).
+* Alot of data from the web is in JSON format. A great command line tool to pair with `curl` is [jq][].
+
+> Note: if you are on windows you may require extra setup if you want to play with curl on the command line. OSX and linux have it by default. On Windows 8, installing the latest version from here https://curl.se/download.html#Win64 worked for me.
+
+
+## general info
+
+With `crul` you have to set curl options per each object, so not globally across all HTTP requests. We may allow the global curl option setting in the future.
+
+
+## using curl options in other packages
+
+We recommend using `...` to allow users to pass in curl options. For example, lets say you have a function in a package
+
+```r
+foo <- function() {
+  z <- crul::HttpClient$new(url = yoururl)
+  z$get()
+}
+```
+
+To make it easy for users to pass in curl options use an `...`
+
+```r
+foo <- function(...) {
+  z <- crul::HttpClient$new(url = yoururl, opts = list(...))
+  z$get()
+}
+```
+
+Then we can pass in any combination of acceptable curl options:
+
+```r
+foo(verbose = TRUE)
+#> verbose curl output
+```
+
+You can instead make users pass in a list, e.g.:
+
+```r
+foo <- function(opts = list()) {
+  z <- crul::HttpClient$new(url = yoururl, opts = opts)
+  z$get()
+}
+```
+
+Then a user has to pass curl options like: 
+
+```r
+foo(opts = list(verbose = TRUE))
+```
+
+
+## timeout
+
+> Set a timeout for a request. If request exceeds timeout, request stops.
+
+relevant commands:
+
+* `timeout_ms=<integer>`
+
+```r
+HttpClient$new("https://www.google.com/search", 
+  opts = list(timeout_ms = 1))$get()
+#> Error in curl::curl_fetch_memory(x$url$url, handle = x$url$handle) :
+#>  Timeout was reached: Operation timed out after 35 milliseconds with 0 bytes received
+```
+
+_Why use this?_ You sometimes are working with a web resource that is somewhat unreliable. For example, if you want to run a script on a server that may take many hours, and the web resource could be down at some point during that time, you could set the timeout and error catch the response so that the script doesn't hang on a server that's not responding. Another example could be if you call a web resource in an R package. In your test suite, you may want to test that a web resource is responding quickly, so you could set a timeout, and not test if that fails.
+
+## verbose
+
+> Print detailed info on a curl call
+
+relevant commands:
+
+* `verbose=<boolean>`
+
+Just do a `HEAD` request so we don't have to deal with big output
+
+```r
+HttpClient$new("https://httpbin.org", 
+  opts = list(verbose = TRUE))$head()
+#> > HEAD / HTTP/1.1
+#> Host: httpbin.org
+#> User-Agent: libcurl/7.54.0 r-curl/3.2 crul/0.5.4.9521
+#> Accept: */*
+#> Accept-Encoding: gzip, deflate
+#> 
+#> < HTTP/1.1 200 OK
+#> < Connection: keep-alive
+#> < Server: gunicorn/19.8.1
+#> < Date: Fri, 06 Jul 2018 17:56:50 GMT
+#> < Content-Type: text/html; charset=utf-8
+#> < Content-Length: 8344
+#> < Access-Control-Allow-Origin: *
+#> < Access-Control-Allow-Credentials: true
+#> < Via: 1.1 vegur
+```
+
+_Why use this?_ As you can see verbose output gives you lots of information that may be useful for debugging a request. You typically don't need verbose output unless you want to inspect a request.
+
+## headers
+
+> Add headers to modify requests, including authentication, setting content-type, accept type, etc.
+
+relevant commands:
+
+* `HttpClient$new(headers = list(...))`
+
+
+```r
+x <- HttpClient$new("https://httpbin.org", 
+  headers = list(
+    Accept = "application/json", 
+    foo = "bar"
+  ), 
+  opts = list(verbose = TRUE)
+)
+x$head()
+#> > HEAD / HTTP/1.1
+#> Host: httpbin.org
+#> User-Agent: libcurl/7.54.0 r-curl/3.2 crul/0.5.4.9521
+#> Accept-Encoding: gzip, deflate
+#> Accept: application/json
+#> foo: bar
+#> 
+#> < HTTP/1.1 200 OK
+#> < Connection: keep-alive
+#> < Server: gunicorn/19.8.1
+#> < Date: Fri, 06 Jul 2018 17:59:15 GMT
+#> < Content-Type: text/html; charset=utf-8
+#> < Content-Length: 8344
+#> < Access-Control-Allow-Origin: *
+#> < Access-Control-Allow-Credentials: true
+#> < Via: 1.1 vegur
+```
+
+_Why use this?_ For some web resources, using headers is mandatory, and `httr` makes including them quite easy. Headers are nice too because e.g., passing authentication in the header instead of the URL string means your private data is not as exposed to prying eyes.
+
+
+## authenticate
+
+> Set authentication details for a resource
+
+relevant commands:
+
+* `auth()`
+
+`auth()` for basic username/password authentication
+
+```r
+auth(user = "foo", pwd = "bar")
+#> $userpwd
+#> [1] "foo:bar"
+#> 
+#> $httpauth
+#> [1] 1
+#> 
+#> attr(,"class")
+#> [1] "auth"
+#> attr(,"type")
+#> [1] "basic"
+```
+
+To use an API key, this depends on the data provider. They may request it one or either of the header
+
+
+```r
+HttpClient$new("https://httpbin.org/get", headers = list(Authorization = "Bearer 234kqhrlj2342"))
+```
+
+or as a query parameter (which is passed in the URL string)
+
+```r
+HttpClient$new("https://httpbin.org/get", query = list(api_key = "<your key>"))
+```
+
+Another authentication option is OAuth. OAuth is not supported in `crul` yet. You can always do OAuth with 
+`httr` and then take your token and pass it in as a header/etc. with `crul`.
+
+## cookies
+
+> Set or get cookies.
+
+relevant commands:
+
+* `auth()`
+
+Set cookies (just showing response headers)
+
+```r
+x <- HttpClient$new(url = "https://www.google.com", opts = list(verbose = TRUE))
+res <- x$get()
+#> < HTTP/1.1 200 OK
+#> < Date: Fri, 06 Jul 2018 23:25:49 GMT
+#> < Expires: -1
+#> < Cache-Control: private, max-age=0
+#> < Content-Type: text/html; charset=ISO-8859-1
+#> < P3P: CP="This is not a P3P policy! See g.co/p3phelp for more info."
+#> < Content-Encoding: gzip
+#> < Server: gws
+#> < X-XSS-Protection: 1; mode=block
+#> < X-Frame-Options: SAMEORIGIN
+#> * Added cookie 1P_JAR="2018-07-06-23" for domain google.com, path /, expire 1533511549
+#> < Set-Cookie: 1P_JAR=2018-07-06-23; expires=Sun, 05-Aug-2018 23:25:49 GMT; path=/; domain=.google.com
+#> * Added cookie NID="134=yt47WC-2mhTgQpkSCMz_ySTig3MCJD5Bx_lNj_aVLAwKu8SPMX-CCowKfU8zSv2cJ2OjiX2LTrYnhWMGvIDieCC419v0VHvlm4Hl9xln9-r4MZwcnqwTZQPT72VNE0uA" for domain google.com, path /, expire 1546730749
+#> < Set-Cookie: NID=134=yt47WC-2mhTgQpkSCMz_ySTig3MCJD5Bx_lNj_aVLAwKu8SPMX-CCowKfU8zSv2cJ2OjiX2LTrYnhWMGvIDieCC419v0VHvlm4Hl9xln9-r4MZwcnqwTZQPT72VNE0uA; expires=Sat, 05-Jan-2019 23:25:49 GMT; path=/; domain=.google.com; HttpOnly
+#> < Alt-Svc: quic=":443"; ma=2592000; v="43,42,41,39,35"
+#> < Transfer-Encoding: chunked
+```
+
+If there are cookies in a response, you can access them with `curl::handle_cookies` like:
+
+```r
+curl::handle_cookies(res$handle)
+#>                  domain flag path secure          expiration   name
+#> 1           .google.com TRUE    /  FALSE 2018-08-05 16:25:16 1P_JAR
+#> 2 #HttpOnly_.google.com TRUE    /  FALSE 2019-01-05 15:25:16    NID
+#>   value
+#> 1 2018-07-06-23
+#> 2 134=4E_Zo-cY8hRLNSj47jRJQML0CPQ8Ip__ ...
+```
+
+## progress
+
+> Print curl progress
+
+relevant commands:
+
+* `HttpClient$new(progress = fxn)`
+
+```r
+x <- HttpClient$new("https://httpbin.org/get", progress = httr::progress())
+#> |==================================| 100%
+```
+
+_Why use this?_ As you could imagine, this is increasingly useful as a request for a web resource takes longer and longer. For very long requests, this will help you know approximately when a request will finish.
+
+
+## proxies
+
+> When behind a proxy, give authentication details for your proxy.
+
+relevant commands:
+
+* `HttpClient$new(proxies = proxy("http://97.77.104.22:3128", "foo", "bar"))`
+
+
+```r
+prox <- proxy("125.39.66.66", port = 80, username = "username", password = "password")
+HttpClient$new("http://www.google.com/search", proxies = prox)
+```
+
+_Why use this?_ Most of us likely don't need to worry about this. However, if you are in a work place, or maybe in certain geographic locations, you may have to use a proxy. I haven't personally used a proxy in R, so any feedback on this is great.
+
+
+## user agent
+
+> Some resources require a user-agent string.
+
+relevant commands:
+
+* `HttpClient$new(headers = list(`User-Agent` = "foobar"))`
+OR 
+* `HttpClient$new(opts = list(useragent = "foobar"))`
+
+both result in the same thing
+
+
+_Why use this?_ This is set by default in a http request, as you can see in the first example above for user agent. Some web APIs require that you set a specific user agent. For example, the [GitHub API](https://developer.github.com/v3/#user-agent-required) requires that you include a user agent string in the header of each request that is your username or the name of your application so they can contact you if there is a problem.
+
+
+[curl]: https://curl.se/
+[jq]: https://stedolan.github.io/jq/
+[httpie]: https://github.com/httpie/httpie
+[gbif]: https://www.gbif.org/
+[post]: https://ropensci.org/blog/2014/12/18/curl-options/

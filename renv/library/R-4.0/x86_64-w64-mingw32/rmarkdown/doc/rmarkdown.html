@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Learn R Markdown</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Learn R Markdown</h1>
+
+
+
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p><a href="https://r4ds.had.co.nz/"><img src="https://r4ds.had.co.nz/cover.png" alt="R for Data Science" data-external="1" width="250" style="padding: 0 15px; float: right;" /></a></p>
+<p>If you are new to using R Markdown, we encourage you to start with a systematic overview, rather than diving right in to reading documentation pages. The best place to start is the <a href="https://r4ds.had.co.nz/communicate-intro.html">“Communication” section</a> in the book “R for Data Science” (R4DS for short), an O’Reilly book written by Hadley Wickham and Garrett Grolemund.</p>
+<p>Here are the chapters that cover R Markdown, as summarized by Hadley and Garrett:</p>
+<ul>
+<li><p>In <a href="https://r4ds.had.co.nz/r-markdown.html">R Markdown</a>, you will learn about R Markdown, a tool for integrating prose, code, and results. You can use R Markdown in notebook mode for analyst-to-analyst communication, and in report mode for analyst-to-decision-maker communication. Thanks to the power of R Markdown formats, you can even use the same document for both purposes.</p></li>
+<li><p>In <a href="https://r4ds.had.co.nz/r-markdown-formats.html">R Markdown formats</a>, you’ll learn a little about the many other varieties of outputs you can produce using R Markdown, including dashboards, websites, and books.</p></li>
+<li><p>We’ll finish up with <a href="https://r4ds.had.co.nz/r-markdown-workflow.html">R Markdown workflow</a>, where you’ll learn about the “analysis notebook” and how to systematically record your successes and failures so that you can learn from them.</p></li>
+</ul>
+<p><br> <br></p>
+<p><a href="https://rmarkdown.rstudio.com/lesson-1.html"><img src="https://rmarkdown.rstudio.com/lesson-images/params-1-hawaii.png" alt="R Markdown tutorials" data-external="1" width="450" style="padding: 0 15px; float: right;" /></a></p>
+</div>
+<div id="tutorials" class="section level1">
+<h1>Tutorials</h1>
+<p>The <a href="https://rmarkdown.rstudio.com/lesson-1.html">R Markdown website</a> offers a series of tutorials you can follow to see what is possible with R Markdown.</p>
+<p>These tutorials offer accompanying <a href="https://rstudio.cloud/">RStudio Cloud</a> lessons you can use right away in your browser.</p>
+<p>You can also access links to all these tutorials in the <strong>“Get Started”</strong> section from the top of this page.</p>
+<p><br> <br></p>
+</div>
+<div id="user-guide" class="section level1">
+<h1>User Guide</h1>
+<p>Written by the authors of the <strong>rmarkdown</strong> package, <a href="https://bookdown.org/yihui/rmarkdown/">R Markdown: The Definitive Guide</a> provides a comprehensive user guide to the complete R Markdown ecosystem for authoring documents. The book is published by Chapman &amp; Hall/CRC, and you can read it online for free.</p>
+<p><a href="https://bookdown.org/yihui/rmarkdown/"><img src="https://bookdown.org/yihui/rmarkdown/images/cover.png" alt="R Markdown: The Definitive Guide" data-external="1" width="250" style="padding: 0 15px; float: right;" /></a></p>
+<p>The book is structured into four parts:</p>
+<ul>
+<li><p><a href="https://bookdown.org/yihui/rmarkdown/installation.html">Part I</a> introduces how to install the relevant packages, and provides an overview of R Markdown, including the possible output formats, the Markdown syntax, the R code chunk syntax, and how to use other languages in R Markdown.</p></li>
+<li><p><a href="https://bookdown.org/yihui/rmarkdown/documents.html">Part II</a> is the detailed documentation of built-in output formats in the rmarkdown package, including document formats and presentation formats. These output formats are “built-in” because you do not need any other R packages other than rmarkdown to use them.</p></li>
+<li><p><a href="https://bookdown.org/yihui/rmarkdown/dashboards.html">Part III</a> documents several R Markdown extension packages that enable you to build different applications or generate output documents with different styles. These output formats are “extensions” because you will need to install R packages, in addition to rmarkdown, to use them.</p></li>
+<li><p><a href="https://bookdown.org/yihui/rmarkdown/parameterized-reports.html">Part IV</a> covers advanced topics about R Markdown.</p></li>
+</ul>
+<p><br> <br></p>
+</div>
+<div id="going-further-wih-examples" class="section level1">
+<h1>Going further wih examples</h1>
+<p><a href="https://bookdown.org/yihui/rmarkdown-cookbook/"><img src="https://bookdown.org/yihui/rmarkdown-cookbook/images/cover.png" alt="R Markdown Cookbook" data-external="1" width="250" style="padding: 0 15px; float: right;" /></a></p>
+<p><a href="https://bookdown.org/yihui/rmarkdown-cookbook/">R Markdown Cookbook</a> provides a range of examples on how to extend the functionality of your R Markdown documents. As a cookbook, this guide is recommended to new and intermediate R Markdown users who desire to enhance the efficiency of using R Markdown and also explore the power of R Markdown. The book is published by Chapman &amp; Hall/CRC, and you can read it online for free.</p>
+<p>This cookbook is not a full technical reference for R Markdown but aims to supplement, instead of replace, the existing literature. The book is thus organized by topics with example as self-contained as possible so that readers can read this book with specific tasks in mind to do with R Markdown.</p>
+<p>The topics are the following</p>
+<ul>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/installation.html">1. Installation</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/conceptual-overview.html">2. Conceptual Overview</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/basics.html">3. Basics</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/document-elements.html">4. Document Elements</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/formatting.html">5. Formatting</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/latex-output.html">6. LaTeX Output</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/html-output.html">7. HTML Output</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/word.html">8. Word</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/multi-formats.html">9. Multiple Output Formats</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/tables.html">10. Tables</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/chunk-options.html">11. Chunk Options</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/output-hooks.html">12. Output Hooks</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/chunk-hooks.html">13. Chunk Hooks</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/knitr-misc.html">14. Miscellaneous knitr Tricks</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/other-languages.html">15. Other Languages</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/managing-projects.html">16. Managing Projects</a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown-cookbook/workflow.html">17. Workflow</a></li>
+</ul>
+<p><br> <br></p>
+</div>
+<div id="cheatsheets" class="section level1">
+<h1>Cheatsheets</h1>
+<p><a href="https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf"><img src="https://www.rstudio.com/wp-content/uploads/2018/08/rmarkdown-2.0.png" alt="R Markdown cheatsheet" data-external="1" width="450" style="padding: 0 15px; float: right;" /></a></p>
+<p>The <a href="https://github.com/rstudio/cheatsheets/raw/master/rmarkdown-2.0.pdf">R Markdown cheatsheet</a> is a one page (two-sided) reference guide you can download as a quick reference while you work.</p>
+<p>The <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">R Markdown Reference</a> is a five page guide that lists each of the options from markdown, knitr, and pandoc that you can use to customize your R Markdown documents.</p>
+<p>You can access both files from within the RStudio IDE:</p>
+<ul>
+<li><p>R Markdown Cheat Sheet: <em>Help &gt; Cheatsheets &gt; R Markdown Cheat Sheet</em>,</p></li>
+<li><p>R Markdown Reference Guide: <em>Help &gt; Cheatsheets &gt; R Markdown Reference Guide</em>.</p></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

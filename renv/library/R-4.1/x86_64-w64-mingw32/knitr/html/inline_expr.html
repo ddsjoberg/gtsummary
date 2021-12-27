@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Wrap code using the inline R expression syntax</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for inline_expr {knitr}"><tr><td>inline_expr {knitr}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Wrap code using the inline R expression syntax</h2>
+
+<h3>Description</h3>
+
+<p>This is a convenience function to write the &quot;source code&quot; of inline R
+expressions. For example, if you want to write <span class="samp">`r 1+1`</span> literally in an
+R Markdown document, you may write <span class="samp">`` `r knitr::inline_expr('1+1')`
+``</span>; for Rnw documents, this may be
+<span class="samp">\verb|\Sexpr{knitr::inline_expr{'1+1'}}|</span>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+inline_expr(code, syntax)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>code</code></td>
+<td>
+<p>Character string of the inline R source code.</p>
+</td></tr>
+<tr valign="top"><td><code>syntax</code></td>
+<td>
+<p>A character string to specify the syntax, e.g. <code>rnw</code>,
+<code>html</code>, or <code>md</code>. If not specified, this will be guessed from
+the knitting context.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character string marked up using the inline R code syntax.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+library(knitr)
+inline_expr("1+1", "rnw")
+inline_expr("1+1", "html")
+inline_expr("1+1", "md")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>knitr</em> version 1.36 <a href="00Index.html">Index</a>]</div>
+</body></html>

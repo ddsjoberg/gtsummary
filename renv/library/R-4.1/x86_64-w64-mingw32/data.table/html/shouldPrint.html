@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: For use by packages that mimic/divert auto printing e.g....</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for shouldPrint {data.table}"><tr><td>shouldPrint {data.table}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2> For use by packages that mimic/divert auto printing e.g. IRkernel and knitr </h2>
+
+<h3>Description</h3>
+
+<p>Not for use by users. Exported only for use by IRkernel (Jupyter) and knitr.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+  shouldPrint(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p> A <code>data.table</code>. </p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Should IRkernel/Jupyter print a data.table returned invisibly by DT[,:=] ?
+This is a read-once function since it resets an internal flag. If you need the value more than once in your logic, store the value from the first call.
+</p>
+
+
+<h3>Value</h3>
+
+<p>TRUE or FALSE.
+</p>
+
+
+<h3>References</h3>
+
+<p><a href="https://github.com/IRkernel/IRkernel/issues/127">https://github.com/IRkernel/IRkernel/issues/127</a><br />
+<a href="https://github.com/Rdatatable/data.table/issues/933">https://github.com/Rdatatable/data.table/issues/933</a><br />
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>data.table</em> version 1.14.2 <a href="00Index.html">Index</a>]</div>
+</body></html>

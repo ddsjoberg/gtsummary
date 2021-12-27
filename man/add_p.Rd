@@ -20,3 +20,4 @@ Adds p-values to gtsummary table
 \author{
 Daniel D. Sjoberg
 }
+\keyword{internal}

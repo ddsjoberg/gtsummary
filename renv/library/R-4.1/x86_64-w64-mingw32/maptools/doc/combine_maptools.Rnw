@@ -1,0 +1,431 @@
+%\VignetteIndexEntry{Combining Spatial Data}
+%\VignetteDepends{}
+%\VignetteKeywords{spatial}
+%\VignettePackage{maptools}
+\documentclass[a4paper,10pt]{article} 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage[dvips]{graphicx,color}
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage[english]{babel}
+\usepackage{xspace}
+
+\usepackage{Sweave}
+\usepackage{mathptm}
+\usepackage{natbib}
+
+\setkeys{Gin}{width=0.95\textwidth}
+\newcommand{\strong}[1]{{\normalfont\fontseries{b}\selectfont #1}}
+\let\pkg=\strong
+\RequirePackage{alltt}
+\newenvironment{example}{\begin{alltt}}{\end{alltt}}
+\newenvironment{smallexample}{\begin{alltt}\small}{\end{alltt}}
+\newcommand{\code}[1]{\texttt{\small #1}}
+\def\RR{\textsf{R}\xspace}
+\def\SP{\texttt{S-PLUS}\xspace}
+\def\SS{\texttt{S}\xspace}
+%#Sweave("combine_maptools.Rnw", keep.source=FALSE)
+\SweaveOpts{keep.source=FALSE}
+
+
+\title{Combining Spatial Data\footnote{This vignette formed pp. 120--126 of the first edition of Bivand, R. S.,
+Pebesma, E. and Gómez-Rubio V. (2008) Applied Spatial Data Analysis with R,
+Springer-Verlag, New York. It was retired from the second edition (2013) to
+accommodate material on other topics, and is made available in this form
+with the understanding of the publishers.}} 
+\author{Roger Bivand} 
+
+\begin{document} 
+
+\maketitle 
+
+<<echo=FALSE>>= 
+owidth <- getOption("width")
+options("width"=90)
+.PngNo <- 0
+@
+
+<<label=afig,echo=FALSE,eval=FALSE>>= 
+.PngNo <- .PngNo + 1; file <- paste("Fig-bitmap-", .PngNo, ".pdf", sep="")
+pdf(file=file, width = 6.5, height = 3.5, pointsize = 12, bg = "white")
+opar <- par(mar=c(3,3,1,1)+0.1)
+@
+<<label=afigl,echo=FALSE,eval=FALSE>>= 
+.PngNo <- .PngNo + 1; file <- paste("Fig-bitmap-", .PngNo, ".pdf", sep="")
+pdf(file=file, width = 6.5, height = 3.5, pointsize = 12, bg = "white")
+@
+<<label=bfigl,echo=FALSE,eval=FALSE>>= 
+.PngNo <- .PngNo + 1; file <- paste("Fig-bitmap-", .PngNo, ".pdf", sep="")
+pdf(file=file, width = 6.5, height = 5, pointsize = 12, bg = "white")
+@
+<<label=bfig,echo=FALSE,eval=FALSE>>= 
+.PngNo <- .PngNo + 1; file <- paste("Fig-bitmap-", .PngNo, ".pdf", sep="")
+pdf(file=file, width = 6.5, height = 5, pointsize = 12, bg = "white")
+opar <- par(mar=c(3,3,1,1)+0.1)
+@
+
+<<label=zfig,echo=FALSE,eval=FALSE>>=
+par(opar)
+dev.null <- dev.off()
+cat("\\includegraphics[width=0.95\\textwidth]{", file, "}\n\n", sep="")
+@
+<<label=zfigl,echo=FALSE,eval=FALSE>>=
+dev.null <- dev.off()
+cat("\\includegraphics[width=0.95\\textwidth]{", file, "}\n\n", sep="")
+@
+
+\section{Introduction}
+
+%FIXME
+
+\section{Checking Topologies}
+
+In this vignette, we look at a practical example
+involving the cleaning of spatial objects originally read into \RR from
+shapefiles published by the US Census. We then aggregate them up
+to metropolitan areas using a text table also from the US Census.
+
+The data in this case are for polygons representing county
+boundaries in 1990 of North Carolina, South Carolina, and
+Virginia, as shown in Fig.\,\ref{fig:poly3a}. The attribute data
+for each polygon are the standard polygon identifiers, state and
+county identifiers, and county names. All the spatial objects
+have the same number of columns of attribute data of the same
+types and with the same names. The files are provided without
+coordinate reference systems as shapefiles; the metadata are used
+for choosing the \code{CRS} values.
+
+\begin{footnotesize}
+<<echo=TRUE,eval=TRUE,keep.source=FALSE>>= 
+owd <- getwd()
+setwd(system.file("shapes", package="maptools"))
+library(maptools)
+nc90 <- readShapeSpatial("co37_d90")
+proj4string(nc90) <- CRS("+proj=longlat +datum=NAD27")
+sc90 <- readShapeSpatial("co45_d90")
+proj4string(sc90) <- CRS("+proj=longlat +datum=NAD27")
+va90 <- readShapeSpatial("co51_d90")
+proj4string(va90) <- CRS("+proj=longlat +datum=NAD27")
+setwd(owd)
+@
+\end{footnotesize}
+
+\begin{figure}[htb]
+\centering
+<<echo=FALSE,results=tex>>= 
+<<bfig>>
+oopar <- par(mar=c(3,2,1,1)+0.1)
+plot(va90, xlim=c(-85,-75), ylim=c(32,40), axes=TRUE, border="grey10")
+plot(nc90, add=TRUE, border="grey40")
+plot(sc90, add=TRUE, border="grey70")
+par(oopar)
+<<zfig>>
+@
+\caption{The
+three states plotted from input spatial objects using different
+grey colours for county boundaries} 
+\label{fig:poly3a}
+\end{figure}
+
+\noindent
+As read in, shapefiles usually have the polygon IDs set to the external
+file feature sequence number from zero to one less than the number
+of features. In our case, wanting to combine three states, we
+need to change the ID values so that they are unique across the study
+area. We can use the FIPS code (Federal Information Processing Standards
+Publication 6-4), which is simply the two-digit state FIPS code placed in
+front of the three-digit within-state FIPS county code, ending up with
+a five-digit string uniquely identifying each county. We can also drop
+the first four attribute data columns, two of which (area and perimeter)
+are misleading for objects in geographical coordinates, and the other two
+are internal ID values from the software used to generate the shapefiles,
+replicating the original feature IDs. We can start with the data set of
+South Carolina (\code{sc90}):
+
+\begin{footnotesize}
+<<echo=TRUE,results=hide,keep.source=FALSE>>= 
+library(maptools)
+@
+<<echo=TRUE,keep.source=FALSE>>= 
+names(sc90)
+sc90a <- spChFIDs(sc90, paste(sc90$ST, sc90$CO, sep=""))
+sc90a <- sc90a[,-(1:4)]
+names(sc90a)
+@
+<<echo=TRUE,results=hide,keep.source=FALSE>>=
+proj4string(sc90a) <- CRS(proj4string(sc90a))
+@
+\end{footnotesize}
+
+
+\subsection{Dissolving Polygons}
+
+When we try the same sequence of commands for North Carolina, we run
+into difficulties:
+
+\begin{footnotesize}
+<<echo=TRUE,keep.source=FALSE>>= 
+names(nc90)
+@
+<<echo=TRUE,eval=FALSE,keep.source=FALSE,results=hide>>= 
+nc90a <- spChFIDs(nc90, paste(nc90$ST, nc90$CO, sep=""))
+@
+<<echo=FALSE,eval=TRUE,results=hide>>= 
+try1 <- try(spChFIDs(nc90, paste(nc90$ST, nc90$CO, sep="")), silent=TRUE)
+@
+<<eval=TRUE,echo=FALSE>>= 
+cat(try1)
+@
+\end{footnotesize}
+
+\noindent
+Tabulating the frequencies of polygons per unique county ID, we can see
+that 98 of North Carolina's counties are represented by single polygons,
+while one has two polygons, and one (on the coast) has four.
+
+\begin{footnotesize}
+<<echo=TRUE,keep.source=FALSE>>= 
+table(table(paste(nc90$ST, nc90$CO, sep="")))
+@
+\end{footnotesize}
+
+\noindent
+One reason for spatial data being structured in this way is that it
+is following the OpenGIS$^{\mbox{\scriptsize\textregistered}}$\footnote{See \url{http://www.opengeospatial.org/}.}
+Simple Features Specification,
+\label{OpenGIS_SFS}
+which allows polygons to have one and only one external boundary
+ring, and an unlimited number of internal boundaries -- holes.
+This means that multiple external boundaries -- such as a county
+made up of several islands -- are represented as multiple
+polygons. In the specification, they are linked to attribute data
+through a look-up table pointing to the appropriate attribute
+data row.
+
+We need to restructure the \code{SpatialPolygons} object such that the
+\code{Polygon} objects belonging to each county belong to the same
+\code{Polygons} object. To do this, we use a function\footnote{This
+function requires that the \pkg{rgeos} package is also installed.} in
+the \pkg{maptools} package also used for dissolving or merging polygons,
+but which can be used here to re-package the original features, so that
+each \code{Polygons} object corresponds to one and only one county:
+
+\begin{footnotesize}
+<<echo=TRUE,results=hide,keep.source=FALSE>>= 
+if (rgeosStatus()) {
+nc90a <- unionSpatialPolygons(nc90, IDs=paste(nc90$ST, nc90$CO, sep=""))
+}
+@
+\end{footnotesize}
+
+\noindent The function uses the IDs argument to set the ID slots
+of the output \code{SpatialPolygons} object. Having sorted out
+the polygons, we need to remove the duplicate rows from the data
+frame and put the pieces back together again:
+
+\begin{footnotesize}
+<<echo=TRUE,keep.source=FALSE>>= 
+if (rgeosStatus()) {
+nc90_df <- as(nc90, "data.frame")[!duplicated(nc90$CO),-(1:4)]
+row.names(nc90_df) <- paste(nc90_df$ST, nc90_df$CO, sep="")
+nc90b <- SpatialPolygonsDataFrame(nc90a, nc90_df)
+}
+@
+\end{footnotesize}
+
+\subsection{Checking Hole Status}
+
+Looking again at Fig.\,\ref{fig:poly3a}, we can see that while
+neither North Carolina nor South Carolina has included boroughs
+within counties, these are frequently found in Virginia. While
+data read from external sources are expected to be structured
+correctly, with the including polygon having an outer edge and an
+inner hole, into which the outer edge of the included borough
+fits, we can also
+check and correct the settings of the hole slot in \code{Polygon}
+objects. The \code{checkPolygonsHoles} function takes a
+\code{Polygons} object as its argument, and, if multiple
+\code{Polygon} objects belong to it, checks them for hole status
+using functions from the \pkg{rgeos} package:
+
+\begin{footnotesize}
+<<echo=TRUE,keep.source=FALSE>>= 
+if (rgeosStatus()) {
+va90a <- spChFIDs(va90, paste(va90$ST, va90$CO, sep=""))
+va90a <- va90a[,-(1:4)]
+va90_pl <- slot(va90a, "polygons")
+va90_pla <- lapply(va90_pl, checkPolygonsHoles)
+p4sva <- CRS(proj4string(va90a))
+vaSP <- SpatialPolygons(va90_pla, proj4string=p4sva)
+va90b <- SpatialPolygonsDataFrame(vaSP, data=as(va90a, "data.frame"))
+}
+@
+\end{footnotesize}
+
+\noindent
+Here we have changed the \code{Polygons} ID values as before, and then
+processed each \code{Polygons} object in turn for internal consistency, finally
+re-assembling the cleaned object. So we now have three spatial objects
+with mutually unique IDs, and with data slots containing data frames
+with the same numbers and kinds of columns with the same names.
+
+
+\section{Combining Spatial Data}
+
+It is quite often desirable to combine spatial data of the same kind,
+in addition to combining positional data of different kinds as discussed
+earlier in this chapter. There are functions \code{rbind} and \code{cbind}
+in \RR for combining objects by rows or columns, and \code{rbind} methods
+for \code{SpatialPixels} and \code{SpatialPixelsDataFrame} objects, as
+well as a \code{cbind} method for \code{SpatialGridDataFrame} objects
+are included in \pkg{sp}. In addition, methods with slightly different
+names to carry out similar operations are included in the \pkg{maptools}
+package.
+
+\subsection{Combining Positional Data}
+
+The \code{spRbind} method combines positional data, such as two
+\code{SpatialPoints} objects or two \code{SpatialPointsDataFrame}
+objects with matching column names and types in their data slots.
+The method is also implemented for \code{SpatialLines} and
+\code{SpatialPolygons} objects and their \code{*DataFrame}
+extensions. The methods do not check for duplication or
+overlapping of the spatial objects being combined, but do reject
+attempts to combine objects that would have resulted in
+non-unique IDs.
+
+Because the methods only take two arguments, combining more than two
+involves repeating calls to the method:
+
+\begin{footnotesize}
+<<echo=TRUE,keep.source=FALSE>>= 
+if (rgeosStatus()) {
+nc_sc_va90 <- spRbind(spRbind(nc90b, sc90a), va90b)
+FIPS <- row.names(nc_sc_va90)
+str(FIPS)
+length(slot(nc_sc_va90, "polygons"))
+}
+@
+\end{footnotesize}
+
+\subsection{Combining Attribute Data}
+\label{spCbind:here}
+
+Here, as very often found in practice, we need to combine data
+for the same spatial objects from different sources, where one
+data source includes the geometries and an identifying index
+variable, and other data sources include the same index variable
+with additional variables. They often include more observations
+than our geometries, sometimes have no data for some of our
+geometries, and not are infrequently sorted in a different
+order. The data cleaning involved in getting ready for analysis
+is a little more tedious with spatial data, as we see, but
+does not differ in principle from steps taken with non-spatial
+data.
+
+The text file provided by the US Census tabulating which counties
+belonged to each metropolitan area in 1990 has a header, which
+has already been omitted, a footer with formatting information,
+and many blank columns. We remove the footer and the blank
+columns first, and go on to remove rows with no data -- the
+metropolitan areas are separated in the file by empty lines. The
+required rows and column numbers were found by inspecting the
+file before reading it into \RR:
+
+\begin{footnotesize}
+<<echo=TRUE,eval=TRUE,keep.source=FALSE>>= 
+t1 <- read.fwf(system.file("share/90mfips.txt", package="maptools"), skip=21,
+ widths=c(4,4,4,4,2,6,2,3,3,1,7,5,3,51), colClasses = "character")
+@
+<<echo=TRUE,keep.source=FALSE>>= 
+t2 <- t1[1:2004,c(1,7,8,14)]
+t3 <- t2[complete.cases(t2),]
+cnty1 <- t3[t3$V7 != "  ",]
+ma1 <- t3[t3$V7 == "  ",c(1,4)]
+cnty2 <- cnty1[which(!is.na(match(cnty1$V7, c("37", "45", "51")))),]
+cnty2$FIPS <- paste(cnty2$V7, cnty2$V8, sep="")
+@
+\end{footnotesize}
+
+\noindent We next break out an object with metro IDs, state and
+county IDs, and county names (\code{cnty1}), and an object with
+metro IDs and metro names (\code{ma1}). From there, we subset the
+counties to the three states, and add the FIPS string for each
+county, to make it possible to combine the new data concerning
+metro area membership to our combined county map. We create an
+object (\code{MA\_FIPS}) of county metro IDs by matching the
+\code{cnty2} FIPS IDs with those of the counties on the map, and
+then retrieving the metro area names from \code{ma1}. These two
+variables are then made into a data frame, the appropriate row
+names inserted and combined with the county map, with method
+\code{spCbind}. At last we are ready to dissolve the counties
+belonging to metro areas and to discard those not belonging to
+metro areas, using \code{unionSpatialPolygons}:
+
+\begin{footnotesize}
+<<echo=TRUE,keep.source=FALSE>>= 
+if (rgeosStatus()) {
+MA_FIPS <- cnty2$V1[match(FIPS, cnty2$FIPS)]
+MA <- ma1$V14[match(MA_FIPS, ma1$V1)]
+MA_df <- data.frame(MA_FIPS=MA_FIPS, MA=MA, row.names=FIPS)
+nc_sc_va90a <- spCbind(nc_sc_va90, MA_df)
+ncscva_MA <- unionSpatialPolygons(nc_sc_va90a, nc_sc_va90a$MA_FIPS)
+}
+@
+\end{footnotesize}
+
+\begin{figure}[htb]
+\centering
+<<echo=FALSE,results=tex>>= 
+<<bfig>>
+if (rgeosStatus()) {
+oopar <- par(mar=c(3,2,1,1)+0.1)
+plot(nc_sc_va90, border="grey", axes=TRUE)
+plot(ncscva_MA, lwd=2, add=TRUE)
+text(coordinates(ncscva_MA), labels=row.names(ncscva_MA), cex=0.6)
+par(oopar)
+} else {
+plot(1)
+}
+<<zfig>>
+@
+\caption{The
+three states with county boundaries plotted in grey, and
+Metropolitan area boundaries plotted in black; Metro area
+standard IDs are shown} 
+\label{fig:poly3b}
+\end{figure}
+
+Figure~\ref{fig:poly3b} shows the output object plotted on top of
+the cleaned input county boundaries. There does appear to be a
+problem, however, because one of the output boundaries has no
+name -- it is located between 6760 and 5720 in eastern Virginia.
+If we do some more matching, to extract the names of the
+metropolitan areas, we can display the name of the area with
+multiple polygons:
+
+\begin{footnotesize}
+<<echo=TRUE,keep.source=FALSE>>= 
+if (rgeosStatus()) {
+np <- sapply(slot(ncscva_MA, "polygons"), function(x) length(slot(x, "Polygons")))
+table(np)
+MA_fips <- row.names(ncscva_MA)
+MA_name <- ma1$V14[match(MA_fips, ma1$V1)]
+data.frame(MA_fips, MA_name)[np > 1,]
+}
+@
+\end{footnotesize}
+
+The Norfolk-Virginia Beach-Newport News, VA MSA is located on both sides
+of Hampton Roads, and the label has been positioned at the centre point
+of the largest member polygon.
+
+<<echo=FALSE>>= 
+options("width"=owidth)
+@
+
+
+\end{document}
+

@@ -147,3 +147,6 @@ add_stat_ex3 <-
     )
   )
 }
+\seealso{
+Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+}

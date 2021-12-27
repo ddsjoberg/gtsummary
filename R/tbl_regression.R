@@ -4,7 +4,7 @@
 #' that is publication-ready. The function is highly customizable
 #' allowing the user to obtain a bespoke summary table of the
 #' regression model results. Review the
-#' \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
+#' \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{tbl_regression vignette}
 #' for detailed examples.
 #'
 #' @section Methods:
@@ -61,6 +61,7 @@
 #' @param show_yesno DEPRECATED
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
+#' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @family tbl_regression tools
 #' @export
 #' @rdname tbl_regression

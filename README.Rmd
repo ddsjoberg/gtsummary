@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/ddsjoberg/gtsummary/workflows/R-CMD-check/badge.svg)](https://github.com/ddsjoberg/gtsummary/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/gtsummary)](https://cran.r-project.org/package=gtsummary)
-[![Codecov test coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=master)
+[![Codecov test coverage](https://codecov.io/gh/ddsjoberg/gtsummary/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=main)
 [![](https://cranlogs.r-pkg.org/badges/gtsummary)](https://cran.r-project.org/package=gtsummary)
 [![DOI:10.32614/RJ-2021-053](https://zenodo.org/badge/DOI/10.32614/RJ-2021-053.svg)](https://doi.org/10.32614/RJ-2021-053)
 <!-- badges: end -->
@@ -26,19 +26,19 @@ knitr::opts_chunk$set(
 
 The {gtsummary} package provides an elegant and flexible way to create publication-ready analytical and summary tables using the **R** programming language.  The {gtsummary} package summarizes data sets, regression models, and more, using sensible defaults with highly customizable capabilities.
 
-* [**Summarize data frames or tibbles**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) easily in **R**. Perfect for presenting descriptive statistics, comparing group **demographics** (e.g creating a **Table 1** for medical journals),  and more. Automatically detects continuous, categorical, and dichotomous variables in your data set, calculates appropriate descriptive statistics, and also includes amount of missingness in each variable.
+* [**Summarize data frames or tibbles**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) easily in **R**. Perfect for presenting descriptive statistics, comparing group **demographics** (e.g creating a **Table 1** for medical journals),  and more. Automatically detects continuous, categorical, and dichotomous variables in your data set, calculates appropriate descriptive statistics, and also includes amount of missingness in each variable.
 
-* [**Summarize regression models**](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) in R and include reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio and Hazard Ratio). 
+* [**Summarize regression models**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) in R and include reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers (i.e. Odds Ratio and Hazard Ratio). 
 
-* [**Customize gtsummary tables**](http://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions) using a growing list of formatting/styling functions. **[Bold](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)** labels, **[italicize](http://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)** levels, **[add p-value](http://www.danieldsjoberg.com/gtsummary/reference/add_p.html)** to summary tables, **[style](http://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)** the statistics however you choose, **[merge](http://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)** or **[stack](http://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)** tables to present results side by side... there are so many possibilities to create the table of your dreams! 
+* [**Customize gtsummary tables**](https://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions) using a growing list of formatting/styling functions. **[Bold](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)** labels, **[italicize](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)** levels, **[add p-value](https://www.danieldsjoberg.com/gtsummary/reference/add_p.html)** to summary tables, **[style](https://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)** the statistics however you choose, **[merge](https://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)** or **[stack](https://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)** tables to present results side by side... there are so many possibilities to create the table of your dreams! 
 
-* **[Report statistics inline](http://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)** from summary tables and regression summary tables in **R markdown**. Make your reports completely reproducible!
+* **[Report statistics inline](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)** from summary tables and regression summary tables in **R markdown**. Make your reports completely reproducible!
 
 
 
 By leveraging [{broom}](https://broom.tidymodels.org/), [{gt}](https://gt.rstudio.com/), and [{labelled}](http://larmarange.github.io/labelled/) packages, {gtsummary} creates beautifully formatted, ready-to-share summary and result tables in a single line of R code!  
 
-Check out the examples below, review the [vignettes](http://www.danieldsjoberg.com/gtsummary/articles/) for a detailed exploration of the output options, and view the [gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html) for various customization examples.
+Check out the examples below, review the [vignettes](https://www.danieldsjoberg.com/gtsummary/articles/) for a detailed exploration of the output options, and view the [gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html) for various customization examples.
 
 
 ## Installation
@@ -60,9 +60,9 @@ remotes::install_github("ddsjoberg/gtsummary")
 
 ### Summary Table
 
-Use [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) to summarize a data frame.
+Use [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html) to summarize a data frame.
 
-<img src = "https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/misc_files/tbl_summary_demo1.gif" alt = "animated" width = "100%">
+<img src = "https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/misc_files/tbl_summary_demo1.gif" alt = "animated" width = "100%">
 
 Example basic table:
 
@@ -89,7 +89,7 @@ if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
 } 
 ```
 
-There are many **customization options** to **add information** (like comparing groups) and **format results** (like bold labels) in your table. See the [`tbl_summary()`](http://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) tutorial for many more options, or below for one example. 
+There are many **customization options** to **add information** (like comparing groups) and **format results** (like bold labels) in your table. See the [`tbl_summary()`](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html) tutorial for many more options, or below for one example. 
 
 ```{r table2, include = TRUE}
 table2 <- 
@@ -120,7 +120,7 @@ if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
 
 ### Regression Models
 
-Use [`tbl_regression()`](http://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) to easily and beautifully display regression model results in a table. See the [tutorial](http://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) for customization options.
+Use [`tbl_regression()`](https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html) to easily and beautifully display regression model results in a table. See the [tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html) for customization options.
 
 ```{r regress, include = TRUE}
 mod1 <- glm(response ~ trt + age + grade, trial, family = binomial)
@@ -175,7 +175,7 @@ if (identical(Sys.getenv("IN_PKGDOWN"), "true")) {
 } 
 ```
 
-Review even more output options in the **[table gallery](http://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
+Review even more output options in the **[table gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html)**.
 
 ## gtsummary + R Markdown
 
@@ -183,9 +183,9 @@ The **{gtsummary}** package was written to be a companion to the **{gt}** packag
 But not all output types are supported by the **{gt}** package.
 Therefore, we have made it possible to print **{gtsummary}** tables with various engines.
 
-Review the **[gtsummary + R Markdown](http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)** vignette for details.
+Review the **[gtsummary + R Markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html)** vignette for details.
 
-<a href="http://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
+<a href="https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html">
 ```{r out.width = "55%", echo = FALSE}
 knitr::include_graphics("man/figures/gt_output_formats.PNG")
 ```
@@ -212,7 +212,7 @@ tbl %>%
 ## Additional Resources
 
 - The best resources are the gtsummary vignettes: [table gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html), [`tbl_summary()` tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html), [`tbl_regression()` tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html), [`inline_text()` tutorial](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html), [gtsummary themes](https://www.danieldsjoberg.com/gtsummary/articles/themes.html), [gtsummary+R markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html).
-- The R Journal Article [*Reproducible Summary Tables with the gtsummary Package*](https://github.com/ddsjoberg/gtsummary/raw/master/data-raw/RJ-2021-053.pdf).
+- The R Journal Article [*Reproducible Summary Tables with the gtsummary Package*](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/RJ-2021-053.pdf).
 - The [RStudio Education Blog](https://education.rstudio.com/blog/2020/07/gtsummary/) includes a post with a brief introduction to the package. 
 - A [recording of a presentation](https://www.youtube.com/watch?v=tANo9E1SYJE) given to the Weill Cornell Biostatistics Department and the Memorial Sloan Kettering R Users Group.
 
@@ -247,6 +247,6 @@ A BibTeX entry for LaTeX users is
 
 Big thank you to [&#x0040;jeffreybears](https://www.jeffreybears.com/) for the hex sticker!
 
-Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](http://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms. Thank you to all contributors!  
+Please note that the {gtsummary} project is released with a [Contributor Code of Conduct](https://www.danieldsjoberg.com/gtsummary/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms. Thank you to all contributors!  
 `r usethis::use_tidy_thanks("ddsjoberg/gtsummary", from = "2018-01-01") %>% {glue::glue("[&#x0040;{.}](https://github.com/{.})")} %>% glue::glue_collapse(sep = ", ", last = ", and ")`
 

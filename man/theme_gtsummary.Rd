@@ -85,7 +85,7 @@ will default to an en dash}
 \lifecycle{maturing}
 The following themes are available to use within the gtsummary package.
 Print theme elements with \code{theme_gtsummary_journal(set_theme = FALSE) \%>\% print()}.
-Review the \href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{themes vignette}
+Review the \href{https://www.danieldsjoberg.com/gtsummary/articles/themes.html}{themes vignette}
 for details.
 }
 \section{Themes}{
@@ -141,7 +141,7 @@ for details.
 
 Use \code{reset_gtsummary_theme()} to restore the default settings
 
-Review the \href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{themes vignette}
+Review the \href{https://www.danieldsjoberg.com/gtsummary/articles/themes.html}{themes vignette}
 to create your own themes.
 }
 
@@ -168,7 +168,7 @@ set_gtsummary_theme_ex1 <-
 reset_gtsummary_theme()
 }
 \seealso{
-\href{http://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}
+\href{https://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}
 
 \code{\link[=set_gtsummary_theme]{set_gtsummary_theme()}}, \code{\link[=reset_gtsummary_theme]{reset_gtsummary_theme()}}
 }

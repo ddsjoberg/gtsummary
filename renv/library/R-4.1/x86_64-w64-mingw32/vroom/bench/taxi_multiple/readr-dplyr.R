@@ -1,0 +1,10 @@
+({ library(readr); library(dplyr); library(purrr) })
+x <- map_dfr(set_names(file), .id = "path",
+  ~ read_csv(.x, col_types = c(pickup_datetime = "c"), quote = "", trim_ws = FALSE, na = character())
+)
+print(x)
+a <- head(x)
+b <- tail(x)
+c <- sample_n(x, 100)
+d <- filter(x, payment_type == "UNK")
+e <- group_by(x, payment_type) %>% summarise(avg_tip = mean(tip_amount))

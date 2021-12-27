@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Get variance-covariance matrix from models</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_varcov {insight}"><tr><td>get_varcov {insight}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get variance-covariance matrix from models</h2>
+
+<h3>Description</h3>
+
+<p>Returns the variance-covariance, as retrieved by
+<code>stats::vcov()</code>, but works for more model objects that probably
+don't provide a <code>vcov()</code>-method.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_varcov(x, ...)
+
+## Default S3 method:
+get_varcov(x, verbose = TRUE, ...)
+
+## S3 method for class 'betareg'
+get_varcov(
+  x,
+  component = c("conditional", "precision", "all"),
+  verbose = TRUE,
+  ...
+)
+
+## S3 method for class 'DirichletRegModel'
+get_varcov(
+  x,
+  component = c("conditional", "precision", "all"),
+  verbose = TRUE,
+  ...
+)
+
+## S3 method for class 'clm2'
+get_varcov(x, component = c("all", "conditional", "scale"), ...)
+
+## S3 method for class 'truncreg'
+get_varcov(x, component = c("conditional", "all"), ...)
+
+## S3 method for class 'gamlss'
+get_varcov(x, component = c("conditional", "all"), ...)
+
+## S3 method for class 'hurdle'
+get_varcov(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+
+## S3 method for class 'zcpglm'
+get_varcov(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+
+## S3 method for class 'MixMod'
+get_varcov(x, component = c("conditional", "zero_inflated", "zi", "all"), ...)
+
+## S3 method for class 'glmmTMB'
+get_varcov(
+  x,
+  component = c("conditional", "zero_inflated", "zi", "dispersion", "all"),
+  ...
+)
+
+## S3 method for class 'brmsfit'
+get_varcov(x, component = "conditional", ...)
+
+## S3 method for class 'betamfx'
+get_varcov(x, component = c("conditional", "precision", "all"), ...)
+
+## S3 method for class 'aov'
+get_varcov(x, complete = FALSE, ...)
+
+## S3 method for class 'mixor'
+get_varcov(x, effects = c("all", "fixed", "random"), ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A model.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>Currently not used.</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>Toggle warnings.</p>
+</td></tr>
+<tr valign="top"><td><code>component</code></td>
+<td>
+<p>Should the complete variance-covariance matrix of the model
+be returned, or only for specific model components only (like count or
+zero-inflated model parts)? Applies to models with zero-inflated component,
+or models with precision (e.g. <code>betareg</code>) component. <code>component</code>
+may be one of <code>"conditional"</code>, <code>"zi"</code>, <code>"zero-inflated"</code>,
+<code>"dispersion"</code>, <code>"precision"</code>, or <code>"all"</code>. May be abbreviated.
+Note that the <em>conditional</em> component is also called <em>count</em> or
+<em>mean</em> component, depending on the model.</p>
+</td></tr>
+<tr valign="top"><td><code>complete</code></td>
+<td>
+<p>Logical, if <code>TRUE</code>, for <code>aov</code>, returns the full
+variance-covariance matrix.</p>
+</td></tr>
+<tr valign="top"><td><code>effects</code></td>
+<td>
+<p>Should the complete variance-covariance matrix of the model
+be returned, or only for specific model parameters only? Currently only
+applies to models of class <code>mixor</code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>The variance-covariance matrix, as <code>matrix</code>-object.
+</p>
+
+
+<h3>Note</h3>
+
+<p><code>get_varcov()</code> tries to return the nearest positive definite matrix
+in case of a negative variance-covariance matrix.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+data(mtcars)
+m &lt;- lm(mpg ~ wt + cyl + vs, data = mtcars)
+get_varcov(m)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>insight</em> version 0.14.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,256 @@
+
+- name: "auto.snapshot"
+  type: "logical[1]"
+  default: false
+  description: >
+    Automatically snapshot changes to the project library after a new package
+    is installed?
+
+- name: "bitbucket.host"
+  type: "character[1]"
+  default: "api.bitbucket.org/2.0"
+  description: >
+    The default Bitbucket host to be used during package retrieval.
+
+- name: "copy.method"
+  type: "*"
+  default: "auto"
+  description: >
+    The method to use when attempting to copy directories. See **Copy Methods**
+    for more information.
+
+- name: "connect.timeout"
+  type: "integer[1]"
+  default: 20
+  description: >
+    The amount of time to spend (in seconds) when attempting to download
+    a file. Only applicable when the `curl` downloader is used.
+
+- name: "connect.retry"
+  type: "integer[1]"
+  default: 3
+  description: >
+    The number of times to attempt re-downloading a file, when transient
+    download errors occur. Only applicable when the `curl` downloader is used.
+
+- name: "cache.enabled"
+  type: "logical[1]"
+  default: true
+  description: >
+    Enable the global `renv` package cache? When active, `renv` will install
+    packages into a global cache, and link or copy packages from the cache
+    into your \R library as appropriate. This can greatly save on disk space
+    and install time when \R packages are shared across multiple projects in
+    the same environment.
+
+- name: "cache.symlinks"
+  type: "logical[1]"
+  default: true
+  description: >
+    Symlink packages from the global `renv` package cache into your project
+    library? When `TRUE`, `renv` will use symlinks (or, on Windows, junction
+    points) to reference packages installed in the cache. Set this to `FALSE`
+    if you'd prefer to copy packages from the cache into your project library.
+
+- name: "dependency.errors"
+  type: "character[1]"
+  default: "reported"
+  description: >
+    Many `renv` APIs require the enumeration of your project's \R package
+    dependencies. This option controls how errors that occur during this enumeration
+    are handled. By default, errors are reported but are non-fatal. Set this to `"fatal"`
+    to force errors to be fatal, and `"ignored"` to ignore errors altogether. See
+    [`dependencies()`] for more details.
+
+- name: "external.libraries"
+  type: "character[*]"
+  default: ~
+  description: >
+    A character vector of external libraries, to be used in tandem with
+    your projects. Be careful when using external libraries: it's possible that things
+    can break within a project if the version(s) of packages used in your project
+    library happen to be incompatible with packages in your external libraries; for
+    example, if your project required `xyz 1.0` but `xyz 1.1` was present and loaded
+    from an external library. Can also be an \R function that provides the paths to
+    external libraries. Library paths will be expanded via [`.expand_R_libs_env_var()`]
+    as necessary.
+
+- name: "filebacked.cache"
+  type: "logical[1]"
+  default: true
+  description: >
+    Enable the `renv` file-backed cache? When enabled, `renv` will cache the
+    contents of files that are read (e.g. DESCRIPTION files) in memory, thereby
+    avoiding re-reading the file contents from the filesystem if the file has
+    not changed. `renv` uses the file `mtime` to determine if the file has
+    changed; consider disabling this if `mtime` is unreliable on your system.
+
+- name: "github.host"
+  type: "character[1]"
+  default: "api.github.com"
+  description: >
+    The default GitHub host to be used during package retrieval.
+
+- name: "gitlab.host"
+  type: "character[1]"
+  default: "gitlab.com"
+  description: >
+    The default GitLab host to be used during package retrieval.
+
+- name: "hydrate.libpaths"
+  type: "character[*]"
+  default: ~
+  description: >
+    A character vector of library paths, to be used by [hydrate()]
+    when attempting to hydrate projects. When empty, the default set of library paths
+    (as documented in `?hydrate`) are used instead. See [`hydrate()`] for more details.
+
+- name: "install.shortcuts"
+  type: "logical[1]"
+  default: true
+  description: >
+    Allow for a set of 'shortcuts' when installing packages with renv? When
+    enabled, if `renv` discovers that a package to be installed is already
+    available within the user or site libraries, then it will install a
+    local copy of that package.
+
+- name: "install.staged"
+  type: "logical[1]"
+  default: true
+  description: >
+    DEPRECATED: Please use `renv.config.install.transactional` instead.
+
+- name: "install.transactional"
+  type: "logical[1]"
+  default: true
+  description: >
+    Perform a transactional install of packages during install and restore? When
+    enabled, `renv` will first install packages into a temporary library, and later
+    copy or move those packages back into the project library only if all packages
+    were successfully downloaded and installed. This can be useful if you'd like to
+    avoid mutating your project library if installation of one or more packages fails.
+
+- name: "install.verbose"
+  type: "logical[1]"
+  default: false
+  description: >
+    Be verbose when installing R packages from sources? When `TRUE`, `renv` will
+    stream any output generated during package build + installation to the console.
+
+- name: "locking.enabled"
+  type: "logical[1]"
+  default: false
+  description: >
+    Use interprocess locks when invoking methods which might mutate the project
+    library? Enable this to allow multiple processes to use the same `renv`
+    project, while minimizing risks relating to concurrent access to the
+    project library. Disable this if you encounter locking issues. Locks are stored
+    as files within the project at `renv/lock`; if you need to manually remove a
+    stale lock you can do so via `unlink("renv/lock", recursive = TRUE)`.
+
+- name: "mran.enabled"
+  type: "logical[1]"
+  default: true
+  description: >
+    Attempt to download binaries from [MRAN](https://mran.microsoft.com/)
+    during restore? See `vignette("mran", package = "renv")` for more details.
+
+- name: "repos.override"
+  type: "character[*]"
+  default: ~
+  description: >
+    Override the R package repositories used during [`restore()`]? Primarily
+    useful for deployment / continuous integration, where you might want to enforce
+    the usage of some set of repositories over what is defined in `renv.lock` or otherwise
+    set by the R session.
+
+- name: "rspm.enabled"
+  type: "logical[1]"
+  default: true
+  description: >
+    Boolean; enable RSPM integration for `renv` projects? When `TRUE`,
+    `renv` will attempt to transform the repository URLs used by RSPM into binary
+    URLs as appropriate for the current platform. Set this to `FALSE` if you'd like
+    to continue using source-only RSPM URLs, or if you find that `renv` is improperly
+    transforming your repository URLs.
+
+- name: "sandbox.enabled"
+  type: "logical[1]"
+  default: true
+  description: >
+    Enable sandboxing for `renv` projects? When active, `renv` will attempt
+    to sandbox the system library, preventing non-system packages installed in the
+    system library from becoming available in `renv` projects. (That is, only packages
+    with priority `"base"` or `"recommended"`, as reported by `installed.packages()`,
+    are made available.)
+
+    Sandboxing is done by linking or copying system packages into a separate
+    library path, and then instructing R to use that library path as the system
+    library path. In some environments, this action can take a large amount of
+    time -- in such a case, you may want to disable the renv sandbox.
+
+- name: "shims.enabled"
+  type: "logical[1]"
+  default: true
+  description: >
+    Should `renv` shims be installed on package load? When enabled, `renv`
+    will install its own shims over the functions `install.packages()`, `update.packages()`
+    and `remove.packages()`, delegating these functions to [`renv::install()`],
+    [`renv::update()`] and [`renv::remove()`] as appropriate.
+
+- name: "snapshot.validate"
+  type: "logical[1]"
+  default: true
+  description: >
+    Validate \R package dependencies when calling snapshot? When `TRUE`,
+    `renv` will attempt to diagnose potential issues in the project library before
+    creating `renv.lock` -- for example, if a package installed in the project library
+    depends on a package which is not currently installed.
+
+- name: "startup.quiet"
+  type: "logical[1]"
+  default: ~
+  description: >
+    Be quiet during startup? When set, `renv` will not display the typical
+    `Project <path> loaded. [renv <version>]` banner on startup.
+
+- name: "synchronized.check"
+  type: "logical[1]"
+  default: true
+  description: >
+    Check that the project library is synchronized with the lockfile on
+    load?
+
+- name: "updates.check"
+  type: "logical[1]"
+  default: false
+  description: >
+    Check for package updates when the session is initialized? This can
+    be useful if you'd like to ensure that your project lockfile remains up-to-date
+    with packages as they are released on CRAN.
+
+- name: "updates.parallel"
+  type: "*"
+  default: 2
+  description: >
+    Check for package updates in parallel? This can be useful when a large
+    number of packages installed from non-CRAN remotes are installed, as these packages
+    can then be checked for updates in parallel.
+
+- name: "user.library"
+  type: "logical[1]"
+  default: false
+  description: >
+    Include the user library on the library paths for your projects? Note
+    that this risks breaking project encapsulation and is not recommended for projects
+    which you intend to share or collaborate on with other users. See also the caveats
+    for the `renv.config.external.libraries` option.
+
+- name: "user.profile"
+  type: "logical[1]"
+  default: false
+  description: >
+    Load the user R profile (typically located at `~/.Rprofile`) when `renv`
+    is loaded? Consider disabling this if you require extra encapsulation in your
+    projects; e.g. if your `.Rprofile` attempts to load packages that you might not
+    install in your projects.

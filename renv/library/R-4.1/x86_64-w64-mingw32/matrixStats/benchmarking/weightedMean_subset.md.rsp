@@ -1,0 +1,70 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string fcnname="weightedMean_subset"%>
+<%@string subname="weightedMean"%>
+<%@meta title="${subname}() benchmarks on subsetted computation"%>
+<%@meta author="Dongcan Jiang"%>
+<%@meta date="2015-06-07"%>
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=subname%>() on subsetted computation.
+
+
+<% for (mode in c("integer", "double")) { %>
+
+## Data type "<%=mode%>"
+### Data
+```r
+<%=withCapture({
+<%@include file="R/random-vectors.R"%>
+data <- rvectors(mode = mode)
+data <- data[1:4]
+})%>
+```
+
+## Results
+
+<% for (ii in seq_along(data)) { %>
+<%
+dataLabel <- names(data)[ii]
+mprintf("%s: %s\n", mode, dataLabel)
+%>
+### <%=dataLabel%> vector
+
+
+```r
+<%=withCapture({
+x <- data[[.dataLabel.]]
+idxs <- sample.int(length(x), size = length(x)*0.7)
+x_S <- x[idxs]
+w <- runif(length(x))
+w_S <- w[idxs]
+gc()
+
+stats <- microbenchmark(
+ "weightedMean_x_w_S"            = weightedMean(x_S, w = w_S, na.rm = FALSE),
+ "weightedMean(x, w, idxs)"        = weightedMean(x, w = w, idxs = idxs, na.rm = FALSE),
+ "weightedMean(x[idxs], w[idxs])" = weightedMean(x[idxs], w = w[idxs], na.rm = FALSE),
+  unit = "ms"
+)
+})%>
+```
+
+<% benchmarkResults(stats, tags=c(mode, dataLabel)) %>
+
+<% } # for (ii ...) %>
+
+<% } # for (mode ...) %>
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2015-06-07
+o Created.
+---------------------------------------------------------------------------%>

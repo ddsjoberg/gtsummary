@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: The Number of Non-Zero Values of a Matrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for nnzero {Matrix}"><tr><td>nnzero {Matrix}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>The Number of Non-Zero Values of a Matrix</h2>
+
+<h3>Description</h3>
+
+<p>Returns the number of non-zero values of a numeric-like <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object, and
+in particular an object <code>x</code> inheriting from class
+<code><a href="Matrix-class.html">Matrix</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+nnzero(x, na.counted = NA)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object, typically inheriting from class
+<code><a href="Matrix-class.html">Matrix</a></code> or <code><a href="../../base/html/numeric.html">numeric</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>na.counted</code></td>
+<td>
+<p>a <code><a href="../../base/html/logical.html">logical</a></code> describing how
+<code><a href="../../base/html/NA.html">NA</a></code>s should be counted.  There are three possible
+settings for <code>na.counted</code>:
+</p>
+
+<dl>
+<dt>TRUE</dt><dd><p><code>NA</code>s <em>are</em> counted as non-zero (since
+&ldquo;they are not zero&rdquo;).</p>
+</dd>
+<dt>NA</dt><dd><p>(default)the result will be <code>NA</code> if there are <code>NA</code>'s in
+<code>x</code> (since &ldquo;NA's are not known, i.e., <em>may be</em> zero&rdquo;).</p>
+</dd>
+<dt>FALSE</dt><dd><p><code>NA</code>s are <em>omitted</em> from <code>x</code> before
+the non-zero entries are counted.</p>
+</dd>
+</dl>
+
+<p>For sparse matrices, you may often want to use <code>na.counted = TRUE</code>.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>the number of non zero entries in <code>x</code> (typically
+<code><a href="../../base/html/integer.html">integer</a></code>).
+</p>
+<p>Note that for a <em>symmetric</em> sparse matrix <code>S</code> (i.e., inheriting from
+class <code><a href="symmetricMatrix-class.html">symmetricMatrix</a></code>), <code>nnzero(S)</code> is
+typically <em>twice</em> the <code>length(S@x)</code>.
+</p>
+
+
+<h3>Methods</h3>
+
+
+<dl>
+<dt><code>signature(x = "ANY")</code></dt><dd><p>the default method for
+non-<code><a href="Matrix-class.html">Matrix</a></code> class objects, simply counts the
+number <code>0</code>s in <code>x</code>, counting <code>NA</code>'s depending on
+the <code>na.counted</code> argument, see above.</p>
+</dd>
+<dt><code>signature(x = "denseMatrix")</code></dt><dd><p>conceptually the same as
+for traditional <code><a href="../../base/html/matrix.html">matrix</a></code> objects, care has to be taken
+for <code>"<a href="symmetricMatrix-class.html">symmetricMatrix</a>"</code> objects.</p>
+</dd>
+<dt><code>signature(x = "diagonalMatrix")</code>, and
+<code>signature(x = "indMatrix")</code></dt><dd><p>fast simple methods for these
+special <code>"sparseMatrix"</code> classes.</p>
+</dd>
+<dt><code>signature(x = "sparseMatrix")</code></dt><dd><p>typically, the most
+interesting method, also carefully taking
+<code>"<a href="symmetricMatrix-class.html">symmetricMatrix</a>"</code> objects into account.</p>
+</dd>
+</dl>
+
+
+
+<h3>See Also</h3>
+
+<p>The <code><a href="Matrix-class.html">Matrix</a></code> class also has a
+<code><a href="../../base/html/length.html">length</a></code> method; typically, <code>length(M)</code> is much
+larger than <code>nnzero(M)</code> for a sparse matrix M, and the latter is
+a better indication of the <em>size</em> of <code>M</code>.
+</p>
+<p><code><a href="drop0.html">drop0</a></code>, <code><a href="../../base/html/zapsmall.html">zapsmall</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+m &lt;- Matrix(0+1:28, nrow = 4)
+m[-3,c(2,4:5,7)] &lt;- m[ 3, 1:4] &lt;- m[1:3, 6] &lt;- 0
+(mT &lt;- as(m, "dgTMatrix"))
+nnzero(mT)
+(S &lt;- crossprod(mT))
+nnzero(S)
+str(S) # slots are smaller than nnzero()
+stopifnot(nnzero(S) == sum(as.matrix(S) != 0))# failed earlier
+
+data(KNex)
+M &lt;- KNex$mm
+class(M)
+dim(M)
+length(M); stopifnot(length(M) == prod(dim(M)))
+nnzero(M) # more relevant than length
+## the above are also visible from
+str(M)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>Matrix</em> version 1.3-3 <a href="00Index.html">Index</a>]</div>
+</body></html>

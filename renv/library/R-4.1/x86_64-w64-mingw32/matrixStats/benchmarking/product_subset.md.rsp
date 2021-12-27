@@ -1,0 +1,64 @@
+<%@include file="includes/setup.md.rsp"%>
+
+<%@string fcnname="product_subset"%>
+<%@string subname="product"%>
+<%@meta title="${subname}() benchmarks on subsetted computation"%>
+<%@meta author="Dongcan Jiang"%>
+<%@meta date="2015-06-07"%>
+
+
+<%@include file="${header}"%>
+
+
+# <%@meta name="title"%>
+
+This report benchmark the performance of <%=subname%>() on subsetted computation.
+
+
+## Data
+```r
+<%=withCapture({
+<%@include file="R/random-vectors.R"%>
+data <- rvectors(mode = "double")
+data <- data[1:4]
+})%>
+```
+
+## Results
+
+<% for (ii in seq_along(data)) { %>
+<%
+dataLabel <- names(data)[ii]
+message(dataLabel)
+%>
+### <%=dataLabel%> vector
+
+```r
+<%=withCapture({
+x <- data[[.dataLabel.]]
+idxs <- sample.int(length(x), size = length(x)*0.7)
+x_S <- x[idxs]
+gc()
+
+stats <- microbenchmark(
+ "product_x_S"      = product(x_S, na.rm = FALSE),
+ "product(x, idxs)"  = product(x, idxs = idxs, na.rm = FALSE),
+ "product(x[idxs])" = product(x[idxs], na.rm = FALSE),
+ unit = "ms"
+)
+})%>
+```
+
+<% benchmarkResults(stats, tags=dataLabel) %>
+
+<% } # for (ii ...) %>
+
+
+<%@include file="${footer}"%>
+
+
+<%---------------------------------------------------------------------------
+HISTORY:
+2015-06-07
+o Created.
+---------------------------------------------------------------------------%>

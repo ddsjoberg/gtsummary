@@ -1,0 +1,191 @@
+---
+title: "Cell and Column Types"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cell and Column Types}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(tibble.print_min = 4, tibble.print_max = 4)
+```
+
+```{r setup}
+library(readxl)
+```
+
+`readxl::read_excel()` will guess column types, by default, or you can provide them explicitly via the `col_types` argument. The `col_types` argument is more flexible than you might think; you can mix actual types in with `"skip"` and `"guess"` and a single type will be recycled to the necessary length.
+
+Here are different ways this might look:
+
+```{r eval = FALSE}
+read_excel("yo.xlsx")
+read_excel("yo.xlsx", col_types = "numeric")
+read_excel("yo.xlsx", col_types = c("date", "skip", "guess", "numeric"))
+```
+
+## Type guessing
+
+If you use other packages in the [tidyverse](http://tidyverse.org), you are probably familiar with [readr](http://readr.tidyverse.org), which reads data from flat files. Like readxl, readr also provides column type guessing, but readr and readxl are very different under the hood.
+
+  * readr guesses column type *based on the data*.
+  * readxl guesses column type *based on Excel cell types*.
+  
+Each cell in an Excel spreadsheet has its own type. For all intents and purposes, they are:
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;empty < boolean < numeric < text
+
+with the wrinkle that datetimes are a very special flavor of numeric. A cell of any particular type can always be represented as one of any higher type and, possibly, as one of lower type. When guessing, `read_excel()` keeps a running "maximum" on the cell types it has seen in any given column. Once it has visited `guess_max` rows or run out of data, this is the guessed type for that column. There is a strong current towards "text", the column type of last resort.
+
+Here's an example of column guessing with `deaths.xlsx` which ships with readxl.
+
+```{r}
+read_excel(readxl_example("deaths.xlsx"), range = cell_rows(5:15))
+```
+
+## Excel types, R types, `col_types`
+
+Here's how the Excel cell/column types are translated into R types and how to force the type explicitly in `col_types`:
+
+| How it is in Excel | How it will be in R     | How to request in `col_types` |
+|--------------------|-------------------------|-------------------------------|
+| *anything*         | *non-existent*          | `"skip"`                      |
+| empty              | `logical`, but all `NA` | *you cannot request this*     |
+| boolean            | `logical`               | `"logical"`                   |
+| numeric            | `numeric`               | `"numeric"`                   |
+| datetime           | `POSIXct`               | `"date"`                      |
+| text               | `character`             | `"text"`                      |
+| *anything*         | `list`                  | `"list"`                      |
+
+Some explanation about the weird cases in the first two rows:
+
+  * If a column falls in your data rectangle, but you do not want an associated variable in the output, specify the column type `"skip"`. Internally, these cells may be visited in order to learn their location, but they are not loaded and their data is never read.
+  * You cannot request that a column be included but filled with `NA`s. Such a column can arise naturally, if all the cells are empty, or you can skip a column (see previous point).
+  
+Example of skipping and guessing:
+
+```{r}
+read_excel(
+  readxl_example("deaths.xlsx"),
+  range = cell_rows(5:15),
+  col_types = c("guess", "skip", "guess", "skip", "skip", "skip")
+)
+```
+
+More about the `"list"` column type in the last row:
+
+  * This will create a list-column in the output, each component of which is a length one atomic vector. The type of these vectors is determined using the logic described above. This can be useful if data of truly disparate type is arranged in a column.
+
+We demonstrate the `"list"` column type using the `clippy.xlsx` sheet that ship with Excel. Its second column holds information about Clippy that would be really hard to store with just one type.
+
+```{r}
+(clippy <- 
+   read_excel(readxl_example("clippy.xlsx"), col_types = c("text", "list")))
+tibble::deframe(clippy)
+sapply(clippy$value, class)
+```
+
+Final note: all datetimes are imported as having the UTC timezone, because, mercifully, Excel has no notion of timezones.
+  
+## When column guessing goes wrong
+
+It's pretty common to expect a column to import as, say, numeric or datetime. And to then be sad when it imports as character instead. Two main causes:
+
+**Contamination by embedded missing or bad data of incompatible type.** Example: missing data entered as `??` in a numeric column.
+
+  * Fix: use the `na` argument of `read_excel()` to describe all possible forms for missing data. This should prevent such cells from influencing type guessing and cause them to import as `NA` of the appropriate type.
+  
+**Contamination of the data rectangle by leading or trailing non-data rows.** Example: the sheet contains a few lines of explanatory prose before the data table begins.
+
+  * Fix: specify the target rectangle. Use `skip` and `n_max` to provide a minimum number of rows to skip and a maximum number of data rows to read, respectively. Or use the more powerful `range` argument to describe the cell rectangle in various ways. See the examples for `read_excel()` help or `vignette("sheet-geometry")` for more detail.
+  
+The `deaths.xlsx` sheet demonstrates this perfectly. Here's how it imports if we don't specify `range` as we did above:
+
+```{r}
+deaths <- read_excel(readxl_example("deaths.xlsx"))
+print(deaths, n = Inf)
+```
+
+Non-data rows above and below the main data rectangle are causing all the columns to import as character.
+
+If your column typing problem can't be solved by specifying `na` or the data rectangle, request the `"list"` column type and handle missing data and coercion after import.
+
+### Peek at column names
+
+Sometimes you aren't completely sure of column count or order, and yet you need to provide *some* information via `col_types`. For example, you might know that the column named "foofy" should be text, but you're not sure where it appears. Or maybe you want to ensure that lots of empty cells at the top of "foofy" don't cause it to be guessed as logical.
+
+Here's an efficient trick to get the column names, so you can programmatically build the `col_types` vector you need for your main reading of the Excel file. Let's imagine I want to force the columns whose names include "Petal" to be text, but leave everything else to be guessed.
+
+```{r}
+(nms <- names(read_excel(readxl_example("datasets.xlsx"), n_max = 0)))
+(ct <- ifelse(grepl("^Petal", nms), "text", "guess"))
+read_excel(readxl_example("datasets.xlsx"), col_types = ct)
+```
+
+## Square pegs in round holes
+
+You can force a column to have a specific type via `col_types`. So what happens to cells of another type? They will either be coerced to the requested type or to an `NA` of appropriate type.
+
+For each column type, below we present a screen shot of a sheet from the built-in example `type-me.xlsx`. We force the first column to have a specific type and the second column explains what is in the first. You'll see how mismatches between cell type and column type are resolved.
+
+### Logical column
+
+A numeric cell is coerced to `FALSE` if it is zero and `TRUE` otherwise. A date cell becomes `NA`. Just like in R, the strings "T", "TRUE", "True", and "true" are regarded as `TRUE` and "F", "FALSE", "False", "false" as
+`FALSE`. Other strings import as `NA`.
+
+```{r}
+df <- read_excel(readxl_example("type-me.xlsx"), sheet = "logical_coercion",
+                 col_types = c("logical", "text"))
+print(df, n = Inf)
+```
+
+```{r out.width = '70%', echo = FALSE}
+knitr::include_graphics("img/type-me-logical.png")
+```
+
+### Numeric column
+
+A boolean cell is coerced to zero if `FALSE` and one if `TRUE`. A datetime comes in as the underlying serial date, which is the number of days, possibly fractional, since the [date origin](https://support.microsoft.com/en-us/help/214330/differences-between-the-1900-and-the-1904-date-system-in-excel). For text, numeric conversion is attempted, to handle the "number as text" phenomenon. If unsuccessful, text cells import as `NA`.
+
+```{r}
+df <- read_excel(readxl_example("type-me.xlsx"), sheet = "numeric_coercion",
+                 col_types = c("numeric", "text"))
+print(df, n = Inf)
+```
+
+```{r out.width = '70%', echo = FALSE}
+knitr::include_graphics("img/type-me-numeric.png")
+```
+
+### Date column
+
+A numeric cell is interpreted as a serial date (*I'm questioning whether this is wise, but <https://github.com/tidyverse/readxl/issues/266>*). Boolean or text cells become `NA`.
+
+```{r}
+df <- read_excel(readxl_example("type-me.xlsx"), sheet = "date_coercion",
+                 col_types = c("date", "text"))
+print(df, n = Inf)
+```
+
+```{r out.width = '70%', echo = FALSE}
+knitr::include_graphics("img/type-me-date.png")
+```
+
+### Text or character column
+
+A boolean cell becomes either `"TRUE"` or `"FALSE"`. A numeric cell is converted to character, much like `as.character()` in R. A date cell is handled like numeric, using the underlying serial value.
+
+```{r}
+df <- read_excel(readxl_example("type-me.xlsx"), sheet = "text_coercion",
+                 col_types = c("text", "text"))
+print(df, n = Inf)
+```
+
+```{r out.width = '70%', echo = FALSE}
+knitr::include_graphics("img/type-me-text.png")
+```
