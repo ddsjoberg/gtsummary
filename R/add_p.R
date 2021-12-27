@@ -133,7 +133,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       "p.value" %in% names(x$table_body)) {
     paste("`add_p()` cannot be run after `add_difference()` when a",
           "'p.value' column is already present.") %>%
-    stop(call. = FALSE)
+      stop(call. = FALSE)
   }
 
   # test -----------------------------------------------------------------------
@@ -284,12 +284,12 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
       modify_table_styling(
         columns = any_of("estimate"),
         label = ifelse(is.null(adj.vars),
-          paste0("**", translate_text("Difference"), "**"),
-          paste0("**", translate_text("Adjusted Difference"), "**")
+                       paste0("**", translate_text("Difference"), "**"),
+                       paste0("**", translate_text("Adjusted Difference"), "**")
         ),
         hide = FALSE,
         fmt_fun = switch(is_function(estimate_fun),
-          estimate_fun
+                         estimate_fun
         ),
         footnote = footnote_add_p(meta_data)
       )
@@ -305,8 +305,8 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
             mutate(
               column =
                 c("estimate", "conf.low", "conf.high") %>%
-                  intersect(names(x$table_body)) %>%
-                  list(),
+                intersect(names(x$table_body)) %>%
+                list(),
               rows = glue(".data$variable == '{variable}'") %>% rlang::parse_expr() %>% list()
             ) %>%
             ungroup() %>%
@@ -318,7 +318,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 
     # adding formatted CI column
     if (all(c("conf.low", "conf.high") %in% names(x$table_body)) &&
-      !"ci" %in% names(x$table_body)) {
+        !"ci" %in% names(x$table_body)) {
       ci.sep <- get_theme_element("pkgwide-str:ci.sep", default = ", ")
       x <- x %>%
         modify_table_body(
@@ -328,10 +328,10 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
                 list(variable, conf.low, conf.high),
                 ~ case_when(
                   !is.na(..2) | !is.na(..3) ~
-                  paste(do.call(estimate_fun[[..1]], list(..2)),
-                    do.call(estimate_fun[[..1]], list(..3)),
-                    sep = ci.sep
-                  )
+                    paste(do.call(estimate_fun[[..1]], list(..2)),
+                          do.call(estimate_fun[[..1]], list(..3)),
+                          sep = ci.sep
+                    )
                 )
               )
             )
@@ -415,7 +415,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 
   # adding test name if supplied (NULL otherwise)
   input_test <- switch(!is.null(test),
-    rlang::expr(everything() ~ !!test)
+                       rlang::expr(everything() ~ !!test)
   )
 
   # running add_p to add the p-value to the output
@@ -809,11 +809,13 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
 #'
 #' @export
 add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
-                                 include = everything(), test.args = NULL, ...) {
+                                 include = everything(), test.args = NULL,
+                                 group = NULL, ...) {
+  updated_call_list <- c(x$call_list, list(add_p = match.call()))
   # setting defaults from gtsummary theme --------------------------------------
   pvalue_fun <-
     pvalue_fun %||%
-    get_theme_element("pkgwide-fn:pvalue_fun") %||%
+    get_theme_element("pkgwide-fn:pvalue_fun", default = style_pvalue) %>%
     gts_mapper("add_p(pvalue_fun=)")
 
   # converting bare arguments to string ----------------------------------------
@@ -840,4 +842,101 @@ add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
 
   # caller_env for add_p
   caller_env <- rlang::caller_env()
+
+  # getting the test name and pvalue
+  meta_data <-
+    x$meta_data %>%
+    select(.data$variable, .data$summary_type) %>%
+    filter(.data$variable %in% .env$include) %>%
+    mutate(
+      test =
+        map(
+          .data$variable,
+          function(variable) {
+            .assign_test_tbl_continuous(
+              data = x$inputs$data, continuous_variable = x$inputs$variable,
+              variable = variable,
+              by = x$inputs$by, group = group, test = test
+            )
+          }
+        ),
+      test_info =
+        map(
+          .data$test,
+          function(test) .get_add_p_test_fun("tbl_continuous", test = test, env = caller_env)
+        ),
+      test_name = map_chr(.data$test_info, ~ pluck(.x, "test_name"))
+    )
+
+  # adding test_name to table body so it can be used to select vars by the test
+  x$table_body <-
+    x$table_body %>%
+    select(-any_of(c("test_name", "test_result"))) %>%
+    left_join(meta_data[c("variable", "test_name")], by = "variable") %>%
+    select(.data$variable, .data$test_name, everything())
+
+  # converting to named list
+  test.args <-
+    .formula_list_to_named_list(
+      x = test.args,
+      data = select(x$inputs$data, any_of(include)),
+      var_info = x$table_body,
+      arg_name = "test.args"
+    )
+
+  browser()
+  x$meta_data <-
+    meta_data %>%
+    mutate(
+      test_result = pmap(
+        list(.data$test_info, .data$variable, .data$summary_type),
+        function(test_info, variable, summary_type) {
+          .run_add_p_test_fun(
+            x = test_info, data = .env$x$inputs$data,
+            by = .env$x$inputs$by, variable = variable,
+            group = group, type = summary_type,
+            test.args = test.args[[variable]], tbl = x,
+            continuous_variable = x$inputs$variable
+          )
+        }
+      ),
+      p.value = map_dbl(.data$test_result, ~ pluck(.x, "df_result", "p.value")),
+      stat_test_lbl = map_chr(.data$test_result, ~ pluck(.x, "df_result", "method"))
+    ) %>%
+    select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
+    {
+      left_join(
+        x$meta_data %>% select(-any_of(c("test_result", "p.value", "stat_test_lbl"))),
+        .,
+        by = "variable")
+    }
+
+  x$call_list <- updated_call_list
+  add_p_merge_p_values(x, meta_data = x$meta_data, pvalue_fun = pvalue_fun)
+}
+
+.assign_test_tbl_continuous <- function(data, continuous_variable,
+                                        variable, by, group, test) {
+  # if user supplied a test, use that test -------------------------------------
+  if (!is.null(test[[variable]])) {
+    return(test[[variable]])
+  }
+
+  # if not by variable, can calculate the test the same way as in `add_p.tbl_summary`
+  if (is.null(by)) {
+    return(
+      .assign_test_tbl_summary(
+        data = data, variable = continuous_variable, summary_type = "continuous",
+        by = variable, group = group, test = test
+      )
+    )
+  }
+
+  # no default test for correlated data
+  if (!is.null(group)) {
+    stop("There is no default test for correlated data when `by=` is specified.", call. = FALSE)
+  }
+
+  # otherwise, use 2-way ANOVA
+  return("anova_2way")
 }
