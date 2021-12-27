@@ -550,7 +550,7 @@ add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {
 # add_p.tbl_continuous ---------------------------------------------------------
 add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) {
   rlang::inject(
-    lm(!!sym(continuous_variable) ~ factor(!!sym(variable)) + factor(!!sym(by)),
+    stats::lm(!!sym(continuous_variable) ~ factor(!!sym(variable)) + factor(!!sym(by)),
        data = data)
   ) %>%
     broom::glance() %>%
