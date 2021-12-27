@@ -842,6 +842,13 @@ add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
       arg_name = "include"
     )
 
+  group <-
+    .select_to_varnames(
+      select = {{ group }},
+      data = x$inputs$data,
+      arg_name = "group"
+    )
+
   test <-
     .formula_list_to_named_list(
       x = test,
