@@ -5,6 +5,7 @@
 #' @inheritParams as_kable
 #' @param col_labels Logical argument adding column labels to output tibble.
 #' Default is `TRUE`.
+#' @param fmt_missing Logical argument adding the missing value formats.
 #' @param ... Not used
 #' @return a [tibble][tibble::tibble-package]
 #' @family gtsummary output types
@@ -21,7 +22,8 @@
 #' # without column labels
 #' as_tibble(tbl, col_labels = FALSE)
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
-                                return_calls = FALSE, exclude = NULL, ...) {
+                                return_calls = FALSE, exclude = NULL,
+                                fmt_missing = FALSE, ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_stop(
@@ -43,7 +45,10 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   x <- .clean_table_styling(x)
 
   # creating list of calls to get formatted tibble -----------------------------
-  tibble_calls <- table_styling_to_tibble_calls(x = x, col_labels = col_labels)
+  tibble_calls <-
+    table_styling_to_tibble_calls(x = x,
+                                  col_labels = col_labels,
+                                  fmt_missing = fmt_missing)
 
   # converting to character vector ---------------------------------------------
   include <-
@@ -76,7 +81,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
 }
 
 
-table_styling_to_tibble_calls <- function(x, col_labels = TRUE) {
+table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FALSE) {
   tibble_calls <- list()
 
   # tibble ---------------------------------------------------------------------
@@ -155,6 +160,27 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE) {
         update_from = !!x$table_body
       ))
     )
+
+  # fmt_missing ----------------------------------------------------------------
+  if (isTRUE(fmt_missing)) {
+    tibble_calls[["fmt_missing"]] <-
+      map(
+        seq_len(nrow(x$table_styling$fmt_missing)),
+        ~expr(
+          ifelse(
+            dplyr::row_number() %in% !!x$table_styling$fmt_missing$row_numbers[.x] & is.na(!!sym(x$table_styling$fmt_missing$column[.x])),
+            !!x$table_styling$fmt_missing$symbol[.x],
+            !!sym(x$table_styling$fmt_missing$column[.x])
+          )
+        )
+      ) %>%
+      rlang::set_names(x$table_styling$fmt_missing$column) %>%
+      {expr(dplyr::mutate(!!!.))} %>%
+      list()
+  }
+  else {
+    tibble_calls[["fmt_missing"]] <- list()
+  }
 
   # cols_hide ------------------------------------------------------------------
   # cols_to_keep object created above in fmt section
