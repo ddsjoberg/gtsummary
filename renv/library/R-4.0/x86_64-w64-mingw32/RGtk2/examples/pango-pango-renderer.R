@@ -1,1 +1,0 @@
-renderer$partChanged(PangoRendererPart["underline"])

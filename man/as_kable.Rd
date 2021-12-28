@@ -4,7 +4,14 @@
 \alias{as_kable}
 \title{Convert gtsummary object to a kable object}
 \usage{
-as_kable(x, include = everything(), return_calls = FALSE, exclude = NULL, ...)
+as_kable(
+  x,
+  include = everything(),
+  return_calls = FALSE,
+  exclude = NULL,
+  fmt_missing = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -19,6 +26,8 @@ Default is \code{everything()}.}
 as a list of expressions.}
 
 \item{exclude}{DEPRECATED}
+
+\item{fmt_missing}{Logical argument adding the missing value formats.}
 
 \item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
 }

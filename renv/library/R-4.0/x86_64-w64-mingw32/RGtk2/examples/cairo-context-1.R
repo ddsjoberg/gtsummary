@@ -1,7 +1,0 @@
-cr$pushGroup()
-cr$setSource(fill_pattern)
-cr$fillPreserve()
-cr$setSource(stroke_pattern)
-cr$stroke()
-cr$popGroupToSource()
-cr$paintWithAlpha(alpha)
