@@ -1,2 +1,0 @@
-filter <- gtkFileFilter()
-filter$addPattern("*")
