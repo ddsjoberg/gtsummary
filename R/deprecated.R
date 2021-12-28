@@ -9,9 +9,9 @@
 NULL
 
 # tentative deprecation schedule
-# "warn" for at least 9 month
-# "stop" after 12 months
-# "delete" after 24 months?
+# "warn" for at least 12 months
+# "stop" after 18 months
+# "delete" after 36 months?
 
 # v1.2.5 (2020-02-11) ----------------------------------------------------------
 #' @rdname deprecated

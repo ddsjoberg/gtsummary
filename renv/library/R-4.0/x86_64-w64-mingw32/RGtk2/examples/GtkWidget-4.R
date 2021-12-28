@@ -1,5 +1,0 @@
-gtkWidgetPushCompositeChild()
-hscrollbar <- gtkHScrollbarNew(hadjustment)
-hscrollbar$setCompositeName("hscrollbar")
-gtkWidgetPopCompositeChild()
-hscrollbar$setParent(scrolled_window)
