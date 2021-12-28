@@ -30,7 +30,7 @@
 #'   bold_labels() %>%
 #'   as_kable()
 as_kable <- function(x, include = everything(), return_calls = FALSE,
-                     exclude = NULL, ...) {
+                     exclude = NULL, fmt_missing = TRUE, ...) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_stop(
@@ -53,7 +53,7 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
 
   # creating list of kable calls -----------------------------------------------
   kable_calls <-
-    table_styling_to_kable_calls(x = x, ...)
+    table_styling_to_kable_calls(x = x, fmt_missing = fmt_missing, ...)
   if (return_calls == TRUE) {
     return(kable_calls)
   }
@@ -83,14 +83,16 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-table_styling_to_kable_calls <- function(x, ...) {
+table_styling_to_kable_calls <- function(x, fmt_missing = TRUE, ...) {
   dots <- rlang::enexprs(...)
 
-  kable_calls <- table_styling_to_tibble_calls(x, col_labels = FALSE)
-
+  kable_calls <-
+    table_styling_to_tibble_calls(x, col_labels = FALSE, fmt_missing = fmt_missing)
 
   # fmt_missing ----------------------------------------------------------------
-  kable_calls[["fmt_missing"]] <- expr(dplyr::mutate_all(~ ifelse(is.na(.), "", .)))
+  kable_calls[["fmt_missing"]] <-
+    c(kable_calls[["fmt_missing"]],
+      list(expr(dplyr::mutate_all(~ ifelse(is.na(.), "", .)))))
 
   # kable ----------------------------------------------------------------------
   df_col_labels <-
