@@ -10,6 +10,7 @@
   col_labels = TRUE,
   return_calls = FALSE,
   exclude = NULL,
+  fmt_missing = FALSE,
   ...
 )
 }
@@ -29,6 +30,8 @@ Default is \code{TRUE}.}
 as a list of expressions.}
 
 \item{exclude}{DEPRECATED}
+
+\item{fmt_missing}{Logical argument adding the missing value formats.}
 
 \item{...}{Not used}
 }
