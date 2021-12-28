@@ -1,76 +1,21 @@
-# THIS SCRIPT CREATES HELP FILE IMAGES FOR GT OBJECTS (INCLUDING GTSUMMARY)
-library(gtsummary)
-rm(list = ls())
+# 1. install pkg that will run and save the documentation images
+remotes::install_github("ddsjoberg/gt.doc.images")
 
-# list of all help files
-gt_functions <-
-  list.files(here::here("man")) %>%
-  purrr::keep(~ stringr::str_ends(., stringr::fixed(".Rd"))) %>%
-  stringr::str_remove(".Rd")
+# 2. Install the most recent version of gtsummary
 
-# create temp gtsummary directory (example scripts will be saved here)
-path_gtsummary <- file.path(tempdir(), "gtsummary")
-fs::dir_create(path_gtsummary)
-unlink(path_gtsummary) # just in case it already existed with files in folder
+# 3. Restart R to have a fresh R session.
+#    No packages should be loaded, not even gtsummary
+#    Any object that is in the global environment may be written over!
 
-# delete existing png example images
-list.files(here::here("man", "figures")) %>%
-  purrr::keep(~ (stringr::str_ends(., "_ex[:digit:]+.png") | stringr::str_ends(., "_ex.png")) &
-    !stringr::str_starts(., "README-")) %>%
-  purrr::walk(~ fs::file_delete(here::here("man", "figures", .x)))
+# 4. Run the function below to save the images created in the help files.
+#    Only objects whose named in `_ex` or `_ex[:digit:]+` are saved.
+#    Files will be saved to "~gtsummary/man/figures/<filename>.png",
+#    where the file name is the object name, i.e.'tbl_ae_count_ex1.png'.
+#    No example object name may overlap throughout the entire package.
+gt.doc.images::save_help_file_images(pkg = "gtsummary")
 
-# cycling over each help file, and saving gt images
-set_gtsummary_theme(list("pkgwide-lgl:quiet" = TRUE))
-for (f in gt_functions) {
-  cli::cli_alert_success("Working on {f}")
-
-  # run code from example
-  utils::example(topic = f, package = "gtsummary", character.only = TRUE, give.lines = FALSE, echo = FALSE)
-
-  # get list of example objects that end in "_ex###"
-  example_objs <- ls()[stringr::str_ends(ls(), "_ex[:digit:]+") | stringr::str_ends(ls(), "_ex")]
-
-  # saving an image of every gt or gtsummary example
-  purrr::walk(
-    example_objs,
-    function(example_chr) {
-      # converting string to object
-      example_obj <- eval(parse(text = example_chr))
-      usethis::ui_todo("Saving `{example_chr}.png`")
-
-      # convert gtsummary object to gt
-      if (inherits(example_obj, "gtsummary")) {
-        example_obj <- as_gt(example_obj)
-      }
-
-      # checking object is now a gt object
-      if (inherits(example_obj, "gt_tbl")) {
-        # saving image
-        gt::gtsave(example_obj,
-          filename = here::here("man", "figures", stringr::str_glue("{example_chr}.png"))
-        )
-      }
-
-      # saving flextable image
-      if (inherits(example_obj, "flextable")) {
-        flextable::save_as_image(example_obj,
-          webshot = "webshot2",
-          path = here::here("man", "figures", stringr::str_glue("{example_chr}.png"))
-        )
-      }
-
-      # shrink image
-      tryCatch(
-        webshot::shrink(here::here("man", "figures", stringr::str_glue("{example_chr}.png"))),
-        error = function(e) {
-          return(invisible())
-        }
-      )
-      return(invisible())
-    }
-  )
-
-  # removing all objects except `gt_functions`, `path_gtsummary`
-  rm(list = ls()[!ls() %in% c("gt_functions", "path_gtsummary")])
-}
-reset_gtsummary_theme()
+# 5. You can save the images for a single file as well
+gt.doc.images::save_help_file_images(
+  pkg = "gtsummary",
+  rd_files = "add_ci"
+)

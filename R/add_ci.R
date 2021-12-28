@@ -15,6 +15,12 @@
 #' @param style_fun Function to style upper and lower bound of confidence
 #' interval. Default is
 #' `list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100), all_continuous() ~ style_sigfig)`.
+#' @param pattern string indicating the pattern to use to merge the CI with
+#' the statistics cell. The default is NULL, where no columns are merged.
+#' The two columns that will be merged are the statistics column,
+#' represented by `"{stat}"` and the CI column represented by `"{ci}"`,
+#' e.g. `pattern = "{stat} ({ci})"` will merge the two columns with the CI
+#' in parentheses.
 #' @param ... Not used
 #' @inheritParams tbl_summary
 #'
@@ -44,14 +50,10 @@
 #' # Example 2 ----------------------------------
 #' add_ci_ex2 <-
 #'   trial %>%
-#'     select(response, trt) %>%
+#'     select(response, grade) %>%
 #'     tbl_summary(statistic = all_categorical() ~ "{p}%",
 #'                 missing = "no") %>%
-#'     add_ci() %>%
-#'     modify_cols_merge(
-#'       rows = !is.na(ci_stat_0),
-#'       pattern = "{stat_0} ({ci_stat_0})"
-#'     ) %>%
+#'     add_ci(pattern = "{stat} ({ci})") %>%
 #'     modify_footnote(everything() ~ NA)
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -72,7 +74,8 @@ add_ci.tbl_summary <- function(x,
                                include = everything(),
                                statistic = NULL,
                                conf.level = 0.95,
-                               style_fun = NULL, ...) {
+                               style_fun = NULL,
+                               pattern = NULL, ...) {
   # resolving arguments --------------------------------------------------------
   include <-
     .select_to_varnames(
@@ -131,6 +134,27 @@ add_ci.tbl_summary <- function(x,
     )
   updated_call_list <- c(x$call_list, list(add_ci = match.call()))
 
+  # check inputs ---------------------------------------------------------------
+  if (!is.null(pattern)) {
+    if (!rlang::is_string(pattern)) {
+      stop("The `pattern=` argument must be a string.", call. = FALSE)
+    }
+    pattern_elements <-
+      stringr::str_extract_all(pattern, "\\{.*?\\}") %>%
+      map(stringr::str_remove_all, pattern = fixed("}")) %>%
+      map(stringr::str_remove_all, pattern = fixed("{")) %>%
+      unlist() %>%
+      unique()
+    if (!rlang::is_empty(pattern_elements %>% setdiff(c("stat", "ci")))) {
+      stop("All `pattern=` elements in curly brackets must be 'stat' and 'ci'", call. = FALSE)
+    }
+    if (!setequal(pattern_elements, c("stat", "ci"))) {
+      paste("The `pattern=` argument should",
+            "include reference to both '{stat}' and '{ci}'") %>%
+        stop(call. = FALSE)
+    }
+  }
+
   # adding new column with CI --------------------------------------------------
   x <-
     x %>%
@@ -162,12 +186,66 @@ add_ci.tbl_summary <- function(x,
             .cols = matches("^stat_\\d+_ci$")
           )
       }
-    ) %>%
-    # updating CI column headers and footnotes
-    modify_header(matches("^ci_stat_\\d+$") ~ paste0("**", conf.level*100, "% CI**")) %>%
-    modify_footnote(
-      update = matches("^ci_stat_\\d+$") ~ translate_text("CI = Confidence Interval"),
-      abbreviation = TRUE)
+    )
+
+  if (is.null(pattern)) {
+    x <-
+      x %>%
+      # updating CI column headers and footnotes
+      modify_header(matches("^ci_stat_\\d+$") ~ paste0("**", conf.level*100, "% CI**")) %>%
+      modify_footnote(
+        update = matches("^ci_stat_\\d+$") ~ translate_text("CI = Confidence Interval"),
+        abbreviation = TRUE)
+  }
+  else {
+    # get the stat column index numbers, eg get the 1 and 2 from stat_1 and stat_2
+    stat_column_names <-
+      x$table_body %>%
+      select(all_stat_cols()) %>%
+      names()
+    chr_index <- stringr::str_replace(stat_column_names, pattern = "^stat_", "")
+
+    # create list of column merging expressions
+    cols_merge_expr <-
+      chr_index %>%
+      map(
+        ~expr(modify_table_styling(
+          columns = !!glue("stat_{.x}"),
+          rows = !is.na(!!sym(paste0("ci_stat_", .x))),
+          cols_merge_pattern =
+            !!glue::glue_data(
+              .x = list(stat = paste0("{stat_", .x, "}"), ci = paste0("{ci_stat_", .x, "}")),
+              pattern
+            )
+        ))
+      )
+
+    # merge columns
+    x <-
+      cols_merge_expr %>%
+      purrr::reduce(~rlang::inject(!!.x %>% !!.y), .init = x) %>%
+      modify_footnote(
+        update = all_stat_cols() ~ translate_text("CI = Confidence Interval"),
+        abbreviation = TRUE)
+
+    # updating header using `pattern=` argument
+    x$table_styling$header <-
+      x$table_styling$header %>%
+      rowwise() %>%
+      mutate(
+        label =
+          ifelse(
+            .data$column %in% stat_column_names,
+            glue::glue_data(
+              .x = list(stat = .data$label, ci = paste0("**", conf.level*100, "% CI**")),
+              pattern
+            ),
+            .data$label
+          )
+      ) %>%
+      ungroup()
+  }
+
 
   # return gtsummary table -----------------------------------------------------
   x$call_list <- updated_call_list
@@ -188,10 +266,10 @@ single_ci <- function(variable, by, tbl, method, conf.level,
       mutate(
         ci =
           calculate_prop_ci(x = .data$n, n = .data$N,
-                                statistic = statistic[[variable]],
-                                method = method[[variable]],
-                                conf.level = conf.level,
-                                style_fun = style_fun[[variable]])
+                            statistic = statistic[[variable]],
+                            method = method[[variable]],
+                            conf.level = conf.level,
+                            style_fun = style_fun[[variable]])
 
       )
   }
@@ -232,7 +310,7 @@ single_ci <- function(variable, by, tbl, method, conf.level,
   else {
     glue("Error with variable '{variable}'. Method '{method[[variable]]}' ",
          "cannot be applied to summary type '{summary_type[[variable]]}'.") %>%
-    stop(call. = FALSE)
+      stop(call. = FALSE)
   }
 
   df_single_ci %>%
@@ -252,7 +330,7 @@ calculate_mean_ci <- function(data, variable, statistic,
         names(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]])) {
       paste("{.code add_ci()} added mean CI for {.val {variable}};",
             "however, no mean is shown in the {.code tbl_summary()} table.") %>%
-      cli::cli_alert_danger()
+        cli::cli_alert_danger()
     }
     df_ci <-
       stats::t.test(data[[variable]], conf.level = conf.level) %>%

@@ -14,6 +14,7 @@ add_ci(x, ...)
   statistic = NULL,
   conf.level = 0.95,
   style_fun = NULL,
+  pattern = NULL,
   ...
 )
 }
@@ -39,6 +40,13 @@ Default is \code{list(all_categorical() ~ "{conf.low}\%, {conf.high}\%", all_con
 \item{style_fun}{Function to style upper and lower bound of confidence
 interval. Default is
 \code{list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100), all_continuous() ~ style_sigfig)}.}
+
+\item{pattern}{string indicating the pattern to use to merge the CI with
+the statistics cell. The default is NULL, where no columns are merged.
+The two columns that will be merged are the statistics column,
+represented by \code{"{stat}"} and the CI column represented by \code{"{ci}"},
+e.g. \code{pattern = "{stat} ({ci})"} will merge the two columns with the CI
+in parentheses.}
 }
 \value{
 gtsummary table
@@ -79,14 +87,10 @@ add_ci_ex1 <-
 # Example 2 ----------------------------------
 add_ci_ex2 <-
   trial \%>\%
-    select(response, trt) \%>\%
+    select(response, grade) \%>\%
     tbl_summary(statistic = all_categorical() ~ "{p}\%",
                 missing = "no") \%>\%
-    add_ci() \%>\%
-    modify_cols_merge(
-      rows = !is.na(ci_stat_0),
-      pattern = "{stat_0} ({ci_stat_0})"
-    ) \%>\%
+    add_ci(pattern = "{stat} ({ci})") \%>\%
     modify_footnote(everything() ~ NA)
 }
 \seealso{
