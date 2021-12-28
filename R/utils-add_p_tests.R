@@ -559,8 +559,12 @@ add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) 
 }
 
 add_p_test_tbl_summary_to_tbl_continuous <- function(
-  data, variable, by, continuous_variable, test.args = NULL,
-  test_name = NULL, group = NULL, ...) {
+  data, variable, by, continuous_variable, test.args = NULL, group = NULL,
+  test_name, ...) {
+
+  if (!is.null(by)) {
+    stop("This test cannot be used with `by=` variable specified.", call. = FALSE)
+  }
 
   switch(
     test_name,
