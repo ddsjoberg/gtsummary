@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9018</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9020</span>
       </span>
     </div>
 
@@ -91,7 +91,9 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Multinomial models computed using MICE are now supported. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1065" class="external-link">#1065</a>)</p></li>
+<ul><li><p>Fix in <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> and <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> where reference row was not properly placed after a <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> when the merged tables share common categorical variables but different reference rows. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1063" class="external-link">#1063</a>)</p></li>
+<li><p>Functions <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, and <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code> gain the <code>fmt_missing=</code> argument that applies missing symbols to missing values. The <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble()</a></code> argument defaults to <code>FALSE</code>, while the others’ default is <code>TRUE</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1073" class="external-link">#1073</a>)</p></li>
+<li><p>Multinomial models computed using MICE are now supported. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1065" class="external-link">#1065</a>)</p></li>
 <li><p>Updating the <code><a href="../reference/add_overall.html">add_overall()</a></code> S3 method to have a more common structure, e.g. <code>add_overall(x, ....)</code>, where previously, the <code>...</code> were not present. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1066" class="external-link">#1066</a>)</p></li>
 <li><p>It is now possible to pass a single tbl to <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code>. This is useful when using <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> as a helper in other functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1068" class="external-link">#1068</a>)</p></li>
 <li><p>Suppress <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> spanning headers by passing <code>tbl_merge(tab_spanner = FALSE)</code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/1067" class="external-link">#1067</a>)</p></li>

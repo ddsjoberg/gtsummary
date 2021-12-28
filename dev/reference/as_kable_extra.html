@@ -26,7 +26,7 @@ and italic cells are not supported for kableExtra output via gtsummary."><meta p
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9018</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9020</span>
       </span>
     </div>
 
@@ -106,6 +106,7 @@ and italic cells are not supported for kableExtra output via gtsummary.</p>
   include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
   return_calls <span class="op">=</span> <span class="cn">FALSE</span>,
   strip_md_bold <span class="op">=</span> <span class="cn">TRUE</span>,
+  fmt_missing <span class="op">=</span> <span class="cn">TRUE</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -126,6 +127,8 @@ as a list of expressions.</p></dd>
 <dt>strip_md_bold</dt>
 <dd><p>When TRUE, all double asterisk (markdown language for
 bold weight) in column labels and spanning headers are removed.</p></dd>
+<dt>fmt_missing</dt>
+<dd><p>Logical argument adding the missing value formats.</p></dd>
 <dt>...</dt>
 <dd><p>Additional arguments passed to <a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable</a></p></dd>
 </dl></div>
