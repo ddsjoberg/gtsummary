@@ -37,7 +37,7 @@ modify_spanning_header(
 
 modify_caption(x, caption, text_interpret = c("md", "html"))
 
-show_header_names(x = NULL, quiet = NULL)
+show_header_names(x = NULL, include_example = TRUE, quiet = NULL)
 }
 \arguments{
 \item{x}{a gtsummary object}
@@ -65,6 +65,8 @@ Use the \code{show_header_names()} to see the column names that can be modified.
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.}
 
 \item{caption}{a string of the table caption/title}
+
+\item{include_example}{logical whether to include print of \code{modify_header()} example}
 }
 \value{
 Updated gtsummary object

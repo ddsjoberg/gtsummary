@@ -22,6 +22,7 @@
 #' @param text_interpret String indicates whether text will be interpreted with
 #' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
 #' @param caption a string of the table caption/title
+#' @param include_example logical whether to include print of `modify_header()` example
 #' @inheritParams modify_table_styling
 #' @inheritParams add_global_p
 #' @family tbl_summary tools
@@ -308,7 +309,7 @@ modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
 
 #' @name modify
 #' @export
-show_header_names <- function(x = NULL, quiet = NULL) {
+show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
@@ -317,22 +318,24 @@ show_header_names <- function(x = NULL, quiet = NULL) {
     stop("Pass a 'gtsummary' object in `x=` to print current column names and headers.")
   }
 
-  df_cols <- x$table_styling$header %>%
+  df_cols <-
+    x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
     select(.data$column, .data$label)
 
-  if (identical(quiet, FALSE)) {
+  if (identical(quiet, FALSE) && isTRUE(include_example)) {
     cat("\n")
     cli_alert_info("As a usage guide, the code below re-creates the current column headers.")
-    block <- mutate(df_cols, formula = glue("  {column} ~ {shQuote(label)}")) %>%
+    block <- mutate(df_cols, formula = glue("  {column} = {shQuote(label)}")) %>%
       pull(.data$formula) %>%
       paste0("", collapse = ",\n") %>%
       {
-        glue("modify_header(update = list(\n{.}\n))")
+        glue("modify_header(\n{.}\n)")
       }
 
     cli_code(block)
-
+  }
+  if (identical(quiet, FALSE)) {
     knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
       print()
   }
