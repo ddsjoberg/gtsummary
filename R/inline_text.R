@@ -103,7 +103,8 @@ inline_text.gtsummary <- function(x, variable,
     df_gtsummary <- filter(df_gtsummary, dplyr::row_number() == 1)
   } # if there is a level, drop first label row, keeping the levels only
   else {
-    df_gtsummary <- filter(df_gtsummary, dplyr::row_number() > 1)
+    df_gtsummary <-
+      filter(df_gtsummary, !(.data$row_type %in% "label" & dplyr::row_number() == 1))
     level <-
       .select_to_varnames(!!level,
         var_info = df_gtsummary$label,

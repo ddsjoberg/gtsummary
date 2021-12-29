@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `inline_text.gtsummary()` where the first level of a categorical variable could not be selected if the table had also been processed with `remove_row_type()`. (#1078)
+
 * Fix in `as_flex_table()` and `as_hux_table()` where reference row was not properly placed after a `tbl_merge()` when the merged tables share common categorical variables but different reference rows. (#1063)
 
 * Functions `as_tibble()`, `as_kable()`, and `as_kable_extra()` gain the `fmt_missing=` argument that applies missing symbols to missing values. The `as_tibble()` argument defaults to `FALSE`, while the others' default is `TRUE`. (#1073)

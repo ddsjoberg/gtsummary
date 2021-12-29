@@ -82,6 +82,16 @@ test_that("inline_text.tbl_summary: with by", {
     inline_text(test_inline2b, variable = "stage", level = "T1", column = "stat_1", pattern = "{n}"),
     "28"
   )
+
+  # can still select first level after remove row type
+  expect_equal(
+    trial %>%
+      select(grade, trt) %>%
+      tbl_summary(by = trt, missing = "no") %>%
+      remove_row_type() %>%
+      inline_text(variable = grade, level = "I", column = "stat_1"),
+    "35 (36%)"
+  )
 })
 
 
