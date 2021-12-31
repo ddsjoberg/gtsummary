@@ -1,60 +1,70 @@
 # gtsummary (development version)
 
-* Fix in `inline_text.gtsummary()` where the first level of a categorical variable could not be selected if the table had also been processed with `remove_row_type()`. (#1078)
-
-* Fix in `as_flex_table()` and `as_hux_table()` where reference row was not properly placed after a `tbl_merge()` when the merged tables share common categorical variables but different reference rows. (#1063)
-
-* Functions `as_tibble()`, `as_kable()`, and `as_kable_extra()` gain the `fmt_missing=` argument that applies missing symbols to missing values. The `as_tibble()` argument defaults to `FALSE`, while the others' default is `TRUE`. (#1073)
-
-* Multinomial models computed using MICE are now supported. (#1065)
-
-* Updating the `add_overall()` S3 method to have a more common structure, e.g. `add_overall(x, ....)`, where previously, the `...` were not present. (#1066)
-
-* It is now possible to pass a single tbl to `tbl_merge()`. This is useful when using `tbl_merge()` as a helper in other functions. (#1068)
-
-* Suppress `tbl_merge()` spanning headers by passing `tbl_merge(tab_spanner = FALSE)` (#1067)
-
-* Updated Spanish translation for Wilcoxon Rank-sum Test.
-
-* Fix in `modify_table_styling(cols_merge_pattern)` when it is used with `tbl_stack()` followed by `tbl_merge()`. (#1057)
-
-* No longer exporting `assert_package()`. It has been migrated to {broom.helpers} and we now use `broom.helpers::.assert_package()`. (#1051)
-
-* Bug fix in `separate_p_footnotes()` where test names were not being translated when `theme_gtsummary_language()` was set. (#1055)
-
-* Added `statistics=` and `digits=` arguments to the `add_overall()` family of functions. (#1047)
-
-* Improved error messaging in `tbl_custom_summary()`
-
-* Added `digits=` argument to `tbl_cross()`. (#1046)
+### New Functions
 
 * Added `add_overall.tbl_continuous()` method. (#1037)
 
-* Updated the default formatting functions in `tbl_custom_summary()`. Previously, summaries with character results erred because the default summary function was `style_number()`. This has been updated to `style_sigfig()` for numeric columns, and `as.character()` for everything else. (#983)
+### New Functionality
 
-* Updates to the French translations.
+* Suppress `tbl_merge()` spanning headers by passing `tbl_merge(tab_spanner = FALSE)` (#1067)
 
-* All `style_*()` functions will retain attribute, such as the names. (#1035, #1031, #981)
+* Functions `as_tibble()`, `as_kable()`, and `as_kable_extra()` gain the `fmt_missing=` argument that applies missing symbols to missing values. The `as_tibble()` argument defaults to `FALSE`, while the others' default is `TRUE`. (#1073)
+
+* The `add_stat()` function was updated to accept `tbl_continuous()` tables.
+
+* Multinomial models computed using MICE are now supported. (#1065)
+
+* It is now possible to pass a single tbl to `tbl_merge()`. This is useful when using `tbl_merge()` as a helper in other functions. (#1068)
+
+* Added `statistics=` and `digits=` arguments to the `add_overall()` family of functions. (#1047)
+
+* Added `digits=` argument to `tbl_cross()`. (#1046)
+
+### Other Updates
 
 * Added link to the `syntax` help file to functions throughout the package. The `syntax` help file illustrates how to use the gtsummary selectors and details the formula-list notation. (#981)
 
-* Fix in `tbl_merge()` when rows in a merging table are not present in the first table. (#1033)
+* Updated Spanish translation for Wilcoxon Rank-sum Test.
+
+* Updates to the French translations.
+
+* Updating the `add_overall()` S3 method to have a more common structure, e.g. `add_overall(x, ....)`, where previously, the `...` were not present. (#1066)
+
+* Improved error messaging in `tbl_custom_summary()`
+
+* Updated the default formatting functions in `tbl_custom_summary()`. Previously, summaries with character results erred because the default summary function was `style_number()`. This has been updated to `style_sigfig()` for numeric columns, and `as.character()` for everything else. (#983)
+
+* All `style_*()` functions will retain attribute, such as the names. (#1035, #1031, #981)
 
 * The `add_n.tbl_regression()` (which is also utilized in `tbl_uvregression()`) was adding the N column without applying a formatting function. The `style_number()` function has now been added as the default styler. (#1022)
 
-* The `add_stat()` function was updated to accept `tbl_continuous()` tables.
+* Added class `"tbl_continuous"` to the output of `tbl_continuous()`.
+
+* Adding `add_p()` test `"mcnemar.test.wide"` to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.
+
+### Bug Fixes
+
+* Fix in `as_flex_table()` and `as_hux_table()` where reference row was not properly placed after a `tbl_merge()` when the merged tables share common categorical variables but different reference rows. (#1063)
+
+* Fix in `inline_text.gtsummary()` where the first level of a categorical variable could not be selected if the table had also been processed with `remove_row_type()`. (#1078)
+
+* Fix in `modify_table_styling(cols_merge_pattern)` when it is used with `tbl_stack()` followed by `tbl_merge()`. (#1057)
+
+* Bug fix in `separate_p_footnotes()` where test names were not being translated when `theme_gtsummary_language()` was set. (#1055)
+
+* Fix in `tbl_merge()` when rows in a merging table are not present in the first table. (#1033)
 
 * Fix in `as_tibble()` for `nnet::multinom()` regression models.
 
 * Fix in `tbl_continuous()` when `include=` is not specified.
 
-* Added class `"tbl_continuous"` to the output of `tbl_continuous()`.
-
 * Fix in `tbl_regression()` when a tidier returns CI columns that are all missing. (#1012)
 
 * Fix in `add_p()`/`add_difference()` when check whether the passed test is an internal method or a custom method. The previous code required Suggested packages, such as, {lme4}, {effectsize}, and {survey}, to be installed. (#1018) 
 
-* Adding `add_p()` test `"mcnemar.test.wide"` to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.
+### Breaking Changes
+
+* No longer exporting `assert_package()`. It has been migrated to {broom.helpers} and we now use `broom.helpers::.assert_package()`. (#1051)
 
 # gtsummary 1.5.0
 
