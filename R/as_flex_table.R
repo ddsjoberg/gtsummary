@@ -35,7 +35,7 @@
 #' @return A {flextable} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf assert_package("flextable", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("flextable", boolean = TRUE)
 #' as_flex_table_ex1 <-
 #'   trial %>%
 #'   select(trt, age, grade) %>%
@@ -124,7 +124,9 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # flextable doesn't use the markdown language `__` or `**`
   # to bold and italicize text, so removing them here
   flextable_calls <- table_styling_to_tibble_calls(x, col_labels = FALSE)
-  flextable_calls$tab_style_bold <- flextable_calls$tab_style_italic <- NULL
+  flextable_calls$tab_style_bold <-
+    flextable_calls$tab_style_italic <-
+    flextable_calls$fmt_missing <- NULL
 
   # flextable ------------------------------------------------------------------
   flextable_calls[["flextable"]] <- expr(flextable::flextable())
@@ -288,14 +290,14 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # fmt_missing ----------------------------------------------------------------
   df_fmt_missing <-
     x$table_styling$fmt_missing %>%
-    inner_join(x$table_styling$header %>%
-      select(.data$column, column_id = .data$id),
-    by = "column"
+    inner_join(
+      x$table_styling$header %>%
+        select(.data$column, column_id = .data$id),
+      by = "column"
     ) %>%
     select(.data$symbol, .data$row_numbers, .data$column_id) %>%
-    nest(location_ids = c(.data$row_numbers, .data$column_id)) %>%
+    nest(location_ids = .data$column_id) %>%
     mutate(
-      row_numbers = map(.data$location_ids, ~ pluck(.x, "row_numbers") %>% unique()),
       column_id = map(.data$location_ids, ~ pluck(.x, "column_id") %>% unique())
     )
 

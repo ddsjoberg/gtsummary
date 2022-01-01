@@ -598,7 +598,7 @@ tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
   # label ----------------------------------------------------------------------
   if (!is.null(label) & is.null(names(label))) { # checking names for deprecated named list input
 
-    # all sepcifed labels must be a string of length 1
+    # all specified labels must be a string of length 1
     if (inherits(label, "formula")) label <- list(label)
     if (!every(label, ~ rlang::is_string(eval_rhs(.x)))) {
       stop(glue(

@@ -9,6 +9,7 @@ as_kable_extra(
   include = everything(),
   return_calls = FALSE,
   strip_md_bold = TRUE,
+  fmt_missing = TRUE,
   ...
 )
 }
@@ -27,6 +28,8 @@ as a list of expressions.}
 \item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
 bold weight) in column labels and spanning headers are removed.}
 
+\item{fmt_missing}{Logical argument adding the missing value formats.}
+
 \item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
 }
 \value{
@@ -39,7 +42,7 @@ available via \link[knitr:kable]{knitr::kable} and {kableExtra}. Bold
 and italic cells are not supported for {kableExtra} output via gtsummary.
 }
 \examples{
-\dontshow{if (assert_package("kableExtra", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("kableExtra", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tbl <-
   trial \%>\%
   tbl_summary(by = trt) \%>\%

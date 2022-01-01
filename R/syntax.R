@@ -1,7 +1,11 @@
 #' Syntax and Notation
 #'
 #' @name syntax
+#' @keywords internal
 #' @description
+#'
+#' # Selectors
+#'
 #' The gtsummary package also utilizes selectors: selectors from the tidyselect
 #' package and custom selectors. Review their help files for details.
 #'
@@ -15,6 +19,8 @@
 #'     `all_continuous()`, `all_categorical()`, `all_dichotomous()`,
 #'     `all_continuous2()`, `all_tests()`, `all_stat_cols()`,
 #'     `all_interaction()`, `all_intercepts()`, `all_contrasts()`
+#'
+#' # Formula and List Selectors
 #'
 #' Many arguments throughout the gtsummary package accept list and
 #' formula notation, e.g. `tbl_summary(statistic=)`. Below enumerates a few

@@ -11,13 +11,13 @@
 #' @return A {kableExtra} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf assert_package("kableExtra", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE)
 #' tbl <-
 #'   trial %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_kable_extra()
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
-                           strip_md_bold = TRUE, ...) {
+                           strip_md_bold = TRUE, fmt_missing = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
   assert_package("kableExtra", "as_kable_extra()")
 
@@ -45,7 +45,7 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 
   # creating list of kableExtra calls ------------------------------------------
   kable_extra_calls <-
-    table_styling_to_kable_extra_calls(x = x, ...)
+    table_styling_to_kable_extra_calls(x = x, fmt_missing = fmt_missing, ...)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
@@ -93,10 +93,10 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-table_styling_to_kable_extra_calls <- function(x, ...) {
+table_styling_to_kable_extra_calls <- function(x, fmt_missing = FALSE, ...) {
   # getting kable calls
   kable_extra_calls <-
-    table_styling_to_kable_calls(x = x, ...)
+    table_styling_to_kable_calls(x = x, fmt_missing = fmt_missing, ...)
 
   # deleting bold and italics settings
   if(!rlang::is_empty(kable_extra_calls$tab_style_bold) ||

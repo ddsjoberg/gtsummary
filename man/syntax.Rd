@@ -4,6 +4,9 @@
 \alias{syntax}
 \title{Syntax and Notation}
 \description{
+Syntax and Notation
+}
+\section{Selectors}{
 The gtsummary package also utilizes selectors: selectors from the tidyselect
 package and custom selectors. Review their help files for details.
 \itemize{
@@ -17,7 +20,9 @@ package and custom selectors. Review their help files for details.
 \code{all_continuous2()}, \code{all_tests()}, \code{all_stat_cols()},
 \code{all_interaction()}, \code{all_intercepts()}, \code{all_contrasts()}
 }
+}
 
+\section{Formula and List Selectors}{
 Many arguments throughout the gtsummary package accept list and
 formula notation, e.g. \code{tbl_summary(statistic=)}. Below enumerates a few
 tips and shortcuts for using the list and formulas.
@@ -52,3 +57,5 @@ Selectors can be combined using the \code{c()} function.\if{html}{\out{<div clas
 }\if{html}{\out{</div>}}
 }
 }
+
+\keyword{internal}

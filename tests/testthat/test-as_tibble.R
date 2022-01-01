@@ -61,12 +61,40 @@ test_that("as_tibble works with bold_p()", {
     c("__Age__", "__Grade__", "_I_", "_II_", "_III_")
   )
 
-  t1 <- trial %>% select(age) %>% tbl_summary()
+  t1 <- trial %>%
+    select(age) %>%
+    tbl_summary()
   expect_equal(
     list(t1, t1) %>%
       tbl_stack(group_header = factor(c("tt", "yy"))) %>%
       as_tibble(col_labels = FALSE) %>%
       purrr::pluck("groupname_col"),
     c("tt", NA, "yy", NA)
+  )
+})
+
+
+test_that("as_tibble(fmt_missing=) works", {
+  t1 <-
+    lm(mpg ~ factor(cyl), mtcars) %>%
+    tbl_regression()
+
+  t2 <-
+    lm(mpg ~ factor(cyl), mtcars %>% dplyr::filter(cyl != 4)) %>%
+    tbl_regression()
+
+  expect_error(
+    tbl <-
+      tbl_merge(list(t1, t2)) %>%
+      as_tibble(fmt_missing = TRUE, col_labels = FALSE),
+    NA
+  )
+  expect_equal(
+    tbl$estimate_1,
+    c(NA_character_, "—", "-6.9", "-12")
+  )
+  expect_equal(
+    tbl$estimate_2,
+    c(NA_character_, NA_character_, "—", "-4.6")
   )
 })

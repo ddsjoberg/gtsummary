@@ -1,5 +1,0 @@
-manager <- gtkRecentManagerGetDefault()
-lookup <- manager$lookupItem(file_uri)
-if (lookup$error)
-  warning("Could not find the file:", lookup$error$message)
-else use_info_object(lookup$retval)

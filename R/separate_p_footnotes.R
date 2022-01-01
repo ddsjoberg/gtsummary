@@ -40,6 +40,7 @@ separate_p_footnotes <- function(x) {
     x$meta_data %>%
     dplyr::select(.data$variable, .data$stat_test_lbl) %>%
     tibble::deframe() %>%
+    map(translate_text) %>%
     purrr::imap(
       ~rlang::expr(
         gtsummary::modify_table_styling(columns = "p.value",
