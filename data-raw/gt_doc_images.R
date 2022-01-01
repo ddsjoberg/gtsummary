@@ -20,5 +20,5 @@ gt.doc.images::save_help_file_images(pkg = "gtsummary",
                                      delete_existing_pngs = TRUE)
 
 # document a single file with
-# gt.doc.images::save_help_file_images(pkg = "gtsummary",
-#                                      rd_files = "tbl_summary")
+gt.doc.images::save_help_file_images(pkg = "gtsummary",
+                                     rd_files = "add_ci.Rd")

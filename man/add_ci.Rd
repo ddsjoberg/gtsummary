@@ -3,7 +3,7 @@
 \name{add_ci}
 \alias{add_ci}
 \alias{add_ci.tbl_summary}
-\title{Add Proportion CIs}
+\title{Add CI Column}
 \usage{
 add_ci(x, ...)
 
@@ -52,7 +52,7 @@ in parentheses.}
 gtsummary table
 }
 \description{
-Add a new column with the confidence intervals for proportions.
+Add a new column with the confidence intervals for proportions, means, etc.
 }
 \section{method argument}{
 

@@ -1,6 +1,6 @@
-#' Add Proportion CIs
+#' Add CI Column
 #'
-#' Add a new column with the confidence intervals for proportions.
+#' Add a new column with the confidence intervals for proportions, means, etc.
 #'
 #' @param x A `tbl_summary` object
 #' @param statistic Formula indicating how the confidence interval will be displayed.
