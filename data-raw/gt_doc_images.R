@@ -1,5 +1,9 @@
 # 1. install pkg that will run and save the documentation images
-remotes::install_github("ddsjoberg/gt.doc.images")
+install.packages(
+  'gt.doc.images',
+  repos = c(ddsjoberg = 'https://ddsjoberg.r-universe.dev',
+            CRAN = 'https://cloud.r-project.org')
+)
 
 # 2. Install the most recent version of gtsummary
 
@@ -9,13 +13,12 @@ remotes::install_github("ddsjoberg/gt.doc.images")
 
 # 4. Run the function below to save the images created in the help files.
 #    Only objects whose named in `_ex` or `_ex[:digit:]+` are saved.
-#    Files will be saved to "~gtsummary/man/figures/<filename>.png",
-#    where the file name is the object name, i.e.'tbl_ae_count_ex1.png'.
-#    No example object name may overlap throughout the entire package.
-gt.doc.images::save_help_file_images(pkg = "gtsummary")
+#    Files will be saved to "~/man/figures/<filename>.png", where the filename
+#    is the object name, i.e.'tbl_ae_count_ex1.png'. No example object
+#    may overlap throughout the entire package.
+gt.doc.images::save_help_file_images(pkg = "gtsummary",
+                                     delete_existing_pngs = TRUE)
 
-# 5. You can save the images for a single file as well
-gt.doc.images::save_help_file_images(
-  pkg = "gtsummary",
-  rd_files = "add_ci"
-)
+# document a single file with
+# gt.doc.images::save_help_file_images(pkg = "gtsummary",
+#                                      rd_files = "tbl_summary")
