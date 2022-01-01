@@ -437,7 +437,7 @@ generate_metadata_custom_summary <- function(data, stat_fns, include,
     data = data %>% select(any_of(include)), # adding a select
     var_info = meta_data_to_var_info(meta_data),
     arg_name = "label",
-    type_check = is_string
+    type_check = is.character
   )
   statistic <- .formula_list_to_named_list(
     x = statistic,
