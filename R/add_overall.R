@@ -50,9 +50,17 @@
 #'  ) %>%
 #'  add_overall(last = TRUE)
 #' @section Example Output:
-#' \if{html}{\figure{tbl_overall_ex1.png}{options: width=50\%}}
-#' \if{html}{\figure{tbl_overall_ex2.png}{options: width=50\%}}
-#' \if{html}{\figure{tbl_overall_ex3.png}{options: width=50\%}}
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\figure{tbl_overall_ex1.png}{options: width=55\%}}
+#'
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{tbl_overall_ex2.png}{options: width=55\%}}
+#'
+#' \if{html}{Example 3}
+#'
+#' \if{html}{\figure{tbl_overall_ex3.png}{options: width=55\%}}
 add_overall <- function(x, ...) {
   UseMethod("add_overall")
 }
