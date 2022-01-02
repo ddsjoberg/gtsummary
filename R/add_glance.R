@@ -179,7 +179,9 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     .formula_list_to_named_list(
       x = label,
       data = df_glance_orig,
-      arg_name = "label"
+      arg_name = "label",
+      type_check = chuck(type_check, "is_string", "fn"),
+      type_check_msg = chuck(type_check, "is_string", "msg")
     )
 
   df_label <-
@@ -217,7 +219,9 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     .formula_list_to_named_list(
       x = fmt_fun,
       data = df_glance_orig,
-      arg_name = "fmt_fun"
+      arg_name = "fmt_fun",
+      type_check = chuck(type_check, "is_function", "fn"),
+      type_check_msg = chuck(type_check, "is_function", "msg")
     )
 
   df_fmt_fun <-

@@ -118,7 +118,9 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
     .formula_list_to_named_list(
       x = update,
       var_info = x$table_styling$header$column,
-      arg_name = "update"
+      arg_name = "update",
+      type_check = chuck(type_check, "is_string_or_na", "fn"),
+      type_check_msg = chuck(type_check, "is_string_or_na", "msg")
     ) %>%
     c(list(...)) # adding the ... to the update list
   if (!is.null(stat_by)) {
@@ -142,7 +144,9 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
         .formula_list_to_named_list(
           x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),
           var_info = x$table_styling$header$column,
-          arg_name = "update"
+          arg_name = "update",
+          type_check = chuck(type_check, "is_string_or_na", "fn"),
+          type_check_msg = chuck(type_check, "is_string_or_na", "msg")
         )
       )
   }
@@ -206,7 +210,9 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
     .formula_list_to_named_list(
       x = {{ update }},
       var_info = x$table_styling$header$column,
-      arg_name = "update"
+      arg_name = "update",
+      type_check = chuck(type_check, "is_string_or_na", "fn"),
+      type_check_msg = chuck(type_check, "is_string_or_na", "msg")
     )
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
@@ -276,7 +282,9 @@ modify_spanning_header <- function(x, update = NULL,
     .formula_list_to_named_list(
       x = {{ update }},
       var_info = x$table_styling$header$column,
-      arg_name = "update"
+      arg_name = "update",
+      type_check = chuck(type_check, "is_string_or_na", "fn"),
+      type_check_msg = chuck(type_check, "is_string_or_na", "msg")
     )
 
   # if no columns selected, print helpful message

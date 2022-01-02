@@ -118,7 +118,9 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
       x = statistic,
       data = use_data_frame(x_copy$inputs$data),
       var_info = x_copy$table_body,
-      arg_name = "statistic"
+      arg_name = "statistic",
+      type_check = chuck(type_check, "is_character", "fn"),
+      type_check_msg = chuck(type_check, "is_character", "msg")
     )
   x_copy$inputs$statistic <-
     .formula_list_to_named_list(
@@ -132,7 +134,9 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
       x = digits,
       data = use_data_frame(x_copy$inputs$data),
       var_info = x_copy$table_body,
-      arg_name = "digits"
+      arg_name = "digits",
+      type_check = chuck(type_check, "digits", "fn"),
+      type_check_msg = chuck(type_check, "digits", "msg")
     )
   x_copy$inputs$digits <-
     .formula_list_to_named_list(
