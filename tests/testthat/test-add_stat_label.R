@@ -13,6 +13,27 @@ test_that("no errors/warnings with standard use", {
 
   expect_error(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
   expect_warning(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
+
+  expect_error(
+    tbl <-
+      trial %>%
+      select(age, grade, trt) %>%
+      tbl_summary(
+        by = trt,
+        type = all_continuous() ~ "continuous2",
+        statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
+      ) %>%
+      add_stat_label(label = age ~ c("Mean (SD)", "Min - Max")),
+    NA
+  )
+  expect_equal(
+    tbl %>%
+      modify_column_unhide(everything()) %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::filter(variable == "age", row_type == "level") %>%
+      dplyr::pull(label),
+    c("Mean (SD)", "Min - Max")
+  )
 })
 
 test_that("no errors/warnings with standard use for continuous2", {

@@ -96,7 +96,9 @@ add_difference <- function(x, test = NULL, group = NULL,
       x = test,
       data = select(use_data_frame(x$inputs$data), any_of(include)),
       var_info = x$table_body,
-      arg_name = "test"
+      arg_name = "test",
+      type_check = chuck(type_check, "is_function_or_string", "fn"),
+      type_check_msg = chuck(type_check, "is_function_or_string", "msg")
     )
 
   estimate_fun <-
@@ -104,7 +106,9 @@ add_difference <- function(x, test = NULL, group = NULL,
       x = {{ estimate_fun }},
       data = select(use_data_frame(x$inputs$data), any_of(x$meta_data$variable)),
       var_info = x$table_body,
-      arg_name = "estimate_fun"
+      arg_name = "estimate_fun",
+      type_check = chuck(type_check, "is_function", "fn"),
+      type_check_msg = chuck(type_check, "is_function", "msg")
     )
   estimate_fun <-
     x$meta_data$variable %>%
@@ -204,7 +208,9 @@ add_difference <- function(x, test = NULL, group = NULL,
       x = test.args,
       data = select(use_data_frame(x$inputs$data), any_of(include)),
       var_info = x$table_body,
-      arg_name = "test.args"
+      arg_name = "test.args",
+      type_check = chuck(type_check, "is_named", "fn"),
+      type_check_msg = chuck(type_check, "is_named", "msg")
     )
 
   x$meta_data <-

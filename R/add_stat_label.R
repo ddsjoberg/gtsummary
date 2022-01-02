@@ -113,7 +113,9 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
         ) %||%
           x$inputs$data$variables[x$meta_data$variable],
       var_info = meta_data_to_var_info(x$meta_data),
-      arg_name = "label"
+      arg_name = "label",
+      type_check = chuck(type_check, "is_character", "fn"),
+      type_check_msg = chuck(type_check, "is_character", "msg")
     )
 
   # stat_label column

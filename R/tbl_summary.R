@@ -371,7 +371,9 @@ generate_metadata <- function(data, value, by, type, label,
     x = type,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "type"
+    arg_name = "type",
+    type_check = chuck(type_check, "is_string", "fn"),
+    type_check_msg = chuck(type_check, "is_string", "msg")
   )
 
   # updating meta data object with new types
@@ -389,25 +391,33 @@ generate_metadata <- function(data, value, by, type, label,
     x = label,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "label"
+    arg_name = "label",
+    type_check = chuck(type_check, "is_character", "fn"),
+    type_check_msg = chuck(type_check, "is_character", "msg")
   )
   statistic <- .formula_list_to_named_list(
     x = statistic,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "statistic"
+    arg_name = "statistic",
+    type_check = chuck(type_check, "is_character", "fn"),
+    type_check_msg = chuck(type_check, "is_character", "msg")
   )
   digits <- .formula_list_to_named_list(
     x = digits,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "digits"
+    arg_name = "digits",
+    type_check = chuck(type_check, "digits", "fn"),
+    type_check_msg = chuck(type_check, "digits", "msg")
   )
   sort <- .formula_list_to_named_list(
     x = sort,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
-    arg_name = "sort"
+    arg_name = "sort",
+    type_check = chuck(type_check, "is_string", "fn"),
+    type_check_msg = chuck(type_check, "is_string", "msg")
   )
 
   # assigning variable characteristics -----------------------------------------
