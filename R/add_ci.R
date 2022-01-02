@@ -99,7 +99,9 @@ add_ci.tbl_summary <- function(x,
       !!!.formula_list_to_named_list(
         x = method,
         var_info = x$meta_data[x$meta_data$variable %in% include,],
-        arg_name = "method"
+        arg_name = "method",
+        type_check = chuck(type_check, "is_string", "fn"),
+        type_check_msg = chuck(type_check, "is_string", "msg")
       )
     )
 
@@ -114,7 +116,9 @@ add_ci.tbl_summary <- function(x,
       !!!.formula_list_to_named_list(
         x = style_fun,
         var_info = x$meta_data[x$meta_data$variable %in% include,],
-        arg_name = "style_fun"
+        arg_name = "style_fun",
+        type_check = chuck(type_check, "is_function", "fn"),
+        type_check_msg = chuck(type_check, "is_function", "msg")
       )
     )
 
@@ -129,7 +133,9 @@ add_ci.tbl_summary <- function(x,
       !!!.formula_list_to_named_list(
         x = statistic,
         var_info = x$table_body[x$table_body$variable %in% include,],
-        arg_name = "statistic"
+        arg_name = "statistic",
+        type_check = chuck(type_check, "is_character", "fn"),
+        type_check_msg = chuck(type_check, "is_character", "msg")
       )
     )
   updated_call_list <- c(x$call_list, list(add_ci = match.call()))
