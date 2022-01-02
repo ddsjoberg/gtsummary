@@ -135,8 +135,7 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
       data = use_data_frame(x_copy$inputs$data),
       var_info = x_copy$table_body,
       arg_name = "digits",
-      type_check <-
-      function(x) rlang::is_integerish(x) || is_function(x) || purrr::every(x, ~rlang::is_integerish(.x) || is_function(.x)),
+      type_check = chuck(type_check, "digits", "fn"),
       type_check_msg = chuck(type_check, "digits", "msg")
     )
   x_copy$inputs$digits <-
