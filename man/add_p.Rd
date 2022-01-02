@@ -15,7 +15,7 @@ add_p(x, ...)
 Adds p-values to gtsummary table
 }
 \seealso{
-\link{add_p.tbl_summary}, \link{add_p.tbl_cross}, \link{add_p.tbl_svysummary}, \link{add_p.tbl_survfit}
+\link{add_p.tbl_summary}, \link{add_p.tbl_cross}, \link{add_p.tbl_svysummary}, \link{add_p.tbl_survfit}, \link{add_p.tbl_continuous}
 }
 \author{
 Daniel D. Sjoberg

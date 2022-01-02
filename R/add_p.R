@@ -4,7 +4,7 @@
 #' @param ... Additional arguments passed to other methods.
 #' @keywords internal
 #' @author Daniel D. Sjoberg
-#' @seealso [add_p.tbl_summary], [add_p.tbl_cross], [add_p.tbl_svysummary], [add_p.tbl_survfit]
+#' @seealso [add_p.tbl_summary], [add_p.tbl_cross], [add_p.tbl_svysummary], [add_p.tbl_survfit], [add_p.tbl_continuous]
 #' @export
 add_p <- function(x, ...) {
   UseMethod("add_p")
@@ -866,7 +866,9 @@ add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
       x = test,
       data = select(x$inputs$data, any_of(x$meta_data$variable)),
       var_info = x$table_body,
-      arg_name = "test"
+      arg_name = "test",
+      type_check = chuck(type_check, "is_function_or_string", "fn"),
+      type_check_msg = chuck(type_check, "is_function_or_string", "msg")
     )
 
   # checking pvalue_fun are functions
@@ -915,7 +917,9 @@ add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
       x = test.args,
       data = select(x$inputs$data, any_of(include)),
       var_info = x$table_body,
-      arg_name = "test.args"
+      arg_name = "test.args",
+      type_check = chuck(type_check, "is_named", "fn"),
+      type_check_msg = chuck(type_check, "is_named", "msg")
     )
 
   x$meta_data <-
