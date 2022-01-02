@@ -823,8 +823,10 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
 #'
 #' @inheritParams add_p.tbl_summary
 #' @param test List of formulas specifying statistical tests to perform for each
-#' variable. See [tests]
-#' for details, more tests, and instruction for implementing a custom test.
+#' variable.
+#' Default is two-way ANOVA when `by=` is not `NULL`, and has the same defaults
+#' as `add_p.tbl_continuous()` when `by = NULL`.
+#' See [tests] for details, more tests, and instruction for implementing a custom test.
 #' @export
 #' @examples
 #' add_p_continuous_ex1 <-

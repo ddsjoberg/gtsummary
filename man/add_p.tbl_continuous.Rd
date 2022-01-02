@@ -18,8 +18,10 @@
 \item{x}{Object with class \code{tbl_summary} from the \link{tbl_summary} function}
 
 \item{test}{List of formulas specifying statistical tests to perform for each
-variable. See \link{tests}
-for details, more tests, and instruction for implementing a custom test.}
+variable.
+Default is two-way ANOVA when \verb{by=} is not \code{NULL}, and has the same defaults
+as \code{add_p.tbl_continuous()} when \code{by = NULL}.
+See \link{tests} for details, more tests, and instruction for implementing a custom test.}
 
 \item{pvalue_fun}{Function to round and format p-values.
 Default is \link{style_pvalue}.
