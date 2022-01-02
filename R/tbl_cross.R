@@ -128,7 +128,14 @@ tbl_cross <- function(data,
   }
 
   # get labels -----------------------------------------------------------------
-  label <- .formula_list_to_named_list(x = label, data = data)
+  label <-
+    .formula_list_to_named_list(
+      x = label,
+      data = data,
+      arg_name = "label",
+      type_check = chuck(type_check, "is_string", "fn"),
+      type_check_msg = chuck(type_check, "is_string", "msg")
+    )
   new_label <- list()
 
   new_label[[row]] <- label[[row]] %||% attr(data[[row]], "label") %||% row
@@ -163,12 +170,13 @@ tbl_cross <- function(data,
   }
 
   # create main table ----------------------------------------------------------
-  x <- data %>%
+  x <-
+    data %>%
     select(any_of(c(row, col, "..total.."))) %>%
     tbl_summary(
       by = col,
       statistic = stats::as.formula(glue("everything() ~ '{statistic}'")),
-      digits = everything() ~ digits,
+      digits = switch(!is.null(digits), everything() ~ digits),
       percent = ifelse(percent == "none", "cell", percent),
       label = new_label,
       missing_text = missing_text,
