@@ -38,7 +38,9 @@ modify_fmt_fun <- function(x, update, rows = NULL) {
     .formula_list_to_named_list(
       x = update,
       data = x$table_body,
-      arg_name = "update"
+      arg_name = "update",
+      type_check = chuck(type_check, "is_function", "fn"),
+      type_check_msg = chuck(type_check, "is_function", "msg")
     )
 
   # updating formatting functions ----------------------------------------------
