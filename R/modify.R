@@ -426,6 +426,7 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
     x = c(update, dots),
     var_info = x$table_styling$header$column,
     arg_name = "... or update",
-    type_check = function(x) rlang::is_string(x) || is.na(x)
+    type_check = chuck(type_check, "is_string_or_na", "fn"),
+    type_check_msg = chuck(type_check, "is_string_or_na", "msg")
   )
 }
