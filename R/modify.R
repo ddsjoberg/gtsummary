@@ -119,7 +119,8 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
       x = update,
       var_info = x$table_styling$header$column,
       arg_name = "update",
-      type_check = function(x) is_string(x) || is.na(x)
+      type_check = function(x) is_string(x) || is.na(x),
+      type_check_msg = type_check_msg$is_string_or_na
     ) %>%
     c(list(...)) # adding the ... to the update list
   if (!is.null(stat_by)) {
@@ -144,7 +145,8 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
           x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),
           var_info = x$table_styling$header$column,
           arg_name = "update",
-          type_check = function(x) is_string(x) || is.na(x)
+          type_check = function(x) is_string(x) || is.na(x),
+          type_check_msg = type_check_msg$is_string_or_na
         )
       )
   }
@@ -209,7 +211,8 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
       x = {{ update }},
       var_info = x$table_styling$header$column,
       arg_name = "update",
-      type_check = function(x) is_string(x) || is.na(x)
+      type_check = function(x) is_string(x) || is.na(x),
+      type_check_msg = type_check_msg$is_string_or_na
     )
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
@@ -280,7 +283,8 @@ modify_spanning_header <- function(x, update = NULL,
       x = {{ update }},
       var_info = x$table_styling$header$column,
       arg_name = "update",
-      type_check = function(x) is_string(x) || is.na(x)
+      type_check = function(x) is_string(x) || is.na(x),
+      type_check_msg = type_check_msg$is_string_or_na
     )
 
   # if no columns selected, print helpful message

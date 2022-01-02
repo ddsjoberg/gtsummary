@@ -49,3 +49,14 @@ gts_mapper <- function(x, context) {
   tryCatch(rlang::as_function(f), error = function(e) NULL) %>%
     rlang::is_function()
 }
+
+type_check_msg <-
+  list(
+    is_string = "Expecting a string as the passed value.",
+    is_character = "Expecting a character as the passed value.",
+    is_function = "Expecting a function as the passed value.",
+    is_function_or_string = "Expecting a function or a string of a function name.",
+    is_string_or_na = "Expecting a string or NA as the passed value.",
+    is_named = "Expecting a named vector or list as the passed value.",
+    digits = "Expecting an integer, function, or a vector/list of intergers/functions as the passed value."
+  )

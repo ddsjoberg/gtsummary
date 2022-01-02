@@ -170,7 +170,8 @@ add_stat <- function(x, fns, location = NULL, ...) {
       ),
       var_info = x$table_body,
       arg_name = "location",
-      type_check = is_string
+      type_check = is_string,
+      type_check_msg = type_check_msg$is_string
     )
   imap(
     location,
@@ -188,7 +189,8 @@ add_stat <- function(x, fns, location = NULL, ...) {
       ),
       var_info = x$table_body,
       arg_name = "fns",
-      type_check = is_function
+      type_check = is_function,
+      type_check_msg = type_check_msg$is_function
     )
 
   # setting new column name ----------------------------------------------------

@@ -39,7 +39,8 @@ modify_fmt_fun <- function(x, update, rows = NULL) {
       x = update,
       data = x$table_body,
       arg_name = "update",
-      type_check = is_function
+      type_check = is_function,
+      type_check_msg = type_check_msg$is_function
     )
 
   # updating formatting functions ----------------------------------------------

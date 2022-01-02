@@ -106,7 +106,8 @@ add_difference <- function(x, test = NULL, group = NULL,
       data = select(use_data_frame(x$inputs$data), any_of(x$meta_data$variable)),
       var_info = x$table_body,
       arg_name = "estimate_fun",
-      type_check = is_function
+      type_check = is_function,
+      type_check_msg = type_check_msg$is_function
     )
   estimate_fun <-
     x$meta_data$variable %>%

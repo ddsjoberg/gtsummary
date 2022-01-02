@@ -90,15 +90,15 @@ add_ci.tbl_summary <- function(x,
     .formula_list_to_named_list(
       x = list(all_categorical() ~ "wilson", all_continuous() ~ "t.test"),
       var_info = x$table_body[x$table_body$variable %in% include,],
-      arg_name = "method",
-      type_check = is_string
+      arg_name = "method"
     ) %>%
     purrr::update_list(
       !!!.formula_list_to_named_list(
         x = method,
         var_info = x$meta_data[x$meta_data$variable %in% include,],
         arg_name = "method",
-        type_check = is_string
+        type_check = is_string,
+        type_check_msg = type_check_msg$is_string
       )
     )
 
@@ -107,15 +107,15 @@ add_ci.tbl_summary <- function(x,
       x = list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100),
                all_continuous() ~ style_sigfig),
       var_info = x$table_body[x$table_body$variable %in% include,],
-      arg_name = "style_fun",
-      type_check = is_function
+      arg_name = "style_fun"
     ) %>%
     purrr::update_list(
       !!!.formula_list_to_named_list(
         x = style_fun,
         var_info = x$meta_data[x$meta_data$variable %in% include,],
         arg_name = "style_fun",
-        type_check = is_function
+        type_check = is_function,
+        type_check_msg = type_check_msg$is_function
       )
     )
 
@@ -124,15 +124,15 @@ add_ci.tbl_summary <- function(x,
       x = list(all_categorical() ~ "{conf.low}%, {conf.high}%",
                all_continuous() ~ "{conf.low}, {conf.high}"),
       var_info = x$table_body[x$table_body$variable %in% include,],
-      arg_name = "statistic",
-      type_check = is_character
+      arg_name = "statistic"
     ) %>%
     purrr::update_list(
       !!!.formula_list_to_named_list(
         x = statistic,
         var_info = x$table_body[x$table_body$variable %in% include,],
         arg_name = "statistic",
-        type_check = is_character
+        type_check = is_character,
+        type_check_msg = type_check_msg$is_character
       )
     )
   updated_call_list <- c(x$call_list, list(add_ci = match.call()))
