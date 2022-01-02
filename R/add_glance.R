@@ -180,7 +180,8 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
       x = label,
       data = df_glance_orig,
       arg_name = "label",
-      type_check = is_string
+      type_check = chuck(type_check, "is_string", "fn"),
+      type_check_msg = chuck(type_check, "is_string", "msg")
     )
 
   df_label <-
@@ -219,7 +220,8 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
       x = fmt_fun,
       data = df_glance_orig,
       arg_name = "fmt_fun",
-      type_check = is_function
+      type_check = chuck(type_check, "is_function", "fn"),
+      type_check_msg = chuck(type_check, "is_function", "msg")
     )
 
   df_fmt_fun <-

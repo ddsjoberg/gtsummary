@@ -146,8 +146,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       data = select(x$inputs$data, any_of(include)),
       var_info = x$table_body,
       arg_name = "test",
-      type_check = function(x) is_string(x) || is_function(x),
-      type_check_msg = type_check_msg$is_function_or_string
+      type_check = chuck(type_check, "is_function_or_string", "fn"),
+      type_check_msg = chuck(type_check, "is_function_or_string", "msg")
     )
 
   # checking pvalue_fun are functions
@@ -195,8 +195,8 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       data = select(x$inputs$data, any_of(include)),
       var_info = x$table_body,
       arg_name = "test.args",
-      type_check = is_named,
-      type_check_msg = type_check_msg$is_named
+      type_check = chuck(type_check, "is_named", "fn"),
+      type_check_msg = chuck(type_check, "is_named", "msg")
     )
 
   x$meta_data <-
@@ -554,8 +554,8 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
       x = test,
       var_info = x$table_body,
       arg_name = "test",
-      type_check = function(x) is_string(x) || is_function(x),
-      type_check_msg = type_check_msg$is_function_or_string
+      type_check = chuck(type_check, "is_function_or_string", "fn"),
+      type_check_msg = chuck(type_check, "is_function_or_string", "msg")
     )
 
   # adding pvalue to meta data -------------------------------------------------
@@ -586,8 +586,8 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
       x = test.args,
       var_info = x$table_body,
       arg_name = "test.args",
-      type_check = is_named,
-      type_check_msg = type_check_msg$is_named
+      type_check = chuck(type_check, "is_named", "fn"),
+      type_check_msg = chuck(type_check, "is_named", "msg")
     )
 
   # checking the formula and data from survfit object are available
@@ -744,8 +744,8 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
       data = select(x$inputs$data$variables, any_of(x$meta_data$variable)),
       var_info = x$table_body,
       arg_name = "test",
-      type_check = function(x) is_string(x) || is_function(x),
-      type_check_msg = type_check_msg$is_function_or_string
+      type_check = chuck(type_check, "is_function_or_string", "fn"),
+      type_check_msg = chuck(type_check, "is_function_or_string", "msg")
     )
 
   # checking pvalue_fun are functions
@@ -789,8 +789,8 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
       data = select(x$inputs$data, any_of(include)),
       var_info = x$table_body,
       arg_name = "test.args",
-      type_check = is_named,
-      type_check_msg = type_check_msg$is_named
+      type_check = chuck(type_check, "is_named", "fn"),
+      type_check_msg = chuck(type_check, "is_named", "msg")
     )
 
   x$meta_data <-

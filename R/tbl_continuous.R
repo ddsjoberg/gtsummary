@@ -69,9 +69,8 @@ tbl_continuous <- function(data,
     purrr::list_modify(
       !!!.formula_list_to_named_list(
         digits, data = data, arg_name = "digits",
-        type_check =
-          function(x) rlang::is_integerish(x) || is_function(x) || purrr::every(x, ~rlang::is_integerish(.x) || is_function(.x)),
-        type_check_msg = type_check_msg$digits)
+        type_check = chuck(type_check, "digits", "fn"),
+        type_check_msg = chuck(type_check, "digits", "msg"))
     )
   statistic <-
     rep_len(list("{median} ({p25}, {p75})"), length.out = length(include)) %>%
@@ -79,14 +78,18 @@ tbl_continuous <- function(data,
     purrr::list_modify(
       !!!.formula_list_to_named_list(statistic, data = data,
                                      arg_name = "statistic",
-                                     type_check = is_string,
-                                     type_check_msg = type_check_msg$is_string)
+                                     type_check = chuck(type_check, "is_string", "fn"),
+                                     type_check_msg = chuck(type_check, "is_string", "msg"))
     )
 
   label <-
-    .formula_list_to_named_list(label, data = data,
-                                arg_name = "label", type_check = is_string,
-                                type_check_msg = type_check_msg$is_string)
+    .formula_list_to_named_list(
+      label,
+      data = data,
+      arg_name = "label",
+      type_check = chuck(type_check, "is_string", "fn"),
+      type_check_msg = chuck(type_check, "is_string", "msg")
+    )
 
   # saving function inputs
   tbl_continuous_inputs <- as.list(environment())

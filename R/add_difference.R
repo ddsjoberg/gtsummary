@@ -97,7 +97,8 @@ add_difference <- function(x, test = NULL, group = NULL,
       data = select(use_data_frame(x$inputs$data), any_of(include)),
       var_info = x$table_body,
       arg_name = "test",
-      type_check = function(x) is_string(x) || is_function(x)
+      type_check = chuck(type_check, "is_function_or_string", "fn"),
+      type_check_msg = chuck(type_check, "is_function_or_string", "msg")
     )
 
   estimate_fun <-
@@ -106,8 +107,8 @@ add_difference <- function(x, test = NULL, group = NULL,
       data = select(use_data_frame(x$inputs$data), any_of(x$meta_data$variable)),
       var_info = x$table_body,
       arg_name = "estimate_fun",
-      type_check = is_function,
-      type_check_msg = type_check_msg$is_function
+      type_check = chuck(type_check, "is_function", "fn"),
+      type_check_msg = chuck(type_check, "is_function", "msg")
     )
   estimate_fun <-
     x$meta_data$variable %>%
@@ -208,7 +209,8 @@ add_difference <- function(x, test = NULL, group = NULL,
       data = select(use_data_frame(x$inputs$data), any_of(include)),
       var_info = x$table_body,
       arg_name = "test.args",
-      type_check = rlang::is_named
+      type_check = chuck(type_check, "is_named", "fn"),
+      type_check_msg = chuck(type_check, "is_named", "msg")
     )
 
   x$meta_data <-

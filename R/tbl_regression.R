@@ -184,8 +184,8 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
       x = label,
       var_info = table_body,
       arg_name = "label",
-      type_check = is_string,
-      type_check_msg = type_check_msg$is_string
+      type_check = chuck(type_check, "is_string", "fn"),
+      type_check_msg = chuck(type_check, "is_string", "msg")
     )
 
   func_inputs$show_single_row <-

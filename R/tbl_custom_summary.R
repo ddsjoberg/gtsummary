@@ -409,8 +409,8 @@ generate_metadata_custom_summary <- function(data, stat_fns, include,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
     arg_name = "type",
-    type_check = is_string,
-    type_check_msg = type_check_msg$is_string
+    type_check = chuck(type_check, "is_string", "fn"),
+    type_check_msg = chuck(type_check, "is_string", "msg")
   )
 
   # updating meta data object with new types
@@ -430,32 +430,32 @@ generate_metadata_custom_summary <- function(data, stat_fns, include,
       data = data %>% select(any_of(include)),
       var_info = meta_data_to_var_info(meta_data),
       arg_name = "stat_fns",
-      type_check = .is_convertible_as_function,
-      type_check_msg = "The right side of formulas provided in `stat_fns` should be a function."
+      type_check = chuck(type_check, "is_function_or_string", "fn"),
+      type_check_msg = chuck(type_check, "is_function_or_string", "msg")
     )
   label <- .formula_list_to_named_list(
     x = label,
     data = data %>% select(any_of(include)), # adding a select
     var_info = meta_data_to_var_info(meta_data),
     arg_name = "label",
-    type_check = is_character,
-    type_check_msg = type_check_msg$is_character
+    type_check = chuck(type_check, "is_character", "fn"),
+    type_check_msg = chuck(type_check, "is_character", "msg")
   )
   statistic <- .formula_list_to_named_list(
     x = statistic,
     data = data %>% select(any_of(include)), # adding a select
     var_info = meta_data_to_var_info(meta_data),
     arg_name = "statistic",
-    type_check = is_character,
-    type_check_msg = type_check_msg$is_character
+    type_check = chuck(type_check, "is_character", "fn"),
+    type_check_msg = chuck(type_check, "is_character", "msg")
   )
   digits <- .formula_list_to_named_list(
     x = digits,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
     arg_name = "digits",
-    type_check = function(x) rlang::is_integerish(x) || is_function(x) || purrr::every(x, ~rlang::is_integerish(.x) || is_function(.x)),
-    type_check_msg = type_check_msg$digits
+    type_check = chuck(type_check, "digits", "fn"),
+    type_check_msg = chuck(type_check, "digits", "msg")
   )
 
   # assigning variable characteristics -----------------------------------------

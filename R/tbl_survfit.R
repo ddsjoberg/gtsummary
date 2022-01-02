@@ -175,8 +175,8 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
       x = label,
       var_info = meta_data_to_var_info(meta_data),
       arg_name = "label",
-      type_check = is_string,
-      type_check_msg = type_check_msg$is_string
+      type_check = chuck(type_check, "is_string", "fn"),
+      type_check_msg = chuck(type_check, "is_string", "msg")
     )
 
   meta_data <-

@@ -128,9 +128,14 @@ tbl_cross <- function(data,
   }
 
   # get labels -----------------------------------------------------------------
-  label <- .formula_list_to_named_list(
-    x = label, data = data, arg_name = "label", type_check = is_string,
-    type_check_msg = type_check_msg$is_string)
+  label <-
+    .formula_list_to_named_list(
+      x = label,
+      data = data,
+      arg_name = "label",
+      type_check = chuck(type_check, "is_string", "fn"),
+      type_check_msg = chuck(type_check, "is_string", "msg")
+    )
   new_label <- list()
 
   new_label[[row]] <- label[[row]] %||% attr(data[[row]], "label") %||% row

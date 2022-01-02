@@ -44,19 +44,27 @@ gts_mapper <- function(x, context) {
   purrr::as_mapper(x)
 }
 
-# test if the element is convertible to a function
-.is_convertible_as_function <- function(f) {
-  tryCatch(rlang::as_function(f), error = function(e) NULL) %>%
-    rlang::is_function()
-}
-
-type_check_msg <-
+type_check <-
   list(
-    is_string = "Expecting a string as the passed value.",
-    is_character = "Expecting a character as the passed value.",
-    is_function = "Expecting a function as the passed value.",
-    is_function_or_string = "Expecting a function or a string of a function name.",
-    is_string_or_na = "Expecting a string or NA as the passed value.",
-    is_named = "Expecting a named vector or list as the passed value.",
-    digits = "Expecting an integer, function, or a vector/list of intergers/functions as the passed value."
+    is_string =
+      list(msg = "Expecting a string as the passed value.",
+           fn = is_string),
+    is_character =
+      list(msg = "Expecting a character as the passed value.",
+           fn = is_character),
+    is_function =
+      list(msg = "Expecting a function as the passed value.",
+           fn = is_function),
+    is_function_or_string =
+      list(msg = "Expecting a function or a string of a function name.",
+           fn = function(x) is_string(x) || is_function(x)),
+    is_string_or_na =
+      list(msg = "Expecting a string or NA as the passed value.",
+           fn = function(x) is_string(x) || is.na(x)),
+    is_named =
+      list(msg = "Expecting a named vector or list as the passed value.",
+           fn = is_named),
+    digits =
+      list(msg = "Expecting an integer, function, or a vector/list of intergers/functions as the passed value.",
+           fn = function(x) rlang::is_integerish(x) || is_function(x) || purrr::every(x, ~rlang::is_integerish(.x) || is_function(.x)))
   )
