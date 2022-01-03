@@ -80,3 +80,15 @@ test_that("checking glue inserts to headers", {
     c("Variable (N = 32)")
   )
 })
+
+test_that("deprecated argument still works", {
+  expect_equal(
+    trial %>%
+      tbl_summary(by = trt, include = age) %>%
+      modify_header(stat_by = "{level}") %>%
+      as_tibble() %>%
+      select(-1) %>%
+      names(),
+    c("Drug A", "Drug B")
+  )
+})

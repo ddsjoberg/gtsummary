@@ -10,6 +10,16 @@ test_that("modify_footnote works", {
     tbl_summary %>%
       modify_footnote(
         update = starts_with("stat_") ~
+          "median (IQR) for continuous variables; n (%) categorical variables"
+      ),
+    NA
+  )
+
+  expect_error(
+    tbl_summary %>%
+      modify_footnote(
+        label = "Variable Footnote",
+        starts_with("stat_") ~
         "median (IQR) for continuous variables; n (%) categorical variables"
       ),
     NA

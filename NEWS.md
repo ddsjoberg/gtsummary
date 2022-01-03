@@ -22,6 +22,8 @@
 
 ### Other Updates
 
+* Improved user interface for `modify_*()` functions (#1064)
+
 * Improved error messaging throughout the package. (#1050)
 
 * Added link to the `syntax` help file to functions throughout the package. The `syntax` help file illustrates how to use the gtsummary selectors and details the formula-list notation. (#981)
