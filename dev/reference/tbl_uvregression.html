@@ -142,8 +142,8 @@ dichotomous variables appropriate for logistic regression with <a href="https://
   pvalue_fun <span class="op">=</span> <span class="cn">NULL</span>,
   formula <span class="op">=</span> <span class="st">"{y} ~ {x}"</span>,
   add_estimate_to_reference_rows <span class="op">=</span> <span class="cn">NULL</span>,
-  show_yesno <span class="op">=</span> <span class="cn">NULL</span>,
-  exclude <span class="op">=</span> <span class="cn">NULL</span>
+  conf.int <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -212,10 +212,11 @@ is the dependent variable, and <code>{x}</code> represents a single covariate. F
 random intercept model, the formula may be <code>formula = "{y} ~ {x} + (1 | gear)"</code>.</p></dd>
 <dt>add_estimate_to_reference_rows</dt>
 <dd><p>add a reference value. Default is FALSE</p></dd>
-<dt>show_yesno</dt>
-<dd><p>DEPRECATED</p></dd>
-<dt>exclude</dt>
-<dd><p>DEPRECATED</p></dd>
+<dt>conf.int</dt>
+<dd><p>Logical indicating whether or not to include a confidence
+interval in the output. Defaults to <code>TRUE</code>.</p></dd>
+<dt>...</dt>
+<dd><p>Not used</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
