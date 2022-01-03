@@ -19,8 +19,7 @@ tbl_regression(x, ...)
   pvalue_fun = NULL,
   tidy_fun = NULL,
   add_estimate_to_reference_rows = FALSE,
-  show_yesno = NULL,
-  exclude = NULL,
+  conf.int = NULL,
   ...
 )
 }
@@ -68,9 +67,8 @@ if installed.}
 
 \item{add_estimate_to_reference_rows}{add a reference value. Default is FALSE}
 
-\item{show_yesno}{DEPRECATED}
-
-\item{exclude}{DEPRECATED}
+\item{conf.int}{Logical indicating whether or not to include a confidence
+interval in the output. Defaults to \code{TRUE}.}
 }
 \value{
 A \code{tbl_regression} object

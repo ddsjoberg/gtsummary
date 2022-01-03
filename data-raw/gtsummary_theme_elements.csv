@@ -35,10 +35,11 @@ style_number,style_number-arg:big.mark,TRUE,,
 style_number,style_number-arg:decimal.mark,TRUE,,
 tbl_regression,tbl_regression-fn:addnl-fn-to-run,FALSE,a function that will be executed after at the end of each `tbl_regression()` call,bold_labels
 tbl_regression,tbl_regression-chr:tidy_columns,FALSE,"character vector of columns from `tidy_fun=` tibble to print. 'estimate' column will always be printed. Select among columns 'conf.low', 'conf.high', 'std.error', 'statistic', or 'p.value'.","c(""std.error"", ""p.value"")"
-tbl_regression,tbl_regression-lst:tidy_plus_plus,FALSE,"Additional `tidy_plus_plus()` arguments. Cannot be one of `model=`, `tidy_fun=`, `exponentiate=`, `variable_labels=`, `show_single_row=`, `intercept=`, `include=`, `conf.level=`, or `strict=` as these are controlled by `tbl_summary()`. The default value for the additional arguments is `list(conf.int = TRUE, add_header_rows = TRUE, add_estimate_to_reference_rows = FALSE)`.","list(conf.int = TRUE, add_header_rows = TRUE, add_estimate_to_reference_rows = TRUE)"
+tbl_regression,tbl_regression-lst:tidy_plus_plus,FALSE,"Additional `tidy_plus_plus()` arguments. Cannot be one of `model=`, `tidy_fun=`, `exponentiate=`, `variable_labels=`, `show_single_row=`, `intercept=`, `include=`, `conf.level=`, `conf.int=`, or `strict=` as these are controlled by `tbl_regression()`. The default value for the additional arguments is `list(conf.int = TRUE, add_header_rows = TRUE, add_estimate_to_reference_rows = FALSE)`.","list(conf.int = TRUE, add_header_rows = TRUE, add_estimate_to_reference_rows = TRUE)"
 tbl_regression,tbl_regression-str:coef_header,FALSE,"string setting the default term for the beta coefficient column header; default is `""Beta""`","ifelse(exponentiate == TRUE, ""exp(coef)"", ""coef"")"
 tbl_regression,tbl_regression-str:ref_row_text,FALSE,string indicating the text to print on reference rows (default is an em-dash),"""Reference"""
 tbl_regression,tbl_regression-arg:conf.level,TRUE,,
+tbl_regression,tbl_regression-arg:conf.int,TRUE,,
 tbl_regression,tbl_regression-arg:estimate_fun ,TRUE,,
 tbl_regression,tbl_regression-arg:pvalue_fun ,TRUE,,
 tbl_regression,tbl_regression-arg:add_estimate_to_reference_rows,TRUE,,
