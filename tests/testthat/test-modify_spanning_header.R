@@ -1,12 +1,20 @@
 skip_on_cran()
 
 test_that("modify_spanning_header works", {
+  tbl1 <-
+    trial %>%
+    dplyr::select(trt, age, grade) %>%
+    tbl_summary(by = trt)
+
   expect_error(
-    tbl1 <-
-      trial %>%
-      dplyr::select(trt, age, grade) %>%
-      tbl_summary(by = trt) %>%
+    tbl1 %>%
       modify_spanning_header(starts_with("stat_") ~ "**Randomization Assignment**"),
+    NA
+  )
+
+  expect_error(
+    tbl1 %>%
+      modify_spanning_header(label = "Variables", starts_with("stat_") ~ "**Randomization Assignment**"),
     NA
   )
 

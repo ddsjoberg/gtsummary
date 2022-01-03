@@ -8,18 +8,21 @@
 #'
 #' @name modify
 #' @param x a gtsummary object
-#' @param update list of formulas or a single formula specifying the updated
-#' column header, footnote, or spanning header.
-#' The LHS specifies the column(s) to be updated, and the RHS is the updated text.
+#' @param update,... use these arguments to assign updates to headers,
+#' spanning headers, and footnotes. See examples below.
+#' - `update` expects a list of assignments, with the variable name or selector
+#' on the LHS of the formula, and the updated string on the RHS. Also accepts
+#' a named list.
+#' - `...` pass individual updates outside of a list, e.g,
+#' `modify_header(p.value = "**P**", all_stat_cols() ~ "**{level}**")`
+#'
 #' Use the `show_header_names()` to see the column names that can be modified.
 #' @param abbreviation Logical indicating if an abbreviation is being updated.
 #' @param stat_by DEPRECATED, use `update = all_stat_cols() ~ "<label>"` instead.
-#' @param ... Specify a column and updated column label,
-#' e.g. `modify_header(p.value = "Model P-values")`. This is provided as an alternative to the
-#' `update=` argument. They accomplish the same goal of updating column headers.
 #' @param text_interpret String indicates whether text will be interpreted with
 #' [gt::md()] or [gt::html()]. Must be `"md"` (default) or `"html"`.
 #' @param caption a string of the table caption/title
+#' @param include_example logical whether to include print of `modify_header()` example
 #' @inheritParams modify_table_styling
 #' @inheritParams add_global_p
 #' @family tbl_summary tools
@@ -64,21 +67,14 @@
 #' # Example 1 ----------------------------------
 #' # updating column headers, footnote, and table caption
 #' modify_ex1 <- tbl %>%
-#'   modify_header(
-#'     update = list(
-#'       label ~ "**Variable**",
-#'       p.value ~ "**P**"
-#'     )
-#'   ) %>%
-#'   modify_footnote(
-#'     update = all_stat_cols() ~ "median (IQR) for Age; n (%) for Grade"
-#'   ) %>%
+#'   modify_header(label = "**Variable**", p.value = "**P**") %>%
+#'   modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (%) for Grade") %>%
 #'   modify_caption("**Patient Characteristics** (N = {N})")
 #'
 #' # Example 2 ----------------------------------
 #' # updating headers, remove all footnotes, add spanning header
 #' modify_ex2 <- tbl %>%
-#'   modify_header(update = all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}%)") %>%
+#'   modify_header(all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}%)") %>%
 #'   # use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
 #'   modify_footnote(update = everything() ~ NA) %>%
 #'   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
@@ -88,7 +84,7 @@
 #' modify_ex3 <-
 #'   glm(response ~ age + grade, trial, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
-#'   modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE)
+#'   modify_footnote(ci = "CI = Credible Interval", abbreviation = TRUE)
 #' @return Updated gtsummary object
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -106,59 +102,37 @@ NULL
 
 #' @name modify
 #' @export
-modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
-                          quiet = NULL, ..., stat_by = NULL) {
+modify_header <- function(x, update = NULL, ..., text_interpret = c("md", "html"),
+                          quiet = NULL, stat_by = NULL) {
   updated_call_list <- c(x$call_list, list(modify_header = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
   text_interpret <- match.arg(text_interpret)
 
-  # converting update arg to a tidyselect list ---------------------------------
-  update <-
-    .formula_list_to_named_list(
-      x = update,
-      var_info = x$table_styling$header$column,
-      arg_name = "update",
-      type_check = chuck(type_check, "is_string_or_na", "fn"),
-      type_check_msg = chuck(type_check, "is_string_or_na", "msg")
-    ) %>%
-    c(list(...)) # adding the ... to the update list
+  # converting update and dots args to a tidyselect list -----------------------
   if (!is.null(stat_by)) {
-    # choose selector type
-    selector_code <- switch("stat_0" %in% names(x$table_body),
-      expr(all_stat_cols(FALSE))
-    ) %||% expr(all_stat_cols())
     lifecycle::deprecate_warn(
-      "1.3.6",
-      "gtsummary::modify_header(stat_by=)",
-      details =
-        paste(
-          "Use `{rlang::expr(modify_header(update =  !!selector_code",
-          "~ !!stat_by)) %>% deparse(width.cutoff = 500L)}` instead."
-        ) %>%
-          glue()
-    )
-    update <-
-      c(
-        update,
-        .formula_list_to_named_list(
-          x = rlang::inject(all_stat_cols(FALSE) ~ !!as.character(stat_by)),
-          var_info = x$table_styling$header$column,
-          arg_name = "update",
-          type_check = chuck(type_check, "is_string_or_na", "fn"),
-          type_check_msg = chuck(type_check, "is_string_or_na", "msg")
-        )
-      )
+      "1.3.6", "gtsummary::modify_header(stat_by=)",
+      details = glue("Use `all_stat_cols(FALSE) ~ {stat_by}` instead."))
+
+    lst_stat_by <-
+      list(rlang::new_formula(lhs = expr(all_stat_cols(FALSE)), rhs = stat_by))
+
+    # adding stat_by code to `update=`
+    if (is.null(update) || rlang::is_list(update)) {
+      update <- c(lst_stat_by, update)
+    }
+    else if (!rlang::is_list(update)) {
+      update <- c(lst_stat_by, list(update))
+    }
   }
-  if (identical(list(), update)) update <- NULL
+  update <- .combine_update_and_dots(x, update, ...)
+
 
   # if no columns selected, print helpful message
-  if (is.null(update) && is.null(stat_by) && identical(quiet, FALSE)) .modify_no_selected_vars(x)
-  if (is.null(update) && is.null(stat_by)) {
+  if (is.null(update) && identical(quiet, FALSE)) .modify_no_selected_vars(x)
+  if (is.null(update)) {
     return(x)
-  }
-  if (purrr::map_lgl(update, ~ !rlang::is_string(.)) %>% any()) {
-    stop("All labels must be strings of length one.")
   }
 
   # evaluating update with glue ------------------------------------------------
@@ -192,13 +166,14 @@ modify_header <- function(x, update = NULL, text_interpret = c("md", "html"),
 
 #' @name modify
 #' @export
-modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
+modify_footnote <- function(x, update = NULL, ..., abbreviation = FALSE,
                             text_interpret = c("md", "html"), quiet = NULL) {
   updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
   # checking inputs ------------------------------------------------------------
   if (!inherits(x, "gtsummary")) {
     stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
   }
+
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
@@ -206,14 +181,8 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
   x <- .update_table_styling(x)
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <-
-    .formula_list_to_named_list(
-      x = {{ update }},
-      var_info = x$table_styling$header$column,
-      arg_name = "update",
-      type_check = chuck(type_check, "is_string_or_na", "fn"),
-      type_check_msg = chuck(type_check, "is_string_or_na", "msg")
-    )
+  update <- .combine_update_and_dots(x, {update}, ...)
+
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
   if (is.null(update)) {
@@ -264,7 +233,7 @@ modify_footnote <- function(x, update = NULL, abbreviation = FALSE,
 
 #' @name modify
 #' @export
-modify_spanning_header <- function(x, update = NULL,
+modify_spanning_header <- function(x, update = NULL, ...,
                                    text_interpret = c("md", "html"), quiet = NULL) {
   updated_call_list <- c(x$call_list, list(modify_spanning_header = match.call()))
   # checking inputs ------------------------------------------------------------
@@ -278,14 +247,7 @@ modify_spanning_header <- function(x, update = NULL,
   x <- .update_table_styling(x)
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <-
-    .formula_list_to_named_list(
-      x = {{ update }},
-      var_info = x$table_styling$header$column,
-      arg_name = "update",
-      type_check = chuck(type_check, "is_string_or_na", "fn"),
-      type_check_msg = chuck(type_check, "is_string_or_na", "msg")
-    )
+  update <- .combine_update_and_dots(x, {update}, ...)
 
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
@@ -347,7 +309,7 @@ modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
 
 #' @name modify
 #' @export
-show_header_names <- function(x = NULL, quiet = NULL) {
+show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
@@ -356,22 +318,24 @@ show_header_names <- function(x = NULL, quiet = NULL) {
     stop("Pass a 'gtsummary' object in `x=` to print current column names and headers.")
   }
 
-  df_cols <- x$table_styling$header %>%
+  df_cols <-
+    x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
     select(.data$column, .data$label)
 
-  if (identical(quiet, FALSE)) {
+  if (identical(quiet, FALSE) && isTRUE(include_example)) {
     cat("\n")
     cli_alert_info("As a usage guide, the code below re-creates the current column headers.")
-    block <- mutate(df_cols, formula = glue("  {column} ~ {shQuote(label)}")) %>%
+    block <- mutate(df_cols, formula = glue("  {column} = {shQuote(label)}")) %>%
       pull(.data$formula) %>%
       paste0("", collapse = ",\n") %>%
       {
-        glue("modify_header(update = list(\n{.}\n))")
+        glue("modify_header(\n{.}\n)")
       }
 
     cli_code(block)
-
+  }
+  if (identical(quiet, FALSE)) {
     knitr::kable(df_cols, col.names = c("Column Name", "Column Header"), format = "pandoc") %>%
       print()
   }
@@ -449,4 +413,20 @@ show_header_names <- function(x = NULL, quiet = NULL) {
   x$table_styling$header %>%
     select(.data$column) %>%
     bind_cols(df_new_cols)
+}
+
+.combine_update_and_dots <- function(x, update, ...) {
+  dots <- rlang::dots_list(...)
+
+  if (!is.null(update) && !rlang::is_list(update)) {
+    update <- list(update)
+  }
+
+  .formula_list_to_named_list(
+    x = c(update, dots),
+    var_info = x$table_styling$header$column,
+    arg_name = "... or update",
+    type_check = chuck(type_check, "is_string_or_na", "fn"),
+    type_check_msg = chuck(type_check, "is_string_or_na", "msg")
+  )
 }
