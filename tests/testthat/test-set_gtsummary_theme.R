@@ -141,13 +141,28 @@ test_that("setting themes", {
 
 
   theme_gtsummary_journal("qjecon")
-  expect_equal(
-    lm(age ~ grade, trial) %>%
+  expect_error(
+    tbl_qjecon1 <-
+      lm(age ~ grade, trial) %>%
       tbl_regression() %>%
-      as_tibble(col_labels = FALSE) %>%
+      as_tibble(col_labels = FALSE),
+    NA
+  )
+  expect_equal(
+    tbl_qjecon1 %>%
       pull(estimate),
     c(NA, NA, "1.4\n(2.54)", "2.0\n(2.55)")
   )
+  expect_false("ci" %in% names(tbl_qjecon1))
+
+  expect_error(
+    tbl_qjecon2 <-
+      mtcars %>%
+      tbl_uvregression(method = lm, y = hp) %>%
+      as_tibble(col_labels = FALSE),
+    NA
+  )
+  expect_false("ci" %in% names(tbl_qjecon2))
 
   reset_gtsummary_theme()
   theme_gtsummary_eda()
