@@ -76,18 +76,6 @@ tbl_strata <- function(data, strata,
   }
   .combine_with <- match.arg(.combine_with)
 
-  if (!is.null(.stack_group_header)) {
-    lifecycle::deprecate_warn(
-      when = "1.5.1",
-      what = "gtsummary::tbl_strata(.stack_group_header)",
-      details =
-        glue(
-          "Use the following instead:\n",
-          "gtsummary::tbl_strata(.combine_args = list(group_header = {.stack_group_header}))")
-    )
-    .combine_args = list(group_header = .stack_group_header)
-  }
-
   # selecting stratum ----------------------------------------------------------
   strata <-
     select(
@@ -116,6 +104,19 @@ tbl_strata <- function(data, strata,
     mutate(
       tbl = map(.data$data, .tbl_fun, ...)
     )
+
+  # deprecated argument --------------------------------------------------------
+  if (!is.null(.stack_group_header) && isTRUE(.combine_with == "tbl_stack")) {
+    lifecycle::deprecate_warn(
+      when = "1.5.1",
+      what = "gtsummary::tbl_strata(.stack_group_header)",
+      details =
+        glue(
+          "Use the following instead:\n",
+          "gtsummary::tbl_strata(.combine_args = list(group_header = {.stack_group_header}))")
+    )
+    .combine_args = list(group_header = df_tbls$strata)
+  }
 
   # combining tbls -------------------------------------------------------------
   .combine_args <-

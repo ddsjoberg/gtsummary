@@ -132,4 +132,17 @@ test_that("no errors with standard use", {
   )
   expect_true(all(is.na(tbl$table_styling$header$spanning_header)))
 
+  lifecycle::expect_deprecated(
+    trial %>%
+      select(age, trt, grade) %>%
+      tbl_strata(
+        strata = trt,
+        .tbl_fun =
+          ~ .x %>%
+          tbl_summary(by = grade, missing = "no") %>%
+          add_n(),
+        .stack_group_header = TRUE,
+        .combine_with = 'tbl_stack'
+      )
+  )
 })

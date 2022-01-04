@@ -33,7 +33,8 @@ used to separate the levels in the spanning header. Default is \code{", "}}
 \item{.combine_with}{One of \code{c("tbl_merge", "tbl_stack")}. Names the function
 used to combine the stratified tables.}
 
-\item{.combine_args}{named list of arguments that are passed to}
+\item{.combine_args}{named list of arguments that are passed to function
+specified in \verb{.combine_with=}}
 
 \item{.stack_group_header}{DEPRECATED.}
 
