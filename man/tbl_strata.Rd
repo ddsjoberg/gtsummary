@@ -11,7 +11,8 @@ tbl_strata(
   ...,
   .sep = ", ",
   .combine_with = c("tbl_merge", "tbl_stack"),
-  .stack_group_header = TRUE,
+  .combine_args = NULL,
+  .stack_group_header = NULL,
   .quiet = NULL
 )
 }
@@ -32,8 +33,9 @@ used to separate the levels in the spanning header. Default is \code{", "}}
 \item{.combine_with}{One of \code{c("tbl_merge", "tbl_stack")}. Names the function
 used to combine the stratified tables.}
 
-\item{.stack_group_header}{When \code{TRUE} and \code{.combine_with = 'tbl_stack'},
-the stratum are passed in \code{tbl_stack(group_header=)}. Default is \code{TRUE}}
+\item{.combine_args}{named list of arguments that are passed to}
+
+\item{.stack_group_header}{DEPRECATED.}
 
 \item{.quiet}{Logical indicating whether to print messages in console.
 Default is \code{FALSE}}
