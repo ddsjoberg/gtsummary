@@ -108,7 +108,8 @@ a data frame as its first argument can be stratified.</p>
   <span class="va">...</span>,
   .sep <span class="op">=</span> <span class="st">", "</span>,
   .combine_with <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl_merge"</span>, <span class="st">"tbl_stack"</span><span class="op">)</span>,
-  .stack_group_header <span class="op">=</span> <span class="cn">TRUE</span>,
+  .combine_args <span class="op">=</span> <span class="cn">NULL</span>,
+  .stack_group_header <span class="op">=</span> <span class="cn">NULL</span>,
   .quiet <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -131,9 +132,11 @@ used to separate the levels in the spanning header. Default is <code>", "</code>
 <dt>.combine_with</dt>
 <dd><p>One of <code>c("tbl_merge", "tbl_stack")</code>. Names the function
 used to combine the stratified tables.</p></dd>
+<dt>.combine_args</dt>
+<dd><p>named list of arguments that are passed to function
+specified in <code>.combine_with=</code></p></dd>
 <dt>.stack_group_header</dt>
-<dd><p>When <code>TRUE</code> and <code>.combine_with = 'tbl_stack'</code>,
-the stratum are passed in <code>tbl_stack(group_header=)</code>. Default is <code>TRUE</code></p></dd>
+<dd><p>DEPRECATED.</p></dd>
 <dt>.quiet</dt>
 <dd><p>Logical indicating whether to print messages in console.
 Default is <code>FALSE</code></p></dd>
