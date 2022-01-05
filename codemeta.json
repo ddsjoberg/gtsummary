@@ -1,22 +1,20 @@
 {
-  "@context": [
-    "https://doi.org/10.5063/schema/codemeta-2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "gtsummary",
-  "description": "Creates presentation-ready tables summarizing data\n    sets, regression models, and more. The code to create the tables is\n    concise and highly customizable. Data frames can be summarized with\n    any function, e.g. mean(), median(), even user-written functions.\n    Regression models are summarized and include the reference rows for\n    categorical variables. Common regression models, such as logistic\n    regression and Cox proportional hazards regression, are automatically\n    identified and the tables are pre-filled with appropriate column\n    headers.",
+  "description": "Creates presentation-ready tables summarizing data sets, regression models, and more. The code to create the tables is concise and highly customizable. Data frames can be summarized with any function, e.g. mean(), median(), even user-written functions. Regression models are summarized and include the reference rows for categorical variables. Common regression models, such as logistic regression and Cox proportional hazards regression, are automatically identified and the tables are pre-filled with appropriate column headers.",
   "name": "gtsummary: Presentation-Ready Data Summary and Analytic Result\n    Tables",
+  "relatedLink": ["https://www.danieldsjoberg.com/gtsummary/", "https://CRAN.R-project.org/package=gtsummary"],
   "codeRepository": "https://github.com/ddsjoberg/gtsummary",
   "issueTracker": "https://github.com/ddsjoberg/gtsummary/issues",
   "license": "https://spdx.org/licenses/MIT",
-  "version": "1.5.0.9000",
+  "version": "1.5.0.9024",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.1.1 (2021-08-10)",
+  "runtimePlatform": "R version 4.1.0 (2021-05-18)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -98,8 +96,6 @@
       "@id": "https://orcid.org/0000-0002-2524-3637"
     }
   ],
-  "copyrightHolder": {},
-  "funder": {},
   "maintainer": [
     {
       "@type": "Person",
@@ -350,6 +346,19 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "sandwich",
+      "name": "sandwich",
+      "version": ">= 3.0.1",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=sandwich"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "scales",
       "name": "scales",
       "provider": {
@@ -438,14 +447,14 @@
       "sameAs": "https://CRAN.R-project.org/package=workflows"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 3.4"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "broom",
       "name": "broom",
@@ -458,11 +467,11 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=broom"
     },
-    {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "broom.helpers",
       "name": "broom.helpers",
-      "version": ">= 1.4.0",
+      "version": ">= 1.5.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -471,7 +480,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=broom.helpers"
     },
-    {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "cli",
       "name": "cli",
@@ -484,7 +493,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=cli"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
@@ -497,7 +506,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "forcats",
       "name": "forcats",
@@ -510,7 +519,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=forcats"
     },
-    {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "glue",
       "name": "glue",
@@ -523,7 +532,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=glue"
     },
-    {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "gt",
       "name": "gt",
@@ -536,7 +545,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=gt"
     },
-    {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "knitr",
       "name": "knitr",
@@ -549,7 +558,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=knitr"
     },
-    {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "lifecycle",
       "name": "lifecycle",
@@ -562,7 +571,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=lifecycle"
     },
-    {
+    "11": {
       "@type": "SoftwareApplication",
       "identifier": "purrr",
       "name": "purrr",
@@ -575,7 +584,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=purrr"
     },
-    {
+    "12": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
       "name": "rlang",
@@ -588,7 +597,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
-    {
+    "13": {
       "@type": "SoftwareApplication",
       "identifier": "stringr",
       "name": "stringr",
@@ -601,7 +610,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=stringr"
     },
-    {
+    "14": {
       "@type": "SoftwareApplication",
       "identifier": "tibble",
       "name": "tibble",
@@ -614,7 +623,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tibble"
     },
-    {
+    "15": {
       "@type": "SoftwareApplication",
       "identifier": "tidyr",
       "name": "tidyr",
@@ -626,31 +635,10 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=tidyr"
-    }
-  ],
-  "releaseNotes": "https://github.com/ddsjoberg/gtsummary/blob/master/NEWS.md",
-  "fileSize": "0KB",
-  "contIntegration": "https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=master",
-  "relatedLink": [
-    "https://CRAN.R-project.org/package=gtsummary",
-    "https://www.danieldsjoberg.com/gtsummary/"
-  ],
-  "keywords": [
-    "r",
-    "summary-tables",
-    "statistics",
-    "rstats",
-    "r-package",
-    "gt",
-    "html5",
-    "easy-to-use",
-    "summary-statistics",
-    "reproducible-research",
-    "reproducibility",
-    "regression-models",
-    "tableone",
-    "table1"
-  ],
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "3084.207KB",
   "citation": [
     {
       "@type": "ScholarlyArticle",
@@ -699,5 +687,8 @@
       }
     }
   ],
-  "readme": "https://github.com/ddsjoberg/gtsummary/blob/master/README.md"
+  "releaseNotes": "https://github.com/ddsjoberg/gtsummary/blob/master/NEWS.md",
+  "readme": "https://github.com/ddsjoberg/gtsummary/blob/main/README.md",
+  "contIntegration": ["https://github.com/ddsjoberg/gtsummary/actions", "https://app.codecov.io/gh/ddsjoberg/gtsummary?branch=main"],
+  "keywords": ["r", "summary-tables", "statistics", "rstats", "r-package", "gt", "html5", "easy-to-use", "summary-statistics", "reproducible-research", "reproducibility", "regression-models", "tableone", "table1"]
 }
