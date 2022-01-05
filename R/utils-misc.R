@@ -51,13 +51,13 @@ type_check <-
            fn = is_string),
     is_character =
       list(msg = "Expecting a character as the passed value.",
-           fn = is_character),
+           fn = is.character),
     is_function =
       list(msg = "Expecting a function as the passed value.",
-           fn = is_function),
+           fn = is.function),
     is_function_or_string =
       list(msg = "Expecting a function or a string of a function name.",
-           fn = function(x) is_string(x) || is_function(x)),
+           fn = function(x) is_string(x) || is.function(x)),
     is_string_or_na =
       list(msg = "Expecting a string or NA as the passed value.",
            fn = function(x) is_string(x) || is.na(x)),
@@ -66,5 +66,5 @@ type_check <-
            fn = is_named),
     digits =
       list(msg = "Expecting an integer, function, or a vector/list of intergers/functions as the passed value.",
-           fn = function(x) rlang::is_integerish(x) || is_function(x) || purrr::every(x, ~rlang::is_integerish(.x) || is_function(.x)))
+           fn = function(x) rlang::is_integerish(x) || is.function(x) || purrr::every(x, ~rlang::is_integerish(.x) || is.function(.x)))
   )
