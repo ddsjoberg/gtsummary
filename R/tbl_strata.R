@@ -14,8 +14,9 @@
 #' used to separate the levels in the spanning header. Default is `", "`
 #' @param .combine_with One of `c("tbl_merge", "tbl_stack")`. Names the function
 #' used to combine the stratified tables.
-#' @param .stack_group_header When `TRUE` and `.combine_with = 'tbl_stack'`,
-#' the stratum are passed in `tbl_stack(group_header=)`. Default is `TRUE`
+#' @param .combine_args named list of arguments that are passed to function
+#' specified in `.combine_with=`
+#' @param .stack_group_header DEPRECATED.
 #' @param .quiet Logical indicating whether to print messages in console.
 #' Default is `FALSE`
 #'
@@ -63,7 +64,8 @@ tbl_strata <- function(data, strata,
                        ...,
                        .sep = ", ",
                        .combine_with = c("tbl_merge", "tbl_stack"),
-                       .stack_group_header = TRUE,
+                       .combine_args = NULL,
+                       .stack_group_header = NULL,
                        .quiet = NULL) {
   # setting defaults -----------------------------------------------------------
   .quiet <- .quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
@@ -103,15 +105,35 @@ tbl_strata <- function(data, strata,
       tbl = map(.data$data, .tbl_fun, ...)
     )
 
+  # deprecated argument --------------------------------------------------------
+  if (!is.null(.stack_group_header) && isTRUE(.combine_with == "tbl_stack")) {
+    lifecycle::deprecate_warn(
+      when = "1.5.1",
+      what = "gtsummary::tbl_strata(.stack_group_header)",
+      details =
+        glue(
+          "Use the following instead:\n",
+          "gtsummary::tbl_strata(.combine_args = list(group_header = {.stack_group_header}))")
+    )
+    .combine_args = list(group_header = df_tbls$strata)
+  }
+
   # combining tbls -------------------------------------------------------------
+  .combine_args <-
+    # default arguments
+    switch(
+      .combine_with,
+      "tbl_merge" = list(tab_spanner = df_tbls$header),
+      "tbl_stack" = list(group_header = df_tbls$header, quiet = .quiet)
+    ) %>%
+    # update with user-passed arguments
+    purrr::list_modify(!!!.combine_args)
+
   if (.combine_with == "tbl_merge") {
-    tbl <- tbl_merge(tbls = df_tbls$tbl, tab_spanner = df_tbls$header)
+    tbl <- rlang::inject(tbl_merge(tbls = df_tbls$tbl, !!!.combine_args))
   }
   else if (.combine_with == "tbl_stack") {
-    tbl <-
-      tbl_stack(tbls = df_tbls$tbl,
-                group_header = switch(isTRUE(.stack_group_header), df_tbls$header),
-                quiet = .quiet)
+    tbl <- rlang::inject(tbl_stack(tbls = df_tbls$tbl, !!!.combine_args))
   }
 
   # return tbl -----------------------------------------------------------------
