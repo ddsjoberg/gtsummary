@@ -126,11 +126,13 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
   x <- modify_table_body(x, ~ .x %>% dplyr::mutate(stars = !!expr_stars_case_when))
 
   # updating hidden column status ----------------------------------------------
+  cols_to_hide <- c(ci = hide_ci, p.value = hide_p, std.error = hide_se)
+  cols_to_hide <- cols_to_hide[c("ci", "p.value", "std.error") %in% names(x$table_body)]
   x <-
     x %>%
     modify_table_styling(
-      columns = c("ci", "p.value", "std.error"),
-      hide = c(hide_ci, hide_p, hide_se)
+      columns = all_of(names(cols_to_hide)),
+      hide = cols_to_hide
     )
 
   # adding `cols_merge` to table styling ---------------------------------------
