@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `tbl_strata(.combine_args=)` has been added that lets you control all arguments in the `tbl_merge()` or `tbl_stack()` that occurs in `tbl_strata()`. (#1090)
+
 ### New Functions
 
 * Added `add_overall.tbl_continuous()` method. (#1037)
@@ -10,9 +12,13 @@
 
 * Functions `as_tibble()`, `as_kable()`, and `as_kable_extra()` gain the `fmt_missing=` argument that applies missing symbols to missing values. The `as_tibble()` argument defaults to `FALSE`, while the others' default is `TRUE`. (#1073)
 
+* Adding `tbl_regression(conf.int=)` and `tbl_uvregression(conf.int=)` argument. For some models, the confidence interval adds to the computation time significantly and may not be needed. This argument will omit the CI calculation. (#1052)
+
 * The `add_stat()` function was updated to accept `tbl_continuous()` tables.
 
 * Multinomial models computed using MICE are now supported. (#1065)
+
+* Added theme element to control the `tbl_regression(conf.int=)` default argument.
 
 * It is now possible to pass a single tbl to `tbl_merge()`. This is useful when using `tbl_merge()` as a helper in other functions. (#1068)
 
@@ -21,6 +27,8 @@
 * Added `digits=` argument to `tbl_cross()`. (#1046)
 
 ### Other Updates
+
+* Improved user interface for `modify_*()` functions (#1064)
 
 * Improved error messaging throughout the package. (#1050)
 
@@ -31,6 +39,8 @@
 * Updates to the French translations.
 
 * Updating the `add_overall()` S3 method to have a more common structure, e.g. `add_overall(x, ....)`, where previously, the `...` were not present. (#1066)
+
+* Updated the `theme_gtsummary_journal("qjecon")` to set  `tbl_regression(conf.int =  FALSE)` by default.
 
 * Improved error messaging in `tbl_custom_summary()`
 
@@ -45,6 +55,8 @@
 * Adding `add_p()` test `"mcnemar.test.wide"` to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.
 
 ### Bug Fixes
+
+* Fix in `add_significance_stars()` that led to an error when the summarized model did not have a confidence interval column.
 
 * Fix in `as_flex_table()` and `as_hux_table()` where reference row was not properly placed after a `tbl_merge()` when the merged tables share common categorical variables but different reference rows. (#1063)
 

@@ -12,15 +12,16 @@
 modify_header(
   x,
   update = NULL,
+  ...,
   text_interpret = c("md", "html"),
   quiet = NULL,
-  ...,
   stat_by = NULL
 )
 
 modify_footnote(
   x,
   update = NULL,
+  ...,
   abbreviation = FALSE,
   text_interpret = c("md", "html"),
   quiet = NULL
@@ -29,20 +30,28 @@ modify_footnote(
 modify_spanning_header(
   x,
   update = NULL,
+  ...,
   text_interpret = c("md", "html"),
   quiet = NULL
 )
 
 modify_caption(x, caption, text_interpret = c("md", "html"))
 
-show_header_names(x = NULL, quiet = NULL)
+show_header_names(x = NULL, include_example = TRUE, quiet = NULL)
 }
 \arguments{
 \item{x}{a gtsummary object}
 
-\item{update}{list of formulas or a single formula specifying the updated
-column header, footnote, or spanning header.
-The LHS specifies the column(s) to be updated, and the RHS is the updated text.
+\item{update, ...}{use these arguments to assign updates to headers,
+spanning headers, and footnotes. See examples below.
+\itemize{
+\item \code{update} expects a list of assignments, with the variable name or selector
+on the LHS of the formula, and the updated string on the RHS. Also accepts
+a named list.
+\item \code{...} pass individual updates outside of a list, e.g,
+\code{modify_header(p.value = "**P**", all_stat_cols() ~ "**{level}**")}
+}
+
 Use the \code{show_header_names()} to see the column names that can be modified.}
 
 \item{text_interpret}{String indicates whether text will be interpreted with
@@ -51,15 +60,13 @@ Use the \code{show_header_names()} to see the column names that can be modified.
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
 
-\item{...}{Specify a column and updated column label,
-e.g. \code{modify_header(p.value = "Model P-values")}. This is provided as an alternative to the
-\verb{update=} argument. They accomplish the same goal of updating column headers.}
-
 \item{stat_by}{DEPRECATED, use \code{update = all_stat_cols() ~ "<label>"} instead.}
 
 \item{abbreviation}{Logical indicating if an abbreviation is being updated.}
 
 \item{caption}{a string of the table caption/title}
+
+\item{include_example}{logical whether to include print of \code{modify_header()} example}
 }
 \value{
 Updated gtsummary object
@@ -130,21 +137,14 @@ show_header_names(tbl)
 # Example 1 ----------------------------------
 # updating column headers, footnote, and table caption
 modify_ex1 <- tbl \%>\%
-  modify_header(
-    update = list(
-      label ~ "**Variable**",
-      p.value ~ "**P**"
-    )
-  ) \%>\%
-  modify_footnote(
-    update = all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade"
-  ) \%>\%
+  modify_header(label = "**Variable**", p.value = "**P**") \%>\%
+  modify_footnote(all_stat_cols() ~ "median (IQR) for Age; n (\%) for Grade") \%>\%
   modify_caption("**Patient Characteristics** (N = {N})")
 
 # Example 2 ----------------------------------
 # updating headers, remove all footnotes, add spanning header
 modify_ex2 <- tbl \%>\%
-  modify_header(update = all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}\%)") \%>\%
+  modify_header(all_stat_cols() ~ "**{level}**, N = {n} ({style_percent(p)}\%)") \%>\%
   # use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes
   modify_footnote(update = everything() ~ NA) \%>\%
   modify_spanning_header(all_stat_cols() ~ "**Treatment Received**")
@@ -154,7 +154,7 @@ modify_ex2 <- tbl \%>\%
 modify_ex3 <-
   glm(response ~ age + grade, trial, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE) \%>\%
-  modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE)
+  modify_footnote(ci = "CI = Credible Interval", abbreviation = TRUE)
 }
 \seealso{
 Other tbl_summary tools: 

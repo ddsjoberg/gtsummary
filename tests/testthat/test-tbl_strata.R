@@ -115,4 +115,34 @@ test_that("no errors with standard use", {
       ),
     NA
   )
+
+  # check .combine_args works, no spanning header anywhere
+  expect_error(
+    tbl <-
+      trial %>%
+      select(grade, stage, trt) %>%
+      tbl_strata(
+        strata = trt,
+        .tbl_fun =
+          ~ .x %>%
+          tbl_summary(),
+        .combine_args = list(tab_spanner = FALSE)
+      ),
+    NA
+  )
+  expect_true(all(is.na(tbl$table_styling$header$spanning_header)))
+
+  lifecycle::expect_deprecated(
+    trial %>%
+      select(age, trt, grade) %>%
+      tbl_strata(
+        strata = trt,
+        .tbl_fun =
+          ~ .x %>%
+          tbl_summary(by = grade, missing = "no") %>%
+          add_n(),
+        .stack_group_header = TRUE,
+        .combine_with = 'tbl_stack'
+      )
+  )
 })

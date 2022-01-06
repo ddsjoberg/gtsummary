@@ -32,6 +32,7 @@ add_p <- function(x, ...) {
 #' @param test.args List of formulas containing additional arguments to pass to
 #' tests that accept arguments. For example, add an argument for all t-tests,
 #' use `test.args = all_tests("t.test") ~ list(var.equal = TRUE)`
+#' @param exclude DEPRECATED.
 #' @param ... Not used
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
