@@ -374,6 +374,10 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 #' @param test A string specifying statistical test to perform. Default is
 #' "`chisq.test`" when expected cell counts >=5 and "`fisher.test`" when
 #' expected cell counts <5.
+#' @param test.args Named list containing additional arguments to pass to
+#' the test (if it accepts additional arguments).
+#' For example, add an argument for a chi-squared test with
+#' `test.args = list(correct = TRUE)`
 #' @inheritParams add_p.tbl_summary
 #' @family tbl_cross tools
 #' @author Karissa Whiting
@@ -399,7 +403,8 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 #'
 #' \if{html}{\figure{add_p_cross_ex2.png}{options: width=45\%}}
 add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
-                            source_note = NULL, ...) {
+                            source_note = NULL,
+                            test.args = NULL, ...) {
   updated_call_list <- c(x$call_list, list(add_p = match.call()))
   # setting defaults -----------------------------------------------------------
   test <- test %||% get_theme_element("add_p.tbl_cross-arg:test")
@@ -424,6 +429,9 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
   input_test <- switch(!is.null(test),
                        rlang::expr(everything() ~ !!test)
   )
+  input_test.args <- switch(!is.null(test.args),
+    rlang::expr(everything() ~ !!test.args)
+  )
 
   # running add_p to add the p-value to the output
   x_copy <- x
@@ -433,6 +441,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
     expr(
       add_p.tbl_summary(x,
                         test = !!input_test,
+                        test.args = !!input_test.args,
                         pvalue_fun = !!pvalue_fun,
                         include = -any_of("..total.."))
     ) %>%
