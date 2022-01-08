@@ -24,7 +24,7 @@ Missing values are included in p-value calculations."><meta property="og:image" 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9025</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9026</span>
       </span>
     </div>
 
@@ -98,7 +98,14 @@ Missing values are included in p-value calculations.</p>
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for tbl_cross</span>
-<span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span><span class="va">x</span>, test <span class="op">=</span> <span class="cn">NULL</span>, pvalue_fun <span class="op">=</span> <span class="cn">NULL</span>, source_note <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span>
+  <span class="va">x</span>,
+  test <span class="op">=</span> <span class="cn">NULL</span>,
+  pvalue_fun <span class="op">=</span> <span class="cn">NULL</span>,
+  source_note <span class="op">=</span> <span class="cn">NULL</span>,
+  test.args <span class="op">=</span> <span class="cn">NULL</span>,
+  <span class="va">...</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -116,6 +123,11 @@ default is <code>style_pvalue(x, prepend_p = TRUE)</code></p></dd>
 <dt>source_note</dt>
 <dd><p>Logical value indicating whether to show p-value
 in the {gt} table source notes rather than a column.</p></dd>
+<dt>test.args</dt>
+<dd><p>Named list containing additional arguments to pass to
+the test (if it accepts additional arguments).
+For example, add an argument for a chi-squared test with
+<code>test.args = list(correct = TRUE)</code></p></dd>
 <dt>...</dt>
 <dd><p>Not used</p></dd>
 </dl></div>
