@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added `add_p.tbl_cross(test.args=)` argument. (#1095)
+
 * The `tbl_strata(.combine_args=)` has been added that lets you control all arguments in the `tbl_merge()` or `tbl_stack()` that occurs in `tbl_strata()`. (#1090)
 
 ### New Functions

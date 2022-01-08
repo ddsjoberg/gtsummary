@@ -4,7 +4,14 @@
 \alias{add_p.tbl_cross}
 \title{Adds p-value to crosstab table}
 \usage{
-\method{add_p}{tbl_cross}(x, test = NULL, pvalue_fun = NULL, source_note = NULL, ...)
+\method{add_p}{tbl_cross}(
+  x,
+  test = NULL,
+  pvalue_fun = NULL,
+  source_note = NULL,
+  test.args = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Object with class \code{tbl_cross} from the \link{tbl_cross} function}
@@ -19,6 +26,11 @@ default is \code{style_pvalue(x, prepend_p = TRUE)}}
 
 \item{source_note}{Logical value indicating whether to show p-value
 in the \{gt\} table source notes rather than a column.}
+
+\item{test.args}{Named list containing additional arguments to pass to
+the test (if it accepts additional arguments).
+For example, add an argument for a chi-squared test with
+\code{test.args = list(correct = TRUE)}}
 
 \item{...}{Not used}
 }
