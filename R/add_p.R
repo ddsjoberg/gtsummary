@@ -446,19 +446,14 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
                         include = -any_of("..total.."))
     ) %>%
     eval()
-  # replacing the input dataset with the original from the `tbl_cross()` call
+  # replacing the input data set with the original from the `tbl_cross()` call
   x$inputs$data <- x_copy$inputs$data
 
-  # updating footnote
-  test_name <- x$meta_data$stat_test_lbl %>% discard(is.na)
-  x <-
-    modify_table_styling(
-      x,
-      columns = "p.value",
-      footnote = test_name
-    )
-
   if (source_note == TRUE) {
+    test_name <-
+      x$meta_data$stat_test_lbl %>%
+      discard(is.na) %>%
+      translate_text()
     #  report p-value as a source_note
     # hiding p-value from output
     x <-
