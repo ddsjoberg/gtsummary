@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added the `add_ci(pattern=)` argument, which makes it easier to merge the CI column with the primary statistics column. (#1029)
+
 * Updates and additions to Portuguese language translations. (#1098)
 
 * Added `add_p.tbl_cross(test.args=)` argument. (#1095)

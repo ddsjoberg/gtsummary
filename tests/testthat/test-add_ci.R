@@ -8,10 +8,19 @@ test_that("add_ci() works", {
       select(response, age, trt) %>%
       tbl_summary(by = trt, missing = "no") %>%
       add_p() %>%
-      add_ci() %>%
-      as_tibble(col_labels = FALSE),
+      add_ci(pattern = "{stat} ({ci})"),
     NA
   )
+  expect_equal(
+   as_tibble(tbl1) %>% names(),
+   c("**Characteristic**", "**Drug A**, N = 98 (**95% CI**)",
+     "**Drug B**, N = 102 (**95% CI**)", "**p-value**")
+ )
+  expect_equal(
+    as_tibble(tbl1, col_labels = FALSE) %>% pull(stat_1),
+    c("28 (29%) (21%, 40%)", "46 (37, 59) (44, 50)")
+  )
+
   expect_error(
     tbl1 <-
       trial %>%
