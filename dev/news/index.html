@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9028</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9029</span>
       </span>
     </div>
 
@@ -91,17 +91,17 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Added the <code>add_ci(pattern=)</code> argument, which makes it easier to merge the CI column with the primary statistics column. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1029" class="external-link">#1029</a>)</p></li>
-<li><p>Updates and additions to Portuguese language translations. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1098" class="external-link">#1098</a>)</p></li>
-<li><p>Added <code>add_p.tbl_cross(test.args=)</code> argument. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1095" class="external-link">#1095</a>)</p></li>
-<li><p>The <code>tbl_strata(.combine_args=)</code> has been added that lets you control all arguments in the <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> or <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> that occurs in <code><a href="../reference/tbl_strata.html">tbl_strata()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1090" class="external-link">#1090</a>)</p></li>
-</ul><div class="section level4">
+<div class="section level4">
 <h4 id="new-functions-development-version">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-development-version"></a></h4>
-<ul><li>Added <code><a href="../reference/add_overall.html">add_overall.tbl_continuous()</a></code> method. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1037" class="external-link">#1037</a>)</li>
+<ul><li><p>Added a <code><a href="../reference/add_p.tbl_continuous.html">add_p.tbl_continuous()</a></code> method for adding p-values to <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1023" class="external-link">#1023</a>)</p></li>
+<li><p>Added <code><a href="../reference/add_overall.html">add_overall.tbl_continuous()</a></code> method. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1037" class="external-link">#1037</a>)</p></li>
 </ul></div>
 <div class="section level4">
 <h4 id="new-functionality-development-version">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-development-version"></a></h4>
-<ul><li><p>Suppress <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> spanning headers by passing <code>tbl_merge(tab_spanner = FALSE)</code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/1067" class="external-link">#1067</a>)</p></li>
+<ul><li><p>Added <code>add_p.tbl_cross(test.args=)</code> argument. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1095" class="external-link">#1095</a>)</p></li>
+<li><p>The <code>tbl_strata(.combine_args=)</code> has been added that lets you control all arguments in the <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> or <code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> that occurs in <code><a href="../reference/tbl_strata.html">tbl_strata()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1090" class="external-link">#1090</a>)</p></li>
+<li><p>Added the <code>add_ci(pattern=)</code> argument, which makes it easier to merge the CI column with the primary statistics column. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1029" class="external-link">#1029</a>)</p></li>
+<li><p>Suppress <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> spanning headers by passing <code>tbl_merge(tab_spanner = FALSE)</code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/1067" class="external-link">#1067</a>)</p></li>
 <li><p>Functions <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, and <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code> gain the <code>fmt_missing=</code> argument that applies missing symbols to missing values. The <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble()</a></code> argument defaults to <code>FALSE</code>, while the others’ default is <code>TRUE</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1073" class="external-link">#1073</a>)</p></li>
 <li><p>Adding <code>tbl_regression(conf.int=)</code> and <code>tbl_uvregression(conf.int=)</code> argument. For some models, the confidence interval adds to the computation time significantly and may not be needed. This argument will omit the CI calculation. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1052" class="external-link">#1052</a>)</p></li>
 <li><p>The <code><a href="../reference/add_stat.html">add_stat()</a></code> function was updated to accept <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> tables.</p></li>
@@ -117,6 +117,7 @@
 <li><p>Improved error messaging throughout the package. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1050" class="external-link">#1050</a>)</p></li>
 <li><p>Added link to the <code>syntax</code> help file to functions throughout the package. The <code>syntax</code> help file illustrates how to use the gtsummary selectors and details the formula-list notation. (<a href="https://github.com/ddsjoberg/gtsummary/issues/981" class="external-link">#981</a>)</p></li>
 <li><p>Updated Spanish translation for Wilcoxon Rank-sum Test.</p></li>
+<li><p>Updates and additions to Portuguese language translations. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1098" class="external-link">#1098</a>)</p></li>
 <li><p>Updates to the French translations.</p></li>
 <li><p>Updating the <code><a href="../reference/add_overall.html">add_overall()</a></code> S3 method to have a more common structure, e.g. <code>add_overall(x, ....)</code>, where previously, the <code>...</code> were not present. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1066" class="external-link">#1066</a>)</p></li>
 <li><p>Updated the <code>theme_gtsummary_journal("qjecon")</code> to set <code>tbl_regression(conf.int =  FALSE)</code> by default.</p></li>
