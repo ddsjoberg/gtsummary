@@ -60,6 +60,19 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 }
 }
 
+\section{tbl_continuous() \%>\% add_p()}{
+\tabular{lll}{
+   \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
+   \code{"anova_2way"} \tab Two-way ANOVA \tab \code{lm(continuous_variable ~ by + variable)} \cr
+   \code{"t.test"} \tab t-test \tab \code{t.test(continuous_variable ~ as.factor(variable), data = data, conf.level = 0.95, ...)} \cr
+   \code{"aov"} \tab One-way ANOVA \tab \code{aov(continuous_variable ~ as.factor(variable), data = data) \%>\% summary()} \cr
+   \code{"kruskal.test"} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[continuous_variable]], as.factor(data[[variable]]))} \cr
+   \code{"wilcox.test"} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(as.numeric(continuous_variable) ~ as.factor(variable), data = data, ...)} \cr
+   \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1 \\UFF5C group), data, family = binomial) \%>\% anova(lme4::glmer(variable ~ continuous_variable + (1 \\UFF5C group), data, family = binomial))} \cr
+   \code{"ancova"} \tab ANCOVA \tab \code{lm(continuous_variable ~ variable + adj.vars)} \cr
+}
+}
+
 \section{tbl_summary() \%>\% add_difference()}{
 \tabular{llll}{
    \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \cr
@@ -118,15 +131,16 @@ While your function may not utilize each of these arguments, these arguments
 are passed and the function must accept them. We recommend including \code{...}
 to future-proof against updates where additional arguments are added.
 
-The following table describes the argument inputs for each gtsummary table type.\tabular{llll}{
-   \strong{argument} \tab \strong{tbl_summary} \tab \strong{tbl_svysummary} \tab \strong{tbl_survfit} \cr
-   \verb{data=} \tab A data frame \tab A survey object \tab A \code{survfit()} object \cr
-   \verb{variable=} \tab String variable name \tab String variable name \tab \code{NA} \cr
-   \verb{by=} \tab String variable name \tab String variable name \tab \code{NA} \cr
-   \verb{group=} \tab String variable name \tab \code{NA} \tab \code{NA} \cr
-   \verb{type=} \tab Summary type \tab Summary type \tab \code{NA} \cr
-   \verb{conf.level=} \tab Confidence interval level \tab \code{NA} \tab \code{NA} \cr
-   \verb{adj.vars=} \tab Character vector of adjustment variable names (e.g. used in ANCOVA) \tab \code{NA} \tab \code{NA} \cr
+The following table describes the argument inputs for each gtsummary table type.\tabular{lllll}{
+   \strong{argument} \tab \strong{tbl_summary} \tab \strong{tbl_svysummary} \tab \strong{tbl_survfit} \tab \strong{tbl_continuous} \cr
+   \verb{data=} \tab A data frame \tab A survey object \tab A \code{survfit()} object \tab A data frame \cr
+   \verb{variable=} \tab String variable name \tab String variable name \tab \code{NA} \tab String variable name \cr
+   \verb{by=} \tab String variable name \tab String variable name \tab \code{NA} \tab String variable name \cr
+   \verb{group=} \tab String variable name \tab \code{NA} \tab \code{NA} \tab String variable name \cr
+   \verb{type=} \tab Summary type \tab Summary type \tab \code{NA} \tab \code{NA} \cr
+   \verb{conf.level=} \tab Confidence interval level \tab \code{NA} \tab \code{NA} \tab \code{NA} \cr
+   \verb{adj.vars=} \tab Character vector of adjustment variable names (e.g. used in ANCOVA) \tab \code{NA} \tab \code{NA} \tab Character vector of adjustment variable names (e.g. used in ANCOVA) \cr
+   \verb{continuous_variable=} \tab \code{NA} \tab \code{NA} \tab \code{NA} \tab String of the continuous variable name \cr
 }
 
 }

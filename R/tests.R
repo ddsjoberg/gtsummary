@@ -41,6 +41,16 @@
 #'   knitr::kable()
 #' ```
 #'
+#' @section tbl_continuous() %>% add_p():
+#'
+#' ```{r, echo = FALSE}
+#' gtsummary:::df_add_p_tests %>%
+#'   dplyr::filter(class == "tbl_continuous", add_p == TRUE) %>%
+#'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
+#'   select(`**alias**` = test_name, `**description**` = description, `**pseudo-code**` = pseudo_code) %>%
+#'   knitr::kable()
+#' ```
+#'
 #' @section tbl_summary() %>% add_difference():
 #'
 #' ```{r, echo = FALSE}
@@ -114,14 +124,15 @@
 #'
 #' ```{r, echo = FALSE}
 #' tibble::tribble(
-#'   ~`**argument**`, ~`**tbl_summary**`, ~`**tbl_svysummary**`, ~`**tbl_survfit**`,
-#'   "`data=`", "A data frame", "A survey object", "A `survfit()` object",
-#'   "`variable=`", "String variable name", "String variable name", "`NA`",
-#'   "`by=`", "String variable name", "String variable name", "`NA`",
-#'   "`group=`", "String variable name", "`NA`", "`NA`",
-#'   "`type=`", "Summary type", "Summary type", "`NA`",
-#'   "`conf.level=`", "Confidence interval level", "`NA`", "`NA`",
-#'   "`adj.vars=`", "Character vector of adjustment variable names (e.g. used in ANCOVA)", "`NA`", "`NA`"
+#'   ~`**argument**`, ~`**tbl_summary**`, ~`**tbl_svysummary**`, ~`**tbl_survfit**`, ~`**tbl_continuous**`,
+#'   "`data=`", "A data frame", "A survey object", "A `survfit()` object", "A data frame",
+#'   "`variable=`", "String variable name", "String variable name", "`NA`", "String variable name",
+#'   "`by=`", "String variable name", "String variable name", "`NA`", "String variable name",
+#'   "`group=`", "String variable name", "`NA`", "`NA`", "String variable name",
+#'   "`type=`", "Summary type", "Summary type", "`NA`", "`NA`",
+#'   "`conf.level=`", "Confidence interval level", "`NA`", "`NA`", "`NA`",
+#'   "`adj.vars=`", "Character vector of adjustment variable names (e.g. used in ANCOVA)", "`NA`", "`NA`", "Character vector of adjustment variable names (e.g. used in ANCOVA)",
+#'   "`continuous_variable=`", "`NA`", "`NA`", "`NA`", "String of the continuous variable name"
 #' ) %>%
 #' knitr::kable()
 #' ```
