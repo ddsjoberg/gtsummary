@@ -2,7 +2,7 @@
 df_theme_elements <- readr::read_csv("data-raw/gtsummary_theme_elements.csv")
 
 df_add_p_tests <-
-  readr::read_csv("data-raw/gtsummary_tests.csv") %>%
+  readr::read_csv("data-raw/gtsummary_tests.csv") |>
   dplyr::mutate(
     test_fun = purrr::map(test_fun, ~ switch(!is.na(.x),
       rlang::parse_expr(.x)
@@ -12,7 +12,7 @@ df_add_p_tests <-
   )
 
 df_translations <- readxl::read_excel("data-raw/gtsummary_translated.xlsx")
-if (nrow(df_translations) != nrow(df_translations %>% select(en) %>% dplyr::distinct())) {
+if (nrow(df_translations) != nrow(df_translations %>% select(en) |> dplyr::distinct())) {
   stop("STOOOOOOOOOPPPPP, error in the translations data")
 }
 

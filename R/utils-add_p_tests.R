@@ -547,6 +547,48 @@ add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {
     mutate(method = method)
 }
 
+# add_p.tbl_continuous ---------------------------------------------------------
+add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) {
+  rlang::inject(
+    stats::lm(!!sym(continuous_variable) ~ factor(!!sym(variable)) + factor(!!sym(by)),
+       data = data)
+  ) %>%
+    broom::glance() %>%
+    dplyr::select(.data$statistic, .data$p.value) %>%
+    mutate(method = "Two-way ANOVA")
+}
+
+add_p_test_tbl_summary_to_tbl_continuous <- function(
+  data, variable, by, continuous_variable, test.args = NULL, group = NULL,
+  test_name, ...) {
+
+  if (!is.null(by)) {
+    stop("This test cannot be used with `by=` variable specified.", call. = FALSE)
+  }
+
+  switch(
+    test_name,
+    "t.test" = add_p_test_t.test(data = data, variable = continuous_variable,
+                                 by = variable, test.args = test.args, ...),
+    "aov" = add_p_test_aov(data = data, variable = continuous_variable,
+                           by = variable, test.args = test.args, ...),
+    "kruskal.test" = add_p_test_kruskal.test(data = data, variable = continuous_variable,
+                                             by = variable, test.args = test.args, ...),
+    "wilcox.test" = add_p_test_wilcox.test(data = data, variable = continuous_variable,
+                                           by = variable, test.args = test.args, ...),
+    "lme4" = add_p_test_lme4(data = data, variable = continuous_variable,
+                             by = variable, test.args = test.args, group = group, ...),
+    "ancova" = add_p_test_ancova(data = data, variable = continuous_variable,
+                                           by = variable, test.args = test.args, ...),
+    "ancova_lme4" = add_p_test_ancova_lme4(data = data, variable = continuous_variable,
+                                           by = variable, test.args = test.args,
+                                           group = group, ...)
+  ) %||%
+    stop("No test selected", call. = FALSE) %>%
+    dplyr::select(-dplyr::any_of(c("estiamte", "conf.low", "conf.high")))
+}
+
+
 # checks if test.args was passed incorrectly
 .superfluous_args <- function(variable, ...) {
   superfluous_args <- list(...) %>%

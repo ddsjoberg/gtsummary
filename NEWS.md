@@ -1,18 +1,18 @@
 # gtsummary (development version)
 
-* Added the `add_ci(pattern=)` argument, which makes it easier to merge the CI column with the primary statistics column. (#1029)
+### New Functions
 
-* Updates and additions to Portuguese language translations. (#1098)
+* Added a `add_p.tbl_continuous()` method for adding p-values to `tbl_continuous()` tables. (#1023)
+
+* Added `add_overall.tbl_continuous()` method. (#1037)
+
+### New Functionality
 
 * Added `add_p.tbl_cross(test.args=)` argument. (#1095)
 
 * The `tbl_strata(.combine_args=)` has been added that lets you control all arguments in the `tbl_merge()` or `tbl_stack()` that occurs in `tbl_strata()`. (#1090)
 
-### New Functions
-
-* Added `add_overall.tbl_continuous()` method. (#1037)
-
-### New Functionality
+* Added the `add_ci(pattern=)` argument, which makes it easier to merge the CI column with the primary statistics column. (#1029)
 
 * Suppress `tbl_merge()` spanning headers by passing `tbl_merge(tab_spanner = FALSE)` (#1067)
 
@@ -41,6 +41,8 @@
 * Added link to the `syntax` help file to functions throughout the package. The `syntax` help file illustrates how to use the gtsummary selectors and details the formula-list notation. (#981)
 
 * Updated Spanish translation for Wilcoxon Rank-sum Test.
+
+* Updates and additions to Portuguese language translations. (#1098)
 
 * Updates to the French translations.
 
