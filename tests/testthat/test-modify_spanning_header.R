@@ -33,4 +33,23 @@ test_that("modify_spanning_header works", {
       is.na() %>%
       all()
   )
+
+  expect_error(
+    tbl <-
+      trial %>%
+      tbl_summary(by = trt, missing = "no", include = c(age, grade)) %>%
+      tbl_butcher() %>%
+      modify_spanning_header(all_stat_cols() ~ "ooof") %>%
+      modify_header(all_stat_cols() ~ "ooof"),
+    NA
+  )
+
+  expect_equal(
+    tbl$table_styling$header %>%
+      dplyr::filter(column == "stat_1") %>%
+      select(label, spanning_header) %>%
+      unlist(),
+    c(label = "ooof", spanning_header = "ooof")
+  )
+
 })
