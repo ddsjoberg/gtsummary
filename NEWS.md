@@ -62,6 +62,8 @@
 
 * Adding `add_p()` test `"mcnemar.test.wide"` to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.
 
+* Update how calls to `gt::fmt_missing()` are constructed to be more memory efficient.
+
 ### Bug Fixes
 
 * Fix in `add_significance_stars()` that led to an error when the summarized model did not have a confidence interval column.
