@@ -62,6 +62,10 @@
 
 * Adding `add_p()` test `"mcnemar.test.wide"` to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.
 
+* Converted `tbl_split()` to S3 function.
+
+* Updated `modify_*()` functions to work more seamlessly with tables that have been `tbl_butchered()`.
+
 * Update how calls to `gt::fmt_missing()` are constructed to be more memory efficient.
 
 ### Bug Fixes
