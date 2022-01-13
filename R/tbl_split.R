@@ -2,7 +2,7 @@
 #'
 #' \lifecycle{experimental}
 #' The `tbl_split` function splits a single gtsummary table into multiple tables.
-#' Updates to the print method here are expected.
+#' Updates to the print method are expected.
 #'
 #' @param x gtsummary table
 #' @param variables variables at which to split the gtsummary table rows (tables

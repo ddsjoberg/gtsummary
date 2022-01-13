@@ -26,7 +26,7 @@ will be separated after each of these variables)}
 \description{
 \lifecycle{experimental}
 The \code{tbl_split} function splits a single gtsummary table into multiple tables.
-Updates to the print method here are expected.
+Updates to the print method are expected.
 }
 \examples{
 tbl <-
