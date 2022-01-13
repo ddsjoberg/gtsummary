@@ -159,6 +159,10 @@
     group_by(.data$column, .data$row_numbers) %>%
     filter(row_number() == n()) %>%
     select(.data$column, .data$row_numbers, .data$symbol) %>%
+    ungroup() %>%
+    tidyr::nest(row_numbers = .data$row_numbers) %>%
+    rowwise() %>%
+    dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
     ungroup()
 
   # footnote -------------------------------------------------------------------
