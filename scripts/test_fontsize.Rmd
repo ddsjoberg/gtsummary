@@ -53,12 +53,12 @@ Non-compact
 
 ```{r tblmodel1a, echo = FALSE, results = "asis", warning = FALSE, message = FALSE}
 reset_gtsummary_theme()
-tbl1 %>% as_hux_table()
+tbl1 %>% as_kable_extra()
 ```
 
 ```{r tblmodel1b, echo = FALSE, results = "asis", warning = FALSE, message = FALSE}
 reset_gtsummary_theme()
-tblmodel %>% as_hux_table()
+tblmodel %>% as_kable_extra()
 ```
 
 #####
@@ -66,11 +66,11 @@ Default Compact (size 8)
 
 ```{r tblmodel2a, echo = FALSE, results = "asis", warning = FALSE, message = FALSE}
 theme_gtsummary_compact()
-tbl1 %>% as_hux_table()
+tbl1 %>% as_kable_extra()
 ```
 
 ```{r tblmodel2b, echo = FALSE, results = "asis", warning = FALSE, message = FALSE}
-tblmodel %>% as_hux_table()
+tblmodel %>% as_kable_extra()
 ```
 
 #####
@@ -80,22 +80,22 @@ Slightly larger compact (size 10)
 ```{r tblmodel3a, echo = FALSE, results = "asis", warning = FALSE, message = FALSE}
 theme_gtsummary_compact(font_size = 10)
 
-tbl1 %>% as_hux_table()
+tbl1 %>% as_kable_extra()
 ```
 
 ```{r tblmodel3b, echo = FALSE, results = "asis", warning = FALSE, message = FALSE}
-tblmodel %>% as_hux_table()
+tblmodel %>% as_kable_extra()
 ```
 
 **Obnoxiously larger font size (size 18)
 ```{r tblmodel4a, echo = FALSE, results = "asis", warning = FALSE, message = FALSE}
 theme_gtsummary_compact(font_size = 18)
 
-tbl1 %>% as_hux_table()
+tbl1 %>% as_kable_extra()
 ```
 
 ```{r tblmode4b, echo = FALSE, results = "asis", warning = FALSE, message = FALSE}
-tblmodel %>% as_hux_table()
+tblmodel %>% as_kable_extra()
 ```
 
 #####
