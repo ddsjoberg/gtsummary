@@ -98,8 +98,24 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-            tbl_cross() %>%
-            add_p()
+          tbl_cross() %>%
+          add_p()
+      ),
+    NA
+  )
+
+  expect_error(
+    trial %>%
+      select(grade, response) %>%
+      tbl_strata2(
+        strata = grade,
+        .tbl_fun =
+          ~ .x %>%
+            tbl_summary(
+              include = response,
+              label = list(response = .y),
+              missing = "no"
+            )
       ),
     NA
   )

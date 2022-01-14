@@ -1,5 +1,10 @@
 # gtsummary (development version)
 
+* New function `tbl_strata2()` that passes both the the stratified data frame as well as the stratum level to the user function. (#/1091)
+
+* Added `tbl_strata(.header=)` argument providing greater control over the stratum headers that are added to the tables.
+
+
 ### New Functions
 
 * Added a `add_p.tbl_continuous()` method for adding p-values to `tbl_continuous()` tables. (#1023)

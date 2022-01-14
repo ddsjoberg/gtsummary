@@ -21,7 +21,9 @@ gt.doc.images::save_help_file_images(pkg = "gtsummary",
 
 # document a single file with
 gt.doc.images::save_help_file_images(pkg = "gtsummary",
-                                     rd_files = "add_ci.Rd")
+                                     rd_files = "tbl_strata.Rd")
 
 # 5. Shrink png files
 gt.doc.images::shrink_help_file_images(pkg = "gtsummary")
+
+gt.doc.images::shrink_help_file_images(pkg = "gtsummary", image_files = "tbl_strata_ex1.png")
