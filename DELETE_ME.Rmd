@@ -1,0 +1,62 @@
+---
+title: "test"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(gtsummary)
+```
+
+## no theme
+
+```{r}
+tbl <- 
+  trial %>%
+  select(age, trt) %>%
+  tbl_summary(missing = "no", 
+              by = trt) %>%
+  add_overall() %>%
+  add_difference()
+tbl %>% as_gt()
+```
+
+## compact
+
+```{r}
+theme_gtsummary_compact()
+tbl %>% as_gt()
+reset_gtsummary_theme()
+```
+
+## medium
+
+```{r}
+theme_gtsummary_compact(gt_font_size = "medium")
+tbl %>% as_gt() 
+reset_gtsummary_theme()
+```
+
+## 30
+
+```{r}
+theme_gtsummary_compact(gt_font_size = "30px")
+tbl %>% as_gt()
+reset_gtsummary_theme()
+```
+
+## small (which should be the same as the default in compact)
+```{r}
+theme_gtsummary_compact(gt_font_size = "small")
+tbl %>% as_gt() 
+reset_gtsummary_theme()
+```
+
+## 13 (which should be the same as the default in compact)
+```{r}
+theme_gtsummary_compact(gt_font_size = "13px")
+tbl %>% as_gt() 
+reset_gtsummary_theme()
+```
