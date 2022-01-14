@@ -64,8 +64,6 @@
 
 * Converted `tbl_split()` to S3 function.
 
-* Updated `modify_*()` functions to work more seamlessly with tables that have been `tbl_butchered()`.
-
 * Update how calls to `gt::fmt_missing()` are constructed to be more memory efficient.
 
 ### Bug Fixes
