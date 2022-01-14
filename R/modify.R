@@ -357,9 +357,7 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
 
 .info_tibble <- function(x) {
   # tbl_summary with no by variable
-  if (inherits(x, c("tbl_summary", "tbl_svysummary")) &&
-      is.null(x$df_by) &&
-      !is.null(x$meta_data)) {
+  if (inherits(x, c("tbl_summary", "tbl_svysummary")) && is.null(x$df_by)) {
     return(
       x$meta_data %>%
         dplyr::slice(1) %>%
@@ -376,8 +374,7 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
 
   # tbl_summary with by variable
   if (inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_continuous")) &&
-      !is.null(x$df_by) &&
-      !is.null(x$meta_data)) {
+      !is.null(x$df_by)) {
     return(
       x$table_styling$header %>%
         select(.data$column) %>%
