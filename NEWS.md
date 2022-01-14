@@ -34,7 +34,9 @@
 
 ### Other Updates
 
-* Automatically reduced vertical white space between columns for compact flextable theme. Allowed modification to font_size for compact theme. 
+* Allowed modification to font_size for compact theme. (#1106)
+
+* Automatically reduced vertical white space between columns for compact flextable theme. 
 
 * Improved user interface for `modify_*()` functions (#1064)
 
