@@ -22,7 +22,7 @@
 #' specified in `.combine_with=`
 #' @param .header String indicating the headers that will be placed.
 #' Default is `"**{strata}**"` when `.combine_with = "tbl_merge"` and
-#' `"{strata}"` when `.combine_with = "tbl_stack"`. Items places in
+#' `"{strata}"` when `.combine_with = "tbl_stack"`. Items placed in
 #' curly brackets will be evaluated according to `glue::glue()` syntax.
 #'   - `strata` stratum levels
 #'   - `n` N within stratum
