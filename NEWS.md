@@ -1,5 +1,10 @@
 # gtsummary (development version)
 
+* New function `tbl_strata2()` that passes both the the stratified data frame as well as the stratum level to the user function. (#/1091)
+
+* Added `tbl_strata(.header=)` argument providing greater control over the stratum headers that are added to the tables.
+
+
 ### New Functions
 
 * Added a `add_p.tbl_continuous()` method for adding p-values to `tbl_continuous()` tables. (#1023)
@@ -65,6 +70,8 @@
 * Added class `"tbl_continuous"` to the output of `tbl_continuous()`.
 
 * Adding `add_p()` test `"mcnemar.test.wide"` to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.
+
+* Converted `tbl_split()` to S3 function.
 
 * Update how calls to `gt::fmt_missing()` are constructed to be more memory efficient.
 
