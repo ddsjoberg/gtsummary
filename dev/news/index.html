@@ -127,6 +127,7 @@
 <li><p>The <code><a href="../reference/add_n_regression.html">add_n.tbl_regression()</a></code> (which is also utilized in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>) was adding the N column without applying a formatting function. The <code><a href="../reference/style_number.html">style_number()</a></code> function has now been added as the default styler. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1022" class="external-link">#1022</a>)</p></li>
 <li><p>Added class <code>"tbl_continuous"</code> to the output of <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code>.</p></li>
 <li><p>Adding <code><a href="../reference/add_p.html">add_p()</a></code> test <code>"mcnemar.test.wide"</code> to calculate the p-value when the data are stored in a wide format, e.g. one column for a before value and a second column for after. The other McNemar test variant available in {gtsummary} expects data in a long format.</p></li>
+<li><p>Converted <code><a href="../reference/tbl_split.html">tbl_split()</a></code> to S3 function.</p></li>
 <li><p>Update how calls to <code><a href="https://gt.rstudio.com/reference/fmt_missing.html" class="external-link">gt::fmt_missing()</a></code> are constructed to be more memory efficient.</p></li>
 </ul></div>
 <div class="section level4">
@@ -726,7 +727,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>
