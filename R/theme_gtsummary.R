@@ -8,6 +8,7 @@
 #'
 #' @param set_theme Logical indicating whether to set the theme. Default is `TRUE`.
 #' When `FALSE` the named list of theme elements is returned invisibly
+#' @param font_size Numeric font size for compact theme, default 8
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
 #'   - `"jama"` _The Journal of the American Medical Association_
