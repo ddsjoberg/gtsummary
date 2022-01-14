@@ -34,7 +34,7 @@
 
 ### Other Updates
 
-* Automatically reduced vertical white space between columns for compact flextable theme. Allowed modification to font_size for compact flextable, huxtable, and kableExtra theme. (NEED TO ADD IN NUMBER)
+* Automatically reduced vertical white space between columns for compact flextable theme. Allowed modification to font_size for compact flextable, huxtable, and kableExtra theme. 
 
 * Improved user interface for `modify_*()` functions (#1064)
 
