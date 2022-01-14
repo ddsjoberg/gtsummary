@@ -99,7 +99,7 @@ table_styling_to_kable_extra_calls <- function(x, fmt_missing = FALSE, ...) {
     table_styling_to_kable_calls(x = x, fmt_missing = fmt_missing, ...)
   format <- rlang::dots_list(...) %>% purrr::pluck("format")
 
-  # inserting blank bold and italic instructions befor the kable() call.
+  # inserting blank bold and italic instructions before the kable() call.
   kable_extra_call_names <- names(kable_extra_calls)
   kable_extra_calls[["bold_italic"]] <- list()
   kable_extra_call_names <-
