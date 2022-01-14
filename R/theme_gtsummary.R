@@ -8,6 +8,7 @@
 #'
 #' @param set_theme Logical indicating whether to set the theme. Default is `TRUE`.
 #' When `FALSE` the named list of theme elements is returned invisibly
+#' @param gt_font_size Character indicating size for compact them, default is small, which is equivalent to 13px
 #' @param font_size Numeric font size for compact theme, default 8
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
@@ -231,7 +232,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @export
-theme_gtsummary_compact <- function(set_theme = TRUE, font_size = 8) {
+theme_gtsummary_compact <- function(set_theme = TRUE, gt_font_size = "small", font_size = 8) {
   lst_theme <-
     list(
       "pkgwide-str:theme_name" = "Compact",
@@ -239,7 +240,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE, font_size = 8) {
       "as_gt-lst:addl_cmds" = list(
         tab_spanner = rlang::expr(
           gt::tab_options(
-            table.font.size = "small",
+            table.font.size = !!gt_font_size,
             data_row.padding = gt::px(1),
             summary_row.padding = gt::px(1),
             grand_summary_row.padding = gt::px(1),
