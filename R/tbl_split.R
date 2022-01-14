@@ -1,7 +1,8 @@
 #' Split gtsummary table
 #'
 #' \lifecycle{experimental}
-#' The `tbl_split` function splits a single gtsummary table into multiple tables
+#' The `tbl_split` function splits a single gtsummary table into multiple tables.
+#' Updates to the print method are expected.
 #'
 #' @param x gtsummary table
 #' @param variables variables at which to split the gtsummary table rows (tables
@@ -20,13 +21,19 @@
 #'   tbl_summary(trial) %>%
 #'   tbl_split(variables = c(marker, grade))
 #'
+#' @name tbl_split
+NULL
+
 #' @export
 #' @rdname tbl_split
-tbl_split <- function(x, variables) {
-  # check/parse inputs ---------------------------------------------------------
-  if (!inherits(x, "gtsummary"))
-    stop("`x=` must be class 'gtsummary'", call. = FALSE)
+tbl_split <- function(x, ...) {
+  UseMethod("tbl_split")
+}
 
+#' @export
+#' @rdname tbl_split
+tbl_split.gtsummary <- function(x, variables, ...) {
+  # check/parse inputs ---------------------------------------------------------
   variables <-
     broom.helpers::.select_to_varnames(
       {{ variables }},
