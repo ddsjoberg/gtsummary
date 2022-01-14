@@ -34,6 +34,8 @@
 
 ### Other Updates
 
+* Automatically reduced vertical white space between columns for compact flextable theme. (NEED TO ADD IN NUMBER)
+
 * Improved user interface for `modify_*()` functions (#1064)
 
 * Improved error messaging throughout the package. (#1050)

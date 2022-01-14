@@ -253,7 +253,8 @@ theme_gtsummary_compact <- function(set_theme = TRUE) {
         valign = list(
           rlang::expr(flextable::fontsize(size = 8, part = "all")),
           rlang::expr(flextable::padding(padding.top = 0, part = "all")),
-          rlang::expr(flextable::padding(padding.bottom = 0, part = "all"))
+          rlang::expr(flextable::padding(padding.bottom = 0, part = "all")),
+          rlang::expr(flextable::set_table_properties(layout = "autofit"))
         )
       ),
       # compact huxtable
