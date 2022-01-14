@@ -6,8 +6,9 @@
 
 --------------------------------------------------------------------------------
 
-Checklist for PR reviewer
+Reviewer Checklist (if item does not apply, mark is as complete)
 
+- [ ] Ensure all package dependencies are installed by running `renv::install()`
 - [ ] PR branch has pulled the most recent updates from master branch. Ensure the pull request branch and your local version match and both have the latest updates from the master branch.
 - [ ] If an update was made to `tbl_summary()`, was the same change implemented for `tbl_svysummary()`?
 - [ ] If a new function was added, function included in `_pkgdown.yml`
@@ -18,7 +19,7 @@ Checklist for PR reviewer
 - [ ] `usethis::use_spell_check()` runs with no spelling errors in documentation
 
 When the branch is ready to be merged into master:
-- [ ] Update NEWS.md with the changes from this pull request under the heading "`# gtsummary (development version)`". If there is an issue associated with the pull request, reference it in parantheses at the end update (see `NEWS.md` for examples).
+- [ ] Update `NEWS.md` with the changes from this pull request under the heading "`# gtsummary (development version)`". If there is an issue associated with the pull request, reference it in parentheses at the end update (see `NEWS.md` for examples).
 - [ ] Increment the version number using `usethis::use_version(which = "dev")` 
 - [ ] Run `codemetar::write_codemeta()`
 - [ ] Run `usethis::use_spell_check()` again
