@@ -67,10 +67,39 @@
 #'         add_n(),
 #'     .header = "**{strata}**, N = {n}"
 #'   )
+#'
+#' # Example 2 ----------------------------------
+#' tbl_strata_ex2 <-
+#'   trial %>%
+#'   select(grade, response) %>%
+#'   mutate(grade = paste("Grade", grade)) %>%
+#'   tbl_strata2(
+#'     strata = grade,
+#'     .tbl_fun =
+#'       ~.x %>%
+#'       tbl_summary(
+#'         label = list(response = .y),
+#'         missing = "no",
+#'         statistic = response ~ "{p}%"
+#'       ) %>%
+#'       add_ci(pattern = "{stat} ({ci})") %>%
+#'      modify_header(stat_0 = "**Rate (95% CI)**") %>%
+#'      modify_footnote(stat_0 = NA),
+#'     .combine_with = "tbl_stack",
+#'     .combine_args = list(group_header = NULL),
+#'     .quiet = TRUE
+#'   ) %>%
+#'   modify_caption("**Response Rate by Grade**")
+#'
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_strata_ex1.png}{options: width=64\%}}
+#' \if{html}{\figure{tbl_strata_ex1.png}{options: width=84\%}}
+#'
+#' @section Example Output:
+#' \if{html}{Example 2}
+#'
+#' \if{html}{\figure{tbl_strata_ex2.png}{options: width=30\%}}
 NULL
 
 #' @export
@@ -218,11 +247,20 @@ tbl_strata_internal <- function(data,
       when = "1.5.1",
       what = "gtsummary::tbl_strata(.stack_group_header)",
       details =
-        glue(
-          "Use the following instead:\n",
-          "gtsummary::tbl_strata(.combine_args = list(group_header = {.stack_group_header}))")
+        switch(
+          isFALSE(.stack_group_header),
+          glue(
+            "Use the following instead:\n",
+            "gtsummary::tbl_strata(.combine_args = list(group_header = NULL))")
+        )
+
     )
-    .combine_args = list(group_header = df_tbls$strata)
+    .combine_args <-
+      switch(
+        isFALSE(.stack_group_header),
+        list(group_header = NULL)
+      ) %||%
+      list(group_header = df_tbls$strata)
   }
 
   # combining tbls -------------------------------------------------------------

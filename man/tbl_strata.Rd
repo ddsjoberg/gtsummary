@@ -98,7 +98,12 @@ each stratum's summary table.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_strata_ex1.png}{options: width=64\%}}
+\if{html}{\figure{tbl_strata_ex1.png}{options: width=84\%}}
+
+
+\if{html}{Example 2}
+
+\if{html}{\figure{tbl_strata_ex2.png}{options: width=30\%}}
 }
 
 \examples{
@@ -115,6 +120,30 @@ tbl_strata_ex1 <-
         add_n(),
     .header = "**{strata}**, N = {n}"
   )
+
+# Example 2 ----------------------------------
+tbl_strata_ex2 <-
+  trial \%>\%
+  select(grade, response) \%>\%
+  mutate(grade = paste("Grade", grade)) \%>\%
+  tbl_strata2(
+    strata = grade,
+    .tbl_fun =
+      ~.x \%>\%
+      tbl_summary(
+        label = list(response = .y),
+        missing = "no",
+        statistic = response ~ "{p}\%"
+      ) \%>\%
+      add_ci(pattern = "{stat} ({ci})") \%>\%
+     modify_header(stat_0 = "**Rate (95\% CI)**") \%>\%
+     modify_footnote(stat_0 = NA),
+    .combine_with = "tbl_stack",
+    .combine_args = list(group_header = NULL),
+    .quiet = TRUE
+  ) \%>\%
+  modify_caption("**Response Rate by Grade**")
+
 }
 \seealso{
 Other tbl_regression tools: 
