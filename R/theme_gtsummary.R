@@ -230,7 +230,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @export
-theme_gtsummary_compact <- function(set_theme = TRUE) {
+theme_gtsummary_compact <- function(set_theme = TRUE, font_size = 8) {
   lst_theme <-
     list(
       "pkgwide-str:theme_name" = "Compact",
@@ -251,7 +251,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE) {
       # compact flextables
       "as_flex_table-lst:addl_cmds" = list(
         valign = list(
-          rlang::expr(flextable::fontsize(size = 8, part = "all")),
+          rlang::expr(flextable::fontsize(size = !!font_size, part = "all")),
           rlang::expr(flextable::padding(padding.top = 0, part = "all")),
           rlang::expr(flextable::padding(padding.bottom = 0, part = "all")),
           rlang::expr(flextable::set_table_properties(layout = "autofit"))
@@ -260,7 +260,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE) {
       # compact huxtable
       "as_hux_table.gtsummary-lst:addl_cmds" = list(
         insert_row = list(
-          rlang::expr(huxtable::set_font_size(value = 8)),
+          rlang::expr(huxtable::set_font_size(value = !!font_size)),
           rlang::expr(huxtable::set_bottom_padding(value = 0)),
           rlang::expr(huxtable::set_top_padding(value = 0))
         )
