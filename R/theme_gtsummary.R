@@ -268,7 +268,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE, font_size = 8) {
       # compact kableExtra
       "as_kable_extra-lst:addl_cmds" = list(
         kable = list(
-          rlang::expr(kableExtra::kable_styling(font_size = 8))
+          rlang::expr(kableExtra::kable_styling(font_size = !!font_size))
         )
       )
     )
