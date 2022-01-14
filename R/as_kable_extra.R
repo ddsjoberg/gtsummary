@@ -116,10 +116,10 @@ table_styling_to_kable_extra_calls <- function(x, fmt_missing = FALSE, ...) {
      (!rlang::is_empty(kable_extra_calls$tab_style_bold) ||
       !rlang::is_empty(kable_extra_calls$tab_style_italic))) {
     paste(
-      "You must specify one of `as_kable_extra(format = c('html', 'latex'))`",
-      "to apply bold/italic styling in the table body."
+      "You must specify one format type to apply bold/italic styling in the table body,",
+      "e.g. {.code as_kable_extra(format = c('html', 'latex'), escape = FALSE)}"
     ) %>%
-      message()
+      cli::cli_alert_info()
   }
 
   # kableExtra doesn't support markdown bold/italics
