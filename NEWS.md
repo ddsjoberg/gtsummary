@@ -39,6 +39,10 @@
 
 ### Other Updates
 
+* Allowed modification to font_size for compact theme. (#1106)
+
+* Automatically reduced vertical white space between columns for compact flextable theme. 
+
 * Improved user interface for `modify_*()` functions (#1064)
 
 * Improved error messaging throughout the package. (#1050)
