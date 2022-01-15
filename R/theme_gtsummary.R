@@ -253,7 +253,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE, font_size = NULL) {
       # compact flextables
       "as_flex_table-lst:addl_cmds" = list(
         valign = list(
-          rlang::expr(flextable::fontsize(size = !!(font_size %||% 13), part = "all")),
+          rlang::expr(flextable::fontsize(size = !!(font_size %||% 8), part = "all")),
           rlang::expr(flextable::padding(padding.top = 0, part = "all")),
           rlang::expr(flextable::padding(padding.bottom = 0, part = "all")),
           rlang::expr(flextable::set_table_properties(layout = "autofit"))
@@ -262,7 +262,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE, font_size = NULL) {
       # compact huxtable
       "as_hux_table.gtsummary-lst:addl_cmds" = list(
         insert_row = list(
-          rlang::expr(huxtable::set_font_size(value = !!(font_size %||% 13))),
+          rlang::expr(huxtable::set_font_size(value = !!(font_size %||% 8))),
           rlang::expr(huxtable::set_bottom_padding(value = 0)),
           rlang::expr(huxtable::set_top_padding(value = 0))
         )
@@ -270,7 +270,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE, font_size = NULL) {
       # compact kableExtra
       "as_kable_extra-lst:addl_cmds" = list(
         kable = list(
-          rlang::expr(kableExtra::kable_styling(font_size = !!(font_size %||% 13)))
+          rlang::expr(kableExtra::kable_styling(font_size = !!(font_size %||% 8)))
         )
       )
     )
