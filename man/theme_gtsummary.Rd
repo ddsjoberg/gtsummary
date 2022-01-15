@@ -16,7 +16,7 @@ theme_gtsummary_journal(
   set_theme = TRUE
 )
 
-theme_gtsummary_compact(set_theme = TRUE)
+theme_gtsummary_compact(set_theme = TRUE, font_size = NULL)
 
 theme_gtsummary_printer(
   print_engine = c("gt", "kable", "kable_extra", "flextable", "huxtable", "tibble"),
@@ -48,6 +48,9 @@ theme_gtsummary_eda(set_theme = TRUE)
 
 \item{set_theme}{Logical indicating whether to set the theme. Default is \code{TRUE}.
 When \code{FALSE} the named list of theme elements is returned invisibly}
+
+\item{font_size}{Numeric font size for compact theme.
+Default is 13 for gt tables, and 8 for all other output types}
 
 \item{print_engine}{String indicating the print method. Must be one of
 \code{"gt"}, \code{"kable"}, \code{"kable_extra"}, \code{"flextable"}, \code{"tibble"}}

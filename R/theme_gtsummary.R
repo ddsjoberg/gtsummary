@@ -8,6 +8,8 @@
 #'
 #' @param set_theme Logical indicating whether to set the theme. Default is `TRUE`.
 #' When `FALSE` the named list of theme elements is returned invisibly
+#' @param font_size Numeric font size for compact theme.
+#' Default is 13 for gt tables, and 8 for all other output types
 #' @section Themes:
 #' - `theme_gtsummary_journal(journal=)`
 #'   - `"jama"` _The Journal of the American Medical Association_
@@ -230,7 +232,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
 # ------------------------------------------------------------------------------
 #' @rdname theme_gtsummary
 #' @export
-theme_gtsummary_compact <- function(set_theme = TRUE) {
+theme_gtsummary_compact <- function(set_theme = TRUE, font_size = NULL) {
   lst_theme <-
     list(
       "pkgwide-str:theme_name" = "Compact",
@@ -238,7 +240,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE) {
       "as_gt-lst:addl_cmds" = list(
         tab_spanner = rlang::expr(
           gt::tab_options(
-            table.font.size = "small",
+            table.font.size = !!(font_size %||% 13),
             data_row.padding = gt::px(1),
             summary_row.padding = gt::px(1),
             grand_summary_row.padding = gt::px(1),
@@ -251,15 +253,16 @@ theme_gtsummary_compact <- function(set_theme = TRUE) {
       # compact flextables
       "as_flex_table-lst:addl_cmds" = list(
         valign = list(
-          rlang::expr(flextable::fontsize(size = 8, part = "all")),
+          rlang::expr(flextable::fontsize(size = !!(font_size %||% 8), part = "all")),
           rlang::expr(flextable::padding(padding.top = 0, part = "all")),
-          rlang::expr(flextable::padding(padding.bottom = 0, part = "all"))
+          rlang::expr(flextable::padding(padding.bottom = 0, part = "all")),
+          rlang::expr(flextable::set_table_properties(layout = "autofit"))
         )
       ),
       # compact huxtable
       "as_hux_table.gtsummary-lst:addl_cmds" = list(
         insert_row = list(
-          rlang::expr(huxtable::set_font_size(value = 8)),
+          rlang::expr(huxtable::set_font_size(value = !!(font_size %||% 8))),
           rlang::expr(huxtable::set_bottom_padding(value = 0)),
           rlang::expr(huxtable::set_top_padding(value = 0))
         )
@@ -267,7 +270,7 @@ theme_gtsummary_compact <- function(set_theme = TRUE) {
       # compact kableExtra
       "as_kable_extra-lst:addl_cmds" = list(
         kable = list(
-          rlang::expr(kableExtra::kable_styling(font_size = 8))
+          rlang::expr(kableExtra::kable_styling(font_size = !!(font_size %||% 8)))
         )
       )
     )
