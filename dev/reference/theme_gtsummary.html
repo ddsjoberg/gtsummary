@@ -28,7 +28,7 @@ for details."><meta property="og:image" content="https://www.danieldsjoberg.com/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9031</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.0.9032</span>
       </span>
     </div>
 
@@ -110,7 +110,7 @@ for details.</p>
   set_theme <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
 
-<span class="fu">theme_gtsummary_compact</span><span class="op">(</span>set_theme <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu">theme_gtsummary_compact</span><span class="op">(</span>set_theme <span class="op">=</span> <span class="cn">TRUE</span>, font_size <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
 
 <span class="fu">theme_gtsummary_printer</span><span class="op">(</span>
   print_engine <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gt"</span>, <span class="st">"kable"</span>, <span class="st">"kable_extra"</span>, <span class="st">"flextable"</span>, <span class="st">"huxtable"</span>, <span class="st">"tibble"</span><span class="op">)</span>,
@@ -145,6 +145,9 @@ for details.</p>
 <dt>set_theme</dt>
 <dd><p>Logical indicating whether to set the theme. Default is <code>TRUE</code>.
 When <code>FALSE</code> the named list of theme elements is returned invisibly</p></dd>
+<dt>font_size</dt>
+<dd><p>Numeric font size for compact theme.
+Default is 13 for gt tables, and 8 for all other output types</p></dd>
 <dt>print_engine</dt>
 <dd><p>String indicating the print method. Must be one of
 <code>"gt"</code>, <code>"kable"</code>, <code>"kable_extra"</code>, <code>"flextable"</code>, <code>"tibble"</code></p></dd>
