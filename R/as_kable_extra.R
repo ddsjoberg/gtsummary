@@ -105,83 +105,10 @@ table_styling_to_kable_extra_calls <- function(x, fmt_missing = FALSE, ...) {
     mutate(id = ifelse(.data$hide == FALSE, dplyr::row_number(), NA)) %>%
     ungroup()
 
-  # format <- rlang::dots_list(...) %>% purrr::pluck("format")
-  #
-  # # inserting blank bold and italic instructions before the kable() call.
-  # kable_extra_call_names <- names(kable_extra_calls)
-  # kable_extra_calls[["bold_italic"]] <- list()
-  # kable_extra_call_names <-
-  #   append(
-  #     kable_extra_call_names,
-  #     values = "bold_italic",
-  #     after = which(kable_extra_call_names %in% "kable") - 1L
-  #   )
-  # kable_extra_calls <- kable_extra_calls[kable_extra_call_names]
-
-
-  # # deleting bold and italics settings
-  # if(is.null(format) &&
-  #    (!rlang::is_empty(kable_extra_calls$tab_style_bold) ||
-  #     !rlang::is_empty(kable_extra_calls$tab_style_italic))) {
-  #   paste(
-  #     "You must specify one format type to apply bold/italic styling in the table body,",
-  #     "e.g. {.code as_kable_extra(format = c('html', 'latex'), escape = FALSE)}"
-  #   ) %>%
-  #     cli::cli_alert_info()
-  # }
-
-  # kableExtra doesn't support markdown bold/italics
+  # kableExtra doesn't support markdown bold/italics, will replace in next section
   kable_extra_calls <-
     kable_extra_calls %>%
     purrr::list_modify(tab_style_bold = NULL, tab_style_italic = NULL)
-
-  # # bold_italic -----------------------------------------------------------------------
-  # if (!is.null(format)) {
-  #   # combine bold/italic instructions into single df
-  #   df_bold_italic <-
-  #     x$table_styling$text_format %>%
-  #     dplyr::filter(.data$format_type %in% c("bold", "italic")) %>%
-  #     tidyr::unnest(.data$row_numbers) %>%
-  #     {dplyr::full_join(
-  #       dplyr::filter(., .data$format_type %in% "bold") %>%
-  #         dplyr::mutate(bold = TRUE) %>%
-  #         dplyr::select(.data$column, .data$row_numbers, .data$bold),
-  #       dplyr::filter(., .data$format_type %in% "italic") %>%
-  #         dplyr::mutate(italic = TRUE) %>%
-  #         dplyr::select(.data$column, .data$row_numbers, .data$italic),
-  #       by = c("column", "row_numbers")
-  #     )} %>%
-  #     dplyr::mutate(
-  #       dplyr::across(c(.data$bold, .data$italic), ~tidyr::replace_na(., FALSE))
-  #     ) %>%
-  #     tidyr::nest(row_numbers = .data$row_numbers) %>%
-  #     dplyr::mutate(
-  #       row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()
-  #     )
-  #
-  #   # construct call to bold/italicize cells
-  #   kable_extra_calls[["bold_italic"]] <-
-  #     map(
-  #       seq_len(nrow(df_bold_italic)),
-  #       ~ expr(
-  #         dplyr::mutate(
-  #           dplyr::across(
-  #             dplyr::all_of(!!df_bold_italic$column[.x]),
-  #             function(xx) ifelse(
-  #               dplyr::row_number() %in% !!df_bold_italic$row_numbers[[.x]],
-  #               kableExtra::cell_spec(
-  #                 xx,
-  #                 format = !!format,
-  #                 bold = !!df_bold_italic$bold[.x],
-  #                 italic = !!df_bold_italic$italic[.x]
-  #               ),
-  #               xx
-  #             )
-  #           )
-  #         )
-  #       )
-  #     )
-  # }
 
   # bold and italic ------------------------------------------------------------
   df_bold_italic <-
