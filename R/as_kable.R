@@ -95,16 +95,21 @@ table_styling_to_kable_calls <- function(x, fmt_missing = TRUE, ...) {
       list(expr(dplyr::mutate_all(~ ifelse(is.na(.), "", .)))))
 
   # kable ----------------------------------------------------------------------
-  df_col_labels <-
-    dplyr::filter(x$table_styling$header, .data$hide == FALSE)
-
-  if (!is.null(x$table_styling$caption)) {
-    kable_calls[["kable"]] <-
-      expr(knitr::kable(caption = !!x$table_styling$caption, col.names = !!df_col_labels$label, !!!dots))
-  } else {
-    kable_calls[["kable"]] <-
-      expr(knitr::kable(col.names = !!df_col_labels$label, !!!dots))
-  }
+  kable_calls[["kable"]] <- .construct_call_to_kable(x, ...)
 
   kable_calls
+}
+
+# constructs call to kable, and allows users to overwrite default arg values.
+.construct_call_to_kable <- function(x, ...) {
+  dots <- rlang::dots_list(...)
+  kable_args <-
+    # default args
+    list(caption = x$table_styling$caption,
+         col.names = dplyr::filter(x$table_styling$header, .data$hide == FALSE)$label) %>%
+    # update with any args user passed values
+    purrr::list_modify(!!!dots) %>%
+    purrr::compact()
+
+  expr(knitr::kable(!!!kable_args))
 }

@@ -54,3 +54,16 @@ test_that("tbl_merge/tbl_stack", {
   expect_error(tbl_stack_ex1 %>% as_kable(), NA)
   expect_warning(tbl_stack_ex1 %>% as_kable(), NA)
 })
+
+test_that("No errors replacing default arg values",{
+  expect_error(
+    trial %>%
+      tbl_summary(
+        by = trt,
+        include = c(age, grade),
+        missing = "no"
+      ) %>%
+      as_kable(col.names = NULL),
+    NA
+  )
+})
