@@ -1,17 +1,20 @@
 # gtsummary (development version)
 
-* New function `tbl_strata2()` that passes both the the stratified data frame as well as the stratum level to the user function. (#/1091)
-
-* Added `tbl_strata(.header=)` argument providing greater control over the stratum headers that are added to the tables.
-
-
 ### New Functions
+
+* New function `tbl_strata2()` that passes both the the stratified data frame as well as the stratum level to the user function. (#1091)
 
 * Added a `add_p.tbl_continuous()` method for adding p-values to `tbl_continuous()` tables. (#1023)
 
 * Added `add_overall.tbl_continuous()` method. (#1037)
 
 ### New Functionality
+
+* The `as_kable_extra()` was updated to utilize `column_spec()` to apply bold and italic styling. (#1107)
+
+* Default arguments to `knitr::kable()` may now be overwritten by passing `...` to either `as_kable()` or `as_kable_extra()`. Previously, passing a user-defined argument previously in use would result in error.
+
+* Added `tbl_strata(.header=)` argument providing greater control over the stratum headers that are added to the tables, e.g. you can now add Ns to the headers using this argument.
 
 * Added `add_p.tbl_cross(test.args=)` argument. (#1095)
 
