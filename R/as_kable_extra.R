@@ -23,13 +23,14 @@
 #'   bold_labels() %>%
 #'   as_kable_extra()
 #'
-#' Example 2 (latex to pdf) -----------------------------------------------------
-#' Custom column names with bold formatting, italic formatting, and line breaks.
-#' The `escape = FALSE` argument is required for custom formatting; however, be careful when
-#' using `escape = FALSE` as special latex characters like `\` and `%` will need
-#' to be escaped prior to entering `as_kable_extra()`. Using `escape = FALSE` when
-#' the gtsummary table has special latex characters will result in the error
-#' `LaTeX failed to compile...`
+#' # Example 2 (latex to pdf) --------------------------------------------------
+#' # Intended for use with `output: pdf_document` in yaml of `.Rmd`.
+#' # Custom column names with bold formatting, italic formatting, and line breaks.
+#' # The `escape = FALSE` argument is required for custom formatting; however, be careful when
+#' # using `escape = FALSE` as special latex characters like `\` and `%` will need
+#' # to be escaped prior to entering `as_kable_extra()`. Using `escape = FALSE` when
+#' # the gtsummary table has special latex characters will result in the error
+#' # `LaTeX failed to compile...`
 #' custom_names <- c("\\textbf{Drug A}\n\\textit{N = 98}", "\\textbf{Drug B}\n\\textit{N = 102}")
 #' tbl_kableExtra_ex2 <-
 #'   trial %>%
@@ -48,10 +49,11 @@
 #'      escape = FALSE
 #'   )
 #'
-#' Example 3 (latex to pdf) -----------------------------------------------------
-#' Additional styling available through `kableExtra::kbl()` and
-#' `kableExtra::kable_styling()`. Creates row striping and repeated column
-#' headers in the presence of page breaks.
+#' # Example 3 (latex to pdf) --------------------------------------------------
+#' # Intended for use with `output: pdf_document` in yaml of `.Rmd`.
+#' # Additional styling available through `kableExtra::kbl()` and
+#' # `kableExtra::kable_styling()`. Creates row striping and repeated column
+#' # headers in the presence of page breaks.
 #' tbl_kableExtra_ex3 <-
 #' trial %>%
 #'   select(trt, age, stage) %>%
