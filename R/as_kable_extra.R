@@ -3,8 +3,9 @@
 #' Function converts a gtsummary object to a knitr_kable + kableExtra object.
 #' A user can use this function if they wish to add customized formatting
 #' available via [knitr::kable] and {kableExtra}; `as_kable_extra()` supports
-#' arguments in `kableExtra::kbl()`. Bold and italic cells are supported for
-#' table bodies, but not yet column names, in {kableExtra} output via gtsummary.
+#' arguments in `kableExtra::kbl()`. {kableExtra} output via gtsummary supports
+#' bold and italic cells for table bodies (but not yet column names). Users
+#' creating pdf output should specify `as_kable_extra(format = "latex")`.
 #'
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
@@ -13,10 +14,60 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE)
-#' tbl <-
+#' # Example 1 (general) -------------------------------------------------------
+#' # Default kableExtra styling.
+#' tbl_kableExtra_ex1 <-
 #'   trial %>%
+#'   select(trt, age, stage) %>%
 #'   tbl_summary(by = trt) %>%
+#'   bold_labels() %>%
 #'   as_kable_extra()
+#'
+#' Example 2 (latex to pdf) -----------------------------------------------------
+#' Custom column names with bold formatting and line breaks. Be careful when
+#' using `escape = FALSE` as special latex characters like `\` and `%` will
+#' need to be escaped prior to entering `as_kable_extra()`.
+#' custom_names <- c("\\textbf{Drug A}\nN = 98", "\\textbf{Drug B}\nN = 102")
+#' tbl_kableExtra_ex2 <-
+#'   trial %>%
+#'   select(trt, age, stage) %>%
+#'   tbl_summary(
+#'      by = trt,
+#'      statistic = list(all_categorical() ~ "n ({p}\\%)")
+#'   ) %>%
+#'   bold_labels() %>%
+#'   modify_footnote(
+#'      update = all_stat_cols() ~ "Median (IQR); n (%)"
+#'   ) %>%
+#'   as_kable_extra(
+#'      format = "latex",
+#'      col.names = linebreak(custom_names, align = "l"),
+#'      escape = FALSE
+#'   )
+#'
+#' Example 3 (latex to pdf) -----------------------------------------------------
+#' Additional styling available through `kableExtra::kbl()` and
+#' `kableExtra::kable_styling()`. Creates row striping and repeated column
+#' headers in the presence of page breaks.
+#' tbl_kableExtra_ex3 <-
+#' trial %>%
+#'   select(trt, age, stage) %>%
+#'   tbl_summary(by = trt) %>%
+#'   bold_labels() %>%
+#'   as_kable_extra(
+#'     format = "latex",
+#'     booktabs = TRUE,
+#'     longtable = TRUE,
+#'     linesep = ""
+#'   ) %>%
+#'   kable_styling(
+#'     position = "left",
+#'     latex_options = c("striped", "repeat_header"),
+#'     stripe_color = "gray!15"
+#'   )
+#' tbl_kableExtra_ex3
+#'
+
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
                            strip_md_bold = TRUE, fmt_missing = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
