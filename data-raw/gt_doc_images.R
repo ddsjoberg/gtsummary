@@ -16,12 +16,11 @@ install.packages(
 #    Files will be saved to "~/man/figures/<filename>.png", where the filename
 #    is the object name, i.e.'tbl_ae_count_ex1.png'. No example object
 #    may overlap throughout the entire package.
-gt.doc.images::save_help_file_images(pkg = "gtsummary",
-                                     delete_existing_pngs = TRUE)
+gt.doc.images::save_help_file_images(pkg = "gtsummary")
 
 # document a single file with
 gt.doc.images::save_help_file_images(pkg = "gtsummary",
-                                     rd_files = "tbl_strata.Rd")
+                                     rd_files = "as_kable_extra.Rd")
 
 # 5. Shrink png files
 gt.doc.images::shrink_help_file_images(pkg = "gtsummary")

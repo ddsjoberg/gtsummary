@@ -62,7 +62,7 @@ tbl_kableExtra_ex1 <-
 # to be escaped prior to entering `as_kable_extra()`. Using `escape = FALSE` when
 # the gtsummary table has special latex characters will result in the error
 # `LaTeX failed to compile...`
-custom_names <- c("\\\\textbf{Drug A}\n\\\\textit{N = 98}", "\\\\textbf{Drug B}\n\\\\textit{N = 102}")
+custom_names <- c("\\\\textbf{Characteristic}", "\\\\textbf{Drug A}\n\\\\textit{N = 98}", "\\\\textbf{Drug B}\n\\\\textit{N = 102}")
 tbl_kableExtra_ex2 <-
   trial \%>\%
   select(trt, age, stage) \%>\%
@@ -76,13 +76,13 @@ tbl_kableExtra_ex2 <-
   ) \%>\%
   as_kable_extra(
      format = "latex",
-     col.names = linebreak(custom_names, align = "l"),
+     col.names = kableExtra::linebreak(custom_names, align = "l"),
      escape = FALSE
   )
 
 # Example 3 (latex to pdf) --------------------------------------------------
 # Intended for use with `output: pdf_document` in yaml of `.Rmd`.
-# Additional styling available through `kableExtra::kbl()` and
+# Additional styling available through `knitr::kable()` and
 # `kableExtra::kable_styling()`. Creates row striping and repeated column
 # headers in the presence of page breaks.
 tbl_kableExtra_ex3 <-
@@ -96,12 +96,11 @@ trial \%>\%
     longtable = TRUE,
     linesep = ""
   ) \%>\%
-  kable_styling(
+  kableExtra::kable_styling(
     position = "left",
     latex_options = c("striped", "repeat_header"),
     stripe_color = "gray!15"
   )
-tbl_kableExtra_ex3
 \dontshow{\}) # examplesIf}
 }
 \seealso{
