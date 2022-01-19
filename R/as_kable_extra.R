@@ -1,9 +1,9 @@
 #' Convert gtsummary object to a kableExtra object
 #'
 #' Function converts a gtsummary object to a knitr_kable + kableExtra object.
-#' A user can use this function if they wish to add customized formatting
-#' available via [knitr::kable] and {kableExtra}; `as_kable_extra()` supports
-#' arguments in `kableExtra::kbl()`. {kableExtra} output via gtsummary supports
+#' This allows the customized formatting available via [knitr::kable]
+#' and {kableExtra}; `as_kable_extra()` supports arguments in `kableExtra::kbl()`.
+#' `as_kable_extra()` output via gtsummary supports
 #' bold and italic cells for table bodies (but not yet column names). Users
 #' creating pdf output should specify `as_kable_extra(format = "latex")`.
 #'
