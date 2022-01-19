@@ -303,12 +303,12 @@ test_that("add_difference() with emmeans()", {
       missing = "no"
     )
 
-  expect_equal(
+  expect_error(
     tbl %>%
       add_difference(test = everything() ~ "emmeans", adj.vars = "stage"),
     NA
   )
-  expect_equal(
+  expect_error(
     tbl %>%
       add_difference(test = everything() ~ "emmeans", group = "stage"),
     NA
