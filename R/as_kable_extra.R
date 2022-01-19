@@ -2,8 +2,9 @@
 #'
 #' Function converts a gtsummary object to a knitr_kable + kableExtra object.
 #' A user can use this function if they wish to add customized formatting
-#' available via [knitr::kable] and {kableExtra}. Bold
-#' and italic cells are not supported for {kableExtra} output via gtsummary.
+#' available via [knitr::kable] and {kableExtra}; `as_kable_extra()` supports
+#' arguments in `kableExtra::kbl()`. Bold and italic cells are supported for
+#' table bodies, but not yet column names, in {kableExtra} output via gtsummary.
 #'
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
