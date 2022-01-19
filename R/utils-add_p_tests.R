@@ -325,7 +325,7 @@ add_p_test_emmeans <- function(data, variable, by, type,
     chr_w_backtick() %>%
     paste(collapse = " + ")
   if (!is.null(group))
-    rhs <- paste0(rhs, "+ (1 ", chr_w_backtick(group), ")")
+    rhs <- paste0(rhs, "+ (1 | ", chr_w_backtick(group), ")")
   f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs}") %>% as.formula()
   f_by <- rlang::inject(~ !!rlang::sym(chr_w_backtick(by)))
 
@@ -337,7 +337,7 @@ add_p_test_emmeans <- function(data, variable, by, type,
     )
   model_fun <-
     switch(
-      type,
+      type2,
       "dichotomous" =
         purrr::partial(stats::glm, formula = f, data = data, family = stats::binomial),
       "continuous" =
@@ -363,13 +363,19 @@ add_p_test_emmeans <- function(data, variable, by, type,
     emmeans::contrast(method = "pairwise") %>%
     summary(infer = TRUE, level = conf.level) %>%
     tibble::as_tibble() %>%
+    dplyr::rename(
+      conf.low = any_of("asymp.LCL"),
+      conf.high = any_of("asymp.UCL"),
+      conf.low = any_of("lower.CL"),
+      conf.high = any_of("upper.CL")
+    ) %>%
     dplyr::select(
       .data$estimate, std.error = .data$SE,
-      conf.low = .data$asymp.LCL, conf.high = .data$asymp.UCL,
+      .data$conf.low, .data$conf.high,
       .data$p.value
     ) %>%
     dplyr::mutate(
-      method = "Least-square mean difference (standard error via delta method)")
+      method = "Least-squares adjusted mean difference")
 }
 
 add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95, adj.vars = NULL, ...) {

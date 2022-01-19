@@ -12,12 +12,20 @@
 #' @section tbl_summary() %>% add_p():
 #'
 #' ```{r, echo = FALSE}
+#' options(knitr.kable.NA = '')
+#' remove_na_details_column <- function(data) {
+#'   if (all(is.na(data[["**details**"]]))) return(dplyr::select(data, -`**details**`))
+#'   data
+#' }
+#'
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_summary", add_p == TRUE) %>%
 #'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
-#'          `**pseudo-code**` = pseudo_code) %>%
+#'          `**pseudo-code**` = pseudo_code,
+#'          `**details**` = details) %>%
+#'   remove_na_details_column() %>%
 #'   knitr::kable()
 #' ```
 #'
@@ -27,7 +35,11 @@
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_svysummary", add_p == TRUE) %>%
 #'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
-#'   select(`**alias**` = test_name, `**description**` = description, `**pseudo-code**` = pseudo_code) %>%
+#'   select(`**alias**` = test_name,
+#'          `**description**` = description,
+#'          `**pseudo-code**` = pseudo_code,
+#'          `**details**` = details) %>%
+#'   remove_na_details_column() %>%
 #'   knitr::kable()
 #' ```
 #'
@@ -37,7 +49,11 @@
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_survfit", add_p == TRUE) %>%
 #'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
-#'   select(`**alias**` = test_name, `**description**` = description, `**pseudo-code**` = pseudo_code) %>%
+#'   select(`**alias**` = test_name,
+#'          `**description**` = description,
+#'          `**pseudo-code**` = pseudo_code,
+#'          `**details**` = details) %>%
+#'   remove_na_details_column() %>%
 #'   knitr::kable()
 #' ```
 #'
@@ -47,7 +63,11 @@
 #' gtsummary:::df_add_p_tests %>%
 #'   dplyr::filter(class == "tbl_continuous", add_p == TRUE) %>%
 #'   dplyr::mutate(test_name = shQuote(test_name) %>% {stringr::str_glue('`{.}`')}) %>%
-#'   select(`**alias**` = test_name, `**description**` = description, `**pseudo-code**` = pseudo_code) %>%
+#'   select(`**alias**` = test_name,
+#'          `**description**` = description,
+#'          `**pseudo-code**` = pseudo_code,
+#'          `**details**` = details) %>%
+#'   remove_na_details_column() %>%
 #'   knitr::kable()
 #' ```
 #'
@@ -60,7 +80,9 @@
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**difference statistic**` = diff_statistic,
-#'          `**pseudo-code**` = pseudo_code) %>%
+#'          `**pseudo-code**` = pseudo_code,
+#'          `**details**` = details) %>%
+#'   remove_na_details_column() %>%
 #'   knitr::kable()
 #' ```
 #'
@@ -73,7 +95,9 @@
 #'   select(`**alias**` = test_name,
 #'          `**description**` = description,
 #'          `**difference statistic**` = diff_statistic,
-#'          `**pseudo-code**` = pseudo_code) %>%
+#'          `**pseudo-code**` = pseudo_code,
+#'          `**details**` = details) %>%
+#'   remove_na_details_column() %>%
 #'   knitr::kable()
 #' ```
 #'
