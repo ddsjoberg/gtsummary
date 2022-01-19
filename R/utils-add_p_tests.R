@@ -300,6 +300,78 @@ add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = 
     )
 }
 
+add_p_test_emmeans <- function(data, variable, by, type,
+                               group = NULL,
+                               conf.level = 0.95, adj.vars = NULL, ...) {
+  .superfluous_args(variable, ...)
+
+  assert_package("emmeans")
+  if (!is.null(group)) assert_package("lme4")
+
+  # checking inputs
+  if (!type %in% c("continuous", "dichotomous")) {
+    stop("Variable must be summary type 'continuous' or 'dichotomous'", call. = FALSE)
+  }
+  if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2) {
+    stop("`by=` must have exactly 2 levels", call. = FALSE)
+  }
+  if (type %in% "dichotomous" &&
+      length(data[[variable]] %>% stats::na.omit() %>% unique()) != 2) {
+    stop("`variable=` must have exactly 2 levels", call. = FALSE)
+  }
+
+  # assembling formula
+  rhs <- c(by, adj.vars) %>%
+    chr_w_backtick() %>%
+    paste(collapse = " + ")
+  if (!is.null(group))
+    rhs <- paste0(rhs, "+ (1 ", chr_w_backtick(group), ")")
+  f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs}") %>% as.formula()
+  f_by <- rlang::inject(~ !!rlang::sym(chr_w_backtick(by)))
+
+  type2 <-
+    dplyr::case_when(
+      is.null(group) ~ type,
+      type == "dichotomous" ~ "dichotomous_mixed",
+      type == "continuous" ~ "continuous_mixed",
+    )
+  model_fun <-
+    switch(
+      type,
+      "dichotomous" =
+        purrr::partial(stats::glm, formula = f, data = data, family = stats::binomial),
+      "continuous" =
+        purrr::partial(stats::lm, formula = f, data = data),
+      "dichotomous_mixed" =
+        purrr::partial(lme4::glmer, formula = f, data = data, family = stats::binomial),
+      "continuous_mixed" =
+        purrr::partial(lme4::lmer, formula = f, data = data)
+    )
+
+  emmeans_fun <-
+    switch(
+      type,
+      "dichotomous" =
+        purrr::partial(emmeans::emmeans, specs = f_by, transform = "response"),
+      "continuous" =
+        purrr::partial(emmeans::emmeans, specs = f_by)
+    )
+
+  # building model
+  model_fun() %>%
+    emmeans_fun() %>%
+    emmeans::contrast(method = "pairwise") %>%
+    summary(infer = TRUE, level = conf.level) %>%
+    tibble::as_tibble() %>%
+    dplyr::select(
+      .data$estimate, std.error = .data$SE,
+      conf.low = .data$asymp.LCL, conf.high = .data$asymp.UCL,
+      .data$p.value
+    ) %>%
+    dplyr::mutate(
+      method = "Least-square mean difference (standard error via delta method)")
+}
+
 add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95, adj.vars = NULL, ...) {
   assert_package("lme4")
   assert_package("broom.mixed")
@@ -551,7 +623,7 @@ add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {
 add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) {
   rlang::inject(
     stats::lm(!!sym(continuous_variable) ~ factor(!!sym(variable)) + factor(!!sym(by)),
-       data = data)
+              data = data)
   ) %>%
     broom::glance() %>%
     dplyr::select(.data$statistic, .data$p.value) %>%
@@ -579,7 +651,7 @@ add_p_test_tbl_summary_to_tbl_continuous <- function(
     "lme4" = add_p_test_lme4(data = data, variable = continuous_variable,
                              by = variable, test.args = test.args, group = group, ...),
     "ancova" = add_p_test_ancova(data = data, variable = continuous_variable,
-                                           by = variable, test.args = test.args, ...),
+                                 by = variable, test.args = test.args, ...),
     "ancova_lme4" = add_p_test_ancova_lme4(data = data, variable = continuous_variable,
                                            by = variable, test.args = test.args,
                                            group = group, ...)
