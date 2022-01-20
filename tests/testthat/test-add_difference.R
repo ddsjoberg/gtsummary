@@ -1,5 +1,6 @@
 skip_on_cran()
 skip_if_not(requireNamespace("lme4"))
+skip_if_not(requireNamespace("emmeans"))
 skip_if_not(requireNamespace("smd"))
 skip_if_not(requireNamespace("survey"))
 
@@ -33,14 +34,14 @@ test_that("p-values are replicated within tbl_summary()", {
   tbl_test.args <-
     trial %>%
     select(trt,
-      var_t.test = age,
-      var_t.test_dots = age,
-      var_wilcox.test = age,
-      var_wilcox.test_dots = age,
-      var_prop.test = response,
-      var_prop.test_dots = response,
-      var_ancova = age,
-      var_cohens_d = age
+           var_t.test = age,
+           var_t.test_dots = age,
+           var_wilcox.test = age,
+           var_wilcox.test_dots = age,
+           var_prop.test = response,
+           var_prop.test_dots = response,
+           var_ancova = age,
+           var_cohens_d = age
     ) %>%
     tbl_summary(by = trt, missing = "no") %>%
     add_difference(
@@ -156,7 +157,7 @@ test_that("p-values are replicated within tbl_summary()", {
   tbl_groups <-
     trial_group %>%
     select(trt, id, stage, marker,
-      age_ancova_lme4 = age
+           age_ancova_lme4 = age
     ) %>%
     tbl_summary(by = trt, missing = "no", include = -c("id", "stage", "marker"), ) %>%
     add_difference(
@@ -293,5 +294,24 @@ test_that("add_difference() with smd and survey weights", {
 })
 
 
+test_that("add_difference() with emmeans()", {
+  tbl <-
+    tbl_summary(
+      trial,
+      by = trt,
+      include = c(age, response),
+      missing = "no"
+    )
 
+  expect_error(
+    tbl %>%
+      add_difference(test = everything() ~ "emmeans", adj.vars = "stage"),
+    NA
+  )
+  expect_error(
+    tbl %>%
+      add_difference(test = everything() ~ "emmeans", group = "death"),
+    NA
+  )
+})
 
