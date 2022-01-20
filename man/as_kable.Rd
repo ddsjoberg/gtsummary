@@ -36,9 +36,7 @@ A \code{knitr_kable} object
 }
 \description{
 Function converts a gtsummary object to a knitr_kable object.
-This function is used in the background when the results are printed or knit.
-A user can use this function if they wish to add customized formatting
-available via \link[knitr:kable]{knitr::kable}.
+This function may be used in the background when the tables are printed or knitted.
 
 Output from \link[knitr:kable]{knitr::kable} is less full featured compared to
 summary tables produced with \href{https://gt.rstudio.com/index.html}{gt}.

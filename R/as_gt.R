@@ -1,6 +1,7 @@
 #' Convert gtsummary object to a gt object
 #'
-#' @description Function converts a gtsummary object to a gt_tbl object.
+#' @description Function converts a gtsummary object to a `"gt_tbl"` object,
+#' that is, a table created with `gt::gt()`.
 #' Function is used in the background when the results are printed or knit.
 #' A user can use this function if they wish to add customized formatting
 #' available via the [gt package](https://gt.rstudio.com/index.html).

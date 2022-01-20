@@ -37,7 +37,7 @@
 #' string must match the single column name passed in `columns=`.
 #'
 #' @seealso `modify_table_body()`
-#' @seealso See \href{http://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
+#' @seealso See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #' @family Advanced modifiers
