@@ -35,6 +35,7 @@ Add event N to regression table
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 add_nevent.tbl_regression_ex1 <-
   trial \%>\%
@@ -50,4 +51,5 @@ add_nevent.tbl_regression_ex2 <-
   glm(response ~ age + grade, trial, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE) \%>\%
   add_nevent(location = "level")
+}
 }
