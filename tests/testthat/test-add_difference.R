@@ -310,7 +310,7 @@ test_that("add_difference() with emmeans()", {
   )
   expect_error(
     tbl %>%
-      add_difference(test = everything() ~ "emmeans", group = "stage"),
+      add_difference(test = everything() ~ "emmeans", group = "death"),
     NA
   )
 })
