@@ -10,7 +10,9 @@
 
 ### New Functionality
 
-* The `as_kable_extra()` was updated to utilize `column_spec()` to apply bold and italic styling. (#1107)
+* Column alignment is not recognized in `as_kable()` and `as_kable_extra()`. Previously, the alignment utilized the `kable()` defaults and ignored any alignment instructions included in the gtsummary table styling.
+
+* The `as_kable_extra()` was updated to utilize `kableExtra::column_spec()` and `kableExtra::cell_spec()` to apply bold and italic styling. The choice of the function depends on the use of `escape=` in `knitr::kable()` (#1107)
 
 * Default arguments to `knitr::kable()` may now be overwritten by passing `...` to either `as_kable()` or `as_kable_extra()`. Previously, passing a user-defined argument previously in use would result in error.
 
