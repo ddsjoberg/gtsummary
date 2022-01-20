@@ -53,7 +53,7 @@ specified in \verb{.combine_with=}}
 
 \item{.header}{String indicating the headers that will be placed.
 Default is \code{"**{strata}**"} when \code{.combine_with = "tbl_merge"} and
-\code{"{strata}"} when \code{.combine_with = "tbl_stack"}. Items places in
+\code{"{strata}"} when \code{.combine_with = "tbl_stack"}. Items placed in
 curly brackets will be evaluated according to \code{glue::glue()} syntax.
 \itemize{
 \item \code{strata} stratum levels
