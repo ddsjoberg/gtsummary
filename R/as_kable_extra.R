@@ -2,9 +2,9 @@
 #'
 #' Function converts a gtsummary object to a knitr_kable + kableExtra object.
 #' This allows the customized formatting available via [knitr::kable]
-#' and {kableExtra}; `as_kable_extra()` supports arguments in `kableExtra::kbl()`.
+#' and {kableExtra}; `as_kable_extra()` supports arguments in `knitr::kable()`.
 #' `as_kable_extra()` output via gtsummary supports
-#' bold and italic cells for table bodies (but not yet column names). Users
+#' bold and italic cells for table bodies. Users
 #' creating pdf output should specify `as_kable_extra(format = "latex")`.
 #'
 #' @section PDF via LaTeX Tips:
@@ -22,8 +22,8 @@
 #' = FALSE` argument; however, when using `escape = FALSE` special latex
 #' characters like `\` and `%` will need to be escaped prior to entering
 #' `as_kable_extra()`. Using `escape = FALSE` when the gtsummary table has
-#' special LaTeX characters will result in the error `LaTeX failed to
-#' compile...`
+#' special LaTeX characters will result in the error `"LaTeX failed to
+#' compile..."`
 #'
 #' ### Additional table styling
 #'
@@ -39,7 +39,7 @@
 #' @author Daniel D. Sjoberg
 #' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE)
 #' # Example 1 (general) -------------------------------------------------------
-#' tbl_kableExtra_ex1 <-
+#' as_kable_extra_ex1_gen <-
 #'   trial %>%
 #'   select(trt, age, stage) %>%
 #'   tbl_summary(by = trt) %>%
@@ -52,12 +52,12 @@
 #'    "\\textbf{Drug A}\n\\textit{N = 98}",
 #'    "\\textbf{Drug B}\n\\textit{N = 102}"
 #' )
-#' tbl_kableExtra_ex2 <-
+#' as_kable_extra_ex2_pdf <-
 #'   trial %>%
 #'   select(trt, age, stage) %>%
 #'   tbl_summary(
 #'      by = trt,
-#'      statistic = list(all_categorical() ~ "n ({p}\\%)")
+#'      statistic = list(all_categorical() ~ "{n} ({p}\\%)")
 #'   ) %>%
 #'   bold_labels() %>%
 #'   modify_footnote(
@@ -65,12 +65,12 @@
 #'   ) %>%
 #'   as_kable_extra(
 #'      format = "latex",
-#'      col.names = kableExtra::linebreak(custom_names, align = "l"),
+#'      col.names = kableExtra::linebreak(custom_names, align = "c"),
 #'      escape = FALSE
 #'   )
 #'
 #' # Example 3 (PDF via LaTeX) -------------------------------------------------
-#' tbl_kableExtra_ex3 <-
+#' as_kable_extra_ex3_pdf <-
 #' trial %>%
 #'   select(trt, age, stage) %>%
 #'   tbl_summary(by = trt) %>%
@@ -90,19 +90,19 @@
 #' @section Example Output:
 #' \if{html}{Example 1 (html)}
 #'
-#' \if{html}{\figure{tbl_kableExtra_ex1.png}{options: width=40\%}}
+#' \if{html}{\figure{as_kable_extra_ex1_html.png}{options: width=40\%}}
 #'
 #' \if{html}{Example 1 (pdf)}
 #'
-#' \if{html}{\figure{tbl_kableExtra_pdf1.png}{options: width=40\%}}
+#' \if{html}{\figure{as_kable_extra_ex1_pdf.png}{options: width=40\%}}
 #'
 #' \if{html}{Example 2 (pdf)}
 #'
-#' \if{html}{\figure{tbl_kableExtra_pdf2.png}{options: width=40\%}}
+#' \if{html}{\figure{as_kable_extra_ex2_pdf.png}{options: width=40\%}}
 #'
 #' \if{html}{Example 3 (pdf)}
 #'
-#' \if{html}{\figure{tbl_kableExtra_pdf3.png}{options: width=40\%}}
+#' \if{html}{\figure{as_kable_extra_ex3_pdf.png}{options: width=40\%}}
 #'
 
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,

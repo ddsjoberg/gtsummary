@@ -12,333 +12,86 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \code{tbl_summary(trial, by = trt) \%>\% add_p(age ~ "t.test", test.args = age ~ list(var.equal = TRUE))}
 }
 \section{tbl_summary() \%>\% add_p()}{
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> **alias** </th>
-   <th style="text-align:left;"> **description** </th>
-   <th style="text-align:left;"> **pseudo-code** </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `&quot;t.test&quot;` </td>
-   <td style="text-align:left;"> t-test </td>
-   <td style="text-align:left;"> `t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;aov&quot;` </td>
-   <td style="text-align:left;"> One-way ANOVA </td>
-   <td style="text-align:left;"> `aov(variable ~ as.factor(by), data = data) \%&gt;\% summary()` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;kruskal.test&quot;` </td>
-   <td style="text-align:left;"> Kruskal-Wallis test </td>
-   <td style="text-align:left;"> `kruskal.test(data[[variable]], as.factor(data[[by]]))` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;wilcox.test&quot;` </td>
-   <td style="text-align:left;"> Wilcoxon rank-sum test </td>
-   <td style="text-align:left;"> `wilcox.test(as.numeric(variable) ~ as.factor(by), data = data, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;chisq.test&quot;` </td>
-   <td style="text-align:left;"> chi-square test of independence </td>
-   <td style="text-align:left;"> `chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;chisq.test.no.correct&quot;` </td>
-   <td style="text-align:left;"> chi-square test of independence </td>
-   <td style="text-align:left;"> `chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;fisher.test&quot;` </td>
-   <td style="text-align:left;"> Fisher's exact test </td>
-   <td style="text-align:left;"> `fisher.test(data[[variable]], as.factor(data[[by]]), conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;mcnemar.test&quot;` </td>
-   <td style="text-align:left;"> McNemar's test </td>
-   <td style="text-align:left;"> `tidyr::pivot_wider(id_cols = group, ...); mcnemar.test(by_1, by_2, conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;mcnemar.test.wide&quot;` </td>
-   <td style="text-align:left;"> McNemar's test </td>
-   <td style="text-align:left;"> `mcnemar.test(data[[variable]], data[[by]], conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;lme4&quot;` </td>
-   <td style="text-align:left;"> random intercept logistic regression </td>
-   <td style="text-align:left;"> `lme4::glmer(by ~ (1 \\UFF5C group), data, family = binomial) \%&gt;\% anova(lme4::glmer(by ~ variable + (1 \\UFF5C group), data, family = binomial))` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;paired.t.test&quot;` </td>
-   <td style="text-align:left;"> Paired t-test </td>
-   <td style="text-align:left;"> `tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;paired.wilcox.test&quot;` </td>
-   <td style="text-align:left;"> Paired Wilcoxon rank-sum test </td>
-   <td style="text-align:left;"> `tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;prop.test&quot;` </td>
-   <td style="text-align:left;"> Test for equality of proportions </td>
-   <td style="text-align:left;"> `prop.test(x, n, conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;ancova&quot;` </td>
-   <td style="text-align:left;"> ANCOVA </td>
-   <td style="text-align:left;"> `lm(variable ~ by + adj.vars)` </td>
-  </tr>
-</tbody>
-</table>
+\tabular{lll}{
+   \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
+   \code{"t.test"} \tab t-test \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \cr
+   \code{"aov"} \tab One-way ANOVA \tab \code{aov(variable ~ as.factor(by), data = data) \%>\% summary()} \cr
+   \code{"kruskal.test"} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[variable]], as.factor(data[[by]]))} \cr
+   \code{"wilcox.test"} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(as.numeric(variable) ~ as.factor(by), data = data, ...)} \cr
+   \code{"chisq.test"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), ...)} \cr
+   \code{"chisq.test.no.correct"} \tab chi-square test of independence \tab \code{chisq.test(x = data[[variable]], y = as.factor(data[[by]]), correct = FALSE)} \cr
+   \code{"fisher.test"} \tab Fisher's exact test \tab \code{fisher.test(data[[variable]], as.factor(data[[by]]), conf.level = 0.95, ...)} \cr
+   \code{"mcnemar.test"} \tab McNemar's test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); mcnemar.test(by_1, by_2, conf.level = 0.95, ...)} \cr
+   \code{"mcnemar.test.wide"} \tab McNemar's test \tab \code{mcnemar.test(data[[variable]], data[[by]], conf.level = 0.95, ...)} \cr
+   \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1 \\UFF5C group), data, family = binomial) \%>\% anova(lme4::glmer(by ~ variable + (1 \\UFF5C group), data, family = binomial))} \cr
+   \code{"paired.t.test"} \tab Paired t-test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"paired.wilcox.test"} \tab Paired Wilcoxon rank-sum test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"prop.test"} \tab Test for equality of proportions \tab \code{prop.test(x, n, conf.level = 0.95, ...)} \cr
+   \code{"ancova"} \tab ANCOVA \tab \code{lm(variable ~ by + adj.vars)} \cr
+}
 }
 
 \section{tbl_svysummary() \%>\% add_p()}{
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> **alias** </th>
-   <th style="text-align:left;"> **description** </th>
-   <th style="text-align:left;"> **pseudo-code** </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.t.test&quot;` </td>
-   <td style="text-align:left;"> t-test adapted to complex survey samples </td>
-   <td style="text-align:left;"> `survey::svyttest(~variable + by, data)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.wilcox.test&quot;` </td>
-   <td style="text-align:left;"> Wilcoxon rank-sum test for complex survey samples </td>
-   <td style="text-align:left;"> `survey::svyranktest(~variable + by, data, test = 'wilcoxon')` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.kruskal.test&quot;` </td>
-   <td style="text-align:left;"> Kruskal-Wallis rank-sum test for complex survey samples </td>
-   <td style="text-align:left;"> `survey::svyranktest(~variable + by, data, test = 'KruskalWallis')` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.vanderwaerden.test&quot;` </td>
-   <td style="text-align:left;"> van der Waerden's normal-scores test for complex survey samples </td>
-   <td style="text-align:left;"> `survey::svyranktest(~variable + by, data, test = 'vanderWaerden')` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.median.test&quot;` </td>
-   <td style="text-align:left;"> Mood's test for the median for complex survey samples </td>
-   <td style="text-align:left;"> `survey::svyranktest(~variable + by, data, test = 'median')` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.chisq.test&quot;` </td>
-   <td style="text-align:left;"> chi-squared test with Rao &amp; Scott's second-order correction </td>
-   <td style="text-align:left;"> `survey::svychisq(~variable + by, data, statistic = 'F')` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.adj.chisq.test&quot;` </td>
-   <td style="text-align:left;"> chi-squared test adjusted by a design effect estimate </td>
-   <td style="text-align:left;"> `survey::svychisq(~variable + by, data, statistic = 'Chisq')` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.wald.test&quot;` </td>
-   <td style="text-align:left;"> Wald test of independence for complex survey samples </td>
-   <td style="text-align:left;"> `survey::svychisq(~variable + by, data, statistic = 'Wald')` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.adj.wald.test&quot;` </td>
-   <td style="text-align:left;"> adjusted Wald test of independence for complex survey samples </td>
-   <td style="text-align:left;"> `survey::svychisq(~variable + by, data, statistic = 'adjWald')` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.lincom.test&quot;` </td>
-   <td style="text-align:left;"> test of independence using the exact asymptotic distribution for complex survey samples </td>
-   <td style="text-align:left;"> `survey::svychisq(~variable + by, data, statistic = 'lincom')` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;svy.saddlepoint.test&quot;` </td>
-   <td style="text-align:left;"> test of independence using a saddlepoint approximation for complex survey samples </td>
-   <td style="text-align:left;"> `survey::svychisq(~variable + by, data, statistic = 'saddlepoint')` </td>
-  </tr>
-</tbody>
-</table>
+\tabular{lll}{
+   \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
+   \code{"svy.t.test"} \tab t-test adapted to complex survey samples \tab \code{survey::svyttest(~variable + by, data)} \cr
+   \code{"svy.wilcox.test"} \tab Wilcoxon rank-sum test for complex survey samples \tab \code{survey::svyranktest(~variable + by, data, test = 'wilcoxon')} \cr
+   \code{"svy.kruskal.test"} \tab Kruskal-Wallis rank-sum test for complex survey samples \tab \code{survey::svyranktest(~variable + by, data, test = 'KruskalWallis')} \cr
+   \code{"svy.vanderwaerden.test"} \tab van der Waerden's normal-scores test for complex survey samples \tab \code{survey::svyranktest(~variable + by, data, test = 'vanderWaerden')} \cr
+   \code{"svy.median.test"} \tab Mood's test for the median for complex survey samples \tab \code{survey::svyranktest(~variable + by, data, test = 'median')} \cr
+   \code{"svy.chisq.test"} \tab chi-squared test with Rao & Scott's second-order correction \tab \code{survey::svychisq(~variable + by, data, statistic = 'F')} \cr
+   \code{"svy.adj.chisq.test"} \tab chi-squared test adjusted by a design effect estimate \tab \code{survey::svychisq(~variable + by, data, statistic = 'Chisq')} \cr
+   \code{"svy.wald.test"} \tab Wald test of independence for complex survey samples \tab \code{survey::svychisq(~variable + by, data, statistic = 'Wald')} \cr
+   \code{"svy.adj.wald.test"} \tab adjusted Wald test of independence for complex survey samples \tab \code{survey::svychisq(~variable + by, data, statistic = 'adjWald')} \cr
+   \code{"svy.lincom.test"} \tab test of independence using the exact asymptotic distribution for complex survey samples \tab \code{survey::svychisq(~variable + by, data, statistic = 'lincom')} \cr
+   \code{"svy.saddlepoint.test"} \tab test of independence using a saddlepoint approximation for complex survey samples \tab \code{survey::svychisq(~variable + by, data, statistic = 'saddlepoint')} \cr
+}
 }
 
 \section{tbl_survfit() \%>\% add_p()}{
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> **alias** </th>
-   <th style="text-align:left;"> **description** </th>
-   <th style="text-align:left;"> **pseudo-code** </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `&quot;logrank&quot;` </td>
-   <td style="text-align:left;"> Log-rank test </td>
-   <td style="text-align:left;"> `survival::survdiff(Surv(.) ~ variable, data, rho = 0)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;petopeto_gehanwilcoxon&quot;` </td>
-   <td style="text-align:left;"> Peto &amp; Peto modification of Gehan-Wilcoxon test </td>
-   <td style="text-align:left;"> `survival::survdiff(Surv(.) ~ variable, data, rho = 1)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;survdiff&quot;` </td>
-   <td style="text-align:left;"> G-rho family test </td>
-   <td style="text-align:left;"> `survival::survdiff(Surv(.) ~ variable, data, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;coxph_lrt&quot;` </td>
-   <td style="text-align:left;"> Cox regression (LRT) </td>
-   <td style="text-align:left;"> `survival::coxph(Surv(.) ~ variable, data, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;coxph_wald&quot;` </td>
-   <td style="text-align:left;"> Cox regression (Wald) </td>
-   <td style="text-align:left;"> `survival::coxph(Surv(.) ~ variable, data, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;coxph_score&quot;` </td>
-   <td style="text-align:left;"> Cox regression (Score) </td>
-   <td style="text-align:left;"> `survival::coxph(Surv(.) ~ variable, data, ...)` </td>
-  </tr>
-</tbody>
-</table>
+\tabular{lll}{
+   \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
+   \code{"logrank"} \tab Log-rank test \tab \code{survival::survdiff(Surv(.) ~ variable, data, rho = 0)} \cr
+   \code{"petopeto_gehanwilcoxon"} \tab Peto & Peto modification of Gehan-Wilcoxon test \tab \code{survival::survdiff(Surv(.) ~ variable, data, rho = 1)} \cr
+   \code{"survdiff"} \tab G-rho family test \tab \code{survival::survdiff(Surv(.) ~ variable, data, ...)} \cr
+   \code{"coxph_lrt"} \tab Cox regression (LRT) \tab \code{survival::coxph(Surv(.) ~ variable, data, ...)} \cr
+   \code{"coxph_wald"} \tab Cox regression (Wald) \tab \code{survival::coxph(Surv(.) ~ variable, data, ...)} \cr
+   \code{"coxph_score"} \tab Cox regression (Score) \tab \code{survival::coxph(Surv(.) ~ variable, data, ...)} \cr
+}
 }
 
 \section{tbl_continuous() \%>\% add_p()}{
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> **alias** </th>
-   <th style="text-align:left;"> **description** </th>
-   <th style="text-align:left;"> **pseudo-code** </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `&quot;anova_2way&quot;` </td>
-   <td style="text-align:left;"> Two-way ANOVA </td>
-   <td style="text-align:left;"> `lm(continuous_variable ~ by + variable)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;t.test&quot;` </td>
-   <td style="text-align:left;"> t-test </td>
-   <td style="text-align:left;"> `t.test(continuous_variable ~ as.factor(variable), data = data, conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;aov&quot;` </td>
-   <td style="text-align:left;"> One-way ANOVA </td>
-   <td style="text-align:left;"> `aov(continuous_variable ~ as.factor(variable), data = data) \%&gt;\% summary()` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;kruskal.test&quot;` </td>
-   <td style="text-align:left;"> Kruskal-Wallis test </td>
-   <td style="text-align:left;"> `kruskal.test(data[[continuous_variable]], as.factor(data[[variable]]))` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;wilcox.test&quot;` </td>
-   <td style="text-align:left;"> Wilcoxon rank-sum test </td>
-   <td style="text-align:left;"> `wilcox.test(as.numeric(continuous_variable) ~ as.factor(variable), data = data, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;lme4&quot;` </td>
-   <td style="text-align:left;"> random intercept logistic regression </td>
-   <td style="text-align:left;"> `lme4::glmer(by ~ (1 \\UFF5C group), data, family = binomial) \%&gt;\% anova(lme4::glmer(variable ~ continuous_variable + (1 \\UFF5C group), data, family = binomial))` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;ancova&quot;` </td>
-   <td style="text-align:left;"> ANCOVA </td>
-   <td style="text-align:left;"> `lm(continuous_variable ~ variable + adj.vars)` </td>
-  </tr>
-</tbody>
-</table>
+\tabular{lll}{
+   \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
+   \code{"anova_2way"} \tab Two-way ANOVA \tab \code{lm(continuous_variable ~ by + variable)} \cr
+   \code{"t.test"} \tab t-test \tab \code{t.test(continuous_variable ~ as.factor(variable), data = data, conf.level = 0.95, ...)} \cr
+   \code{"aov"} \tab One-way ANOVA \tab \code{aov(continuous_variable ~ as.factor(variable), data = data) \%>\% summary()} \cr
+   \code{"kruskal.test"} \tab Kruskal-Wallis test \tab \code{kruskal.test(data[[continuous_variable]], as.factor(data[[variable]]))} \cr
+   \code{"wilcox.test"} \tab Wilcoxon rank-sum test \tab \code{wilcox.test(as.numeric(continuous_variable) ~ as.factor(variable), data = data, ...)} \cr
+   \code{"lme4"} \tab random intercept logistic regression \tab \verb{lme4::glmer(by ~ (1 \\UFF5C group), data, family = binomial) \%>\% anova(lme4::glmer(variable ~ continuous_variable + (1 \\UFF5C group), data, family = binomial))} \cr
+   \code{"ancova"} \tab ANCOVA \tab \code{lm(continuous_variable ~ variable + adj.vars)} \cr
+}
 }
 
 \section{tbl_summary() \%>\% add_difference()}{
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> **alias** </th>
-   <th style="text-align:left;"> **description** </th>
-   <th style="text-align:left;"> **difference statistic** </th>
-   <th style="text-align:left;"> **pseudo-code** </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `&quot;t.test&quot;` </td>
-   <td style="text-align:left;"> t-test </td>
-   <td style="text-align:left;"> mean difference </td>
-   <td style="text-align:left;"> `t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;paired.t.test&quot;` </td>
-   <td style="text-align:left;"> Paired t-test </td>
-   <td style="text-align:left;"> mean difference </td>
-   <td style="text-align:left;"> `tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;paired.wilcox.test&quot;` </td>
-   <td style="text-align:left;"> Paired Wilcoxon rank-sum test </td>
-   <td style="text-align:left;"> rate difference </td>
-   <td style="text-align:left;"> `tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;prop.test&quot;` </td>
-   <td style="text-align:left;"> Test for equality of proportions </td>
-   <td style="text-align:left;"> rate difference </td>
-   <td style="text-align:left;"> `prop.test(x, n, conf.level = 0.95, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;ancova&quot;` </td>
-   <td style="text-align:left;"> ANCOVA </td>
-   <td style="text-align:left;"> mean difference </td>
-   <td style="text-align:left;"> `lm(variable ~ by + adj.vars)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;ancova_lme4&quot;` </td>
-   <td style="text-align:left;"> ANCOVA with random intercept </td>
-   <td style="text-align:left;"> mean difference </td>
-   <td style="text-align:left;"> `lme4::lmer(variable ~ by + adj.vars + (1 \\UFF5C group), data)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;cohens_d&quot;` </td>
-   <td style="text-align:left;"> Cohen's D </td>
-   <td style="text-align:left;"> standardized mean difference </td>
-   <td style="text-align:left;"> `effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `&quot;smd&quot;` </td>
-   <td style="text-align:left;"> Standardized Mean Difference </td>
-   <td style="text-align:left;"> standardized mean difference </td>
-   <td style="text-align:left;"> `smd::smd(x = data[[variable]], g = data[[by]], std.error = TRUE)` </td>
-  </tr>
-</tbody>
-</table>
+\tabular{llll}{
+   \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \cr
+   \code{"t.test"} \tab t-test \tab mean difference \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \cr
+   \code{"paired.t.test"} \tab Paired t-test \tab mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"paired.wilcox.test"} \tab Paired Wilcoxon rank-sum test \tab rate difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)} \cr
+   \code{"prop.test"} \tab Test for equality of proportions \tab rate difference \tab \code{prop.test(x, n, conf.level = 0.95, ...)} \cr
+   \code{"ancova"} \tab ANCOVA \tab mean difference \tab \code{lm(variable ~ by + adj.vars)} \cr
+   \code{"ancova_lme4"} \tab ANCOVA with random intercept \tab mean difference \tab \verb{lme4::lmer(variable ~ by + adj.vars + (1 \\UFF5C group), data)} \cr
+   \code{"cohens_d"} \tab Cohen's D \tab standardized mean difference \tab \code{effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)} \cr
+   \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = data[[variable]], g = data[[by]], std.error = TRUE)} \cr
+}
 }
 
 \section{tbl_svysummary() \%>\% add_difference()}{
-<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> **alias** </th>
-   <th style="text-align:left;"> **description** </th>
-   <th style="text-align:left;"> **difference statistic** </th>
-   <th style="text-align:left;"> **pseudo-code** </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `&quot;smd&quot;` </td>
-   <td style="text-align:left;"> Standardized Mean Difference </td>
-   <td style="text-align:left;"> standardized mean difference </td>
-   <td style="text-align:left;"> `smd::smd(x = data$variables[[variable]], g = data$variables[[by]], w = weights(data),  std.error = TRUE)` </td>
-  </tr>
-</tbody>
-</table>
+\tabular{llll}{
+   \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \cr
+   \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = data$variables[[variable]], g = data$variables[[by]], w = weights(data),  std.error = TRUE)} \cr
+}
 }
 
 \section{Custom Functions}{
@@ -378,75 +131,17 @@ While your function may not utilize each of these arguments, these arguments
 are passed and the function must accept them. We recommend including \code{...}
 to future-proof against updates where additional arguments are added.
 
-The following table describes the argument inputs for each gtsummary table type.<table>
- <thead>
-  <tr>
-   <th style="text-align:left;"> **argument** </th>
-   <th style="text-align:left;"> **tbl_summary** </th>
-   <th style="text-align:left;"> **tbl_svysummary** </th>
-   <th style="text-align:left;"> **tbl_survfit** </th>
-   <th style="text-align:left;"> **tbl_continuous** </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> `data=` </td>
-   <td style="text-align:left;"> A data frame </td>
-   <td style="text-align:left;"> A survey object </td>
-   <td style="text-align:left;"> A `survfit()` object </td>
-   <td style="text-align:left;"> A data frame </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `variable=` </td>
-   <td style="text-align:left;"> String variable name </td>
-   <td style="text-align:left;"> String variable name </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> String variable name </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `by=` </td>
-   <td style="text-align:left;"> String variable name </td>
-   <td style="text-align:left;"> String variable name </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> String variable name </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `group=` </td>
-   <td style="text-align:left;"> String variable name </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> String variable name </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `type=` </td>
-   <td style="text-align:left;"> Summary type </td>
-   <td style="text-align:left;"> Summary type </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> `NA` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `conf.level=` </td>
-   <td style="text-align:left;"> Confidence interval level </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> `NA` </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `adj.vars=` </td>
-   <td style="text-align:left;"> Character vector of adjustment variable names (e.g. used in ANCOVA) </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> Character vector of adjustment variable names (e.g. used in ANCOVA) </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> `continuous_variable=` </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> `NA` </td>
-   <td style="text-align:left;"> String of the continuous variable name </td>
-  </tr>
-</tbody>
-</table>
+The following table describes the argument inputs for each gtsummary table type.\tabular{lllll}{
+   \strong{argument} \tab \strong{tbl_summary} \tab \strong{tbl_svysummary} \tab \strong{tbl_survfit} \tab \strong{tbl_continuous} \cr
+   \verb{data=} \tab A data frame \tab A survey object \tab A \code{survfit()} object \tab A data frame \cr
+   \verb{variable=} \tab String variable name \tab String variable name \tab \code{NA} \tab String variable name \cr
+   \verb{by=} \tab String variable name \tab String variable name \tab \code{NA} \tab String variable name \cr
+   \verb{group=} \tab String variable name \tab \code{NA} \tab \code{NA} \tab String variable name \cr
+   \verb{type=} \tab Summary type \tab Summary type \tab \code{NA} \tab \code{NA} \cr
+   \verb{conf.level=} \tab Confidence interval level \tab \code{NA} \tab \code{NA} \tab \code{NA} \cr
+   \verb{adj.vars=} \tab Character vector of adjustment variable names (e.g. used in ANCOVA) \tab \code{NA} \tab \code{NA} \tab Character vector of adjustment variable names (e.g. used in ANCOVA) \cr
+   \verb{continuous_variable=} \tab \code{NA} \tab \code{NA} \tab \code{NA} \tab String of the continuous variable name \cr
+}
 
 }
 }
