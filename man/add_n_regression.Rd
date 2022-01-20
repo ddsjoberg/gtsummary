@@ -35,6 +35,7 @@ Add N to regression table
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 add_n.tbl_regression_ex1 <-
   trial \%>\%
@@ -52,4 +53,5 @@ add_n.tbl_regression_ex2 <-
   glm(response ~ age + grade, trial, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE) \%>\%
   add_n(location = "level")
+}
 }

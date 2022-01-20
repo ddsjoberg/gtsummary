@@ -40,6 +40,7 @@ Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust
 
 \examples{
 \dontshow{if (broom.helpers::.assert_package("car", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 # Example 1 ----------------------------------
 add_q_ex1 <-
   trial[c("trt", "age", "grade", "response")] \%>\%
@@ -58,6 +59,7 @@ add_q_ex2 <-
   ) \%>\%
   add_global_p() \%>\%
   add_q()
+}
 \dontshow{\}) # examplesIf}
 }
 \seealso{

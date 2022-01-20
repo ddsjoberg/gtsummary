@@ -54,6 +54,7 @@
 #' @family tbl_svysummary tools
 #'
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' tbl_strata_ex1 <-
 #'   trial %>%
@@ -90,7 +91,7 @@
 #'     .quiet = TRUE
 #'   ) %>%
 #'   modify_caption("**Response Rate by Grade**")
-#'
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

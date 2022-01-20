@@ -1,7 +1,7 @@
 #' Modify Hidden Columns
 #'
 #' \lifecycle{maturing}
-#' Use these functions to hide or unhide columns in a gtsummary tables.
+#' Use these functions to hide or unhide columns in a gtsummary table.
 #'
 #' @inheritParams modify_table_styling
 #'

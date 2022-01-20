@@ -16,7 +16,7 @@ modify_column_unhide(x, columns)
 }
 \description{
 \lifecycle{maturing}
-Use these functions to hide or unhide columns in a gtsummary tables.
+Use these functions to hide or unhide columns in a gtsummary table.
 }
 \section{Example Output}{
 
@@ -39,6 +39,7 @@ Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsumm
 
 Other Advanced modifiers: 
 \code{\link{modify_cols_merge}()},
+\code{\link{modify_column_alignment}()},
 \code{\link{modify_fmt_fun}()},
 \code{\link{modify_table_body}()},
 \code{\link{modify_table_styling}()}

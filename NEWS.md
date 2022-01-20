@@ -2,7 +2,7 @@
 
 ### New Functions
 
-* New test option "emmeans" in `add_difference()` and `add_p()` uses the {emmeans} package to estimate marginal means/least-squares means for continuous variables, binary variables and random intercept models. (#1112)
+* Added new function `modify_column_alignment()` to updated column alignment. Function is a wrapper for the more complex `modify_table_styling()` function.
 
 * New function `tbl_strata2()` that passes both the the stratified data frame as well as the stratum level to the user function. (#1091)
 
@@ -11,6 +11,8 @@
 * Added `add_overall.tbl_continuous()` method. (#1037)
 
 ### New Functionality
+
+* New test option "emmeans" in `add_difference()` and `add_p()` uses the {emmeans} package to estimate marginal means/least-squares means for continuous variables, binary variables and random intercept models. (#1112)
 
 * Column alignment is not recognized in `as_kable()` and `as_kable_extra()`. Previously, the alignment utilized the `kable()` defaults and ignored any alignment instructions included in the gtsummary table styling.
 
