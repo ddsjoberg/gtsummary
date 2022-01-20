@@ -1,9 +1,35 @@
 #' Convert gtsummary object to a kableExtra object
 #'
 #' Function converts a gtsummary object to a knitr_kable + kableExtra object.
-#' A user can use this function if they wish to add customized formatting
-#' available via [knitr::kable] and {kableExtra}. Bold
-#' and italic cells are not supported for {kableExtra} output via gtsummary.
+#' This allows the customized formatting available via [knitr::kable]
+#' and {kableExtra}; `as_kable_extra()` supports arguments in `knitr::kable()`.
+#' `as_kable_extra()` output via gtsummary supports
+#' bold and italic cells for table bodies. Users
+#' creating pdf output should specify `as_kable_extra(format = "latex")`.
+#'
+#' @section PDF via LaTeX Tips:
+#'
+#' This section discusses options intended for use with
+#'  - `output: pdf_document` in yaml of `.Rmd`.
+#'  - `as_kable_extra(format = "latex")`
+#'
+#' ### Custom column names
+#'
+#' In pdf output, column names do not currently inherit formatting applied in
+#' {gtsummary} tables. However, custom column names can be achieved with the
+#' `col.names` argument as shown in Example 2, including attributes such as bold
+#' formatting, italic formatting, and line breaks. Doing so requires the `escape
+#' = FALSE` argument; however, when using `escape = FALSE` special latex
+#' characters like `\` and `%` will need to be escaped prior to entering
+#' `as_kable_extra()`. Using `escape = FALSE` when the gtsummary table has
+#' special LaTeX characters will result in the error `"LaTeX failed to
+#' compile..."`
+#'
+#' ### Additional table styling
+#'
+#' Additional styling is available through `knitr::kable()` and
+#' `kableExtra::kable_styling()` as shown in Example 3, which implements row
+#' striping and repeated column headers in the presence of page breaks.
 #'
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
@@ -12,10 +38,73 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE)
-#' tbl <-
+#' # Example 1 (general) -------------------------------------------------------
+#' as_kable_extra_ex1_gen <-
 #'   trial %>%
+#'   select(trt, age, stage) %>%
 #'   tbl_summary(by = trt) %>%
+#'   bold_labels() %>%
 #'   as_kable_extra()
+#'
+#' # Example 2 (PDF via LaTeX) -------------------------------------------------
+#' custom_names <- c(
+#'    "\\textbf{Characteristic}",
+#'    "\\textbf{Drug A}\n\\textit{N = 98}",
+#'    "\\textbf{Drug B}\n\\textit{N = 102}"
+#' )
+#' as_kable_extra_ex2_pdf <-
+#'   trial %>%
+#'   select(trt, age, stage) %>%
+#'   tbl_summary(
+#'      by = trt,
+#'      statistic = list(all_categorical() ~ "{n} ({p}\\%)")
+#'   ) %>%
+#'   bold_labels() %>%
+#'   modify_footnote(
+#'      update = all_stat_cols() ~ "Median (IQR); n (%)"
+#'   ) %>%
+#'   as_kable_extra(
+#'      format = "latex",
+#'      col.names = kableExtra::linebreak(custom_names, align = "c"),
+#'      escape = FALSE
+#'   )
+#'
+#' # Example 3 (PDF via LaTeX) -------------------------------------------------
+#' as_kable_extra_ex3_pdf <-
+#' trial %>%
+#'   select(trt, age, stage) %>%
+#'   tbl_summary(by = trt) %>%
+#'   bold_labels() %>%
+#'   as_kable_extra(
+#'     format = "latex",
+#'     booktabs = TRUE,
+#'     longtable = TRUE,
+#'     linesep = ""
+#'   ) %>%
+#'   kableExtra::kable_styling(
+#'     position = "left",
+#'     latex_options = c("striped", "repeat_header"),
+#'     stripe_color = "gray!15"
+#'   )
+#'
+#' @section Example Output:
+#' \if{html}{Example 1 (html)}
+#'
+#' \if{html}{\figure{as_kable_extra_ex1_html.png}{options: width=40\%}}
+#'
+#' \if{html}{Example 1 (pdf)}
+#'
+#' \if{html}{\figure{as_kable_extra_ex1_pdf.png}{options: width=40\%}}
+#'
+#' \if{html}{Example 2 (pdf)}
+#'
+#' \if{html}{\figure{as_kable_extra_ex2_pdf.png}{options: width=40\%}}
+#'
+#' \if{html}{Example 3 (pdf)}
+#'
+#' \if{html}{\figure{as_kable_extra_ex3_pdf.png}{options: width=40\%}}
+#'
+
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
                            strip_md_bold = TRUE, fmt_missing = TRUE, ...) {
   # must have kableExtra package installed to use this function ----------------
