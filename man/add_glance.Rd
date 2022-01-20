@@ -64,23 +64,72 @@ table source note (\code{add_glance_source_note()}).
 \section{Default Labels}{
 
 The following statistics have set default labels when printed.
-When there is no default, the column name from \code{broom::glance()} is printed.\tabular{ll}{
-   Statistic Name \tab Default Label \cr
-   r.squared \tab R² \cr
-   adj.r.squared \tab Adjusted R² \cr
-   p.value \tab p-value \cr
-   logLik \tab Log-likelihood \cr
-   statistic \tab Statistic \cr
-   df.residual \tab Residual df \cr
-   null.deviance \tab Null deviance \cr
-   df.null \tab Null df \cr
-   nevent \tab N events \cr
-   concordance \tab c-index \cr
-   std.error.concordance \tab c-index SE \cr
-   nobs \tab No. Obs. \cr
-   deviance \tab Deviance \cr
-   sigma \tab Sigma \cr
-}
+When there is no default, the column name from \code{broom::glance()} is printed.<table>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Statistic Name </th>
+   <th style="text-align:left;"> Default Label </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> r.squared </td>
+   <td style="text-align:left;"> R² </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> adj.r.squared </td>
+   <td style="text-align:left;"> Adjusted R² </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> p.value </td>
+   <td style="text-align:left;"> p-value </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> logLik </td>
+   <td style="text-align:left;"> Log-likelihood </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> statistic </td>
+   <td style="text-align:left;"> Statistic </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> df.residual </td>
+   <td style="text-align:left;"> Residual df </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> null.deviance </td>
+   <td style="text-align:left;"> Null deviance </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> df.null </td>
+   <td style="text-align:left;"> Null df </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> nevent </td>
+   <td style="text-align:left;"> N events </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> concordance </td>
+   <td style="text-align:left;"> c-index </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> std.error.concordance </td>
+   <td style="text-align:left;"> c-index SE </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> nobs </td>
+   <td style="text-align:left;"> No. Obs. </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> deviance </td>
+   <td style="text-align:left;"> Deviance </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> sigma </td>
+   <td style="text-align:left;"> Sigma </td>
+  </tr>
+</tbody>
+</table>
 }
 
 \section{Tips}{
