@@ -1,9 +1,7 @@
 #' Convert gtsummary object to a kable object
 #'
 #' @description Function converts a gtsummary object to a knitr_kable object.
-#' This function is used in the background when the results are printed or knit.
-#' A user can use this function if they wish to add customized formatting
-#' available via [knitr::kable].
+#' This function may be used in the background when the tables are printed or knitted.
 #'
 #' @description Output from [knitr::kable] is less full featured compared to
 #' summary tables produced with [gt](https://gt.rstudio.com/index.html).
@@ -105,8 +103,14 @@ table_styling_to_kable_calls <- function(x, fmt_missing = TRUE, ...) {
   dots <- rlang::dots_list(...)
   kable_args <-
     # default args
-    list(caption = x$table_styling$caption,
-         col.names = dplyr::filter(x$table_styling$header, .data$hide == FALSE)$label) %>%
+    list(
+      caption = x$table_styling$caption,
+      col.names = dplyr::filter(x$table_styling$header, .data$hide == FALSE)$label,
+      align =
+        filter(x$table_styling$header, .data$hide == FALSE) %>%
+        dplyr::pull(align) %>%
+        stringr::str_sub(1, 1)
+    ) %>%
     # update with any args user passed values
     purrr::list_modify(!!!dots) %>%
     purrr::compact()
