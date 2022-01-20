@@ -62,11 +62,11 @@ characters like \verb{\\} and \verb{\%} will need to be escaped prior to enterin
 special LaTeX characters will result in the error \verb{LaTeX failed to compile...}
 }
 
-\subsection{Additional table styling Additional styling is available through}{
+\subsection{Additional table styling}{
 
-\code{knitr::kable()} and \code{kableExtra::kable_styling()} as shown in Example 3,
-which implements row striping and repeated column headers in the presence of
-page breaks.
+Additional styling is available through \code{knitr::kable()} and
+\code{kableExtra::kable_styling()} as shown in Example 3, which implements row
+striping and repeated column headers in the presence of page breaks.
 }
 }
 
@@ -74,19 +74,19 @@ page breaks.
 
 \if{html}{Example 1 (html)}
 
-\if{html}{\figure{tbl_kableExtra_ex1.png}{options: width=50\%}}
+\if{html}{\figure{tbl_kableExtra_ex1.png}{options: width=40\%}}
 
 \if{html}{Example 1 (pdf)}
 
-\if{html}{\figure{tbl_kableExtra_pdf1.png}{options: width=50\%}}
+\if{html}{\figure{tbl_kableExtra_pdf1.png}{options: width=40\%}}
 
 \if{html}{Example 2 (pdf)}
 
-\if{html}{\figure{tbl_kableExtra_pdf2.png}{options: width=45\%}}
+\if{html}{\figure{tbl_kableExtra_pdf2.png}{options: width=40\%}}
 
 \if{html}{Example 3 (pdf)}
 
-\if{html}{\figure{tbl_kableExtra_pdf3.png}{options: width=45\%}}
+\if{html}{\figure{tbl_kableExtra_pdf3.png}{options: width=40\%}}
 }
 
 \examples{
@@ -100,7 +100,11 @@ tbl_kableExtra_ex1 <-
   as_kable_extra()
 
 # Example 2 (PDF via LaTeX) -------------------------------------------------
-custom_names <- c("\\\\textbf{Characteristic}", "\\\\textbf{Drug A}\n\\\\textit{N = 98}", "\\\\textbf{Drug B}\n\\\\textit{N = 102}")
+custom_names <- c(
+   "\\\\textbf{Characteristic}",
+   "\\\\textbf{Drug A}\n\\\\textit{N = 98}",
+   "\\\\textbf{Drug B}\n\\\\textit{N = 102}"
+)
 tbl_kableExtra_ex2 <-
   trial \%>\%
   select(trt, age, stage) \%>\%
