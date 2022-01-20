@@ -108,7 +108,7 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @return A `tbl_custom_summary` and `tbl_summary` object
 #' @author Joseph Larmarange
-#' @examples
+#' @examplesIf isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
 #' # Example 1 ----------------------------------
 #' my_stats <- function(data, ...) {
 #'   marker_sum = sum(data$marker, na.rm = TRUE)

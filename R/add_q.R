@@ -15,7 +15,7 @@
 #' @family tbl_regression tools
 #' @family tbl_uvregression tools
 #' @export
-#' @examplesIf broom.helpers::.assert_package("car", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("car", boolean = TRUE) && isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
 #' # Example 1 ----------------------------------
 #' add_q_ex1 <-
 #'   trial[c("trt", "age", "grade", "response")] %>%

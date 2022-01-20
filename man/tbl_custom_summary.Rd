@@ -193,6 +193,7 @@ statistics refer to a third variable.
 }
 
 \examples{
+\dontshow{if (isTRUE(Sys.getenv("NOT_CRAN") \%in\% c("true", ""))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 my_stats <- function(data, ...) {
   marker_sum = sum(data$marker, na.rm = TRUE)
@@ -271,6 +272,7 @@ tbl_custom_summary_ex3 <-
     overall_row = TRUE
   ) \%>\%
   bold_labels()
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

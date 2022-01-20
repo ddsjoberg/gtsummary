@@ -152,6 +152,7 @@ This list is not exhaustive, and care should be taken for each number reported.
 }
 
 \examples{
+\dontshow{if (isTRUE(Sys.getenv("NOT_CRAN") \%in\% c("true", ""))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1 ----------------------------------
 tbl_uv_ex1 <-
   tbl_uvregression(
@@ -173,6 +174,7 @@ tbl_uv_ex2 <-
     exponentiate = TRUE,
     pvalue_fun = function(x) style_pvalue(x, digits = 2)
   )
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html#tbl_uvregression}{vignette}  for detailed examples

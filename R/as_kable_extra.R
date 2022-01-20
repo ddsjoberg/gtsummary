@@ -37,7 +37,7 @@
 #' @return A {kableExtra} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE) && isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
 #' # Example 1 (general) -------------------------------------------------------
 #' as_kable_extra_ex1_gen <-
 #'   trial %>%

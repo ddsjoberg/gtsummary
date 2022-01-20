@@ -22,7 +22,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' @inheritParams add_n_regression
 #' @name add_nevent_regression
 #'
-#' @examples
+#' @examplesIf isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
 #' # Example 1 ----------------------------------
 #' add_nevent.tbl_regression_ex1 <-
 #'   trial %>%

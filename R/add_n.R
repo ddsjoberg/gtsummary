@@ -277,7 +277,7 @@ add_n.tbl_survfit <- function(x, ...) {
 #' @param ... Not used
 #'
 #' @name add_n_regression
-#' @examples
+#' @examplesIf isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
 #' # Example 1 ----------------------------------
 #' add_n.tbl_regression_ex1 <-
 #'   trial %>%

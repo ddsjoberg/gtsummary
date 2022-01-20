@@ -49,7 +49,7 @@
 #' @family tbl_uvregression tools
 #' @export
 #' @return A `tbl_uvregression` object
-#' @examples
+#' @examplesIf isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
 #' # Example 1 ----------------------------------
 #' tbl_uv_ex1 <-
 #'   tbl_uvregression(

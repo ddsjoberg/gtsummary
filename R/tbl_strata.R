@@ -53,7 +53,7 @@
 #' @family tbl_survfit tools
 #' @family tbl_svysummary tools
 #'
-#' @examples
+#' @examplesIf isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
 #' # Example 1 ----------------------------------
 #' tbl_strata_ex1 <-
 #'   trial %>%
