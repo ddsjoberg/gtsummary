@@ -84,6 +84,7 @@ modify_cols_merge_ex2 <-
 }
 \seealso{
 Other Advanced modifiers: 
+\code{\link{modify_column_alignment}()},
 \code{\link{modify_column_hide}()},
 \code{\link{modify_fmt_fun}()},
 \code{\link{modify_table_body}()},

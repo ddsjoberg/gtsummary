@@ -107,6 +107,7 @@ each stratum's summary table.
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 tbl_strata_ex1 <-
   trial \%>\%
@@ -143,7 +144,7 @@ tbl_strata_ex2 <-
     .quiet = TRUE
   ) \%>\%
   modify_caption("**Response Rate by Grade**")
-
+}
 }
 \seealso{
 Other tbl_regression tools: 

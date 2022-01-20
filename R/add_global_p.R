@@ -20,6 +20,7 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #'
 #' @examplesIf broom.helpers::.assert_package("car", boolean = TRUE)
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' tbl_lm_global_ex1 <-
 #'   lm(marker ~ age + grade, trial) %>%
@@ -36,6 +37,7 @@
 #'     exponentiate = TRUE
 #'   ) %>%
 #'   add_global_p()
+#' }
 #' @family tbl_uvregression tools
 #' @family tbl_regression tools
 #' @section Example Output:
