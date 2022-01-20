@@ -2,6 +2,8 @@
 
 ### New Functions
 
+* Added new function `modify_column_alignment()` to updated column alignment. Function is a wrapper for the more complex `modify_table_styling()` function.
+
 * New function `tbl_strata2()` that passes both the the stratified data frame as well as the stratum level to the user function. (#1091)
 
 * Added a `add_p.tbl_continuous()` method for adding p-values to `tbl_continuous()` tables. (#1023)
