@@ -205,8 +205,8 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
 
   # table of column headers
   x <-
-    .create_gtsummary_object(
-      table_body = table_body,
+    .create_gtsummary_object(table_body = table_body) %>%
+    purrr::list_modify(
       N = pluck(table_body, "N_obs", 1),
       n = pluck(table_body, "N_obs", 1), # i want to remove this eventually
       N_event = pluck(table_body, "N_event", 1), model_obj = x,
