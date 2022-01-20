@@ -62,12 +62,31 @@ characters like \verb{\\} and \verb{\%} will need to be escaped prior to enterin
 special LaTeX characters will result in the error \verb{LaTeX failed to compile...}
 }
 
-\subsection{Additional table styling}{
+\subsection{Additional table styling Additional styling is available through}{
 
-Additional styling available through \code{knitr::kable()} and
-\code{kableExtra::kable_styling()} as show in Example 3, which reates row striping
-and repeated column headers in the presence of page breaks.
+\code{knitr::kable()} and \code{kableExtra::kable_styling()} as shown in Example 3,
+which implements row striping and repeated column headers in the presence of
+page breaks.
 }
+}
+
+\section{Example Output}{
+
+\if{html}{Example 1 (html)}
+
+\if{html}{\figure{tbl_kableExtra_ex1.png}{options: width=50\%}}
+
+\if{html}{Example 1 (pdf)}
+
+\if{html}{\figure{tbl_kableExtra_pdf1.png}{options: width=50\%}}
+
+\if{html}{Example 2 (pdf)}
+
+\if{html}{\figure{tbl_kableExtra_pdf2.png}{options: width=45\%}}
+
+\if{html}{Example 3 (pdf)}
+
+\if{html}{\figure{tbl_kableExtra_pdf3.png}{options: width=45\%}}
 }
 
 \examples{

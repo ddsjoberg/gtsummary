@@ -80,6 +80,24 @@
 #'     latex_options = c("striped", "repeat_header"),
 #'     stripe_color = "gray!15"
 #'   )
+#'
+#' @section Example Output:
+#' \if{html}{Example 1 (html)}
+#'
+#' \if{html}{\figure{tbl_kableExtra_ex1.png}{options: width=50\%}}
+#'
+#' \if{html}{Example 1 (pdf)}
+#'
+#' \if{html}{\figure{tbl_kableExtra_pdf1.png}{options: width=50\%}}
+#'
+#' \if{html}{Example 2 (pdf)}
+#'
+#' \if{html}{\figure{tbl_kableExtra_pdf2.png}{options: width=45\%}}
+#'
+#' \if{html}{Example 3 (pdf)}
+#'
+#' \if{html}{\figure{tbl_kableExtra_pdf3.png}{options: width=45\%}}
+#'
 
 as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
                            strip_md_bold = TRUE, fmt_missing = TRUE, ...) {
