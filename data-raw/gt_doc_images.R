@@ -26,3 +26,7 @@ gt.doc.images::save_help_file_images(pkg = "gtsummary",
 gt.doc.images::shrink_help_file_images(pkg = "gtsummary")
 
 gt.doc.images::shrink_help_file_images(pkg = "gtsummary", image_files = "tbl_strata_ex1.png")
+
+c("as_kable_extra_ex2_pdf.png", "as_kable_extra_ex3_pdf.png",
+  "as_kable_extra_ex1_pdf.png", "as_flex_table_ex1.png") |>
+  purrr::walk(~webshot::shrink(here::here("man", "figures", .x)))
