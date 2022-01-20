@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 1.5.1
 
 ### New Functions
 
@@ -14,7 +14,7 @@
 
 * New test option "emmeans" in `add_difference()` and `add_p()` uses the {emmeans} package to estimate marginal means/least-squares means for continuous variables, binary variables and random intercept models. (#1112)
 
-* Column alignment is not recognized in `as_kable()` and `as_kable_extra()`. Previously, the alignment utilized the `kable()` defaults and ignored any alignment instructions included in the gtsummary table styling.
+* Column alignment is now recognized in `as_kable()` and `as_kable_extra()`. Previously, the alignment utilized the `kable()` defaults and ignored any alignment instructions included in the gtsummary table styling.
 
 * The `as_kable_extra()` was updated to utilize `kableExtra::column_spec()` and `kableExtra::cell_spec()` to apply bold and italic styling. The choice of the function depends on the use of `escape=` in `knitr::kable()` (#1107)
 

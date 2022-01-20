@@ -7,10 +7,6 @@
 ## R CMD check results
 Maintainer: 'Daniel D. Sjoberg <danield.sjoberg@gmail.com>'
 
-Examples with CPU (user + system) or elapsed time > 10s
-             user system elapsed
-tbl_butcher 10.55   0.01   11.29
-
 ## Additional Comments
 
 Thank you for your time.
