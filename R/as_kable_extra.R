@@ -7,6 +7,28 @@
 #' bold and italic cells for table bodies (but not yet column names). Users
 #' creating pdf output should specify `as_kable_extra(format = "latex")`.
 #'
+#' @section PDF via LaTeX Tips:
+#'
+#' This section discusses options intended for use with
+#'  - `output: pdf_document` in yaml of `.Rmd`.
+#'  - `as_kable_extra(format = "latex")`
+#'
+#' ### Custom column names
+#' In pdf output, column names do not currently inherit formatting applied in
+#' {gtsummary} tables. However, custom column names can be achieved with the
+#' `col.names` argument as shown in Example 2, including attributes such as bold
+#' formatting, italic formatting, and line breaks. Doing so requires the `escape
+#' = FALSE` argument; however, when using `escape = FALSE` special latex
+#' characters like `\` and `%` will need to be escaped prior to entering
+#' `as_kable_extra()`. Using `escape = FALSE` when the gtsummary table has
+#' special LaTeX characters will result in the error `LaTeX failed to
+#' compile...`
+#'
+#' ### Additional table styling Additional styling is available through
+#' `knitr::kable()` and `kableExtra::kable_styling()` as shown in Example 3,
+#' which implements row striping and repeated column headers in the presence of
+#' page breaks.
+#'
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
 #' @export
@@ -15,7 +37,6 @@
 #' @author Daniel D. Sjoberg
 #' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE)
 #' # Example 1 (general) -------------------------------------------------------
-#' # Default kableExtra styling.
 #' tbl_kableExtra_ex1 <-
 #'   trial %>%
 #'   select(trt, age, stage) %>%
@@ -23,14 +44,7 @@
 #'   bold_labels() %>%
 #'   as_kable_extra()
 #'
-#' # Example 2 (latex to pdf) --------------------------------------------------
-#' # Intended for use with `output: pdf_document` in yaml of `.Rmd`.
-#' # Custom column names with bold formatting, italic formatting, and line breaks.
-#' # The `escape = FALSE` argument is required for custom formatting; however, be careful when
-#' # using `escape = FALSE` as special latex characters like `\` and `%` will need
-#' # to be escaped prior to entering `as_kable_extra()`. Using `escape = FALSE` when
-#' # the gtsummary table has special latex characters will result in the error
-#' # `LaTeX failed to compile...`
+#' # Example 2 (PDF via LaTeX) -------------------------------------------------
 #' custom_names <- c("\\textbf{Characteristic}", "\\textbf{Drug A}\n\\textit{N = 98}", "\\textbf{Drug B}\n\\textit{N = 102}")
 #' tbl_kableExtra_ex2 <-
 #'   trial %>%
@@ -49,11 +63,7 @@
 #'      escape = FALSE
 #'   )
 #'
-#' # Example 3 (latex to pdf) --------------------------------------------------
-#' # Intended for use with `output: pdf_document` in yaml of `.Rmd`.
-#' # Additional styling available through `knitr::kable()` and
-#' # `kableExtra::kable_styling()`. Creates row striping and repeated column
-#' # headers in the presence of page breaks.
+#' # Example 3 (PDF via LaTeX) -------------------------------------------------
 #' tbl_kableExtra_ex3 <-
 #' trial %>%
 #'   select(trt, age, stage) %>%
