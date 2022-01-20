@@ -12,7 +12,7 @@ df_add_p_tests <-
   )
 
 df_translations <- readxl::read_excel("data-raw/gtsummary_translated.xlsx")
-if (nrow(df_translations) != nrow(df_translations %>% select(en) |> dplyr::distinct())) {
+if (nrow(df_translations) != nrow(df_translations |> dplyr::select(en) |> dplyr::distinct())) {
   stop("STOOOOOOOOOPPPPP, error in the translations data")
 }
 
