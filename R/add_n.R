@@ -277,7 +277,8 @@ add_n.tbl_survfit <- function(x, ...) {
 #' @param ... Not used
 #'
 #' @name add_n_regression
-#' @examplesIf isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
+#' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' add_n.tbl_regression_ex1 <-
 #'   trial %>%
@@ -295,6 +296,7 @@ add_n.tbl_survfit <- function(x, ...) {
 #'   glm(response ~ age + grade, trial, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
 #'   add_n(location = "level")
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

@@ -35,7 +35,7 @@ Add N to regression table
 }
 
 \examples{
-\dontshow{if (isTRUE(Sys.getenv("NOT_CRAN") \%in\% c("true", ""))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 # Example 1 ----------------------------------
 add_n.tbl_regression_ex1 <-
   trial \%>\%
@@ -53,5 +53,5 @@ add_n.tbl_regression_ex2 <-
   glm(response ~ age + grade, trial, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE) \%>\%
   add_n(location = "level")
-\dontshow{\}) # examplesIf}
+}
 }

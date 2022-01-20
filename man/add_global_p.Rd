@@ -63,7 +63,8 @@ Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("car", boolean = TRUE) && isTRUE(Sys.getenv("NOT_CRAN") \%in\% c("true", ""))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("car", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 # Example 1 ----------------------------------
 tbl_lm_global_ex1 <-
   lm(marker ~ age + grade, trial) \%>\%
@@ -80,6 +81,7 @@ tbl_uv_global_ex2 <-
     exponentiate = TRUE
   ) \%>\%
   add_global_p()
+}
 \dontshow{\}) # examplesIf}
 }
 \seealso{

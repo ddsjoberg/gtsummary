@@ -75,7 +75,8 @@ Adds p-values to tables created by \code{tbl_svysummary} by comparing values acr
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("survey", boolean = TRUE) && isTRUE(Sys.getenv("NOT_CRAN") \%in\% c("true", ""))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("survey", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 # Example 1 ----------------------------------
 # A simple weighted dataset
 add_p_svysummary_ex1 <-
@@ -102,6 +103,7 @@ add_p_svysummary_ex3 <-
       all_categorical() ~ "svy.wald.test"
     )
   )
+}
 \dontshow{\}) # examplesIf}
 }
 \seealso{

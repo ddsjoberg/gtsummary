@@ -22,7 +22,8 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' @inheritParams add_n_regression
 #' @name add_nevent_regression
 #'
-#' @examplesIf isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
+#' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' add_nevent.tbl_regression_ex1 <-
 #'   trial %>%
@@ -38,6 +39,7 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #'   glm(response ~ age + grade, trial, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
 #'   add_nevent(location = "level")
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

@@ -49,7 +49,8 @@
 #' @family tbl_uvregression tools
 #' @export
 #' @return A `tbl_uvregression` object
-#' @examplesIf isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
+#' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' tbl_uv_ex1 <-
 #'   tbl_uvregression(
@@ -71,6 +72,7 @@
 #'     exponentiate = TRUE,
 #'     pvalue_fun = function(x) style_pvalue(x, digits = 2)
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

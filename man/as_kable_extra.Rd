@@ -90,7 +90,8 @@ striping and repeated column headers in the presence of page breaks.
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("kableExtra", boolean = TRUE) && isTRUE(Sys.getenv("NOT_CRAN") \%in\% c("true", ""))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("kableExtra", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 # Example 1 (general) -------------------------------------------------------
 as_kable_extra_ex1_gen <-
   trial \%>\%
@@ -139,6 +140,7 @@ trial \%>\%
     latex_options = c("striped", "repeat_header"),
     stripe_color = "gray!15"
   )
+}
 \dontshow{\}) # examplesIf}
 }
 \seealso{

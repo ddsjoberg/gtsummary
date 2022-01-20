@@ -107,7 +107,7 @@ each stratum's summary table.
 }
 
 \examples{
-\dontshow{if (isTRUE(Sys.getenv("NOT_CRAN") \%in\% c("true", ""))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 # Example 1 ----------------------------------
 tbl_strata_ex1 <-
   trial \%>\%
@@ -144,7 +144,7 @@ tbl_strata_ex2 <-
     .quiet = TRUE
   ) \%>\%
   modify_caption("**Response Rate by Grade**")
-\dontshow{\}) # examplesIf}
+}
 }
 \seealso{
 Other tbl_regression tools: 

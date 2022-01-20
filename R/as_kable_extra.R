@@ -37,7 +37,8 @@
 #' @return A {kableExtra} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE) && isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
+#' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE)
+#' \donttest{
 #' # Example 1 (general) -------------------------------------------------------
 #' as_kable_extra_ex1_gen <-
 #'   trial %>%
@@ -86,7 +87,7 @@
 #'     latex_options = c("striped", "repeat_header"),
 #'     stripe_color = "gray!15"
 #'   )
-#'
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1 (html)}
 #'

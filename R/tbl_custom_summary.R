@@ -108,7 +108,8 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @return A `tbl_custom_summary` and `tbl_summary` object
 #' @author Joseph Larmarange
-#' @examplesIf isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
+#' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' my_stats <- function(data, ...) {
 #'   marker_sum = sum(data$marker, na.rm = TRUE)
@@ -187,6 +188,7 @@
 #'     overall_row = TRUE
 #'   ) %>%
 #'   bold_labels()
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

@@ -665,7 +665,8 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #' @export
 #' @return A `tbl_svysummary` object
 #' @author Joseph Larmarange
-#' @examplesIf broom.helpers::.assert_package("survey", boolean = TRUE) && isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
+#' @examplesIf broom.helpers::.assert_package("survey", boolean = TRUE)
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' # A simple weighted dataset
 #' add_p_svysummary_ex1 <-
@@ -692,6 +693,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #'       all_categorical() ~ "svy.wald.test"
 #'     )
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

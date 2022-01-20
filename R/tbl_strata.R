@@ -53,7 +53,8 @@
 #' @family tbl_survfit tools
 #' @family tbl_svysummary tools
 #'
-#' @examplesIf isTRUE(Sys.getenv("NOT_CRAN") %in% c("true", ""))
+#' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' tbl_strata_ex1 <-
 #'   trial %>%
@@ -90,7 +91,7 @@
 #'     .quiet = TRUE
 #'   ) %>%
 #'   modify_caption("**Response Rate by Grade**")
-#'
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
