@@ -321,7 +321,8 @@ test_that("add_difference() with emmeans()", {
         include = c(age, response),
         missing = "no"
       ) %>%
-      add_difference(test = everything() ~ "emmeans", adj.vars = "marker")
+      add_difference(test = everything() ~ "emmeans", adj.vars = "marker"),
+    NA
   )
 })
 
