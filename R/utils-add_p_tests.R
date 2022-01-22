@@ -307,17 +307,24 @@ add_p_test_emmeans <- function(data, variable, by, type,
 
   assert_package("emmeans")
   if (!is.null(group)) assert_package("lme4")
+  if (is_survey(data)) assert_package("survey")
+  data_frame <-
+    switch(is.data.frame(data), data) %||%
+    .remove_survey_cols(data)
 
   # checking inputs
   if (!type %in% c("continuous", "dichotomous")) {
     stop("Variable must be summary type 'continuous' or 'dichotomous'", call. = FALSE)
   }
-  if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2) {
+  if (length(data_frame[[by]] %>% stats::na.omit() %>% unique()) != 2) {
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   }
   if (type %in% "dichotomous" &&
-      length(data[[variable]] %>% stats::na.omit() %>% unique()) != 2) {
+      length(data_frame[[variable]] %>% stats::na.omit() %>% unique()) != 2) {
     stop("`variable=` must have exactly 2 levels", call. = FALSE)
+  }
+  if (is_survey(data) && !is.null(group)) {
+    stop("Cannot use `group=` argument with 'emmeans' and survey data.", call. = FALSE)
   }
 
   # assembling formula
@@ -326,14 +333,22 @@ add_p_test_emmeans <- function(data, variable, by, type,
     paste(collapse = " + ")
   if (!is.null(group))
     rhs <- paste0(rhs, "+ (1 | ", chr_w_backtick(group), ")")
-  f <- stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs}") %>% as.formula()
+  f <-
+    ifelse(
+      type == "dichotomous",
+      stringr::str_glue("as.factor({chr_w_backtick(variable)}) ~ {rhs}"),
+      stringr::str_glue("{chr_w_backtick(variable)} ~ {rhs}")
+    ) %>%
+    as.formula()
   f_by <- rlang::inject(~ !!rlang::sym(chr_w_backtick(by)))
 
   type2 <-
     dplyr::case_when(
-      is.null(group) ~ type,
-      type == "dichotomous" ~ "dichotomous_mixed",
-      type == "continuous" ~ "continuous_mixed",
+      is.data.frame(data) && is.null(group) ~ type,
+      is_survey(data) && is.null(group) && type == "dichotomous" ~  "dichotomous_svy",
+      is_survey(data) && is.null(group) && type == "continuous" ~  "continuous_svy",
+      is.data.frame(data) && type == "dichotomous" ~ "dichotomous_mixed",
+      is.data.frame(data) && type == "continuous" ~ "continuous_mixed",
     )
   model_fun <-
     switch(
@@ -342,6 +357,10 @@ add_p_test_emmeans <- function(data, variable, by, type,
         purrr::partial(stats::glm, formula = f, data = data, family = stats::binomial),
       "continuous" =
         purrr::partial(stats::lm, formula = f, data = data),
+      "dichotomous_svy" =
+        purrr::partial(survey::svyglm, formula = f, design = data, family = stats::binomial),
+      "continuous_svy" =
+        purrr::partial(survey::svyglm, formula = f, design = data),
       "dichotomous_mixed" =
         purrr::partial(lme4::glmer, formula = f, data = data, family = stats::binomial),
       "continuous_mixed" =
@@ -375,7 +394,13 @@ add_p_test_emmeans <- function(data, variable, by, type,
       .data$p.value
     ) %>%
     dplyr::mutate(
-      method = "Least-squares adjusted mean difference")
+      method =
+        ifelse(
+         is.null(.env$adj.vars),
+         "Regression least-squares mean difference",
+         "Regression least-squares adjusted mean difference"
+        )
+    )
 }
 
 add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95, adj.vars = NULL, ...) {
