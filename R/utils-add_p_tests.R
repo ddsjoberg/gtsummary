@@ -394,7 +394,13 @@ add_p_test_emmeans <- function(data, variable, by, type,
       .data$p.value
     ) %>%
     dplyr::mutate(
-      method = "Least-squares adjusted mean difference")
+      method =
+        ifelse(
+         is.null(.env$adj.vars),
+         "Regression least-squares mean difference",
+         "Regression least-squares adjusted mean difference"
+        )
+    )
 }
 
 add_p_test_ancova_lme4 <- function(data, variable, by, group, conf.level = 0.95, adj.vars = NULL, ...) {
