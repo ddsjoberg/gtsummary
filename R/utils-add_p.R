@@ -320,6 +320,16 @@
     return("ancova_lme4")
   }
 
+  if (summary_type %in% c("continuous", "continuous2", "dichotomous") &&
+      is.null(group) && is_survey(data)) {
+    return("emmeans")
+  }
+
+  if (summary_type %in% c("categorical") &&
+      is.null(adj.vars) && is.null(group) && is_survey(data)) {
+    return("smd")
+  }
+
   glue(
     "There is no default test for variable '{variable}'. Please specify method in `test=` ",
     "or exclude it with `include = -c({variable})`"

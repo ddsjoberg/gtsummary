@@ -313,5 +313,16 @@ test_that("add_difference() with emmeans()", {
       add_difference(test = everything() ~ "emmeans", group = "death"),
     NA
   )
+
+  expect_error(
+    survey::svydesign(ids = ~1, data = trial, weights = ~1) %>%
+      tbl_svysummary(
+        by = trt,
+        include = c(age, response),
+        missing = "no"
+      ) %>%
+      add_difference(test = everything() ~ "emmeans", adj.vars = "marker"),
+    NA
+  )
 })
 
