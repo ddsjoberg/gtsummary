@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix when `add_overall()` was run before `add_n()`. The overall row was not being omitted from the sum and the Ns were doubled. (#1126)
+
 # gtsummary 1.5.1
 
 ### New Functions
