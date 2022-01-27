@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix when `add_overall()` was run before `add_n()`. The overall row was not being omitted from the sum and the Ns were doubled. (#1126)
+
 * Added method "emmeans" to `add_difference()` for `tbl_svysummary()` objects.
 
 * Updated default `add_difference()` for `tbl_svysummary()` objects to be "emmeans" for continuous and dichotomous variables, and "smd" for categorical variables.
