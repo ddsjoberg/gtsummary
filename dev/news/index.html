@@ -91,7 +91,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Added method “emmeans” to <code><a href="../reference/add_difference.html">add_difference()</a></code> for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects.</p></li>
+<ul><li><p>Fix when <code><a href="../reference/add_overall.html">add_overall()</a></code> was run before <code><a href="../reference/add_n.html">add_n()</a></code>. The overall row was not being omitted from the sum and the Ns were doubled. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1126" class="external-link">#1126</a>)</p></li>
+<li><p>Added method “emmeans” to <code><a href="../reference/add_difference.html">add_difference()</a></code> for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects.</p></li>
 <li><p>Updated default <code><a href="../reference/add_difference.html">add_difference()</a></code> for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects to be “emmeans” for continuous and dichotomous variables, and “smd” for categorical variables. # gtsummary 1.5.1</p></li>
 </ul><div class="section level4">
 <h4 id="new-functions-development-version">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-development-version"></a></h4>
