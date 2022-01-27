@@ -29,6 +29,13 @@ test_that("no errors/warnings with standard use", {
     statistic = "{N}{n}{n_miss}{p}{p_miss}",
     footnote = TRUE
   ), NA)
+
+  # check that the Ns are the same when add overall is run before/after add_n()
+  tbl1 <- tbl_summary(trial, by = trt, include = c(age, stage))
+  expect_equal(
+    tbl1 %>% add_n() %>% add_overall() %>% purrr::pluck("table_body", "n"),
+    tbl1 %>% add_overall() %>% add_n() %>% purrr::pluck("table_body", "n")
+  )
 })
 
 

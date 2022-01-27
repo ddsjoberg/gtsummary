@@ -98,7 +98,7 @@ test_that("tbl_custom_summary() basics", {
   )
   expect_equal(
     tbl$n,
-    c("400", NA, NA, NA, "400", NA, NA, NA, NA, "400")
+    c("200", NA, NA, NA, "200", NA, NA, NA, NA, "200")
   )
   expect_equal(
     tbl$stat_2,
