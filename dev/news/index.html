@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.1.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.1.9002</span>
       </span>
     </div>
 
@@ -91,7 +91,9 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Fix when <code><a href="../reference/add_overall.html">add_overall()</a></code> was run before <code><a href="../reference/add_n.html">add_n()</a></code>. The overall row was not being omitted from the sum and the Ns were doubled. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1126" class="external-link">#1126</a>)</p></li>
+<ul><li><p>Removed foreign reference to external functions and replaced with indirect calls. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1129" class="external-link">#1129</a>)</p></li>
+<li><p>Now exporting the <code><a href="../reference/dot-create_gtsummary_object.html">.create_gtsummary_object()</a></code> function as a utility for other packages to build gtsummary tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1130" class="external-link">#1130</a>)</p></li>
+<li><p>Fix when <code><a href="../reference/add_overall.html">add_overall()</a></code> was run before <code><a href="../reference/add_n.html">add_n()</a></code>. The overall row was not being omitted from the sum and the Ns were doubled. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1126" class="external-link">#1126</a>)</p></li>
 <li><p>Added method “emmeans” to <code><a href="../reference/add_difference.html">add_difference()</a></code> for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects.</p></li>
 <li><p>Updated default <code><a href="../reference/add_difference.html">add_difference()</a></code> for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects to be “emmeans” for continuous and dichotomous variables, and “smd” for categorical variables. # gtsummary 1.5.1</p></li>
 </ul><div class="section level4">
