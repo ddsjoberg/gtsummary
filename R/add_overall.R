@@ -23,13 +23,13 @@
 #' @export
 #' @return A `tbl_*` of same class as `x`
 #' @examples
-#' Example 1 ------------------------------------
+#' # Example 1 ----------------------------------
 #' tbl_overall_ex1 <-
 #'   trial %>%
 #'   tbl_summary(include = c(age, grade), by = trt) %>%
 #'   add_overall()
 #'
-#' Example 2 ------------------------------------
+#' # Example 2 ----------------------------------
 #' tbl_overall_ex2 <-
 #'   trial %>%
 #'   tbl_summary(
@@ -45,7 +45,7 @@
 #'     digits = ~ c(1, 0)
 #'   )
 #'
-#' Example 3 ------------------------------------
+#' # Example 3 ----------------------------------
 #' tbl_overall_ex3 <-
 #'  trial %>%
 #'  tbl_continuous(
