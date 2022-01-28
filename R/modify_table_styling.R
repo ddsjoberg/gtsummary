@@ -264,8 +264,8 @@ modify_table_styling <- function(x,
   rows <- enquo(rows)
   all_columns <-
     str_extract_all(pattern, "\\{.*?\\}") %>%
-    map(str_remove_all, pattern = fixed("}")) %>%
-    map(str_remove_all, pattern = fixed("{")) %>%
+    map(~str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist()
 
   if (!is.na(pattern) && !all(all_columns %in% x$table_styling$header$column)) {

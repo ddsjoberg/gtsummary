@@ -68,7 +68,7 @@ modify_cols_merge <- function(x, pattern, rows = NULL) {
   columns <-
     pattern %>%
     str_extract_all("\\{.*?\\}") %>%
-    map(str_remove_all, pattern = "^\\{|\\}$") %>%
+    map(~str_remove_all(.x, pattern = "^\\{|\\}$")) %>%
     unlist()
   if (length(columns) == 0L) {
     cli::cli_alert_danger("No column names found in {.code modify_cols_merge(pattern=)}")

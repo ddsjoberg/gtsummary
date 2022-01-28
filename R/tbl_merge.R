@@ -219,7 +219,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
           )
         )
     ) %>%
-    purrr::reduce(dplyr::rows_update, by = "column", .init = x$table_styling$header)
+    purrr::reduce(~dplyr::rows_update(.x, .y, by = "column"), .init = x$table_styling$header)
 
   for (style_type in c("footnote", "footnote_abbrev", "fmt_fun", "text_format", "fmt_missing", "cols_merge")) {
     x$table_styling[[style_type]] <-
@@ -269,7 +269,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   for (style_type in c("caption", "source_note")) {
     x$table_styling[[style_type]] <-
       map(seq_along(tbls), ~ pluck(tbls, .x, "table_styling", style_type)) %>%
-      purrr::reduce(.f = `%||%`)
+      purrr::reduce(.f = ~ .x %||% .y)
   }
 
   # # rename variables in expressions, and take first non-NULL element
@@ -283,7 +283,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
           tbl = tbls[[.x]]
         )
       ) %>%
-      purrr::reduce(.f = `%||%`)
+      purrr::reduce(.f = ~ .x %||% .y)
   }
 
   x
@@ -337,8 +337,8 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   columns <- tbl$table_styling$header$column
   var_list <-
     stringr::str_extract_all(pattern, "\\{.*?\\}") %>%
-    map(stringr::str_remove_all, pattern = fixed("}")) %>%
-    map(stringr::str_remove_all, pattern = fixed("{")) %>%
+    map(~stringr::str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~stringr::str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist() %>%
     setdiff(c("label", "variable", "var_label", "row_type")) %>%
     intersect(columns)

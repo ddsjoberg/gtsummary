@@ -305,7 +305,7 @@ table_styling_to_gt_calls <- function(x, ...) {
         .data$interpret_spanning_header, .data$spanning_header,
         ~ call2(parse_expr(.x), .y)
       ),
-      cols = map(.data$cols, pull)
+      cols = map(.data$cols, ~pull(.x))
     ) %>%
     select(.data$spanning_header, .data$cols)
 

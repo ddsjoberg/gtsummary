@@ -89,10 +89,13 @@ created by \code{tbl_summary}, \code{tbl_svysummary}, \code{tbl_continuous} or
 }
 
 \examples{
+# Example 1 ----------------------------------
 tbl_overall_ex1 <-
   trial \%>\%
   tbl_summary(include = c(age, grade), by = trt) \%>\%
   add_overall()
+
+# Example 2 ----------------------------------
 tbl_overall_ex2 <-
   trial \%>\%
   tbl_summary(
@@ -107,6 +110,8 @@ tbl_overall_ex2 <-
     statistic = ~ "{p}\% (n={n})",
     digits = ~ c(1, 0)
   )
+
+# Example 3 ----------------------------------
 tbl_overall_ex3 <-
  trial \%>\%
  tbl_continuous(

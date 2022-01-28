@@ -170,7 +170,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
   for (style_type in c("caption", "source_note", "horizontal_line_above")) {
     results$table_styling[[style_type]] <-
       map(seq_along(tbls), ~ pluck(tbls, .x, "table_styling", style_type)) %>%
-      purrr::reduce(.f = `%||%`)
+      purrr::reduce(.f = ~ .x %||% .y)
   }
 
   # adding label for grouping variable, if present -----------------------------

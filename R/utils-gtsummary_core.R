@@ -10,7 +10,7 @@
 #' @param table_body the table_body tibble
 #' @param ... other objects that will be added to the gtsummary object list
 #'
-#' @noRd
+#' @export
 #' @keywords internal
 #' @return gtsummary object
 .create_gtsummary_object <- function(table_body, ...) {

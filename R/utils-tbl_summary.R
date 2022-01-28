@@ -1083,8 +1083,8 @@ extracting_function_calls_from_stat_display <- function(stat_display, variable) 
     stat_display %>%
     paste(collapse = " ") %>%
     str_extract_all("\\{.*?\\}") %>%
-    map(str_remove_all, pattern = fixed("}")) %>%
-    map(str_remove_all, pattern = fixed("{")) %>%
+    map(~str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist()
 
   if (length(fns_names_chr) == 0) {
@@ -1119,8 +1119,8 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
   # extracting statistics requested
   fns_names_chr <-
     str_extract_all(stat_display, "\\{.*?\\}") %>%
-    map(str_remove_all, pattern = fixed("}")) %>%
-    map(str_remove_all, pattern = fixed("{")) %>%
+    map(~str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist()
   base_stats <- c(
     "p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs",
@@ -1495,7 +1495,7 @@ meta_data_to_var_info <- function(meta_data) {
   if ("class" %in% names(var_info)) {
     var_info <-
       var_info %>%
-      mutate(var_class = map_chr(.data$class, pluck, 1)) %>%
+      mutate(var_class = map_chr(.data$class, ~pluck(.x, 1))) %>%
       select(-.data$class)
   }
   if ("summary_type" %in% names(var_info)) {
