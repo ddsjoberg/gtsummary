@@ -97,6 +97,8 @@ tbl_continuous <- function(data,
   # calculate tbl_continuous tables --------------------------------------------
   variable_label <-
     label[[variable]] %||% attr(data[[variable]], "label") %||% variable
+  statistic_footnote <-
+    stat_label_match(statistic) %>% unlist() %>% unique() %>% paste(collapse = "; ")
   result <-
     tbl_custom_summary(
       data, data,
@@ -109,7 +111,7 @@ tbl_continuous <- function(data,
       type = all_of(include %>% setdiff(c(variable, by))) ~ "categorical"
     ) %>%
     modify_footnote(
-      all_stat_cols() ~ glue("{variable_label}: {stat_label_match(statistic)}")
+      all_stat_cols() ~ glue("{variable_label}: {statistic_footnote}")
     )
 
   result[["inputs"]] <- tbl_continuous_inputs
