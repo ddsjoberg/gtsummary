@@ -136,8 +136,8 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
       ) %>%
       # parsing the stratum, and creating
       mutate(
-        variable = str_split(.data$strata, pattern = "=", n = 2) %>% map_chr(pluck(1)),
-        level = str_split(.data$strata, pattern = "=", n = 2) %>% map_chr(pluck(2)),
+        variable = str_split(.data$strata, pattern = "=", n = 2) %>% map_chr(~pluck(.x, 1)),
+        level = str_split(.data$strata, pattern = "=", n = 2) %>% map_chr(~pluck(.x, 2)),
         level_label = glue(level_label)
       )
   }

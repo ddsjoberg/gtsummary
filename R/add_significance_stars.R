@@ -87,8 +87,8 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
   if (!is_string(pattern)) abort("`pattern=` must be a string.")
   pattern_cols <-
     str_extract_all(pattern, "\\{.*?\\}") %>%
-    map(str_remove_all, pattern = fixed("}")) %>%
-    map(str_remove_all, pattern = fixed("{")) %>%
+    map(~str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist()
   if (isTRUE(is_empty(pattern_cols))) {
     abort("`pattern=` must be a string using glue syntax to select columns.")
