@@ -264,7 +264,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
       meta_data %>%
         select(.data$variable, .data$test_result) %>%
         mutate(
-          df_result = map(.data$test_result, pluck, "df_result"),
+          df_result = map(.data$test_result, ~pluck(.x, "df_result")),
           row_type = "label"
         ) %>%
         unnest(.data$df_result) %>%
