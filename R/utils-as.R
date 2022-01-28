@@ -60,7 +60,7 @@
       filter(!is.na(.data[[column]])) %>%
       set_names(c("column", "rows")) %>%
       mutate(
-        rows = map(.data$rows, parse_expr),
+        rows = map(.data$rows, ~parse_expr(.x)),
         format_type = .env$column,
         undo_text_format = FALSE
       ) %>%
@@ -73,7 +73,7 @@
       filter(!is.na(.data[[column]])) %>%
       set_names(c("column", "rows")) %>%
       mutate(
-        rows = map(.data$rows, parse_expr),
+        rows = map(.data$rows, ~parse_expr(.x)),
         symbol = get_theme_element("tbl_regression-str:ref_row_text",
           default = "\U2014"
         )

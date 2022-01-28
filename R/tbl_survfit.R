@@ -164,7 +164,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   meta_data <-
     tibble(
       survfit = x,
-      tidy = map(.data$survfit, broom::tidy),
+      tidy = map(.data$survfit, ~broom::tidy(.x)),
       stratified = map_lgl(.data$tidy, ~ "strata" %in% names(.x)),
       variable = survfit_to_var(.data$survfit, .data$stratified, .data$tidy, quiet)
     )

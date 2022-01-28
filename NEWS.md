@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Removed foreign reference to external functions and replaced with indirect calls. (#1129)
+
+* Now exporting the `.create_gtsummary_object()` function as a utility for other packages to build gtsummary tables. (#1130)
+
 * Fix when `add_overall()` was run before `add_n()`. The overall row was not being omitted from the sum and the Ns were doubled. (#1126)
 
 * Added method "emmeans" to `add_difference()` for `tbl_svysummary()` objects.
