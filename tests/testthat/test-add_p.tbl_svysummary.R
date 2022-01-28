@@ -185,7 +185,7 @@ test_that("add_p works well", {
   expect_equal(
     dplyr::filter(tbl2$meta_data, variable == "stage")$p.value,
     survey::svychisq(~ stage + response, strial, statistic = "lincom")$p.value %>% as.numeric(),
-    tolerance = 10^-4 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
+    tolerance = 10^-3 # see issue https://github.com/ddsjoberg/gtsummary/issues/702
   )
 
   # TO DO: fix test
