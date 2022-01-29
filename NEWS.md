@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Removed foreign reference to external functions and replaced with indirect calls (the reason for the short time between releases). (#1129)
+* Removed foreign reference to external functions in the top level of the package and replaced with indirect calls (the reason for the short time between releases). (#1129)
 
 * Updates to the way footnotes are printed in `tbl_summary()` when there is  summary type `"continuous2"` present. Previously, all footnotes were removed, and now only the `"continuous2"` footnotes are removed. (#1127)
 
