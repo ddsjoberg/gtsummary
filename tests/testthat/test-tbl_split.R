@@ -1,3 +1,5 @@
+skip_on_cran()
+
 t1 <- tbl_summary(trial)
 
 test_that("no errors/warnings with standard use", {

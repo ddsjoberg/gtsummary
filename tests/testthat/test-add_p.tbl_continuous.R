@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("add_p.tbl_continuous() works", {
   expect_error(
     tbl_continuous(

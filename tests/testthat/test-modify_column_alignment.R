@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("modify_column_alignment() works", {
   expect_error(
     lm(age ~ marker + grade, trial) %>%
