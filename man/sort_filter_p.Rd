@@ -33,6 +33,7 @@ Sort and filter variables in table by p-values
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 sort_filter_p_ex1 <-
   trial \%>\%
@@ -47,6 +48,7 @@ sort_p_ex2 <-
   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE) \%>\%
   sort_p()
+}
 }
 \author{
 Karissa Whiting, Daniel D. Sjoberg

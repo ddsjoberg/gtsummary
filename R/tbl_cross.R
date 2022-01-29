@@ -33,6 +33,7 @@
 #' @export
 #' @return A `tbl_cross` object
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' tbl_cross_ex1 <-
 #'   trial %>%
@@ -43,6 +44,7 @@
 #'   trial %>%
 #'   tbl_cross(row = stage, col = trt, percent = "cell") %>%
 #'   add_p()
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

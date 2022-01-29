@@ -10,6 +10,7 @@
 #' @author Daniel D. Sjoberg, Esther Drill
 #' @export
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' bold_p_ex1 <-
 #'   trial[c("age", "grade", "response", "trt")] %>%
@@ -22,6 +23,7 @@
 #'   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
 #'   bold_p(t = 0.65)
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

@@ -39,6 +39,7 @@
 #'
 #' @family tbl_summary tools
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' add_ci_ex1 <-
 #'   trial %>%
@@ -55,6 +56,7 @@
 #'                 missing = "no") %>%
 #'     add_ci(pattern = "{stat} ({ci})") %>%
 #'     modify_footnote(everything() ~ NA)
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

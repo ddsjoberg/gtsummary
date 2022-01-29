@@ -104,6 +104,7 @@ To re-order the rows with glance statistics on bottom, use the script below:\if{
 }
 
 \examples{
+\donttest{
 mod <- lm(age ~ marker + grade, trial) \%>\% tbl_regression()
 
 # Example 1 ----------------------------------
@@ -121,6 +122,7 @@ add_glance_ex2 <-
     label = list(sigma ~ "\U03C3"),
     include = c(r.squared, AIC, sigma)
   )
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

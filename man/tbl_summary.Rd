@@ -191,6 +191,7 @@ in the denominator, not at each level of the categorical variable.
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 tbl_summary_ex1 <-
   trial \%>\%
@@ -229,6 +230,7 @@ tbl_summary_ex4 <-
     statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min}, {max}"),
     missing = "no"
   )
+}
 }
 \seealso{
 See \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{tbl_summary vignette} for detailed tutorial

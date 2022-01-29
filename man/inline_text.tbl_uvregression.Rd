@@ -61,6 +61,7 @@ print the table the estimates are extracted from.
 }
 
 \examples{
+\donttest{
 inline_text_ex1 <-
   trial[c("response", "age", "grade")] \%>\%
   tbl_uvregression(
@@ -72,6 +73,7 @@ inline_text_ex1 <-
 
 inline_text(inline_text_ex1, variable = age)
 inline_text(inline_text_ex1, variable = grade, level = "III")
+}
 }
 \seealso{
 Other tbl_uvregression tools: 

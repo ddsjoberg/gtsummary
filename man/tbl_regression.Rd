@@ -120,6 +120,7 @@ This list is not exhaustive, and care should be taken for each number reported.
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 library(survival)
 tbl_regression_ex1 <-
@@ -136,6 +137,7 @@ suppressMessages(library(lme4))
 tbl_regression_ex3 <-
   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE)
+}
 }
 \seealso{
 See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples

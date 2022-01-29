@@ -49,6 +49,7 @@
 #' ````
 #'
 #' @examples
+#' \donttest{
 #' mod <- lm(age ~ marker + grade, trial) %>% tbl_regression()
 #'
 #' # Example 1 ----------------------------------
@@ -66,6 +67,7 @@
 #'     label = list(sigma ~ "\U03C3"),
 #'     include = c(r.squared, AIC, sigma)
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

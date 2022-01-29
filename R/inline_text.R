@@ -352,6 +352,7 @@ inline_text.tbl_regression <-
 #' @export
 #' @return A string reporting results from a gtsummary table
 #' @examples
+#' \donttest{
 #' inline_text_ex1 <-
 #'   trial[c("response", "age", "grade")] %>%
 #'   tbl_uvregression(
@@ -363,6 +364,7 @@ inline_text.tbl_regression <-
 #'
 #' inline_text(inline_text_ex1, variable = age)
 #' inline_text(inline_text_ex1, variable = grade, level = "III")
+#' }
 inline_text.tbl_uvregression <- inline_text.tbl_regression
 
 

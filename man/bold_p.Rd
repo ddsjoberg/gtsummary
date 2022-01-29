@@ -30,6 +30,7 @@ in a gtsummary tables.
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 bold_p_ex1 <-
   trial[c("age", "grade", "response", "trt")] \%>\%
@@ -42,6 +43,7 @@ bold_p_ex2 <-
   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE) \%>\%
   bold_p(t = 0.65)
+}
 }
 \author{
 Daniel D. Sjoberg, Esther Drill

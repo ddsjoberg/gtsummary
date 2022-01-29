@@ -67,6 +67,7 @@
 #' @rdname tbl_regression
 #' @return A `tbl_regression` object
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' library(survival)
 #' tbl_regression_ex1 <-
@@ -83,6 +84,7 @@
 #' tbl_regression_ex3 <-
 #'   glmer(am ~ hp + (1 | gear), mtcars, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE)
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

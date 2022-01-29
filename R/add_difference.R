@@ -20,6 +20,7 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #'
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' add_difference_ex1 <-
 #'   trial %>%
@@ -49,6 +50,7 @@
 #'   ) %>%
 #'   add_n() %>%
 #'   add_difference(adj.vars = c(grade, stage))
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

@@ -32,6 +32,7 @@ Function uses \code{car::vif()} to calculate the VIF.
 
 \examples{
 \dontshow{if (broom.helpers::.assert_package("car", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 # Example 1 ----------------------------------
 add_vif_ex1 <-
   lm(age ~ grade + marker, trial) \%>\%
@@ -43,6 +44,7 @@ add_vif_ex2 <-
   lm(age ~ grade + marker, trial) \%>\%
   tbl_regression() \%>\%
   add_vif(c("aGVIF", "df"))
+}
 \dontshow{\}) # examplesIf}
 }
 \seealso{
