@@ -57,3 +57,9 @@ add_p_continuous_ex1 <-
   ) \%>\%
   add_p()
 }
+\seealso{
+Other tbl_continuous tools: 
+\code{\link{add_overall}()},
+\code{\link{tbl_continuous}()}
+}
+\concept{tbl_continuous tools}

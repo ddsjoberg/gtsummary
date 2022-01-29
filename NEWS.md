@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added the continuous variable name/label to the footnote for greater clarity in `tbl_continuous()` (#1123)
+
 * Removed foreign reference to external functions and replaced with indirect calls. (#1129)
 
 * Now exporting the `.create_gtsummary_object()` function as a utility for other packages to build gtsummary tables. (#1130)

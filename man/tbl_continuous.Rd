@@ -80,4 +80,9 @@ tbl_continuous_ex2 <-
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
+
+Other tbl_continuous tools: 
+\code{\link{add_overall}()},
+\code{\link{add_p.tbl_continuous}()}
 }
+\concept{tbl_continuous tools}

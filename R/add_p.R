@@ -835,6 +835,7 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
 #' as `add_p.tbl_continuous()` when `by = NULL`.
 #' See [tests] for details, more tests, and instruction for implementing a custom test.
 #' @export
+#' @family tbl_continuous tools
 #' @examples
 #' add_p_continuous_ex1 <-
 #'   tbl_continuous(
