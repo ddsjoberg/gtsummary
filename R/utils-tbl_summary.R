@@ -852,6 +852,7 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
 footnote_stat_label <- function(meta_data) {
   meta_data %>%
     select(c("summary_type", "stat_label")) %>%
+    filter(!.data$summary_type %in% "continuous2") %>% # removing multiline stats
     mutate(
       summary_type = case_when(
         summary_type == "dichotomous" ~ "categorical",
@@ -861,7 +862,11 @@ footnote_stat_label <- function(meta_data) {
     ) %>%
     distinct() %>%
     pull("message") %>%
-    paste(collapse = "; ")
+    stats::na.omit() %>%
+    purrr::when(
+      rlang::is_empty(.) ~ NA_character_,
+      TRUE ~ paste(., collapse = "; ")
+    )
 }
 
 # summarize_categorical --------------------------------------------------------
