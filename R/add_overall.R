@@ -18,6 +18,7 @@
 #' @param ... Not used
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
+#' @family tbl_continuous tools
 #' @family tbl_custom_summary tools
 #' @author Daniel D. Sjoberg
 #' @export
