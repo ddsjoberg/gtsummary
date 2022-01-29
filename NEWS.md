@@ -1,10 +1,10 @@
 # gtsummary (development version)
 
+* Removed foreign reference to external functions and replaced with indirect calls (the reason for the short time between releases). (#1129)
+
 * Updates to the way footnotes are printed in `tbl_summary()` when there is  summary type `"continuous2"` present. Previously, all footnotes were removed, and now only the `"continuous2"` footnotes are removed. (#1127)
 
 * Added the continuous variable name/label to the footnote for greater clarity in `tbl_continuous()` (#1123)
-
-* Removed foreign reference to external functions and replaced with indirect calls. (#1129)
 
 * Now exporting the `.create_gtsummary_object()` function as a utility for other packages to build gtsummary tables. (#1130)
 
