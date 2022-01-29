@@ -15,6 +15,7 @@
 #'
 #' @return a gtsummary table
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
+#' @family tbl_continuous tools
 #' @export
 #'
 #' @examples
