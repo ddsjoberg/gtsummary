@@ -25,7 +25,7 @@ tbl_custom_summary."><meta property="og:image" content="https://www.danieldsjobe
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
       </span>
     </div>
 
@@ -209,6 +209,9 @@ call. Default is <code>NULL</code>.</p></dd>
 <code><a href="tbl_stack.html">tbl_stack</a>()</code>,
 <code><a href="tbl_strata.html">tbl_strata</a>()</code>,
 <code><a href="tbl_svysummary.html">tbl_svysummary</a>()</code></p>
+<p>Other tbl_continuous tools: 
+<code><a href="add_p.tbl_continuous.html">add_p.tbl_continuous</a>()</code>,
+<code><a href="tbl_continuous.html">tbl_continuous</a>()</code></p>
 <p>Other tbl_custom_summary tools: 
 <code><a href="continuous_summary.html">continuous_summary</a>()</code>,
 <code><a href="proportion_summary.html">proportion_summary</a>()</code>,
@@ -222,10 +225,13 @@ call. Default is <code>NULL</code>.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">tbl_overall_ex1</span> <span class="op">&lt;-</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
+<span class="r-in"><span class="va">tbl_overall_ex1</span> <span class="op">&lt;-</span></span>
 <span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span><span class="op">)</span>, by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu">add_overall</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
 <span class="r-in"><span class="va">tbl_overall_ex2</span> <span class="op">&lt;-</span></span>
 <span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in">  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span></span>
@@ -240,6 +246,8 @@ call. Default is <code>NULL</code>.</p></dd>
 <span class="r-in">    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{p}% (n={n})"</span>,</span>
 <span class="r-in">    digits <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
 <span class="r-in">  <span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="co"># Example 3 ----------------------------------</span></span>
 <span class="r-in"><span class="va">tbl_overall_ex3</span> <span class="op">&lt;-</span></span>
 <span class="r-in"> <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span class="r-in"> <span class="fu"><a href="tbl_continuous.html">tbl_continuous</a></span><span class="op">(</span></span>

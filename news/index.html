@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
       </span>
     </div>
 
@@ -90,16 +90,23 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.5.1" id="gtsummary-151">gtsummary 1.5.1<small>2022-01-20</small><a class="anchor" aria-label="anchor" href="#gtsummary-151"></a></h2>
-<div class="section level4">
-<h4 id="new-functions-1-5-1">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-5-1"></a></h4>
+<h2 class="page-header" data-toc-text="1.5.2" id="gtsummary-152">gtsummary 1.5.2<a class="anchor" aria-label="anchor" href="#gtsummary-152"></a></h2>
+<ul><li><p>Removed foreign reference to external functions in the top level of the package and replaced with indirect calls (the reason for the short time between releases). (<a href="https://github.com/ddsjoberg/gtsummary/issues/1129" class="external-link">#1129</a>)</p></li>
+<li><p>Updates to the way footnotes are printed in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> when there is summary type <code>"continuous2"</code> present. Previously, all footnotes were removed, and now only the <code>"continuous2"</code> footnotes are removed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1127" class="external-link">#1127</a>)</p></li>
+<li><p>Added the continuous variable name/label to the footnote for greater clarity in <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/1123" class="external-link">#1123</a>)</p></li>
+<li><p>Now exporting the <code><a href="../reference/dot-create_gtsummary_object.html">.create_gtsummary_object()</a></code> function as a utility for other packages to build gtsummary tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1130" class="external-link">#1130</a>)</p></li>
+<li><p>Fix when <code><a href="../reference/add_overall.html">add_overall()</a></code> was run before <code><a href="../reference/add_n.html">add_n()</a></code>. The overall row was not being omitted from the sum and the Ns were doubled. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1126" class="external-link">#1126</a>)</p></li>
+<li><p>Added method “emmeans” to <code><a href="../reference/add_difference.html">add_difference()</a></code> for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects.</p></li>
+<li><p>Updated default <code><a href="../reference/add_difference.html">add_difference()</a></code> for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects to be “emmeans” for continuous and dichotomous variables, and “smd” for categorical variables. # gtsummary 1.5.1</p></li>
+</ul><div class="section level4">
+<h4 id="new-functions-1-5-2">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-5-2"></a></h4>
 <ul><li><p>Added new function <code><a href="../reference/modify_column_alignment.html">modify_column_alignment()</a></code> to updated column alignment. Function is a wrapper for the more complex <code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code> function.</p></li>
 <li><p>New function <code><a href="../reference/tbl_strata.html">tbl_strata2()</a></code> that passes both the the stratified data frame as well as the stratum level to the user function. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1091" class="external-link">#1091</a>)</p></li>
 <li><p>Added a <code><a href="../reference/add_p.tbl_continuous.html">add_p.tbl_continuous()</a></code> method for adding p-values to <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1023" class="external-link">#1023</a>)</p></li>
 <li><p>Added <code><a href="../reference/add_overall.html">add_overall.tbl_continuous()</a></code> method. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1037" class="external-link">#1037</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="new-functionality-1-5-1">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-1-5-1"></a></h4>
+<h4 id="new-functionality-1-5-2">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-1-5-2"></a></h4>
 <ul><li><p>New test option “emmeans” in <code><a href="../reference/add_difference.html">add_difference()</a></code> and <code><a href="../reference/add_p.html">add_p()</a></code> uses the {emmeans} package to estimate marginal means/least-squares means for continuous variables, binary variables and random intercept models. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1112" class="external-link">#1112</a>)</p></li>
 <li><p>Column alignment is now recognized in <code><a href="../reference/as_kable.html">as_kable()</a></code> and <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code>. Previously, the alignment utilized the <code>kable()</code> defaults and ignored any alignment instructions included in the gtsummary table styling.</p></li>
 <li><p>The <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code> was updated to utilize <code><a href="https://rdrr.io/pkg/kableExtra/man/column_spec.html" class="external-link">kableExtra::column_spec()</a></code> and <code><a href="https://rdrr.io/pkg/kableExtra/man/cell_spec.html" class="external-link">kableExtra::cell_spec()</a></code> to apply bold and italic styling. The choice of the function depends on the use of <code>escape=</code> in <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/1107" class="external-link">#1107</a>)</p></li>
@@ -119,7 +126,7 @@
 <li><p>Added <code>digits=</code> argument to <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1046" class="external-link">#1046</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="other-updates-1-5-1">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-1-5-1"></a></h4>
+<h4 id="other-updates-1-5-2">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-1-5-2"></a></h4>
 <ul><li><p>Allowed modification to font_size for compact theme. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1106" class="external-link">#1106</a>)</p></li>
 <li><p>Automatically reduced vertical white space between columns for compact flextable theme.</p></li>
 <li><p>Improved user interface for <code>modify_*()</code> functions (<a href="https://github.com/ddsjoberg/gtsummary/issues/1064" class="external-link">#1064</a>)</p></li>
@@ -140,7 +147,7 @@
 <li><p>Update how calls to <code><a href="https://gt.rstudio.com/reference/fmt_missing.html" class="external-link">gt::fmt_missing()</a></code> are constructed to be more memory efficient.</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-1-5-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-1"></a></h4>
+<h4 id="bug-fixes-1-5-2">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-2"></a></h4>
 <ul><li><p>Fix in <code><a href="../reference/add_significance_stars.html">add_significance_stars()</a></code> that led to an error when the summarized model did not have a confidence interval column.</p></li>
 <li><p>Fix in <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> and <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> where reference row was not properly placed after a <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> when the merged tables share common categorical variables but different reference rows. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1063" class="external-link">#1063</a>)</p></li>
 <li><p>Fix in <code><a href="../reference/inline_text.gtsummary.html">inline_text.gtsummary()</a></code> where the first level of a categorical variable could not be selected if the table had also been processed with <code><a href="../reference/remove_row_type.html">remove_row_type()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1078" class="external-link">#1078</a>)</p></li>
@@ -153,7 +160,7 @@
 <li><p>Fix in <code><a href="../reference/add_p.html">add_p()</a></code>/<code><a href="../reference/add_difference.html">add_difference()</a></code> when check whether the passed test is an internal method or a custom method. The previous code required Suggested packages, such as, {lme4}, {effectsize}, and {survey}, to be installed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1018" class="external-link">#1018</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="breaking-changes-1-5-1">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-5-1"></a></h4>
+<h4 id="breaking-changes-1-5-2">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-5-2"></a></h4>
 <ul><li>No longer exporting <code>assert_package()</code>. It has been migrated to {broom.helpers} and we now use <code><a href="https://larmarange.github.io/broom.helpers/reference/assert_package.html" class="external-link">broom.helpers::.assert_package()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1051" class="external-link">#1051</a>)</li>
 </ul></div>
 </div>
