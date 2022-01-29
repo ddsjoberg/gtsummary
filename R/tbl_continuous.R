@@ -15,6 +15,7 @@
 #'
 #' @return a gtsummary table
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
+#' @family tbl_continuous tools
 #' @export
 #'
 #' @examples
@@ -95,6 +96,10 @@ tbl_continuous <- function(data,
   tbl_continuous_inputs <- as.list(environment())
 
   # calculate tbl_continuous tables --------------------------------------------
+  variable_label <-
+    label[[variable]] %||% attr(data[[variable]], "label") %||% variable
+  statistic_footnote <-
+    stat_label_match(statistic) %>% unlist() %>% unique() %>% paste(collapse = "; ")
   result <-
     tbl_custom_summary(
       data, data,
@@ -105,7 +110,11 @@ tbl_continuous <- function(data,
       label = label,
       include = include,
       type = all_of(include %>% setdiff(c(variable, by))) ~ "categorical"
+    ) %>%
+    modify_footnote(
+      all_stat_cols() ~ glue("{variable_label}: {statistic_footnote}")
     )
+
   result[["inputs"]] <- tbl_continuous_inputs
   result[["call_list"]] <- list(tbl_continuous = match.call())
 

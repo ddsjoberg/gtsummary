@@ -153,6 +153,10 @@ Other tbl_svysummary tools:
 \code{\link{tbl_strata}()},
 \code{\link{tbl_svysummary}()}
 
+Other tbl_continuous tools: 
+\code{\link{add_p.tbl_continuous}()},
+\code{\link{tbl_continuous}()}
+
 Other tbl_custom_summary tools: 
 \code{\link{continuous_summary}()},
 \code{\link{proportion_summary}()},
@@ -162,6 +166,7 @@ Other tbl_custom_summary tools:
 \author{
 Daniel D. Sjoberg
 }
+\concept{tbl_continuous tools}
 \concept{tbl_custom_summary tools}
 \concept{tbl_summary tools}
 \concept{tbl_svysummary tools}
