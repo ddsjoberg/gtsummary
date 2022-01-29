@@ -51,10 +51,10 @@ type_check <-
            fn = function(x) is_string(x)),
     is_character =
       list(msg = "Expecting a character as the passed value.",
-           fn = is.character),
+           fn = function(x) is.character(x)),
     is_function =
       list(msg = "Expecting a function as the passed value.",
-           fn = is.function),
+           fn = function(x) is.function(x)),
     is_function_or_string =
       list(msg = "Expecting a function or a string of a function name.",
            fn = function(x) is_string(x) || is.function(x)),
