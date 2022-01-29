@@ -13,6 +13,7 @@
 #' @export
 #'
 #' @examplesIf broom.helpers::.assert_package("car", boolean = TRUE)
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' add_vif_ex1 <-
 #'   lm(age ~ grade + marker, trial) %>%
@@ -24,6 +25,7 @@
 #'   lm(age ~ grade + marker, trial) %>%
 #'   tbl_regression() %>%
 #'   add_vif(c("aGVIF", "df"))
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

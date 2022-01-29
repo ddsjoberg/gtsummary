@@ -89,6 +89,7 @@ created by \code{tbl_summary}, \code{tbl_svysummary}, \code{tbl_continuous} or
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 tbl_overall_ex1 <-
   trial \%>\%
@@ -113,13 +114,14 @@ tbl_overall_ex2 <-
 
 # Example 3 ----------------------------------
 tbl_overall_ex3 <-
- trial \%>\%
- tbl_continuous(
-   variable = age,
-   by = trt,
-   include = grade
- ) \%>\%
- add_overall(last = TRUE)
+  trial \%>\%
+  tbl_continuous(
+    variable = age,
+    by = trt,
+    include = grade
+  ) \%>\%
+  add_overall(last = TRUE)
+}
 }
 \seealso{
 Other tbl_summary tools: 

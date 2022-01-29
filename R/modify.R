@@ -56,6 +56,7 @@
 #' - `knitr::kable(caption=)`
 #'
 #' @examples
+#' \donttest{
 #' # create summary table
 #' tbl <- trial[c("age", "grade", "trt")] %>%
 #'   tbl_summary(by = trt, missing = "no") %>%
@@ -85,6 +86,7 @@
 #'   glm(response ~ age + grade, trial, family = binomial) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
 #'   modify_footnote(ci = "CI = Credible Interval", abbreviation = TRUE)
+#' }
 #' @return Updated gtsummary object
 #' @section Example Output:
 #' \if{html}{Example 1}

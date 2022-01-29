@@ -82,6 +82,7 @@ The function creates a cross table of two categorical variables.
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 tbl_cross_ex1 <-
   trial \%>\%
@@ -92,6 +93,7 @@ tbl_cross_ex2 <-
   trial \%>\%
   tbl_cross(row = stage, col = trt, percent = "cell") \%>\%
   add_p()
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

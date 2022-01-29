@@ -8,6 +8,7 @@
 #' @name sort_filter_p
 #' @rdname sort_filter_p
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' sort_filter_p_ex1 <-
 #'   trial %>%
@@ -22,6 +23,7 @@
 #'   glm(response ~ trt + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE) %>%
 #'   sort_p()
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

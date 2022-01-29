@@ -136,6 +136,7 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Daniel D. Sjoberg
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' tbl_summary_ex1 <-
 #'   trial %>%
@@ -174,6 +175,7 @@
 #'     statistic = all_continuous() ~ c("{median} ({p25}, {p75})", "{min}, {max}"),
 #'     missing = "no"
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

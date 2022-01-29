@@ -126,6 +126,7 @@ Captions are assigned based on output type.
 }
 
 \examples{
+\donttest{
 # create summary table
 tbl <- trial[c("age", "grade", "trt")] \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
@@ -155,6 +156,7 @@ modify_ex3 <-
   glm(response ~ age + grade, trial, family = binomial) \%>\%
   tbl_regression(exponentiate = TRUE) \%>\%
   modify_footnote(ci = "CI = Credible Interval", abbreviation = TRUE)
+}
 }
 \seealso{
 Other tbl_summary tools: 

@@ -76,6 +76,7 @@ Confidence intervals for means are calculated using \code{t.test()} and
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 add_ci_ex1 <-
   trial \%>\%
@@ -92,6 +93,7 @@ add_ci_ex2 <-
                 missing = "no") \%>\%
     add_ci(pattern = "{stat} ({ci})") \%>\%
     modify_footnote(everything() ~ NA)
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
