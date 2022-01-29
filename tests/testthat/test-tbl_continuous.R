@@ -1,3 +1,5 @@
+skip_on_cran()
+
 test_that("tbl_continuous() works", {
   expect_error(
     tbl1 <-

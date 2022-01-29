@@ -1,3 +1,5 @@
+skip_on_cran()
+
 gts_tbl <- trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
