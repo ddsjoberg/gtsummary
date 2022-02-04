@@ -94,13 +94,13 @@ add_ci.tbl_summary <- function(x,
   method <-
     .formula_list_to_named_list(
       x = list(all_categorical() ~ "wilson", all_continuous() ~ "t.test"),
-      var_info = x$table_body[x$table_body$variable %in% include,],
+      var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
       arg_name = "method"
     ) %>%
     purrr::update_list(
       !!!.formula_list_to_named_list(
         x = method,
-        var_info = x$meta_data[x$meta_data$variable %in% include,],
+        var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
         arg_name = "method",
         type_check = chuck(type_check, "is_string", "fn"),
         type_check_msg = chuck(type_check, "is_string", "msg")
@@ -111,13 +111,13 @@ add_ci.tbl_summary <- function(x,
     .formula_list_to_named_list(
       x = list(all_categorical() ~ purrr::partial(style_sigfig, scale =  100),
                all_continuous() ~ style_sigfig),
-      var_info = x$table_body[x$table_body$variable %in% include,],
+      var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
       arg_name = "style_fun"
     ) %>%
     purrr::update_list(
       !!!.formula_list_to_named_list(
         x = style_fun,
-        var_info = x$meta_data[x$meta_data$variable %in% include,],
+        var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
         arg_name = "style_fun",
         type_check = chuck(type_check, "is_function", "fn"),
         type_check_msg = chuck(type_check, "is_function", "msg")
@@ -128,13 +128,13 @@ add_ci.tbl_summary <- function(x,
     .formula_list_to_named_list(
       x = list(all_categorical() ~ "{conf.low}%, {conf.high}%",
                all_continuous() ~ "{conf.low}, {conf.high}"),
-      var_info = x$table_body[x$table_body$variable %in% include,],
+      var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
       arg_name = "statistic"
     ) %>%
     purrr::update_list(
       !!!.formula_list_to_named_list(
         x = statistic,
-        var_info = x$table_body[x$table_body$variable %in% include,],
+        var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
         arg_name = "statistic",
         type_check = chuck(type_check, "is_character", "fn"),
         type_check_msg = chuck(type_check, "is_character", "msg")
