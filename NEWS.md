@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Adding Norwegian translations (#1143)
+
 * Fix when using summary type gtsummary selectors (e.g. `all_continuous()`) with the `add_ci(style_fun=)` argument. (#1141)
  
 # gtsummary 1.5.2
