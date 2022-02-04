@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix when using summary type gtsummary selectors (e.g. `all_continuous()`) with the `add_ci(style_fun=)` argument. (#1141)
+ 
 # gtsummary 1.5.2
 
 * Removed foreign reference to external functions in the top level of the package and replaced with indirect calls (the reason for the short time between releases). (#1129)
