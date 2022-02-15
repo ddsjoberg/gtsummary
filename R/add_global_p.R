@@ -8,13 +8,21 @@
 #' @param keep Logical argument indicating whether to also retain the individual
 #' p-values in the table output for each level of the categorical variable.
 #' Default is `FALSE`
+#' @param anova_fun Function that will be used in place of `car::Anova()`
+#' when specified to calculate the global p-values.
+#' The function must return a tibble matching the output of `car::Anova() %>% broom::tidy()`.
+#' The function must accept the following arguments (even if unused)
+#' `anova_fun(x = <model object>, tbl = <tbl_regression object>, type =, ...)`.
+#' Anything passed in `add_global_p(...)` will be passed to `anova_fun(...)`.
+#' Default is `NULL`.
 #' @param include Variables to calculate global p-value for. Input may be a vector of
 #' quoted or unquoted variable names. Default is `everything()`
 #' @param quiet Logical indicating whether to print messages in console. Default is
 #' `FALSE`
 #' @param terms DEPRECATED.  Use `include=` argument instead.
 #' @param type Type argument passed to `car::Anova`. Default is `"III"`
-#' @param ... Additional arguments to be passed to `car::Anova`
+#' @param ... Additional arguments to be passed to `car::Anova` or
+#' `anova_fun` (if specified)
 #' @author Daniel D. Sjoberg
 #' @export
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
@@ -57,9 +65,13 @@ add_global_p <- function(x, ...) {
 
 #' @name add_global_p
 #' @export
-add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
+add_global_p.tbl_regression <- function(x,
+                                        include = everything(),
+                                        type = NULL,
                                         keep = FALSE,
-                                        quiet = NULL, ..., terms = NULL) {
+                                        anova_fun = NULL,
+                                        quiet = NULL,
+                                        ..., terms = NULL) {
   updated_call_list <- c(x$call_list, list(add_global_p = match.call()))
   # deprecated arguments -------------------------------------------------------
   if (!is.null(terms)) {
@@ -90,7 +102,7 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
   }
 
   # vetted model geeglm not supported here.
-  if (inherits(x$inputs$x, "geeglm")) {
+  if (is.null(anova_fun) && inherits(x$inputs$x, "geeglm")) {
     rlang::abort(paste(
       "Model class `geeglm` not supported by `car::Anova()`,",
       "and function could not calculate requested p-value."
@@ -98,7 +110,7 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
   }
 
   # printing analysis performed
-  if (quiet == FALSE) {
+  if (isTRUE(quiet == FALSE) && is.null(anova_fun)) {
     expr_car <-
       rlang::expr(car::Anova(x$model_obj, type = !!type, !!!list(...))) %>%
       deparse()
@@ -114,22 +126,25 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
   }
 
   # calculating global pvalues
-  tryCatch(
-    {
-      car_Anova <-
-        x$model_obj %>%
-        car::Anova(type = type, ...) %>%
-        {suppressWarnings(broom::tidy(.))}
-    },
+  tryCatch({
+    anova_args <- c(list(x = x$model_obj, tbl = x, type = type), rlang::dots_list(...))
+    car_Anova <- do.call(what = anova_fun %||% tidy_car_anova, args = anova_args)
+  },
     error = function(e) {
-      paste0(
-        "{.code add_global_p()} uses ",
-        "{.code car::Anova() %>% broom::tidy()} to calculate/tidy the global p-value,\n",
-        "and the function returned an error while calculating the p-values.\n",
-        "Is your model type supported by {.code car::Anova()}?"
-      ) %>%
-        cli_alert_danger()
-      stop(e)
+      if (is.null(anova_fun)) {
+        paste0(
+          "{.code add_global_p()} uses ",
+          "{.code car::Anova() %>% broom::tidy()} to calculate/tidy the global p-value,\n",
+          "and the function returned an error while calculating the p-values.\n",
+          "Is your model type supported by {.code car::Anova()}?"
+        ) %>%
+          cli_alert_danger()
+        stop(e)
+      }
+      else {
+        cli_alert_danger("There was an error running {.code anova_fun()}")
+        stop(e)
+      }
     }
   )
 
@@ -190,7 +205,8 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
 #' @name add_global_p
 #' @export
 add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything(),
-                                          keep = FALSE, quiet = NULL, ...) {
+                                          keep = FALSE, anova_fun = NULL,
+                                          quiet = NULL, ...) {
   updated_call_list <- c(x$call_list, list(add_global_p = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
@@ -204,11 +220,8 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
       arg_name = "include"
     )
 
-  # capturing dots in expression
-  dots <- rlang::enexprs(...)
-
   # printing analysis performed
-  if (quiet == FALSE) {
+  if (isTRUE(quiet == FALSE) && is.null(anova_fun)) {
     expr_car <-
       rlang::expr(car::Anova(mod = x$model_obj, type = !!type, !!!list(...))) %>%
       deparse()
@@ -230,23 +243,24 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
       function(x, y) {
         tryCatch(
           {
-            car_Anova <-
-              rlang::call2(
-                car::Anova,
-                mod = x[["model_obj"]], type = type, !!!dots
-              ) %>%
-              rlang::eval_tidy() %>%
-              {suppressWarnings(broom::tidy(.))}
+            anova_args <- c(list(x = x[["model_obj"]], tbl = x, type = type), rlang::dots_list(...))
+            car_Anova <- do.call(what = anova_fun %||% tidy_car_anova, args = anova_args)
           },
           error = function(e) {
-            paste0(
-              "{.code add_global_p()} uses ",
-              "{.code car::Anova() %>% broom::tidy()} to calculate/tidy the global p-value,\n",
-              "and the function returned an error while calculating the p-value ",
-              "for {.val {y}}."
-            ) %>%
-              cli_alert_danger()
-            stop(e)
+            if (is.null(anova_fun)) {
+              paste0(
+                "{.code add_global_p()} uses ",
+                "{.code car::Anova() %>% broom::tidy()} to calculate/tidy the global p-value,\n",
+                "and the function returned an error while calculating the p-value for {.val {y}}.\n",
+                "Is your model type supported by {.code car::Anova()}?"
+              ) %>%
+                cli_alert_danger()
+              stop(e)
+            }
+            else {
+              cli_alert_danger("There was an error running {.code anova_fun()} for {.val {y}}.")
+              stop(e)
+            }
           }
         )
 
@@ -309,4 +323,9 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
 
   x$call_list <- updated_call_list
   x
+}
+
+tidy_car_anova <- function(x, type, tbl, ...) {
+  car::Anova(mod = x, type = type, ...) %>%
+    {suppressWarnings(broom::tidy(.))}
 }

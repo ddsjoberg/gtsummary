@@ -13,6 +13,7 @@ add_global_p(x, ...)
   include = everything(),
   type = NULL,
   keep = FALSE,
+  anova_fun = NULL,
   quiet = NULL,
   ...,
   terms = NULL
@@ -23,6 +24,7 @@ add_global_p(x, ...)
   type = NULL,
   include = everything(),
   keep = FALSE,
+  anova_fun = NULL,
   quiet = NULL,
   ...
 )
@@ -31,7 +33,8 @@ add_global_p(x, ...)
 \item{x}{Object with class \code{tbl_regression} from the
 \link{tbl_regression} function}
 
-\item{...}{Additional arguments to be passed to \code{car::Anova}}
+\item{...}{Additional arguments to be passed to \code{car::Anova} or
+\code{anova_fun} (if specified)}
 
 \item{include}{Variables to calculate global p-value for. Input may be a vector of
 quoted or unquoted variable names. Default is \code{everything()}}
@@ -41,6 +44,14 @@ quoted or unquoted variable names. Default is \code{everything()}}
 \item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
 Default is \code{FALSE}}
+
+\item{anova_fun}{Function that will be used in place of \code{car::Anova()}
+when specified to calculate the global p-values.
+The function must return a tibble matching the output of \code{car::Anova() \%>\% broom::tidy()}.
+The function must accept the following arguments (even if unused)
+\verb{anova_fun(x = <model object>, tbl = <tbl_regression object>, type =, ...)}.
+Anything passed in \code{add_global_p(...)} will be passed to \code{anova_fun(...)}.
+Default is \code{NULL}.}
 
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
