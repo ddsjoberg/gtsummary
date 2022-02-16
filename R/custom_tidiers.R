@@ -260,7 +260,7 @@ tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.9
 
 #' @rdname custom_tidiers
 #' @export
-tidy_wald_test <- function(x, tidy_fun = NULL, vcov = vcov(x), coef = coef(x), ...) {
+tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
   assert_package("aod", "tidy_wald_test()")
 
   tidy_fun <- tidy_fun %||% broom.helpers::tidy_with_broom_or_parameters
@@ -282,9 +282,9 @@ tidy_wald_test <- function(x, tidy_fun = NULL, vcov = vcov(x), coef = coef(x), .
       model_terms_id = rlang::set_names(.data$data[["term_id"]]) %>% list(),
       wald_test =
         aod::wald.test(
-          Sigma = .env$vcov,
-          b = .env$coef,
-          Terms = model_terms_id
+          Sigma = stats::vcov(x),
+          b = stats::coef(x),
+          Terms = .data$model_terms_id
         ) %>%
         list(),
       df = wald_test$result$chi2 %>% purrr::pluck("df"),

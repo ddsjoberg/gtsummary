@@ -44,7 +44,7 @@ pool_and_tidy_mice(x, pool.args = NULL, ..., quiet = FALSE)
 
 tidy_gam(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...)
 
-tidy_wald_test(x, tidy_fun = NULL, vcov = vcov(x), coef = coef(x), ...)
+tidy_wald_test(x, tidy_fun = NULL, ...)
 }
 \arguments{
 \item{x}{a regression model object}
