@@ -258,7 +258,7 @@ tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.9
 
 #' @rdname custom_tidiers
 #' @export
-tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
+tidy_wald_test <- function(x, tidy_fun = NULL, vcov = vcov(x), coef = coef(x), ...) {
   assert_package("aod", "tidy_wald_test()")
 
   tidy_fun <- tidy_fun %||% broom.helpers::tidy_with_broom_or_parameters
@@ -266,7 +266,7 @@ tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
   # match model terms to the variable
   broom.helpers::tidy_and_attach(
     model = x,
-    tidy_fun = tidycmprsk::tidy
+    tidy_fun = tidy_fun
   ) %>%
     broom.helpers::tidy_identify_variables() %>%
     dplyr::select(term = .data$variable, model_terms = .data$term) %>%
@@ -280,8 +280,8 @@ tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
       model_terms_id = rlang::set_names(.data$data[["term_id"]]) %>% list(),
       wald_test =
         aod::wald.test(
-          Sigma = vcov(x),
-          b = coef(x),
+          Sigma = .env$vcov,
+          b = .env$coef,
           Terms = model_terms_id
         ) %>%
         list(),
