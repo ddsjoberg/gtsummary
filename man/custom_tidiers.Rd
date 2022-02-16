@@ -78,9 +78,10 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 \item{pool.args}{named list of arguments passed to \code{mice::pool()} in
 \code{pool_and_tidy_mice()}. Default is \code{NULL}}
 
-\item{vcov}{Variance-covariance matrix. Default is \code{vcov(x)}, where x is the model object}
-
-\item{coef}{Coef vector. Default is \code{coef(x)}, where x is the model object}
+\item{tidy_fun}{Option to specify a particular tidier function for the
+model. Default is to use \code{broom::tidy}, but if an error occurs
+then tidying of the model is attempted with \code{parameters::model_parameters()},
+if installed.}
 }
 \description{
 \lifecycle{maturing}

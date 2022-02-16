@@ -36,13 +36,12 @@
 #' Ensure your model type is compatible with the methods/functions used to estimate
 #' the model parameters before attempting to use the tidier with `tbl_regression()`
 #' @inheritParams broom::tidy.glm
+#' @inheritParams tbl_regression
 #' @inheritParams add_global_p
 #' @param pool.args named list of arguments passed to `mice::pool()` in
 #' `pool_and_tidy_mice()`. Default is `NULL`
 #' @param vcov_estimation,vcov_type,vcov_args arguments passed to
 #' `parameters::model_parameters()`
-#' @param vcov Variance-covariance matrix. Default is `vcov(x)`, where x is the model object
-#' @param coef Coef vector. Default is `coef(x)`, where x is the model object
 #' @param ... arguments passed to method;
 #' - `pool_and_tidy_mice()`: `mice::tidy(x, ...)`
 #' - `tidy_standardize()`: `effectsize::standardize_parameters(x, ...)`
@@ -287,9 +286,9 @@ tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
           Terms = .data$model_terms_id
         ) %>%
         list(),
-      df = wald_test$result$chi2 %>% purrr::pluck("df"),
-      statistic = wald_test$result$chi2 %>% purrr::pluck("chi2"),
-      p.value = wald_test$result$chi2 %>% purrr::pluck("P"),
+      df = .data$wald_test$result$chi2 %>% purrr::pluck("df"),
+      statistic = .data$wald_test$result$chi2 %>% purrr::pluck("chi2"),
+      p.value = .data$wald_test$result$chi2 %>% purrr::pluck("P"),
     ) %>%
     dplyr::ungroup() %>%
     dplyr::select(.data$term, .data$df, .data$statistic, .data$p.value)
