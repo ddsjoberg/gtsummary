@@ -101,14 +101,6 @@ add_global_p.tbl_regression <- function(x,
     return(x)
   }
 
-  # vetted model geeglm not supported here.
-  if (is.null(anova_fun) && inherits(x$inputs$x, "geeglm")) {
-    rlang::abort(paste(
-      "Model class `geeglm` not supported by `car::Anova()`,",
-      "and function could not calculate requested p-value."
-    ))
-  }
-
   # printing analysis performed
   if (isTRUE(quiet == FALSE) && is.null(anova_fun)) {
     expr_car <-
@@ -136,7 +128,8 @@ add_global_p.tbl_regression <- function(x,
           "{.code add_global_p()} uses ",
           "{.code car::Anova() %>% broom::tidy()} to calculate/tidy the global p-value,\n",
           "and the function returned an error while calculating the p-values.\n",
-          "Is your model type supported by {.code car::Anova()}?"
+          "Is your model type supported by {.code car::Anova()}?\n",
+          "Perhaps {.code add_global_p(anova_fun = gtsummary::tidy_wald_test} will work?"
         ) %>%
           cli_alert_danger()
         stop(e)
@@ -252,7 +245,8 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
                 "{.code add_global_p()} uses ",
                 "{.code car::Anova() %>% broom::tidy()} to calculate/tidy the global p-value,\n",
                 "and the function returned an error while calculating the p-value for {.val {y}}.\n",
-                "Is your model type supported by {.code car::Anova()}?"
+                "Is your model type supported by {.code car::Anova()}?\n",
+                "Perhaps {.code add_global_p(anova_fun = gtsummary::tidy_wald_test} will work?"
               ) %>%
                 cli_alert_danger()
               stop(e)
