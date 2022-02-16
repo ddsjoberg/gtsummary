@@ -41,6 +41,8 @@
 #' `pool_and_tidy_mice()`. Default is `NULL`
 #' @param vcov_estimation,vcov_type,vcov_args arguments passed to
 #' `parameters::model_parameters()`
+#' @param vcov Variance-covariance matrix. Default is `vcov(x)`, where x is the model object
+#' @param coef Coef vector. Default is `coef(x)`, where x is the model object
 #' @param ... arguments passed to method;
 #' - `pool_and_tidy_mice()`: `mice::tidy(x, ...)`
 #' - `tidy_standardize()`: `effectsize::standardize_parameters(x, ...)`
