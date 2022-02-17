@@ -186,9 +186,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
         "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
         "style_number-arg:decimal.mark" =
-          ifelse(.Platform$OS.type == "windows",
-                 special_char$interpunct,
-                 "\U00B7"),
+          ifelse(.Platform$OS.type == "windows", special_char$interpunct, "\U00B7"),
         "style_number-arg:big.mark" = "\U2009",
         "pkgwide-str:ci.sep" = " to "
       )
