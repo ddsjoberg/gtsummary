@@ -187,9 +187,8 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
         "style_number-arg:decimal.mark" =
           ifelse(.Platform$OS.type == "windows",
-                 rlang::expr(special_char$interpunct),
-                 "\U00B7") %>%
-          eval(),
+                 special_char$interpunct,
+                 "\U00B7"),
         "style_number-arg:big.mark" = "\U2009",
         "pkgwide-str:ci.sep" = " to "
       )
