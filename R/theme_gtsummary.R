@@ -171,7 +171,8 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "pkgwide-str:theme_name" = "New England Journal of Medicine",
         "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
         "pkgwide-fn:prependpvalue_fun" = function(x) style_pvalue(x, digits = 2, prepend_p = TRUE),
-        "style_number-arg:decimal.mark" = ".",
+        "style_number-arg:decimal.mark" =
+          ifelse(.Platform$OS.type == "windows", special_char$interpunct, "\U00B7"),
         "style_number-arg:big.mark" = ",",
         "tbl_summary-str:continuous_stat" = "{median} ({p25} \U2013 {p75})",
         "tbl_summary-str:categorical_stat" = "{n} ({p})",
