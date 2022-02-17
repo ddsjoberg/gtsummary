@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fixing Lancet theme mid-point encoding issue on Linux and MacOS. (#1146)
+
 * Adding Norwegian translations (#1143)
 
 * Fix when using summary type gtsummary selectors (e.g. `all_continuous()`) with the `add_ci(style_fun=)` argument. (#1141)
