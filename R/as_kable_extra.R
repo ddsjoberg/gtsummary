@@ -11,19 +11,15 @@
 #'
 #' This section discusses options intended for use with
 #'  - `output: pdf_document` in yaml of `.Rmd`.
-#'  - `as_kable_extra(format = "latex")`
+#'  - `as_kable_extra(format = "latex", escape = FALSE)`
 #'
-#' ### Custom column names
+#' With LaTeX output with `escape = FALSE`, the markdown syntax for bold
+#' and italic are converted to LaTeX code and `"\n"` is recognized as a linebreaker.
 #'
-#' In pdf output, column names do not currently inherit formatting applied in
-#' {gtsummary} tables. However, custom column names can be achieved with the
-#' `col.names` argument as shown in Example 2, including attributes such as bold
-#' formatting, italic formatting, and line breaks. Doing so requires the `escape
-#' = FALSE` argument; however, when using `escape = FALSE` special latex
-#' characters like `\` and `%` will need to be escaped prior to entering
-#' `as_kable_extra()`. Using `escape = FALSE` when the gtsummary table has
-#' special LaTeX characters will result in the error `"LaTeX failed to
-#' compile..."`
+#' With `escape = FALSE`, it's important that any special characters in your
+#' table are escaped. For example, the default `tbl_summary()` table includes
+#' a percentage symbol for categorical variables. The statistics should
+#' be updated to `statistic = all_categorical() ~ "{n} ({p}\\%)"`
 #'
 #' ### Additional table styling
 #'
@@ -117,22 +113,6 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .clean_table_styling(x)
 
-  # stripping markdown asterisk ------------------------------------------------
-  if (strip_md_bold == TRUE) {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      mutate(
-        label = str_replace_all(
-          .data$label,
-          pattern = fixed("**"), replacement = fixed("")
-        ),
-        spanning_header = str_replace_all(
-          .data$spanning_header,
-          pattern = fixed("**"), replacement = fixed("")
-        )
-      )
-  }
-
   # creating list of kableExtra calls ------------------------------------------
   kable_extra_calls <-
     table_styling_to_kable_extra_calls(x = x, fmt_missing = fmt_missing, ...)
@@ -184,6 +164,30 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 }
 
 table_styling_to_kable_extra_calls <- function(x, fmt_missing = FALSE, ...) {
+  dots <- rlang::dots_list(...)
+
+  if (!is.null(dots[["strip_md_bold"]])) {
+    lifecycle::deprecate_warn(when = "1.5.3",
+                              what = "gtsummary::as_kable_extra(strip_md_bold=)")
+    dots <- purrr::list_modify(strip_md_bold = NULL) %>% purrr::compact()
+  }
+
+  # if escape is FALSE and latex output, convert markdown to latex and add linebreaks
+  if (!isTRUE(dots[["escape"]]) &&
+      (isTRUE(is.null(dots[["format"]]) && knitr::is_latex_output()) ||
+       identical(dots[["format"]], "latex"))) {
+    x <- .linebreak_gtsummary(x)
+  }
+  # otherwise, remove markdown syntax from headers
+  else {
+    x$table_styling$header <-
+      x$table_styling$header %>%
+      mutate(
+        label = .strip_markdown(.data$label),
+        spanning_header = .strip_markdown(.data$spanning_header)
+      )
+  }
+
   # getting kable calls
   kable_extra_calls <-
     table_styling_to_kable_calls(x = x, fmt_missing = fmt_missing, ...)
@@ -249,7 +253,11 @@ table_styling_to_kable_extra_calls <- function(x, fmt_missing = FALSE, ...) {
       distinct() %>%
       ungroup()
 
-    header <- df_header$width %>% set_names(df_header$spanning_header)
+    header <-
+      df_header$width %>%
+      set_names(df_header$spanning_header) %>%
+      c(list(escape = dots[["escape"]])) %>%
+      purrr::compact()
 
     kable_extra_calls[["add_header_above"]] <-
       expr(kableExtra::add_header_above(header = !!header))
@@ -374,4 +382,95 @@ table_styling_to_kable_extra_calls <- function(x, fmt_missing = FALSE, ...) {
     )
 
   return(kable_extra_calls)
+}
+
+
+# This function calls `kableExtra::linebreak()` on gtsummary headers and spanning headers.
+# Note that `escape = FALSE` and `format = "latex"` are required.
+#  - the default `align=` argument is taken from the gtsummary object
+#  - the markdown double-star and double-underscore bold syntax is converted to LaTeX, `\textbf{}`
+#  - the markdown single-star and single-underscore italic syntax is converted to LaTeX, `\textit{}`
+.linebreak_gtsummary <- function(x,
+                                 align = NULL,
+                                 double_escape = FALSE,
+                                 linebreaker = "\n") {
+  # check inputs ---------------------------------------------------------------
+  if (!inherits(x, "gtsummary")) {
+    stop("'x' must be a 'gtsummary' table.", call. = FALSE)
+  }
+  rlang::check_installed("kableExtra", reason = "to use `linebreak_kable_extra()`.")
+
+  # set align argument ---------------------------------------------------------
+  align <-
+    align %||%
+    stringr::str_sub(dplyr::filter(x$table_styling$header, !.data$hide)$align, 1, 1)
+
+  # linebreak the headers ------------------------------------------------------
+  x$table_styling$header$label <-
+    kableExtra::linebreak(
+      x = .markdown_to_latex(x$table_styling$header$label),
+      align = align,
+      double_escape = double_escape,
+      linebreaker = linebreaker
+    )
+
+  x$table_styling$header$spanning_header <-
+    kableExtra::linebreak(
+      x = .markdown_to_latex(x$table_styling$header$spanning_header),
+      align = "c",
+      double_escape = double_escape,
+      linebreaker = linebreaker
+    )
+
+  # return process gtsummary table ---------------------------------------------
+  x
+
+}
+
+.markdown_to_latex <- function(x) {
+  x %>%
+    # convert bold ** to \textbf{}
+    stringr::str_replace_all(
+      pattern = "\\*\\*(.*?)\\*\\*",
+      replacement = "\\\\textbf{\\1}"
+    ) %>%
+    # convert bold __ to \textbf{}
+    stringr::str_replace_all(
+      pattern = "\\_\\_(.*?)\\_\\_",
+      replacement = "\\\\textbf{\\1}"
+    ) %>%
+    # convert italic * to \textit{}
+    stringr::str_replace_all(
+      pattern = "\\*(.*?)\\*",
+      replacement = "\\\\textit{\\1}"
+    ) %>%
+    # convert italic _ to \textit{}
+    stringr::str_replace_all(
+      pattern = "\\_(.*?)\\_",
+      replacement = "\\\\textit{\\1}"
+    )
+}
+
+.strip_markdown <- function(x) {
+  x %>%
+    # convert bold ** to \textbf{}
+    stringr::str_replace_all(
+      pattern = "\\*\\*(.*?)\\*\\*",
+      replacement = "\\1"
+    ) %>%
+    # convert bold __ to \textbf{}
+    stringr::str_replace_all(
+      pattern = "\\_\\_(.*?)\\_\\_",
+      replacement = "\\1"
+    ) %>%
+    # convert italic * to \textit{}
+    stringr::str_replace_all(
+      pattern = "\\*(.*?)\\*",
+      replacement = "\\1"
+    ) %>%
+    # convert italic _ to \textit{}
+    stringr::str_replace_all(
+      pattern = "\\_(.*?)\\_",
+      replacement = "\\1"
+    )
 }
