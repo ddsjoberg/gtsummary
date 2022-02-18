@@ -31,7 +31,6 @@ test_that("no errors/warnings with standard use after tbl_regression", {
   )
 
   expect_message(tbl1 %>% add_global_p(quiet = TRUE), NA)
-  expect_message(tbl1 %>% add_global_p(quiet = FALSE), "*")
 })
 
 test_that("no errors/warnings with standard use after tbl_uvregression", {
@@ -95,7 +94,6 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
   )
 
   expect_message(tbl1 %>% add_global_p(quiet = TRUE), NA)
-  expect_message(tbl1 %>% add_global_p(quiet = FALSE), "*")
 
   expect_error(
     tbl_bad_names <-

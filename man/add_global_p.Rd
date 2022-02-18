@@ -33,8 +33,8 @@ add_global_p(x, ...)
 \item{x}{Object with class \code{tbl_regression} from the
 \link{tbl_regression} function}
 
-\item{...}{Additional arguments to be passed to \code{car::Anova} or
-\code{anova_fun} (if specified)}
+\item{...}{Additional arguments to be passed to \code{car::Anova},
+\code{aod::wald.test()} or \code{anova_fun} (if specified)}
 
 \item{include}{Variables to calculate global p-value for. Input may be a vector of
 quoted or unquoted variable names. Default is \code{everything()}}
@@ -49,7 +49,7 @@ Default is \code{FALSE}}
 when specified to calculate the global p-values.
 The function must return a tibble matching the output of \code{car::Anova() \%>\% broom::tidy()}.
 The function must accept the following arguments (even if unused)
-\verb{anova_fun(x = <model object>, tbl = <tbl_regression object>, type =, ...)}.
+\verb{anova_fun(x = <model object>, ...)}.
 Anything passed in \code{add_global_p(...)} will be passed to \code{anova_fun(...)}.
 Default is \code{NULL}.}
 
@@ -60,6 +60,9 @@ Default is \code{NULL}.}
 }
 \description{
 This function uses \code{car::Anova(type = "III")} to calculate global p-values variables.
+If the model type is not supported by \code{car::Anova()}, then \code{aod::wald.test()}
+is used to calculate the p-values. The \verb{type=} argument is ignored in
+\code{aod::wald.test()}.
 Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }
 \section{Example Output}{
