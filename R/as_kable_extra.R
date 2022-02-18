@@ -29,8 +29,9 @@
 #'
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
+#' @param format,escape,... arguments passed to `knitr::kable()`
 #' @export
-#' @return A {kableExtra} object
+#' @return A {kableExtra} table
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE)
@@ -44,11 +45,6 @@
 #'   as_kable_extra()
 #'
 #' # Example 2 (PDF via LaTeX) -------------------------------------------------
-#' custom_names <- c(
-#'    "\\textbf{Characteristic}",
-#'    "\\textbf{Drug A}\n\\textit{N = 98}",
-#'    "\\textbf{Drug B}\n\\textit{N = 102}"
-#' )
 #' as_kable_extra_ex2_pdf <-
 #'   trial %>%
 #'   select(trt, age, stage) %>%
@@ -57,14 +53,9 @@
 #'      statistic = list(all_categorical() ~ "{n} ({p}\\%)")
 #'   ) %>%
 #'   bold_labels() %>%
-#'   modify_footnote(
-#'      update = all_stat_cols() ~ "Median (IQR); n (%)"
-#'   ) %>%
-#'   as_kable_extra(
-#'      format = "latex",
-#'      col.names = kableExtra::linebreak(custom_names, align = "c"),
-#'      escape = FALSE
-#'   )
+#'   modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") %>%
+#'   modify_footnote(update = all_stat_cols() ~ "Median (IQR); n (%)") %>%
+#'   as_kable_extra(format = "latex", escape = FALSE)
 #'
 #' # Example 3 (PDF via LaTeX) -------------------------------------------------
 #' as_kable_extra_ex3_pdf <-
@@ -102,8 +93,13 @@
 #' \if{html}{\figure{as_kable_extra_ex3_pdf.png}{options: width=40\%}}
 #'
 
-as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
-                           strip_md_bold = TRUE, fmt_missing = TRUE, ...) {
+as_kable_extra <- function(x,
+                           include = everything(),
+                           return_calls = FALSE,
+                           fmt_missing = TRUE,
+                           format = ifelse(knitr::is_latex_output(), "latex", "html"),
+                           escape = TRUE,
+                           ...) {
   # must have kableExtra package installed to use this function ----------------
   assert_package("kableExtra", "as_kable_extra()")
 
@@ -115,7 +111,10 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
 
   # creating list of kableExtra calls ------------------------------------------
   kable_extra_calls <-
-    table_styling_to_kable_extra_calls(x = x, fmt_missing = fmt_missing, ...)
+    table_styling_to_kable_extra_calls(x = x,
+                                       escape = escape,
+                                       format = format,
+                                       fmt_missing = fmt_missing, ...)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
@@ -163,7 +162,8 @@ as_kable_extra <- function(x, include = everything(), return_calls = FALSE,
     eval()
 }
 
-table_styling_to_kable_extra_calls <- function(x, fmt_missing = FALSE, ...) {
+table_styling_to_kable_extra_calls <- function(x, escape, format,
+                                               fmt_missing = FALSE, ...) {
   dots <- rlang::dots_list(...)
 
   if (!is.null(dots[["strip_md_bold"]])) {
@@ -173,9 +173,7 @@ table_styling_to_kable_extra_calls <- function(x, fmt_missing = FALSE, ...) {
   }
 
   # if escape is FALSE and latex output, convert markdown to latex and add linebreaks
-  if (!isTRUE(dots[["escape"]]) &&
-      (isTRUE(is.null(dots[["format"]]) && knitr::is_latex_output()) ||
-       identical(dots[["format"]], "latex"))) {
+  if (!isTRUE(escape) && isTRUE(format == "latex")) {
     x <- .linebreak_gtsummary(x)
   }
   # otherwise, remove markdown syntax from headers

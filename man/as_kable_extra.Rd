@@ -8,8 +8,9 @@ as_kable_extra(
   x,
   include = everything(),
   return_calls = FALSE,
-  strip_md_bold = TRUE,
   fmt_missing = TRUE,
+  format = ifelse(knitr::is_latex_output(), "latex", "html"),
+  escape = TRUE,
   ...
 )
 }
@@ -25,15 +26,12 @@ Default is \code{everything()}.}
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
-\item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.}
-
 \item{fmt_missing}{Logical argument adding the missing value formats.}
 
-\item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
+\item{format, escape, ...}{arguments passed to \code{knitr::kable()}}
 }
 \value{
-A {kableExtra} object
+A {kableExtra} table
 }
 \description{
 Function converts a gtsummary object to a knitr_kable + kableExtra object.
@@ -49,19 +47,16 @@ creating pdf output should specify \code{as_kable_extra(format = "latex")}.
 This section discusses options intended for use with
 \itemize{
 \item \code{output: pdf_document} in yaml of \code{.Rmd}.
-\item \code{as_kable_extra(format = "latex")}
-}
-\subsection{Custom column names}{
-
-In pdf output, column names do not currently inherit formatting applied in
-{gtsummary} tables. However, custom column names can be achieved with the
-\code{col.names} argument as shown in Example 2, including attributes such as bold
-formatting, italic formatting, and line breaks. Doing so requires the \code{escape = FALSE} argument; however, when using \code{escape = FALSE} special latex
-characters like \verb{\\} and \verb{\%} will need to be escaped prior to entering
-\code{as_kable_extra()}. Using \code{escape = FALSE} when the gtsummary table has
-special LaTeX characters will result in the error \code{"LaTeX failed to compile..."}
+\item \code{as_kable_extra(format = "latex", escape = FALSE)}
 }
 
+With LaTeX output with \code{escape = FALSE}, the markdown syntax for bold
+and italic are converted to LaTeX code and \code{"\\n"} is recognized as a linebreaker.
+
+With \code{escape = FALSE}, it's important that any special characters in your
+table are escaped. For example, the default \code{tbl_summary()} table includes
+a percentage symbol for categorical variables. The statistics should
+be updated to \code{statistic = all_categorical() ~ "{n} ({p}\\\\\%)"}
 \subsection{Additional table styling}{
 
 Additional styling is available through \code{knitr::kable()} and
@@ -101,11 +96,6 @@ as_kable_extra_ex1_gen <-
   as_kable_extra()
 
 # Example 2 (PDF via LaTeX) -------------------------------------------------
-custom_names <- c(
-   "\\\\textbf{Characteristic}",
-   "\\\\textbf{Drug A}\n\\\\textit{N = 98}",
-   "\\\\textbf{Drug B}\n\\\\textit{N = 102}"
-)
 as_kable_extra_ex2_pdf <-
   trial \%>\%
   select(trt, age, stage) \%>\%
@@ -114,14 +104,9 @@ as_kable_extra_ex2_pdf <-
      statistic = list(all_categorical() ~ "{n} ({p}\\\\\%)")
   ) \%>\%
   bold_labels() \%>\%
-  modify_footnote(
-     update = all_stat_cols() ~ "Median (IQR); n (\%)"
-  ) \%>\%
-  as_kable_extra(
-     format = "latex",
-     col.names = kableExtra::linebreak(custom_names, align = "c"),
-     escape = FALSE
-  )
+  modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") \%>\%
+  modify_footnote(update = all_stat_cols() ~ "Median (IQR); n (\%)") \%>\%
+  as_kable_extra(format = "latex", escape = FALSE)
 
 # Example 3 (PDF via LaTeX) -------------------------------------------------
 as_kable_extra_ex3_pdf <-
