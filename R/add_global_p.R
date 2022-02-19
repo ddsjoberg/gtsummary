@@ -1,27 +1,27 @@
 #' Add the global p-values
 #'
-#' This function uses `car::Anova(type = "III")` to calculate global p-values variables.
+#' This function uses `car::Anova()` to calculate global p-values
+#' for model covariates.
 #' Output from `tbl_regression` and `tbl_uvregression` objects supported.
 #'
-#' @param x Object with class `tbl_regression` from the
-#' [tbl_regression] function
+#' @param x Object with class `'tbl_regression'` or `'tbl_uvregression'`
 #' @param keep Logical argument indicating whether to also retain the individual
 #' p-values in the table output for each level of the categorical variable.
-#' Default is `FALSE`
+#' Default is `FALSE`.
 #' @param anova_fun Function that will be used in place of `car::Anova()`
 #' when specified to calculate the global p-values.
-#' The function must return a tibble matching the output of
+#' - function must return a tibble matching the output of
 #' `car::Anova() %>% broom::tidy()` including a columns called `"term"` and `"p.values"`
-#' The function must follow this structure: `anova_fun(x = <model object>, ...)`.
-#' Anything passed in `add_global_p(...)` will be passed to `anova_fun(...)`.
-#' Default is `NULL`. If your model type is not supported by `car::Anova()`,
-#' possibly `tidy_wald_test()` will work--a wrapper for `aod::wald.test()`.
+#' - function must accept arguments `anova_fun(x, ...)`, where is a model object
+#' - arguments passed in `...` will be passed to `anova_fun(...)`
+#' - the `add_global_p(type=)`
+#' - a common function used here is `tidy_wald_test()`, a wrapper for `aod::wald.test()`
 #' @param include Variables to calculate global p-value for. Input may be a vector of
 #' quoted or unquoted variable names. Default is `everything()`
 #' @param quiet Logical indicating whether to print messages in console. Default is
 #' `FALSE`
 #' @param terms DEPRECATED.  Use `include=` argument instead.
-#' @param type Type argument passed to `car::Anova`. Default is `"III"`
+#' @param type Type argument passed to `car::Anova(type=)`. Default is `"III"`
 #' @param ... Additional arguments to be passed to `car::Anova`,
 #' `aod::wald.test()` or `anova_fun` (if specified)
 #' @author Daniel D. Sjoberg
