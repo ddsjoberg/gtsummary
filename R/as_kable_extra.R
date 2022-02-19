@@ -188,7 +188,10 @@ table_styling_to_kable_extra_calls <- function(x, escape, format,
 
   # getting kable calls
   kable_extra_calls <-
-    table_styling_to_kable_calls(x = x, fmt_missing = fmt_missing, ...)
+    table_styling_to_kable_calls(x = x,
+                                 escape = escape,
+                                 format = format,
+                                 fmt_missing = fmt_missing, ...)
 
   # adding id number for columns not hidden
   x$table_styling$header <-
@@ -258,7 +261,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format,
       purrr::compact()
 
     kable_extra_calls[["add_header_above"]] <-
-      expr(kableExtra::add_header_above(header = !!header))
+      expr(kableExtra::add_header_above(header = !!header, escape = !!escape))
   }
 
   # horizontal_line_above ------------------------------------------------------
@@ -390,14 +393,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format,
 #  - the markdown single-star and single-underscore italic syntax is converted to LaTeX, `\textit{}`
 .linebreak_gtsummary <- function(x,
                                  align = NULL,
-                                 double_escape = FALSE,
                                  linebreaker = "\n") {
-  # check inputs ---------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) {
-    stop("'x' must be a 'gtsummary' table.", call. = FALSE)
-  }
-  rlang::check_installed("kableExtra", reason = "to use `linebreak_kable_extra()`.")
-
   # set align argument ---------------------------------------------------------
   align <-
     align %||%
@@ -408,16 +404,15 @@ table_styling_to_kable_extra_calls <- function(x, escape, format,
     kableExtra::linebreak(
       x = .markdown_to_latex(x$table_styling$header$label),
       align = align,
-      double_escape = double_escape,
       linebreaker = linebreaker
     )
 
   x$table_styling$header$spanning_header <-
     kableExtra::linebreak(
-      x = .markdown_to_latex(x$table_styling$header$spanning_header),
+      x = .markdown_to_latex2(x$table_styling$header$spanning_header),
       align = "c",
-      double_escape = double_escape,
-      linebreaker = linebreaker
+      linebreaker = linebreaker,
+      double_escape = TRUE
     )
 
   # return process gtsummary table ---------------------------------------------
@@ -425,6 +420,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format,
 
 }
 
+# this escapes the latex code in `knitr::kable(col.names=)`
 .markdown_to_latex <- function(x) {
   x %>%
     # convert bold ** to \textbf{}
@@ -446,6 +442,31 @@ table_styling_to_kable_extra_calls <- function(x, escape, format,
     stringr::str_replace_all(
       pattern = "\\_(.*?)\\_",
       replacement = "\\\\textit{\\1}"
+    )
+}
+
+# this escapes the latex code in `kableExtra::add_header_row()`
+.markdown_to_latex2 <- function(x) {
+  x %>%
+    # convert bold ** to \textbf{}
+    stringr::str_replace_all(
+      pattern = "\\*\\*(.*?)\\*\\*",
+      replacement = "\\\\\\\\textbf{\\1}"
+    ) %>%
+    # convert bold __ to \textbf{}
+    stringr::str_replace_all(
+      pattern = "\\_\\_(.*?)\\_\\_",
+      replacement = "\\\\\\\\textbf{\\1}"
+    ) %>%
+    # convert italic * to \textit{}
+    stringr::str_replace_all(
+      pattern = "\\*(.*?)\\*",
+      replacement = "\\\\\\\\textit{\\1}"
+    ) %>%
+    # convert italic _ to \textit{}
+    stringr::str_replace_all(
+      pattern = "\\_(.*?)\\_",
+      replacement = "\\\\\\\\textit{\\1}"
     )
 }
 
