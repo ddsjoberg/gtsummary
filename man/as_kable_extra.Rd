@@ -11,6 +11,7 @@ as_kable_extra(
   fmt_missing = TRUE,
   format = ifelse(knitr::is_latex_output(), "latex", "html"),
   escape = TRUE,
+  escape_table_body = !escape,
   ...
 )
 }
@@ -29,6 +30,8 @@ as a list of expressions.}
 \item{fmt_missing}{Logical argument adding the missing value formats.}
 
 \item{format, escape, ...}{arguments passed to \code{knitr::kable()}}
+
+\item{escape_table_body}{UPDATE THIS}
 }
 \value{
 A {kableExtra} table

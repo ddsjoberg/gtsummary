@@ -30,6 +30,7 @@
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
 #' @param format,escape,... arguments passed to `knitr::kable()`
+#' @param escape_table_body UPDATE THIS
 #' @export
 #' @return A {kableExtra} table
 #' @family gtsummary output types
@@ -99,6 +100,7 @@ as_kable_extra <- function(x,
                            fmt_missing = TRUE,
                            format = ifelse(knitr::is_latex_output(), "latex", "html"),
                            escape = TRUE,
+                           escape_table_body = !escape,
                            ...) {
   # must have kableExtra package installed to use this function ----------------
   assert_package("kableExtra", "as_kable_extra()")
@@ -114,6 +116,7 @@ as_kable_extra <- function(x,
     table_styling_to_kable_extra_calls(x = x,
                                        escape = escape,
                                        format = format,
+                                       escape_table_body = escape_table_body,
                                        fmt_missing = fmt_missing, ...)
 
   # adding user-specified calls ------------------------------------------------
@@ -163,6 +166,7 @@ as_kable_extra <- function(x,
 }
 
 table_styling_to_kable_extra_calls <- function(x, escape, format,
+                                               escape_table_body,
                                                fmt_missing = FALSE, ...) {
   dots <- rlang::dots_list(...)
 
@@ -204,6 +208,27 @@ table_styling_to_kable_extra_calls <- function(x, escape, format,
   kable_extra_calls <-
     kable_extra_calls %>%
     purrr::list_modify(tab_style_bold = NULL, tab_style_italic = NULL)
+
+  # escaping special characters in table_body if requested ---------------------
+  if (isTRUE(escape_table_body)) {
+    kable_call_index <- which(names(kable_extra_calls) %in% "kable")
+    cols_to_escape <-
+      filter(x$table_styling$header, !.data$hide) %>% dplyr::pull(.data$column)
+
+    expr_escape_table_body <-
+      list(
+        escape_table_body =
+          rlang::expr(
+            dplyr::mutate(
+              dplyr::across(all_of(!!cols_to_escape) & where(is.character),
+                            function(.x) gsub("([#$%&_{}])", "\\\\\\1", x = .x))
+            )
+          )
+      )
+
+    kable_extra_calls <-
+      append(kable_extra_calls, values = expr_escape_table_body, after = kable_call_index - 1L)
+  }
 
   # bold and italic ------------------------------------------------------------
   kable_extra_calls <- .add_bold_italic_calls(kable_extra_calls, x, ...)
