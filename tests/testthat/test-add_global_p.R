@@ -55,7 +55,6 @@ test_that("no errors/warnings with standard use after tbl_uvregression", {
   )
 
   expect_message(tbl2 %>% add_global_p(quiet = TRUE), NA)
-  expect_message(tbl2 %>% add_global_p(quiet = FALSE), "*")
 })
 
 
