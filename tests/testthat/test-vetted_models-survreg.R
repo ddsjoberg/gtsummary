@@ -171,7 +171,7 @@ test_that("vetted_models survreg()", {
     trial %>%
       tbl_uvregression(
         y = Surv(ttdeath, death),
-        method = survreg
+        method = survival::survreg
       ) %>%
       add_global_p() %>%
       add_q(),
