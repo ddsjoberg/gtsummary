@@ -457,6 +457,11 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
     stringr::str_replace_all(
       pattern = "\\_(.*?)\\_",
       replacement = "\\\\textit{\\1}"
+    ) %>%
+    # convert underline ~~ to \underline{}
+    stringr::str_replace_all(
+      pattern = "\\~\\~(.*?)\\~\\~",
+      replacement = "\\\\underline{\\1}"
     )
 }
 
@@ -482,29 +487,19 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
     stringr::str_replace_all(
       pattern = "\\_(.*?)\\_",
       replacement = "\\\\\\\\textit{\\1}"
+    ) %>%
+    # convert underline ~~ to \underline{}
+    stringr::str_replace_all(
+      pattern = "\\~\\~(.*?)\\~\\~",
+      replacement = "\\\\\\\\underline{\\1}"
     )
 }
 
 .strip_markdown <- function(x) {
-  x %>%
-    # convert bold ** to \textbf{}
-    stringr::str_replace_all(
-      pattern = "\\*\\*(.*?)\\*\\*",
-      replacement = "\\1"
-    ) %>%
-    # convert bold __ to \textbf{}
-    stringr::str_replace_all(
-      pattern = "\\_\\_(.*?)\\_\\_",
-      replacement = "\\1"
-    ) %>%
-    # convert italic * to \textit{}
-    stringr::str_replace_all(
-      pattern = "\\*(.*?)\\*",
-      replacement = "\\1"
-    ) %>%
-    # convert italic _ to \textit{}
-    stringr::str_replace_all(
-      pattern = "\\_(.*?)\\_",
-      replacement = "\\1"
-    )
+  # strip bold **
+  stringr::str_replace_all(
+    string = x,
+    pattern = "\\*\\*(.*?)\\*\\*",
+    replacement = "\\1"
+  )
 }
