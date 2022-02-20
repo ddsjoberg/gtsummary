@@ -30,7 +30,6 @@
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
 #' @param format,escape,... arguments passed to `knitr::kable()`
-#' @param escape_table_body UPDATE THIS
 #' @export
 #' @return A {kableExtra} table
 #' @family gtsummary output types
@@ -49,23 +48,20 @@
 #' as_kable_extra_ex2_pdf <-
 #'   trial %>%
 #'   select(trt, age, stage) %>%
-#'   tbl_summary(
-#'      by = trt,
-#'      statistic = list(all_categorical() ~ "{n} ({p}\\%)")
-#'   ) %>%
+#'   tbl_summary(by = trt) %>%
 #'   bold_labels() %>%
 #'   modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") %>%
-#'   modify_footnote(update = all_stat_cols() ~ "Median (IQR); n (%)") %>%
 #'   as_kable_extra(format = "latex", escape = FALSE)
 #'
 #' # Example 3 (PDF via LaTeX) -------------------------------------------------
 #' as_kable_extra_ex3_pdf <-
-#' trial %>%
+#'   trial %>%
 #'   select(trt, age, stage) %>%
 #'   tbl_summary(by = trt) %>%
 #'   bold_labels() %>%
 #'   as_kable_extra(
 #'     format = "latex",
+#'     escape = FALSE,
 #'     booktabs = TRUE,
 #'     longtable = TRUE,
 #'     linesep = ""
@@ -95,13 +91,11 @@
 #'
 
 as_kable_extra <- function(x,
-                           include = everything(),
-                           return_calls = FALSE,
-                           fmt_missing = TRUE,
                            format = ifelse(knitr::is_latex_output(), "latex", "html"),
                            escape = TRUE,
-                           escape_table_body = !escape,
-                           ...) {
+                           ...,
+                           include = everything(),
+                           return_calls = FALSE) {
   # must have kableExtra package installed to use this function ----------------
   assert_package("kableExtra", "as_kable_extra()")
 
@@ -115,9 +109,7 @@ as_kable_extra <- function(x,
   kable_extra_calls <-
     table_styling_to_kable_extra_calls(x = x,
                                        escape = escape,
-                                       format = format,
-                                       escape_table_body = escape_table_body,
-                                       fmt_missing = fmt_missing, ...)
+                                       format = format, ...)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
@@ -165,15 +157,18 @@ as_kable_extra <- function(x,
     eval()
 }
 
-table_styling_to_kable_extra_calls <- function(x, escape, format,
-                                               escape_table_body,
-                                               fmt_missing = FALSE, ...) {
+table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
   dots <- rlang::dots_list(...)
 
   if (!is.null(dots[["strip_md_bold"]])) {
     lifecycle::deprecate_warn(when = "1.5.3",
                               what = "gtsummary::as_kable_extra(strip_md_bold=)")
     dots <- purrr::list_modify(strip_md_bold = NULL) %>% purrr::compact()
+  }
+  if (!is.null(dots[["fmt_missing"]])) {
+    lifecycle::deprecate_warn(when = "1.5.3",
+                              what = "gtsummary::as_kable_extra(fmt_missing=)")
+    dots <- purrr::list_modify(fmt_missing = NULL) %>% purrr::compact()
   }
 
   # if escape is FALSE and latex output, convert markdown to latex and add linebreaks
@@ -194,8 +189,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format,
   kable_extra_calls <-
     table_styling_to_kable_calls(x = x,
                                  escape = escape,
-                                 format = format,
-                                 fmt_missing = fmt_missing, ...)
+                                 format = format, ...)
 
   # adding id number for columns not hidden
   x$table_styling$header <-
@@ -209,8 +203,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format,
     kable_extra_calls %>%
     purrr::list_modify(tab_style_bold = NULL, tab_style_italic = NULL)
 
-  # escaping special characters in table_body if requested ---------------------
-  if (isTRUE(escape_table_body)) {
+  # escaping special characters in table_body ----------------------------------
+  if (!isTRUE(escape) && format %in% "latex") {
     kable_call_index <- which(names(kable_extra_calls) %in% "kable")
     cols_to_escape <-
       filter(x$table_styling$header, !.data$hide) %>% dplyr::pull(.data$column)

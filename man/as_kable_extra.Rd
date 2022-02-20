@@ -6,18 +6,18 @@
 \usage{
 as_kable_extra(
   x,
-  include = everything(),
-  return_calls = FALSE,
-  fmt_missing = TRUE,
   format = ifelse(knitr::is_latex_output(), "latex", "html"),
   escape = TRUE,
-  escape_table_body = !escape,
-  ...
+  ...,
+  include = everything(),
+  return_calls = FALSE
 )
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
+
+\item{format, escape, ...}{arguments passed to \code{knitr::kable()}}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -26,12 +26,6 @@ Default is \code{everything()}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
-
-\item{fmt_missing}{Logical argument adding the missing value formats.}
-
-\item{format, escape, ...}{arguments passed to \code{knitr::kable()}}
-
-\item{escape_table_body}{UPDATE THIS}
 }
 \value{
 A {kableExtra} table
@@ -102,23 +96,20 @@ as_kable_extra_ex1_gen <-
 as_kable_extra_ex2_pdf <-
   trial \%>\%
   select(trt, age, stage) \%>\%
-  tbl_summary(
-     by = trt,
-     statistic = list(all_categorical() ~ "{n} ({p}\\\\\%)")
-  ) \%>\%
+  tbl_summary(by = trt) \%>\%
   bold_labels() \%>\%
   modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") \%>\%
-  modify_footnote(update = all_stat_cols() ~ "Median (IQR); n (\%)") \%>\%
   as_kable_extra(format = "latex", escape = FALSE)
 
 # Example 3 (PDF via LaTeX) -------------------------------------------------
 as_kable_extra_ex3_pdf <-
-trial \%>\%
+  trial \%>\%
   select(trt, age, stage) \%>\%
   tbl_summary(by = trt) \%>\%
   bold_labels() \%>\%
   as_kable_extra(
     format = "latex",
+    escape = FALSE,
     booktabs = TRUE,
     longtable = TRUE,
     linesep = ""
