@@ -47,19 +47,17 @@ This section discusses options intended for use with
 \item \code{as_kable_extra(format = "latex", escape = FALSE)}
 }
 
-With LaTeX output with \code{escape = FALSE}, the markdown syntax for bold
-and italic are converted to LaTeX code and \code{"\\n"} is recognized as a linebreaker.
+With the above settings in your R markdown document, you'll see the following
+applied to your table.
+\itemize{
+\item Markdown bold, italic, and underline syntax in the headers will be converted to LaTeX
+\item Special characters in the table body will be escaped
+\item The \code{"\\n"} symbol will be recognized as a line break in the table headers
+}
 
-With \code{escape = FALSE}, it's important that any special characters in your
-table are escaped. For example, the default \code{tbl_summary()} table includes
-a percentage symbol for categorical variables. The statistics should
-be updated to \code{statistic = all_categorical() ~ "{n} ({p}\\\\\%)"}
-\subsection{Additional table styling}{
-
-Additional styling is available through \code{knitr::kable()} and
+Additional styling is available with
 \code{kableExtra::kable_styling()} as shown in Example 3, which implements row
 striping and repeated column headers in the presence of page breaks.
-}
 }
 
 \section{Example Output}{

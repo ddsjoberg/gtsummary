@@ -13,17 +13,13 @@
 #'  - `output: pdf_document` in yaml of `.Rmd`.
 #'  - `as_kable_extra(format = "latex", escape = FALSE)`
 #'
-#' With LaTeX output with `escape = FALSE`, the markdown syntax for bold
-#' and italic are converted to LaTeX code and `"\n"` is recognized as a linebreaker.
+#' With the above settings in your R markdown document, you'll see the following
+#' applied to your table.
+#' - Markdown bold, italic, and underline syntax in the headers will be converted to LaTeX
+#' - Special characters in the table body will be escaped
+#' - The `"\n"` symbol will be recognized as a line break in the table headers
 #'
-#' With `escape = FALSE`, it's important that any special characters in your
-#' table are escaped. For example, the default `tbl_summary()` table includes
-#' a percentage symbol for categorical variables. The statistics should
-#' be updated to `statistic = all_categorical() ~ "{n} ({p}\\%)"`
-#'
-#' ### Additional table styling
-#'
-#' Additional styling is available through `knitr::kable()` and
+#' Additional styling is available with
 #' `kableExtra::kable_styling()` as shown in Example 3, which implements row
 #' striping and repeated column headers in the presence of page breaks.
 #'
