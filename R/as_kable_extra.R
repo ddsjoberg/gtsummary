@@ -5,27 +5,21 @@
 #' and {kableExtra}; `as_kable_extra()` supports arguments in `knitr::kable()`.
 #' `as_kable_extra()` output via gtsummary supports
 #' bold and italic cells for table bodies. Users
-#' creating pdf output should specify `as_kable_extra(format = "latex")`. Users
 #' are encouraged to leverage `as_kable_extra()` for enhanced pdf printing; for html
 #' output options there is better support via `as_gt()`.
 #'
-#' @section PDF via LaTeX Tips:
+#' @section PDF/LaTeX Tips:
 #'
 #' This section discusses options intended for use with
 #'  - `output: pdf_document` in yaml of `.Rmd`.
-#'  - `as_kable_extra(format = "latex", escape = FALSE)`
+#'  - `as_kable_extra(escape = FALSE)` (the default value). The `escape=` argument
+#'     informs if special characters should be escaped rendering LaTeX typesetting
 #'
 #' The above settings in your R markdown document automatically renders LaTeX
-#' typesetting instructions via {kableExtra} in your pdf for the following:
+#' typesetting instructions via kableExtra in your pdf for the following:
 #' - Markdown bold, italic, and underline syntax in the headers will be converted to LaTeX
-#' - Special characters in the table body will be escaped
+#' - Special characters in the table body will be escaped, and as a result will render properly
 #' - The `"\n"` symbol will be recognized as a line break in the table headers
-#'
-#' `escape` informs if special characters should be escaped when {gtsummary}
-#' automatically renders LaTeX typesetting instructions via {kableExtra}.
-#' `escape = FALSE` is required to take advantage of the above styling conveniences;
-#' however, it is possible that other unanticipated special characters could prohibit
-#' rendering of the pdf with this option.
 #'
 #' Additional styling is available with
 #' `kableExtra::kable_styling()` as shown in Example 3, which implements row
@@ -33,7 +27,8 @@
 #'
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
-#' @param format,escape,... arguments passed to `knitr::kable()`
+#' @param format,escape,... arguments passed to `knitr::kable()`. Default is
+#' `escape = FALSE`, and the format is auto-detected.
 #' @export
 #' @return A {kableExtra} table
 #' @family gtsummary output types
@@ -55,7 +50,7 @@
 #'   tbl_summary(by = trt) %>%
 #'   bold_labels() %>%
 #'   modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") %>%
-#'   as_kable_extra(format = "latex", escape = FALSE)
+#'   as_kable_extra()
 #'
 #' # Example 3 (PDF via LaTeX) -------------------------------------------------
 #' as_kable_extra_ex3_pdf <-
@@ -64,8 +59,6 @@
 #'   tbl_summary(by = trt) %>%
 #'   bold_labels() %>%
 #'   as_kable_extra(
-#'     format = "latex",
-#'     escape = FALSE,
 #'     booktabs = TRUE,
 #'     longtable = TRUE,
 #'     linesep = ""
@@ -95,8 +88,8 @@
 #'
 
 as_kable_extra <- function(x,
-                           format = ifelse(knitr::is_latex_output(), "latex", "html"),
-                           escape = TRUE,
+                           escape = FALSE,
+                           format = NULL,
                            ...,
                            include = everything(),
                            return_calls = FALSE) {
@@ -111,9 +104,10 @@ as_kable_extra <- function(x,
 
   # creating list of kableExtra calls ------------------------------------------
   kable_extra_calls <-
-    table_styling_to_kable_extra_calls(x = x,
-                                       escape = escape,
-                                       format = format, ...)
+    table_styling_to_kable_extra_calls(
+      x = x,
+      escape = escape,
+      format = format %||% ifelse(knitr::is_latex_output(), "latex", "html"), ...)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")

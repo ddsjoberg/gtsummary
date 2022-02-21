@@ -6,8 +6,8 @@
 \usage{
 as_kable_extra(
   x,
-  format = ifelse(knitr::is_latex_output(), "latex", "html"),
-  escape = TRUE,
+  escape = FALSE,
+  format = NULL,
   ...,
   include = everything(),
   return_calls = FALSE
@@ -17,7 +17,8 @@ as_kable_extra(
 \item{x}{Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
 
-\item{format, escape, ...}{arguments passed to \code{knitr::kable()}}
+\item{format, escape, ...}{arguments passed to \code{knitr::kable()}. Default is
+\code{escape = FALSE}, and the format is auto-detected.}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -36,32 +37,26 @@ This allows the customized formatting available via \link[knitr:kable]{knitr::ka
 and {kableExtra}; \code{as_kable_extra()} supports arguments in \code{knitr::kable()}.
 \code{as_kable_extra()} output via gtsummary supports
 bold and italic cells for table bodies. Users
-creating pdf output should specify \code{as_kable_extra(format = "latex")}. Users
 are encouraged to leverage \code{as_kable_extra()} for enhanced pdf printing; for html
 output options there is better support via \code{as_gt()}.
 }
-\section{PDF via LaTeX Tips}{
+\section{PDF/LaTeX Tips}{
 
 
 This section discusses options intended for use with
 \itemize{
 \item \code{output: pdf_document} in yaml of \code{.Rmd}.
-\item \code{as_kable_extra(format = "latex", escape = FALSE)}
+\item \code{as_kable_extra(escape = FALSE)} (the default value). The \verb{escape=} argument
+informs if special characters should be escaped rendering LaTeX typesetting
 }
 
 The above settings in your R markdown document automatically renders LaTeX
-typesetting instructions via {kableExtra} in your pdf for the following:
+typesetting instructions via kableExtra in your pdf for the following:
 \itemize{
 \item Markdown bold, italic, and underline syntax in the headers will be converted to LaTeX
-\item Special characters in the table body will be escaped
+\item Special characters in the table body will be escaped, and as a result will render properly
 \item The \code{"\\n"} symbol will be recognized as a line break in the table headers
 }
-
-\code{escape} informs if special characters should be escaped when {gtsummary}
-automatically renders LaTeX typesetting instructions via {kableExtra}.
-\code{escape = FALSE} is required to take advantage of the above styling conveniences;
-however, it is possible that other unanticipated special characters could prohibit
-rendering of the pdf with this option.
 
 Additional styling is available with
 \code{kableExtra::kable_styling()} as shown in Example 3, which implements row
@@ -105,7 +100,7 @@ as_kable_extra_ex2_pdf <-
   tbl_summary(by = trt) \%>\%
   bold_labels() \%>\%
   modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") \%>\%
-  as_kable_extra(format = "latex", escape = FALSE)
+  as_kable_extra()
 
 # Example 3 (PDF via LaTeX) -------------------------------------------------
 as_kable_extra_ex3_pdf <-
@@ -114,8 +109,6 @@ as_kable_extra_ex3_pdf <-
   tbl_summary(by = trt) \%>\%
   bold_labels() \%>\%
   as_kable_extra(
-    format = "latex",
-    escape = FALSE,
     booktabs = TRUE,
     longtable = TRUE,
     linesep = ""
