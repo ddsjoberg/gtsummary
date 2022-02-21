@@ -27,6 +27,7 @@
 #'   - `strata` stratum levels
 #'   - `n` N within stratum
 #'   - `N` Overall N
+#'
 #' The evaluated value of `.header=` is also available within `tbl_strata2(.tbl_fun=)`
 #' @param .stack_group_header DEPRECATED.
 #' @param .quiet Logical indicating whether to print messages in console.
