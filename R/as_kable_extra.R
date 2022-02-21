@@ -5,7 +5,9 @@
 #' and {kableExtra}; `as_kable_extra()` supports arguments in `knitr::kable()`.
 #' `as_kable_extra()` output via gtsummary supports
 #' bold and italic cells for table bodies. Users
-#' creating pdf output should specify `as_kable_extra(format = "latex")`.
+#' creating pdf output should specify `as_kable_extra(format = "latex")`. Users
+#' are encouraged to leverage `as_kable_extra()` for enhanced pdf printing; for html
+#' output options there is better support via `as_gt()`.
 #'
 #' @section PDF via LaTeX Tips:
 #'
@@ -13,11 +15,17 @@
 #'  - `output: pdf_document` in yaml of `.Rmd`.
 #'  - `as_kable_extra(format = "latex", escape = FALSE)`
 #'
-#' With the above settings in your R markdown document, you'll see the following
-#' applied to your table.
+#' The above settings in your R markdown document automatically renders LaTeX
+#' typesetting instructions via {kableExtra} in your pdf for the following:
 #' - Markdown bold, italic, and underline syntax in the headers will be converted to LaTeX
 #' - Special characters in the table body will be escaped
 #' - The `"\n"` symbol will be recognized as a line break in the table headers
+#'
+#' `escape` informs if special characters should be escaped when {gtsummary}
+#' automatically renders LaTeX typesetting instructions via {kableExtra}.
+#' `escape = FALSE` is required to take advantage of the above styling conveniences;
+#' however, it is possible that other unanticipated special characters could prohibit
+#' rendering of the pdf with this option.
 #'
 #' Additional styling is available with
 #' `kableExtra::kable_styling()` as shown in Example 3, which implements row
