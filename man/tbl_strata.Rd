@@ -59,8 +59,9 @@ curly brackets will be evaluated according to \code{glue::glue()} syntax.
 \item \code{strata} stratum levels
 \item \code{n} N within stratum
 \item \code{N} Overall N
-The evaluated value of \verb{.header=} is also available within \code{tbl_strata2(.tbl_fun=)}
-}}
+}
+
+The evaluated value of \verb{.header=} is also available within \code{tbl_strata2(.tbl_fun=)}}
 
 \item{.stack_group_header}{DEPRECATED.}
 
