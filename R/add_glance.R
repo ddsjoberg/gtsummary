@@ -84,6 +84,13 @@ add_glance_table <- function(x, include = everything(), label = NULL,
                              fmt_fun = NULL, glance_fun = broom::glance) {
   updated_call_list <- c(x$call_list, list(add_glance_table = match.call()))
 
+  # instructing mice users how to get this function working --------------------
+  if (inherits(x$model_obj, "mira") && identical(glance_fun, broom::glance)) {
+    paste("Mice objects of class {.val mira} likely need",
+          "{.code add_glance_table(glance_fun = function(x) broom::glance(mice::pool(x)))}") %>%
+    cli::cli_alert_info()
+  }
+
   # prepare glance statistics and formatting functions -------------------------
   lst_prep_glance <-
     .prep_glance_statistics(
@@ -137,6 +144,14 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
                                    text_interpret = c("md", "html"),
                                    sep1 = " = ", sep2 = "; ") {
   updated_call_list <- c(x$call_list, list(add_glance_source_note = match.call()))
+
+  # instructing mice users how to get this function working --------------------
+  if (inherits(x$model_obj, "mira") && identical(glance_fun, broom::glance)) {
+    paste("Mice objects of class {.val mira} likely need",
+          "{.code add_glance_source_note(glance_fun = function(x) broom::glance(mice::pool(x)))}") %>%
+      cli::cli_alert_info()
+  }
+
   # prepare glance statistics and formatting functions -------------------------
   lst_prep_glance <-
     .prep_glance_statistics(
