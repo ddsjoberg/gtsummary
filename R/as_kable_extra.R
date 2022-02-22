@@ -107,7 +107,8 @@ as_kable_extra <- function(x,
     table_styling_to_kable_extra_calls(
       x = x,
       escape = escape,
-      format = format %||% ifelse(knitr::is_latex_output(), "latex", "html"), ...)
+      format = format %||% ifelse(knitr::is_latex_output(), "latex", "html"),
+      ...)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_kable_extra-lst:addl_cmds")
@@ -202,24 +203,28 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
     purrr::list_modify(tab_style_bold = NULL, tab_style_italic = NULL)
 
   # escaping special characters in table_body ----------------------------------
+  kable_call_index <- which(names(kable_extra_calls) %in% "kable")
+  cols_to_escape <-
+    filter(x$table_styling$header, !.data$hide) %>% dplyr::pull(.data$column)
+  kable_extra_calls <-
+    append(kable_extra_calls,
+           values = list(escape_table_body = NULL),
+           after = kable_call_index - 1L)
   if (!isTRUE(escape) && format %in% "latex") {
-    kable_call_index <- which(names(kable_extra_calls) %in% "kable")
-    cols_to_escape <-
-      filter(x$table_styling$header, !.data$hide) %>% dplyr::pull(.data$column)
-
-    expr_escape_table_body <-
-      list(
-        escape_table_body =
-          rlang::expr(
-            dplyr::mutate(
-              dplyr::across(all_of(!!cols_to_escape) & where(is.character),
-                            function(.x) gsub("([#$%&_{}])", "\\\\\\1", x = .x))
-            )
-          )
+    kable_extra_calls[["escape_table_body"]] <-
+      rlang::expr(
+        dplyr::mutate(
+          dplyr::across(all_of(!!cols_to_escape) & where(is.character), .escape_latex)
+        )
       )
-
-    kable_extra_calls <-
-      append(kable_extra_calls, values = expr_escape_table_body, after = kable_call_index - 1L)
+  }
+  else if (!isTRUE(escape) && format %in% "html") {
+    kable_extra_calls[["escape_table_body"]] <-
+      rlang::expr(
+        dplyr::mutate(
+          dplyr::across(all_of(!!cols_to_escape) & where(is.character), .escape_html)
+        )
+      )
   }
 
   # bold and italic ------------------------------------------------------------
@@ -504,4 +509,45 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
     pattern = "\\*\\*(.*?)\\*\\*",
     replacement = "\\1"
   )
+}
+
+#' Special Character Escape
+#'
+#' These utility functions were copied from the internals of kableExtra,
+#' and assist in escaping special characters in LaTeX and HTML tables.
+#' These function assist in the creations of tables via `as_kable_extra()`.
+#'
+#' @param x character vector
+#' @return character vector with escaped special characters
+#' @seealso `as_kable_extra()`
+#' @name kableExtra_utils
+#' @keywords internal
+#'
+#' @examples
+#' .escape_latex(c("%", "{test}"))
+#' .escape_html(c(">0.9", "line\nbreak"))
+NULL
+
+#' @rdname kableExtra_utils
+#' @export
+.escape_html <- function(x) {
+  x <- gsub("&", "&amp;", x)
+  x <- gsub("<", "&lt;", x)
+  x <- gsub(">", "&gt;", x)
+  x <- gsub("\"", "&quot;", x)
+  x <- gsub("\n", "<br />", x)
+  x
+}
+
+#' @rdname kableExtra_utils
+#' @export
+.escape_latex <- function (x) {
+  x <- gsub("\\\\", "\\\\textbackslash", x)
+  x <- gsub("([#$%&_{}])", "\\\\\\1", x)
+  x <- gsub("\\\\textbackslash", "\\\\textbackslash{}", x)
+  x <- gsub("~", "\\\\textasciitilde{}", x)
+  x <- gsub("\\^", "\\\\textasciicircum{}", x)
+  x <- kableExtra::linebreak(x)
+
+  x
 }
