@@ -60,7 +60,6 @@ add_global_p <- function(x, ...) {
 add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
                                         keep = FALSE,
                                         quiet = NULL, ..., terms = NULL) {
-  rlang::check_dots_empty()
   updated_call_list <- c(x$call_list, list(add_global_p = match.call()))
   # deprecated arguments -------------------------------------------------------
   if (!is.null(terms)) {
@@ -192,7 +191,6 @@ add_global_p.tbl_regression <- function(x, include = everything(), type = NULL,
 #' @export
 add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything(),
                                           keep = FALSE, quiet = NULL, ...) {
-  rlang::check_dots_empty()
   updated_call_list <- c(x$call_list, list(add_global_p = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
