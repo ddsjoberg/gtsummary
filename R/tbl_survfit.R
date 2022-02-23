@@ -108,6 +108,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
                              statistic = NULL, label = NULL, label_header = NULL,
                              estimate_fun = NULL, missing = NULL,
                              conf.level = 0.95, reverse = FALSE, quiet = NULL, ...) {
+  rlang::check_dots_empty()
   # setting defaults -----------------------------------------------------------
   ci.sep <- get_theme_element("pkgwide-str:ci.sep", default = ", ")
   statistic <-

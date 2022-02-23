@@ -33,6 +33,7 @@ tbl_split <- function(x, ...) {
 #' @export
 #' @rdname tbl_split
 tbl_split.gtsummary <- function(x, variables, ...) {
+  rlang::check_dots_empty()
   # check/parse inputs ---------------------------------------------------------
   variables <-
     broom.helpers::.select_to_varnames(
@@ -65,5 +66,6 @@ tbl_split.gtsummary <- function(x, variables, ...) {
 #' @export
 #' @rdname tbl_split
 print.tbl_split <- function(x, ...) {
+  rlang::check_dots_empty()
   purrr::walk(x, print)
 }

@@ -166,14 +166,12 @@ library(survival)
 test_inline_surv_strata <-
   survfit(Surv(ttdeath, death) ~ trt, trial) %>%
   tbl_survival(
-    times = c(12, 24),
-    time_label = "{time} Months"
+    times = c(12, 24)
   )
 test_inline_surv_nostrata <-
   survfit(Surv(ttdeath, death) ~ 1, trial) %>%
   tbl_survival(
-    times = c(12, 24),
-    time_label = "{time} Months"
+    times = c(12, 24)
   )
 
 test_inline_surv_strata2 <-

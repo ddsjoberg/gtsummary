@@ -40,6 +40,7 @@ inline_text <- function(x, ...) {
 
 inline_text.gtsummary <- function(x, variable,
                                   level = NULL, column = NULL, pattern = NULL, ...) {
+  rlang::check_dots_empty()
   column <- rlang::enquo(column)
   column_is_null <- tryCatch(is.null(eval_tidy(column)), error = function(e) FALSE)
   level <- rlang::enquo(level)
@@ -203,6 +204,7 @@ inline_text.gtsummary <- function(x, variable,
 #' inline_text(t1, variable = grade, column = "p.value")
 inline_text.tbl_summary <- function(x, variable, column = NULL, level = NULL,
                                     pattern = NULL, pvalue_fun = NULL, ...) {
+  rlang::check_dots_empty()
   # setting defaults ---------------------------------------------------------
   pvalue_fun <-
     pvalue_fun %||%
@@ -313,6 +315,7 @@ inline_text.tbl_regression <-
   function(x, variable, level = NULL,
            pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
            estimate_fun = NULL, pvalue_fun = NULL, ...) {
+    rlang::check_dots_empty()
     # setting defaults ---------------------------------------------------------
     pvalue_fun <-
       pvalue_fun %||%
@@ -428,6 +431,7 @@ inline_text.tbl_survival <-
            pattern = "{estimate} ({conf.level*100}% CI {ci})",
            estimate_fun = NULL,
            ...) {
+    rlang::check_dots_empty()
     if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
 
     # setting defaults ---------------------------------------------------------
@@ -580,6 +584,7 @@ inline_text.tbl_survfit <-
   function(x, variable = NULL, level = NULL,
            pattern = NULL, time = NULL, prob = NULL, column = NULL,
            estimate_fun = x$inputs$estimate_fun, pvalue_fun = NULL, ...) {
+    rlang::check_dots_empty()
     # quoting inputs -------------------------------------------------------------
     variable <- rlang::enquo(variable)
     column <- rlang::enquo(column)
@@ -679,6 +684,7 @@ inline_text.tbl_survfit <-
 inline_text.tbl_cross <-
   function(x, col_level = NULL, row_level = NULL,
            pvalue_fun = NULL, ...) {
+    rlang::check_dots_empty()
 
     # check arguments ----------------------------------------------------------
     if (is.null(col_level) | (is.null(row_level) & !identical("p.value", col_level))) {

@@ -13,6 +13,7 @@ NULL
 #' @rdname print_gtsummary
 #' @export
 print.gtsummary <- function(x, print_engine = NULL, ...) {
+  rlang::check_dots_empty()
   # select print engine
   print_engine <-
     print_engine %||%

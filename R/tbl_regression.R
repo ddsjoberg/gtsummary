@@ -111,6 +111,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
                                    tidy_fun = NULL,
                                    add_estimate_to_reference_rows = FALSE,
                                    conf.int = NULL, ...) {
+  rlang::check_dots_empty()
   # deprecated arguments -------------------------------------------------------
   .tbl_regression_deprecated_arguments(...)
 
