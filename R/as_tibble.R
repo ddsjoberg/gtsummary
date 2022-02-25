@@ -24,7 +24,7 @@
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                 return_calls = FALSE, exclude = NULL,
                                 fmt_missing = FALSE, ...) {
-  rlang::check_dots_empty()
+  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_stop(
