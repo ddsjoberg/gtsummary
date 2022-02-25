@@ -8,7 +8,7 @@
 \usage{
 .escape_html(x)
 
-.escape_latex(x)
+.escape_latex(x, newlines = TRUE, align = "c")
 }
 \arguments{
 \item{x}{character vector}

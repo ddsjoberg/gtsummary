@@ -212,11 +212,19 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
            after = kable_call_index - 1L)
   if (!isTRUE(escape) && format %in% "latex") {
     kable_extra_calls[["escape_table_body"]] <-
-      rlang::expr(
-        dplyr::mutate(
-          dplyr::across(all_of(!!cols_to_escape) & where(is.character), .escape_latex)
-        )
-      )
+      map(
+        seq_len(nrow(x$table_styling$header)),
+        function(i) {
+          if (x$table_styling$header$hide[i] %in% TRUE) return(NULL)
+          rlang::expr(
+            dplyr::mutate(
+              dplyr::across(all_of(!!x$table_styling$header$column[i]) & where(is.character),
+                            ~.escape_latex(.x, align = !!str_sub(x$table_styling$header$align[i], 1, 1)))
+            )
+          )
+        }
+      ) %>%
+      purrr::compact()
   }
   else if (!isTRUE(escape) && format %in% "html") {
     kable_extra_calls[["escape_table_body"]] <-
@@ -541,13 +549,14 @@ NULL
 
 #' @rdname kableExtra_utils
 #' @export
-.escape_latex <- function (x) {
+.escape_latex <- function (x, newlines = TRUE, align = "c") {
   x <- gsub("\\\\", "\\\\textbackslash", x)
   x <- gsub("([#$%&_{}])", "\\\\\\1", x)
   x <- gsub("\\\\textbackslash", "\\\\textbackslash{}", x)
   x <- gsub("~", "\\\\textasciitilde{}", x)
   x <- gsub("\\^", "\\\\textasciicircum{}", x)
-  x <- kableExtra::linebreak(x)
+  if (newlines) x <- kableExtra::linebreak(x, align = align)
+  x <- gsub("  ", "\\\\ \\\\ ", x) # spaces
 
   x
 }

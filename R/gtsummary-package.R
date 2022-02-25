@@ -14,6 +14,7 @@
 #' @importFrom glue glue as_glue glue_collapse
 #' @importFrom stringr fixed word str_extract_all str_remove_all str_starts
 #' str_split str_detect str_remove str_replace_all str_wrap str_sub str_locate
+#' str_sub
 #' @importFrom broom.helpers .formula_list_to_named_list .select_to_varnames
 #' .generic_selector
 #' @importFrom cli cli_alert_info cli_alert_danger cli_code cli_ul
