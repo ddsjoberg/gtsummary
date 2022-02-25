@@ -310,7 +310,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
   vct_footnote <-
     .number_footnotes(x) %>%
     pull(.data$footnote) %>%
-    unique()
+    unique() %>%
+    {gsub("\n", " ", .)} # the linebreak causes a rendering issue, so removing it
 
   if (length(vct_footnote > 0)) {
     kable_extra_calls[["footnote"]] <-
