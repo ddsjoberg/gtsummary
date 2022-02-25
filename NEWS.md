@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Add tbl_butcher(keep=) argument to optionally keep some internal objects as needed  (#1148)
+
 * Fixing Lancet theme mid-point encoding issue on Linux and MacOS. (#1146)
 
 * Adding Norwegian translations (#1143)

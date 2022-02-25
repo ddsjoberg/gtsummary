@@ -11,6 +11,9 @@
 #' properly.
 #'
 #' @param x a gtsummary object
+#' @param include names of additional elements to retain in the gtsummary
+#' object. `c("table_body", "table_styling")` will always be retained.
+#' Default is `NULL`
 #'
 #' @return a gtsummary object
 #' @export
@@ -32,13 +35,23 @@
 #'  object.size(tbl_large) %>% format(units = "Mb")
 #'  object.size(tbl_butchered) %>% format(units = "Mb")
 #'  }
-tbl_butcher <- function(x) {
+tbl_butcher <- function(x, include = NULL) {
   if (!inherits(x, "gtsummary") || is.null(x$table_styling)) {
     stop("`x=` must be a gtsummary object created with v1.4.0 or later.")
   }
 
+  # select additional elements to keep in output -------------------------------
+  include <-
+    .select_to_varnames(
+      select = {{ include }},
+      var_info = names(x),
+      arg_name = "include"
+    )
+
   # elements to be removed from `x=` -------------------------------------------
-  element_names <- names(x) %>% setdiff(c("table_body", "table_styling"))
+  element_names <-
+    names(x) %>%
+    setdiff(union(c("table_body", "table_styling"), include))
   lst_nulls <-
     rep_len(list(NULL), length(element_names)) %>%
     rlang::set_names(element_names)

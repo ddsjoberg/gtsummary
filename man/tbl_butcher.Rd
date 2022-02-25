@@ -4,10 +4,14 @@
 \alias{tbl_butcher}
 \title{Reduce size of gtsummary objects}
 \usage{
-tbl_butcher(x)
+tbl_butcher(x, include = NULL)
 }
 \arguments{
 \item{x}{a gtsummary object}
+
+\item{include}{names of additional elements to retain in the gtsummary
+object. \code{c("table_body", "table_styling")} will always be retained.
+Default is \code{NULL}}
 }
 \value{
 a gtsummary object
