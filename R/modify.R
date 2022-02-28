@@ -357,6 +357,27 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
   show_header_names(x)
 }
 
+.prep_modify_stats <- function(x) {
+  # tbl_summary with no by variable
+  if (inherits(x, c("tbl_summary", "tbl_svysummary")) && is.null(x$df_by)) {
+    x$meta_data %>%
+      dplyr::slice(1) %>%
+      pluck("df_stats", 1) %>%
+      select(any_of(c("N_obs", "N_unweighted"))) %>%
+      dplyr::slice(1) %>%
+      dplyr::rename(N = .data$N_obs) %>%
+      dplyr::rename_with(
+        .fn = ~paste0("modify_stat_", .),
+        .cols = any_of(c("N", "N_unweighted"))
+      ) %>%
+      full_join(
+        x$table_styling$header,
+        by = character()
+      ) %>%
+      dplyr::relocate(any_of(c("N", "N_unweighted")), .after = last_col())
+  }
+}
+
 .info_tibble <- function(x) {
   # tbl_summary with no by variable
   if (inherits(x, c("tbl_summary", "tbl_svysummary")) && is.null(x$df_by)) {
