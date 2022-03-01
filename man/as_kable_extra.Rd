@@ -10,6 +10,7 @@ as_kable_extra(
   format = NULL,
   ...,
   include = everything(),
+  addtl_fmt = TRUE,
   return_calls = FALSE
 )
 }
@@ -24,6 +25,10 @@ as_kable_extra(
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
 Default is \code{everything()}.}
+
+\item{addtl_fmt}{logical indicating whether to include additional formatting.
+Default is \code{TRUE}. This is primarily used to escape special characters,
+convert markdown to LaTeX, and removing line breaks from the footnote.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}

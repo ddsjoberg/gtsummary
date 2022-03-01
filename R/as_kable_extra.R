@@ -29,6 +29,9 @@
 #' @inheritParams as_flex_table
 #' @param format,escape,... arguments passed to `knitr::kable()`. Default is
 #' `escape = FALSE`, and the format is auto-detected.
+#' @param addtl_fmt logical indicating whether to include additional formatting.
+#' Default is `TRUE`. This is primarily used to escape special characters,
+#' convert markdown to LaTeX, and removing line breaks from the footnote.
 #' @export
 #' @return A {kableExtra} table
 #' @family gtsummary output types
