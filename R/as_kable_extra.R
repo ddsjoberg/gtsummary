@@ -8,22 +8,37 @@
 #' are encouraged to leverage `as_kable_extra()` for enhanced pdf printing; for html
 #' output options there is better support via `as_gt()`.
 #'
-#' @section PDF/LaTeX Tips:
+#' @section Details:
+#'
+#' ## PDF/LaTeX
 #'
 #' This section discusses options intended for use with
 #'  - `output: pdf_document` in yaml of `.Rmd`.
-#'  - `as_kable_extra(escape = FALSE)` (the default value). The `escape=` argument
-#'     informs if special characters should be escaped rendering LaTeX typesetting
-#'
-#' The above settings in your R markdown document automatically renders LaTeX
-#' typesetting instructions via kableExtra in your pdf for the following:
-#' - Markdown bold, italic, and underline syntax in the headers will be converted to LaTeX
-#' - Special characters in the table body will be escaped, and as a result will render properly
-#' - The `"\n"` symbol will be recognized as a line break in the table headers
+#'  - `as_kable_extra(escape = FALSE)` (the default value).
+#'     The `escape=` argument informs if special characters should be escaped
+#'     when rendering LaTeX typesetting.
+#'  - `as_kable_extra(addtl_fmt = TRUE)` (the default value) When `TRUE`,
+#'    the following are executed:
+#'    - Markdown bold, italic, and underline syntax in the headers will be converted to LaTeX
+#'    - Special characters in the table body will be escaped
+#'    - The `"\n"` symbol will be recognized as a line break in the table headers
+#'    - The `"\n"` symbol is removed from the footnotes
 #'
 #' Additional styling is available with
 #' `kableExtra::kable_styling()` as shown in Example 3, which implements row
 #' striping and repeated column headers in the presence of page breaks.
+#'
+#' ## HTML
+#'
+#' This section discusses options intended for use with
+#'  - `output: html_document` in yaml of `.Rmd`.
+#'  - `as_kable_extra(escape = FALSE)` (the default value).
+#'     The `escape=` argument informs if special characters should be escaped
+#'     when rendering HTML typesetting.
+#'  - `as_kable_extra(addtl_fmt = TRUE)` (the default value) When `TRUE`,
+#'    the following are executed:
+#'    - Special characters in the table body and headers will be escaped
+#'    - The `"\n"` symbol is removed from the footnotes
 #'
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
@@ -188,6 +203,14 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
         spanning_header = .strip_markdown(.data$spanning_header)
       )
   }
+  if (!isTRUE(escape) && isTRUE(addtl_fmt) && isTRUE(format == "html")) {
+    x$table_styling$header <-
+      x$table_styling$header %>%
+      mutate(
+        label = .escape_html(.data$label),
+        spanning_header = .escape_html(.data$spanning_header)
+      )
+  }
 
   # getting kable calls
   kable_extra_calls <-
@@ -215,6 +238,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     append(kable_extra_calls,
            values = list(escape_table_body = NULL),
            after = kable_call_index - 1L)
+
   if (!isTRUE(escape) && isTRUE(addtl_fmt) && format %in% "latex") {
     kable_extra_calls[["escape_table_body"]] <-
       map(
@@ -289,11 +313,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
       distinct() %>%
       ungroup()
 
-    header <-
-      df_header$width %>%
-      set_names(df_header$spanning_header) %>%
-      c(list(escape = escape)) %>%
-      purrr::compact()
+    header <- df_header$width %>% set_names(df_header$spanning_header)
 
     kable_extra_calls[["add_header_above"]] <-
       expr(kableExtra::add_header_above(header = !!header, escape = !!escape))
@@ -316,7 +336,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     .number_footnotes(x) %>%
     pull(.data$footnote) %>%
     unique() %>%
-    {ifelse(addtl_fmt, gsub("\n", " ", .), .)} # the linebreak causes a rendering issue, so removing it
+    {ifelse(addtl_fmt, gsub("\\n", " ", .), .)} # the linebreak causes a rendering issue, so removing it
 
   if (length(vct_footnote > 0)) {
     kable_extra_calls[["footnote"]] <-

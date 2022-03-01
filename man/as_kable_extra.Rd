@@ -45,27 +45,47 @@ bold and italic cells for table bodies. Users
 are encouraged to leverage \code{as_kable_extra()} for enhanced pdf printing; for html
 output options there is better support via \code{as_gt()}.
 }
-\section{PDF/LaTeX Tips}{
+\section{Details}{
 
+\subsection{PDF/LaTeX}{
 
 This section discusses options intended for use with
 \itemize{
 \item \code{output: pdf_document} in yaml of \code{.Rmd}.
-\item \code{as_kable_extra(escape = FALSE)} (the default value). The \verb{escape=} argument
-informs if special characters should be escaped rendering LaTeX typesetting
-}
-
-The above settings in your R markdown document automatically renders LaTeX
-typesetting instructions via kableExtra in your pdf for the following:
+\item \code{as_kable_extra(escape = FALSE)} (the default value).
+The \verb{escape=} argument informs if special characters should be escaped
+when rendering LaTeX typesetting.
+\item \code{as_kable_extra(addtl_fmt = TRUE)} (the default value) When \code{TRUE},
+the following are executed:
 \itemize{
 \item Markdown bold, italic, and underline syntax in the headers will be converted to LaTeX
-\item Special characters in the table body will be escaped, and as a result will render properly
+\item Special characters in the table body will be escaped
 \item The \code{"\\n"} symbol will be recognized as a line break in the table headers
+\item The \code{"\\n"} symbol is removed from the footnotes
+}
 }
 
 Additional styling is available with
 \code{kableExtra::kable_styling()} as shown in Example 3, which implements row
 striping and repeated column headers in the presence of page breaks.
+}
+
+\subsection{HTML}{
+
+This section discusses options intended for use with
+\itemize{
+\item \code{output: html_document} in yaml of \code{.Rmd}.
+\item \code{as_kable_extra(escape = FALSE)} (the default value).
+The \verb{escape=} argument informs if special characters should be escaped
+when rendering HTML typesetting.
+\item \code{as_kable_extra(addtl_fmt = TRUE)} (the default value) When \code{TRUE},
+the following are executed:
+\itemize{
+\item Special characters in the table body and headers will be escaped
+\item The \code{"\\n"} symbol is removed from the footnotes
+}
+}
+}
 }
 
 \section{Example Output}{
