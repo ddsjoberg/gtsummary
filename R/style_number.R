@@ -39,7 +39,7 @@ style_number <- function(x, digits = 0, big.mark = NULL, decimal.mark = NULL,
     map2_chr(
       x, digits,
       function(.x, .y) {
-        round(.x * scale, digits = .y) %>%
+        round2(.x * scale, digits = .y) %>%
           format(
             big.mark = big.mark, decimal.mark = decimal.mark, nsmall = .y,
             scientific = FALSE, trim = TRUE, ...
@@ -50,4 +50,9 @@ style_number <- function(x, digits = 0, big.mark = NULL, decimal.mark = NULL,
   names(ret) <- names(x)
 
   ret
+}
+
+# this function assures that 5s are rounded up (and not to even, the default in `round()`)
+round2 <- function(x, digits = 0) {
+  round(x + .Machine$double.eps * sign(x), digits = digits)
 }

@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Add tbl_butcher(keep=) argument to optionally keep some internal objects as needed  (#1148)
+* Removed use of `round()` in `style_number()`, and replaced it with a round function that does _not_ "round-to-even". (#1140)
+
+* Add `tbl_butcher(keep=)` argument to optionally keep some internal objects as needed.  (#1148)
 
 * Fixing Lancet theme mid-point encoding issue on Linux and MacOS. (#1146)
 
