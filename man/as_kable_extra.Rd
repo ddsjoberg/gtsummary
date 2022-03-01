@@ -28,7 +28,7 @@ Default is \code{everything()}.}
 
 \item{addtl_fmt}{logical indicating whether to include additional formatting.
 Default is \code{TRUE}. This is primarily used to escape special characters,
-convert markdown to LaTeX, and removing line breaks from the footnote.}
+convert markdown to LaTeX, and remove line breaks from the footnote.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
@@ -45,47 +45,40 @@ bold and italic cells for table bodies. Users
 are encouraged to leverage \code{as_kable_extra()} for enhanced pdf printing; for html
 output options there is better support via \code{as_gt()}.
 }
-\section{Details}{
+\section{PDF/LaTeX}{
 
-\subsection{PDF/LaTeX}{
 
-This section discusses options intended for use with
+This section shows options intended for use with \code{output: pdf_document} in yaml of \code{.Rmd}.
+
+When the default values of \code{as_kable_extra(escape = FALSE, addtl_fmt = TRUE)}
+are utilized, the following formatting occurs.
 \itemize{
-\item \code{output: pdf_document} in yaml of \code{.Rmd}.
-\item \code{as_kable_extra(escape = FALSE)} (the default value).
-The \verb{escape=} argument informs if special characters should be escaped
-when rendering LaTeX typesetting.
-\item \code{as_kable_extra(addtl_fmt = TRUE)} (the default value) When \code{TRUE},
-the following are executed:
-\itemize{
-\item Markdown bold, italic, and underline syntax in the headers will be converted to LaTeX
-\item Special characters in the table body will be escaped
-\item The \code{"\\n"} symbol will be recognized as a line break in the table headers
+\item Markdown bold, italic, and underline syntax in the headers will be converted to escaped LaTeX code
+\item Special characters in the table body will be escaped with \code{.escape_latex()}
+\item The \code{"\\n"} symbol will be recognized as a line break in the table headers and the table body
 \item The \code{"\\n"} symbol is removed from the footnotes
 }
-}
+
+To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALSE)}
 
 Additional styling is available with
 \code{kableExtra::kable_styling()} as shown in Example 3, which implements row
 striping and repeated column headers in the presence of page breaks.
 }
 
-\subsection{HTML}{
+\section{HTML}{
 
-This section discusses options intended for use with
+
+This section discusses options intended for use with \code{output: html_document} in yaml of \code{.Rmd}.
+
+When the default values of \code{as_kable_extra(escape = FALSE, addtl_fmt = TRUE)}
+are utilized, the following formatting occurs.
 \itemize{
-\item \code{output: html_document} in yaml of \code{.Rmd}.
-\item \code{as_kable_extra(escape = FALSE)} (the default value).
-The \verb{escape=} argument informs if special characters should be escaped
-when rendering HTML typesetting.
-\item \code{as_kable_extra(addtl_fmt = TRUE)} (the default value) When \code{TRUE},
-the following are executed:
-\itemize{
-\item Special characters in the table body and headers will be escaped
+\item Special characters in the table body and headers will be escaped with \code{.escape_html()}
 \item The \code{"\\n"} symbol is removed from the footnotes
 }
-}
-}
+
+To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALSE)}
 }
 
 \section{Example Output}{

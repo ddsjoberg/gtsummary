@@ -8,37 +8,33 @@
 #' are encouraged to leverage `as_kable_extra()` for enhanced pdf printing; for html
 #' output options there is better support via `as_gt()`.
 #'
-#' @section Details:
+#' @section PDF/LaTeX:
 #'
-#' ## PDF/LaTeX
+#' This section shows options intended for use with `output: pdf_document` in yaml of `.Rmd`.
 #'
-#' This section discusses options intended for use with
-#'  - `output: pdf_document` in yaml of `.Rmd`.
-#'  - `as_kable_extra(escape = FALSE)` (the default value).
-#'     The `escape=` argument informs if special characters should be escaped
-#'     when rendering LaTeX typesetting.
-#'  - `as_kable_extra(addtl_fmt = TRUE)` (the default value) When `TRUE`,
-#'    the following are executed:
-#'    - Markdown bold, italic, and underline syntax in the headers will be converted to LaTeX
-#'    - Special characters in the table body will be escaped
-#'    - The `"\n"` symbol will be recognized as a line break in the table headers
+#' When the default values of `as_kable_extra(escape = FALSE, addtl_fmt = TRUE)`
+#' are utilized, the following formatting occurs.
+#'    - Markdown bold, italic, and underline syntax in the headers will be converted to escaped LaTeX code
+#'    - Special characters in the table body will be escaped with `.escape_latex()`
+#'    - The `"\n"` symbol will be recognized as a line break in the table headers and the table body
 #'    - The `"\n"` symbol is removed from the footnotes
+#'
+#' To suppress the additional formatting, set `as_kable_extra(addtl_fmt = FALSE)`
 #'
 #' Additional styling is available with
 #' `kableExtra::kable_styling()` as shown in Example 3, which implements row
 #' striping and repeated column headers in the presence of page breaks.
 #'
-#' ## HTML
+#' @section HTML:
 #'
-#' This section discusses options intended for use with
-#'  - `output: html_document` in yaml of `.Rmd`.
-#'  - `as_kable_extra(escape = FALSE)` (the default value).
-#'     The `escape=` argument informs if special characters should be escaped
-#'     when rendering HTML typesetting.
-#'  - `as_kable_extra(addtl_fmt = TRUE)` (the default value) When `TRUE`,
-#'    the following are executed:
-#'    - Special characters in the table body and headers will be escaped
+#' This section discusses options intended for use with `output: html_document` in yaml of `.Rmd`.
+#'
+#' When the default values of `as_kable_extra(escape = FALSE, addtl_fmt = TRUE)`
+#' are utilized, the following formatting occurs.
+#'    - Special characters in the table body and headers will be escaped with `.escape_html()`
 #'    - The `"\n"` symbol is removed from the footnotes
+#'
+#' To suppress the additional formatting, set `as_kable_extra(addtl_fmt = FALSE)`
 #'
 #' @inheritParams as_kable
 #' @inheritParams as_flex_table
@@ -46,7 +42,7 @@
 #' `escape = FALSE`, and the format is auto-detected.
 #' @param addtl_fmt logical indicating whether to include additional formatting.
 #' Default is `TRUE`. This is primarily used to escape special characters,
-#' convert markdown to LaTeX, and removing line breaks from the footnote.
+#' convert markdown to LaTeX, and remove line breaks from the footnote.
 #' @export
 #' @return A {kableExtra} table
 #' @family gtsummary output types
@@ -248,7 +244,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
           rlang::expr(
             dplyr::mutate(
               dplyr::across(all_of(!!x$table_styling$header$column[i]) & where(is.character),
-                            ~.escape_latex(.x, align = !!str_sub(x$table_styling$header$align[i], 1, 1)))
+                            ~gtsummary::.escape_latex(.x, align = !!str_sub(x$table_styling$header$align[i], 1, 1)))
             )
           )
         }
@@ -259,7 +255,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     kable_extra_calls[["escape_table_body"]] <-
       rlang::expr(
         dplyr::mutate(
-          dplyr::across(all_of(!!cols_to_escape) & where(is.character), .escape_html)
+          dplyr::across(all_of(!!cols_to_escape) & where(is.character), gtsummary::.escape_html)
         )
       )
   }
