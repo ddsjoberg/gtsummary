@@ -92,6 +92,7 @@ as_kable_extra <- function(x,
                            format = NULL,
                            ...,
                            include = everything(),
+                           addtl_fmt = TRUE,
                            return_calls = FALSE) {
   # must have kableExtra package installed to use this function ----------------
   assert_package("kableExtra", "as_kable_extra()")
@@ -108,6 +109,7 @@ as_kable_extra <- function(x,
       x = x,
       escape = escape,
       format = format %||% ifelse(knitr::is_latex_output(), "latex", "html"),
+      addtl_fmt = addtl_fmt,
       ...)
 
   # adding user-specified calls ------------------------------------------------
@@ -156,7 +158,7 @@ as_kable_extra <- function(x,
     eval()
 }
 
-table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
+table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...) {
   dots <- rlang::dots_list(...)
 
   if (!is.null(dots[["strip_md_bold"]])) {
@@ -171,7 +173,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
   }
 
   # if escape is FALSE and latex output, convert markdown to latex and add linebreaks
-  if (!isTRUE(escape) && isTRUE(format == "latex")) {
+  if (!isTRUE(escape) && isTRUE(addtl_fmt) && isTRUE(format == "latex")) {
     x <- .linebreak_gtsummary(x)
   }
   # otherwise, remove markdown syntax from headers
@@ -210,7 +212,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
     append(kable_extra_calls,
            values = list(escape_table_body = NULL),
            after = kable_call_index - 1L)
-  if (!isTRUE(escape) && format %in% "latex") {
+  if (!isTRUE(escape) && isTRUE(addtl_fmt) && format %in% "latex") {
     kable_extra_calls[["escape_table_body"]] <-
       map(
         seq_len(nrow(x$table_styling$header)),
@@ -226,7 +228,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
       ) %>%
       purrr::compact()
   }
-  else if (!isTRUE(escape) && format %in% "html") {
+  else if (!isTRUE(escape) && isTRUE(addtl_fmt) && format %in% "html") {
     kable_extra_calls[["escape_table_body"]] <-
       rlang::expr(
         dplyr::mutate(
@@ -236,7 +238,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
   }
 
   # bold and italic ------------------------------------------------------------
-  kable_extra_calls <- .add_bold_italic_calls(kable_extra_calls, x, ...)
+  kable_extra_calls <- .add_bold_italic_calls(kable_extra_calls, x, escape, ...)
 
   # add_indent -----------------------------------------------------------------
   df_indent <-
@@ -287,7 +289,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
     header <-
       df_header$width %>%
       set_names(df_header$spanning_header) %>%
-      c(list(escape = dots[["escape"]])) %>%
+      c(list(escape = escape)) %>%
       purrr::compact()
 
     kable_extra_calls[["add_header_above"]] <-
@@ -311,7 +313,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
     .number_footnotes(x) %>%
     pull(.data$footnote) %>%
     unique() %>%
-    {gsub("\n", " ", .)} # the linebreak causes a rendering issue, so removing it
+    {ifelse(addtl_fmt, gsub("\n", " ", .), .)} # the linebreak causes a rendering issue, so removing it
 
   if (length(vct_footnote > 0)) {
     kable_extra_calls[["footnote"]] <-
@@ -321,9 +323,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, ...) {
   kable_extra_calls
 }
 
-.add_bold_italic_calls <- function(kable_extra_calls, x, ...) {
+.add_bold_italic_calls <- function(kable_extra_calls, x, escape, ...) {
   dots <- rlang::dots_list(...)
-  escape <- dots[["escape"]] %||% TRUE
 
   # use `column_spec()` if `kable(escape = TRUE)` (the default) ----------------
   if (isTRUE(escape)) {
