@@ -334,44 +334,40 @@ tbl_custom_summary <- function(
       df_by = df_by(data, by)
     )
 
-  # adding stat footnote (unless there are continuous2 vars)
-  if (!"continuous2" %in% meta_data$summary_type) {
-    x <-
-      modify_table_styling(
-        x,
-        columns = starts_with("stat_"),
-        footnote = footnote_stat_label(meta_data)
+  # adding "modify_stat_" information ------------------------------------------
+  x$table_styling$header$modify_stat_N <- nrow(data)
+  if (!is.null(by)) {
+    x$table_styling$header <-
+      x$table_styling$header %>%
+      dplyr::left_join(
+        x$df_by %>%
+          select(column = .data$by_col,
+                 modify_stat_n = .data$n,
+                 modify_stat_p = .data$p,
+                 modify_stat_level = .data$by_chr),
+        by = "column"
       )
   }
 
-  # returning all results in a list --------------------------------------------
-  # assigning tbl_custom_summary and tbl_summary classes
-  class(x) <- c("tbl_custom_summary", "tbl_summary", class(x)) # custom class
 
-  # adding headers
-  if (is.null(by)) {
-    x <- modify_header(
-      x,
-      stat_0 = "**N = {style_number(N)}**",
-      label = paste0("**", translate_text("Characteristic"), "**")
-    )
-  } else {
-    x <- modify_header(
-      x,
-      update = list(
-        all_stat_cols(FALSE) ~ "**{level}**, N = {style_number(n)}",
-        label ~ paste0("**", translate_text("Characteristic"), "**")
-      )
-    )
-  }
-
-  # running any additional mods ------------------------------------------------
-  # ADD THEME FOR tbl_custom_summary
+  # adding headers and footnote ------------------------------------------------
   x <-
-    get_theme_element("tbl_summary-fn:addnl-fn-to-run", default = identity) %>%
-    do.call(list(x))
+    modify_table_styling(
+      x,
+      columns = all_stat_cols(),
+      footnote = footnote_stat_label(meta_data)
+    ) %>%
+    modify_header(
+      label = paste0("**", translate_text("Characteristic"), "**"),
+      all_stat_cols() ~
+        ifelse(is.null(by),
+               "**N = {style_number(N)}**",
+               "**{level}**, N = {style_number(n)}")
+    )
 
-  # returning tbl_custom_summary table -----------------------------------------
+  # assign class and return final tbl ------------------------------------------
+  class(x) <- c("tbl_custom_summary", "tbl_summary", class(x))
+
   x
 }
 
