@@ -137,15 +137,20 @@ modify_header <- function(x, update = NULL, ..., text_interpret = c("md", "html"
     return(x)
   }
 
+  # adding stats to x$table_styling$header, if needed --------------------------
+  x <- .prep_modify_stats(x) # TODO: delete this after all fns have been updated
+
   # evaluating update with glue ------------------------------------------------
-  df_info_tibble <- .info_tibble(x)
   update <-
     update %>%
     imap(
       ~ expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
         eval_tidy(
-          data = df_info_tibble %>%
-            filter(column %in% .y) %>%
+          data =
+            x$table_styling$header %>%
+            select(.data$column, starts_with("modify_stat_")) %>%
+            filter(.data$column %in% .y) %>%
+            dplyr::rename_with(~stringr::str_replace(., fixed("modify_stat_"), fixed(""))) %>%
             as.list() %>%
             discard(is.na)
         )
@@ -358,9 +363,16 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
 }
 
 .prep_modify_stats <- function(x) {
+  # if tbl already has updated structure, no changes
+  if (any(startsWith(names(x$table_styling$header), "modify_stat_"))) {
+    return(x)
+  }
+
   # tbl_summary with no by variable
-  if (inherits(x, c("tbl_summary", "tbl_svysummary")) && is.null(x$df_by)) {
-    x$meta_data %>%
+  if (inherits(x, c("tbl_summary", "tbl_svysummary")) &&
+      is.null(x$df_by) && !is.null(x$meta_data)) {
+    x$table_styling$header <-
+      x$meta_data %>%
       dplyr::slice(1) %>%
       pluck("df_stats", 1) %>%
       select(any_of(c("N_obs", "N_unweighted"))) %>%
@@ -374,8 +386,59 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
         x$table_styling$header,
         by = character()
       ) %>%
-      dplyr::relocate(any_of(c("N", "N_unweighted")), .after = last_col())
+      dplyr::relocate(starts_with("modify_stat_"), .after = last_col())
+    return(x)
   }
+
+  # tbl_summary with by variable
+  else if (inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_continuous")) &&
+           !is.null(x$df_by)) {
+    x$table_styling$header <-
+      x$table_styling$header %>%
+      select(.data$column) %>%
+      full_join(
+        x$df_by %>%
+          select(any_of(c("N", "N_unweighted"))) %>%
+          distinct(),
+        by = character()
+      ) %>%
+      left_join(
+        x$df_by %>%
+          select(
+            column = .data$by_col, level = .data$by_chr,
+            any_of(c("n", "p", "n_unweighted", "p_unweighted"))
+          ),
+        by = "column"
+      ) %>%
+      dplyr::rename_with(
+        .fn = ~paste0("modify_stat_", .),
+        .cols = any_of(c("N", "N_unweighted", "n", "p", "n_unweighted", "p_unweighted"))
+      ) %>%
+      full_join(
+        x$table_styling$header,
+        by = "column"
+      ) %>%
+      dplyr::relocate(starts_with("modify_stat_"), .after = last_col())
+    return(x)
+  }
+
+  # regression tables often have the Ns in the returned list
+  if (any(names(x) %in% c("N", "N_event"))) {
+    tibble::as_tibble(names(x)) %>%
+      dplyr::rename_with(
+        .fn = ~paste0("modify_stat_", .),
+        .cols = everything()
+      ) %>%
+      full_join(
+        x$table_styling$header,
+        by = character()
+      ) %>%
+      dplyr::relocate(starts_with("modify_stat_"), .after = last_col())
+    return(x)
+  }
+
+  # otherwise, returning unmodified table
+  return(x)
 }
 
 .info_tibble <- function(x) {

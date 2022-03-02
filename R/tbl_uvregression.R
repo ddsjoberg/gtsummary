@@ -349,6 +349,11 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     filter(.data$row_type == "label") %>%
     select(any_of(c("variable", "var_type", "label", "N_obs", "N_event")))
 
+  # removing modify_stat_* columns ---------------------------------------------
+  results$table_styling$header <-
+    results$table_styling$header %>%
+    select(-starts_with("modify_stat_"))
+
   # adding column of N ---------------------------------------------------------
   if (hide_n == FALSE) results <- add_n(results, location = "label")
 
