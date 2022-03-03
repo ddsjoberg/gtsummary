@@ -137,24 +137,8 @@ modify_header <- function(x, update = NULL, ..., text_interpret = c("md", "html"
     return(x)
   }
 
-  # adding stats to x$table_styling$header, if needed --------------------------
-  x <- .prep_modify_stats(x) # TODO: delete this after all fns have been updated
-
   # evaluating update with glue ------------------------------------------------
-  update <-
-    update %>%
-    imap(
-      ~ expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
-        eval_tidy(
-          data =
-            x$table_styling$header %>%
-            select(.data$column, starts_with("modify_stat_")) %>%
-            filter(.data$column %in% .y) %>%
-            dplyr::rename_with(~stringr::str_replace(., fixed("modify_stat_"), fixed(""))) %>%
-            as.list() %>%
-            discard(is.na)
-        )
-    )
+  update <- .eval_with_glue(x, update)
 
   # updating column headers ----------------------------------------------------
   x <-
@@ -196,42 +180,22 @@ modify_footnote <- function(x, update = NULL, ..., abbreviation = FALSE,
     return(x)
   }
 
-  # updating footnote ----------------------------------------------------------
-  footnote_column_name <- ifelse(abbreviation == TRUE, "footnote_abbrev", "footnote")
-
-  # updating footnote ----------------------------------------------------------
-  df_info_tibble <- .info_tibble(x)
-  update <-
-    update %>%
-    imap(
-      ~ expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
-        eval_tidy(
-          data = df_info_tibble %>%
-            filter(column %in% .y) %>%
-            as.list() %>%
-            discard(is.na)
-        )
-    )
+  # evaluating update with glue ------------------------------------------------
+  update <- .eval_with_glue(x, update)
 
   # updating footnotes ---------------------------------------------------------
-  if (abbreviation == FALSE) {
-    x <-
-      modify_table_styling(
-        x,
-        columns = names(update),
-        footnote = unlist(update),
-        text_interpret = text_interpret
+  modify_table_styling_args <- list(x = x,
+                                    columns = names(update),
+                                    footnote = unlist(update),
+                                    text_interpret = text_interpret)
+  if (isTRUE(abbreviation)) { # for abbreviations, update list names
+    modify_table_styling_args <-
+      stats::setNames(
+        modify_table_styling_args,
+        c("x", "columns", "footnote_abbrev", "text_interpret")
       )
   }
-  else if (abbreviation == TRUE) {
-    x <-
-      modify_table_styling(
-        x,
-        columns = names(update),
-        footnote_abbrev = unlist(update),
-        text_interpret = text_interpret
-      )
-  }
+  x <- do.call(modify_table_styling, modify_table_styling_args)
 
   # returning gtsummary object -------------------------------------------------
   x$call_list <- updated_call_list
@@ -262,20 +226,10 @@ modify_spanning_header <- function(x, update = NULL, ...,
     return(x)
   }
 
-  # updating spanning header ---------------------------------------------------
-  df_info_tibble <- .info_tibble(x)
-  update <-
-    update %>%
-    imap(
-      ~ expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
-        eval_tidy(
-          data = df_info_tibble %>%
-            filter(column %in% .y) %>%
-            as.list() %>%
-            discard(is.na)
-        )
-    )
+  # evaluating update with glue ------------------------------------------------
+  update <- .eval_with_glue(x, update)
 
+  # updating spanning header ---------------------------------------------------
   x <-
     modify_table_styling(
       x,
@@ -298,12 +252,11 @@ modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
   text_interpret <- match.arg(text_interpret)
   updated_call_list <- c(x$call_list, list(modify_caption = match.call()))
 
-  # first interpreting caption in case user passed glue args -----------------
-  caption <-
-    .info_tibble(x) %>%
-    filter(.data$column == "label") %>%
-    with(glue(caption)) %>%
-    as.character()
+  # evaluating update with glue ------------------------------------------------
+  caption <- # eval on the label column stats
+    .eval_with_glue(x, list(label = caption)) %>%
+    unlist() %>%
+    unname()
 
   # adding caption to gtsummary object ----------------------------------------
   x$table_styling$caption <- caption
@@ -362,145 +315,6 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
   show_header_names(x)
 }
 
-.prep_modify_stats <- function(x) {
-  # if tbl already has updated structure, no changes
-  if (any(startsWith(names(x$table_styling$header), "modify_stat_"))) {
-    return(x)
-  }
-
-  # tbl_summary with no by variable
-  if (inherits(x, c("tbl_summary", "tbl_svysummary")) &&
-      is.null(x$df_by) && !is.null(x$meta_data)) {
-    x$table_styling$header <-
-      x$meta_data %>%
-      dplyr::slice(1) %>%
-      pluck("df_stats", 1) %>%
-      select(any_of(c("N_obs", "N_unweighted"))) %>%
-      dplyr::slice(1) %>%
-      dplyr::rename(N = .data$N_obs) %>%
-      dplyr::rename_with(
-        .fn = ~paste0("modify_stat_", .),
-        .cols = any_of(c("N", "N_unweighted"))
-      ) %>%
-      full_join(
-        x$table_styling$header,
-        by = character()
-      ) %>%
-      dplyr::relocate(starts_with("modify_stat_"), .after = last_col())
-    return(x)
-  }
-
-  # tbl_summary with by variable
-  else if (inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_continuous")) &&
-           !is.null(x$df_by)) {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      select(.data$column) %>%
-      full_join(
-        x$df_by %>%
-          select(any_of(c("N", "N_unweighted"))) %>%
-          distinct(),
-        by = character()
-      ) %>%
-      left_join(
-        x$df_by %>%
-          select(
-            column = .data$by_col, level = .data$by_chr,
-            any_of(c("n", "p", "n_unweighted", "p_unweighted"))
-          ),
-        by = "column"
-      ) %>%
-      dplyr::rename_with(
-        .fn = ~paste0("modify_stat_", .),
-        .cols = any_of(c("N", "N_unweighted", "n", "p", "n_unweighted", "p_unweighted"))
-      ) %>%
-      full_join(
-        x$table_styling$header,
-        by = "column"
-      ) %>%
-      dplyr::relocate(starts_with("modify_stat_"), .after = last_col())
-    return(x)
-  }
-
-  # regression tables often have the Ns in the returned list
-  if (any(names(x) %in% c("N", "N_event"))) {
-    tibble::as_tibble(names(x)) %>%
-      dplyr::rename_with(
-        .fn = ~paste0("modify_stat_", .),
-        .cols = everything()
-      ) %>%
-      full_join(
-        x$table_styling$header,
-        by = character()
-      ) %>%
-      dplyr::relocate(starts_with("modify_stat_"), .after = last_col())
-    return(x)
-  }
-
-  # otherwise, returning unmodified table
-  return(x)
-}
-
-.info_tibble <- function(x) {
-  # tbl_summary with no by variable
-  if (inherits(x, c("tbl_summary", "tbl_svysummary")) && is.null(x$df_by)) {
-    return(
-      x$meta_data %>%
-        dplyr::slice(1) %>%
-        pluck("df_stats", 1) %>%
-        select(any_of(c("N_obs", "N_unweighted"))) %>%
-        dplyr::slice(1) %>%
-        dplyr::rename(N = .data$N_obs) %>%
-        full_join(
-          select(x$table_styling$header, .data$column),
-          by = character()
-        )
-    )
-  }
-
-  # tbl_summary with by variable
-  if (inherits(x, c("tbl_summary", "tbl_svysummary", "tbl_continuous")) &&
-      !is.null(x$df_by)) {
-    return(
-      x$table_styling$header %>%
-        select(.data$column) %>%
-        full_join(
-          x$df_by %>%
-            select(any_of(c("N", "N_unweighted"))) %>%
-            distinct(),
-          by = character()
-        ) %>%
-        left_join(
-          x$df_by %>%
-            select(
-              column = .data$by_col, level = .data$by_chr,
-              any_of(c("n", "p", "n_unweighted", "p_unweighted"))
-            ),
-          by = "column"
-        )
-    )
-  }
-
-  # adding a few stats from the returned gtsummary list
-  df_new_cols <- x[names(x) %in% c("N", "N_event", "n")] %>% tibble::as_tibble()
-
-  # if no new cols, return without adding anything
-  if (ncol(df_new_cols) == 0) {
-    return(x$table_styling$header %>% select(.data$column))
-  }
-
-  # adding n as a synonym of N if not already present
-  # in V1.3.6, all documentation about {n} being supported was removed. This can be removed eventually
-  if (!"n" %in% names(df_new_cols) && "N" %in% names(df_new_cols)) {
-    df_new_cols <- mutate(df_new_cols, n = .data$N)
-  }
-
-  # returning tibble with new vars added
-  x$table_styling$header %>%
-    select(.data$column) %>%
-    bind_cols(df_new_cols)
-}
-
 .combine_update_and_dots <- function(x, update, ...) {
   dots <- rlang::dots_list(...)
 
@@ -514,5 +328,21 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
     arg_name = "... or update",
     type_check = chuck(type_check, "is_string_or_na", "fn"),
     type_check_msg = chuck(type_check, "is_string_or_na", "msg")
+  )
+}
+
+.eval_with_glue <- function(x, update) {
+  imap(
+    update,
+    ~ expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
+      eval_tidy(
+        data =
+          x$table_styling$header %>%
+          select(.data$column, starts_with("modify_stat_")) %>%
+          filter(.data$column %in% .y) %>%
+          dplyr::rename_with(~stringr::str_replace(., fixed("modify_stat_"), fixed(""))) %>%
+          as.list() %>%
+          discard(is.na)
+      )
   )
 }
