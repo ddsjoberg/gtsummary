@@ -19,6 +19,30 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
   append(calls, new_list, after = index)
 }
 
+
+# this function is used to fill in missing values in the
+# x$table_styling$header$modify_stat_* columns
+.fill_table_header_modify_stats <-
+  function(x, modify_stats = c("modify_stat_N", "modify_stat_N_event",
+                               "modify_stat_N_unweighted")) {
+    # browser()
+    modify_stats <-
+      x$table_styling$header %>%
+      select(any_of(modify_stats) & where(.single_value)) %>%
+      names()
+
+    x$table_styling$header <-
+      x$table_styling$header %>%
+      tidyr::fill(any_of(modify_stats), .direction = "downup")
+
+    return(x)
+  }
+
+.single_value <- function(x) {
+  if (length(unique(na.omit(x))) == 1L) return(TRUE)
+  FALSE
+}
+
 #' gtsummary wrapper for purrr::as_mapper
 #'
 #' This wrapper only accepts a function or formula notation function,

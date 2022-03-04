@@ -101,6 +101,8 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
       )
   }
 
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   # add call list and return x
   x$call_list <- updated_call_list
   x

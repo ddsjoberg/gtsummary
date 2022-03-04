@@ -229,10 +229,8 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
     x %>%
     modify_table_body(~bind_cols(.x, overall %>% select(c("stat_0"))))
 
-  # fill in the Ns in the header table
-  x$table_styling$header <-
-    x$table_styling$header %>%
-    tidyr::fill(any_of(c("modify_stat_N")), .direction = "down")
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
 
   if (last == FALSE) {
     x <- x %>%

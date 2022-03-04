@@ -95,6 +95,8 @@ add_nevent.tbl_regression <- function(x, location = NULL, ...) {
     ) %>%
     modify_header(stat_nevent ~ "**Event N**")
 
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   # add call list and return x
   x$call_list <- updated_call_list
   x
@@ -171,6 +173,8 @@ add_nevent.tbl_survfit <- function(x, ...) {
       hide = FALSE
     )
 
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   # adding indicator to output that add_n was run on this data
   x$call_list <- updated_call_list
   x

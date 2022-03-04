@@ -256,6 +256,8 @@ add_ci.tbl_summary <- function(x,
 
 
   # return gtsummary table -----------------------------------------------------
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   x$call_list <- updated_call_list
   x
 }

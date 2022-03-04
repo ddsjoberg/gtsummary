@@ -355,7 +355,8 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
     }
   }
 
-
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   x
 }
 
