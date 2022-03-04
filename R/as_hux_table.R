@@ -43,7 +43,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
   # converting row specifications to row numbers, and removing old cmds --------
-  x <- .clean_table_styling(x)
+  x <- .table_styling_expr_to_row_number(x)
 
   # stripping markdown asterisk ------------------------------------------------
   if (strip_md_bold == TRUE) {
