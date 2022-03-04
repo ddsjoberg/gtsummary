@@ -59,7 +59,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
   x <- .table_styling_cols_merge(x)
 
   # converting row specifications to row numbers, and removing old cmds --------
-  x <- .clean_table_styling(x)
+  x <- .table_styling_expr_to_row_number(x)
 
   # creating list of gt calls --------------------------------------------------
   gt_calls <- table_styling_to_gt_calls(x = x, ...)

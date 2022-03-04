@@ -111,7 +111,26 @@
 
 # 1. Converts row expressions to row numbers, and only keeps the most recent.
 # 2. Deletes NA footnote, text_formatting undoings, etc. as they will not be used
-.clean_table_styling <- function(x) {
+
+
+#' Object Convert Helper
+#'
+#' Ahead of a gtsummary object being converted to an output type,
+#' each logical expression saved in `x$table_styling` is converted to a
+#' list of row numbers.
+#'
+#' @param x a gtsummary object
+#'
+#' @return a gtsummary object
+#' @keywords internal
+#' @export
+#'
+#' @examples
+#' tbl <-
+#'   trial %>%
+#'   tbl_summary(include = c(age, grade)) %>%
+#'   .table_styling_expr_to_row_number()
+.table_styling_expr_to_row_number <- function(x) {
   if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
 
   # text_format ----------------------------------------------------------------
@@ -167,11 +186,11 @@
 
   # footnote -------------------------------------------------------------------
   x$table_styling$footnote <-
-    .clean_table_styling_footnote(x, "footnote")
+    .table_styling_expr_to_row_number_footnote(x, "footnote")
 
   # footnote_abbrev ------------------------------------------------------------
   x$table_styling$footnote_abbrev <-
-    .clean_table_styling_footnote(x, "footnote_abbrev")
+    .table_styling_expr_to_row_number_footnote(x, "footnote_abbrev")
 
   # fmt_fun --------------------------------------------------------------------
   x$table_styling$fmt_fun <-
@@ -217,7 +236,7 @@
   x
 }
 
-.clean_table_styling_footnote <- function(x, footnote_type) {
+.table_styling_expr_to_row_number_footnote <- function(x, footnote_type) {
   df_clean <-
     x$table_styling[[footnote_type]] %>%
     filter(.data$column %in% .cols_to_show(x))
@@ -301,7 +320,7 @@
   if (is.null(x$table_styling$cols_merge) || nrow(x$table_styling$cols_merge) == 0) {
     return(x)
   }
-  x_cleaned <- .clean_table_styling(x)
+  x_cleaned <- .table_styling_expr_to_row_number(x)
   if (nrow(x_cleaned$table_styling$cols_merge) == 0) {
     return(x)
   }
