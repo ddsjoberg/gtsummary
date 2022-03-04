@@ -43,7 +43,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
   # converting row specifications to row numbers, and removing old cmds --------
-  x <- .clean_table_styling(x)
+  x <- .table_styling_expr_to_row_number(x)
 
   # creating list of calls to get formatted tibble -----------------------------
   tibble_calls <-
