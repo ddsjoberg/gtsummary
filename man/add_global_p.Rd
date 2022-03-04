@@ -49,9 +49,9 @@ when specified to calculate the global p-values.
 \itemize{
 \item function must return a tibble matching the output of
 \code{car::Anova() \%>\% broom::tidy()} including a columns called \code{"term"} and \code{"p.values"}
-\item function must accept arguments \code{anova_fun(x, ...)}, where is a model object
+\item function must accept arguments \code{anova_fun(x, ...)}, where \code{x} is a model object
 \item arguments passed in \code{...} will be passed to \code{anova_fun(...)}
-\item the \code{add_global_p(type=)}
+\item the \code{add_global_p(type=)} argument is \emph{ignored} in \verb{anova_fun=}
 \item a common function used here is \code{tidy_wald_test()}, a wrapper for \code{aod::wald.test()}
 }}
 

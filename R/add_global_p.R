@@ -12,9 +12,9 @@
 #' when specified to calculate the global p-values.
 #' - function must return a tibble matching the output of
 #' `car::Anova() %>% broom::tidy()` including a columns called `"term"` and `"p.values"`
-#' - function must accept arguments `anova_fun(x, ...)`, where is a model object
+#' - function must accept arguments `anova_fun(x, ...)`, where `x` is a model object
 #' - arguments passed in `...` will be passed to `anova_fun(...)`
-#' - the `add_global_p(type=)`
+#' - the `add_global_p(type=)` argument is _ignored_ in `anova_fun=`
 #' - a common function used here is `tidy_wald_test()`, a wrapper for `aod::wald.test()`
 #' @param include Variables to calculate global p-value for. Input may be a vector of
 #' quoted or unquoted variable names. Default is `everything()`
