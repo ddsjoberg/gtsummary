@@ -115,7 +115,7 @@ as_kable_extra <- function(x,
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
   # converting row specifications to row numbers, and removing old cmds --------
-  x <- .clean_table_styling(x)
+  x <- .table_styling_expr_to_row_number(x)
 
   # creating list of kableExtra calls ------------------------------------------
   kable_extra_calls <-
