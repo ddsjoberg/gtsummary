@@ -182,15 +182,8 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
       x$tbls[include],
       function(x, y) {
         car_Anova <-
-          tryCatch(
-            .run_anova(x = x[["model_obj"]], type = type, anova_fun = anova_fun, ...),
-            error = function(e) {
-              paste("There was an error calculating the global",
-                    "p-value for variable {.field {y}}.") %>%
-              cli::cli_alert_danger()
-              stop(e)
-            }
-          )
+          .run_anova(x = x[["model_obj"]], type = type,
+                     anova_fun = anova_fun, variable = y, ...)
 
         car_Anova %>%
           mutate(
@@ -260,7 +253,7 @@ tidy_car_anova <- function(x, type, tbl, ...) {
 
 # this function runs anova_fun if specified.
 # if anova_fun is NULL, then we use car::Anova,
-.run_anova <- function(x, type, anova_fun, ...) {
+.run_anova <- function(x, type, anova_fun, variable = NULL, ...) {
   dots <- rlang::dots_list(...)
 
   # running custom function passed by user
@@ -269,7 +262,12 @@ tidy_car_anova <- function(x, type, tbl, ...) {
       tryCatch(
         do.call(anova_fun, args = c(list(x = x), dots)),
         error = function(e) {
-          cli::cli_alert_danger("There was an error running {.code anova_fun()}")
+          ifelse(
+            !is.null(variable),
+            "There was an error running {.code anova_fun()} for {.val {variable}}",
+            "There was an error running {.code anova_fun()}"
+          ) %>%
+          cli::cli_alert_danger()
           stop(e)
         }
       )
@@ -278,13 +276,26 @@ tidy_car_anova <- function(x, type, tbl, ...) {
 
   # running car::Anova()
   tryCatch(
-    do.call(car::Anova, args = c(list(mod = x, type = type), dots)) %>%
-      broom::tidy(),
+    do.call(car::Anova, args = c(list(mod = x, type = type), dots)) %>% broom::tidy(),
+
+    # trying `add_global_p(anova_fun = gtsummary::tidy_wald_test)` if `car::Anova()` fails
     error = function(e) {
-      paste("{.code car::Anova()} failed...try using",
-            "{.code add_global_p(anova_fun = tidy_wald_test)}") %>%
-      cli::cli_alert_warning()
-      stop(e)
+      ifelse(
+        !is.null(variable),
+        "There was an error running {.code car::Anova()} for {.val {variable}}",
+        "There was an error running {.code car::Anova()}"
+      ) %>%
+        paste0(", trying {.code add_global_p(anova_fun = gtsummary::tidy_wald_test)}") %>%
+        cli::cli_alert_danger()
+
+      tryCatch(
+        do.call(tidy_wald_test, args = c(list(x = x), dots)),
+        error = function(e) {
+          paste0("{.code add_global_p(anova_fun = gtsummary::tidy_wald_test)} failed...") %>%
+            cli::cli_alert_danger()
+          stop(e, call. = FALSE)
+        }
+      )
     }
   )
 }
