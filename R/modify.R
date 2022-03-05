@@ -332,15 +332,18 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
 }
 
 .eval_with_glue <- function(x, update) {
+  df_header <-
+    x$table_styling$header %>%
+    select(.data$column, starts_with("modify_stat_")) %>%
+    dplyr::rename_with(~stringr::str_replace(., fixed("modify_stat_"), fixed("")))
+
   imap(
     update,
     ~ expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
       eval_tidy(
         data =
-          x$table_styling$header %>%
-          select(.data$column, starts_with("modify_stat_")) %>%
+          df_header %>%
           filter(.data$column %in% .y) %>%
-          dplyr::rename_with(~stringr::str_replace(., fixed("modify_stat_"), fixed(""))) %>%
           as.list() %>%
           discard(is.na)
       )
