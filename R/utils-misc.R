@@ -39,7 +39,7 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
   }
 
 .single_value <- function(x) {
-  if (length(unique(na.omit(x))) == 1L) return(TRUE)
+  if (length(unique(stats::na.omit(x))) == 1L) return(TRUE)
   FALSE
 }
 
