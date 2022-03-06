@@ -176,6 +176,33 @@ test_that("setting themes", {
   )
   expect_equal(tbl$label, c("Age", "Median (IQR)", "Mean (SD)", "Range", "Unknown"))
   expect_equal(tbl$stat_0, c(NA, "47 (38, 57)", "47 (14)", "6, 83", "11"))
+
+  reset_gtsummary_theme()
+
+  expect_equal({
+    theme_gtsummary_journal("lancet")
+    with_gtsummary_theme(
+      x = list("style_number-arg:decimal.mark" = "."),
+      expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
+    ) %>%
+      dplyr::pull(stat_0)},
+    "0.64 (0.22 – 1.39)"
+  )
+
+  expect_equal({
+    theme_gtsummary_journal("lancet")
+    with_gtsummary_theme(
+      x = list("style_number-arg:decimal.mark" = "."),
+      expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
+    )
+    tbl_summary(trial, include = marker, missing = "no") %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull(stat_0)},
+    "0·64 (0·22 – 1·39)"
+  )
+
+  reset_gtsummary_theme()
+
 })
 
 reset_gtsummary_theme()
