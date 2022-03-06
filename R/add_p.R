@@ -72,6 +72,7 @@ add_p <- function(x, ...) {
 add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
                               group = NULL, include = everything(), test.args = NULL,
                               exclude = NULL, ...) {
+  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
   updated_call_list <- c(x$call_list, list(add_p = match.call()))
 
   # DEPRECATION notes ----------------------------------------------------------
@@ -405,7 +406,9 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
                             source_note = NULL,
                             test.args = NULL, ...) {
+  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
   updated_call_list <- c(x$call_list, list(add_p = match.call()))
+
   # setting defaults -----------------------------------------------------------
   test <- test %||% get_theme_element("add_p.tbl_cross-arg:test")
   source_note <- source_note %||%
@@ -532,6 +535,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
                               pvalue_fun = style_pvalue,
                               include = everything(), quiet = NULL, ...) {
+  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
   updated_call_list <- c(x$call_list, list(add_p = match.call()))
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
@@ -709,7 +713,9 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 
 add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
                                  include = everything(), test.args = NULL, ...) {
+  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
   updated_call_list <- c(x$call_list, list(add_p = match.call()))
+
   # checking for survey package ------------------------------------------------
   assert_package("survey", "add_p.tbl_svysummary()")
 
@@ -848,6 +854,7 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
 add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
                                  include = everything(), test.args = NULL,
                                  group = NULL, ...) {
+  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
   updated_call_list <- c(x$call_list, list(add_p = match.call()))
   # setting defaults from gtsummary theme --------------------------------------
   pvalue_fun <-
