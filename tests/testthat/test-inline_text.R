@@ -166,14 +166,12 @@ library(survival)
 test_inline_surv_strata <-
   survfit(Surv(ttdeath, death) ~ trt, trial) %>%
   tbl_survival(
-    times = c(12, 24),
-    time_label = "{time} Months"
+    times = c(12, 24)
   )
 test_inline_surv_nostrata <-
   survfit(Surv(ttdeath, death) ~ 1, trial) %>%
   tbl_survival(
-    times = c(12, 24),
-    time_label = "{time} Months"
+    times = c(12, 24)
   )
 
 test_inline_surv_strata2 <-
@@ -293,7 +291,7 @@ test_that("inline_text.tbl_survfit", {
 test_that("inline_text.tbl_cross", {
   tbl_cross <-
     tbl_cross(trial, row = trt, col = response) %>%
-    add_p(percent = "cell")
+    add_p()
 
   expect_equal(
     inline_text(tbl_cross, row_level = "Drug A", col_level = "1"),
@@ -314,7 +312,7 @@ test_that("inline_text.tbl_cross", {
 test_that("inline_text.tbl_cross- expect error args aren't present", {
   tbl_cross <-
     tbl_cross(trial, row = trt, col = response) %>%
-    add_p(percent = "cell")
+    add_p()
 
   expect_error(
     inline_text(tbl_cross, row_level = "Drug A"),
