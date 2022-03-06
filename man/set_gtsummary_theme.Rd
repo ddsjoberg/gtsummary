@@ -29,9 +29,9 @@ with_gtsummary_theme(x, expr, env = rlang::caller_env())
 \lifecycle{maturing}
 Functions to \strong{set}, \strong{reset}, \strong{get}, and evaluate \strong{with} gtsummary themes.
 \itemize{
-\item \code{set_gtsummary_theme()} set a theme's preferences
-\item \code{reset_gtsummary_theme()} reset all preferences
-\item \code{get_gtsummary_theme()} get a named list with all preferences currently set
+\item \code{set_gtsummary_theme()} set a theme
+\item \code{reset_gtsummary_theme()} reset themes
+\item \code{get_gtsummary_theme()} get a named list with all active theme elements
 \item \code{with_gtsummary_theme()} evaluate an expression with a theme temporarily set
 }
 }

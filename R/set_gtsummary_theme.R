@@ -4,9 +4,9 @@
 #' \lifecycle{maturing}
 #' Functions to **set**, **reset**, **get**, and evaluate **with** gtsummary themes.
 #'
-#' - `set_gtsummary_theme()` set a theme's preferences
-#' - `reset_gtsummary_theme()` reset all preferences
-#' - `get_gtsummary_theme()` get a named list with all preferences currently set
+#' - `set_gtsummary_theme()` set a theme
+#' - `reset_gtsummary_theme()` reset themes
+#' - `get_gtsummary_theme()` get a named list with all active theme elements
 #' - `with_gtsummary_theme()` evaluate an expression with a theme temporarily set
 #'
 #' @section Details:
