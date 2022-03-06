@@ -3,19 +3,40 @@
 \name{set_gtsummary_theme}
 \alias{set_gtsummary_theme}
 \alias{reset_gtsummary_theme}
+\alias{get_gtsummary_theme}
+\alias{with_gtsummary_theme}
 \title{Set a gtsummary theme}
 \usage{
-set_gtsummary_theme(x)
+set_gtsummary_theme(x, quiet = NULL)
 
 reset_gtsummary_theme()
+
+get_gtsummary_theme()
+
+with_gtsummary_theme(x, expr, env = rlang::caller_env())
 }
 \arguments{
-\item{x}{A gtsummary theme function, e.g. \code{theme_gtsummary_journal()}, or a
-named list defining a gtsummary theme. See details below.}
+\item{x}{A named list defining a gtsummary theme.}
+
+\item{quiet}{Logical indicating whether to print messages in console. Default is
+\code{FALSE}}
+
+\item{expr}{Expression to be evaluated with the theme specified in \verb{x=} loaded}
+
+\item{env}{The environment in which to evaluate \verb{expr=}}
 }
 \description{
 \lifecycle{maturing}
-Use this function to set preferences for the display of gtsummary tables.
+Functions to \strong{set}, \strong{reset}, \strong{get}, and evaluate \strong{with} gtsummary themes.
+\itemize{
+\item \code{set_gtsummary_theme()} set a theme's preferences
+\item \code{reset_gtsummary_theme()} reset all preferences
+\item \code{get_gtsummary_theme()} get a named list with all preferences currently set
+\item \code{with_gtsummary_theme()} evaluate an expression with a theme temporarily set
+}
+}
+\section{Details}{
+
 The default formatting and styling throughout the gtsummary package are
 taken from the published reporting guidelines of the top four urology
 journals: European Urology, The Journal of Urology, Urology and
@@ -23,6 +44,7 @@ the British Journal of Urology International. Use this function to change
 the default reporting style to match another journal, or your own
 personal style.
 }
+
 \section{Example Output}{
 
 \if{html}{Example}
