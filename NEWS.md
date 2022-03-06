@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Adding functions `get_gtsummary_theme()` and `with_gtsummary_theme()` for extracting the current gtsummary theme and running code with a temporarily theme.
+
 * Added a check for functions that accept `...` where nothing should be passed in the `...`. If a bad or misspelled argument is found, the users are informed. (#1083)
 
 * Now exporting a function primarily used internally as a helper for converting a gtsummary table to gt (and other formats): `.table_styling_expr_to_row_number()`.
