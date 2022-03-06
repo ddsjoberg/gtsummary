@@ -54,6 +54,7 @@ set_gtsummary_theme <- function(x, quiet = NULL) {
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # checking the input is a named list -----------------------------------------
+  if (rlang::is_empty(x)) return(invisible())
   if (!inherits(x, "list") || is.null(names(x)) || "" %in% names(x)) {
     stop("Argument `x=` must be  named list.", call. = FALSE)
   }
