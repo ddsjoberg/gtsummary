@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9006</span>
       </span>
     </div>
 
@@ -91,7 +91,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Now exporting a function primarily used internally as a helper for converting a gtsummary table to gt (and other formats): <code><a href="../reference/dot-table_styling_expr_to_row_number.html">.table_styling_expr_to_row_number()</a></code>.</p></li>
+<ul><li><p>Added a check for functions that accept <code>...</code> where nothing should be passed in the <code>...</code>. If a bad or misspelled argument is found, the users are informed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1083" class="external-link">#1083</a>)</p></li>
+<li><p>Now exporting a function primarily used internally as a helper for converting a gtsummary table to gt (and other formats): <code><a href="../reference/dot-table_styling_expr_to_row_number.html">.table_styling_expr_to_row_number()</a></code>.</p></li>
 <li><p>Removed use of <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">round()</a></code> in <code><a href="../reference/style_number.html">style_number()</a></code>, and replaced it with a round function that does <em>not</em> “round-to-even”. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1140" class="external-link">#1140</a>)</p></li>
 <li><p>Add <code>tbl_butcher(keep=)</code> argument to optionally keep some internal objects as needed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1148" class="external-link">#1148</a>)</p></li>
 <li><p>Fixing Lancet theme mid-point encoding issue on Linux and MacOS. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1146" class="external-link">#1146</a>)</p></li>
