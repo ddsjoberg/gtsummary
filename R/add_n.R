@@ -59,6 +59,7 @@ add_n <- function(x, ...) {
 
 add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
                               last = FALSE, missing = NULL, ...) {
+  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
   updated_call_list <- c(x$call_list, list(add_n = match.call()))
   # checking that input is class tbl_summary
   if (!(inherits(x, "tbl_summary") | inherits(x, "tbl_svysummary"))) {
@@ -226,6 +227,7 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 #' \if{html}{\figure{add_n.tbl_survfit_ex1.png}{options: width=64\%}}
 
 add_n.tbl_survfit <- function(x, ...) {
+  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
   updated_call_list <- c(x$call_list, list(add_n = match.call()))
 
   # adding N to the table_body -------------------------------------------------
@@ -316,6 +318,7 @@ NULL
 #' @rdname add_n_regression
 #' @export
 add_n.tbl_regression <- function(x, location = NULL, ...) {
+  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
   updated_call_list <- c(x$call_list, list(add_n = match.call()))
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
