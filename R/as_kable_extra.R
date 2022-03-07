@@ -331,10 +331,12 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   vct_footnote <-
     .number_footnotes(x) %>%
     pull(.data$footnote) %>%
-    unique() %>%
-    {ifelse(addtl_fmt, gsub("\\n", " ", .), .)} # the linebreak causes a rendering issue, so removing it
+    unique()
 
   if (length(vct_footnote > 0)) {
+    # the linebreak causes a rendering issue, so removing it
+    vct_footnote <- ifelse(addtl_fmt, gsub("\\n", " ", vct_footnote), vct_footnote)
+
     kable_extra_calls[["footnote"]] <-
       expr(kableExtra::footnote(number = !!vct_footnote))
   }
