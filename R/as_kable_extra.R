@@ -14,9 +14,12 @@
 #'
 #' When the default values of `as_kable_extra(escape = FALSE, addtl_fmt = TRUE)`
 #' are utilized, the following formatting occurs.
-#'    - Markdown bold, italic, and underline syntax in the headers will be converted to escaped LaTeX code
-#'    - Special characters in the table body will be escaped with `.escape_latex()`
-#'    - The `"\n"` symbol will be recognized as a line break in the table headers and the table body
+#'    - Markdown bold, italic, and underline syntax in the headers,
+#'      spanning headers, caption, and footnote will be converted to escaped LaTeX code
+#'    - Special characters in the table body, headers, spanning headers, caption,
+#'      and footnote will be escaped with `.escape_latex()` or `.escape_latex2()`
+#'    - The `"\n"` symbol will be recognized as a line break in the table
+#'      headers, spanning headers, caption, and the table body
 #'    - The `"\n"` symbol is removed from the footnotes
 #'
 #' To suppress the additional formatting, set `as_kable_extra(addtl_fmt = FALSE)`
@@ -31,7 +34,9 @@
 #'
 #' When the default values of `as_kable_extra(escape = FALSE, addtl_fmt = TRUE)`
 #' are utilized, the following formatting occurs.
-#'    - Special characters in the table body and headers will be escaped with `.escape_html()`
+#'    - The default markdown syntax in the headers and spanning headers is removed
+#'    - Special characters in the table body, headers, spanning headers, caption,
+#'      and footnote will be escaped with `.escape_html()`
 #'    - The `"\n"` symbol is removed from the footnotes
 #'
 #' To suppress the additional formatting, set `as_kable_extra(addtl_fmt = FALSE)`
@@ -188,23 +193,21 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
   # if escape is FALSE and latex output, convert markdown to latex and add linebreaks
   if (!isTRUE(escape) && isTRUE(addtl_fmt) && isTRUE(format == "latex")) {
-    x <- .linebreak_gtsummary(x)
+    x <- .latex_conversion_and_escaping(x)
+  }
+  # if escape is FALSE and latex output, convert markdown to latex and add linebreaks
+  else if (!isTRUE(escape) && isTRUE(addtl_fmt) && isTRUE(format == "html")) {
+    x <- .html_conversion_and_escaping(x)
   }
   # otherwise, remove markdown syntax from headers
+  # only removing from header and spanning header, as this is where default markdown
+  # formatting is placed in a gtsummary object
   else {
     x$table_styling$header <-
       x$table_styling$header %>%
       mutate(
         label = .strip_markdown(.data$label),
         spanning_header = .strip_markdown(.data$spanning_header)
-      )
-  }
-  if (!isTRUE(escape) && isTRUE(addtl_fmt) && isTRUE(format == "html")) {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      mutate(
-        label = .escape_html(.data$label),
-        spanning_header = .escape_html(.data$spanning_header)
       )
   }
 
@@ -334,11 +337,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     unique()
 
   if (length(vct_footnote > 0)) {
-    # the linebreak causes a rendering issue, so removing it
-    vct_footnote <- ifelse(addtl_fmt, gsub("\\n", " ", vct_footnote), vct_footnote)
-
     kable_extra_calls[["footnote"]] <-
-      expr(kableExtra::footnote(number = !!vct_footnote))
+      expr(kableExtra::footnote(number = !!vct_footnote, escape = !!escape))
   }
 
   kable_extra_calls
@@ -441,12 +441,13 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
 # This function calls `kableExtra::linebreak()` on gtsummary headers and spanning headers.
 # Note that `escape = FALSE` and `format = "latex"` are required.
-#  - the default `align=` argument is taken from the gtsummary object
+#  - the default `align=` argument for columns is taken from the gtsummary object
+#  - the headers, spanning headers, footnotes, and captions are escaped
 #  - the markdown double-star and double-underscore bold syntax is converted to LaTeX, `\textbf{}`
 #  - the markdown single-star and single-underscore italic syntax is converted to LaTeX, `\textit{}`
-.linebreak_gtsummary <- function(x,
-                                 align = NULL,
-                                 linebreaker = "\n") {
+.latex_conversion_and_escaping <- function(x,
+                                           align = NULL,
+                                           linebreaker = "\n") {
   # set align argument ---------------------------------------------------------
   align <-
     align %||%
@@ -454,23 +455,68 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
 
   # linebreak the headers ------------------------------------------------------
   x$table_styling$header$label <-
+    .escape_latex(x$table_styling$header$label, newlines = FALSE) %>%
+    .markdown_to_latex() %>%
     kableExtra::linebreak(
-      x = .markdown_to_latex(x$table_styling$header$label),
       align = align,
       linebreaker = linebreaker
     )
 
   x$table_styling$header$spanning_header <-
+    .escape_latex2(x$table_styling$header$spanning_header, newlines = FALSE) %>%
+    .markdown_to_latex2() %>%
     kableExtra::linebreak(
-      x = .markdown_to_latex2(x$table_styling$header$spanning_header),
       align = "c",
       linebreaker = linebreaker,
       double_escape = TRUE
     )
 
-  # return process gtsummary table ---------------------------------------------
+  # removing line breaks from footnotes
+  x$table_styling$footnote$footnote <-
+    gsub("\\n", " ", x$table_styling$footnote$footnote) %>%
+    .escape_latex2(newlines = FALSE) %>%
+    .markdown_to_latex2()
+  x$table_styling$footnote_abbrev$footnote <-
+    gsub("\\n", " ", x$table_styling$footnote_abbrev$footnote) %>%
+    .escape_latex2(newlines = FALSE) %>%
+    .markdown_to_latex2()
+
+  if (!is.null(x$table_styling$caption)) {
+    x$table_styling$caption <-
+      .escape_latex(x$table_styling$caption, newlines = FALSE) %>%
+      .markdown_to_latex()
+  }
+
+  # return processed gtsummary table -------------------------------------------
   x
 
+}
+
+# this function does the following
+# - strips markdown syntax from headers and spanning headers
+# - escapes special characters from header, spanning header, caption, and footnotes
+.html_conversion_and_escaping <- function(x) {
+  x$table_styling$header$label <-
+    .strip_markdown(x$table_styling$header$label) %>%
+    .escape_html()
+  x$table_styling$header$spanning_header <-
+    .strip_markdown(x$table_styling$header$spanning_header) %>%
+    .escape_html()
+
+  # removing line breaks from footnotes
+  x$table_styling$footnote$footnote <-
+    gsub("\\n", " ", x$table_styling$footnote$footnote) %>%
+    .escape_html()
+  x$table_styling$footnote_abbrev$footnote <-
+    gsub("\\n", " ", x$table_styling$footnote_abbrev$footnote) %>%
+    .escape_html()
+
+  if (!is.null(x$table_styling$caption)) {
+    x$table_styling$caption <- .escape_html(x$table_styling$caption)
+  }
+
+  # return processed gtsummary table -------------------------------------------
+  x
 }
 
 # this escapes the latex code in `knitr::kable(col.names=)`
@@ -580,6 +626,20 @@ NULL
   x <- gsub("\\^", "\\\\textasciicircum{}", x)
   if (newlines) x <- kableExtra::linebreak(x, align = align)
   x <- gsub("  ", "\\\\ \\\\ ", x) # spaces
+
+  x
+}
+
+#' @rdname kableExtra_utils
+#' @export
+.escape_latex2 <- function (x, newlines = TRUE, align = "c") {
+  x <- gsub("\\\\", "\\\\\\\\textbackslash", x)
+  x <- gsub("([#$%&_{}])", "\\\\\\\\\\1", x)
+  x <- gsub("\\\\textbackslash", "\\\\\\\\textbackslash{}", x)
+  x <- gsub("~", "\\\\\\\\textasciitilde{}", x)
+  x <- gsub("\\^", "\\\\\\\\textasciicircum{}", x)
+  if (newlines) x <- kableExtra::linebreak(x, align = align)
+  x <- gsub("  ", "\\\\\\\\ \\\\\\\\ ", x) # spaces
 
   x
 }

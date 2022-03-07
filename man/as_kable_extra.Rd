@@ -53,9 +53,12 @@ This section shows options intended for use with \code{output: pdf_document} in 
 When the default values of \code{as_kable_extra(escape = FALSE, addtl_fmt = TRUE)}
 are utilized, the following formatting occurs.
 \itemize{
-\item Markdown bold, italic, and underline syntax in the headers will be converted to escaped LaTeX code
-\item Special characters in the table body will be escaped with \code{.escape_latex()}
-\item The \code{"\\n"} symbol will be recognized as a line break in the table headers and the table body
+\item Markdown bold, italic, and underline syntax in the headers,
+spanning headers, caption, and footnote will be converted to escaped LaTeX code
+\item Special characters in the table body, headers, spanning headers, caption,
+and footnote will be escaped with \code{.escape_latex()} or \code{.escape_latex2()}
+\item The \code{"\\n"} symbol will be recognized as a line break in the table
+headers, spanning headers, caption, and the table body
 \item The \code{"\\n"} symbol is removed from the footnotes
 }
 
@@ -74,7 +77,9 @@ This section discusses options intended for use with \code{output: html_document
 When the default values of \code{as_kable_extra(escape = FALSE, addtl_fmt = TRUE)}
 are utilized, the following formatting occurs.
 \itemize{
-\item Special characters in the table body and headers will be escaped with \code{.escape_html()}
+\item The default markdown syntax in the headers and spanning headers is removed
+\item Special characters in the table body, headers, spanning headers, caption,
+and footnote will be escaped with \code{.escape_html()}
 \item The \code{"\\n"} symbol is removed from the footnotes
 }
 

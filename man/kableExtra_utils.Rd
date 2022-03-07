@@ -4,11 +4,14 @@
 \alias{kableExtra_utils}
 \alias{.escape_html}
 \alias{.escape_latex}
+\alias{.escape_latex2}
 \title{Special Character Escape}
 \usage{
 .escape_html(x)
 
 .escape_latex(x, newlines = TRUE, align = "c")
+
+.escape_latex2(x, newlines = TRUE, align = "c")
 }
 \arguments{
 \item{x}{character vector}
