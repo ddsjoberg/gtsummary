@@ -16,7 +16,9 @@
 #' p-values are styled with `style_pvalue()` and the remaining statistics
 #' are styled with `style_sigfig(x, digits = 3)`
 #' @param glance_fun function that returns model statistics. Default is
-#' `broom::glance()`. Custom functions must return a single row tibble.
+#' `broom::glance()` for most model obejcts, and
+#' `broom::glance(mice::pool())` for MICE 'mira' models.
+#' Custom functions must return a single row tibble.
 #' @param sep1 Separator between statistic name and statistic.
 #' Default is `" = "`, e.g. `"R2 = 0.456"`
 #' @param sep2 Separator between statistics. Default is `"; "`
@@ -81,8 +83,11 @@ NULL
 #' @export
 #' @rdname add_glance
 add_glance_table <- function(x, include = everything(), label = NULL,
-                             fmt_fun = NULL, glance_fun = broom::glance) {
+                             fmt_fun = NULL, glance_fun = NULL) {
   updated_call_list <- c(x$call_list, list(add_glance_table = match.call()))
+
+  # default glance() function --------------------------------------------------
+  glance_fun <- glance_fun %||% .default_glance_fun(x)
 
   # prepare glance statistics and formatting functions -------------------------
   lst_prep_glance <-
@@ -133,10 +138,14 @@ add_glance_table <- function(x, include = everything(), label = NULL,
 #' @export
 #' @rdname add_glance
 add_glance_source_note <- function(x, include = everything(), label = NULL,
-                                   fmt_fun = NULL, glance_fun = broom::glance,
+                                   fmt_fun = NULL, glance_fun = NULL,
                                    text_interpret = c("md", "html"),
                                    sep1 = " = ", sep2 = "; ") {
   updated_call_list <- c(x$call_list, list(add_glance_source_note = match.call()))
+
+  # default glance() function --------------------------------------------------
+  glance_fun <- glance_fun %||% .default_glance_fun(x)
+
   # prepare glance statistics and formatting functions -------------------------
   lst_prep_glance <-
     .prep_glance_statistics(
@@ -266,3 +275,12 @@ df_default_glance_labels <-
     "deviance", "Deviance",
     "sigma", "Sigma"
   )
+
+.default_glance_fun <- function(x) {
+  if (inherits(x$model_obj, "mira")) {
+    assert_package("mice", fn = "add_glance_*()")
+    return(function(x) broom::glance(mice::pool(x)))
+  }
+
+  return(broom::glance)
+}
