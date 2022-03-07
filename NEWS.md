@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated the default function in add_glance_*(galnce_fun=) for MICE models. (Update glance() method for mice objects in add_glance_table() #1137)
+
 * Adding functions `get_gtsummary_theme()` and `with_gtsummary_theme()` for extracting the current gtsummary theme and running code with a temporarily theme.
 
 * Added a check for functions that accept `...` where nothing should be passed in the `...`. If a bad or misspelled argument is found, the users are informed. (#1083)

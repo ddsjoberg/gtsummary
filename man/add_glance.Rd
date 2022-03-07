@@ -11,7 +11,7 @@ add_glance_table(
   include = everything(),
   label = NULL,
   fmt_fun = NULL,
-  glance_fun = broom::glance
+  glance_fun = NULL
 )
 
 add_glance_source_note(
@@ -19,7 +19,7 @@ add_glance_source_note(
   include = everything(),
   label = NULL,
   fmt_fun = NULL,
-  glance_fun = broom::glance,
+  glance_fun = NULL,
   text_interpret = c("md", "html"),
   sep1 = " = ",
   sep2 = "; "
@@ -42,7 +42,9 @@ p-values are styled with \code{style_pvalue()} and the remaining statistics
 are styled with \code{style_sigfig(x, digits = 3)}}
 
 \item{glance_fun}{function that returns model statistics. Default is
-\code{broom::glance()}. Custom functions must return a single row tibble.}
+\code{broom::glance()} for most model obejcts, and
+\code{broom::glance(mice::pool())} for MICE 'mira' models.
+Custom functions must return a single row tibble.}
 
 \item{text_interpret}{String indicates whether source note text
 will be interpreted with
