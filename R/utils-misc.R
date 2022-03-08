@@ -25,7 +25,6 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
 .fill_table_header_modify_stats <-
   function(x, modify_stats = c("modify_stat_N", "modify_stat_N_event",
                                "modify_stat_N_unweighted")) {
-    # browser()
     modify_stats <-
       x$table_styling$header %>%
       select(any_of(modify_stats) & where(.single_value)) %>%
