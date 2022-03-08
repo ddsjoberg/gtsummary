@@ -324,7 +324,14 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
 
   .formula_list_to_named_list(
     x = c(update, dots),
-    var_info = x$table_styling$header$column,
+    data = x$table_body,
+    var_info =
+      x$table_styling$header %>%
+      select(.data$column, .data$hide, starts_with("selector_")) %>%
+      dplyr::rename_with(
+        .fn = ~stringr::str_remove(., pattern = fixed("selector_")),
+        starts_with("selector_")
+      ),
     arg_name = "... or update",
     type_check = chuck(type_check, "is_string_or_na", "fn"),
     type_check_msg = chuck(type_check, "is_string_or_na", "msg")

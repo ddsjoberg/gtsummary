@@ -200,7 +200,7 @@ tbl_svysummary_ex1 <-
 data(api, package = "survey")
 tbl_svysummary_ex2 <-
   survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) \%>\%
-  tbl_svysummary(by = "both", include = c(cname, api00, api99, both))
+  tbl_svysummary(by = "both", include = c(api00, stype))
 \dontshow{\}) # examplesIf}
 }
 \seealso{
