@@ -282,10 +282,11 @@ tidy_car_anova <- function(x, type, tbl, ...) {
     error = function(e) {
       ifelse(
         !is.null(variable),
-        "There was an error running {.code car::Anova()} for {.val {variable}}",
-        "There was an error running {.code car::Anova()}"
+        "There was an error running {.code car::Anova()} for {.val {variable}}, ",
+        "There was an error running {.code car::Anova()}, "
       ) %>%
-        paste0(", trying {.code add_global_p(anova_fun = gtsummary::tidy_wald_test)}") %>%
+        paste0("likely due to this model type not being supported. ",
+               "The results displayed are based on {.code add_global_p(anova_fun = gtsummary::tidy_wald_test)}") %>%
         cli::cli_alert_danger()
 
       tryCatch(
