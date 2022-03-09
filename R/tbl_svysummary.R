@@ -102,7 +102,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   by <-
     .select_to_varnames(
       select = {{ by }},
-      data = .remove_survey_cols(data),
+      data = data$variables,
       arg_name = "by",
       select_single = TRUE
     )
@@ -110,10 +110,15 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   include <-
     .select_to_varnames(
       select = {{ include }},
-      data = .remove_survey_cols(data),
+      data = data$variables,
       arg_name = "include"
     ) %>%
     union(by)
+  if ("n" %in% include) {
+    paste("Cannot summarize a column called 'n'. Rename it or remove",
+          "is from the summary with `include = -n`") %>%
+      abort()
+  }
 
   # setting defaults from gtsummary theme --------------------------------------
   label <- label %||%
@@ -291,11 +296,13 @@ summarize_categorical_survey <- function(data, variable, by,
   }
 
   if (is.null(by)) {
-    svy_table <- survey::svytable(c_form(right = variable), data) %>%
+    svy_table <-
+      survey::svytable(c_form(right = variable), data) %>%
       as_tibble() %>%
       set_names("variable_levels", "n")
   } else {
-    svy_table <- survey::svytable(c_form(right = c(by, variable)), data) %>%
+    svy_table <-
+      survey::svytable(c_form(right = c(by, variable)), data) %>%
       as_tibble() %>%
       set_names("by", "variable_levels", "n")
   }
@@ -600,27 +607,9 @@ c_form <- function(left = NULL, right = 1) {
   stats::as.formula(paste(left, "~", right))
 }
 
-
-# this function removes the weight/survey columns from x$variables
-# used when columns must be selected from the survey object, and we dont want users
-# to select the weighting columns
-.remove_survey_cols <- function(x) {
-  if (is.data.frame(x)) {
-    return(x)
-  }
-  if (is.call(x$call)) {
-    x$variables %>%
-      select(-any_of(c(
-        all.vars(x$call$id),
-        all.vars(x$call$probs),
-        all.vars(x$call$fpc),
-        all.vars(x$call$weights)
-      )))
-  }
-  else {
-    x$variables
-  }
-
+.extract_data_frame <- function(x) {
+  if (is.data.frame(x)) return(x)
+  x$variables # return survey object data frame
 }
 
 # Min and Max Values for survey design
