@@ -78,7 +78,7 @@ add_ci.tbl_summary <- function(x,
                                conf.level = 0.95,
                                style_fun = NULL,
                                pattern = NULL, ...) {
-  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
+  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
   # resolving arguments --------------------------------------------------------
   include <-
     .select_to_varnames(
