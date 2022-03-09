@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Updated the default function in add_glance_*(galnce_fun=) for MICE models. (Update glance() method for mice objects in add_glance_table() #1137)
+* No longer removing the strata column from survey objects from the columns that will be summarized in `tbl_svysummary()`. If users previously didn't indicate which variables to summarize with `include=`, then the strata column (if present) will now appear in the summary table. When using a srvyr class object, all columns will be printed in summary table by default. (#1166)
+
+* Updated the default function in `add_glance_*(glance_fun=)` for MICE models. (#1137)
 
 * Adding functions `get_gtsummary_theme()` and `with_gtsummary_theme()` for extracting the current gtsummary theme and running code with a temporarily theme.
 

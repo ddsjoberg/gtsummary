@@ -613,17 +613,11 @@ c_form <- function(left = NULL, right = 1) {
       select(-any_of(c(
         all.vars(x$call$id),
         all.vars(x$call$probs),
-        all.vars(x$call$strata),
         all.vars(x$call$fpc),
         all.vars(x$call$weights)
       )))
-  } else if (!is.null(attr(x, "survey_vars"))) {
-    # "survey_vars" attribute is used by srvyr
-    x$variables %>%
-      select(-any_of(
-        attr(x, "survey_vars") %>% as.character() %>% unlist()
-      ))
-  } else {
+  }
+  else {
     x$variables
   }
 
