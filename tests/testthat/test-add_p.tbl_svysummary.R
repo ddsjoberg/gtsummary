@@ -161,6 +161,8 @@ test_that("add_p works well", {
     NA
   )
 
+  expect_error(as_flex_table(tbl2), NA)
+
   expect_equal(
     dplyr::filter(tbl2$meta_data, variable == "age")$p.value,
     survey::svyranktest(age ~ response, strial, test = "vanderWaerden")$p.value %>% rlang::set_names(NULL)
