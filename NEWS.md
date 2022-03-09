@@ -1,8 +1,12 @@
 # gtsummary (development version)
 
-* No longer removing the strata column from survey objects from the columns that will be summarized in `tbl_svysummary()`. If users previously didn't indicate which variables to summarize with `include=`, then the strata column (if present) will now appear in the summary table. When using a srvyr class object, all columns will be printed in summary table by default. (#1166)
+* No longer removing the survey design columns from survey objects from the columns that will be summarized in `tbl_svysummary()` and those summarized in `tbl_uvregression()`. If users previously didn't indicate which variables to summarize with `include=`, then the design columns will now appear in the summary tables. (#1166)
 
 * Updated the default function in `add_glance_*(glance_fun=)` for MICE models. (#1137)
+
+* Fix in `add_p.tbl_svysummary()` when Wald tests were converted to flextable. The survey tidier saved the column as a matrix-column instead of a vector, which was incompatible with flextable output. (#1153)
+
+* Added a `tbl_regression.tidycrr()` method to summarize competing risks regression models. (#1169)
 
 * Added a `tbl_regression.tidycrr()` method to summarize competing risks regression models. (#1169)
 

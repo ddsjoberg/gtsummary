@@ -503,7 +503,8 @@ add_p_test_svy.wald.test <- function(data, variable, by, ...) {
     {
       suppressMessages(broom::tidy(.))
     } %>%
-    mutate(method = "Wald test of independence for complex survey samples")
+    mutate(method = "Wald test of independence for complex survey samples") %>%
+    dplyr::mutate(dplyr::across(where(is.matrix), c))
 }
 
 add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
@@ -514,7 +515,8 @@ add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
     } %>%
     dplyr::mutate_at(vars(.data$statistic, .data$p.value), as.numeric) %>%
     # default saves these cols as a matrix
-    mutate(method = "adjusted Wald test of independence for complex survey samples")
+    mutate(method = "adjusted Wald test of independence for complex survey samples") %>%
+    dplyr::mutate(dplyr::across(where(is.matrix), c))
 }
 
 add_p_test_svy.lincom.test <- function(data, variable, by, ...) {
