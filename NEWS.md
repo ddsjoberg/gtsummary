@@ -4,6 +4,8 @@
 
 * Updated the default function in `add_glance_*(glance_fun=)` for MICE models. (#1137)
 
+* Added a `tbl_regression.tidycrr()` method to summarize competing risks regression models. (#1169)
+
 * Adding functions `get_gtsummary_theme()` and `with_gtsummary_theme()` for extracting the current gtsummary theme and running code with a temporarily theme.
 
 * Added a check for functions that accept `...` where nothing should be passed in the `...`. If a bad or misspelled argument is found, the users are informed. (#1083)
