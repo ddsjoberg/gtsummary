@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `add_p.tbl_svysummary()` when Wald tests were converted to flextable. The survey tidier saved the column as a matrix-column instead of a vector, which was incompatible with flextable output. (#1153)
+
 * Added a `tbl_regression.tidycrr()` method to summarize competing risks regression models. (#1169)
 
 * Updated the default function in add_glance_*(galnce_fun=) for MICE models. (Update glance() method for mice objects in add_glance_table() #1137)
