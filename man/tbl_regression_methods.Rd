@@ -14,6 +14,7 @@
 \alias{tbl_regression.stanreg}
 \alias{tbl_regression.brmsfit}
 \alias{tbl_regression.gam}
+\alias{tbl_regression.tidycrr}
 \alias{tbl_regression.multinom}
 \title{Methods for tbl_regression}
 \usage{
@@ -70,6 +71,8 @@
 
 \method{tbl_regression}{gam}(x, tidy_fun = tidy_gam, ...)
 
+\method{tbl_regression}{tidycrr}(x, tidy_fun = tidycmprsk::tidy, ...)
+
 \method{tbl_regression}{multinom}(x, ...)
 }
 \arguments{
@@ -103,12 +106,11 @@ fit object and not the parsnip/workflows object.
 \item \code{"survreg"}: The scale parameter is removed, \code{broom::tidy(x) \%>\% dplyr::filter(term != "Log(scale)")}
 \item \code{"multinom"}: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 \item \code{"gam"}: Uses the internal tidier \code{tidy_gam()} to print both parametric and smooth terms.
+\item \code{"tidycrr"}: Uses the tidier \code{tidycmprsk::tidy()} to print the model terms.
 \item \code{"lmerMod"}, \code{"glmerMod"}, \code{"glmmTMB"}, \code{"glmmadmb"}, \code{"stanreg"}, \code{"brmsfit"}: These mixed effects
 models use \code{broom.mixed::tidy(x, effects = "fixed")}. Specify \code{tidy_fun = broom.mixed::tidy}
 to print the random components.
 }
-
-This list is not exhaustive, and care should be taken for each number reported.
 }
 
 \keyword{internal}

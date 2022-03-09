@@ -236,3 +236,17 @@ test_that("tidymodels/parsnip/workflows", {
       dplyr::filter(!is.na(estimate))
   )
 })
+
+test_that("tidycrr models work", {
+  mod <- tidycmprsk::crr(tidycmprsk::Surv(ttdeath, death_cr) ~  age + grade, tidycmprsk::trial)
+
+  expect_error(
+    tbl <- tbl_regression(mod, exponentiate = TRUE),
+    NA
+  )
+  expect_equal(
+    as_tibble(tbl, col_labels = FALSE)$estimate,
+    c("1.01", NA, NA, "1.06", "1.54")
+  )
+  expect_error(add_global_p(tbl), NA)
+})

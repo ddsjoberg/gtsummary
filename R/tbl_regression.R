@@ -21,11 +21,11 @@
 #' - `"survreg"`: The scale parameter is removed, `broom::tidy(x) %>% dplyr::filter(term != "Log(scale)")`
 #' - `"multinom"`: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)
 #' - `"gam"`: Uses the internal tidier `tidy_gam()` to print both parametric and smooth terms.
+#' - `"tidycrr"`: Uses the tidier `tidycmprsk::tidy()` to print the model terms.
 #' - `"lmerMod"`, `"glmerMod"`, `"glmmTMB"`, `"glmmadmb"`, `"stanreg"`, `"brmsfit"`: These mixed effects
 #' models use `broom.mixed::tidy(x, effects = "fixed")`. Specify `tidy_fun = broom.mixed::tidy`
 #' to print the random components.
 #'
-#' This list is not exhaustive, and care should be taken for each number reported.
 #' @param x Regression model object
 #' @param exponentiate Logical indicating whether to exponentiate the
 #' coefficient estimates. Default is `FALSE`.
