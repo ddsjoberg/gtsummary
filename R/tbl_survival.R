@@ -64,7 +64,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
                                  missing = "-",
                                  estimate_fun = NULL,
                                  ...) {
-  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
+  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
 
   # setting defaults -----------------------------------------------------------
   estimate_fun <-
