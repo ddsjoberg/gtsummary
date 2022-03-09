@@ -77,7 +77,7 @@ add_overall <- function(x, ...) {
 #' @export
 add_overall.tbl_summary <- function(x, last = FALSE, col_label = NULL,
                                     statistic = NULL, digits = NULL, ...) {
-  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
+  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
   add_overall_generic(
     x = x, last = last, col_label = col_label,
     statistic = statistic, digits = digits,
