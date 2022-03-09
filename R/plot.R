@@ -28,7 +28,7 @@ NULL
 plot.tbl_regression <- function(x,
                                 remove_header_rows = TRUE,
                                 remove_reference_rows = FALSE, ...) {
-  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
+  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
   assert_package("GGally", fn = "plot.tbl_regression()")
 
   df_coefs <- x$table_body

@@ -53,7 +53,7 @@ NULL
 #' @rdname add_nevent_regression
 #' @export
 add_nevent.tbl_regression <- function(x, location = NULL, ...) {
-  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
+  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
   updated_call_list <- c(x$call_list, list(add_nevent = match.call()))
   location <- match.arg(location, choices = c("label", "level"), several.ok = TRUE)
 
@@ -132,7 +132,7 @@ add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 #' \if{html}{\figure{add_nevent.tbl_survfit_ex1.png}{options: width=64\%}}
 
 add_nevent.tbl_survfit <- function(x, ...) {
-  rlang::check_dots_empty(error = function(cnd) rlang::inform(as.character(cnd)))
+  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
   updated_call_list <- c(x$call_list, list(add_nevent = match.call()))
 
   # checking survfit is a standard (not multi-state)
