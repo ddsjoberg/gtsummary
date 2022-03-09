@@ -115,6 +115,13 @@ tbl_regression.gam <- function(x, tidy_fun = tidy_gam, ...) {
 
 #' @export
 #' @rdname tbl_regression_methods
+tbl_regression.tidycrr <- function(x, tidy_fun = tidycmprsk::tidy, ...) {
+  assert_package("tidycmprsk", "tbl_regression.tidycrr()")
+  tbl_regression.default(x = x, tidy_fun = tidy_fun, ...)
+}
+
+#' @export
+#' @rdname tbl_regression_methods
 tbl_regression.multinom <- function(x, ...) {
   result <- tbl_regression.default(x = x, ...)
 
