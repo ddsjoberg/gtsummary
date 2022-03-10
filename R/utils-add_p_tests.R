@@ -129,7 +129,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
     )
 
   # message about missing data
-  if (quiet && any(is.na(data_wide[[2]]) + is.na(data_wide[[3]]) == 1)) {
+  if (!quiet && any(is.na(data_wide[[2]]) + is.na(data_wide[[3]]) == 1)) {
     glue(
       "Note for variable '{variable}': Some observations included in the ",
       "calculation of summary statistics ",
