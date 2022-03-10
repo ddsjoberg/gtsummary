@@ -114,7 +114,7 @@ If a bug was fixed, a unit test was added for the bug check</li>
 Run <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code>. Check the R console for errors, and review the rendered website.</li>
 <li>
 <input type="checkbox" disabled>
-Code coverage is suitable for any new functions/features. Review coverage with <code><a href="http://covr.r-lib.org/reference/report.html" class="external-link">covr::report()</a></code>. Before you run, set <code>Sys.setenv(NOT_CRAN="true")</code> and begin in a fresh R session without any packages loaded.</li>
+Code coverage is suitable for any new functions/features. Review coverage with <code>withr::with_envvar(new = c("NOT_CRAN" = "true"), covr::report())</code>. Begin in a fresh R session without any packages loaded.</li>
 <li>
 <input type="checkbox" disabled>
 R CMD Check runs without errors, warnings, and notes</li>
