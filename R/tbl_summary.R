@@ -22,7 +22,8 @@
 #' If type not specified for a variable, the function
 #' will default to an appropriate summary type. See below for details.
 #' @param value List of formulas specifying the value to display for dichotomous
-#' variables.  See below for details.
+#' variables. gtsummary selectors, e.g. `all_dichotomous()`, cannot be used
+#' with this argument. See below for details.
 #' @param statistic List of formulas specifying types of summary statistics to
 #' display for each variable.  The default is
 #' `list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")`.
@@ -367,14 +368,15 @@ generate_metadata <- function(data, value, by, type, label,
   # updating type --------------------------------------------------------------
   # updating type of user supplied one
   # converting tidyselect formula lists to named lists
-  type <- .formula_list_to_named_list(
-    x = type,
-    data = data,
-    var_info = meta_data_to_var_info(meta_data),
-    arg_name = "type",
-    type_check = chuck(type_check, "is_string", "fn"),
-    type_check_msg = chuck(type_check, "is_string", "msg")
-  )
+  type <-
+    .formula_list_to_named_list(
+      x = type,
+      data = data,
+      var_info = meta_data_to_var_info(meta_data),
+      arg_name = "type",
+      type_check = chuck(type_check, "is_string_summary_type", "fn"),
+      type_check_msg = chuck(type_check, "is_string_summary_type", "msg")
+    )
 
   # updating meta data object with new types
   meta_data <-
@@ -416,8 +418,8 @@ generate_metadata <- function(data, value, by, type, label,
     data = data,
     var_info = meta_data_to_var_info(meta_data),
     arg_name = "sort",
-    type_check = chuck(type_check, "is_string", "fn"),
-    type_check_msg = chuck(type_check, "is_string", "msg")
+    type_check = chuck(type_check, "is_string_summary_sort", "fn"),
+    type_check_msg = chuck(type_check, "is_string_summary_sort", "msg")
   )
 
   # assigning variable characteristics -----------------------------------------
