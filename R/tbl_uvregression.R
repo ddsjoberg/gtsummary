@@ -136,8 +136,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
            tryCatch({
              .select_to_varnames(
                select = !!x,
-               data = switch(is.data.frame(data), data) %||%
-                 .remove_survey_cols(data),
+               data = .extract_data_frame(data),
                arg_name = "x"
              ) %>%
                rlang::sym()},
@@ -150,8 +149,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
            tryCatch({
              .select_to_varnames(
                select = !!y,
-               data = switch(is.data.frame(data), data) %||%
-                 .remove_survey_cols(data),
+               data = .extract_data_frame(data),
                arg_name = "y"
              ) %>%
                rlang::sym()},
@@ -172,17 +170,13 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   include <-
     .select_to_varnames(
       select = {{ include }},
-      data = switch(is.data.frame(data),
-        data
-      ) %||% .remove_survey_cols(data),
+      data = .extract_data_frame(data),
       arg_name = "include"
     )
   show_single_row <-
     .select_to_varnames(
       select = {{ show_single_row }},
-      data = switch(is.data.frame(data),
-        data
-      ) %||% .remove_survey_cols(data),
+      data = .extract_data_frame(data),
       arg_name = "show_single_row"
     )
 
@@ -214,9 +208,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   label <-
     .formula_list_to_named_list(
       x = label,
-      data = switch(is.data.frame(data),
-        data
-      ) %||% .remove_survey_cols(data),
+      data = .extract_data_frame(data),
       arg_name = "label",
       type_check = chuck(type_check, "is_string", "fn"),
       type_check_msg = chuck(type_check, "is_string", "msg")
@@ -236,9 +228,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
 
   # get all vars not specified -------------------------------------------------
   all_vars <-
-    names(switch(is.data.frame(data),
-      data
-    ) %||% .remove_survey_cols(data)) %>%
+    names(.extract_data_frame(data)) %>%
     # removing x or y variable
     setdiff(paste(c(y, x), "~ 1") %>% stats::as.formula() %>% all.vars()) %>%
     # removing any other variables listed in the formula
