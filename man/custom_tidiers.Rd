@@ -7,6 +7,7 @@
 \alias{tidy_robust}
 \alias{pool_and_tidy_mice}
 \alias{tidy_gam}
+\alias{tidy_wald_test}
 \title{Collection of custom tidiers}
 \usage{
 tidy_standardize(
@@ -42,6 +43,8 @@ tidy_robust(
 pool_and_tidy_mice(x, pool.args = NULL, ..., quiet = FALSE)
 
 tidy_gam(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...)
+
+tidy_wald_test(x, tidy_fun = NULL, ...)
 }
 \arguments{
 \item{x}{a regression model object}
@@ -74,6 +77,11 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 
 \item{pool.args}{named list of arguments passed to \code{mice::pool()} in
 \code{pool_and_tidy_mice()}. Default is \code{NULL}}
+
+\item{tidy_fun}{Option to specify a particular tidier function for the
+model. Default is to use \code{broom::tidy}, but if an error occurs
+then tidying of the model is attempted with \code{parameters::model_parameters()},
+if installed.}
 }
 \description{
 \lifecycle{maturing}
@@ -104,6 +112,7 @@ function with \code{tbl_regression()}, pass a function with the arguments for
 \item \code{pool_and_tidy_mice()} tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object \emph{before} the model results
 have been pooled. See example.
+\item \code{tidy_wald_test()} tidier to report Wald p-values, wrapping the \code{aod::wald.test()} function.
 }
 
 Ensure your model type is compatible with the methods/functions used to estimate

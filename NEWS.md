@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added `add_global_p(anova_fun=)` argument allowing users to pass custom functions to calculate global p-values when car::Anova() does not support the model type. (#1149)
+
+* Added tidier `tidy_wald_test()`, a generic function that can calculate Wald test statistics for groups of variables in a model. The tidier expects the model object is supported by both `vcov()` and `coef()` to obtain the variance-covariance matrix and the coef vector.
+
 * No longer removing the survey design columns from survey objects from the columns that will be summarized in `tbl_svysummary()` and those summarized in `tbl_uvregression()`. If users previously didn't indicate which variables to summarize with `include=`, then the design columns will now appear in the summary tables. (#1166)
 
 * Updated the default function in `add_glance_*(glance_fun=)` for MICE models. (#1137)

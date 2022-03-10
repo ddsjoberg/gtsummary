@@ -78,3 +78,24 @@ test_that("no errors/warnings with tidy_robust()", {
     NA
   )
 })
+
+test_that("no errors/warnings with tidy_wald_test()", {
+  skip_if(!require("aod"))
+
+  mod <- lm(age ~ stage + marker, trial)
+
+  # why is the statistic different stage!?
+  expect_equal(
+    tidy_wald_test(mod) %>%
+      dplyr::select(term, df, p.value),
+    car::Anova(mod, type = 3) %>%
+      broom::tidy() %>%
+      dplyr::slice_head(n = 3) %>%
+      dplyr::select(term, df, p.value),
+    tolerance = 10e-2,
+    ignore_attr = TRUE
+  )
+})
+
+
+

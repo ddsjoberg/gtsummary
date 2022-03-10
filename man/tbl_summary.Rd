@@ -55,7 +55,8 @@ If type not specified for a variable, the function
 will default to an appropriate summary type. See below for details.}
 
 \item{value}{List of formulas specifying the value to display for dichotomous
-variables.  See below for details.}
+variables. gtsummary selectors, e.g. \code{all_dichotomous()}, cannot be used
+with this argument. See below for details.}
 
 \item{missing}{Indicates whether to include counts of \code{NA} values in the table.
 Allowed values are \code{"no"} (never display NA values),
