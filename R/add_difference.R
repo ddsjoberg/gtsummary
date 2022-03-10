@@ -88,7 +88,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   include <-
     .select_to_varnames(
       select = {{ include }},
-      data = select(use_data_frame(x$inputs$data), any_of(x$meta_data$variable)),
+      data = select(.extract_data_frame(x$inputs$data), any_of(x$meta_data$variable)),
       var_info = x$table_body,
       arg_name = "include"
     )
@@ -96,7 +96,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   test <-
     .formula_list_to_named_list(
       x = test,
-      data = select(use_data_frame(x$inputs$data), any_of(include)),
+      data = select(.extract_data_frame(x$inputs$data), any_of(include)),
       var_info = x$table_body,
       arg_name = "test",
       type_check = chuck(type_check, "is_function_or_string", "fn"),
@@ -106,7 +106,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   estimate_fun <-
     .formula_list_to_named_list(
       x = {{ estimate_fun }},
-      data = select(use_data_frame(x$inputs$data), any_of(x$meta_data$variable)),
+      data = select(.extract_data_frame(x$inputs$data), any_of(x$meta_data$variable)),
       var_info = x$table_body,
       arg_name = "estimate_fun",
       type_check = chuck(type_check, "is_function", "fn"),
@@ -128,7 +128,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   adj.vars <-
     .select_to_varnames(
       select = {{ adj.vars }},
-      data = use_data_frame(x$inputs$data),
+      data = .extract_data_frame(x$inputs$data),
       var_info = x$table_body,
       arg_name = "adj.vars"
     )
@@ -143,7 +143,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   group <-
     .select_to_varnames(
       select = {{ group }},
-      data = use_data_frame(x$inputs$data),
+      data = .extract_data_frame(x$inputs$data),
       var_info = x$table_body,
       arg_name = "group",
       select_single = TRUE
@@ -208,7 +208,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   test.args <-
     .formula_list_to_named_list(
       x = test.args,
-      data = select(use_data_frame(x$inputs$data), any_of(include)),
+      data = select(.extract_data_frame(x$inputs$data), any_of(include)),
       var_info = x$table_body,
       arg_name = "test.args",
       type_check = chuck(type_check, "is_named", "fn"),
@@ -258,7 +258,3 @@ add_difference <- function(x, test = NULL, group = NULL,
   x
 }
 
-use_data_frame <- function(x) {
-  if (is.data.frame(x)) return(x)
-  x$variables # return survey object data frame
-}

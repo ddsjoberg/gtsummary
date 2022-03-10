@@ -410,7 +410,7 @@ test_that("tbl_svysummary-no error when by variable is ordered factor", {
 
 test_that("tbl_svysummary-provides similar results than tbl_summary for simple weights", {
   t1 <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
-    tbl_svysummary()
+    tbl_svysummary(include = c(Class, Sex, Age, Survived))
   t2 <- as.data.frame(Titanic) %>%
     tidyr::uncount(Freq) %>%
     tbl_summary()
@@ -427,23 +427,25 @@ test_that("tbl_svysummary-provides similar results than tbl_summary for simple w
 })
 
 test_that("tbl_svysummary-calculates unweighted N with continuous variables and {N_obs_unweighted}", {
-  t1 <- as_tibble(Titanic) %>%
+  t1 <-
+    as_tibble(Titanic) %>%
     mutate(age = round(as.numeric(list(runif(1, min = 5, max = 100))))) %>%
-    ungroup() %>%
+    dplyr::ungroup() %>%
     survey::svydesign(data = ., ids = ~1, weights = ~n) %>%
     tbl_svysummary(
       by = Sex,
+      include = -n,
       statistic = list(all_continuous() ~ "{N_obs_unweighted}")
     )
 
   expect_equal(
     t1$meta_data$df_stats[[1]] %>%
-      pull("N_obs_unweighted") %>%
+      dplyr::pull("N_obs_unweighted") %>%
       dplyr::first(),
     as_tibble(Titanic) %>%
-      group_by(Sex) %>%
-      count() %>%
-      pull(n) %>%
+      dplyr::group_by(Sex) %>%
+      dplyr::count() %>%
+      dplyr::pull(n) %>%
       dplyr::first()
   )
 })
