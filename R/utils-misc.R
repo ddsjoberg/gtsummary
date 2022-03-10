@@ -49,6 +49,12 @@ type_check <-
     is_string =
       list(msg = "Expecting a string as the passed value.",
            fn = function(x) is_string(x)),
+    is_string_summary_type =
+      list(msg = "Expecting one of `c('categorical', 'dichotomous', 'continuous', 'continuous2')` as the passed value.",
+           fn = function(x) is_string(x) && x %in% c("categorical", "dichotomous", "continuous", "continuous2")),
+    is_string_summary_sort =
+      list(msg = "Expecting one of `c('frequency', 'alphanumeric')` as the passed value.",
+           fn = function(x) is_string(x) && x %in% c("frequency", "alphanumeric")),
     is_character =
       list(msg = "Expecting a character as the passed value.",
            fn = function(x) is.character(x)),
