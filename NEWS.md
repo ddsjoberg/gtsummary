@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added `add_global_p(anova_fun=)` argument allowing users to pass custom functions to calculate global p-values when car::Anova() does not support the model type. (#1149)
+
+* Added tidier `tidy_wald_test()`, a generic function that can calculate Wald test statistics for groups of variables in a model. The tidier expects the model object is supported by both `vcov()` and `coef()` to obtain the variance-covariance matrix and the coef vector.
+
 * Fix in `add_p.tbl_svysummary()` when Wald tests were converted to flextable. The survey tidier saved the column as a matrix-column instead of a vector, which was incompatible with flextable output. (#1153)
 
 * Added a `tbl_regression.tidycrr()` method to summarize competing risks regression models. (#1169)
