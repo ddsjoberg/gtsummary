@@ -43,6 +43,7 @@
 * Added method "emmeans" to `add_difference()` for `tbl_svysummary()` objects.
 
 * Updated default `add_difference()` for `tbl_svysummary()` objects to be "emmeans" for continuous and dichotomous variables, and "smd" for categorical variables.
+
 # gtsummary 1.5.1
 
 ### New Functions
