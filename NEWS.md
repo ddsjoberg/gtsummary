@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Added `add_global_p(anova_fun=)` argument allowing users to pass custom functions to calculate global p-values when car::Anova() does not support the model type. (#1149)
+* Added `add_global_p(anova_fun=)` argument allowing users to pass custom functions to calculate global p-values when `car::Anova()` does not support the model type. (#1149)
 
 * Added tidier `tidy_wald_test()`, a generic function that can calculate Wald test statistics for groups of variables in a model. The tidier expects the model object is supported by both `vcov()` and `coef()` to obtain the variance-covariance matrix and the coef vector.
 
