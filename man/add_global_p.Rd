@@ -13,6 +13,7 @@ add_global_p(x, ...)
   include = everything(),
   type = NULL,
   keep = FALSE,
+  anova_fun = NULL,
   quiet = NULL,
   ...,
   terms = NULL
@@ -23,24 +24,36 @@ add_global_p(x, ...)
   type = NULL,
   include = everything(),
   keep = FALSE,
+  anova_fun = NULL,
   quiet = NULL,
   ...
 )
 }
 \arguments{
-\item{x}{Object with class \code{tbl_regression} from the
-\link{tbl_regression} function}
+\item{x}{Object with class \code{'tbl_regression'} or \code{'tbl_uvregression'}}
 
-\item{...}{Additional arguments to be passed to \code{car::Anova}}
+\item{...}{Additional arguments to be passed to \code{car::Anova},
+\code{aod::wald.test()} or \code{anova_fun} (if specified)}
 
 \item{include}{Variables to calculate global p-value for. Input may be a vector of
 quoted or unquoted variable names. Default is \code{everything()}}
 
-\item{type}{Type argument passed to \code{car::Anova}. Default is \code{"III"}}
+\item{type}{Type argument passed to \code{car::Anova(type=)}. Default is \code{"III"}}
 
 \item{keep}{Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
-Default is \code{FALSE}}
+Default is \code{FALSE}.}
+
+\item{anova_fun}{Function that will be used in place of \code{car::Anova()}
+when specified to calculate the global p-values.
+\itemize{
+\item function must return a tibble matching the output of
+\code{car::Anova() \%>\% broom::tidy()} including a columns called \code{"term"} and \code{"p.values"}
+\item function must accept arguments \code{anova_fun(x, ...)}, where \code{x} is a model object
+\item arguments passed in \code{...} will be passed to \code{anova_fun(...)}
+\item the \code{add_global_p(type=)} argument is \emph{ignored} in \verb{anova_fun=}
+\item a common function used here is \code{tidy_wald_test()}, a wrapper for \code{aod::wald.test()}
+}}
 
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
@@ -48,7 +61,8 @@ Default is \code{FALSE}}
 \item{terms}{DEPRECATED.  Use \verb{include=} argument instead.}
 }
 \description{
-This function uses \code{car::Anova(type = "III")} to calculate global p-values variables.
+This function uses \code{car::Anova()} to calculate global p-values
+for model covariates.
 Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 }
 \section{Example Output}{

@@ -55,7 +55,8 @@ If type not specified for a variable, the function
 will default to an appropriate summary type. See below for details.}
 
 \item{value}{List of formulas specifying the value to display for dichotomous
-variables.  See below for details.}
+variables. gtsummary selectors, e.g. \code{all_dichotomous()}, cannot be used
+with this argument. See below for details.}
 
 \item{missing}{Indicates whether to include counts of \code{NA} values in the table.
 Allowed values are \code{"no"} (never display NA values),
@@ -193,14 +194,14 @@ Read more on the \link{syntax} used through the package.
 # A simple weighted dataset
 tbl_svysummary_ex1 <-
   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%
-  tbl_svysummary(by = Survived, percent = "row")
+  tbl_svysummary(by = Survived, percent = "row", include = c(Class, Age))
 
 # Example 2 ----------------------------------
 # A dataset with a complex design
 data(api, package = "survey")
 tbl_svysummary_ex2 <-
   survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) \%>\%
-  tbl_svysummary(by = "both", include = c(cname, api00, api99, both))
+  tbl_svysummary(by = "both", include = c(stype, api00, api99, both))
 \dontshow{\}) # examplesIf}
 }
 \seealso{
