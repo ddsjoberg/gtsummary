@@ -31,9 +31,12 @@
 #' using the mice package. Pass the mice model object *before* the model results
 #' have been pooled. See example.
 #'
+#' - `tidy_wald_test()` tidier to report Wald p-values, wrapping the `aod::wald.test()` function.
+#'
 #' Ensure your model type is compatible with the methods/functions used to estimate
 #' the model parameters before attempting to use the tidier with `tbl_regression()`
 #' @inheritParams broom::tidy.glm
+#' @inheritParams tbl_regression
 #' @inheritParams add_global_p
 #' @param pool.args named list of arguments passed to `mice::pool()` in
 #' `pool_and_tidy_mice()`. Default is `NULL`
@@ -252,4 +255,41 @@ tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.9
         dplyr::mutate(parametric = FALSE)
     ) %>%
     dplyr::relocate(.data$parametric, .after = dplyr::last_col())
+}
+
+#' @rdname custom_tidiers
+#' @export
+tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
+  assert_package("aod", "tidy_wald_test()")
+
+  tidy_fun <- tidy_fun %||% broom.helpers::tidy_with_broom_or_parameters
+
+  # match model terms to the variable
+  broom.helpers::tidy_and_attach(
+    model = x,
+    tidy_fun = tidy_fun
+  ) %>%
+    broom.helpers::tidy_identify_variables() %>%
+    dplyr::select(term = .data$variable, model_terms = .data$term) %>%
+    dplyr::mutate(term_id = dplyr::row_number()) %>%
+    # reduce to one line per variable in model
+    tidyr::nest(data = -.data$term) %>%
+    dplyr::rowwise() %>%
+    # calculate Wald test
+    dplyr::mutate(
+      model_terms = unlist(.data$data[["model_terms"]]) %>% list(),
+      model_terms_id = rlang::set_names(.data$data[["term_id"]]) %>% list(),
+      wald_test =
+        aod::wald.test(
+          Sigma = stats::vcov(x),
+          b = stats::coef(x),
+          Terms = .data$model_terms_id
+        ) %>%
+        list(),
+      df = .data$wald_test$result$chi2 %>% purrr::pluck("df"),
+      statistic = .data$wald_test$result$chi2 %>% purrr::pluck("chi2"),
+      p.value = .data$wald_test$result$chi2 %>% purrr::pluck("P"),
+    ) %>%
+    dplyr::ungroup() %>%
+    dplyr::select(.data$term, .data$df, .data$statistic, .data$p.value)
 }

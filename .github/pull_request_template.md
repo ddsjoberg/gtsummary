@@ -14,7 +14,7 @@ Reviewer Checklist (if item does not apply, mark is as complete)
 - [ ] If a new function was added, function included in `_pkgdown.yml`
 - [ ] If a bug was fixed, a unit test was added for the bug check
 - [ ] Run `pkgdown::build_site()`. Check the R console for errors, and review the rendered website.
-- [ ] Code coverage is suitable for any new functions/features. Review coverage with `covr::report()`. Before you run, set `Sys.setenv(NOT_CRAN="true")` and begin in a fresh R session without any packages loaded. 
+- [ ] Code coverage is suitable for any new functions/features. Review coverage with `withr::with_envvar(new = c("NOT_CRAN" = "true"), covr::report())`. Begin in a fresh R session without any packages loaded. 
 - [ ] R CMD Check runs without errors, warnings, and notes
 - [ ] `usethis::use_spell_check()` runs with no spelling errors in documentation
 

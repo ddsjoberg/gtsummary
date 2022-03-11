@@ -129,7 +129,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
     )
 
   # message about missing data
-  if (quiet && any(is.na(data_wide[[2]]) + is.na(data_wide[[3]]) == 1)) {
+  if (!quiet && any(is.na(data_wide[[2]]) + is.na(data_wide[[3]]) == 1)) {
     glue(
       "Note for variable '{variable}': Some observations included in the ",
       "calculation of summary statistics ",
@@ -309,8 +309,7 @@ add_p_test_emmeans <- function(data, variable, by, type,
   if (!is.null(group)) assert_package("lme4")
   if (is_survey(data)) assert_package("survey")
   data_frame <-
-    switch(is.data.frame(data), data) %||%
-    .remove_survey_cols(data)
+    .extract_data_frame(data)
 
   # checking inputs
   if (!type %in% c("continuous", "dichotomous")) {
@@ -456,13 +455,13 @@ add_p_test_smd <- function(data, variable, by, tbl, type,
   assert_package("smd")
   if (is_survey(data)) assert_package("survey")
 
-  if (use_data_frame(data)[[by]] %>% stats::na.omit() %>% unique() %>% length() != 2L) {
+  if (.extract_data_frame(data)[[by]] %>% stats::na.omit() %>% unique() %>% length() != 2L) {
     stop("SMD requires exactly two levels of `by=` variable", call. = FALSE)
   }
 
   smd_args <-
-    list(x = use_data_frame(data)[[variable]],
-         g = use_data_frame(data)[[by]],
+    list(x = .extract_data_frame(data)[[variable]],
+         g = .extract_data_frame(data)[[by]],
          std.error = TRUE,
          na.rm = TRUE)
 

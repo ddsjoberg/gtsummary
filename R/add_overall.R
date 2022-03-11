@@ -113,7 +113,7 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
   # removing 'by' variable from data
   # (so it won't show up in the overall tbl_summary)
   # x_copy$inputs[["data"]] <-
-  #   select(use_data_frame(x$inputs[["data"]]), -x[["by"]])
+  #   select(.extract_data_frame(x$inputs[["data"]]), -x[["by"]])
   x_copy$inputs$include <- x_copy$inputs$include %>% setdiff(x$inputs$by)
 
   # if overall row, already included in data -----------------------------------
@@ -125,7 +125,7 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
   statistic <-
     .formula_list_to_named_list(
       x = statistic,
-      data = use_data_frame(x_copy$inputs$data),
+      data = .extract_data_frame(x_copy$inputs$data),
       var_info = x_copy$table_body,
       arg_name = "statistic",
       type_check = chuck(type_check, "is_character", "fn"),
@@ -134,14 +134,14 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
   x_copy$inputs$statistic <-
     .formula_list_to_named_list(
       x = x_copy$inputs$statistic,
-      data = use_data_frame(x_copy$inputs$data),
+      data = .extract_data_frame(x_copy$inputs$data),
       var_info = x_copy$table_body,
       arg_name = "statistic"
     )
   digits <-
     .formula_list_to_named_list(
       x = digits,
-      data = use_data_frame(x_copy$inputs$data),
+      data = .extract_data_frame(x_copy$inputs$data),
       var_info = x_copy$table_body,
       arg_name = "digits",
       type_check = chuck(type_check, "digits", "fn"),
@@ -150,7 +150,7 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
   x_copy$inputs$digits <-
     .formula_list_to_named_list(
       x = x_copy$inputs$digits,
-      data = use_data_frame(x_copy$inputs$data),
+      data = .extract_data_frame(x_copy$inputs$data),
       var_info = x_copy$table_body,
       arg_name = "digits"
     )
