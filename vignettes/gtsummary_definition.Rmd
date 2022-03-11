@@ -76,7 +76,7 @@ tibble::tribble(
   "spanning_header", "Includes text printed above columns as spanning headers.",
   "interpret_spanning_header", "the {gt} function that is used to interpret the column spanning headers, `gt::md()` or `gt::html()`",
   "modify_stat_{*}", "any column beginning with `modify_stat_` is a statistic available to report in `modify_header()` (and others)",
-  "selector_{*}", "any column beginning with `selector_` is a column that is scoped in `modify_header()` (and friends) to be used in a selecting environment"
+  "modify_selector_{*}", "any column beginning with `modify_selector_` is a column that is scoped in `modify_header()` (and friends) to be used in a selecting environment"
 ) %>%
   gt::gt() %>%
   gt::fmt_markdown(columns = everything()) %>%

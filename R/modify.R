@@ -327,10 +327,10 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
     data = x$table_body,
     var_info =
       x$table_styling$header %>%
-      select(.data$column, .data$hide, starts_with("selector_")) %>%
+      select(.data$column, .data$hide, starts_with("modify_selector_")) %>%
       dplyr::rename_with(
-        .fn = ~stringr::str_remove(., pattern = fixed("selector_")),
-        starts_with("selector_")
+        .fn = ~stringr::str_remove(., pattern = fixed("modify_selector_")),
+        starts_with("modify_selector_")
       ),
     arg_name = "... or update",
     type_check = chuck(type_check, "is_string_or_na", "fn"),
