@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Total change to the way statistics are saved and reported in `modify_header()`, `modify_spanning_header()`, `modify_footnote()`, and `modify_caption()`. There is now a standardized place to these statistics to be saved in all gtsummary tables (in `x$table_styling$header` in columns starting with "modify_stat_"). The modify functions have been updated to access the statistics from the header data frame. An added benefit to this structure, is that the statistics are available after tables are merged and stacked. Statistics available in modify_caption() are taken from the "label" column. (#1165, #1101)
+
 * Added `add_global_p(anova_fun=)` argument allowing users to pass custom functions to calculate global p-values when `car::Anova()` does not support the model type. (#1149)
 
 * Added tidier `tidy_wald_test()`, a generic function that can calculate Wald test statistics for groups of variables in a model. The tidier expects the model object is supported by both `vcov()` and `coef()` to obtain the variance-covariance matrix and the coef vector.
