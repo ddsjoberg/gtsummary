@@ -276,6 +276,8 @@ add_stat <- function(x, fns, location = NULL, ...) {
     )
 
   # return tbl_summary object --------------------------------------------------
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   x$call_list <- updated_call_list
   x
 }

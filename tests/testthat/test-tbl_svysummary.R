@@ -415,7 +415,14 @@ test_that("tbl_svysummary-provides similar results than tbl_summary for simple w
     tidyr::uncount(Freq) %>%
     tbl_summary()
   expect_equal(t1$table_body, t2$table_body)
-  expect_equal(t1$table_styling, t2$table_styling)
+  expect_equal(
+    t1$table_styling %>% purrr::list_modify(header = NULL),
+    t2$table_styling %>% purrr::list_modify(header = NULL)
+  )
+  expect_equal(
+    t1$table_styling$header %>% select(-contains("unweighted")),
+    t2$table_styling$header %>% select(-contains("unweighted"))
+  )
 
   statistic <- list(all_continuous() ~ "{mean}", all_categorical() ~ "{n} ({p}%)")
   t1 <- survey::svydesign(~1, data = trial, weights = ~1) %>%
@@ -423,7 +430,14 @@ test_that("tbl_svysummary-provides similar results than tbl_summary for simple w
   t2 <- trial %>%
     tbl_summary(by = trt, statistic = statistic)
   expect_equal(t1$table_body, t2$table_body)
-  expect_equal(t1$table_styling, t2$table_styling)
+  expect_equal(
+    t1$table_styling %>% purrr::list_modify(header = NULL),
+    t2$table_styling %>% purrr::list_modify(header = NULL)
+  )
+  expect_equal(
+    t1$table_styling$header %>% select(-contains("unweighted")) %>% select(all_of(names(.) %>% sort())),
+    t2$table_styling$header %>% select(-contains("unweighted")) %>% select(all_of(names(.) %>% sort()))
+  )
 })
 
 test_that("tbl_svysummary-calculates unweighted N with continuous variables and {N_obs_unweighted}", {

@@ -154,6 +154,8 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
     )
 
   # return x -------------------------------------------------------------------
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   x$call_list <- updated_call_list
   x
 }

@@ -105,6 +105,8 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
   x <- modify_header(x, q.value = paste0("**", translate_text("q-value"), "**"))
 
   # return final object --------------------------------------------------------
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   # adding call
   x$call_list <- updated_call_list
 

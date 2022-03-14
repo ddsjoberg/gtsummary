@@ -155,6 +155,8 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
     x <- modify_footnote(x, n ~ stat_to_label(statistic))
   }
 
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   # adding indicator to output that add_n was run on this data
   x$call_list <- updated_call_list
   # returning tbl_summary object
@@ -270,6 +272,8 @@ add_n.tbl_survfit <- function(x, ...) {
       hide = FALSE
     )
 
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   # adding indicator to output that add_n was run on this data
   x$call_list <- updated_call_list
   x
@@ -366,6 +370,8 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
       fmt_fun = style_number
     )
 
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   x$call_list <- updated_call_list
   x
 }

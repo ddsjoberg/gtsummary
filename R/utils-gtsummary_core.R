@@ -97,11 +97,24 @@
       interpret_spanning_header = "gt::md",
       spanning_header = NA_character_
     ) %>%
-    dplyr::rows_update(
-      x$table_styling$header,
-      by = "column"
-    )
+    .rows_update_table_styling_header(x$table_styling$header)
 
   # return x -------------------------------------------------------------------
   x
+}
+
+.rows_update_table_styling_header <- function(x, y) {
+  common_columns <-intersect(names(x), names(y))
+
+  x %>%
+    # updating rows in header
+    dplyr::rows_update(
+      y %>% select(all_of(common_columns)),
+      by = "column"
+    ) %>%
+    # re-adding the columns not in the original header table
+    dplyr::left_join(
+      y %>% select(-all_of(setdiff(common_columns, "column"))),
+      by = "column"
+    )
 }
