@@ -660,3 +660,76 @@ test_that("no error with factor variable with all NA and no specifed levels", {
     c("0 (NA%)", "98")
   )
 })
+
+
+test_that("modify_*() family works", {
+  tbl0 <-
+    trial %>%
+    select(trt, age, grade) %>%
+    tbl_summary(by = trt)
+  tbl1 <-
+    tbl0 %>%
+    add_difference() %>%
+    add_n() %>%
+    add_overall() %>%
+    modify_spanning_header(everything() ~ "N = {N}") %>%
+    modify_header(all_stat_cols(FALSE) ~ "{level} N = {n}",
+                  stat_0 = "Overall N = {N}") %>%
+    modify_footnote(label = "N = {N}") %>%
+    modify_caption("N = {N}")
+  tbl2 <-
+    tbl0 %>%
+    add_overall() %>%
+    add_p() %>%
+    add_n() %>%
+    modify_spanning_header(everything() ~ "N = {N}") %>%
+    modify_header(all_stat_cols(FALSE) ~ "{level} N = {n}",
+                  stat_0 = "Overall N = {N}") %>%
+    modify_footnote(label = "N = {N}") %>%
+    modify_caption("N = {N}")
+
+  expect_false(
+    any(is.na(tbl1$table_styling$header$modify_stat_N))
+  )
+  expect_false(
+    any(is.na(tbl2$table_styling$header$modify_stat_N))
+  )
+
+  expect_true(
+    all(tbl1$table_styling$header$spanning_header == "N = 200")
+  )
+  expect_true(
+    all(tbl2$table_styling$header$spanning_header == "N = 200")
+  )
+
+  expect_equal(
+    tbl1$table_styling$header %>%
+      filter(startsWith(column, "stat_")) %>%
+      pull(label),
+    c("Overall N = 200", "Drug A N = 98", "Drug B N = 102")
+  )
+  expect_equal(
+    tbl2$table_styling$header %>%
+      filter(startsWith(column, "stat_")) %>%
+      pull(label),
+    c("Overall N = 200", "Drug A N = 98", "Drug B N = 102")
+  )
+
+  expect_equal(
+    tbl1$table_styling$caption,
+    "N = 200",
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    tbl2$table_styling$caption,
+    "N = 200",
+    ignore_attr = TRUE
+  )
+
+  expect_equal(
+    tbl_merge(list(tbl0, tbl0))$table_styling$header %>%
+      filter(startsWith(column, "stat_")) %>%
+      dplyr::pull(modify_stat_n),
+    c(98, 102, 98, 102)
+  )
+})

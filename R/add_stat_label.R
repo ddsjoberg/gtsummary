@@ -192,6 +192,8 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   }
 
   # keeping track of all functions previously run ------------------------------
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
   x$call_list <- updated_call_list
 
   x

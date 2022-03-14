@@ -240,6 +240,18 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
       conf.level = conf.level
     )
 
+  # adding the Ns to the `x$table_styling$header`
+  x$table_styling$header <-
+    x[c("N", "n", "N_event")] %>%
+    purrr::compact() %>%
+    as_tibble() %>%
+    dplyr::rename_with(.fn = ~paste0("modify_stat_", .), .cols = everything()) %>%
+    full_join(
+      x$table_styling$header,
+      by = character()
+    ) %>%
+    dplyr::relocate(starts_with("modify_stat_"), .after = last_col())
+
   # running any additional mods ------------------------------------------------
   x <-
     get_theme_element("tbl_regression-fn:addnl-fn-to-run", default = identity) %>%
