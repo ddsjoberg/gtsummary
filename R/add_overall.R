@@ -226,11 +226,12 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
     )
 
   # adding overall stat to the table_body data frame
-  x$table_body <-
-    bind_cols(
-      x$table_body,
-      overall %>% select(c("stat_0"))
-    )
+  x <-
+    x %>%
+    modify_table_body(~bind_cols(.x, overall %>% select(c("stat_0"))))
+
+  # fill in the Ns in the header table modify_stat_* columns
+  x <- .fill_table_header_modify_stats(x)
 
   if (last == FALSE) {
     x <- x %>%
