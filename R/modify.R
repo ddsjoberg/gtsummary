@@ -346,13 +346,40 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
 
   imap(
     update,
-    ~ expr(ifelse(!is.na(!!.x), glue(!!.x), NA_character_)) %>%
-      eval_tidy(
-        data =
-          df_header %>%
-          filter(.data$column %in% .y) %>%
-          as.list() %>%
-          discard(is.na)
+    function(x, y) {
+      if (!y %in% df_header$column) {
+        cli::cli_alert_danger("Column {.val {y}} not found. Select from {.val {rev(df_header$column)}}")
+        glue("Error processing `modify_*()` for column '{y}'.") %>% stop(call. = FALSE)
+      }
+      lst_env_for_eval <-
+        df_header %>%
+        filter(.data$column %in% .env$y) %>%
+        as.list() %>%
+        discard(is.na)
+
+      tryCatch(
+        expr(ifelse(!is.na(!!x), glue(!!x), NA_character_)) %>%
+          eval_tidy(data = lst_env_for_eval),
+        error = function(e) {
+          # if string has open and close {}, then print detailed message
+          if (!is_empty(lst_env_for_eval) && stringr::str_detect(x, pattern = "\\{*\\}")) {
+            tryCatch(
+              {
+                cls <-
+                  imap(lst_env_for_eval, ~glue("{{.field {.y}}} ({{.cls {class(.x)[1]}}})")) %>%
+                  paste(collapse = ", ")
+                paste("There was an error processing column {.val {y}}--likely a glue syntax error.",
+                      "The following fields are available to insert into the string:",
+                      cls) %>%
+                  cli::cli_alert_danger()
+              },
+              error = function(e) invisible()
+            )
+          }
+          glue("Error processing `modify_*()` for column '{y}'.") %>% stop(call. = FALSE)
+        }
       )
+    }
   )
 }
+
