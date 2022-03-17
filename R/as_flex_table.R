@@ -100,14 +100,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   }
 
   # taking each kable function call, concatenating them with %>% separating them
-  flextable_calls[include] %>%
-    # removing NULL elements
-    unlist() %>%
-    compact() %>%
-    # concatenating expressions with %>% between each of them
-    reduce(function(x, y) expr(!!x %>% !!y)) %>%
-    # evaluating expressions
-    eval()
+  .eval_list_of_exprs(flextable_calls[include])
 }
 
 # creating flextable calls from table_styling ----------------------------------

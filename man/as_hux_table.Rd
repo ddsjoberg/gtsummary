@@ -2,6 +2,7 @@
 % Please edit documentation in R/as_hux_table.R
 \name{as_hux_table}
 \alias{as_hux_table}
+\alias{as_hux_xlsx}
 \title{Convert gtsummary object to a huxtable object}
 \usage{
 as_hux_table(
@@ -10,6 +11,8 @@ as_hux_table(
   return_calls = FALSE,
   strip_md_bold = FALSE
 )
+
+as_hux_xlsx(x, file, include = everything(), strip_md_bold = FALSE)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package

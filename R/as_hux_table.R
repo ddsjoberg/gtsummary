@@ -23,7 +23,7 @@
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
 #' @inheritParams as_flex_table
-#' @export
+#' @name as_hux_table
 #' @return A {huxtable} object
 #' @family gtsummary output types
 #' @author David Hugh-Jones
@@ -33,8 +33,10 @@
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   as_hux_table()
-#' @export
+NULL
 
+#' @export
+#' @rdname as_hux_table
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = FALSE) {
   assert_package("huxtable", "as_hux_table()")
@@ -87,14 +89,51 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
     return(huxtable_calls[include])
   }
 
-  huxtable_calls[include] %>%
-    # removing NULL elements
-    unlist() %>%
-    compact() %>%
-    # concatenating expressions with %>% between each of them
-    reduce(function(x, y) expr(!!x %>% !!y)) %>%
-    # evaluating expressions
-    eval()
+  .eval_list_of_exprs(huxtable_calls[include])
+}
+
+#' @export
+#' @rdname as_hux_table
+as_hux_xlsx <- function(x, file, include = everything(), strip_md_bold = FALSE) {
+  assert_package("openxlsx", fn = "as_hux_xlsx()")
+
+  # save list of expressions to run --------------------------------------------
+  huxtable_calls <-
+    as_hux_table(x = x, include = include,
+                 strip_md_bold = strip_md_bold, return_calls = TRUE) %>%
+    purrr::list_modify(set_left_padding = NULL, set_left_padding2 = NULL)
+
+  # construct calls to manually indent the columns -----------------------------
+  # extract the indentation instructions from table_styling
+  df_text_format <-
+    gtsummary::.table_styling_expr_to_row_number(x) %>%
+    purrr::pluck("table_styling", "text_format") %>%
+    dplyr::filter(.data$format_type %in% c("indent", "indent2"))
+
+  # create expressions to add indentations to `x$table_body`
+  indent_exprs <-
+    purrr::pmap(
+      list(df_text_format$column, df_text_format$row_numbers, df_text_format$format_type),
+      function(column, row_numbers, format_type) {
+        indent_spaces <- ifelse(format_type %in% "indent", "     ", "          ")
+        rlang::expr(
+          dplyr::mutate(
+            dplyr::across(dplyr::all_of(!!column),
+                          ~ifelse(dplyr::row_number() %in% !!row_numbers,
+                                  paste0(!!indent_spaces, .), .)))
+        )
+      }
+    )
+
+  # insert indentation code before 'as_huxtable()' call ------------------------
+  index_n <- which(names(huxtable_calls) %in% "huxtable")
+  huxtable_calls <- append(x = huxtable_calls,
+                           values = list("indent" = indent_exprs),
+                           after = index_n - 1L)
+
+  # run hux commands and export to excel ---------------------------------------
+  .eval_list_of_exprs(huxtable_calls[include]) %>%
+    huxtable::quick_xlsx(file = file, open = FALSE)
 }
 
 # creating huxtable calls from table_styling -----------------------------------
