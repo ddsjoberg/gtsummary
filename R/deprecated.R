@@ -29,7 +29,7 @@ add_p_ <- function(...) {
 #' @rdname deprecated
 #' @export
 as_flextable <- function(...) {
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_stop(
     "1.3.3", "gtsummary::as_flextable()", "as_flex_table()",
     details = paste(
       "The `as_flextable()` function graduated",
@@ -42,9 +42,6 @@ as_flextable <- function(...) {
     ) %>%
       stringr::str_wrap()
   )
-
-  # passing args to `as_flex_table()` ------------------------------------------
-  as_flex_table(...)
 }
 
 # v1.3.6 -----------------------------------------------------------------------
