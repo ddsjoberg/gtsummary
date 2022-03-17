@@ -98,7 +98,9 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
   }
 
   # taking each gt function call, concatenating them with %>% separating them
-  .eval_list_of_exprs(exprs = gt_calls[include])
+  gt_calls[include] %>%
+  c(parse_expr(getOption("gtsummary.as_gt.addl_cmds", default = "NULL"))) %>%
+  .eval_list_of_exprs()
 }
 
 # creating gt calls from table_styling -----------------------------------------
