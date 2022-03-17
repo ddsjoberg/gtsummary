@@ -24,6 +24,8 @@
 #'
 #' @inheritParams as_flex_table
 #' @inheritParams huxtable::quick_xlsx
+#' @param bold_header_rows logical indidating whether to bold header rows.
+#' Default is `TRUE`
 #' @name as_hux_table
 #' @return A {huxtable} object
 #' @family gtsummary output types
@@ -95,13 +97,13 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
 
 #' @export
 #' @rdname as_hux_table
-as_hux_xlsx <- function(x, file, include = everything(), strip_md_bold = FALSE) {
+as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE) {
   assert_package("openxlsx", fn = "as_hux_xlsx()")
 
   # save list of expressions to run --------------------------------------------
   huxtable_calls <-
     as_hux_table(x = x, include = include,
-                 strip_md_bold = strip_md_bold, return_calls = TRUE) %>%
+                 strip_md_bold = TRUE, return_calls = TRUE) %>%
     purrr::list_modify(set_left_padding = NULL, set_left_padding2 = NULL)
 
   # construct calls to manually indent the columns -----------------------------
@@ -131,6 +133,12 @@ as_hux_xlsx <- function(x, file, include = everything(), strip_md_bold = FALSE) 
   huxtable_calls <- append(x = huxtable_calls,
                            values = list("indent" = indent_exprs),
                            after = index_n - 1L)
+
+  # bold header rows -----------------------------------------------------------
+  if (isTRUE(bold_header_rows)) {
+    huxtable_calls[["bold_header_rows"]] <-
+      expr(huxtable::style_header_rows(bold = TRUE))
+  }
 
   # run hux commands and export to excel ---------------------------------------
   .eval_list_of_exprs(huxtable_calls[include]) %>%
@@ -363,9 +371,13 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # set_markdown ---------------------------------------------------------------
   header_rows <- switch(any_spanning_header, 1:2) %||% 1L
   huxtable_calls[["set_markdown"]] <-
-    list(set_markdown = expr(huxtable::set_markdown(row = !!header_rows,
-                                                    col = huxtable::everywhere,
-                                                    value = TRUE)))
+    list(
+      set_markdown =
+        expr(huxtable::set_markdown(row = !!header_rows,
+                                    col = huxtable::everywhere,
+                                    value = TRUE)),
+      set_header_rows = expr(huxtable::set_header_rows(row = !!header_rows, value = TRUE))
+    )
 
   # align ----------------------------------------------------------------------
   df_align <-

@@ -12,7 +12,7 @@ as_hux_table(
   strip_md_bold = FALSE
 )
 
-as_hux_xlsx(x, file, include = everything(), strip_md_bold = FALSE)
+as_hux_xlsx(x, file, include = everything(), bold_header_rows = TRUE)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -30,6 +30,9 @@ as a list of expressions.}
 bold weight) in column labels and spanning headers are removed.}
 
 \item{file}{File path for the output.}
+
+\item{bold_header_rows}{logical indidating whether to bold header rows.
+Default is \code{TRUE}}
 }
 \value{
 A {huxtable} object
