@@ -23,6 +23,7 @@
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
 #' @inheritParams as_flex_table
+#' @inheritParams huxtable::quick_xlsx
 #' @name as_hux_table
 #' @return A {huxtable} object
 #' @family gtsummary output types

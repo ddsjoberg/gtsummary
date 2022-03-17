@@ -28,6 +28,8 @@ as a list of expressions.}
 
 \item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
 bold weight) in column labels and spanning headers are removed.}
+
+\item{file}{File path for the output.}
 }
 \value{
 A {huxtable} object
