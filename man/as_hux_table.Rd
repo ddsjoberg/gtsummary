@@ -9,7 +9,7 @@ as_hux_table(
   x,
   include = everything(),
   return_calls = FALSE,
-  strip_md_bold = FALSE
+  strip_md_bold = NULL
 )
 
 as_hux_xlsx(x, file, include = everything(), bold_header_rows = TRUE)
@@ -26,12 +26,11 @@ Default is \code{everything()}.}
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
-\item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.}
+\item{strip_md_bold}{DEPRECATED}
 
 \item{file}{File path for the output.}
 
-\item{bold_header_rows}{logical indidating whether to bold header rows.
+\item{bold_header_rows}{logical indicating whether to bold header rows.
 Default is \code{TRUE}}
 }
 \value{
@@ -63,6 +62,16 @@ it to a huxtable and formats the table with the following huxtable functions:
 Any one of these commands may be omitted using the \verb{include=} argument.
 }
 
+\section{Excel Output}{
+
+
+Use the \code{as_hux_xlsx()} function to save a copy of the table in an excel file.
+The file is saved using \code{huxtable::quick_xlsx()}.
+The indentation and markdown syntax in the headers are not recognized
+and exported to the excel file. The \code{as_hux_xlsx()} function will bold
+the header rows and manually indent the needed columns.
+}
+
 \examples{
 \dontshow{if (broom.helpers::.assert_package("huxtable", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 trial \%>\%
@@ -81,6 +90,6 @@ Other gtsummary output types:
 \code{\link{as_tibble.gtsummary}()}
 }
 \author{
-David Hugh-Jones
+David Hugh-Jones, Daniel D. Sjoberg
 }
 \concept{gtsummary output types}

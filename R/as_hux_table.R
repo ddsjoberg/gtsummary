@@ -22,14 +22,23 @@
 #'
 #' Any one of these commands may be omitted using the `include=` argument.
 #'
+#' @section Excel Output:
+#'
+#' Use the `as_hux_xlsx()` function to save a copy of the table in an excel file.
+#' The file is saved using `huxtable::quick_xlsx()`.
+#' The indentation and markdown syntax in the headers are not recognized
+#' and exported to the excel file. The `as_hux_xlsx()` function will bold
+#' the header rows and manually indent the needed columns.
+#'
 #' @inheritParams as_flex_table
 #' @inheritParams huxtable::quick_xlsx
-#' @param bold_header_rows logical indidating whether to bold header rows.
+#' @param bold_header_rows logical indicating whether to bold header rows.
 #' Default is `TRUE`
+#' @param strip_md_bold DEPRECATED
 #' @name as_hux_table
 #' @return A {huxtable} object
 #' @family gtsummary output types
-#' @author David Hugh-Jones
+#' @author David Hugh-Jones, Daniel D. Sjoberg
 #' @examplesIf broom.helpers::.assert_package("huxtable", boolean = TRUE)
 #' trial %>%
 #'   dplyr::select(trt, age, grade) %>%
@@ -41,24 +50,16 @@ NULL
 #' @export
 #' @rdname as_hux_table
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
-                         strip_md_bold = FALSE) {
+                         strip_md_bold = NULL) {
   assert_package("huxtable", "as_hux_table()")
-
+  if (!is.null(strip_md_bold) || isTRUE(strip_md_bold)) {
+    lifecycle::deprecate_warn("1.5.3", "gtsummary::as_hux_table(strip_md_bold=)")
+  }
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .table_styling_expr_to_row_number(x)
-
-  # stripping markdown asterisk ------------------------------------------------
-  if (strip_md_bold == TRUE) {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      mutate_at(
-        vars(.data$label, .data$spanning_header),
-        ~ str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
-      )
-  }
 
   # creating list of huxtable calls -------------------------------------------
   huxtable_calls <- table_styling_to_huxtable_calls(x = x)
@@ -102,8 +103,7 @@ as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE
 
   # save list of expressions to run --------------------------------------------
   huxtable_calls <-
-    as_hux_table(x = x, include = include,
-                 strip_md_bold = TRUE, return_calls = TRUE) %>%
+    as_hux_table(x = x, include = include, return_calls = TRUE) %>%
     purrr::list_modify(set_left_padding = NULL, set_left_padding2 = NULL)
 
   # construct calls to manually indent the columns -----------------------------
