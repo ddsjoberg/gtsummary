@@ -9,7 +9,7 @@ as_hux_table(
   x,
   include = everything(),
   return_calls = FALSE,
-  strip_md_bold = NULL
+  strip_md_bold = FALSE
 )
 
 as_hux_xlsx(x, file, include = everything(), bold_header_rows = TRUE)

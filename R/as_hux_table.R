@@ -50,9 +50,9 @@ NULL
 #' @export
 #' @rdname as_hux_table
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
-                         strip_md_bold = NULL) {
+                         strip_md_bold = FALSE) {
   assert_package("huxtable", "as_hux_table()")
-  if (!is.null(strip_md_bold) || isTRUE(strip_md_bold)) {
+  if (!isFALSE(strip_md_bold)) {
     lifecycle::deprecate_warn("1.5.3", "gtsummary::as_hux_table(strip_md_bold=)")
   }
   # running pre-conversion function, if present --------------------------------
