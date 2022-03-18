@@ -75,9 +75,8 @@ gts_mapper <- function(x, context) {
           "has been migrated to a function argument or a gtsummary theme.",
           "\n{.url https://www.danieldsjoberg.com/gtsummary/articles/themes.html}") %>%
     cli::cli_alert_danger()
-    return(getOption(x, default = default))
   }
-  return(NULL)
+  getOption(x, default = default)
 }
 
 
