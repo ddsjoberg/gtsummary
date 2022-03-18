@@ -95,7 +95,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     pvalue_fun %||%
     get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    .get_deprecated_option("gtsummary.pvalue_fun", default = style_pvalue) %>%
     gts_mapper("add_p(pvalue_fun=)")
 
   # converting bare arguments to string ----------------------------------------
@@ -419,7 +419,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
       pvalue_fun %||%
       get_theme_element("add_p.tbl_cross-arg:pvalue_fun") %||%
       get_theme_element("pkgwide-fn:pvalue_fun") %||%
-      getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+      .get_deprecated_option("gtsummary.pvalue_fun", default = style_pvalue) %>%
       gts_mapper("add_p(pvalue_fun=)")
   } else {
     pvalue_fun <-
@@ -545,7 +545,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   pvalue_fun <-
     pvalue_fun %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    .get_deprecated_option("gtsummary.pvalue_fun", default = style_pvalue) %>%
     gts_mapper("add_p(pvalue_fun=)")
 
   include <- .select_to_varnames(select = {{ include }}, var_info = x$meta_data)
@@ -729,7 +729,7 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
     get_theme_element("add_p.tbl_svysummary-arg:pvalue_fun") %||%
     get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    .get_deprecated_option("gtsummary.pvalue_fun", default = style_pvalue) %>%
     gts_mapper("add_p(pvalue_fun=)")
 
 

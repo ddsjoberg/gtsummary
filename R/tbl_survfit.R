@@ -151,9 +151,9 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   estimate_fun <-
     estimate_fun %||%
     switch(estimate_type,
-      probs = getOption("gtsummary.tbl_survfit.probs.estimate_fun") %||%
+      probs = .get_deprecated_option("gtsummary.tbl_survfit.probs.estimate_fun") %||%
         partial(style_sigfig, digits = 2),
-      times = getOption("gtsummary.tbl_survfit.times.estimate_fun") %||%
+      times = .get_deprecated_option("gtsummary.tbl_survfit.times.estimate_fun") %||%
         partial(style_percent, symbol = TRUE)
     ) %>%
     gts_mapper("tbl_survfit(estimate_fun=)")
