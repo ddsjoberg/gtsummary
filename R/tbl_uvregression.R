@@ -103,11 +103,11 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     pvalue_fun %||%
     get_theme_element("tbl_regression-arg:pvalue_fun") %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    .get_deprecated_option("gtsummary.pvalue_fun", default = style_pvalue) %>%
     gts_mapper("tbl_uvregression(pvalue_fun=)")
   estimate_fun <-
     estimate_fun %||%
-    getOption(
+    .get_deprecated_option(
       "gtsummary.tbl_regression.estimate_fun",
       default = ifelse(exponentiate == TRUE, style_ratio, style_sigfig)
     ) %>%
@@ -117,7 +117,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
     get_theme_element("tbl_regression-arg:conf.int", default = TRUE)
   conf.level <-
     conf.level %||%
-    getOption("gtsummary.conf.level", default = 0.95)
+    .get_deprecated_option("gtsummary.conf.level", default = 0.95)
 
   # bare to string/enexpr ------------------------------------------------------
   # updated method and y inputs to be bare, and converting them to strings

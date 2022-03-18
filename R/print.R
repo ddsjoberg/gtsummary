@@ -17,7 +17,7 @@ print.gtsummary <- function(x, print_engine = NULL, ...) {
   # select print engine
   print_engine <-
     print_engine %||%
-    getOption("gtsummary.print_engine") %||%
+    .get_deprecated_option("gtsummary.print_engine") %||%
     get_theme_element("pkgwide-str:print_engine") %||%
     "gt" # default printer is gt
 
@@ -49,7 +49,7 @@ knit_print.gtsummary <- function(x, ...) {
   # assigning print engine -----------------------------------------------------
   # select print engine
   print_engine <-
-    getOption("gtsummary.print_engine") %||%
+    .get_deprecated_option("gtsummary.print_engine") %||%
     get_theme_element("pkgwide-str:print_engine")
 
   # gt is the default printer for html output

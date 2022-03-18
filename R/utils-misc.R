@@ -67,6 +67,20 @@ gts_mapper <- function(x, context) {
   purrr::as_mapper(x)
 }
 
+# All documentation of the global options was removed in v1.3.1.
+# This messaging was added in v1.5.3
+.get_deprecated_option <- function(x, default = NULL) {
+  if (!is.null(getOption(x, default = NULL))) {
+    paste("Global option {.val {x}} is soft deprecated and will",
+          "{.emph soon} be removed from {.pkg gtsummary}.\nThe functionality",
+          "has been migrated to a function argument or a gtsummary theme.",
+          "\n{.url https://www.danieldsjoberg.com/gtsummary/articles/themes.html}") %>%
+    cli::cli_alert_danger()
+  }
+  getOption(x, default = default)
+}
+
+
 type_check <-
   list(
     is_string =
