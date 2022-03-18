@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The global options previously available have now been soft deprecated. All documentation of the global options was removed in v1.3.1. (#1085)
+
 * The `as_flextable()` function has been upgraded from a soft to a hard deprecation; use `as_flex_table()` instead.
 
 * Total change to the way statistics are saved and reported in `modify_header()`, `modify_spanning_header()`, `modify_footnote()`, and `modify_caption()`. There is now a standardized place to these statistics to be saved in all gtsummary tables (in `x$table_styling$header` in columns starting with "modify_stat_"). The modify functions have been updated to access the statistics from the header data frame. An added benefit to this structure, is that the statistics are available after tables are merged and stacked. Statistics available in modify_caption() are taken from the "label" column. (#1165, #1101)

@@ -204,13 +204,13 @@
     if (summary_type %in% c("continuous", "continuous2")) {
       test_func <-
         get_theme_element("add_p.tbl_summary-attr:test.continuous.group_by2") %||%
-        getOption("gtsummary.add_p.test.continuous.group_by2", default = "lme4")
+        .get_deprecated_option("gtsummary.add_p.test.continuous.group_by2", default = "lme4")
       return(test_func)
     }
     if (summary_type %in% c("categorical", "dichotomous")) {
       test_func <-
         get_theme_element("add_p.tbl_summary-attr:test.categorical.group_by2") %||%
-        getOption("gtsummary.add_p.test.categorical.group_by2", default = "lme4")
+        .get_deprecated_option("gtsummary.add_p.test.categorical.group_by2", default = "lme4")
       return(test_func)
     }
   }
@@ -219,13 +219,13 @@
   if (summary_type %in% c("continuous", "continuous2") & length(unique(data[[by]])) == 2) {
     test_func <-
       get_theme_element("add_p.tbl_summary-attr:test.continuous_by2") %||%
-      getOption("gtsummary.add_p.test.continuous_by2", default = "wilcox.test")
+      .get_deprecated_option("gtsummary.add_p.test.continuous_by2", default = "wilcox.test")
     return(test_func)
   }
   if (summary_type %in% c("continuous", "continuous2")) {
     test_func <-
       get_theme_element("add_p.tbl_summary-attr:test.continuous") %||%
-      getOption("gtsummary.add_p.test.continuous", default = "kruskal.test")
+      .get_deprecated_option("gtsummary.add_p.test.continuous", default = "kruskal.test")
     return(test_func)
   }
 
@@ -248,12 +248,12 @@
   if (isTRUE(min_exp >= 5 || is.nan(min_exp))) {
     test_func <-
       get_theme_element("add_p.tbl_summary-attr:test.categorical") %||%
-      getOption("gtsummary.add_p.test.categorical", default = "chisq.test.no.correct")
+      .get_deprecated_option("gtsummary.add_p.test.categorical", default = "chisq.test.no.correct")
     return(test_func)
   }
   test_func <-
     get_theme_element("add_p.tbl_summary-attr:test.categorical.low_count") %||%
-    getOption("gtsummary.add_p.test.categorical.low_count", default = "fisher.test")
+    .get_deprecated_option("gtsummary.add_p.test.categorical.low_count", default = "fisher.test")
   return(test_func)
 }
 

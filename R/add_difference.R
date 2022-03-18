@@ -137,7 +137,7 @@ add_difference <- function(x, test = NULL, group = NULL,
     pvalue_fun %||%
     get_theme_element("add_p.tbl_summary-arg:pvalue_fun") %||%
     get_theme_element("pkgwide-fn:pvalue_fun") %||%
-    getOption("gtsummary.pvalue_fun", default = style_pvalue) %>%
+    .get_deprecated_option("gtsummary.pvalue_fun", default = style_pvalue) %>%
     gts_mapper("add_p(pvalue_fun=)")
 
   group <-
