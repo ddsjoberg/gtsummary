@@ -149,7 +149,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
         columns = "p.value",
         label = "**p-value**",
         hide = FALSE,
-        fmt_fun = x$inputs$pvalue_fun %||% getOption("gtsummary.pvalue_fun", default = style_pvalue)
+        fmt_fun = x$inputs$pvalue_fun %||% .get_deprecated_option("gtsummary.pvalue_fun", default = style_pvalue)
       )
   }
   # replacing the combined rows with a single row
