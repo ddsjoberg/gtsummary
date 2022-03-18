@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* The global options previously available have now been soft deprecated. All documentation of the global options was removed in v1.3.1. (Deprecate global options #1085)
+* The global options previously available have now been soft deprecated. All documentation of the global options was removed in v1.3.1. (#1085)
 
 * The `as_flextable()` function has been upgraded from a soft to a hard deprecation; use `as_flex_table()` instead.
 
