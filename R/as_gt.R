@@ -99,7 +99,7 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
 
   # taking each gt function call, concatenating them with %>% separating them
   gt_calls[include] %>%
-  c(parse_expr(getOption("gtsummary.as_gt.addl_cmds", default = "NULL"))) %>%
+  c(parse_expr(.get_deprecated_option("gtsummary.as_gt.addl_cmds", default = "NULL"))) %>%
   .eval_list_of_exprs()
 }
 
