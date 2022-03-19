@@ -348,8 +348,8 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
     update,
     function(x, y) {
       if (!y %in% df_header$column) {
-        cli::cli_alert_danger("Column {.val {y}} not found. Select from {.val {rev(df_header$column)}}")
-        glue("Error processing `modify_*()` for column '{y}'.") %>% stop(call. = FALSE)
+        cli::cli_alert_warning("Column {.val {y}} not found and was ignored.")
+        return(NULL)
       }
       lst_env_for_eval <-
         df_header %>%
@@ -368,10 +368,10 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
                 cls <-
                   imap(lst_env_for_eval, ~glue("{{.field {.y}}} ({{.cls {class(.x)[1]}}})")) %>%
                   paste(collapse = ", ")
-                paste("There was an error processing column {.val {y}}--likely a glue syntax error.",
-                      "The following fields are available to insert into the string:",
-                      cls) %>%
-                  cli::cli_alert_danger()
+                cli::cli_alert_danger(
+                  "There was an error processing column {.val {y}}--likely a glue syntax error.")
+                paste("The following fields are available to insert via glue syntax:\n", cls) %>%
+                  cli::cli_alert_info()
               },
               error = function(e) invisible()
             )
@@ -380,6 +380,7 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
         }
       )
     }
-  )
+  ) %>%
+    purrr::compact()
 }
 
