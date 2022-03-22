@@ -921,7 +921,7 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
         ~ switch(is.numeric(.x) & .y %in% percent_stats,
           purrr::partial(style_number, digits = !!.x, scale = 100)
         ) %||%
-          switch(is.numeric(.x) & summary_type %in% c("categorical", "dichotomous") & .y %in% "p",
+          switch(is.numeric(.x) & summary_type %in% c("categorical", "dichotomous") & .y %in% c("p", "p_unweighted"),
             purrr::partial(style_number, digits = !!.x, scale = 100)
           ) %||%
           # all other stats are not scaled
