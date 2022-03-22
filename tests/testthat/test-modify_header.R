@@ -24,6 +24,9 @@ test_that("input checks", {
     NA
   )
 
+  expect_error(tbl_summary_noby %>% modify_header(stat_0 = "N = {n}"))
+  expect_message(tbl_summary_noby %>% modify_header(stat_1 = "N = {n}"))
+
   # this is erring on R 3.6 only WTF??!
   # expect_error(
   #   tbl_summary_noby %>% modify_header(label = c("test", "test2"))
