@@ -279,9 +279,9 @@ test_that("tbl_svysummary-all_categorical() use with `type=`", {
   expect_true(
     !"dichotomous" %in%
       (survey::svydesign(data = trial, ids = ~1, weights = ~1) %>%
-        tbl_svysummary(type = all_dichotomous() ~ "categorical") %>%
-        purrr::pluck("meta_data") %>%
-        dplyr::pull(summary_type))
+         tbl_svysummary(type = all_dichotomous() ~ "categorical") %>%
+         purrr::pluck("meta_data") %>%
+         dplyr::pull(summary_type))
   )
 })
 
@@ -537,5 +537,37 @@ test_that("tbl_svysummary() works with date and date/time", {
   expect_error(
     tbl2 <- df_date %>% tbl_svysummary(by = group),
     NA
+  )
+
+
+  # checking that formatting the unweighted proportion works
+  data(api, package = "survey")
+  dstrat <-
+    survey::svydesign(id = ~1, strata = ~stype,
+                      weights = ~pw, data = apistrat, fpc = ~fpc,
+                      variables = apistrat[, c("pcttest", "growth", "awards")])
+  expect_equal(
+    tbl_svysummary(
+      data = dstrat,
+      include = awards,
+      type = awards ~ "categorical",
+      statistic = all_categorical() ~ "{p_unweighted}%",
+      digits = all_categorical() ~ 2
+    ) %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull(),
+    c(NA, "43.50%", "56.50%")
+  )
+
+  expect_equal(
+    tbl_svysummary(
+      data = dstrat,
+      include = awards,
+      type = awards ~ "categorical",
+      statistic = all_categorical() ~ "{p_unweighted}%"
+    ) %>%
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull(),
+    c(NA, "44%", "56%")
   )
 })
