@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Improved error messaging in `modify_*()` functions. (#914)
+
 * Added `style_percent()` as the default formatting function for unweighted proportions. (#1181)
 
 * The global options previously available have now been soft deprecated. All documentation of the global options was removed in v1.3.1. (#1085)
