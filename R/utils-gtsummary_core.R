@@ -46,10 +46,17 @@
       text_interpret = character(), footnote = character()
     )
   x$table_styling$text_format <-
-    tibble(
-      column = "label", rows = list(rlang::expr(.data$row_type %in% c("level", "missing"))),
-      format_type = "indent", undo_text_format = FALSE
+    purrr::when(
+      all(c("label", "row_type") %in% x$table_styling$header$column),
+      isTRUE(.) ~
+        tibble(column = "label",
+               rows = list(rlang::expr(.data$row_type %in% c("level", "missing"))),
+               format_type = "indent", undo_text_format = FALSE),
+      isFALSE(.) ~
+        tibble(column = character(), rows = list(),
+               format_type = character(), undo_text_format = logical())
     )
+
   x$table_styling$fmt_missing <-
     tibble(column = character(), rows = list(), symbol = character())
   x$table_styling$fmt_fun <-

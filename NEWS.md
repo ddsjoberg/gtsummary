@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `as_gt()` when there are no hidden columns.
+
 * Improved error messaging in `modify_*()` functions. (#914)
 
 * Added `style_percent()` as the default formatting function for unweighted proportions. (#1181)
