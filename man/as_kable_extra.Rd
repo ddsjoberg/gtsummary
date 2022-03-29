@@ -6,34 +6,35 @@
 \usage{
 as_kable_extra(
   x,
+  escape = FALSE,
+  format = NULL,
+  ...,
   include = everything(),
-  return_calls = FALSE,
-  strip_md_bold = TRUE,
-  fmt_missing = TRUE,
-  ...
+  addtl_fmt = TRUE,
+  return_calls = FALSE
 )
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
 
+\item{format, escape, ...}{arguments passed to \code{knitr::kable()}. Default is
+\code{escape = FALSE}, and the format is auto-detected.}
+
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
 Default is \code{everything()}.}
 
+\item{addtl_fmt}{logical indicating whether to include additional formatting.
+Default is \code{TRUE}. This is primarily used to escape special characters,
+convert markdown to LaTeX, and remove line breaks from the footnote.}
+
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
-
-\item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.}
-
-\item{fmt_missing}{Logical argument adding the missing value formats.}
-
-\item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
 }
 \value{
-A {kableExtra} object
+A {kableExtra} table
 }
 \description{
 Function converts a gtsummary object to a knitr_kable + kableExtra object.
@@ -41,33 +42,48 @@ This allows the customized formatting available via \link[knitr:kable]{knitr::ka
 and {kableExtra}; \code{as_kable_extra()} supports arguments in \code{knitr::kable()}.
 \code{as_kable_extra()} output via gtsummary supports
 bold and italic cells for table bodies. Users
-creating pdf output should specify \code{as_kable_extra(format = "latex")}.
+are encouraged to leverage \code{as_kable_extra()} for enhanced pdf printing; for html
+output options there is better support via \code{as_gt()}.
 }
-\section{PDF via LaTeX Tips}{
+\section{PDF/LaTeX}{
 
 
-This section discusses options intended for use with
+This section shows options intended for use with \code{output: pdf_document} in yaml of \code{.Rmd}.
+
+When the default values of \code{as_kable_extra(escape = FALSE, addtl_fmt = TRUE)}
+are utilized, the following formatting occurs.
 \itemize{
-\item \code{output: pdf_document} in yaml of \code{.Rmd}.
-\item \code{as_kable_extra(format = "latex")}
-}
-\subsection{Custom column names}{
-
-In pdf output, column names do not currently inherit formatting applied in
-{gtsummary} tables. However, custom column names can be achieved with the
-\code{col.names} argument as shown in Example 2, including attributes such as bold
-formatting, italic formatting, and line breaks. Doing so requires the \code{escape = FALSE} argument; however, when using \code{escape = FALSE} special latex
-characters like \verb{\\} and \verb{\%} will need to be escaped prior to entering
-\code{as_kable_extra()}. Using \code{escape = FALSE} when the gtsummary table has
-special LaTeX characters will result in the error \code{"LaTeX failed to compile..."}
+\item Markdown bold, italic, and underline syntax in the headers,
+spanning headers, caption, and footnote will be converted to escaped LaTeX code
+\item Special characters in the table body, headers, spanning headers, caption,
+and footnote will be escaped with \code{.escape_latex()} or \code{.escape_latex2()}
+\item The \code{"\\n"} symbol will be recognized as a line break in the table
+headers, spanning headers, caption, and the table body
+\item The \code{"\\n"} symbol is removed from the footnotes
 }
 
-\subsection{Additional table styling}{
+To suppress \emph{these} additional formats, set \code{as_kable_extra(addtl_fmt = FALSE)}
 
-Additional styling is available through \code{knitr::kable()} and
+Additional styling is available with
 \code{kableExtra::kable_styling()} as shown in Example 3, which implements row
 striping and repeated column headers in the presence of page breaks.
 }
+
+\section{HTML}{
+
+
+This section discusses options intended for use with \code{output: html_document} in yaml of \code{.Rmd}.
+
+When the default values of \code{as_kable_extra(escape = FALSE, addtl_fmt = TRUE)}
+are utilized, the following formatting occurs.
+\itemize{
+\item The default markdown syntax in the headers and spanning headers is removed
+\item Special characters in the table body, headers, spanning headers, caption,
+and footnote will be escaped with \code{.escape_html()}
+\item The \code{"\\n"} symbol is removed from the footnotes
+}
+
+To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALSE)}
 }
 
 \section{Example Output}{
@@ -101,36 +117,21 @@ as_kable_extra_ex1_gen <-
   as_kable_extra()
 
 # Example 2 (PDF via LaTeX) -------------------------------------------------
-custom_names <- c(
-   "\\\\textbf{Characteristic}",
-   "\\\\textbf{Drug A}\n\\\\textit{N = 98}",
-   "\\\\textbf{Drug B}\n\\\\textit{N = 102}"
-)
 as_kable_extra_ex2_pdf <-
   trial \%>\%
   select(trt, age, stage) \%>\%
-  tbl_summary(
-     by = trt,
-     statistic = list(all_categorical() ~ "{n} ({p}\\\\\%)")
-  ) \%>\%
+  tbl_summary(by = trt) \%>\%
   bold_labels() \%>\%
-  modify_footnote(
-     update = all_stat_cols() ~ "Median (IQR); n (\%)"
-  ) \%>\%
-  as_kable_extra(
-     format = "latex",
-     col.names = kableExtra::linebreak(custom_names, align = "c"),
-     escape = FALSE
-  )
+  modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") \%>\%
+  as_kable_extra()
 
 # Example 3 (PDF via LaTeX) -------------------------------------------------
 as_kable_extra_ex3_pdf <-
-trial \%>\%
+  trial \%>\%
   select(trt, age, stage) \%>\%
   tbl_summary(by = trt) \%>\%
   bold_labels() \%>\%
   as_kable_extra(
-    format = "latex",
     booktabs = TRUE,
     longtable = TRUE,
     linesep = ""

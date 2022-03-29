@@ -1,8 +1,5 @@
 #' Convert gtsummary object to a kable object
 #'
-#' @description Function converts a gtsummary object to a knitr_kable object.
-#' This function may be used in the background when the tables are printed or knitted.
-#'
 #' @description Output from [knitr::kable] is less full featured compared to
 #' summary tables produced with [gt](https://gt.rstudio.com/index.html).
 #' For example, kable summary tables do not include indentation, footnotes,
@@ -27,8 +24,8 @@
 #'   tbl_summary(by = trt) %>%
 #'   bold_labels() %>%
 #'   as_kable()
-as_kable <- function(x, include = everything(), return_calls = FALSE,
-                     exclude = NULL, fmt_missing = TRUE, ...) {
+as_kable <- function(x, ..., include = everything(), return_calls = FALSE,
+                     exclude = NULL) {
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_stop(
@@ -51,7 +48,7 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
 
   # creating list of kable calls -----------------------------------------------
   kable_calls <-
-    table_styling_to_kable_calls(x = x, fmt_missing = fmt_missing, ...)
+    table_styling_to_kable_calls(x = x, ...)
   if (return_calls == TRUE) {
     return(kable_calls)
   }
@@ -74,11 +71,17 @@ as_kable <- function(x, include = everything(), return_calls = FALSE,
   .eval_list_of_exprs(kable_calls[include])
 }
 
-table_styling_to_kable_calls <- function(x, fmt_missing = TRUE, ...) {
+table_styling_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
+  if (!is.null(dots[["fmt_missing"]])) {
+    lifecycle::deprecate_warn(when = "1.5.3",
+                              what = "gtsummary::as_kable_extra(fmt_missing=)")
+    dots <- purrr::list_modify(fmt_missing = NULL) %>% purrr::compact()
+  }
+
   kable_calls <-
-    table_styling_to_tibble_calls(x, col_labels = FALSE, fmt_missing = fmt_missing)
+    table_styling_to_tibble_calls(x, col_labels = FALSE, fmt_missing = TRUE)
 
   # fmt_missing ----------------------------------------------------------------
   kable_calls[["fmt_missing"]] <-

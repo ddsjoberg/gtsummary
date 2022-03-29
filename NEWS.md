@@ -1,5 +1,24 @@
 # gtsummary (development version)
 
+### Improvements to `as_kable_extra()`
+* For users who used the default kableExtra print without output-specific formatting, there are no breaking changes...the only changes will be improved output styling.
+* The biggest user-facing change is that the default results for **LaTeX output** are now greatly improved compared to previous releases, when `escape=FALSE` (the new default).
+  - Markdown bold, italic, and underline syntax in the headers, spanning headers, caption, and footnote will be converted to escaped LaTeX code.
+  - Special LaTeX characters in the body of the table will be escaped with `.escape_latex()` or `.escape_latex2()`, e.g. `%` will be updated to `\\%`, and rendered as `%` in the PDF document.
+  - The "\n" symbol will be recognized as a line break in the table headers, spanning headers, caption, and the table body.
+  - `\n` is removed from footnotes 
+  - The `escape=` argument is now passed to `kableExtra::add_header_row()` and `kableExtra::footnote()` as well (previously, was only passed to `knitr::kable()`).
+* The `as_kable_extra(escape=, format=)` arguments have been made explicit, where previously, these arguments were passed via `...`.
+* *Breaking Change* The default value of `escape=` is now `FALSE`.  If users previously used `as_kable_extra(escape=FALSE)` and had manually escaped LaTeX/HTML characters in the body of the table, these characters will now be double escaped. To print the table without the auto-escaping that is now present, utilize the new argument `as_kable_extra(addtl_fmt=FALSE)`
+* *Breaking Change* The `fmt_missing=` argument was added to `as_tibble()`, `as_kable()`, and `as_kable_extra()` in the last release. This argument is now deprecated in `as_kable()` and `as_kable_extra()`. If a user does not want missing values formatted, they can exclude these commands with the `include=` argument. 
+* *Breaking Change* The `strip_md_bold=` has been deprecated. The markdown syntax will automatically be stripped from headers, unless `escape = FALSE` and `format = "latex"`. In that case, the markdown syntax will be converted to LaTeX commands.
+* **HTML Updates** 
+  - The default markdown syntax in the headers and spanning headers is removed.
+  - Special characters in the table body, headers, spanning headers, caption, and footnote will be escaped with `.escape_html()`.
+  - The `"\n"` symbol is removed from the footnotes
+  
+### Other Updates
+
 * Fix in `as_gt()` when there are no hidden columns.
 
 * Improved error messaging in `modify_*()` functions. (#914)
