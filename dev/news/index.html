@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9016</span>
       </span>
     </div>
 
@@ -91,6 +91,35 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
+<div class="section level4">
+<h4 id="improvements-to-as_kable_extra-development-version">Improvements to <code>as_kable_extra()</code>
+<a class="anchor" aria-label="anchor" href="#improvements-to-as_kable_extra-development-version"></a></h4>
+<ul><li>For users who used the default kableExtra print without output-specific formatting, there are no breaking changes…the only changes will be improved output styling.</li>
+<li>The biggest user-facing change is that the default results for <strong>LaTeX output</strong> are now greatly improved compared to previous releases, when <code>escape=FALSE</code> (the new default).
+<ul><li>Markdown bold, italic, and underline syntax in the headers, spanning headers, caption, and footnote will be converted to escaped LaTeX code.</li>
+<li>Special LaTeX characters in the body of the table will be escaped with <code><a href="../reference/kableExtra_utils.html">.escape_latex()</a></code> or <code><a href="../reference/kableExtra_utils.html">.escape_latex2()</a></code>, e.g. <code>%</code> will be updated to <code>\\%</code>, and rendered as <code>%</code> in the PDF document.</li>
+<li>The “” symbol will be recognized as a line break in the table headers, spanning headers, caption, and the table body.</li>
+<li>
+<code>\n</code> is removed from footnotes</li>
+<li>The <code>escape=</code> argument is now passed to <code>kableExtra::add_header_row()</code> and <code><a href="https://rdrr.io/pkg/kableExtra/man/footnote.html" class="external-link">kableExtra::footnote()</a></code> as well (previously, was only passed to <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code>).</li>
+</ul></li>
+<li>The <code>as_kable_extra(escape=, format=)</code> arguments have been made explicit, where previously, these arguments were passed via <code>...</code>.</li>
+<li>
+<em>Breaking Change</em> The default value of <code>escape=</code> is now <code>FALSE</code>. If users previously used <code>as_kable_extra(escape=FALSE)</code> and had manually escaped LaTeX/HTML characters in the body of the table, these characters will now be double escaped. To print the table without the auto-escaping that is now present, utilize the new argument <code>as_kable_extra(addtl_fmt=FALSE)</code>
+</li>
+<li>
+<em>Breaking Change</em> The <code>fmt_missing=</code> argument was added to <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, and <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code> in the last release. This argument is now deprecated in <code><a href="../reference/as_kable.html">as_kable()</a></code> and <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code>. If a user does not want missing values formatted, they can exclude these commands with the <code>include=</code> argument.</li>
+<li>
+<em>Breaking Change</em> The <code>strip_md_bold=</code> has been deprecated. The markdown syntax will automatically be stripped from headers, unless <code>escape = FALSE</code> and <code>format = "latex"</code>. In that case, the markdown syntax will be converted to LaTeX commands.</li>
+<li>
+<strong>HTML Updates</strong>
+<ul><li>The default markdown syntax in the headers and spanning headers is removed.</li>
+<li>Special characters in the table body, headers, spanning headers, caption, and footnote will be escaped with <code><a href="../reference/kableExtra_utils.html">.escape_html()</a></code>.</li>
+<li>The <code>"\n"</code> symbol is removed from the footnotes</li>
+</ul></li>
+</ul></div>
+<div class="section level4">
+<h4 id="other-updates-development-version">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
 <ul><li><p>Fix in <code><a href="../reference/as_gt.html">as_gt()</a></code> when there are no hidden columns.</p></li>
 <li><p>Improved error messaging in <code>modify_*()</code> functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/914" class="external-link">#914</a>)</p></li>
 <li><p>Added <code><a href="../reference/style_percent.html">style_percent()</a></code> as the default formatting function for unweighted proportions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1181" class="external-link">#1181</a>)</p></li>
@@ -112,6 +141,7 @@
 <li><p>Adding Norwegian translations (<a href="https://github.com/ddsjoberg/gtsummary/issues/1143" class="external-link">#1143</a>)</p></li>
 <li><p>Fix when using summary type gtsummary selectors (e.g. <code><a href="../reference/select_helpers.html">all_continuous()</a></code>) with the <code>add_ci(style_fun=)</code> argument. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1141" class="external-link">#1141</a>)</p></li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5.2" id="gtsummary-152">gtsummary 1.5.2<small>2022-01-29</small><a class="anchor" aria-label="anchor" href="#gtsummary-152"></a></h2>
 <ul><li><p>Removed foreign reference to external functions in the top level of the package and replaced with indirect calls (the reason for the short time between releases). (<a href="https://github.com/ddsjoberg/gtsummary/issues/1129" class="external-link">#1129</a>)</p></li>
