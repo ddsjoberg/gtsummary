@@ -5,55 +5,43 @@
 #' available via the huxtable functions. The huxtable package supports output
 #' to PDF via LaTeX, as well as HTML and Word.
 #'
-#' @section Details:
-#' The `as_hux_table()` takes the data frame that will be printed, converts
-#' it to a huxtable and formats the table with the following huxtable functions:
+#' @section Excel Output:
 #'
-#' 1. `huxtable::huxtable()`
-#' 1. `huxtable::insert_row()` to insert header rows
-#' 1. `huxtable::set_left_padding()` to indent variable levels
-#' 1. `huxtable::add_footnote()` to add table footnotes and source notes
-#' 1. `huxtable::set_bold()` to bold cells
-#' 1. `huxtable::set_italic()` to italicize cells
-#' 1. `huxtable::set_top_border()` add horizontal line (when indicated)
-#' 1. `huxtable::set_na_string()` to use an em-dash for missing numbers
-#' 1. `huxtable::set_markdown()` use markdown for header rows
-#' 1. `huxtable::set_align()` to set column alignment
-#'
-#' Any one of these commands may be omitted using the `include=` argument.
+#' Use the `as_hux_xlsx()` function to save a copy of the table in an excel file.
+#' The file is saved using `huxtable::quick_xlsx()`.
 #'
 #' @inheritParams as_flex_table
-#' @export
+#' @inheritParams huxtable::quick_xlsx
+#' @param bold_header_rows logical indicating whether to bold header rows.
+#' Default is `TRUE`
+#' @param strip_md_bold DEPRECATED
+#' @name as_hux_table
 #' @return A {huxtable} object
 #' @family gtsummary output types
-#' @author David Hugh-Jones
+#' @author David Hugh-Jones, Daniel D. Sjoberg
 #' @examplesIf broom.helpers::.assert_package("huxtable", boolean = TRUE)
 #' trial %>%
 #'   dplyr::select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   as_hux_table()
-#' @export
+NULL
 
+#' @export
+#' @rdname as_hux_table
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = FALSE) {
   assert_package("huxtable", "as_hux_table()")
-
+  if (!isFALSE(strip_md_bold)) {
+    lifecycle::deprecate_warn(
+      "1.5.3", "gtsummary::as_hux_table(strip_md_bold=)",
+      details = "Markdown syntax is now recognized by the {huxtable} package.")
+  }
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
 
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .table_styling_expr_to_row_number(x)
-
-  # stripping markdown asterisk ------------------------------------------------
-  if (strip_md_bold == TRUE) {
-    x$table_styling$header <-
-      x$table_styling$header %>%
-      mutate_at(
-        vars(.data$label, .data$spanning_header),
-        ~ str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
-      )
-  }
 
   # creating list of huxtable calls -------------------------------------------
   huxtable_calls <- table_styling_to_huxtable_calls(x = x)
@@ -87,14 +75,56 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
     return(huxtable_calls[include])
   }
 
-  huxtable_calls[include] %>%
-    # removing NULL elements
-    unlist() %>%
-    compact() %>%
-    # concatenating expressions with %>% between each of them
-    reduce(function(x, y) expr(!!x %>% !!y)) %>%
-    # evaluating expressions
-    eval()
+  .eval_list_of_exprs(huxtable_calls[include])
+}
+
+#' @export
+#' @rdname as_hux_table
+as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE) {
+  assert_package("openxlsx", fn = "as_hux_xlsx()")
+
+  # save list of expressions to run --------------------------------------------
+  huxtable_calls <-
+    as_hux_table(x = x, include = include, return_calls = TRUE) %>%
+    purrr::list_modify(set_left_padding = NULL, set_left_padding2 = NULL)
+
+  # construct calls to manually indent the columns -----------------------------
+  # extract the indentation instructions from table_styling
+  df_text_format <-
+    gtsummary::.table_styling_expr_to_row_number(x) %>%
+    purrr::pluck("table_styling", "text_format") %>%
+    dplyr::filter(.data$format_type %in% c("indent", "indent2"))
+
+  # create expressions to add indentations to `x$table_body`
+  indent_exprs <-
+    purrr::pmap(
+      list(df_text_format$column, df_text_format$row_numbers, df_text_format$format_type),
+      function(column, row_numbers, format_type) {
+        indent_spaces <- ifelse(format_type %in% "indent", "     ", "          ")
+        rlang::expr(
+          dplyr::mutate(
+            dplyr::across(dplyr::all_of(!!column),
+                          ~ifelse(dplyr::row_number() %in% !!row_numbers,
+                                  paste0(!!indent_spaces, .), .)))
+        )
+      }
+    )
+
+  # insert indentation code before 'as_huxtable()' call ------------------------
+  index_n <- which(names(huxtable_calls) %in% "huxtable")
+  huxtable_calls <- append(x = huxtable_calls,
+                           values = list("indent" = indent_exprs),
+                           after = index_n - 1L)
+
+  # bold header rows -----------------------------------------------------------
+  if (isTRUE(bold_header_rows)) {
+    huxtable_calls[["bold_header_rows"]] <-
+      expr(huxtable::style_header_rows(bold = TRUE))
+  }
+
+  # run hux commands and export to excel ---------------------------------------
+  .eval_list_of_exprs(huxtable_calls[include]) %>%
+    huxtable::quick_xlsx(file = file, open = FALSE)
 }
 
 # creating huxtable calls from table_styling -----------------------------------
@@ -323,9 +353,13 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # set_markdown ---------------------------------------------------------------
   header_rows <- switch(any_spanning_header, 1:2) %||% 1L
   huxtable_calls[["set_markdown"]] <-
-    list(set_markdown = expr(huxtable::set_markdown(row = !!header_rows,
-                                                    col = huxtable::everywhere,
-                                                    value = TRUE)))
+    list(
+      set_markdown =
+        expr(huxtable::set_markdown(row = !!header_rows,
+                                    col = huxtable::everywhere,
+                                    value = TRUE)),
+      set_header_rows = expr(huxtable::set_header_rows(row = !!header_rows, value = TRUE))
+    )
 
   # align ----------------------------------------------------------------------
   df_align <-

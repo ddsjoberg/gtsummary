@@ -167,14 +167,7 @@ as_kable_extra <- function(x,
   }
 
   # taking each kable function call, concatenating them with %>% separating them
-  kable_extra_calls[include] %>%
-    # removing NULL elements
-    unlist() %>%
-    compact() %>%
-    # concatenating expressions with %>% between each of them
-    reduce(function(x, y) expr(!!x %>% !!y)) %>%
-    # evaluating expressions
-    eval()
+  .eval_list_of_exprs(kable_extra_calls[include])
 }
 
 table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...) {

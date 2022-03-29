@@ -2,6 +2,7 @@
 % Please edit documentation in R/as_hux_table.R
 \name{as_hux_table}
 \alias{as_hux_table}
+\alias{as_hux_xlsx}
 \title{Convert gtsummary object to a huxtable object}
 \usage{
 as_hux_table(
@@ -10,6 +11,8 @@ as_hux_table(
   return_calls = FALSE,
   strip_md_bold = FALSE
 )
+
+as_hux_xlsx(x, file, include = everything(), bold_header_rows = TRUE)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -23,8 +26,12 @@ Default is \code{everything()}.}
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
-\item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.}
+\item{strip_md_bold}{DEPRECATED}
+
+\item{file}{File path for the output.}
+
+\item{bold_header_rows}{logical indicating whether to bold header rows.
+Default is \code{TRUE}}
 }
 \value{
 A {huxtable} object
@@ -35,24 +42,11 @@ A user can use this function if they wish to add customized formatting
 available via the huxtable functions. The huxtable package supports output
 to PDF via LaTeX, as well as HTML and Word.
 }
-\section{Details}{
+\section{Excel Output}{
 
-The \code{as_hux_table()} takes the data frame that will be printed, converts
-it to a huxtable and formats the table with the following huxtable functions:
-\enumerate{
-\item \code{huxtable::huxtable()}
-\item \code{huxtable::insert_row()} to insert header rows
-\item \code{huxtable::set_left_padding()} to indent variable levels
-\item \code{huxtable::add_footnote()} to add table footnotes and source notes
-\item \code{huxtable::set_bold()} to bold cells
-\item \code{huxtable::set_italic()} to italicize cells
-\item \code{huxtable::set_top_border()} add horizontal line (when indicated)
-\item \code{huxtable::set_na_string()} to use an em-dash for missing numbers
-\item \code{huxtable::set_markdown()} use markdown for header rows
-\item \code{huxtable::set_align()} to set column alignment
-}
 
-Any one of these commands may be omitted using the \verb{include=} argument.
+Use the \code{as_hux_xlsx()} function to save a copy of the table in an excel file.
+The file is saved using \code{huxtable::quick_xlsx()}.
 }
 
 \examples{
@@ -73,6 +67,6 @@ Other gtsummary output types:
 \code{\link{as_tibble.gtsummary}()}
 }
 \author{
-David Hugh-Jones
+David Hugh-Jones, Daniel D. Sjoberg
 }
 \concept{gtsummary output types}

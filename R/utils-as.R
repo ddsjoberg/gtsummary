@@ -341,3 +341,14 @@
   # return merged gtsummary table ----------------------------------------------
   x
 }
+
+
+# this function takes a list expressions and evaluates them with a `%>%` between them
+.eval_list_of_exprs <- function(exprs, env = rlang::caller_env()) {
+  exprs %>%
+    # removing NULL elements
+    unlist() %>%
+    compact() %>%
+    # concatenating expressions with %>% between each of them
+    reduce(function(x, y) rlang::inject(!!x %>% !!y, env = env))
+}
