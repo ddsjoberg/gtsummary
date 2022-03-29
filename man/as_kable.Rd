@@ -4,18 +4,13 @@
 \alias{as_kable}
 \title{Convert gtsummary object to a kable object}
 \usage{
-as_kable(
-  x,
-  include = everything(),
-  return_calls = FALSE,
-  exclude = NULL,
-  fmt_missing = TRUE,
-  ...
-)
+as_kable(x, ..., include = everything(), return_calls = FALSE, exclude = NULL)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
 (e.g. \link{tbl_summary} or \link{tbl_regression})}
+
+\item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
 
 \item{include}{Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
@@ -26,18 +21,11 @@ Default is \code{everything()}.}
 as a list of expressions.}
 
 \item{exclude}{DEPRECATED}
-
-\item{fmt_missing}{Logical argument adding the missing value formats.}
-
-\item{...}{Additional arguments passed to \link[knitr:kable]{knitr::kable}}
 }
 \value{
 A \code{knitr_kable} object
 }
 \description{
-Function converts a gtsummary object to a knitr_kable object.
-This function may be used in the background when the tables are printed or knitted.
-
 Output from \link[knitr:kable]{knitr::kable} is less full featured compared to
 summary tables produced with \href{https://gt.rstudio.com/index.html}{gt}.
 For example, kable summary tables do not include indentation, footnotes,
