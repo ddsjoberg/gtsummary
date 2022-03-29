@@ -19,6 +19,10 @@
   
 ### Other Updates
 
+* New function `as_hux_xlsx()` added to export a formatted {gtsummary} table directly to Excel.
+* Deprecated the `as_huxtable(strip_md_bold=)`  as {huxtable} now recognizes the markdown syntax and there is no reason to remove the markdown syntax.
+* Added `huxtable::set_header_rows()` to the `as_hux_table()` stack.
+
 * Fix in `as_gt()` when there are no hidden columns.
 
 * Improved error messaging in `modify_*()` functions. (#914)

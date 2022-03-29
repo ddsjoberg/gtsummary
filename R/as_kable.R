@@ -68,14 +68,7 @@ as_kable <- function(x, ..., include = everything(), return_calls = FALSE,
   include <- "tibble" %>% union(include)
 
   # taking each kable function call, concatenating them with %>% separating them
-  kable_calls[include] %>%
-    # removing NULL elements
-    unlist() %>%
-    compact() %>%
-    # concatenating expressions with %>% between each of them
-    reduce(function(x, y) expr(!!x %>% !!y)) %>%
-    # evaluating expressions
-    eval()
+  .eval_list_of_exprs(kable_calls[include])
 }
 
 table_styling_to_kable_calls <- function(x, ...) {

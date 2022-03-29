@@ -71,14 +71,7 @@ as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
   }
 
   # taking each gt function call, concatenating them with %>% separating them
-  tibble_calls[include] %>%
-    # removing NULL elements
-    unlist() %>%
-    compact() %>%
-    # concatenating expressions with %>% between each of them
-    reduce(function(x, y) expr(!!x %>% !!y)) %>%
-    # evaluating expressions
-    eval()
+  .eval_list_of_exprs(tibble_calls[include])
 }
 
 
