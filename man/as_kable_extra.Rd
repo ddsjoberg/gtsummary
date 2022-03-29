@@ -62,7 +62,7 @@ headers, spanning headers, caption, and the table body
 \item The \code{"\\n"} symbol is removed from the footnotes
 }
 
-To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALSE)}
+To suppress \emph{these} additional formats, set \code{as_kable_extra(addtl_fmt = FALSE)}
 
 Additional styling is available with
 \code{kableExtra::kable_styling()} as shown in Example 3, which implements row

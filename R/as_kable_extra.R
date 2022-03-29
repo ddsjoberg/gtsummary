@@ -22,7 +22,7 @@
 #'      headers, spanning headers, caption, and the table body
 #'    - The `"\n"` symbol is removed from the footnotes
 #'
-#' To suppress the additional formatting, set `as_kable_extra(addtl_fmt = FALSE)`
+#' To suppress _these_ additional formats, set `as_kable_extra(addtl_fmt = FALSE)`
 #'
 #' Additional styling is available with
 #' `kableExtra::kable_styling()` as shown in Example 3, which implements row
