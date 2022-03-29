@@ -42,34 +42,11 @@ A user can use this function if they wish to add customized formatting
 available via the huxtable functions. The huxtable package supports output
 to PDF via LaTeX, as well as HTML and Word.
 }
-\section{Details}{
-
-The \code{as_hux_table()} takes the data frame that will be printed, converts
-it to a huxtable and formats the table with the following huxtable functions:
-\enumerate{
-\item \code{huxtable::huxtable()}
-\item \code{huxtable::insert_row()} to insert header rows
-\item \code{huxtable::set_left_padding()} to indent variable levels
-\item \code{huxtable::add_footnote()} to add table footnotes and source notes
-\item \code{huxtable::set_bold()} to bold cells
-\item \code{huxtable::set_italic()} to italicize cells
-\item \code{huxtable::set_top_border()} add horizontal line (when indicated)
-\item \code{huxtable::set_na_string()} to use an em-dash for missing numbers
-\item \code{huxtable::set_markdown()} use markdown for header rows
-\item \code{huxtable::set_align()} to set column alignment
-}
-
-Any one of these commands may be omitted using the \verb{include=} argument.
-}
-
 \section{Excel Output}{
 
 
 Use the \code{as_hux_xlsx()} function to save a copy of the table in an excel file.
 The file is saved using \code{huxtable::quick_xlsx()}.
-The indentation and markdown syntax in the headers are not recognized
-and exported to the excel file. The \code{as_hux_xlsx()} function will bold
-the header rows and manually indent the needed columns.
 }
 
 \examples{

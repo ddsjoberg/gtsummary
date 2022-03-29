@@ -5,30 +5,10 @@
 #' available via the huxtable functions. The huxtable package supports output
 #' to PDF via LaTeX, as well as HTML and Word.
 #'
-#' @section Details:
-#' The `as_hux_table()` takes the data frame that will be printed, converts
-#' it to a huxtable and formats the table with the following huxtable functions:
-#'
-#' 1. `huxtable::huxtable()`
-#' 1. `huxtable::insert_row()` to insert header rows
-#' 1. `huxtable::set_left_padding()` to indent variable levels
-#' 1. `huxtable::add_footnote()` to add table footnotes and source notes
-#' 1. `huxtable::set_bold()` to bold cells
-#' 1. `huxtable::set_italic()` to italicize cells
-#' 1. `huxtable::set_top_border()` add horizontal line (when indicated)
-#' 1. `huxtable::set_na_string()` to use an em-dash for missing numbers
-#' 1. `huxtable::set_markdown()` use markdown for header rows
-#' 1. `huxtable::set_align()` to set column alignment
-#'
-#' Any one of these commands may be omitted using the `include=` argument.
-#'
 #' @section Excel Output:
 #'
 #' Use the `as_hux_xlsx()` function to save a copy of the table in an excel file.
 #' The file is saved using `huxtable::quick_xlsx()`.
-#' The indentation and markdown syntax in the headers are not recognized
-#' and exported to the excel file. The `as_hux_xlsx()` function will bold
-#' the header rows and manually indent the needed columns.
 #'
 #' @inheritParams as_flex_table
 #' @inheritParams huxtable::quick_xlsx
