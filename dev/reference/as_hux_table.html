@@ -26,7 +26,7 @@ to PDF via LaTeX, as well as HTML and Word."><meta property="og:image" content="
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9016</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9017</span>
       </span>
     </div>
 
@@ -106,7 +106,9 @@ to PDF via LaTeX, as well as HTML and Word.</p>
   include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
   return_calls <span class="op">=</span> <span class="cn">FALSE</span>,
   strip_md_bold <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span>
+
+<span class="fu">as_hux_xlsx</span><span class="op">(</span><span class="va">x</span>, <span class="va">file</span>, include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, bold_header_rows <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -123,29 +125,24 @@ Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html
 <dd><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
 as a list of expressions.</p></dd>
 <dt>strip_md_bold</dt>
-<dd><p>When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.</p></dd>
+<dd><p>DEPRECATED</p></dd>
+<dt>file</dt>
+<dd><p>File path for the output.</p></dd>
+<dt>bold_header_rows</dt>
+<dd><p>logical indicating whether to bold header rows.
+Default is <code>TRUE</code></p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A huxtable object</p>
     </div>
-    <div id="details">
-    <h2>Details</h2>
+    <div id="excel-output">
+    <h2>Excel Output</h2>
     
 
-<p>The <code>as_hux_table()</code> takes the data frame that will be printed, converts
-it to a huxtable and formats the table with the following huxtable functions:</p><ol><li><p><code><a href="https://hughjonesd.github.io/huxtable/reference/huxtable.html" class="external-link">huxtable::huxtable()</a></code></p></li>
-<li><p><code><a href="https://hughjonesd.github.io/huxtable/reference/insert_column.html" class="external-link">huxtable::insert_row()</a></code> to insert header rows</p></li>
-<li><p><code><a href="https://hughjonesd.github.io/huxtable/reference/padding.html" class="external-link">huxtable::set_left_padding()</a></code> to indent variable levels</p></li>
-<li><p><code><a href="https://hughjonesd.github.io/huxtable/reference/add_footnote.html" class="external-link">huxtable::add_footnote()</a></code> to add table footnotes and source notes</p></li>
-<li><p><code><a href="https://hughjonesd.github.io/huxtable/reference/bold.html" class="external-link">huxtable::set_bold()</a></code> to bold cells</p></li>
-<li><p><code><a href="https://hughjonesd.github.io/huxtable/reference/bold.html" class="external-link">huxtable::set_italic()</a></code> to italicize cells</p></li>
-<li><p><code><a href="https://hughjonesd.github.io/huxtable/reference/borders.html" class="external-link">huxtable::set_top_border()</a></code> add horizontal line (when indicated)</p></li>
-<li><p><code><a href="https://hughjonesd.github.io/huxtable/reference/na_string.html" class="external-link">huxtable::set_na_string()</a></code> to use an em-dash for missing numbers</p></li>
-<li><p><code><a href="https://hughjonesd.github.io/huxtable/reference/markdown.html" class="external-link">huxtable::set_markdown()</a></code> use markdown for header rows</p></li>
-<li><p><code><a href="https://hughjonesd.github.io/huxtable/reference/align.html" class="external-link">huxtable::set_align()</a></code> to set column alignment</p></li>
-</ol><p>Any one of these commands may be omitted using the <code>include=</code> argument.</p>
+
+<p>Use the <code>as_hux_xlsx()</code> function to save a copy of the table in an excel file.
+The file is saved using <code><a href="https://hughjonesd.github.io/huxtable/reference/quick-output.html" class="external-link">huxtable::quick_xlsx()</a></code>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -158,7 +155,7 @@ it to a huxtable and formats the table with the following huxtable functions:</p
     </div>
     <div id="author">
     <h2>Author</h2>
-    <p>David Hugh-Jones</p>
+    <p>David Hugh-Jones, Daniel D. Sjoberg</p>
     </div>
 
     <div id="ref-examples">

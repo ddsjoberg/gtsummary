@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9016</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9017</span>
       </span>
     </div>
 
@@ -120,7 +120,10 @@
 </ul></div>
 <div class="section level4">
 <h4 id="other-updates-development-version">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
-<ul><li><p>Fix in <code><a href="../reference/as_gt.html">as_gt()</a></code> when there are no hidden columns.</p></li>
+<ul><li><p>New function <code><a href="../reference/as_hux_table.html">as_hux_xlsx()</a></code> added to export a formatted {gtsummary} table directly to Excel.</p></li>
+<li><p>Deprecated the <code>as_huxtable(strip_md_bold=)</code> as {huxtable} now recognizes the markdown syntax and there is no reason to remove the markdown syntax.</p></li>
+<li><p>Added <code><a href="https://hughjonesd.github.io/huxtable/reference/header_cols.html" class="external-link">huxtable::set_header_rows()</a></code> to the <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> stack.</p></li>
+<li><p>Fix in <code><a href="../reference/as_gt.html">as_gt()</a></code> when there are no hidden columns.</p></li>
 <li><p>Improved error messaging in <code>modify_*()</code> functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/914" class="external-link">#914</a>)</p></li>
 <li><p>Added <code><a href="../reference/style_percent.html">style_percent()</a></code> as the default formatting function for unweighted proportions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1181" class="external-link">#1181</a>)</p></li>
 <li><p>The global options previously available have now been soft deprecated. All documentation of the global options was removed in v1.3.1. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1085" class="external-link">#1085</a>)</p></li>
