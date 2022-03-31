@@ -82,7 +82,7 @@ gts_mapper <- function(x, context) {
 
 .assert_class <- function(x, class) {
   if (!inherits(x, class)) {
-    glue("Expecting object of class '{class}'") %>%
+    glue("Expecting object of class {quoted_list(class)}") %>%
       stop(call. = FALSE)
   }
 }

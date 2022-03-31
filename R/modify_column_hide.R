@@ -25,6 +25,7 @@ NULL
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 modify_column_hide <- function(x, columns) {
+  .assert_class(x, "gtsummary")
   updated_call_list <- c(x$call_list, list(modify_column_hide = match.call()))
   x <-
     modify_table_styling(
@@ -40,6 +41,7 @@ modify_column_hide <- function(x, columns) {
 #' @rdname modify_column_hide
 #' @export
 modify_column_unhide <- function(x, columns) {
+  .assert_class(x, "gtsummary")
   updated_call_list <- c(x$call_list, list(modify_column_unhide = match.call()))
   x <-
     modify_table_styling(

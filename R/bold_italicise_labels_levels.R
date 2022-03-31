@@ -26,9 +26,7 @@ NULL
 bold_labels <- function(x) {
   updated_call_list <- c(x$call_list, list(bold_labels = match.call()))
   # input checks ---------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) {
-    stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
-  }
+  .assert_class(x, "gtsummary")
 
   # bold labels ----------------------------------------------------------------
   x <-
@@ -49,9 +47,7 @@ bold_labels <- function(x) {
 bold_levels <- function(x) {
   updated_call_list <- c(x$call_list, list(bold_levels = match.call()))
   # input checks ---------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) {
-    stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
-  }
+  .assert_class(x, "gtsummary")
 
   # bold levels ----------------------------------------------------------------
   x <-
@@ -73,9 +69,7 @@ bold_levels <- function(x) {
 italicize_labels <- function(x) {
   updated_call_list <- c(x$call_list, list(italicize_labels = match.call()))
   # input checks ---------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) {
-    stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
-  }
+  .assert_class(x, "gtsummary")
 
   # italicize labels -----------------------------------------------------------
   x <-
@@ -97,9 +91,7 @@ italicize_labels <- function(x) {
 italicize_levels <- function(x) {
   updated_call_list <- c(x$call_list, list(italicize_levels = match.call()))
   # input checks ---------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) {
-    stop("Class of 'x' must be 'gtsummary'", call. = FALSE)
-  }
+  .assert_class(x, "gtsummary")
 
   # italicize levels -----------------------------------------------------------
   x <-

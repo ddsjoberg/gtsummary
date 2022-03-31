@@ -41,9 +41,7 @@ sort_p <- function(x, q = FALSE) {
   updated_call_list <- c(x$call_list, list(sort_p = match.call()))
   # checking inputs ------------------------------------------------------------
   # checking class of x
-  if (!inherits(x, "gtsummary")) {
-    stop("`x=` must be a gtsummary obejct.", call. = FALSE)
-  }
+  .assert_class(x, "gtsummary")
 
   # checking input table has a p.value column
   if (q == FALSE && !"p.value" %in% names(x$table_body)) {
@@ -82,10 +80,7 @@ sort_p <- function(x, q = FALSE) {
 filter_p <- function(x, q = FALSE, t = 0.05) {
   updated_call_list <- c(x$call_list, list(filter_p = match.call()))
   # checking inputs ------------------------------------------------------------
-  # checking class of x
-  if (!inherits(x, "gtsummary")) {
-    stop("`x=` must be a gtsummary obejct.", call. = FALSE)
-  }
+  .assert_class(x, "gtsummary")
 
   # checking input table has a p.value column
   if (q == FALSE && !"p.value" %in% names(x$table_body)) {
