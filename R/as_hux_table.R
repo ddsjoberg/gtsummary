@@ -31,6 +31,7 @@ NULL
 #' @rdname as_hux_table
 as_hux_table <- function(x, include = everything(), return_calls = FALSE,
                          strip_md_bold = FALSE) {
+  .assert_class(x, "gtsummary")
   assert_package("huxtable", "as_hux_table()")
   if (!isFALSE(strip_md_bold)) {
     lifecycle::deprecate_warn(
@@ -81,6 +82,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
 #' @export
 #' @rdname as_hux_table
 as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE) {
+  .assert_class(x, "gtsummary")
   assert_package("openxlsx", fn = "as_hux_xlsx()")
 
   # save list of expressions to run --------------------------------------------

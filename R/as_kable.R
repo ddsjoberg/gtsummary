@@ -26,6 +26,7 @@
 #'   as_kable()
 as_kable <- function(x, ..., include = everything(), return_calls = FALSE,
                      exclude = NULL) {
+  .assert_class(x, "gtsummary")
   # DEPRECATION notes ----------------------------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_stop(

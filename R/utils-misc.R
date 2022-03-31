@@ -75,9 +75,16 @@ gts_mapper <- function(x, context) {
           "{.emph soon} be removed from {.pkg gtsummary}.\nThe functionality",
           "has been migrated to a function argument or a gtsummary theme.",
           "\n{.url https://www.danieldsjoberg.com/gtsummary/articles/themes.html}") %>%
-    cli::cli_alert_danger()
+      cli::cli_alert_danger()
   }
   getOption(x, default = default)
+}
+
+.assert_class <- function(x, class) {
+  if (!inherits(x, class)) {
+    glue("Expecting object of class '{class}'") %>%
+      stop(call. = FALSE)
+  }
 }
 
 
