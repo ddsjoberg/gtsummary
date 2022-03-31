@@ -65,7 +65,7 @@ add_difference <- function(x, test = NULL, group = NULL,
                            pvalue_fun = NULL, estimate_fun = NULL) {
   # checking inputs ------------------------------------------------------------
   updated_call_list <- c(x$call_list, list(add_difference = match.call()))
-  .assert_class(x, c("tbl_sudmmary", "tbl_svysummary"))
+  .assert_class(x, c("tbl_summary", "tbl_svysummary"))
 
   if (is.null(x$by) || nrow(x$df_by) != 2) {
     stop("'tbl_summary'/'tbl_svysummary' object must have a `by=` value with exactly two levels", call. = FALSE)
