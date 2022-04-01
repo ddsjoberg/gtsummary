@@ -107,6 +107,7 @@ NULL
 modify_header <- function(x, update = NULL, ..., text_interpret = c("md", "html"),
                           quiet = NULL, stat_by = NULL) {
   updated_call_list <- c(x$call_list, list(modify_header = match.call()))
+  .assert_class(x, "gtsummary")
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
   text_interpret <- match.arg(text_interpret)
@@ -161,9 +162,7 @@ modify_footnote <- function(x, update = NULL, ..., abbreviation = FALSE,
                             text_interpret = c("md", "html"), quiet = NULL) {
   updated_call_list <- c(x$call_list, list(modify_footnote = match.call()))
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) {
-    stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
-  }
+  .assert_class(x, "gtsummary")
 
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
@@ -208,9 +207,8 @@ modify_spanning_header <- function(x, update = NULL, ...,
                                    text_interpret = c("md", "html"), quiet = NULL) {
   updated_call_list <- c(x$call_list, list(modify_spanning_header = match.call()))
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) {
-    stop("Argument `x=` must be an object with 'gtsummary' class", call. = FALSE)
-  }
+  .assert_class(x, "gtsummary")
+
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
@@ -247,7 +245,7 @@ modify_spanning_header <- function(x, update = NULL, ...,
 #' @export
 modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) abort("`x=` must be class 'gtsummary'.")
+  .assert_class(x, "gtsummary")
   if (!rlang::is_string(caption)) abort("`caption=` must be a string.")
   text_interpret <- match.arg(text_interpret)
   updated_call_list <- c(x$call_list, list(modify_caption = match.call()))
@@ -274,9 +272,7 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 
   # checking input -------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) {
-    stop("Pass a 'gtsummary' object in `x=` to print current column names and headers.")
-  }
+  .assert_class(x, "gtsummary")
 
   df_cols <-
     x$table_styling$header %>%

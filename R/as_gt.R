@@ -37,6 +37,7 @@
 
 as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
                   exclude = NULL) {
+  .assert_class(x, "gtsummary")
   # making list of commands to include -----------------------------------------
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_stop(

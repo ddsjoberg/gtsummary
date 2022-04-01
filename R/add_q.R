@@ -52,9 +52,7 @@ add_q <- function(x, method = "fdr", pvalue_fun = NULL, quiet = NULL) {
 
   # checking inputs ------------------------------------------------------------
   # checking class of x
-  if (!inherits(x, "gtsummary")) {
-    stop("`x=` must be a gtsummary obejct.", call. = FALSE)
-  }
+  .assert_class(x, "gtsummary")
 
   # checking input table has a p.value column
   if (!"p.value" %in% names(x$table_body)) {

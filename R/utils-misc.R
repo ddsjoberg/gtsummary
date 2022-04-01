@@ -75,9 +75,18 @@ gts_mapper <- function(x, context) {
           "{.emph soon} be removed from {.pkg gtsummary}.\nThe functionality",
           "has been migrated to a function argument or a gtsummary theme.",
           "\n{.url https://www.danieldsjoberg.com/gtsummary/articles/themes.html}") %>%
-    cli::cli_alert_danger()
+      cli::cli_alert_danger()
   }
   getOption(x, default = default)
+}
+
+.assert_class <- function(x, class, arg_name = "x") {
+  if (!inherits(x, class)) {
+    cls_clps <-
+      glue::glue_collapse(shQuote(class, type = "csh"), sep = ", ", last = ", or ")
+    glue("Error in argument '{arg_name}='. Expecting object of class {cls_clps}") %>%
+      stop(call. = FALSE)
+  }
 }
 
 

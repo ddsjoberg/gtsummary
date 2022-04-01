@@ -85,6 +85,7 @@ NULL
 add_glance_table <- function(x, include = everything(), label = NULL,
                              fmt_fun = NULL, glance_fun = NULL) {
   updated_call_list <- c(x$call_list, list(add_glance_table = match.call()))
+  .assert_class(x, c("tbl_regression"))
 
   # default glance() function --------------------------------------------------
   glance_fun <- glance_fun %||% .default_glance_fun(x)
@@ -142,6 +143,7 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
                                    text_interpret = c("md", "html"),
                                    sep1 = " = ", sep2 = "; ") {
   updated_call_list <- c(x$call_list, list(add_glance_source_note = match.call()))
+  .assert_class(x, c("tbl_regression"))
 
   # default glance() function --------------------------------------------------
   glance_fun <- glance_fun %||% .default_glance_fun(x)

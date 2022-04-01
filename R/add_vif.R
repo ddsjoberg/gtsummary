@@ -37,9 +37,8 @@
 add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   updated_call_list <- c(x$call_list, list(add_vif = match.call()))
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "tbl_regression")) {
-    stop("`x=` must be class 'tbl_regression'")
-  }
+  .assert_class(x, "tbl_regression")
+
   assert_package("car", "add_vif()")
   estimate_fun <- estimate_fun %||% style_sigfig %>% gts_mapper("add_vif(estimate_fun=)")
 

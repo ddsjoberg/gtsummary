@@ -19,6 +19,8 @@
   
 ### Other Updates
 
+* Improved error messaging the functions `as_gt()`, `as_kable()`, `as_flex_table()`, `as_hux_table()` when an object that is not class 'gtsummary' is passed. (#1188)
+
 * New function `as_hux_xlsx()` added to export a formatted {gtsummary} table directly to Excel.
 * Deprecated the `as_huxtable(strip_md_bold=)`  as {huxtable} now recognizes the markdown syntax and there is no reason to remove the markdown syntax.
 * Added `huxtable::set_header_rows()` to the `as_hux_table()` stack.

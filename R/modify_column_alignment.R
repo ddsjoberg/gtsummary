@@ -16,6 +16,7 @@
 #'   modify_column_alignment(columns = everything(), align = "left")
 
 modify_column_alignment <- function(x, columns, align = c("left", "right", "center")) {
+  .assert_class(x, "gtsummary")
   updated_call_list <- c(x$call_list, list(modify_column_hide = match.call()))
   align <- match.arg(align)
 
