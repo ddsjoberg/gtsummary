@@ -48,6 +48,7 @@
 #' \if{html}{\figure{as_flex_table_ex1.png}{options: width=60\%}}
 as_flex_table <- function(x, include = everything(), return_calls = FALSE,
                           strip_md_bold = TRUE) {
+  .assert_class(x, "gtsummary")
   # checking flextable installation --------------------------------------------
   assert_package("flextable", "as_flex_table()")
 

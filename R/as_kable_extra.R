@@ -114,6 +114,7 @@ as_kable_extra <- function(x,
                            addtl_fmt = TRUE,
                            return_calls = FALSE) {
   # must have kableExtra package installed to use this function ----------------
+  .assert_class(x, "gtsummary")
   assert_package("kableExtra", "as_kable_extra()")
 
   # running pre-conversion function, if present --------------------------------

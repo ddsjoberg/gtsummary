@@ -49,7 +49,7 @@
 #' @export
 #' @family Advanced modifiers
 modify_table_body <- function(x, fun, ...) {
-  if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
+  .assert_class(x, "gtsummary")
   updated_call_list <- c(x$call_list, list(modify_table_body = match.call()))
 
   # execute function on x$table_body -------------------------------------------

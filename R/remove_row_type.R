@@ -28,7 +28,7 @@ remove_row_type <- function(x, variables = everything(),
                             type = c("header", "reference", "missing")) {
   updated_call_list <- c(x$call_list, list(remove_row_type = match.call()))
   # check inputs ---------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) abort("Argument `x=` must be class 'gtsummary'")
+  .assert_class(x, "gtsummary")
   type <- match.arg(type)
 
   # convert variables input to character variable names ------------------------

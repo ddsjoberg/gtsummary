@@ -60,7 +60,7 @@
 #' \if{html}{\figure{modify_cols_merge_ex2.png}{options: width=41\%}}
 modify_cols_merge <- function(x, pattern, rows = NULL) {
   # check inputs ---------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) abort("`x=` must be class 'gtsummary'")
+  .assert_class(x, "gtsummary")
   if (!rlang::is_string(pattern)) abort("`pattern=` must be a string.")
   updated_call_list <- c(x$call_list, list(modify_column_hide = match.call()))
 

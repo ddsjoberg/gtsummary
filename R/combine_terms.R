@@ -45,6 +45,8 @@
 combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
   assert_package("survival", "combine_terms()") # required for survreg() models
   updated_call_list <- c(x$call_list, list(combine_terms = match.call()))
+  .assert_class(x, "tbl_regression")
+
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE
 

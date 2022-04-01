@@ -28,6 +28,7 @@ test_that("tbl_survfit", {
   fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 
   expect_error(tbl_survfit(fit1, times = c(12, 24), label_header = "**{time} Months**") %>% as_gt(), NA)
+  expect_error(as_gt(fit1))
 })
 
 test_that("indent2", {

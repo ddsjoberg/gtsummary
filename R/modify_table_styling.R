@@ -94,7 +94,8 @@ modify_table_styling <- function(x,
                                  cols_merge_pattern = NULL) {
   updated_call_list <- c(x$call_list, list(modify_table_styling = match.call()))
   # checking inputs ------------------------------------------------------------
-  if (!inherits(x, "gtsummary")) stop("`x=` must be class 'gtsummary'", call. = FALSE)
+  .assert_class(x, "gtsummary")
+
   if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
   text_interpret <- match.arg(text_interpret) %>% {
     paste0("gt::", .)

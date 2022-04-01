@@ -33,6 +33,8 @@
 
 modify_fmt_fun <- function(x, update, rows = NULL) {
   updated_call_list <- c(x$call_list, list(modify_column_unhide = match.call()))
+  .assert_class(x, "gtsummary")
+
   # converting update arg to a tidyselect list ---------------------------------
   update <-
     .formula_list_to_named_list(

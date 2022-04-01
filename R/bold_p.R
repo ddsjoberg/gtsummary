@@ -36,10 +36,7 @@
 bold_p <- function(x, t = 0.05, q = FALSE) {
   updated_call_list <- c(x$call_list, list(bold_p = match.call()))
   # checking inputs ------------------------------------------------------------
-  # checking class of x
-  if (!inherits(x, "gtsummary")) {
-    stop("`x=` must be a gtsummary object.", call. = FALSE)
-  }
+  .assert_class(x, "gtsummary")
 
   # checking input table has a p.value column
   if (q == FALSE && !"p.value" %in% names(x$table_body)) {
