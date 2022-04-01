@@ -80,9 +80,11 @@ gts_mapper <- function(x, context) {
   getOption(x, default = default)
 }
 
-.assert_class <- function(x, class) {
+.assert_class <- function(x, class, arg_name = "x") {
   if (!inherits(x, class)) {
-    glue("Expecting object of class {quoted_list(class)}") %>%
+    cls_clps <-
+      glue::glue_collapse(shQuote(class, type = "csh"), sep = ", ", last = ", or ")
+    glue("Error in argument '{arg_name}='. Expecting object of class {cls_clps}") %>%
       stop(call. = FALSE)
   }
 }
