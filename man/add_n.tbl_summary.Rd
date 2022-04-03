@@ -11,7 +11,6 @@
   col_label = "**N**",
   footnote = FALSE,
   last = FALSE,
-  missing = NULL,
   ...
 )
 
@@ -21,7 +20,6 @@
   col_label = "**N**",
   footnote = FALSE,
   last = FALSE,
-  missing = NULL,
   ...
 )
 }
@@ -38,9 +36,12 @@ Other statistics available to report include:
 \item \code{"{n_miss}"} number of missing observations,
 \item \code{"{p}"} percent non-missing data,
 \item \code{"{p_miss}"} percent missing data
+\item survey summaries also have the following unweighted statistics available:
+\code{"N_obs_unweighted"}, \code{"N_miss_unweighted"}, \code{"N_nonmiss_unweighted"}, \code{"p_miss_unweighted"}, \code{"p_nonmiss_unweighted"}
+}
+
 The argument uses \link[glue:glue]{glue::glue} syntax and multiple statistics may be reported,
-e.g. \code{statistic = "{n} / {N} ({p}\%)"}
-}}
+e.g. \code{statistic = "{n} / {N} ({p}\%)"}}
 
 \item{col_label}{String indicating the column label.  Default is \code{"**N**"}}
 
@@ -49,9 +50,6 @@ clarifying the statistics presented. Default is \code{FALSE}}
 
 \item{last}{Logical indicator to include N column last in table.
 Default is \code{FALSE}, which will display N column first.}
-
-\item{missing}{DEPRECATED. Logical argument indicating whether to print N
-(\code{missing = FALSE}), or N missing (\code{missing = TRUE}).  Default is \code{FALSE}}
 
 \item{...}{Not used}
 }

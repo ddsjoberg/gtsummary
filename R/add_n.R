@@ -28,6 +28,9 @@ add_n <- function(x, ...) {
 #' * `"{n_miss}"` number of missing observations,
 #' * `"{p}"` percent non-missing data,
 #' * `"{p_miss}"` percent missing data
+#' * survey summaries also have the following unweighted statistics available:
+#' `"N_obs_unweighted"`, `"N_miss_unweighted"`, `"N_nonmiss_unweighted"`, `"p_miss_unweighted"`, `"p_nonmiss_unweighted"`
+#'
 #' The argument uses [glue::glue] syntax and multiple statistics may be reported,
 #' e.g. `statistic = "{n} / {N} ({p}%)"`
 #' @param col_label String indicating the column label.  Default is `"**N**"`
@@ -35,8 +38,6 @@ add_n <- function(x, ...) {
 #' clarifying the statistics presented. Default is `FALSE`
 #' @param last Logical indicator to include N column last in table.
 #' Default is `FALSE`, which will display N column first.
-#' @param missing DEPRECATED. Logical argument indicating whether to print N
-#' (`missing = FALSE`), or N missing (`missing = TRUE`).  Default is `FALSE`
 #' @param ... Not used
 #' @family tbl_summary tools
 #' @family tbl_svysummary tools
@@ -58,7 +59,7 @@ add_n <- function(x, ...) {
 #' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
 
 add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
-                              last = FALSE, missing = NULL, ...) {
+                              last = FALSE, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))
   updated_call_list <- c(x$call_list, list(add_n = match.call()))
   # checking that input is class tbl_summary
@@ -67,11 +68,11 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
   }
 
   # DEPRECATED specifying statistic via missing argument -----------------------
-  if (!is.null(missing)) {
+  if (!is.null(rlang::dots_list(...)[["missing"]])) {
     lifecycle::deprecate_stop(
       "1.2.2",
-      "gtsummary::add_n(missing = )",
-      "gtsummary::add_n(statistic = )"
+      "gtsummary::add_n(missing=)",
+      "gtsummary::add_n(statistic=)"
     )
   }
 
