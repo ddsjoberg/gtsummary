@@ -31,17 +31,17 @@ with class \code{tbl_svysummary} from the \link{tbl_svysummary} function}
 number of non-missing observation for each variable, \code{statistic = "{n}"}.
 Other statistics available to report include:
 \itemize{
-\item \code{"{N}"} total number of observations,
-\item \code{"{n}"} number of non-missing observations,
-\item \code{"{n_miss}"} number of missing observations,
-\item \code{"{p}"} percent non-missing data,
+\item \code{"{N_obs}"} total number of observations,
+\item \code{"{N_nonmiss}"} number of non-missing observations,
+\item \code{"{N_miss}"} number of missing observations,
+\item \code{"{p_nonmiss}"} percent non-missing data,
 \item \code{"{p_miss}"} percent missing data
 \item survey summaries also have the following unweighted statistics available:
 \code{"N_obs_unweighted"}, \code{"N_miss_unweighted"}, \code{"N_nonmiss_unweighted"}, \code{"p_miss_unweighted"}, \code{"p_nonmiss_unweighted"}
 }
 
 The argument uses \link[glue:glue]{glue::glue} syntax and multiple statistics may be reported,
-e.g. \code{statistic = "{n} / {N} ({p}\%)"}}
+e.g. \code{statistic = "{N_nonmiss} / {N_obs} ({p_nonmiss}\%)"}}
 
 \item{col_label}{String indicating the column label.  Default is \code{"**N**"}}
 
