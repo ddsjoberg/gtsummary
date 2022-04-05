@@ -27,6 +27,10 @@ bold_labels <- function(x) {
   updated_call_list <- c(x$call_list, list(bold_labels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
+  if (!"row_type" %in% x$table_styling$header$column) {
+    cli::cli_alert_warning("{.code bold_labels()} cannot be used in this context.")
+    return(x)
+  }
 
   # bold labels ----------------------------------------------------------------
   x <-
@@ -48,6 +52,10 @@ bold_levels <- function(x) {
   updated_call_list <- c(x$call_list, list(bold_levels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
+  if (!"row_type" %in% x$table_styling$header$column) {
+    cli::cli_alert_warning("{.code bold_levels()} cannot be used in this context.")
+    return(x)
+  }
 
   # bold levels ----------------------------------------------------------------
   x <-
@@ -70,6 +78,10 @@ italicize_labels <- function(x) {
   updated_call_list <- c(x$call_list, list(italicize_labels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
+  if (!"row_type" %in% x$table_styling$header$column) {
+    cli::cli_alert_warning("{.code italicize_labels()} cannot be used in this context.")
+    return(x)
+  }
 
   # italicize labels -----------------------------------------------------------
   x <-
@@ -92,6 +104,10 @@ italicize_levels <- function(x) {
   updated_call_list <- c(x$call_list, list(italicize_levels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
+  if (!"row_type" %in% x$table_styling$header$column) {
+    cli::cli_alert_warning("{.code italicize_levels()} cannot be used in this context.")
+    return(x)
+  }
 
   # italicize levels -----------------------------------------------------------
   x <-
