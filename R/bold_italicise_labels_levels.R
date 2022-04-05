@@ -32,7 +32,7 @@ bold_labels <- function(x) {
   x <-
     modify_table_styling(
       x,
-      columns = "label",
+      columns = .first_unhidden_column(x),
       rows = .data$row_type == "label",
       text_format = "bold"
     )
@@ -53,7 +53,7 @@ bold_levels <- function(x) {
   x <-
     modify_table_styling(
       x,
-      columns = "label",
+      columns = .first_unhidden_column(x),
       rows = .data$row_type != "label",
       text_format = "bold"
     )
@@ -75,7 +75,7 @@ italicize_labels <- function(x) {
   x <-
     modify_table_styling(
       x,
-      columns = "label",
+      columns = .first_unhidden_column(x),
       rows = .data$row_type == "label",
       text_format = "italic"
     )
@@ -97,7 +97,7 @@ italicize_levels <- function(x) {
   x <-
     modify_table_styling(
       x,
-      columns = "label",
+      columns = .first_unhidden_column(x),
       rows = .data$row_type != "label",
       text_format = "italic"
     )
@@ -105,4 +105,10 @@ italicize_levels <- function(x) {
   x$call_list <- updated_call_list
 
   x
+}
+
+.first_unhidden_column <- function(x) {
+  x$table_styling$header %>%
+    dplyr::filter(!.data$hide) %>%
+    purrr::pluck("column", 1)
 }
