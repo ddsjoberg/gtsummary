@@ -19,6 +19,8 @@
   
 ### Other Updates
 
+* Functions `bold_labels()`, `bold_levels()`, `italicize_labels()`, and `italicize_levels()` now bold/italicize the first column shown in the table. Previously, the `"label"` column (which is most often the first shown column) was styled.
+
 * Improved error messaging the functions `as_gt()`, `as_kable()`, `as_flex_table()`, `as_hux_table()` when an object that is not class 'gtsummary' is passed. (#1188)
 
 * New function `as_hux_xlsx()` added to export a formatted {gtsummary} table directly to Excel.
