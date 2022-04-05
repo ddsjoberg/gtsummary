@@ -27,12 +27,16 @@ bold_labels <- function(x) {
   updated_call_list <- c(x$call_list, list(bold_labels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
+  if (!"row_type" %in% x$table_styling$header$column) {
+    cli::cli_alert_warning("{.code bold_labels()} cannot be used in this context.")
+    return(x)
+  }
 
   # bold labels ----------------------------------------------------------------
   x <-
     modify_table_styling(
       x,
-      columns = "label",
+      columns = .first_unhidden_column(x),
       rows = .data$row_type == "label",
       text_format = "bold"
     )
@@ -48,12 +52,16 @@ bold_levels <- function(x) {
   updated_call_list <- c(x$call_list, list(bold_levels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
+  if (!"row_type" %in% x$table_styling$header$column) {
+    cli::cli_alert_warning("{.code bold_levels()} cannot be used in this context.")
+    return(x)
+  }
 
   # bold levels ----------------------------------------------------------------
   x <-
     modify_table_styling(
       x,
-      columns = "label",
+      columns = .first_unhidden_column(x),
       rows = .data$row_type != "label",
       text_format = "bold"
     )
@@ -70,12 +78,16 @@ italicize_labels <- function(x) {
   updated_call_list <- c(x$call_list, list(italicize_labels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
+  if (!"row_type" %in% x$table_styling$header$column) {
+    cli::cli_alert_warning("{.code italicize_labels()} cannot be used in this context.")
+    return(x)
+  }
 
   # italicize labels -----------------------------------------------------------
   x <-
     modify_table_styling(
       x,
-      columns = "label",
+      columns = .first_unhidden_column(x),
       rows = .data$row_type == "label",
       text_format = "italic"
     )
@@ -92,12 +104,16 @@ italicize_levels <- function(x) {
   updated_call_list <- c(x$call_list, list(italicize_levels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
+  if (!"row_type" %in% x$table_styling$header$column) {
+    cli::cli_alert_warning("{.code italicize_levels()} cannot be used in this context.")
+    return(x)
+  }
 
   # italicize levels -----------------------------------------------------------
   x <-
     modify_table_styling(
       x,
-      columns = "label",
+      columns = .first_unhidden_column(x),
       rows = .data$row_type != "label",
       text_format = "italic"
     )
@@ -105,4 +121,10 @@ italicize_levels <- function(x) {
   x$call_list <- updated_call_list
 
   x
+}
+
+.first_unhidden_column <- function(x) {
+  x$table_styling$header %>%
+    dplyr::filter(!.data$hide) %>%
+    purrr::pluck("column", 1)
 }
