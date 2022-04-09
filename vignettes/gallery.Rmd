@@ -1,8 +1,8 @@
 ---
-title: "Table Gallery"
+title: "FAQ + Gallery"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Table Gallery}
+  %\VignetteIndexEntry{FAQ + Gallery}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -30,7 +30,7 @@ if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
 }
 ```
 
-Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting table using {gtsummary}, please submit it to the gallery via a pull request to the [GitHub repository](https://github.com/ddsjoberg/gtsummary).
+FAQ and Gallery showing various tables possible with the {gtsummary} package.
 
 ```{r setup, message = FALSE, warning=FALSE}
 library(gtsummary); library(gt); library(survival)
@@ -39,10 +39,88 @@ library(dplyr); library(stringr); library(purrr); library(forcats); library(tidy
 
 <hr>
 
+## Frequently Asked Questions
+
+### Data Summary Tables
+
+Headers, Labels and Formatting
+
+1. [How do I **modify column headers** in a table?](#table-header)
+
+1. [How do I **change the value** of the by levels?](#modify-pvalue)
+
+1. [How do I added a **spanning header** row to a table?](#table-header)
+
+1. [How do I change **variable labels**?](#modify-pvalue)
+
+1. [How do I **italicize or bold labels** in a table?](#table-header)
+
+1. [How do I **italicize or bold levels** in a table?](#continuous2)
+
+1. [How do I reduce **font size and cell padding** in a table?](#side-by-side)
+
+Adding and Modifying Statistics
+ 
+8. [How do I add the **number of observations** to a summary table?](#table-header)
+
+1. [How do I show **additional summary statistics** as a new row?](#continuous2)
+
+1. [How do I include a column for **missing values of a grouping variable**?](#include-missing)
+
+1. [How do I add a column with the **confidence around the mean**?](#mean-ci)
+
+1. [How do I add a column for the **difference between groups**?](#add_difference)
+
+1. [How do I summarize a continuous variable by one, two (or more) categorical variables?](#cross_tab_continuous)
+
+1. [How do I **stratify a summary table** by more than one variable?](#tbl_strata)
+
+1. [How do I change the **p-values format**?](#modify-pvalue)
+
+1. [How do I add a p-value for each group compared to a **single reference group**?](#compare-to-ref)
+
+1. [How do I add a correction for **multiple testing**?](#modify-pvalue)
+
+1. [How do I **combine** a summary table with a regression table?](#side-by-side)
+
+Statistical Tests
+
+19. [How do I do a **paired** t-test or McNemar's test?](#paired-test)
+
+<hr>
+
+### Regression Tables
+
+Headers, Labels and Formatting
+
+1. [How do I change the text in a **footnote**?](#tbl_uvregression-x)
+
+1. [How do I add **significance stars** for low p-values?](#add_significance_stars)
+
+1. [How do I **reduce font size** and cell padding in a table?](#side-by-side)
+
+Creating and Combining Tables
+
+4. [How do I **combine** the results of two related regression models into one table?](#side-by-side)
+
+1. [How do I **combine** a regression table with a summary table?](#side-by-side)
+
+1. [How do I create a regression table for **multiple models** with the same covariate(s) and different outcomes?](#tbl_uvregression-x)
+
+Adding and Modifying Statistics
+
+7. [How do I add total **event numbers** to a regression table?](#add_nevent)
+
+1. [How do I add event numbers for **each level** of a categorical covariate?](#add_nevent-levels)
+
+1. [How do I format a **Wald confidence interval**?](#wald-ci)
+
+<hr>
+
 ## Summary Tables
 <a id="table-header"></a>
 
-Add a spanning header over the group columns for increased clarity, and modify column headers.
+Add a spanning header over the group columns for increased clarity, and modify column headers. Using `bold_labels()` formats the labels as bold, but labels can also be italicized using `italicize_labels()`, or combined to format with both bold and italics.
 
 ```{r}
 trial %>%
@@ -52,7 +130,7 @@ trial %>%
     missing = "no",
     statistic = all_continuous() ~ "{median} ({p25}, {p75})"
   ) %>%
-  modify_header(all_stat_cols() ~ "**{level}**<br>N =  {n} ({style_percent(p)}%)") %>%
+  modify_header(all_stat_cols() ~ "**{level}**<br>N = {n} ({style_percent(p)}%)") %>%
   add_n() %>%
   bold_labels() %>%
   modify_spanning_header(all_stat_cols() ~ "**Chemotherapy Treatment**")
@@ -61,7 +139,7 @@ trial %>%
 <hr>
 <a id="continuous2"></a>
 
-Show continuous summary statistics on multiple lines.
+Show continuous summary statistics on multiple lines. Levels are italicized here using the `italicize_levels()` function, but the `bold_levels()` function can be used instead to create bold text, or both functions can be used together to get text that is both bold and in italics.
 
 ```{r}
 trial %>%
@@ -82,6 +160,7 @@ trial %>%
 <a id="modify-pvalue"></a>
 
 Modify the function that formats the p-values, change variable labels, updating tumor response header, and add a correction for multiple testing.
+
 ```{r, message = FALSE}
 trial %>%
   select(response, age, grade) %>%
@@ -110,7 +189,7 @@ trial %>%
   tbl_summary(
     by = response, 
     label = list(age ~ "Patient Age", grade ~ "Tumor Grade")
-  )  
+  ) 
 ```
 
 <hr>
@@ -207,34 +286,22 @@ tbl_merge(list(t0, t1, t2)) %>%
 <hr>
 <a id="mean-ci"></a>
 
-Add additional statistics as additional columns.
+Add 95% confidence interval around the mean as an additional column
 
 ```{r}
-# define function for lower and upper bounds of the mean CI
-ll <- function(x) t.test(x)$conf.int[1]
-ul <- function(x) t.test(x)$conf.int[2]
 
-t1 <-
-  trial %>%
+trial %>%
   select(age, marker) %>%
   tbl_summary(statistic = all_continuous() ~ "{mean} ({sd})", missing = "no") %>%
-  modify_header(stat_0 ~ "**Mean (SD)**")
+  modify_header(stat_0 ~ "**Mean (SD)**") %>%
+  add_ci()
 
-t2 <-
-  trial %>%
-  select(age, marker) %>%
-  tbl_summary(statistic = all_continuous() ~ "{ll}, {ul}", missing = "no") %>%
-  modify_header(stat_0 ~ "**95% CI for Mean**")
-
-tbl_merge(list(t1, t2)) %>%
-  modify_footnote(everything() ~ NA_character_) %>%
-  modify_spanning_header(everything() ~ NA_character_)
 ```
 
 <hr>
 <a id="cross_tab_continuous"></a>
 
-It's often needed to summarize a continuous by one, two, or more categorical variables.
+It's often needed to summarize a continuous variable by one, two, or more categorical variables. The example below shows a table summarizing a continuous variable by two categorical variables. To summarize by more than two categorical variables, use `tbl_continuous` in conjunction with `tbl_strata` (see an example of `tbl_strata` [here](#tbl_strata)).
 
 ```{r}
 trial %>%
@@ -266,6 +333,7 @@ trial %>%
 <a id="add_nevent"></a>
 
 Include number of observations and the number of events in a univariate regression table.
+
 ```{r}
 trial %>%
   select(response, age, grade) %>%
@@ -283,6 +351,7 @@ trial %>%
 
 Include two related models side-by-side with descriptive statistics.
 We also use the compact table theme that reduces cell padding and font size.
+
 ```{r}
 gt_r1 <- glm(response ~ trt + grade, trial, family = binomial) %>%
   tbl_regression(exponentiate = TRUE)
