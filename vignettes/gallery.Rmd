@@ -30,7 +30,7 @@ if (!identical(Sys.getenv("IN_PKGDOWN"), "true") &&
 }
 ```
 
-Gallery showing various tables possible with the {gtsummary} package.  If you have created an interesting table using {gtsummary}, please submit it to the gallery via a pull request to the [GitHub repository](https://github.com/ddsjoberg/gtsummary).
+FAQ and Gallery showing various tables possible with the {gtsummary} package.
 
 ```{r setup, message = FALSE, warning=FALSE}
 library(gtsummary); library(gt); library(survival)
@@ -41,51 +41,51 @@ library(dplyr); library(stringr); library(purrr); library(forcats); library(tidy
 
 ## Frequently Asked Questions
 
-### Summary Tables
+### Data Summary Tables
 
 Headers, Labels and Formatting
 
-[How do I modify statistical column headers in a table?](#table-header)
+1. [How do I **modify column headers** in a table?](#table-header)
 
-[How do I modify column headers for grouping variable levels?](#modify-pvalue)
+1. [How do I **change the value** of the by levels?](#modify-pvalue)
 
-[How do I added a spanning header row to a table?](#table-header)
+1. [How do I added a **spanning header** row to a table?](#table-header)
 
-[How do I change variable (row) labels?](#modify-pvalue)
+1. [How do I change **variable labels**?](#modify-pvalue)
 
-[How do I italicize or bold labels in a table?](#table-header)
+1. [How do I **italicize or bold labels** in a table?](#table-header)
 
-[How do I italicize or bold levels in a table?](#continuous2)
+1. [How do I **italicize or bold levels** in a table?](#continuous2)
 
-[How do I reduce font size and cell padding in a table?](#side-by-side)
+1. [How do I reduce **font size and cell padding** in a table?](#side-by-side)
 
 Adding and Modifying Statistics
+ 
+8. [How do I add the **number of observations** to a summary table?](#table-header)
 
-[How do I add the number of observations to a summary table?](#table-header)
+1. [How do I show **additional summary statistics** as a new row?](#continuous2)
 
-[How do I show additional summary statistics as a new row?](#continuous2)
+1. [How do I include a column for **missing values of a grouping variable**?](#include-missing)
 
-[How do I include a column for missing (NA) values of a grouping variable?](#include-missing)
+1. [How do I add a column with the **confidence around the mean**?](#mean-ci)
 
-[How do I add a column containing the 95% confidence around the mean?](#mean-ci)
+1. [How do I add a column for the **difference between groups**?](#add_difference)
 
-[How do I add a column for the difference between groups?](#add_difference)
+1. [How do I summarize a continuous variable by one, two (or more) categorical variables?](#cross_tab_continuous)
 
-[How do I summarize a continuous variable by one, two (or more) categorical variables?](#cross_tab_continuous)
+1. [How do I **stratify a summary table** by more than one variable?](#tbl_strata)
 
-[How do I stratify a summary table by more than one variable?](#tbl_strata)
+1. [How do I change the **p-values format**?](#modify-pvalue)
 
-[How do I change the format used for p-values?](#modify-pvalue)
+1. [How do I add a p-value for each group compared to a **single reference group**?](#compare-to-ref)
 
-[How do I add a p-value for each group compared to a single reference group?](#compare-to-ref)
+1. [How do I add a correction for **multiple testing**?](#modify-pvalue)
 
-[How do I add a correction for multiple testing?](#modify-pvalue)
-
-[How do I combine a summary table with a regression table?](#side-by-side)
+1. [How do I **combine** a summary table with a regression table?](#side-by-side)
 
 Statistical Tests
 
-[How do I do a paired t-test or McNemar's test?](#paired-test)
+19. [How do I do a **paired** t-test or McNemar's test?](#paired-test)
 
 <hr>
 
@@ -93,27 +93,27 @@ Statistical Tests
 
 Headers, Labels and Formatting
 
-[How do I change the text in a footnote?](#tbl_uvregression-x)
+1. [How do I change the text in a **footnote**?](#tbl_uvregression-x)
 
-[How do I add significance stars for low p-values?](#add_significance_stars)
+1. [How do I add **significance stars** for low p-values?](#add_significance_stars)
 
-[How do I reduce font size and cell padding in a table?](#side-by-side)
+1. [How do I **reduce font size** and cell padding in a table?](#side-by-side)
 
 Creating and Combining Tables
 
-[How do I combine the results of two related regression models into one table?](#side-by-side)
+4. [How do I **combine** the results of two related regression models into one table?](#side-by-side)
 
-[How do I combine a regression table with a summary table?](#side-by-side)
+1. [How do I **combine** a regression table with a summary table?](#side-by-side)
 
-[How do I create a regression table for multiple models with the same covariate(s) and different outcomes?](#tbl_uvregression-x)
+1. [How do I create a regression table for **multiple models** with the same covariate(s) and different outcomes?](#tbl_uvregression-x)
 
 Adding and Modifying Statistics
 
-[How do I add total event numbers to a regression table?](#add_nevent)
+7. [How do I add total **event numbers** to a regression table?](#add_nevent)
 
-[How do I add event numbers for each level of a categorical covariate?](#add_nevent-levels)
+1. [How do I add event numbers for **each level** of a categorical covariate?](#add_nevent-levels)
 
-[How do I format a Wald confidence interval?](#wald-ci)
+1. [How do I format a **Wald confidence interval**?](#wald-ci)
 
 <hr>
 
