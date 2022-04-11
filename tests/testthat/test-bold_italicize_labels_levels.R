@@ -5,6 +5,9 @@ tbl <- trial %>%
   add_p() %>%
   add_q()
 
+tbl_cross_ex <- trial %>%
+  tbl_cross(row = trt, col = response)
+
 test_that("tab_style: bold and italicize", {
   expect_error(
     tbl %>%
@@ -16,6 +19,17 @@ test_that("tab_style: bold and italicize", {
       bold_p(q = TRUE, t = 0.2),
     NA
   )
+
+  expect_error(
+    tbl_cross_ex %>%
+    #  bold_labels() %>%
+      bold_levels() %>%
+      italicize_labels() %>%
+      italicize_levels() %>%
+      bold_p()
+    NA
+  )
+
   expect_warning(
     tbl %>%
       bold_labels() %>%
@@ -49,5 +63,28 @@ test_that("error when non-gtsummary object passed", {
     mtcars %>%
       italicize_levels(),
     NULL
+  )
+})
+
+test_that("", {
+  expect_error(
+    tbl %>%
+      bold_labels() %>%
+      bold_levels() %>%
+      italicize_labels() %>%
+      italicize_levels() %>%
+      bold_p() %>%
+      bold_p(q = TRUE, t = 0.2),
+    NA
+  )
+  expect_warning(
+    tbl %>%
+      bold_labels() %>%
+      bold_levels() %>%
+      italicize_labels() %>%
+      italicize_levels() %>%
+      bold_p() %>%
+      bold_p(q = TRUE, t = 0.2),
+    NA
   )
 })

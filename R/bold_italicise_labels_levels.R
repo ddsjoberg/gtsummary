@@ -21,9 +21,16 @@
 NULL
 
 
-#' @describeIn bold_italicize_labels_levels Bold labels in gtsummary tables
 #' @export
-bold_labels <- function(x) {
+#' @rdname bold_italicize_labels_levels
+bold_labels <- function(x, ...) {
+  UseMethod("bold_labels")
+}
+
+
+#' @export
+#' @rdname bold_italicize_labels_levels
+bold_labels.gtsummary <- function(x) {
   updated_call_list <- c(x$call_list, list(bold_labels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
@@ -46,9 +53,15 @@ bold_labels <- function(x) {
   x
 }
 
-#' @describeIn bold_italicize_labels_levels Bold levels in gtsummary tables
 #' @export
-bold_levels <- function(x) {
+#' @rdname bold_italicize_labels_levels
+bold_levels <- function(x, ...) {
+  UseMethod("bold_labels")
+}
+
+#' @export
+#' @rdname bold_italicize_labels_levels
+bold_levels.gtsummary <- function(x) {
   updated_call_list <- c(x$call_list, list(bold_levels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
@@ -72,8 +85,31 @@ bold_levels <- function(x) {
 }
 
 
-#' @describeIn bold_italicize_labels_levels Italicize labels in gtsummary tables
 #' @export
+#' @rdname bold_italicize_labels_levels
+bold_levels.tbl_cross <- function(x) {
+
+  x <- bold_levels.gtsummary(x)
+
+  # bold levels ----------------------------------------------------------------
+  stats_to_bold <- x$table_body %>%
+    select(all_stat_cols(FALSE)) %>%
+    names()
+
+  x$table_styling$header <-
+    mutate(x$table_styling$header,
+           label =
+             case_when(
+               .data$hide == FALSE & (.data$column %in% stats_to_bold) ~
+                 paste0("**", label,  "**"),
+               TRUE ~ label
+             ))
+  x
+
+}
+
+#' @export
+#' @rdname bold_italicize_labels_levels
 italicize_labels <- function(x) {
   updated_call_list <- c(x$call_list, list(italicize_labels = match.call()))
   # input checks ---------------------------------------------------------------
@@ -98,9 +134,9 @@ italicize_labels <- function(x) {
 }
 
 
-#' @describeIn bold_italicize_labels_levels Italicize levels in gtsummary tables
 #' @export
-italicize_levels <- function(x) {
+#' @rdname bold_italicize_labels_levels
+italicize_levels.gtsummary <- function(x) {
   updated_call_list <- c(x$call_list, list(italicize_levels = match.call()))
   # input checks ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
@@ -121,6 +157,30 @@ italicize_levels <- function(x) {
   x$call_list <- updated_call_list
 
   x
+}
+
+
+#' @export
+#' @rdname bold_italicize_labels_levels
+italicize_levels.tbl_cross <- function(x) {
+
+  x <- italicize_levels.gtsummary(x)
+
+  # bold levels ----------------------------------------------------------------
+  stats_to_bold <- x$table_body %>%
+    select(all_stat_cols(FALSE)) %>%
+    names()
+
+  x$table_styling$header <-
+    mutate(x$table_styling$header,
+           label =
+             case_when(
+               .data$hide == FALSE & (.data$column %in% stats_to_bold) ~
+                 paste0("*", label,  "*"),
+               TRUE ~ label
+             ))
+  x
+
 }
 
 .first_unhidden_column <- function(x) {
