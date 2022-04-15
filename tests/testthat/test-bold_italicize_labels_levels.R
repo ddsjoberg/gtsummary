@@ -1,3 +1,5 @@
+
+
 skip_on_cran()
 
 tbl <- trial %>%
@@ -5,8 +7,19 @@ tbl <- trial %>%
   add_p() %>%
   add_q()
 
+
 tbl_cross_ex <- trial %>%
   tbl_cross(row = trt, col = response)
+
+tbl_uv_ex1 <-
+  tbl_uvregression(
+    trial[c("response", "age", "grade")],
+    method = glm,
+    y = response,
+    method.args = list(family = binomial),
+    exponentiate = TRUE
+  )
+
 
 test_that("tab_style: bold and italicize", {
   expect_error(
@@ -22,11 +35,19 @@ test_that("tab_style: bold and italicize", {
 
   expect_error(
     tbl_cross_ex %>%
-    #  bold_labels() %>%
+      bold_labels() %>%
       bold_levels() %>%
       italicize_labels() %>%
-      italicize_levels() %>%
-      bold_p()
+      italicize_levels(),
+    NA
+  )
+
+  expect_error(
+    tbl_uv_ex1 %>%
+      bold_labels() %>%
+      bold_levels() %>%
+      italicize_labels() %>%
+      italicize_levels(),
     NA
   )
 
@@ -42,6 +63,18 @@ test_that("tab_style: bold and italicize", {
   )
 })
 
+test_that("expect message when bold_labels() on tbl_cross", {
+
+  expect_message(
+    tbl_cross_ex %>%
+      bold_labels() %>%
+      bold_levels() %>%
+      italicize_labels() %>%
+      italicize_levels(),
+    "*"
+  )
+
+})
 
 test_that("error when non-gtsummary object passed", {
   expect_error(
@@ -66,25 +99,7 @@ test_that("error when non-gtsummary object passed", {
   )
 })
 
-test_that("", {
-  expect_error(
-    tbl %>%
-      bold_labels() %>%
-      bold_levels() %>%
-      italicize_labels() %>%
-      italicize_levels() %>%
-      bold_p() %>%
-      bold_p(q = TRUE, t = 0.2),
-    NA
-  )
-  expect_warning(
-    tbl %>%
-      bold_labels() %>%
-      bold_levels() %>%
-      italicize_labels() %>%
-      italicize_levels() %>%
-      bold_p() %>%
-      bold_p(q = TRUE, t = 0.2),
-    NA
-  )
-})
+
+
+
+
