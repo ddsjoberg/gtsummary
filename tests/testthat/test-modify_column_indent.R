@@ -1,5 +1,5 @@
 test_that("modify_column_indent() works", {
-  expect_equal(
+  expect_error(
     tbl <-
       trial %>%
       select(grade) %>%
