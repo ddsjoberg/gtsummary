@@ -48,6 +48,15 @@ Once \code{gt::cols_merge()} gains the \verb{rows=} argument the
 implementation will be updated to use it, which will keep
 numeric columns numeric. For the \emph{vast majority} of users,
 \emph{the planned change will be go unnoticed}.
+
+If this functionality is used in conjunction with \code{tbl_stack()} (which
+includes \code{tbl_uvregression()}), there is potential issue with printing.
+When columns are stack AND when the column-merging is
+defined with a quosure, you may run into issues due to the loss of the
+environment when 2 or more quosures are combined. If the expression
+version of the quosure is the same as the quosure (i.e. no evaluated
+objects), there should be no issues. Regardless, this argument is used
+internally with care, and it is \emph{not} recommended for users.
 }
 
 \section{Example Output}{
@@ -86,6 +95,7 @@ modify_cols_merge_ex2 <-
 Other Advanced modifiers: 
 \code{\link{modify_column_alignment}()},
 \code{\link{modify_column_hide}()},
+\code{\link{modify_column_indent}()},
 \code{\link{modify_fmt_fun}()},
 \code{\link{modify_table_body}()},
 \code{\link{modify_table_styling}()}
