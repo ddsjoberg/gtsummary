@@ -7,14 +7,14 @@
 #' @param rows predicate expression to select rows to indent. Default is `NULL`,
 #' indicating all rows
 #' @param double_indent logical indicating whether to double indent the cells.
-#' Default is `FALSE`
+#' Default is `FALSE` for a single indentation
 #' @param undo logical indicating whether an indentation should be removed/undone.
 #' Default is `FALSE`
 #'
 #' @return a gtsummary table
 #' @export
-#' @family Advanced modifiers
 #'
+#' @family Advanced modifiers
 #' @examples
 #' # remove indentation from `tbl_summary()`
 #' modify_column_indent_ex1 <-

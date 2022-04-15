@@ -21,7 +21,7 @@ modify_column_indent(
 indicating all rows}
 
 \item{double_indent}{logical indicating whether to double indent the cells.
-Default is \code{FALSE}}
+Default is \code{FALSE} for a single indentation}
 
 \item{undo}{logical indicating whether an indentation should be removed/undone.
 Default is \code{FALSE}}
