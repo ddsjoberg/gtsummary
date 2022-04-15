@@ -174,7 +174,12 @@ italicize_labels.tbl_cross <- function(x) {
                .data$hide == FALSE & (.data$column %in% stats_to_ital) ~
                  paste0("*", spanning_header,  "*"),
                TRUE ~ spanning_header
-             ))
+             )) %>%
+    mutate(label = case_when(
+      .data$hide == FALSE & (.data$column == "stat_0") ~
+        paste0("*", label,  "*"),
+      TRUE ~ label
+    ))
 
   x
 }
