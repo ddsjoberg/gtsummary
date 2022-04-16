@@ -19,6 +19,8 @@
   
 ### Other Updates
 
+* Added new function  `modify_column_indent()`--a wrapper for `modify_table_styling()`--to make it easier to add and remove indentation in a table.
+
 * Converted the Table Gallery vignette into an FAQ+Gallery (#811)
 
 * Functions `bold_labels()`, `bold_levels()`, `italicize_labels()`, and `italicize_levels()` now bold/italicize the first column shown in the table. Previously, the `"label"` column (which is most often the first shown column) was styled.
