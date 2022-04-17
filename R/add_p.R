@@ -434,7 +434,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
                        rlang::expr(everything() ~ !!test)
   )
   input_test.args <- switch(!is.null(test.args),
-    rlang::expr(everything() ~ !!test.args)
+                            rlang::expr(everything() ~ !!test.args)
   )
 
   # running add_p to add the p-value to the output
@@ -473,10 +473,24 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
     attr(x$table_styling$source_note, "text_interpret") <- "md"
   }
 
-  # return tbl_cross
+  # strip markdown bold around column label ------------------------------------
+  x$table_styling$header <-
+    x$table_styling$header %>%
+    mutate(
+      label =
+        ifelse(
+          .data$column %in% "p.value",
+          stringr::str_replace_all(.data$label,
+                                   pattern = "\\*\\*(.*?)\\*\\*",
+                                   replacement = "\\1"),
+          .data$label
+        )
+
+    )
+
+  # return tbl_cross -----------------------------------------------------------
   x$call_list <- updated_call_list
-  x %>%
-    modify_header(p.value = "p-value")
+  x
 }
 
 
