@@ -59,10 +59,26 @@ bold_labels.tbl_cross <- function(x) {
 
   # bold labels ----------------------------------------------------------------
   x <-  bold_labels.gtsummary(x)
-  cli::cli_alert_warning("Labels are bolded by default in `tbl_cross()")
+
+  stats_to_ital <-
+    select(x$table_body, all_stat_cols(FALSE)) %>%
+    names()
+
+  x$table_styling$header <-
+    mutate(x$table_styling$header,
+           spanning_header =
+             case_when(
+               .data$hide == FALSE & (.data$column %in% stats_to_ital) ~
+                 paste0("**", spanning_header,  "**"),
+               TRUE ~ spanning_header
+             )) %>%
+    mutate(label = case_when(
+      .data$hide == FALSE & (.data$column == "stat_0") ~
+        paste0("**", label,  "**"),
+      TRUE ~ label
+    ))
 
   x
-
 }
 
 #' @export

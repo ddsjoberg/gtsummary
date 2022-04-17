@@ -63,18 +63,6 @@ test_that("tab_style: bold and italicize", {
   )
 })
 
-test_that("expect message when bold_labels() on tbl_cross", {
-
-  expect_message(
-    tbl_cross_ex %>%
-      bold_labels() %>%
-      bold_levels() %>%
-      italicize_labels() %>%
-      italicize_levels(),
-    "*"
-  )
-
-})
 
 test_that("error when non-gtsummary object passed", {
   expect_error(
