@@ -475,7 +475,8 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 
   # return tbl_cross
   x$call_list <- updated_call_list
-  x
+  x %>%
+    modify_header(p.value = "p-value")
 }
 
 

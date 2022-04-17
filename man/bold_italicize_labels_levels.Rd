@@ -3,40 +3,40 @@
 \name{bold_italicize_labels_levels}
 \alias{bold_italicize_labels_levels}
 \alias{bold_labels}
-\alias{bold_labels.gtsummary}
-\alias{bold_labels.tbl_cross}
-\alias{bold_levels}
-\alias{bold_levels.gtsummary}
-\alias{bold_levels.tbl_cross}
 \alias{italicize_labels}
-\alias{italicize_labels.gtsummary}
-\alias{italicize_labels.tbl_cross}
+\alias{bold_levels}
 \alias{italicize_levels}
+\alias{bold_labels.gtsummary}
+\alias{bold_levels.gtsummary}
+\alias{italicize_labels.gtsummary}
 \alias{italicize_levels.gtsummary}
+\alias{bold_labels.tbl_cross}
+\alias{bold_levels.tbl_cross}
+\alias{italicize_labels.tbl_cross}
 \alias{italicize_levels.tbl_cross}
 \title{Bold or Italicize labels or levels in gtsummary tables}
 \usage{
 bold_labels(x)
 
-\method{bold_labels}{gtsummary}(x)
-
-\method{bold_labels}{tbl_cross}(x)
+italicize_labels(x)
 
 bold_levels(x)
 
+italicize_levels(x)
+
+\method{bold_labels}{gtsummary}(x)
+
 \method{bold_levels}{gtsummary}(x)
-
-\method{bold_levels}{tbl_cross}(x)
-
-italicize_labels(x)
 
 \method{italicize_labels}{gtsummary}(x)
 
-\method{italicize_labels}{tbl_cross}(x)
-
-italicize_levels(x)
-
 \method{italicize_levels}{gtsummary}(x)
+
+\method{bold_labels}{tbl_cross}(x)
+
+\method{bold_levels}{tbl_cross}(x)
+
+\method{italicize_labels}{tbl_cross}(x)
 
 \method{italicize_levels}{tbl_cross}(x)
 }
