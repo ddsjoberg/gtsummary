@@ -35,33 +35,13 @@ A user can use this function if they wish to add customized formatting
 available via the flextable functions. The flextable output is particularly
 useful when combined with R markdown with Word output, since the gt package
 does not support Word.
+\itemize{
+\item If \strong{ftExtra v0.3.1} or greater is installed, the header rows will be printed
+with the bold/italic syntax. Otherwise, all markdown styling is stripped from these cells.
+\item Use the \code{flextable::width()} function for precise control over column
+width after calling \code{as_flex_table()}.
 }
-\section{Details}{
-
-The \code{as_flex_table()} functions converts the gtsummary object to a flextable,
-and prints it with the following styling functions.
-\enumerate{
-\item \code{flextable::flextable()}
-\item \code{flextable::set_header_labels()} to set column labels
-\item \code{flextable::add_header_row()}, if applicable, to set spanning column header
-\item \code{flextable::align()} to set column alignment
-\item \code{flextable::padding()} to indent variable levels
-\item \code{flextable::fontsize()} to set font size
-\item \code{flextable::autofit()} to estimate the column widths
-\item \code{flextable::footnote()} to add table footnotes and source notes
-\item \code{flextable::bold()} to bold cells in data frame
-\item \code{flextable::italic()} to italicize cells in data frame
-\item \code{flextable::border()} to set all border widths to 1
-\item \code{flextable::padding()} to set consistent header padding
-\item \code{flextable::valign()} to ensure label column is top-left justified
 }
-
-Any one of these commands may be omitted using the \verb{include=} argument.
-
-Pro tip: Use the \code{flextable::width()} function for exacting control over
-column width after calling \code{as_flex_table()}.
-}
-
 \section{Example Output}{
 
 \if{html}{Example 1}
