@@ -86,13 +86,15 @@ The function creates a cross table of two categorical variables.
 # Example 1 ----------------------------------
 tbl_cross_ex1 <-
   trial \%>\%
-  tbl_cross(row = trt, col = response)
+  tbl_cross(row = trt, col = response) \%>\%
+  bold_labels()
 
 # Example 2 ----------------------------------
 tbl_cross_ex2 <-
   trial \%>\%
   tbl_cross(row = stage, col = trt, percent = "cell") \%>\%
-  add_p()
+  add_p() \%>\%
+  bold_labels()
 }
 }
 \seealso{
