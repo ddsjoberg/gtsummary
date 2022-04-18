@@ -19,6 +19,8 @@
   
 ### Other Updates
 
+* Functions `bold_labels()`, `bold_levels()`, `italicize_labels()`, `italicize_levels()` are now method functions so they can work better on `tbl_cross()` objects. 
+
 * Added new function  `modify_column_indent()`--a wrapper for `modify_table_styling()`--to make it easier to add and remove indentation in a table.
 
 * Converted the Table Gallery vignette into an FAQ+Gallery (#811)

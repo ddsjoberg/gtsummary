@@ -3,18 +3,42 @@
 \name{bold_italicize_labels_levels}
 \alias{bold_italicize_labels_levels}
 \alias{bold_labels}
-\alias{bold_levels}
 \alias{italicize_labels}
+\alias{bold_levels}
 \alias{italicize_levels}
+\alias{bold_labels.gtsummary}
+\alias{bold_levels.gtsummary}
+\alias{italicize_labels.gtsummary}
+\alias{italicize_levels.gtsummary}
+\alias{bold_labels.tbl_cross}
+\alias{bold_levels.tbl_cross}
+\alias{italicize_labels.tbl_cross}
+\alias{italicize_levels.tbl_cross}
 \title{Bold or Italicize labels or levels in gtsummary tables}
 \usage{
 bold_labels(x)
 
-bold_levels(x)
-
 italicize_labels(x)
 
+bold_levels(x)
+
 italicize_levels(x)
+
+\method{bold_labels}{gtsummary}(x)
+
+\method{bold_levels}{gtsummary}(x)
+
+\method{italicize_labels}{gtsummary}(x)
+
+\method{italicize_levels}{gtsummary}(x)
+
+\method{bold_labels}{tbl_cross}(x)
+
+\method{bold_levels}{tbl_cross}(x)
+
+\method{italicize_labels}{tbl_cross}(x)
+
+\method{italicize_levels}{tbl_cross}(x)
 }
 \arguments{
 \item{x}{Object created using gtsummary functions}
@@ -25,17 +49,6 @@ Functions return the same class of gtsummary object supplied
 \description{
 Bold or Italicize labels or levels in gtsummary tables
 }
-\section{Functions}{
-\itemize{
-\item \code{bold_labels}: Bold labels in gtsummary tables
-
-\item \code{bold_levels}: Bold levels in gtsummary tables
-
-\item \code{italicize_labels}: Italicize labels in gtsummary tables
-
-\item \code{italicize_levels}: Italicize levels in gtsummary tables
-}}
-
 \section{Example Output}{
 
 \if{html}{\figure{tbl_bold_ital_ex.png}{options: width=50\%}}
