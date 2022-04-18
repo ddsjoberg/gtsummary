@@ -8,7 +8,7 @@ as_flex_table(
   x,
   include = everything(),
   return_calls = FALSE,
-  strip_md_bold = TRUE
+  strip_md_bold = NULL
 )
 }
 \arguments{
@@ -23,8 +23,7 @@ Default is \code{everything()}.}
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
-\item{strip_md_bold}{When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.}
+\item{strip_md_bold}{DEPRECATED}
 }
 \value{
 A {flextable} object
@@ -37,7 +36,7 @@ useful when combined with R markdown with Word output, since the gt package
 does not support Word.
 \itemize{
 \item If \strong{ftExtra v0.3.1} or greater is installed, the header rows will be printed
-with the bold/italic syntax. Otherwise, all markdown styling is stripped from these cells.
+with the bold/italic styling. Otherwise, all markdown styling is stripped from the header.
 \item Use the \code{flextable::width()} function for precise control over column
 width after calling \code{as_flex_table()}.
 }
