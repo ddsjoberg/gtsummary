@@ -114,7 +114,12 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       columns = any_of("ci"),
       label = glue("**{style_percent(conf.level, symbol = TRUE)} {translate_text('CI')}**") %>% as.character(),
       hide = !all(c("conf.low", "conf.high") %in% tidy_columns_to_report),
-      footnote_abbrev = translate_text("CI = Confidence Interval")
+      footnote_abbrev =
+        ifelse(
+          inherits(x$model_obj, c("stanreg", "stanfit", "brmsfit", "rjags")),
+          translate_text("CI = Credible Interval"),
+          translate_text("CI = Confidence Interval")
+        )
     ) %>%
     modify_table_styling(
       columns = any_of("ci"),
