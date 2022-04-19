@@ -37,13 +37,15 @@
 #' # Example 1 ----------------------------------
 #' tbl_cross_ex1 <-
 #'   trial %>%
-#'   tbl_cross(row = trt, col = response)
+#'   tbl_cross(row = trt, col = response) %>%
+#'   bold_labels()
 #'
 #' # Example 2 ----------------------------------
 #' tbl_cross_ex2 <-
 #'   trial %>%
 #'   tbl_cross(row = stage, col = trt, percent = "cell") %>%
-#'   add_p()
+#'   add_p() %>%
+#'   bold_labels()
 #' }
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -177,25 +179,23 @@ tbl_cross <- function(data,
     select(any_of(c(row, col, "..total.."))) %>%
     tbl_summary(
       by = col,
-      statistic = stats::as.formula(glue("everything() ~ '{statistic}'")),
+      statistic = ~glue("{statistic}"),
       digits = switch(!is.null(digits), everything() ~ digits),
       percent = ifelse(percent == "none", "cell", percent),
       label = new_label,
       missing_text = missing_text,
       type = list("categorical") %>% rlang::set_names(row)
     ) %>%
-    bold_labels() %>%
-    modify_header(all_stat_cols(FALSE) ~ "{level}") %>%
+    modify_header(all_stat_cols(FALSE) ~ "{level}", label = "") %>%
     modify_footnote(everything() ~ NA_character_) %>%
-    modify_spanning_header(
-      c(starts_with("stat_"), -any_of("stat_0")) ~ paste0("**", new_label[[col]], "**")
-    )
+    modify_spanning_header(all_stat_cols(FALSE) ~ new_label[[col]])
+
 
   # adding column margin
   if ("column" %in% margin) {
     x <-
       add_overall(x, last = TRUE) %>%
-      modify_header(update = list(stat_0 ~ paste0("**", margin_text, "**"))) %>%
+      modify_header(update = list(stat_0 ~ margin_text)) %>%
       modify_footnote(stat_0 ~ NA_character_)
   }
 
