@@ -9,6 +9,10 @@ test_inline2b <- trial %>%
   add_overall() %>%
   add_p()
 
+test_inline3 <-
+  trial %>%
+  tbl_summary(by = trt, include = age, missing = "no") %>%
+  add_difference()
 
 test_that("inline_text.tbl_summary: no by", {
   expect_error(
@@ -46,6 +50,11 @@ test_that("inline_text.tbl_summary: with by", {
   expect_warning(
     inline_text(test_inline2, variable = "age", column = "Drug B"),
     NA
+  )
+
+  expect_equal(
+    inline_text(test_inline3, pattern = "{estimate} (95% CI {ci})", variable = "age"),
+    "-0.44 (95% CI -4.6, 3.7)"
   )
 
   expect_error(
