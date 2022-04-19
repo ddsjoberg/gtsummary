@@ -257,7 +257,7 @@ inline_text.tbl_summary <- function(x, variable, column = NULL, level = NULL,
     x = x,
     variable = !!variable,
     level = !!level,
-    column = column,
+    column = !!column,
     pattern = pattern
   )
 }
