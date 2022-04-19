@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(requireNamespace("survival"))
 
 t1 <- trial %>% tbl_summary()
 t2 <- trial %>% tbl_summary(by = trt)
