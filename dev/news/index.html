@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9024</span>
       </span>
     </div>
 
@@ -120,7 +120,8 @@
 </ul></div>
 <div class="section level4">
 <h4 id="other-updates-development-version">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
-<ul><li><p>Bug fix in <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code> where one could not pass a pattern only when the column argument was <code>NULL</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1193" class="external-link">#1193</a>)</p></li>
+<ul><li><p>All models CIs were labelled as a Confidence Interval. Now Bayesian models will correctly label the Credible Interval. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1196" class="external-link">#1196</a>)</p></li>
+<li><p>Bug fix in <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code> where one could not pass a pattern only when the column argument was <code>NULL</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1193" class="external-link">#1193</a>)</p></li>
 <li><p>Functions <code><a href="../reference/bold_italicize_labels_levels.html">bold_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_levels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_levels()</a></code> are now method functions so they can work better on <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code> objects.</p></li>
 <li><p>Added new function <code><a href="../reference/modify_column_indent.html">modify_column_indent()</a></code>–a wrapper for <code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code>–to make it easier to add and remove indentation in a table.</p></li>
 <li><p>Converted the Table Gallery vignette into an FAQ+Gallery (<a href="https://github.com/ddsjoberg/gtsummary/issues/811" class="external-link">#811</a>)</p></li>
