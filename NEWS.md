@@ -19,6 +19,10 @@
   
 ### Other Updates
 
+* All models CIs were labelled as a Confidence Interval. Now Bayesian models will correctly label the Credible Interval. (#1196)
+
+* Bug fix in `inline_text.tbl_summary()` where one could not pass a pattern only when the column argument was `NULL`. (#1193)
+
 * Functions `bold_labels()`, `bold_levels()`, `italicize_labels()`, `italicize_levels()` are now method functions so they can work better on `tbl_cross()` objects. 
 
 * Added new function  `modify_column_indent()`--a wrapper for `modify_table_styling()`--to make it easier to add and remove indentation in a table.
