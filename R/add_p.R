@@ -133,9 +133,9 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     ) %>%
       stop(call. = FALSE)
   }
-  if ("add_difference" %in% names(x$call_list) &&
+  if (any(c("add_difference", "add_p") %in% names(x$call_list)) &&
       "p.value" %in% names(x$table_body)) {
-    paste("`add_p()` cannot be run after `add_difference()` when a",
+    paste("`add_p()` cannot be run after `add_difference()` or `add_p()` when a",
           "'p.value' column is already present.") %>%
       stop(call. = FALSE)
   }

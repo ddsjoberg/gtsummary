@@ -70,8 +70,8 @@ add_difference <- function(x, test = NULL, group = NULL,
   if (is.null(x$by) || nrow(x$df_by) != 2) {
     stop("'tbl_summary'/'tbl_svysummary' object must have a `by=` value with exactly two levels", call. = FALSE)
   }
-  if ("add_p" %in% names(x$call_list)) {
-    stop("`add_difference()` cannot be run after `add_p()`", call. = FALSE)
+  if (any(c("add_p", "add_difference") %in% names(x$call_list))) {
+    stop("`add_difference()` cannot be run after `add_p()` or `add_difference()`", call. = FALSE)
   }
   if (rlang::is_function(estimate_fun)) {
     lifecycle::deprecate_warn(

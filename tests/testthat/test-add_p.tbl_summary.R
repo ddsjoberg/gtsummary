@@ -443,13 +443,29 @@ test_that("no error with missing data", {
   )
 })
 
-test_that("add_p can be run after add_difference", {
+test_that("add_p can be run after add_difference()", {
   expect_error(
     trial %>%
       select(age, trt) %>%
       tbl_summary(by = trt) %>%
       add_difference() %>%
       add_p(all_continuous() ~ "t.test")
+  )
+
+  expect_error(
+    trial %>%
+      select(age, trt) %>%
+      tbl_summary(by = trt) %>%
+      add_p() %>%
+      add_p()
+  )
+
+  expect_error(
+    trial %>%
+      select(age, trt) %>%
+      tbl_summary(by = trt) %>%
+      add_difference() %>%
+      add_difference()
   )
 
   expect_error(
