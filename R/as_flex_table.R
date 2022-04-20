@@ -6,7 +6,7 @@
 #' useful when combined with R markdown with Word output, since the gt package
 #' does not support Word.
 #'
-#' - If **ftExtra v0.3.1** or greater is installed, the header rows will be printed
+#' - If **ftExtra v0.4.0** or greater is installed, the header rows will be printed
 #' with the bold/italic styling. Otherwise, all markdown styling is stripped from the header.
 #' - Use the `flextable::width()` function for precise control over column
 #' width after calling `as_flex_table()`.
