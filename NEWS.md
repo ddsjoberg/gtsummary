@@ -19,6 +19,8 @@
   
 ### Other Updates
 
+* Added error messaging if user tries to run `add_p()` or `add_difference()` twice. (#1209)
+
 * All models CIs were labelled as a Confidence Interval. Now Bayesian models will correctly label the Credible Interval. (#1196)
 
 * Bug fix in `inline_text.tbl_summary()` where one could not pass a pattern only when the column argument was `NULL`. (#1193)
