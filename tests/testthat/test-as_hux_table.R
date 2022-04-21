@@ -29,6 +29,7 @@ test_that("tbl_uvregression", {
 })
 
 test_that("tbl_survfit", {
+  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
   library(survival)
   fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 
@@ -37,6 +38,7 @@ test_that("tbl_survfit", {
 })
 
 test_that("tbl_merge/tbl_stack", {
+  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
   t1 <-
     glm(response ~ trt + grade + age, trial, family = binomial) %>%
     tbl_regression(exponentiate = TRUE)
