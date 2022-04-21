@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9026</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9027</span>
       </span>
     </div>
 
@@ -120,7 +120,8 @@
 </ul></div>
 <div class="section level4">
 <h4 id="other-updates-development-version">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
-<ul><li><p>Fix in emmeans methods for <code><a href="../reference/add_difference.html">add_difference()</a></code> to due an argument name change in the emmeans package. We now require the most recent version of the package. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1205" class="external-link">#1205</a>)</p></li>
+<ul><li><p>Added support for markdown syntax in {flextable} header rows by utilizing the {ftExtra} package. If this package is installed, the bold/italic markdown syntax found in the headers will be styled. Otherwise, the markdown syntax is stripped from the header rows. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1200" class="external-link">#1200</a>)</p></li>
+<li><p>Fix in emmeans methods for <code><a href="../reference/add_difference.html">add_difference()</a></code> to due an argument name change in the emmeans package. We now require the most recent version of the package. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1205" class="external-link">#1205</a>)</p></li>
 <li><p>Added error messaging if user tries to run <code><a href="../reference/add_p.html">add_p()</a></code> or <code><a href="../reference/add_difference.html">add_difference()</a></code> twice. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1209" class="external-link">#1209</a>)</p></li>
 <li><p>All models CIs were labelled as a Confidence Interval. Now Bayesian models will correctly label the Credible Interval. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1196" class="external-link">#1196</a>)</p></li>
 <li><p>Bug fix in <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code> where one could not pass a pattern only when the column argument was <code>NULL</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1193" class="external-link">#1193</a>)</p></li>

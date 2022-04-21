@@ -3,7 +3,13 @@
 A user can use this function if they wish to add customized formatting
 available via the flextable functions. The flextable output is particularly
 useful when combined with R markdown with Word output, since the gt package
-does not support Word."><meta property="og:image" content="https://www.danieldsjoberg.com/gtsummary/logo.png"><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
+does not support Word.
+If ftExtra v0.4.0 or greater is installed, the header rows will be printed
+with the bold/italic styling. Otherwise, all markdown styling is stripped from the header.
+Use the flextable::width() function for precise control over column
+width after calling as_flex_table().
+
+"><meta property="og:image" content="https://www.danieldsjoberg.com/gtsummary/logo.png"><meta name="robots" content="noindex"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-145876596-1"></script><script>
@@ -27,7 +33,7 @@ does not support Word."><meta property="og:image" content="https://www.danieldsj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9026</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9027</span>
       </span>
     </div>
 
@@ -99,15 +105,18 @@ does not support Word."><meta property="og:image" content="https://www.danieldsj
 A user can use this function if they wish to add customized formatting
 available via the flextable functions. The flextable output is particularly
 useful when combined with R markdown with Word output, since the gt package
-does not support Word.</p>
-    </div>
+does not support Word.</p><ul><li><p>If <strong>ftExtra v0.4.0</strong> or greater is installed, the header rows will be printed
+with the bold/italic styling. Otherwise, all markdown styling is stripped from the header.</p></li>
+<li><p>Use the <code><a href="https://davidgohel.github.io/flextable/reference/width.html" class="external-link">flextable::width()</a></code> function for precise control over column
+width after calling <code>as_flex_table()</code>.</p></li>
+</ul></div>
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">as_flex_table</span><span class="op">(</span>
   <span class="va">x</span>,
   include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
   return_calls <span class="op">=</span> <span class="cn">FALSE</span>,
-  strip_md_bold <span class="op">=</span> <span class="cn">TRUE</span>
+  strip_md_bold <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -125,34 +134,11 @@ Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html
 <dd><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
 as a list of expressions.</p></dd>
 <dt>strip_md_bold</dt>
-<dd><p>When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.</p></dd>
+<dd><p>DEPRECATED</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A flextable object</p>
-    </div>
-    <div id="details">
-    <h2>Details</h2>
-    
-
-<p>The <code>as_flex_table()</code> functions converts the gtsummary object to a flextable,
-and prints it with the following styling functions.</p><ol><li><p><code><a href="https://davidgohel.github.io/flextable/reference/flextable.html" class="external-link">flextable::flextable()</a></code></p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/set_header_labels.html" class="external-link">flextable::set_header_labels()</a></code> to set column labels</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/add_header_row.html" class="external-link">flextable::add_header_row()</a></code>, if applicable, to set spanning column header</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/align.html" class="external-link">flextable::align()</a></code> to set column alignment</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/padding.html" class="external-link">flextable::padding()</a></code> to indent variable levels</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/fontsize.html" class="external-link">flextable::fontsize()</a></code> to set font size</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/autofit.html" class="external-link">flextable::autofit()</a></code> to estimate the column widths</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/footnote.html" class="external-link">flextable::footnote()</a></code> to add table footnotes and source notes</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/bold.html" class="external-link">flextable::bold()</a></code> to bold cells in data frame</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/italic.html" class="external-link">flextable::italic()</a></code> to italicize cells in data frame</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/border.html" class="external-link">flextable::border()</a></code> to set all border widths to 1</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/padding.html" class="external-link">flextable::padding()</a></code> to set consistent header padding</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/valign.html" class="external-link">flextable::valign()</a></code> to ensure label column is top-left justified</p></li>
-</ol><p>Any one of these commands may be omitted using the <code>include=</code> argument.</p>
-<p>Pro tip: Use the <code><a href="https://davidgohel.github.io/flextable/reference/width.html" class="external-link">flextable::width()</a></code> function for exacting control over
-column width after calling <code>as_flex_table()</code>.</p>
     </div>
     <div id="example-output">
     <h2>Example Output</h2>
