@@ -19,7 +19,9 @@
   
 ### Other Updates
 
-* All models CIs were labelled as a Confidence Interval. Now Bayesian models will correctly label the Credible Interval. (#1196)
+* Update to keep up with changes in {emmeans} v1.7.3 in `add_difference()`. An argument name changed in an {emmeans} function.
+
+* All models CIs were labelled as a Confidence Interval. Now Bayesian models will correctly label the Credible Interval. (#1196) 
 
 * Bug fix in `inline_text.tbl_summary()` where one could not pass a pattern only when the column argument was `NULL`. (#1193)
 
