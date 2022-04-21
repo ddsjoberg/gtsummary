@@ -28,7 +28,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{"paired.wilcox.test"} \tab Paired Wilcoxon rank-sum test \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)} \tab  \cr
    \code{"prop.test"} \tab Test for equality of proportions \tab \code{prop.test(x, n, conf.level = 0.95, ...)} \tab  \cr
    \code{"ancova"} \tab ANCOVA \tab \code{lm(variable ~ by + adj.vars)} \tab  \cr
-   \code{"emmeans"} \tab Estimated Marginal Means or LS-means \tab \code{lm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{glm(family = binomial)} and \code{emmeans(transform = "response")} arguments are used. When \code{group} is specified, \code{lme4::lmer()} and \code{lme4::glmer()} are used with the group as a random intercept. \cr
+   \code{"emmeans"} \tab Estimated Marginal Means or LS-means \tab \code{lm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{glm(family = binomial)} and \code{emmeans(regrid = "response")} arguments are used. When \code{group} is specified, \code{lme4::lmer()} and \code{lme4::glmer()} are used with the group as a random intercept. \cr
 }
 }
 
@@ -46,7 +46,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{"svy.adj.wald.test"} \tab adjusted Wald test of independence for complex survey samples \tab \code{survey::svychisq(~variable + by, data, statistic = 'adjWald')} \tab  \cr
    \code{"svy.lincom.test"} \tab test of independence using the exact asymptotic distribution for complex survey samples \tab \code{survey::svychisq(~variable + by, data, statistic = 'lincom')} \tab  \cr
    \code{"svy.saddlepoint.test"} \tab test of independence using a saddlepoint approximation for complex survey samples \tab \code{survey::svychisq(~variable + by, data, statistic = 'saddlepoint')} \tab  \cr
-   \code{"emmeans"} \tab Estimated Marginal Means or LS-means \tab \code{survey::svyglm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{survey::svyglm(family = binomial)} and \code{emmeans(transform = "response")} arguments are used. \cr
+   \code{"emmeans"} \tab Estimated Marginal Means or LS-means \tab \code{survey::svyglm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{survey::svyglm(family = binomial)} and \code{emmeans(regrid = "response")} arguments are used. \cr
 }
 }
 
@@ -86,7 +86,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \code{"ancova_lme4"} \tab ANCOVA with random intercept \tab mean difference \tab \verb{lme4::lmer(variable ~ by + adj.vars + (1 \\UFF5C group), data)} \tab  \cr
    \code{"cohens_d"} \tab Cohen's D \tab standardized mean difference \tab \code{effectsize::cohens_d(variable ~ by, data, ci = conf.level, ...)} \tab  \cr
    \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = data[[variable]], g = data[[by]], std.error = TRUE)} \tab  \cr
-   \code{"emmeans"} \tab Estimated Marginal Means or LS-means \tab adjusted mean difference \tab \code{lm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{glm(family = binomial)} and \code{emmeans(transform = "response")} arguments are used. When \code{group} is specified, \code{lme4::lmer()} and \code{lme4::glmer()} are used with the group as a random intercept. \cr
+   \code{"emmeans"} \tab Estimated Marginal Means or LS-means \tab adjusted mean difference \tab \code{lm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{glm(family = binomial)} and \code{emmeans(regrid = "response")} arguments are used. When \code{group} is specified, \code{lme4::lmer()} and \code{lme4::glmer()} are used with the group as a random intercept. \cr
 }
 }
 
@@ -94,7 +94,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \tabular{lllll}{
    \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{"smd"} \tab Standardized Mean Difference \tab standardized mean difference \tab \code{smd::smd(x = data$variables[[variable]], g = data$variables[[by]], w = weights(data),  std.error = TRUE)} \tab  \cr
-   \code{"emmeans"} \tab Estimated Marginal Means or LS-means \tab adjusted mean difference \tab \code{survey::svyglm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{survey::svyglm(family = binomial)} and \code{emmeans(transform = "response")} arguments are used. \cr
+   \code{"emmeans"} \tab Estimated Marginal Means or LS-means \tab adjusted mean difference \tab \code{survey::svyglm(variable ~ by + adj.vars, data) \%>\% emmeans::emmeans(specs =~by) \%>\% emmeans::contrast(method = "pairwise") \%>\% summary(infer = TRUE, level = conf.level)} \tab When variable is binary, \code{survey::svyglm(family = binomial)} and \code{emmeans(regrid = "response")} arguments are used. \cr
 }
 }
 
