@@ -19,7 +19,7 @@
   
 ### Other Updates
 
-* Update to keep up with changes in {emmeans} v1.7.3 in `add_difference()`. An argument name changed in an {emmeans} function.
+- Fix in emmeans methods for `add_difference()` to due an argument name change in the emmeans package. We now require the most recent version of the package. (#1205)
 
 * Added error messaging if user tries to run `add_p()` or `add_difference()` twice. (#1209)
 
