@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(requireNamespace("lme4"))
+skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
 
 test_that("add_glance_source_note: no errors/warnings with standard use", {
   tbl1 <-

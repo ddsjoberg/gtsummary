@@ -1,5 +1,6 @@
 skip_on_cran()
-skip_if_not(requireNamespace("survey"))
+skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 library(survival)
 
 test_that("no errors/warnings with standard use", {
@@ -61,7 +62,7 @@ test_that("add_overall-works with ordered factors", {
 })
 
 test_that("no errors/warnings with standard use for tbl_svysummary", {
-  skip_if_not(requireNamespace("survey"))
+  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
 
   t <- trial %>%
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
@@ -83,7 +84,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
 })
 
 test_that("no errors/warnings with standard use for tbl_svysummary with continuous2", {
-  skip_if_not(requireNamespace("survey"))
+  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
 
   t <- trial %>%
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%

@@ -88,7 +88,7 @@ test_that("expect errors", {
     NA
   )
 
-  skip_if_not(requireNamespace("survey"))
+  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
   return_two_10s <- function(...) rep_len(10, 2)
   expect_error(
     survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%

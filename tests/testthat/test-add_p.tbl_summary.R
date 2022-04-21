@@ -45,8 +45,8 @@ test_that("add_p creates output without error/warning", {
 })
 
 test_that("add_p & lme4", {
-  skip_if_not(require("lme4"))
-  skip_if_not(require("broom.mixed"))
+  skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
+  skip_if_not(broom.helpers::.assert_package("broom.mixed", pkg_search = "gtsummary", boolean = TRUE))
 
   expect_message(
     tbl_summary(trial, by = trt) %>%
@@ -392,8 +392,8 @@ test_that("p-values are replicated within tbl_summary()", {
 })
 
 test_that("Groups arg and lme4", {
-  skip_if_not(require("lme4"))
-  skip_if_not(require("broom.mixed"))
+  skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
+  skip_if_not(broom.helpers::.assert_package("broom.mixed", pkg_search = "gtsummary", boolean = TRUE))
 
   tbl_groups <-
     trial_group %>%

@@ -1,8 +1,8 @@
 skip_on_cran()
-skip_if_not(requireNamespace("lme4"))
-skip_if_not(requireNamespace("emmeans"))
-skip_if_not(requireNamespace("smd"))
-skip_if_not(requireNamespace("survey"))
+skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("emmeans", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("smd", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
 
 test_that("add_difference-basic use", {
   expect_error(

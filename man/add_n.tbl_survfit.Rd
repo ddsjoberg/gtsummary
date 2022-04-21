@@ -24,7 +24,7 @@ will add the total number of observations in a new column.
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("survival", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)

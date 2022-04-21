@@ -1,6 +1,6 @@
 skip_on_cran()
-skip_if_not(requireNamespace("Hmisc"))
-skip_if_not(requireNamespace("lme4"))
+skip_if_not(broom.helpers::.assert_package("Hmisc", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
 
 library(survival)
 library(lme4)

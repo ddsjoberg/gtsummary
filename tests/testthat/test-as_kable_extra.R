@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(requireNamespace("kableExtra"))
+skip_if_not(broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE))
 
 test_that("tbl_summary", {
   expect_error(tbl_summary(trial) %>% as_kable_extra(), NA)

@@ -338,7 +338,7 @@ test_that("inline_text.tbl_cross- expect error args aren't present", {
   )
 })
 
-skip_if_not(requireNamespace("survey"))
+skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
 
 # inline_text.tbl_svysummary tests --------------
 test_inline1 <- trial %>%
@@ -425,7 +425,7 @@ test_that("inline_text.tbl_svysummary: with by -  expect errors", {
 })
 
 test_that("inline_text.tbl_svysummary: no errors with empty string selection", {
-  skip_if_not(requireNamespace("survey"))
+  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
   expect_error(
     trial %>%
       select(grade) %>%
