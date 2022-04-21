@@ -11,7 +11,7 @@ test_that("no errors/warnings with standard use after tbl_summary() and add_p()"
 
 
 test_that("no errors/warnings with standard use after tbl_regression() and add_global_p()", {
-  skip_if_not(requireNamespace("car"))
+  skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
   regress1 <- glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
     tbl_regression(exponentiate = TRUE) %>%
     add_global_p()
@@ -21,7 +21,7 @@ test_that("no errors/warnings with standard use after tbl_regression() and add_g
 })
 
 test_that("no errors/warnings with standard use after tbl_regression() and add_global_p()", {
-  skip_if_not(requireNamespace("car"))
+  skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
   regress2 <-
     tbl_uvregression(
       trial %>% dplyr::select(response, age, grade),

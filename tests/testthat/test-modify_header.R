@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(requireNamespace("survey"))
+skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
 library(dplyr)
 
 tbl_summary_noby <- trial %>% tbl_summary()

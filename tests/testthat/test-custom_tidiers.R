@@ -1,21 +1,23 @@
 skip_on_cran()
+skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
 
 mod <- lm(age ~ marker + grade, trial)
 
 test_that("no errors/warnings with tidy_standardize", {
-  skip_if(!require("effectsize"))
+  skip_if_not(broom.helpers::.assert_package("effectsize", pkg_search = "gtsummary", boolean = TRUE))
   expect_error(tbl_regression(mod, tidy_fun = tidy_standardize), NA)
 })
 
 test_that("no errors/warnings with tidy_bootstrap", {
-  skip_if(!require("parameters"))
+  skip_if_not(broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE))
+  skip_if_not_installed("boot")
   expect_error(tbl_regression(mod, tidy_fun = tidy_bootstrap), NA)
   expect_warning(tbl_regression(mod, tidy_fun = tidy_bootstrap), NA)
 })
 
 
 test_that("no errors/warnings with pool_and_tidy_mice", {
-  skip_if(!require("mice"))
+  skip_if_not(broom.helpers::.assert_package("mice", pkg_search = "gtsummary", boolean = TRUE))
   mod_mice <-
     suppressWarnings(mice::mice(trial, m = 2)) %>%
     with(glm(response ~ age + marker + grade, family = binomial))
@@ -27,7 +29,7 @@ test_that("no errors/warnings with pool_and_tidy_mice", {
 
 
 test_that("no errors/warnings with tbl_regression.multinom", {
-  skip_if(!require("nnet"))
+  skip_if_not(broom.helpers::.assert_package("nnet", pkg_search = "gtsummary", boolean = TRUE))
   expect_output(
     tbl_nnet <-
       nnet::multinom(grade ~ age, trial) %>%
@@ -41,7 +43,7 @@ test_that("no errors/warnings with tbl_regression.multinom", {
 })
 
 test_that("no errors/warnings with tbl_regression.gam", {
-  skip_if(!require("mgcv"))
+  skip_if_not(broom.helpers::.assert_package("mgcv", pkg_search = "gtsummary", boolean = TRUE))
   mod <- mgcv::gam(response ~ s(marker, age) + grade, data = trial, family = binomial)
 
   expect_error(
@@ -68,7 +70,8 @@ test_that("no errors/warnings with tbl_regression.gam", {
 })
 
 test_that("no errors/warnings with tidy_robust()", {
-  skip_if(!require("parameters") || !require("insight"))
+  skip_if_not(broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE))
+  skip_if_not(broom.helpers::.assert_package("insight", pkg_search = "gtsummary", boolean = TRUE))
   expect_error(
     glm(response ~ age + trt, trial, family = binomial) %>%
       tbl_regression(
@@ -80,7 +83,7 @@ test_that("no errors/warnings with tidy_robust()", {
 })
 
 test_that("no errors/warnings with tidy_wald_test()", {
-  skip_if(!require("aod"))
+  skip_if_not(broom.helpers::.assert_package("aod", pkg_search = "gtsummary", boolean = TRUE))
 
   mod <- lm(age ~ stage + marker, trial)
 

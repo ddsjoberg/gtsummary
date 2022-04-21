@@ -117,7 +117,7 @@ add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 #' @param ... Not used
 #' @export
 #' @family tbl_survfit tools
-#' @examples
+#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)

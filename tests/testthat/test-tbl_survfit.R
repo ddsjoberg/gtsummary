@@ -1,4 +1,6 @@
 skip_on_cran()
+skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 library(survival)
 
 test_that("no errors/warnings with stratified variable", {

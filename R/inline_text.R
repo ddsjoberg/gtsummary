@@ -415,7 +415,7 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' @return A string reporting results from a gtsummary table
 #' @export
 #' @keywords internal
-#' @examples
+#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' library(survival)
 #' surv_table <-
 #'   survfit(Surv(ttdeath, death) ~ trt, trial) %>%
@@ -553,7 +553,7 @@ inline_text.tbl_survival <-
 #' @author Daniel D. Sjoberg
 #' @export
 #' @return A string reporting results from a gtsummary table
-#' @examples
+#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' library(survival)
 #' # fit survfit
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)

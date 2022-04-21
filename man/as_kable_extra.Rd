@@ -106,7 +106,7 @@ To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALS
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("kableExtra", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Example 1 (general) -------------------------------------------------------
 as_kable_extra_ex1_gen <-

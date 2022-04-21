@@ -1,5 +1,6 @@
 skip_on_cran()
-skip_if_not(requireNamespace("lme4"))
+skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
 library(survival)
 library(lme4)
 
@@ -29,7 +30,7 @@ test_that("lm: no errors/warnings with standard use", {
 })
 
 test_that("geeglm: no errors/warnings with standard use", {
-  skip_if_not(requireNamespace("geepack"))
+  skip_if_not(broom.helpers::.assert_package("geepack", pkg_search = "gtsummary", boolean = TRUE))
 
   expect_error(
     tbl_uvregression(
@@ -305,7 +306,7 @@ test_that("tbl_uvregression throw error with bad arguments in model function", {
 })
 
 test_that("tbl_uvregression works with survey object", {
-  skip_if_not(requireNamespace("survey"))
+  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
   svy <- survey::svydesign(ids = ~1, data = trial, weights = ~1)
 
   expect_error(

@@ -120,7 +120,7 @@ test_that("no errors with standard use", {
     NA
   )
 
-  skip_if_not(requireNamespace("survey"))
+  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
   expect_error(
     survey::svydesign(~1, data = trial, weights = ~1) %>%
       tbl_strata(

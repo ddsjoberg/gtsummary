@@ -1,7 +1,7 @@
 skip_on_cran()
-skip_if_not(requireNamespace("flextable"))
-skip_if_not(requireNamespace("huxtable"))
-skip_if_not(requireNamespace("kableExtra"))
+skip_if_not(broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("huxtable", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE))
 
 
 test_that("no errors/warnings with all output types", {

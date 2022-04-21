@@ -69,6 +69,7 @@ and a second test of the \emph{G-rho} family.\if{html}{\out{<div class="sourceCo
 }
 
 \examples{
+\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 
 gts_survfit <-
@@ -88,6 +89,7 @@ add_p_tbl_survfit_ex1 <-
 add_p_tbl_survfit_ex2 <-
   gts_survfit \%>\%
   add_p(test = "survdiff", test.args = list(rho = 0.5))
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other tbl_survfit tools: 

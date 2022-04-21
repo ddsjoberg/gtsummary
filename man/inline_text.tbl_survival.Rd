@@ -65,6 +65,7 @@ print the table the estimates are extracted from.
 }
 
 \examples{
+\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 surv_table <-
   survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
@@ -74,6 +75,7 @@ inline_text(surv_table,
   strata = "Drug A",
   time = 12
 )
+\dontshow{\}) # examplesIf}
 }
 \author{
 Karissa Whiting

@@ -602,7 +602,7 @@ test_that("unobserved levels can be dichotomously summarized", {
 })
 
 test_that("Hmisc labelled data don't error", {
-  skip_if_not_installed("Hmisc")
+  skip_if_not(broom.helpers::.assert_package("Hmisc", pkg_search = "gtsummary", boolean = TRUE))
   hmisc_data <-
     structure(
       list(

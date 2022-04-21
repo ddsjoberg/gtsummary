@@ -12,7 +12,7 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #'
-#' @examplesIf broom.helpers::.assert_package("car", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' # Example 1 ----------------------------------
 #' add_vif_ex1 <-

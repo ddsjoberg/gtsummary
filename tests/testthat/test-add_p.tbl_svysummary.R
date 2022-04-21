@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(requireNamespace("survey"))
+skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
 
 strial <- trial %>%
   survey::svydesign(data = ., ids = ~1, weights = ~1)

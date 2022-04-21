@@ -135,7 +135,7 @@ the model parameters before attempting to use the tidier with \code{tbl_regressi
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("effectsize", boolean = TRUE) && broom.helpers::.assert_package("parameters", boolean = TRUE) && broom.helpers::.assert_package("mice", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (broom.helpers::.assert_package("effectsize", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("mice", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Example 1 ----------------------------------
 mod <- lm(age ~ marker + grade, trial)

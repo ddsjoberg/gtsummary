@@ -53,7 +53,7 @@ test_that("no errors/warnings with standard use for continuous2", {
 
 
 test_that("no errors/warnings with standard use for tbl_svysummary", {
-  skip_if_not(requireNamespace("survey"))
+  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
   tbl <- trial %>%
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt)
@@ -66,7 +66,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
 })
 
 test_that("no errors/warnings with standard use for tbl_svysummary with continuous2", {
-  skip_if_not(requireNamespace("survey"))
+  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
   tbl <- trial %>%
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2")

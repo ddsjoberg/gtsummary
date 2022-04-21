@@ -1,5 +1,6 @@
 skip_on_cran()
-skip_if_not(requireNamespace("lme4"))
+skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 
 library(survival)
 fit_cox <- coxph(Surv(time, status) ~ sex, lung)

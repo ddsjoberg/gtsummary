@@ -19,7 +19,9 @@
   
 ### Other Updates
 
-- Fix in emmeans methods for `add_difference()` to due an argument name change in the emmeans package. We now require the most recent version of the package. (#1205)
+* Added support for markdown syntax in {flextable} header rows by utilizing the {ftExtra} package. If this package is installed, the bold/italic markdown syntax found in the headers will be styled. Otherwise, the markdown syntax is stripped from the header rows. (#1200)
+
+* Fix in emmeans methods for `add_difference()` to due an argument name change in the emmeans package. We now require the most recent version of the package. (#1205)
 
 * Added error messaging if user tries to run `add_p()` or `add_difference()` twice. (#1209)
 

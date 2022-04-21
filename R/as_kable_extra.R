@@ -52,7 +52,7 @@
 #' @return A {kableExtra} table
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("kableExtra", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' # Example 1 (general) -------------------------------------------------------
 #' as_kable_extra_ex1_gen <-

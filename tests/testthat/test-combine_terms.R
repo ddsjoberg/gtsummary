@@ -1,8 +1,8 @@
 skip_on_cran()
-skip_if_not(requireNamespace("car"))
-skip_if_not(requireNamespace("Hmisc"))
-skip_if_not(requireNamespace("geepack"))
-skip_if_not(requireNamespace("survival") && packageVersion("survival") >= "3.2-12")
+skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("Hmisc", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("geepack", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 
 library(Hmisc)
 mod1 <- lm(
