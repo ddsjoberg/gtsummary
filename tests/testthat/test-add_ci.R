@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(requireNamespace("Hmisc"))
+skip_if_not(broom.helpers::.assert_package("Hmisc", pkg_search = "gtsummary", boolean = TRUE))
 
 test_that("add_ci() works", {
   expect_error(

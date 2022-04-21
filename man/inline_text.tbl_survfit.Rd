@@ -56,6 +56,7 @@ inline reporting in an R markdown document. Detailed examples in the
 \href{https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html}{inline_text vignette}
 }
 \examples{
+\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 # fit survfit
 fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
@@ -82,6 +83,7 @@ tbl2 <-
 inline_text(tbl1, time = 24, level = "Drug B")
 inline_text(tbl1, column = p.value)
 inline_text(tbl2, prob = 0.5)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Other tbl_summary tools: 

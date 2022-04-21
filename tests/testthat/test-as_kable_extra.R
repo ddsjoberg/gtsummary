@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not(requireNamespace("kableExtra"))
+skip_if_not(broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE))
 
 test_that("tbl_summary", {
   expect_error(tbl_summary(trial) %>% as_kable_extra(), NA)
@@ -29,6 +29,7 @@ test_that("tbl_uvregression", {
 })
 
 test_that("tbl_survfit", {
+  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
   library(survival)
   fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 
@@ -37,6 +38,7 @@ test_that("tbl_survfit", {
 })
 
 test_that("tbl_merge/tbl_stack", {
+  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
   library(survival)
   t1 <-
     glm(response ~ trt + grade + age, trial, family = binomial) %>%
