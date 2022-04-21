@@ -1,4 +1,6 @@
 skip_on_cran()
+skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("boot", pkg_search = "gtsummary", boolean = TRUE))
 
 mod <- lm(age ~ marker + grade, trial)
 
@@ -9,6 +11,7 @@ test_that("no errors/warnings with tidy_standardize", {
 
 test_that("no errors/warnings with tidy_bootstrap", {
   skip_if_not(broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE))
+  skip_if_not_installed("boot")
   expect_error(tbl_regression(mod, tidy_fun = tidy_bootstrap), NA)
   expect_warning(tbl_regression(mod, tidy_fun = tidy_bootstrap), NA)
 })
