@@ -1,6 +1,5 @@
 skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
-skip_if_not(broom.helpers::.assert_package("boot", pkg_search = "gtsummary", boolean = TRUE))
 
 mod <- lm(age ~ marker + grade, trial)
 
