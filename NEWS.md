@@ -19,6 +19,8 @@
   
 ### Other Updates
 
+* Update to keep up with changes in {emmeans} v1.7.3 in `add_difference()`. An argument name changed in an {emmeans} function.
+
 * Added error messaging if user tries to run `add_p()` or `add_difference()` twice. (#1209)
 
 * All models CIs were labelled as a Confidence Interval. Now Bayesian models will correctly label the Credible Interval. (#1196)
