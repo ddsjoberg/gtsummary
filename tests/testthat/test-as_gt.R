@@ -24,6 +24,7 @@ test_that("tbl_uvregression", {
 })
 
 test_that("tbl_survfit", {
+  skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
   library(survival)
   fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 

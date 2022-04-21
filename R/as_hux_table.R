@@ -19,7 +19,7 @@
 #' @return A {huxtable} object
 #' @family gtsummary output types
 #' @author David Hugh-Jones, Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("huxtable", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("huxtable", pkg_search = "gtsummary", boolean = TRUE)
 #' trial %>%
 #'   dplyr::select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%

@@ -1,5 +1,7 @@
 skip_on_cran()
 # test-add_p.tbl_survfit -------------------------------------------------------
+skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
+skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 
 library(survival)
 

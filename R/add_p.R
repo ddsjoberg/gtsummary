@@ -519,7 +519,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' ```
 #'
 #' @export
-#' @examples
+#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' library(survival)
 #'
 #' gts_survfit <-
@@ -685,7 +685,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #' @export
 #' @return A `tbl_svysummary` object
 #' @author Joseph Larmarange
-#' @examplesIf broom.helpers::.assert_package("survey", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' # Example 1 ----------------------------------
 #' # A simple weighted dataset

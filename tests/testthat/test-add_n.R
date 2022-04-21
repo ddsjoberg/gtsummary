@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 
 t1 <- trial %>% tbl_summary()
 t2 <- trial %>% tbl_summary(by = trt)
@@ -93,7 +94,7 @@ test_that("no errors/warnings with standard use wit continuous2", {
 
 
 test_that("no errors/warnings with standard use for tbl_svysummary", {
-  skip_if_not(requireNamespace("survey"))
+  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
 
   t <- trial %>%
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
@@ -121,7 +122,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
 })
 
 test_that("no errors/warnings with standard use for tbl_svysummary with continuous2", {
-  skip_if_not(requireNamespace("survey"))
+  skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
 
   t <- trial %>%
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
