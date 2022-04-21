@@ -1,4 +1,5 @@
 skip_on_cran()
+skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 
 # inline_text.tbl_summary tests --------------
 
