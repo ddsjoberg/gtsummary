@@ -519,7 +519,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' ```
 #'
 #' @export
-#' @examples
+#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' library(survival)
 #'
 #' gts_survfit <-
