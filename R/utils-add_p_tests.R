@@ -349,6 +349,7 @@ add_p_test_emmeans <- function(data, variable, by, type,
       is.data.frame(data) && type == "dichotomous" ~ "dichotomous_mixed",
       is.data.frame(data) && type == "continuous" ~ "continuous_mixed",
     )
+
   model_fun <-
     switch(
       type2,
@@ -370,7 +371,7 @@ add_p_test_emmeans <- function(data, variable, by, type,
     switch(
       type,
       "dichotomous" =
-        purrr::partial(emmeans::emmeans, specs = f_by, transform = "response"),
+        purrr::partial(emmeans::emmeans, specs = f_by, regrid = "response"),
       "continuous" =
         purrr::partial(emmeans::emmeans, specs = f_by)
     )
