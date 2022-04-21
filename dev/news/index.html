@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9025</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.5.2.9026</span>
       </span>
     </div>
 
@@ -120,7 +120,8 @@
 </ul></div>
 <div class="section level4">
 <h4 id="other-updates-development-version">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-development-version"></a></h4>
-<ul><li><p>Added error messaging if user tries to run <code><a href="../reference/add_p.html">add_p()</a></code> or <code><a href="../reference/add_difference.html">add_difference()</a></code> twice. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1209" class="external-link">#1209</a>)</p></li>
+<ul><li><p>Fix in emmeans methods for <code><a href="../reference/add_difference.html">add_difference()</a></code> to due an argument name change in the emmeans package. We now require the most recent version of the package. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1205" class="external-link">#1205</a>)</p></li>
+<li><p>Added error messaging if user tries to run <code><a href="../reference/add_p.html">add_p()</a></code> or <code><a href="../reference/add_difference.html">add_difference()</a></code> twice. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1209" class="external-link">#1209</a>)</p></li>
 <li><p>All models CIs were labelled as a Confidence Interval. Now Bayesian models will correctly label the Credible Interval. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1196" class="external-link">#1196</a>)</p></li>
 <li><p>Bug fix in <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code> where one could not pass a pattern only when the column argument was <code>NULL</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1193" class="external-link">#1193</a>)</p></li>
 <li><p>Functions <code><a href="../reference/bold_italicize_labels_levels.html">bold_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_levels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_levels()</a></code> are now method functions so they can work better on <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code> objects.</p></li>
