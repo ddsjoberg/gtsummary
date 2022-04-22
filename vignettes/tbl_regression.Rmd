@@ -262,3 +262,19 @@ The default options can be changed using the {gtsummary} themes function `set_gt
 The package includes pre-specified themes, and you can also create your own.
 Themes can control baseline behavior, for example, how p-values are rounded, coefficients are rounded, default headers, confidence levels, etc.
 For details on creating a theme and setting personal defaults, visit the [themes vignette](https://www.danieldsjoberg.com/gtsummary/articles/themes.html).
+
+## Supported Models
+
+Below is a listing of known and tested models supported by `tbl_regression()`.
+If a model follows a standard format and has a tidier, it's likely to be supported as well, even if not listed below.
+
+```{r supported_models, echo = FALSE}
+broom.helpers::supported_models %>%
+  gt::gt() %>%
+  gt::cols_label(model = gt::md("Model"), notes = gt::md("Details")) %>%
+  gt::fmt_markdown(columns = everything()) %>%
+  gt::tab_options(table.font.size = 11, data_row.padding = gt::px(1), 
+    summary_row.padding = gt::px(1), grand_summary_row.padding = gt::px(1), 
+    footnotes.padding = gt::px(1), source_notes.padding = gt::px(1), 
+    row_group.padding = gt::px(1))
+```
