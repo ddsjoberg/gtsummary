@@ -76,7 +76,7 @@ table_styling_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
   if (!is.null(dots[["fmt_missing"]])) {
-    lifecycle::deprecate_warn(when = "1.5.3",
+    lifecycle::deprecate_warn(when = "1.6.0",
                               what = "gtsummary::as_kable_extra(fmt_missing=)")
     dots <- purrr::list_modify(fmt_missing = NULL) %>% purrr::compact()
   }
