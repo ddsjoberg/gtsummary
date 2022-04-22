@@ -34,13 +34,18 @@ A user can use this function if they wish to add customized formatting
 available via the flextable functions. The flextable output is particularly
 useful when combined with R markdown with Word output, since the gt package
 does not support Word.
-\itemize{
-\item If \strong{ftExtra v0.4.0} or greater is installed, the header rows will be printed
+}
+\section{experimental}{
+
+
+The ftExtra package provides a function to recognize and print markdown syntax
+in a flextable headers.
+If \strong{ftExtra v0.4.0} or greater is installed and
+\code{options(gtsummary.use_ftExtra = TRUE)} has been set, the header rows will be printed
 with the bold/italic styling. Otherwise, all markdown styling is stripped from the header.
-\item Use the \code{flextable::width()} function for precise control over column
-width after calling \code{as_flex_table()}.
+To "turn off" this feature, you can run \code{as_flex_table(include = -ftExtra)}
 }
-}
+
 \section{Example Output}{
 
 \if{html}{Example 1}
