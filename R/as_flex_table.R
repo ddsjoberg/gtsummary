@@ -6,14 +6,18 @@
 #' useful when combined with R markdown with Word output, since the gt package
 #' does not support Word.
 #'
-#' @section experimental:
+#' @section Experimental:
 #'
-#' The ftExtra package provides a function to recognize and print markdown syntax
-#' in a flextable headers.
-#' If **ftExtra v0.4.0** or greater is installed and
-#' `options(gtsummary.use_ftExtra = TRUE)` has been set, the header rows will be printed
-#' with the bold/italic styling. Otherwise, all markdown styling is stripped from the header.
-#' To "turn off" this feature, you can run `as_flex_table(include = -ftExtra)`
+#' The **ftExtra** package provides a function to recognize and print markdown syntax
+#' in **flextable** headers.
+#' To use this feature
+#' - Install **ftExtra v0.4.0** or greater
+#' - Set `options(gtsummary.use_ftExtra = TRUE)`
+#'
+#' To "turn off" this feature, run `as_flex_table(include = -ftExtra)`.
+#'
+#' If you experience any issues using this feature, please file an issue at
+#' [https://github.com/ddsjoberg/gtsummary/issues/new/choose](https://github.com/ddsjoberg/gtsummary/issues/new/choose).
 #'
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
@@ -46,7 +50,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   # checking flextable installation --------------------------------------------
   assert_package("flextable", "as_flex_table()")
   strip_md_bold <-
-    isTRUE(getOption("gtsummary.use_ftExtra")) && !assert_package("ftExtra", boolean = TRUE)
+    !(isTRUE(getOption("gtsummary.use_ftExtra")) && assert_package("ftExtra", boolean = TRUE))
 
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
@@ -238,6 +242,7 @@ table_styling_to_flextable_calls <- function(x, use_ft_extra, ...) {
   )
 
   # ft_extra -------------------------------------------------------------------
+  flextable_calls[["ftExtra"]] <- list()
   if (isTRUE(use_ft_extra)) {
     flextable_calls[["ftExtra"]] <-
       list(
