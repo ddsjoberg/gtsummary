@@ -35,15 +35,21 @@ available via the flextable functions. The flextable output is particularly
 useful when combined with R markdown with Word output, since the gt package
 does not support Word.
 }
-\section{experimental}{
+\section{Experimental}{
 
 
-The ftExtra package provides a function to recognize and print markdown syntax
-in a flextable headers.
-If \strong{ftExtra v0.4.0} or greater is installed and
-\code{options(gtsummary.use_ftExtra = TRUE)} has been set, the header rows will be printed
-with the bold/italic styling. Otherwise, all markdown styling is stripped from the header.
-To "turn off" this feature, you can run \code{as_flex_table(include = -ftExtra)}
+The \strong{ftExtra} package provides a function to recognize and print markdown syntax
+in \strong{flextable} headers.
+To use this feature
+\itemize{
+\item Install \strong{ftExtra v0.4.0} or greater
+\item Set \code{options(gtsummary.use_ftExtra = TRUE)}
+}
+
+To "turn off" this feature, run \code{as_flex_table(include = -ftExtra)}.
+
+If you experience any issues using this feature, please file an issue at
+\url{https://github.com/ddsjoberg/gtsummary/issues/new/choose}.
 }
 
 \section{Example Output}{
