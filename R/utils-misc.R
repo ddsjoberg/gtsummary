@@ -68,7 +68,7 @@ gts_mapper <- function(x, context) {
 }
 
 # All documentation of the global options was removed in v1.3.1.
-# This messaging was added in v1.5.3
+# This messaging was added in v1.6.0
 .get_deprecated_option <- function(x, default = NULL) {
   if (!is.null(getOption(x, default = NULL))) {
     paste("Global option {.val {x}} is soft deprecated and will",

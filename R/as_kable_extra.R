@@ -175,12 +175,12 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   dots <- rlang::dots_list(...)
 
   if (!is.null(dots[["strip_md_bold"]])) {
-    lifecycle::deprecate_warn(when = "1.5.3",
+    lifecycle::deprecate_warn(when = "1.6.0",
                               what = "gtsummary::as_kable_extra(strip_md_bold=)")
     dots <- purrr::list_modify(strip_md_bold = NULL) %>% purrr::compact()
   }
   if (!is.null(dots[["fmt_missing"]])) {
-    lifecycle::deprecate_warn(when = "1.5.3",
+    lifecycle::deprecate_warn(when = "1.6.0",
                               what = "gtsummary::as_kable_extra(fmt_missing=)")
     dots <- purrr::list_modify(fmt_missing = NULL) %>% purrr::compact()
   }

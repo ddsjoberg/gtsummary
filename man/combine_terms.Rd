@@ -38,6 +38,7 @@ with a single row in the output table.  The p-value is calculated using
 }
 
 \examples{
+\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Example 1 ----------------------------------
 # Logistic Regression Example, LRT p-value
@@ -55,6 +56,7 @@ combine_terms_ex1 <-
     test = "LRT"
   )
 }
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

@@ -35,7 +35,7 @@ as_hux_table <- function(x, include = everything(), return_calls = FALSE,
   assert_package("huxtable", "as_hux_table()")
   if (!isFALSE(strip_md_bold)) {
     lifecycle::deprecate_warn(
-      "1.5.3", "gtsummary::as_hux_table(strip_md_bold=)",
+      "1.6.0", "gtsummary::as_hux_table(strip_md_bold=)",
       details = "Markdown syntax is now recognized by the {huxtable} package.")
   }
   # running pre-conversion function, if present --------------------------------
