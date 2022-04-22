@@ -1,6 +1,7 @@
 # gtsummary (development version)
 
 ### Improvements to `as_kable_extra()`
+
 * For users who used the default kableExtra print without output-specific formatting, there are no breaking changes...the only changes will be improved output styling.
 * The biggest user-facing change is that the default results for **LaTeX output** are now greatly improved compared to previous releases, when `escape=FALSE` (the new default).
   - Markdown bold, italic, and underline syntax in the headers, spanning headers, caption, and footnote will be converted to escaped LaTeX code.
@@ -16,73 +17,83 @@
   - The default markdown syntax in the headers and spanning headers is removed.
   - Special characters in the table body, headers, spanning headers, caption, and footnote will be escaped with `.escape_html()`.
   - The `"\n"` symbol is removed from the footnotes
-  
+ 
+### Improvements to `as_flex_table()`
+
+* Added support for markdown syntax in {flextable} header rows by utilizing the {ftExtra} package. If this package is installed and `options(gtsummary.use_ftExtra = TRUE)` has been set, the bold/italic markdown syntax found in the headers will be styled. Otherwise, the markdown syntax is stripped from the header rows. (#1200)
+
+### New Functions
+
+* New function `as_hux_xlsx()` added to export a formatted {gtsummary} table directly to Excel.
+
+* Added a `tbl_regression.tidycrr()` method to summarize competing risks regression models. (#1169)
+
+* Added tidier `tidy_wald_test()`, a generic function that can calculate Wald test statistics for groups of variables in a model. The tidier expects the model object is supported by both `vcov()` and `coef()` to obtain the variance-covariance matrix and the coef vector.
+
+* Adding functions `get_gtsummary_theme()` and `with_gtsummary_theme()` for extracting the current gtsummary theme and running code with a temporarily theme.
+
+* Added new function  `modify_column_indent()`--a wrapper for `modify_table_styling()`--to make it easier to add and remove indentation in a table.
+
+* Now exporting a function primarily used internally as a helper for converting a gtsummary table to gt (and other formats): `.table_styling_expr_to_row_number()`.
+
+### New Functionality
+
+* Functions `bold_labels()`, `bold_levels()`, `italicize_labels()`, `italicize_levels()` are now method functions so they can work better on `tbl_cross()` objects. 
+
+* Total overhaul to the way statistics are saved and reported in `modify_header()`, `modify_spanning_header()`, `modify_footnote()`, and `modify_caption()`. There is now a standardized place to these statistics to be saved in all gtsummary tables (in `x$table_styling$header` in columns starting with `"modify_stat_"`). The modify functions have been updated to access the statistics from the header data frame. An added benefit to this structure, is that the statistics are available after tables are merged and stacked. Statistics available in `modify_caption()` are taken from the `"label"` column. (#1165, #1101)
+
+* Added `add_global_p(anova_fun=)` argument allowing users to pass custom functions to calculate global p-values when `car::Anova()` does not support the model type. (#1149)
+
+* Functions `bold_labels()`, `bold_levels()`, `italicize_labels()`, and `italicize_levels()` now bold/italicize the first column shown in the table. Previously, the `"label"` column (which is most often the first shown column) was styled.
+
+* Updated the default function in `add_glance_*(glance_fun=)` for MICE models. (#1137)
+
+* Add `tbl_butcher(keep=)` argument to optionally keep some internal objects as needed.  (#1148)
+
+* Adding Norwegian translations (#1143)
+
 ### Other Updates
 
-* Added support for markdown syntax in {flextable} header rows by utilizing the {ftExtra} package. If this package is installed, the bold/italic markdown syntax found in the headers will be styled. Otherwise, the markdown syntax is stripped from the header rows. (#1200)
+* Removed use of `round()` in `style_number()`, and replaced it with a round function that does _not_ "round-to-even". (#1140)
 
-* Fix in emmeans methods for `add_difference()` to due an argument name change in the emmeans package. We now require the most recent version of the package. (#1205)
+* Converted the Table Gallery vignette into an FAQ+Gallery (#811)
 
 * Added error messaging if user tries to run `add_p()` or `add_difference()` twice. (#1209)
 
 * All models CIs were labelled as a Confidence Interval. Now Bayesian models will correctly label the Credible Interval. (#1196)
 
-* Bug fix in `inline_text.tbl_summary()` where one could not pass a pattern only when the column argument was `NULL`. (#1193)
-
-* Functions `bold_labels()`, `bold_levels()`, `italicize_labels()`, `italicize_levels()` are now method functions so they can work better on `tbl_cross()` objects. 
-
-* Added new function  `modify_column_indent()`--a wrapper for `modify_table_styling()`--to make it easier to add and remove indentation in a table.
-
-* Converted the Table Gallery vignette into an FAQ+Gallery (#811)
-
-* Functions `bold_labels()`, `bold_levels()`, `italicize_labels()`, and `italicize_levels()` now bold/italicize the first column shown in the table. Previously, the `"label"` column (which is most often the first shown column) was styled.
-
 * Improved error messaging the functions `as_gt()`, `as_kable()`, `as_flex_table()`, `as_hux_table()` when an object that is not class 'gtsummary' is passed. (#1188)
 
-* New function `as_hux_xlsx()` added to export a formatted {gtsummary} table directly to Excel.
-* Deprecated the `as_huxtable(strip_md_bold=)`  as {huxtable} now recognizes the markdown syntax and there is no reason to remove the markdown syntax.
-* Added `huxtable::set_header_rows()` to the `as_hux_table()` stack.
+* Deprecated the `as_huxtable(strip_md_bold=)` as {huxtable} now recognizes the markdown syntax and there is no reason to remove the markdown syntax.
 
-* Fix in `as_gt()` when there are no hidden columns.
+* Added `huxtable::set_header_rows()` to the `as_hux_table()` stack.
 
 * Improved error messaging in `modify_*()` functions. (#914)
 
-* Added `style_percent()` as the default formatting function for unweighted proportions. (#1181)
+* Added `style_percent()` as the default formatting function for un-weighted proportions. (#1181)
 
 * The global options previously available have now been soft deprecated. All documentation of the global options was removed in v1.3.1. (#1085)
 
 * The `as_flextable()` function has been upgraded from a soft to a hard deprecation; use `as_flex_table()` instead.
 
-* Total change to the way statistics are saved and reported in `modify_header()`, `modify_spanning_header()`, `modify_footnote()`, and `modify_caption()`. There is now a standardized place to these statistics to be saved in all gtsummary tables (in `x$table_styling$header` in columns starting with "modify_stat_"). The modify functions have been updated to access the statistics from the header data frame. An added benefit to this structure, is that the statistics are available after tables are merged and stacked. Statistics available in modify_caption() are taken from the "label" column. (#1165, #1101)
-
-* Added `add_global_p(anova_fun=)` argument allowing users to pass custom functions to calculate global p-values when `car::Anova()` does not support the model type. (#1149)
-
-* Added tidier `tidy_wald_test()`, a generic function that can calculate Wald test statistics for groups of variables in a model. The tidier expects the model object is supported by both `vcov()` and `coef()` to obtain the variance-covariance matrix and the coef vector.
-
 * No longer removing the survey design columns from survey objects from the columns that will be summarized in `tbl_svysummary()` and those summarized in `tbl_uvregression()`. If users previously didn't indicate which variables to summarize with `include=`, then the design columns will now appear in the summary tables. (#1166)
-
-* Updated the default function in `add_glance_*(glance_fun=)` for MICE models. (#1137)
-
-* Fix in `add_p.tbl_svysummary()` when Wald tests were converted to flextable. The survey tidier saved the column as a matrix-column instead of a vector, which was incompatible with flextable output. (#1153)
-
-* Added a `tbl_regression.tidycrr()` method to summarize competing risks regression models. (#1169)
-
-* Adding functions `get_gtsummary_theme()` and `with_gtsummary_theme()` for extracting the current gtsummary theme and running code with a temporarily theme.
 
 * Added a check for functions that accept `...` where nothing should be passed in the `...`. If a bad or misspelled argument is found, the users are informed. (#1083)
 
-* Now exporting a function primarily used internally as a helper for converting a gtsummary table to gt (and other formats): `.table_styling_expr_to_row_number()`.
+### Bug Fixes
 
-* Removed use of `round()` in `style_number()`, and replaced it with a round function that does _not_ "round-to-even". (#1140)
+* Fix in `"emmeans"` methods for `add_difference()` to due an argument name change in the emmeans package. We now require the most recent version of the package. (#1205)
 
-* Add `tbl_butcher(keep=)` argument to optionally keep some internal objects as needed.  (#1148)
+* Bug fix in `inline_text.tbl_summary()` where one could not pass a pattern only when the column argument was `NULL`. (#1193)
+
+* Fix in `as_gt()` when there are no hidden columns.
+
+* Fix in `add_p.tbl_svysummary()` when Wald tests were converted to flextable. The survey tidier saved the column as a matrix-column instead of a vector, which was incompatible with flextable output. (#1153)
 
 * Fixing Lancet theme mid-point encoding issue on Linux and MacOS. (#1146)
 
-* Adding Norwegian translations (#1143)
-
 * Fix when using summary type gtsummary selectors (e.g. `all_continuous()`) with the `add_ci(style_fun=)` argument. (#1141)
- 
+
 # gtsummary 1.5.2
 
 * Removed foreign reference to external functions in the top level of the package and replaced with indirect calls (the reason for the short time between releases). (#1129)
