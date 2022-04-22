@@ -50,7 +50,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   # checking flextable installation --------------------------------------------
   assert_package("flextable", "as_flex_table()")
   strip_md_bold <-
-    isTRUE(getOption("gtsummary.use_ftExtra")) && !assert_package("ftExtra", boolean = TRUE)
+    !isTRUE(getOption("gtsummary.use_ftExtra")) && !assert_package("ftExtra", boolean = TRUE)
 
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
