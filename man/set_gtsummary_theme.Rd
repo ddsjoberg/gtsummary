@@ -5,6 +5,7 @@
 \alias{reset_gtsummary_theme}
 \alias{get_gtsummary_theme}
 \alias{with_gtsummary_theme}
+\alias{check_gtsummary_theme}
 \title{Set a gtsummary theme}
 \usage{
 set_gtsummary_theme(x, quiet = NULL)
@@ -14,6 +15,8 @@ reset_gtsummary_theme()
 get_gtsummary_theme()
 
 with_gtsummary_theme(x, expr, env = rlang::caller_env())
+
+check_gtsummary_theme(x)
 }
 \arguments{
 \item{x}{A named list defining a gtsummary theme.}
@@ -33,6 +36,7 @@ Functions to \strong{set}, \strong{reset}, \strong{get}, and evaluate \strong{wi
 \item \code{reset_gtsummary_theme()} reset themes
 \item \code{get_gtsummary_theme()} get a named list with all active theme elements
 \item \code{with_gtsummary_theme()} evaluate an expression with a theme temporarily set
+\item \code{check_gtsummary_theme()} checks if passed theme is valid
 }
 }
 \section{Details}{
