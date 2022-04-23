@@ -51,7 +51,6 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   assert_package("flextable", "as_flex_table()")
   use_ft_extra <-
     (isTRUE(getOption("gtsummary.use_ftExtra")) || isTRUE(get_theme_element("as_flex_table-lgl:use_ftExtra"))) &&    # either is TRUE
-    !(isFALSE(getOption("gtsummary.use_ftExtra")) || isFALSE(get_theme_element("as_flex_table-lgl:use_ftExtra"))) && # neither is FALSE
     assert_package("ftExtra", boolean = TRUE)                                                                        # ftExtra is installed
 
   # running pre-conversion function, if present --------------------------------
