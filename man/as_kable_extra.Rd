@@ -65,7 +65,7 @@ headers, spanning headers, caption, and the table body
 To suppress \emph{these} additional formats, set \code{as_kable_extra(addtl_fmt = FALSE)}
 
 Additional styling is available with
-\code{kableExtra::kable_styling()} as shown in Example 3, which implements row
+\code{kableExtra::kable_styling()} as shown in Example 2, which implements row
 striping and repeated column headers in the presence of page breaks.
 }
 
