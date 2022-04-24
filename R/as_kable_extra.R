@@ -25,7 +25,7 @@
 #' To suppress _these_ additional formats, set `as_kable_extra(addtl_fmt = FALSE)`
 #'
 #' Additional styling is available with
-#' `kableExtra::kable_styling()` as shown in Example 3, which implements row
+#' `kableExtra::kable_styling()` as shown in Example 2, which implements row
 #' striping and repeated column headers in the presence of page breaks.
 #'
 #' @section HTML:
