@@ -42,7 +42,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   # deprecated arguments -------------------------------------------------------
   if (!is.null(strip_md_bold)) {
     lifecycle::deprecate_warn(
-      "1.5.4", "gtsummary::as_flex_table(strip_md_bold=)",
+      "1.6.0", "gtsummary::as_flex_table(strip_md_bold=)",
       details = "Install {ftExtra} package to obtain styled header rows.")
   }
 
