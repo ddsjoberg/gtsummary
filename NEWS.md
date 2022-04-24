@@ -46,6 +46,8 @@
 
 * Functions `bold_labels()`, `bold_levels()`, `italicize_labels()`, and `italicize_levels()` now bold/italicize the first column shown in the table. Previously, the `"label"` column (which is most often the first shown column) was styled.
 
+* Added theme element to pass arguments to `knitr::kable()` in `as_kable()` and `as_kable_extra()`.
+
 * Updated the default function in `add_glance_*(glance_fun=)` for MICE models. (#1137)
 
 * Add `tbl_butcher(keep=)` argument to optionally keep some internal objects as needed.  (#1148)
