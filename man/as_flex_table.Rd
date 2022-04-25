@@ -43,7 +43,7 @@ in \strong{flextable} headers.
 To use this feature
 \itemize{
 \item Install \strong{ftExtra v0.4.0} or greater
-\item Set \code{options(gtsummary.use_ftExtra = TRUE)}
+\item Set \code{options(gtsummary.use_ftExtra = TRUE)} or the corresponding theme element
 }
 
 To "turn off" this feature, run \code{as_flex_table(include = -ftExtra)}.
