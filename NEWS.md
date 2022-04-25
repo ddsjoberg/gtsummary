@@ -20,7 +20,7 @@
  
 ### Improvements to `as_flex_table()`
 
-* Added support for markdown syntax in {flextable} header rows by utilizing the {ftExtra} package. If this package is installed and `options(gtsummary.use_ftExtra = TRUE)` has been set, the bold/italic markdown syntax found in the headers will be styled. Otherwise, the markdown syntax is stripped from the header rows. (#1200)
+* Added support for markdown syntax in {flextable} header rows by utilizing the {ftExtra} package. If this package is installed and `options(gtsummary.use_ftExtra = TRUE)` has been set (or the equivalent theme element), the bold/italic markdown syntax found in the headers will be styled. Otherwise, the markdown syntax is stripped from the header rows. (#1200)
 
 ### New Functions
 
@@ -35,6 +35,8 @@
 * Added new function  `modify_column_indent()`--a wrapper for `modify_table_styling()`--to make it easier to add and remove indentation in a table.
 
 * Now exporting a function primarily used internally as a helper for converting a gtsummary table to gt (and other formats): `.table_styling_expr_to_row_number()`.
+
+* Theme helper function `check_gtsummary_theme()` has been added. The function takes a gtsummary theme list as the input, and runs various consistency checks. Useful when constructing a personalized theme. This function replaces the internal checks that a passed theme element is indeed a valid theme element.
 
 ### New Functionality
 
