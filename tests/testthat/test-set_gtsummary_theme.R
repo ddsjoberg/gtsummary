@@ -74,11 +74,6 @@ test_that("setting themes", {
     "*"
   )
 
-  expect_error(
-    get_theme_element("not_a_theme_element"),
-    "*"
-  )
-
   # setting a continuous2 default stat
   list(
     "tbl_summary-str:default_con_type" = "continuous2",
@@ -202,6 +197,11 @@ test_that("setting themes", {
   )
 
   reset_gtsummary_theme()
+
+  expect_message(check_gtsummary_theme(mtcars))
+  expect_message(check_gtsummary_theme(as.list(letters)))
+  expect_message(check_gtsummary_theme(list("not_a_theme" = 5)))
+  expect_message(check_gtsummary_theme(list("style_number-arg:decimal.mark" = ".")), "*Looks good*")
 
 })
 
