@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 1.6.0
 
 ### Improvements to `as_kable_extra()`
 
