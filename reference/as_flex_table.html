@@ -27,7 +27,7 @@ does not support Word."><meta property="og:image" content="https://www.danieldsj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
       </span>
     </div>
 
@@ -42,7 +42,7 @@ does not support Word."><meta property="og:image" content="https://www.danieldsj
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -63,7 +63,7 @@ does not support Word."><meta property="og:image" content="https://www.danieldsj
       <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/gallery.html">FAQ + gallery</a>
     </li>
   </ul></li>
 <li>
@@ -107,7 +107,7 @@ does not support Word.</p>
   <span class="va">x</span>,
   include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
   return_calls <span class="op">=</span> <span class="cn">FALSE</span>,
-  strip_md_bold <span class="op">=</span> <span class="cn">TRUE</span>
+  strip_md_bold <span class="op">=</span> <span class="cn">NULL</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -125,34 +125,24 @@ Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html
 <dd><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
 as a list of expressions.</p></dd>
 <dt>strip_md_bold</dt>
-<dd><p>When TRUE, all double asterisk (markdown language for
-bold weight) in column labels and spanning headers are removed.</p></dd>
+<dd><p>DEPRECATED</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A flextable object</p>
     </div>
-    <div id="details">
-    <h2>Details</h2>
+    <div id="experimental">
+    <h2>Experimental</h2>
     
 
-<p>The <code>as_flex_table()</code> functions converts the gtsummary object to a flextable,
-and prints it with the following styling functions.</p><ol><li><p><code><a href="https://davidgohel.github.io/flextable/reference/flextable.html" class="external-link">flextable::flextable()</a></code></p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/set_header_labels.html" class="external-link">flextable::set_header_labels()</a></code> to set column labels</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/add_header_row.html" class="external-link">flextable::add_header_row()</a></code>, if applicable, to set spanning column header</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/align.html" class="external-link">flextable::align()</a></code> to set column alignment</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/padding.html" class="external-link">flextable::padding()</a></code> to indent variable levels</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/fontsize.html" class="external-link">flextable::fontsize()</a></code> to set font size</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/autofit.html" class="external-link">flextable::autofit()</a></code> to estimate the column widths</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/footnote.html" class="external-link">flextable::footnote()</a></code> to add table footnotes and source notes</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/bold.html" class="external-link">flextable::bold()</a></code> to bold cells in data frame</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/italic.html" class="external-link">flextable::italic()</a></code> to italicize cells in data frame</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/border.html" class="external-link">flextable::border()</a></code> to set all border widths to 1</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/padding.html" class="external-link">flextable::padding()</a></code> to set consistent header padding</p></li>
-<li><p><code><a href="https://davidgohel.github.io/flextable/reference/valign.html" class="external-link">flextable::valign()</a></code> to ensure label column is top-left justified</p></li>
-</ol><p>Any one of these commands may be omitted using the <code>include=</code> argument.</p>
-<p>Pro tip: Use the <code><a href="https://davidgohel.github.io/flextable/reference/width.html" class="external-link">flextable::width()</a></code> function for exacting control over
-column width after calling <code>as_flex_table()</code>.</p>
+
+<p>The <strong>ftExtra</strong> package provides a function to recognize and print markdown syntax
+in <strong>flextable</strong> headers.
+To use this feature</p><ul><li><p>Install <strong>ftExtra v0.4.0</strong> or greater</p></li>
+<li><p>Set <code>options(gtsummary.use_ftExtra = TRUE)</code> or the corresponding theme element</p></li>
+</ul><p>To "turn off" this feature, run <code>as_flex_table(include = -ftExtra)</code>.</p>
+<p>If you experience any issues using this feature, please file an issue at
+<a href="https://github.com/ddsjoberg/gtsummary/issues/new/choose" class="external-link">https://github.com/ddsjoberg/gtsummary/issues/new/choose</a>.</p>
     </div>
     <div id="example-output">
     <h2>Example Output</h2>
@@ -193,11 +183,11 @@ column width after calling <code>as_flex_table()</code>.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

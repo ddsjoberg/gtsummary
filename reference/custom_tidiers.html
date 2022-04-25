@@ -26,7 +26,7 @@ and tbl_uvregression() to obtain modified results. See examples below."><meta pr
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
       </span>
     </div>
 
@@ -41,7 +41,7 @@ and tbl_uvregression() to obtain modified results. See examples below."><meta pr
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -62,7 +62,7 @@ and tbl_uvregression() to obtain modified results. See examples below."><meta pr
       <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/gallery.html">FAQ + gallery</a>
     </li>
   </ul></li>
 <li>
@@ -133,7 +133,9 @@ and <code><a href="tbl_uvregression.html">tbl_uvregression()</a></code> to obtai
 
 <span class="fu">pool_and_tidy_mice</span><span class="op">(</span><span class="va">x</span>, pool.args <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="fu">tidy_gam</span><span class="op">(</span><span class="va">x</span>, conf.int <span class="op">=</span> <span class="cn">FALSE</span>, exponentiate <span class="op">=</span> <span class="cn">FALSE</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">tidy_gam</span><span class="op">(</span><span class="va">x</span>, conf.int <span class="op">=</span> <span class="cn">FALSE</span>, exponentiate <span class="op">=</span> <span class="cn">FALSE</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span>
+
+<span class="fu">tidy_wald_test</span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -167,6 +169,11 @@ interval in the tidied output. Defaults to <code>FALSE</code>.</p></dd>
 <dt>pool.args</dt>
 <dd><p>named list of arguments passed to <code><a href="https://amices.org/mice/reference/pool.html" class="external-link">mice::pool()</a></code> in
 <code>pool_and_tidy_mice()</code>. Default is <code>NULL</code></p></dd>
+<dt>tidy_fun</dt>
+<dd><p>Option to specify a particular tidier function for the
+model. Default is to use <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy</a></code>, but if an error occurs
+then tidying of the model is attempted with <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>,
+if installed.</p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -193,6 +200,7 @@ function with <code><a href="tbl_regression.html">tbl_regression()</a></code>, p
 <li><p><code>pool_and_tidy_mice()</code> tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object <em>before</em> the model results
 have been pooled. See example.</p></li>
+<li><p><code>tidy_wald_test()</code> tidier to report Wald p-values, wrapping the <code><a href="https://rdrr.io/pkg/aod/man/wald.test.html" class="external-link">aod::wald.test()</a></code> function.</p></li>
 </ul><p>Ensure your model type is compatible with the methods/functions used to estimate
 the model parameters before attempting to use the tidier with <code><a href="tbl_regression.html">tbl_regression()</a></code></p>
     </div>
@@ -264,11 +272,11 @@ the model parameters before attempting to use the tidier with <code><a href="tbl
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

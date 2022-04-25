@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
       </span>
     </div>
 
@@ -38,7 +38,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -59,7 +59,7 @@
       <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/gallery.html">FAQ + gallery</a>
     </li>
   </ul></li>
 <li>
@@ -90,23 +90,104 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="1.5.2" id="gtsummary-152">gtsummary 1.5.2<a class="anchor" aria-label="anchor" href="#gtsummary-152"></a></h2>
+<h2 class="page-header" data-toc-text="1.6.0" id="gtsummary-160">gtsummary 1.6.0<a class="anchor" aria-label="anchor" href="#gtsummary-160"></a></h2>
+<div class="section level4">
+<h4 id="improvements-to-as_kable_extra-1-6-0">Improvements to <code>as_kable_extra()</code>
+<a class="anchor" aria-label="anchor" href="#improvements-to-as_kable_extra-1-6-0"></a></h4>
+<ul><li>For users who used the default kableExtra print without output-specific formatting, there are no breaking changes…the only changes will be improved output styling.</li>
+<li>The biggest user-facing change is that the default results for <strong>LaTeX output</strong> are now greatly improved compared to previous releases, when <code>escape=FALSE</code> (the new default).<ul><li>Markdown bold, italic, and underline syntax in the headers, spanning headers, caption, and footnote will be converted to escaped LaTeX code.</li>
+<li>Special LaTeX characters in the body of the table will be escaped with <code><a href="../reference/kableExtra_utils.html">.escape_latex()</a></code> or <code><a href="../reference/kableExtra_utils.html">.escape_latex2()</a></code>, e.g. <code>%</code> will be updated to <code>\\%</code>, and rendered as <code>%</code> in the PDF document.</li>
+<li>The “” symbol will be recognized as a line break in the table headers, spanning headers, caption, and the table body.</li>
+<li>
+<code>\n</code> is removed from footnotes</li>
+<li>The <code>escape=</code> argument is now passed to <code>kableExtra::add_header_row()</code> and <code><a href="https://rdrr.io/pkg/kableExtra/man/footnote.html" class="external-link">kableExtra::footnote()</a></code> as well (previously, was only passed to <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code>).</li>
+</ul></li>
+<li>The <code>as_kable_extra(escape=, format=)</code> arguments have been made explicit, where previously, these arguments were passed via <code>...</code>.</li>
+<li>
+<em>Breaking Change</em> The default value of <code>escape=</code> is now <code>FALSE</code>. If users previously used <code>as_kable_extra(escape=FALSE)</code> and had manually escaped LaTeX/HTML characters in the body of the table, these characters will now be double escaped. To print the table without the auto-escaping that is now present, utilize the new argument <code>as_kable_extra(addtl_fmt=FALSE)</code>
+</li>
+<li>
+<em>Breaking Change</em> The <code>fmt_missing=</code> argument was added to <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, and <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code> in the last release. This argument is now deprecated in <code><a href="../reference/as_kable.html">as_kable()</a></code> and <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code>. If a user does not want missing values formatted, they can exclude these commands with the <code>include=</code> argument.</li>
+<li>
+<em>Breaking Change</em> The <code>strip_md_bold=</code> has been deprecated. The markdown syntax will automatically be stripped from headers, unless <code>escape = FALSE</code> and <code>format = "latex"</code>. In that case, the markdown syntax will be converted to LaTeX commands.</li>
+<li>
+<strong>HTML Updates</strong><ul><li>The default markdown syntax in the headers and spanning headers is removed.</li>
+<li>Special characters in the table body, headers, spanning headers, caption, and footnote will be escaped with <code><a href="../reference/kableExtra_utils.html">.escape_html()</a></code>.</li>
+<li>The <code>"\n"</code> symbol is removed from the footnotes</li>
+</ul></li>
+</ul></div>
+<div class="section level4">
+<h4 id="improvements-to-as_flex_table-1-6-0">Improvements to <code>as_flex_table()</code>
+<a class="anchor" aria-label="anchor" href="#improvements-to-as_flex_table-1-6-0"></a></h4>
+<ul><li>Added support for markdown syntax in {flextable} header rows by utilizing the {ftExtra} package. If this package is installed and <code>options(gtsummary.use_ftExtra = TRUE)</code> has been set (or the equivalent theme element), the bold/italic markdown syntax found in the headers will be styled. Otherwise, the markdown syntax is stripped from the header rows. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1200" class="external-link">#1200</a>)</li></ul></div>
+<div class="section level4">
+<h4 id="new-functions-1-6-0">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-6-0"></a></h4>
+<ul><li><p>New function <code><a href="../reference/as_hux_table.html">as_hux_xlsx()</a></code> added to export a formatted {gtsummary} table directly to Excel.</p></li>
+<li><p>Added a <code><a href="../reference/tbl_regression_methods.html">tbl_regression.tidycrr()</a></code> method to summarize competing risks regression models. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1169" class="external-link">#1169</a>)</p></li>
+<li><p>Added tidier <code><a href="../reference/custom_tidiers.html">tidy_wald_test()</a></code>, a generic function that can calculate Wald test statistics for groups of variables in a model. The tidier expects the model object is supported by both <code><a href="https://rdrr.io/r/stats/vcov.html" class="external-link">vcov()</a></code> and <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> to obtain the variance-covariance matrix and the coef vector.</p></li>
+<li><p>Adding functions <code><a href="../reference/set_gtsummary_theme.html">get_gtsummary_theme()</a></code> and <code><a href="../reference/set_gtsummary_theme.html">with_gtsummary_theme()</a></code> for extracting the current gtsummary theme and running code with a temporarily theme.</p></li>
+<li><p>Added new function <code><a href="../reference/modify_column_indent.html">modify_column_indent()</a></code>–a wrapper for <code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code>–to make it easier to add and remove indentation in a table.</p></li>
+<li><p>Now exporting a function primarily used internally as a helper for converting a gtsummary table to gt (and other formats): <code><a href="../reference/dot-table_styling_expr_to_row_number.html">.table_styling_expr_to_row_number()</a></code>.</p></li>
+<li><p>Theme helper function <code><a href="../reference/set_gtsummary_theme.html">check_gtsummary_theme()</a></code> has been added. The function takes a gtsummary theme list as the input, and runs various consistency checks. Useful when constructing a personalized theme. This function replaces the internal checks that a passed theme element is indeed a valid theme element.</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="new-functionality-1-6-0">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-1-6-0"></a></h4>
+<ul><li><p>Functions <code><a href="../reference/bold_italicize_labels_levels.html">bold_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_levels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_levels()</a></code> are now method functions so they can work better on <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code> objects.</p></li>
+<li><p>Total overhaul to the way statistics are saved and reported in <code><a href="../reference/modify.html">modify_header()</a></code>, <code><a href="../reference/modify.html">modify_spanning_header()</a></code>, <code><a href="../reference/modify.html">modify_footnote()</a></code>, and <code><a href="../reference/modify.html">modify_caption()</a></code>. There is now a standardized place to these statistics to be saved in all gtsummary tables (in <code>x$table_styling$header</code> in columns starting with <code>"modify_stat_"</code>). The modify functions have been updated to access the statistics from the header data frame. An added benefit to this structure, is that the statistics are available after tables are merged and stacked. Statistics available in <code><a href="../reference/modify.html">modify_caption()</a></code> are taken from the <code>"label"</code> column. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1165" class="external-link">#1165</a>, <a href="https://github.com/ddsjoberg/gtsummary/issues/1101" class="external-link">#1101</a>)</p></li>
+<li><p>Added <code>add_global_p(anova_fun=)</code> argument allowing users to pass custom functions to calculate global p-values when <code><a href="https://rdrr.io/pkg/car/man/Anova.html" class="external-link">car::Anova()</a></code> does not support the model type. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1149" class="external-link">#1149</a>)</p></li>
+<li><p>Functions <code><a href="../reference/bold_italicize_labels_levels.html">bold_labels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">bold_levels()</a></code>, <code><a href="../reference/bold_italicize_labels_levels.html">italicize_labels()</a></code>, and <code><a href="../reference/bold_italicize_labels_levels.html">italicize_levels()</a></code> now bold/italicize the first column shown in the table. Previously, the <code>"label"</code> column (which is most often the first shown column) was styled.</p></li>
+<li><p>Added theme element to pass arguments to <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code> in <code><a href="../reference/as_kable.html">as_kable()</a></code> and <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code>.</p></li>
+<li><p>Updated the default function in <code>add_glance_*(glance_fun=)</code> for MICE models. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1137" class="external-link">#1137</a>)</p></li>
+<li><p>Add <code>tbl_butcher(keep=)</code> argument to optionally keep some internal objects as needed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1148" class="external-link">#1148</a>)</p></li>
+<li><p>Adding Norwegian translations (<a href="https://github.com/ddsjoberg/gtsummary/issues/1143" class="external-link">#1143</a>)</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="other-updates-1-6-0">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-1-6-0"></a></h4>
+<ul><li><p>Removed use of <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">round()</a></code> in <code><a href="../reference/style_number.html">style_number()</a></code>, and replaced it with a round function that does <em>not</em> “round-to-even”. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1140" class="external-link">#1140</a>)</p></li>
+<li><p>Converted the Table Gallery vignette into an FAQ+Gallery (<a href="https://github.com/ddsjoberg/gtsummary/issues/811" class="external-link">#811</a>)</p></li>
+<li><p>Added error messaging if user tries to run <code><a href="../reference/add_p.html">add_p()</a></code> or <code><a href="../reference/add_difference.html">add_difference()</a></code> twice. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1209" class="external-link">#1209</a>)</p></li>
+<li><p>All models CIs were labelled as a Confidence Interval. Now Bayesian models will correctly label the Credible Interval. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1196" class="external-link">#1196</a>)</p></li>
+<li><p>Improved error messaging the functions <code><a href="../reference/as_gt.html">as_gt()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code>, <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> when an object that is not class ‘gtsummary’ is passed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1188" class="external-link">#1188</a>)</p></li>
+<li><p>Deprecated the <code>as_huxtable(strip_md_bold=)</code> as {huxtable} now recognizes the markdown syntax and there is no reason to remove the markdown syntax.</p></li>
+<li><p>Added <code><a href="https://hughjonesd.github.io/huxtable/reference/header_cols.html" class="external-link">huxtable::set_header_rows()</a></code> to the <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> stack.</p></li>
+<li><p>Improved error messaging in <code>modify_*()</code> functions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/914" class="external-link">#914</a>)</p></li>
+<li><p>Added <code><a href="../reference/style_percent.html">style_percent()</a></code> as the default formatting function for un-weighted proportions. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1181" class="external-link">#1181</a>)</p></li>
+<li><p>The global options previously available have now been soft deprecated. All documentation of the global options was removed in v1.3.1. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1085" class="external-link">#1085</a>)</p></li>
+<li><p>The <code><a href="../reference/deprecated.html">as_flextable()</a></code> function has been upgraded from a soft to a hard deprecation; use <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> instead.</p></li>
+<li><p>No longer removing the survey design columns from survey objects from the columns that will be summarized in <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> and those summarized in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. If users previously didn’t indicate which variables to summarize with <code>include=</code>, then the design columns will now appear in the summary tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1166" class="external-link">#1166</a>)</p></li>
+<li><p>Added a check for functions that accept <code>...</code> where nothing should be passed in the <code>...</code>. If a bad or misspelled argument is found, the users are informed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1083" class="external-link">#1083</a>)</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-1-6-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-6-0"></a></h4>
+<ul><li><p>Fix in <code>"emmeans"</code> methods for <code><a href="../reference/add_difference.html">add_difference()</a></code> to due an argument name change in the emmeans package. We now require the most recent version of the package. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1205" class="external-link">#1205</a>)</p></li>
+<li><p>Bug fix in <code><a href="../reference/inline_text.tbl_summary.html">inline_text.tbl_summary()</a></code> where one could not pass a pattern only when the column argument was <code>NULL</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1193" class="external-link">#1193</a>)</p></li>
+<li><p>Fix in <code><a href="../reference/as_gt.html">as_gt()</a></code> when there are no hidden columns.</p></li>
+<li><p>Fix in <code><a href="../reference/add_p.tbl_svysummary.html">add_p.tbl_svysummary()</a></code> when Wald tests were converted to flextable. The survey tidier saved the column as a matrix-column instead of a vector, which was incompatible with flextable output. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1153" class="external-link">#1153</a>)</p></li>
+<li><p>Fixing Lancet theme mid-point encoding issue on Linux and MacOS. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1146" class="external-link">#1146</a>)</p></li>
+<li><p>Fix when using summary type gtsummary selectors (e.g. <code><a href="../reference/select_helpers.html">all_continuous()</a></code>) with the <code>add_ci(style_fun=)</code> argument. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1141" class="external-link">#1141</a>)</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.5.2" id="gtsummary-152">gtsummary 1.5.2<small>2022-01-29</small><a class="anchor" aria-label="anchor" href="#gtsummary-152"></a></h2>
 <ul><li><p>Removed foreign reference to external functions in the top level of the package and replaced with indirect calls (the reason for the short time between releases). (<a href="https://github.com/ddsjoberg/gtsummary/issues/1129" class="external-link">#1129</a>)</p></li>
 <li><p>Updates to the way footnotes are printed in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> when there is summary type <code>"continuous2"</code> present. Previously, all footnotes were removed, and now only the <code>"continuous2"</code> footnotes are removed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1127" class="external-link">#1127</a>)</p></li>
 <li><p>Added the continuous variable name/label to the footnote for greater clarity in <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/1123" class="external-link">#1123</a>)</p></li>
 <li><p>Now exporting the <code><a href="../reference/dot-create_gtsummary_object.html">.create_gtsummary_object()</a></code> function as a utility for other packages to build gtsummary tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1130" class="external-link">#1130</a>)</p></li>
 <li><p>Fix when <code><a href="../reference/add_overall.html">add_overall()</a></code> was run before <code><a href="../reference/add_n.html">add_n()</a></code>. The overall row was not being omitted from the sum and the Ns were doubled. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1126" class="external-link">#1126</a>)</p></li>
 <li><p>Added method “emmeans” to <code><a href="../reference/add_difference.html">add_difference()</a></code> for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects.</p></li>
-<li><p>Updated default <code><a href="../reference/add_difference.html">add_difference()</a></code> for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects to be “emmeans” for continuous and dichotomous variables, and “smd” for categorical variables. # gtsummary 1.5.1</p></li>
-</ul><div class="section level4">
-<h4 id="new-functions-1-5-2">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-5-2"></a></h4>
+<li><p>Updated default <code><a href="../reference/add_difference.html">add_difference()</a></code> for <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> objects to be “emmeans” for continuous and dichotomous variables, and “smd” for categorical variables.</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.5.1" id="gtsummary-151">gtsummary 1.5.1<small>2022-01-20</small><a class="anchor" aria-label="anchor" href="#gtsummary-151"></a></h2>
+<div class="section level4">
+<h4 id="new-functions-1-5-1">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-5-1"></a></h4>
 <ul><li><p>Added new function <code><a href="../reference/modify_column_alignment.html">modify_column_alignment()</a></code> to updated column alignment. Function is a wrapper for the more complex <code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code> function.</p></li>
 <li><p>New function <code><a href="../reference/tbl_strata.html">tbl_strata2()</a></code> that passes both the the stratified data frame as well as the stratum level to the user function. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1091" class="external-link">#1091</a>)</p></li>
 <li><p>Added a <code><a href="../reference/add_p.tbl_continuous.html">add_p.tbl_continuous()</a></code> method for adding p-values to <code><a href="../reference/tbl_continuous.html">tbl_continuous()</a></code> tables. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1023" class="external-link">#1023</a>)</p></li>
 <li><p>Added <code><a href="../reference/add_overall.html">add_overall.tbl_continuous()</a></code> method. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1037" class="external-link">#1037</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="new-functionality-1-5-2">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-1-5-2"></a></h4>
+<h4 id="new-functionality-1-5-1">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-1-5-1"></a></h4>
 <ul><li><p>New test option “emmeans” in <code><a href="../reference/add_difference.html">add_difference()</a></code> and <code><a href="../reference/add_p.html">add_p()</a></code> uses the {emmeans} package to estimate marginal means/least-squares means for continuous variables, binary variables and random intercept models. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1112" class="external-link">#1112</a>)</p></li>
 <li><p>Column alignment is now recognized in <code><a href="../reference/as_kable.html">as_kable()</a></code> and <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code>. Previously, the alignment utilized the <code>kable()</code> defaults and ignored any alignment instructions included in the gtsummary table styling.</p></li>
 <li><p>The <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code> was updated to utilize <code><a href="https://rdrr.io/pkg/kableExtra/man/column_spec.html" class="external-link">kableExtra::column_spec()</a></code> and <code><a href="https://rdrr.io/pkg/kableExtra/man/cell_spec.html" class="external-link">kableExtra::cell_spec()</a></code> to apply bold and italic styling. The choice of the function depends on the use of <code>escape=</code> in <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/1107" class="external-link">#1107</a>)</p></li>
@@ -126,7 +207,7 @@
 <li><p>Added <code>digits=</code> argument to <code><a href="../reference/tbl_cross.html">tbl_cross()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1046" class="external-link">#1046</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="other-updates-1-5-2">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-1-5-2"></a></h4>
+<h4 id="other-updates-1-5-1">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-1-5-1"></a></h4>
 <ul><li><p>Allowed modification to font_size for compact theme. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1106" class="external-link">#1106</a>)</p></li>
 <li><p>Automatically reduced vertical white space between columns for compact flextable theme.</p></li>
 <li><p>Improved user interface for <code>modify_*()</code> functions (<a href="https://github.com/ddsjoberg/gtsummary/issues/1064" class="external-link">#1064</a>)</p></li>
@@ -147,7 +228,7 @@
 <li><p>Update how calls to <code><a href="https://gt.rstudio.com/reference/fmt_missing.html" class="external-link">gt::fmt_missing()</a></code> are constructed to be more memory efficient.</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-1-5-2">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-2"></a></h4>
+<h4 id="bug-fixes-1-5-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-5-1"></a></h4>
 <ul><li><p>Fix in <code><a href="../reference/add_significance_stars.html">add_significance_stars()</a></code> that led to an error when the summarized model did not have a confidence interval column.</p></li>
 <li><p>Fix in <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> and <code><a href="../reference/as_hux_table.html">as_hux_table()</a></code> where reference row was not properly placed after a <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> when the merged tables share common categorical variables but different reference rows. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1063" class="external-link">#1063</a>)</p></li>
 <li><p>Fix in <code><a href="../reference/inline_text.gtsummary.html">inline_text.gtsummary()</a></code> where the first level of a categorical variable could not be selected if the table had also been processed with <code><a href="../reference/remove_row_type.html">remove_row_type()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1078" class="external-link">#1078</a>)</p></li>
@@ -160,9 +241,8 @@
 <li><p>Fix in <code><a href="../reference/add_p.html">add_p()</a></code>/<code><a href="../reference/add_difference.html">add_difference()</a></code> when check whether the passed test is an internal method or a custom method. The previous code required Suggested packages, such as, {lme4}, {effectsize}, and {survey}, to be installed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1018" class="external-link">#1018</a>)</p></li>
 </ul></div>
 <div class="section level4">
-<h4 id="breaking-changes-1-5-2">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-5-2"></a></h4>
-<ul><li>No longer exporting <code>assert_package()</code>. It has been migrated to {broom.helpers} and we now use <code><a href="https://larmarange.github.io/broom.helpers/reference/assert_package.html" class="external-link">broom.helpers::.assert_package()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1051" class="external-link">#1051</a>)</li>
-</ul></div>
+<h4 id="breaking-changes-1-5-1">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-5-1"></a></h4>
+<ul><li>No longer exporting <code>assert_package()</code>. It has been migrated to {broom.helpers} and we now use <code><a href="https://larmarange.github.io/broom.helpers/reference/assert_package.html" class="external-link">broom.helpers::.assert_package()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1051" class="external-link">#1051</a>)</li></ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5.0" id="gtsummary-150">gtsummary 1.5.0<small>2021-10-16</small><a class="anchor" aria-label="anchor" href="#gtsummary-150"></a></h2>
@@ -175,8 +255,7 @@
 <li>
 <p>New function <code><a href="../reference/tbl_custom_summary.html">tbl_custom_summary()</a></code> allowing to create a table of summary statistics using a custom summary function (<a href="https://github.com/ddsjoberg/gtsummary/issues/973" class="external-link">#973</a>, <a href="https://github.com/ddsjoberg/gtsummary/issues/976" class="external-link">#976</a>)</p>
 <ul><li>Set of helpers to be used with <code><a href="../reference/tbl_custom_summary.html">tbl_custom_summary()</a></code>: <code><a href="../reference/continuous_summary.html">continuous_summary()</a></code>, <code><a href="../reference/proportion_summary.html">proportion_summary()</a></code>, <code><a href="../reference/ratio_summary.html">ratio_summary()</a></code>
-</li>
-</ul></li>
+</li></ul></li>
 <li><p>New function <code><a href="../reference/modify_cols_merge.html">modify_cols_merge()</a></code> that can merge two or more columns in a {gtsummary} table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/939" class="external-link">#939</a>)</p></li>
 <li><p>Added function <code><a href="../reference/tbl_butcher.html">tbl_butcher()</a></code> to reduce the size of a {gtsummary} table. After an object has been butchered, other {gtsummary} functions may not be able to execute on the object.</p></li>
 <li><p>Added new function <code><a href="../reference/custom_tidiers.html">tidy_robust()</a></code> that will add robust standard errors, confidence intervals, and p-values with <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. The function is a wrapper for <code>parameters::model_paramters()</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/979" class="external-link">#979</a>)</p></li>
@@ -307,8 +386,7 @@
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3.7" id="gtsummary-137">gtsummary 1.3.7<small>2021-02-26</small><a class="anchor" aria-label="anchor" href="#gtsummary-137"></a></h2>
-<ul><li>No changes. Resubmitting to resolve CRAN quirk.</li>
-</ul></div>
+<ul><li>No changes. Resubmitting to resolve CRAN quirk.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3.6" id="gtsummary-136">gtsummary 1.3.6<small>2021-01-08</small><a class="anchor" aria-label="anchor" href="#gtsummary-136"></a></h2>
 <div class="section level4">
@@ -553,8 +631,7 @@
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.6" id="gtsummary-126">gtsummary 1.2.6<small>2020-02-13</small><a class="anchor" aria-label="anchor" href="#gtsummary-126"></a></h2>
-<ul><li>Bug fix for random effects regression model where coefficients were not exponentiated when requested. Using <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom.mixed::tidy()</a></code> rather than <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code> resolved issue.</li>
-</ul></div>
+<ul><li>Bug fix for random effects regression model where coefficients were not exponentiated when requested. Using <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom.mixed::tidy()</a></code> rather than <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code> resolved issue.</li></ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.5" id="gtsummary-125">gtsummary 1.2.5<small>2020-02-11</small><a class="anchor" aria-label="anchor" href="#gtsummary-125"></a></h2>
 <div class="section level4">
@@ -739,11 +816,11 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

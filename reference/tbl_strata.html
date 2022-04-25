@@ -32,7 +32,7 @@ are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun)
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
       </span>
     </div>
 
@@ -47,7 +47,7 @@ are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun)
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -68,7 +68,7 @@ are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun)
       <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/gallery.html">FAQ + gallery</a>
     </li>
   </ul></li>
 <li>
@@ -164,9 +164,8 @@ Default is <code>"**{strata}**"</code> when <code>.combine_with = "tbl_merge"</c
 <code>"{strata}"</code> when <code>.combine_with = "tbl_stack"</code>. Items placed in
 curly brackets will be evaluated according to <code><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue()</a></code> syntax.</p><ul><li><p><code>strata</code> stratum levels</p></li>
 <li><p><code>n</code> N within stratum</p></li>
-<li><p><code>N</code> Overall N
-The evaluated value of <code>.header=</code> is also available within <code>tbl_strata2(.tbl_fun=)</code></p></li>
-</ul></dd>
+<li><p><code>N</code> Overall N</p></li>
+</ul><p>The evaluated value of <code>.header=</code> is also available within <code>tbl_strata2(.tbl_fun=)</code></p></dd>
 <dt>.stack_group_header</dt>
 <dd><p>DEPRECATED.</p></dd>
 <dt>.quiet</dt>
@@ -313,11 +312,11 @@ each stratum's summary table.</p></li>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

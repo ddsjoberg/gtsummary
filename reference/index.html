@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
       </span>
     </div>
 
@@ -38,7 +38,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -59,7 +59,7 @@
       <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/gallery.html">FAQ + gallery</a>
     </li>
   </ul></li>
 <li>
@@ -353,7 +353,7 @@ multiple comparisons</p></td>
         </td>
         <td><p>Convert gtsummary object to a kableExtra object</p></td>
       </tr><tr><td>
-          <p><code><a href="as_hux_table.html">as_hux_table()</a></code> </p>
+          <p><code><a href="as_hux_table.html">as_hux_table()</a></code> <code><a href="as_hux_table.html">as_hux_xlsx()</a></code> </p>
         </td>
         <td><p>Convert gtsummary object to a huxtable object</p></td>
       </tr><tr><td>
@@ -397,7 +397,7 @@ multiple comparisons</p></td>
         </td>
         <td><p>Modify column headers, footnotes, spanning headers, and table captions</p></td>
       </tr><tr><td>
-          <p><code><a href="bold_italicize_labels_levels.html">bold_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">bold_levels()</a></code> <code><a href="bold_italicize_labels_levels.html">italicize_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">italicize_levels()</a></code> </p>
+          <p><code><a href="bold_italicize_labels_levels.html">bold_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">italicize_labels()</a></code> <code><a href="bold_italicize_labels_levels.html">bold_levels()</a></code> <code><a href="bold_italicize_labels_levels.html">italicize_levels()</a></code> </p>
         </td>
         <td><p>Bold or Italicize labels or levels in gtsummary tables</p></td>
       </tr><tr><td>
@@ -441,7 +441,7 @@ multiple comparisons</p></td>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="set_gtsummary_theme.html">set_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">reset_gtsummary_theme()</a></code> </p>
+          <p><code><a href="set_gtsummary_theme.html">set_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">reset_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">get_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">with_gtsummary_theme()</a></code> <code><a href="set_gtsummary_theme.html">check_gtsummary_theme()</a></code> </p>
         </td>
         <td><p>Set a gtsummary theme</p></td>
       </tr><tr><td>
@@ -476,6 +476,10 @@ multiple comparisons</p></td>
           <p><code><a href="modify_cols_merge.html">modify_cols_merge()</a></code> </p>
         </td>
         <td><p>Modify Column Merging</p></td>
+      </tr><tr><td>
+          <p><code><a href="modify_column_indent.html">modify_column_indent()</a></code> </p>
+        </td>
+        <td><p>Add/Remove Indentation</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="select-helpers">Select Helpers <a href="#select-helpers" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
@@ -489,7 +493,7 @@ multiple comparisons</p></td>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
-          <p><code><a href="custom_tidiers.html">tidy_standardize()</a></code> <code><a href="custom_tidiers.html">tidy_bootstrap()</a></code> <code><a href="custom_tidiers.html">tidy_robust()</a></code> <code><a href="custom_tidiers.html">pool_and_tidy_mice()</a></code> <code><a href="custom_tidiers.html">tidy_gam()</a></code> </p>
+          <p><code><a href="custom_tidiers.html">tidy_standardize()</a></code> <code><a href="custom_tidiers.html">tidy_bootstrap()</a></code> <code><a href="custom_tidiers.html">tidy_robust()</a></code> <code><a href="custom_tidiers.html">pool_and_tidy_mice()</a></code> <code><a href="custom_tidiers.html">tidy_gam()</a></code> <code><a href="custom_tidiers.html">tidy_wald_test()</a></code> </p>
         </td>
         <td><p>Collection of custom tidiers</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
@@ -509,11 +513,11 @@ multiple comparisons</p></td>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

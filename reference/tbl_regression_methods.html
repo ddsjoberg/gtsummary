@@ -26,7 +26,7 @@ Those methods are listed below."><meta property="og:image" content="https://www.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
       </span>
     </div>
 
@@ -41,7 +41,7 @@ Those methods are listed below."><meta property="og:image" content="https://www.
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -62,7 +62,7 @@ Those methods are listed below."><meta property="og:image" content="https://www.
       <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/gallery.html">FAQ + gallery</a>
     </li>
   </ul></li>
 <li>
@@ -166,6 +166,9 @@ Those methods are listed below.</p>
 <span class="co"># S3 method for gam</span>
 <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="va">tidy_gam</span>, <span class="va">...</span><span class="op">)</span>
 
+<span class="co"># S3 method for tidycrr</span>
+<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="fu">tidycmprsk</span><span class="fu">::</span><span class="va"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span>, <span class="va">...</span><span class="op">)</span>
+
 <span class="co"># S3 method for multinom</span>
 <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
@@ -197,11 +200,11 @@ fit object and not the parsnip/workflows object.</p></li>
 <li><p><code>"survreg"</code>: The scale parameter is removed, <code>broom::tidy(x) %&gt;% dplyr::filter(term != "Log(scale)")</code></p></li>
 <li><p><code>"multinom"</code>: This multinomial outcome is complex, with one line per covariate per outcome (less the reference group)</p></li>
 <li><p><code>"gam"</code>: Uses the internal tidier <code><a href="custom_tidiers.html">tidy_gam()</a></code> to print both parametric and smooth terms.</p></li>
+<li><p><code>"tidycrr"</code>: Uses the tidier <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidycmprsk::tidy()</a></code> to print the model terms.</p></li>
 <li><p><code>"lmerMod"</code>, <code>"glmerMod"</code>, <code>"glmmTMB"</code>, <code>"glmmadmb"</code>, <code>"stanreg"</code>, <code>"brmsfit"</code>: These mixed effects
 models use <code>broom.mixed::tidy(x, effects = "fixed")</code>. Specify <code>tidy_fun = broom.mixed::tidy</code>
 to print the random components.</p></li>
-</ul><p>This list is not exhaustive, and care should be taken for each number reported.</p>
-    </div>
+</ul></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -211,11 +214,11 @@ to print the random components.</p></li>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

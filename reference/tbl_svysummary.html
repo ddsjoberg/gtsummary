@@ -25,7 +25,7 @@ It is similar to tbl_summary()."><meta property="og:image" content="https://www.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
       </span>
     </div>
 
@@ -40,7 +40,7 @@ It is similar to tbl_summary()."><meta property="og:image" content="https://www.
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -61,7 +61,7 @@ It is similar to tbl_summary()."><meta property="og:image" content="https://www.
       <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/gallery.html">FAQ + gallery</a>
     </li>
   </ul></li>
 <li>
@@ -153,7 +153,8 @@ If type not specified for a variable, the function
 will default to an appropriate summary type. See below for details.</p></dd>
 <dt>value</dt>
 <dd><p>List of formulas specifying the value to display for dichotomous
-variables.  See below for details.</p></dd>
+variables. gtsummary selectors, e.g. <code><a href="select_helpers.html">all_dichotomous()</a></code>, cannot be used
+with this argument. See below for details.</p></dd>
 <dt>missing</dt>
 <dd><p>Indicates whether to include counts of <code>NA</code> values in the table.
 Allowed values are <code>"no"</code> (never display NA values),
@@ -290,14 +291,14 @@ of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># A simple weighted dataset</span></span>
 <span class="r-in"><span class="va">tbl_svysummary_ex1</span> <span class="op">&lt;-</span></span>
 <span class="r-in">  <span class="fu">survey</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survey/man/svydesign.html" class="external-link">svydesign</a></span><span class="op">(</span><span class="op">~</span><span class="fl">1</span>, data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">Titanic</span><span class="op">)</span>, weights <span class="op">=</span> <span class="op">~</span><span class="va">Freq</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_svysummary</span><span class="op">(</span>by <span class="op">=</span> <span class="va">Survived</span>, percent <span class="op">=</span> <span class="st">"row"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">tbl_svysummary</span><span class="op">(</span>by <span class="op">=</span> <span class="va">Survived</span>, percent <span class="op">=</span> <span class="st">"row"</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">Class</span>, <span class="va">Age</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
 <span class="r-in"><span class="co"># A dataset with a complex design</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">api</span>, package <span class="op">=</span> <span class="st">"survey"</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">tbl_svysummary_ex2</span> <span class="op">&lt;-</span></span>
 <span class="r-in">  <span class="fu">survey</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survey/man/svydesign.html" class="external-link">svydesign</a></span><span class="op">(</span>id <span class="op">=</span> <span class="op">~</span><span class="va">dnum</span>, weights <span class="op">=</span> <span class="op">~</span><span class="va">pw</span>, data <span class="op">=</span> <span class="va">apiclus1</span>, fpc <span class="op">=</span> <span class="op">~</span><span class="va">fpc</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_svysummary</span><span class="op">(</span>by <span class="op">=</span> <span class="st">"both"</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">cname</span>, <span class="va">api00</span>, <span class="va">api99</span>, <span class="va">both</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">tbl_svysummary</span><span class="op">(</span>by <span class="op">=</span> <span class="st">"both"</span>, include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">api00</span>, <span class="va">stype</span><span class="op">)</span><span class="op">)</span></span>
 </code></pre></div>
     </div>
   </div>
@@ -308,11 +309,11 @@ of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

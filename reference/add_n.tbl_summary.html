@@ -24,7 +24,7 @@ total number of non-missing (or missing) observations"><meta property="og:image"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@ total number of non-missing (or missing) observations"><meta property="og:image"
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -60,7 +60,7 @@ total number of non-missing (or missing) observations"><meta property="og:image"
       <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
-      <a href="../articles/gallery.html">table gallery</a>
+      <a href="../articles/gallery.html">FAQ + gallery</a>
     </li>
   </ul></li>
 <li>
@@ -104,7 +104,6 @@ total number of non-missing (or missing) observations</p>
   col_label <span class="op">=</span> <span class="st">"**N**"</span>,
   footnote <span class="op">=</span> <span class="cn">FALSE</span>,
   last <span class="op">=</span> <span class="cn">FALSE</span>,
-  missing <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -115,7 +114,6 @@ total number of non-missing (or missing) observations</p>
   col_label <span class="op">=</span> <span class="st">"**N**"</span>,
   footnote <span class="op">=</span> <span class="cn">FALSE</span>,
   last <span class="op">=</span> <span class="cn">FALSE</span>,
-  missing <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -128,14 +126,15 @@ with class <code>tbl_svysummary</code> from the <a href="tbl_svysummary.html">tb
 <dt>statistic</dt>
 <dd><p>String indicating the statistic to report. Default is the
 number of non-missing observation for each variable, <code>statistic = "{n}"</code>.
-Other statistics available to report include:</p><ul><li><p><code>"{N}"</code> total number of observations,</p></li>
-<li><p><code>"{n}"</code> number of non-missing observations,</p></li>
-<li><p><code>"{n_miss}"</code> number of missing observations,</p></li>
-<li><p><code>"{p}"</code> percent non-missing data,</p></li>
-<li><p><code>"{p_miss}"</code> percent missing data
-The argument uses <a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue</a> syntax and multiple statistics may be reported,
-e.g. <code>statistic = "{n} / {N} ({p}%)"</code></p></li>
-</ul></dd>
+Other statistics available to report include:</p><ul><li><p><code>"{N_obs}"</code> total number of observations,</p></li>
+<li><p><code>"{N_nonmiss}"</code> number of non-missing observations,</p></li>
+<li><p><code>"{N_miss}"</code> number of missing observations,</p></li>
+<li><p><code>"{p_nonmiss}"</code> percent non-missing data,</p></li>
+<li><p><code>"{p_miss}"</code> percent missing data</p></li>
+<li><p>survey summaries also have the following unweighted statistics available:
+<code>"N_obs_unweighted"</code>, <code>"N_miss_unweighted"</code>, <code>"N_nonmiss_unweighted"</code>, <code>"p_miss_unweighted"</code>, <code>"p_nonmiss_unweighted"</code></p></li>
+</ul><p>The argument uses <a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue</a> syntax and multiple statistics may be reported,
+e.g. <code>statistic = "{N_nonmiss} / {N_obs} ({p_nonmiss}%)"</code></p></dd>
 <dt>col_label</dt>
 <dd><p>String indicating the column label.  Default is <code>"**N**"</code></p></dd>
 <dt>footnote</dt>
@@ -144,9 +143,6 @@ clarifying the statistics presented. Default is <code>FALSE</code></p></dd>
 <dt>last</dt>
 <dd><p>Logical indicator to include N column last in table.
 Default is <code>FALSE</code>, which will display N column first.</p></dd>
-<dt>missing</dt>
-<dd><p>DEPRECATED. Logical argument indicating whether to print N
-(<code>missing = FALSE</code>), or N missing (<code>missing = TRUE</code>).  Default is <code>FALSE</code></p></dd>
 <dt>...</dt>
 <dd><p>Not used</p></dd>
 </dl></div>
@@ -217,11 +213,11 @@ Default is <code>FALSE</code>, which will display N column first.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, Joseph Larmarange, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
