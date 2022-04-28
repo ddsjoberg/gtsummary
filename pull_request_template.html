@@ -90,29 +90,57 @@
 
 
 <p><strong>What changes are proposed in this pull request?</strong></p>
-<p><strong>If there is an GitHub issue associated with this pull request, please provide link.</strong></p>
+<p><strong>If there is an GitHub issue associated with this pull
+request, please provide link.</strong></p>
 <hr><p>Reviewer Checklist (if item does not apply, mark is as complete)</p>
-<ul><li>
-<input type="checkbox" disabled>Ensure all package dependencies are installed by running <code>renv::install()</code>
+<ul class="task-list"><li>
+<input type="checkbox" disabled>
+Ensure all package dependencies are installed by running
+<code><a href="https://rstudio.github.io/renv/reference/install.html" class="external-link">renv::install()</a></code>
 </li>
 <li>
-<input type="checkbox" disabled>PR branch has pulled the most recent updates from master branch. Ensure the pull request branch and your local version match and both have the latest updates from the master branch.</li>
+<input type="checkbox" disabled>
+PR branch has pulled the most recent updates from master branch. Ensure
+the pull request branch and your local version match and both have the
+latest updates from the master branch.</li>
 <li>
-<input type="checkbox" disabled>If an update was made to <code><a href="reference/tbl_summary.html">tbl_summary()</a></code>, was the same change implemented for <code><a href="reference/tbl_svysummary.html">tbl_svysummary()</a></code>?</li>
+<input type="checkbox" disabled>
+If an update was made to <code><a href="reference/tbl_summary.html">tbl_summary()</a></code>, was the same change
+implemented for <code><a href="reference/tbl_svysummary.html">tbl_svysummary()</a></code>?</li>
 <li>
-<input type="checkbox" disabled>If a new function was added, function included in <code>_pkgdown.yml</code>
+<input type="checkbox" disabled>
+If a new function was added, function included in
+<code>_pkgdown.yml</code>
 </li>
 <li>
-<input type="checkbox" disabled>If a bug was fixed, a unit test was added for the bug check</li>
+<input type="checkbox" disabled>
+If a bug was fixed, a unit test was added for the bug check</li>
 <li>
-<input type="checkbox" disabled>Run <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code>. Check the R console for errors, and review the rendered website.</li>
+<input type="checkbox" disabled>
+Run <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code>. Check the R console for errors,
+and review the rendered website.</li>
 <li>
-<input type="checkbox" disabled>Code coverage is suitable for any new functions/features. Review coverage with <code>withr::with_envvar(new = c("NOT_CRAN" = "true"), covr::report())</code>. Begin in a fresh R session without any packages loaded.</li>
+<input type="checkbox" disabled>
+Code coverage is suitable for any new functions/features. Review
+coverage with
+<code>withr::with_envvar(new = c("NOT_CRAN" = "true"), covr::report())</code>.
+Begin in a fresh R session without any packages loaded.</li>
 <li>
-<input type="checkbox" disabled>R CMD Check runs without errors, warnings, and notes</li>
+<input type="checkbox" disabled>
+R CMD Check runs without errors, warnings, and notes</li>
 <li>
-<input type="checkbox" disabled><code>usethis::use_spell_check()</code> runs with no spelling errors in documentation</li>
-</ul><p>When the branch is ready to be merged into master: - [ ] Update <code>NEWS.md</code> with the changes from this pull request under the heading “<code># gtsummary (development version)</code>”. If there is an issue associated with the pull request, reference it in parentheses at the end update (see <code>NEWS.md</code> for examples). - [ ] Increment the version number using <code>usethis::use_version(which = "dev")</code> - [ ] Run <code>codemetar::write_codemeta()</code> - [ ] Run <code>usethis::use_spell_check()</code> again - [ ] Approve Pull Request - [ ] Merge the PR. Please use “Squash and merge”.</p>
+<input type="checkbox" disabled><code><a href="https://usethis.r-lib.org/reference/use_spell_check.html" class="external-link">usethis::use_spell_check()</a></code> runs with no spelling errors in
+documentation</li>
+</ul><p>When the branch is ready to be merged into master: - [ ] Update
+<code>NEWS.md</code> with the changes from this pull request under the
+heading “<code># gtsummary (development version)</code>”. If there is an
+issue associated with the pull request, reference it in parentheses at
+the end update (see <code>NEWS.md</code> for examples). - [ ] Increment
+the version number using
+<code>usethis::use_version(which = "dev")</code> - [ ] Run
+<code>codemetar::write_codemeta()</code> - [ ] Run
+<code><a href="https://usethis.r-lib.org/reference/use_spell_check.html" class="external-link">usethis::use_spell_check()</a></code> again - [ ] Approve Pull Request
+- [ ] Merge the PR. Please use “Squash and merge”.</p>
 
 
   </div>
@@ -126,11 +154,16 @@
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D.
+Sjoberg</a>, Michael Curry,
+<a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>,
+<a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa
+Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer></div>
