@@ -31,7 +31,9 @@
 #' using the mice package. Pass the mice model object *before* the model results
 #' have been pooled. See example.
 #'
-#' - `tidy_wald_test()` tidier to report Wald p-values, wrapping the `aod::wald.test()` function.
+#' - `tidy_wald_test()` tidier to report Wald p-values, wrapping the
+#'   `aod::wald.test()` function.
+#'   Use this tidier with `add_global_p(anova_fun = tidy_wald_test)`
 #'
 #' Ensure your model type is compatible with the methods/functions used to estimate
 #' the model parameters before attempting to use the tidier with `tbl_regression()`
