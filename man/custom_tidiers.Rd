@@ -112,7 +112,9 @@ function with \code{tbl_regression()}, pass a function with the arguments for
 \item \code{pool_and_tidy_mice()} tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object \emph{before} the model results
 have been pooled. See example.
-\item \code{tidy_wald_test()} tidier to report Wald p-values, wrapping the \code{aod::wald.test()} function.
+\item \code{tidy_wald_test()} tidier to report Wald p-values, wrapping the
+\code{aod::wald.test()} function.
+Use this tidier with \code{add_global_p(anova_fun = tidy_wald_test)}
 }
 
 Ensure your model type is compatible with the methods/functions used to estimate
