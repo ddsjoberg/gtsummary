@@ -103,8 +103,10 @@ get_gtsummary_theme <- function() {
 with_gtsummary_theme <- function(x, expr, env = rlang::caller_env()) {
   # save current theme ---------------------------------------------------------
   current_theme <- get_gtsummary_theme()
-  # on exit, restore theme
-  on.exit(set_gtsummary_theme(current_theme, quiet = TRUE))
+
+  # on exit, restore theme -----------------------------------------------------
+  on.exit(reset_gtsummary_theme(), add = TRUE)
+  on.exit(set_gtsummary_theme(current_theme, quiet = TRUE), add = TRUE)
 
   # add specified theme --------------------------------------------------------
   set_gtsummary_theme(suppressMessages(x), quiet = TRUE)

@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `with_gtsummary_theme()`. The function restored any previously set theme, but inadvertently included the temporary theme along with it.
+
 # gtsummary 1.6.0
 
 ### Improvements to `as_kable_extra()`
