@@ -200,7 +200,9 @@ function with <code><a href="tbl_regression.html">tbl_regression()</a></code>, p
 <li><p><code>pool_and_tidy_mice()</code> tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object <em>before</em> the model results
 have been pooled. See example.</p></li>
-<li><p><code>tidy_wald_test()</code> tidier to report Wald p-values, wrapping the <code><a href="https://rdrr.io/pkg/aod/man/wald.test.html" class="external-link">aod::wald.test()</a></code> function.</p></li>
+<li><p><code>tidy_wald_test()</code> tidier to report Wald p-values, wrapping the
+<code><a href="https://rdrr.io/pkg/aod/man/wald.test.html" class="external-link">aod::wald.test()</a></code> function.
+Use this tidier with <code>add_global_p(anova_fun = tidy_wald_test)</code></p></li>
 </ul><p>Ensure your model type is compatible with the methods/functions used to estimate
 the model parameters before attempting to use the tidier with <code><a href="tbl_regression.html">tbl_regression()</a></code></p>
     </div>
