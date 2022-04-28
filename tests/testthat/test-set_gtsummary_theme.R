@@ -74,11 +74,6 @@ test_that("setting themes", {
     "*"
   )
 
-  expect_error(
-    get_theme_element("not_a_theme_element"),
-    "*"
-  )
-
   # setting a continuous2 default stat
   list(
     "tbl_summary-str:default_con_type" = "continuous2",
@@ -195,6 +190,27 @@ test_that("setting themes", {
       x = list("style_number-arg:decimal.mark" = "."),
       expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
     )
+    thm_names <- names(get_gtsummary_theme())
+    get_gtsummary_theme()},
+  theme_gtsummary_journal("lancet", set_theme = FALSE)[thm_names],
+  ignore_function_env = TRUE
+  )
+
+  expect_true({
+    reset_gtsummary_theme()
+    with_gtsummary_theme(
+      x = list("style_number-arg:decimal.mark" = ","),
+      expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
+    )
+    rlang::is_empty(get_gtsummary_theme())}
+  )
+
+  expect_equal({
+    theme_gtsummary_journal("lancet")
+    with_gtsummary_theme(
+      x = list("style_number-arg:decimal.mark" = "."),
+      expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
+    )
     tbl_summary(trial, include = marker, missing = "no") %>%
       as_tibble(col_labels = FALSE) %>%
       dplyr::pull(stat_0)},
@@ -202,6 +218,11 @@ test_that("setting themes", {
   )
 
   reset_gtsummary_theme()
+
+  expect_message(check_gtsummary_theme(mtcars))
+  expect_message(check_gtsummary_theme(as.list(letters)))
+  expect_message(check_gtsummary_theme(list("not_a_theme" = 5)))
+  expect_message(check_gtsummary_theme(list("style_number-arg:decimal.mark" = ".")), "*Looks good*")
 
 })
 

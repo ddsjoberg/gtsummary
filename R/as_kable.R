@@ -76,7 +76,7 @@ table_styling_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
   if (!is.null(dots[["fmt_missing"]])) {
-    lifecycle::deprecate_warn(when = "1.5.3",
+    lifecycle::deprecate_warn(when = "1.6.0",
                               what = "gtsummary::as_kable_extra(fmt_missing=)")
     dots <- purrr::list_modify(fmt_missing = NULL) %>% purrr::compact()
   }
@@ -98,6 +98,7 @@ table_styling_to_kable_calls <- function(x, ...) {
 # constructs call to kable, and allows users to overwrite default arg values.
 .construct_call_to_kable <- function(x, ...) {
   dots <- rlang::dots_list(...)
+
   kable_args <-
     # default args
     list(
@@ -108,6 +109,8 @@ table_styling_to_kable_calls <- function(x, ...) {
         dplyr::pull(.data$align) %>%
         stringr::str_sub(1, 1)
     ) %>%
+    # update with any args from theme element
+    purrr::list_modify(!!!get_theme_element("as_kable-arg:dots")) %>%
     # update with any args user passed values
     purrr::list_modify(!!!dots) %>%
     purrr::compact()

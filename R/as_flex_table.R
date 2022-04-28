@@ -6,10 +6,18 @@
 #' useful when combined with R markdown with Word output, since the gt package
 #' does not support Word.
 #'
-#' - If **ftExtra v0.4.0** or greater is installed, the header rows will be printed
-#' with the bold/italic styling. Otherwise, all markdown styling is stripped from the header.
-#' - Use the `flextable::width()` function for precise control over column
-#' width after calling `as_flex_table()`.
+#' @section Experimental:
+#'
+#' The **ftExtra** package provides a function to recognize and print markdown syntax
+#' in **flextable** headers.
+#' To use this feature
+#' - Install **ftExtra v0.4.0** or greater
+#' - Set `options(gtsummary.use_ftExtra = TRUE)` or the corresponding theme element
+#'
+#' To "turn off" this feature, run `as_flex_table(include = -ftExtra)`.
+#'
+#' If you experience any issues using this feature, please file an issue at
+#' [https://github.com/ddsjoberg/gtsummary/issues/new/choose](https://github.com/ddsjoberg/gtsummary/issues/new/choose).
 #'
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
@@ -34,14 +42,16 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   # deprecated arguments -------------------------------------------------------
   if (!is.null(strip_md_bold)) {
     lifecycle::deprecate_warn(
-      "1.5.4", "gtsummary::as_flex_table(strip_md_bold=)",
-      details = "Install {ftExtra} package to obtain styled header rows.")
+      "1.6.0", "gtsummary::as_flex_table(strip_md_bold=)",
+      details = "Install {ftExtra} package to obtain styled header rows. See `?as_flex_table()` for details.")
   }
 
   .assert_class(x, "gtsummary")
   # checking flextable installation --------------------------------------------
   assert_package("flextable", "as_flex_table()")
-  strip_md_bold <- !assert_package("ftExtra", boolean = TRUE)
+  use_ft_extra <-
+    (isTRUE(getOption("gtsummary.use_ftExtra")) || isTRUE(get_theme_element("as_flex_table-lgl:use_ftExtra"))) &&    # either is TRUE
+    assert_package("ftExtra", boolean = TRUE)                                                                        # ftExtra is installed
 
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
@@ -50,7 +60,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   x <- .table_styling_expr_to_row_number(x)
 
   # stripping markdown asterisk ------------------------------------------------
-  if (isTRUE(strip_md_bold)) {
+  if (isFALSE(use_ft_extra)) {
     x$table_styling$header <-
       x$table_styling$header %>%
       mutate_at(
@@ -60,7 +70,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   }
 
   # creating list of flextable calls -------------------------------------------
-  flextable_calls <- table_styling_to_flextable_calls(x = x, use_ft_extra = !strip_md_bold)
+  flextable_calls <- table_styling_to_flextable_calls(x = x, use_ft_extra = use_ft_extra)
 
   # adding user-specified calls ------------------------------------------------
   insert_expr_after <- get_theme_element("as_flex_table-lst:addl_cmds")
@@ -232,6 +242,23 @@ table_styling_to_flextable_calls <- function(x, use_ft_extra, ...) {
     expr(flextable::fontsize(part = "header", size = 11))
   )
 
+  # ft_extra -------------------------------------------------------------------
+  flextable_calls[["ftExtra"]] <- list()
+  if (isTRUE(use_ft_extra)) {
+    flextable_calls[["ftExtra"]] <-
+      list(
+        expr(
+          ftExtra::colformat_md(
+            part = "header",
+            md_extensions =
+              get_theme_element(
+                "as_flex_table-lgl:ftExtra.colformat_md.md_extensions",
+                default = "+hard_line_breaks")
+          )
+        )
+      )
+  }
+
   # autofit --------------------------------------------------------------------
   flextable_calls[["autofit"]] <- expr(flextable::autofit())
 
@@ -402,16 +429,6 @@ table_styling_to_flextable_calls <- function(x, use_ft_extra, ...) {
         flextable::valign(valign = "top", part = "body")
       )
     )
-
-  # ft_extra -------------------------------------------------------------------
-  if (isTRUE(use_ft_extra)) {
-    flextable_calls[["ftExtra"]] <-
-      list(
-        expr(
-          ftExtra::colformat_md(part = "header", md_extensions = "+hard_line_breaks")
-        )
-      )
-  }
 
   flextable_calls
 }

@@ -38,7 +38,7 @@ A {kableExtra} table
 }
 \description{
 Function converts a gtsummary object to a knitr_kable + kableExtra object.
-This allows the customized formatting available via \link[knitr:kable]{knitr::kable}
+This allows the customized formatting available via \code{knitr::kable()}
 and {kableExtra}; \code{as_kable_extra()} supports arguments in \code{knitr::kable()}.
 \code{as_kable_extra()} output via gtsummary supports
 bold and italic cells for table bodies. Users
@@ -65,7 +65,7 @@ headers, spanning headers, caption, and the table body
 To suppress \emph{these} additional formats, set \code{as_kable_extra(addtl_fmt = FALSE)}
 
 Additional styling is available with
-\code{kableExtra::kable_styling()} as shown in Example 3, which implements row
+\code{kableExtra::kable_styling()} as shown in Example 2, which implements row
 striping and repeated column headers in the presence of page breaks.
 }
 
@@ -88,49 +88,37 @@ To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALS
 
 \section{Example Output}{
 
-\if{html}{Example 1 (html)}
+\if{html}{Example 1 (PDF)}
 
-\if{html}{\figure{as_kable_extra_ex1_html.png}{options: width=40\%}}
+\if{html}{\figure{as_kable_extra_ex1_pdf.png}{options: width=45\%}}
 
-\if{html}{Example 1 (pdf)}
+\if{html}{Example 2 (PDF)}
 
-\if{html}{\figure{as_kable_extra_ex1_pdf.png}{options: width=40\%}}
-
-\if{html}{Example 2 (pdf)}
-
-\if{html}{\figure{as_kable_extra_ex2_pdf.png}{options: width=40\%}}
-
-\if{html}{Example 3 (pdf)}
-
-\if{html}{\figure{as_kable_extra_ex3_pdf.png}{options: width=40\%}}
+\if{html}{\figure{as_kable_extra_ex2_pdf.png}{options: width=65\%}}
 }
 
 \examples{
 \dontshow{if (broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
-# Example 1 (general) -------------------------------------------------------
-as_kable_extra_ex1_gen <-
+# basic gtsummary tbl to build upon
+as_kable_extra_base <-
   trial \%>\%
   select(trt, age, stage) \%>\%
   tbl_summary(by = trt) \%>\%
-  bold_labels() \%>\%
-  as_kable_extra()
+  bold_labels()
 
-# Example 2 (PDF via LaTeX) -------------------------------------------------
-as_kable_extra_ex2_pdf <-
-  trial \%>\%
-  select(trt, age, stage) \%>\%
-  tbl_summary(by = trt) \%>\%
-  bold_labels() \%>\%
+# Example 1 (PDF via LaTeX) ---------------------
+# add linebreak in table header with '\n'
+as_kable_extra_ex1_pdf <-
+  as_kable_extra_base \%>\%
   modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") \%>\%
   as_kable_extra()
 
-# Example 3 (PDF via LaTeX) -------------------------------------------------
-as_kable_extra_ex3_pdf <-
-  trial \%>\%
-  select(trt, age, stage) \%>\%
-  tbl_summary(by = trt) \%>\%
-  bold_labels() \%>\%
+# Example 2 (PDF via LaTeX) ---------------------
+# additional styling in `knitr::kable()` and with
+#   call to `kableExtra::kable_styling()`
+as_kable_extra_ex1_pdf <-
+  as_kable_extra_base \%>\%
   as_kable_extra(
     booktabs = TRUE,
     longtable = TRUE,

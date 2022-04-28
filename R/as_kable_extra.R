@@ -1,7 +1,7 @@
 #' Convert gtsummary object to a kableExtra object
 #'
 #' Function converts a gtsummary object to a knitr_kable + kableExtra object.
-#' This allows the customized formatting available via [knitr::kable]
+#' This allows the customized formatting available via `knitr::kable()`
 #' and {kableExtra}; `as_kable_extra()` supports arguments in `knitr::kable()`.
 #' `as_kable_extra()` output via gtsummary supports
 #' bold and italic cells for table bodies. Users
@@ -25,7 +25,7 @@
 #' To suppress _these_ additional formats, set `as_kable_extra(addtl_fmt = FALSE)`
 #'
 #' Additional styling is available with
-#' `kableExtra::kable_styling()` as shown in Example 3, which implements row
+#' `kableExtra::kable_styling()` as shown in Example 2, which implements row
 #' striping and repeated column headers in the presence of page breaks.
 #'
 #' @section HTML:
@@ -54,29 +54,25 @@
 #' @author Daniel D. Sjoberg
 #' @examplesIf broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
-#' # Example 1 (general) -------------------------------------------------------
-#' as_kable_extra_ex1_gen <-
+#' # basic gtsummary tbl to build upon
+#' as_kable_extra_base <-
 #'   trial %>%
 #'   select(trt, age, stage) %>%
 #'   tbl_summary(by = trt) %>%
-#'   bold_labels() %>%
-#'   as_kable_extra()
+#'   bold_labels()
 #'
-#' # Example 2 (PDF via LaTeX) -------------------------------------------------
-#' as_kable_extra_ex2_pdf <-
-#'   trial %>%
-#'   select(trt, age, stage) %>%
-#'   tbl_summary(by = trt) %>%
-#'   bold_labels() %>%
+#' # Example 1 (PDF via LaTeX) ---------------------
+#' # add linebreak in table header with '\n'
+#' as_kable_extra_ex1_pdf <-
+#'   as_kable_extra_base %>%
 #'   modify_header(all_stat_cols() ~ "**{level}**\n*N = {n}*") %>%
 #'   as_kable_extra()
 #'
-#' # Example 3 (PDF via LaTeX) -------------------------------------------------
-#' as_kable_extra_ex3_pdf <-
-#'   trial %>%
-#'   select(trt, age, stage) %>%
-#'   tbl_summary(by = trt) %>%
-#'   bold_labels() %>%
+#' # Example 2 (PDF via LaTeX) ---------------------
+#' # additional styling in `knitr::kable()` and with
+#' #   call to `kableExtra::kable_styling()`
+#' as_kable_extra_ex1_pdf <-
+#'   as_kable_extra_base %>%
 #'   as_kable_extra(
 #'     booktabs = TRUE,
 #'     longtable = TRUE,
@@ -89,22 +85,14 @@
 #'   )
 #' }
 #' @section Example Output:
-#' \if{html}{Example 1 (html)}
+#' \if{html}{Example 1 (PDF)}
 #'
-#' \if{html}{\figure{as_kable_extra_ex1_html.png}{options: width=40\%}}
+#' \if{html}{\figure{as_kable_extra_ex1_pdf.png}{options: width=45\%}}
 #'
-#' \if{html}{Example 1 (pdf)}
+#' \if{html}{Example 2 (PDF)}
 #'
-#' \if{html}{\figure{as_kable_extra_ex1_pdf.png}{options: width=40\%}}
-#'
-#' \if{html}{Example 2 (pdf)}
-#'
-#' \if{html}{\figure{as_kable_extra_ex2_pdf.png}{options: width=40\%}}
-#'
-#' \if{html}{Example 3 (pdf)}
-#'
-#' \if{html}{\figure{as_kable_extra_ex3_pdf.png}{options: width=40\%}}
-#'
+#' \if{html}{\figure{as_kable_extra_ex2_pdf.png}{options: width=65\%}}
+
 
 as_kable_extra <- function(x,
                            escape = FALSE,
@@ -175,12 +163,12 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   dots <- rlang::dots_list(...)
 
   if (!is.null(dots[["strip_md_bold"]])) {
-    lifecycle::deprecate_warn(when = "1.5.3",
+    lifecycle::deprecate_warn(when = "1.6.0",
                               what = "gtsummary::as_kable_extra(strip_md_bold=)")
     dots <- purrr::list_modify(strip_md_bold = NULL) %>% purrr::compact()
   }
   if (!is.null(dots[["fmt_missing"]])) {
-    lifecycle::deprecate_warn(when = "1.5.3",
+    lifecycle::deprecate_warn(when = "1.6.0",
                               what = "gtsummary::as_kable_extra(fmt_missing=)")
     dots <- purrr::list_modify(fmt_missing = NULL) %>% purrr::compact()
   }
