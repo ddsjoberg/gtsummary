@@ -1,10 +1,13 @@
 #' Collection of custom tidiers
 #'
+#' @description
 #' \lifecycle{maturing}
-#' Collection of tidiers that can be passed to `tbl_regression()`
-#' and `tbl_uvregression()` to obtain modified results. See examples below.
+#' Collection of tidiers that can be utilized in gtsummary. See details below.
 #'
-#' @section Details:
+#' # Regression Model Tidiers
+#'
+#' These tidiers are passed to `tbl_regression()` and `tbl_uvregression()` to
+#' obtain modified results.
 #'
 #' - `tidy_standardize()` tidier to report standardized coefficients. The
 #' [effectsize](https://easystats.github.io/effectsize/reference/standardize_parameters.html)
@@ -31,10 +34,12 @@
 #' using the mice package. Pass the mice model object *before* the model results
 #' have been pooled. See example.
 #'
-#' - `tidy_wald_test()` tidier to report Wald p-values, wrapping the `aod::wald.test()` function.
+#' # Other Tidiers
 #'
-#' Ensure your model type is compatible with the methods/functions used to estimate
-#' the model parameters before attempting to use the tidier with `tbl_regression()`
+#' - `tidy_wald_test()` tidier to report Wald p-values, wrapping the
+#'   `aod::wald.test()` function.
+#'   Use this tidier with `add_global_p(anova_fun = tidy_wald_test)`
+#'
 #' @inheritParams broom::tidy.glm
 #' @inheritParams tbl_regression
 #' @inheritParams add_global_p

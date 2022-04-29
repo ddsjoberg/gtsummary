@@ -85,11 +85,11 @@ if installed.}
 }
 \description{
 \lifecycle{maturing}
-Collection of tidiers that can be passed to \code{tbl_regression()}
-and \code{tbl_uvregression()} to obtain modified results. See examples below.
+Collection of tidiers that can be utilized in gtsummary. See details below.
 }
-\section{Details}{
-
+\section{Regression Model Tidiers}{
+These tidiers are passed to \code{tbl_regression()} and \code{tbl_uvregression()} to
+obtain modified results.
 \itemize{
 \item \code{tidy_standardize()} tidier to report standardized coefficients. The
 \href{https://easystats.github.io/effectsize/reference/standardize_parameters.html}{effectsize}
@@ -112,11 +112,15 @@ function with \code{tbl_regression()}, pass a function with the arguments for
 \item \code{pool_and_tidy_mice()} tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object \emph{before} the model results
 have been pooled. See example.
-\item \code{tidy_wald_test()} tidier to report Wald p-values, wrapping the \code{aod::wald.test()} function.
+}
 }
 
-Ensure your model type is compatible with the methods/functions used to estimate
-the model parameters before attempting to use the tidier with \code{tbl_regression()}
+\section{Other Tidiers}{
+\itemize{
+\item \code{tidy_wald_test()} tidier to report Wald p-values, wrapping the
+\code{aod::wald.test()} function.
+Use this tidier with \code{add_global_p(anova_fun = tidy_wald_test)}
+}
 }
 
 \section{Example Output}{
