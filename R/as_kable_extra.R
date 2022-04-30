@@ -221,38 +221,48 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
            after = kable_call_index - 1L)
 
   if (!isTRUE(escape) && isTRUE(addtl_fmt) && format %in% "latex") {
-    # if a cell is bold/italic, then we should NOT escape it
-    # constructing `ifelse()` statement whether a cell should be escaped
-    df_temp_header <-
+    # getting all unique column/rows where cell will be bold or italic
+    df_text_format_collapsed <-
       x$table_styling$text_format %>%
+      filter(.data$format_type %in% c("bold", "italic")) %>%
       select(.data$column, .data$row_numbers) %>%
       tidyr::unnest(.data$row_numbers) %>%
       dplyr::distinct() %>%
       tidyr::nest(row_numbers = .data$row_numbers) %>%
-      mutate(row_numbers = map(.data$row_numbers, ~unlist(.) %>% unname())) %>%
-      {left_join(x$table_styling$header, ., by = "column")}
-    df_temp_header$expr_condition <-
-      map(
-        df_temp_header$row_numbers,
-        function(.x) {
-          if (is.null(.x)) return(expr(!!rep_len(FALSE, nrow(x$table_body))))
-          expr(dplyr::row_number() %in% !!.x)
-        }
-      )
+      mutate(row_numbers = map(.data$row_numbers, ~unlist(.) %>% unname()))
 
+    # expression identify the bold/italic cells. will be used in the `across()` below
+    expr_no_escape <-
+      map2(
+        df_text_format_collapsed$column,
+        df_text_format_collapsed$row_numbers,
+        function(.x, .y) {
+          expr((dplyr::cur_column() %in% !!.x & dplyr::row_number() %in% !!.y))
+        }
+      ) %>%
+      purrr::reduce(~expr(!!.x | !!.y))
+
+    # collapse header into fewer rows by align status
+    df_header_by_align <-
+      x$table_styling$header %>%
+      filter(!.data$hide) %>%
+      select(.data$column, .data$align) %>%
+      tidyr::nest(column = .data$column) %>%
+      mutate(column = map(.data$column, ~unlist(.) %>% unname()))
+
+    # create one call per alignment type found in table
     kable_extra_calls[["escape_table_body"]] <-
       map(
-        seq_len(nrow(df_temp_header)),
+        seq_len(nrow(df_header_by_align)),
         function(i) {
-          if (df_temp_header$hide[i] %in% TRUE) return(NULL)
           rlang::expr(
             dplyr::mutate(
               dplyr::across
-              (all_of(!!df_temp_header$column[i]) & where(is.character),
+              (all_of(!!!df_header_by_align$column[i]) & where(is.character),
                 ~ifelse(
-                  !!df_temp_header$expr_condition[[i]],
+                  !!expr_no_escape,
                   .x,
-                  gtsummary::.escape_latex(.x, align = !!str_sub(df_temp_header$align[i], 1, 1))
+                  gtsummary::.escape_latex(.x, align = !!str_sub(df_header_by_align$align[i], 1, 1))
                 )
               )
             )
