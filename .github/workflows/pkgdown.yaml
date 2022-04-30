@@ -23,7 +23,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
-          extra-packages: pkgdown
+          extra-packages: pkgdown, MatchIt, Matching
           needs: website
 
       - name: Deploy package
