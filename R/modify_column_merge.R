@@ -16,6 +16,14 @@
 #' major modifications to the table, such as those with `tbl_merge()` and
 #' `tbl_stack()`, before assigning merging instructions. Otherwise,
 #' unexpected formatting may occur in the final table.
+#' 3. If this functionality is used in conjunction with `tbl_stack()` (which
+#' includes `tbl_uvregression()`), there is potential issue with printing.
+#' When columns are stack AND when the column-merging is
+#' defined with a quosure, you may run into issues due to the loss of the
+#' environment when 2 or more quosures are combined. If the expression
+#' version of the quosure is the same as the quosure (i.e. no evaluated
+#' objects), there should be no issues. Regardless, this argument is used
+#' internally with care, and **it is _not_ recommended for users**.
 #'
 #' @section Future Updates:
 #' There are planned updates to the implementation of this function
@@ -42,33 +50,33 @@
 #' @family Advanced modifiers
 #' @examples
 #' # Example 1 ----------------------------------
-#' modify_cols_merge_ex1 <-
+#' modify_column_merge_ex1 <-
 #'   trial %>%
 #'   select(age, marker, trt) %>%
 #'   tbl_summary(by = trt, missing = "no") %>%
 #'   add_p(all_continuous() ~ "t.test",
 #'         pvalue_fun = ~style_pvalue(., prepend_p = TRUE)) %>%
 #'   modify_fmt_fun(statistic ~ style_sigfig) %>%
-#'   modify_cols_merge(pattern = "t = {statistic}; {p.value}") %>%
+#'   modify_column_merge(pattern = "t = {statistic}; {p.value}") %>%
 #'   modify_header(statistic ~ "**t-test**")
 #'
 #' # Example 2 ----------------------------------
-#' modify_cols_merge_ex2 <-
+#' modify_column_merge_ex2 <-
 #'   lm(marker ~ age + grade, trial) %>%
 #'   tbl_regression() %>%
-#'   modify_cols_merge(
+#'   modify_column_merge(
 #'     pattern = "{estimate} ({ci})",
 #'     rows = !is.na(estimate)
 #'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{modify_cols_merge_ex1.png}{options: width=65\%}}
+#' \if{html}{\figure{modify_column_merge_ex1.png}{options: width=65\%}}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{modify_cols_merge_ex2.png}{options: width=41\%}}
-modify_cols_merge <- function(x, pattern, rows = NULL) {
+#' \if{html}{\figure{modify_column_merge_ex2.png}{options: width=41\%}}
+modify_column_merge <- function(x, pattern, rows = NULL) {
   # check inputs ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
   if (!rlang::is_string(pattern)) abort("`pattern=` must be a string.")
@@ -81,13 +89,13 @@ modify_cols_merge <- function(x, pattern, rows = NULL) {
     map(~str_remove_all(.x, pattern = "^\\{|\\}$")) %>%
     unlist()
   if (length(columns) == 0L) {
-    cli::cli_alert_danger("No column names found in {.code modify_cols_merge(pattern=)}")
+    cli::cli_alert_danger("No column names found in {.code modify_column_merge(pattern=)}")
     cli::cli_ul("Wrap all column names in curly brackets.")
     abort("Error in `pattern=` argument")
   }
   if (!all(columns %in% names(x$table_body))) {
     problem_cols <- columns %>% setdiff(names(x$table_body))
-    paste("Some columns specified in {.code modify_cols_merge(pattern=)}",
+    paste("Some columns specified in {.code modify_column_merge(pattern=)}",
           "were not found in the table, e.g. {.val {problem_cols}}") %>%
     cli::cli_alert_danger()
     cli::cli_ul("Select from {.val {names(x$table_body)}}.")
