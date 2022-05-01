@@ -1,9 +1,9 @@
-test_that("modify_cols_merge() works", {
+test_that("modify_column_merge() works", {
   mod <- lm(marker ~ age + grade, trial) %>% tbl_regression()
   expect_error(
     tbl <-
       mod %>%
-      modify_cols_merge(
+      modify_column_merge(
         pattern = "{estimate} ({ci})",
         rows = !is.na(estimate)
       ),
@@ -19,7 +19,7 @@ test_that("modify_cols_merge() works", {
 
   expect_error(
     mod %>%
-      modify_cols_merge(
+      modify_column_merge(
         pattern = "{not_a_column} ({ci})",
         rows = !is.na(estimate)
       )
@@ -27,7 +27,7 @@ test_that("modify_cols_merge() works", {
 
   expect_error(
     mod %>%
-      modify_cols_merge(
+      modify_column_merge(
         pattern = "no columns selected",
         rows = !is.na(estimate)
       )
