@@ -182,6 +182,8 @@ where <- function(fn) {
 
 
 # v1.6.1 ----------------------------------------------------------
+#' @rdname deprecated
+#' @export
 modify_cols_merge <- function(...) {
   lifecycle::deprecate_warn("1.6.1", "gtsummary::modify_cols_merge()", "modify_column_merge()")
   modify_column_merge(...)
