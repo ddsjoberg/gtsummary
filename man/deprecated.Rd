@@ -11,6 +11,7 @@
 \alias{all_double}
 \alias{all_logical}
 \alias{all_factor}
+\alias{modify_cols_merge}
 \title{Deprecated functions}
 \usage{
 tbl_summary_(...)
@@ -30,6 +31,8 @@ all_double()
 all_logical()
 
 all_factor()
+
+modify_cols_merge(...)
 }
 \description{
 \lifecycle{deprecated}
