@@ -247,11 +247,13 @@ modify_table_styling <- function(x,
 
   # cols_merge_pattern ---------------------------------------------------------
   if (!is.null(cols_merge_pattern)) {
-    x <- .modify_cols_merge(x,
-      column = columns,
-      rows = !!rows,
-      pattern = cols_merge_pattern
-    )
+    x <-
+      .modify_cols_merge(
+        x,
+        column = columns,
+        rows = !!rows,
+        pattern = cols_merge_pattern
+      )
   }
 
   # return x -------------------------------------------------------------------
