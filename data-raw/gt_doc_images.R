@@ -20,7 +20,7 @@ gt.doc.images::save_help_file_images(pkg = "gtsummary")
 
 # document a single file with
 gt.doc.images::save_help_file_images(pkg = "gtsummary",
-                                     rd_files = "add_p.tbl_cross.Rd")
+                                     rd_files = "modify_column_merge.Rd")
 
 # 5. Shrink png files
 gt.doc.images::shrink_help_file_images(pkg = "gtsummary")
