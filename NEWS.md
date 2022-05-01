@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated start-up messaging. (#1228)
+
 * Renamed `modify_cols_merge()` to `modify_column_merge()` to be inline with the other `modify_column_*()` functions.
 
 * Fix in `with_gtsummary_theme()`. The function restored any previously set theme, but inadvertently included the temporary theme along with it.
