@@ -62,6 +62,9 @@ test_that("tbl_merge/tbl_stack", {
   expect_warning(tbl_merge_ex1 %>% as_kable_extra(), NA)
   expect_error(tbl_stack_ex1 %>% as_kable_extra(), NA)
   expect_warning(tbl_stack_ex1 %>% as_kable_extra(), NA)
+
+  expect_error(tbl_stack_ex1 %>% as_kable_extra(format = "latex"), NA)
+  expect_warning(tbl_stack_ex1 %>% as_kable_extra(format = "latex"), NA)
 })
 
 test_that("indent2", {
