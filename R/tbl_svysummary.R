@@ -581,37 +581,6 @@ df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
   return
 }
 
-# calculate_missing_row for survey objects ------------------------------------------------
-calculate_missing_row_survey <- function(data, variable, by, missing_text) {
-  # converting variable to TRUE/FALSE for missing
-  data$variables <-
-    data$variables %>%
-    select(c(variable, by)) %>%
-    mutate(
-      !!variable := is.na(.data[[variable]])
-    )
-
-  # passing the T/F variable through the functions to format as we do in
-  # the tbl_summary output
-  summarize_categorical_survey(
-    data = data, variable = variable, by = by,
-    dichotomous_value = TRUE, sort = "alphanumeric", percent = "column",
-    stat_display = "{n}"
-  ) %>%
-    adding_formatting_as_attr(
-      data = data, variable = variable,
-      summary_type = "dichotomous", stat_display = "{n}", digits = NULL
-    ) %>%
-    {
-      df_stats_to_tbl(
-        data = data, variable = variable, summary_type = "dichotomous", by = by,
-        var_label = missing_text, stat_display = "{n}", df_stats = .,
-        missing = "no", missing_text = "Doesn't Matter -- Text should never appear"
-      )
-    } %>%
-    # changing row_type to missing
-    mutate(row_type = "missing")
-}
 
 # helper for generating formulas for survey tests -------------------------------------
 c_form <- function(left = NULL, right = 1) {
