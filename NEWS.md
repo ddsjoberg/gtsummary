@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added theme element to control what missing statistic is shown in summary tables with options to display number or percent missing or non-missing or total number of observations. (#1224)
+
 * Updated start-up messaging. (#1228)
 
 * Renamed `modify_cols_merge()` to `modify_column_merge()` to be inline with the other `modify_column_*()` functions.
