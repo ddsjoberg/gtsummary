@@ -194,7 +194,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
   else if (journal == "qjecon") {
     lst_theme <-
       list(
-        "pkgwide-str:theme_name" = "The Quareterly Journal of Economics",
+        "pkgwide-str:theme_name" = "The Quarterly Journal of Economics",
         "tbl_regression-arg:conf.int" = FALSE,
         "tbl_summary-fn:percent_fun" = function(x) style_number(x, digits = 1, scale = 100),
         "tbl_regression-fn:addnl-fn-to-run" = function(x) {

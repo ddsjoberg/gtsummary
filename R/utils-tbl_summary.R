@@ -1007,12 +1007,6 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
 # df_stats_to_tbl --------------------------------------------------------------
 df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_display,
                             df_stats, missing, missing_text) {
-  if (is_survey(data)) {
-    calculate_missing_fun <- calculate_missing_row_survey
-  } else {
-    calculate_missing_fun <- calculate_missing_row
-  }
-
   # styling the statistics -----------------------------------------------------
   df_stats_original <- df_stats
   for (v in (names(df_stats) %>% setdiff(c("by", "variable", "variable_levels", "stat_display")))) {
@@ -1096,17 +1090,20 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
 
   # add rows for missing -------------------------------------------------------
   if (missing == "always" || (missing == "ifany" & has_na(data, variable))) {
+    # browser()
+
+    missing_stat <- get_theme_element("tbl_summary-str:missing_stat", default = "{N_miss}")
     result <-
       result %>%
       bind_rows(
         df_stats_original %>%
-          select(any_of(c("by", "variable", "N_miss"))) %>%
+          select(any_of(c("by", "variable", "N_miss", "N_obs", "p_miss", "N_nonmiss", "p_nonmiss"))) %>%
           distinct() %>%
-          mutate(stat_display = "{N_miss}") %>%
+          mutate(stat_display = .env$missing_stat) %>%
           {
             df_stats_to_tbl(
               data = data, variable = variable, summary_type = "dichotomous", by = by,
-              var_label = missing_text, stat_display = "{N_miss}", df_stats = .,
+              var_label = missing_text, stat_display = missing_stat, df_stats = .,
               missing = "no", missing_text = "Doesn't Matter -- Text should never appear"
             )
           } %>%
@@ -1123,38 +1120,6 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
   result %>% select(all_of(c("variable", "row_type", "label", stat_vars)))
 }
 
-# calculate_missing_row --------------------------------------------------------
-calculate_missing_row <- function(data, variable, by, missing_text) {
-  # converting variable to TRUE/FALSE for missing
-  data <-
-    data %>%
-    select(c(variable, by)) %>%
-    mutate(
-      !!variable := is.na(.data[[variable]])
-    )
-
-
-  # passing the T/F variable through the functions to format as we do in
-  # the tbl_summary output
-  summarize_categorical(
-    data = data, variable = variable, by = by, class = "logical",
-    dichotomous_value = TRUE, sort = "alphanumeric", percent = "column",
-    stat_display = "{n}"
-  ) %>%
-    adding_formatting_as_attr(
-      data = data, variable = variable,
-      summary_type = "dichotomous", stat_display = "{n}", digits = NULL
-    ) %>%
-    {
-      df_stats_to_tbl(
-        data = data, variable = variable, summary_type = "dichotomous", by = by,
-        var_label = missing_text, stat_display = "{n}", df_stats = .,
-        missing = "no", missing_text = "Doesn't Matter -- Text should never appear"
-      )
-    } %>%
-    # changing row_type to missing
-    mutate(row_type = "missing")
-}
 
 # df_stats_fun -----------------------------------------------------------------
 # this function creates df_stats in the tbl_summary meta data table
