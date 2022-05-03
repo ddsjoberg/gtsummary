@@ -232,15 +232,19 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
       mutate(row_numbers = map(.data$row_numbers, ~unlist(.) %>% unname()))
 
     # expression identify the bold/italic cells. will be used in the `across()` below
-    expr_no_escape <-
-      map2(
-        df_text_format_collapsed$column,
-        df_text_format_collapsed$row_numbers,
-        function(.x, .y) {
-          expr((dplyr::cur_column() %in% !!.x & dplyr::row_number() %in% !!.y))
-        }
-      ) %>%
-      purrr::reduce(~expr(!!.x | !!.y))
+    if (nrow(df_text_format_collapsed) > 0) {
+      expr_no_escape <-
+        map2(
+          df_text_format_collapsed$column,
+          df_text_format_collapsed$row_numbers,
+          function(.x, .y) {
+            expr((dplyr::cur_column() %in% !!.x & dplyr::row_number() %in% !!.y))
+          }
+        ) %>%
+        purrr::reduce(~expr(!!.x | !!.y))
+    }
+    else expr_no_escape <- expr(FALSE) # no cells will be skipped if no bold/italic formatting
+
 
     # collapse header into fewer rows by align status
     df_header_by_align <-
