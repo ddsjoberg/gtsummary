@@ -69,6 +69,9 @@ test_that("tbl_merge/tbl_stack", {
   expect_error(tbl_stack_ex1 %>% bold_labels() %>% as_kable_extra(escape = TRUE, format = "latex"), NA)
   expect_warning(tbl_stack_ex1 %>% bold_labels() %>% as_kable_extra(escape = TRUE, format = "latex"), NA)
 
+  expect_error(tbl_stack_ex1 %>% as_kable_extra(escape = TRUE, format = "latex"), NA)
+  expect_warning(tbl_stack_ex1 %>% as_kable_extra(escape = TRUE, format = "latex"), NA)
+
   expect_error(tbl_stack_ex1 %>% as_kable_extra(format = "html"), NA)
   expect_warning(tbl_stack_ex1 %>% as_kable_extra(format = "html"), NA)
 
