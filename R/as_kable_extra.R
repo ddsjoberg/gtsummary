@@ -243,7 +243,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
         ) %>%
         purrr::reduce(~expr(!!.x | !!.y))
     }
-    else expr_no_escape <- expr(FALSE) # no cells will be skipped if no bold/italic formatting
+    else expr_no_escape <- expr(!!rep_len(FALSE, nrow(x$table_body))) # no cells will be skipped if no bold/italic formatting
 
 
     # collapse header into fewer rows by align status
