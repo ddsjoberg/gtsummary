@@ -250,3 +250,14 @@ test_that("tidycrr models work", {
   )
   expect_error(add_global_p(tbl), NA)
 })
+
+test_that("cmprsk::crr models message", {
+  set.seed(10)
+  ftime <- rexp(200)
+  fstatus <- sample(0:2,200,replace=TRUE)
+  cov <- matrix(runif(600),nrow=200)
+  dimnames(cov)[[2]] <- c('x1','x2','x3')
+  mod <- cmprsk::crr(ftime,fstatus,cov)
+
+  expect_message(tbl_regression(mod))
+})
