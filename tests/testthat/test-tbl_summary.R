@@ -644,6 +644,28 @@ test_that("no error when by variable omitted from include", {
   )
 })
 
+test_that("all column names are accepted", {
+  df <- data.frame(variable = c(rep("A", 5), rep("B", 5)), value= 1:10)
+
+  expect_error(
+    tbl_summary(df, by = "variable"),
+    NA
+  )
+  expect_error(
+    tbl_summary(df),
+    NA
+  )
+  expect_error(
+    tbl_summary(df %>% dplyr::rename(by = variable)),
+    NA
+  )
+  expect_error(
+    tbl_summary(df %>% dplyr::rename(by = variable), by = "by"),
+    NA
+  )
+
+})
+
 test_that("no error with factor variable with all NA and no specifed levels", {
   expect_error(
     tbl <-
@@ -733,3 +755,5 @@ test_that("modify_*() family works", {
     c(98, 102, 98, 102)
   )
 })
+
+
