@@ -648,7 +648,7 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value,
     "by"
   ))
   data <- data %>%
-    select(c(variable, by)) %>%
+    select(any_of(c(variable, by))) %>%
     # renaming variables to c("variable", "by") (if there is a by variable)
     set_names(variable_by_chr)
 
@@ -758,7 +758,7 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
   df_by <- df_by(data, by)
   data <-
     data %>%
-    select(c(variable, by)) %>%
+    select(any_of(c(variable, by))) %>%
     # renaming variables to c("variable", "by") (if there is a by variable)
     set_names(variable_by_chr)
 
