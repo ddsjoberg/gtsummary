@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Update for `tbl_summary(by=)` that now allows for a column named `"variable"` to be passed. (#1234)
+
+* Fix in `as_kable_extra()` when output format is `'latex'` where a cell that had been bold or italicized had special characters double-escaped. Added a condition not to escape special characters in these styled cells. (#1230)
+
 * Added theme element to control what missing statistic is shown in summary tables with options to display number or percent missing or non-missing or total number of observations. (#1224)
 
 * Updated start-up messaging. (#1228)
