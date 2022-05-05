@@ -122,6 +122,14 @@ tbl_regression.tidycrr <- function(x, tidy_fun = tidycmprsk::tidy, ...) {
 
 #' @export
 #' @rdname tbl_regression_methods
+tbl_regression.crr <- function(x, ...) {
+  cli::cli_alert_info("For better summary support, build model with {.code tidycmprsk::crr()}.")
+  cli::cli_ul("Visit {.url https://mskcc-epi-bio.github.io/tidycmprsk/} for details.")
+  tbl_regression.default(x = x, ...)
+}
+
+#' @export
+#' @rdname tbl_regression_methods
 tbl_regression.multinom <- function(x, ...) {
   result <- tbl_regression.default(x = x, ...)
 
