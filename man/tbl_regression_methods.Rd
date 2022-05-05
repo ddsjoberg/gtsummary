@@ -15,6 +15,7 @@
 \alias{tbl_regression.brmsfit}
 \alias{tbl_regression.gam}
 \alias{tbl_regression.tidycrr}
+\alias{tbl_regression.crr}
 \alias{tbl_regression.multinom}
 \title{Methods for tbl_regression}
 \usage{
@@ -72,6 +73,8 @@
 \method{tbl_regression}{gam}(x, tidy_fun = tidy_gam, ...)
 
 \method{tbl_regression}{tidycrr}(x, tidy_fun = tidycmprsk::tidy, ...)
+
+\method{tbl_regression}{crr}(x, ...)
 
 \method{tbl_regression}{multinom}(x, ...)
 }
