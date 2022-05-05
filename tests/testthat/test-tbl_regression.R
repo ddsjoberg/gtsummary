@@ -209,6 +209,8 @@ test_that("Interaction modifications", {
 })
 
 test_that("tidymodels/parsnip/workflows", {
+  skip_if_not(broom.helpers::.assert_package("parsnip", pkg_search = "gtsummary", boolean = TRUE))
+  skip_if_not(broom.helpers::.assert_package("workflows", pkg_search = "gtsummary", boolean = TRUE))
   expect_equal(
     parsnip::linear_reg() %>%
       parsnip::set_engine('lm') %>%
@@ -238,6 +240,7 @@ test_that("tidymodels/parsnip/workflows", {
 })
 
 test_that("tidycrr models work", {
+  skip_if_not(broom.helpers::.assert_package("tidycmprsk", pkg_search = "gtsummary", boolean = TRUE))
   mod <- tidycmprsk::crr(tidycmprsk::Surv(ttdeath, death_cr) ~  age + grade, tidycmprsk::trial)
 
   expect_error(
@@ -249,4 +252,16 @@ test_that("tidycrr models work", {
     c("1.01", NA, NA, "1.06", "1.54")
   )
   expect_error(add_global_p(tbl), NA)
+})
+
+test_that("cmprsk::crr models message", {
+  skip_if_not(broom.helpers::.assert_package("cmprsk", pkg_search = "gtsummary", boolean = TRUE))
+  set.seed(10)
+  ftime <- rexp(200)
+  fstatus <- sample(0:2,200,replace=TRUE)
+  cov <- matrix(runif(600),nrow=200)
+  dimnames(cov)[[2]] <- c('x1','x2','x3')
+  mod <- cmprsk::crr(ftime,fstatus,cov)
+
+  expect_message(tbl_regression(mod))
 })
