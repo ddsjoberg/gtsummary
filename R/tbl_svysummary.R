@@ -24,6 +24,7 @@
 #'   \item `{n}` frequency
 #'   \item `{N}` denominator, or cohort size
 #'   \item `{p}` formatted percentage
+#'   \item `{p_se}` formatted standard error of percentage
 #'   \item `{n_unweighted}` unweighted frequency
 #'   \item `{N_unweighted}` unweighted denominator
 #'   \item `{p_unweighted}` unweighted formatted percentage
@@ -329,7 +330,7 @@ summarize_categorical_survey <- function(data, variable, by,
         mutate(
           variable_levels = str_sub(.data$var_level, stringr::str_length(variable) + 1)
         ) %>%
-        select(p = mean, p_se = SE, variable_levels)
+        select(p = .data$mean, p_se = .data$SE, .data$variable_levels)
     } else {
       # this will have p=1 for all and p_se=0 for all
       svy_p <- tibble(
@@ -370,13 +371,13 @@ summarize_categorical_survey <- function(data, variable, by,
         variable_levels = levels(data$variables[[variable]])
       ) %>%
         mutate(
-          var_level = paste0("interaction(", {{ by }}, ", ", variable, ")", .data$by, ".", .data$variable_levels)
+          var_level = paste0("interaction(", .env$by, ", ", variable, ")", .data$by, ".", .data$variable_levels)
         )
 
       svy_p <- survey::svymean(c_inter(by, variable), data) %>%
         as_tibble(rownames = "var_level") %>%
         dplyr::left_join(inttemp, by = "var_level") %>%
-        select(p = mean, p_se = SE, by, variable_levels)
+        select(p = .data$mean, p_se = .data$SE, .data$by, .data$variable_levels)
     }
 
     svy_table <-
@@ -401,9 +402,7 @@ summarize_categorical_survey <- function(data, variable, by,
   svy_table <- svy_table %>%
     group_by(!!!syms(group_by_percent)) %>%
     mutate(
-      N = sum(.data$n),
-      # if the Big N is 0, there is no denom so making percent NA
-      p_old = ifelse(.data$N == 0, NA, .data$n / .data$N)
+      N = sum(.data$n)
     ) %>%
     ungroup()
 
@@ -595,7 +594,7 @@ df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
     sort = "alphanumeric", percent = "column",
     stat_display = "{n}"
   ) %>%
-    select(-.data$stat_display) %>%
+    select(-.data$stat_display, -.data$p_se) %>%
     rename(
       p_miss = .data$p,
       N_obs = .data$N,
