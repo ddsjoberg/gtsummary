@@ -99,6 +99,7 @@ For categorical variables the following statistics are available to display.
 \item \code{{n}} frequency
 \item \code{{N}} denominator, or cohort size
 \item \code{{p}} formatted percentage
+\item \code{{p_se}} formatted standard error of percentage
 \item \code{{n_unweighted}} unweighted frequency
 \item \code{{N_unweighted}} unweighted denominator
 \item \code{{p_unweighted}} unweighted formatted percentage
