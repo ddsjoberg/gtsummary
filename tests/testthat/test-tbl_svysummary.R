@@ -207,9 +207,9 @@ test_that("tbl_svysummary-testing tidyselect parsing", {
   expect_equal(
     big_test$table_body %>%
       filter(.data$variable %in% c("age", "marker")) %>%
-      pull(.data$stat_1) %>%
-      word(2) %>%
-      word(2, sep = fixed(".")) %>%
+      dplyr::pull(.data$stat_1) %>%
+      stringr::word(2) %>%
+      stringr::word(2, sep = fixed(".")) %>%
       nchar() %>%
       unique(),
     3
