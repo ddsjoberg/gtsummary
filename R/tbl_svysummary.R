@@ -119,7 +119,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   if ("n" %in% include) {
     paste(
       "Cannot summarize a column called 'n'. Rename it or remove",
-      "is from the summary with `include = -n`"
+      "it from the summary with `include = -n`"
     ) %>%
       abort()
   }
