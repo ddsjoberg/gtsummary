@@ -1,8 +1,10 @@
 # gtsummary (development version)
 
+* The experimental support for `ftExtra::colformat_md()` in `as_flex_table()` has been removed. The function requires evaluated YAML paths and does not allow un-evaluated references like ``bibliography:: "`r here::here()`"``. (#1229)
+
 * Added `tbl_regression.crr()` method with messaging recommending use of `tidycmprsk::crr()` instead. (#1237)
 
-* Update for `tbl_summary(by=)` that now all (ows for a column named `"variable"` to be passed. (#1234)
+* Update for `tbl_summary(by=)` that now allows for a column named `"variable"` to be passed. (#1234)
 
 * Fix in `as_kable_extra()` when output format is `'latex'` where a cell that had been bold or italicized had special characters double-escaped. Added a condition not to escape special characters in these styled cells. (#1230)
 
