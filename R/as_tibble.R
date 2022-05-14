@@ -207,7 +207,7 @@ table_styling_to_tibble_calls <- function(x, col_labels = TRUE, fmt_missing = FA
   }
 
   # udpate data and return
-  data[row_numbers, columns, drop = FALSE] <- df_updated
+  data[row_numbers, columns] <- df_updated
 
   data
 }
