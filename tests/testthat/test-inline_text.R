@@ -447,3 +447,26 @@ test_that("check for messaging about duplicate variables", {
   )
 
 })
+
+test_that("inline_text.gtsummary() errors are triggered", {
+  tbl <-
+    head(mtcars) %>%
+    .create_gtsummary_object() %>%
+    modify_column_unhide(everything())
+
+  expect_error(
+    inline_text(tbl, variable = "mpg"),
+    "does not have the required"
+  )
+
+  tbl <-
+    head(mtcars) %>%
+    dplyr::mutate(variable = "one") %>%
+    .create_gtsummary_object() %>%
+    modify_column_unhide(everything())
+
+  expect_error(
+    inline_text(tbl, variable = "one", column = "mpg", level = "21"),
+    "does not have the required"
+  )
+})

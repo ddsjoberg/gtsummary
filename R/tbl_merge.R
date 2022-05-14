@@ -68,12 +68,20 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # input checks ---------------------------------------------------------------
   # class of tbls
   if (!inherits(tbls, "list")) {
-    stop("Expecting 'tbls' to be a list, e.g. 'tbls = list(tbl1, tbl2)'")
+    stop("Expecting `tbls=` to be a list, e.g. `tbls = list(tbl1, tbl2)`")
   }
 
   # checking all inputs are class gtsummary
-  if (!purrr::every(tbls, ~ inherits(.x, "gtsummary"))) {
-    stop("All objects in 'tbls' must be class 'gtsummary'", call. = FALSE)
+  if (purrr::some(tbls, ~!inherits(.x, "gtsummary"))) {
+    stop("All objects in `tbls=` must be class 'gtsummary'", call. = FALSE)
+  }
+
+  # check all tbls have the merging columns
+  if (purrr::some(tbls, ~any(!c("variable", "row_type", "var_label", "label") %in% names(.x$table_body)))) {
+    paste("All objects in `tbls=` objects must have columns",
+          "'variable', 'row_type', 'var_label', and 'label'",
+          "in `.$table_body` for merging.") %>%
+    stop(call. = FALSE)
   }
 
   # at least two objects must be passed

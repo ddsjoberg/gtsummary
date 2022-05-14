@@ -71,6 +71,11 @@ inline_text.gtsummary <- function(x, variable,
   df_gtsummary <- as_tibble(x, col_labels = FALSE)
 
   # variable selection ---------------------------------------------------------
+  if (!"variable" %in% names(df_gtsummary)) {
+    paste("The gtsummary table does not have the required 'variable' column in `.$table_body`.") %>%
+      stop(call. = FALSE)
+  }
+
   variable <-
     .select_to_varnames({{ variable }},
       var_info = x$table_body,
@@ -104,6 +109,10 @@ inline_text.gtsummary <- function(x, variable,
     df_gtsummary <- filter(df_gtsummary, dplyr::row_number() == 1)
   } # if there is a level, drop first label row, keeping the levels only
   else {
+    if (any(!c("row_type", "label") %in% names(df_gtsummary))) {
+      paste("The gtsummary table does not have the required 'row_type' and 'label' columns in `.$table_body`.") %>%
+        stop(call. = FALSE)
+    }
     df_gtsummary <-
       filter(df_gtsummary, !(.data$row_type %in% "label" & dplyr::row_number() == 1))
     level <-
