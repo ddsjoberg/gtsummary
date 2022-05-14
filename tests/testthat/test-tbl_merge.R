@@ -144,6 +144,18 @@ test_that("tbl_merge() one table", {
   )
 })
 
+test_that("tbl_merge() errors are triggered", {
+  tbl <-
+    head(mtcars) %>%
+    .create_gtsummary_object() %>%
+    modify_column_unhide(everything())
+
+  expect_error(
+    tbl_merge(list(tbl, tbl)),
+    "objects must have columns"
+  )
+})
+
 test_that("tbl_merge with complicated tbl_stack + cols_merge", {
   theme_gtsummary_journal("jama")
 
@@ -176,3 +188,5 @@ test_that("tbl_merge with complicated tbl_stack + cols_merge", {
   )
   reset_gtsummary_theme()
 })
+
+
