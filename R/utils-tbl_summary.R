@@ -1100,7 +1100,9 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
       result %>%
       bind_rows(
         df_stats_original %>%
-          select(any_of(c("by", "variable", "N_miss", "N_obs", "p_miss", "N_nonmiss", "p_nonmiss"))) %>%
+          select(any_of(c("by", "variable", "N_miss", "N_obs", "p_miss", "N_nonmiss", "p_nonmiss",
+                          "N_obs_unweighted", "N_miss_unweighted", "N_nonmiss_unweighted",
+                          "p_miss_unweighted", "p_nonmiss_unweighted"))) %>%
           distinct() %>%
           mutate(stat_display = .env$missing_stat) %>%
           {
