@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updates to labels and default formatting functions of unweighted statistics presented in `tbl_svysummary()`. (#1253)
+
 * Adding additional structural checks in `tbl_merge()` and `inline_text()` to provide better error messaging. (#1248)
 
 * The experimental support for `ftExtra::colformat_md()` in `as_flex_table()` has been removed. The function requires evaluated YAML paths and does not allow un-evaluated references like ``bibliography:: "`r here::here()`"``. (#1229)
