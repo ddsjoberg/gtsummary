@@ -159,7 +159,7 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #' Methods `c("wilson", "wilson.no.correct")` are calculated with
 #' [stats::prop.test()] (with `correct = c(TRUE, FALSE)`). The default method,
 #' `"wilson"`, includes the Yates continuity correction.
-#' Methods `c("exact", "asymptotic")` are calculated with [Hmisc::binconf()]
+#' Methods `c("exact", "asymptotic")` are calculated with `Hmisc::binconf()`
 #' and the corresponding method.
 #'
 #' @export
