@@ -537,10 +537,10 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
       "{n}", "n",
       "{N}", "N",
       "{p}%", "%",
-      "{p_miss}%", "% missing",
-      "{p_nonmiss}%", "% not missing",
       "{p}", "%",
+      "{p_miss}%", "% missing",
       "{p_miss}", "% missing",
+      "{p_nonmiss}%", "% not missing",
       "{p_nonmiss}", "% not missing",
       "{N_miss}", "N missing",
       "{N_nonmiss}", "N",
@@ -549,11 +549,14 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
       "{p_se}", "SE(%)",
       "{N_unweighted}", "N (unweighted)",
       "{n_unweighted}", "n (unweighted)",
-      "{p_unweighted}", "% (unweighted)",
       "{N_obs_unweighted}", "Total N (unweighted)",
       "{N_miss_unweighted}", "N Missing (unweighted)",
       "{N_nonmiss_unweighted}", "N not Missing (unweighted)",
+      "{p_unweighted}%", "% (unweighted)",
+      "{p_unweighted}", "% (unweighted)",
+      "{p_miss_unweighted}%", "% Missing (unweighted)",
       "{p_miss_unweighted}", "% Missing (unweighted)",
+      "{p_nonmiss_unweighted}%", "% not Missing (unweighted)",
       "{p_nonmiss_unweighted}", "% not Missing (unweighted)"
     ) %>%
     # adding in quartiles
