@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Swapped `gt::fmt_missing()` for `gt::sub_missing()`. (#1257)
+
 * Updates to labels and default formatting functions of unweighted statistics presented in `tbl_svysummary()`. (#1253)
 
 * Adding additional structural checks in `tbl_merge()` and `inline_text()` to provide better error messaging. (#1248)
