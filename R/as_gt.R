@@ -126,7 +126,7 @@ table_styling_to_gt_calls <- function(x, ...) {
   # fmt_missing ----------------------------------------------------------------
   gt_calls[["fmt_missing"]] <-
     expr(
-      gt::fmt_missing(columns = gt::everything(), missing_text = "")
+      gt::sub_missing(columns = gt::everything(), missing_text = "")
     ) %>%
     c(
       map(
