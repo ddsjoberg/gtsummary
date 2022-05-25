@@ -311,13 +311,26 @@ summarize_categorical_survey <- function(data, variable, by,
     ) %>%
     rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p)
 
+  # convert to factor if not already a factor
+  if (!is.factor(data$variables[[variable]])) {
+    data$variables[[variable]] <- as.factor(data$variables[[variable]])
+  }
   # if there is a dichotomous value, it needs to be present as a level of the variable for svytable
-  if (!is.null(dichotomous_value) && !dichotomous_value %in% unique(data$variables[[variable]])) {
+  if (!is.null(dichotomous_value) && !dichotomous_value %in% levels(data$variables[[variable]])) {
     data$variables[[variable]] <- as.factor(data$variables[[variable]])
     levels(data$variables[[variable]]) <- c(levels(data$variables[[variable]]), dichotomous_value)
-  } else if (is.character(data$variables[[variable]]) | is.numeric(data$variables[[variable]])) {
-    # convert characters and numeric to factors so all levels are present later if using svyby
-    data$variables[[variable]] <- as.factor(data$variables[[variable]])
+  }
+  # if no level (e.g. when only NA), convert to binary variable
+  if (length(levels(data$variables[[variable]])) == 0) {
+    levels(data$variables[[variable]]) <- c(TRUE, FALSE)
+    dichotomous_value <- TRUE
+  }
+  # if one level, it will produce an error with svymean
+  # need to add a second level
+  if (length(levels(data$variables[[variable]])) == 1) {
+    l <- levels(data$variables[[variable]])
+    dichotomous_value <- l
+    levels(data$variables[[variable]]) <- c(l, paste0("not_", l))
   }
 
   if (!is.null(by) && is.character(data$variables[[by]])) {
@@ -403,7 +416,9 @@ summarize_categorical_survey <- function(data, variable, by,
   svy_table <- svy_table %>%
     group_by(!!!syms(group_by_percent)) %>%
     mutate(
-      N = sum(.data$n)
+      N = sum(.data$n),
+      p = if_else(N == 0, NA_real_, p), # re-introducing NA where relevant
+      p_se = if_else(N == 0, NA_real_, p_se)
     ) %>%
     ungroup()
 
