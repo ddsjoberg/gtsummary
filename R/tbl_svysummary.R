@@ -364,8 +364,14 @@ summarize_categorical_survey <- function(data, variable, by,
         as_tibble() %>%
         tidyr::pivot_longer(!one_of(by)) %>%
         mutate(
-          stat = if_else(stringr::str_starts(.data$name, paste0("se.", variable)), "p_se", "p"),
-          name = stringr::str_remove_all(.data$name, "se\\.") %>% str_remove_all(variable)
+          stat = if_else(
+            str_starts(.data$name, paste0("se.", variable)) | str_starts(.data$name, paste0("se.`", variable, "`")),
+            "p_se",
+            "p"
+          ),
+          name = stringr::str_remove_all(.data$name, "se\\.") %>%
+            str_remove_all(variable) %>%
+            str_remove_all("`")
         ) %>%
         tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
         set_names(c("by", "variable_levels", "p", "p_se"))
@@ -374,8 +380,14 @@ summarize_categorical_survey <- function(data, variable, by,
         as_tibble() %>%
         tidyr::pivot_longer(!one_of(variable)) %>%
         mutate(
-          stat = if_else(stringr::str_starts(.data$name, paste0("se.", by)), "p_se", "p"),
-          name = stringr::str_remove_all(.data$name, "se\\.") %>% str_remove_all(by)
+          stat = if_else(
+            str_starts(.data$name, paste0("se.", by)) | str_starts(.data$name, paste0("se.`", by, "`")),
+            "p_se",
+            "p"
+          ),
+          name = stringr::str_remove_all(.data$name, "se\\.") %>%
+            str_remove_all(by) %>%
+            str_remove_all("`")
         ) %>%
         tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
         set_names(c("variable_levels", "by", "p", "p_se"))
