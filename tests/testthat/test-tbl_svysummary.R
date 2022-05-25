@@ -571,3 +571,11 @@ test_that("tbl_svysummary() works with date and date/time", {
     c(NA, "44%", "56%")
   )
 })
+
+test_that("tbl_svysummary works with 0/1 variables", {
+  expect_error(
+    survey::svydesign(data = trial, ids = ~ 1, weights = ~ 1) %>%
+      tbl_svysummary(include = response),
+    NA
+  )
+})
