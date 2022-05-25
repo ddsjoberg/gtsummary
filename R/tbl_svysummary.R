@@ -417,8 +417,8 @@ summarize_categorical_survey <- function(data, variable, by,
     group_by(!!!syms(group_by_percent)) %>%
     mutate(
       N = sum(.data$n),
-      p = if_else(N == 0, NA_real_, p), # re-introducing NA where relevant
-      p_se = if_else(N == 0, NA_real_, p_se)
+      p = if_else(.data$N == 0, NA_real_, .data$p), # re-introducing NA where relevant
+      p_se = if_else(.data$N == 0, NA_real_, .data$p_se)
     ) %>%
     ungroup()
 
