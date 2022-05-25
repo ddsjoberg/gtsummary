@@ -315,7 +315,8 @@ summarize_categorical_survey <- function(data, variable, by,
   if (!is.null(dichotomous_value) && !dichotomous_value %in% unique(data$variables[[variable]])) {
     data$variables[[variable]] <- as.factor(data$variables[[variable]])
     levels(data$variables[[variable]]) <- c(levels(data$variables[[variable]]), dichotomous_value)
-  } else if (is.character(data$variables[[variable]])) { # covert characters to factors so all levels are present later if using svyby
+  } else if (is.character(data$variables[[variable]]) | is.numeric(data$variables[[variable]])) {
+    # convert characters and numeric to factors so all levels are present later if using svyby
     data$variables[[variable]] <- as.factor(data$variables[[variable]])
   }
 
@@ -325,7 +326,7 @@ summarize_categorical_survey <- function(data, variable, by,
 
   if (is.null(by)) {
     if (percent %in% c("column", "cell")) {
-      svy_p <- survey::svymean(c_form(right = variable), data) %>%
+      svy_p <- survey::svymean(c_form(right = variable), data, na.rm = TRUE) %>%
         as_tibble(rownames = "var_level") %>%
         mutate(
           variable_levels = str_sub(.data$var_level, stringr::str_length(variable) + 1)
@@ -346,7 +347,7 @@ summarize_categorical_survey <- function(data, variable, by,
       left_join(svy_p, by = c("variable_levels"))
   } else {
     if (percent == "column") {
-      svy_p <- survey::svyby(c_form(right = variable), c_form(right = by), data, survey::svymean) %>%
+      svy_p <- survey::svyby(c_form(right = variable), c_form(right = by), data, survey::svymean, na.rm = TRUE) %>%
         as_tibble() %>%
         tidyr::pivot_longer(!one_of(by)) %>%
         mutate(
@@ -356,7 +357,7 @@ summarize_categorical_survey <- function(data, variable, by,
         tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
         set_names(c("by", "variable_levels", "p", "p_se"))
     } else if (percent == "row") {
-      svy_p <- survey::svyby(c_form(right = by), c_form(right = variable), data, survey::svymean) %>%
+      svy_p <- survey::svyby(c_form(right = by), c_form(right = variable), data, survey::svymean, na.rm = TRUE) %>%
         as_tibble() %>%
         tidyr::pivot_longer(!one_of(variable)) %>%
         mutate(
@@ -374,7 +375,7 @@ summarize_categorical_survey <- function(data, variable, by,
           var_level = paste0("interaction(", .env$by, ", ", variable, ")", .data$by, ".", .data$variable_levels)
         )
 
-      svy_p <- survey::svymean(c_inter(by, variable), data) %>%
+      svy_p <- survey::svymean(c_inter(by, variable), data, na.rm = TRUE) %>%
         as_tibble(rownames = "var_level") %>%
         dplyr::left_join(inttemp, by = "var_level") %>%
         select(p = .data$mean, p_se = .data$SE, .data$by, .data$variable_levels)
