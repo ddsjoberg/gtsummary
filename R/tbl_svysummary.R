@@ -24,7 +24,7 @@
 #'   \item `{n}` frequency
 #'   \item `{N}` denominator, or cohort size
 #'   \item `{p}` formatted percentage
-#'   \item `{p_se}` formatted standard error of percentage
+#'   \item `{p_se}` formatted standard error of percentage computed with [survey::svymean()])
 #'   \item `{n_unweighted}` unweighted frequency
 #'   \item `{N_unweighted}` unweighted denominator
 #'   \item `{p_unweighted}` unweighted formatted percentage
