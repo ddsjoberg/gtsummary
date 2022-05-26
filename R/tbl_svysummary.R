@@ -327,10 +327,11 @@ summarize_categorical_survey <- function(data, variable, by,
   }
   # if one level, it will produce an error with svymean
   # need to add a second level
+  level_to_be_removed <- NULL
   if (length(levels(data$variables[[variable]])) == 1) {
     l <- levels(data$variables[[variable]])
-    dichotomous_value <- l
     levels(data$variables[[variable]]) <- c(l, paste0("not_", l))
+    level_to_be_removed <- paste0("not_", l)
   }
 
   if (!is.null(by) && is.character(data$variables[[by]])) {
@@ -433,6 +434,11 @@ summarize_categorical_survey <- function(data, variable, by,
       p_se = if_else(.data$N == 0, NA_real_, .data$p_se)
     ) %>%
     ungroup()
+
+  if (!is.null(level_to_be_removed)) {
+    svy_table <- svy_table %>%
+      filter(.data$variable_levels != level_to_be_removed)
+  }
 
   if (!is.null(dichotomous_value)) {
     svy_table <- svy_table %>%
