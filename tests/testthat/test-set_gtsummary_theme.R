@@ -224,6 +224,19 @@ test_that("setting themes", {
   expect_message(check_gtsummary_theme(list("not_a_theme" = 5)))
   expect_message(check_gtsummary_theme(list("style_number-arg:decimal.mark" = ".")), "*Looks good*")
 
+  # check the message is printed in with_gtsummary_theme()
+  reset_gtsummary_theme()
+  list("tbl_summary-str:continuous_stat" = "{median}") %>%
+    set_gtsummary_theme()
+
+  expect_message(
+    with_gtsummary_theme(
+      x = list("tbl_summary-str:continuous_stat" = "{mean}"),
+      expr = tbl_summary(trial, include = age) %>% as_kable(),
+      msg_ignored_elements = "Theme element(s) {.val {elements}} is/are utilized internally and were ignored."
+    ),
+    "*utilized internally*"
+  )
 })
 
 reset_gtsummary_theme()
