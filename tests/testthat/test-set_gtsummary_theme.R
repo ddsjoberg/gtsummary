@@ -235,7 +235,7 @@ test_that("setting themes", {
       expr = tbl_summary(trial, include = age) %>% as_kable(),
       msg_ignored_elements = "Theme element(s) {.val {elements}} is/are utilized internally and were ignored."
     ),
-    "*utilized internally*"
+    "*continuous_stat*"
   )
 })
 
