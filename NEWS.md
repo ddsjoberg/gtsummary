@@ -1,6 +1,8 @@
 # gtsummary (development version)
 
-* Swapped `gt::fmt_missing()` for `gt::sub_missing()`. (#1257)
+* Added argument `with_gtsummary_theme(msg_ignored_elements=)` argument. Use this argument to message users if any theme elements will be overwritten and therefore ignored inside the `with_gtsummary_theme()` call. (#1266)
+
+* Swapped `gt::fmt_missing()` for `gt::sub_missing()` as the former is now deprecated. (#1257)
 
 * Updates to labels and default formatting functions of unweighted statistics presented in `tbl_svysummary()`. (#1253)
 

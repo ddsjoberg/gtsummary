@@ -14,7 +14,12 @@ reset_gtsummary_theme()
 
 get_gtsummary_theme()
 
-with_gtsummary_theme(x, expr, env = rlang::caller_env())
+with_gtsummary_theme(
+  x,
+  expr,
+  env = rlang::caller_env(),
+  msg_ignored_elements = NULL
+)
 
 check_gtsummary_theme(x)
 }
@@ -27,6 +32,10 @@ check_gtsummary_theme(x)
 \item{expr}{Expression to be evaluated with the theme specified in \verb{x=} loaded}
 
 \item{env}{The environment in which to evaluate \verb{expr=}}
+
+\item{msg_ignored_elements}{Default is NULL with no message printed. Pass a string
+that will be printed with \code{cli::cli_alert_info()}. The \code{"{elements}"}
+object contains vector of theme elements that will be overwritten and ignored.}
 }
 \description{
 \lifecycle{maturing}
