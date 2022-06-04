@@ -21,6 +21,9 @@
 #' @param x A named list defining a gtsummary theme.
 #' @param expr Expression to be evaluated with the theme specified in `x=` loaded
 #' @param env The environment in which to evaluate `expr=`
+#' @param msg_ignored_elements Default is NULL with no message printed. Pass a string
+#' that will be printed with `cli::cli_alert_info()`. The `"{elements}"`
+#' object contains vector of theme elements that will be overwritten and ignored.
 #' @inheritParams add_global_p
 #' @name set_gtsummary_theme
 #' @export
@@ -100,7 +103,9 @@ get_gtsummary_theme <- function() {
 # ------------------------------------------------------------------------------
 #' @rdname set_gtsummary_theme
 #' @export
-with_gtsummary_theme <- function(x, expr, env = rlang::caller_env()) {
+with_gtsummary_theme <- function(x, expr,
+                                 env = rlang::caller_env(),
+                                 msg_ignored_elements = NULL) {
   # save current theme ---------------------------------------------------------
   current_theme <- get_gtsummary_theme()
 
@@ -108,11 +113,41 @@ with_gtsummary_theme <- function(x, expr, env = rlang::caller_env()) {
   on.exit(reset_gtsummary_theme(), add = TRUE)
   on.exit(set_gtsummary_theme(current_theme, quiet = TRUE), add = TRUE)
 
+  # message ignored theme elements ---------------------------------------------
+  .msg_ignored_elements(x, current_theme, msg_ignored_elements)
+
   # add specified theme --------------------------------------------------------
   set_gtsummary_theme(suppressMessages(x), quiet = TRUE)
 
   # evaluate expression
   rlang::eval_tidy({{ expr }}, env = env)
+}
+
+.msg_ignored_elements <- function(x, current_theme, msg) {
+  # if no message, dont print one!
+  if (is.null(msg)) return(invisible())
+
+  # save vector of theme element names that will be ignored
+  elements <-
+    x %>%
+    imap(
+      function(.x, .y) {
+        # if theme element not currently set, return NULL
+        if (is.null(current_theme[[.y]])) return(NULL)
+        # if theme element is already set and is different, return the name of the element
+        if (!identical(.x, current_theme[[.y]])) return(.y)
+        return(NULL)
+      }
+    ) %>%
+    purrr::compact() %>%
+    unlist()
+
+  # print message of ignored elements
+  if (!rlang::is_empty(elements)) {
+    cli::cli_alert_info(msg)
+  }
+
+  return(invisible())
 }
 
 # ------------------------------------------------------------------------------

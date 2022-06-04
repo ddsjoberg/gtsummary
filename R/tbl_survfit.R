@@ -276,7 +276,7 @@ tbl_survfit.data.frame <- function(x, y, include = everything(), ...) {
   if (!inherits(y_surv, "Surv")) {
     paste(
       "Together, the data frame in `x=`, and the survival outcome in `y=`",
-      "must construct `Surv` oject, e.g. `with(trial, Surv(ttdeath, death))`"
+      "must construct `Surv` object, e.g. `with(trial, Surv(ttdeath, death))`"
     ) %>%
       stringr::str_wrap() %>%
       stop(call. = FALSE)
