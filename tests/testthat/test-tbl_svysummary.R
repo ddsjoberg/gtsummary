@@ -17,7 +17,7 @@ test_that("tbl_svysummary creates output without error/warning (no by var)", {
 })
 
 
-test_that("tbl_svtsummary creates output without error/warning (with by var)", {
+test_that("tbl_svysummary creates output without error/warning (with by var)", {
   statistics <- list(
     all_continuous() ~ "{median} {mean} {sd} {var} {min} {max} {sum} {p25} {p42} {p75} {p89}",
     all_categorical() ~ "{n} {N} {p} | {n_unweighted} {N_unweighted} {p_unweighted}"
@@ -207,9 +207,9 @@ test_that("tbl_svysummary-testing tidyselect parsing", {
   expect_equal(
     big_test$table_body %>%
       filter(.data$variable %in% c("age", "marker")) %>%
-      pull(.data$stat_1) %>%
-      word(2) %>%
-      word(2, sep = fixed(".")) %>%
+      dplyr::pull(.data$stat_1) %>%
+      stringr::word(2) %>%
+      stringr::word(2, sep = fixed(".")) %>%
       nchar() %>%
       unique(),
     3
@@ -571,3 +571,27 @@ test_that("tbl_svysummary() works with date and date/time", {
     c(NA, "44%", "56%")
   )
 })
+
+test_that("tbl_svysummary() works with 0/1 variables", {
+  expect_error(
+    survey::svydesign(data = trial, ids = ~ 1, weights = ~ 1) %>%
+      tbl_svysummary(include = response),
+    NA
+  )
+})
+
+test_that("tbl_svysummary() works with a factor having only one levem", {
+  d <- tibble(fct = factor(c("a", "a", "a", "a", "a"))) %>%
+    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1)
+
+  expect_error(
+    res <- d %>% tbl_svysummary(),
+    NA
+  )
+
+  expect_equal(
+    res$table_body$stat_0,
+    c(NA, "5 (100%)")
+  )
+})
+

@@ -39,7 +39,9 @@ Therefore, when you want to merge a table that has run \code{add_stat_label(loca
 you need to match the \code{"label"} column values before the \code{"stat_column"}
 is merged with it.
 
-For example, the following two tables merge properly\if{html}{\out{<div class="sourceCode r">}}\preformatted{tbl1 <- trial \%>\% select(age, grade) \%>\% tbl_summary() \%>\% add_stat_label()
+For example, the following two tables merge properly
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{tbl1 <- trial \%>\% select(age, grade) \%>\% tbl_summary() \%>\% add_stat_label()
 tbl2 <- lm(marker ~ age + grade, trial) \%>\% tbl_regression()
 
 tbl_merge(list(tbl1, tbl2))

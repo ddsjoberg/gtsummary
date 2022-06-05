@@ -537,19 +537,26 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
       "{n}", "n",
       "{N}", "N",
       "{p}%", "%",
-      "{p_miss}%", "% missing",
-      "{p_nonmiss}%", "% not missing",
       "{p}", "%",
+      "{p_miss}%", "% missing",
       "{p_miss}", "% missing",
+      "{p_nonmiss}%", "% not missing",
       "{p_nonmiss}", "% not missing",
       "{N_miss}", "N missing",
       "{N_nonmiss}", "N",
       "{N_obs}", "No. obs.",
+      "{p_se}%", "SE(%)",
       "{p_se}", "SE(%)",
+      "{N_unweighted}", "N (unweighted)",
+      "{n_unweighted}", "n (unweighted)",
       "{N_obs_unweighted}", "Total N (unweighted)",
       "{N_miss_unweighted}", "N Missing (unweighted)",
       "{N_nonmiss_unweighted}", "N not Missing (unweighted)",
+      "{p_unweighted}%", "% (unweighted)",
+      "{p_unweighted}", "% (unweighted)",
+      "{p_miss_unweighted}%", "% Missing (unweighted)",
       "{p_miss_unweighted}", "% Missing (unweighted)",
+      "{p_nonmiss_unweighted}%", "% not Missing (unweighted)",
       "{p_nonmiss_unweighted}", "% not Missing (unweighted)"
     ) %>%
     # adding in quartiles
@@ -969,12 +976,18 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
         }
 
         # if the variable is categorical and a percent, use `style_percent`
-        else if (summary_type %in% c("categorical", "dichotomous") & colname %in% c("p", "p_unweighted")) {
+        else if (summary_type %in% c("categorical", "dichotomous") &
+                 colname %in% c("p", "p_unweighted", "p_miss", "p_nonmiss",
+                                "p_miss_unweighted", "p_nonmiss_unweighted")) {
           attr(column, "fmt_fun") <- percent_fun
         }
 
         # if the variable is categorical and an N, use `style_number`
-        else if (summary_type %in% c("categorical", "dichotomous") & colname %in% c("N", "n")) {
+        else if (summary_type %in% c("categorical", "dichotomous") &
+                 colname %in% c("N", "n", "n_unweighted", "N_unweighted",
+                                "N_obs", "N_miss", "N_nonmiss",
+                                "N_obs_unweighted", "N_miss_unweighted",
+                                "N_nonmiss_unweighted")) {
           attr(column, "fmt_fun") <- style_number
         }
 
@@ -989,7 +1002,6 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
         }
 
         # that should cover everything in `tbl_summary()`,
-        # this will cover the standard error for proportions in `tbl_svysummary()`
         # but these are sometimes used in `tbl_custom_summary()`
         else if (is.numeric(column)) {
           attr(column, "fmt_fun") <- style_sigfig
@@ -1099,7 +1111,9 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
       result %>%
       bind_rows(
         df_stats_original %>%
-          select(any_of(c("by", "variable", "N_miss", "N_obs", "p_miss", "N_nonmiss", "p_nonmiss"))) %>%
+          select(any_of(c("by", "variable", "N_miss", "N_obs", "p_miss", "N_nonmiss", "p_nonmiss",
+                          "N_obs_unweighted", "N_miss_unweighted", "N_nonmiss_unweighted",
+                          "p_miss_unweighted", "p_nonmiss_unweighted"))) %>%
           distinct() %>%
           mutate(stat_display = .env$missing_stat) %>%
           {

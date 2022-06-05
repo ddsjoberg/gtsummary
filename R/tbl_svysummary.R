@@ -24,7 +24,7 @@
 #'   \item `{n}` frequency
 #'   \item `{N}` denominator, or cohort size
 #'   \item `{p}` formatted percentage
-#'   \item `{p_se}` formatted standard error of percentage
+#'   \item `{p_se}` formatted standard error of percentage computed with [survey::svymean()])
 #'   \item `{n_unweighted}` unweighted frequency
 #'   \item `{N_unweighted}` unweighted denominator
 #'   \item `{p_unweighted}` unweighted formatted percentage
@@ -119,7 +119,7 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   if ("n" %in% include) {
     paste(
       "Cannot summarize a column called 'n'. Rename it or remove",
-      "is from the summary with `include = -n`"
+      "it from the summary with `include = -n`"
     ) %>%
       abort()
   }
@@ -310,12 +310,27 @@ summarize_categorical_survey <- function(data, variable, by,
     ) %>%
     rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p)
 
+  # convert to factor if not already a factor
+  if (!is.factor(data$variables[[variable]])) {
+    data$variables[[variable]] <- as.factor(data$variables[[variable]])
+  }
   # if there is a dichotomous value, it needs to be present as a level of the variable for svytable
-  if (!is.null(dichotomous_value) && !dichotomous_value %in% unique(data$variables[[variable]])) {
+  if (!is.null(dichotomous_value) && !dichotomous_value %in% levels(data$variables[[variable]])) {
     data$variables[[variable]] <- as.factor(data$variables[[variable]])
     levels(data$variables[[variable]]) <- c(levels(data$variables[[variable]]), dichotomous_value)
-  } else if (is.character(data$variables[[variable]])) { # covert characters to factors so all levels are present later if using svyby
-    data$variables[[variable]] <- as.factor(data$variables[[variable]])
+  }
+  # if no level (e.g. when only NA), convert to binary variable
+  if (length(levels(data$variables[[variable]])) == 0) {
+    levels(data$variables[[variable]]) <- c(TRUE, FALSE)
+    dichotomous_value <- TRUE
+  }
+  # if one level, it will produce an error with svymean
+  # need to add a second level
+  level_to_be_removed <- NULL
+  if (length(levels(data$variables[[variable]])) == 1) {
+    l <- levels(data$variables[[variable]])
+    levels(data$variables[[variable]]) <- c(l, paste0("not_", l))
+    level_to_be_removed <- paste0("not_", l)
   }
 
   if (!is.null(by) && is.character(data$variables[[by]])) {
@@ -324,7 +339,7 @@ summarize_categorical_survey <- function(data, variable, by,
 
   if (is.null(by)) {
     if (percent %in% c("column", "cell")) {
-      svy_p <- survey::svymean(c_form(right = variable), data) %>%
+      svy_p <- survey::svymean(c_form(right = variable), data, na.rm = TRUE) %>%
         as_tibble(rownames = "var_level") %>%
         mutate(
           variable_levels = str_sub(.data$var_level, stringr::str_length(variable) + 1)
@@ -345,22 +360,34 @@ summarize_categorical_survey <- function(data, variable, by,
       left_join(svy_p, by = c("variable_levels"))
   } else {
     if (percent == "column") {
-      svy_p <- survey::svyby(c_form(right = variable), c_form(right = by), data, survey::svymean) %>%
+      svy_p <- survey::svyby(c_form(right = variable), c_form(right = by), data, survey::svymean, na.rm = TRUE) %>%
         as_tibble() %>%
         tidyr::pivot_longer(!one_of(by)) %>%
         mutate(
-          stat = if_else(str_sub(.data$name, 1, 2) == "se", "p_se", "p"),
-          name = stringr::str_remove_all(.data$name, "se\\.") %>% str_remove_all(variable)
+          stat = if_else(
+            str_starts(.data$name, paste0("se.", variable)) | str_starts(.data$name, paste0("se.`", variable, "`")),
+            "p_se",
+            "p"
+          ),
+          name = stringr::str_remove_all(.data$name, "se\\.") %>%
+            str_remove_all(variable) %>%
+            str_remove_all("`")
         ) %>%
         tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
         set_names(c("by", "variable_levels", "p", "p_se"))
     } else if (percent == "row") {
-      svy_p <- survey::svyby(c_form(right = by), c_form(right = variable), data, survey::svymean) %>%
+      svy_p <- survey::svyby(c_form(right = by), c_form(right = variable), data, survey::svymean, na.rm = TRUE) %>%
         as_tibble() %>%
         tidyr::pivot_longer(!one_of(variable)) %>%
         mutate(
-          stat = if_else(str_sub(.data$name, 1, 2) == "se", "p_se", "p"),
-          name = stringr::str_remove_all(.data$name, "se\\.") %>% str_remove_all(by)
+          stat = if_else(
+            str_starts(.data$name, paste0("se.", by)) | str_starts(.data$name, paste0("se.`", by, "`")),
+            "p_se",
+            "p"
+          ),
+          name = stringr::str_remove_all(.data$name, "se\\.") %>%
+            str_remove_all(by) %>%
+            str_remove_all("`")
         ) %>%
         tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
         set_names(c("variable_levels", "by", "p", "p_se"))
@@ -373,7 +400,7 @@ summarize_categorical_survey <- function(data, variable, by,
           var_level = paste0("interaction(", .env$by, ", ", variable, ")", .data$by, ".", .data$variable_levels)
         )
 
-      svy_p <- survey::svymean(c_inter(by, variable), data) %>%
+      svy_p <- survey::svymean(c_inter(by, variable), data, na.rm = TRUE) %>%
         as_tibble(rownames = "var_level") %>%
         dplyr::left_join(inttemp, by = "var_level") %>%
         select(p = .data$mean, p_se = .data$SE, .data$by, .data$variable_levels)
@@ -401,9 +428,16 @@ summarize_categorical_survey <- function(data, variable, by,
   svy_table <- svy_table %>%
     group_by(!!!syms(group_by_percent)) %>%
     mutate(
-      N = sum(.data$n)
+      N = sum(.data$n),
+      p = if_else(.data$N == 0, NA_real_, .data$p), # re-introducing NA where relevant
+      p_se = if_else(.data$N == 0, NA_real_, .data$p_se)
     ) %>%
     ungroup()
+
+  if (!is.null(level_to_be_removed)) {
+    svy_table <- svy_table %>%
+      filter(.data$variable_levels != level_to_be_removed)
+  }
 
   if (!is.null(dichotomous_value)) {
     svy_table <- svy_table %>%
