@@ -259,10 +259,7 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_inputs <- as.list(environment())
 
   # checking function inputs ---------------------------------------------------
-  tbl_summary_input_checks(
-    data, by, label, type, value, statistic,
-    digits, missing, missing_text, sort
-  )
+  tbl_summary_input_checks(data, by, missing_text, include)
 
   # generate meta_data --------------------------------------------------------
   meta_data <- generate_metadata(

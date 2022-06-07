@@ -252,7 +252,7 @@ tbl_survfit.data.frame <- function(x, y, include = everything(), ...) {
   include <- dplyr::select(x, {{ include }}) %>% names()
 
   # checking inputs ------------------------------------------------------------
-  check_haven_labelled(x)
+  check_haven_labelled(x, include)
 
   # able to construct Surv() object?
   y <- enexpr(y)
