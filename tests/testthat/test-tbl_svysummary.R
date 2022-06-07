@@ -409,11 +409,12 @@ test_that("tbl_svysummary-no error when by variable is ordered factor", {
 })
 
 test_that("tbl_svysummary-provides similar results than tbl_summary for simple weights", {
-  t1 <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
-    tbl_svysummary(include = c(Class, Sex, Age, Survived))
-  t2 <- as.data.frame(Titanic) %>%
-    tidyr::uncount(Freq) %>%
-    tbl_summary()
+  d1 <- survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq)
+  d2 <- as.data.frame(Titanic) %>% tidyr::uncount(Freq)
+
+  # col percentages
+  t1 <- d1 %>% tbl_svysummary(include = c(Class, Sex, Age, Survived))
+  t2 <- d2 %>% tbl_summary(include = c(Class, Sex, Age, Survived))
   expect_equal(t1$table_body, t2$table_body)
   expect_equal(
     t1$table_styling %>% purrr::list_modify(header = NULL),
@@ -422,6 +423,40 @@ test_that("tbl_svysummary-provides similar results than tbl_summary for simple w
   expect_equal(
     t1$table_styling$header %>% select(-contains("unweighted")),
     t2$table_styling$header %>% select(-contains("unweighted"))
+  )
+
+  # row percentages
+  t1 <- d1 %>%
+    tbl_svysummary(include = c(Class, Sex), by = Survived, percent = "row") %>%
+    add_overall()
+  t2 <- d2 %>%
+    tbl_summary(include = c(Class, Sex), by = Survived, percent = "row") %>%
+    add_overall()
+  expect_equal(t1$table_body, t2$table_body)
+  expect_equal(
+    t1$table_styling %>% purrr::list_modify(header = NULL),
+    t2$table_styling %>% purrr::list_modify(header = NULL)
+  )
+  expect_equal(
+    tmp <- t1$table_styling$header %>% select(-contains("unweighted")),
+    t2$table_styling$header %>% select(all_of(names(tmp))) # order of variables can differ
+  )
+
+  # cell percentages
+  t1 <- d1 %>%
+    tbl_svysummary(include = c(Class, Sex), by = Survived, percent = "cell") %>%
+    add_overall()
+  t2 <- d2 %>%
+    tbl_summary(include = c(Class, Sex), by = Survived, percent = "cell") %>%
+    add_overall()
+  expect_equal(t1$table_body, t2$table_body)
+  expect_equal(
+    t1$table_styling %>% purrr::list_modify(header = NULL),
+    t2$table_styling %>% purrr::list_modify(header = NULL)
+  )
+  expect_equal(
+    tmp <- t1$table_styling$header %>% select(-contains("unweighted")),
+    t2$table_styling$header %>% select(all_of(names(tmp))) # order of variables can differ
   )
 
   statistic <- list(all_continuous() ~ "{mean}", all_categorical() ~ "{n} ({p}%)")
