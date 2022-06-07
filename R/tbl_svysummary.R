@@ -188,15 +188,12 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   tbl_summary_inputs$exclude <- NULL # should not be exported
 
   # checking function inputs ---------------------------------------------------
-  tbl_summary_input_checks(
-    data$variables, by, label, type, value, statistic,
-    digits, missing, missing_text, sort
-  )
+  tbl_summary_input_checks(data$variables, by, missing_text, include)
 
   # removing variables not selected for summary --------------------------------
   data$variables <- select(data$variables, !!include)
 
-  # generate meta_data --------------------------------------------------------
+  # generate meta_data ---------------------------------------------------------
   meta_data <- generate_metadata(data$variables, value, by, type, label, statistic, digits, percent, sort, survey = data)
 
   # calculating summary statistics ---------------------------------------------

@@ -507,11 +507,10 @@ tbl_summary_data_checks <- function(data) {
   }
 }
 
-tbl_summary_input_checks <- function(data, by, label, type, value, statistic,
-                                     digits, missing, missing_text, sort) {
+tbl_summary_input_checks <- function(data, by, missing_text, include) {
   # data -----------------------------------------------------------------------
   tbl_summary_data_checks(data)
-  check_haven_labelled(data)
+  check_haven_labelled(data, variables = c(include, by))
 
   # missing_text ---------------------------------------------------------------
   # input must be character
@@ -1264,13 +1263,13 @@ eval_rhs <- function(x) {
   rlang::f_rhs(x) %>% rlang::eval_tidy(env = rlang::f_env(x))
 }
 
-check_haven_labelled <- function(data) {
+check_haven_labelled <- function(data, variables) {
   # extract data frame
   data <- switch(is_survey(data),
     data$variables
   ) %||% data
 
-  if (purrr::some(data, ~ inherits(., "haven_labelled"))) {
+  if (purrr::some(data[variables], ~ inherits(., "haven_labelled"))) {
     # list of columns with haven_labelled
     haven_labelled_vars <-
       purrr::map_lgl(data, ~ inherits(.x, "haven_labelled")) %>%

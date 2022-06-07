@@ -287,10 +287,7 @@ tbl_custom_summary <- function(
   tbl_custom_summary_inputs <- as.list(environment())
 
   # checking function inputs ---------------------------------------------------
-  tbl_summary_input_checks(
-    data, by, label, type, value, statistic,
-    digits, missing, missing_text, sort = NULL # sort to NULL
-  )
+  tbl_summary_input_checks(data, by, missing_text, include)
 
   # generate meta_data --------------------------------------------------------
   meta_data <- generate_metadata_custom_summary(
