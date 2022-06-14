@@ -105,7 +105,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
       map2(
         tbls, seq_along(tbls),
         ~ modify_spanning_header(
-          .x, vars(
+          .x, c(
             everything(),
             -any_of(c("variable", "row_type", "var_label", "label"))
           ) ~ tab_spanner[.y]

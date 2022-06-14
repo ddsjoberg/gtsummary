@@ -180,17 +180,25 @@ add_global_p.tbl_uvregression <- function(x, type = NULL, include = everything()
   global_p <-
     imap_dfr(
       x$tbls[include],
-      function(x, y) {
+      function(tbl, tbl_name) {
+        # return empty tibble if variable not included
+        if (!tbl_name %in% include) return(tibble(variable = character(0L),
+                                                  row_type = character(0L),
+                                                  p.value_global = numeric(0L)))
         car_Anova <-
-          .run_anova(x = x[["model_obj"]], type = type,
-                     anova_fun = anova_fun, variable = y, ...)
+          .run_anova(x = tbl[["model_obj"]], type = type,
+                     anova_fun = anova_fun, variable = tbl_name, ...)
 
         car_Anova %>%
           mutate(
             variable = broom.helpers::.clean_backticks(.data$term),
             row_type = "label"
           ) %>%
-          filter(.data$variable %in% .env$include) %>%
+          filter(
+            (!is.null(x$inputs$y) & .data$variable %in% .env$tbl_name) |
+              (!is.null(x$inputs$x) & .data$variable %in% x$inputs$x)
+          ) %>%
+          mutate(variable = .env$tbl_name) %>% # required when using `tbl_uvregression(x=)`
           select(any_of(c("variable", "row_type", "p.value"))) %>%
           set_names(c("variable", "row_type", "p.value_global"))
       }
