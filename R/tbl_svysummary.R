@@ -24,7 +24,7 @@
 #'   \item `{n}` frequency
 #'   \item `{N}` denominator, or cohort size
 #'   \item `{p}` formatted percentage
-#'   \item `{p_se}` formatted standard error of percentage computed with [survey::svymean()])
+#'   \item `{p.std.error}` formatted standard error of percentage computed with [survey::svymean()])
 #'   \item `{n_unweighted}` unweighted frequency
 #'   \item `{N_unweighted}` unweighted denominator
 #'   \item `{p_unweighted}` unweighted formatted percentage
@@ -341,13 +341,13 @@ summarize_categorical_survey <- function(data, variable, by,
         mutate(
           variable_levels = str_sub(.data$var_level, stringr::str_length(variable) + 1)
         ) %>%
-        select(p = .data$mean, p_se = .data$SE, .data$variable_levels)
+        select(p = .data$mean, p.std.error = .data$SE, .data$variable_levels)
     } else {
-      # this will have p=1 for all and p_se=0 for all
+      # this will have p=1 for all and p.std.error=0 for all
       svy_p <- tibble(
         variable_levels = levels(data$variables[[variable]]),
         p = 1,
-        p_se = 0
+        p.std.error = 0
       )
     }
     svy_table <-
@@ -363,7 +363,7 @@ summarize_categorical_survey <- function(data, variable, by,
         mutate(
           stat = if_else(
             str_starts(.data$name, paste0("se.", variable)) | str_starts(.data$name, paste0("se.`", variable, "`")),
-            "p_se",
+            "p.std.error",
             "p"
           ),
           name = stringr::str_remove_all(.data$name, "se\\.") %>%
@@ -371,7 +371,7 @@ summarize_categorical_survey <- function(data, variable, by,
             str_remove_all("`")
         ) %>%
         tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
-        set_names(c("by", "variable_levels", "p", "p_se"))
+        set_names(c("by", "variable_levels", "p", "p.std.error"))
     } else if (percent == "row") {
       svy_p <- survey::svyby(c_form(right = by), c_form(right = variable), data, survey::svymean, na.rm = TRUE) %>%
         as_tibble() %>%
@@ -379,7 +379,7 @@ summarize_categorical_survey <- function(data, variable, by,
         mutate(
           stat = if_else(
             str_starts(.data$name, paste0("se.", by)) | str_starts(.data$name, paste0("se.`", by, "`")),
-            "p_se",
+            "p.std.error",
             "p"
           ),
           name = stringr::str_remove_all(.data$name, "se\\.") %>%
@@ -387,7 +387,7 @@ summarize_categorical_survey <- function(data, variable, by,
             str_remove_all("`")
         ) %>%
         tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
-        set_names(c("variable_levels", "by", "p", "p_se"))
+        set_names(c("variable_levels", "by", "p", "p.std.error"))
     } else if (percent == "cell") {
       inttemp <- expand.grid(
         by = levels(data$variables[[by]]),
@@ -400,7 +400,7 @@ summarize_categorical_survey <- function(data, variable, by,
       svy_p <- survey::svymean(c_inter(by, variable), data, na.rm = TRUE) %>%
         as_tibble(rownames = "var_level") %>%
         dplyr::left_join(inttemp, by = "var_level") %>%
-        select(p = .data$mean, p_se = .data$SE, .data$by, .data$variable_levels)
+        select(p = .data$mean, p.std.error = .data$SE, .data$by, .data$variable_levels)
     }
 
     svy_table <-
@@ -427,7 +427,7 @@ summarize_categorical_survey <- function(data, variable, by,
     mutate(
       N = sum(.data$n),
       p = if_else(.data$N == 0, NA_real_, .data$p), # re-introducing NA where relevant
-      p_se = if_else(.data$N == 0, NA_real_, .data$p_se)
+      p.std.error = if_else(.data$N == 0, NA_real_, .data$p.std.error)
     ) %>%
     ungroup()
 
@@ -624,7 +624,7 @@ df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
     sort = "alphanumeric", percent = "column",
     stat_display = "{n}"
   ) %>%
-    select(-.data$stat_display, -.data$p_se) %>%
+    select(-.data$stat_display, -.data$p.std.error) %>%
     rename(
       p_miss = .data$p,
       N_obs = .data$N,
