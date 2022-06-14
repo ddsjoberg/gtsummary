@@ -93,6 +93,6 @@ add_significance_stars_ex3 <-
   as_gt() \%>\%
   gt::tab_style(
     style = "vertical-align:top",
-    locations = gt::cells_body(columns = vars(label))
+    locations = gt::cells_body(columns = label)
   )
 }

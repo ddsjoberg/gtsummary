@@ -57,7 +57,7 @@
 #'   as_gt() %>%
 #'   gt::tab_style(
 #'     style = "vertical-align:top",
-#'     locations = gt::cells_body(columns = vars(label))
+#'     locations = gt::cells_body(columns = label)
 #'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
