@@ -24,7 +24,8 @@ test_that("no errors/warnings with standard use after tbl_regression", {
   expect_equal(
     tbl1 %>% add_global_p(keep = TRUE, type = "II") %>%
       pluck("table_body") %>% filter(variable == "factor(cyl)") %>%
-      pull("p.value") %>% {
+      pull("p.value") %>%
+      {
         sum(is.na(.))
       },
     1L
@@ -80,7 +81,8 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
   expect_equal(
     tbl1 %>% add_global_p(keep = TRUE, type = "II") %>%
       pluck("table_body") %>% filter(variable == "factor(`number + cylinders`)") %>%
-      pull("p.value") %>% {
+      pull("p.value") %>%
+      {
         sum(is.na(.))
       },
     1L
@@ -110,5 +112,23 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
       pull(p.value),
     dplyr::filter(tbl_bad_names$table_body, variable == "grade1") %>%
       pull(p.value)
+  )
+})
+
+test_that("`add_global_p()` works with `tbl_uvregression(x=)`", {
+  expect_error(
+    tbl <-
+      trial %>%
+      select(`A g e` = age, `m$rkr` = marker, `gr..de` = grade) %>%
+      tbl_uvregression(
+        method = lm,
+        x = `gr..de`
+      ) %>%
+      add_global_p(keep = TRUE),
+    NA
+  )
+  expect_equal(
+    as_tibble(tbl, col_labels = FALSE)$p.value,
+    c("0.7", NA, "0.6", "0.4", "0.025", NA, "0.010", "0.6")
   )
 })

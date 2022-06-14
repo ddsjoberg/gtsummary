@@ -178,7 +178,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
     modify_table_styling(
       x,
       columns =
-        vars(
+        c(
           where(is.numeric),
           -any_of(c(
             "estimate", "conf.low", "conf.high", "p.value", "std.error", "statistic",

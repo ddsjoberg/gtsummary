@@ -262,12 +262,12 @@ add_stat <- function(x, fns, location = NULL, ...) {
     ) %>%
     # assigning a default fmt_fun
     modify_table_styling(
-      columns = vars(where(is.numeric) & all_of(new_col_names)),
+      columns = c(where(is.numeric) & all_of(new_col_names)),
       fmt_fun = function(x) style_sigfig(x, digits = 3)
     ) %>%
     # if a numeric column is called 'p.value' or 'q.value', giving p-value default formatting
     modify_table_styling(
-      columns = vars(where(is.numeric) & any_of(c("p.value", "q.value"))),
+      columns = c(where(is.numeric) & any_of(c("p.value", "q.value"))),
       fmt_fun = get_theme_element("pkgwide-fn:pvalue_fun", default = style_pvalue)
     )
 
