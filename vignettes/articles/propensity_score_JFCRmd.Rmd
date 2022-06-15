@@ -1,0 +1,506 @@
+---
+title: "propensity_score"
+
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Introduction
+
+RCT are considered the goal standard approach for estimating treatment effects. Random allocation ensures that treatment assignment will not be confounded by either measured or unmeasured baseline characteristics. In observational or nonrandomized studies, treatment selection is often accompanied by subject characteristics. Propensity score (PS) is one approach to reduce the effects of confounding in observational studies. PS is therefore a balancing score. Conditional on PS, the distribution of observed baseline characteristics will be similar between treated and untreated subjects.
+
+## Useful recources and vignettes 
+For those who want to have deeper understanding of causal inference, please visit the causal inference R workshop prepared by Malcolm Barrett & LucyMcGowan:
+https://github.com/malcolmbarrett/causal_inference_r_workshop
+
+Additional useful vignettes include by not limited to
+- Matching weights tutorial: http://rstudio-pubs-static.s3.amazonaws.com/198545_5fae2128569a4e4a80627bc87c71d1e2.html
+-SAS 'PSMATCH" procedure:https://support.sas.com/rnd/app/stat/procedures/psmatch.html
+
+-A review of propensity score: principles, methods and application in Stata:https://www.stata.com/meeting/italy14/abstracts/materials/it14_grotta.pdf
+<br>
+
+## Data
+Using the National Health and Nutrition Examination Survey Data (`nhefs_complete`), we are interested in the relationship between the **exposure**, `qsmk`, whether the participant quit smoking, and the **outcomes** : 1) `death`: whether the participate died or not as binary outcome, 2) time to death as time to event outcome, and 3) `wt82_71`, weight change in kilograms as continuous outcome 
+
+Some possible confounders: 
+`sex`, `age`,`smokeyrs`,`sbp`,`dbp`,`race`,`income`,`diabetes`,`exercise`,`income` and `wt71` 
+
+```{r trial, echo = F}
+# options(gtsummary.as_gt.addl_cmds = "gt::tab_options(table.font.size = 'small', data_row.padding = gt::px(1))")
+
+#install.packages("remotes")
+#remotes::install_github("malcolmbarrett/causalworkshop")
+
+#causalworkshop::install_workshop("G:\\My Documents\\GitHub\\tutorial-for-PS-analysis-\\causalworkshop")
+#causalworkshop::install_workshop()
+
+library(dplyr)
+library(gtsummary)
+library(broom)
+library(remotes)
+library(causaldata)
+
+# theme_gtsummary_journal(journal = "jama")
+
+theme_gtsummary_compact()
+
+df<-nhefs_complete %>%
+   mutate(os.yrs=ifelse(death==1,as.numeric(yrdth-age),21),
+          qsmk_cat=factor(ifelse(qsmk==1,'Quitted smoking','Not quit smoking' ),levels=c('Not quit smoking','Quitted smoking')))%>% dplyr::select(seqn,qsmk_cat,qsmk,sbp,dbp,sex,age,race,wt71,smokeyrs,exercise,wt82_71,os.yrs,death) 
+
+```
+
+## Steps to consider prior to matching  
+
+- Use `tbl_summary` to examine collected baseline characteristics between treated and un-treated groups
+
+SMD (standardized mean difference) is the most commonly used statistic to examine balance diagnostics https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6351359/
+
+Variables with abs(SMD) > 0.1 is indicative of data imbalance between the groups.   
+- Use `add_difference()` and `method`= smd to compute the SMD between the two groups.  SMD is calculated using the `smd()` function in package `smd`. 
+
+From the summary table, all the variables have SMD>0.1 and this suggests imbalanced between baseline characteristics and the groups that did and did not quit smoking. In addition, we also didn't compute SMD for any outcomes variable -use  `include()` to omit.
+
+
+```{r pre_match_smd}
+#df %>% dplyr::select(-c(seqn,os.yrs,death,wt82_71,qsmk)) %>%
+ # tbl_summary(
+   # by = qsmk_cat,
+    #statistic =
+     # list(all_continuous() ~ "{mean} ({sd})",
+          # all_dichotomous() ~ "{p}%"),
+   # missing = "no"
+  #) %>%
+  #add_n() %>%
+  #add_difference(everything() ~ "smd"
+                 # no need to show SMD for outcomes
+                #) %>%
+  # rename Difference to SMD
+ # modify_header(estimate ~ "**SMD**") %>%
+  # remove 95% CI
+ # modify_column_hide(columns = ci) 
+
+
+
+
+
+pre<-df %>% dplyr::select(-c(seqn,os.yrs,death,wt82_71,qsmk)) %>%
+  tbl_summary(
+    by = qsmk_cat,
+    statistic =
+      list(all_continuous() ~ "{mean} ({sd})",
+           all_dichotomous() ~ "{p}%"),
+    missing = "no"
+  ) %>%
+  add_n() %>%
+  add_difference(everything() ~ "smd"
+                 # no need to show SMD for outcomes
+                ) %>%
+  # rename Difference to SMD
+  modify_header(estimate ~ "**SMD**") %>%
+  # remove 95% CI
+  modify_column_hide(columns = ci) 
+
+pre
+
+# Extract the SMD pre-matching
+#Extract the SMD
+pre.SMD<-data.frame(variable=pre$table_body$variable,
+                         prematch=pre$table_body$estimate)
+
+```
+
+
+## Constructing PS score
+Logistic regression model is the most common method to construct the propensity score to predict the probability of receiving the treatment
+
+```{r PSscore }
+
+# make a complete case dataset for PS model 
+#trial1 <-trial %>% 
+  # add ID
+  #mutate(ID = row_number()) 
+
+df.ps <- df %>%
+  # select only matching variables and not the outcomes
+  dplyr::select(-c(os.yrs,death,wt82_71)) %>%
+  # Exclude rows with NA
+  na.omit() %>%
+  # merge outcomes
+  left_join(., df %>% select(seqn, os.yrs,death,wt82_71), 
+            by = "seqn") 
+
+
+# Construct PS model 
+m_ps <- glm(qsmk ~ sbp + dbp + sex +age+race+wt71+smokeyrs+exercise, 
+            family = binomial(), data = df.ps) 
+
+## Summarize the PS findings
+m_ps %>% tbl_regression(exponentiate = TRUE) %>% as_gt() %>% gt::tab_header(title = "Factors associated with quitted smoking")
+
+
+
+
+## To explorer the overlapping regions
+prs_df<-glm(qsmk ~ sbp + dbp + sex +age+race+wt71+smokeyrs+exercise, 
+            family = binomial(), data = df.ps) %>%
+## obtained the estimated PS
+broom::augment(type.predict = "response", data = df.ps) %>%
+  rename(ps_score=.fitted)
+
+library(ggplot2)
+
+#mirrored histograms
+ggplot()+
+  geom_histogram(data=subset(prs_df,qsmk_cat=="Quitted smoking"),aes(ps_score,fill="Actual quitted smoking: Yes", y= ..count..)) +
+  geom_histogram(data=subset(prs_df, qsmk_cat=="Not quit smoking"), aes(ps_score, fill="Actual quitted smoking: No", y= -..count..)) +
+  scale_fill_hue("Group")+scale_x_continuous(name="Probability of quitting smoking", limits=c(0,1)) + 
+  scale_y_continuous(breaks = c(-250, -200, -150, -100,-50, 0, 50, 100,150,200,250),labels = c("250","200", "150", "100", "50", "0","50", "100","150","200","250")) 
+
+
+
+
+
+```
+
+-Before applying the estimated PS (either through matching, stratification or inverse probability weight), it is important to examine the region of common support.  If the two groups do not have sufficient common region (i.e, the distributions  are total mirror imaging of each other), then applying PS analysis may not be feasible. 
+
+
+## PS Matching
+There are different algorithm for matching: optimal matching (Bersekas, 1991), Greedy's nearest neighbour matching (with or without replacement). See Austin (2012) for detailed discussion and comparison of different algorithms for matching on the propensity score. The R pckage `MatchIt` written by Noah Greifer, offers different methods for matching. Complete vignette on this package can be found here: https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html#assessing-the-quality-of-matches]
+
+The following codes show the 1:1 Greedy's nearest neighbour matching without replacement with a caliper of 0.25. 
+
+Caliper is the actual maximum distance allowed by the matching algorithm. It is usually set to be a quarter of standard deviation of the propensity score. Reference on selecting the appropriate caliper canbe found here : https://doi.org/10.1093/aje/kwt212
+```{r match}
+
+library(MatchIt)
+
+
+matchdat <- matchit(qsmk ~ sbp + dbp + sex +age+race+wt71+smokeyrs+exercise, 
+                    method = "nearest", 
+                    distance = "glm",
+                    link = "logit",
+                    data = df.ps,
+                    caliper = 0.25,  # starting typically with 0.25
+                    std.caliper = T,
+                    replace = FALSE
+)
+
+# Extract matched data for analysis
+df.match  <- match.data(matchdat)
+
+```
+
+## Summarize the matching
+After matching, we can use ` tbl_summary ` to assess the balance of covariates between the matched group. Alternative way is to use the mirrored histograms to review the distributions of propensity score for the matched and unmatched groups.
+
+
+### Post-matching SMD
+We now see the distributions are fairly balanced between the two groups and abs(SMD) are all below 0.1
+```{r postmatchSMD}
+
+## PS matched
+
+
+#df.match %>%
+  #dplyr::select(sbp,dbp,sex,age,race,wt71,smokeyrs,exercise,qsmk_cat) %>%
+
+  #tbl_summary(by = "qsmk_cat") %>%
+  #add_difference(
+    #test = everything() ~ "smd",
+    #estimate_fun = list(everything() ~ function(x)
+     # style_sigfig(x, digits = 3))
+  #) %>%
+  # rename Difference to SMD
+  #modify_header(estimate ~ "**SMD**") %>%
+  # remove 95%CI
+  #modify_column_hide(columns = ci)
+
+post<-df.match %>%
+  dplyr::select(sbp,dbp,sex,age,race,wt71,smokeyrs,exercise,qsmk_cat) %>%
+
+  tbl_summary(by = "qsmk_cat") %>%
+  add_difference(
+    test = everything() ~ "smd",
+    estimate_fun = list(everything() ~ function(x)
+      style_sigfig(x, digits = 3))
+  ) %>%
+  # rename Difference to SMD
+  modify_header(estimate ~ "**SMD**") %>%
+  # remove 95%CI
+  modify_column_hide(columns = ci)
+post
+
+#Extract the SMD
+post.SMD<-data.frame(Matched=post$table_body$estimate)
+
+```
+
+### Plot showing the balance effect of matching
+```{r}
+
+df.plot<-cbind(pre.SMD,post.SMD)
+df.plot<-df.plot %>% na.omit()
+df.plot.long<-df.plot  %>% na.omit() %>% 
+ tidyr::pivot_longer(!variable, names_to = "Method", values_to = "SMD") %>% mutate(SMD=abs(SMD))
+
+
+
+## Order variable names by magnitude of SMD
+varNames <- as.character(df.plot$variable)[order(df.plot$prematch)]
+
+## Order factor levels in the same order
+df.plot.long$variable <- factor(df.plot.long$variable,
+                                levels = varNames)
+
+## Plot using ggplot2
+ggplot(data = df.plot.long,
+       mapping = aes(x = variable, y = SMD, group = Method, color = Method)) +
+   
+    geom_point() +
+    geom_hline(yintercept = 0.1, color = "black", size = 0.1) +
+    coord_flip() +
+    theme_bw() +
+    theme(legend.key = element_blank())
+
+```
+
+
+### Additional ways to check balance
+```{r}
+a<-summary(matchdat)
+
+#Make a$nn to a dataframe
+#Treated is the group that quitted smoking
+#COntrol is the group that did not quit smoking
+a$nn %>% as.data.frame() %>% tibble::rownames_to_column() %>%   gt::gt() %>% gt::tab_header("Table: Sample sizes")
+
+```
+ESS is the effective sample size.  The table shows how much of the data has been matched.  We were able to find a matched pair for the majority of the participants that quitted smoking.
+
+
+#### Visualize the distributions of PS for the matching groups
+
+```{r}
+#Merge the matched data back to the prs_df
+df.nm<-left_join(prs_df,df.match ,by='seqn') %>%
+  #Create the 4 groups: 
+  mutate(group=ifelse(qsmk.x==1 & is.na(qsmk.y),'unmatched Treated',
+               ifelse(qsmk.x==0 & is.na(qsmk.y),'unmatched Control',
+               ifelse(qsmk.x==1 & qsmk.y==1,'matched Treated','matched Control')))) %>% select(seqn,qsmk.x,ps_score,group)
+
+#HIstogram
+ggplot()+
+  geom_histogram(data=subset(df.nm,qsmk.x==1),aes(ps_score, y= ..count..)) + 
+  geom_histogram(data=subset(df.nm,qsmk.x==1 & group=='matched Treated'),aes(ps_score,fill="Actual quitted smoking: Yes", y= ..count..))+
+  geom_histogram(data=subset(df.nm, qsmk.x==0), aes(ps_score, y= -..count..)) +
+   geom_histogram(data=subset(df.nm, qsmk.x==0 & group=='matched Control'), aes(ps_score, fill="Actual quitted smoking: No", y= -..count..))+
+  scale_fill_hue("Group")+scale_x_continuous(name="Probability of quitting smoking", limits=c(0,1)) +scale_y_continuous(breaks = c(-250, -200, -150, -100,-50, 0, 50, 100,150,200,250),labels = c("250","200", "150", "100", "50", "0","50", "100","150","200","250")) 
+
+
+
+
+```
+
+Mirrored histogramsagain is helpful to view the distribution of PS for the matched (colored) and unmatched (gray) of the control and treated groups.  This is a helpful visualtizaion to show if the  unmatched were very different between cases and controls
+
+
+
+<br>
+
+### Strategy to improve balance between groups 
+Parameters within matchit can be tweaked to help improve matching. 
+  - For example, relaxing or tightening the maximum caliper width will affect how closely the pairs are matched may improve the overall balance. 
+  - Choosing a different matching algorithm, for example, the default is to match the largest (`m.order` = "largest") matching takes place in descending order of distance measures.   
+  - re-specify the PS model with additional covarites
+  
+If matching does not improve, consider a different matching strategy.
+Below we will show the matching weights methods.  
+
+
+
+<br>
+
+
+## Matching weights (uses package Matching)
+
+The matching weights method is a weighting analogue to the 1:1 pairwise matching (https://pubmed.ncbi.nlm.nih.gov/23902694/). 
+
+The concept of matching weights is similar to the inverse probability treatment weight. The propensity score matching weight is defined as the smaller of the predicted probabilities of receiving or not receiving the treatment over the predicted probability of being assigned to the arm the patient is actually in. 
+
+Use `svydesign` to specify the matching weights
+
+```{r}
+library(Matching)
+library(survey)
+
+## Using the complete case data and fitted propensity model constructed above 
+dat = df.ps #Quit Smoke is 1
+psModel = m_ps 
+
+
+## Predicted probability of being assigned to group1
+dat$pgrp1 <- predict(psModel, type = "response")
+## Predicted probability of being assigned to group2
+dat$pgrp2 <- 1 - dat$pgrp1
+
+## Predicted probability of being assigned to the
+## treatment actually assigned (either group1 or group2)
+dat$pAssign <- NA
+dat$pAssign[dat$qsmk == 1] <- dat$pgrp1[dat$qsmk  == 1]
+dat$pAssign[dat$qsmk == 0] <- dat$pgrp2[dat$qsmk == 0]
+
+## Smaller of pgrp1 vs pgrp2 for matching weight
+dat$pMin <- pmin(dat$pgrp1, dat$pgrp2)
+
+## Propensity score matching weight
+dat$mw <- dat$pMin / dat$pAssign
+
+## Weighted data
+datSvy = svydesign(ids = ~ 1, data = dat, weights = ~ mw)
+
+```
+
+## Post-matching weights SMD
+
+Use `tbl_svysummary` to summarize the match weighted data and calculate SMD.  
+
+
+
+```{r}
+
+datSvy %>% 
+  tbl_svysummary(by = "qsmk",
+                 include = c(sbp,dbp,sex,age,race,wt71,smokeyrs,exercise)) %>%
+  add_difference(test = everything() ~ "smd",
+                 estimate_fun = list(
+                   everything() ~ function(x) style_sigfig(x, digits = 3))) %>%
+  # rename Difference to SMD
+  modify_header(estimate ~ "**SMD**") %>%
+  # remove 95%CI
+  modify_column_hide(columns = ci)
+
+
+```
+
+
+Note that effective sample sizes were rounded to whole numbers for convenience but should not be interpreted as the number of patients because  some patient may only be contributing a portion of his/her information.  Therefore, the focus should be on the comparison of percentages in each exposure group.   
+
+
+
+## Outcome analysis
+More details on estimating effect after matching can be found here: https://kosukeimai.github.io/MatchIt/articles/estimating-effects.html
+
+Below are some example codes on estimating treatment effect after propensity score 1:1 matching
+### PS 1:1 matched  
+
+
+#### For continuous outcome
+
+```{r}
+library(lmtest)
+# Continuous outcome weight changes
+fit1<-lm(wt82_71 ~ qsmk,
+    data = df.match,weights=weights) 
+
+#Cluster-robust standard errors
+coeftest(fit1, cluster = ~subclass)
+
+```
+
+
+
+
+#### For binary outcome
+```{r}
+
+# Binary outcome
+glm(death ~ qsmk,
+    family = binomial,
+    data = df.match,weights=weights) %>% tbl_regression(exponentiate = TRUE)
+
+
+```
+
+#### Survival outcome
+```{r}
+library(survival)
+# Cox Regression for marginal HR-Estimating using the cluster robust standard error
+coxMatchedclust <- coxph(Surv(os.yrs, death) ~ qsmk,
+                         robust = TRUE,
+                         weights = weights,
+                         cluster = subclass,
+                         data = df.match
+) %>% tbl_regression(exponentiate = TRUE)
+
+
+# Frailty model
+coxMatchedfrail <- coxph(Surv(os.yrs, death) ~ qsmk + frailty(subclass),
+                    data = df.match) %>% tbl_regression(exponentiate = TRUE, include = qsmk )
+
+tbl_merge(list(coxMatchedclust ,coxMatchedfrail),
+    tab_spanner = c("**Marginal HR model**", "**Frailty model**"))
+
+
+```
+
+
+
+### Matching weights
+
+#### Continuous outcome
+```{r}
+glmWeighted1 <- svyglm(wt82_71 ~ qsmk,
+                      family  = gaussian(link = "identity"),
+                      design    = datSvy)
+    
+coeftest(glmWeighted1, cluster = ~subclass)
+
+```
+
+
+
+
+#### Binary outcome
+```{r}
+glmWeighted <- svyglm(death ~ qsmk,
+                      family  = quasibinomial(),
+                      design    = datSvy)
+    
+tbl_regression(glmWeighted, exponentiate = TRUE)
+
+```
+
+
+#### Survival outcome
+```{r}
+coxWeighted <- svycoxph(Surv(os.yrs, death) ~ qsmk,
+                        design = datSvy)
+
+tbl_regression(coxWeighted, exponentiate = TRUE)
+
+
+```
+
+
+
+
+## Conclusions
+Matching often involves a tradeoff among balance, generalization, and sample size. The main advantage of the propensity score matching is it allows the researchers to design and estimate the average treatment effect in the treated from observational or nonrandomized study by forming balanced matched pairs that share the similarly value of the propensity score and minimizing the effect of confounding due to non-random allocation of treatment. However, some concerns of PSM includes but not limited to 1) requires large samples with substantial overlap in PS between treated and control; 2) More tweaking is needed by user to achieve balance; 3) PSM can only accounts for observed (observable) covariates and not latent characteristics. 
+
+Matching weights can offer a more efficient estimation and more accurate variance calculation.  It achieves balance with little tweaking required by user. It uses data from all patients, with no exclusion due to difficulty of matching but patients at the extreme end of the PS spectrum are being downweighted and contribute very little to the final estimation.
+Therefore, the matched sample is considered a pseudo-population where patients are only contributing a portion of their data.  This concept may be challenging to understand for investigators.
+
+
+
+
+
+
