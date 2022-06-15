@@ -70,25 +70,6 @@ From the summary table, all the variables have SMD>0.1 and this suggests imbalan
 
 
 ```{r pre_match_smd}
-#df %>% dplyr::select(-c(seqn,os.yrs,death,wt82_71,qsmk)) %>%
- # tbl_summary(
-   # by = qsmk_cat,
-    #statistic =
-     # list(all_continuous() ~ "{mean} ({sd})",
-          # all_dichotomous() ~ "{p}%"),
-   # missing = "no"
-  #) %>%
-  #add_n() %>%
-  #add_difference(everything() ~ "smd"
-                 # no need to show SMD for outcomes
-                #) %>%
-  # rename Difference to SMD
- # modify_header(estimate ~ "**SMD**") %>%
-  # remove 95% CI
- # modify_column_hide(columns = ci) 
-
-
-
 
 
 pre<-df %>% dplyr::select(-c(seqn,os.yrs,death,wt82_71,qsmk)) %>%
