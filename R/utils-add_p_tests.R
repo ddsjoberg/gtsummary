@@ -110,6 +110,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
 add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
                                             test.args = NULL, conf.level = 0.95, ...) {
   quiet <- FALSE # need to add support for quiet later
+  if (missing(group) || is.null(group)) stop("Paired tests require the `group=` argument.", call. = FALSE)
   .superfluous_args(variable, ...)
   # checking inputs
   if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2) {
@@ -213,6 +214,7 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
                                                  test.args = NULL, conf.level = 0.95,
                                                  quiet = FALSE, ...) {
   .superfluous_args(variable, ...)
+  if (missing(group) || is.null(group)) stop("Paired tests require the `group=` argument.", call. = FALSE)
   # checking inputs
   if (length(data[[by]] %>% stats::na.omit() %>% unique()) != 2) {
     stop("`by=` must have exactly 2 levels", call. = FALSE)
