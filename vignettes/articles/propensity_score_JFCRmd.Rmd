@@ -115,7 +115,7 @@ pre
 # Extract the SMD
 pre.SMD <-
   pre$table_body %>%
-  select(variable, label, prematch = estimate) %>%
+  select(variable, label, smd = estimate) %>%
   drop_na()
 ```
 
@@ -176,26 +176,24 @@ The following codes show the 1:1 Greedy's nearest neighbour matching without rep
 
 Caliper is the actual maximum distance allowed by the matching algorithm. It is usually set to be a quarter of standard deviation of the propensity score. Reference on selecting the appropriate caliper canbe found here : https://doi.org/10.1093/aje/kwt212
 ```{r match}
-
-library(MatchIt)
-
-
-matchdat <- matchit(qsmk ~ sbp + dbp + sex + age + race + wt71 + smokeyrs + exercise,
-                    method = "nearest",
-                    distance = "glm",
-                    link = "logit",
-                    data = df.ps,
-                    caliper = 0.25, # starting typically with 0.25
-                    std.caliper = T,
-                    replace = FALSE
-)
+matchdat <-
+  MatchIt::matchit(
+    qsmk ~ sbp + dbp + sex + age + race + wt71 + smokeyrs + exercise,
+    data = prs_df,
+    method = "nearest",
+    distance = "glm",
+    link = "logit",
+    caliper = 0.25, # starting typically with 0.25
+    std.caliper = TRUE,
+    replace = FALSE
+  )
 
 # Extract matched data for analysis
-df.match <- match.data(matchdat)
+df.match <- MatchIt::match.data(matchdat)
 ```
 
 ## Summarize the matching
-After matching, we can use ` tbl_summary ` to assess the balance of covariates between the matched group. Alternative way is to use the mirrored histograms to review the distributions of propensity score for the matched and unmatched groups.
+After matching, we can use `tbl_summary()` to assess the balance of covariates between the matched group. Alternative way is to use the mirrored histograms to review the distributions of propensity score for the matched and unmatched groups.
 
 
 ### Post-matching SMD
@@ -219,55 +217,53 @@ We now see the distributions are fairly balanced between the two groups and abs(
 # remove 95%CI
 # modify_column_hide(columns = ci)
 
-post <- df.match %>%
-  dplyr::select(sbp, dbp, sex, age, race, wt71, smokeyrs, exercise, qsmk_cat) %>%
-  tbl_summary(by = "qsmk_cat") %>%
+post <-
+  df.match %>%
+  select(sbp, dbp, sex, age, race, wt71, smokeyrs, exercise, qsmk) %>%
+  mutate(
+    qsmk = 
+      factor(qsmk, 
+             levels = c(0, 1), 
+             labels = c("Did _not_ Quit Smoking", "Quit Smoking"))
+  ) %>%
+  tbl_summary(by = "qsmk") %>%
   add_difference(
     test = everything() ~ "smd",
-    estimate_fun = list(everything() ~ function(x) {
-      style_sigfig(x, digits = 3)
-    })
+    estimate_fun = ~partial(style_sigfig, digits = 3)
   ) %>%
-  # rename Difference to SMD
-  modify_header(estimate ~ "**SMD**") %>%
-  # remove 95%CI
-  modify_column_hide(columns = ci)
+  modify_header(estimate ~ "**SMD**") %>% # rename Difference to SMD
+  modify_column_hide(columns = ci) # remove 95%CI
 post
 
 # Extract the SMD
-post.SMD <- data.frame(Matched = post$table_body$estimate)
+post.SMD <- 
+  post$table_body %>%
+  select(variable, label, smd = estimate) %>%
+  drop_na()
 ```
 
 ### Plot showing the balance effect of matching
 ```{r}
-
-df.plot <- cbind(pre.SMD, post.SMD)
-df.plot <- df.plot %>% na.omit()
-df.plot.long <- df.plot %>%
-  na.omit() %>%
-  tidyr::pivot_longer(!variable, names_to = "Method", values_to = "SMD") %>%
-  mutate(SMD = abs(SMD))
-
-
-
-## Order variable names by magnitude of SMD
-varNames <- as.character(df.plot$variable)[order(df.plot$prematch)]
-
-## Order factor levels in the same order
-df.plot.long$variable <- factor(df.plot.long$variable,
-                                levels = varNames
-)
+df.plot <-
+  bind_rows(
+    pre.SMD %>% mutate(type = "Pre-Match"),
+    post.SMD %>% mutate(type = "Post-Match")
+  ) %>%
+  mutate(smd = abs(smd))
 
 ## Plot using ggplot2
-ggplot(
-  data = df.plot.long,
-  mapping = aes(x = variable, y = SMD, group = Method, color = Method)
+(ggplot(
+  data = df.plot,
+  mapping = aes(x = label, y = smd, group = type, color = type)
 ) +
   geom_point() +
-  geom_hline(yintercept = 0.1, color = "black", size = 0.1) +
+  geom_hline(yintercept = 0.1, color = "black", 
+             size = 0.1, linetype = "dashed") +
+  labs(group = "", x = "", color = "") +
   coord_flip() +
   theme_bw() +
-  theme(legend.key = element_blank())
+  theme(legend.key = element_blank())) %>%
+  print()
 ```
 
 
@@ -291,7 +287,8 @@ ESS is the effective sample size.  The table shows how much of the data has been
 
 ```{r}
 # Merge the matched data back to the prs_df
-df.nm <- left_join(prs_df, df.match, by = "seqn") %>%
+df.nm <- 
+  left_join(prs_df, df.match, by = "seqn") %>%
   # Create the 4 groups:
   mutate(group = ifelse(qsmk.x == 1 & is.na(qsmk.y), "unmatched Treated",
                         ifelse(qsmk.x == 0 & is.na(qsmk.y), "unmatched Control",
