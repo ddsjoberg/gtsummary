@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Improved error messages for paired tests in `add_p()` and `add_difference()` when `group=` argument is not specified. (#1273)
+
 * Updated `add_global_p()` to handle `tbl_uvregression()` objects where users specified the `x=` argument (when `y=` argument is more common). (#1260)
 
 * The checks for `"haven_labelled"` class are now only performed for the variables indicated in `include=` and `by=` in `tbl_summary()` and `tbl_svysummary()`. The checks in `tbl_uvregression()` and `tbl_survfit.data.frame()` are only applied to the variables in `include=`, e.g. no checking for the outcome variable(s).
