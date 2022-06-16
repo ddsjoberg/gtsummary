@@ -145,7 +145,7 @@ prs_df <-
     family = binomial
   ) %>%
   ## obtained the estimated PS
-  broom::augment(type.predict = "response") %>%
+  broom::augment(type.predict = "response", data = nhefs) %>%
   rename(ps_score = .fitted)
 
 # mirrored histograms
@@ -252,7 +252,7 @@ df.plot <-
   mutate(smd = abs(smd))
 
 ## Plot using ggplot2
-(ggplot(
+ggplot(
   data = df.plot,
   mapping = aes(x = label, y = smd, group = type, color = type)
 ) +
@@ -262,8 +262,7 @@ df.plot <-
   labs(group = "", x = "", color = "") +
   coord_flip() +
   theme_bw() +
-  theme(legend.key = element_blank())) %>%
-  print()
+  theme(legend.key = element_blank())
 ```
 
 
@@ -290,11 +289,14 @@ ESS is the effective sample size.  The table shows how much of the data has been
 df.nm <- 
   left_join(prs_df, df.match, by = "seqn") %>%
   # Create the 4 groups:
-  mutate(group = ifelse(qsmk.x == 1 & is.na(qsmk.y), "unmatched Treated",
-                        ifelse(qsmk.x == 0 & is.na(qsmk.y), "unmatched Control",
-                               ifelse(qsmk.x == 1 & qsmk.y == 1, "matched Treated", "matched Control")
-                        )
-  )) %>% select(seqn, qsmk.x, ps_score, group)
+  mutate(
+    group = ifelse(qsmk.x == 1 & is.na(qsmk.y), "unmatched Treated",
+                   ifelse(qsmk.x == 0 & is.na(qsmk.y), "unmatched Control",
+                          ifelse(qsmk.x == 1 & qsmk.y == 1, "matched Treated", "matched Control")
+                   )
+    )
+  ) %>% 
+  select(seqn, qsmk.x, ps_score, group)
 
 # HIstogram
 ggplot() +
@@ -337,7 +339,6 @@ Use `svydesign` to specify the matching weights
 
 ```{r}
 library(Matching)
-library(survey)
 
 ## Using the complete case data and fitted propensity model constructed above
 dat <- df.ps # Quit Smoke is 1
@@ -362,7 +363,7 @@ dat$pMin <- pmin(dat$pgrp1, dat$pgrp2)
 dat$mw <- dat$pMin / dat$pAssign
 
 ## Weighted data
-datSvy <- svydesign(ids = ~1, data = dat, weights = ~mw)
+datSvy <- survey::svydesign(ids = ~1, data = dat, weights = ~mw)
 ```
 
 ## Post-matching weights SMD
@@ -380,14 +381,10 @@ datSvy %>%
   ) %>%
   add_difference(
     test = everything() ~ "smd",
-    estimate_fun = list(
-      everything() ~ function(x) style_sigfig(x, digits = 3)
-    )
+    estimate_fun = ~partial(style_sigfig, digits = 3)
   ) %>%
-  # rename Difference to SMD
-  modify_header(estimate ~ "**SMD**") %>%
-  # remove 95%CI
-  modify_column_hide(columns = ci)
+  modify_header(estimate ~ "**SMD**") %>%   # rename Difference to SMD
+  modify_column_hide(columns = ci)          # remove 95%CI
 ```
 
 
@@ -405,14 +402,13 @@ Below are some example codes on estimating treatment effect after propensity sco
 #### For continuous outcome
 
 ```{r}
-library(lmtest)
 # Continuous outcome weight changes
 fit1 <- lm(wt82_71 ~ qsmk,
            data = df.match, weights = weights
 )
 
 # Cluster-robust standard errors
-coeftest(fit1, cluster = ~subclass)
+lmtest::coeftest(fit1, cluster = ~subclass)
 ```
 
 
@@ -461,7 +457,7 @@ glmWeighted1 <- svyglm(wt82_71 ~ qsmk,
                        design = datSvy
 )
 
-coeftest(glmWeighted1, cluster = ~subclass)
+lmtest::coeftest(glmWeighted1, cluster = ~subclass)
 ```
 
 
