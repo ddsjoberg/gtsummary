@@ -23,7 +23,8 @@
 #' \itemize{
 #'   \item `{n}` frequency
 #'   \item `{N}` denominator, or cohort size
-#'   \item `{p}` formatted percentage
+#'   \item `{p}` percentage
+#'   \item `{p.std.error}` standard error of the sample proportion computed with [survey::svymean()]
 #'   \item `{n_unweighted}` unweighted frequency
 #'   \item `{N_unweighted}` unweighted denominator
 #'   \item `{p_unweighted}` unweighted formatted percentage
@@ -95,8 +96,9 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   assert_package("survey", "tbl_svysummary()")
 
   # test if data is a survey object
-  if (!is_survey(data))
+  if (!is_survey(data)) {
     stop("'data' should be a survey object (see svydesign()).", call. = FALSE)
+  }
 
   # converting bare arguments to string ----------------------------------------
   by <-
@@ -115,8 +117,10 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
     ) %>%
     union(by)
   if ("n" %in% include) {
-    paste("Cannot summarize a column called 'n'. Rename it or remove",
-          "is from the summary with `include = -n`") %>%
+    paste(
+      "Cannot summarize a column called 'n'. Rename it or remove",
+      "it from the summary with `include = -n`"
+    ) %>%
       abort()
   }
 
@@ -185,7 +189,6 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
   # will return call, and all object passed to in tbl_summary call -------------
   # the object func_inputs is a list of every object passed to the function
   tbl_summary_inputs <- as.list(environment())
-  tbl_summary_inputs$exclude <- NULL # should not be exported
 
   # checking function inputs ---------------------------------------------------
   tbl_summary_input_checks(data$variables, by, missing_text, include)
@@ -236,20 +239,21 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
       pluck(x, "meta_data", "df_stats", 1, "N_obs", 1)
     x$table_styling$header$modify_stat_N_unweighted <-
       pluck(x, "meta_data", "df_stats", 1, "N_unweighted", 1)
-  }
-  else {
+  } else {
     x$table_styling$header <-
       x$table_styling$header %>%
       dplyr::left_join(
         x$df_by %>%
-          select(column = .data$by_col,
-                 modify_stat_n = .data$n,
-                 modify_stat_N = .data$N,
-                 modify_stat_p = .data$p,
-                 modify_stat_n_unweighted = .data$n_unweighted,
-                 modify_stat_N_unweighted = .data$N_unweighted,
-                 modify_stat_p_unweighted = .data$p_unweighted,
-                 modify_stat_level = .data$by_chr),
+          select(
+            column = .data$by_col,
+            modify_stat_n = .data$n,
+            modify_stat_N = .data$N,
+            modify_stat_p = .data$p,
+            modify_stat_n_unweighted = .data$n_unweighted,
+            modify_stat_N_unweighted = .data$N_unweighted,
+            modify_stat_p_unweighted = .data$p_unweighted,
+            modify_stat_level = .data$by_chr
+          ),
         by = "column"
       ) %>%
       tidyr::fill(c(.data$modify_stat_N, .data$modify_stat_N_unweighted), .direction = "updown")
@@ -265,9 +269,10 @@ tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
     modify_header(
       label = paste0("**", translate_text("Characteristic"), "**"),
       all_stat_cols() ~
-        ifelse(is.null(by),
-               "**N = {style_number(N)}**",
-               "**{level}**, N = {style_number(n)}")
+      ifelse(is.null(by),
+        "**N = {style_number(N)}**",
+        "**{level}**, N = {style_number(n)}"
+      )
     )
 
 
@@ -302,22 +307,107 @@ summarize_categorical_survey <- function(data, variable, by,
     ) %>%
     rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p)
 
+  # convert to factor if not already a factor
+  if (!is.factor(data$variables[[variable]])) {
+    data$variables[[variable]] <- as.factor(data$variables[[variable]])
+  }
   # if there is a dichotomous value, it needs to be present as a level of the variable for svytable
-  if (!is.null(dichotomous_value) && !dichotomous_value %in% unique(data$variables[[variable]])) {
+  if (!is.null(dichotomous_value) && !dichotomous_value %in% levels(data$variables[[variable]])) {
     data$variables[[variable]] <- as.factor(data$variables[[variable]])
     levels(data$variables[[variable]]) <- c(levels(data$variables[[variable]]), dichotomous_value)
   }
+  # if no level (e.g. when only NA), convert to binary variable
+  if (length(levels(data$variables[[variable]])) == 0) {
+    levels(data$variables[[variable]]) <- c(TRUE, FALSE)
+    dichotomous_value <- TRUE
+  }
+  # if one level, it will produce an error with svymean
+  # need to add a second level
+  level_to_be_removed <- NULL
+  if (length(levels(data$variables[[variable]])) == 1) {
+    l <- levels(data$variables[[variable]])
+    levels(data$variables[[variable]]) <- c(l, paste0("not_", l))
+    level_to_be_removed <- paste0("not_", l)
+  }
+
+  if (!is.null(by) && is.character(data$variables[[by]])) {
+    data$variables[[by]] <- as.factor(data$variables[[by]])
+  }
 
   if (is.null(by)) {
+    if (percent %in% c("column", "cell")) {
+      svy_p <- survey::svymean(c_form(right = variable), data, na.rm = TRUE) %>%
+        as_tibble(rownames = "var_level") %>%
+        mutate(
+          variable_levels = str_sub(.data$var_level, stringr::str_length(variable) + 1)
+        ) %>%
+        select(p = .data$mean, p.std.error = .data$SE, .data$variable_levels)
+    } else {
+      # this will have p=1 for all and p.std.error=0 for all
+      svy_p <- tibble(
+        variable_levels = levels(data$variables[[variable]]),
+        p = 1,
+        p.std.error = 0
+      )
+    }
     svy_table <-
       survey::svytable(c_form(right = variable), data) %>%
       as_tibble() %>%
-      set_names("variable_levels", "n")
+      set_names("variable_levels", "n") %>%
+      left_join(svy_p, by = c("variable_levels"))
   } else {
+    if (percent == "column") {
+      svy_p <- survey::svyby(c_form(right = variable), c_form(right = by), data, survey::svymean, na.rm = TRUE) %>%
+        as_tibble() %>%
+        tidyr::pivot_longer(!one_of(by)) %>%
+        mutate(
+          stat = if_else(
+            str_starts(.data$name, paste0("se.", variable)) | str_starts(.data$name, paste0("se.`", variable, "`")),
+            "p.std.error",
+            "p"
+          ),
+          name = stringr::str_remove_all(.data$name, "se\\.") %>%
+            str_remove_all(variable) %>%
+            str_remove_all("`")
+        ) %>%
+        tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
+        set_names(c("by", "variable_levels", "p", "p.std.error"))
+    } else if (percent == "row") {
+      svy_p <- survey::svyby(c_form(right = by), c_form(right = variable), data, survey::svymean, na.rm = TRUE) %>%
+        as_tibble() %>%
+        tidyr::pivot_longer(!one_of(variable)) %>%
+        mutate(
+          stat = if_else(
+            str_starts(.data$name, paste0("se.", by)) | str_starts(.data$name, paste0("se.`", by, "`")),
+            "p.std.error",
+            "p"
+          ),
+          name = stringr::str_remove_all(.data$name, "se\\.") %>%
+            str_remove_all(by) %>%
+            str_remove_all("`")
+        ) %>%
+        tidyr::pivot_wider(names_from = "stat", values_from = "value") %>%
+        set_names(c("variable_levels", "by", "p", "p.std.error"))
+    } else if (percent == "cell") {
+      inttemp <- expand.grid(
+        by = levels(data$variables[[by]]),
+        variable_levels = levels(data$variables[[variable]])
+      ) %>%
+        mutate(
+          var_level = paste0("interaction(", .env$by, ", ", variable, ")", .data$by, ".", .data$variable_levels)
+        )
+
+      svy_p <- survey::svymean(c_inter(by, variable), data, na.rm = TRUE) %>%
+        as_tibble(rownames = "var_level") %>%
+        dplyr::left_join(inttemp, by = "var_level") %>%
+        select(p = .data$mean, p.std.error = .data$SE, .data$by, .data$variable_levels)
+    }
+
     svy_table <-
       survey::svytable(c_form(right = c(by, variable)), data) %>%
       as_tibble() %>%
-      set_names("by", "variable_levels", "n")
+      set_names("by", "variable_levels", "n") %>%
+      left_join(svy_p, by = c("by", "variable_levels"))
   }
 
   svy_table <- svy_table %>%
@@ -336,10 +426,15 @@ summarize_categorical_survey <- function(data, variable, by,
     group_by(!!!syms(group_by_percent)) %>%
     mutate(
       N = sum(.data$n),
-      # if the Big N is 0, there is no denom so making percent NA
-      p = ifelse(.data$N == 0, NA, .data$n / .data$N)
+      p = if_else(.data$N == 0, NA_real_, .data$p), # re-introducing NA where relevant
+      p.std.error = if_else(.data$N == 0, NA_real_, .data$p.std.error)
     ) %>%
     ungroup()
+
+  if (!is.null(level_to_be_removed)) {
+    svy_table <- svy_table %>%
+      filter(.data$variable_levels != level_to_be_removed)
+  }
 
   if (!is.null(dichotomous_value)) {
     svy_table <- svy_table %>%
@@ -402,8 +497,7 @@ summarize_continuous_survey <- function(data, variable, by, stat_display,
         by = character()
       ) %>%
       select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
-  }
-  else {
+  } else {
     return <-
       df_stats %>%
       mutate(stat_display = .env$stat_display) %>%
@@ -530,7 +624,7 @@ df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
     sort = "alphanumeric", percent = "column",
     stat_display = "{n}"
   ) %>%
-    select(-.data$stat_display) %>%
+    select(-.data$stat_display, -.data$p.std.error) %>%
     rename(
       p_miss = .data$p,
       N_obs = .data$N,
@@ -559,12 +653,10 @@ df_stats_fun_survey <- function(summary_type, variable, dichotomous_value, sort,
       return %>%
       left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
       rename(col_name = .data$by_col)
-  }
-  else if ("variable_levels" %in% names(return)) {
+  } else if ("variable_levels" %in% names(return)) {
     return$label <- as.character(return$variable_levels)
     return$col_name <- "stat_0"
-  }
-  else {
+  } else {
     return$label <- var_label
     return$col_name <- "stat_0"
   }
@@ -589,8 +681,14 @@ c_form <- function(left = NULL, right = 1) {
   stats::as.formula(paste(left, "~", right))
 }
 
+c_inter <- function(f1, f2) {
+  stats::as.formula(paste0("~interaction(", f1, ",", f2, ")"))
+}
+
 .extract_data_frame <- function(x) {
-  if (is.data.frame(x)) return(x)
+  if (is.data.frame(x)) {
+    return(x)
+  }
   x$variables # return survey object data frame
 }
 
