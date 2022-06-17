@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added the standard error of proportions to the list of available statistics for categorical data summaries in `tbl_svysummary()`. (#1187)
+
 * Added Tarone-Ware test to `add_p.tbl_survfit()` (#732)
 
 * Improved error messages for paired tests in `add_p()` and `add_difference()` when `group=` argument is not specified. (#1273)
