@@ -98,7 +98,8 @@ For categorical variables the following statistics are available to display.
 \itemize{
 \item \code{{n}} frequency
 \item \code{{N}} denominator, or cohort size
-\item \code{{p}} formatted percentage
+\item \code{{p}} percentage
+\item \code{{p.std.error}} standard error of the sample proportion computed with \code{\link[survey:surveysummary]{survey::svymean()}}
 \item \code{{n_unweighted}} unweighted frequency
 \item \code{{N_unweighted}} unweighted denominator
 \item \code{{p_unweighted}} unweighted formatted percentage

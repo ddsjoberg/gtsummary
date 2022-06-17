@@ -54,6 +54,7 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
 \tabular{lll}{
    \strong{alias} \tab \strong{description} \tab \strong{pseudo-code} \cr
    \code{"logrank"} \tab Log-rank test \tab \code{survival::survdiff(Surv(.) ~ variable, data, rho = 0)} \cr
+   \code{"tarone"} \tab Tarone-Ware test \tab \code{survival::survdiff(Surv(.) ~ variable, data, rho = 1.5)} \cr
    \code{"petopeto_gehanwilcoxon"} \tab Peto & Peto modification of Gehan-Wilcoxon test \tab \code{survival::survdiff(Surv(.) ~ variable, data, rho = 1)} \cr
    \code{"survdiff"} \tab G-rho family test \tab \code{survival::survdiff(Surv(.) ~ variable, data, ...)} \cr
    \code{"coxph_lrt"} \tab Cox regression (LRT) \tab \code{survival::coxph(Surv(.) ~ variable, data, ...)} \cr

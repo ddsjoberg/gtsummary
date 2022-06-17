@@ -544,6 +544,8 @@ stat_label_match <- function(stat_display, iqr = TRUE, range = TRUE) {
       "{N_miss}", "N missing",
       "{N_nonmiss}", "N",
       "{N_obs}", "No. obs.",
+      "{p.std.error}%", "SE(%)",
+      "{p.std.error}", "SE(%)",
       "{N_unweighted}", "N (unweighted)",
       "{n_unweighted}", "n (unweighted)",
       "{N_obs_unweighted}", "Total N (unweighted)",
@@ -999,7 +1001,7 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
         }
 
         # that should cover everything in `tbl_summary()`,
-        # but these are somtimes used in `tbl_custom_summary()`
+        # but these are sometimes used in `tbl_custom_summary()`
         else if (is.numeric(column)) {
           attr(column, "fmt_fun") <- style_sigfig
         }
