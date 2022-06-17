@@ -17,7 +17,7 @@
 \arguments{
 \item{x}{Object of class \code{"tbl_survfit"}}
 
-\item{test}{string indicating test to use. Must be one of \code{"logrank"}, \code{"survdiff"},
+\item{test}{string indicating test to use. Must be one of \code{"logrank"}, \code{"tarone"}, \code{"survdiff"},
 \code{"petopeto_gehanwilcoxon"}, \code{"coxph_lrt"}, \code{"coxph_wald"}, \verb{"coxph_score".}
 See details below}
 
