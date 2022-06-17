@@ -499,7 +499,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' \lifecycle{maturing}
 #' Calculate and add a p-value
 #' @param x Object of class `"tbl_survfit"`
-#' @param test string indicating test to use. Must be one of `"logrank"`, `"survdiff"`,
+#' @param test string indicating test to use. Must be one of `"logrank"`, `"tarone"`, `"survdiff"`,
 #' `"petopeto_gehanwilcoxon"`, `"coxph_lrt"`, `"coxph_wald"`, `"coxph_score".`
 #' See details below
 #' @inheritParams add_p.tbl_summary
