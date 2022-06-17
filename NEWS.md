@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added Tarone-Ware test to `add_p.tbl_survfit()` (#732)
+
 * Improved error messages for paired tests in `add_p()` and `add_difference()` when `group=` argument is not specified. (#1273)
 
 * Updated `add_global_p()` to handle `tbl_uvregression()` objects where users specified the `x=` argument (when `y=` argument is more common). (#1260)

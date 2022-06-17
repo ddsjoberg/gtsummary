@@ -611,13 +611,13 @@ add_p_tbl_survfit_survdiff <- function(data, variable, test.args, ...) {
   broom::glance(survdiff_result) %>%
     dplyr::mutate(
       method =
-        switch(is.null(test.args$rho) || test.args$rho == 0,
-               "Log-rank test"
-        ) %||%
-        switch(test.args$rho == 1,
-               "Peto & Peto modification of Gehan-Wilcoxon test"
-        ) %||%
-        stringr::str_glue("G-rho (\U03C1 = {test.args$rho}) test")
+        purrr::when(
+          test.args$rho,
+          is.null(.) || . == 0 ~ "Log-rank test",
+          . == 1 ~ "Peto & Peto modification of Gehan-Wilcoxon test",
+          . == 1.5 ~ "Tarone-Ware test",
+          TRUE ~ stringr::str_glue("G-rho (\U03C1 = {test.args$rho}) test")
+        )
     )
 }
 
@@ -629,6 +629,11 @@ add_p_tbl_survfit_logrank <- function(data, variable, ...) {
 add_p_tbl_survfit_petopeto_gehanwilcoxon <- function(data, variable, ...) {
   .superfluous_args(variable, ...)
   add_p_tbl_survfit_survdiff(data, test.args = list(rho = 1))
+}
+
+add_p_tbl_survfit_tarone <- function(data, variable, ...) {
+  .superfluous_args(variable, ...)
+  add_p_tbl_survfit_survdiff(data, test.args = list(rho = 1.5))
 }
 
 add_p_tbl_survfit_coxph <- function(data, variable, test_type, test.args, ...) {

@@ -45,7 +45,8 @@ test_that("add_p.tbl_survfit survdiff family checks", {
     list(
       survfit(Surv(ttdeath, death) ~ trt, trial),
       survfit(Surv(ttdeath, death) ~ response, trial),
-      survfit(Surv(ttdeath, death) ~ grade, trial)
+      survfit(Surv(ttdeath, death) ~ grade, trial),
+      survfit(Surv(ttdeath, death) ~ stage, trial)
     ) %>%
     tbl_survfit(times = c(12, 24))
 
@@ -67,6 +68,12 @@ test_that("add_p.tbl_survfit survdiff family checks", {
     broom::glance() %>%
     dplyr::pull(p.value)
 
+  # tarone-ware
+  tarone_stage <-
+    survdiff(Surv(ttdeath, death) ~ stage, trial, rho = 1.5) %>%
+    broom::glance() %>%
+    dplyr::pull(p.value)
+
 
   expect_equal(
     tbl_survfit %>%
@@ -74,12 +81,13 @@ test_that("add_p.tbl_survfit survdiff family checks", {
         test = list(
           trt ~ "logrank",
           response ~ "survdiff",
-          grade ~ "petopeto_gehanwilcoxon"
+          grade ~ "petopeto_gehanwilcoxon",
+          stage ~ "tarone"
         ),
         test.args = response ~ list(rho = 0.5)
       ) %>%
       purrr::pluck("meta_data", "p.value"),
-    c(logrank_trt, grho_response, peto_grade)
+    c(logrank_trt, grho_response, peto_grade, tarone_stage)
   )
 })
 
