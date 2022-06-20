@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* The `paired.wilcox.test` available in `add_p.tbl_summary()` and `add_difference.tbl_summary()` was mistakenly marked as returning difference, but it does not. The documentation has been corrected, which results in improved messaging to the user when the test is selected in `add_difference()`. (#1279)
+
 * Added the standard error of proportions to the list of available statistics for categorical data summaries in `tbl_svysummary()`. (#1187)
 
 * Added Tarone-Ware test to `add_p.tbl_survfit()` (#732)
