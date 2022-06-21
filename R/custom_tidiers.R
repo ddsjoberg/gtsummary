@@ -10,9 +10,9 @@
 #' obtain modified results.
 #'
 #' - `tidy_standardize()` tidier to report standardized coefficients. The
-#' [effectsize](https://easystats.github.io/effectsize/reference/standardize_parameters.html)
+#' [parameters](https://easystats.github.io/parameters/reference/standardize_parameters.html)
 #' package includes a wonderful function to estimate standardized coefficients.
-#' The tidier uses the output from `effectsize::standardize_parameters()`, and
+#' The tidier uses the output from `parameters::standardize_parameters()`, and
 #' merely takes the result and puts it in `broom::tidy()` format.
 #'
 #' - `tidy_bootstrap()` tidier to report bootstrapped coefficients. The
@@ -49,7 +49,7 @@
 #' `parameters::model_parameters()`
 #' @param ... arguments passed to method;
 #' - `pool_and_tidy_mice()`: `mice::tidy(x, ...)`
-#' - `tidy_standardize()`: `effectsize::standardize_parameters(x, ...)`
+#' - `tidy_standardize()`: `parameters::standardize_parameters(x, ...)`
 #' - `tidy_bootstrap()`: `parameters::bootstrap_parameters(x, ...)`
 #' - `tidy_robust()`: `parameters::model_parameters(x, ...)`
 #'
@@ -105,12 +105,12 @@ tidy_standardize <- function(x, exponentiate = FALSE,
   dots <- list(...)
 
   # calculating standardize coefs
-  std_coef_expr <- expr(effectsize::standardize_parameters(model = x, ci = !!conf.level, !!!dots))
+  std_coef_expr <- expr(parameters::standardize_parameters(model = x, ci = !!conf.level, !!!dots))
   if (quiet == FALSE) {
     inform(glue("tidy_standardize(): Estimating standardized coefs with\n  `{deparse(std_coef_expr, width.cutoff = 500L)}`"))
   }
   std_coef <-
-    expr(effectsize::standardize_parameters(model = !!x, ci = !!conf.level, !!!dots)) %>%
+    expr(parameters::standardize_parameters(model = !!x, ci = !!conf.level, !!!dots)) %>%
     eval()
 
   # converting output to broom::tidy format
