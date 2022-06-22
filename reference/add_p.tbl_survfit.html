@@ -25,7 +25,7 @@ Calculate and add a p-value"><meta property="og:image" content="https://www.dani
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@ Calculate and add a p-value</p>
     <dl><dt>x</dt>
 <dd><p>Object of class <code>"tbl_survfit"</code></p></dd>
 <dt>test</dt>
-<dd><p>string indicating test to use. Must be one of <code>"logrank"</code>, <code>"survdiff"</code>,
+<dd><p>string indicating test to use. Must be one of <code>"logrank"</code>, <code>"tarone"</code>, <code>"survdiff"</code>,
 <code>"petopeto_gehanwilcoxon"</code>, <code>"coxph_lrt"</code>, <code>"coxph_wald"</code>, <code>"coxph_score".</code>
 See details below</p></dd>
 <dt>test.args</dt>
@@ -148,7 +148,8 @@ functions. Default is <code><a href="https://tidyselect.r-lib.org/reference/ever
 the test name. However, if you need to specify different tests within the same
 table, the input in flexible using the list notation common throughout the
 gtsummary package. For example, the following code would call the log-rank test,
-and a second test of the <em>G-rho</em> family.</p><div class="sourceCode r"><pre><code><span class="va">...</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+and a second test of the <em>G-rho</em> family.</p>
+<p></p><div class="sourceCode r"><pre><code><span class="va">...</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/add_p.html">add_p</a></span><span class="op">(</span>test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">trt</span> <span class="op">~</span> <span class="st">"logrank"</span>, <span class="va">grade</span> <span class="op">~</span> <span class="st">"survdiff"</span><span class="op">)</span>,
         test.args <span class="op">=</span> <span class="va">grade</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rho <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></code></pre><p></p></div>
     </div>
@@ -205,16 +206,11 @@ and a second test of the <em>G-rho</em> family.</p><div class="sourceCode r"><pr
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D.
-Sjoberg</a>, Michael Curry,
-<a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>,
-<a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa
-Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

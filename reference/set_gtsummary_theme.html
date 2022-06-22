@@ -32,7 +32,7 @@ check_gtsummary_theme() checks if passed theme is valid
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
       </span>
     </div>
 
@@ -116,7 +116,12 @@ Functions to <strong>set</strong>, <strong>reset</strong>, <strong>get</strong>,
 
 <span class="fu">get_gtsummary_theme</span><span class="op">(</span><span class="op">)</span>
 
-<span class="fu">with_gtsummary_theme</span><span class="op">(</span><span class="va">x</span>, <span class="va">expr</span>, env <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/stack.html" class="external-link">caller_env</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">with_gtsummary_theme</span><span class="op">(</span>
+  <span class="va">x</span>,
+  <span class="va">expr</span>,
+  env <span class="op">=</span> <span class="fu">rlang</span><span class="fu">::</span><span class="fu"><a href="https://rlang.r-lib.org/reference/stack.html" class="external-link">caller_env</a></span><span class="op">(</span><span class="op">)</span>,
+  msg_ignored_elements <span class="op">=</span> <span class="cn">NULL</span>
+<span class="op">)</span>
 
 <span class="fu">check_gtsummary_theme</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
     </div>
@@ -132,6 +137,10 @@ Functions to <strong>set</strong>, <strong>reset</strong>, <strong>get</strong>,
 <dd><p>Expression to be evaluated with the theme specified in <code>x=</code> loaded</p></dd>
 <dt>env</dt>
 <dd><p>The environment in which to evaluate <code>expr=</code></p></dd>
+<dt>msg_ignored_elements</dt>
+<dd><p>Default is NULL with no message printed. Pass a string
+that will be printed with <code><a href="https://cli.r-lib.org/reference/cli_alert.html" class="external-link">cli::cli_alert_info()</a></code>. The <code>"{elements}"</code>
+object contains vector of theme elements that will be overwritten and ignored.</p></dd>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -188,16 +197,11 @@ personal style.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D.
-Sjoberg</a>, Michael Curry,
-<a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>,
-<a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa
-Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>

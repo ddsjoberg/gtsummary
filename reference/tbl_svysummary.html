@@ -25,7 +25,7 @@ It is similar to tbl_summary()."><meta property="og:image" content="https://www.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
       </span>
     </div>
 
@@ -191,7 +191,8 @@ A statistic name that appears between curly brackets
 will be replaced with the numeric statistic (see <a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue</a>).</p>
 <p>For categorical variables the following statistics are available to display.</p><ul><li><p><code>{n}</code> frequency</p></li>
 <li><p><code>{N}</code> denominator, or cohort size</p></li>
-<li><p><code>{p}</code> formatted percentage</p></li>
+<li><p><code>{p}</code> percentage</p></li>
+<li><p><code>{p.std.error}</code> standard error of the sample proportion computed with <code><a href="https://rdrr.io/pkg/survey/man/surveysummary.html" class="external-link">survey::svymean()</a></code></p></li>
 <li><p><code>{n_unweighted}</code> unweighted frequency</p></li>
 <li><p><code>{N_unweighted}</code> unweighted denominator</p></li>
 <li><p><code>{p_unweighted}</code> unweighted formatted percentage</p></li>
@@ -309,16 +310,11 @@ of formulas (e.g. <code>statistic</code>, <code>type</code>, <code>digits</code>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D.
-Sjoberg</a>, Michael Curry,
-<a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>,
-<a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa
-Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer></div>
