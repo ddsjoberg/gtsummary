@@ -588,9 +588,10 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
       stat_display = stat_display,
       .keep = TRUE
     ) %>%
-    dplyr::mutate(variable = variable) %>%
+    dplyr::rename(any_of(c(by = by))) %>%
+    dplyr::mutate(variable = .env$variable) %>%
     dplyr::ungroup() %>%
-    dplyr::rename(any_of(c(by = by, variable_levels = variable)))
+    dplyr::rename(any_of(c(variable_levels = variable)))
 
   # replacing by variable with original (non-factor version)
   if (!is.null(by)) {
