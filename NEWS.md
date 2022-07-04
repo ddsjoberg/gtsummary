@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fixed bug when a column named `"variable"` was passed to `tbl_custom_summary(by=)`, which resulted in an error. (#1285)
+
 # gtsummary 1.6.1
 
 ### New Functionality
