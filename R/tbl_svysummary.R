@@ -33,6 +33,7 @@
 #' \itemize{
 #'   \item `{median}` median
 #'   \item `{mean}` mean
+#'   \item `{mean.std.error}` standard error of the sample mean computed with [survey::svymean()]
 #'   \item `{sd}` standard deviation
 #'   \item `{var}` variance
 #'   \item `{min}` minimum
@@ -535,6 +536,9 @@ compute_survey_stat <- function(data, variable, by, f) {
   if (f %in% c("var", "sd")) {
     fun <- survey::svyvar
   }
+  if (f == "mean.std.error") {
+    fun <- svymean.std.error
+  }
   if (f == "median") {
     fun <- svyquantile_version
     args$quantiles <- .5
@@ -701,6 +705,11 @@ svymin <- function(x, design, na.rm = FALSE, ...) {
 svymax <- function(x, design, na.rm = FALSE, ...) {
   x <- all.vars(x)
   max(design$variables[[x]], na.rm = na.rm)
+}
+
+# mean standard error
+svymean.std.error <- function(x, design, na.rm = FALSE, ...) {
+  survey::svymean(x = x, design = design, na.rm = na.rm, ...) %>% survey::SE()
 }
 
 # function chooses which quantile function to sue based on the survey pkg version
