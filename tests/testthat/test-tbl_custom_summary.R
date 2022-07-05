@@ -255,4 +255,24 @@ test_that("character summaries do not cause error", {
     NA
   )
 
+  # by variable can be named "variable"
+  expect_equal(
+    trial %>%
+      select(age, variable = trt) %>%
+      tbl_custom_summary(
+        by = "variable",
+        stat_fns = ~continuous_summary("age"),
+        statistic = ~"{mean} ({sd})"
+      ) %>%
+      as_tibble(),
+    trial %>%
+      select(age, trt) %>%
+      tbl_custom_summary(
+        by = "trt",
+        stat_fns = ~continuous_summary("age"),
+        statistic = ~"{mean} ({sd})"
+      ) %>%
+      as_tibble()
+  )
+
 })

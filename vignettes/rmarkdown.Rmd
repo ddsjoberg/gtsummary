@@ -47,8 +47,7 @@ list(
   dplyr::mutate(
     rating = dplyr::case_when(
       printer == "gt" & output == "HTML" ~ 1, # good output
-      printer == "gt" & output %in% c("PDF", "RTF") ~ 5, # under construction
-      printer == "gt" & output == "Word" ~ 4, # not supported
+      printer == "gt" & output %in% c("PDF", "RTF", "Word") ~ 5, # under construction
       printer == "kable" ~ 2, # ok output
       printer == "flextable" & output != "RTF" ~ 1, # good output
       printer == "flextable" & output == "RTF" ~ 4, # not supported

@@ -1,36 +1,49 @@
 # gtsummary (development version)
 
+* Added the standard error of means to the list of available statistics for continuous data summaries in `tbl_svysummary()`. (#1291)
+* Fixed bug when a column named `"variable"` was passed to `tbl_custom_summary(by=)`, which resulted in an error. (#1285)
+
+# gtsummary 1.6.1
+
+### New Functionality
+
 * Added the standard error of proportions to the list of available statistics for categorical data summaries in `tbl_svysummary()`. (#1187)
 
 * Added Tarone-Ware test to `add_p.tbl_survfit()` (#732)
 
-* Improved error messages for paired tests in `add_p()` and `add_difference()` when `group=` argument is not specified. (#1273)
-
 * Updated `add_global_p()` to handle `tbl_uvregression()` objects where users specified the `x=` argument (when `y=` argument is more common). (#1260)
 
-* The checks for `"haven_labelled"` class are now only performed for the variables indicated in `include=` and `by=` in `tbl_summary()` and `tbl_svysummary()`. The checks in `tbl_uvregression()` and `tbl_survfit.data.frame()` are only applied to the variables in `include=`, e.g. no checking for the outcome variable(s).
+### Other Updates
+
+* Updated start-up messaging. (#1228)
+
+* The `paired.wilcox.test` available in `add_p.tbl_summary()` and `add_difference.tbl_summary()` was mistakenly marked as returning a difference, but it does not. The documentation has been corrected, which results in improved messaging to the user when the test is selected in `add_difference()`. (#1279)
+
+* Improved error messages for paired tests in `add_p()` and `add_difference()` when `group=` argument is not specified. (#1273)
 
 * Added argument `with_gtsummary_theme(msg_ignored_elements=)` argument. Use this argument to message users if any theme elements will be overwritten and therefore ignored inside the `with_gtsummary_theme()` call. (#1266)
 
 * Swapped `gt::fmt_missing()` for `gt::sub_missing()` as the former is now deprecated. (#1257)
 
+* The checks for `"haven_labelled"` class are now only performed for the variables indicated in `include=` and `by=` in `tbl_summary()` and `tbl_svysummary()`. The checks in `tbl_uvregression()` and `tbl_survfit.data.frame()` are only applied to the variables in `include=`, e.g. no checking for the outcome variable(s).
+
 * Updates to labels and default formatting functions of unweighted statistics presented in `tbl_svysummary()`. (#1253)
 
 * Adding additional structural checks in `tbl_merge()` and `inline_text()` to provide better error messaging. (#1248)
 
-* The experimental support for `ftExtra::colformat_md()` in `as_flex_table()` has been removed. The function requires evaluated YAML paths and does not allow un-evaluated references like ``bibliography:: "`r here::here()`"``. (#1229)
-
 * Added `tbl_regression.crr()` method with messaging recommending use of `tidycmprsk::crr()` instead. (#1237)
+
+* The experimental support for `ftExtra::colformat_md()` in `as_flex_table()` has been removed. The function requires evaluated YAML paths and does not allow un-evaluated references like ``bibliography:: "`r here::here()`"``. (#1229)
 
 * Update for `tbl_summary(by=)` that now allows for a column named `"variable"` to be passed. (#1234)
 
-* Fix in `as_kable_extra()` when output format is `'latex'` where a cell that had been bold or italicized had special characters double-escaped. Added a condition not to escape special characters in these styled cells. (#1230)
-
 * Added theme element to control what missing statistic is shown in summary tables with options to display number or percent missing or non-missing or total number of observations. (#1224)
 
-* Updated start-up messaging. (#1228)
-
 * Renamed `modify_cols_merge()` to `modify_column_merge()` to be inline with the other `modify_column_*()` functions.
+
+### Bug Fixes
+
+* Fix in `as_kable_extra()` when output format is `'latex'` where a cell that had been bold or italicized had special characters double-escaped. Added a condition not to escape special characters in these styled cells. (#1230)
 
 * Fix in `with_gtsummary_theme()`. The function restored any previously set theme, but inadvertently included the temporary theme along with it.
 

@@ -81,7 +81,6 @@ calculate a p-value from \code{t.test()} assuming equal variance, use
    \strong{alias} \tab \strong{description} \tab \strong{difference statistic} \tab \strong{pseudo-code} \tab \strong{details} \cr
    \code{"t.test"} \tab t-test \tab mean difference \tab \code{t.test(variable ~ as.factor(by), data = data, conf.level = 0.95, ...)} \tab  \cr
    \code{"paired.t.test"} \tab Paired t-test \tab mean difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); t.test(by_1, by_2, paired = TRUE, conf.level = 0.95, ...)} \tab  \cr
-   \code{"paired.wilcox.test"} \tab Paired Wilcoxon rank-sum test \tab rate difference \tab \verb{tidyr::pivot_wider(id_cols = group, ...); wilcox.test(by_1, by_2, paired = TRUE, conf.int = TRUE, conf.level = 0.95, ...)} \tab  \cr
    \code{"prop.test"} \tab Test for equality of proportions \tab rate difference \tab \code{prop.test(x, n, conf.level = 0.95, ...)} \tab  \cr
    \code{"ancova"} \tab ANCOVA \tab mean difference \tab \code{lm(variable ~ by + adj.vars)} \tab  \cr
    \code{"ancova_lme4"} \tab ANCOVA with random intercept \tab mean difference \tab \verb{lme4::lmer(variable ~ by + adj.vars + (1 \\UFF5C group), data)} \tab  \cr
