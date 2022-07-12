@@ -40,7 +40,7 @@ remotes::install_github("malcolmbarrett/causalworkshop")
 # causalworkshop::install_workshop()
 ```
 
-```{r trial, echo = FALSE}
+```{r setup, echo = FALSE}
 library(gtsummary)
 library(tidyverse)
 
@@ -62,7 +62,7 @@ nhefs <-
   ) %>%
   select(seqn, qsmk, sbp, dbp, sex, age, race, wt71, 
          smokeyrs, exercise, wt82_71, os.yrs, death) %>%
-  drop_na() %>%
+  #drop_na() %>%
   labelled::set_variable_labels(
     sbp = "Systolic Blood Pressure",
     dbp = "Diastolic Blood Pressure",
@@ -124,11 +124,20 @@ pre.SMD <-
 Logistic regression model is the most common method to construct the propensity score to predict the probability of receiving the treatment
 
 ```{r PSscore }
+#Make a complete case data on the baseline variables
+nhefs.final <- nhefs %>%
+  # select only matching variables and not the outcomes
+  dplyr::select(-c(os.yrs,death,wt82_71)) %>%
+  # Exclude rows with NA
+  na.omit() %>%
+  # merge outcomes
+  left_join(., nhefs %>% select(seqn, os.yrs,death,wt82_71), 
+            by = "seqn") 
 # Construct PS model
 mod_ps <- 
   glm(
     qsmk ~ sbp + dbp + sex + age + race + wt71 + smokeyrs + exercise,
-    data = nhefs, 
+    data = nhefs.final, 
     family = binomial
   )
 
@@ -141,11 +150,11 @@ mod_ps %>%
 prs_df <- 
   glm(
     qsmk ~ sbp + dbp + sex + age + race + wt71 + smokeyrs + exercise,
-    data = nhefs, 
+    data = nhefs.final, 
     family = binomial
   ) %>%
   ## obtained the estimated PS
-  broom::augment(type.predict = "response", data = nhefs) %>%
+  broom::augment(type.predict = "response", data = nhefs.final) %>%
   rename(ps_score = .fitted)
 
 # mirrored histograms
@@ -179,7 +188,7 @@ Caliper is the actual maximum distance allowed by the matching algorithm. It is 
 matchdat <-
   MatchIt::matchit(
     qsmk ~ sbp + dbp + sex + age + race + wt71 + smokeyrs + exercise,
-    data = prs_df,
+    data = nhefs.final,
     method = "nearest",
     distance = "glm",
     link = "logit",
@@ -266,7 +275,7 @@ ggplot(
 ```
 
 
-### Additional ways to check balance
+### Additional ways to summarize matching
 ```{r}
 a <- summary(matchdat)
 
@@ -298,7 +307,7 @@ df.nm <-
   ) %>% 
   select(seqn, qsmk.x, ps_score, group)
 
-# HIstogram
+# Overlapped histograms
 ggplot() +
   geom_histogram(data = subset(df.nm, qsmk.x == 1), aes(ps_score, y = ..count..)) +
   geom_histogram(data = subset(df.nm, qsmk.x == 1 & group == "matched Treated"), aes(ps_score, fill = "Actual quitted smoking: Yes", y = ..count..)) +
@@ -309,7 +318,7 @@ ggplot() +
   scale_y_continuous(breaks = c(-250, -200, -150, -100, -50, 0, 50, 100, 150, 200, 250), labels = c("250", "200", "150", "100", "50", "0", "50", "100", "150", "200", "250"))
 ```
 
-Mirrored histogramsagain is helpful to view the distribution of PS for the matched (colored) and unmatched (gray) of the control and treated groups.  This is a helpful visualtizaion to show if the  unmatched were very different between cases and controls
+Mirrored histograms again are helpful to view the distribution of PS for the matched (colored) and unmatched (gray) of the control and treated groups.  This is a helpful visualization to show if the  unmatched were very different between cases and controls
 
 
 
@@ -341,8 +350,8 @@ Use `svydesign` to specify the matching weights
 library(Matching)
 
 ## Using the complete case data and fitted propensity model constructed above
-dat <- df.ps # Quit Smoke is 1
-psModel <- m_ps
+dat <- nhefs.final # Quit Smoke is 1
+psModel <- mod_ps
 
 
 ## Predicted probability of being assigned to group1
@@ -452,7 +461,7 @@ tbl_merge(list(coxMatchedclust, coxMatchedfrail),
 
 #### Continuous outcome
 ```{r}
-glmWeighted1 <- svyglm(wt82_71 ~ qsmk,
+glmWeighted1 <- survey::svyglm(wt82_71 ~ qsmk,
                        family = gaussian(link = "identity"),
                        design = datSvy
 )
@@ -465,7 +474,7 @@ lmtest::coeftest(glmWeighted1, cluster = ~subclass)
 
 #### Binary outcome
 ```{r}
-glmWeighted <- svyglm(death ~ qsmk,
+glmWeighted <- survey::svyglm(death ~ qsmk,
                       family = quasibinomial(),
                       design = datSvy
 )
@@ -476,7 +485,7 @@ tbl_regression(glmWeighted, exponentiate = TRUE)
 
 #### Survival outcome
 ```{r}
-coxWeighted <- svycoxph(Surv(os.yrs, death) ~ qsmk,
+coxWeighted <- survey::svycoxph(Surv(os.yrs, death) ~ qsmk,
                         design = datSvy
 )
 
@@ -487,7 +496,7 @@ tbl_regression(coxWeighted, exponentiate = TRUE)
 
 
 ## Conclusions
-Matching often involves a tradeoff among balance, generalization, and sample size. The main advantage of the propensity score matching is it allows the researchers to design and estimate the average treatment effect in the treated from observational or nonrandomized study by forming balanced matched pairs that share the similarly value of the propensity score and minimizing the effect of confounding due to non-random allocation of treatment. However, some concerns of PSM includes but not limited to 1) requires large samples with substantial overlap in PS between treated and control; 2) More tweaking is needed by user to achieve balance; 3) PSM can only accounts for observed (observable) covariates and not latent characteristics. 
+Matching often involves a trade-off among balance, generalization, and sample size. The main advantage of the propensity score matching is it allows the researchers to design and estimate the average treatment effect in the treated from observational or non-randomized study by forming balanced matched pairs that share the similarly value of the propensity score and minimizing the effect of confounding due to non-random allocation of treatment. However, some concerns of PSM includes but not limited to 1) requires large samples with substantial overlap in PS between treated and control; 2) More tweaking is needed by user to achieve balance; 3) PSM can only accounts for observed (observable) covariates and not latent characteristics. 
 
-Matching weights can offer a more efficient estimation and more accurate variance calculation.  It achieves balance with little tweaking required by user. It uses data from all patients, with no exclusion due to difficulty of matching but patients at the extreme end of the PS spectrum are being downweighted and contribute very little to the final estimation.
+Matching weights can offer a more efficient estimation and more accurate variance calculation.  It achieves balance with little tweaking required by user. It uses data from all patients, with no exclusion due to difficulty of matching but patients at the extreme end of the PS spectrum are being down-weighted and contribute very little to the final estimation.
 Therefore, the matched sample is considered a pseudo-population where patients are only contributing a portion of their data.  This concept may be challenging to understand for investigators.
