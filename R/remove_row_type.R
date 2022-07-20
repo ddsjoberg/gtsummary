@@ -5,6 +5,8 @@
 #' @param x gtsummary object
 #' @param variables variables to to remove rows from. Default is `everything()`
 #' @param type type of row to remove. Must be one of
+#' @param level_value When `type='level'` you can specify the value of the level to remove.
+#' When `NULL` all levels are removed.
 #' `c("header", "reference", "missing")`
 #' @export
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
