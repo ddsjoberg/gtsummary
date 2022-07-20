@@ -25,11 +25,16 @@
 #'
 #' \if{html}{\figure{remove_row_type_ex1.png}{options: width=60\%}}
 remove_row_type <- function(x, variables = everything(),
-                            type = c("header", "reference", "missing")) {
+                            type = c("header", "reference", "missing", "level", "all"),
+                            level_value = NULL) {
   updated_call_list <- c(x$call_list, list(remove_row_type = match.call()))
   # check inputs ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
   type <- match.arg(type)
+
+  if (!is.null(level_value) && type != "level") {
+    cli::cli_inform("Argument {.code level_value} ignored when {.code type != 'level'}")
+  }
 
   # convert variables input to character variable names ------------------------
   variables <-
@@ -63,6 +68,23 @@ remove_row_type <- function(x, variables = everything(),
     lst_expr <- list(
       variables = "row_type",
       expr = expr(.data$row_type == "missing")
+    )
+  } else if (type == "level") {
+    if (!is.null(level_value)) {
+      lst_expr <- list(
+        variables = c("row_type", "label"),
+        expr = expr(.data$row_type == "level" & .data$label %in% level_value)
+        )
+    } else {
+      lst_expr <- list(
+        variables = "row_type",
+        expr = expr(.data$row_type == "level")
+        )
+    }
+  } else if (type == "all") {
+    lst_expr <- list(
+      variables = "variable",
+      expr = expr(!is.na(.data$variable))
     )
   }
 

@@ -7,7 +7,8 @@
 remove_row_type(
   x,
   variables = everything(),
-  type = c("header", "reference", "missing")
+  type = c("header", "reference", "missing", "level", "all"),
+  level_value = NULL
 )
 }
 \arguments{
