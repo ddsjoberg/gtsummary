@@ -57,4 +57,16 @@ test_that("no errors/warnings with standard use", {
     "Grade"
   )
 
+  expect_error(
+    trial %>%
+      tbl_summary(include = grade) %>%
+      remove_row_type(variable = grade, type = "level", level_value = 5)
+  )
+
+  expect_message(
+    trial %>%
+      tbl_summary(include = grade) %>%
+      remove_row_type(variable = grade, type = "header", level_value = "I")
+  )
+
 })

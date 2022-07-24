@@ -5,7 +5,7 @@
 #' @param x gtsummary object
 #' @param variables variables to to remove rows from. Default is `everything()`
 #' @param type type of row to remove. Must be one of
-#' @param level_value When `type='level'` you can specify the value of the level to remove.
+#' @param level_value When `type='level'` you can specify the *character* value of the level to remove.
 #' When `NULL` all levels are removed.
 #' `c("header", "reference", "missing")`
 #' @export
@@ -36,6 +36,9 @@ remove_row_type <- function(x, variables = everything(),
 
   if (!is.null(level_value) && type != "level") {
     cli::cli_inform("Argument {.code level_value} ignored when {.code type != 'level'}")
+  }
+  if (!is.null(level_value) && !is.character(level_value)) {
+    cli::cli_abort("The {.code level_value} argument must be class {.cls character}")
   }
 
   # convert variables input to character variable names ------------------------

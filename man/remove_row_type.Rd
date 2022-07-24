@@ -18,7 +18,7 @@ remove_row_type(
 
 \item{type}{type of row to remove. Must be one of}
 
-\item{level_value}{When \code{type='level'} you can specify the value of the level to remove.
+\item{level_value}{When \code{type='level'} you can specify the \emph{character} value of the level to remove.
 When \code{NULL} all levels are removed.
 \code{c("header", "reference", "missing")}}
 }
