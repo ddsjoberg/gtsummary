@@ -1,5 +1,6 @@
 # gtsummary (development version)
 
+* Added the standard error of means to the list of available statistics for continuous data summaries in `tbl_svysummary()`. (#1291)
 * Fixed bug when a column named `"variable"` was passed to `tbl_custom_summary(by=)`, which resulted in an error. (#1285)
 
 # gtsummary 1.6.1

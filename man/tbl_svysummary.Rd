@@ -108,6 +108,7 @@ For continuous variables the following statistics are available to display.
 \itemize{
 \item \code{{median}} median
 \item \code{{mean}} mean
+\item \code{{mean.std.error}} standard error of the sample mean computed with \code{\link[survey:surveysummary]{survey::svymean()}}
 \item \code{{sd}} standard deviation
 \item \code{{var}} variance
 \item \code{{min}} minimum
