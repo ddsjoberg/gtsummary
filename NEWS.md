@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* Added additional options to `remove_row_type(type = c("level", "all"))`.
+  - Use `type = "all"` to remove all rows associated with the variable(s) specified in `remove_row_type(variables=)`.
+  - Use `type = "level"` in conjunction with new argument `level_values=` to remove specified levels for a variable, or do not use the new argument to remove all levels for categorical variables.
+
 * Fixed bug when a column named `"variable"` was passed to `tbl_custom_summary(by=)`, which resulted in an error. (#1285)
 
 # gtsummary 1.6.1
