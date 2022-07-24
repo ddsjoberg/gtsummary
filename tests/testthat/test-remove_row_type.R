@@ -28,4 +28,33 @@ test_that("no errors/warnings with standard use", {
   )
 
   expect_error(remove_row_type(tbl_sum, type = "reference"))
+
+
+  expect_equal(
+    trial %>%
+      tbl_summary(include = c(age, grade)) %>%
+      remove_row_type(variable = grade, type = "all") %>%
+      purrr::pluck("table_body"),
+    trial %>%
+      tbl_summary(include = age) %>%
+      remove_row_type(variable = grade, type = "all") %>%
+      purrr::pluck("table_body")
+  )
+
+  expect_equal(
+    trial %>%
+      tbl_summary(include = grade) %>%
+      remove_row_type(variable = grade, type = "level", level_value = "I") %>%
+      purrr::pluck("table_body", "label"),
+    c("Grade", "II", "III")
+  )
+
+  expect_equal(
+    trial %>%
+      tbl_summary(include = grade) %>%
+      remove_row_type(variable = grade, type = "level") %>%
+      purrr::pluck("table_body", "label"),
+    "Grade"
+  )
+
 })
