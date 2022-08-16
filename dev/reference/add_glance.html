@@ -25,7 +25,7 @@ table source note (add_glance_source_note())."><meta property="og:image" content
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -99,61 +99,78 @@ table source note (<code>add_glance_source_note()</code>).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">add_glance_table</span><span class="op">(</span>
-  <span class="va">x</span>,
-  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
-  label <span class="op">=</span> <span class="cn">NULL</span>,
-  fmt_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  glance_fun <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">add_glance_source_note</span><span class="op">(</span>
-  <span class="va">x</span>,
-  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
-  label <span class="op">=</span> <span class="cn">NULL</span>,
-  fmt_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  glance_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span>,
-  sep1 <span class="op">=</span> <span class="st">" = "</span>,
-  sep2 <span class="op">=</span> <span class="st">"; "</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_glance_table</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fmt_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  glance_fun <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">add_glance_source_note</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fmt_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  glance_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span>,</span>
+<span>  sep1 <span class="op">=</span> <span class="st">" = "</span>,</span>
+<span>  sep2 <span class="op">=</span> <span class="st">"; "</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>'tbl_regression' object</p></dd>
+
+
 <dt>include</dt>
 <dd><p>list of statistics to include in output. Must be column
 names of the tibble returned by <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">broom::glance()</a></code>. The include argument
 can also be used to specify the order the statistics appear in the table.</p></dd>
+
+
 <dt>label</dt>
 <dd><p>List of formulas specifying statistic labels,
 e.g. <code>list(r.squared ~ "R2", p.value ~ "P")</code></p></dd>
+
+
 <dt>fmt_fun</dt>
 <dd><p>List of formulas where the LHS is a statistic and the RHS
 is a function to format/round the statistics. The default is to round
 the number of observations and degrees of freedom to the nearest integer,
 p-values are styled with <code><a href="style_pvalue.html">style_pvalue()</a></code> and the remaining statistics
 are styled with <code>style_sigfig(x, digits = 3)</code></p></dd>
+
+
 <dt>glance_fun</dt>
 <dd><p>function that returns model statistics. Default is
 <code><a href="https://generics.r-lib.org/reference/glance.html" class="external-link">broom::glance()</a></code> for most model obejcts, and
 <code>broom::glance(mice::pool())</code> for MICE 'mira' models.
 Custom functions must return a single row tibble.</p></dd>
+
+
 <dt>text_interpret</dt>
 <dd><p>String indicates whether source note text
 will be interpreted with
 <code><a href="https://gt.rstudio.com/reference/md.html" class="external-link">gt::md()</a></code> or <code><a href="https://gt.rstudio.com/reference/html.html" class="external-link">gt::html()</a></code>. Must be <code>"md"</code> (default) or <code>"html"</code>.</p></dd>
+
+
 <dt>sep1</dt>
 <dd><p>Separator between statistic name and statistic.
 Default is <code>" = "</code>, e.g. <code>"R2 = 0.456"</code></p></dd>
+
+
 <dt>sep2</dt>
 <dd><p>Separator between statistics. Default is <code>"; "</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>gtsummary table</p>
+    
+
+<p>gtsummary table</p>
     </div>
     <div id="default-labels">
     <h2>Default Labels</h2>
@@ -167,8 +184,9 @@ When there is no default, the column name from <code><a href="https://generics.r
 
 <p>When combining <code>add_glance_table()</code> with <code><a href="tbl_merge.html">tbl_merge()</a></code>, the
 ordering of the model terms and the glance statistics may become jumbled.
-To re-order the rows with glance statistics on bottom, use the script below:</p><div class="sourceCode r"><pre><code><span class="fu"><a href="../reference/tbl_merge.html">tbl_merge</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">tbl1</span>, <span class="va">tbl2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="../reference/modify_table_body.html">modify_table_body</a></span><span class="op">(</span><span class="op">~</span><span class="va">.x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">arrange</span><span class="op">(</span><span class="va">row_type</span> <span class="op">==</span> <span class="st">"glance_statistic"</span><span class="op">)</span><span class="op">)</span></code></pre><p></p></div>
+To re-order the rows with glance statistics on bottom, use the script below:</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/tbl_merge.html">tbl_merge</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">tbl1</span>, <span class="va">tbl2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/modify_table_body.html">modify_table_body</a></span><span class="op">(</span><span class="op">~</span><span class="va">.x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">arrange</span><span class="op">(</span><span class="va">row_type</span> <span class="op">==</span> <span class="st">"glance_statistic"</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div>
     </div>
     <div id="example-output">
     <h2>Example Output</h2>
@@ -186,25 +204,25 @@ To re-order the rows with glance statistics on bottom, use the script below:</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="va">add_glance_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">mod</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">add_glance_table</span><span class="op">(</span></span>
-<span class="r-in">    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sigma</span> <span class="op">~</span> <span class="st">"\U03C3"</span><span class="op">)</span>,</span>
-<span class="r-in">    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">r.squared</span>, <span class="va">AIC</span>, <span class="va">sigma</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
-<span class="r-in"><span class="va">add_glance_ex2</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">mod</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">add_glance_source_note</span><span class="op">(</span></span>
-<span class="r-in">    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sigma</span> <span class="op">~</span> <span class="st">"\U03C3"</span><span class="op">)</span>,</span>
-<span class="r-in">    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">r.squared</span>, <span class="va">AIC</span>, <span class="va">sigma</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="co"># }</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">add_glance_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">mod</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">add_glance_table</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sigma</span> <span class="op">~</span> <span class="st">"\U03C3"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">r.squared</span>, <span class="va">AIC</span>, <span class="va">sigma</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">add_glance_ex2</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">mod</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">add_glance_source_note</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sigma</span> <span class="op">~</span> <span class="st">"\U03C3"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">r.squared</span>, <span class="va">AIC</span>, <span class="va">sigma</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -219,7 +237,7 @@ To re-order the rows with glance statistics on bottom, use the script below:</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

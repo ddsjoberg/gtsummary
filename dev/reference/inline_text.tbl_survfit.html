@@ -27,7 +27,7 @@ inline_text vignette"><meta property="og:image" content="https://www.danieldsjob
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -103,42 +103,58 @@ inline reporting in an R markdown document. Detailed examples in the
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for tbl_survfit</span>
-<span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  variable <span class="op">=</span> <span class="cn">NULL</span>,
-  level <span class="op">=</span> <span class="cn">NULL</span>,
-  pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  time <span class="op">=</span> <span class="cn">NULL</span>,
-  prob <span class="op">=</span> <span class="cn">NULL</span>,
-  column <span class="op">=</span> <span class="cn">NULL</span>,
-  estimate_fun <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">estimate_fun</span>,
-  pvalue_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for tbl_survfit</span></span>
+<span><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  variable <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  level <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  prob <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  column <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  estimate_fun <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">inputs</span><span class="op">$</span><span class="va">estimate_fun</span>,</span>
+<span>  pvalue_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>Object created from  <a href="tbl_survfit.html">tbl_survfit</a></p></dd>
+
+
 <dt>variable</dt>
 <dd><p>Variable name of statistic to present.</p></dd>
+
+
 <dt>level</dt>
 <dd><p>Level of the variable to display for categorical variables.
 Can also specify the 'Unknown' row.  Default is <code>NULL</code></p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>String indicating the statistics to return.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>time for which to return survival probabilities.</p></dd>
+
+
 <dt>prob</dt>
 <dd><p>probability with values in (0,1)</p></dd>
+
+
 <dt>column</dt>
 <dd><p>column to print from <code>x$table_body</code>.
 Columns may be selected with <code>time=</code> or <code>prob=</code> as well.</p></dd>
+
+
 <dt>estimate_fun</dt>
 <dd><p>Function to round and format estimate and confidence limits.
 Default is the same function used in <code><a href="tbl_survfit.html">tbl_survfit()</a></code></p></dd>
+
+
 <dt>pvalue_fun</dt>
 <dd><p>Function to round and format p-values.
 Default is <a href="style_pvalue.html">style_pvalue</a>.
@@ -146,12 +162,17 @@ The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 <code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
 <code>purrr::partial(style_pvalue, digits = 2)</code>).</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Not used</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A string reporting results from a gtsummary table</p>
+    
+
+<p>A string reporting results from a gtsummary table</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -180,38 +201,38 @@ and return a string that is the rounded/formatted p-value (e.g.
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># fit survfit</span></span>
-<span class="r-in"><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span>, <span class="va">trial</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>, <span class="va">trial</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># sumarize survfit objects</span></span>
-<span class="r-in"><span class="va">tbl1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_survfit.html">tbl_survfit</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">fit1</span>,</span>
-<span class="r-in">    times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span><span class="op">)</span>,</span>
-<span class="r-in">    label <span class="op">=</span> <span class="st">"Treatment"</span>,</span>
-<span class="r-in">    label_header <span class="op">=</span> <span class="st">"**{time} Month**"</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># fit survfit</span></span></span>
+<span class="r-in"><span><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span>, <span class="va">trial</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>, <span class="va">trial</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># sumarize survfit objects</span></span></span>
+<span class="r-in"><span><span class="va">tbl1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_survfit.html">tbl_survfit</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">fit1</span>,</span></span>
+<span class="r-in"><span>    times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    label <span class="op">=</span> <span class="st">"Treatment"</span>,</span></span>
+<span class="r-in"><span>    label_header <span class="op">=</span> <span class="st">"**{time} Month**"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The `label` argument of `tbl_survfit()` is deprecated as of gtsummary 1.3.6.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> `label=` argument no longer accepts a single string. Pass formula list.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">tbl2</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_survfit.html">tbl_survfit</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">fit2</span>,</span>
-<span class="r-in">    probs <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span class="r-in">    label_header <span class="op">=</span> <span class="st">"**Median Survival**"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># report results inline</span></span>
-<span class="r-in"><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span><span class="va">tbl1</span>, time <span class="op">=</span> <span class="fl">24</span>, level <span class="op">=</span> <span class="st">"Drug B"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tbl2</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_survfit.html">tbl_survfit</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">fit2</span>,</span></span>
+<span class="r-in"><span>    probs <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>    label_header <span class="op">=</span> <span class="st">"**Median Survival**"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># report results inline</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span><span class="va">tbl1</span>, time <span class="op">=</span> <span class="fl">24</span>, level <span class="op">=</span> <span class="st">"Drug B"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "41% (33%, 52%)"</span>
-<span class="r-in"><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span><span class="va">tbl1</span>, column <span class="op">=</span> <span class="va">p.value</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span><span class="va">tbl1</span>, column <span class="op">=</span> <span class="va">p.value</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "p=0.2"</span>
-<span class="r-in"><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span><span class="va">tbl2</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span><span class="va">tbl2</span>, prob <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "22 (21, —)"</span>
 </code></pre></div>
     </div>
@@ -227,7 +248,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

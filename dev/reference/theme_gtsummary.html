@@ -28,7 +28,7 @@ for details."><meta property="og:image" content="https://www.danieldsjoberg.com/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -105,36 +105,36 @@ for details.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">theme_gtsummary_journal</span><span class="op">(</span>
-  journal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"jama"</span>, <span class="st">"lancet"</span>, <span class="st">"nejm"</span>, <span class="st">"qjecon"</span><span class="op">)</span>,
-  set_theme <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">theme_gtsummary_compact</span><span class="op">(</span>set_theme <span class="op">=</span> <span class="cn">TRUE</span>, font_size <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">theme_gtsummary_printer</span><span class="op">(</span>
-  print_engine <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gt"</span>, <span class="st">"kable"</span>, <span class="st">"kable_extra"</span>, <span class="st">"flextable"</span>, <span class="st">"huxtable"</span>, <span class="st">"tibble"</span><span class="op">)</span>,
-  set_theme <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">theme_gtsummary_language</span><span class="op">(</span>
-  language <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"de"</span>, <span class="st">"en"</span>, <span class="st">"es"</span>, <span class="st">"fr"</span>, <span class="st">"gu"</span>, <span class="st">"hi"</span>, <span class="st">"is"</span>, <span class="st">"ja"</span>, <span class="st">"kr"</span>, <span class="st">"mr"</span>, <span class="st">"no"</span>, <span class="st">"pt"</span>,
-    <span class="st">"se"</span>, <span class="st">"zh-cn"</span>, <span class="st">"zh-tw"</span><span class="op">)</span>,
-  decimal.mark <span class="op">=</span> <span class="cn">NULL</span>,
-  big.mark <span class="op">=</span> <span class="cn">NULL</span>,
-  iqr.sep <span class="op">=</span> <span class="cn">NULL</span>,
-  ci.sep <span class="op">=</span> <span class="cn">NULL</span>,
-  set_theme <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">theme_gtsummary_continuous2</span><span class="op">(</span>
-  statistic <span class="op">=</span> <span class="st">"{median} ({p25, {p75})"</span>,
-  set_theme <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span>
-
-<span class="fu">theme_gtsummary_mean_sd</span><span class="op">(</span>set_theme <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">theme_gtsummary_eda</span><span class="op">(</span>set_theme <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">theme_gtsummary_journal</span><span class="op">(</span></span>
+<span>  journal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"jama"</span>, <span class="st">"lancet"</span>, <span class="st">"nejm"</span>, <span class="st">"qjecon"</span><span class="op">)</span>,</span>
+<span>  set_theme <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">theme_gtsummary_compact</span><span class="op">(</span>set_theme <span class="op">=</span> <span class="cn">TRUE</span>, font_size <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">theme_gtsummary_printer</span><span class="op">(</span></span>
+<span>  print_engine <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gt"</span>, <span class="st">"kable"</span>, <span class="st">"kable_extra"</span>, <span class="st">"flextable"</span>, <span class="st">"huxtable"</span>, <span class="st">"tibble"</span><span class="op">)</span>,</span>
+<span>  set_theme <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">theme_gtsummary_language</span><span class="op">(</span></span>
+<span>  language <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"de"</span>, <span class="st">"en"</span>, <span class="st">"es"</span>, <span class="st">"fr"</span>, <span class="st">"gu"</span>, <span class="st">"hi"</span>, <span class="st">"is"</span>, <span class="st">"ja"</span>, <span class="st">"kr"</span>, <span class="st">"mr"</span>, <span class="st">"no"</span>, <span class="st">"pt"</span>,</span>
+<span>    <span class="st">"se"</span>, <span class="st">"zh-cn"</span>, <span class="st">"zh-tw"</span><span class="op">)</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  iqr.sep <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci.sep <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  set_theme <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">theme_gtsummary_continuous2</span><span class="op">(</span></span>
+<span>  statistic <span class="op">=</span> <span class="st">"{median} ({p25, {p75})"</span>,</span>
+<span>  set_theme <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">theme_gtsummary_mean_sd</span><span class="op">(</span>set_theme <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">theme_gtsummary_eda</span><span class="op">(</span>set_theme <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -142,15 +142,23 @@ for details.</p>
     <dl><dt>journal</dt>
 <dd><p>String indicating the journal theme to follow. One of
 <code>c("jama", "lancet", "nejm", "qjecon")</code>. Details below.</p></dd>
+
+
 <dt>set_theme</dt>
 <dd><p>Logical indicating whether to set the theme. Default is <code>TRUE</code>.
 When <code>FALSE</code> the named list of theme elements is returned invisibly</p></dd>
+
+
 <dt>font_size</dt>
 <dd><p>Numeric font size for compact theme.
 Default is 13 for gt tables, and 8 for all other output types</p></dd>
+
+
 <dt>print_engine</dt>
 <dd><p>String indicating the print method. Must be one of
 <code>"gt"</code>, <code>"kable"</code>, <code>"kable_extra"</code>, <code>"flextable"</code>, <code>"tibble"</code></p></dd>
+
+
 <dt>language</dt>
 <dd><p>String indicating language. Must be one of <code>"de"</code> (German),
 <code>"en"</code> (English), <code>"es"</code> (Spanish), <code>"fr"</code> (French), <code>"gu"</code> (Gujarati),
@@ -160,25 +168,36 @@ Default is 13 for gt tables, and 8 for all other output types</p></dd>
 <p>If a language is missing a translation for a word or phrase, please feel free
 to reach out on <a href="https://github.com/ddsjoberg/gtsummary/issues" class="external-link">GitHub</a>
 with the translated text!</p></dd>
+
+
 <dt>decimal.mark</dt>
 <dd><p>The character to be used to indicate the numeric decimal point.
 Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
+
+
 <dt>big.mark</dt>
 <dd><p>Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is <code>","</code>, except when <code>decimal.mark = ","</code> when the default is a space.</p></dd>
+
+
 <dt>iqr.sep</dt>
 <dd><p>string indicating separator for the default IQR in <code><a href="tbl_summary.html">tbl_summary()</a></code>.
 If <code>decimal.mark=</code> is NULL, <code>iqr.sep=</code> is <code>", "</code>. The comma
 separator, however, can look odd when <code>decimal.mark = ","</code>. In this case the argument
 will default to an en dash</p></dd>
+
+
 <dt>ci.sep</dt>
 <dd><p>string indicating separator for confidence intervals.
 If <code>decimal.mark=</code> is NULL, <code>ci.sep=</code> is <code>", "</code>. The comma
 separator, however, can look odd when <code>decimal.mark = ","</code>. In this case the argument
 will default to an en dash</p></dd>
+
+
 <dt>statistic</dt>
 <dd><p>Default statistic continuous variables</p></dd>
+
 </dl></div>
     <div id="themes">
     <h2>Themes</h2>
@@ -229,21 +248,21 @@ to create your own themes.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Setting JAMA theme for gtsummary</span></span>
-<span class="r-in"><span class="fu">theme_gtsummary_journal</span><span class="op">(</span><span class="st">"jama"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Setting JAMA theme for gtsummary</span></span></span>
+<span class="r-in"><span><span class="fu">theme_gtsummary_journal</span><span class="op">(</span><span class="st">"jama"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Setting theme `JAMA`</span>
-<span class="r-in"><span class="co"># Themes can be combined by including more than one</span></span>
-<span class="r-in"><span class="fu">theme_gtsummary_compact</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="co"># Themes can be combined by including more than one</span></span></span>
+<span class="r-in"><span><span class="fu">theme_gtsummary_compact</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Setting theme `Compact`</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">set_gtsummary_theme_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># reset gtsummary themes</span></span>
-<span class="r-in"><span class="fu"><a href="set_gtsummary_theme.html">reset_gtsummary_theme</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">set_gtsummary_theme_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># reset gtsummary themes</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="set_gtsummary_theme.html">reset_gtsummary_theme</a></span><span class="op">(</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -258,7 +277,7 @@ to create your own themes.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

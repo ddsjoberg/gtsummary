@@ -25,7 +25,7 @@ Output from tbl_regression and tbl_uvregression objects supported."><meta proper
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -99,48 +99,58 @@ Output from <code>tbl_regression</code> and <code>tbl_uvregression</code> object
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">add_global_p</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for tbl_regression</span>
-<span class="fu">add_global_p</span><span class="op">(</span>
-  <span class="va">x</span>,
-  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
-  type <span class="op">=</span> <span class="cn">NULL</span>,
-  keep <span class="op">=</span> <span class="cn">FALSE</span>,
-  anova_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  quiet <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  terms <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for tbl_uvregression</span>
-<span class="fu">add_global_p</span><span class="op">(</span>
-  <span class="va">x</span>,
-  type <span class="op">=</span> <span class="cn">NULL</span>,
-  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
-  keep <span class="op">=</span> <span class="cn">FALSE</span>,
-  anova_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  quiet <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_global_p</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for tbl_regression</span></span>
+<span><span class="fu">add_global_p</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  keep <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  anova_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  terms <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for tbl_uvregression</span></span>
+<span><span class="fu">add_global_p</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  keep <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  anova_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>Object with class <code>'tbl_regression'</code> or <code>'tbl_uvregression'</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments to be passed to <code><a href="https://rdrr.io/pkg/car/man/Anova.html" class="external-link">car::Anova</a></code>,
 <code><a href="https://rdrr.io/pkg/aod/man/wald.test.html" class="external-link">aod::wald.test()</a></code> or <code>anova_fun</code> (if specified)</p></dd>
+
+
 <dt>include</dt>
 <dd><p>Variables to calculate global p-value for. Input may be a vector of
 quoted or unquoted variable names. Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything()</a></code></p></dd>
+
+
 <dt>type</dt>
 <dd><p>Type argument passed to <code>car::Anova(type=)</code>. Default is <code>"III"</code></p></dd>
+
+
 <dt>keep</dt>
 <dd><p>Logical argument indicating whether to also retain the individual
 p-values in the table output for each level of the categorical variable.
 Default is <code>FALSE</code>.</p></dd>
+
+
 <dt>anova_fun</dt>
 <dd><p>Function that will be used in place of <code><a href="https://rdrr.io/pkg/car/man/Anova.html" class="external-link">car::Anova()</a></code>
 when specified to calculate the global p-values.</p><ul><li><p>function must return a tibble matching the output of
@@ -150,11 +160,16 @@ when specified to calculate the global p-values.</p><ul><li><p>function must ret
 <li><p>the <code>add_global_p(type=)</code> argument is <em>ignored</em> in <code>anova_fun=</code></p></li>
 <li><p>a common function used here is <code><a href="custom_tidiers.html">tidy_wald_test()</a></code>, a wrapper for <code><a href="https://rdrr.io/pkg/aod/man/wald.test.html" class="external-link">aod::wald.test()</a></code></p></li>
 </ul></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Logical indicating whether to print messages in console. Default is
 <code>FALSE</code></p></dd>
+
+
 <dt>terms</dt>
 <dd><p>DEPRECATED.  Use <code>include=</code> argument instead.</p></dd>
+
 </dl></div>
     <div id="example-output">
     <h2>Example Output</h2>
@@ -197,24 +212,24 @@ when specified to calculate the global p-values.</p><ul><li><p>function must ret
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="va">tbl_lm_global_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">marker</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">add_global_p</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
-<span class="r-in"><span class="va">tbl_uv_global_ex2</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"response"</span>, <span class="st">"trt"</span>, <span class="st">"age"</span>, <span class="st">"grade"</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_uvregression.html">tbl_uvregression</a></span><span class="op">(</span></span>
-<span class="r-in">    method <span class="op">=</span> <span class="va">glm</span>,</span>
-<span class="r-in">    y <span class="op">=</span> <span class="va">response</span>,</span>
-<span class="r-in">    method.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>,</span>
-<span class="r-in">    exponentiate <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">add_global_p</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># }</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">tbl_lm_global_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">marker</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">add_global_p</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">tbl_uv_global_ex2</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"response"</span>, <span class="st">"trt"</span>, <span class="st">"age"</span>, <span class="st">"grade"</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_uvregression.html">tbl_uvregression</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    method <span class="op">=</span> <span class="va">glm</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="va">response</span>,</span></span>
+<span class="r-in"><span>    method.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    exponentiate <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">add_global_p</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -229,7 +244,7 @@ when specified to calculate the global p-values.</p><ul><li><p>function must ret
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

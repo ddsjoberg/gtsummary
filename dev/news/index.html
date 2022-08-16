@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -91,7 +91,45 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li>Fix in <code><a href="../reference/set_gtsummary_theme.html">with_gtsummary_theme()</a></code>. The function restored any previously set theme, but inadvertently included the temporary theme along with it.</li></ul></div>
+<ul><li>
+<p>Added additional options to <code>remove_row_type(type = c("level", "all"))</code>.</p>
+<ul><li>Use <code>type = "all"</code> to remove all rows associated with the variable(s) specified in <code>remove_row_type(variables=)</code>.</li>
+<li>Use <code>type = "level"</code> in conjunction with new argument <code>level_values=</code> to remove specified levels for a variable, or do not use the new argument to remove all levels for categorical variables.</li>
+</ul></li>
+<li><p>Added the standard error of means to the list of available statistics for continuous data summaries in <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1291" class="external-link">#1291</a>)</p></li>
+<li><p>Fixed bug when a column named <code>"variable"</code> was passed to <code>tbl_custom_summary(by=)</code>, which resulted in an error. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1285" class="external-link">#1285</a>)</p></li>
+<li><p>Updated calls to <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">round()</a></code> in the <code>style_*()</code> functions to <code>round2()</code>, which implements classic rounding rules. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1304" class="external-link">#1304</a>)</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.6.1" id="gtsummary-161">gtsummary 1.6.1<small>2022-06-22</small><a class="anchor" aria-label="anchor" href="#gtsummary-161"></a></h2>
+<div class="section level4">
+<h4 id="new-functionality-1-6-1">New Functionality<a class="anchor" aria-label="anchor" href="#new-functionality-1-6-1"></a></h4>
+<ul><li><p>Added the standard error of proportions to the list of available statistics for categorical data summaries in <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1187" class="external-link">#1187</a>)</p></li>
+<li><p>Added Tarone-Ware test to <code><a href="../reference/add_p.tbl_survfit.html">add_p.tbl_survfit()</a></code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/732" class="external-link">#732</a>)</p></li>
+<li><p>Updated <code><a href="../reference/add_global_p.html">add_global_p()</a></code> to handle <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> objects where users specified the <code>x=</code> argument (when <code>y=</code> argument is more common). (<a href="https://github.com/ddsjoberg/gtsummary/issues/1260" class="external-link">#1260</a>)</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="other-updates-1-6-1">Other Updates<a class="anchor" aria-label="anchor" href="#other-updates-1-6-1"></a></h4>
+<ul><li><p>Updated start-up messaging. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1228" class="external-link">#1228</a>)</p></li>
+<li><p>The <code>paired.wilcox.test</code> available in <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code> and <code>add_difference.tbl_summary()</code> was mistakenly marked as returning a difference, but it does not. The documentation has been corrected, which results in improved messaging to the user when the test is selected in <code><a href="../reference/add_difference.html">add_difference()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1279" class="external-link">#1279</a>)</p></li>
+<li><p>Improved error messages for paired tests in <code><a href="../reference/add_p.html">add_p()</a></code> and <code><a href="../reference/add_difference.html">add_difference()</a></code> when <code>group=</code> argument is not specified. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1273" class="external-link">#1273</a>)</p></li>
+<li><p>Added argument <code>with_gtsummary_theme(msg_ignored_elements=)</code> argument. Use this argument to message users if any theme elements will be overwritten and therefore ignored inside the <code><a href="../reference/set_gtsummary_theme.html">with_gtsummary_theme()</a></code> call. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1266" class="external-link">#1266</a>)</p></li>
+<li><p>Swapped <code><a href="https://gt.rstudio.com/reference/fmt_missing.html" class="external-link">gt::fmt_missing()</a></code> for <code><a href="https://gt.rstudio.com/reference/sub_missing.html" class="external-link">gt::sub_missing()</a></code> as the former is now deprecated. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1257" class="external-link">#1257</a>)</p></li>
+<li><p>The checks for <code>"haven_labelled"</code> class are now only performed for the variables indicated in <code>include=</code> and <code>by=</code> in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. The checks in <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> and <code><a href="../reference/tbl_survfit.html">tbl_survfit.data.frame()</a></code> are only applied to the variables in <code>include=</code>, e.g. no checking for the outcome variable(s).</p></li>
+<li><p>Updates to labels and default formatting functions of unweighted statistics presented in <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1253" class="external-link">#1253</a>)</p></li>
+<li><p>Adding additional structural checks in <code><a href="../reference/tbl_merge.html">tbl_merge()</a></code> and <code><a href="../reference/inline_text.html">inline_text()</a></code> to provide better error messaging. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1248" class="external-link">#1248</a>)</p></li>
+<li><p>Added <code><a href="../reference/tbl_regression_methods.html">tbl_regression.crr()</a></code> method with messaging recommending use of <code><a href="https://mskcc-epi-bio.github.io/tidycmprsk/reference/crr.html" class="external-link">tidycmprsk::crr()</a></code> instead. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1237" class="external-link">#1237</a>)</p></li>
+<li><p>The experimental support for <code>ftExtra::colformat_md()</code> in <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> has been removed. The function requires evaluated YAML paths and does not allow un-evaluated references like <code>bibliography:: "`r here::here()`"</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1229" class="external-link">#1229</a>)</p></li>
+<li><p>Update for <code>tbl_summary(by=)</code> that now allows for a column named <code>"variable"</code> to be passed. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1234" class="external-link">#1234</a>)</p></li>
+<li><p>Added theme element to control what missing statistic is shown in summary tables with options to display number or percent missing or non-missing or total number of observations. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1224" class="external-link">#1224</a>)</p></li>
+<li><p>Renamed <code><a href="../reference/deprecated.html">modify_cols_merge()</a></code> to <code><a href="../reference/modify_column_merge.html">modify_column_merge()</a></code> to be inline with the other <code>modify_column_*()</code> functions.</p></li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-1-6-1">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-6-1"></a></h4>
+<ul><li><p>Fix in <code><a href="../reference/as_kable_extra.html">as_kable_extra()</a></code> when output format is <code>'latex'</code> where a cell that had been bold or italicized had special characters double-escaped. Added a condition not to escape special characters in these styled cells. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1230" class="external-link">#1230</a>)</p></li>
+<li><p>Fix in <code><a href="../reference/set_gtsummary_theme.html">with_gtsummary_theme()</a></code>. The function restored any previously set theme, but inadvertently included the temporary theme along with it.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6.0" id="gtsummary-160">gtsummary 1.6.0<small>2022-04-25</small><a class="anchor" aria-label="anchor" href="#gtsummary-160"></a></h2>
 <div class="section level4">
@@ -259,7 +297,7 @@
 <p>New function <code><a href="../reference/tbl_custom_summary.html">tbl_custom_summary()</a></code> allowing to create a table of summary statistics using a custom summary function (<a href="https://github.com/ddsjoberg/gtsummary/issues/973" class="external-link">#973</a>, <a href="https://github.com/ddsjoberg/gtsummary/issues/976" class="external-link">#976</a>)</p>
 <ul><li>Set of helpers to be used with <code><a href="../reference/tbl_custom_summary.html">tbl_custom_summary()</a></code>: <code><a href="../reference/continuous_summary.html">continuous_summary()</a></code>, <code><a href="../reference/proportion_summary.html">proportion_summary()</a></code>, <code><a href="../reference/ratio_summary.html">ratio_summary()</a></code>
 </li></ul></li>
-<li><p>New function <code><a href="../reference/modify_cols_merge.html">modify_cols_merge()</a></code> that can merge two or more columns in a {gtsummary} table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/939" class="external-link">#939</a>)</p></li>
+<li><p>New function <code><a href="../reference/deprecated.html">modify_cols_merge()</a></code> that can merge two or more columns in a {gtsummary} table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/939" class="external-link">#939</a>)</p></li>
 <li><p>Added function <code><a href="../reference/tbl_butcher.html">tbl_butcher()</a></code> to reduce the size of a {gtsummary} table. After an object has been butchered, other {gtsummary} functions may not be able to execute on the object.</p></li>
 <li><p>Added new function <code><a href="../reference/custom_tidiers.html">tidy_robust()</a></code> that will add robust standard errors, confidence intervals, and p-values with <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. The function is a wrapper for <code>parameters::model_paramters()</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/979" class="external-link">#979</a>)</p></li>
 </ul></div>
@@ -651,18 +689,18 @@
 <h4 id="syntax-1-2-5">Syntax<a class="anchor" aria-label="anchor" href="#syntax-1-2-5"></a></h4>
 <ul><li>
 <p>Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers. When passing a single variable, the <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> function wrapper is no longer required. (<a href="https://github.com/ddsjoberg/gtsummary/issues/250" class="external-link">#250</a>)</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> age <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="st">"age"</span> <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">c</span>(<span class="st">"age"</span>, <span class="st">"trt"</span>) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">c</span>(age, trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">vars</span>(age, trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">vars</span>(<span class="kw">everything</span>(), <span class="op">-</span>age, <span class="op">-</span>trt) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a>age_column =<span class="st"> "age"</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> age_column <span class="op">~</span><span class="st"> "NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">tbl_summary</span>(trial, <span class="dt">label =</span> <span class="kw">vars</span>(age_column) <span class="op">~</span><span class="st"> "NEW LABEL"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11"></a></span>
-<span id="cb1-12"><a href="#cb1-12"></a>purrr<span class="op">::</span><span class="kw">map</span>(<span class="kw">c</span>(<span class="st">"trt"</span>, <span class="st">"grade"</span>), <span class="op">~</span><span class="kw">tbl_summary</span>(trial, <span class="dt">by =</span> .x))</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> age <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="st">"age"</span> <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"trt"</span>) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">c</span>(age, trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(age, trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(<span class="fu">everything</span>(), <span class="sc">-</span>age, <span class="sc">-</span>trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>age_column <span class="ot">=</span> <span class="st">"age"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> age_column <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(age_column) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">map</span>(<span class="fu">c</span>(<span class="st">"trt"</span>, <span class="st">"grade"</span>), <span class="sc">~</span><span class="fu">tbl_summary</span>(trial, <span class="at">by =</span> .x))</span></code></pre></div>
 </li>
 <li><p>Updated <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> to allow flexible tidyselect inputs and improved error messaging for arguments <code>x</code> and <code>y</code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/249" class="external-link">#249</a>)</p></li>
 <li><p>After the input updates in <a href="https://github.com/ddsjoberg/gtsummary/issues/250" class="external-link">#250</a>, the <code>exclude=</code> argument appearing in <code><a href="../reference/add_p.html">add_p()</a></code>, <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>, <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, <code><a href="../reference/as_gt.html">as_gt()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, and <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble()</a></code> was redundant. The <code>exclude=</code> argument is now deprecated. Use <code>include=</code> instead, with tidyselect syntax. (<a href="https://github.com/ddsjoberg/gtsummary/issues/331" class="external-link">#331</a>)</p></li>
@@ -754,12 +792,12 @@
 <li><p>The function <code><a href="../reference/as_gt.html">as_gt()</a></code> now has <code>include =</code> and <code>exclude =</code> arguments</p></li>
 <li><p>Updated some function names to be the same as they were in the first version</p></li>
 </ul><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-    <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span><span class="op">(</span><span class="op">)</span>            <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_p</span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_labels</span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_levels</span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu">tab_style_italicize_labels</span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu">tab_style_italicize_levels</span><span class="op">(</span><span class="op">)</span>  </code></pre></div>
+<code class="sourceCode R"><span></span>
+<span>    <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span><span class="op">(</span><span class="op">)</span>            <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_p</span><span class="op">(</span><span class="op">)</span>  </span>
+<span>    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_labels</span><span class="op">(</span><span class="op">)</span>  </span>
+<span>    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_levels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_levels</span><span class="op">(</span><span class="op">)</span>  </span>
+<span>    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_labels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu">tab_style_italicize_labels</span><span class="op">(</span><span class="op">)</span>  </span>
+<span>    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">italicize_levels</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu">tab_style_italicize_levels</span><span class="op">(</span><span class="op">)</span>  </span></code></pre></div>
 <ul><li><p>Passing named lists in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> is now defunct.</p></li>
 <li><p><code><a href="../reference/tbl_stack.html">tbl_stack()</a></code> fix for <code>tbl_uvregression</code> objects (<a href="https://github.com/ddsjoberg/gtsummary/issues/175" class="external-link">#175</a>)</p></li>
 <li><p>Option to exclude some variables from testing when using <code><a href="../reference/add_p.html">add_p()</a></code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/164" class="external-link">#164</a>)</p></li>
@@ -790,19 +828,19 @@
 <div class="section level4">
 <h4 id="updated-function-names-1-0-0">Updated Function Names<a class="anchor" aria-label="anchor" href="#updated-function-names-1-0-0"></a></h4>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-    <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">fmt_table1</span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span>    <span class="op">&lt;-</span>  <span class="fu">fmt_regression</span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu">fmt_uni_regression</span><span class="op">(</span><span class="op">)</span>  
-    <span class="fu"><a href="../reference/style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="op">)</span>      <span class="op">&lt;-</span>  <span class="fu">fmt_pvalue</span><span class="op">(</span><span class="op">)</span>  
-    <span class="va">style_percent</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_percent.html" class="external-link">fmt_percent</a></span><span class="op">(</span><span class="op">)</span>  
-    <span class="va">style_ratio</span>         <span class="op">&lt;-</span>  <span class="fu">fmt_beta</span><span class="op">(</span><span class="op">)</span>  </code></pre></div>
+<code class="sourceCode R"><span></span>
+<span>    <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">fmt_table1</span><span class="op">(</span><span class="op">)</span>  </span>
+<span>    <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span>    <span class="op">&lt;-</span>  <span class="fu">fmt_regression</span><span class="op">(</span><span class="op">)</span>  </span>
+<span>    <span class="fu"><a href="../reference/tbl_uvregression.html">tbl_uvregression</a></span><span class="op">(</span><span class="op">)</span>  <span class="op">&lt;-</span>  <span class="fu">fmt_uni_regression</span><span class="op">(</span><span class="op">)</span>  </span>
+<span>    <span class="fu"><a href="../reference/style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="op">)</span>      <span class="op">&lt;-</span>  <span class="fu">fmt_pvalue</span><span class="op">(</span><span class="op">)</span>  </span>
+<span>    <span class="va">style_percent</span>       <span class="op">&lt;-</span>  <span class="fu"><a href="https://gt.rstudio.com/reference/fmt_percent.html" class="external-link">fmt_percent</a></span><span class="op">(</span><span class="op">)</span>  </span>
+<span>    <span class="va">style_ratio</span>         <span class="op">&lt;-</span>  <span class="fu">fmt_beta</span><span class="op">(</span><span class="op">)</span>  </span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="new-functions-1-0-0">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-0-0"></a></h4>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>    <span class="kw">tbl_survival</span>()          <span class="kw">as_gt</span>()  </span>
-<span id="cb4-2"><a href="#cb4-2"></a>    <span class="kw">tbl_merge</span>()             <span class="kw">style_sigfig</span>()  </span>
-<span id="cb4-3"><a href="#cb4-3"></a>    <span class="kw">add_nevent</span>()            <span class="kw">gtsummary_logo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tbl_survival</span>()          <span class="fu">as_gt</span>()  </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tbl_merge</span>()             <span class="fu">style_sigfig</span>()  </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_nevent</span>()            <span class="fu">gtsummary_logo</span>()</span></code></pre></div>
 </div>
 </div>
     <div class="section level2">
@@ -823,7 +861,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

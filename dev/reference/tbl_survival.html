@@ -27,7 +27,7 @@ formatted summary of the results"><meta property="og:image" content="https://www
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -103,22 +103,22 @@ formatted summary of the results</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tbl_survival</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for survfit</span>
-<span class="fu">tbl_survival</span><span class="op">(</span>
-  <span class="va">x</span>,
-  times <span class="op">=</span> <span class="cn">NULL</span>,
-  probs <span class="op">=</span> <span class="cn">NULL</span>,
-  label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span>, <span class="st">"{time}"</span>, <span class="st">"{prob*100}%"</span><span class="op">)</span>,
-  level_label <span class="op">=</span> <span class="st">"{level}, N = {n}"</span>,
-  header_label <span class="op">=</span> <span class="cn">NULL</span>,
-  header_estimate <span class="op">=</span> <span class="cn">NULL</span>,
-  failure <span class="op">=</span> <span class="cn">FALSE</span>,
-  missing <span class="op">=</span> <span class="st">"-"</span>,
-  estimate_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tbl_survival</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for survfit</span></span>
+<span><span class="fu">tbl_survival</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  times <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  probs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">probs</span><span class="op">)</span>, <span class="st">"{time}"</span>, <span class="st">"{prob*100}%"</span><span class="op">)</span>,</span>
+<span>  level_label <span class="op">=</span> <span class="st">"{level}, N = {n}"</span>,</span>
+<span>  header_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  header_estimate <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  failure <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  missing <span class="op">=</span> <span class="st">"-"</span>,</span>
+<span>  estimate_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -127,18 +127,28 @@ formatted summary of the results</p>
 <dd><p>A survfit object with a no stratification
 (e.g. <code>survfit(Surv(ttdeath, death) ~ 1, trial)</code>), or a single stratifying
 variable (e.g. <code>survfit(Surv(ttdeath, death) ~ trt, trial)</code>)</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Not used</p></dd>
+
+
 <dt>times</dt>
 <dd><p>Numeric vector of times for which to return survival probabilities.</p></dd>
+
+
 <dt>probs</dt>
 <dd><p>Numeric vector of probabilities with values in (0,1)
 specifying the survival quantiles to return</p></dd>
+
+
 <dt>label</dt>
 <dd><p>String defining the label shown for the time or prob column.
 Default is <code>"{time}"</code> or <code>"{prob*100}%"</code>.  The input uses <a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue</a> notation to
 convert the string into a label.  A common label may be <code>"{time} Months"</code>, which
 would resolve to "6 Months" or "12 Months" depending on specified <code>times</code>.</p></dd>
+
+
 <dt>level_label</dt>
 <dd><p>Used when survival results are stratified.
 It is a string defining the label shown.  The input uses
@@ -146,25 +156,36 @@ It is a string defining the label shown.  The input uses
 The default is <code>"{level}, N = {n}"</code>.  Other information available to
 call are <code>'{n}'</code>, <code>'{level}'</code>, <code>'{n.event.tot}'</code>, <code>'{n.event.strata}'</code>, and
 <code>'{strata}'</code>. See below for details.</p></dd>
+
+
 <dt>header_label</dt>
 <dd><p>String to be displayed as column header.
 Default is <code>'**Time**'</code> when <code>time</code> is specified, and
 <code>'**Quantile**'</code> when <code>probs</code> is specified.</p></dd>
+
+
 <dt>header_estimate</dt>
 <dd><p>String to be displayed as column header of the Kaplan-Meier
 estimate.  Default is <code>'**Probability**'</code> when <code>time</code> is specified, and
 <code>'**Time**'</code> when <code>probs</code> is specified.</p></dd>
+
+
 <dt>failure</dt>
 <dd><p>Calculate failure probabilities rather than survival probabilities.
 Default is <code>FALSE</code>.  Does NOT apply to survival quantile requests</p></dd>
+
+
 <dt>missing</dt>
 <dd><p>String indicating what to replace missing confidence
 limits with in output.  Default is <code>missing = "-"</code></p></dd>
+
+
 <dt>estimate_fun</dt>
 <dd><p>Function used to format the estimate and confidence
 limits. The default is <code>style_percent(x, symbol = TRUE)</code> for survival
 probabilities, and
 <code>style_sigfig(x, digits = 3)</code> for time estimates.</p></dd>
+
 </dl></div>
 
   </div>
@@ -179,7 +200,7 @@ probabilities, and
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

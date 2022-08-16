@@ -25,7 +25,7 @@ Use modify_table_styling() instead."><meta property="og:image" content="https://
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -99,57 +99,84 @@ Use <code><a href="modify_table_styling.html">modify_table_styling()</a></code> 
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">modify_table_header</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">column</span>,
-  label <span class="op">=</span> <span class="cn">NULL</span>,
-  hide <span class="op">=</span> <span class="cn">NULL</span>,
-  align <span class="op">=</span> <span class="cn">NULL</span>,
-  missing_emdash <span class="op">=</span> <span class="cn">NULL</span>,
-  indent <span class="op">=</span> <span class="cn">NULL</span>,
-  text_interpret <span class="op">=</span> <span class="cn">NULL</span>,
-  bold <span class="op">=</span> <span class="cn">NULL</span>,
-  italic <span class="op">=</span> <span class="cn">NULL</span>,
-  fmt_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  footnote_abbrev <span class="op">=</span> <span class="cn">NULL</span>,
-  footnote <span class="op">=</span> <span class="cn">NULL</span>,
-  spanning_header <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">modify_table_header</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">column</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hide <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  align <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  missing_emdash <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  indent <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  text_interpret <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bold <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  italic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fmt_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  footnote_abbrev <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  footnote <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  spanning_header <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>gtsummary object</p></dd>
+
+
 <dt>column</dt>
 <dd><p>vector or selector of columns in <code>x$table_body</code></p></dd>
+
+
 <dt>label</dt>
 <dd><p>string of column label</p></dd>
+
+
 <dt>hide</dt>
 <dd><p>logical indicating whether to hide column from output</p></dd>
+
+
 <dt>align</dt>
 <dd><p>string indicating alignment of column, must be one of
 <code>c("left", "right", "center")</code></p></dd>
+
+
 <dt>missing_emdash</dt>
 <dd><p>string that evaluates to logical identifying rows to
 include em-dash for missing values, e.g. <code>"reference_row == TRUE"</code></p></dd>
+
+
 <dt>indent</dt>
 <dd><p>string that evaluates to logical identifying rows to indent</p></dd>
+
+
 <dt>text_interpret</dt>
 <dd><p>string, must be one of <code>"gt::md"</code> or <code>"gt::html"</code></p></dd>
+
+
 <dt>bold</dt>
 <dd><p>string that evaluates to logical identifying rows to bold</p></dd>
+
+
 <dt>italic</dt>
 <dd><p>string that evaluates to logical identifying rows to italicize</p></dd>
+
+
 <dt>fmt_fun</dt>
 <dd><p>function that formats the statistics in the column</p></dd>
+
+
 <dt>footnote_abbrev</dt>
 <dd><p>string with abbreviation definition, e.g.
 <code>"CI = Confidence Interval"</code></p></dd>
+
+
 <dt>footnote</dt>
 <dd><p>string with text for column footnote</p></dd>
+
+
 <dt>spanning_header</dt>
 <dd><p>string with text for spanning header</p></dd>
+
 </dl></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -168,7 +195,7 @@ include em-dash for missing values, e.g. <code>"reference_row == TRUE"</code></p
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

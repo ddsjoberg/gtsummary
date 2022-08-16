@@ -32,7 +32,7 @@ for detailed examples in the 'Advanced Customization' section."><meta property="
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -113,7 +113,7 @@ for detailed examples in the 'Advanced Customization' section.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">as_gt</span><span class="op">(</span><span class="va">x</span>, include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, return_calls <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span>, exclude <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_gt</span><span class="op">(</span><span class="va">x</span>, include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, return_calls <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span>, exclude <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -121,22 +121,33 @@ for detailed examples in the 'Advanced Customization' section.</p>
     <dl><dt>x</dt>
 <dd><p>Object created by a function from the gtsummary package
 (e.g. <a href="tbl_summary.html">tbl_summary</a> or <a href="tbl_regression.html">tbl_regression</a>)</p></dd>
+
+
 <dt>include</dt>
 <dd><p>Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
 Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything()</a></code>.</p></dd>
+
+
 <dt>return_calls</dt>
 <dd><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
 as a list of expressions.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Arguments passed on to <a href="https://gt.rstudio.com/reference/gt.html" class="external-link">gt::gt</a></p></dd>
+
+
 <dt>exclude</dt>
 <dd><p>DEPRECATED.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>gt_tbl</code> object</p>
+    
+
+<p>A <code>gt_tbl</code> object</p>
     </div>
     <div id="example-output">
     <h2>Example Output</h2>
@@ -161,10 +172,10 @@ as a list of expressions.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">as_gt_ex</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"trt"</span>, <span class="st">"age"</span>, <span class="st">"response"</span>, <span class="st">"grade"</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">as_gt</span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">as_gt_ex</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"trt"</span>, <span class="st">"age"</span>, <span class="st">"response"</span>, <span class="st">"grade"</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">as_gt</span><span class="op">(</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -179,7 +190,7 @@ as a list of expressions.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

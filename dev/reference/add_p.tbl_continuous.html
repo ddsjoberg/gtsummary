@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -95,28 +95,32 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for tbl_continuous</span>
-<span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  test <span class="op">=</span> <span class="cn">NULL</span>,
-  pvalue_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
-  test.args <span class="op">=</span> <span class="cn">NULL</span>,
-  group <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for tbl_continuous</span></span>
+<span><span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  test <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pvalue_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  test.args <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>Object with class <code>tbl_summary</code> from the <a href="tbl_summary.html">tbl_summary</a> function</p></dd>
+
+
 <dt>test</dt>
 <dd><p>List of formulas specifying statistical tests to perform for each
 variable.
 Default is two-way ANOVA when <code>by=</code> is not <code>NULL</code>, and has the same defaults
 as <code>add_p.tbl_continuous()</code> when <code>by = NULL</code>.
 See <a href="tests.html">tests</a> for details, more tests, and instruction for implementing a custom test.</p></dd>
+
+
 <dt>pvalue_fun</dt>
 <dd><p>Function to round and format p-values.
 Default is <a href="style_pvalue.html">style_pvalue</a>.
@@ -124,20 +128,29 @@ The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 <code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
 <code>purrr::partial(style_pvalue, digits = 2)</code>).</p></dd>
+
+
 <dt>include</dt>
 <dd><p>Variables to include in output. Input may be a vector of
 quoted variable names, unquoted variable names, or tidyselect select helper
 functions. Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything()</a></code>.</p></dd>
+
+
 <dt>test.args</dt>
 <dd><p>List of formulas containing additional arguments to pass to
 tests that accept arguments. For example, add an argument for all t-tests,
 use <code>test.args = all_tests("t.test") ~ list(var.equal = TRUE)</code></p></dd>
+
+
 <dt>group</dt>
 <dd><p>Column name (unquoted or quoted) of an ID or grouping variable.
 The column can be used to calculate p-values with correlated data.
 Default is <code>NULL</code>. See <a href="tests.html">tests</a> for methods that utilize the <code>group=</code> argument.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Not used</p></dd>
+
 </dl></div>
     <div id="see-also">
     <h2>See also</h2>
@@ -148,14 +161,14 @@ Default is <code>NULL</code>. See <a href="tests.html">tests</a> for methods tha
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">add_p_continuous_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_continuous.html">tbl_continuous</a></span><span class="op">(</span></span>
-<span class="r-in">    data <span class="op">=</span> <span class="va">trial</span>,</span>
-<span class="r-in">    variable <span class="op">=</span> <span class="va">age</span>,</span>
-<span class="r-in">    by <span class="op">=</span> <span class="va">trt</span>,</span>
-<span class="r-in">    include <span class="op">=</span> <span class="va">grade</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">add_p_continuous_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_continuous.html">tbl_continuous</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    data <span class="op">=</span> <span class="va">trial</span>,</span></span>
+<span class="r-in"><span>    variable <span class="op">=</span> <span class="va">age</span>,</span></span>
+<span class="r-in"><span>    by <span class="op">=</span> <span class="va">trt</span>,</span></span>
+<span class="r-in"><span>    include <span class="op">=</span> <span class="va">grade</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -170,7 +183,7 @@ Default is <code>NULL</code>. See <a href="tests.html">tests</a> for methods tha
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

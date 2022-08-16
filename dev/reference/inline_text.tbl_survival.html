@@ -25,7 +25,7 @@ for inline reporting in an R markdown document."><meta property="og:image" conte
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -99,46 +99,61 @@ for inline reporting in an R markdown document.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for tbl_survival</span>
-<span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  strata <span class="op">=</span> <span class="cn">NULL</span>,
-  time <span class="op">=</span> <span class="cn">NULL</span>,
-  prob <span class="op">=</span> <span class="cn">NULL</span>,
-  pattern <span class="op">=</span> <span class="st">"{estimate} ({conf.level*100}% CI {ci})"</span>,
-  estimate_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for tbl_survival</span></span>
+<span><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  strata <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  time <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  prob <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="st">"{estimate} ({conf.level*100}% CI {ci})"</span>,</span>
+<span>  estimate_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>Object created from  <a href="tbl_survival.html">tbl_survival</a></p></dd>
+
+
 <dt>strata</dt>
 <dd><p>If <code>tbl_survival</code> estimates are stratified, level of the stratum
 to report. Default is <code>NULL</code> when <code>tbl_survival</code> have no specified strata.</p></dd>
+
+
 <dt>time</dt>
 <dd><p>Time for which to return survival probability</p></dd>
+
+
 <dt>prob</dt>
 <dd><p>Probability for which to return survival time.  For median
 survival use <code>prob = 0.50</code></p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>String indicating the statistics to return.  Uses
 <a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue</a> formatting.
 Default is <code>'{estimate} ({conf.level*100}% {ci})'</code>.  All columns from
 <code>x$table_long</code> are available to print as well as the
 confidence level (conf.level). See below for details.</p></dd>
+
+
 <dt>estimate_fun</dt>
 <dd><p>function to round/style estimate and lower/upper
 confidence interval estimates.  Note, this does not style the 'ci' column,
 which is a string. Default is x$estimate_fun</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Not used</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A string reporting results from a gtsummary table</p>
+    
+
+<p>A string reporting results from a gtsummary table</p>
     </div>
     <div id="pattern-argument">
     <h2>pattern argument</h2>
@@ -165,19 +180,19 @@ print the table the estimates are extracted from.</p><ul><li><p><code>{label}</c
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">surv_table</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_survival.html">tbl_survival</a></span><span class="op">(</span>times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">surv_table</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/survival/man/survfit.html" class="external-link">survfit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span> <span class="op">~</span> <span class="va">trt</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_survival.html">tbl_survival</a></span><span class="op">(</span>times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">24</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`tbl_survival()` was deprecated in gtsummary 1.4.0.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Please use `tbl_survfit()` instead.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span><span class="va">surv_table</span>,</span>
-<span class="r-in">  strata <span class="op">=</span> <span class="st">"Drug A"</span>,</span>
-<span class="r-in">  time <span class="op">=</span> <span class="fl">12</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span><span class="va">surv_table</span>,</span></span>
+<span class="r-in"><span>  strata <span class="op">=</span> <span class="st">"Drug A"</span>,</span></span>
+<span class="r-in"><span>  time <span class="op">=</span> <span class="fl">12</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Updating <span style="color: #00BB00;">gtsummary</span> object from `x$table_header` to `x$table_styling` introduced in <span style="color: #0000BB;">"v1.4.0"</span>.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 91% (95% CI 85%, 97%)</span>
 </code></pre></div>
@@ -194,7 +209,7 @@ print the table the estimates are extracted from.</p><ul><li><p><code>{label}</c
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

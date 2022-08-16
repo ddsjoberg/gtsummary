@@ -28,7 +28,7 @@ a custom function in charge of computing the statistics (see Details)."><meta pr
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -105,50 +105,60 @@ a custom function in charge of computing the statistics (see Details).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tbl_custom_summary</span><span class="op">(</span>
-  <span class="va">data</span>,
-  by <span class="op">=</span> <span class="cn">NULL</span>,
-  label <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">stat_fns</span>,
-  <span class="va">statistic</span>,
-  digits <span class="op">=</span> <span class="cn">NULL</span>,
-  type <span class="op">=</span> <span class="cn">NULL</span>,
-  value <span class="op">=</span> <span class="cn">NULL</span>,
-  missing <span class="op">=</span> <span class="cn">NULL</span>,
-  missing_text <span class="op">=</span> <span class="cn">NULL</span>,
-  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
-  overall_row <span class="op">=</span> <span class="cn">FALSE</span>,
-  overall_row_last <span class="op">=</span> <span class="cn">FALSE</span>,
-  overall_row_label <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tbl_custom_summary</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">stat_fns</span>,</span>
+<span>  <span class="va">statistic</span>,</span>
+<span>  digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  value <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  missing <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  missing_text <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  overall_row <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overall_row_last <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  overall_row_label <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A data frame</p></dd>
+
+
 <dt>by</dt>
 <dd><p>A column name (quoted or unquoted) in <code>data</code>.
 Summary statistics will be calculated separately for each level of the <code>by</code>
 variable (e.g. <code>by = trt</code>). If <code>NULL</code>, summary statistics
 are calculated using all observations. To stratify a table by two or more
 variables, use <code><a href="tbl_strata.html">tbl_strata()</a></code></p></dd>
+
+
 <dt>label</dt>
 <dd><p>List of formulas specifying variables labels,
 e.g. <code>list(age ~ "Age", stage ~ "Path T Stage")</code>.  If a
 variable's label is not specified here, the label attribute
 (<code>attr(data$age, "label")</code>) is used.  If
 attribute label is <code>NULL</code>, the variable name will be used.</p></dd>
+
+
 <dt>stat_fns</dt>
 <dd><p>Formula or list of formulas specifying the function to be
 used to compute the statistics (see below for details and examples). You can
 also use dedicated helpers such as <code><a href="continuous_summary.html">continuous_summary()</a></code>, <code><a href="ratio_summary.html">ratio_summary()</a></code>
 or <code><a href="proportion_summary.html">proportion_summary()</a></code>.</p></dd>
+
+
 <dt>statistic</dt>
 <dd><p>List of formulas specifying the <code><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue()</a></code> pattern to
 display the statistics for each variable. The statistics should be returned
 by the functions specified in <code>stat_fns</code> (see below for details and
 examples).</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>List of formulas specifying the number of decimal
 places to round summary statistics. If not specified,
@@ -158,39 +168,58 @@ rather than an integer.  For example, if the
 statistic being calculated is <code>"{mean} ({sd})"</code> and you want the mean rounded
 to 1 decimal place, and the SD to 2 use <code>digits = list(age ~ c(1, 2))</code>. User
 may also pass a styling function: <code>digits = age ~ style_sigfig</code></p></dd>
+
+
 <dt>type</dt>
 <dd><p>List of formulas specifying variable types. Accepted values
 are <code>c("continuous", "continuous2", "categorical", "dichotomous")</code>,
 e.g. <code>type = list(age ~ "continuous", female ~ "dichotomous")</code>.
 If type not specified for a variable, the function
 will default to an appropriate summary type. See below for details.</p></dd>
+
+
 <dt>value</dt>
 <dd><p>List of formulas specifying the value to display for dichotomous
 variables. gtsummary selectors, e.g. <code><a href="select_helpers.html">all_dichotomous()</a></code>, cannot be used
 with this argument. See below for details.</p></dd>
+
+
 <dt>missing</dt>
 <dd><p>Indicates whether to include counts of <code>NA</code> values in the table.
 Allowed values are <code>"no"</code> (never display NA values),
 <code>"ifany"</code> (only display if any NA values), and <code>"always"</code>
 (includes NA count row for all variables). Default is <code>"ifany"</code>.</p></dd>
+
+
 <dt>missing_text</dt>
 <dd><p>String to display for count of missing observations.
 Default is <code>"Unknown"</code>.</p></dd>
+
+
 <dt>include</dt>
 <dd><p>variables to include in the summary table. Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything()</a></code></p></dd>
+
+
 <dt>overall_row</dt>
 <dd><p>Logical indicator to display an overall row. Default is
 <code>FALSE</code>. Use <code><a href="add_overall.html">add_overall()</a></code> to add an overall column.</p></dd>
+
+
 <dt>overall_row_last</dt>
 <dd><p>Logical indicator to display overall row last in
 table. Default is <code>FALSE</code>, which will display overall row first.</p></dd>
+
+
 <dt>overall_row_label</dt>
 <dd><p>String indicating the overall row label. Default is
 <code>"Overall"</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>tbl_custom_summary</code> and <code>tbl_summary</code> object</p>
+    
+
+<p>A <code>tbl_custom_summary</code> and <code>tbl_summary</code> object</p>
     </div>
     <div id="similarities-with-tbl-summary-">
     <h2>Similarities with <code><a href="tbl_summary.html">tbl_summary()</a></code></h2>
@@ -223,7 +252,7 @@ if present</p></li>
 encouraged the user-defined function accept <code>...</code> as each of the arguments
 <em>will</em> be passed to the function, even if not all inputs are utilized by
 the user's function, e.g. <code>foo(data, ...)</code> (see examples).</p>
-<p>The user-defined function should return a one row <code><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">dplyr::tibble()</a></code> with
+<p>The user-defined function should return a one row <code><a href="https://dplyr.tidyverse.org/reference/reexports.html" class="external-link">dplyr::tibble()</a></code> with
 one column per summary statistics (see examples).</p>
     </div>
     <div id="statistic-argument">
@@ -310,90 +339,90 @@ statistics refer to a third variable.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="va">my_stats</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">marker_sum</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">marker</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">mean_age</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">age</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span class="r-in">    marker_sum <span class="op">=</span> <span class="va">marker_sum</span>,</span>
-<span class="r-in">    mean_age <span class="op">=</span> <span class="va">mean_age</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">my_stats</span><span class="op">(</span><span class="va">trial</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">my_stats</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">marker_sum</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">marker</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">mean_age</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">age</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    marker_sum <span class="op">=</span> <span class="va">marker_sum</span>,</span></span>
+<span class="r-in"><span>    mean_age <span class="op">=</span> <span class="va">mean_age</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">my_stats</span><span class="op">(</span><span class="va">trial</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   marker_sum mean_age</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>       174.     47.2</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">tbl_custom_summary_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_custom_summary</span><span class="op">(</span></span>
-<span class="r-in">    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"stage"</span>, <span class="st">"grade"</span><span class="op">)</span>,</span>
-<span class="r-in">    by <span class="op">=</span> <span class="st">"trt"</span>,</span>
-<span class="r-in">    stat_fns <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="va">my_stats</span>,</span>
-<span class="r-in">    statistic <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"A: {mean_age} - S: {marker_sum}"</span>,</span>
-<span class="r-in">    digits <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>,</span>
-<span class="r-in">    overall_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">    overall_row_label <span class="op">=</span> <span class="st">"All stages &amp; grades"</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_overall.html">add_overall</a></span><span class="op">(</span>last <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span></span>
-<span class="r-in">    update <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"A: mean age - S: sum of marker"</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># Use `data[[variable]]` to access the current variable</span></span>
-<span class="r-in"><span class="va">mean_ci</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">variable</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">variable</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span class="r-in">    mean <span class="op">=</span> <span class="va">test</span><span class="op">$</span><span class="va">estimate</span>,</span>
-<span class="r-in">    conf.low <span class="op">=</span> <span class="va">test</span><span class="op">$</span><span class="va">conf.int</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
-<span class="r-in">    conf.high <span class="op">=</span> <span class="va">test</span><span class="op">$</span><span class="va">conf.int</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">tbl_custom_summary_ex2</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_custom_summary</span><span class="op">(</span></span>
-<span class="r-in">    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"marker"</span>, <span class="st">"ttdeath"</span><span class="op">)</span>,</span>
-<span class="r-in">    by <span class="op">=</span> <span class="st">"trt"</span>,</span>
-<span class="r-in">    stat_fns <span class="op">=</span> <span class="op">~</span> <span class="va">mean_ci</span>,</span>
-<span class="r-in">    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{mean} [{conf.low}; {conf.high}]"</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_overall.html">add_overall</a></span><span class="op">(</span>last <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span></span>
-<span class="r-in">    update <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"mean [95% CI]"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 3 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># Use `full_data` to access the full datasets</span></span>
-<span class="r-in"><span class="co"># Returned statistic can also be a character</span></span>
-<span class="r-in"><span class="va">diff_to_great_mean</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">full_data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">marker</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">great_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">full_data</span><span class="op">$</span><span class="va">marker</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">diff</span> <span class="op">&lt;-</span> <span class="va">mean</span> <span class="op">-</span> <span class="va">great_mean</span></span>
-<span class="r-in">  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
-<span class="r-in">    mean <span class="op">=</span> <span class="va">mean</span>,</span>
-<span class="r-in">    great_mean <span class="op">=</span> <span class="va">great_mean</span>,</span>
-<span class="r-in">    diff <span class="op">=</span> <span class="va">diff</span>,</span>
-<span class="r-in">    level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">diff</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">"high"</span>, <span class="st">"low"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">tbl_custom_summary_ex3</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_custom_summary</span><span class="op">(</span></span>
-<span class="r-in">    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grade"</span>, <span class="st">"stage"</span><span class="op">)</span>,</span>
-<span class="r-in">    by <span class="op">=</span> <span class="st">"trt"</span>,</span>
-<span class="r-in">    stat_fns <span class="op">=</span> <span class="op">~</span> <span class="va">diff_to_great_mean</span>,</span>
-<span class="r-in">    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{mean} ({level}, diff: {diff})"</span>,</span>
-<span class="r-in">    overall_row <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tbl_custom_summary_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_custom_summary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"stage"</span>, <span class="st">"grade"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    by <span class="op">=</span> <span class="st">"trt"</span>,</span></span>
+<span class="r-in"><span>    stat_fns <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="va">my_stats</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"A: {mean_age} - S: {marker_sum}"</span>,</span></span>
+<span class="r-in"><span>    digits <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    overall_row_label <span class="op">=</span> <span class="st">"All stages &amp; grades"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_overall.html">add_overall</a></span><span class="op">(</span>last <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    update <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"A: mean age - S: sum of marker"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Use `data[[variable]]` to access the current variable</span></span></span>
+<span class="r-in"><span><span class="va">mean_ci</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">variable</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html" class="external-link">t.test</a></span><span class="op">(</span><span class="va">data</span><span class="op">[[</span><span class="va">variable</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    mean <span class="op">=</span> <span class="va">test</span><span class="op">$</span><span class="va">estimate</span>,</span></span>
+<span class="r-in"><span>    conf.low <span class="op">=</span> <span class="va">test</span><span class="op">$</span><span class="va">conf.int</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>    conf.high <span class="op">=</span> <span class="va">test</span><span class="op">$</span><span class="va">conf.int</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tbl_custom_summary_ex2</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_custom_summary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"marker"</span>, <span class="st">"ttdeath"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    by <span class="op">=</span> <span class="st">"trt"</span>,</span></span>
+<span class="r-in"><span>    stat_fns <span class="op">=</span> <span class="op">~</span> <span class="va">mean_ci</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{mean} [{conf.low}; {conf.high}]"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_overall.html">add_overall</a></span><span class="op">(</span>last <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    update <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"mean [95% CI]"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 3 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Use `full_data` to access the full datasets</span></span></span>
+<span class="r-in"><span><span class="co"># Returned statistic can also be a character</span></span></span>
+<span class="r-in"><span><span class="va">diff_to_great_mean</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">full_data</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">marker</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">great_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">full_data</span><span class="op">$</span><span class="va">marker</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">diff</span> <span class="op">&lt;-</span> <span class="va">mean</span> <span class="op">-</span> <span class="va">great_mean</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    mean <span class="op">=</span> <span class="va">mean</span>,</span></span>
+<span class="r-in"><span>    great_mean <span class="op">=</span> <span class="va">great_mean</span>,</span></span>
+<span class="r-in"><span>    diff <span class="op">=</span> <span class="va">diff</span>,</span></span>
+<span class="r-in"><span>    level <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">diff</span> <span class="op">&gt;</span> <span class="fl">0</span>, <span class="st">"high"</span>, <span class="st">"low"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tbl_custom_summary_ex3</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_custom_summary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grade"</span>, <span class="st">"stage"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    by <span class="op">=</span> <span class="st">"trt"</span>,</span></span>
+<span class="r-in"><span>    stat_fns <span class="op">=</span> <span class="op">~</span> <span class="va">diff_to_great_mean</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{mean} ({level}, diff: {diff})"</span>,</span></span>
+<span class="r-in"><span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -408,7 +437,7 @@ statistics refer to a third variable.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

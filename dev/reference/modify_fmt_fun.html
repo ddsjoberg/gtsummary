@@ -26,7 +26,7 @@ are formatted"><meta property="og:image" content="https://www.danieldsjoberg.com
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -101,21 +101,26 @@ are formatted</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">modify_fmt_fun</span><span class="op">(</span><span class="va">x</span>, <span class="va">update</span>, rows <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">modify_fmt_fun</span><span class="op">(</span><span class="va">x</span>, <span class="va">update</span>, rows <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>gtsummary object</p></dd>
+
+
 <dt>update</dt>
 <dd><p>list of formulas or a single formula specifying the updated
 formatting function.
 The LHS specifies the column(s) to be updated,
 and the RHS is the updated formatting function.</p></dd>
+
+
 <dt>rows</dt>
 <dd><p>predicate expression to select rows in <code>x$table_body</code>.
 Default is <code>NULL</code>. See details below.</p></dd>
+
 </dl></div>
     <div id="example-output">
     <h2>Example Output</h2>
@@ -144,25 +149,25 @@ an external object named <code>variable</code> in the following expression
     <h2>See also</h2>
     <div class="dont-index"><p>Review <a href="syntax.html">list, formula, and selector syntax</a> used throughout gtsummary</p>
 <p>Other Advanced modifiers: 
-<code><a href="modify_cols_merge.html">modify_cols_merge</a>()</code>,
 <code><a href="modify_column_alignment.html">modify_column_alignment</a>()</code>,
 <code><a href="modify_column_hide.html">modify_column_hide</a>()</code>,
 <code><a href="modify_column_indent.html">modify_column_indent</a>()</code>,
+<code><a href="modify_column_merge.html">modify_column_merge</a>()</code>,
 <code><a href="modify_table_body.html">modify_table_body</a>()</code>,
 <code><a href="modify_table_styling.html">modify_table_styling</a>()</code></p></div>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># show 'grade' p-values to 3 decimal places</span></span>
-<span class="r-in"><span class="va">modify_fmt_fun_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_fmt_fun</span><span class="op">(</span></span>
-<span class="r-in">    update <span class="op">=</span> <span class="va">p.value</span> <span class="op">~</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span>
-<span class="r-in">    rows <span class="op">=</span> <span class="va">variable</span> <span class="op">==</span> <span class="st">"grade"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># show 'grade' p-values to 3 decimal places</span></span></span>
+<span class="r-in"><span><span class="va">modify_fmt_fun_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_fmt_fun</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    update <span class="op">=</span> <span class="va">p.value</span> <span class="op">~</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    rows <span class="op">=</span> <span class="va">variable</span> <span class="op">==</span> <span class="st">"grade"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -177,7 +182,7 @@ an external object named <code>variable</code> in the following expression
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

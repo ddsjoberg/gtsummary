@@ -25,7 +25,7 @@ gtsummary table by directly modifying .$table_styling"><meta property="og:image"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -99,63 +99,91 @@ gtsummary table by directly modifying <code>.$table_styling</code></p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">modify_table_styling</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">columns</span>,
-  rows <span class="op">=</span> <span class="cn">NULL</span>,
-  label <span class="op">=</span> <span class="cn">NULL</span>,
-  spanning_header <span class="op">=</span> <span class="cn">NULL</span>,
-  hide <span class="op">=</span> <span class="cn">NULL</span>,
-  footnote <span class="op">=</span> <span class="cn">NULL</span>,
-  footnote_abbrev <span class="op">=</span> <span class="cn">NULL</span>,
-  align <span class="op">=</span> <span class="cn">NULL</span>,
-  missing_symbol <span class="op">=</span> <span class="cn">NULL</span>,
-  fmt_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  text_format <span class="op">=</span> <span class="cn">NULL</span>,
-  undo_text_format <span class="op">=</span> <span class="cn">FALSE</span>,
-  text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span>,
-  cols_merge_pattern <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">modify_table_styling</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">columns</span>,</span>
+<span>  rows <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  spanning_header <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hide <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  footnote <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  footnote_abbrev <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  align <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  missing_symbol <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fmt_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  text_format <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  undo_text_format <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span>,</span>
+<span>  cols_merge_pattern <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>gtsummary object</p></dd>
+
+
 <dt>columns</dt>
 <dd><p>vector or selector of columns in <code>x$table_body</code></p></dd>
+
+
 <dt>rows</dt>
 <dd><p>predicate expression to select rows in <code>x$table_body</code>.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is <code>NULL</code>. See details below.</p></dd>
+
+
 <dt>label</dt>
 <dd><p>string of column label(s)</p></dd>
+
+
 <dt>spanning_header</dt>
 <dd><p>string with text for spanning header</p></dd>
+
+
 <dt>hide</dt>
 <dd><p>logical indicating whether to hide column from output</p></dd>
+
+
 <dt>footnote</dt>
 <dd><p>string with text for footnote</p></dd>
+
+
 <dt>footnote_abbrev</dt>
 <dd><p>string with abbreviation definition, e.g.
 <code>"CI = Confidence Interval"</code></p></dd>
+
+
 <dt>align</dt>
 <dd><p>string indicating alignment of column, must be one of
 <code>c("left", "right", "center")</code></p></dd>
+
+
 <dt>missing_symbol</dt>
 <dd><p>string indicating how missing values are formatted.</p></dd>
+
+
 <dt>fmt_fun</dt>
 <dd><p>function that formats the statistics in the
 columns/rows in <code>columns=</code> and <code>rows=</code></p></dd>
+
+
 <dt>text_format</dt>
 <dd><p>string indicated which type of text formatting to apply to the rows and columns.
 Must be one of <code>c("bold", "italic", "indent", "indent2")</code>. Do not assign
 both <code>"indent"</code> and <code>"indent2"</code> to the same cell.</p></dd>
+
+
 <dt>undo_text_format</dt>
 <dd><p>rarely used. Logical that undoes the indent, bold,
 and italic styling when <code>TRUE</code></p></dd>
+
+
 <dt>text_interpret</dt>
 <dd><p>string, must be one of <code>"md"</code> or <code>"html"</code></p></dd>
+
+
 <dt>cols_merge_pattern</dt>
 <dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="figures/lifecycle-experimental.svg" alt="[Experimental]"></a>
  glue-syntax string
@@ -163,6 +191,7 @@ indicating how to merge
 columns in <code>x$table_body</code>. For example, to construct a confidence interval
 use <code>"{conf.low}, {conf.high}"</code>. The first column listed in the pattern
 string must match the single column name passed in <code>columns=</code>.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -213,10 +242,10 @@ internally with care, and it is <em>not</em> recommended for users.</p>
 <p>See <a href="https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html">gtsummary internals vignette</a></p>
 <p>Review <a href="syntax.html">list, formula, and selector syntax</a> used throughout gtsummary</p>
 <p>Other Advanced modifiers: 
-<code><a href="modify_cols_merge.html">modify_cols_merge</a>()</code>,
 <code><a href="modify_column_alignment.html">modify_column_alignment</a>()</code>,
 <code><a href="modify_column_hide.html">modify_column_hide</a>()</code>,
 <code><a href="modify_column_indent.html">modify_column_indent</a>()</code>,
+<code><a href="modify_column_merge.html">modify_column_merge</a>()</code>,
 <code><a href="modify_fmt_fun.html">modify_fmt_fun</a>()</code>,
 <code><a href="modify_table_body.html">modify_table_body</a>()</code></p></div>
     </div>
@@ -233,7 +262,7 @@ internally with care, and it is <em>not</em> recommended for users.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

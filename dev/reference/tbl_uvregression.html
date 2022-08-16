@@ -38,7 +38,7 @@ dichotomous variables appropriate for logistic regression with glm."><meta prope
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -125,26 +125,26 @@ dichotomous variables appropriate for logistic regression with <a href="https://
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tbl_uvregression</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">method</span>,
-  y <span class="op">=</span> <span class="cn">NULL</span>,
-  x <span class="op">=</span> <span class="cn">NULL</span>,
-  method.args <span class="op">=</span> <span class="cn">NULL</span>,
-  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,
-  label <span class="op">=</span> <span class="cn">NULL</span>,
-  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
-  tidy_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  hide_n <span class="op">=</span> <span class="cn">FALSE</span>,
-  show_single_row <span class="op">=</span> <span class="cn">NULL</span>,
-  conf.level <span class="op">=</span> <span class="cn">NULL</span>,
-  estimate_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  pvalue_fun <span class="op">=</span> <span class="cn">NULL</span>,
-  formula <span class="op">=</span> <span class="st">"{y} ~ {x}"</span>,
-  add_estimate_to_reference_rows <span class="op">=</span> <span class="cn">NULL</span>,
-  conf.int <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tbl_uvregression</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">method</span>,</span>
+<span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  method.args <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  tidy_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hide_n <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_single_row <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  conf.level <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  estimate_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pvalue_fun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  formula <span class="op">=</span> <span class="st">"{y} ~ {x}"</span>,</span>
+<span>  add_estimate_to_reference_rows <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  conf.int <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -153,51 +153,77 @@ dichotomous variables appropriate for logistic regression with <a href="https://
 <dd><p>Data frame to be used in univariate regression modeling.  Data
 frame includes the outcome variable(s) and the independent variables.
 Survey design objects are also accepted.</p></dd>
+
+
 <dt>method</dt>
 <dd><p>Regression method (e.g. <a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a>, <a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a>, <a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">survival::coxph</a>,
 <code><a href="https://rdrr.io/pkg/survey/man/svyglm.html" class="external-link">survey::svyglm</a></code>, and more).</p></dd>
+
+
 <dt>y</dt>
 <dd><p>Model outcome (e.g. <code>y = recurrence</code> or <code>y = Surv(time, recur)</code>).
 All other column in <code>data</code> will be regressed on <code>y</code>.
 Specify one and only one of <code>y</code> or <code>x</code></p></dd>
+
+
 <dt>x</dt>
 <dd><p>Model covariate (e.g. <code>x = trt</code>).
 All other columns in <code>data</code> will serve as the outcome in a regression model
 with <code>x</code> as a covariate.  Output table is best when <code>x</code> is a continuous or
 dichotomous variable displayed on a single row.
 Specify one and only one of <code>y</code> or <code>x</code></p></dd>
+
+
 <dt>method.args</dt>
 <dd><p>List of additional arguments passed on to the regression
 function defined by <code>method</code>.</p></dd>
+
+
 <dt>exponentiate</dt>
 <dd><p>Logical indicating whether to exponentiate the
 coefficient estimates. Default is <code>FALSE</code>.</p></dd>
+
+
 <dt>label</dt>
 <dd><p>List of formulas specifying variables labels,
 e.g. <code>list(age ~ "Age", stage ~ "Path T Stage")</code></p></dd>
+
+
 <dt>include</dt>
 <dd><p>Variables to include in output. Input may be a vector of
 quoted variable names, unquoted variable names, or tidyselect select helper
 functions. Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything()</a></code>.</p></dd>
+
+
 <dt>tidy_fun</dt>
 <dd><p>Option to specify a particular tidier function for the
 model. Default is to use <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy</a></code>, but if an error occurs
 then tidying of the model is attempted with <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>,
 if installed.</p></dd>
+
+
 <dt>hide_n</dt>
 <dd><p>Hide N column. Default is <code>FALSE</code></p></dd>
+
+
 <dt>show_single_row</dt>
 <dd><p>By default categorical variables are printed on
 multiple rows.  If a variable is dichotomous (e.g. Yes/No) and you wish to print
 the regression coefficient on a single row, include the variable name(s)
 here--quoted and unquoted variable name accepted.</p></dd>
+
+
 <dt>conf.level</dt>
 <dd><p>Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.</p></dd>
+
+
 <dt>estimate_fun</dt>
 <dd><p>Function to round and format coefficient estimates.
 Default is <a href="style_sigfig.html">style_sigfig</a> when the coefficients are not transformed, and
 <a href="style_ratio.html">style_ratio</a> when the coefficients have been exponentiated.</p></dd>
+
+
 <dt>pvalue_fun</dt>
 <dd><p>Function to round and format p-values.
 Default is <a href="style_pvalue.html">style_pvalue</a>.
@@ -205,22 +231,33 @@ The function must have a numeric vector input (the numeric, exact p-value),
 and return a string that is the rounded/formatted p-value (e.g.
 <code>pvalue_fun = function(x) style_pvalue(x, digits = 2)</code> or equivalently,
 <code>purrr::partial(style_pvalue, digits = 2)</code>).</p></dd>
+
+
 <dt>formula</dt>
 <dd><p>String of the model formula.
 Uses <a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue</a> syntax. Default is <code>"{y} ~ {x}"</code>, where <code>{y}</code>
 is the dependent variable, and <code>{x}</code> represents a single covariate. For a
 random intercept model, the formula may be <code>formula = "{y} ~ {x} + (1 | gear)"</code>.</p></dd>
+
+
 <dt>add_estimate_to_reference_rows</dt>
 <dd><p>add a reference value. Default is FALSE</p></dd>
+
+
 <dt>conf.int</dt>
 <dd><p>Logical indicating whether or not to include a confidence
 interval in the output. Defaults to <code>TRUE</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Not used</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>tbl_uvregression</code> object</p>
+    
+
+<p>A <code>tbl_uvregression</code> object</p>
     </div>
     <div id="example-output">
     <h2>Example Output</h2>
@@ -273,29 +310,29 @@ to print the random components.</p></li>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="va">tbl_uv_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu">tbl_uvregression</span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"response"</span>, <span class="st">"age"</span>, <span class="st">"grade"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">    method <span class="op">=</span> <span class="va">glm</span>,</span>
-<span class="r-in">    y <span class="op">=</span> <span class="va">response</span>,</span>
-<span class="r-in">    method.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>,</span>
-<span class="r-in">    exponentiate <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># rounding pvalues to 2 decimal places</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span>
-<span class="r-in"><span class="va">tbl_uv_ex2</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu">tbl_uvregression</span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ttdeath"</span>, <span class="st">"death"</span>, <span class="st">"age"</span>, <span class="st">"grade"</span>, <span class="st">"response"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">    method <span class="op">=</span> <span class="va">coxph</span>,</span>
-<span class="r-in">    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span>,</span>
-<span class="r-in">    exponentiate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">    pvalue_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="co"># }</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">tbl_uv_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_uvregression</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"response"</span>, <span class="st">"age"</span>, <span class="st">"grade"</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>    method <span class="op">=</span> <span class="va">glm</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="va">response</span>,</span></span>
+<span class="r-in"><span>    method.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    exponentiate <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># rounding pvalues to 2 decimal places</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tbl_uv_ex2</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_uvregression</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ttdeath"</span>, <span class="st">"death"</span>, <span class="st">"age"</span>, <span class="st">"grade"</span>, <span class="st">"response"</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>    method <span class="op">=</span> <span class="va">coxph</span>,</span></span>
+<span class="r-in"><span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">ttdeath</span>, <span class="va">death</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    exponentiate <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    pvalue_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -310,7 +347,7 @@ to print the random components.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

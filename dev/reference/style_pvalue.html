@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9003</span>
       </span>
     </div>
 
@@ -95,39 +95,52 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">style_pvalue</span><span class="op">(</span>
-  <span class="va">x</span>,
-  digits <span class="op">=</span> <span class="fl">1</span>,
-  prepend_p <span class="op">=</span> <span class="cn">FALSE</span>,
-  big.mark <span class="op">=</span> <span class="cn">NULL</span>,
-  decimal.mark <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">style_pvalue</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  prepend_p <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>Numeric vector of p-values.</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>Number of digits large p-values are rounded. Must be 1, 2, or 3.
 Default is 1.</p></dd>
+
+
 <dt>prepend_p</dt>
 <dd><p>Logical. Should 'p=' be prepended to formatted p-value.
 Default is <code>FALSE</code></p></dd>
+
+
 <dt>big.mark</dt>
 <dd><p>Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is <code>","</code>, except when <code>decimal.mark = ","</code> when the default is a space.</p></dd>
+
+
 <dt>decimal.mark</dt>
 <dd><p>The character to be used to indicate the numeric decimal point.
 Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other arguments passed on to <code><a href="https://rdrr.io/r/base/format.html" class="external-link">base::format()</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A character vector of styled p-values</p>
+    
+
+<p>A character vector of styled p-values</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -145,15 +158,15 @@ Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">pvals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="fl">1.5</span>, <span class="fl">1</span>, <span class="fl">0.999</span>, <span class="fl">0.5</span>, <span class="fl">0.25</span>, <span class="fl">0.2</span>, <span class="fl">0.197</span>, <span class="fl">0.12</span>, <span class="fl">0.10</span>, <span class="fl">0.0999</span>, <span class="fl">0.06</span>,</span>
-<span class="r-in">  <span class="fl">0.03</span>, <span class="fl">0.002</span>, <span class="fl">0.001</span>, <span class="fl">0.00099</span>, <span class="fl">0.0002</span>, <span class="fl">0.00002</span>, <span class="op">-</span><span class="fl">1</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="fu">style_pvalue</span><span class="op">(</span><span class="va">pvals</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">pvals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fl">1.5</span>, <span class="fl">1</span>, <span class="fl">0.999</span>, <span class="fl">0.5</span>, <span class="fl">0.25</span>, <span class="fl">0.2</span>, <span class="fl">0.197</span>, <span class="fl">0.12</span>, <span class="fl">0.10</span>, <span class="fl">0.0999</span>, <span class="fl">0.06</span>,</span></span>
+<span class="r-in"><span>  <span class="fl">0.03</span>, <span class="fl">0.002</span>, <span class="fl">0.001</span>, <span class="fl">0.00099</span>, <span class="fl">0.0002</span>, <span class="fl">0.00002</span>, <span class="op">-</span><span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">style_pvalue</span><span class="op">(</span><span class="va">pvals</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] NA       "&gt;0.9"   "&gt;0.9"   "0.5"    "0.3"    "0.2"    "0.2"    "0.12"  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9] "0.10"   "0.10"   "0.060"  "0.030"  "0.002"  "0.001"  "&lt;0.001" "&lt;0.001"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [17] "&lt;0.001" NA      </span>
-<span class="r-in"><span class="fu">style_pvalue</span><span class="op">(</span><span class="va">pvals</span>, digits <span class="op">=</span> <span class="fl">2</span>, prepend_p <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">style_pvalue</span><span class="op">(</span><span class="va">pvals</span>, digits <span class="op">=</span> <span class="fl">2</span>, prepend_p <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] NA        "p&gt;0.99"  "p&gt;0.99"  "p=0.50"  "p=0.25"  "p=0.20"  "p=0.20" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [8] "p=0.12"  "p=0.10"  "p=0.10"  "p=0.060" "p=0.030" "p=0.002" "p=0.001"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [15] "p&lt;0.001" "p&lt;0.001" "p&lt;0.001" NA       </span>
@@ -171,7 +184,7 @@ Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
