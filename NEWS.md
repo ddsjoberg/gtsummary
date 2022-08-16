@@ -8,6 +8,8 @@
 
 * Fixed bug when a column named `"variable"` was passed to `tbl_custom_summary(by=)`, which resulted in an error. (#1285)
 
+* Updated calls to `round()` in the `style_*()` functions to `round2()`, which implements classic rounding rules. (#1304)
+
 # gtsummary 1.6.1
 
 ### New Functionality
