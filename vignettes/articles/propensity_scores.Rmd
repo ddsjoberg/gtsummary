@@ -204,7 +204,8 @@ df_post_match <- MatchIt::match.data(df_matchit_results)
 
 ## Summarize the matching
 
-After matching, we can use `tbl_summary()` to assess the balance of covariates between the matched group. Alternative way is to use the mirrored histograms to review the distributions of propensity score for the matched and unmatched groups.
+After matching, we can use `tbl_summary()` to assess the balance of covariates between the matched group.
+Alternative way is to use the mirrored histograms to review the distributions of propensity score for the matched and unmatched groups.
 
 ### Post-matching SMD
 
@@ -304,20 +305,19 @@ This is a helpful visualization to show if the  unmatched were very different be
 
 ### Strategy to improve balance between groups 
 
-Parameters within matchit can be tweaked to help improve matching.
+Parameters within {matchit} can be tweaked to help improve matching.
 
-- For example, relaxing or tightening the maximum caliper width will affect how closely the pairs are matched may improve the overall balance.
+- Relaxing or tightening the maximum caliper width will affect how closely the pairs are matched may improve the overall balance.
 
 - Choosing a different matching algorithm, for example, the default is to match the largest (`m.order` = "largest") matching takes place in descending order of distance measures.
 
 - Re-specify the PS model with additional covarites
 
 If matching does not improve, consider a different matching strategy.
-Below we will show the matching weights methods.  
 
 ## Matching weights (uses package Matching)
 
-The matching weights method is a weighting analogue to the 1:1 pairwise matching (https://pubmed.ncbi.nlm.nih.gov/23902694/). 
+The matching weights method is a weighting analogue to the 1:1 pairwise matching ([https://pubmed.ncbi.nlm.nih.gov/23902694/](https://pubmed.ncbi.nlm.nih.gov/23902694/)). 
 
 The concept of matching weights is similar to the inverse probability treatment weight.
 The propensity score matching weight is defined as the smaller of the predicted probabilities of receiving or not receiving the treatment over the predicted probability of being assigned to the arm the patient is actually in. 
@@ -326,6 +326,8 @@ Use `svydesign` to specify the matching weights
 
 ```{r}
 library(Matching)
+
+#TODO:  Add formula before we implement 
 
 ## Using the complete case data and fitted propensity model constructed above
 dat <- nhefs # Quit Smoke is 1
@@ -357,8 +359,6 @@ datSvy <- survey::svydesign(ids = ~1, data = dat, weights = ~mw)
 
 Use `tbl_svysummary` to summarize the match weighted data and calculate SMD.  
 
-
-
 ```{r}
 
 datSvy %>%
@@ -380,18 +380,18 @@ Note that effective sample sizes were rounded to whole numbers for convenience b
 
 
 ## Outcome analysis
-More details on estimating effect after matching can be found here: https://kosukeimai.github.io/MatchIt/articles/estimating-effects.html
+
+More details on estimating effect after matching can be found here: [https://kosukeimai.github.io/MatchIt/articles/estimating-effects.html](https://kosukeimai.github.io/MatchIt/articles/estimating-effects.html)
 
 Below are some example codes on estimating treatment effect after propensity score 1:1 matching
-### PS 1:1 matched  
 
+### PS 1:1 matched  
 
 #### For continuous outcome
 
 ```{r}
 # Continuous outcome weight changes
-fit1 <- lm(wt82_71 ~ qsmk,
-           data = df_post_match, weights = weights
+fit1 <- lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights
 )
 
 # Cluster-robust standard errors
@@ -473,7 +473,13 @@ tbl_regression(coxWeighted, exponentiate = TRUE)
 
 
 ## Conclusions
-Matching often involves a trade-off among balance, generalization, and sample size. The main advantage of the propensity score matching is it allows the researchers to design and estimate the average treatment effect in the treated from observational or non-randomized study by forming balanced matched pairs that share the similarly value of the propensity score and minimizing the effect of confounding due to non-random allocation of treatment. However, some concerns of PSM includes but not limited to 1) requires large samples with substantial overlap in PS between treated and control; 2) More tweaking is needed by user to achieve balance; 3) PSM can only accounts for observed (observable) covariates and not latent characteristics. 
 
-Matching weights can offer a more efficient estimation and more accurate variance calculation.  It achieves balance with little tweaking required by user. It uses data from all patients, with no exclusion due to difficulty of matching but patients at the extreme end of the PS spectrum are being down-weighted and contribute very little to the final estimation.
-Therefore, the matched sample is considered a pseudo-population where patients are only contributing a portion of their data.  This concept may be challenging to understand for investigators.
+Matching often involves a trade-off among balance, generalization, and sample size.
+The main advantage of the propensity score matching is it allows the researchers to design and estimate the average treatment effect in the treated from observational or non-randomized study by forming balanced matched pairs that share the similarly value of the propensity score and minimizing the effect of confounding due to non-random allocation of treatment.
+However, some concerns of PSM includes but not limited to 1) requires large samples with substantial overlap in PS between treated and control; 2) More tweaking is needed by user to achieve balance; 3) PSM can only accounts for observed (observable) covariates and not latent characteristics. 
+
+Matching weights can offer a more efficient estimation and more accurate variance calculation.
+It achieves balance with little tweaking required by user.
+It uses data from all patients, with no exclusion due to difficulty of matching but patients at the extreme end of the PS spectrum are being down-weighted and contribute very little to the final estimation.
+Therefore, the matched sample is considered a pseudo-population where patients are only contributing a portion of their data.
+This concept may be challenging to understand for investigators.
