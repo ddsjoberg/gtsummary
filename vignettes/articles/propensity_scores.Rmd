@@ -340,7 +340,7 @@ svy_nhefs <-
   mutate(
     ps = predict(mod_ps, type = "response"),
     matching_weight = 
-      min(1 - ps, ps) / (qsmk * ps + (1 - qsmk) * (1 - ps))
+      pmin(1 - ps, ps) / (qsmk * ps + (1 - qsmk) * (1 - ps))
   ) %>%
   survey::svydesign(ids = ~1, data = ., weights = ~matching_weight)
 ```
