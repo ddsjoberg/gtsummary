@@ -13,8 +13,8 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-RCT are considered the goal standard approach for estimating treatment effects.
-Random allocation ensures that treatment assignment will not be confounded by either measured or unmeasured baseline characteristics. In observational or non-randomized studies, treatment selection is often accompanied by subject characteristics.
+The randomized controlled trial (RCT) is considered the gold standard approach for estimating treatment effects.
+Randomization ensures treatment assignment will not be confounded by either measured or unmeasured baseline characteristics. In observational or non-randomized studies, treatment selection is often accompanied by subject characteristics.
 Propensity score (PS) is one approach to reduce the effects of confounding in observational studies. 
 PS is therefore a balancing score. Conditional on PS, the distribution of observed baseline characteristics will be similar between treated and untreated subjects.
 
@@ -311,7 +311,7 @@ Parameters within {matchit} can be tweaked to help improve matching.
 
 - Choosing a different matching algorithm, for example, the default is to match the largest (`m.order` = "largest") matching takes place in descending order of distance measures.
 
-- Re-specify the PS model with additional covarites
+- Re-specify the PS model with additional covariates
 
 If matching does not improve, consider a different matching strategy.
 
@@ -322,37 +322,27 @@ The matching weights method is a weighting analogue to the 1:1 pairwise matching
 The concept of matching weights is similar to the inverse probability treatment weight.
 The propensity score matching weight is defined as the smaller of the predicted probabilities of receiving or not receiving the treatment over the predicted probability of being assigned to the arm the patient is actually in. 
 
-Use `svydesign` to specify the matching weights
+Let $e_i = Pr(Z_i = 1| \textbf{X_i})$, which is typically estimated by a logistic regression model.
+In our example, $Z_i = 1$ indicates a participant quit smoking.
+The matching weight is then defined as
 
-```{r}
+$$
+W_i = \frac{\min(1 - e_i, e_i)}{Z_i e_i + (1 - Z_i)(1 - e_i)}
+$$
+
+Use `svydesign` to specify the matching weights.
+
+```{r, message=FALSE}
 library(Matching)
 
-#TODO:  Add formula before we implement 
-
-## Using the complete case data and fitted propensity model constructed above
-dat <- nhefs # Quit Smoke is 1
-psModel <- mod_ps
-
-
-## Predicted probability of being assigned to group1
-dat$pgrp1 <- predict(psModel, type = "response")
-## Predicted probability of being assigned to group2
-dat$pgrp2 <- 1 - dat$pgrp1
-
-## Predicted probability of being assigned to the
-## treatment actually assigned (either group1 or group2)
-dat$pAssign <- NA
-dat$pAssign[dat$qsmk == 1] <- dat$pgrp1[dat$qsmk == 1]
-dat$pAssign[dat$qsmk == 0] <- dat$pgrp2[dat$qsmk == 0]
-
-## Smaller of pgrp1 vs pgrp2 for matching weight
-dat$pMin <- pmin(dat$pgrp1, dat$pgrp2)
-
-## Propensity score matching weight
-dat$mw <- dat$pMin / dat$pAssign
-
-## Weighted data
-datSvy <- survey::svydesign(ids = ~1, data = dat, weights = ~mw)
+svy_nhefs <-
+  nhefs %>%
+  mutate(
+    ps = predict(mod_ps, type = "response"),
+    matching_weight = 
+      min(1 - ps, ps) / (qsmk * ps + (1 - qsmk) * (1 - ps))
+  ) %>%
+  survey::svydesign(ids = ~1, data = ., weights = ~matching_weight)
 ```
 
 ## Post-matching weights SMD
@@ -360,8 +350,7 @@ datSvy <- survey::svydesign(ids = ~1, data = dat, weights = ~mw)
 Use `tbl_svysummary` to summarize the match weighted data and calculate SMD.  
 
 ```{r}
-
-datSvy %>%
+svy_nhefs %>%
   tbl_svysummary(
     by = "qsmk",
     include = c(sbp, dbp, sex, age, race, wt71, smokeyrs, exercise)
@@ -374,10 +363,8 @@ datSvy %>%
   modify_column_hide(columns = ci)          # remove 95%CI
 ```
 
-
-Note that effective sample sizes were rounded to whole numbers for convenience but should not be interpreted as the number of patients because  some patient may only be contributing a portion of his/her information.  Therefore, the focus should be on the comparison of percentages in each exposure group.   
-
-
+Note that effective sample sizes were rounded to whole numbers for convenience but should not be interpreted as the number of patients because  some patient may only be contributing a portion of his/her information.
+Therefore, the focus should be on the comparison of percentages in each exposure group.   
 
 ## Outcome analysis
 
@@ -391,86 +378,83 @@ Below are some example codes on estimating treatment effect after propensity sco
 
 ```{r}
 # Continuous outcome weight changes
-fit1 <- lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights
-)
-
-# Cluster-robust standard errors
-lmtest::coeftest(fit1, cluster = ~subclass)
+lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights) %>%
+  tbl_regression()
 ```
 
-
-
-
 #### For binary outcome
-```{r}
 
+```{r}
 # Binary outcome
 glm(death ~ qsmk,
     family = binomial,
-    data = df_post_match, weights = weights
-) %>% tbl_regression(exponentiate = TRUE)
+    data = df_post_match, 
+    weights = weights
+) %>% 
+  tbl_regression(exponentiate = TRUE)
 ```
 
 #### Survival outcome
+
 ```{r}
 # Cox Regression for marginal HR-Estimating using the cluster robust standard error
-coxMatchedclust <- coxph(Surv(os.yrs, death) ~ qsmk,
-                         robust = TRUE,
-                         weights = weights,
-                         cluster = subclass,
-                         data = df_post_match
-) %>% tbl_regression(exponentiate = TRUE)
+coxMatchedclust <- 
+  coxph(Surv(os.yrs, death) ~ qsmk,
+        robust = TRUE,
+        weights = weights,
+        cluster = subclass,
+        data = df_post_match
+  ) %>%
+  tbl_regression(exponentiate = TRUE)
 
 
 # Frailty model
-coxMatchedfrail <- coxph(Surv(os.yrs, death) ~ qsmk + frailty(subclass),
-                         data = df_post_match
-) %>% tbl_regression(exponentiate = TRUE, include = qsmk)
+coxMatchedfrail <- 
+  coxph(
+    Surv(os.yrs, death) ~ qsmk + frailty(subclass),
+    data = df_post_match
+  ) %>% 
+  tbl_regression(exponentiate = TRUE, include = qsmk)
 
-tbl_merge(list(coxMatchedclust, coxMatchedfrail),
-          tab_spanner = c("**Marginal HR model**", "**Frailty model**")
-)
+list(coxMatchedclust, coxMatchedfrail) %>%
+  tbl_merge(tab_spanner = c("**Marginal HR model**", "**Frailty model**"))
 ```
-
-
 
 ### Matching weights
 
 #### Continuous outcome
-```{r}
-glmWeighted1 <- survey::svyglm(wt82_71 ~ qsmk,
-                               family = gaussian(link = "identity"),
-                               design = datSvy
-)
 
-lmtest::coeftest(glmWeighted1, cluster = ~subclass)
+```{r}
+survey::svyglm(
+  wt82_71 ~ qsmk,
+  family = gaussian(link = "identity"),
+  design = svy_nhefs
+) %>%
+  tbl_regression()
 ```
 
 
-
-
 #### Binary outcome
-```{r}
-glmWeighted <- survey::svyglm(death ~ qsmk,
-                              family = quasibinomial(),
-                              design = datSvy
-)
 
-tbl_regression(glmWeighted, exponentiate = TRUE)
+```{r}
+survey::svyglm(
+  death ~ qsmk,
+  family = quasibinomial(),
+  design = svy_nhefs
+) %>%
+  tbl_regression(exponentiate = TRUE)
 ```
 
 
 #### Survival outcome
+
 ```{r}
-coxWeighted <- survey::svycoxph(Surv(os.yrs, death) ~ qsmk,
-                                design = datSvy
-)
-
-tbl_regression(coxWeighted, exponentiate = TRUE)
+survey::svycoxph(
+  Surv(os.yrs, death) ~ qsmk,
+  design = svy_nhefs
+) %>%
+  tbl_regression(exponentiate = TRUE)
 ```
-
-
-
 
 ## Conclusions
 
