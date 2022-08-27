@@ -298,7 +298,7 @@ theme_gtsummary_printer <- function(print_engine = c("gt", "kable", "kable_extra
 #' @param language String indicating language. Must be one of `"de"` (German),
 #' `"en"` (English), `"es"` (Spanish), `"fr"` (French), `"gu"` (Gujarati),
 #' `"hi"` (Hindi), `"is"` (Icelandic),`"ja"` (Japanese), `"kr"` (Korean),
-#' `"mr"` (Marathi), `"nl"` (Dutch), `"no"` (Norwegian), `"pt"` (Portuguese),
+#' `"nl"` (Dutch), `"mr"` (Marathi), `"no"` (Norwegian), `"pt"` (Portuguese),
 #' `"se"` (Swedish), `"zh-c,n"` (Chinese Simplified), `"zh-tw"` (Chinese Traditional)
 #'
 #' If a language is missing a translation for a word or phrase, please feel free

@@ -58,7 +58,7 @@ Default is 13 for gt tables, and 8 for all other output types}
 \item{language}{String indicating language. Must be one of \code{"de"} (German),
 \code{"en"} (English), \code{"es"} (Spanish), \code{"fr"} (French), \code{"gu"} (Gujarati),
 \code{"hi"} (Hindi), \code{"is"} (Icelandic),\code{"ja"} (Japanese), \code{"kr"} (Korean),
-\code{"mr"} (Marathi), \code{"nl"} (Dutch), \code{"no"} (Norwegian), \code{"pt"} (Portuguese),
+\code{"nl"} (Dutch), \code{"mr"} (Marathi), \code{"no"} (Norwegian), \code{"pt"} (Portuguese),
 \code{"se"} (Swedish), \code{"zh-c,n"} (Chinese Simplified), \code{"zh-tw"} (Chinese Traditional)
 
 If a language is missing a translation for a word or phrase, please feel free
