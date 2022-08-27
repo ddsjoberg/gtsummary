@@ -97,4 +97,18 @@ test_that("as_tibble(fmt_missing=) works", {
     tbl$estimate_2,
     c(NA_character_, NA_character_, "—", "-4.6")
   )
+
+  expect_equal(
+    trial %>%
+      select(age) %>%
+      tbl_summary() %>%
+      modify_table_body(
+        ~.x %>% mutate(stat_0 = NA_character_)
+      ) %>%
+      modify_table_styling(stat_0, rows = !is.na(label), missing_symbol = "-") %>%
+      as_tibble(fmt_missing = TRUE, col_labels = FALSE) %>%
+      dplyr::pull(stat_0),
+    c("-", "-")
+  )
+
 })
