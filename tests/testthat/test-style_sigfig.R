@@ -7,7 +7,7 @@ test_that("correct rounding near thresholds", {
   )
 
   expect_true(
-    style_sigfig(-9.98) == "10"
+    style_sigfig(-9.98) == "-10"
   )
 
   expect_true(
