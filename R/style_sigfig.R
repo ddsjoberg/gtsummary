@@ -23,10 +23,12 @@
 #'   style_sigfig()
 style_sigfig <- function(x, digits = 2, scale = 1, big.mark = NULL, decimal.mark = NULL, ...) {
   # calculating the number of digits to round number
-  d <- paste0("round2(abs(x * scale), digits = ", digits - digits:1 + 1, ") < 10^",
-    digits - digits:1, " ~ ", digits:1,
-    collapse = ", "
-  ) %>%
+  d <-
+    paste0(
+      "round2(abs(x * scale), digits = ", digits:1, ") ",
+      "< 10^(", 1:digits - 1 ,") ~ ", digits:1,
+      collapse = ", "
+    ) %>%
     {
       paste0("case_when(", ., ", TRUE ~ 0)")
     } %>%
