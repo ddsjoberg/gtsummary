@@ -94,5 +94,29 @@ test_that("indent2", {
   )
 })
 
+test_that("latex-column-alignment", {
+
+  t1 <- trial %>%
+    select(trt, age) %>%
+    tbl_summary(
+      by = trt
+    )
+
+  t2 <- trial %>%
+    select(trt, grade) %>%
+    tbl_summary(
+      by = trt
+    )
+
+  tstack <- tbl_stack(list(t1, t2)) %>%
+    modify_header(
+      all_stat_cols() ~ "**{level}**\nN = {n}"
+    ) %>%
+    as_kable_extra(format = "latex")
+
+  expect_snapshot(tstack)
+
+})
+
 
 
