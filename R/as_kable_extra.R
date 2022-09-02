@@ -472,7 +472,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   # set align argument ---------------------------------------------------------
   align <-
     align %||%
-    stringr::str_sub(dplyr::filter(x$table_styling$header, !.data$hide)$align, 1, 1)
+    stringr::str_sub(x$table_styling$header$align, 1, 1)
 
   # linebreak the headers ------------------------------------------------------
   x$table_styling$header$label <-

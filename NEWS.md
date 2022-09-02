@@ -1,7 +1,18 @@
 # gtsummary (development version)
 
+* Added additional options to `remove_row_type(type = c("level", "all"))`.
+  - Use `type = "all"` to remove all rows associated with the variable(s) specified in `remove_row_type(variables=)`.
+  - Use `type = "level"` in conjunction with new argument `level_values=` to remove specified levels for a variable, or do not use the new argument to remove all levels for categorical variables.
+
 * Added the standard error of means to the list of available statistics for continuous data summaries in `tbl_svysummary()`. (#1291)
+
 * Fixed bug when a column named `"variable"` was passed to `tbl_custom_summary(by=)`, which resulted in an error. (#1285)
+
+* Bug fix in `as_tibble(fmt_missing = TRUE)`. Previously, missing assignments applied to more than one row were being ignored. (#1327)
+
+* Bug fix in column alignment with `tbl_stack()` for `as_kable_extra()` output. (#1326)
+
+* Updated calls to `round()` in the `style_*()` functions to `round2()`, which implements classic rounding rules. (#1304)
 
 # gtsummary 1.6.1
 
