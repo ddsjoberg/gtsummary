@@ -34,7 +34,7 @@ jobs:
           needs: website
 
       - name: Install extra pkgs
-        run: install.packages(c("tidyverse", "causaldata"), repos = "http://cran.rstudio.com/")
+        run: install.packages(c("tidyverse", "causaldata", "Matching", "MatchIt"), repos = "http://cran.rstudio.com/")
         shell: Rscript {0}
 
       - name: Build site
