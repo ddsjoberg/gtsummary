@@ -9,50 +9,48 @@ knitr::opts_chunk$set(
 )
 ```
 
-
 ## Introduction
 
 The randomized controlled trial (RCT) is considered the gold standard approach for estimating treatment effects.
-Randomization ensures treatment assignment will not be confounded by either measured or unmeasured baseline characteristics. In observational or non-randomized studies, treatment selection is often accompanied by subject characteristics.
-Propensity score (PS) is one approach to reduce the effects of confounding in observational studies. 
-PS is therefore a balancing score. Conditional on PS, the distribution of observed baseline characteristics will be similar between treated and untreated subjects.
+Randomization ensures treatment assignment will not be confounded by either measured or unmeasured baseline characteristics.
+In observational or non-randomized studies, treatment selection is often related by subject characteristics, such as disease severity or comorbidities.
+Propensity score (PS) is one approach to reduce the effects of confounding these studies with potential selection biases for treatment. 
 
-## Useful recources and vignettes 
+Herein, we review how to perform propensity score analysis aided with the {gtsummary} package.
 
-For those who want to have deeper understanding of causal inference, please visit the causal inference R workshop prepared by Malcolm Barrett ([@malco_barrett](https://twitter.com/malco_barrett)) & Lucy D’Agostino McGowan ([@LucyStats](https://twitter.com/LucyStats)):
-https://github.com/malcolmbarrett/causal_inference_r_workshop
+## Other Resources
 
-Additional useful vignettes include by not limited to
+For a deeper review of propensity score methods, review one or more of the following resources
 
-- Matching weights tutorial: http://rstudio-pubs-static.s3.amazonaws.com/198545_5fae2128569a4e4a80627bc87c71d1e2.html
+- Causal inference R workshop prepared by ([Malcolm Barrett](https://twitter.com/malco_barrett)) and  ([Lucy D’Agostino McGowan](https://twitter.com/LucyStats)). Workshop material are found (here)[https://github.com/malcolmbarrett/causal_inference_r_workshop].
 
-- SAS 'PSMATCH" procedure:https://support.sas.com/rnd/app/stat/procedures/psmatch.html
-
-- A review of propensity score: principles, methods and application in Stata:https://www.stata.com/meeting/italy14/abstracts/materials/it14_grotta.pdf
-<br>
+- "A Tutorial and Case Study in Propensity Score Analysis: An Application to Estimating the Effect of In-Hospital Smoking Cessation Counseling on Mortality" published in *Multivariate Behavioral Research*. (doi:10.1080/00273171.2011.540480)[https://doi.org/10.1080%2F00273171.2011.540480].
 
 ## Data
 
-Using the National Health and Nutrition Examination Survey Data (`nhefs_complete`), we are interested in the relationship between the **exposure**, `qsmk`, whether the participant quit smoking, and the **outcomes** : 1) `death`: whether the participate died or not as binary outcome, 2) time to death as time to event outcome, and 3) `wt82_71`, weight change in kilograms as continuous outcome 
+Using the National Health and Nutrition Examination Survey Data, we are interested in the relationship between whether a participant quit smoking (the exposure), and three outcomes: subsequent death (binary), time to death (time to event), and weight change (continuous).
 
-Some possible confounders: 
-`sex`, `age`,`smokeyrs`,`sbp`,`dbp`,`race`,`income`,`diabetes`,`exercise`,`income` and `wt71` 
+The data can be found in {causaldata} package: `causaldata::nhefs_complete`.
+
+We will assess the relationship between the exposure and the outcome in the presenece of the following potential counding variables: `sex`, `age`,`smokeyrs`,`sbp`,`dbp`,`race`,`income`,`diabetes`,`exercise`,`income` and `wt71` 
+
+To begin, install the following packages and prepare the data.
+Note that the {gtsummary} package utilizes column labels and we assign the labels using the {labelled} package.
 
 ```{r, eval = FALSE}
-install.packages(c("gtsummary", "tidyverse" "remotes"))
+install.packages(c("gtsummary", "tidyverse" "causaldata", "Matching", "MatchIt", "labelled"))
 ```
 
 ```{r setup, echo = FALSE, message=FALSE}
 library(gtsummary)
 library(tidyverse)
 library(survival)
-
 theme_gtsummary_compact()
 
 nhefs <- 
   causaldata::nhefs_complete %>%
   mutate(
-    os.yrs =
+    followup_yrs =
       case_when(
         death == 1 ~ as.numeric(yrdth - age),
         death == 0 ~ 21
@@ -64,7 +62,7 @@ nhefs <-
     across(c(race, sex), ~as.numeric(as.character(.)))
   ) %>%
   select(seqn, qsmk, sbp, dbp, sex, age, race, wt71, 
-         smokeyrs, exercise, wt82_71, os.yrs, death) %>%
+         smokeyrs, exercise, wt82_71, followup_yrs, death) %>%
   drop_na() %>%
   labelled::set_variable_labels(
     sbp = "Systolic Blood Pressure",
@@ -80,20 +78,16 @@ nhefs <-
 
 ## Steps to consider prior to matching  
 
-Use `tbl_summary` to examine collected baseline characteristics between treated and un-treated groups
+Use `tbl_summary` to examine collected baseline characteristics between treated and un-treated groups.
+The standardized mean difference (SMD) is a commonly used measure to assess differences or balance between two groups.
+A rule-of-thumb method to assess potentially important imbalance between the two groups is when the magnitidue of the SMD is larger than 0.1.
 
-SMD (standardized mean difference) is the most commonly used statistic to examine balance diagnostics https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6351359/
-
-Variables with abs(SMD) > 0.1 is indicative of data imbalance between the groups.   
-Use `add_difference()` and `method`= smd to compute the SMD between the two groups.  SMD is calculated using the `smd()` function in package `smd`. 
-
-From the summary table, all the variables have SMD>0.1 and this suggests imbalanced between baseline characteristics and the groups that did and did not quit smoking. In addition, we also didn't compute SMD for any outcomes variable -use  `include()` to omit.
-
+In the summary table below, all the variables have SMD greater than 0.1, suggesting imbalanced between baseline characteristics and the groups that did and did not quit smoking.
 
 ```{r pre_match_smd}
 gts_pre_match <-
   nhefs %>%
-  select(-c(seqn, os.yrs, death, wt82_71)) %>%
+  select(-c(seqn, followup_yrs, death, wt82_71)) %>%
   mutate(
     qsmk = 
       factor(qsmk, 
@@ -111,12 +105,6 @@ gts_pre_match <-
     all_stat_cols() ~ "**{level}**<br>N = {n}"
   ) %>%
   modify_column_hide(columns = ci) # remove 95% CI
-
-# Extract the SMD pre-matching
-pre_match_smd <-
-  gts_pre_match$table_body %>%
-  select(variable, label, smd = estimate) %>%
-  drop_na()
 
 gts_pre_match
 ```
@@ -228,18 +216,24 @@ gts_post_match <-
   modify_header(estimate ~ "**SMD**") %>% # rename Difference to SMD
   modify_column_hide(columns = ci) # remove 95%CI
 
-# Extract the SMD
-post_match_smd <- 
-  gts_post_match$table_body %>%
-  select(variable, label, smd = estimate) %>%
-  drop_na()
-
 gts_post_match
 ```
 
 ### Plot showing the balance effect of matching
 
 ```{r}
+# Extract the SMD pre-matching
+pre_match_smd <-
+  gts_pre_match$table_body %>%
+  select(variable, label, smd = estimate) %>%
+  drop_na()
+
+# Extract the SMD
+post_match_smd <- 
+  gts_post_match$table_body %>%
+  select(variable, label, smd = estimate) %>%
+  drop_na()
+
 pre_match_smd %>% 
   mutate(type = "Pre-Match") %>%
   bind_rows(post_match_smd %>% mutate(type = "Post-Match")) %>%
@@ -398,7 +392,7 @@ glm(death ~ qsmk,
 ```{r}
 # Cox Regression for marginal HR-Estimating using the cluster robust standard error
 coxMatchedclust <- 
-  coxph(Surv(os.yrs, death) ~ qsmk,
+  coxph(Surv(followup_yrs, death) ~ qsmk,
         robust = TRUE,
         weights = weights,
         cluster = subclass,
@@ -410,7 +404,7 @@ coxMatchedclust <-
 # Frailty model
 coxMatchedfrail <- 
   coxph(
-    Surv(os.yrs, death) ~ qsmk + frailty(subclass),
+    Surv(followup_yrs, death) ~ qsmk + frailty(subclass),
     data = df_post_match
   ) %>% 
   tbl_regression(exponentiate = TRUE, include = qsmk)
@@ -449,7 +443,7 @@ survey::svyglm(
 
 ```{r}
 survey::svycoxph(
-  Surv(os.yrs, death) ~ qsmk,
+  Surv(followup_yrs, death) ~ qsmk,
   design = svy_nhefs
 ) %>%
   tbl_regression(exponentiate = TRUE)
