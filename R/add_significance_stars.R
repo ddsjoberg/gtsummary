@@ -3,13 +3,15 @@
 #' \lifecycle{experimental}
 #' Add significance stars to estimates with small p-values
 #'
-#' @param x a `'tbl_regression'` or `'tbl_uvregression'` object
+#' @param x a `'gtsummary'` object with a `'p.value'` column
 #' @param thresholds thresholds for significance stars. Default is `c(0.001, 0.01, 0.05)`
 #' @param hide_ci logical whether to hide confidence interval. Default is `TRUE`
-#' @param hide_p logical whether to hide p-value. Default is `TRUE`
+#' @param hide_p logical whether to hide p-value. Default is `TRUE` for regression summaries, and `FALSE` otherwise.
 #' @param hide_se logical whether to hide standard error. Default is `FALSE`
 #' @param pattern glue-syntax string indicating what to display in formatted column.
-#' Default is `"{estimate}{stars}"`. Other common patterns are
+#' Default is `"{estimate}{stars}"` for regression summaries and `"{p.value}{stars}"` otherwise.
+#' A footnote is placed on the first column listed in the pattern.
+#' Other common patterns are
 #' `"{estimate}{stars} ({conf.low}, {conf.high})"` and
 #' `"{estimate} ({conf.low} to {conf.high}){stars}"`
 #'
@@ -72,11 +74,25 @@
 #'
 #' \if{html}{\figure{add_significance_stars_ex3.png}{options: width=30\%}}
 
-add_significance_stars <- function(x, pattern = "{estimate}{stars}",
+add_significance_stars <- function(x, pattern = NULL,
                                    thresholds = c(0.001, 0.01, 0.05),
-                                   hide_ci = TRUE, hide_p = TRUE, hide_se = FALSE) {
+                                   hide_ci = TRUE,
+                                   hide_p = inherits(x, c("tbl_regression", "tbl_uvregression")),
+                                   hide_se = FALSE) {
   # checking inputs ------------------------------------------------------------
-  .assert_class(x, c("tbl_regression", "tbl_uvregression"))
+  .assert_class(x, "gtsummary")
+  if (!"p.value" %in% names(x$table_body)) {
+    cli::cli_abort(c(
+      "!" = "There is no p-value column in the table and significance stars cannot be placed."))
+  }
+
+  # assign default pattern and footnote placement ------------------------------
+  pattern <-
+    pattern %||%
+    dplyr::case_when(
+      inherits(x, c("tbl_regression", "tbl_uvregression")) ~ "{estimate}{stars}",
+      TRUE ~ "{p.value}{stars}"
+    )
 
   thresholds <- sort(thresholds, decreasing = TRUE) %>% unique()
   if (any(!dplyr::between(thresholds, 0L, 1L))) {
@@ -106,14 +122,14 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
     ) %>%
     paste(collapse = "; ")
 
-  x <- modify_footnote(x, "estimate" ~ p_footnote)
+  x <- modify_footnote(x, any_of(pattern_cols[1]) ~ p_footnote)
 
   # adding stars column --------------------------------------------------------
   thresholds <- union(thresholds, 0L)
   expr_stars_case_when <-
     map2(
       thresholds, seq_along(thresholds),
-      ~ expr(!is.na(estimate) & p.value >= !!.x ~ !!paste(rep_len("*", .y - 1), collapse = "")) %>%
+      ~ expr(!is.na(!!sym(pattern_cols[1])) & p.value >= !!.x ~ !!paste(rep_len("*", .y - 1), collapse = "")) %>%
         rlang::expr_deparse()
     ) %>%
     purrr::reduce(.f = ~ paste(.x, .y, sep = ", ")) %>%
@@ -135,20 +151,12 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
     )
 
   # adding `cols_merge` to table styling ---------------------------------------
-  model_variables <-
-    x$table_body %>%
-    filter(!is.na(.data$coefficients_type)) %>%
-    # keep obs from regression model
-    dplyr::pull(.data$variable) %>%
-    unique()
-
   x <-
     modify_table_styling(
       x = x,
       columns = pattern_cols[1],
-      rows = !!expr(.data$variable %in% !!model_variables &
-        !is.na(.data$estimate) &
-        !.data$reference_row %in% TRUE),
+      rows =
+        !!expr(!is.na(.data$p.value) & !is.na(!!sym(pattern_cols[1]))),
       cols_merge_pattern = pattern
     )
 
