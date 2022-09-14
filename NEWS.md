@@ -12,6 +12,8 @@
 
 * Bug fix in `as_tibble(fmt_missing = TRUE)`. Previously, missing assignments applied to more than one row were being ignored. (#1327)
 
+* Bug fix in column alignment with `tbl_stack()` for `as_kable_extra()` output. (#1326)
+
 * Updated calls to `round()` in the `style_*()` functions to `round2()`, which implements classic rounding rules. (#1304)
 
 # gtsummary 1.6.1
