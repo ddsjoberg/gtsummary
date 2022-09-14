@@ -24,8 +24,8 @@ theme_gtsummary_printer(
 )
 
 theme_gtsummary_language(
-  language = c("de", "en", "es", "fr", "gu", "hi", "is", "ja", "kr", "mr", "no", "pt",
-    "se", "zh-cn", "zh-tw"),
+  language = c("de", "en", "es", "fr", "gu", "hi", "is", "ja", "kr", "mr", "nl", "no",
+    "pt", "se", "zh-cn", "zh-tw"),
   decimal.mark = NULL,
   big.mark = NULL,
   iqr.sep = NULL,
@@ -58,8 +58,8 @@ Default is 13 for gt tables, and 8 for all other output types}
 \item{language}{String indicating language. Must be one of \code{"de"} (German),
 \code{"en"} (English), \code{"es"} (Spanish), \code{"fr"} (French), \code{"gu"} (Gujarati),
 \code{"hi"} (Hindi), \code{"is"} (Icelandic),\code{"ja"} (Japanese), \code{"kr"} (Korean),
-\code{"mr"} (Marathi), \code{"no"} (Norwegian), \code{"pt"} (Portuguese), \code{"se"} (Swedish),
-\code{"zh-c,n"} (Chinese Simplified), \code{"zh-tw"} (Chinese Traditional)
+\code{"nl"} (Dutch), \code{"mr"} (Marathi), \code{"no"} (Norwegian), \code{"pt"} (Portuguese),
+\code{"se"} (Swedish), \code{"zh-c,n"} (Chinese Simplified), \code{"zh-tw"} (Chinese Traditional)
 
 If a language is missing a translation for a word or phrase, please feel free
 to reach out on \href{https://github.com/ddsjoberg/gtsummary/issues}{GitHub}
