@@ -18,7 +18,7 @@ Propensity score (PS) is one approach to reduce the effects of confounding these
 
 Herein, we review how to perform propensity score analysis aided with the {gtsummary} package.
 
-## Other Resources
+### Other Resources
 
 For a deeper review of propensity score methods, review one or more of the following resources
 
@@ -26,7 +26,9 @@ For a deeper review of propensity score methods, review one or more of the follo
 
 - "A Tutorial and Case Study in Propensity Score Analysis: An Application to Estimating the Effect of In-Hospital Smoking Cessation Counseling on Mortality" published in *Multivariate Behavioral Research*. (doi:10.1080/00273171.2011.540480)[https://doi.org/10.1080%2F00273171.2011.540480].
 
-## Data
+## Construct a Propensity Score
+
+### Data
 
 Using the National Health and Nutrition Examination Survey Data, we are interested in the relationship between whether a participant quit smoking (the exposure), and three outcomes: subsequent death (binary), time to death (time to event), and weight change (continuous).
 
@@ -76,11 +78,11 @@ nhefs <-
   )
 ```
 
-## Steps to consider prior to matching  
+### Estimate the propensity score
 
 Use `tbl_summary` to examine collected baseline characteristics between treated and un-treated groups.
 The standardized mean difference (SMD) is a commonly used measure to assess differences or balance between two groups.
-A rule-of-thumb method to assess potentially important imbalance between the two groups is when the magnitidue of the SMD is larger than 0.1.
+A rule-of-thumb method to assess potentially important imbalance between the two groups is when the magnitude of the SMD is larger than 0.1.
 
 In the summary table below, all the variables have SMD greater than 0.1, suggesting imbalanced between baseline characteristics and the groups that did and did not quit smoking.
 
@@ -109,7 +111,6 @@ gts_pre_match <-
 gts_pre_match
 ```
 
-## Constructing PS score
 
 Logistic regression model is the most common method to construct the propensity score to predict the probability of receiving the treatment
 
@@ -164,13 +165,17 @@ ggplot() +
 Before applying the estimated PS (either through matching, stratification or inverse probability weight), it is important to examine the region of common support.
 If the two groups do not have sufficient common region (i.e, the distributions  are total mirror imaging of each other), then applying PS analysis may not be feasible. 
 
-## PS Matching
+## Method 1: Propensity Score Matching
 
-There are different algorithm for matching: optimal matching (Bersekas, 1991), Greedy's nearest neighbour matching (with or without replacement). See Austin (2012) for detailed discussion and comparison of different algorithms for matching on the propensity score. The R pckage `MatchIt` written by Noah Greifer, offers different methods for matching. Complete vignette on this package can be found here: https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html#assessing-the-quality-of-matches]
+There are different algorithm for matching: optimal matching (Bersekas, 1991), Greedy's nearest neighbour matching (with or without replacement).
+See Austin (2012) for detailed discussion and comparison of different algorithms for matching on the propensity score.
+The R pckage `MatchIt` written by Noah Greifer, offers different methods for matching. Complete vignette on this package can be found here: https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html#assessing-the-quality-of-matches]
 
-The following codes show the 1:1 Greedy's nearest neighbour matching without replacement with a caliper of 0.25. 
+The following codes show the 1:1 Greedy's nearest neighbor matching without replacement with a caliper of 0.25. 
 
-Caliper is the actual maximum distance allowed by the matching algorithm. It is usually set to be a quarter of standard deviation of the propensity score. Reference on selecting the appropriate caliper canbe found here : https://doi.org/10.1093/aje/kwt212
+Caliper is the actual maximum distance allowed by the matching algorithm.
+It is usually set to be a quarter of standard deviation of the propensity score.
+Reference on selecting the appropriate caliper canbe found here : https://doi.org/10.1093/aje/kwt212
 
 ```{r match}
 df_matchit_results <-
@@ -189,12 +194,12 @@ df_matchit_results <-
 df_post_match <- MatchIt::match.data(df_matchit_results)
 ```
 
-## Summarize the matching
+### Summarize the matched groups
 
 After matching, we can use `tbl_summary()` to assess the balance of covariates between the matched group.
 Alternative way is to use the mirrored histograms to review the distributions of propensity score for the matched and unmatched groups.
 
-### Post-matching SMD
+### Post-matching Assessment
 
 We now see the distributions are fairly balanced between the two groups and abs(SMD) are all below 0.1.
 
@@ -219,7 +224,7 @@ gts_post_match <-
 gts_post_match
 ```
 
-### Plot showing the balance effect of matching
+Now let's visualize the matching by plotting the pre- and post-matching standardized mean differences.
 
 ```{r}
 # Extract the SMD pre-matching
@@ -248,7 +253,7 @@ pre_match_smd %>%
   theme(legend.position = "bottom")
 ```
 
-#### Visualize the distributions of PS for the matching groups
+We can also assess the matching algorithm using histograms.
 
 ```{r warning=FALSE}
 df_with_ps %>%
@@ -308,7 +313,61 @@ Parameters within {matchit} can be tweaked to help improve matching.
 
 If matching does not improve, consider a different matching strategy.
 
-## Matching weights (uses package Matching)
+
+### Analysis  
+
+#### Continuous outcome
+
+```{r}
+# Continuous outcome weight changes
+lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights) %>%
+  tbl_regression()
+# TODO: update for clusters
+```
+
+#### Binary outcome
+
+```{r}
+# Binary outcome
+glm(death ~ qsmk,
+    family = binomial,
+    data = df_post_match, 
+    weights = weights
+) %>% 
+  tbl_regression(exponentiate = TRUE)
+#TODO: JC to change this to conditional logistic regression.
+```
+
+#### Survival outcome
+
+To account for the matched groups, we can use either a cluster or a random effect via the frailty model.
+
+```{r}
+# Cox Regression for marginal HR-Estimating using the cluster robust standard error
+coxMatchedclust <- 
+  coxph(Surv(followup_yrs, death) ~ qsmk,
+        robust = TRUE,
+        weights = weights,
+        cluster = subclass,
+        data = df_post_match
+  ) %>%
+  tbl_regression(exponentiate = TRUE)
+
+
+# Frailty model
+coxMatchedfrail <- 
+  coxph(
+    Surv(followup_yrs, death) ~ qsmk + frailty(subclass),
+    data = df_post_match
+  ) %>% 
+  tbl_regression(exponentiate = TRUE, include = qsmk)
+
+list(coxMatchedclust, coxMatchedfrail) %>%
+  tbl_merge(tab_spanner = c("**Marginal HR model**", "**Frailty model**"))
+```
+
+
+## Method 2: Matching weights
 
 The matching weights method is a weighting analogue to the 1:1 pairwise matching ([https://pubmed.ncbi.nlm.nih.gov/23902694/](https://pubmed.ncbi.nlm.nih.gov/23902694/)). 
 
@@ -338,7 +397,7 @@ svy_nhefs <-
   survey::svydesign(ids = ~1, data = ., weights = ~matching_weight)
 ```
 
-## Post-matching weights SMD
+### Post-matching weights SMD
 
 Use `tbl_svysummary` to summarize the match weighted data and calculate SMD.  
 
@@ -359,61 +418,9 @@ svy_nhefs %>%
 Note that effective sample sizes were rounded to whole numbers for convenience but should not be interpreted as the number of patients because  some patient may only be contributing a portion of his/her information.
 Therefore, the focus should be on the comparison of percentages in each exposure group.   
 
-## Outcome analysis
-
 More details on estimating effect after matching can be found here: [https://kosukeimai.github.io/MatchIt/articles/estimating-effects.html](https://kosukeimai.github.io/MatchIt/articles/estimating-effects.html)
 
-Below are some example codes on estimating treatment effect after propensity score 1:1 matching
-
-### PS 1:1 matched  
-
-#### For continuous outcome
-
-```{r}
-# Continuous outcome weight changes
-lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights) %>%
-  tbl_regression()
-```
-
-#### For binary outcome
-
-```{r}
-# Binary outcome
-glm(death ~ qsmk,
-    family = binomial,
-    data = df_post_match, 
-    weights = weights
-) %>% 
-  tbl_regression(exponentiate = TRUE)
-```
-
-#### Survival outcome
-
-```{r}
-# Cox Regression for marginal HR-Estimating using the cluster robust standard error
-coxMatchedclust <- 
-  coxph(Surv(followup_yrs, death) ~ qsmk,
-        robust = TRUE,
-        weights = weights,
-        cluster = subclass,
-        data = df_post_match
-  ) %>%
-  tbl_regression(exponentiate = TRUE)
-
-
-# Frailty model
-coxMatchedfrail <- 
-  coxph(
-    Surv(followup_yrs, death) ~ qsmk + frailty(subclass),
-    data = df_post_match
-  ) %>% 
-  tbl_regression(exponentiate = TRUE, include = qsmk)
-
-list(coxMatchedclust, coxMatchedfrail) %>%
-  tbl_merge(tab_spanner = c("**Marginal HR model**", "**Frailty model**"))
-```
-
-### Matching weights
+### Analysis
 
 #### Continuous outcome
 
