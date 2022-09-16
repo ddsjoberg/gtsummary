@@ -60,6 +60,10 @@ numeric columns numeric. For the \emph{vast majority} of users,
 \if{html}{Example 3}
 
 \if{html}{\figure{add_significance_stars_ex3.png}{options: width=30\%}}
+
+\if{html}{Example 4}
+
+\if{html}{\figure{add_significance_stars_ex4.png}{options: width=30\%}}
 }
 
 \examples{
@@ -92,6 +96,19 @@ add_significance_stars_ex3 <-
   ) \%>\%
   modify_header(estimate ~ "**Beta (SE)**") \%>\%
   modify_footnote(estimate ~ "SE = Standard Error", abbreviation = TRUE) \%>\%
+  as_gt() \%>\%
+  gt::tab_style(
+    style = "vertical-align:top",
+    locations = gt::cells_body(columns = label)
+  )
+
+# Example 4 ----------------------------------
+add_significance_stars_ex4 <-
+  lm(marker ~ stage + grade, data = trial) \%>\%
+  tbl_regression() \%>\%
+  add_global_p() \%>\%
+  add_significance_stars(hide_p = FALSE,
+                           pattern = "{p.value}{stars}") \%>\%
   as_gt() \%>\%
   gt::tab_style(
     style = "vertical-align:top",

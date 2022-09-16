@@ -61,6 +61,19 @@
 #'     style = "vertical-align:top",
 #'     locations = gt::cells_body(columns = label)
 #'   )
+#'
+#' # Example 4 ----------------------------------
+#' add_significance_stars_ex4 <-
+#'   lm(marker ~ stage + grade, data = trial) %>%
+#'   tbl_regression() %>%
+#'   add_global_p() %>%
+#'   add_significance_stars(hide_p = FALSE,
+#'                            pattern = "{p.value}{stars}") %>%
+#'   as_gt() %>%
+#'   gt::tab_style(
+#'     style = "vertical-align:top",
+#'     locations = gt::cells_body(columns = label)
+#'   )
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -73,6 +86,10 @@
 #' \if{html}{Example 3}
 #'
 #' \if{html}{\figure{add_significance_stars_ex3.png}{options: width=30\%}}
+#'
+#' \if{html}{Example 4}
+#'
+#' \if{html}{\figure{add_significance_stars_ex4.png}{options: width=30\%}}
 
 add_significance_stars <- function(x, pattern = NULL,
                                    thresholds = c(0.001, 0.01, 0.05),
@@ -129,7 +146,8 @@ add_significance_stars <- function(x, pattern = NULL,
   expr_stars_case_when <-
     map2(
       thresholds, seq_along(thresholds),
-      ~ expr(!is.na(!!sym(pattern_cols[1])) & p.value >= !!.x ~ !!paste(rep_len("*", .y - 1), collapse = "")) %>%
+      ~ expr(#!is.na(!!sym(pattern_cols[1])) &
+               p.value >= !!.x ~ !!paste(rep_len("*", .y - 1), collapse = "")) %>%
         rlang::expr_deparse()
     ) %>%
     purrr::reduce(.f = ~ paste(.x, .y, sep = ", ")) %>%
@@ -156,7 +174,7 @@ add_significance_stars <- function(x, pattern = NULL,
       x = x,
       columns = pattern_cols[1],
       rows =
-        !!expr(!is.na(.data$p.value) & !is.na(!!sym(pattern_cols[1]))),
+        !!expr(!is.na(.data$p.value) ), #& !is.na(!!sym(pattern_cols[1]))),
       cols_merge_pattern = pattern
     )
 
