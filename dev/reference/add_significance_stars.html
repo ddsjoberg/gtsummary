@@ -25,7 +25,7 @@ Add significance stars to estimates with small p-values"><meta property="og:imag
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9008</span>
       </span>
     </div>
 
@@ -101,10 +101,10 @@ Add significance stars to estimates with small p-values</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">add_significance_stars</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  pattern <span class="op">=</span> <span class="st">"{estimate}{stars}"</span>,</span>
+<span>  pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  thresholds <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span><span class="op">)</span>,</span>
 <span>  hide_ci <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  hide_p <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  hide_p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">inherits</a></span><span class="op">(</span><span class="va">x</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl_regression"</span>, <span class="st">"tbl_uvregression"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  hide_se <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -112,12 +112,14 @@ Add significance stars to estimates with small p-values</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
-<dd><p>a <code>'tbl_regression'</code> or <code>'tbl_uvregression'</code> object</p></dd>
+<dd><p>a <code>'gtsummary'</code> object with a <code>'p.value'</code> column</p></dd>
 
 
 <dt>pattern</dt>
 <dd><p>glue-syntax string indicating what to display in formatted column.
-Default is <code>"{estimate}{stars}"</code>. Other common patterns are
+Default is <code>"{estimate}{stars}"</code> for regression summaries and <code>"{p.value}{stars}"</code> otherwise.
+A footnote is placed on the first column listed in the pattern.
+Other common patterns are
 <code>"{estimate}{stars} ({conf.low}, {conf.high})"</code> and
 <code>"{estimate} ({conf.low} to {conf.high}){stars}"</code></p></dd>
 
@@ -131,7 +133,7 @@ Default is <code>"{estimate}{stars}"</code>. Other common patterns are
 
 
 <dt>hide_p</dt>
-<dd><p>logical whether to hide p-value. Default is <code>TRUE</code></p></dd>
+<dd><p>logical whether to hide p-value. Default is <code>TRUE</code> for regression summaries, and <code>FALSE</code> otherwise.</p></dd>
 
 
 <dt>hide_se</dt>
@@ -161,6 +163,8 @@ numeric columns numeric. For the <em>vast majority</em> of users,
 <p><img src="figures/add_significance_stars_ex2.png" width="35%"></p>
 <p>Example 3</p>
 <p><img src="figures/add_significance_stars_ex3.png" width="30%"></p>
+<p>Example 4</p>
+<p><img src="figures/add_significance_stars_ex4.png" width="30%"></p>
     </div>
 
     <div id="ref-examples">
@@ -194,6 +198,19 @@ numeric columns numeric. For the <em>vast majority</em> of users,
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">~</span> <span class="st">"**Beta (SE)**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">~</span> <span class="st">"SE = Standard Error"</span>, abbreviation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">tab_style</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    style <span class="op">=</span> <span class="st">"vertical-align:top"</span>,</span></span>
+<span class="r-in"><span>    locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">label</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 4 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">add_significance_stars_ex4</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">marker</span> <span class="op">~</span> <span class="va">stage</span> <span class="op">+</span> <span class="va">grade</span>, data <span class="op">=</span> <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_global_p.html">add_global_p</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">add_significance_stars</span><span class="op">(</span>hide_p <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>                           pattern <span class="op">=</span> <span class="st">"{p.value}{stars}"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">tab_style</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    style <span class="op">=</span> <span class="st">"vertical-align:top"</span>,</span></span>
