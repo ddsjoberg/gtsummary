@@ -120,7 +120,7 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   df_stat_label <-
     x$meta_data %>%
     filter(!.data$summary_type %in% "continuous2") %>%
-    select(.data$variable, .data$stat_label) %>%
+    select("variable", "stat_label") %>%
     tibble::deframe() %>%
     # updating the default values with values in label
     purrr::imap_chr(~ label[[.y]] %||% .x) %>%
@@ -132,7 +132,7 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
     modify_table_body(
       ~ .x %>%
         left_join(df_stat_label, by = "variable") %>%
-        dplyr::relocate(.data$stat_label, .after = .data$label) %>%
+        dplyr::relocate("stat_label", .after = "label") %>%
         mutate(
           # adding in "n" for missing rows, and header
           stat_label = case_when(
@@ -158,13 +158,13 @@ add_stat_label <- function(x, location = NULL, label = NULL) {
   df_con2_update <-
     x$meta_data %>%
     filter(.data$summary_type %in% "continuous2") %>%
-    select(.data$variable, .data$summary_type, .data$stat_label) %>%
+    select("variable", "summary_type", "stat_label") %>%
     mutate(
       stat_label = map2(.data$stat_label, .data$variable, ~ label[[.y]] %||% .x),
       row_type = "level"
     ) %>%
-    tidyr::unnest(.data$stat_label) %>%
-    dplyr::rename(var_type = .data$summary_type, label = .data$stat_label)
+    tidyr::unnest("stat_label") %>%
+    dplyr::rename(var_type = "summary_type", label = "stat_label")
   rows_to_update <-
     x$table_body$variable %in% unique(df_con2_update$variable) &
       x$table_body$var_type %in% "continuous2" &

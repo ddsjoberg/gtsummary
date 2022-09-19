@@ -76,7 +76,7 @@ test_that("tbl_svysummary works in character inputs for `by=`", {
   expect_error(
     purrr::map(
       c("Survived", "Class", "Sex", "Age"),
-      ~ tbl_svysummary(d, by = .x)
+      ~ tbl_svysummary(d, by = all_of(.x))
     ),
     NA
   )

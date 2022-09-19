@@ -68,7 +68,7 @@ test_that("tbl_summary works in character inputs for `by=`", {
   expect_error(
     purrr::map(
       c("trt", "grade", "stage"),
-      ~ tbl_summary(trial, by = .x)
+      ~ tbl_summary(trial, by = all_of(.x))
     ),
     NA
   )
@@ -436,7 +436,7 @@ test_that("tbl_summary-complex environments check", {
     label_var <- "grade"
     trial %>%
       tbl_summary(
-        label = label_var ~ "Grade, oof",
+        label = all_of(label_var) ~ "Grade, oof",
       )
   }
   expect_error(tbl_env2 <- no_fun2(), NA)

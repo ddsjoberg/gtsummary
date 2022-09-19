@@ -257,7 +257,7 @@ inline_text.tbl_summary <- function(x, variable, column = NULL, level = NULL,
       col_lookup_table %>%
       filter(.data$input == !!column) %>%
       slice(1) %>%
-      pull(.data$column_name)
+      pull("column_name")
   }
   else if (column_is_null && is.null(x$by)) column <- "stat_0"
 
@@ -759,7 +759,7 @@ inline_text.tbl_cross <-
     col_level <- col_lookup_table %>%
       filter(.data$input == col_level) %>%
       slice(1) %>%
-      pull(.data$column_name)
+      pull("column_name")
 
     # replacing passed data with, tbl_data (only data used in table) -----------
     x$inputs$data <- x$tbl_data
@@ -794,7 +794,7 @@ df_stats_to_table_body <- function(x) {
           select(-any_of(c("by", "stat_display", "variable_levels",
                            "col_label", "strata"))) %>%
           tidyr::pivot_wider(id_cols = any_of(c("variable", "label", "row_type")),
-                             names_from = .data$col_name,
+                             names_from = "col_name",
                              names_glue = "raw_{col_name}_{.value}",
                              values_from = -any_of(c("variable", "label", "row_type", "col_name")))  %>%
           select(any_of(c("variable", "row_type", "label")), everything())
@@ -823,11 +823,11 @@ df_stats_to_table_body <- function(x) {
                   style_sigfig
               )
           ) %>%
-          unnest(.data$raw_colname) %>%
-          select(-.data$colname)
+          unnest("raw_colname") %>%
+          select(-"colname")
       }
     ) %>%
-    nest(raw_colname = .data$raw_colname) %>%
+    nest(raw_colname = "raw_colname") %>%
     dplyr::rowwise() %>%
     mutate(raw_colname = unlist(.data$raw_colname) %>% unname() %>% list()) %>%
     ungroup()

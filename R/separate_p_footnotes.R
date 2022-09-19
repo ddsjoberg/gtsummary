@@ -39,7 +39,7 @@ separate_p_footnotes <- function(x) {
   # add footnotes to the body of the table -------------------------------------
   footnote_calls <-
     x$meta_data %>%
-    dplyr::select(.data$variable, .data$stat_test_lbl) %>%
+    dplyr::select("variable", "stat_test_lbl") %>%
     tibble::deframe() %>%
     map(translate_text) %>%
     purrr::imap(

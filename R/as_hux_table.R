@@ -158,7 +158,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # padding --------------------------------------------------------------------
   df_padding <-
     x$table_styling$header %>%
-    select(.data$id, .data$column) %>%
+    select("id", "column") %>%
     inner_join(
       x$table_styling$text_format %>%
         filter(.data$format_type == "indent"),
@@ -178,7 +178,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # padding2 -------------------------------------------------------------------
   df_padding2 <-
     x$table_styling$header %>%
-    select(.data$id, .data$column) %>%
+    select("id", "column") %>%
     inner_join(
       x$table_styling$text_format %>%
         filter(.data$format_type == "indent2"),
@@ -198,7 +198,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   # footnote -------------------------------------------------------------------
   vct_footnote <-
     .number_footnotes(x) %>%
-    pull(.data$footnote) %>%
+    pull("footnote") %>%
     unique()
   border <- rep_len(0, length(vct_footnote))
   border[1] <- 0.8
@@ -231,10 +231,10 @@ table_styling_to_huxtable_calls <- function(x, ...) {
     x$table_styling$text_format %>%
     filter(.data$format_type == "bold") %>%
     inner_join(x$table_styling$header %>%
-                 select(.data$column, column_id = .data$id),
+                 select("column", column_id = "id"),
                by = "column"
     ) %>%
-    select(.data$format_type, .data$row_numbers, .data$column_id)
+    select("format_type", "row_numbers", "column_id")
 
   huxtable_calls[["set_bold"]] <-
     map(
@@ -251,10 +251,10 @@ table_styling_to_huxtable_calls <- function(x, ...) {
     x$table_styling$text_format %>%
     filter(.data$format_type == "italic") %>%
     inner_join(x$table_styling$header %>%
-                 select(.data$column, column_id = .data$id),
+                 select("column", column_id = "id"),
                by = "column"
     ) %>%
-    select(.data$format_type, .data$row_numbers, .data$column_id)
+    select("format_type", "row_numbers", "column_id")
 
   huxtable_calls[["set_italic"]] <-
     map(
@@ -282,11 +282,11 @@ table_styling_to_huxtable_calls <- function(x, ...) {
     x$table_styling$fmt_missing %>%
     inner_join(
       x$table_styling$header %>%
-        select(.data$column, column_id = .data$id),
+        select("column", column_id = "id"),
       by = "column"
     ) %>%
-    select(.data$symbol, .data$row_numbers, .data$column_id) %>%
-    nest(location_ids = .data$column_id) %>%
+    select("symbol", "row_numbers", "column_id") %>%
+    nest(location_ids = "column_id") %>%
     mutate(
       column_id = map(.data$location_ids, ~ pluck(.x, "column_id") %>% unique())
     )
@@ -308,7 +308,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   col_labels <-
     x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
-    select(.data$column, .data$label) %>%
+    select("column", "label") %>%
     tibble::deframe()
 
   huxtable_calls[["insert_row"]] <- list()
@@ -367,7 +367,7 @@ table_styling_to_huxtable_calls <- function(x, ...) {
   df_align <-
     x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
-    select(.data$id, .data$align) %>%
+    select("id", "align") %>%
     group_by(.data$align) %>%
     nest() %>%
     ungroup()

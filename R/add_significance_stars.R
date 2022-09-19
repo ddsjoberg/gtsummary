@@ -139,7 +139,7 @@ add_significance_stars <- function(x, pattern = "{estimate}{stars}",
     x$table_body %>%
     filter(!is.na(.data$coefficients_type)) %>%
     # keep obs from regression model
-    dplyr::pull(.data$variable) %>%
+    dplyr::pull("variable") %>%
     unique()
 
   x <-

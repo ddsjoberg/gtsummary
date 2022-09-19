@@ -67,7 +67,7 @@ sort_p <- function(x, q = FALSE) {
     group_by(.data$variable) %>%
     mutate(sort_col = min(.data[[sort_var]], na.rm = TRUE)) %>%
     arrange(.data$sort_col) %>%
-    select(-.data$sort_col) %>%
+    select(-"sort_col") %>%
     ungroup()
 
   # returning results ----------------------------------------------------------
@@ -106,7 +106,7 @@ filter_p <- function(x, q = FALSE, t = 0.05) {
     group_by(.data$variable) %>%
     mutate(sort_col = min(.data[[sort_var]], na.rm = TRUE)) %>%
     filter(.data$sort_col <= .env$t) %>%
-    select(-.data$sort_col) %>%
+    select(-"sort_col") %>%
     ungroup()
 
   # returning results ----------------------------------------------------------
