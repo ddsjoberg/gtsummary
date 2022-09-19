@@ -66,7 +66,7 @@ test_that("tbl_svysummary works in character inputs for `by=`", {
   my_by_variable <- "Survived"
 
   expect_error(
-    tbl_svysummary(d, by = my_by_variable),
+    tbl_svysummary(d, by = all_of(my_by_variable)),
     NA
   )
   expect_error(

@@ -130,7 +130,8 @@ inline_text.gtsummary <- function(x, variable,
   # cell/pattern selection -----------------------------------------------------
   if (!column_is_null) {
     column <-
-      .select_to_varnames(!!column,
+      .select_to_varnames(
+        !!column,
         data = df_gtsummary,
         arg_name = "column",
         select_single = TRUE
@@ -266,7 +267,7 @@ inline_text.tbl_summary <- function(x, variable, column = NULL, level = NULL,
     x = x,
     variable = !!variable,
     level = !!level,
-    column = !!column,
+    column = all_of(column),
     pattern = pattern
   )
 }
@@ -658,7 +659,7 @@ inline_text.tbl_survfit <-
       x = x,
       variable = !!variable,
       level = {{ level }},
-      column = column,
+      column = all_of(column),
       pattern = pattern
     )
   }

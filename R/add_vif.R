@@ -77,7 +77,7 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   for (s in statistic) {
     x <- x %>%
       modify_table_styling(
-        s,
+        all_of(s),
         label = switch(s,
           "VIF" = "**VIF**",
           "GVIF" = "**GVIF**",

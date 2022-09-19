@@ -708,7 +708,7 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value,
     ungroup() %>%
     rename(variable_levels = "variable") %>%
     mutate(variable = !!variable) %>%
-    select(c(by, variable, "variable_levels", everything()))
+    select(any_of(c("by", "variable", "variable_levels")), everything())
 
   if (!is.null(dichotomous_value)) {
     result <- result %>%

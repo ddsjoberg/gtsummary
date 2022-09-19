@@ -155,9 +155,9 @@ tbl_cross <- function(data,
 
   # omit missing data, or factorize missing level ------------------------------
   data <- data %>%
-    mutate_at(vars(row, col), as.factor) %>%
+    mutate_at(vars(any_of(c(row, col))), as.factor) %>%
     mutate_at(
-      vars(row, col),
+      vars(any_of(c(row, col))),
       ~ switch(missing,
         "no" = .,
         "ifany" = forcats::fct_explicit_na(., missing_text),
@@ -178,7 +178,7 @@ tbl_cross <- function(data,
     data %>%
     select(any_of(c(row, col, "..total.."))) %>%
     tbl_summary(
-      by = col,
+      by = any_of(col),
       statistic = ~glue("{statistic}"),
       digits = switch(!is.null(digits), everything() ~ digits),
       percent = ifelse(percent == "none", "cell", percent),

@@ -87,7 +87,7 @@ as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE
 
   # save list of expressions to run --------------------------------------------
   huxtable_calls <-
-    as_hux_table(x = x, include = include, return_calls = TRUE) %>%
+    as_hux_table(x = x, include = {{ include }}, return_calls = TRUE) %>%
     purrr::list_modify(set_left_padding = NULL, set_left_padding2 = NULL)
 
   # construct calls to manually indent the columns -----------------------------
@@ -125,7 +125,7 @@ as_hux_xlsx <- function(x, file, include = everything(), bold_header_rows = TRUE
   }
 
   # run hux commands and export to excel ---------------------------------------
-  .eval_list_of_exprs(huxtable_calls[include]) %>%
+  .eval_list_of_exprs(huxtable_calls) %>%
     huxtable::quick_xlsx(file = file, open = FALSE)
 }
 
