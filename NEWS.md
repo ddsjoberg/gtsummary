@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated `add_significance_stars()` to accept any gtsummary table (instead of only regression model summaries) and to work with `add_global_p()` (#1320)
+
 * Added Dutch language translations. (#1302)
 
 * Added additional options to `remove_row_type(type = c("level", "all"))`.
