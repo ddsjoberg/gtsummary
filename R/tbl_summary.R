@@ -287,9 +287,9 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
         }
       )
     ) %>%
-    select(var_type = .data$summary_type, .data$var_label, .data$tbl_stats) %>%
-    unnest(.data$tbl_stats) %>%
-    select(.data$variable, .data$var_type, .data$var_label, everything())
+    select(var_type = "summary_type", "var_label", "tbl_stats") %>%
+    unnest("tbl_stats") %>%
+    select("variable", "var_type", "var_label", everything())
 
   # table of column headers ----------------------------------------------------
   x <-
@@ -310,10 +310,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       x$table_styling$header %>%
       dplyr::left_join(
         x$df_by %>%
-          select(column = .data$by_col,
-                 modify_stat_n = .data$n,
-                 modify_stat_p = .data$p,
-                 modify_stat_level = .data$by_chr),
+          select(column = "by_col",
+                 modify_stat_n = "n",
+                 modify_stat_p = "p",
+                 modify_stat_level = "by_chr"),
         by = "column"
       )
   }

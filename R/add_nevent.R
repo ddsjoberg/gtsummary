@@ -91,8 +91,8 @@ add_nevent.tbl_regression <- function(x, location = NULL, ...) {
     ) %>%
     modify_table_body(
       dplyr::relocate,
-      .data$stat_nevent,
-      .before = .data$estimate
+      "stat_nevent",
+      .before = "estimate"
     ) %>%
     modify_header(stat_nevent ~ "**Event N**")
 
@@ -152,7 +152,7 @@ add_nevent.tbl_survfit <- function(x, ...) {
     purrr::map2_dfr(
       x$meta_data$survfit, x$meta_data$variable,
       ~ tibble(
-        nevent = broom::tidy(.x) %>% pull(.data$n.event) %>% sum(),
+        nevent = broom::tidy(.x) %>% pull("n.event") %>% sum(),
         variable = .y,
         row_type = "label"
       )

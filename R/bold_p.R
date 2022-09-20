@@ -61,7 +61,7 @@ bold_p <- function(x, t = 0.05, q = FALSE) {
   x <-
     modify_table_styling(
       x,
-      columns = col_name,
+      columns = all_of(col_name),
       rows = !!expr(!!sym(col_name) <= !!t),
       text_format = "bold"
     )

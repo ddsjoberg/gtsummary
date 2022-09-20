@@ -207,9 +207,9 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   # table_body -----------------------------------------------------------------
   table_body <-
     meta_data %>%
-    select(.data$var_label, .data$table_body) %>%
-    unnest(.data$table_body) %>%
-    select(.data$variable, .data$var_label, everything())
+    select("var_label", "table_body") %>%
+    unnest("table_body") %>%
+    select("variable", "var_label", everything())
 
   # finishing up ---------------------------------------------------------------
   # constructing final result
@@ -223,7 +223,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   # applying labels
   lbls <-
     meta_data$df_stats[[1]] %>%
-    select(.data$col_name, .data$col_label) %>%
+    select("col_name", "col_label") %>%
     distinct() %>%
     tibble::deframe() %>%
     as.list()
@@ -345,7 +345,7 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
           table_body <-
             df_stats %>%
             mutate_at(
-              vars(.data$estimate, .data$conf.low, .data$conf.high),
+              vars("estimate", "conf.low", "conf.high"),
               ~ coalesce(as.character(estimate_fun(.)), missing)
             ) %>%
             mutate(
@@ -356,16 +356,16 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
             ) %>%
             select(c("variable", "row_type", "label", "col_name", "statistic")) %>%
             tidyr::pivot_wider(
-              id_cols = c(.data$variable, .data$row_type, .data$label),
-              names_from = c(.data$col_name),
-              values_from = c(.data$statistic)
+              id_cols = c("variable", "row_type", "label"),
+              names_from = "col_name",
+              values_from = "statistic"
             )
 
           # adding label row, if needed
           if (nrow(table_body) > 1) {
             table_body <-
               table_body %>%
-              select(.data$variable) %>%
+              select("variable") %>%
               distinct() %>%
               mutate(
                 row_type = "label",
@@ -419,7 +419,7 @@ survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet,
   }
 
   # removing strata column if there are no stratum in survfit
-  if (length(strata) == 0) df_stat <- select(df_stat, -.data$strata)
+  if (length(strata) == 0) df_stat <- select(df_stat, -"strata")
 
   # add fmt_fun attribute
   for (column in c("estimate", "conf.low", "conf.high")) {
@@ -458,7 +458,7 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
     mutate_at(vars(!!!strata), ~ factor(., levels = unique(.))) %>%
     # if CI is missing, and SE is 0, making the CIs the estimate
     mutate_at(
-      vars(.data$conf.high, .data$conf.low),
+      vars("conf.high", "conf.low"),
       ~ ifelse(is.na(.) & .data$std.error == 0, .data$estimate, .)
     ) %>%
     select(any_of(c("time", "estimate", "conf.high", "conf.low", "strata"))) %>%
@@ -489,14 +489,14 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
           time = list(.env$times),
           col_name = list(paste("stat", seq_len(length(.env$times)), sep = "_"))
         ) %>%
-        unnest(cols = c(.data$time, .data$col_name)),
+        unnest(cols = c("time", "col_name")),
       by = unlist(c(strata, "time"))
     ) %>%
     # if the user-specifed time is unobserved, filling estimates with previous value
     arrange(!!!syms(strata), .data$time) %>%
     group_by(!!!syms(strata)) %>%
-    tidyr::fill(.data$estimate, .data$conf.high, .data$conf.low,
-      .data$time_max,
+    tidyr::fill(
+      "estimate", "conf.high", "conf.low", "time_max",
       .direction = "down"
     ) %>%
     ungroup() %>%
@@ -504,7 +504,7 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
     filter(!is.na(.data$col_name)) %>%
     # if user-specified time is after the latest follow-up time, making it NA
     mutate_at(
-      vars(.data$estimate, .data$conf.high, .data$conf.low),
+      vars("estimate", "conf.high", "conf.low"),
       ~ ifelse(.data$time > .data$time_max, NA_real_, .)
     ) %>%
     mutate(
@@ -518,7 +518,7 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
     ) %>%
     select(
       any_of(c("variable", "label", "strata", "col_name", "col_label")),
-      everything(), -.data$time_max
+      everything(), -"time_max"
     )
   if (length(strata) > 0) {
     df_stat$variable_levels = df_stat$label
@@ -528,8 +528,8 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
   if (reverse == TRUE) {
     df_stat <-
       df_stat %>%
-      mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high), ~ 1 - .) %>%
-      dplyr::rename(conf.low = .data$conf.high, conf.high = .data$conf.low)
+      mutate_at(vars("estimate", "conf.low", "conf.high"), ~ 1 - .) %>%
+      dplyr::rename(conf.low = "conf.high", conf.high = "conf.low")
   }
 
   # add fmt_fun attribute

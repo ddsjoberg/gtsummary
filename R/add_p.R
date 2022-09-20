@@ -163,7 +163,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
   # getting the test name and pvalue
   meta_data <-
     x$meta_data %>%
-    select(.data$variable, .data$summary_type) %>%
+    select("variable", "summary_type") %>%
     filter(.data$variable %in% include) %>%
     mutate(
       test =
@@ -188,7 +188,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
     x$table_body %>%
     select(-any_of(c("test_name", "test_result"))) %>%
     left_join(meta_data[c("variable", "test_name")], by = "variable") %>%
-    select(.data$variable, .data$test_name, everything())
+    select("variable", "test_name", everything())
 
   # converting to named list
   test.args <-
@@ -218,7 +218,7 @@ add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
       p.value = map_dbl(.data$test_result, ~ pluck(.x, "df_result", "p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~ pluck(.x, "df_result", "method"))
     ) %>%
-    select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
+    select("variable", "test_result", "p.value", "stat_test_lbl") %>%
     {
       left_join(
         x$meta_data %>% select(-any_of(c("test_result", "p.value", "stat_test_lbl"))),
@@ -263,12 +263,12 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
       x,
       left_join,
       meta_data %>%
-        select(.data$variable, .data$test_result) %>%
+        select("variable", "test_result") %>%
         mutate(
           df_result = map(.data$test_result, ~pluck(.x, "df_result")),
           row_type = "label"
         ) %>%
-        unnest(.data$df_result) %>%
+        unnest("df_result") %>%
         select(
           -any_of("method"),
           # removing any columns already present in table_body
@@ -318,8 +318,8 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
               rows = glue(".data$variable == '{variable}'") %>% rlang::parse_expr() %>% list()
             ) %>%
             ungroup() %>%
-            select(.data$column, .data$rows, .data$fmt_fun) %>%
-            unnest(cols = .data$column)
+            select("column", "rows", "fmt_fun") %>%
+            unnest(cols = "column")
         )
     }
 
@@ -344,7 +344,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
               )
             )
         ) %>%
-        modify_table_body(dplyr::relocate, .data$ci, .before = "conf.low") %>%
+        modify_table_body(dplyr::relocate, "ci", .before = "conf.low") %>%
         # adding print instructions for estimates
         modify_table_styling(
           any_of("ci"),
@@ -591,7 +591,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   meta_data <-
     x$meta_data %>%
     filter(.data$stratified == TRUE & .data$variable %in% include) %>%
-    select(.data$variable, .data$survfit) %>%
+    select("variable", "survfit") %>%
     mutate(
       test = map(.data$variable, ~ test[[.x]] %||% "logrank"),
       test_info = map(
@@ -603,7 +603,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
   # adding test_name to table body so it can be used to select vars by the test
   x$table_body <-
     left_join(x$table_body, meta_data[c("variable", "test_name")], by = "variable") %>%
-    select(.data$variable, .data$test_name, everything())
+    select("variable", "test_name", everything())
 
   # converting to named list
   test.args <-
@@ -645,7 +645,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
       p.value = map_dbl(.data$test_result, ~ pluck(.x, "df_result", "p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~ pluck(.x, "df_result", "method"))
     ) %>%
-    select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
+    select("variable", "test_result", "p.value", "stat_test_lbl") %>%
     {
       left_join(x$meta_data, ., by = "variable")
     }
@@ -788,7 +788,7 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
   # getting the test name and pvalue
   meta_data <-
     x$meta_data %>%
-    select(.data$variable, .data$summary_type) %>%
+    select("variable", "summary_type") %>%
     filter(.data$variable %in% include) %>%
     mutate(
       test = map2(
@@ -809,7 +809,7 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
   # adding test_name to table body so it can be used to select vars by the test
   x$table_body <-
     left_join(x$table_body, meta_data[c("variable", "test_name")], by = "variable") %>%
-    select(.data$variable, .data$test_name, everything())
+    select("variable", "test_name", everything())
 
   # converting to named list
   test.args <-
@@ -839,7 +839,7 @@ add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
       p.value = map_dbl(.data$test_result, ~ pluck(.x, "df_result", "p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~ pluck(.x, "df_result", "method"))
     ) %>%
-    select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
+    select("variable", "test_result", "p.value", "stat_test_lbl") %>%
     {
       left_join(x$meta_data, ., by = "variable")
     }
@@ -915,7 +915,7 @@ add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
   # getting the test name and pvalue
   meta_data <-
     x$meta_data %>%
-    select(.data$variable, .data$summary_type) %>%
+    select("variable", "summary_type") %>%
     filter(.data$variable %in% .env$include) %>%
     mutate(
       test =
@@ -942,7 +942,7 @@ add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
     x$table_body %>%
     select(-any_of(c("test_name", "test_result"))) %>%
     left_join(meta_data[c("variable", "test_name")], by = "variable") %>%
-    select(.data$variable, .data$test_name, everything())
+    select("variable", "test_name", everything())
 
   # converting to named list
   test.args <-
@@ -973,7 +973,7 @@ add_p.tbl_continuous <- function(x, test = NULL, pvalue_fun = NULL,
       p.value = map_dbl(.data$test_result, ~ pluck(.x, "df_result", "p.value")),
       stat_test_lbl = map_chr(.data$test_result, ~ pluck(.x, "df_result", "method"))
     ) %>%
-    select(.data$variable, .data$test_result, .data$p.value, .data$stat_test_lbl) %>%
+    select("variable", "test_result", "p.value", "stat_test_lbl") %>%
     {
       left_join(
         x$meta_data %>% select(-any_of(c("test_result", "p.value", "stat_test_lbl"))),

@@ -136,7 +136,7 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
       statistic = glue(.env$statistic) %>% as.character(),
       row_type = "label"
     ) %>%
-    select(.data$variable, .data$row_type, n = .data$statistic)
+    select("variable", "row_type", n = "statistic")
 
   # merging result with existing tbl_summary -----------------------------------
   x$table_body <-
@@ -361,8 +361,8 @@ add_n.tbl_regression <- function(x, location = NULL, ...) {
     ) %>%
     modify_table_body(
       dplyr::relocate,
-      .data$stat_n,
-      .after = .data$label
+      "stat_n",
+      .after = "label"
     ) %>%
     modify_table_styling(
       columns = all_of("stat_n"),

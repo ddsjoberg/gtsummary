@@ -124,7 +124,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
         mutate(
           var_label = ifelse(.data$row_type == "label", .data$label, NA)
         ) %>%
-        tidyr::fill(.data$var_label, .direction = "downup") %>%
+        tidyr::fill("var_label", .direction = "downup") %>%
         ungroup() %>%
         rename_at(
           vars(-c("variable", "row_type", "var_label", "label")),
@@ -160,7 +160,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   # merging formatted objects together
   merged_table <-
     nested_table[[1]] %>%
-    rename(table = .data$data)
+    rename(table = "data")
 
   if (tbls_length > 1) {
     # cycling through all tbls, merging results into a column tibble
@@ -195,7 +195,7 @@ tbl_merge <- function(tbls, tab_spanner = NULL) {
   table_body <-
     merged_table %>%
     unnest("table") %>%
-    select(.data$variable, .data$var_label, .data$row_type, .data$label,
+    select("variable", "var_label", "row_type", "label",
            !!!ends_with_selectors, everything())
 
   # renaming columns in stylings and updating ----------------------------------

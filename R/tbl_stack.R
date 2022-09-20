@@ -157,7 +157,7 @@ tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
   if (nrow(results$table_styling$cols_merge) > 0) {
     results$table_styling$cols_merge <-
       results$table_styling$cols_merge %>%
-      tidyr::nest(rows = .data$rows) %>%
+      tidyr::nest(rows = "rows") %>%
       mutate(rows = map(.data$rows, ~ .x$rows %>% unlist()))
     results$table_styling$cols_merge$rows <-
       map(
@@ -199,8 +199,8 @@ print_stack_differences <- function(tbls) {
       ~ pluck(.x, "table_styling", "header") %>%
         mutate(..tbl_id.. = .y)
     ) %>%
-    select(.data$..tbl_id.., .data$column, .data$label, .data$spanning_header) %>%
-    tidyr::pivot_longer(cols = c(.data$label, .data$spanning_header)) %>%
+    select("..tbl_id..", "column", "label", "spanning_header") %>%
+    tidyr::pivot_longer(cols = c("label", "spanning_header")) %>%
     group_by(.data$column, .data$name) %>%
     mutate(
       new_value = .data$value[1],

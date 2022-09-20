@@ -51,9 +51,9 @@ tbl_split.gtsummary <- function(x, variables, ...) {
       tibble(variable = variables, ..group.. = variables),
       by = "variable"
     ) %>%
-    tidyr::fill(.data$..group.., .direction = "up") %>%
-    tidyr::nest(data = -.data$..group..) %>%
-    dplyr::pull(.data$data) %>%
+    tidyr::fill("..group..", .direction = "up") %>%
+    tidyr::nest(data = -"..group..") %>%
+    dplyr::pull("data") %>%
     purrr::map(
       ~list(.) %>%
         purrr::set_names("table_body") %>%

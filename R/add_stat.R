@@ -201,7 +201,7 @@ add_stat <- function(x, fns, location = NULL, ...) {
   # calculating statistics -----------------------------------------------------
   df_new_stat <-
     tibble(variable = names(fns)) %>%
-    left_join(x$meta_data %>% select(.data$variable, .data$summary_type),
+    left_join(x$meta_data %>% select("variable", "summary_type"),
               by = "variable"
     ) %>%
     mutate(
@@ -214,7 +214,7 @@ add_stat <- function(x, fns, location = NULL, ...) {
     mutate(
       df_add_stats = purrr::imap(fns, ~ eval_fn_safe(tbl = x, variable = .y, fn = .x))
     ) %>%
-    select(-.data$summary_type)
+    select(-"summary_type")
 
   # converting returned statistics to a tibble if not already ------------------
   df_new_stat$df_add_stats <-
@@ -252,7 +252,7 @@ add_stat <- function(x, fns, location = NULL, ...) {
     x %>%
     modify_table_body(
       left_join,
-      df_new_stat %>% tidyr::unnest(cols = c(.data$label, .data$df_add_stats)),
+      df_new_stat %>% tidyr::unnest(cols = c("label", "df_add_stats")),
       by = c("variable", "row_type", "label")
     ) %>%
     # showing all new columns

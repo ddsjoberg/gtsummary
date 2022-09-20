@@ -214,7 +214,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   # escaping special characters in table_body ----------------------------------
   kable_call_index <- which(names(kable_extra_calls) %in% "kable")
   cols_to_escape <-
-    filter(x$table_styling$header, !.data$hide) %>% dplyr::pull(.data$column)
+    filter(x$table_styling$header, !.data$hide) %>% dplyr::pull("column")
   kable_extra_calls <-
     append(kable_extra_calls,
            values = list(escape_table_body = NULL),
@@ -225,10 +225,10 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     df_text_format_collapsed <-
       x$table_styling$text_format %>%
       filter(.data$format_type %in% c("bold", "italic")) %>%
-      select(.data$column, .data$row_numbers) %>%
-      tidyr::unnest(.data$row_numbers) %>%
+      select("column", "row_numbers") %>%
+      tidyr::unnest("row_numbers") %>%
       dplyr::distinct() %>%
-      tidyr::nest(row_numbers = .data$row_numbers) %>%
+      tidyr::nest(row_numbers = "row_numbers") %>%
       mutate(row_numbers = map(.data$row_numbers, ~unlist(.) %>% unname()))
 
     # expression identify the bold/italic cells. will be used in the `across()` below
@@ -250,8 +250,8 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     df_header_by_align <-
       x$table_styling$header %>%
       filter(!.data$hide) %>%
-      select(.data$column, .data$align) %>%
-      tidyr::nest(column = .data$column) %>%
+      select("column", "align") %>%
+      tidyr::nest(column = "column") %>%
       mutate(column = map(.data$column, ~unlist(.) %>% unname()))
 
     # create one call per alignment type found in table
@@ -312,7 +312,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
     df_header0 <-
       x$table_styling$header %>%
       filter(.data$hide == FALSE) %>%
-      select(.data$spanning_header) %>%
+      select("spanning_header") %>%
       mutate(
         spanning_header = ifelse(is.na(.data$spanning_header),
                                  " ", .data$spanning_header
@@ -354,7 +354,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   # footnote -------------------------------------------------------------------
   vct_footnote <-
     .number_footnotes(x) %>%
-    pull(.data$footnote) %>%
+    pull("footnote") %>%
     unique()
 
   if (length(vct_footnote > 0)) {
@@ -375,7 +375,7 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
       dplyr::filter(.data$format_type %in% c("bold", "italic")) %>%
       mutate(index = map(.data$row_numbers, ~seq_len(nrow(x$table_body)) %in% .x)) %>%
       dplyr::left_join(
-        x$table_styling$header %>% select(.data$column, .data$id),
+        x$table_styling$header %>% select("column", "id"),
         by = "column"
       )
 
@@ -416,20 +416,20 @@ table_styling_to_kable_extra_calls <- function(x, escape, format, addtl_fmt, ...
   df_bold_italic <-
     x$table_styling$text_format %>%
     dplyr::filter(.data$format_type %in% c("bold", "italic")) %>%
-    tidyr::unnest(.data$row_numbers) %>%
+    tidyr::unnest("row_numbers") %>%
     {dplyr::full_join(
       dplyr::filter(., .data$format_type %in% "bold") %>%
         dplyr::mutate(bold = TRUE) %>%
-        dplyr::select(.data$column, .data$row_numbers, .data$bold),
+        dplyr::select("column", "row_numbers", "bold"),
       dplyr::filter(., .data$format_type %in% "italic") %>%
         dplyr::mutate(italic = TRUE) %>%
-        dplyr::select(.data$column, .data$row_numbers, .data$italic),
+        dplyr::select("column", "row_numbers", "italic"),
       by = c("column", "row_numbers")
     )} %>%
     dplyr::mutate(
-      dplyr::across(c(.data$bold, .data$italic), ~tidyr::replace_na(., FALSE))
+      dplyr::across(all_of(c("bold", "italic")), ~tidyr::replace_na(., FALSE))
     ) %>%
-    tidyr::nest(row_numbers = .data$row_numbers) %>%
+    tidyr::nest(row_numbers = "row_numbers") %>%
     dplyr::mutate(
       row_numbers = map(.data$row_numbers, ~unlist(.x) %>% unname())
     )

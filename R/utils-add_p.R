@@ -62,7 +62,7 @@
     return(
       df %>%
         select(any_of(c("test_name", "fun_to_run", "accept_dots"))) %>%
-        mutate_at(vars(.data$fun_to_run), ~ map(.x, eval)) %>%
+        mutate_at(vars("fun_to_run"), ~ map(.x, eval)) %>%
         as.list() %>%
         purrr::flatten()
     )
@@ -151,7 +151,7 @@
     setequal(names(test_fun_result), c("p", "test"))) {
     x$df_result <-
       tibble::as_tibble(test_fun_result) %>%
-      dplyr::rename(p.value = .data$p, method = .data$test)
+      dplyr::rename(p.value = "p", method = "test")
   } else if (rlang::is_scalar_double(test_fun_result)) {
     x$df_result <- tibble(p.value = test_fun_result, method = NA_character_)
   } else if (is.null(test_fun_result)) {

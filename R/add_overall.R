@@ -237,8 +237,8 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
     x <- x %>%
       modify_table_body(
         dplyr::relocate,
-        .data$stat_0,
-        .before = .data$stat_1
+        "stat_0",
+        .before = "stat_1"
       )
   }
 

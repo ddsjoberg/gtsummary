@@ -89,7 +89,7 @@ add_ci.tbl_summary <- function(x,
   summary_type <-
     x$meta_data %>%
     filter(.data$variable %in% .env$include) %>%
-    select(.data$variable, .data$summary_type) %>%
+    select("variable", "summary_type") %>%
     tibble::deframe()
 
   method <-
@@ -312,7 +312,7 @@ single_ci <- function(variable, by, tbl, method, conf.level,
         df_single_ci %>%
         dplyr::rename(by = all_of(tbl$by)) %>%
         left_join(
-          tbl$df_by %>% select(.data$by, col_name = .data$by_col),
+          tbl$df_by %>% select("by", col_name = "by_col"),
           by = "by"
         ) %>%
         select(any_of(c("by", "col_name", "ci")))

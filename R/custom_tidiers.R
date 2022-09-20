@@ -117,13 +117,13 @@ tidy_standardize <- function(x, exponentiate = FALSE,
   tidy <-
     as_tibble(std_coef) %>%
     select(
-      term = .data$Parameter, estimate = .data$Std_Coefficient,
-      conf.low = .data$CI_low, conf.high = .data$CI_high
+      term = "Parameter", estimate = "Std_Coefficient",
+      conf.low = "CI_low", conf.high = "CI_high"
     )
 
   # exponentiate, if requested
   if (exponentiate) {
-    tidy <- mutate_at(tidy, vars(.data$estimate, .data$conf.low, .data$conf.high), exp)
+    tidy <- mutate_at(tidy, vars("estimate", "conf.low", "conf.high"), exp)
   }
 
   # removing conf int, if requested
@@ -153,13 +153,13 @@ tidy_bootstrap <- function(x, exponentiate = FALSE,
   tidy <-
     as_tibble(boot_coef) %>%
     select(
-      term = .data$Parameter, estimate = .data$Coefficient,
-      conf.low = .data$CI_low, conf.high = .data$CI_high, p.value = .data$p
+      term = "Parameter", estimate = "Coefficient",
+      conf.low = "CI_low", conf.high = "CI_high", p.value = "p"
     )
 
   # exponentiate, if requested
   if (exponentiate) {
-    tidy <- mutate_at(tidy, vars(.data$estimate, .data$conf.low, .data$conf.high), exp)
+    tidy <- mutate_at(tidy, vars("estimate", "conf.low", "conf.high"), exp)
   }
 
   # removing conf int, if requested
@@ -208,7 +208,7 @@ tidy_robust <- function(x,
   # exponentiate, if requested -------------------------------------------------
   if (exponentiate) {
     tidy <-
-      mutate_at(tidy, vars(.data$estimate, .data$conf.low, .data$conf.high), exp)
+      mutate_at(tidy, vars("estimate", "conf.low", "conf.high"), exp)
   }
 
   # removing conf int, if requested --------------------------------------------
@@ -259,7 +259,7 @@ tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.9
       broom::tidy(x, parametric = FALSE, ...) %>%
         dplyr::mutate(parametric = FALSE)
     ) %>%
-    dplyr::relocate(.data$parametric, .after = dplyr::last_col())
+    dplyr::relocate("parametric", .after = dplyr::last_col())
 }
 
 #' @rdname custom_tidiers
@@ -275,10 +275,10 @@ tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
     tidy_fun = tidy_fun
   ) %>%
     broom.helpers::tidy_identify_variables() %>%
-    dplyr::select(term = .data$variable, model_terms = .data$term) %>%
+    dplyr::select(term = "variable", model_terms = "term") %>%
     dplyr::mutate(term_id = dplyr::row_number()) %>%
     # reduce to one line per variable in model
-    tidyr::nest(data = -.data$term) %>%
+    tidyr::nest(data = -"term") %>%
     dplyr::rowwise() %>%
     # calculate Wald test
     dplyr::mutate(
@@ -296,5 +296,5 @@ tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
       p.value = .data$wald_test$result$chi2 %>% purrr::pluck("P"),
     ) %>%
     dplyr::ungroup() %>%
-    dplyr::select(.data$term, .data$df, .data$statistic, .data$p.value)
+    dplyr::select("term", "df", "statistic", "p.value")
 }

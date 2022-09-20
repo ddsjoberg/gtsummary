@@ -160,8 +160,8 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
     left_join(
       new_model_tbl$table_body %>%
         select(
-          .data$variable, .data$var_type, .data$reference_row,
-          .data$row_type, .data$label
+          "variable", "var_type", "reference_row",
+          "row_type", "label"
         ) %>%
         mutate(collapse_row = FALSE),
       by = c("variable", "var_type", "row_type", "reference_row", "label")
@@ -173,7 +173,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
       (dplyr::row_number() == 1 & .data$collapse_row == TRUE)) %>%
     # updating column values for collapsed rows
     mutate_at(
-      vars(.data$estimate, .data$conf.low, .data$conf.high, .data$ci),
+      vars("estimate", "conf.low", "conf.high", "ci"),
       ~ ifelse(.data$collapse_row == TRUE, NA, .)
     ) %>%
     mutate(
@@ -192,7 +192,7 @@ combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
   # writing over the table_body in x -------------------------------------------
   x$table_body <-
     table_body %>%
-    select(-.data$collapse_row)
+    select(-"collapse_row")
 
   # returning updated tbl object -----------------------------------------------
   x$call_list <- updated_call_list

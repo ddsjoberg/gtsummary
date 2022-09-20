@@ -24,8 +24,8 @@ test_that("tbl_cross- works in character inputs for `col` and `row", {
   row_variable <- "response"
   expect_error(
     tbl_cross(trial,
-      col = col_variable,
-      row = row_variable
+      col = all_of(col_variable),
+      row = all_of(row_variable)
     ),
     NA
   )

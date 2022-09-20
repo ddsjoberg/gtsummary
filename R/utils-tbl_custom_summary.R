@@ -45,7 +45,7 @@ continuous_summary <- function(variable) {
       stat_display = stat_display,
       summary_type = "continuous"
     ) %>%
-      dplyr::select(-.data$variable, -.data$stat_display)
+      dplyr::select(-"variable", -"stat_display")
   }
 }
 

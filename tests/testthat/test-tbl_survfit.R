@@ -182,7 +182,7 @@ test_that("Factor ordering preserved", {
     trt = ifelse(trt == "Drug A", 1, 0),
     trt = factor(trt, levels = c(0, 1), labels = c("Drug B", "Drug A"))
   )
-  mod1 <- survfit(Surv(ttdeath, death) ~ trt, trial2)
+  mod1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial2)
 
   tbl1 <- tbl_survfit(mod1, times = 12)
   tbl2 <- tbl_survfit(mod1, probs = 0.2)
