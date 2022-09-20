@@ -67,6 +67,7 @@ numeric columns numeric. For the \emph{vast majority} of users,
 }
 
 \examples{
+\dontshow{if (broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 tbl <-
   lm(time ~ ph.ecog + sex, survival::lung) \%>\%
   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
@@ -114,4 +115,5 @@ add_significance_stars_ex4 <-
     style = "vertical-align:top",
     locations = gt::cells_body(columns = label)
   )
+\dontshow{\}) # examplesIf}
 }

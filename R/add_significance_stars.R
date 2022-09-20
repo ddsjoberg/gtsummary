@@ -26,7 +26,7 @@
 #' numeric columns numeric. For the _vast majority_ of users,
 #' _the planned change will be go unnoticed_.
 #'
-#' @examples
+#' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
 #' tbl <-
 #'   lm(time ~ ph.ecog + sex, survival::lung) %>%
 #'   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
