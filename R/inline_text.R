@@ -261,6 +261,7 @@ inline_text.tbl_summary <- function(x, variable, column = NULL, level = NULL,
       pull("column_name")
   }
   else if (column_is_null && is.null(x$by)) column <- "stat_0"
+  else if (column_is_null && !is.null(x$by)) column <- NULL
 
   # call generic inline_text() function ----------------------------------------
   inline_text.gtsummary(
