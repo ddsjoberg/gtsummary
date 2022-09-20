@@ -223,7 +223,7 @@ tbl_survival.survfit <- function(x, times = NULL, probs = NULL,
         hide = ifelse(.data$column == "groupname_col", FALSE, .data$hide),
       )
     result$table_body <-
-      rename(result$table_body, groupname_col = .data$level_label) %>%
+      rename(result$table_body, groupname_col = "level_label") %>%
       ungroup()
   }
 
@@ -251,9 +251,9 @@ surv_time <- function(x, times, failure) {
     } %>%
     as_tibble() %>%
     rename(
-      estimate = .data$surv,
-      conf.low = .data$lower,
-      conf.high = .data$upper
+      estimate = "surv",
+      conf.low = "lower",
+      conf.high = "upper"
     )
 
   # converting strata to character
@@ -267,10 +267,10 @@ surv_time <- function(x, times, failure) {
   if (failure == TRUE) {
     table_body <-
       table_body %>%
-      mutate_at(vars(.data$estimate, .data$conf.low, .data$conf.high), ~ 1 - .) %>%
+      mutate_at(vars("estimate", "conf.low", "conf.high"), ~ 1 - .) %>%
       rename(
-        conf.low = .data$conf.high,
-        conf.high = .data$conf.low
+        conf.low = "conf.high",
+        conf.high = "conf.low"
       )
   }
 
@@ -302,7 +302,7 @@ surv_quantile <- function(x, probs) {
       survfit_quantile[[1]] %>%
       dplyr::left_join(survfit_quantile[[2]], by = c("prob", "strata")) %>%
       dplyr::left_join(survfit_quantile[[3]], by = c("prob", "strata")) %>%
-      rename(estimate = .data$quantile)
+      rename(estimate = "quantile")
   }
 
   else {
@@ -321,14 +321,14 @@ surv_quantile <- function(x, probs) {
       survfit_quantile[[1]] %>%
       dplyr::left_join(survfit_quantile[[2]], by = "prob") %>%
       dplyr::left_join(survfit_quantile[[3]], by = "prob") %>%
-      rename(estimate = .data$quantile)
+      rename(estimate = "quantile")
   }
 
   table_body %>%
     mutate(prob = as.numeric(.data$prob) / 100) %>%
     rename(
-      conf.low = .data$lower,
-      conf.high = .data$upper
+      conf.low = "lower",
+      conf.high = "upper"
     )
 }
 

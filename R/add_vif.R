@@ -77,7 +77,7 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   for (s in statistic) {
     x <- x %>%
       modify_table_styling(
-        s,
+        all_of(s),
         label = switch(s,
           "VIF" = "**VIF**",
           "GVIF" = "**GVIF**",
@@ -135,8 +135,8 @@ add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
       tibble::rownames_to_column(var = "variable") %>%
       tibble::as_tibble() %>%
       dplyr::rename(
-        aGVIF = .data$`GVIF^(1/(2*Df))`,
-        df = .data$Df
+        aGVIF = "GVIF^(1/(2*Df))",
+        df = "Df"
       )
   }
 

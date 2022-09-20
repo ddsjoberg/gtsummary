@@ -19,9 +19,9 @@
   x$table_styling$header <-
     x$table_header %>%
     mutate(interpret_spanning_header = "gt::md") %>%
-    select(.data$column, .data$hide, .data$align,
-      interpret_label = .data$text_interpret, .data$label,
-      .data$interpret_spanning_header, .data$spanning_header
+    select("column", "hide", "align",
+           interpret_label = "text_interpret", "label",
+           "interpret_spanning_header", "spanning_header"
     )
 
   x <-
@@ -105,7 +105,7 @@
 .cols_to_show <- function(x) {
   x$table_styling$header %>%
     filter(!.data$hide) %>%
-    pull(.data$column)
+    pull("column")
 }
 
 
@@ -149,16 +149,16 @@
           ) %>%
           list(),
     ) %>%
-    select(-.data$rows) %>%
-    unnest(.data$row_numbers) %>%
+    select(-"rows") %>%
+    unnest("row_numbers") %>%
     group_by(.data$column, .data$row_numbers, .data$format_type) %>%
     filter(row_number() == n()) %>%
     filter(.data$undo_text_format == FALSE) %>%
     # dropping undoing cmds
     group_by(.data$column, .data$format_type) %>%
-    nest(row_numbers = .data$row_numbers) %>%
+    nest(row_numbers = "row_numbers") %>%
     mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname())) %>%
-    select(.data$column, .data$row_numbers, everything()) %>%
+    select("column", "row_numbers", everything()) %>%
     ungroup()
 
   # fmt_missing ----------------------------------------------------------------
@@ -173,13 +173,13 @@
         ) %||%
           .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
     ) %>%
-    select(-.data$rows) %>%
-    unnest(.data$row_numbers) %>%
+    select(-"rows") %>%
+    unnest("row_numbers") %>%
     group_by(.data$column, .data$row_numbers) %>%
     filter(row_number() == n()) %>%
-    select(.data$column, .data$row_numbers, .data$symbol) %>%
+    select("column", "row_numbers", "symbol") %>%
     ungroup() %>%
-    tidyr::nest(row_numbers = .data$row_numbers) %>%
+    tidyr::nest(row_numbers = "row_numbers") %>%
     rowwise() %>%
     dplyr::mutate(row_numbers = unlist(.data$row_numbers) %>% unname() %>% list()) %>%
     ungroup()
@@ -206,12 +206,12 @@
             return_when_null = seq_len(nrow(x$table_body))
           ) %>% list()
     ) %>%
-    select(-.data$rows) %>%
-    unnest(.data$row_numbers) %>%
+    select(-"rows") %>%
+    unnest("row_numbers") %>%
     group_by(.data$column, .data$row_numbers) %>%
     filter(row_number() == n()) %>%
     ungroup() %>%
-    nest(row_numbers = .data$row_numbers) %>%
+    nest(row_numbers = "row_numbers") %>%
     mutate(row_numbers = map(.data$row_numbers, ~ unlist(.x) %>% unname()))
 
   # cols_merge -----------------------------------------------------------------
@@ -231,7 +231,7 @@
           ) %>%
           list(),
     ) %>%
-    select(-.data$rows, rows = .data$row_numbers)
+    select(-"rows", rows = "row_numbers")
 
   x
 }
@@ -258,8 +258,8 @@
           .rows_expr_to_row_numbers(x$table_body, .data$rows) %>% list(),
       tab_location = ifelse(identical(.data$row_numbers, NA), "header", "body")
     ) %>%
-    select(-.data$rows) %>%
-    unnest(cols = .data$row_numbers) %>%
+    select(-"rows") %>%
+    unnest(cols = "row_numbers") %>%
     group_by(.data$column, .data$tab_location, .data$row_numbers) %>%
     filter(row_number() == n()) %>%
     # keeping the most recent addition
@@ -271,7 +271,7 @@
       df_clean %>%
       inner_join(
         x$table_styling$header %>%
-          select(.data$column) %>%
+          select("column") %>%
           mutate(column_id = row_number()),
         by = "column"
       ) %>%
@@ -300,7 +300,7 @@
   ) %>%
     inner_join(
       x$table_styling$header %>%
-        select(.data$column) %>%
+        select("column") %>%
         mutate(column_id = row_number()),
       by = "column"
     ) %>%
@@ -309,10 +309,10 @@
     nest() %>%
     ungroup() %>%
     mutate(footnote_id = row_number()) %>%
-    unnest(cols = .data$data) %>%
+    unnest(cols = "data") %>%
     select(
-      .data$footnote_id, .data$footnote, .data$column,
-      .data$tab_location, .data$row_numbers
+      "footnote_id", "footnote", "column",
+      "tab_location", "row_numbers"
     )
 }
 
