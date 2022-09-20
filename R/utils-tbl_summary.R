@@ -441,7 +441,7 @@ df_by <- function(data, by) {
       )
 
     result <- df_by(data$variables, by) %>%
-      rename(n_unweighted = .data$n, N_unweighted = .data$N, p_unweighted = .data$p) %>%
+      rename(n_unweighted = "n", N_unweighted = "N", p_unweighted = "p") %>%
       left_join(svy_table, by = "by")
 
     result
@@ -685,9 +685,9 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value,
   if ("by" %in% variable_by_chr) {
     df_tab <-
       df_tab %>%
-      select(by_fct = .data$by, everything()) %>%
+      select(by_fct = "by", everything()) %>%
       left_join(df_by[c("by", "by_fct")], by = "by_fct") %>%
-      select(-.data$by_fct)
+      select(-"by_fct")
   }
 
   # calculating percent
@@ -706,14 +706,14 @@ summarize_categorical <- function(data, variable, by, class, dichotomous_value,
       p = ifelse(.data$N == 0, NA, .data$n / .data$N)
     ) %>%
     ungroup() %>%
-    rename(variable_levels = .data$variable) %>%
+    rename(variable_levels = "variable") %>%
     mutate(variable = !!variable) %>%
-    select(c(by, variable, "variable_levels", everything()))
+    select(any_of(c("by", "variable", "variable_levels")), everything())
 
   if (!is.null(dichotomous_value)) {
     result <- result %>%
       filter(.data$variable_levels == !!dichotomous_value) %>%
-      select(-.data$variable_levels)
+      select(-"variable_levels")
   }
 
   result <-
@@ -793,9 +793,9 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
   if (!is.null(by)) {
     df_stats <-
       df_stats %>%
-      select(by_fct = .data$by, everything()) %>%
+      select(by_fct = "by", everything()) %>%
       left_join(df_by[c("by", "by_fct")], by = "by_fct") %>%
-      select(-.data$by_fct)
+      select(-"by_fct")
   }
 
   # adding stat_display to the data frame
@@ -826,7 +826,7 @@ safe_summarise_at <- function(data, variable, fns) {
   tryCatch({
     # ref for all this `.keep_attr()` nonsense stackoverflow.com/questions/67291199
     dplyr::summarise_at(data,
-                        vars(.data$variable),
+                        vars("variable"),
                         map(
                           fns,
                           function(.x) {
@@ -1035,7 +1035,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
       dplyr::rowwise() %>%
       mutate(statistic = glue::glue(.data$stat_display) %>% as.character()) %>%
       ungroup() %>%
-      select(-.data$stat_display),
+      select(-"stat_display"),
     error = function(e) {
       stop(glue(
         "There was an error assembling the summary statistics for '{{variable}}'\n",
@@ -1068,7 +1068,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
     df_stats_wide <-
       df_stats %>%
       select(any_of(c("by", "variable", "variable_levels", "statistic"))) %>%
-      rename(stat_0 = .data$statistic) %>%
+      rename(stat_0 = "statistic") %>%
       select(any_of(c("variable", "variable_levels", "stat_0")))
   }
 
@@ -1081,7 +1081,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
         row_type = "level",
         label = as.character(.data$variable_levels)
       ) %>%
-      select(-.data$variable_levels)
+      select(-"variable_levels")
 
     # adding label row
     result <-
@@ -1178,8 +1178,8 @@ df_stats_fun <- function(summary_type, variable, dichotomous_value, sort,
     sort = "alphanumeric", percent = "column",
     stat_display = "{n}"
   ) %>%
-    select(-.data$stat_display) %>%
-    rename(p_miss = .data$p, N_obs = .data$N, N_miss = .data$n) %>%
+    select(-"stat_display") %>%
+    rename(p_miss = "p", N_obs = "N", N_miss = "n") %>%
     mutate(
       N_nonmiss = .data$N_obs - .data$N_miss,
       p_nonmiss = 1 - .data$p_miss
@@ -1196,7 +1196,7 @@ df_stats_fun <- function(summary_type, variable, dichotomous_value, sort,
     return <-
       return %>%
       left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
-      rename(col_name = .data$by_col)
+      rename(col_name = "by_col")
   }
   else {
     return$col_name <- "stat_0"
@@ -1251,10 +1251,10 @@ meta_data_to_var_info <- function(meta_data) {
     var_info <-
       var_info %>%
       mutate(var_class = map_chr(.data$class, ~pluck(.x, 1))) %>%
-      select(-.data$class)
+      select(-"class")
   }
   if ("summary_type" %in% names(var_info)) {
-    var_info <- select(var_info, var_type = .data$summary_type, everything())
+    var_info <- select(var_info, var_type = "summary_type", everything())
   }
 
   var_info

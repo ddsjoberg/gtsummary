@@ -10,6 +10,8 @@ NULL
 
 # tentative deprecation schedule
 # "warn" for 18 months
+#   1.6.1 2022-06-22
+#   1.6.0 2022-04-25
 #   1.5.2 2022-01-29
 #   1.5.1 2022-01-20
 #   1.5.0 2021-10-16

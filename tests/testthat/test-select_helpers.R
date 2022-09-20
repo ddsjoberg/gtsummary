@@ -57,7 +57,7 @@ test_that("test-select helpers", {
   expect_equal(
     purrr::map_chr(
       c("trt", "grade", stage_variable),
-      ~ tbl_summary(trial, by = .x) %>%
+      ~ tbl_summary(trial, by = all_of(.x)) %>%
         purrr::pluck("by")
     ),
     c("trt", "grade", stage_variable)

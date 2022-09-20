@@ -45,7 +45,7 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   x$table_styling$header <-
     x$table_styling$header %>%
     mutate_at(
-      vars(.data$label, .data$spanning_header),
+      vars("label", "spanning_header"),
       ~ str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
     )
 
@@ -110,7 +110,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
   col_labels <-
     x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
-    select(.data$column, .data$label) %>%
+    select("column", "label") %>%
     tibble::deframe()
 
   flextable_calls[["set_header_labels"]] <- expr(
@@ -133,10 +133,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
     df_header0 <-
       x$table_styling$header %>%
       filter(.data$hide == FALSE) %>%
-      select(.data$spanning_header) %>%
+      select("spanning_header") %>%
       mutate(
         spanning_header = ifelse(is.na(.data$spanning_header),
-          " ", .data$spanning_header
+                                 " ", .data$spanning_header
         ),
         spanning_header_id = dplyr::row_number()
       )
@@ -169,7 +169,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
   df_align <-
     x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
-    select(.data$id, .data$align) %>%
+    select("id", "align") %>%
     group_by(.data$align) %>%
     nest() %>%
     ungroup()
@@ -182,7 +182,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # padding --------------------------------------------------------------------
   df_padding <-
     x$table_styling$header %>%
-    select(.data$id, .data$column) %>%
+    select("id", "column") %>%
     inner_join(
       x$table_styling$text_format %>%
         filter(.data$format_type == "indent"),
@@ -201,7 +201,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # padding2 -------------------------------------------------------------------
   df_padding2 <-
     x$table_styling$header %>%
-    select(.data$id, .data$column) %>%
+    select("id", "column") %>%
     inner_join(
       x$table_styling$text_format %>%
         filter(.data$format_type == "indent2"),
@@ -231,18 +231,20 @@ table_styling_to_flextable_calls <- function(x, ...) {
   df_footnote <-
     .number_footnotes(x) %>%
     inner_join(x$table_styling$header %>%
-      select(.data$column, column_id = .data$id),
-    by = "column"
+                 select("column", column_id = "id"),
+               by = "column"
     ) %>%
-    mutate(row_numbers = ifelse(.data$tab_location == "header",
-      header_i_index,
-      .data$row_numbers
-    )) %>%
+    mutate(
+      row_numbers =
+        ifelse(.data$tab_location == "header",
+               header_i_index,
+               .data$row_numbers)
+    ) %>%
     select(
-      .data$footnote_id, .data$footnote, .data$tab_location,
-      .data$row_numbers, .data$column_id
+      "footnote_id", "footnote", "tab_location",
+      "row_numbers", "column_id"
     ) %>%
-    nest(location_ids = c(.data$row_numbers, .data$column_id)) %>%
+    nest(location_ids = c("row_numbers", "column_id")) %>%
     mutate(
       row_numbers = map(.data$location_ids, ~ pluck(.x, "row_numbers") %>% unique()),
       column_id = map(.data$location_ids, ~ pluck(.x, "column_id") %>% unique())
@@ -267,11 +269,11 @@ table_styling_to_flextable_calls <- function(x, ...) {
     x$table_styling$fmt_missing %>%
     inner_join(
       x$table_styling$header %>%
-        select(.data$column, column_id = .data$id),
+        select("column", column_id = "id"),
       by = "column"
     ) %>%
-    select(.data$symbol, .data$row_numbers, .data$column_id) %>%
-    nest(location_ids = .data$column_id) %>%
+    select("symbol", "row_numbers", "column_id") %>%
+    nest(location_ids = "column_id") %>%
     mutate(
       column_id = map(.data$location_ids, ~ pluck(.x, "column_id") %>% unique())
     )
@@ -293,10 +295,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
     x$table_styling$text_format %>%
     filter(.data$format_type == "bold") %>%
     inner_join(x$table_styling$header %>%
-      select(.data$column, column_id = .data$id),
-    by = "column"
+                 select("column", column_id = "id"),
+               by = "column"
     ) %>%
-    select(.data$format_type, .data$row_numbers, .data$column_id)
+    select("format_type", "row_numbers", "column_id")
 
   flextable_calls[["bold"]] <-
     map(
@@ -313,10 +315,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
     x$table_styling$text_format %>%
     filter(.data$format_type == "italic") %>%
     inner_join(x$table_styling$header %>%
-      select(.data$column, column_id = .data$id),
-    by = "column"
+                 select("column", column_id = "id"),
+               by = "column"
     ) %>%
-    select(.data$format_type, .data$row_numbers, .data$column_id)
+    select("format_type", "row_numbers", "column_id")
 
   flextable_calls[["italic"]] <-
     map(

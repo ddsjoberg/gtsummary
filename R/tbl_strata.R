@@ -216,7 +216,7 @@ tbl_strata_internal <- function(data,
   }
   df_by <-
     df_by %>%
-    select(strata = .data$by,
+    select(strata = "by",
            any_of(c("n", "N", "p",
                     "n_unweighted", "N_unweighted", "p_unweighted"))) %>%
     mutate(header = glue::glue_data(dplyr::cur_data(), .header))
@@ -230,7 +230,7 @@ tbl_strata_internal <- function(data,
     mutate(strata = paste(!!!syms(names(new_strata_names)), sep = .sep)) %>%
     ungroup() %>%
     left_join(
-      df_by %>% select(.data$strata, .data$header),
+      df_by %>% select("strata", "header"),
       by = "strata"
     ) %>%
     mutate(
@@ -284,7 +284,7 @@ tbl_strata_internal <- function(data,
   }
 
   # return tbl -----------------------------------------------------------------
-  tbl$df_strata <- df_tbls %>% select(starts_with("strata_"), .data$header)
+  tbl$df_strata <- df_tbls %>% select(starts_with("strata_"), "header")
   class(tbl) <- c("tbl_strata", .combine_with, "gtsummary")
   tbl
 }

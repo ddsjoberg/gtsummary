@@ -156,7 +156,7 @@ add_difference <- function(x, test = NULL, group = NULL,
         .data$summary_type %in% c("categorical", "dichotomous"),
         .data$variable %in% include
       ) %>%
-      pull(.data$variable)
+      pull("variable")
     if (!rlang::is_empty(bad_percent_vars)) {
       paste(
         "{.code add_difference()} results for categorical variables",
@@ -175,7 +175,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   # getting the test name and pvalue
   meta_data <-
     x$meta_data %>%
-    select(.data$variable, .data$summary_type) %>%
+    select("variable", "summary_type") %>%
     filter(.data$variable %in% include) %>%
     mutate(
       test = map2(
@@ -201,7 +201,7 @@ add_difference <- function(x, test = NULL, group = NULL,
   # adding test_name to table body so it can be used to select vars by the test
   x$table_body <-
     left_join(x$table_body, meta_data[c("variable", "test_name")], by = "variable") %>%
-    select(.data$variable, .data$test_name, everything())
+    select("variable", "test_name", everything())
 
   # converting to named list
   test.args <-
@@ -231,7 +231,7 @@ add_difference <- function(x, test = NULL, group = NULL,
         }
       )
     ) %>%
-    select(.data$variable, .data$test_result) %>%
+    select("variable", "test_result") %>%
     {
       left_join(x$meta_data, ., by = "variable")
     }

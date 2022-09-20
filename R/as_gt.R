@@ -142,7 +142,7 @@ table_styling_to_gt_calls <- function(x, ...) {
   # cols_align -----------------------------------------------------------------
   df_cols_align <-
     x$table_styling$header %>%
-    select(.data$column, .data$align) %>%
+    select("column", "align") %>%
     group_by(.data$align) %>%
     nest() %>%
     mutate(cols = map(.data$data, ~ pull(.x, column)))
@@ -246,11 +246,11 @@ table_styling_to_gt_calls <- function(x, ...) {
         x$table_styling$footnote,
         x$table_styling$footnote_abbrev
       ) %>%
-      nest(data = c(.data$column, .data$row_numbers)) %>%
+      nest(data = c("column", "row_numbers")) %>%
       rowwise() %>%
       mutate(
-        columns = .data$data %>% pull(.data$column) %>% unique() %>% list(),
-        rows = .data$data %>% pull(.data$row_numbers) %>% unique() %>% list()
+        columns = .data$data %>% pull("column") %>% unique() %>% list(),
+        rows = .data$data %>% pull("row_numbers") %>% unique() %>% list()
       ) %>%
       ungroup()
     df_footnotes$footnote_exp <-
@@ -291,9 +291,9 @@ table_styling_to_gt_calls <- function(x, ...) {
   # spanning_header ------------------------------------------------------------
   df_spanning_header <-
     x$table_styling$header %>%
-    select(.data$column, .data$interpret_spanning_header, .data$spanning_header) %>%
+    select("column", "interpret_spanning_header", "spanning_header") %>%
     filter(!is.na(.data$spanning_header)) %>%
-    nest(cols = .data$column) %>%
+    nest(cols = "column") %>%
     mutate(
       spanning_header = map2(
         .data$interpret_spanning_header, .data$spanning_header,
@@ -301,7 +301,7 @@ table_styling_to_gt_calls <- function(x, ...) {
       ),
       cols = map(.data$cols, ~pull(.x))
     ) %>%
-    select(.data$spanning_header, .data$cols)
+    select("spanning_header", "cols")
 
   gt_calls[["tab_spanner"]] <-
     map(
