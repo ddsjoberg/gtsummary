@@ -15,7 +15,7 @@ add_p_test_aov <- function(data, variable, by, ...) {
     eval() %>%
     broom::tidy() %>%
     dplyr::mutate(method = "One-way ANOVA") %>%
-    select(-.data$term) %>%
+    select(-"term") %>%
     dplyr::slice(1)
 }
 
@@ -83,7 +83,7 @@ add_p_test_lme4 <- function(data, variable, by, group, type, ...) {
   }
 
   data <-
-    select(data, variable, by, group) %>%
+    select(data, all_of(c(variable, by, group))) %>%
     filter(stats::complete.cases(.))
 
   # creating formulas for base model (without variable) and full model
@@ -117,7 +117,7 @@ add_p_tbl_summary_paired.t.test <- function(data, variable, by, group,
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   }
   if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-      pull(.data$..n..) %>% max(na.rm = TRUE) > 1) {
+      pull("..n..") %>% max(na.rm = TRUE) > 1) {
     stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
   }
 
@@ -174,7 +174,7 @@ add_p_test_mcnemar.test <- function(data, variable, by, group = NULL,
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   }
   if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-      pull(.data$..n..) %>% max(na.rm = TRUE) > 1) {
+      pull("..n..") %>% max(na.rm = TRUE) > 1) {
     stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
   }
 
@@ -220,7 +220,7 @@ add_p_tbl_summary_paired.wilcox.test <- function(data, variable, by, group,
     stop("`by=` must have exactly 2 levels", call. = FALSE)
   }
   if (dplyr::group_by_at(data, c(by, group)) %>% dplyr::count(name = "..n..") %>%
-      pull(.data$..n..) %>% max(na.rm = TRUE) > 1) {
+      pull("..n..") %>% max(na.rm = TRUE) > 1) {
     stop("'{variable}': There may only be one observation per `group=` per `by=` level.", call. = FALSE)
   }
 
@@ -291,8 +291,8 @@ add_p_test_ancova <- function(data, variable, by, conf.level = 0.95, adj.vars = 
     broom.helpers::tidy_remove_intercept() %>%
     dplyr::filter(.data$variable %in% .env$by) %>%
     select(
-      .data$estimate, .data$std.error, .data$statistic,
-      .data$conf.low, .data$conf.high, .data$p.value
+      "estimate", "std.error", "statistic",
+      "conf.low", "conf.high", "p.value"
     ) %>%
     dplyr::mutate(
       method = case_when(
@@ -391,9 +391,9 @@ add_p_test_emmeans <- function(data, variable, by, type,
       conf.high = any_of("upper.CL")
     ) %>%
     dplyr::select(
-      .data$estimate, std.error = .data$SE,
-      .data$conf.low, .data$conf.high,
-      .data$p.value
+      "estimate", std.error = "SE",
+      "conf.low", "conf.high",
+      "p.value"
     ) %>%
     dplyr::mutate(
       method =
@@ -448,7 +448,7 @@ add_p_test_cohens_d <- function(data, variable, by, conf.level = 0.95, test.args
   rlang::expr(effectsize::cohens_d(x = !!f, data = !!data, ci = !!conf.level, !!!test.args)) %>%
     eval() %>%
     tibble::as_tibble() %>%
-    select(estimate = .data$Cohens_d, conf.low = .data$CI_low, conf.high = .data$CI_high) %>%
+    select(estimate = "Cohens_d", conf.low = "CI_low", conf.high = "CI_high") %>%
     dplyr::mutate(method = "Cohen's D")
 }
 
@@ -473,7 +473,7 @@ add_p_test_smd <- function(data, variable, by, tbl, type,
   }
 
   rlang::inject(smd::smd(!!!smd_args)) %>%
-    select(.data$estimate, .data$std.error) %>%
+    select("estimate", "std.error") %>%
     mutate(
       conf.low = .data$estimate + stats::qnorm((1 - .env$conf.level) / 2) * .data$std.error,
       conf.high = .data$estimate - stats::qnorm((1 - .env$conf.level) / 2) * .data$std.error,
@@ -516,7 +516,7 @@ add_p_test_svy.adj.wald.test <- function(data, variable, by, ...) {
     {
       suppressMessages(broom::tidy(.))
     } %>%
-    dplyr::mutate_at(vars(.data$statistic, .data$p.value), as.numeric) %>%
+    dplyr::mutate_at(vars("statistic", "p.value"), as.numeric) %>%
     # default saves these cols as a matrix
     mutate(method = "adjusted Wald test of independence for complex survey samples") %>%
     dplyr::mutate(dplyr::across(where(is.matrix), c))
@@ -666,7 +666,7 @@ add_p_test_anova_2way <- function(data, variable, by, continuous_variable, ...) 
               data = data)
   ) %>%
     broom::glance() %>%
-    dplyr::select(.data$statistic, .data$p.value) %>%
+    dplyr::select("statistic", "p.value") %>%
     mutate(method = "Two-way ANOVA")
 }
 

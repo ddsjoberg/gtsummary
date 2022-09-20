@@ -106,7 +106,7 @@ table_styling_to_kable_calls <- function(x, ...) {
       col.names = dplyr::filter(x$table_styling$header, .data$hide == FALSE)$label,
       align =
         filter(x$table_styling$header, .data$hide == FALSE) %>%
-        dplyr::pull(.data$align) %>%
+        dplyr::pull("align") %>%
         stringr::str_sub(1, 1)
     ) %>%
     # update with any args from theme element

@@ -94,9 +94,9 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             {
               new_header_text <-
                 paste0(
-                  x$table_styling$header %>% filter(.data$column == "estimate") %>% pull(.data$label),
+                  x$table_styling$header %>% filter(.data$column == "estimate") %>% pull("label"),
                   " **(**",
-                  x$table_styling$header %>% filter(.data$column == "ci") %>% pull(.data$label),
+                  x$table_styling$header %>% filter(.data$column == "ci") %>% pull("label"),
                   "**)**"
                 )
 
@@ -105,7 +105,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                 x$table_styling$footnote_abbrev %>%
                 filter(.data$column %in% "estimate") %>%
                 filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) %>%
-                dplyr::pull(.data$footnote) %>%
+                dplyr::pull("footnote") %>%
                 c("CI = Confidence Interval") %>%
                 paste(collapse = ", ")
               x %>%
@@ -132,7 +132,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             {
               new_header_text <-
                 paste0(
-                  x$table_styling$header %>% filter(.data$column == "estimate") %>% pull(.data$label),
+                  x$table_styling$header %>% filter(.data$column == "estimate") %>% pull("label"),
                   " **(", style_number(x$inputs$conf.level, scale = 100), "% CI)**"
                 )
 
@@ -141,7 +141,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
                 x$table_styling$footnote_abbrev %>%
                 filter(.data$column %in% "estimate") %>%
                 filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) %>%
-                dplyr::pull(.data$footnote) %>%
+                dplyr::pull("footnote") %>%
                 c("CI = Confidence Interval") %>%
                 paste(collapse = ", ")
               x %>%
@@ -200,7 +200,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "tbl_regression-fn:addnl-fn-to-run" = function(x) {
           new_header_text <-
             paste(
-              x$table_styling$header %>% filter(.data$column == "estimate") %>% pull(.data$label),
+              x$table_styling$header %>% filter(.data$column == "estimate") %>% pull("label"),
               "**(SE)**",
               sep = " "
             )
@@ -209,7 +209,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             x$table_styling$footnote_abbrev %>%
             filter(.data$column %in% "estimate") %>%
             filter(dplyr::row_number() == dplyr::n(), !is.na(.data$footnote)) %>%
-            dplyr::pull(.data$footnote) %>%
+            dplyr::pull("footnote") %>%
             c("SE = Standard Error") %>%
             paste(collapse = ", ")
 

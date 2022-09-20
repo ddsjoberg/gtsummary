@@ -277,13 +277,13 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
   df_cols <-
     x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
-    select(.data$column, .data$label)
+    select("column", "label")
 
   if (identical(quiet, FALSE) && isTRUE(include_example)) {
     cat("\n")
     cli_alert_info("As a usage guide, the code below re-creates the current column headers.")
     block <- mutate(df_cols, formula = glue("  {column} = {shQuote(label)}")) %>%
-      pull(.data$formula) %>%
+      pull("formula") %>%
       paste0("", collapse = ",\n") %>%
       {
         glue("modify_header(\n{.}\n)")
@@ -323,7 +323,7 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
     data = x$table_body,
     var_info =
       x$table_styling$header %>%
-      select(.data$column, .data$hide, starts_with("modify_selector_")) %>%
+      select("column", "hide", starts_with("modify_selector_")) %>%
       dplyr::rename_with(
         .fn = ~stringr::str_remove(., pattern = fixed("modify_selector_")),
         starts_with("modify_selector_")
@@ -337,7 +337,7 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
 .eval_with_glue <- function(x, update) {
   df_header <-
     x$table_styling$header %>%
-    select(.data$column, starts_with("modify_stat_")) %>%
+    select("column", starts_with("modify_stat_")) %>%
     dplyr::rename_with(~stringr::str_replace(., fixed("modify_stat_"), fixed("")))
 
   imap(

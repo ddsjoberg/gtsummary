@@ -26,7 +26,7 @@
 #' numeric columns numeric. For the _vast majority_ of users,
 #' _the planned change will be go unnoticed_.
 #'
-#' @examples
+#' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
 #' tbl <-
 #'   lm(time ~ ph.ecog + sex, survival::lung) %>%
 #'   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
@@ -146,8 +146,7 @@ add_significance_stars <- function(x, pattern = NULL,
   expr_stars_case_when <-
     map2(
       thresholds, seq_along(thresholds),
-      ~ expr(#!is.na(!!sym(pattern_cols[1])) &
-               p.value >= !!.x ~ !!paste(rep_len("*", .y - 1), collapse = "")) %>%
+      ~ expr(p.value >= !!.x ~ !!paste(rep_len("*", .y - 1), collapse = "")) %>%
         rlang::expr_deparse()
     ) %>%
     purrr::reduce(.f = ~ paste(.x, .y, sep = ", ")) %>%
@@ -174,7 +173,7 @@ add_significance_stars <- function(x, pattern = NULL,
       x = x,
       columns = pattern_cols[1],
       rows =
-        !!expr(!is.na(.data$p.value) ), #& !is.na(!!sym(pattern_cols[1]))),
+        !!expr(!is.na(.data$p.value) ),
       cols_merge_pattern = pattern
     )
 

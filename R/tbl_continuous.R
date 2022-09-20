@@ -103,12 +103,12 @@ tbl_continuous <- function(data,
   result <-
     tbl_custom_summary(
       data, data,
-      by = by,
+      by = all_of(by),
       stat_fns = everything() ~ continuous_summary(variable),
       statistic = statistic,
       digits = digits,
       label = label,
-      include = include,
+      include = all_of(include),
       type = all_of(include %>% setdiff(c(variable, by))) ~ "categorical"
     ) %>%
     modify_footnote(
