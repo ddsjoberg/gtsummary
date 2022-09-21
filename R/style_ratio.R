@@ -23,17 +23,9 @@
 #' ) %>%
 #'   style_ratio()
 style_ratio <- function(x, digits = 2, big.mark = NULL, decimal.mark = NULL, ...) {
-  ret <-
-    case_when(
-      round2(abs(x), digits = digits) < 1 ~ # for ratios less than 1
-        style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
-      abs(x) < 1 ~ # for ratios less than 1, but will round to 1 with the specified numbed of digits. therefore need to round it like a ratio that is 1 or greater
-        style_sigfig(sign(x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...),
-      TRUE ~ # for ratios greater than 1
-        style_sigfig(x, digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...)
-    )
-
-  # applying names back to vector, and returning vector
-  names(ret) <- names(x)
-  ret
+  ifelse(
+    round2(abs(x), digits = digits) < 1,
+    style_sigfig(x, digits = digits, big.mark = big.mark, decimal.mark = decimal.mark, ...),
+    style_sigfig(pmax(1, x), digits = digits + 1, big.mark = big.mark, decimal.mark = decimal.mark, ...)
+  )
 }
