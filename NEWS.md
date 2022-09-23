@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* The following updates were made to the indentation implementation for gt output:
+  - Previously, only HTML output was able to indent for gt tables, and this was implemented via `gt::tab_style()`.
+  - Indentation is now available for HTML, PDF, and Word and is implemented by adding unicode non-breaking spaces to the data frame via `gt::text_transform()`.
+  - The "names" for the indentation calls have been updated to `"indent"` and `"indent2"`. This change should affect very very few users.
+  - Indentation for RTF does not currently work. Instead of indented columns, malformed unicode characters are shown. This issue will be addressed in a future gt release. If you do use RTF output, and would like your output to be identical to what it was before this update, use `as_gt(include = -indent)`.
+
 * Updated `add_significance_stars()` to accept any gtsummary table (instead of only regression model summaries) and to work with `add_global_p()` (#1320)
 
 * Added Dutch language translations. (#1302)
