@@ -158,29 +158,29 @@ table_styling_to_gt_calls <- function(x, ...) {
 
   # indent ---------------------------------------------------------------------
   df_indent <- x$table_styling$text_format %>% filter(.data$format_type == "indent")
-  gt_calls[["tab_style_indent"]] <-
+  gt_calls[["indent"]] <-
     map(
       seq_len(nrow(df_indent)),
-      ~ expr(gt::tab_style(
-        style = gt::cell_text(indent = gt::px(10), align = "left"),
+      ~ expr(gt::text_transform(
         locations = gt::cells_body(
           columns = !!df_indent$column[[.x]],
           rows = !!df_indent$row_numbers[[.x]]
-        )
+        ),
+        fn = function(x) paste0("\U00A0\U00A0\U00A0\U00A0", x)
       ))
     )
 
   # indent2 --------------------------------------------------------------------
   df_indent2 <- x$table_styling$text_format %>% filter(.data$format_type == "indent2")
-  gt_calls[["tab_style_indent2"]] <-
+  gt_calls[["indent2"]] <-
     map(
       seq_len(nrow(df_indent2)),
-      ~ expr(gt::tab_style(
-        style = gt::cell_text(indent = gt::px(20), align = "left"),
+      ~ expr(gt::text_transform(
         locations = gt::cells_body(
           columns = !!df_indent2$column[[.x]],
           rows = !!df_indent2$row_numbers[[.x]]
-        )
+        ),
+        fn = function(x) paste0("\U00A0\U00A0\U00A0\U00A0\U00A0\U00A0\U00A0\U00A0", x)
       ))
     )
 
