@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added the `"var_type"` hidden column to the output of `tbl_survfit()`. This addition ensures the table will work with `remove_row_type()`. (#1343)
+
 * The following updates were made to the indentation implementation for gt output:
   - Previously, only HTML output was able to indent for gt tables, and this was implemented via `gt::tab_style()`.
   - Indentation is now available for HTML, PDF, and Word and is implemented by adding unicode non-breaking spaces to the data frame via `gt::text_transform()`.
