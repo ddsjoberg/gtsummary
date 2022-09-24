@@ -38,6 +38,49 @@ path_figure <- list(
   "img/icons8-under-construction-100.png"
 )
 
+# first make the key to go in the footnote
+gt_markdown_key <- 
+  tibble::tibble(
+    figure = 1:5,
+    desc = c(
+      "Output fully supported",
+      "Missing indentation, footnotes, spanning headers",
+      "No formatted output",
+      "Output not supported",
+      "Under development: missing indentation or malformed headers"
+    )
+  ) %>%
+  gt() %>%
+  cols_label(figure = md("**Key**"), desc = "") %>%
+  data_color(
+    columns = c(figure),
+    colors = scales::col_factor(
+      palette = c("#bae1ff", "#ffb3ba", "#ffdfba", "#ffffba", "#baffc9"),
+      domain = NULL,
+      reverse = TRUE
+    ),
+    alpha = 0.8
+  ) %>%
+  text_transform(
+    locations = cells_body(columns = c(figure)),
+    fn = function(x) {
+      dplyr::case_when(
+        x == 1 ~ local_image(filename = path_figure[[1]], height = 20),
+        x == 2 ~ local_image(filename = path_figure[[2]], height = 20),
+        x == 3 ~ local_image(filename = path_figure[[3]], height = 20),
+        x == 4 ~ local_image(filename = path_figure[[4]], height = 20),
+        x == 5 ~ local_image(filename = path_figure[[5]], height = 20)
+      )
+    }
+  ) %>%
+  tab_options(
+    table.font.size = 'x-small', 
+    data_row.padding = px(3),
+    column_labels.hidden = TRUE
+  ) %>%
+  opt_table_lines(extent = "none") %>%
+  tab_options(table.align='left')
+
 # making table with gt
 list(
   printer = c("gt", "flextable", "huxtable", "kableExtra", "kable", "tibble"),
@@ -46,8 +89,8 @@ list(
   purrr::cross_df() %>%
   dplyr::mutate(
     rating = dplyr::case_when(
-      printer == "gt" & output == "HTML" ~ 1, # good output
-      printer == "gt" & output %in% c("PDF", "RTF", "Word") ~ 5, # under construction
+      printer == "gt" & output %in% c("HTML", "PDF") ~ 1, # good output
+      printer == "gt" & output %in% c("RTF", "Word") ~ 5, # under construction
       printer == "kable" ~ 2, # ok output
       printer == "flextable" & output != "RTF" ~ 1, # good output
       printer == "flextable" & output == "RTF" ~ 4, # not supported
@@ -114,45 +157,51 @@ list(
   ) %>%
   cols_width(c(HTML, PDF, RTF, Word) ~ px(60),
              c(link) ~ px(110),
-             c(link, fns) ~ px(140))
+             c(link, fns) ~ px(140)) %>%
+  gt::tab_source_note(
+    source_note = gt_markdown_key %>% as_raw_html() %>% html()
+  ) %>%
+  tab_options(
+    table.border.bottom.width = 0
+  )
 ```
 
 <!-- Printing key for table of output types. -->
 ```{r, echo=FALSE}
-tibble::tibble(
-  figure = 1:5,
-  desc = c(
-    "Output fully supported",
-    "Formatted output, but missing indentation, footnotes, spanning headers",
-    "No formatted output",
-    "Output not supported",
-    "Under development"
-  )
-) %>%
-  gt() %>%
-  cols_label(figure = md("**Key**"), desc = "") %>%
-  data_color(
-    columns = c(figure),
-    colors = scales::col_factor(
-      palette = c("#bae1ff", "#ffb3ba", "#ffdfba", "#ffffba", "#baffc9"),
-      domain = NULL,
-      reverse = TRUE
-    ),
-    alpha = 0.8
-  ) %>%
-  text_transform(
-    locations = cells_body(columns = c(figure)),
-    fn = function(x) {
-      dplyr::case_when(
-        x == 1 ~ local_image(filename = path_figure[[1]], height = 20),
-        x == 2 ~ local_image(filename = path_figure[[2]], height = 20),
-        x == 3 ~ local_image(filename = path_figure[[3]], height = 20),
-        x == 4 ~ local_image(filename = path_figure[[4]], height = 20),
-        x == 5 ~ local_image(filename = path_figure[[5]], height = 20)
-      )
-    }
-  ) %>%
-  tab_options(table.font.size = 'x-small', data_row.padding = px(3))
+# tibble::tibble(
+#   figure = 1:5,
+#   desc = c(
+#     "Output fully supported",
+#     "Formatted output, but missing indentation, footnotes, spanning headers",
+#     "No formatted output",
+#     "Output not supported",
+#     "Under development"
+#   )
+# ) %>%
+#   gt() %>%
+#   cols_label(figure = md("**Key**"), desc = "") %>%
+#   data_color(
+#     columns = c(figure),
+#     colors = scales::col_factor(
+#       palette = c("#bae1ff", "#ffb3ba", "#ffdfba", "#ffffba", "#baffc9"),
+#       domain = NULL,
+#       reverse = TRUE
+#     ),
+#     alpha = 0.8
+#   ) %>%
+#   text_transform(
+#     locations = cells_body(columns = c(figure)),
+#     fn = function(x) {
+#       dplyr::case_when(
+#         x == 1 ~ local_image(filename = path_figure[[1]], height = 20),
+#         x == 2 ~ local_image(filename = path_figure[[2]], height = 20),
+#         x == 3 ~ local_image(filename = path_figure[[3]], height = 20),
+#         x == 4 ~ local_image(filename = path_figure[[4]], height = 20),
+#         x == 5 ~ local_image(filename = path_figure[[5]], height = 20)
+#       )
+#     }
+#   ) %>%
+#   tab_options(table.font.size = 'x-small', data_row.padding = px(3))
 ```
 
 Any **{gtsummary}** table can be converted to one of the types in the table above. 
