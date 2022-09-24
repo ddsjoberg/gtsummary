@@ -184,7 +184,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
     meta_data %>%
     mutate(
       var_label = survfit_to_label(.data$survfit, .data$variable, .data$stratified, label),
-      var_type = map_chr(stratified, ~ifelse(.x, "categorical", "continuous"))
+      var_type = map_chr(.data$stratified, ~ifelse(.x, "categorical", "continuous"))
     )
 
   meta_data <-
