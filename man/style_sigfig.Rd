@@ -40,11 +40,21 @@ is avoided, however, and additional significant figures may be displayed for
 large numbers.  For example, if the number of significant digits
 requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2).
 }
-\details{
-If 2 sig figs are input, the number is rounded to 2 decimal places
-when \code{abs(x) < 1}, 1 decimal place when \code{abs(x) >= 1 & abs(x) < 10},
+\section{Details}{
+
+\itemize{
+\item Scientific notation output is avoided.
+\item If 2 significant figures are requested, the number is rounded to no more than 2 decimal places.
+For example, a number will be rounded to 2 decimals places when \code{abs(x) < 1},
+1 decimal place when \code{abs(x) >= 1 & abs(x) < 10},
 and to the nearest integer when \code{abs(x) >= 10}.
+\item Additional significant figures
+may be displayed for large numbers. For example, if the number of
+significant digits requested is 2,
+123 will be displayed (rather than 120 or 1.2x10^2).
 }
+}
+
 \examples{
 c(0.123, 0.9, 1.1234, 12.345, -0.123, -0.9, -1.1234, -132.345, NA, -0.001) \%>\%
   style_sigfig()

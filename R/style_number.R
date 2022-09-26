@@ -1,7 +1,7 @@
 #' Style numbers
 #'
 #' @param x Numeric vector
-#' @param digits Integer or vector of integers specifying the number of digits
+#' @param digits Integer or vector of integers specifying the number of decimals
 #' to round `x=`. When vector is passed, each integer is mapped 1:1 to the
 #' numeric values in `x`
 #' @param big.mark Character used between every 3 digits to separate

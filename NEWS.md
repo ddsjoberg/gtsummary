@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fixed bug in `style_sigfig()` with numbers close to the thresholds. (#1298)
+
 * Added the `"var_type"` hidden column to the output of `tbl_survfit()`. This addition ensures the table will work with `remove_row_type()`. (#1343)
 
 * The following updates were made to the indentation implementation for gt output:
