@@ -27,7 +27,7 @@ requested is 2, 123 will be displayed (rather than 120 or 1.2x10^2)."><meta prop
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9011</span>
       </span>
     </div>
 
@@ -154,10 +154,18 @@ Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>If 2 sig figs are input, the number is rounded to 2 decimal places
-when <code>abs(x) &lt; 1</code>, 1 decimal place when <code>abs(x) &gt;= 1 &amp; abs(x) &lt; 10</code>,
-and to the nearest integer when <code>abs(x) &gt;= 10</code>.</p>
-    </div>
+    
+
+<ul><li><p>Scientific notation output is avoided.</p></li>
+<li><p>If 2 significant figures are requested, the number is rounded to no more than 2 decimal places.
+For example, a number will be rounded to 2 decimals places when <code>abs(x) &lt; 1</code>,
+1 decimal place when <code>abs(x) &gt;= 1 &amp; abs(x) &lt; 10</code>,
+and to the nearest integer when <code>abs(x) &gt;= 10</code>.</p></li>
+<li><p>Additional significant figures
+may be displayed for large numbers. For example, if the number of
+significant digits requested is 2,
+123 will be displayed (rather than 120 or 1.2x10^2).</p></li>
+</ul></div>
     <div id="see-also">
     <h2>See also</h2>
     <div class="dont-index"><p>Other style tools: 

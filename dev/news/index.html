@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9010</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.1.9011</span>
       </span>
     </div>
 
@@ -94,7 +94,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Added the <code>"var_type"</code> hidden column to the output of <code><a href="../reference/tbl_survfit.html">tbl_survfit()</a></code>. This addition ensures the table will work with <code><a href="../reference/remove_row_type.html">remove_row_type()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1343" class="external-link">#1343</a>)</p></li>
+<ul><li><p>Fixed bug in <code><a href="../reference/style_sigfig.html">style_sigfig()</a></code> with numbers close to the thresholds. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1298" class="external-link">#1298</a>)</p></li>
+<li><p>Added the <code>"var_type"</code> hidden column to the output of <code><a href="../reference/tbl_survfit.html">tbl_survfit()</a></code>. This addition ensures the table will work with <code><a href="../reference/remove_row_type.html">remove_row_type()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1343" class="external-link">#1343</a>)</p></li>
 <li>
 <p>The following updates were made to the indentation implementation for gt output:</p>
 <ul><li>Previously, only HTML output was able to indent for gt tables, and this was implemented via <code><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">gt::tab_style()</a></code>.</li>
