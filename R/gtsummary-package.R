@@ -30,10 +30,11 @@ utils::globalVariables(".")
 ## usethis namespace: end
 NULL
 
-release_questions <- function() {
+release_bullets <- function() {
   c(
     "Do you need to run `usethis::use_latest_dependencies(overwrite = TRUE)`?",
     "Have you updated all the gt help file images?",
+    "Have you reviewed the deprecation timeline for all deprecated features?",
     "Is the size of the build less than 5MB?"
   )
 }

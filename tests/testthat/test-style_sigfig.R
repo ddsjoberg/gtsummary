@@ -7,6 +7,15 @@ test_that("correct rounding near thresholds", {
   )
 
   expect_true(
+    style_sigfig(-9.98) == "-10"
+  )
+
+  expect_equal(
+    style_sigfig(seq(from = 9.94, to = 10, by = 0.01)),
+    c("9.9", "10", "10", "10", "10", "10", "10")
+  )
+
+  expect_true(
     style_sigfig(0.97, digits = 1) == "1"
   )
 
