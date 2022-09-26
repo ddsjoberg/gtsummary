@@ -16,7 +16,7 @@ style_number(
 \arguments{
 \item{x}{Numeric vector}
 
-\item{digits}{Integer or vector of integers specifying the number of digits
+\item{digits}{Integer or vector of integers specifying the number of decimals
 to round \verb{x=}. When vector is passed, each integer is mapped 1:1 to the
 numeric values in \code{x}}
 
