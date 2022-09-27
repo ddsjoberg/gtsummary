@@ -123,9 +123,6 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   # input checks ---------------------------------------------------------------
   if (rlang::is_string(label)) {
     label <- inject(everything() ~ !!label)
-    lifecycle::deprecate_stop(
-      "1.3.6", "gtsummary::tbl_survfit(label=)",
-      details = "`label=` argument no longer accepts a single string. Pass formula list.")
   }
   assert_package("survival", "tbl_survfit()")
   if (purrr::every(x, ~ !inherits(.x, "survfit"))) {
