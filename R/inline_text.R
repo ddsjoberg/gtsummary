@@ -42,9 +42,9 @@ inline_text.gtsummary <- function(x, variable,
                                   level = NULL, column = NULL, pattern = NULL, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))
   column <- rlang::enquo(column)
-  column_is_null <- tryCatch(is.null(eval_tidy(column)), error = function(e) FALSE)
+  column_is_null <- tryCatch(suppressWarnings(is.null(eval_tidy(column))), error = function(e) FALSE)
   level <- rlang::enquo(level)
-  level_is_null <- tryCatch(is.null(eval_tidy(level)), error = function(e) FALSE)
+  level_is_null <- tryCatch(suppressWarnings(is.null(eval_tidy(level))), error = function(e) FALSE)
 
   # adding raw stats if user will use them -------------------------------------
   if (!is.null(pattern) && !column_is_null) {
@@ -229,7 +229,7 @@ inline_text.tbl_summary <- function(x, variable, column = NULL, level = NULL,
   level <- rlang::enquo(level)
 
   # checking column ----------------------------------------------------------
-  column_is_null <- tryCatch(is.null(eval_tidy(column)), error = function(e) FALSE)
+  column_is_null <- tryCatch(suppressWarnings(is.null(eval_tidy(column))), error = function(e) FALSE)
   if (!column_is_null) {
     # the following code converts the column input to a column name in x$table_body
     col_lookup_table <- tibble(
