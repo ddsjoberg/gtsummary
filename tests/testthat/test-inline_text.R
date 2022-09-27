@@ -17,7 +17,14 @@ test_inline3 <-
   add_difference()
 
 test_that("inline_text.gtsummary", {
-
+  expect_equal(
+    trial %>%
+      select(age) %>%
+      tbl_summary() %>%
+      structure(class = "gtsummary") %>%
+      inline_text(variable = "age", column = "stat_0"),
+    "47 (38, 57)"
+  )
 })
 
 
