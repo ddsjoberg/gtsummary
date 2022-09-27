@@ -1,3 +1,4 @@
+
 skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
 library(dplyr)
@@ -86,13 +87,9 @@ test_that("checking glue inserts to headers", {
 })
 
 test_that("deprecated argument still works", {
-  expect_equal(
+  lifecycle::expect_defunct(
     trial %>%
       tbl_summary(by = trt, include = age) %>%
-      modify_header(stat_by = "{level}") %>%
-      as_tibble() %>%
-      select(-1) %>%
-      names(),
-    c("Drug A", "Drug B")
+      modify_header(stat_by = "{level}")
   )
 })

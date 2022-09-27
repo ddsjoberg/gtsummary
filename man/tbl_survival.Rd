@@ -2,72 +2,15 @@
 % Please edit documentation in R/tbl_survival.R
 \name{tbl_survival}
 \alias{tbl_survival}
-\alias{tbl_survival.survfit}
 \title{Creates table of univariate summary statistics for time-to-event endpoints}
 \usage{
-tbl_survival(x, ...)
-
-\method{tbl_survival}{survfit}(
-  x,
-  times = NULL,
-  probs = NULL,
-  label = ifelse(is.null(probs), "{time}", "{prob*100}\%"),
-  level_label = "{level}, N = {n}",
-  header_label = NULL,
-  header_estimate = NULL,
-  failure = FALSE,
-  missing = "-",
-  estimate_fun = NULL,
-  ...
-)
+tbl_survival(...)
 }
 \arguments{
-\item{x}{A survfit object with a no stratification
-(e.g. \code{survfit(Surv(ttdeath, death) ~ 1, trial)}), or a single stratifying
-variable (e.g. \code{survfit(Surv(ttdeath, death) ~ trt, trial)})}
-
 \item{...}{Not used}
-
-\item{times}{Numeric vector of times for which to return survival probabilities.}
-
-\item{probs}{Numeric vector of probabilities with values in (0,1)
-specifying the survival quantiles to return}
-
-\item{label}{String defining the label shown for the time or prob column.
-Default is \code{"{time}"} or \code{"{prob*100}\%"}.  The input uses \link[glue:glue]{glue::glue} notation to
-convert the string into a label.  A common label may be \code{"{time} Months"}, which
-would resolve to "6 Months" or "12 Months" depending on specified \code{times}.}
-
-\item{level_label}{Used when survival results are stratified.
-It is a string defining the label shown.  The input uses
-\link[glue:glue]{glue::glue} notation to convert the string into a label.
-The default is \code{"{level}, N = {n}"}.  Other information available to
-call are \code{'{n}'}, \code{'{level}'}, \code{'{n.event.tot}'}, \code{'{n.event.strata}'}, and
-\code{'{strata}'}. See below for details.}
-
-\item{header_label}{String to be displayed as column header.
-Default is \code{'**Time**'} when \code{time} is specified, and
-\code{'**Quantile**'} when \code{probs} is specified.}
-
-\item{header_estimate}{String to be displayed as column header of the Kaplan-Meier
-estimate.  Default is \code{'**Probability**'} when \code{time} is specified, and
-\code{'**Time**'} when \code{probs} is specified.}
-
-\item{failure}{Calculate failure probabilities rather than survival probabilities.
-Default is \code{FALSE}.  Does NOT apply to survival quantile requests}
-
-\item{missing}{String indicating what to replace missing confidence
-limits with in output.  Default is \code{missing = "-"}}
-
-\item{estimate_fun}{Function used to format the estimate and confidence
-limits. The default is \code{style_percent(x, symbol = TRUE)} for survival
-probabilities, and
-\code{style_sigfig(x, digits = 3)} for time estimates.}
 }
 \description{
 \lifecycle{deprecated}
 Please use \link{tbl_survfit}.
-Function takes a \code{survfit} object as an argument, and provides a
-formatted summary of the results
 }
 \keyword{internal}
