@@ -327,8 +327,8 @@ single_ci <- function(variable, by, tbl, method, conf.level,
   df_single_ci %>%
     tidyr::pivot_wider(
       id_cols = any_of("variable_levels"),
-      values_from = .data$ci,
-      names_from = .data$col_name
+      values_from = "ci",
+      names_from = "col_name"
     ) %>%
     select(all_stat_cols()) %>%
     dplyr::rename_with(.fn = ~paste0(., "_ci"))

@@ -144,14 +144,13 @@ add_stat <- function(x, fns, location = NULL, ...) {
     dep_args,
     function(.x, .y) {
       if (!is.null(dots[[.y]]))
-        lifecycle::deprecate_warn(when = "1.4.0", what = .x[[1]], with = .x[[2]],
-                                  details = "Argument has been ignored.")
+        lifecycle::deprecate_stop(when = "1.4.0", what = .x[[1]], with = .x[[2]])
     }
   )
 
   # convert to named lists -----------------------------------------------------
   if (rlang::is_string(location)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.4.0",
       "gtsummary::add_stat(location = 'must be a formula list, e.g. `everything() ~ \"label\"`,')"
     )

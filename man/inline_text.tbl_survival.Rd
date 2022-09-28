@@ -4,81 +4,12 @@
 \alias{inline_text.tbl_survival}
 \title{Report statistics from survival summary tables inline}
 \usage{
-\method{inline_text}{tbl_survival}(
-  x,
-  strata = NULL,
-  time = NULL,
-  prob = NULL,
-  pattern = "{estimate} ({conf.level*100}\% CI {ci})",
-  estimate_fun = NULL,
-  ...
-)
+\method{inline_text}{tbl_survival}(...)
 }
 \arguments{
-\item{x}{Object created from  \link{tbl_survival}}
-
-\item{strata}{If \code{tbl_survival} estimates are stratified, level of the stratum
-to report. Default is \code{NULL} when \code{tbl_survival} have no specified strata.}
-
-\item{time}{Time for which to return survival probability}
-
-\item{prob}{Probability for which to return survival time.  For median
-survival use \code{prob = 0.50}}
-
-\item{pattern}{String indicating the statistics to return.  Uses
-\link[glue:glue]{glue::glue} formatting.
-Default is \code{'{estimate} ({conf.level*100}\% {ci})'}.  All columns from
-\code{x$table_long} are available to print as well as the
-confidence level (conf.level). See below for details.}
-
-\item{estimate_fun}{function to round/style estimate and lower/upper
-confidence interval estimates.  Note, this does not style the 'ci' column,
-which is a string. Default is x$estimate_fun}
-
 \item{...}{Not used}
-}
-\value{
-A string reporting results from a gtsummary table
 }
 \description{
 \lifecycle{deprecated}
-for inline reporting in an R markdown document.
 }
-\section{pattern argument}{
-
-The following items are available to print.  Use \code{print(x$table_long)} to
-print the table the estimates are extracted from.
-\itemize{
-\item \code{{label}} 'time' or 'prob' label
-\item \code{{estimate}} survival or survival time estimate formatted with 'estimate_fun'
-\item \code{{conf.low}} lower limit of confidence interval formatted with 'estimate_fun'
-\item \code{{conf.high}} upper limit of confidence interval formatted with 'estimate_fun'
-\item \code{{ci}} confidence interval formatted with x$estimate_fun (pre-formatted)
-\item \code{{time}/{prob}} time or survival quantile (numeric)
-\item \code{{n.risk}} number at risk at 'time' (within stratum if applicable)
-\item \code{{n.event}} number of observed events at 'time' (within stratum if applicable)
-\item \code{{n}} number of observations (within stratum if applicable)
-\item \code{{variable}} stratum variable (if applicable)
-\item \code{{level}} stratum level (if applicable )
-\item \code{{groupname}} label_level from original \code{tbl_survival()} call
-}
-}
-
-\examples{
-\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-library(survival)
-surv_table <-
-  survfit(Surv(ttdeath, death) ~ trt, trial) \%>\%
-  tbl_survival(times = c(12, 24))
-
-inline_text(surv_table,
-  strata = "Drug A",
-  time = 12
-)
-\dontshow{\}) # examplesIf}
-}
-\author{
-Karissa Whiting
-}
-\concept{tbl_survival tools}
 \keyword{internal}
