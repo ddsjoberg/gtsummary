@@ -414,7 +414,7 @@ test_that("Groups arg and lme4", {
   )
 })
 
-test_that("difftime works with wolcox", {
+test_that("difftime works with Wilcox", {
   expect_equal(
     trial %>%
       mutate(

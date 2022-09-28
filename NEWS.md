@@ -1,24 +1,26 @@
 # gtsummary (development version)
 
-* Fixed bug in `style_sigfig()` with numbers close to the thresholds. (#1298)
-
-* Added the `"var_type"` hidden column to the output of `tbl_survfit()`. This addition ensures the table will work with `remove_row_type()`. (#1343)
-
 * The following updates were made to the indentation implementation for gt output:
   - Previously, only HTML output was able to indent for gt tables, and this was implemented via `gt::tab_style()`.
   - Indentation is now available for HTML, PDF, and Word and is implemented by adding unicode non-breaking spaces to the data frame via `gt::text_transform()`.
   - The "names" for the indentation calls have been updated to `"indent"` and `"indent2"`. This change should affect very very few users.
   - Indentation for RTF does not currently work. Instead of indented columns, malformed unicode characters are shown. This issue will be addressed in a future gt release. If you do use RTF output, and would like your output to be identical to what it was before this update, use `as_gt(include = -indent)`.
 
-* Updated `add_significance_stars()` to accept any gtsummary table (instead of only regression model summaries) and to work with `add_global_p()` (#1320)
-
-* Added Dutch language translations. (#1302)
+* A link to the cheat sheet has been added to the website. 
 
 * Added additional options to `remove_row_type(type = c("level", "all"))`.
   - Use `type = "all"` to remove all rows associated with the variable(s) specified in `remove_row_type(variables=)`.
   - Use `type = "level"` in conjunction with new argument `level_values=` to remove specified levels for a variable, or do not use the new argument to remove all levels for categorical variables.
 
 * Added the standard error of means to the list of available statistics for continuous data summaries in `tbl_svysummary()`. (#1291)
+
+* Added Dutch language translations. (#1302)
+
+* Updated `add_significance_stars()` to accept any gtsummary table (instead of only regression model summaries) and to work with `add_global_p()` (#1320)
+
+* Added the `"var_type"` hidden column to the output of `tbl_survfit()`. This addition ensures the table will work with `remove_row_type()`. (#1343)
+
+* Fixed bug in `style_sigfig()` with numbers close to the thresholds. (#1298)
 
 * Fixed bug when a column named `"variable"` was passed to `tbl_custom_summary(by=)`, which resulted in an error. (#1285)
 

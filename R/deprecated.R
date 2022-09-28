@@ -17,11 +17,11 @@ NULL
 #   1.5.0 2021-10-16
 #   1.4.2 2021-07-13
 #   1.4.1 2021-05-19
+
+# "stop" for 18 months, then delete from pkg
 #   1.4.0 2021-04-13
 #   1.3.7 2021-02-26
 #   1.3.6 2021-01-08
-#
-# "stop" for 18 months, then delete from pkg
 #   1.3.5 2020-09-29
 #   1.3.4 2020-08-27
 #   1.3.3 2020-08-11
@@ -33,8 +33,7 @@ NULL
 #   1.2.4 2019-12-16
 #   1.2.3 2019-11-12
 #   1.2.2 2019-11-10
-#   1.2.1 2019-08-20
-#   1.2.0 2019-08-19
+
 
 # v1.2.5 (2020-02-11) ----------------------------------------------------------
 #' @rdname deprecated
@@ -72,7 +71,7 @@ as_flextable <- function(...) {
 #' @rdname deprecated
 #' @export
 all_numeric <- function() {
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_stop(
     "1.3.6", "gtsummary::all_numeric()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -81,15 +80,13 @@ all_numeric <- function() {
       "Use `where(is.numeric)` instead."
     )
   )
-
-  where(is.numeric)
 }
 
 
 #' @rdname deprecated
 #' @export
 all_character <- function() {
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_stop(
     "1.3.6", "gtsummary::all_character()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -98,14 +95,12 @@ all_character <- function() {
       "Use `where(is.character)` instead."
     )
   )
-
-  where(is.character)
 }
 
 #' @rdname deprecated
 #' @export
 all_integer <- function() {
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_stop(
     "1.3.6", "gtsummary::all_integer()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -114,14 +109,12 @@ all_integer <- function() {
       "Use `where(is.integer)` instead."
     )
   )
-
-  where(is.integer)
 }
 
 #' @rdname deprecated
 #' @export
 all_double <- function() {
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_stop(
     "1.3.6", "gtsummary::all_double()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -130,14 +123,12 @@ all_double <- function() {
       "Use `where(is.double)` instead."
     )
   )
-
-  where(is.double)
 }
 
 #' @rdname deprecated
 #' @export
 all_logical <- function() {
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_stop(
     "1.3.6", "gtsummary::all_logical()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -146,14 +137,12 @@ all_logical <- function() {
       "Use `where(is.logical)` instead."
     )
   )
-
-  where(is.logical)
 }
 
 #' @rdname deprecated
 #' @export
 all_factor <- function() {
-  lifecycle::deprecate_warn(
+  lifecycle::deprecate_stop(
     "1.3.6", "gtsummary::all_factor()",
     details = paste0(
       "The {tidyselect} and {dplyr} packages have implemented functions to ",
@@ -162,8 +151,6 @@ all_factor <- function() {
       "Use `where(is.factor)` instead."
     )
   )
-
-  where(is.factor)
 }
 
 # this is a copy of the tidyselect where function. it can be deleted after the

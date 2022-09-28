@@ -67,7 +67,7 @@ tbl1 <-
   tbl_survfit(
     fit1,
     times = c(12, 24),
-    label = "Treatment",
+    label = ~"Treatment",
     label_header = "**{time} Month**"
   ) \%>\%
   add_p()

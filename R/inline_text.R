@@ -42,9 +42,9 @@ inline_text.gtsummary <- function(x, variable,
                                   level = NULL, column = NULL, pattern = NULL, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))
   column <- rlang::enquo(column)
-  column_is_null <- tryCatch(is.null(eval_tidy(column)), error = function(e) FALSE)
+  column_is_null <- tryCatch(suppressWarnings(is.null(eval_tidy(column))), error = function(e) FALSE)
   level <- rlang::enquo(level)
-  level_is_null <- tryCatch(is.null(eval_tidy(level)), error = function(e) FALSE)
+  level_is_null <- tryCatch(suppressWarnings(is.null(eval_tidy(level))), error = function(e) FALSE)
 
   # adding raw stats if user will use them -------------------------------------
   if (!is.null(pattern) && !column_is_null) {
@@ -145,7 +145,7 @@ inline_text.gtsummary <- function(x, variable,
 
   # if column selected and not pattern, return column
   if (!column_is_null && is.null(pattern)) {
-    return(dplyr::pull(df_gtsummary, all_of(column)))
+    return(df_gtsummary[[column]])
   }
 
   # if using pattern and column name, rename the columns that comprise column name
@@ -229,7 +229,7 @@ inline_text.tbl_summary <- function(x, variable, column = NULL, level = NULL,
   level <- rlang::enquo(level)
 
   # checking column ----------------------------------------------------------
-  column_is_null <- tryCatch(is.null(eval_tidy(column)), error = function(e) FALSE)
+  column_is_null <- tryCatch(suppressWarnings(is.null(eval_tidy(column))), error = function(e) FALSE)
   if (!column_is_null) {
     # the following code converts the column input to a column name in x$table_body
     col_lookup_table <- tibble(
@@ -385,160 +385,15 @@ inline_text.tbl_uvregression <- inline_text.tbl_regression
 #' Report statistics from survival summary tables inline
 #'
 #' \lifecycle{deprecated}
-# 'Extracts and returns statistics from a table created by [tbl_survival]
-#' for inline reporting in an R markdown document.
-#'
-#' @param x Object created from  [tbl_survival]
-#' @param strata If `tbl_survival` estimates are stratified, level of the stratum
-#' to report. Default is `NULL` when `tbl_survival` have no specified strata.
-#' @param time Time for which to return survival probability
-#' @param prob Probability for which to return survival time.  For median
-#' survival use `prob = 0.50`
-#' @param pattern String indicating the statistics to return.  Uses
-#' [glue::glue] formatting.
-#' Default is \code{'{estimate} ({conf.level*100}\% {ci})'}.  All columns from
-#' `x$table_long` are available to print as well as the
-#' confidence level (conf.level). See below for details.
-#' @param estimate_fun function to round/style estimate and lower/upper
-#' confidence interval estimates.  Note, this does not style the 'ci' column,
-#' which is a string. Default is x$estimate_fun
 #' @param ... Not used
-#'
-#' @section pattern argument:
-#' The following items are available to print.  Use `print(x$table_long)` to
-#' print the table the estimates are extracted from.
-#' \itemize{
-#'   \item `{label}` 'time' or 'prob' label
-#'   \item `{estimate}` survival or survival time estimate formatted with 'estimate_fun'
-#'   \item `{conf.low}` lower limit of confidence interval formatted with 'estimate_fun'
-#'   \item `{conf.high}` upper limit of confidence interval formatted with 'estimate_fun'
-#'   \item `{ci}` confidence interval formatted with x$estimate_fun (pre-formatted)
-#'   \item `{time}/{prob}` time or survival quantile (numeric)
-#'   \item `{n.risk}` number at risk at 'time' (within stratum if applicable)
-#'   \item `{n.event}` number of observed events at 'time' (within stratum if applicable)
-#'   \item `{n}` number of observations (within stratum if applicable)
-#'   \item `{variable}` stratum variable (if applicable)
-#'   \item `{level}` stratum level (if applicable )
-#'   \item `{groupname}` label_level from original `tbl_survival()` call
-#' }
-#' @author Karissa Whiting
-#' @family tbl_survival tools
-#' @return A string reporting results from a gtsummary table
 #' @export
 #' @keywords internal
-#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
-#' library(survival)
-#' surv_table <-
-#'   survfit(Surv(ttdeath, death) ~ trt, trial) %>%
-#'   tbl_survival(times = c(12, 24))
-#'
-#' inline_text(surv_table,
-#'   strata = "Drug A",
-#'   time = 12
-#' )
-inline_text.tbl_survival <-
-  function(x, strata = NULL,
-           time = NULL, prob = NULL,
-           pattern = "{estimate} ({conf.level*100}% CI {ci})",
-           estimate_fun = NULL,
-           ...) {
-    check_dots_empty(error = function(e) inform(c(e$message, e$body)))
-    if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
-
-    # setting defaults ---------------------------------------------------------
-    if (is.null(estimate_fun)) {
-      estimate_fun <-
-        x$table_styling$fmt_fun %>%
-        filter(.data$column == "estimate") %>%
-        dplyr::slice_tail() %>%
-        pull("fmt_fun") %>%
-        purrr::pluck(1)
-    }
-
-    # input checks -------------------------------------------------------------
-    if (c(is.null(time), is.null(prob)) %>% sum() != 1) {
-      stop("One and only one of 'time' and 'prob' must be specified.")
-    }
-    if (!is.null(time)) {
-      if (time < 0) stop("Must specify a positive 'time'.")
-    }
-    if (!is.null(prob)) {
-      if (prob < 0 | prob > 1) stop("Must specify a 'prob' between 0 and 1.")
-    }
-
-    # creating a var that is either time or prob (the fixed variable)
-    fixed_val <- time %||% prob
-
-    if (length(fixed_val) != 1) stop("'time' or 'prob' must be length 1")
-
-    if (!is.null(time)) {
-      result <-
-        x$table_long %>%
-        mutate(fixed_var = time)
-    }
-    if (!is.null(prob)) {
-      result <-
-        x$table_long %>%
-        mutate(fixed_var = prob)
-    }
-
-    # select strata ------------------------------------------------------------
-    # if multiple strata exist in tbl_survival, grab rows matching specified strata
-    if ("strata" %in% names(x$table_long)) {
-      if (is.null(strata)) {
-        stop(glue(
-          "Must specify one of the following strata: ",
-          "{pluck(x, 'table_long', 'level') %>% unique() %>% paste(collapse = ', ')}"
-        ))
-      }
-
-      result <-
-        result %>%
-        filter(!!parse_expr(glue("level == '{strata}'")))
-
-      if (nrow(result) == 0) {
-        stop(glue(
-          "Is the strata name spelled correctly? strata must be one of: ",
-          "{pluck(x, 'table_long', 'level') %>% unique() %>% paste(collapse = ', ')}"
-        ))
-      }
-    } else {
-      if (!is.null(strata)) {
-        warning(glue("Ignoring strata = '{strata}'. No strata in tbl_survival. "))
-      }
-    }
-
-    # select time --------------------------------------------------------------
-    # when specified timpoint is not in tbl_survival,
-    # return result for closest time and give warning
-    display_fixed <-
-      result$fixed_var[which.min(abs(result$fixed_var - fixed_val))]
-    if (!fixed_val %in% result$fixed_var) {
-      message(glue(
-        "Specified 'time' or 'prob' not in 'x': '{fixed_val}'. ",
-        "Displaying nearest estimate: {display_fixed}"
-      ))
-    }
-
-    result <-
-      result %>%
-      filter(.data$fixed_var == display_fixed)
-
-    # formatting result and returning ------------------------------------------
-    result <-
-      result %>%
-      mutate_at(
-        vars(c("estimate", "conf.low", "conf.high")),
-        estimate_fun
-      ) %>%
-      mutate(
-        conf.level = x$survfit$conf.int,
-        stat = glue(pattern)
-      ) %>%
-      pull("stat")
-
-    result
-  }
+inline_text.tbl_survival <- function(...) {
+  lifecycle::deprecate_stop(
+    when = "1.4.0",
+    what = "gtsummary::inline_text.tbl_survival()"
+  )
+}
 
 #' Report statistics from survfit tables inline
 #'
@@ -575,7 +430,7 @@ inline_text.tbl_survival <-
 #'   tbl_survfit(
 #'     fit1,
 #'     times = c(12, 24),
-#'     label = "Treatment",
+#'     label = ~"Treatment",
 #'     label_header = "**{time} Month**"
 #'   ) %>%
 #'   add_p()
