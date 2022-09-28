@@ -117,7 +117,7 @@ as_kable_extra_ex1_pdf <-
 # Example 2 (PDF via LaTeX) ---------------------
 # additional styling in `knitr::kable()` and with
 #   call to `kableExtra::kable_styling()`
-as_kable_extra_ex1_pdf <-
+as_kable_extra_ex2_pdf <-
   as_kable_extra_base \%>\%
   as_kable_extra(
     booktabs = TRUE,
