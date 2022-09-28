@@ -32,9 +32,10 @@ NULL
 
 release_bullets <- function() {
   c(
-    "Do you need to run `usethis::use_latest_dependencies(overwrite = TRUE)`?",
-    "Have you updated all the gt help file images?",
-    "Have you reviewed the deprecation timeline for all deprecated features?",
-    "Is the size of the build less than 5MB?"
+    "Check the output from `devtools::check()` and look for warnings or messages",
+    "Review deprecation schedule",
+    "Run the code styler",
+    "Updated the gt help file images",
+    "Check build size is less than 5MB"
   )
 }

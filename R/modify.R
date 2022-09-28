@@ -114,20 +114,9 @@ modify_header <- function(x, update = NULL, ..., text_interpret = c("md", "html"
 
   # converting update and dots args to a tidyselect list -----------------------
   if (!is.null(stat_by)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.3.6", "gtsummary::modify_header(stat_by=)",
       details = glue("Use `all_stat_cols(FALSE) ~ {stat_by}` instead."))
-
-    lst_stat_by <-
-      list(rlang::new_formula(lhs = expr(all_stat_cols(FALSE)), rhs = stat_by))
-
-    # adding stat_by code to `update=`
-    if (is.null(update) || rlang::is_list(update)) {
-      update <- c(lst_stat_by, update)
-    }
-    else if (!rlang::is_list(update)) {
-      update <- c(lst_stat_by, list(update))
-    }
   }
   update <- .combine_update_and_dots(x, update, ...)
 

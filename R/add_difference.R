@@ -74,13 +74,11 @@ add_difference <- function(x, test = NULL, group = NULL,
     stop("`add_difference()` cannot be run after `add_p()` or `add_difference()`", call. = FALSE)
   }
   if (rlang::is_function(estimate_fun)) {
-    lifecycle::deprecate_warn(
+    lifecycle::deprecate_stop(
       "1.4.0",
       "gtsummary::add_difference(estimate_fun = 'must be a list of forumulas')",
       details = "Argument has been converted to `list(everything() ~ estimate_fun)`"
     )
-    estimate_fun <-
-      inject(everything() ~ !!gts_mapper(estimate_fun, "add_difference(estimate_fun=)"))
   }
 
   # expanding formula lists/var selects ----------------------------------------

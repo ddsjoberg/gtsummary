@@ -10,25 +10,31 @@ test_inline2b <- trial %>%
   add_overall() %>%
   add_p()
 
+
 test_inline3 <-
   trial %>%
   tbl_summary(by = trt, include = age, missing = "no") %>%
   add_difference()
+
+test_that("inline_text.gtsummary", {
+  expect_equal(
+    trial %>%
+      select(age) %>%
+      tbl_summary() %>%
+      structure(class = "gtsummary") %>%
+      inline_text(variable = "age", column = "stat_0"),
+    "47 (38, 57)"
+  )
+})
+
 
 test_that("inline_text.tbl_summary: no by", {
   expect_error(
     inline_text(test_inline1, variable = "age"),
     NA
   )
-  expect_warning(
-    inline_text(test_inline1, variable = "age"),
-    NA
-  )
+
   expect_error(
-    inline_text(test_inline1, variable = "stage", level = "T1"),
-    NA
-  )
-  expect_warning(
     inline_text(test_inline1, variable = "stage", level = "T1"),
     NA
   )
@@ -48,10 +54,6 @@ test_that("inline_text.tbl_summary: with by", {
     inline_text(test_inline2, variable = "age", column = "Drug B"),
     "48 (39, 56)"
   )
-  expect_warning(
-    inline_text(test_inline2, variable = "age", column = "Drug B"),
-    NA
-  )
 
   expect_equal(
     inline_text(test_inline3, pattern = "{estimate} (95% CI {ci})", variable = "age"),
@@ -62,15 +64,7 @@ test_that("inline_text.tbl_summary: with by", {
     inline_text(test_inline2, variable = "stage", level = "T1", column = "Drug B"),
     NA
   )
-  expect_warning(
-    inline_text(test_inline2, variable = "stage", level = "T1", column = "Drug B"),
-    NA
-  )
   expect_error(
-    inline_text(test_inline2b, variable = "stage", column = "p.value"),
-    NA
-  )
-  expect_warning(
     inline_text(test_inline2b, variable = "stage", column = "p.value"),
     NA
   )
@@ -171,77 +165,9 @@ test_that("inline_text.regression -  expect errors", {
   )
 })
 
-# inline_text.tbl_survival tests  --------------
-library(survival)
-test_inline_surv_strata <-
-  survfit(Surv(ttdeath, death) ~ trt, trial) %>%
-  tbl_survival(
-    times = c(12, 24)
-  )
-test_inline_surv_nostrata <-
-  survfit(Surv(ttdeath, death) ~ 1, trial) %>%
-  tbl_survival(
-    times = c(12, 24)
-  )
-
-test_inline_surv_strata2 <-
-  survfit(Surv(ttdeath, death) ~ trt, trial) %>%
-  tbl_survival(
-    probs = c(0.2, 0.5)
-  )
-test_inline_surv_nostrata2 <-
-  survfit(Surv(ttdeath, death) ~ 1, trial) %>%
-  tbl_survival(
-    probs = c(0.2, 0.5)
-  )
-
-# test tbl_survival with strata
-test_that("inline_text.tbl_survival - with strata", {
-  expect_error(
-    inline_text(test_inline_surv_strata, strata = "Drug B", time = 24),
-    NA
-  )
-  expect_error(
-    inline_text(test_inline_surv_strata2, strata = "Drug B", prob = 0.2),
-    NA
-  )
-  expect_message(
-    inline_text(test_inline_surv_strata, strata = "Drug B", time = 30),
-    "Specified 'time'*"
-  )
-  expect_error(
-    inline_text(test_inline_surv_strata, strata = "Drug B", time = -2),
-    "Must specify a positive 'time'."
-  )
-  expect_error(
-    inline_text(test_inline_surv_strata, strata = NULL, time = 24),
-    "Must specify one of the following strata:*"
-  )
-  expect_error(
-    inline_text(test_inline_surv_strata, strata = "Drururuug", time = 24),
-    "Is the strata name spelled correctly*"
-  )
-})
-
-# test tbl_survival with no strata
-test_that("inline_text.tbl_survival - no strata", {
-  expect_error(
-    inline_text(test_inline_surv_nostrata, time = 24),
-    NA
-  )
-  expect_error(
-    inline_text(test_inline_surv_nostrata2, prob = 0.2),
-    NA
-  )
-  expect_warning(
-    inline_text(test_inline_surv_nostrata, strata = "Drug B", time = 24),
-    "Ignoring strata =*"
-  )
-})
-
 # inline_text.tbl_survfit tests  --------------
-fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
-fit2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
+fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
+fit2 <- survival::survfit(survival::Surv(ttdeath, death) ~ 1, trial)
 
 tbl1 <-
   tbl_survfit(
@@ -357,15 +283,7 @@ test_that("inline_text.tbl_svysummary: no by", {
     inline_text(test_inline1, variable = "age"),
     NA
   )
-  expect_warning(
-    inline_text(test_inline1, variable = "age"),
-    NA
-  )
   expect_error(
-    inline_text(test_inline1, variable = "stage", level = "T1"),
-    NA
-  )
-  expect_warning(
     inline_text(test_inline1, variable = "stage", level = "T1"),
     NA
   )
@@ -385,23 +303,11 @@ test_that("inline_text.tbl_svysummary: with by", {
     inline_text(test_inline2, variable = "age", column = "Drug B"),
     NA
   )
-  expect_warning(
-    inline_text(test_inline2, variable = "age", column = "Drug B"),
-    NA
-  )
   expect_error(
     inline_text(test_inline2, variable = "stage", level = "T1", column = "Drug B"),
     NA
   )
-  expect_warning(
-    inline_text(test_inline2, variable = "stage", level = "T1", column = "Drug B"),
-    NA
-  )
   expect_error(
-    inline_text(test_inline2b, variable = "stage", column = "p.value"),
-    NA
-  )
-  expect_warning(
     inline_text(test_inline2b, variable = "stage", column = "p.value"),
     NA
   )
