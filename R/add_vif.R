@@ -29,10 +29,14 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_vif_ex1.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_vif_ex1.png", width = "45")`
+#' }}
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_vif_ex2.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_vif_ex2.png", width = "45")`
+#' }}
 #'
 add_vif <- function(x, statistic = NULL, estimate_fun = NULL) {
   updated_call_list <- c(x$call_list, list(add_vif = match.call()))

@@ -20,7 +20,9 @@ will add the total number of observations in a new column.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_n.tbl_survfit_ex1.png}{options: width=64\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_n.tbl_survfit_ex1.png" style="width:64\%;">
+}}
 }
 
 \examples{

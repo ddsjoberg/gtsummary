@@ -8,7 +8,8 @@
 #' @family tbl_uvregression tools
 #' @return Functions return the same class of gtsummary object supplied
 #' @examples
-#' tbl_bold_ital_ex <-
+#' # Example 1 ----------------------------------
+#' tbl_bold_ital_ex1 <-
 #'   trial[c("trt", "age", "grade")] %>%
 #'   tbl_summary() %>%
 #'   bold_labels() %>%
@@ -16,7 +17,12 @@
 #'   italicize_labels() %>%
 #'   italicize_levels()
 #' @section Example Output:
-#' \if{html}{\figure{tbl_bold_ital_ex.png}{options: width=50\%}}
+#'
+#' \if{html}{Example 1}
+#'
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_bold_ital_ex1.png", width = "50")`
+#' }}
 #'
 NULL
 

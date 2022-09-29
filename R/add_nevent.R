@@ -43,11 +43,15 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_nevent.tbl_regression_ex1.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_nevent.tbl_regression_ex1.png", width = "64")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_nevent.tbl_regression_ex2.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_nevent.tbl_regression_ex2.png", width = "64")`
+#' }}
 NULL
 
 #' @rdname add_nevent_regression
@@ -131,7 +135,9 @@ add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_nevent.tbl_survfit_ex1.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_nevent.tbl_survfit_ex1.png", width = "64")`
+#' }}
 
 add_nevent.tbl_survfit <- function(x, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))

@@ -121,11 +121,15 @@ dichotomous variables appropriate for logistic regression with \link{glm}.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_uv_ex1.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_uv_ex1.png" style="width:50\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_uv_ex2.png" style="width:50\%;">
+}}
 }
 
 \section{Methods}{

@@ -73,11 +73,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_glance_ex1.png}{options: width=35\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_glance_ex1.png", width = "35")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_glance_ex2.png}{options: width=35\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_glance_ex2.png", width = "35")`
+#' }}
 NULL
 
 #' @export

@@ -29,7 +29,9 @@ Removes either the header, reference, or missing rows from a gtsummary table.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{remove_row_type_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/remove_row_type_ex1.png" style="width:60\%;">
+}}
 }
 
 \examples{

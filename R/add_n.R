@@ -56,7 +56,9 @@ add_n <- function(x, ...) {
 #'
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_n_ex.png", width = "50")`
+#' }}
 
 add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
                               last = FALSE, ...) {
@@ -227,7 +229,9 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_n.tbl_survfit_ex1.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_n.tbl_survfit_ex1.png", width = "64")`
+#' }}
 
 add_n.tbl_survfit <- function(x, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))
@@ -313,11 +317,15 @@ add_n.tbl_survfit <- function(x, ...) {
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_n.tbl_regression_ex1.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_n.tbl_regression_ex1.png", width = "64")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_n.tbl_regression_ex2.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_n.tbl_regression_ex2.png", width = "64")`
+#' }}
 NULL
 
 #' @rdname add_n_regression

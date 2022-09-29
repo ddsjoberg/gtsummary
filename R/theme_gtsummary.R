@@ -59,7 +59,9 @@
 #' @section Example Output:
 #' \if{html}{Example}
 #'
-#' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "set_gtsummary_theme_ex1.png", width = "60")`
+#' }}
 #' @name theme_gtsummary
 #' @seealso [Themes vignette](https://www.danieldsjoberg.com/gtsummary/articles/themes.html)
 #' @seealso [set_gtsummary_theme()], [reset_gtsummary_theme()]

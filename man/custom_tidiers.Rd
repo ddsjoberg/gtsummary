@@ -127,15 +127,21 @@ Use this tidier with \code{add_global_p(anova_fun = tidy_wald_test)}
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tidy_standardize_ex1.png}{options: width=65\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tidy_standardize_ex1.png" style="width:65\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tidy_standardize_ex2.png}{options: width=47\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tidy_standardize_ex2.png" style="width:47\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{pool_and_tidy_mice_ex3.png}{options: width=47\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/pool_and_tidy_mice_ex3.png" style="width:47\%;">
+}}
 }
 
 \examples{

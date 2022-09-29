@@ -29,7 +29,9 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{modify_fmt_fun_ex1.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "modify_fmt_fun_ex1.png", width = "45")`
+#' }}
 
 modify_fmt_fun <- function(x, update, rows = NULL) {
   updated_call_list <- c(x$call_list, list(modify_column_unhide = match.call()))

@@ -76,11 +76,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_uv_ex1.png}{options: width=50\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_uv_ex1.png", width = "50")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_uv_ex2.png}{options: width=50\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_uv_ex2.png", width = "50")`
+#' }}
 
 tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NULL,
                              exponentiate = FALSE, label = NULL,

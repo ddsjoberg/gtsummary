@@ -25,7 +25,9 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{remove_row_type_ex1.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "remove_row_type_ex1.png", width = "60")`
+#' }}
 remove_row_type <- function(x, variables = everything(),
                             type = c("header", "reference", "missing", "level", "all"),
                             level_value = NULL) {

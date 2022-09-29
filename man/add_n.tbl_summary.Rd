@@ -65,7 +65,9 @@ total number of non-missing (or missing) observations
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_n_ex.png" style="width:50\%;">
+}}
 }
 
 \examples{
