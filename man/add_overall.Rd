@@ -78,19 +78,19 @@ created by \code{tbl_summary}, \code{tbl_svysummary}, \code{tbl_continuous} or
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_overall_ex1.png" style="width:55\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_overall_ex1.png" style="width:55\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_overall_ex2.png" style="width:55\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_overall_ex2.png" style="width:55\%;">
 }}
 
 \if{html}{Example 3}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_overall_ex3.png" style="width:55\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_overall_ex3.png" style="width:55\%;">
 }}
 }
 

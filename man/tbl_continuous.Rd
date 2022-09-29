@@ -54,13 +54,13 @@ Summarize a continuous variable by one or more categorical variables
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_continuous_ex1.png" style="width:38\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_continuous_ex1.png" style="width:38\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_continuous_ex2.png" style="width:35\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_continuous_ex2.png" style="width:35\%;">
 }}
 }
 

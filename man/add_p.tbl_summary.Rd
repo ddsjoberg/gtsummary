@@ -64,13 +64,13 @@ Adds p-values to tables created by \code{tbl_summary} by comparing values across
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_p_ex1.png" style="width:60\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_ex1.png" style="width:60\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_p_ex2.png" style="width:60\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_ex2.png" style="width:60\%;">
 }}
 }
 

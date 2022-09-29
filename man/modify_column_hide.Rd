@@ -23,7 +23,7 @@ Use these functions to hide or unhide columns in a gtsummary table.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/modify_column_hide_ex1.png" style="width:45\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_hide_ex1.png" style="width:45\%;">
 }}
 }
 

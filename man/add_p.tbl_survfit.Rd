@@ -64,13 +64,13 @@ and a second test of the \emph{G-rho} family.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_p_tbl_survfit_ex1.png" style="width:55\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_tbl_survfit_ex1.png" style="width:55\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_p_tbl_survfit_ex2.png" style="width:45\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_tbl_survfit_ex2.png" style="width:45\%;">
 }}
 }
 

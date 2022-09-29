@@ -177,25 +177,25 @@ in the denominator, not at each level of the categorical variable.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_summary_ex1.png" style="width:31\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_summary_ex1.png" style="width:31\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_summary_ex2.png" style="width:45\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_summary_ex2.png" style="width:45\%;">
 }}
 
 \if{html}{Example 3}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_summary_ex3.png" style="width:45\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_summary_ex3.png" style="width:45\%;">
 }}
 
 \if{html}{Example 4}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_summary_ex4.png" style="width:31\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_summary_ex4.png" style="width:31\%;">
 }}
 }
 

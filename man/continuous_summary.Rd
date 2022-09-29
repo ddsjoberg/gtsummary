@@ -26,7 +26,7 @@ of \code{\link[=tbl_custom_summary]{tbl_custom_summary()}} the same continuous s
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/continuous_summary_ex1.png" style="width:31\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/continuous_summary_ex1.png" style="width:31\%;">
 }}
 }
 
