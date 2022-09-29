@@ -19,19 +19,22 @@ the specific test used for each of the p-values.
 }
 \section{Example Output}{
 
+
+\if{html}{Example 1}
+
 \if{html}{\out{
 <img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/separate_p_footnotes_ex1.png" style="width:80\%;">
 }}
 }
 
 \examples{
+# Example 1 ----------------------------------
 separate_p_footnotes_ex1 <-
   trial \%>\%
   select(trt, age, grade) \%>\%
   tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   separate_p_footnotes()
-
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

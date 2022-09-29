@@ -27,14 +27,17 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
-#' as_gt_ex <-
+#' # Example 1 ----------------------------------
+#' as_gt_ex1 <-
 #'   trial[c("trt", "age", "response", "grade")] %>%
 #'   tbl_summary(by = trt) %>%
 #'   as_gt()
 #' @section Example Output:
 #'
+#' \if{html}{Example 1}
+#'
 #' \if{html}{\out{
-#' `r man_create_image_tag(file = "as_gt_ex.png", width = "50")`
+#' `r man_create_image_tag(file = "as_gt_ex1.png", width = "50")`
 #' }}
 
 as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
