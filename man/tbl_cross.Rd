@@ -75,13 +75,13 @@ The function creates a cross table of two categorical variables.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_cross_ex1.png" style="width:50\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_cross_ex1.png" style="width:50\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_cross_ex2.png" style="width:60\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_cross_ex2.png" style="width:60\%;">
 }}
 }
 

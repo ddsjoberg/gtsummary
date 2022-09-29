@@ -21,7 +21,7 @@ will add the total number of events observed in a new column.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_nevent.tbl_survfit_ex1.png" style="width:64\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_nevent.tbl_survfit_ex1.png" style="width:64\%;">
 }}
 }
 

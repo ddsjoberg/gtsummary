@@ -63,7 +63,7 @@ personal style.
 \if{html}{Example}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/set_gtsummary_theme_ex1.png" style="width:70\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/set_gtsummary_theme_ex1.png" style="width:70\%;">
 }}
 }
 

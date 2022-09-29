@@ -59,7 +59,7 @@ and the corresponding method.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/proportion_summary_ex1.png" style="width:31\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/proportion_summary_ex1.png" style="width:31\%;">
 }}
 }
 
