@@ -96,12 +96,16 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_strata_ex1.png}{options: width=84\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_strata_ex1.png", width = "84")`
+#' }}
 #'
 #' @section Example Output:
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_strata_ex2.png}{options: width=30\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_strata_ex2.png", width = "30")`
+#' }}
 NULL
 
 #' @export

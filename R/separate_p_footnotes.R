@@ -22,7 +22,9 @@
 #'   separate_p_footnotes()
 #'
 #' @section Example Output:
-#' \if{html}{\figure{separate_p_footnotes_ex1.png}{options: width=80\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "separate_p_footnotes_ex1.png", width = "80")`
+#' }}
 
 separate_p_footnotes <- function(x) {
   # check inputs ---------------------------------------------------------------

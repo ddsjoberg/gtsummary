@@ -18,7 +18,9 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{modify_column_hide_ex1.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "modify_column_hide_ex1.png", width = "45")`
+#' }}
 NULL
 
 #' @rdname modify_column_hide

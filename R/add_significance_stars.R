@@ -77,19 +77,27 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_significance_stars_ex1.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_significance_stars_ex1.png", width = "45")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_significance_stars_ex2.png}{options: width=35\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_significance_stars_ex2.png", width = "35")`
+#' }}
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{add_significance_stars_ex3.png}{options: width=30\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_significance_stars_ex3.png", width = "30")`
+#' }}
 #'
 #' \if{html}{Example 4}
 #'
-#' \if{html}{\figure{add_significance_stars_ex4.png}{options: width=30\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_significance_stars_ex4.png", width = "30")`
+#' }}
 
 add_significance_stars <- function(x, pattern = NULL,
                                    thresholds = c(0.001, 0.01, 0.05),

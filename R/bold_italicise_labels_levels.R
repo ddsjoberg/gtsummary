@@ -16,7 +16,9 @@
 #'   italicize_labels() %>%
 #'   italicize_levels()
 #' @section Example Output:
-#' \if{html}{\figure{tbl_bold_ital_ex.png}{options: width=50\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_bold_ital_ex.png", width = "50")`
+#' }}
 #'
 NULL
 

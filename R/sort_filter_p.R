@@ -27,11 +27,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{sort_filter_p_ex1.png}{options: width=50\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "sort_filter_p_ex1.png", width = "50")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{sort_p_ex2.png}{options: width=50\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "sort_p_ex2.png", width = "50")`
+#' }}
 NULL
 
 

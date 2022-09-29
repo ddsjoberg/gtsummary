@@ -40,7 +40,9 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{combine_terms_ex1.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "combine_terms_ex1.png", width = "45")`
+#' }}
 
 combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
   assert_package("survival", "combine_terms()") # required for survreg() models
