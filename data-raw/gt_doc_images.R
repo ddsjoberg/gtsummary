@@ -18,18 +18,19 @@ install.packages(
 #    may overlap throughout the entire package.
 
 # gt.doc.images MUST BE UDPATED TO BE ABLE TO DIRECT THE IMAGES TO ANOTHER FOLDER!
-gt.doc.images::save_help_file_images(pkg = "gtsummary")
+gt.doc.images::save_help_file_images(pkg = "gtsummary", path.output = file.path(path, "man-images"))
 
 # document a single file with
 gt.doc.images::save_help_file_images(pkg = "gtsummary",
-                                     rd_files = "modify_column_merge.Rd")
+                                     rd_files = "modify_column_merge.Rd",
+                                     path.output = file.path(path, "man-images"))
 
 # 5. Shrink png files
-gt.doc.images::shrink_help_file_images(pkg = "gtsummary")
+gt.doc.images::shrink_help_file_images(pkg = "gtsummary", path.output = file.path(path, "man-images"))
 
-gt.doc.images::shrink_help_file_images(pkg = "gtsummary", image_files = "tbl_strata_ex1.png")
+gt.doc.images::shrink_help_file_images(pkg = "gtsummary", image_files = "tbl_strata_ex1.png", path.output = file.path(path, "man-images"))
 
 c("as_kable_extra_ex1_pdf.png", "as_kable_extra_ex2_pdf.png",
   "as_flex_table_ex1.png",
   "gt_output_formats.PNG") |>
-  purrr::walk(~webshot::shrink(here::here("man", "figures", .x)))
+  purrr::walk(~webshot2::shrink(here::here("man", "figures", .x)))
