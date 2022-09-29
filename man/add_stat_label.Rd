@@ -52,15 +52,21 @@ tbl_merge(list(tbl1, tbl2))
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_stat_label_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_stat_label_ex1.png" style="width:60\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_stat_label_ex2.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_stat_label_ex2.png" style="width:60\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_stat_label_ex3.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_stat_label_ex3.png" style="width:45\%;">
+}}
 }
 
 \examples{

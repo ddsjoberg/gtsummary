@@ -34,7 +34,9 @@ with a single row in the output table.  The p-value is calculated using
 
 \if{html}{Example 1}
 
-\if{html}{\figure{combine_terms_ex1.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/combine_terms_ex1.png" style="width:45\%;">
+}}
 }
 
 \examples{

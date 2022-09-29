@@ -63,11 +63,15 @@ add_p <- function(x, ...) {
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_p_ex1.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_p_ex1.png", width = "60")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_p_ex2.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_p_ex2.png", width = "60")`
+#' }}
 
 add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
                               group = NULL, include = everything(), test.args = NULL,
@@ -399,11 +403,15 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_p_cross_ex1.png}{options: width=50\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_p_cross_ex1.png", width = "50")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_p_cross_ex2.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_p_cross_ex2.png", width = "45")`
+#' }}
 add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
                             source_note = NULL,
                             test.args = NULL, ...) {
@@ -542,11 +550,15 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_p_tbl_survfit_ex1.png}{options: width=55\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_p_tbl_survfit_ex1.png", width = "55")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_p_tbl_survfit_ex2.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_p_tbl_survfit_ex2.png", width = "45")`
+#' }}
 
 add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
                               pvalue_fun = style_pvalue,
@@ -717,15 +729,21 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_p_svysummary_ex1.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_p_svysummary_ex1.png", width = "45")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_p_svysummary_ex2.png}{options: width=65\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_p_svysummary_ex2.png", width = "65")`
+#' }}
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{add_p_svysummary_ex3.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_p_svysummary_ex3.png", width = "60")`
+#' }}
 
 add_p.tbl_svysummary <- function(x, test = NULL, pvalue_fun = NULL,
                                  include = everything(), test.args = NULL, ...) {

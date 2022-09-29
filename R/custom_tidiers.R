@@ -87,15 +87,21 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tidy_standardize_ex1.png}{options: width=65\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tidy_standardize_ex1.png", width = "65")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tidy_standardize_ex2.png}{options: width=47\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tidy_standardize_ex2.png", width = "47")`
+#' }}
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{pool_and_tidy_mice_ex3.png}{options: width=47\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "pool_and_tidy_mice_ex3.png", width = "47")`
+#' }}
 
 tidy_standardize <- function(x, exponentiate = FALSE,
                              conf.level = 0.95,

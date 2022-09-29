@@ -84,11 +84,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_svysummary_ex1.png}{options: width=31\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_svysummary_ex1.png", width = "31")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_svysummary_ex2.png}{options: width=36\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_svysummary_ex2.png", width = "36")`
+#' }}
 tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
                            digits = NULL, type = NULL, value = NULL,
                            missing = NULL, missing_text = NULL, sort = NULL,

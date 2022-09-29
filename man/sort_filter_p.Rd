@@ -25,11 +25,15 @@ Sort and filter variables in table by p-values
 
 \if{html}{Example 1}
 
-\if{html}{\figure{sort_filter_p_ex1.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/sort_filter_p_ex1.png" style="width:50\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{sort_p_ex2.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/sort_p_ex2.png" style="width:50\%;">
+}}
 }
 
 \examples{

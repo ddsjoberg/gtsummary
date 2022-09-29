@@ -180,19 +180,27 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_summary_ex1.png}{options: width=31\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_summary_ex1.png", width = "31")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_summary_ex2.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_summary_ex2.png", width = "45")`
+#' }}
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{tbl_summary_ex3.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_summary_ex3.png", width = "45")`
+#' }}
 #'
 #' \if{html}{Example 4}
 #'
-#' \if{html}{\figure{tbl_summary_ex4.png}{options: width=31\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_summary_ex4.png", width = "31")`
+#' }}
 
 tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
                         digits = NULL, type = NULL, value = NULL,

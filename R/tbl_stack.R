@@ -67,11 +67,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_stack_ex1.png}{options: width=50\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_stack_ex1.png", width = "50")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_stack_ex2.png}{options: width=80\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_stack_ex2.png", width = "80")`
+#' }}
 
 tbl_stack <- function(tbls, group_header = NULL, quiet = NULL) {
   # setting defaults -----------------------------------------------------------

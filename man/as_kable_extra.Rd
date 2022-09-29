@@ -90,11 +90,15 @@ To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALS
 
 \if{html}{Example 1 (PDF)}
 
-\if{html}{\figure{as_kable_extra_ex1_pdf.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/as_kable_extra_ex1_pdf.png" style="width:45\%;">
+}}
 
 \if{html}{Example 2 (PDF)}
 
-\if{html}{\figure{as_kable_extra_ex2_pdf.png}{options: width=65\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/as_kable_extra_ex2_pdf.png" style="width:65\%;">
+}}
 }
 
 \examples{

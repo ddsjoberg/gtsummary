@@ -47,7 +47,9 @@
 #' @section Example Output:
 #' \if{html}{Example}
 #'
-#' \if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=70\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "set_gtsummary_theme_ex1.png", width = "70")`
+#' }}
 NULL
 
 # ------------------------------------------------------------------------------

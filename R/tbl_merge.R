@@ -58,11 +58,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_merge_ex1.png}{options: width=70\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_merge_ex1.png", width = "70")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_merge_ex2.png}{options: width=65\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_merge_ex2.png", width = "65")`
+#' }}
 #'
 tbl_merge <- function(tbls, tab_spanner = NULL) {
   # input checks ---------------------------------------------------------------

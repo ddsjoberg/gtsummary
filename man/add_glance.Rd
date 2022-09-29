@@ -100,11 +100,15 @@ To re-order the rows with glance statistics on bottom, use the script below:
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_glance_ex1.png}{options: width=35\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_glance_ex1.png" style="width:35\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_glance_ex2.png}{options: width=35\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_glance_ex2.png" style="width:35\%;">
+}}
 }
 
 \examples{

@@ -39,7 +39,9 @@ does not support Word.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{as_flex_table_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/as_flex_table_ex1.png" style="width:60\%;">
+}}
 }
 
 \examples{

@@ -27,11 +27,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{bold_p_ex1.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "bold_p_ex1.png", width = "60")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{bold_p_ex2.png}{options: width=50\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "bold_p_ex2.png", width = "50")`
+#' }}
 
 bold_p <- function(x, t = 0.05, q = FALSE) {
   updated_call_list <- c(x$call_list, list(bold_p = match.call()))

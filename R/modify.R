@@ -91,15 +91,21 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{modify_ex1.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "modify_ex1.png", width = "45")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{modify_ex2.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "modify_ex2.png", width = "45")`
+#' }}
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{modify_ex3.png}{options: width=35\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "modify_ex3.png", width = "35")`
+#' }}
 NULL
 
 #' @name modify

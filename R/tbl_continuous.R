@@ -38,11 +38,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_continuous_ex1.png}{options: width=38\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_continuous_ex1.png", width = "38")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_continuous_ex2.png}{options: width=35\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_continuous_ex2.png", width = "35")`
+#' }}
 
 tbl_continuous <- function(data,
                            variable,

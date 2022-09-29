@@ -85,19 +85,27 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_survfit_ex1.png}{options: width=55\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_survfit_ex1.png", width = "55")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_survfit_ex2.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_survfit_ex2.png", width = "45")`
+#' }}
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{tbl_survfit_ex3.png}{options: width=55\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_survfit_ex3.png", width = "55")`
+#' }}
 #'
 #' \if{html}{Example 4}
 #'
-#' \if{html}{\figure{survfit_cr_ex4.png}{options: width=55\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "survfit_cr_ex4.png", width = "55")`
+#' }}
 tbl_survfit <- function(x, ...) {
   UseMethod("tbl_survfit", x)
 }

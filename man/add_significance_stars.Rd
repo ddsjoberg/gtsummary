@@ -51,19 +51,27 @@ numeric columns numeric. For the \emph{vast majority} of users,
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_significance_stars_ex1.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_significance_stars_ex1.png" style="width:45\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_significance_stars_ex2.png}{options: width=35\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_significance_stars_ex2.png" style="width:35\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_significance_stars_ex3.png}{options: width=30\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_significance_stars_ex3.png" style="width:30\%;">
+}}
 
 \if{html}{Example 4}
 
-\if{html}{\figure{add_significance_stars_ex4.png}{options: width=30\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_significance_stars_ex4.png" style="width:30\%;">
+}}
 }
 
 \examples{

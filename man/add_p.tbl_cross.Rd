@@ -42,11 +42,15 @@ Missing values are included in p-value calculations.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_p_cross_ex1.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_p_cross_ex1.png" style="width:50\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_p_cross_ex2.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_p_cross_ex2.png" style="width:45\%;">
+}}
 }
 
 \examples{

@@ -45,7 +45,9 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{modify_table_body_ex1.png}{options: width=65\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "modify_table_body_ex1.png", width = "65")`
+#' }}
 #' @export
 #' @family Advanced modifiers
 modify_table_body <- function(x, fun, ...) {
