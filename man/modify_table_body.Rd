@@ -29,7 +29,9 @@ To show a column, add a column header with \code{modify_header()}.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{modify_table_body_ex1.png}{options: width=65\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/modify_table_body_ex1.png" style="width:65\%;">
+}}
 }
 
 \examples{

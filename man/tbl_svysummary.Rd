@@ -144,11 +144,15 @@ in the denominator, not at each level of the categorical variable.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_svysummary_ex1.png}{options: width=31\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_svysummary_ex1.png" style="width:31\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_svysummary_ex2.png}{options: width=36\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_svysummary_ex2.png" style="width:36\%;">
+}}
 }
 
 \section{type argument}{

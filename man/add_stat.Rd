@@ -71,15 +71,21 @@ To access the continuous variable in a \code{tbl_continuous()} table, use
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_stat_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_stat_ex1.png" style="width:60\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_stat_ex2.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_stat_ex2.png" style="width:60\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_stat_ex3.png" style="width:60\%;">
+}}
 }
 
 \examples{

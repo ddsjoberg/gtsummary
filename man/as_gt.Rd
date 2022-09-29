@@ -41,7 +41,9 @@ for detailed examples in the 'Advanced Customization' section.
 \section{Example Output}{
 
 
-\if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/as_gt_ex.png" style="width:50\%;">
+}}
 }
 
 \examples{

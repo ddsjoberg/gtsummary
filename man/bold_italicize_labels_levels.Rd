@@ -51,7 +51,9 @@ Bold or Italicize labels or levels in gtsummary tables
 }
 \section{Example Output}{
 
-\if{html}{\figure{tbl_bold_ital_ex.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_bold_ital_ex.png" style="width:50\%;">
+}}
 }
 
 \examples{

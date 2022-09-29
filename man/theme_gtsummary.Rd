@@ -152,7 +152,9 @@ to create your own themes.
 
 \if{html}{Example}
 
-\if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/set_gtsummary_theme_ex1.png" style="width:60\%;">
+}}
 }
 
 \examples{

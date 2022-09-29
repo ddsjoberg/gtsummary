@@ -31,11 +31,15 @@ Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_q_ex1.png}{options: width=65\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_q_ex1.png" style="width:65\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_q_ex2.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/add_q_ex2.png" style="width:60\%;">
+}}
 }
 
 \examples{

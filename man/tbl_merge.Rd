@@ -26,11 +26,15 @@ Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, \code{tbl_sta
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_merge_ex1.png}{options: width=70\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_merge_ex1.png" style="width:70\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_merge_ex2.png}{options: width=65\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/tbl_merge_ex2.png" style="width:65\%;">
+}}
 }
 
 \examples{

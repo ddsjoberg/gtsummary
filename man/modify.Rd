@@ -114,15 +114,21 @@ Captions are assigned based on output type.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{modify_ex1.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/modify_ex1.png" style="width:45\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{modify_ex2.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/modify_ex2.png" style="width:45\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{modify_ex3.png}{options: width=35\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/modify_ex3.png" style="width:35\%;">
+}}
 }
 
 \examples{

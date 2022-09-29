@@ -19,7 +19,9 @@ the specific test used for each of the p-values.
 }
 \section{Example Output}{
 
-\if{html}{\figure{separate_p_footnotes_ex1.png}{options: width=80\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/separate_p_footnotes_ex1.png" style="width:80\%;">
+}}
 }
 
 \examples{
