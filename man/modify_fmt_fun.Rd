@@ -27,7 +27,7 @@ are formatted
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man/figures/modify_fmt_fun_ex1.png" style="width:45\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_fmt_fun_ex1.png" style="width:45\%;">
 }}
 }
 
