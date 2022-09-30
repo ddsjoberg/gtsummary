@@ -150,9 +150,9 @@ For example, add an argument for a chi-squared test with
     
 
 <p>Example 1</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_cross_ex1.png" style="width:50%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_cross_ex1.png" alt="image of rendered example table" style="width:50%;"></p>
 <p>Example 2</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_cross_ex2.png" style="width:45%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_cross_ex2.png" alt="image of rendered example table" style="width:45%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -167,7 +167,8 @@ For example, add an argument for a chi-squared test with
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">add_p_cross_ex1</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="tbl_cross.html">tbl_cross</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">stage</span>, col <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
@@ -178,6 +179,7 @@ For example, add an argument for a chi-squared test with
 <span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="tbl_cross.html">tbl_cross</a></span><span class="op">(</span>row <span class="op">=</span> <span class="va">stage</span>, col <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span>source_note <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>

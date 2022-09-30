@@ -174,9 +174,9 @@ and a second test of the <em>G-rho</em> family.</p>
     
 
 <p>Example 1</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_tbl_survfit_ex1.png" style="width:55%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_tbl_survfit_ex1.png" alt="image of rendered example table" style="width:55%;"></p>
 <p>Example 2</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_tbl_survfit_ex2.png" style="width:45%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_tbl_survfit_ex2.png" alt="image of rendered example table" style="width:45%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -193,7 +193,8 @@ and a second test of the <em>G-rho</em> family.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">gts_survfit</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
@@ -212,6 +213,7 @@ and a second test of the <em>G-rho</em> family.</p>
 <span class="r-in"><span><span class="va">add_p_tbl_survfit_ex2</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="va">gts_survfit</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span>test <span class="op">=</span> <span class="st">"survdiff"</span>, test.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rho <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>

@@ -161,18 +161,19 @@ numeric columns numeric. For the <em>vast majority</em> of users,
     
 
 <p>Example 1</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex1.png" style="width:45%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex1.png" alt="image of rendered example table" style="width:45%;"></p>
 <p>Example 2</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex2.png" style="width:35%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex2.png" alt="image of rendered example table" style="width:35%;"></p>
 <p>Example 3</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex3.png" style="width:30%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex3.png" alt="image of rendered example table" style="width:30%;"></p>
 <p>Example 4</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex4.png" style="width:30%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex4.png" alt="image of rendered example table" style="width:30%;"></p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">time</span> <span class="op">~</span> <span class="va">ph.ecog</span> <span class="op">+</span> <span class="va">sex</span>, <span class="fu">survival</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/survival/man/lung.html" class="external-link">lung</a></span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ph.ecog <span class="op">=</span> <span class="st">"ECOG Score"</span>, sex <span class="op">=</span> <span class="st">"Sex"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
@@ -219,6 +220,7 @@ numeric columns numeric. For the <em>vast majority</em> of users,
 <span class="r-in"><span>    style <span class="op">=</span> <span class="st">"vertical-align:top"</span>,</span></span>
 <span class="r-in"><span>    locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">label</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>

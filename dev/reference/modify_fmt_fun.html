@@ -130,7 +130,7 @@ Default is <code>NULL</code>. See details below.</p></dd>
     
 
 <p>Example 1</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_fmt_fun_ex1.png" style="width:45%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_fmt_fun_ex1.png" alt="image of rendered example table" style="width:45%;"></p>
     </div>
     <div id="rows-argument">
     <h2>rows argument</h2>
@@ -162,7 +162,8 @@ an external object named <code>variable</code> in the following expression
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
 <span class="r-in"><span><span class="co"># show 'grade' p-values to 3 decimal places</span></span></span>
 <span class="r-in"><span><span class="va">modify_fmt_fun_ex1</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
@@ -171,6 +172,7 @@ an external object named <code>variable</code> in the following expression
 <span class="r-in"><span>    update <span class="op">=</span> <span class="va">p.value</span> <span class="op">~</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="va">x</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    rows <span class="op">=</span> <span class="va">variable</span> <span class="op">==</span> <span class="st">"grade"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>

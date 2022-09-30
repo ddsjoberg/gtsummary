@@ -176,9 +176,9 @@ use <code>test.args = all_tests("t.test") ~ list(var.equal = TRUE)</code></p></d
     
 
 <p>Example 1</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_ex1.png" style="width:60%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_ex1.png" alt="image of rendered example table" style="width:60%;"></p>
 <p>Example 2</p>
-<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_ex2.png" style="width:60%;"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_ex2.png" alt="image of rendered example table" style="width:60%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -209,7 +209,8 @@ use <code>test.args = all_tests("t.test") ~ list(var.equal = TRUE)</code></p></d
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">add_p_ex1</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"grade"</span>, <span class="st">"trt"</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
@@ -226,6 +227,7 @@ use <code>test.args = all_tests("t.test") ~ list(var.equal = TRUE)</code></p></d
 <span class="r-in"><span>    <span class="co"># assume equal variance in the t-test</span></span></span>
 <span class="r-in"><span>    test.args <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_tests</a></span><span class="op">(</span><span class="st">"t.test"</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>var.equal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
