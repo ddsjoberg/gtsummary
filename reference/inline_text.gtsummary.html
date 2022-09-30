@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -57,6 +57,9 @@
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -95,26 +98,37 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for gtsummary</span>
-<span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">variable</span>, level <span class="op">=</span> <span class="cn">NULL</span>, column <span class="op">=</span> <span class="cn">NULL</span>, pattern <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for gtsummary</span></span>
+<span><span class="fu"><a href="inline_text.html">inline_text</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">variable</span>, level <span class="op">=</span> <span class="cn">NULL</span>, column <span class="op">=</span> <span class="cn">NULL</span>, pattern <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>gtsummary object</p></dd>
+
+
 <dt>variable</dt>
 <dd><p>Variable name of statistic to present</p></dd>
+
+
 <dt>level</dt>
 <dd><p>Level of the variable to display for categorical variables.
 Default is <code>NULL</code></p></dd>
+
+
 <dt>column</dt>
 <dd><p>Column name to return from <code>x$table_body</code>.</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>String indicating the statistics to return.
 Uses <a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue</a> formatting. Default is <code>NULL</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>Not used</p></dd>
+
 </dl></div>
     <div id="column-pattern">
     <h2>column + pattern</h2>
@@ -143,7 +157,7 @@ mean from a <code><a href="tbl_summary.html">tbl_summary()</a></code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

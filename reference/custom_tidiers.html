@@ -25,7 +25,7 @@ Collection of tidiers that can be utilized in gtsummary. See details below."><me
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -59,6 +59,9 @@ Collection of tidiers that can be utilized in gtsummary. See details below."><me
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -99,79 +102,96 @@ Collection of tidiers that can be utilized in gtsummary. See details below.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tidy_standardize</span><span class="op">(</span>
-  <span class="va">x</span>,
-  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,
-  conf.level <span class="op">=</span> <span class="fl">0.95</span>,
-  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">tidy_bootstrap</span><span class="op">(</span>
-  <span class="va">x</span>,
-  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,
-  conf.level <span class="op">=</span> <span class="fl">0.95</span>,
-  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">tidy_robust</span><span class="op">(</span>
-  <span class="va">x</span>,
-  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,
-  conf.level <span class="op">=</span> <span class="fl">0.95</span>,
-  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,
-  vcov_estimation <span class="op">=</span> <span class="cn">NULL</span>,
-  vcov_type <span class="op">=</span> <span class="cn">NULL</span>,
-  vcov_args <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="fu">pool_and_tidy_mice</span><span class="op">(</span><span class="va">x</span>, pool.args <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu">tidy_gam</span><span class="op">(</span><span class="va">x</span>, conf.int <span class="op">=</span> <span class="cn">FALSE</span>, exponentiate <span class="op">=</span> <span class="cn">FALSE</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">tidy_wald_test</span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tidy_standardize</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tidy_bootstrap</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tidy_robust</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  vcov_estimation <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  vcov_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  vcov_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">pool_and_tidy_mice</span><span class="op">(</span><span class="va">x</span>, pool.args <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tidy_gam</span><span class="op">(</span><span class="va">x</span>, conf.int <span class="op">=</span> <span class="cn">FALSE</span>, exponentiate <span class="op">=</span> <span class="cn">FALSE</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tidy_wald_test</span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a regression model object</p></dd>
+
+
 <dt>exponentiate</dt>
 <dd><p>Logical indicating whether or not to exponentiate the
 the coefficient estimates. This is typical for logistic and multinomial
 regressions, but a bad idea if there is no log or logit link. Defaults
 to <code>FALSE</code>.</p></dd>
+
+
 <dt>conf.level</dt>
 <dd><p>The confidence level to use for the confidence interval
 if <code>conf.int = TRUE</code>. Must be strictly greater than 0 and less than 1.
 Defaults to 0.95, which corresponds to a 95 percent confidence interval.</p></dd>
+
+
 <dt>conf.int</dt>
 <dd><p>Logical indicating whether or not to include a confidence
 interval in the tidied output. Defaults to <code>FALSE</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed to method;</p><ul><li><p><code>pool_and_tidy_mice()</code>: <code>mice::tidy(x, ...)</code></p></li>
 <li><p><code>tidy_standardize()</code>: <code>parameters::standardize_parameters(x, ...)</code></p></li>
 <li><p><code>tidy_bootstrap()</code>: <code>parameters::bootstrap_parameters(x, ...)</code></p></li>
 <li><p><code>tidy_robust()</code>: <code>parameters::model_parameters(x, ...)</code></p></li>
 </ul></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Logical indicating whether to print messages in console. Default is
 <code>FALSE</code></p></dd>
+
+
 <dt>vcov_estimation, vcov_type, vcov_args</dt>
 <dd><p>arguments passed to
 <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code></p></dd>
+
+
 <dt>pool.args</dt>
 <dd><p>named list of arguments passed to <code><a href="https://amices.org/mice/reference/pool.html" class="external-link">mice::pool()</a></code> in
 <code>pool_and_tidy_mice()</code>. Default is <code>NULL</code></p></dd>
+
+
 <dt>tidy_fun</dt>
 <dd><p>Option to specify a particular tidier function for the
 model. Default is to use <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy</a></code>, but if an error occurs
 then tidying of the model is attempted with <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>,
 if installed.</p></dd>
+
 </dl></div>
     <div id="regression-model-tidiers">
     <h2>Regression Model Tidiers</h2>
@@ -210,44 +230,44 @@ Use this tidier with <code>add_global_p(anova_fun = tidy_wald_test)</code></p></
     
 
 <p>Example 1</p>
-<p><img src="figures/tidy_standardize_ex1.png" width="65%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tidy_standardize_ex1.png" alt="image of rendered example table" style="width:65%;"></p>
 <p>Example 2</p>
-<p><img src="figures/tidy_standardize_ex2.png" width="47%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tidy_standardize_ex2.png" alt="image of rendered example table" style="width:47%;"></p>
 <p>Example 3</p>
-<p><img src="figures/pool_and_tidy_mice_ex3.png" width="47%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/pool_and_tidy_mice_ex3.png" alt="image of rendered example table" style="width:47%;"></p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">tbl_stnd</span> <span class="op">&lt;-</span> <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">mod</span>, tidy_fun <span class="op">=</span> <span class="va">tidy_standardize</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tbl_stnd</span> <span class="op">&lt;-</span> <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">mod</span>, tidy_fun <span class="op">=</span> <span class="va">tidy_standardize</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> tidy_standardize(): Estimating standardized coefs with</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `parameters::standardize_parameters(model = x, ci = 0.95)`</span>
-<span class="r-in"><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">tidy_standardize_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_merge.html">tbl_merge</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">tbl_stnd</span>, <span class="va">tbl</span><span class="op">)</span>,</span>
-<span class="r-in">    tab_spanner <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"**Standardized Model**"</span>, <span class="st">"**Original Model**"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># use "posthoc" method for coef calculation</span></span>
-<span class="r-in"><span class="va">tidy_standardize_ex2</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">mod</span>, tidy_fun <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">partial</a></span><span class="op">(</span><span class="va">tidy_standardize</span>, method <span class="op">=</span> <span class="st">"posthoc"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">tidy_standardize_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_merge.html">tbl_merge</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">tbl_stnd</span>, <span class="va">tbl</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    tab_spanner <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"**Standardized Model**"</span>, <span class="st">"**Original Model**"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># use "posthoc" method for coef calculation</span></span></span>
+<span class="r-in"><span><span class="va">tidy_standardize_ex2</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">mod</span>, tidy_fun <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">partial</a></span><span class="op">(</span><span class="va">tidy_standardize</span>, method <span class="op">=</span> <span class="st">"posthoc"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> tidy_standardize(): Estimating standardized coefs with</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `parameters::standardize_parameters(model = x, ci = 0.95, method = "posthoc")`</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 3 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># Multiple Imputation using the mice package</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1123</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pool_and_tidy_mice_ex3</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://amices.org/mice/reference/mice.html" class="external-link">mice</a></span><span class="op">(</span><span class="va">trial</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 3 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># Multiple Imputation using the mice package</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pool_and_tidy_mice_ex3</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span><span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://amices.org/mice/reference/mice.html" class="external-link">mice</a></span><span class="op">(</span><span class="va">trial</span>, m <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  iter imp variable</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1   1  age  marker  response</span>
@@ -262,7 +282,7 @@ Use this tidier with <code>add_global_p(anova_fun = tidy_wald_test)</code></p></
 <span class="r-out co"><span class="r-pr">#&gt;</span>   5   2  age  marker  response</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> pool_and_tidy_mice(): Tidying mice model with</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `mice::pool(x) %&gt;% mice::tidy(exponentiate = FALSE, conf.int = TRUE, conf.level = 0.95)`</span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -277,7 +297,7 @@ Use this tidier with <code>add_global_p(anova_fun = tidy_wald_test)</code></p></
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

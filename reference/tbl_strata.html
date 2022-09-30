@@ -32,7 +32,7 @@ are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun)
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -66,6 +66,9 @@ are passed to .tbl_fun=, e.g. purrr::map2(data, strata, .tbl_fun)
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -110,54 +113,68 @@ are passed to <code>.tbl_fun=</code>, e.g. <code>purrr::map2(data, strata, .tbl_
 </ul></div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tbl_strata</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">strata</span>,
-  <span class="va">.tbl_fun</span>,
-  <span class="va">...</span>,
-  .sep <span class="op">=</span> <span class="st">", "</span>,
-  .combine_with <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl_merge"</span>, <span class="st">"tbl_stack"</span><span class="op">)</span>,
-  .combine_args <span class="op">=</span> <span class="cn">NULL</span>,
-  .header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">.combine_with</span> <span class="op">==</span> <span class="st">"tbl_merge"</span>, <span class="st">"**{strata}**"</span>, <span class="st">"{strata}"</span><span class="op">)</span>,
-  .stack_group_header <span class="op">=</span> <span class="cn">NULL</span>,
-  .quiet <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">tbl_strata2</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">strata</span>,
-  <span class="va">.tbl_fun</span>,
-  <span class="va">...</span>,
-  .sep <span class="op">=</span> <span class="st">", "</span>,
-  .combine_with <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl_merge"</span>, <span class="st">"tbl_stack"</span><span class="op">)</span>,
-  .combine_args <span class="op">=</span> <span class="cn">NULL</span>,
-  .header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">.combine_with</span> <span class="op">==</span> <span class="st">"tbl_merge"</span>, <span class="st">"**{strata}**"</span>, <span class="st">"{strata}"</span><span class="op">)</span>,
-  .stack_group_header <span class="op">=</span> <span class="cn">NULL</span>,
-  .quiet <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tbl_strata</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">strata</span>,</span>
+<span>  <span class="va">.tbl_fun</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  .sep <span class="op">=</span> <span class="st">", "</span>,</span>
+<span>  .combine_with <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl_merge"</span>, <span class="st">"tbl_stack"</span><span class="op">)</span>,</span>
+<span>  .combine_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  .header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">.combine_with</span> <span class="op">==</span> <span class="st">"tbl_merge"</span>, <span class="st">"**{strata}**"</span>, <span class="st">"{strata}"</span><span class="op">)</span>,</span>
+<span>  .stack_group_header <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  .quiet <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tbl_strata2</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">strata</span>,</span>
+<span>  <span class="va">.tbl_fun</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  .sep <span class="op">=</span> <span class="st">", "</span>,</span>
+<span>  .combine_with <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tbl_merge"</span>, <span class="st">"tbl_stack"</span><span class="op">)</span>,</span>
+<span>  .combine_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  .header <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">.combine_with</span> <span class="op">==</span> <span class="st">"tbl_merge"</span>, <span class="st">"**{strata}**"</span>, <span class="st">"{strata}"</span><span class="op">)</span>,</span>
+<span>  .stack_group_header <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  .quiet <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>a data frame or survey object</p></dd>
+
+
 <dt>strata</dt>
 <dd><p>character vector or tidy-selector of columns in data to stratify results by</p></dd>
+
+
 <dt>.tbl_fun</dt>
 <dd><p>A function or formula. If a <em>function</em>, it is used as is.
 If a formula, e.g. <code>~ .x %&gt;% tbl_summary() %&gt;% add_p()</code>, it is converted to a function.
 The stratified data frame is passed to this function.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments passed on to the <code>.tbl_fun</code> function.</p></dd>
+
+
 <dt>.sep</dt>
 <dd><p>when more than one stratifying variable is passed, this string is
 used to separate the levels in the spanning header. Default is <code>", "</code></p></dd>
+
+
 <dt>.combine_with</dt>
 <dd><p>One of <code>c("tbl_merge", "tbl_stack")</code>. Names the function
 used to combine the stratified tables.</p></dd>
+
+
 <dt>.combine_args</dt>
 <dd><p>named list of arguments that are passed to function
 specified in <code>.combine_with=</code></p></dd>
+
+
 <dt>.header</dt>
 <dd><p>String indicating the headers that will be placed.
 Default is <code>"**{strata}**"</code> when <code>.combine_with = "tbl_merge"</code> and
@@ -166,11 +183,16 @@ curly brackets will be evaluated according to <code><a href="https://glue.tidyve
 <li><p><code>n</code> N within stratum</p></li>
 <li><p><code>N</code> Overall N</p></li>
 </ul><p>The evaluated value of <code>.header=</code> is also available within <code>tbl_strata2(.tbl_fun=)</code></p></dd>
+
+
 <dt>.stack_group_header</dt>
 <dd><p>DEPRECATED.</p></dd>
+
+
 <dt>.quiet</dt>
 <dd><p>Logical indicating whether to print messages in console.
 Default is <code>FALSE</code></p></dd>
+
 </dl></div>
     <div id="tips">
     <h2>Tips</h2>
@@ -190,10 +212,10 @@ each stratum's summary table.</p></li>
     
 
 <p>Example 1</p>
-<p><img src="figures/tbl_strata_ex1.png" width="84%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_strata_ex1.png" alt="image of rendered example table" style="width:84%;"></p>
 
 <p>Example 2</p>
-<p><img src="figures/tbl_strata_ex2.png" width="30%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_strata_ex2.png" alt="image of rendered example table" style="width:30%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -264,44 +286,44 @@ each stratum's summary table.</p></li>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="va">tbl_strata_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">stage</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Grade"</span>, <span class="va">grade</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_strata</span><span class="op">(</span></span>
-<span class="r-in">    strata <span class="op">=</span> <span class="va">grade</span>,</span>
-<span class="r-in">    .tbl_fun <span class="op">=</span></span>
-<span class="r-in">      <span class="op">~</span> <span class="va">.x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">        <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, missing <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">        <span class="fu"><a href="add_n.html">add_n</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">    .header <span class="op">=</span> <span class="st">"**{strata}**, N = {n}"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
-<span class="r-in"><span class="va">tbl_strata_ex2</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">grade</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Grade"</span>, <span class="va">grade</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_strata2</span><span class="op">(</span></span>
-<span class="r-in">    strata <span class="op">=</span> <span class="va">grade</span>,</span>
-<span class="r-in">    .tbl_fun <span class="op">=</span></span>
-<span class="r-in">      <span class="op">~</span><span class="va">.x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">      <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span></span>
-<span class="r-in">        label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>response <span class="op">=</span> <span class="va">.y</span><span class="op">)</span>,</span>
-<span class="r-in">        missing <span class="op">=</span> <span class="st">"no"</span>,</span>
-<span class="r-in">        statistic <span class="op">=</span> <span class="va">response</span> <span class="op">~</span> <span class="st">"{p}%"</span></span>
-<span class="r-in">      <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">      <span class="fu"><a href="add_ci.html">add_ci</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"{stat} ({ci})"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">     <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="st">"**Rate (95% CI)**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">     <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span>
-<span class="r-in">    .combine_with <span class="op">=</span> <span class="st">"tbl_stack"</span>,</span>
-<span class="r-in">    .combine_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>group_header <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span>
-<span class="r-in">    .quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="modify.html">modify_caption</a></span><span class="op">(</span><span class="st">"**Response Rate by Grade**"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># }</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">tbl_strata_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">stage</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Grade"</span>, <span class="va">grade</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_strata</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    strata <span class="op">=</span> <span class="va">grade</span>,</span></span>
+<span class="r-in"><span>    .tbl_fun <span class="op">=</span></span></span>
+<span class="r-in"><span>      <span class="op">~</span> <span class="va">.x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, missing <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="add_n.html">add_n</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    .header <span class="op">=</span> <span class="st">"**{strata}**, N = {n}"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">tbl_strata_ex2</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">grade</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>grade <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Grade"</span>, <span class="va">grade</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_strata2</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    strata <span class="op">=</span> <span class="va">grade</span>,</span></span>
+<span class="r-in"><span>    .tbl_fun <span class="op">=</span></span></span>
+<span class="r-in"><span>      <span class="op">~</span><span class="va">.x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>response <span class="op">=</span> <span class="va">.y</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        missing <span class="op">=</span> <span class="st">"no"</span>,</span></span>
+<span class="r-in"><span>        statistic <span class="op">=</span> <span class="va">response</span> <span class="op">~</span> <span class="st">"{p}%"</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="add_ci.html">add_ci</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"{stat} ({ci})"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>     <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="st">"**Rate (95% CI)**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>     <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    .combine_with <span class="op">=</span> <span class="st">"tbl_stack"</span>,</span></span>
+<span class="r-in"><span>    .combine_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>group_header <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    .quiet <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_caption</a></span><span class="op">(</span><span class="st">"**Response Rate by Grade**"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -316,7 +338,7 @@ each stratum's summary table.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

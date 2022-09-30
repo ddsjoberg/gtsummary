@@ -26,7 +26,7 @@ Use show_header_names() to print underlying column names."><meta property="og:im
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -60,6 +60,9 @@ Use show_header_names() to print underlying column names."><meta property="og:im
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -101,25 +104,32 @@ Use <code><a href="modify.html">show_header_names()</a></code> to print underlyi
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">modify_column_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">pattern</span>, rows <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">modify_column_merge</span><span class="op">(</span><span class="va">x</span>, <span class="va">pattern</span>, rows <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>gtsummary object</p></dd>
+
+
 <dt>pattern</dt>
 <dd><p>glue syntax string indicating how to merge columns in
 <code>x$table_body</code>. For example, to construct a confidence interval
 use <code>"{conf.low}, {conf.high}"</code>.</p></dd>
+
+
 <dt>rows</dt>
 <dd><p>predicate expression to select rows in <code>x$table_body</code>.
 Can be used to style footnote, formatting functions, missing symbols,
 and text formatting. Default is <code>NULL</code>. See details below.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>gtsummary table</p>
+    
+
+<p>gtsummary table</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -167,9 +177,9 @@ internally with care, and it is <em>not</em> recommended for users.</p>
     
 
 <p>Example 1</p>
-<p><img src="figures/modify_column_merge_ex1.png" width="65%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_merge_ex1.png" alt="image of rendered example table" style="width:65%;"></p>
 <p>Example 2</p>
-<p><img src="figures/modify_column_merge_ex2.png" width="41%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_merge_ex2.png" alt="image of rendered example table" style="width:41%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -184,25 +194,27 @@ internally with care, and it is <em>not</em> recommended for users.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="va">modify_column_merge_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">marker</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, missing <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"t.test"</span>,</span>
-<span class="r-in">        pvalue_fun <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="va">.</span>, prepend_p <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="modify_fmt_fun.html">modify_fmt_fun</a></span><span class="op">(</span><span class="va">statistic</span> <span class="op">~</span> <span class="va">style_sigfig</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_column_merge</span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"t = {statistic}; {p.value}"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span><span class="va">statistic</span> <span class="op">~</span> <span class="st">"**t-test**"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
-<span class="r-in"><span class="va">modify_column_merge_ex2</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">marker</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_column_merge</span><span class="op">(</span></span>
-<span class="r-in">    pattern <span class="op">=</span> <span class="st">"{estimate} ({ci})"</span>,</span>
-<span class="r-in">    rows <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">modify_column_merge_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">marker</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, missing <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"t.test"</span>,</span></span>
+<span class="r-in"><span>        pvalue_fun <span class="op">=</span> <span class="op">~</span><span class="fu"><a href="style_pvalue.html">style_pvalue</a></span><span class="op">(</span><span class="va">.</span>, prepend_p <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="modify_fmt_fun.html">modify_fmt_fun</a></span><span class="op">(</span><span class="va">statistic</span> <span class="op">~</span> <span class="va">style_sigfig</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_column_merge</span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"t = {statistic}; {p.value}"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span><span class="va">statistic</span> <span class="op">~</span> <span class="st">"**t-test**"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">modify_column_merge_ex2</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">marker</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_column_merge</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    pattern <span class="op">=</span> <span class="st">"{estimate} ({ci})"</span>,</span></span>
+<span class="r-in"><span>    rows <span class="op">=</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">estimate</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -217,7 +229,7 @@ internally with care, and it is <em>not</em> recommended for users.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

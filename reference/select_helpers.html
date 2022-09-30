@@ -35,7 +35,7 @@ all_contrasts() selects variables in regression model based on their type of con
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -69,6 +69,9 @@ all_contrasts() selects variables in regression model based on their type of con
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -116,52 +119,63 @@ functions for selecting columns of data frames (and other items as well).</p><ul
 </ul></div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">all_continuous</span><span class="op">(</span>continuous2 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">all_continuous2</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">all_categorical</span><span class="op">(</span>dichotomous <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">all_dichotomous</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">all_tests</span><span class="op">(</span>tests <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="fu">all_stat_cols</span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-
-<span class="fu">all_interaction</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">all_intercepts</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">all_contrasts</span><span class="op">(</span>contrasts_type <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">all_continuous</span><span class="op">(</span>continuous2 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">all_continuous2</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">all_categorical</span><span class="op">(</span>dichotomous <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">all_dichotomous</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">all_tests</span><span class="op">(</span>tests <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">all_stat_cols</span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">all_interaction</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">all_intercepts</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">all_contrasts</span><span class="op">(</span>contrasts_type <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>continuous2</dt>
 <dd><p>Logical indicating whether to include continuous2 variables. Default is <code>TRUE</code></p></dd>
+
+
 <dt>dichotomous</dt>
 <dd><p>Logical indicating whether to include dichotomous variables.
 Default is <code>TRUE</code></p></dd>
+
+
 <dt>tests</dt>
 <dd><p>string indicating the test type of the variables to select, e.g.
 select all variables being compared with <code>"t.test"</code></p></dd>
+
+
 <dt>stat_0</dt>
 <dd><p>When <code>FALSE</code>, will not select the <code>"stat_0"</code> column. Default is <code>TRUE</code></p></dd>
+
+
 <dt>contrasts_type</dt>
 <dd><p>type of contrast to select. When <code>NULL</code>, all variables with a
 contrast will be selected. Default is <code>NULL</code>.  Select among contrast types
 <code>c("treatment", "sum", "poly", "helmert", "other")</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A character vector of column names selected</p>
+    
+
+<p>A character vector of column names selected</p>
     </div>
     <div id="example-output">
     <h2>Example Output</h2>
     
 
 <p>Example 1</p>
-<p><img src="figures/select_ex1.png" width="55%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/select_ex1.png" alt="image of rendered example table" style="width:55%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -170,13 +184,13 @@ contrast will be selected. Default is <code>NULL</code>.  Select among contrast 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">select_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">response</span>, <span class="va">grade</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span></span>
-<span class="r-in">    statistic <span class="op">=</span> <span class="fu">all_continuous</span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span>,</span>
-<span class="r-in">    type <span class="op">=</span> <span class="fu">all_dichotomous</span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"categorical"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">select_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">response</span>, <span class="va">grade</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="fu">all_continuous</span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span>,</span></span>
+<span class="r-in"><span>    type <span class="op">=</span> <span class="fu">all_dichotomous</span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"categorical"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -191,7 +205,7 @@ contrast will be selected. Default is <code>NULL</code>.  Select among contrast 
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

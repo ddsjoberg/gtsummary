@@ -26,7 +26,7 @@ computing the ratio of two continuous variables and its confidence interval."><m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -60,6 +60,9 @@ computing the ratio of two continuous variables and its confidence interval."><m
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -101,7 +104,7 @@ computing the ratio of two continuous variables and its confidence interval.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ratio_summary</span><span class="op">(</span><span class="va">numerator</span>, <span class="va">denominator</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ratio_summary</span><span class="op">(</span><span class="va">numerator</span>, <span class="va">denominator</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -109,16 +112,23 @@ computing the ratio of two continuous variables and its confidence interval.</p>
     <dl><dt>numerator</dt>
 <dd><p>String indicating the name of the variable to be summed
 for computing the numerator.</p></dd>
+
+
 <dt>denominator</dt>
 <dd><p>String indicating the name of the variable to be summed
 for computing the denominator.</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>Should missing values be removed before summing the numerator
 and the denominator? (default is <code>TRUE</code>)</p></dd>
+
+
 <dt>conf.level</dt>
 <dd><p>Confidence level for the returned confidence interval.
 Must be strictly greater than 0 and less than 1. Default to 0.95, which
 corresponds to a 95 percent confidence interval.</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -135,7 +145,7 @@ corresponds to a 95 percent confidence interval.</p></dd>
     
 
 <p>Example 1</p>
-<p><img src="figures/ratio_summary_ex1.png" width="31%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/ratio_summary_ex1.png" alt="image of rendered example table" style="width:31%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -152,22 +162,22 @@ corresponds to a 95 percent confidence interval.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="va">ratio_summary_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_custom_summary.html">tbl_custom_summary</a></span><span class="op">(</span></span>
-<span class="r-in">    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"stage"</span>, <span class="st">"grade"</span><span class="op">)</span>,</span>
-<span class="r-in">    by <span class="op">=</span> <span class="st">"trt"</span>,</span>
-<span class="r-in">    stat_fns <span class="op">=</span> <span class="op">~</span> <span class="fu">ratio_summary</span><span class="op">(</span><span class="st">"response"</span>, <span class="st">"ttdeath"</span><span class="op">)</span>,</span>
-<span class="r-in">    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{ratio} [{conf.low}; {conf.high}] ({num}/{denom})"</span>,</span>
-<span class="r-in">    digits <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
-<span class="r-in">    overall_row <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">    overall_row_label <span class="op">=</span> <span class="st">"All stages &amp; grades"</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span></span>
-<span class="r-in">    update <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Ratio [95% CI] (n/N)"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">ratio_summary_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_custom_summary.html">tbl_custom_summary</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    include <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"stage"</span>, <span class="st">"grade"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    by <span class="op">=</span> <span class="st">"trt"</span>,</span></span>
+<span class="r-in"><span>    stat_fns <span class="op">=</span> <span class="op">~</span> <span class="fu">ratio_summary</span><span class="op">(</span><span class="st">"response"</span>, <span class="st">"ttdeath"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="op">~</span> <span class="st">"{ratio} [{conf.low}; {conf.high}] ({num}/{denom})"</span>,</span></span>
+<span class="r-in"><span>    digits <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    overall_row <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    overall_row_label <span class="op">=</span> <span class="st">"All stages &amp; grades"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    update <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"Ratio [95% CI] (n/N)"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -182,7 +192,7 @@ corresponds to a 95 percent confidence interval.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

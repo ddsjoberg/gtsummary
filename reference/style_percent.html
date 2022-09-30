@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -57,6 +57,9 @@
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -95,40 +98,53 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">style_percent</span><span class="op">(</span>
-  <span class="va">x</span>,
-  symbol <span class="op">=</span> <span class="cn">FALSE</span>,
-  digits <span class="op">=</span> <span class="fl">0</span>,
-  big.mark <span class="op">=</span> <span class="cn">NULL</span>,
-  decimal.mark <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">style_percent</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  symbol <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  big.mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  decimal.mark <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>numeric vector of percentages</p></dd>
+
+
 <dt>symbol</dt>
 <dd><p>Logical indicator to include percent symbol in output.
 Default is <code>FALSE</code>.</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>number of digits to round large percentages (i.e. greater than 10%).
 Smaller percentages are rounded to <code>digits + 1</code> places.
 Default is <code>0</code></p></dd>
+
+
 <dt>big.mark</dt>
 <dd><p>Character used between every 3 digits to separate
 hundreds/thousands/millions/etc.
 Default is <code>","</code>, except when <code>decimal.mark = ","</code> when the default is a space.</p></dd>
+
+
 <dt>decimal.mark</dt>
 <dd><p>The character to be used to indicate the numeric decimal point.
 Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other arguments passed on to <code><a href="https://rdrr.io/r/base/format.html" class="external-link">base::format()</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A character vector of styled percentages</p>
+    
+
+<p>A character vector of styled percentages</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -146,10 +162,10 @@ Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">percent_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0.0001</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>, <span class="fl">0.10</span>, <span class="fl">0.45356</span>, <span class="fl">0.99</span>, <span class="fl">1.45</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">style_percent</span><span class="op">(</span><span class="va">percent_vals</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">percent_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0.0001</span>, <span class="fl">0.005</span>, <span class="fl">0.01</span>, <span class="fl">0.10</span>, <span class="fl">0.45356</span>, <span class="fl">0.99</span>, <span class="fl">1.45</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">style_percent</span><span class="op">(</span><span class="va">percent_vals</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA     "0"    "&lt;0.1" "0.5"  "1.0"  "10"   "45"   "99"   "145" </span>
-<span class="r-in"><span class="fu">style_percent</span><span class="op">(</span><span class="va">percent_vals</span>, symbol <span class="op">=</span> <span class="cn">TRUE</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">style_percent</span><span class="op">(</span><span class="va">percent_vals</span>, symbol <span class="op">=</span> <span class="cn">TRUE</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA       "0%"     "0.01%"  "0.50%"  "1.00%"  "10.0%"  "45.4%"  "99.0%" </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [9] "145.0%"</span>
 </code></pre></div>
@@ -166,7 +182,7 @@ Default is <code>"."</code>  or <code>getOption("OutDec")</code></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

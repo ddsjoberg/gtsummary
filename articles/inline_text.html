@@ -48,7 +48,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -84,6 +84,9 @@
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -122,8 +125,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Tutorial: inline_text</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: September 13,
-2020</h4>
+            <h4 data-toc-skip class="date">Last Updated: September 13, 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ddsjoberg/gtsummary/blob/HEAD/vignettes/inline_text.Rmd" class="external-link"><code>vignettes/inline_text.Rmd</code></a></small>
       <div class="hidden name"><code>inline_text.Rmd</code></div>
@@ -135,54 +137,42 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p><strong>Reproducible reports</strong> are an important part of good
-practices. We often need to report the <strong>results from a
-table</strong> in the text of an R markdown report. <strong>Inline
-reporting</strong> has been made simple with <a href="https://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_summary.html"><code>inline_text()</code></a>.
-The <code><a href="../reference/inline_text.html">inline_text()</a></code> function reports statistics from
-{gtsummary} tables inline in an <a href="https://rmarkdown.rstudio.com/lesson-1.html" class="external-link">R markdown</a>
-report.</p>
+<p><strong>Reproducible reports</strong> are an important part of good practices. We often need to report the <strong>results from a table</strong> in the text of an R markdown report. <strong>Inline reporting</strong> has been made simple with <a href="https://www.danieldsjoberg.com/gtsummary/reference/inline_text.tbl_summary.html"><code>inline_text()</code></a>. The <code><a href="../reference/inline_text.html">inline_text()</a></code> function reports statistics from {gtsummary} tables inline in an <a href="https://rmarkdown.rstudio.com/lesson-1.html" class="external-link">R markdown</a> report.</p>
 </div>
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
 <p>Before going through the tutorial, install and load {gtsummary}.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("gtsummary")</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("gtsummary")</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ddsjoberg/gtsummary" class="external-link">gtsummary</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example-data-set">Example data set<a class="anchor" aria-label="anchor" href="#example-data-set"></a>
 </h2>
-<p>We’ll be using the <a href="https://www.danieldsjoberg.com/gtsummary/reference/trial.html"><code>trial</code></a>
-data set throughout this example.</p>
+<p>We’ll be using the <a href="https://www.danieldsjoberg.com/gtsummary/reference/trial.html"><code>trial</code></a> data set throughout this example.</p>
 <ul>
-<li>This set contains data from 200 patients who received one of two
-types of chemotherapy (Drug A or Drug B). The outcomes are tumor
-response and death.</li>
+<li>This set contains data from 200 patients who received one of two types of chemotherapy (Drug A or Drug B). The outcomes are tumor response and death.</li>
 </ul>
-<p>For brevity in the tutorial, let’s keep a subset of the variables
-from the trial data set.</p>
+<p>For brevity in the tutorial, let’s keep a subset of the variables from the trial data set.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">trial2</span> <span class="op">&lt;-</span>
-  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">marker</span>, <span class="va">stage</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">trial2</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">marker</span>, <span class="va">stage</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="inline_text_tbl_summary">Inline results from tbl_summary()<a class="anchor" aria-label="anchor" href="#inline_text_tbl_summary"></a>
 </h2>
-<p>First create a basic summary table using <a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html"><code>tbl_summary()</code></a>
-(review <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"><code>tbl_summary()</code>
-vignette</a> for detailed overview of this function if needed).</p>
+<p>First create a basic summary table using <a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_summary.html"><code>tbl_summary()</code></a> (review <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html"><code>tbl_summary()</code> vignette</a> for detailed overview of this function if needed).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="va">trial2</span>, by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span>
-<span class="va">tab1</span></code></pre></div>
-<div id="omzatkzrhe" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<code class="sourceCode R"><span><span class="va">tab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="va">trial2</span>, by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span></span>
+<span><span class="va">tab1</span></span></code></pre></div>
+<div id="pexeznstil" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#omzatkzrhe .gt_table {
+#pexeznstil .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -207,7 +197,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-left-color: #D3D3D3;
 }
 
-#omzatkzrhe .gt_heading {
+#pexeznstil .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -219,7 +209,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-right-color: #D3D3D3;
 }
 
-#omzatkzrhe .gt_title {
+#pexeznstil .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -231,7 +221,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-bottom-width: 0;
 }
 
-#omzatkzrhe .gt_subtitle {
+#pexeznstil .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -243,13 +233,13 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-top-width: 0;
 }
 
-#omzatkzrhe .gt_bottom_border {
+#pexeznstil .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#omzatkzrhe .gt_col_headings {
+#pexeznstil .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -264,7 +254,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-right-color: #D3D3D3;
 }
 
-#omzatkzrhe .gt_col_heading {
+#pexeznstil .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -284,7 +274,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   overflow-x: hidden;
 }
 
-#omzatkzrhe .gt_column_spanner_outer {
+#pexeznstil .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -296,15 +286,15 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 4px;
 }
 
-#omzatkzrhe .gt_column_spanner_outer:first-child {
+#pexeznstil .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#omzatkzrhe .gt_column_spanner_outer:last-child {
+#pexeznstil .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#omzatkzrhe .gt_column_spanner {
+#pexeznstil .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -316,7 +306,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   width: 100%;
 }
 
-#omzatkzrhe .gt_group_heading {
+#pexeznstil .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -341,7 +331,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   vertical-align: middle;
 }
 
-#omzatkzrhe .gt_empty_group_heading {
+#pexeznstil .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -356,15 +346,15 @@ vignette</a> for detailed overview of this function if needed).</p>
   vertical-align: middle;
 }
 
-#omzatkzrhe .gt_from_md > :first-child {
+#pexeznstil .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#omzatkzrhe .gt_from_md > :last-child {
+#pexeznstil .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#omzatkzrhe .gt_row {
+#pexeznstil .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -383,7 +373,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   overflow-x: hidden;
 }
 
-#omzatkzrhe .gt_stub {
+#pexeznstil .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -396,7 +386,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 5px;
 }
 
-#omzatkzrhe .gt_stub_row_group {
+#pexeznstil .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -410,11 +400,11 @@ vignette</a> for detailed overview of this function if needed).</p>
   vertical-align: top;
 }
 
-#omzatkzrhe .gt_row_group_first td {
+#pexeznstil .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#omzatkzrhe .gt_summary_row {
+#pexeznstil .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -424,16 +414,16 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 5px;
 }
 
-#omzatkzrhe .gt_first_summary_row {
+#pexeznstil .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#omzatkzrhe .gt_first_summary_row.thick {
+#pexeznstil .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#omzatkzrhe .gt_last_summary_row {
+#pexeznstil .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -443,7 +433,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-bottom-color: #D3D3D3;
 }
 
-#omzatkzrhe .gt_grand_summary_row {
+#pexeznstil .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -453,7 +443,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 5px;
 }
 
-#omzatkzrhe .gt_first_grand_summary_row {
+#pexeznstil .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -463,11 +453,11 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-top-color: #D3D3D3;
 }
 
-#omzatkzrhe .gt_striped {
+#pexeznstil .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#omzatkzrhe .gt_table_body {
+#pexeznstil .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -476,7 +466,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-bottom-color: #D3D3D3;
 }
 
-#omzatkzrhe .gt_footnotes {
+#pexeznstil .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -490,7 +480,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-right-color: #D3D3D3;
 }
 
-#omzatkzrhe .gt_footnote {
+#pexeznstil .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -499,7 +489,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 5px;
 }
 
-#omzatkzrhe .gt_sourcenotes {
+#pexeznstil .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -513,7 +503,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-right-color: #D3D3D3;
 }
 
-#omzatkzrhe .gt_sourcenote {
+#pexeznstil .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -521,81 +511,74 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 5px;
 }
 
-#omzatkzrhe .gt_left {
+#pexeznstil .gt_left {
   text-align: left;
 }
 
-#omzatkzrhe .gt_center {
+#pexeznstil .gt_center {
   text-align: center;
 }
 
-#omzatkzrhe .gt_right {
+#pexeznstil .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#omzatkzrhe .gt_font_normal {
+#pexeznstil .gt_font_normal {
   font-weight: normal;
 }
 
-#omzatkzrhe .gt_font_bold {
+#pexeznstil .gt_font_bold {
   font-weight: bold;
 }
 
-#omzatkzrhe .gt_font_italic {
+#pexeznstil .gt_font_italic {
   font-style: italic;
 }
 
-#omzatkzrhe .gt_super {
+#pexeznstil .gt_super {
   font-size: 65%;
 }
 
-#omzatkzrhe .gt_two_val_uncert {
-  display: inline-block;
-  line-height: 1em;
-  text-align: right;
-  font-size: 60%;
-  vertical-align: -0.25em;
-  margin-left: 0.1em;
-}
-
-#omzatkzrhe .gt_footnote_marks {
+#pexeznstil .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#omzatkzrhe .gt_asterisk {
+#pexeznstil .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#omzatkzrhe .gt_slash_mark {
-  font-size: 0.7em;
-  line-height: 0.7em;
-  vertical-align: 0.15em;
+#pexeznstil .gt_indent_1 {
+  text-indent: 5px;
 }
 
-#omzatkzrhe .gt_fraction_numerator {
-  font-size: 0.6em;
-  line-height: 0.6em;
-  vertical-align: 0.45em;
+#pexeznstil .gt_indent_2 {
+  text-indent: 10px;
 }
 
-#omzatkzrhe .gt_fraction_denominator {
-  font-size: 0.6em;
-  line-height: 0.6em;
-  vertical-align: -0.05em;
+#pexeznstil .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#pexeznstil .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#pexeznstil .gt_indent_5 {
+  text-indent: 25px;
 }
 </style>
 <table class="table gt_table">
 <thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col">
 <strong>Drug A</strong>, N = 98<sup class="gt_footnote_marks">1</sup>
 </th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col">
 <strong>Drug B</strong>, N = 102<sup class="gt_footnote_marks">1</sup>
 </th>
     </tr></thead>
@@ -606,7 +589,7 @@ vignette</a> for detailed overview of this function if needed).</p>
 <td class="gt_row gt_center">0.52 (0.19, 1.20)</td>
 </tr>
 <tr>
-<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Unknown</td>
+<td class="gt_row gt_left">    Unknown</td>
 <td class="gt_row gt_center">6</td>
 <td class="gt_row gt_center">4</td>
 </tr>
@@ -616,22 +599,22 @@ vignette</a> for detailed overview of this function if needed).</p>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">T1</td>
+<td class="gt_row gt_left">    T1</td>
 <td class="gt_row gt_center">28 (29%)</td>
 <td class="gt_row gt_center">25 (25%)</td>
 </tr>
 <tr>
-<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">T2</td>
+<td class="gt_row gt_left">    T2</td>
 <td class="gt_row gt_center">25 (26%)</td>
 <td class="gt_row gt_center">29 (28%)</td>
 </tr>
 <tr>
-<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">T3</td>
+<td class="gt_row gt_left">    T3</td>
 <td class="gt_row gt_center">22 (22%)</td>
 <td class="gt_row gt_center">21 (21%)</td>
 </tr>
 <tr>
-<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">T4</td>
+<td class="gt_row gt_left">    T4</td>
 <td class="gt_row gt_center">23 (23%)</td>
 <td class="gt_row gt_center">27 (26%)</td>
 </tr>
@@ -642,49 +625,37 @@ vignette</a> for detailed overview of this function if needed).</p>
     </tr></tfoot>
 </table>
 </div>
-<p>To report the median (IQR) of the marker levels in each group, use
-the following commands inline.</p>
+<p>To report the median (IQR) of the marker levels in each group, use the following commands inline.</p>
 <blockquote>
-<p>The median (IQR) marker level in the Drug A and Drug B groups are
-<code>`r inline_text(tab1, variable = marker, column = "Drug A")`</code>
-and
-<code>`r inline_text(tab1, variable = marker, column = "Drug B")`</code>,
-respectively.</p>
+<p>The median (IQR) marker level in the Drug A and Drug B groups are <code>`r inline_text(tab1, variable = marker, column = "Drug A")`</code> and <code>`r inline_text(tab1, variable = marker, column = "Drug B")`</code>, respectively.</p>
 </blockquote>
 <p>Here’s how the line will appear in your report.</p>
 <blockquote>
-<p>The median (IQR) marker level in the Drug A and Drug B groups are
-0.84 (0.24, 1.57) and 0.52 (0.19, 1.20), respectively.</p>
+<p>The median (IQR) marker level in the Drug A and Drug B groups are 0.84 (0.24, 1.57) and 0.52 (0.19, 1.20), respectively.</p>
 </blockquote>
-<p>If you display a statistic from a categorical variable, include the
-<code>level</code> argument.</p>
+<p>If you display a statistic from a categorical variable, include the <code>level</code> argument.</p>
 <blockquote>
-<p><code>`r inline_text(tab1, variable = stage, level = "T1", column = "Drug B")`</code>
-resolves to “25 (25%)”</p>
+<p><code>`r inline_text(tab1, variable = stage, level = "T1", column = "Drug B")`</code> resolves to “25 (25%)”</p>
 </blockquote>
 </div>
 <div class="section level2">
 <h2 id="inline_text_tbl_regression">Inline results from tbl_regression()<a class="anchor" aria-label="anchor" href="#inline_text_tbl_regression"></a>
 </h2>
-<p>Similar syntax is used to report results from <a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html"><code>tbl_regression()</code></a>
-and <a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_uvregression.html"><code>tbl_uvregression()</code></a>
-tables. Refer to the <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html"><code>tbl_regression()</code>
-vignette</a> if you need detailed guidance on using these functions.</p>
+<p>Similar syntax is used to report results from <a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html"><code>tbl_regression()</code></a> and <a href="https://www.danieldsjoberg.com/gtsummary/reference/tbl_uvregression.html"><code>tbl_uvregression()</code></a> tables. Refer to the <a href="https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html"><code>tbl_regression()</code> vignette</a> if you need detailed guidance on using these functions.</p>
 <p>Let’s first create a regression model.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># build logistic regression model</span>
-<span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">response</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">stage</span>, <span class="va">trial</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Now summarize the results with <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>;
-exponentiate to get the odds ratios.</p>
+<code class="sourceCode R"><span><span class="co"># build logistic regression model</span></span>
+<span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">response</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">stage</span>, <span class="va">trial</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Now summarize the results with <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>; exponentiate to get the odds ratios.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl_m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">m1</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="va">tbl_m1</span></code></pre></div>
-<div id="nbnmematyz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<code class="sourceCode R"><span><span class="va">tbl_m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">m1</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">tbl_m1</span></span></code></pre></div>
+<div id="cyleeghebz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#nbnmematyz .gt_table {
+#cyleeghebz .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -709,7 +680,7 @@ exponentiate to get the odds ratios.</p>
   border-left-color: #D3D3D3;
 }
 
-#nbnmematyz .gt_heading {
+#cyleeghebz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -721,7 +692,7 @@ exponentiate to get the odds ratios.</p>
   border-right-color: #D3D3D3;
 }
 
-#nbnmematyz .gt_title {
+#cyleeghebz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -733,7 +704,7 @@ exponentiate to get the odds ratios.</p>
   border-bottom-width: 0;
 }
 
-#nbnmematyz .gt_subtitle {
+#cyleeghebz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -745,13 +716,13 @@ exponentiate to get the odds ratios.</p>
   border-top-width: 0;
 }
 
-#nbnmematyz .gt_bottom_border {
+#cyleeghebz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#nbnmematyz .gt_col_headings {
+#cyleeghebz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -766,7 +737,7 @@ exponentiate to get the odds ratios.</p>
   border-right-color: #D3D3D3;
 }
 
-#nbnmematyz .gt_col_heading {
+#cyleeghebz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -786,7 +757,7 @@ exponentiate to get the odds ratios.</p>
   overflow-x: hidden;
 }
 
-#nbnmematyz .gt_column_spanner_outer {
+#cyleeghebz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -798,15 +769,15 @@ exponentiate to get the odds ratios.</p>
   padding-right: 4px;
 }
 
-#nbnmematyz .gt_column_spanner_outer:first-child {
+#cyleeghebz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#nbnmematyz .gt_column_spanner_outer:last-child {
+#cyleeghebz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#nbnmematyz .gt_column_spanner {
+#cyleeghebz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -818,7 +789,7 @@ exponentiate to get the odds ratios.</p>
   width: 100%;
 }
 
-#nbnmematyz .gt_group_heading {
+#cyleeghebz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -843,7 +814,7 @@ exponentiate to get the odds ratios.</p>
   vertical-align: middle;
 }
 
-#nbnmematyz .gt_empty_group_heading {
+#cyleeghebz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -858,15 +829,15 @@ exponentiate to get the odds ratios.</p>
   vertical-align: middle;
 }
 
-#nbnmematyz .gt_from_md > :first-child {
+#cyleeghebz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#nbnmematyz .gt_from_md > :last-child {
+#cyleeghebz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#nbnmematyz .gt_row {
+#cyleeghebz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -885,7 +856,7 @@ exponentiate to get the odds ratios.</p>
   overflow-x: hidden;
 }
 
-#nbnmematyz .gt_stub {
+#cyleeghebz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -898,7 +869,7 @@ exponentiate to get the odds ratios.</p>
   padding-right: 5px;
 }
 
-#nbnmematyz .gt_stub_row_group {
+#cyleeghebz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -912,11 +883,11 @@ exponentiate to get the odds ratios.</p>
   vertical-align: top;
 }
 
-#nbnmematyz .gt_row_group_first td {
+#cyleeghebz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#nbnmematyz .gt_summary_row {
+#cyleeghebz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -926,16 +897,16 @@ exponentiate to get the odds ratios.</p>
   padding-right: 5px;
 }
 
-#nbnmematyz .gt_first_summary_row {
+#cyleeghebz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#nbnmematyz .gt_first_summary_row.thick {
+#cyleeghebz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#nbnmematyz .gt_last_summary_row {
+#cyleeghebz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -945,7 +916,7 @@ exponentiate to get the odds ratios.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#nbnmematyz .gt_grand_summary_row {
+#cyleeghebz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -955,7 +926,7 @@ exponentiate to get the odds ratios.</p>
   padding-right: 5px;
 }
 
-#nbnmematyz .gt_first_grand_summary_row {
+#cyleeghebz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -965,11 +936,11 @@ exponentiate to get the odds ratios.</p>
   border-top-color: #D3D3D3;
 }
 
-#nbnmematyz .gt_striped {
+#cyleeghebz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#nbnmematyz .gt_table_body {
+#cyleeghebz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -978,7 +949,7 @@ exponentiate to get the odds ratios.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#nbnmematyz .gt_footnotes {
+#cyleeghebz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -992,7 +963,7 @@ exponentiate to get the odds ratios.</p>
   border-right-color: #D3D3D3;
 }
 
-#nbnmematyz .gt_footnote {
+#cyleeghebz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1001,7 +972,7 @@ exponentiate to get the odds ratios.</p>
   padding-right: 5px;
 }
 
-#nbnmematyz .gt_sourcenotes {
+#cyleeghebz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1015,7 +986,7 @@ exponentiate to get the odds ratios.</p>
   border-right-color: #D3D3D3;
 }
 
-#nbnmematyz .gt_sourcenote {
+#cyleeghebz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1023,84 +994,77 @@ exponentiate to get the odds ratios.</p>
   padding-right: 5px;
 }
 
-#nbnmematyz .gt_left {
+#cyleeghebz .gt_left {
   text-align: left;
 }
 
-#nbnmematyz .gt_center {
+#cyleeghebz .gt_center {
   text-align: center;
 }
 
-#nbnmematyz .gt_right {
+#cyleeghebz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#nbnmematyz .gt_font_normal {
+#cyleeghebz .gt_font_normal {
   font-weight: normal;
 }
 
-#nbnmematyz .gt_font_bold {
+#cyleeghebz .gt_font_bold {
   font-weight: bold;
 }
 
-#nbnmematyz .gt_font_italic {
+#cyleeghebz .gt_font_italic {
   font-style: italic;
 }
 
-#nbnmematyz .gt_super {
+#cyleeghebz .gt_super {
   font-size: 65%;
 }
 
-#nbnmematyz .gt_two_val_uncert {
-  display: inline-block;
-  line-height: 1em;
-  text-align: right;
-  font-size: 60%;
-  vertical-align: -0.25em;
-  margin-left: 0.1em;
-}
-
-#nbnmematyz .gt_footnote_marks {
+#cyleeghebz .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#nbnmematyz .gt_asterisk {
+#cyleeghebz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#nbnmematyz .gt_slash_mark {
-  font-size: 0.7em;
-  line-height: 0.7em;
-  vertical-align: 0.15em;
+#cyleeghebz .gt_indent_1 {
+  text-indent: 5px;
 }
 
-#nbnmematyz .gt_fraction_numerator {
-  font-size: 0.6em;
-  line-height: 0.6em;
-  vertical-align: 0.45em;
+#cyleeghebz .gt_indent_2 {
+  text-indent: 10px;
 }
 
-#nbnmematyz .gt_fraction_denominator {
-  font-size: 0.6em;
-  line-height: 0.6em;
-  vertical-align: -0.05em;
+#cyleeghebz .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#cyleeghebz .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#cyleeghebz .gt_indent_5 {
+  text-indent: 25px;
 }
 </style>
 <table class="table gt_table">
 <thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col">
 <strong>OR</strong><sup class="gt_footnote_marks">1</sup>
 </th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col">
 <strong>95% CI</strong><sup class="gt_footnote_marks">1</sup>
 </th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col"><strong>p-value</strong></th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
@@ -1116,25 +1080,25 @@ exponentiate to get the odds ratios.</p>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">T1</td>
+<td class="gt_row gt_left">    T1</td>
 <td class="gt_row gt_center">—</td>
 <td class="gt_row gt_center">—</td>
 <td class="gt_row gt_center"></td>
 </tr>
 <tr>
-<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">T2</td>
+<td class="gt_row gt_left">    T2</td>
 <td class="gt_row gt_center">0.58</td>
 <td class="gt_row gt_center">0.24, 1.37</td>
 <td class="gt_row gt_center">0.2</td>
 </tr>
 <tr>
-<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">T3</td>
+<td class="gt_row gt_left">    T3</td>
 <td class="gt_row gt_center">0.94</td>
 <td class="gt_row gt_center">0.39, 2.28</td>
 <td class="gt_row gt_center">0.9</td>
 </tr>
 <tr>
-<td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">T4</td>
+<td class="gt_row gt_left">    T4</td>
 <td class="gt_row gt_center">0.79</td>
 <td class="gt_row gt_center">0.33, 1.90</td>
 <td class="gt_row gt_center">0.6</td>
@@ -1146,8 +1110,7 @@ exponentiate to get the odds ratios.</p>
     </tr></tfoot>
 </table>
 </div>
-<p>To report the result for <code>age</code>, use the following commands
-inline.</p>
+<p>To report the result for <code>age</code>, use the following commands inline.</p>
 <blockquote>
 <p><code>`r inline_text(tbl_m1, variable = age)`</code></p>
 </blockquote>
@@ -1155,19 +1118,13 @@ inline.</p>
 <blockquote>
 <p>1.02 (95% CI 1.00, 1.04; p=0.091)</p>
 </blockquote>
-<p>It is reasonable that you’ll need to modify the text. To do this, use
-the <code>pattern</code> argument. The <code>pattern</code> argument
-syntax follows <code><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue()</a></code> format with referenced R
-objects being inserted between curly brackets. The default is
-<code>pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"</code>.
-You have access the to following fields within the <code>pattern</code>
-argument.</p>
-<div id="occqkwplii" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<p>It is reasonable that you’ll need to modify the text. To do this, use the <code>pattern</code> argument. The <code>pattern</code> argument syntax follows <code><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue()</a></code> format with referenced R objects being inserted between curly brackets. The default is <code>pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"</code>. You have access the to following fields within the <code>pattern</code> argument.</p>
+<div id="mpvgihtjpq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#occqkwplii .gt_table {
+#mpvgihtjpq .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1192,7 +1149,7 @@ argument.</p>
   border-left-color: #D3D3D3;
 }
 
-#occqkwplii .gt_heading {
+#mpvgihtjpq .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1204,7 +1161,7 @@ argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#occqkwplii .gt_title {
+#mpvgihtjpq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1216,7 +1173,7 @@ argument.</p>
   border-bottom-width: 0;
 }
 
-#occqkwplii .gt_subtitle {
+#mpvgihtjpq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1228,13 +1185,13 @@ argument.</p>
   border-top-width: 0;
 }
 
-#occqkwplii .gt_bottom_border {
+#mpvgihtjpq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#occqkwplii .gt_col_headings {
+#mpvgihtjpq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1249,7 +1206,7 @@ argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#occqkwplii .gt_col_heading {
+#mpvgihtjpq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1269,7 +1226,7 @@ argument.</p>
   overflow-x: hidden;
 }
 
-#occqkwplii .gt_column_spanner_outer {
+#mpvgihtjpq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1281,15 +1238,15 @@ argument.</p>
   padding-right: 4px;
 }
 
-#occqkwplii .gt_column_spanner_outer:first-child {
+#mpvgihtjpq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#occqkwplii .gt_column_spanner_outer:last-child {
+#mpvgihtjpq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#occqkwplii .gt_column_spanner {
+#mpvgihtjpq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1301,7 +1258,7 @@ argument.</p>
   width: 100%;
 }
 
-#occqkwplii .gt_group_heading {
+#mpvgihtjpq .gt_group_heading {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1326,7 +1283,7 @@ argument.</p>
   vertical-align: middle;
 }
 
-#occqkwplii .gt_empty_group_heading {
+#mpvgihtjpq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1341,15 +1298,15 @@ argument.</p>
   vertical-align: middle;
 }
 
-#occqkwplii .gt_from_md > :first-child {
+#mpvgihtjpq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#occqkwplii .gt_from_md > :last-child {
+#mpvgihtjpq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#occqkwplii .gt_row {
+#mpvgihtjpq .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1368,7 +1325,7 @@ argument.</p>
   overflow-x: hidden;
 }
 
-#occqkwplii .gt_stub {
+#mpvgihtjpq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1381,7 +1338,7 @@ argument.</p>
   padding-right: 5px;
 }
 
-#occqkwplii .gt_stub_row_group {
+#mpvgihtjpq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1395,11 +1352,11 @@ argument.</p>
   vertical-align: top;
 }
 
-#occqkwplii .gt_row_group_first td {
+#mpvgihtjpq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#occqkwplii .gt_summary_row {
+#mpvgihtjpq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1409,16 +1366,16 @@ argument.</p>
   padding-right: 5px;
 }
 
-#occqkwplii .gt_first_summary_row {
+#mpvgihtjpq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#occqkwplii .gt_first_summary_row.thick {
+#mpvgihtjpq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#occqkwplii .gt_last_summary_row {
+#mpvgihtjpq .gt_last_summary_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1428,7 +1385,7 @@ argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#occqkwplii .gt_grand_summary_row {
+#mpvgihtjpq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1438,7 +1395,7 @@ argument.</p>
   padding-right: 5px;
 }
 
-#occqkwplii .gt_first_grand_summary_row {
+#mpvgihtjpq .gt_first_grand_summary_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1448,11 +1405,11 @@ argument.</p>
   border-top-color: #D3D3D3;
 }
 
-#occqkwplii .gt_striped {
+#mpvgihtjpq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#occqkwplii .gt_table_body {
+#mpvgihtjpq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1461,7 +1418,7 @@ argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#occqkwplii .gt_footnotes {
+#mpvgihtjpq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1475,7 +1432,7 @@ argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#occqkwplii .gt_footnote {
+#mpvgihtjpq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 1px;
@@ -1484,7 +1441,7 @@ argument.</p>
   padding-right: 5px;
 }
 
-#occqkwplii .gt_sourcenotes {
+#mpvgihtjpq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1498,7 +1455,7 @@ argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#occqkwplii .gt_sourcenote {
+#mpvgihtjpq .gt_sourcenote {
   font-size: 90%;
   padding-top: 1px;
   padding-bottom: 1px;
@@ -1506,78 +1463,71 @@ argument.</p>
   padding-right: 5px;
 }
 
-#occqkwplii .gt_left {
+#mpvgihtjpq .gt_left {
   text-align: left;
 }
 
-#occqkwplii .gt_center {
+#mpvgihtjpq .gt_center {
   text-align: center;
 }
 
-#occqkwplii .gt_right {
+#mpvgihtjpq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#occqkwplii .gt_font_normal {
+#mpvgihtjpq .gt_font_normal {
   font-weight: normal;
 }
 
-#occqkwplii .gt_font_bold {
+#mpvgihtjpq .gt_font_bold {
   font-weight: bold;
 }
 
-#occqkwplii .gt_font_italic {
+#mpvgihtjpq .gt_font_italic {
   font-style: italic;
 }
 
-#occqkwplii .gt_super {
+#mpvgihtjpq .gt_super {
   font-size: 65%;
 }
 
-#occqkwplii .gt_two_val_uncert {
-  display: inline-block;
-  line-height: 1em;
-  text-align: right;
-  font-size: 60%;
-  vertical-align: -0.25em;
-  margin-left: 0.1em;
-}
-
-#occqkwplii .gt_footnote_marks {
+#mpvgihtjpq .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#occqkwplii .gt_asterisk {
+#mpvgihtjpq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#occqkwplii .gt_slash_mark {
-  font-size: 0.7em;
-  line-height: 0.7em;
-  vertical-align: 0.15em;
+#mpvgihtjpq .gt_indent_1 {
+  text-indent: 5px;
 }
 
-#occqkwplii .gt_fraction_numerator {
-  font-size: 0.6em;
-  line-height: 0.6em;
-  vertical-align: 0.45em;
+#mpvgihtjpq .gt_indent_2 {
+  text-indent: 10px;
 }
 
-#occqkwplii .gt_fraction_denominator {
-  font-size: 0.6em;
-  line-height: 0.6em;
-  vertical-align: -0.05em;
+#mpvgihtjpq .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mpvgihtjpq .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mpvgihtjpq .gt_indent_5 {
+  text-indent: 25px;
 }
 </style>
 <table class="table gt_table">
 <thead class="gt_col_headings"><tr>
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Parameter</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Description</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col">Parameter</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col">Description</th>
     </tr></thead>
 <tbody class="gt_table_body">
 <tr>
@@ -1620,23 +1570,14 @@ argument.</p>
 </table>
 </div>
 <blockquote>
-<p>Age was not significantly associated with tumor response
-<code>`r inline_text(tbl_m1, variable = age, pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")`</code>.</p>
+<p>Age was not significantly associated with tumor response <code>`r inline_text(tbl_m1, variable = age, pattern = "(OR {estimate}; 95% CI {conf.low}, {conf.high}; {p.value})")`</code>.</p>
 </blockquote>
 <blockquote>
-<p>Age was not significantly associated with tumor response (OR 1.02;
-95% CI 1.00, 1.04; p=0.091).</p>
+<p>Age was not significantly associated with tumor response (OR 1.02; 95% CI 1.00, 1.04; p=0.091).</p>
 </blockquote>
-<p>If you’re printing results from a categorical variable, include the
-<code>level</code> argument,
-e.g. <code>inline_text(tbl_m1, variable = stage, level = "T3")</code>
-resolves to “0.94 (95% CI 0.39, 2.28; p=0.9)”.</p>
-<p>The <code>inline_text</code> function has arguments for rounding the
-p-value (<code>pvalue_fun</code>) and the coefficients and confidence
-interval (<code>estimate_fun</code>). These default to the same rounding
-performed in the table, but can be modified when reporting inline.</p>
-<p>For more details about inline code, review to the <a href="https://rmarkdown.rstudio.com/lesson-4.html" class="external-link">RStudio documentation
-page</a>.</p>
+<p>If you’re printing results from a categorical variable, include the <code>level</code> argument, e.g. <code>inline_text(tbl_m1, variable = stage, level = "T3")</code> resolves to “0.94 (95% CI 0.39, 2.28; p=0.9)”.</p>
+<p>The <code>inline_text</code> function has arguments for rounding the p-value (<code>pvalue_fun</code>) and the coefficients and confidence interval (<code>estimate_fun</code>). These default to the same rounding performed in the table, but can be modified when reporting inline.</p>
+<p>For more details about inline code, review to the <a href="https://rmarkdown.rstudio.com/lesson-4.html" class="external-link">RStudio documentation page</a>.</p>
 </div>
   </div>
 
@@ -1657,7 +1598,7 @@ page</a>.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

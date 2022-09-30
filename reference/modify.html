@@ -27,7 +27,7 @@ the column names."><meta property="og:image" content="https://www.danieldsjoberg
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -61,6 +61,9 @@ the column names."><meta property="og:image" content="https://www.danieldsjoberg
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -103,41 +106,43 @@ the column names.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">modify_header</span><span class="op">(</span>
-  <span class="va">x</span>,
-  update <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span>,
-  quiet <span class="op">=</span> <span class="cn">NULL</span>,
-  stat_by <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">modify_footnote</span><span class="op">(</span>
-  <span class="va">x</span>,
-  update <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  abbreviation <span class="op">=</span> <span class="cn">FALSE</span>,
-  text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span>,
-  quiet <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">modify_spanning_header</span><span class="op">(</span>
-  <span class="va">x</span>,
-  update <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span>,
-  quiet <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">modify_caption</span><span class="op">(</span><span class="va">x</span>, <span class="va">caption</span>, text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="fu">show_header_names</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, include_example <span class="op">=</span> <span class="cn">TRUE</span>, quiet <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">modify_header</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  update <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stat_by <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">modify_footnote</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  update <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  abbreviation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">modify_spanning_header</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  update <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">modify_caption</span><span class="op">(</span><span class="va">x</span>, <span class="va">caption</span>, text_interpret <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"md"</span>, <span class="st">"html"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">show_header_names</span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, include_example <span class="op">=</span> <span class="cn">TRUE</span>, quiet <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>a gtsummary object</p></dd>
+
+
 <dt>update, ...</dt>
 <dd><p>use these arguments to assign updates to headers,
 spanning headers, and footnotes. See examples below.</p><ul><li><p><code>update</code> expects a list of assignments, with the variable name or selector
@@ -146,24 +151,39 @@ a named list.</p></li>
 <li><p><code>...</code> pass individual updates outside of a list, e.g,
 <code>modify_header(p.value = "**P**", all_stat_cols() ~ "**{level}**")</code></p></li>
 </ul><p>Use the <code>show_header_names()</code> to see the column names that can be modified.</p></dd>
+
+
 <dt>text_interpret</dt>
 <dd><p>String indicates whether text will be interpreted with
 <code><a href="https://gt.rstudio.com/reference/md.html" class="external-link">gt::md()</a></code> or <code><a href="https://gt.rstudio.com/reference/html.html" class="external-link">gt::html()</a></code>. Must be <code>"md"</code> (default) or <code>"html"</code>.</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Logical indicating whether to print messages in console. Default is
 <code>FALSE</code></p></dd>
+
+
 <dt>stat_by</dt>
 <dd><p>DEPRECATED, use <code>update = all_stat_cols() ~ "&lt;label&gt;"</code> instead.</p></dd>
+
+
 <dt>abbreviation</dt>
 <dd><p>Logical indicating if an abbreviation is being updated.</p></dd>
+
+
 <dt>caption</dt>
 <dd><p>a string of the table caption/title</p></dd>
+
+
 <dt>include_example</dt>
 <dd><p>logical whether to include print of <code>modify_header()</code> example</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Updated gtsummary object</p>
+    
+
+<p>Updated gtsummary object</p>
     </div>
     <div id="tbl-summary-tbl-svysummary-and-tbl-cross-">
     <h2>tbl_summary(), tbl_svysummary(), and tbl_cross()</h2>
@@ -200,11 +220,11 @@ for the number of events (when applicable).</p>
     
 
 <p>Example 1</p>
-<p><img src="figures/modify_ex1.png" width="45%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_ex1.png" alt="image of rendered example table" style="width:45%;"></p>
 <p>Example 2</p>
-<p><img src="figures/modify_ex2.png" width="45%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_ex2.png" alt="image of rendered example table" style="width:45%;"></p>
 <p>Example 3</p>
-<p><img src="figures/modify_ex3.png" width="35%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_ex3.png" alt="image of rendered example table" style="width:35%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -275,21 +295,21 @@ for the number of events (when applicable).</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># create summary table</span></span>
-<span class="r-in"><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"grade"</span>, <span class="st">"trt"</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, missing <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># print the column names that can be modified</span></span>
-<span class="r-in"><span class="fu">show_header_names</span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># create summary table</span></span></span>
+<span class="r-in"><span><span class="va">tbl</span> <span class="op">&lt;-</span> <span class="va">trial</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"grade"</span>, <span class="st">"trt"</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span>, missing <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="add_p.html">add_p</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># print the column names that can be modified</span></span></span>
+<span class="r-in"><span><span class="fu">show_header_names</span><span class="op">(</span><span class="va">tbl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> As a usage guide, the code below re-creates the current column headers.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">modify_header</span><span style="color: #BBBB00;">(</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   label = <span style="color: #BBBB00;">"**Characteristic**"</span>,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   stat_1 = <span style="color: #BBBB00;">"**Drug A**, N = 98"</span>,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   stat_2 = <span style="color: #BBBB00;">"**Drug B**, N = 102"</span>,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   p.value = <span style="color: #BBBB00;">"**p-value**"</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   label = <span style="color: #BBBB00;">'**Characteristic**'</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   stat_1 = <span style="color: #BBBB00;">'**Drug A**, N = 98'</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   stat_2 = <span style="color: #BBBB00;">'**Drug B**, N = 102'</span>,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   p.value = <span style="color: #BBBB00;">'**p-value**'</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -299,29 +319,29 @@ for the number of events (when applicable).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> stat_1        **Drug A**, N = 98  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> stat_2        **Drug B**, N = 102 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> p.value       **p-value**         </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># updating column headers, footnote, and table caption</span></span>
-<span class="r-in"><span class="va">modify_ex1</span> <span class="op">&lt;-</span> <span class="va">tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_header</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"**Variable**"</span>, p.value <span class="op">=</span> <span class="st">"**P**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_footnote</span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"median (IQR) for Age; n (%) for Grade"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_caption</span><span class="op">(</span><span class="st">"**Patient Characteristics** (N = {N})"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># updating headers, remove all footnotes, add spanning header</span></span>
-<span class="r-in"><span class="va">modify_ex2</span> <span class="op">&lt;-</span> <span class="va">tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_header</span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"**{level}**, N = {n} ({style_percent(p)}%)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="co"># use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes</span></span>
-<span class="r-in">  <span class="fu">modify_footnote</span><span class="op">(</span>update <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="cn">NA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_spanning_header</span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"**Treatment Received**"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 3 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># updating an abbreviation in table footnote</span></span>
-<span class="r-in"><span class="va">modify_ex3</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">response</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span>exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_footnote</span><span class="op">(</span>ci <span class="op">=</span> <span class="st">"CI = Credible Interval"</span>, abbreviation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># updating column headers, footnote, and table caption</span></span></span>
+<span class="r-in"><span><span class="va">modify_ex1</span> <span class="op">&lt;-</span> <span class="va">tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_header</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"**Variable**"</span>, p.value <span class="op">=</span> <span class="st">"**P**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_footnote</span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"median (IQR) for Age; n (%) for Grade"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_caption</span><span class="op">(</span><span class="st">"**Patient Characteristics** (N = {N})"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># updating headers, remove all footnotes, add spanning header</span></span></span>
+<span class="r-in"><span><span class="va">modify_ex2</span> <span class="op">&lt;-</span> <span class="va">tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_header</span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"**{level}**, N = {n} ({style_percent(p)}%)"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="co"># use `modify_footnote(everything() ~ NA, abbreviation = TRUE)` to delete abbrev. footnotes</span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_footnote</span><span class="op">(</span>update <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="cn">NA</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_spanning_header</span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"**Treatment Received**"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 3 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># updating an abbreviation in table footnote</span></span></span>
+<span class="r-in"><span><span class="va">modify_ex3</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">response</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span>exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_footnote</span><span class="op">(</span>ci <span class="op">=</span> <span class="st">"CI = Credible Interval"</span>, abbreviation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -336,7 +356,7 @@ for the number of events (when applicable).</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

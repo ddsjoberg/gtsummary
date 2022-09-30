@@ -26,7 +26,7 @@ Those methods are listed below."><meta property="og:image" content="https://www.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -62,6 +62,9 @@ Those methods are listed below."><meta property="og:image" content="https://www.
       <a href="../articles/themes.html">gtsummary + themes</a>
     </li>
     <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
+    </li>
+    <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
     </li>
   </ul></li>
@@ -95,98 +98,103 @@ Those methods are listed below."><meta property="og:image" content="https://www.
 
     <div class="ref-description">
     <p>Most regression models are handled by <code><a href="tbl_regression.html">tbl_regression.default()</a></code>,
-which uses <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code> to perform initial tidying of results. There are,
+which uses <code><a href="https://broom.tidymodels.org/reference/reexports.html" class="external-link">broom::tidy()</a></code> to perform initial tidying of results. There are,
 however, some model types that have modified default printing behavior.
 Those methods are listed below.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for model_fit</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for workflow</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for survreg</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">term</span> <span class="op">!=</span>
-    <span class="st">"Log(scale)"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for mira</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="va">pool_and_tidy_mice</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for mipo</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for lmerMod</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for glmerMod</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for glmmTMB</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for glmmadmb</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for stanreg</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for brmsfit</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span>
-  <span class="va">x</span>,
-  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for gam</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="va">tidy_gam</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for tidycrr</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="fu">tidycmprsk</span><span class="fu">::</span><span class="va"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for crr</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for multinom</span>
-<span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for model_fit</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for workflow</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for survreg</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">.data</span><span class="op">$</span><span class="va">term</span> <span class="op">!=</span></span>
+<span>    <span class="st">"Log(scale)"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for mira</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="va">pool_and_tidy_mice</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for mipo</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for lmerMod</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for glmerMod</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for glmmTMB</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for glmmadmb</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for stanreg</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for brmsfit</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  tidy_fun <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span> <span class="fu">broom.mixed</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for gam</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="va">tidy_gam</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for tidycrr</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, tidy_fun <span class="op">=</span> <span class="fu">tidycmprsk</span><span class="fu">::</span><span class="va"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for crr</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for multinom</span></span>
+<span><span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>Regression model object</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed to <code><a href="tbl_regression.html">tbl_regression.default()</a></code></p></dd>
+
+
 <dt>tidy_fun</dt>
 <dd><p>Option to specify a particular tidier function for the
 model. Default is to use <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy</a></code>, but if an error occurs
 then tidying of the model is attempted with <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>,
 if installed.</p></dd>
+
 </dl></div>
     <div id="methods">
     <h2>Methods</h2>
@@ -221,7 +229,7 @@ to print the random components.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

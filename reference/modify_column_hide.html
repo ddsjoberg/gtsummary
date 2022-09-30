@@ -25,7 +25,7 @@ Use these functions to hide or unhide columns in a gtsummary table."><meta prope
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -59,6 +59,9 @@ Use these functions to hide or unhide columns in a gtsummary table."><meta prope
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -99,24 +102,27 @@ Use these functions to hide or unhide columns in a gtsummary table.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">modify_column_hide</span><span class="op">(</span><span class="va">x</span>, <span class="va">columns</span><span class="op">)</span>
-
-<span class="fu">modify_column_unhide</span><span class="op">(</span><span class="va">x</span>, <span class="va">columns</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">modify_column_hide</span><span class="op">(</span><span class="va">x</span>, <span class="va">columns</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">modify_column_unhide</span><span class="op">(</span><span class="va">x</span>, <span class="va">columns</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>x</dt>
 <dd><p>gtsummary object</p></dd>
+
+
 <dt>columns</dt>
 <dd><p>vector or selector of columns in <code>x$table_body</code></p></dd>
+
 </dl></div>
     <div id="example-output">
     <h2>Example Output</h2>
     
 
 <p>Example 1</p>
-<p><img src="figures/modify_column_hide_ex1.png" width="45%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_hide_ex1.png" alt="image of rendered example table" style="width:45%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -132,13 +138,15 @@ Use these functions to hide or unhide columns in a gtsummary table.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># hide 95% CI, and replace with standard error</span></span>
-<span class="r-in"><span class="va">modify_column_hide_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_column_hide</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">ci</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">modify_column_unhide</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">std.error</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># hide 95% CI, and replace with standard error</span></span></span>
+<span class="r-in"><span><span class="va">modify_column_hide_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="va">marker</span> <span class="op">+</span> <span class="va">grade</span>, <span class="va">trial</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_column_hide</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">ci</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">modify_column_unhide</span><span class="op">(</span>columns <span class="op">=</span> <span class="va">std.error</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -153,7 +161,7 @@ Use these functions to hide or unhide columns in a gtsummary table.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

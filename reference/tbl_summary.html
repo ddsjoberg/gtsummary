@@ -26,7 +26,7 @@ for detailed examples."><meta property="og:image" content="https://www.danieldsj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -60,6 +60,9 @@ for detailed examples."><meta property="og:image" content="https://www.danieldsj
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -101,43 +104,51 @@ for detailed examples.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">tbl_summary</span><span class="op">(</span>
-  <span class="va">data</span>,
-  by <span class="op">=</span> <span class="cn">NULL</span>,
-  label <span class="op">=</span> <span class="cn">NULL</span>,
-  statistic <span class="op">=</span> <span class="cn">NULL</span>,
-  digits <span class="op">=</span> <span class="cn">NULL</span>,
-  type <span class="op">=</span> <span class="cn">NULL</span>,
-  value <span class="op">=</span> <span class="cn">NULL</span>,
-  missing <span class="op">=</span> <span class="cn">NULL</span>,
-  missing_text <span class="op">=</span> <span class="cn">NULL</span>,
-  sort <span class="op">=</span> <span class="cn">NULL</span>,
-  percent <span class="op">=</span> <span class="cn">NULL</span>,
-  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">tbl_summary</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  statistic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  digits <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  value <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  missing <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  missing_text <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sort <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  percent <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A data frame</p></dd>
+
+
 <dt>by</dt>
 <dd><p>A column name (quoted or unquoted) in <code>data</code>.
 Summary statistics will be calculated separately for each level of the <code>by</code>
 variable (e.g. <code>by = trt</code>). If <code>NULL</code>, summary statistics
 are calculated using all observations. To stratify a table by two or more
 variables, use <code><a href="tbl_strata.html">tbl_strata()</a></code></p></dd>
+
+
 <dt>label</dt>
 <dd><p>List of formulas specifying variables labels,
 e.g. <code>list(age ~ "Age", stage ~ "Path T Stage")</code>.  If a
 variable's label is not specified here, the label attribute
 (<code>attr(data$age, "label")</code>) is used.  If
 attribute label is <code>NULL</code>, the variable name will be used.</p></dd>
+
+
 <dt>statistic</dt>
 <dd><p>List of formulas specifying types of summary statistics to
 display for each variable.  The default is
 <code>list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")</code>.
 See below for details.</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>List of formulas specifying the number of decimal
 places to round summary statistics. If not specified,
@@ -147,38 +158,55 @@ rather than an integer.  For example, if the
 statistic being calculated is <code>"{mean} ({sd})"</code> and you want the mean rounded
 to 1 decimal place, and the SD to 2 use <code>digits = list(age ~ c(1, 2))</code>. User
 may also pass a styling function: <code>digits = age ~ style_sigfig</code></p></dd>
+
+
 <dt>type</dt>
 <dd><p>List of formulas specifying variable types. Accepted values
 are <code>c("continuous", "continuous2", "categorical", "dichotomous")</code>,
 e.g. <code>type = list(age ~ "continuous", female ~ "dichotomous")</code>.
 If type not specified for a variable, the function
 will default to an appropriate summary type. See below for details.</p></dd>
+
+
 <dt>value</dt>
 <dd><p>List of formulas specifying the value to display for dichotomous
 variables. gtsummary selectors, e.g. <code><a href="select_helpers.html">all_dichotomous()</a></code>, cannot be used
 with this argument. See below for details.</p></dd>
+
+
 <dt>missing</dt>
 <dd><p>Indicates whether to include counts of <code>NA</code> values in the table.
 Allowed values are <code>"no"</code> (never display NA values),
 <code>"ifany"</code> (only display if any NA values), and <code>"always"</code>
 (includes NA count row for all variables). Default is <code>"ifany"</code>.</p></dd>
+
+
 <dt>missing_text</dt>
 <dd><p>String to display for count of missing observations.
 Default is <code>"Unknown"</code>.</p></dd>
+
+
 <dt>sort</dt>
 <dd><p>List of formulas specifying the type of sorting to perform for
 categorical data. Options are <code>frequency</code> where results are sorted in
 descending order of frequency and <code>alphanumeric</code>,
 e.g. <code>sort = list(everything() ~ "frequency")</code></p></dd>
+
+
 <dt>percent</dt>
 <dd><p>Indicates the type of percentage to return. Must be one of
 <code>"column"</code>, <code>"row"</code>, or <code>"cell"</code>. Default is <code>"column"</code>.</p></dd>
+
+
 <dt>include</dt>
 <dd><p>variables to include in the summary table. Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything()</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A <code>tbl_summary</code> object</p>
+    
+
+<p>A <code>tbl_summary</code> object</p>
     </div>
     <div id="select-helpers">
     <h2>select helpers</h2>
@@ -257,13 +285,13 @@ in the denominator, not at each level of the categorical variable.</p>
     
 
 <p>Example 1</p>
-<p><img src="figures/tbl_summary_ex1.png" width="31%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_summary_ex1.png" alt="image of rendered example table" style="width:31%;"></p>
 <p>Example 2</p>
-<p><img src="figures/tbl_summary_ex2.png" width="45%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_summary_ex2.png" alt="image of rendered example table" style="width:45%;"></p>
 <p>Example 3</p>
-<p><img src="figures/tbl_summary_ex3.png" width="45%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_summary_ex3.png" alt="image of rendered example table" style="width:45%;"></p>
 <p>Example 4</p>
-<p><img src="figures/tbl_summary_ex4.png" width="31%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_summary_ex4.png" alt="image of rendered example table" style="width:31%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -295,46 +323,46 @@ in the denominator, not at each level of the categorical variable.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># Example 1 ----------------------------------</span></span>
-<span class="r-in"><span class="va">tbl_summary_ex1</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_summary</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 ----------------------------------</span></span>
-<span class="r-in"><span class="va">tbl_summary_ex2</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">response</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_summary</span><span class="op">(</span></span>
-<span class="r-in">    by <span class="op">=</span> <span class="va">trt</span>,</span>
-<span class="r-in">    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="st">"Patient Age"</span><span class="op">)</span>,</span>
-<span class="r-in">    statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span><span class="op">)</span>,</span>
-<span class="r-in">    digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 3 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># for convenience, you can also pass named lists to any arguments</span></span>
-<span class="r-in"><span class="co"># that accept formulas (e.g label, digits, etc.)</span></span>
-<span class="r-in"><span class="va">tbl_summary_ex3</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_summary</span><span class="op">(</span></span>
-<span class="r-in">    by <span class="op">=</span> <span class="va">trt</span>,</span>
-<span class="r-in">    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>age <span class="op">=</span> <span class="st">"Patient Age"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 4 ----------------------------------</span></span>
-<span class="r-in"><span class="co"># multi-line summaries of continuous data with type 'continuous2'</span></span>
-<span class="r-in"><span class="va">tbl_summary_ex4</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">marker</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">tbl_summary</span><span class="op">(</span></span>
-<span class="r-in">    type <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"continuous2"</span>,</span>
-<span class="r-in">    statistic <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"{median} ({p25}, {p75})"</span>, <span class="st">"{min}, {max}"</span><span class="op">)</span>,</span>
-<span class="r-in">    missing <span class="op">=</span> <span class="st">"no"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="co"># }</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">tbl_summary_ex1</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">response</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_summary</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="va">tbl_summary_ex2</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">grade</span>, <span class="va">response</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_summary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    by <span class="op">=</span> <span class="va">trt</span>,</span></span>
+<span class="r-in"><span>    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="st">"Patient Age"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"{mean} ({sd})"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    digits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">age</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 3 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># for convenience, you can also pass named lists to any arguments</span></span></span>
+<span class="r-in"><span><span class="co"># that accept formulas (e.g label, digits, etc.)</span></span></span>
+<span class="r-in"><span><span class="va">tbl_summary_ex3</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_summary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    by <span class="op">=</span> <span class="va">trt</span>,</span></span>
+<span class="r-in"><span>    label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>age <span class="op">=</span> <span class="st">"Patient Age"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 4 ----------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># multi-line summaries of continuous data with type 'continuous2'</span></span></span>
+<span class="r-in"><span><span class="va">tbl_summary_ex4</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">marker</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">tbl_summary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    type <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"continuous2"</span>,</span></span>
+<span class="r-in"><span>    statistic <span class="op">=</span> <span class="fu"><a href="select_helpers.html">all_continuous</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"{median} ({p25}, {p75})"</span>, <span class="st">"{min}, {max}"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    missing <span class="op">=</span> <span class="st">"no"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -349,7 +377,7 @@ in the denominator, not at each level of the categorical variable.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

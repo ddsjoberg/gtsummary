@@ -29,7 +29,7 @@ output options there is better support via as_gt()."><meta property="og:image" c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
       </span>
     </div>
 
@@ -63,6 +63,9 @@ output options there is better support via as_gt()."><meta property="og:image" c
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
+    </li>
+    <li>
+      <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/gtsummary.pdf" class="external-link">cheat sheet</a>
     </li>
     <li>
       <a href="../articles/gallery.html">FAQ + gallery</a>
@@ -107,15 +110,15 @@ output options there is better support via <code><a href="as_gt.html">as_gt()</a
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">as_kable_extra</span><span class="op">(</span>
-  <span class="va">x</span>,
-  escape <span class="op">=</span> <span class="cn">FALSE</span>,
-  format <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>,
-  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,
-  addtl_fmt <span class="op">=</span> <span class="cn">TRUE</span>,
-  return_calls <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_kable_extra</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  escape <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  format <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  addtl_fmt <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  return_calls <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -123,25 +126,36 @@ output options there is better support via <code><a href="as_gt.html">as_gt()</a
     <dl><dt>x</dt>
 <dd><p>Object created by a function from the gtsummary package
 (e.g. <a href="tbl_summary.html">tbl_summary</a> or <a href="tbl_regression.html">tbl_regression</a>)</p></dd>
+
+
 <dt>format, escape, ...</dt>
 <dd><p>arguments passed to <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code>. Default is
 <code>escape = FALSE</code>, and the format is auto-detected.</p></dd>
+
+
 <dt>include</dt>
 <dd><p>Commands to include in output. Input may be a vector of
 quoted or unquoted names. tidyselect and gtsummary select helper
 functions are also accepted.
 Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything()</a></code>.</p></dd>
+
+
 <dt>addtl_fmt</dt>
 <dd><p>logical indicating whether to include additional formatting.
 Default is <code>TRUE</code>. This is primarily used to escape special characters,
 convert markdown to LaTeX, and remove line breaks from the footnote.</p></dd>
+
+
 <dt>return_calls</dt>
 <dd><p>Logical. Default is <code>FALSE</code>. If <code>TRUE</code>, the calls are returned
 as a list of expressions.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A kableExtra table</p>
+    
+
+<p>A kableExtra table</p>
     </div>
     <div id="pdf-latex">
     <h2>PDF/LaTeX</h2>
@@ -180,9 +194,9 @@ and footnote will be escaped with <code><a href="kableExtra_utils.html">.escape_
     
 
 <p>Example 1 (PDF)</p>
-<p><img src="figures/as_kable_extra_ex1_pdf.png" width="45%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_kable_extra_ex1_pdf.png" alt="image of rendered example table" style="width:45%;"></p>
 <p>Example 2 (PDF)</p>
-<p><img src="figures/as_kable_extra_ex2_pdf.png" width="65%"></p>
+<p><img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_kable_extra_ex2_pdf.png" alt="image of rendered example table" style="width:65%;"></p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -200,37 +214,37 @@ and footnote will be escaped with <code><a href="kableExtra_utils.html">.escape_
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="co"># basic gtsummary tbl to build upon</span></span>
-<span class="r-in"><span class="va">as_kable_extra_base</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">age</span>, <span class="va">stage</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 1 (PDF via LaTeX) ---------------------</span></span>
-<span class="r-in"><span class="co"># add linebreak in table header with '\n'</span></span>
-<span class="r-in"><span class="va">as_kable_extra_ex1_pdf</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">as_kable_extra_base</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"**{level}**\n*N = {n}*"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">as_kable_extra</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 (PDF via LaTeX) ---------------------</span></span>
-<span class="r-in"><span class="co"># additional styling in `knitr::kable()` and with</span></span>
-<span class="r-in"><span class="co">#   call to `kableExtra::kable_styling()`</span></span>
-<span class="r-in"><span class="va">as_kable_extra_ex1_pdf</span> <span class="op">&lt;-</span></span>
-<span class="r-in">  <span class="va">as_kable_extra_base</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">as_kable_extra</span><span class="op">(</span></span>
-<span class="r-in">    booktabs <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">    longtable <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">    linesep <span class="op">=</span> <span class="st">""</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span></span>
-<span class="r-in">    position <span class="op">=</span> <span class="st">"left"</span>,</span>
-<span class="r-in">    latex_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"repeat_header"</span><span class="op">)</span>,</span>
-<span class="r-in">    stripe_color <span class="op">=</span> <span class="st">"gray!15"</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="co"># }</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="co"># basic gtsummary tbl to build upon</span></span></span>
+<span class="r-in"><span><span class="va">as_kable_extra_base</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">age</span>, <span class="va">stage</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 (PDF via LaTeX) ---------------------</span></span></span>
+<span class="r-in"><span><span class="co"># add linebreak in table header with '\n'</span></span></span>
+<span class="r-in"><span><span class="va">as_kable_extra_ex1_pdf</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">as_kable_extra_base</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span><span class="fu"><a href="select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"**{level}**\n*N = {n}*"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">as_kable_extra</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 (PDF via LaTeX) ---------------------</span></span></span>
+<span class="r-in"><span><span class="co"># additional styling in `knitr::kable()` and with</span></span></span>
+<span class="r-in"><span><span class="co">#   call to `kableExtra::kable_styling()`</span></span></span>
+<span class="r-in"><span><span class="va">as_kable_extra_ex2_pdf</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>  <span class="va">as_kable_extra_base</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">as_kable_extra</span><span class="op">(</span></span></span>
+<span class="r-in"><span>    booktabs <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    longtable <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>    linesep <span class="op">=</span> <span class="st">""</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">kableExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kableExtra/man/kable_styling.html" class="external-link">kable_styling</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    position <span class="op">=</span> <span class="st">"left"</span>,</span></span>
+<span class="r-in"><span>    latex_options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"striped"</span>, <span class="st">"repeat_header"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    stripe_color <span class="op">=</span> <span class="st">"gray!15"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -245,7 +259,7 @@ and footnote will be escaped with <code><a href="kableExtra_utils.html">.escape_
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
