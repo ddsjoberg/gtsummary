@@ -52,6 +52,7 @@
 #' @export
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @examples
+#' \donttest{
 #' library(dplyr, warn.conflicts = FALSE)
 #' library(stringr)
 #' # Example 1 ----------------------------------
@@ -115,6 +116,7 @@
 #'       p.value ~ style_pvalue
 #'     )
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

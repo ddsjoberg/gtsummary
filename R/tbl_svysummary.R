@@ -69,7 +69,7 @@
 #' @family tbl_svysummary tools
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Joseph Larmarange
-#' @examplesIf broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)
 #' # A simple weighted dataset
 #' tbl_svysummary_ex1 <-
 #'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%

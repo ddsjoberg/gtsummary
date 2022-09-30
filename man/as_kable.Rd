@@ -36,10 +36,12 @@ Tip: To better distinguish variable labels and level labels when
 indenting is not supported, try \code{\link[=bold_labels]{bold_labels()}} or \code{\link[=italicize_levels]{italicize_levels()}}.
 }
 \examples{
+\donttest{
 trial \%>\%
   tbl_summary(by = trt) \%>\%
   bold_labels() \%>\%
   as_kable()
+}
 }
 \seealso{
 Other gtsummary output types: 

@@ -69,13 +69,13 @@ Confidence intervals for means are calculated using \code{t.test()} and
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex1.png" style="width:50\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex1.png" alt="image of rendered example table" style="width:50\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex2.png" style="width:45\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex2.png" alt="image of rendered example table" style="width:45\%;">
 }}
 }
 

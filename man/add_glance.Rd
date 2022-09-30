@@ -101,13 +101,13 @@ To re-order the rows with glance statistics on bottom, use the script below:
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_glance_ex1.png" style="width:35\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_glance_ex1.png" alt="image of rendered example table" style="width:35\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_glance_ex2.png" style="width:35\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_glance_ex2.png" alt="image of rendered example table" style="width:35\%;">
 }}
 }
 

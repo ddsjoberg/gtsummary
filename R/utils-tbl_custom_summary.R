@@ -17,6 +17,7 @@
 #' @family tbl_custom_summary tools
 #' @author Joseph Larmarange
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' continuous_summary_ex1 <-
 #'   trial %>%
@@ -31,6 +32,7 @@
 #'   modify_footnote(
 #'     update = all_stat_cols() ~ "Median age (IQR)"
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

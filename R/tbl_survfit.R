@@ -36,7 +36,7 @@
 #' @family tbl_survfit tools
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' library(survival)
 #'
 #' # Example 1 ----------------------------------

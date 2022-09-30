@@ -13,13 +13,15 @@
 #' @return A {flextable} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE)
+#' \donttest{
 #' as_flex_table_ex1 <-
 #'   trial %>%
 #'   select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   as_flex_table()
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

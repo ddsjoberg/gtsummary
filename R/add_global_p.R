@@ -28,7 +28,7 @@
 #' @export
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #'
-#' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' # Example 1 ----------------------------------
 #' tbl_lm_global_ex1 <-

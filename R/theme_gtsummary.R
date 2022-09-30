@@ -43,6 +43,7 @@
 #' Review the [themes vignette](https://www.danieldsjoberg.com/gtsummary/articles/themes.html)
 #' to create your own themes.
 #' @examples
+#' \donttest{
 #' # Setting JAMA theme for gtsummary
 #' theme_gtsummary_journal("jama")
 #' # Themes can be combined by including more than one
@@ -56,6 +57,7 @@
 #'
 #' # reset gtsummary themes
 #' reset_gtsummary_theme()
+#' }
 #' @section Example Output:
 #' \if{html}{Example}
 #'
