@@ -1,4 +1,4 @@
-# gtsummary (development version)
+# gtsummary 1.6.2
 
 * The following updates were made to the indentation implementation for gt output:
   - Previously, only HTML output was able to indent for gt tables, and this was implemented via `gt::tab_style()`.
