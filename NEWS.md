@@ -1,3 +1,5 @@
+# gtsummary (development version)
+
 # gtsummary 1.6.2
 
 * The following updates were made to the indentation implementation for gt output:
