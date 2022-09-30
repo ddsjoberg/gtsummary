@@ -49,6 +49,7 @@
 #'
 #' @family Advanced modifiers
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' modify_column_merge_ex1 <-
 #'   trial %>%
@@ -68,6 +69,7 @@
 #'     pattern = "{estimate} ({ci})",
 #'     rows = !is.na(estimate)
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

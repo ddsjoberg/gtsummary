@@ -216,7 +216,8 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 #' @export
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @family tbl_survfit tools
-#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' \donttest{
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)
@@ -226,6 +227,7 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 #'   list(fit1, fit2) %>%
 #'   tbl_survfit(times = c(12, 24)) %>%
 #'   add_n()
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

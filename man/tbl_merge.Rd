@@ -27,13 +27,13 @@ Merges two or more \code{tbl_regression}, \code{tbl_uvregression}, \code{tbl_sta
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_merge_ex1.png" style="width:70\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_merge_ex1.png" alt="image of rendered example table" style="width:70\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_merge_ex2.png" style="width:65\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_merge_ex2.png" alt="image of rendered example table" style="width:65\%;">
 }}
 }
 

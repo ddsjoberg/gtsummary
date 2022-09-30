@@ -63,11 +63,12 @@ personal style.
 \if{html}{Example}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/set_gtsummary_theme_ex1.png" style="width:70\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/set_gtsummary_theme_ex1.png" alt="image of rendered example table" style="width:70\%;">
 }}
 }
 
 \examples{
+\donttest{
 # Setting JAMA theme for gtsummary
 set_gtsummary_theme(theme_gtsummary_journal("jama"))
 # Themes can be combined by including more than one
@@ -82,6 +83,7 @@ set_gtsummary_theme_ex1 <-
 
 # reset gtsummary theme
 reset_gtsummary_theme()
+}
 }
 \seealso{
 \href{https://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}

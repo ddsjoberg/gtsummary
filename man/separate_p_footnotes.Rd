@@ -23,7 +23,7 @@ the specific test used for each of the p-values.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/separate_p_footnotes_ex1.png" style="width:80\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/separate_p_footnotes_ex1.png" alt="image of rendered example table" style="width:80\%;">
 }}
 }
 

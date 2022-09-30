@@ -23,11 +23,12 @@ Use these functions to hide or unhide columns in a gtsummary table.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_hide_ex1.png" style="width:45\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_hide_ex1.png" alt="image of rendered example table" style="width:45\%;">
 }}
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 # hide 95\% CI, and replace with standard error
 modify_column_hide_ex1 <-
@@ -35,6 +36,7 @@ modify_column_hide_ex1 <-
   tbl_regression() \%>\%
   modify_column_hide(columns = ci) \%>\%
   modify_column_unhide(columns = std.error)
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

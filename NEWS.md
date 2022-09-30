@@ -3,10 +3,10 @@
 * The following updates were made to the indentation implementation for gt output:
   - Previously, only HTML output was able to indent for gt tables, and this was implemented via `gt::tab_style()`.
   - Indentation is now available for HTML, PDF, and Word and is implemented by adding unicode non-breaking spaces to the data frame via `gt::text_transform()`.
-  - The "names" for the indentation calls have been updated to `"indent"` and `"indent2"`. This change should affect very very few users.
-  - Indentation for RTF does not currently work. Instead of indented columns, malformed unicode characters are shown. This issue will be addressed in a future gt release. If you do use RTF output, and would like your output to be identical to what it was before this update, use `as_gt(include = -indent)`.
+  - The "names" for the indentation calls have been updated to `"indent"` and `"indent2"`. This change should affect very very few users. If you're not sure what the names refer to, then this does not affect you.
+  - Indentation for RTF does not currently work. Instead of indented columns, irregular unicode characters are shown. This issue will be addressed in a future gt release. If you do use RTF output, and would like your output to be identical to what it was before this update, use `as_gt(include = -indent)`.
 
-* A link to the cheat sheet has been added to the website. 
+* A link to the cheat sheet has been added to the website's navigation bar. 
 
 * Added additional options to `remove_row_type(type = c("level", "all"))`.
   - Use `type = "all"` to remove all rows associated with the variable(s) specified in `remove_row_type(variables=)`.
@@ -20,6 +20,8 @@
 
 * Added the `"var_type"` hidden column to the output of `tbl_survfit()`. This addition ensures the table will work with `remove_row_type()`. (#1343)
 
+* Updated calls to `round()` in the `style_*()` functions to `round2()`, which implements classic rounding rules. (#1304)
+
 * Fixed bug in `style_sigfig()` with numbers close to the thresholds. (#1298)
 
 * Fixed bug when a column named `"variable"` was passed to `tbl_custom_summary(by=)`, which resulted in an error. (#1285)
@@ -27,8 +29,6 @@
 * Bug fix in `as_tibble(fmt_missing = TRUE)`. Previously, missing assignments applied to more than one row were being ignored. (#1327)
 
 * Bug fix in column alignment with `tbl_stack()` for `as_kable_extra()` output. (#1326)
-
-* Updated calls to `round()` in the `style_*()` functions to `round2()`, which implements classic rounding rules. (#1304)
 
 # gtsummary 1.6.1
 

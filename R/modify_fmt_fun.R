@@ -17,6 +17,7 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' # show 'grade' p-values to 3 decimal places
 #' modify_fmt_fun_ex1 <-
@@ -26,6 +27,7 @@
 #'     update = p.value ~ function(x) style_pvalue(x, digits = 3),
 #'     rows = variable == "grade"
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

@@ -81,30 +81,30 @@ formatted summary table of the results
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_survfit_ex1.png" style="width:55\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_survfit_ex1.png" alt="image of rendered example table" style="width:55\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_survfit_ex2.png" style="width:45\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_survfit_ex2.png" alt="image of rendered example table" style="width:45\%;">
 }}
 
 \if{html}{Example 3}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_survfit_ex3.png" style="width:55\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_survfit_ex3.png" alt="image of rendered example table" style="width:55\%;">
 }}
 
 \if{html}{Example 4}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/survfit_cr_ex4.png" style="width:55\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/survfit_cr_ex4.png" alt="image of rendered example table" style="width:55\%;">
 }}
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(survival)
 
 # Example 1 ----------------------------------

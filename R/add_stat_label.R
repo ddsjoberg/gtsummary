@@ -40,6 +40,7 @@
 #' @export
 #' @return A `tbl_summary` or `tbl_svysummary` object
 #' @examples
+#' \donttest{
 #' tbl <- trial %>%
 #'   dplyr::select(trt, age, grade, response) %>%
 #'   tbl_summary(by = trt)
@@ -71,6 +72,7 @@
 #'     statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
 #'   ) %>%
 #'   add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

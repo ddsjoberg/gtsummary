@@ -12,6 +12,7 @@
 #' @author Daniel D. Sjoberg
 #' @export
 #' @examples
+#' \donttest{
 #' tbl <-
 #'   trial %>%
 #'   select(trt, age, grade, response) %>%
@@ -21,6 +22,7 @@
 #'
 #' # without column labels
 #' as_tibble(tbl, col_labels = FALSE)
+#' }
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
                                 return_calls = FALSE, exclude = NULL,
                                 fmt_missing = FALSE, ...) {

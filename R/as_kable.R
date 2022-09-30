@@ -20,10 +20,12 @@
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
 #' @examples
+#' \donttest{
 #' trial %>%
 #'   tbl_summary(by = trt) %>%
 #'   bold_labels() %>%
 #'   as_kable()
+#' }
 as_kable <- function(x, ..., include = everything(), return_calls = FALSE,
                      exclude = NULL) {
   .assert_class(x, "gtsummary")

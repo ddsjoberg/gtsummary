@@ -9,11 +9,13 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' tbl <-
 #'   lm(age ~ marker + grade, trial) %>%
 #'   tbl_regression() %>%
 #'   modify_column_alignment(columns = everything(), align = "left")
+#' }
 
 modify_column_alignment <- function(x, columns, align = c("left", "right", "center")) {
   .assert_class(x, "gtsummary")

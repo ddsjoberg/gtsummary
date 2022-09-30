@@ -42,6 +42,7 @@ a \link[tibble:tibble-package]{tibble}
 Function converts a gtsummary object to a tibble.
 }
 \examples{
+\donttest{
 tbl <-
   trial \%>\%
   select(trt, age, grade, response) \%>\%
@@ -51,6 +52,7 @@ as_tibble(tbl)
 
 # without column labels
 as_tibble(tbl, col_labels = FALSE)
+}
 }
 \seealso{
 Other gtsummary output types: 

@@ -19,6 +19,7 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' tbl_continuous_ex1 <-
 #'   tbl_continuous(
@@ -35,6 +36,7 @@
 #'     variable = age,
 #'     include = c(trt, grade)
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

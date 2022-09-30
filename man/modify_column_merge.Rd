@@ -72,17 +72,18 @@ internally with care, and it is \emph{not} recommended for users.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_merge_ex1.png" style="width:65\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_merge_ex1.png" alt="image of rendered example table" style="width:65\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_merge_ex2.png" style="width:41\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_column_merge_ex2.png" alt="image of rendered example table" style="width:41\%;">
 }}
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 modify_column_merge_ex1 <-
   trial \%>\%
@@ -102,6 +103,7 @@ modify_column_merge_ex2 <-
     pattern = "{estimate} ({ci})",
     rows = !is.na(estimate)
   )
+}
 }
 \seealso{
 Other Advanced modifiers: 

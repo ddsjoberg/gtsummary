@@ -19,11 +19,13 @@ modify_column_alignment(x, columns, align = c("left", "right", "center"))
 Update column alignment/justification in a gtsummary table.
 }
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 tbl <-
   lm(age ~ marker + grade, trial) \%>\%
   tbl_regression() \%>\%
   modify_column_alignment(columns = everything(), align = "left")
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

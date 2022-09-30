@@ -69,7 +69,7 @@ functions for selecting columns of data frames (and other items as well).
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/select_ex1.png" style="width:55\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/select_ex1.png" alt="image of rendered example table" style="width:55\%;">
 }}
 }
 
