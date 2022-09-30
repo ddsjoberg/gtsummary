@@ -54,6 +54,7 @@ Missing values are included in p-value calculations.
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 add_p_cross_ex1 <-
   trial \%>\%
@@ -65,6 +66,7 @@ add_p_cross_ex2 <-
   trial \%>\%
   tbl_cross(row = stage, col = trt) \%>\%
   add_p(source_note = TRUE)
+}
 }
 \seealso{
 Other tbl_cross tools: 

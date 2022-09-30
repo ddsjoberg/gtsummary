@@ -316,12 +316,14 @@ inline_text.tbl_svysummary <- inline_text.tbl_summary
 #' @export
 #' @return A string reporting results from a gtsummary table
 #' @examples
+#' \donttest{
 #' inline_text_ex1 <-
 #'   glm(response ~ age + grade, trial, family = binomial(link = "logit")) %>%
 #'   tbl_regression(exponentiate = TRUE)
 #'
 #' inline_text(inline_text_ex1, variable = age)
 #' inline_text(inline_text_ex1, variable = grade, level = "III")
+#' }
 inline_text.tbl_regression <-
   function(x, variable, level = NULL,
            pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})",
@@ -419,7 +421,7 @@ inline_text.tbl_survival <- function(...) {
 #' @author Daniel D. Sjoberg
 #' @export
 #' @return A string reporting results from a gtsummary table
-#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' library(survival)
 #' # fit survfit
 #' fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)

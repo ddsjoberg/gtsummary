@@ -70,6 +70,7 @@ tbl_merge(list(tbl1, tbl2))
 }
 
 \examples{
+\donttest{
 tbl <- trial \%>\%
   dplyr::select(trt, age, grade, response) \%>\%
   tbl_summary(by = trt)
@@ -101,6 +102,7 @@ add_stat_label_ex3 <-
     statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
   ) \%>\%
   add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

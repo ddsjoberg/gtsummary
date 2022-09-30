@@ -75,7 +75,7 @@ numeric columns numeric. For the \emph{vast majority} of users,
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 tbl <-
   lm(time ~ ph.ecog + sex, survival::lung) \%>\%

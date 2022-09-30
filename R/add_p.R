@@ -43,6 +43,7 @@ add_p <- function(x, ...) {
 #' @return A `tbl_summary` object
 #' @author Daniel D. Sjoberg, Emily C. Zabor
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' add_p_ex1 <-
 #'   trial[c("age", "grade", "trt")] %>%
@@ -60,6 +61,7 @@ add_p <- function(x, ...) {
 #'     # assume equal variance in the t-test
 #'     test.args = all_tests("t.test") ~ list(var.equal = TRUE)
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -389,6 +391,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 #' @author Karissa Whiting
 #' @export
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' add_p_cross_ex1 <-
 #'   trial %>%
@@ -400,6 +403,7 @@ add_p_merge_p_values <- function(x, lgl_add_p = TRUE,
 #'   trial %>%
 #'   tbl_cross(row = stage, col = trt) %>%
 #'   add_p(source_note = TRUE)
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
@@ -527,7 +531,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' ```
 #'
 #' @export
-#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' library(survival)
 #'
@@ -699,7 +703,7 @@ add_p.tbl_survfit <- function(x, test = "logrank", test.args = NULL,
 #' @export
 #' @return A `tbl_svysummary` object
 #' @author Joseph Larmarange
-#' @examplesIf broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' # Example 1 ----------------------------------
 #' # A simple weighted dataset

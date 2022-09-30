@@ -89,6 +89,7 @@ To access the continuous variable in a \code{tbl_continuous()} table, use
 }
 
 \examples{
+\donttest{
 library(dplyr, warn.conflicts = FALSE)
 library(stringr)
 # Example 1 ----------------------------------
@@ -152,6 +153,7 @@ add_stat_ex3 <-
       p.value ~ style_pvalue
     )
   )
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

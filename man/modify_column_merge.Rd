@@ -83,6 +83,7 @@ internally with care, and it is \emph{not} recommended for users.
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 modify_column_merge_ex1 <-
   trial \%>\%
@@ -102,6 +103,7 @@ modify_column_merge_ex2 <-
     pattern = "{estimate} ({ci})",
     rows = !is.na(estimate)
   )
+}
 }
 \seealso{
 Other Advanced modifiers: 

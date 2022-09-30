@@ -65,6 +65,7 @@ Summarize a continuous variable by one or more categorical variables
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 tbl_continuous_ex1 <-
   tbl_continuous(
@@ -81,6 +82,7 @@ tbl_continuous_ex2 <-
     variable = age,
     include = c(trt, grade)
   )
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

@@ -75,6 +75,7 @@ Adds p-values to tables created by \code{tbl_summary} by comparing values across
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 add_p_ex1 <-
   trial[c("age", "grade", "trt")] \%>\%
@@ -92,6 +93,7 @@ add_p_ex2 <-
     # assume equal variance in the t-test
     test.args = all_tests("t.test") ~ list(var.equal = TRUE)
   )
+}
 }
 \seealso{
 See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples

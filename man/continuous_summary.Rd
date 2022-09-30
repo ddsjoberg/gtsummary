@@ -31,6 +31,7 @@ of \code{\link[=tbl_custom_summary]{tbl_custom_summary()}} the same continuous s
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 continuous_summary_ex1 <-
   trial \%>\%
@@ -45,6 +46,7 @@ continuous_summary_ex1 <-
   modify_footnote(
     update = all_stat_cols() ~ "Median age (IQR)"
   )
+}
 }
 \seealso{
 Other tbl_custom_summary tools: 

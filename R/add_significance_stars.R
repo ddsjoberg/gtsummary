@@ -26,7 +26,7 @@
 #' numeric columns numeric. For the _vast majority_ of users,
 #' _the planned change will be go unnoticed_.
 #'
-#' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' tbl <-
 #'   lm(time ~ ph.ecog + sex, survival::lung) %>%

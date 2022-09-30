@@ -21,6 +21,7 @@
 #' @seealso See \href{https://www.danieldsjoberg.com/gtsummary/articles/gtsummary_definition.html}{gtsummary internals vignette}
 #'
 #' @examples
+#' \donttest{
 #' # Example 1 --------------------------------
 #' # Add number of cases and controls to regression table
 #' modify_table_body_ex1 <-
@@ -42,6 +43,7 @@
 #'   # assigning header labels
 #'   modify_header(N_nonevent = "**Control N**", N_event = "**Case N**") %>%
 #'   modify_fmt_fun(c(N_event, N_nonevent) ~ style_number)
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
