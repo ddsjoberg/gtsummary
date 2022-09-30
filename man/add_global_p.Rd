@@ -70,13 +70,13 @@ Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_lm_global_ex1.png" style="width:45\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_lm_global_ex1.png" alt="image of rendered example table" style="width:45\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_uv_global_ex2.png" style="width:50\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_uv_global_ex2.png" alt="image of rendered example table" style="width:50\%;">
 }}
 }
 

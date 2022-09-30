@@ -28,13 +28,13 @@ Add event N to regression table
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_nevent.tbl_regression_ex1.png" style="width:64\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_nevent.tbl_regression_ex1.png" alt="image of rendered example table" style="width:64\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_nevent.tbl_regression_ex2.png" style="width:64\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_nevent.tbl_regression_ex2.png" alt="image of rendered example table" style="width:64\%;">
 }}
 }
 

@@ -91,13 +91,13 @@ To suppress the additional formatting, set \code{as_kable_extra(addtl_fmt = FALS
 \if{html}{Example 1 (PDF)}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_kable_extra_ex1_pdf.png" style="width:45\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_kable_extra_ex1_pdf.png" alt="image of rendered example table" style="width:45\%;">
 }}
 
 \if{html}{Example 2 (PDF)}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_kable_extra_ex2_pdf.png" style="width:65\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_kable_extra_ex2_pdf.png" alt="image of rendered example table" style="width:65\%;">
 }}
 }
 

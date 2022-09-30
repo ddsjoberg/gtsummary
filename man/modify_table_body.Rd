@@ -30,7 +30,7 @@ To show a column, add a column header with \code{modify_header()}.
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_table_body_ex1.png" style="width:65\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_table_body_ex1.png" alt="image of rendered example table" style="width:65\%;">
 }}
 }
 

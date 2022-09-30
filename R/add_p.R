@@ -528,6 +528,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #'
 #' @export
 #' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' \donttest{
 #' library(survival)
 #'
 #' gts_survfit <-
@@ -547,6 +548,7 @@ add_p.tbl_cross <- function(x, test = NULL, pvalue_fun = NULL,
 #' add_p_tbl_survfit_ex2 <-
 #'   gts_survfit %>%
 #'   add_p(test = "survdiff", test.args = list(rho = 0.5))
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'

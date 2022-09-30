@@ -128,19 +128,19 @@ Use this tidier with \code{add_global_p(anova_fun = tidy_wald_test)}
 \if{html}{Example 1}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tidy_standardize_ex1.png" style="width:65\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tidy_standardize_ex1.png" alt="image of rendered example table" style="width:65\%;">
 }}
 
 \if{html}{Example 2}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tidy_standardize_ex2.png" style="width:47\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tidy_standardize_ex2.png" alt="image of rendered example table" style="width:47\%;">
 }}
 
 \if{html}{Example 3}
 
 \if{html}{\out{
-<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/pool_and_tidy_mice_ex3.png" style="width:47\%;">
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/pool_and_tidy_mice_ex3.png" alt="image of rendered example table" style="width:47\%;">
 }}
 }
 

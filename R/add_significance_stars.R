@@ -27,6 +27,7 @@
 #' _the planned change will be go unnoticed_.
 #'
 #' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
+#' \donttest{
 #' tbl <-
 #'   lm(time ~ ph.ecog + sex, survival::lung) %>%
 #'   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
@@ -74,6 +75,7 @@
 #'     style = "vertical-align:top",
 #'     locations = gt::cells_body(columns = label)
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
