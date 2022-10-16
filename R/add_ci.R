@@ -102,14 +102,16 @@ add_ci.tbl_summary <- function(x,
       var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
       arg_name = "method"
     ) %>%
-    purrr::update_list(
-      !!!.formula_list_to_named_list(
-        x = method,
-        var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
-        arg_name = "method",
-        type_check = chuck(type_check, "is_string", "fn"),
-        type_check_msg = chuck(type_check, "is_string", "msg")
-      )
+    utils::modifyList(
+      val =
+        .formula_list_to_named_list(
+          x = method,
+          var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
+          arg_name = "method",
+          type_check = chuck(type_check, "is_string", "fn"),
+          type_check_msg = chuck(type_check, "is_string", "msg")
+        ) %||%
+        list()
     )
 
   style_fun <-
@@ -119,14 +121,16 @@ add_ci.tbl_summary <- function(x,
       var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
       arg_name = "style_fun"
     ) %>%
-    purrr::update_list(
-      !!!.formula_list_to_named_list(
-        x = style_fun,
-        var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
-        arg_name = "style_fun",
-        type_check = chuck(type_check, "is_function", "fn"),
-        type_check_msg = chuck(type_check, "is_function", "msg")
-      )
+    utils::modifyList(
+      val =
+        .formula_list_to_named_list(
+          x = style_fun,
+          var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
+          arg_name = "style_fun",
+          type_check = chuck(type_check, "is_function", "fn"),
+          type_check_msg = chuck(type_check, "is_function", "msg")
+        ) %||%
+        list()
     )
 
   statistic <-
@@ -136,15 +140,18 @@ add_ci.tbl_summary <- function(x,
       var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
       arg_name = "statistic"
     ) %>%
-    purrr::update_list(
-      !!!.formula_list_to_named_list(
-        x = statistic,
-        var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
-        arg_name = "statistic",
-        type_check = chuck(type_check, "is_character", "fn"),
-        type_check_msg = chuck(type_check, "is_character", "msg")
-      )
+    utils::modifyList(
+      val =
+        .formula_list_to_named_list(
+          x = statistic,
+          var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
+          arg_name = "statistic",
+          type_check = chuck(type_check, "is_character", "fn"),
+          type_check_msg = chuck(type_check, "is_character", "msg")
+        ) %||%
+        list()
     )
+
   updated_call_list <- c(x$call_list, list(add_ci = match.call()))
 
   # check inputs ---------------------------------------------------------------

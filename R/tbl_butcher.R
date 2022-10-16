@@ -57,5 +57,6 @@ tbl_butcher <- function(x, include = NULL) {
     rlang::set_names(element_names)
 
   # remove elements and returned reduced object --------------------------------
-  purrr::list_modify(x, !!!lst_nulls)
+  purrr::list_modify(x, !!!lst_nulls) %>%
+    purrr::compact()
 }

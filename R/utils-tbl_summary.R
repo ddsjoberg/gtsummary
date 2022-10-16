@@ -640,10 +640,10 @@ footnote_stat_label <- function(meta_data) {
     distinct() %>%
     pull("message") %>%
     stats::na.omit() %>%
-    purrr::when(
+    {.purrr_when(
       rlang::is_empty(.) ~ NA_character_,
       TRUE ~ paste(., collapse = "; ")
-    )
+    )}
 }
 
 # summarize_categorical --------------------------------------------------------

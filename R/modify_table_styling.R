@@ -225,7 +225,7 @@ modify_table_styling <- function(x,
         format_type = text_format,
         undo_text_format = undo_text_format
       ) %>%
-      purrr::cross_df() %>%
+      {tidyr::expand_grid(!!!.)} %>%
       {
         bind_rows(x$table_styling$text_format, .)
       }
@@ -239,7 +239,7 @@ modify_table_styling <- function(x,
         rows = list(rows),
         symbol = missing_symbol
       ) %>%
-      purrr::cross_df() %>%
+      {tidyr::expand_grid(!!!.)} %>%
       {
         bind_rows(x$table_styling$fmt_missing, .)
       }
