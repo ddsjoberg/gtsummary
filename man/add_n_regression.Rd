@@ -27,11 +27,15 @@ Add N to regression table
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_n.tbl_regression_ex1.png}{options: width=64\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_n.tbl_regression_ex1.png" alt="image of rendered example table" style="width:64\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_n.tbl_regression_ex2.png}{options: width=64\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_n.tbl_regression_ex2.png" alt="image of rendered example table" style="width:64\%;">
+}}
 }
 
 \examples{

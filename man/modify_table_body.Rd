@@ -29,10 +29,13 @@ To show a column, add a column header with \code{modify_header()}.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{modify_table_body_ex1.png}{options: width=65\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_table_body_ex1.png" alt="image of rendered example table" style="width:65\%;">
+}}
 }
 
 \examples{
+\donttest{
 # Example 1 --------------------------------
 # Add number of cases and controls to regression table
 modify_table_body_ex1 <-
@@ -54,6 +57,7 @@ modify_table_body_ex1 <-
   # assigning header labels
   modify_header(N_nonevent = "**Control N**", N_event = "**Case N**") \%>\%
   modify_fmt_fun(c(N_event, N_nonevent) ~ style_number)
+}
 }
 \seealso{
 \code{modify_table_styling()}

@@ -56,7 +56,9 @@ add_n <- function(x, ...) {
 #'
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_n_ex.png}{options: width=50\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_n_ex.png", width = "50")`
+#' }}
 
 add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnote = FALSE,
                               last = FALSE, ...) {
@@ -82,11 +84,10 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
     map_dfr(
       function(.x) {
         df_stats <-
-          .x %>%
           # remove overall row, if it has been added with `add_overall()`
-          purrr::when(
-            "by" %in% names(.) ~ filter(., !is.na(.data$by)),
-            TRUE ~ .
+          .purrr_when(
+            "by" %in% names(.x) ~ filter(.x, !is.na(.data$by)),
+            TRUE ~ .x
           ) %>%
           select(any_of(c(
             "variable", "by", "N_obs", "N_miss", "N_nonmiss", "p_miss",
@@ -214,7 +215,8 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 #' @export
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @family tbl_survfit tools
-#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' \donttest{
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)
@@ -224,10 +226,13 @@ add_n.tbl_svysummary <- add_n.tbl_summary
 #'   list(fit1, fit2) %>%
 #'   tbl_survfit(times = c(12, 24)) %>%
 #'   add_n()
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_n.tbl_survfit_ex1.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_n.tbl_survfit_ex1.png", width = "64")`
+#' }}
 
 add_n.tbl_survfit <- function(x, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))
@@ -313,11 +318,15 @@ add_n.tbl_survfit <- function(x, ...) {
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_n.tbl_regression_ex1.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_n.tbl_regression_ex1.png", width = "64")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_n.tbl_regression_ex2.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_n.tbl_regression_ex2.png", width = "64")`
+#' }}
 NULL
 
 #' @rdname add_n_regression

@@ -69,7 +69,7 @@
 #' @family tbl_svysummary tools
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @author Joseph Larmarange
-#' @examplesIf broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)
 #' # A simple weighted dataset
 #' tbl_svysummary_ex1 <-
 #'   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) %>%
@@ -84,11 +84,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_svysummary_ex1.png}{options: width=31\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_svysummary_ex1.png", width = "31")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_svysummary_ex2.png}{options: width=36\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_svysummary_ex2.png", width = "36")`
+#' }}
 tbl_svysummary <- function(data, by = NULL, label = NULL, statistic = NULL,
                            digits = NULL, type = NULL, value = NULL,
                            missing = NULL, missing_text = NULL, sort = NULL,

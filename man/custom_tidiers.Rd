@@ -127,19 +127,25 @@ Use this tidier with \code{add_global_p(anova_fun = tidy_wald_test)}
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tidy_standardize_ex1.png}{options: width=65\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tidy_standardize_ex1.png" alt="image of rendered example table" style="width:65\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tidy_standardize_ex2.png}{options: width=47\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tidy_standardize_ex2.png" alt="image of rendered example table" style="width:47\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{pool_and_tidy_mice_ex3.png}{options: width=47\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/pool_and_tidy_mice_ex3.png" alt="image of rendered example table" style="width:47\%;">
+}}
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("effectsize", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("mice", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("effectsize", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE) && broom.helpers::.assert_package("mice", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Example 1 ----------------------------------
 mod <- lm(age ~ marker + grade, trial)

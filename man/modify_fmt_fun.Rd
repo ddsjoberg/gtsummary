@@ -26,7 +26,9 @@ are formatted
 
 \if{html}{Example 1}
 
-\if{html}{\figure{modify_fmt_fun_ex1.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/modify_fmt_fun_ex1.png" alt="image of rendered example table" style="width:45\%;">
+}}
 }
 
 \section{rows argument}{
@@ -49,6 +51,7 @@ an external object named \code{variable} in the following expression
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 # show 'grade' p-values to 3 decimal places
 modify_fmt_fun_ex1 <-
@@ -58,6 +61,7 @@ modify_fmt_fun_ex1 <-
     update = p.value ~ function(x) style_pvalue(x, digits = 3),
     rows = variable == "grade"
   )
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

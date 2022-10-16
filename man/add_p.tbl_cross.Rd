@@ -42,14 +42,19 @@ Missing values are included in p-value calculations.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_p_cross_ex1.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_cross_ex1.png" alt="image of rendered example table" style="width:50\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_p_cross_ex2.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_cross_ex2.png" alt="image of rendered example table" style="width:45\%;">
+}}
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 add_p_cross_ex1 <-
   trial \%>\%
@@ -61,6 +66,7 @@ add_p_cross_ex2 <-
   trial \%>\%
   tbl_cross(row = stage, col = trt) \%>\%
   add_p(source_note = TRUE)
+}
 }
 \seealso{
 Other tbl_cross tools: 

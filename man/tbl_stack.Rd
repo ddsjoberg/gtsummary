@@ -28,11 +28,15 @@ retained from the first passed gtsummary object.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_stack_ex1.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_stack_ex1.png" alt="image of rendered example table" style="width:50\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_stack_ex2.png}{options: width=80\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_stack_ex2.png" alt="image of rendered example table" style="width:80\%;">
+}}
 }
 
 \examples{

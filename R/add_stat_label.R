@@ -40,6 +40,7 @@
 #' @export
 #' @return A `tbl_summary` or `tbl_svysummary` object
 #' @examples
+#' \donttest{
 #' tbl <- trial %>%
 #'   dplyr::select(trt, age, grade, response) %>%
 #'   tbl_summary(by = trt)
@@ -71,18 +72,25 @@
 #'     statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
 #'   ) %>%
 #'   add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_stat_label_ex1.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_stat_label_ex1.png", width = "60")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_stat_label_ex2.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_stat_label_ex2.png", width = "60")`
+#' }}
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{add_stat_label_ex3.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_stat_label_ex3.png", width = "45")`
+#' }}
 
 add_stat_label <- function(x, location = NULL, label = NULL) {
   updated_call_list <- c(x$call_list, list(add_stat_label = match.call()))

@@ -17,6 +17,7 @@
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #' @export
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' # show 'grade' p-values to 3 decimal places
 #' modify_fmt_fun_ex1 <-
@@ -26,10 +27,13 @@
 #'     update = p.value ~ function(x) style_pvalue(x, digits = 3),
 #'     rows = variable == "grade"
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{modify_fmt_fun_ex1.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "modify_fmt_fun_ex1.png", width = "45")`
+#' }}
 
 modify_fmt_fun <- function(x, update, rows = NULL) {
   updated_call_list <- c(x$call_list, list(modify_column_unhide = match.call()))

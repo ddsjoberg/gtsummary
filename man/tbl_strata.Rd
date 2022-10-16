@@ -99,12 +99,16 @@ each stratum's summary table.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_strata_ex1.png}{options: width=84\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_strata_ex1.png" alt="image of rendered example table" style="width:84\%;">
+}}
 
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_strata_ex2.png}{options: width=30\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_strata_ex2.png" alt="image of rendered example table" style="width:30\%;">
+}}
 }
 
 \examples{

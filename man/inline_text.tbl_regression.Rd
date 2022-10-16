@@ -61,12 +61,14 @@ print the table the estimates are extracted from.
 }
 
 \examples{
+\donttest{
 inline_text_ex1 <-
   glm(response ~ age + grade, trial, family = binomial(link = "logit")) \%>\%
   tbl_regression(exponentiate = TRUE)
 
 inline_text(inline_text_ex1, variable = age)
 inline_text(inline_text_ex1, variable = grade, level = "III")
+}
 }
 \seealso{
 Other tbl_regression tools: 

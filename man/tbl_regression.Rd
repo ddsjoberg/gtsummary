@@ -107,15 +107,21 @@ to print the random components.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_regression_ex1.png}{options: width=64\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_regression_ex1.png" alt="image of rendered example table" style="width:64\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_regression_ex2.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_regression_ex2.png" alt="image of rendered example table" style="width:50\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{tbl_regression_ex3.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_regression_ex3.png" alt="image of rendered example table" style="width:50\%;">
+}}
 }
 
 \examples{

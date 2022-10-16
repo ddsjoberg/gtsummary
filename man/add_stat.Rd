@@ -71,18 +71,25 @@ To access the continuous variable in a \code{tbl_continuous()} table, use
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_stat_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_ex1.png" alt="image of rendered example table" style="width:60\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_stat_ex2.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_ex2.png" alt="image of rendered example table" style="width:60\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_stat_ex3.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_ex3.png" alt="image of rendered example table" style="width:60\%;">
+}}
 }
 
 \examples{
+\donttest{
 library(dplyr, warn.conflicts = FALSE)
 library(stringr)
 # Example 1 ----------------------------------
@@ -146,6 +153,7 @@ add_stat_ex3 <-
       p.value ~ style_pvalue
     )
   )
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

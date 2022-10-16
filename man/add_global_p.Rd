@@ -69,15 +69,19 @@ Output from \code{tbl_regression} and \code{tbl_uvregression} objects supported.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_lm_global_ex1.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_lm_global_ex1.png" alt="image of rendered example table" style="width:45\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_uv_global_ex2.png}{options: width=50\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_uv_global_ex2.png" alt="image of rendered example table" style="width:50\%;">
+}}
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Example 1 ----------------------------------
 tbl_lm_global_ex1 <-

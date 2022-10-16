@@ -20,11 +20,14 @@ will add the total number of events observed in a new column.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_nevent.tbl_survfit_ex1.png}{options: width=64\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_nevent.tbl_survfit_ex1.png" alt="image of rendered example table" style="width:64\%;">
+}}
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 library(survival)
 fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)
@@ -35,6 +38,7 @@ add_nevent.tbl_survfit_ex1 <-
   tbl_survfit(times = c(12, 24)) \%>\%
   add_n() \%>\%
   add_nevent()
+}
 \dontshow{\}) # examplesIf}
 }
 \seealso{

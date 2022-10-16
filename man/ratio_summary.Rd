@@ -42,7 +42,9 @@ Confidence interval is computed with \code{\link[stats:poisson.test]{stats::pois
 
 \if{html}{Example 1}
 
-\if{html}{\figure{ratio_summary_ex1.png}{options: width=31\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/ratio_summary_ex1.png" alt="image of rendered example table" style="width:31\%;">
+}}
 }
 
 \examples{

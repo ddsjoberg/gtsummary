@@ -54,11 +54,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_difference_ex1.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_difference_ex1.png", width = "60")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_difference_ex2.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_difference_ex2.png", width = "60")`
+#' }}
 add_difference <- function(x, test = NULL, group = NULL,
                            adj.vars = NULL, test.args = NULL,
                            conf.level = 0.95, include = everything(),

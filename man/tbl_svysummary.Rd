@@ -144,11 +144,15 @@ in the denominator, not at each level of the categorical variable.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_svysummary_ex1.png}{options: width=31\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_svysummary_ex1.png" alt="image of rendered example table" style="width:31\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_svysummary_ex2.png}{options: width=36\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_svysummary_ex2.png" alt="image of rendered example table" style="width:36\%;">
+}}
 }
 
 \section{type argument}{
@@ -192,7 +196,7 @@ Read more on the \link{syntax} used through the package.
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # A simple weighted dataset
 tbl_svysummary_ex1 <-
   survey::svydesign(~1, data = as.data.frame(Titanic), weights = ~Freq) \%>\%

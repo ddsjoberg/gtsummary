@@ -49,6 +49,7 @@
 #'
 #' @family Advanced modifiers
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' modify_column_merge_ex1 <-
 #'   trial %>%
@@ -68,14 +69,19 @@
 #'     pattern = "{estimate} ({ci})",
 #'     rows = !is.na(estimate)
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{modify_column_merge_ex1.png}{options: width=65\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "modify_column_merge_ex1.png", width = "65")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{modify_column_merge_ex2.png}{options: width=41\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "modify_column_merge_ex2.png", width = "41")`
+#' }}
 modify_column_merge <- function(x, pattern, rows = NULL) {
   # check inputs ---------------------------------------------------------------
   .assert_class(x, "gtsummary")

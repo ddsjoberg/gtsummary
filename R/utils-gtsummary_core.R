@@ -46,13 +46,12 @@
       text_interpret = character(), footnote = character()
     )
   x$table_styling$text_format <-
-    purrr::when(
-      all(c("label", "row_type") %in% x$table_styling$header$column),
-      isTRUE(.) ~
+    .purrr_when(
+      isTRUE(all(c("label", "row_type") %in% x$table_styling$header$column)) ~
         tibble(column = "label",
                rows = list(rlang::expr(.data$row_type %in% c("level", "missing"))),
                format_type = "indent", undo_text_format = FALSE),
-      isFALSE(.) ~
+      isFALSE(all(c("label", "row_type") %in% x$table_styling$header$column)) ~
         tibble(column = character(), rows = list(),
                format_type = character(), undo_text_format = logical())
     )
@@ -85,7 +84,7 @@
     for (styling_element in names(x$table_styling)) {
       # if element is a tibble with a column called 'column'
       if (is.data.frame(x$table_styling[[styling_element]]) &&
-        "column" %in% names(x$table_styling[[styling_element]])) {
+          "column" %in% names(x$table_styling[[styling_element]])) {
         x$table_styling[[styling_element]] <-
           x$table_styling[[styling_element]] %>%
           filter(!.data$column %in% deleted_columns)
@@ -124,4 +123,29 @@
       y %>% select(-all_of(setdiff(common_columns, "column"))),
       by = "column"
     )
+}
+
+
+.purrr_when <- function(...) {
+  lst_formulas <- rlang::dots_list(...)
+
+  for(i in seq_len(length(lst_formulas))) {
+    if (isTRUE(eval_tidy(.f_lhs_as_quo(lst_formulas[[i]])))) {
+      return(eval_tidy(.f_rhs_as_quo(lst_formulas[[i]])))
+    }
+  }
+  # if not matches, return NULL
+  NULL
+}
+.f_lhs_as_quo <- function(x) {
+  rlang::new_quosure(
+    expr = rlang::f_lhs(x),
+    env = attr(x, ".Environment")
+  )
+}
+.f_rhs_as_quo <- function(x) {
+  rlang::new_quosure(
+    expr = rlang::f_rhs(x),
+    env = attr(x, ".Environment")
+  )
 }

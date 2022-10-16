@@ -8,6 +8,7 @@
 #' @name modify_column_hide
 #' @family Advanced modifiers
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' # hide 95% CI, and replace with standard error
 #' modify_column_hide_ex1 <-
@@ -15,10 +16,13 @@
 #'   tbl_regression() %>%
 #'   modify_column_hide(columns = ci) %>%
 #'   modify_column_unhide(columns = std.error)
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{modify_column_hide_ex1.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "modify_column_hide_ex1.png", width = "45")`
+#' }}
 NULL
 
 #' @rdname modify_column_hide

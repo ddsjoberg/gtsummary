@@ -17,6 +17,7 @@
 #' @family tbl_custom_summary tools
 #' @author Joseph Larmarange
 #' @examples
+#' \donttest{
 #' # Example 1 ----------------------------------
 #' continuous_summary_ex1 <-
 #'   trial %>%
@@ -31,10 +32,13 @@
 #'   modify_footnote(
 #'     update = all_stat_cols() ~ "Median age (IQR)"
 #'   )
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{continuous_summary_ex1.png}{options: width=31\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "continuous_summary_ex1.png", width = "31")`
+#' }}
 continuous_summary <- function(variable) {
   variable_to_summarize <- variable
   function(data, stat_display, ...) {
@@ -102,7 +106,9 @@ continuous_summary <- function(variable) {
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{ratio_summary_ex1.png}{options: width=31\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "ratio_summary_ex1.png", width = "31")`
+#' }}
 ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.95) {
   function(data, ...) {
     num <- sum(data[[numerator]], na.rm = na.rm)
@@ -189,7 +195,9 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{proportion_summary_ex1.png}{options: width=31\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "proportion_summary_ex1.png", width = "31")`
+#' }}
 proportion_summary <- function(variable, value, weights = NULL, na.rm = TRUE,
                                conf.level = 0.95,
                                method = c("wilson", "wilson.no.correct", "exact", "asymptotic")) {

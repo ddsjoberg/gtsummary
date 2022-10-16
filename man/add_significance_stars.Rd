@@ -51,23 +51,32 @@ numeric columns numeric. For the \emph{vast majority} of users,
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_significance_stars_ex1.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex1.png" alt="image of rendered example table" style="width:45\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_significance_stars_ex2.png}{options: width=35\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex2.png" alt="image of rendered example table" style="width:35\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_significance_stars_ex3.png}{options: width=30\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex3.png" alt="image of rendered example table" style="width:30\%;">
+}}
 
 \if{html}{Example 4}
 
-\if{html}{\figure{add_significance_stars_ex4.png}{options: width=30\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_significance_stars_ex4.png" alt="image of rendered example table" style="width:30\%;">
+}}
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 tbl <-
   lm(time ~ ph.ecog + sex, survival::lung) \%>\%
   tbl_regression(label = list(ph.ecog = "ECOG Score", sex = "Sex"))
@@ -115,5 +124,6 @@ add_significance_stars_ex4 <-
     style = "vertical-align:top",
     locations = gt::cells_body(columns = label)
   )
+}
 \dontshow{\}) # examplesIf}
 }

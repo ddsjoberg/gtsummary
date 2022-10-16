@@ -60,15 +60,21 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{tbl_overall_ex1.png}{options: width=55\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_overall_ex1.png", width = "55")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{tbl_overall_ex2.png}{options: width=55\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_overall_ex2.png", width = "55")`
+#' }}
 #'
 #' \if{html}{Example 3}
 #'
-#' \if{html}{\figure{tbl_overall_ex3.png}{options: width=55\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "tbl_overall_ex3.png", width = "55")`
+#' }}
 add_overall <- function(x, ...) {
   UseMethod("add_overall")
 }

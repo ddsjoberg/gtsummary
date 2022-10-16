@@ -152,10 +152,13 @@ to create your own themes.
 
 \if{html}{Example}
 
-\if{html}{\figure{set_gtsummary_theme_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/set_gtsummary_theme_ex1.png" alt="image of rendered example table" style="width:60\%;">
+}}
 }
 
 \examples{
+\donttest{
 # Setting JAMA theme for gtsummary
 theme_gtsummary_journal("jama")
 # Themes can be combined by including more than one
@@ -169,6 +172,7 @@ set_gtsummary_theme_ex1 <-
 
 # reset gtsummary themes
 reset_gtsummary_theme()
+}
 }
 \seealso{
 \href{https://www.danieldsjoberg.com/gtsummary/articles/themes.html}{Themes vignette}

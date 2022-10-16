@@ -62,11 +62,15 @@ along with the difference confidence interval and p-value.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_difference_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_difference_ex1.png" alt="image of rendered example table" style="width:60\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_difference_ex2.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_difference_ex2.png" alt="image of rendered example table" style="width:60\%;">
+}}
 }
 
 \examples{

@@ -14,7 +14,7 @@
 #' @return a ggplot
 #' @name plot
 #'
-#' @examplesIf broom.helpers::.assert_package("GGally", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("GGally", pkg_search = "gtsummary", boolean = TRUE)
 #' glm(response ~ marker + grade, trial, family = binomial) %>%
 #'   tbl_regression(
 #'     add_estimate_to_reference_rows = TRUE,

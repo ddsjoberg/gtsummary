@@ -13,17 +13,21 @@
 #' @return A {flextable} object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE)
+#' \donttest{
 #' as_flex_table_ex1 <-
 #'   trial %>%
 #'   select(trt, age, grade) %>%
 #'   tbl_summary(by = trt) %>%
 #'   add_p() %>%
 #'   as_flex_table()
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{as_flex_table_ex1.png}{options: width=60\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "as_flex_table_ex1.png", width = "60")`
+#' }}
 as_flex_table <- function(x, include = everything(), return_calls = FALSE,
                           strip_md_bold = NULL) {
   # deprecated arguments -------------------------------------------------------

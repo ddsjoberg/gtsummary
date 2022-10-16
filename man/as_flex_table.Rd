@@ -39,17 +39,21 @@ does not support Word.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{as_flex_table_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_flex_table_ex1.png" alt="image of rendered example table" style="width:60\%;">
+}}
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 as_flex_table_ex1 <-
   trial \%>\%
   select(trt, age, grade) \%>\%
   tbl_summary(by = trt) \%>\%
   add_p() \%>\%
   as_flex_table()
+}
 \dontshow{\}) # examplesIf}
 }
 \seealso{

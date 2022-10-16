@@ -182,15 +182,21 @@ statistics refer to a third variable.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{tbl_custom_summary_ex1.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_custom_summary_ex1.png" alt="image of rendered example table" style="width:45\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{tbl_custom_summary_ex2.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_custom_summary_ex2.png" alt="image of rendered example table" style="width:45\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{tbl_custom_summary_ex3.png}{options: width=35\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_custom_summary_ex3.png" alt="image of rendered example table" style="width:35\%;">
+}}
 }
 
 \examples{

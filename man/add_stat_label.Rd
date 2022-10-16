@@ -52,18 +52,25 @@ tbl_merge(list(tbl1, tbl2))
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_stat_label_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_label_ex1.png" alt="image of rendered example table" style="width:60\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_stat_label_ex2.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_label_ex2.png" alt="image of rendered example table" style="width:60\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_stat_label_ex3.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_stat_label_ex3.png" alt="image of rendered example table" style="width:45\%;">
+}}
 }
 
 \examples{
+\donttest{
 tbl <- trial \%>\%
   dplyr::select(trt, age, grade, response) \%>\%
   tbl_summary(by = trt)
@@ -95,6 +102,7 @@ add_stat_label_ex3 <-
     statistic = all_continuous() ~ c("{mean} ({sd})", "{min} - {max}"),
   ) \%>\%
   add_stat_label(label = age ~ c("Mean (SD)", "Min - Max"))
+}
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary

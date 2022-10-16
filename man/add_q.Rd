@@ -31,15 +31,19 @@ Adjustments to p-values are performed with \link[stats:p.adjust]{stats::p.adjust
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_q_ex1.png}{options: width=65\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_q_ex1.png" alt="image of rendered example table" style="width:65\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_q_ex2.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_q_ex2.png" alt="image of rendered example table" style="width:60\%;">
+}}
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Example 1 ----------------------------------
 add_q_ex1 <-

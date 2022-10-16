@@ -25,10 +25,13 @@ of \code{\link[=tbl_custom_summary]{tbl_custom_summary()}} the same continuous s
 
 \if{html}{Example 1}
 
-\if{html}{\figure{continuous_summary_ex1.png}{options: width=31\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/continuous_summary_ex1.png" alt="image of rendered example table" style="width:31\%;">
+}}
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 continuous_summary_ex1 <-
   trial \%>\%
@@ -43,6 +46,7 @@ continuous_summary_ex1 <-
   modify_footnote(
     update = all_stat_cols() ~ "Median age (IQR)"
   )
+}
 }
 \seealso{
 Other tbl_custom_summary tools: 

@@ -63,19 +63,25 @@ Adds p-values to tables created by \code{tbl_svysummary} by comparing values acr
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_p_svysummary_ex1.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_svysummary_ex1.png" alt="image of rendered example table" style="width:45\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_p_svysummary_ex2.png}{options: width=65\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_svysummary_ex2.png" alt="image of rendered example table" style="width:65\%;">
+}}
 
 \if{html}{Example 3}
 
-\if{html}{\figure{add_p_svysummary_ex3.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_svysummary_ex3.png" alt="image of rendered example table" style="width:60\%;">
+}}
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 # Example 1 ----------------------------------
 # A simple weighted dataset

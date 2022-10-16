@@ -41,11 +41,16 @@ for detailed examples in the 'Advanced Customization' section.
 \section{Example Output}{
 
 
-\if{html}{\figure{as_gt_ex.png}{options: width=50\%}}
+\if{html}{Example 1}
+
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/as_gt_ex1.png" alt="image of rendered example table" style="width:50\%;">
+}}
 }
 
 \examples{
-as_gt_ex <-
+# Example 1 ----------------------------------
+as_gt_ex1 <-
   trial[c("trt", "age", "response", "grade")] \%>\%
   tbl_summary(by = trt) \%>\%
   as_gt()

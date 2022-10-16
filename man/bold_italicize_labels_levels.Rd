@@ -51,11 +51,17 @@ Bold or Italicize labels or levels in gtsummary tables
 }
 \section{Example Output}{
 
-\if{html}{\figure{tbl_bold_ital_ex.png}{options: width=50\%}}
+
+\if{html}{Example 1}
+
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/tbl_bold_ital_ex1.png" alt="image of rendered example table" style="width:50\%;">
+}}
 }
 
 \examples{
-tbl_bold_ital_ex <-
+# Example 1 ----------------------------------
+tbl_bold_ital_ex1 <-
   trial[c("trt", "age", "grade")] \%>\%
   tbl_summary() \%>\%
   bold_labels() \%>\%

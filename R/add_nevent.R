@@ -43,11 +43,15 @@ add_nevent <- function(x, ...) UseMethod("add_nevent")
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_nevent.tbl_regression_ex1.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_nevent.tbl_regression_ex1.png", width = "64")`
+#' }}
 #'
 #' \if{html}{Example 2}
 #'
-#' \if{html}{\figure{add_nevent.tbl_regression_ex2.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_nevent.tbl_regression_ex2.png", width = "64")`
+#' }}
 NULL
 
 #' @rdname add_nevent_regression
@@ -117,7 +121,8 @@ add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 #' @param ... Not used
 #' @export
 #' @family tbl_survfit tools
-#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' \donttest{
 #' library(survival)
 #' fit1 <- survfit(Surv(ttdeath, death) ~ 1, trial)
 #' fit2 <- survfit(Surv(ttdeath, death) ~ trt, trial)
@@ -128,10 +133,13 @@ add_nevent.tbl_uvregression <- add_nevent.tbl_regression
 #'   tbl_survfit(times = c(12, 24)) %>%
 #'   add_n() %>%
 #'   add_nevent()
+#' }
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{add_nevent.tbl_survfit_ex1.png}{options: width=64\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_nevent.tbl_survfit_ex1.png", width = "64")`
+#' }}
 
 add_nevent.tbl_survfit <- function(x, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))

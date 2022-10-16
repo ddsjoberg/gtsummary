@@ -63,15 +63,20 @@ and a second test of the \emph{G-rho} family.
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_p_tbl_survfit_ex1.png}{options: width=55\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_tbl_survfit_ex1.png" alt="image of rendered example table" style="width:55\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_p_tbl_survfit_ex2.png}{options: width=45\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_tbl_survfit_ex2.png" alt="image of rendered example table" style="width:45\%;">
+}}
 }
 
 \examples{
-\dontshow{if (broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
 library(survival)
 
 gts_survfit <-
@@ -91,6 +96,7 @@ add_p_tbl_survfit_ex1 <-
 add_p_tbl_survfit_ex2 <-
   gts_survfit \%>\%
   add_p(test = "survdiff", test.args = list(rho = 0.5))
+}
 \dontshow{\}) # examplesIf}
 }
 \seealso{

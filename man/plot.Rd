@@ -32,7 +32,7 @@ The \code{plot()} function extracts \code{x$table_body} and passes the it to
 \lifecycle{experimental}
 }
 \examples{
-\dontshow{if (broom.helpers::.assert_package("GGally", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("GGally", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 glm(response ~ marker + grade, trial, family = binomial) \%>\%
   tbl_regression(
     add_estimate_to_reference_rows = TRUE,

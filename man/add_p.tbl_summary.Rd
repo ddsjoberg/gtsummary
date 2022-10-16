@@ -63,14 +63,19 @@ Adds p-values to tables created by \code{tbl_summary} by comparing values across
 
 \if{html}{Example 1}
 
-\if{html}{\figure{add_p_ex1.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_ex1.png" alt="image of rendered example table" style="width:60\%;">
+}}
 
 \if{html}{Example 2}
 
-\if{html}{\figure{add_p_ex2.png}{options: width=60\%}}
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_p_ex2.png" alt="image of rendered example table" style="width:60\%;">
+}}
 }
 
 \examples{
+\donttest{
 # Example 1 ----------------------------------
 add_p_ex1 <-
   trial[c("age", "grade", "trt")] \%>\%
@@ -88,6 +93,7 @@ add_p_ex2 <-
     # assume equal variance in the t-test
     test.args = all_tests("t.test") ~ list(var.equal = TRUE)
   )
+}
 }
 \seealso{
 See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html}{vignette} for detailed examples

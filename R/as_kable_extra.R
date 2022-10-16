@@ -52,7 +52,7 @@
 #' @return A {kableExtra} table
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
-#' @examplesIf broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("kableExtra", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' # basic gtsummary tbl to build upon
 #' as_kable_extra_base <-
@@ -87,11 +87,15 @@
 #' @section Example Output:
 #' \if{html}{Example 1 (PDF)}
 #'
-#' \if{html}{\figure{as_kable_extra_ex1_pdf.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "as_kable_extra_ex1_pdf.png", width = "45")`
+#' }}
 #'
 #' \if{html}{Example 2 (PDF)}
 #'
-#' \if{html}{\figure{as_kable_extra_ex2_pdf.png}{options: width=65\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "as_kable_extra_ex2_pdf.png", width = "65")`
+#' }}
 
 
 as_kable_extra <- function(x,

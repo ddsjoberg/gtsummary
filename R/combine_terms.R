@@ -19,7 +19,7 @@
 #' @return `tbl_regression` object
 #' @export
 #'
-#' @examplesIf broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' # Example 1 ----------------------------------
 #' # Logistic Regression Example, LRT p-value
@@ -40,7 +40,9 @@
 #' @section Example Output:
 #' \if{html}{Example 1}
 #'
-#' \if{html}{\figure{combine_terms_ex1.png}{options: width=45\%}}
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "combine_terms_ex1.png", width = "45")`
+#' }}
 
 combine_terms <- function(x, formula_update, label = NULL, quiet = NULL, ...) {
   assert_package("survival", "combine_terms()") # required for survreg() models
