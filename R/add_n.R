@@ -84,11 +84,10 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
     map_dfr(
       function(.x) {
         df_stats <-
-          .x %>%
           # remove overall row, if it has been added with `add_overall()`
-          purrr::when(
-            "by" %in% names(.) ~ filter(., !is.na(.data$by)),
-            TRUE ~ .
+          .purrr_when(
+            "by" %in% names(.x) ~ filter(.x, !is.na(.data$by)),
+            TRUE ~ .x
           ) %>%
           select(any_of(c(
             "variable", "by", "N_obs", "N_miss", "N_nonmiss", "p_miss",

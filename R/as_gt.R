@@ -340,10 +340,10 @@ table_styling_to_gt_calls <- function(x, ...) {
   gt_calls[["cols_hide"]] <-
     names(x$table_body) %>%
     setdiff(.cols_to_show(x)) %>%
-    purrr::when(
+    {.purrr_when(
       rlang::is_empty(.) ~ NULL,
       TRUE ~ expr(gt::cols_hide(columns = !!.))
-    )
+    )}
 
   # return list of gt expressions
   gt_calls

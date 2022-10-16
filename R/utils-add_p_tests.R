@@ -611,11 +611,10 @@ add_p_tbl_survfit_survdiff <- function(data, variable, test.args, ...) {
   broom::glance(survdiff_result) %>%
     dplyr::mutate(
       method =
-        purrr::when(
-          test.args$rho,
-          is.null(.) || . == 0 ~ "Log-rank test",
-          . == 1 ~ "Peto & Peto modification of Gehan-Wilcoxon test",
-          . == 1.5 ~ "Tarone-Ware test",
+        .purrr_when(
+          is.null(test.args$rho) || test.args$rho == 0 ~ "Log-rank test",
+          test.args$rho == 1 ~ "Peto & Peto modification of Gehan-Wilcoxon test",
+          test.args$rho == 1.5 ~ "Tarone-Ware test",
           TRUE ~ stringr::str_glue("G-rho (\U03C1 = {test.args$rho}) test")
         )
     )
