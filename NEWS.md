@@ -2,7 +2,7 @@
 
 * The `modify_cpation()` function now works with tables created with `gtreg::tbl_listing()` that do not contain a column named `"label"`. (#1358)
 
-* Functions `tbl_summary()` and `tbl_svysummary()` now support `"{n}"`, `"{p}"`, and `"{level}"` when no `by=` variable is present for use in functions like `modiff_header()`. For the survey summary, the unweighted variants are also available.
+* Functions `tbl_summary()` and `tbl_svysummary()` now support `"{n}"`, `"{p}"`, and `"{level}"` when no `by=` variable is present for use in functions like `modify_header()`. For the survey summary, the unweighted variants are also available. (#1366)
 
 # gtsummary 1.6.2
 
