@@ -1,5 +1,9 @@
 # gtsummary (development version)
 
+* The `modify_cpation()` function now works with tables created with `gtreg::tbl_listing()` that do not contain a column named `"label"`. (#1358)
+
+* Functions `tbl_summary()` and `tbl_svysummary()` now support `"{n}"`, `"{p}"`, and `"{level}"` when no `by=` variable is present for use in functions like `modiff_header()`. For the survey summary, the unweighted variants are also available.
+
 # gtsummary 1.6.2
 
 * The following updates were made to the indentation implementation for gt output:
