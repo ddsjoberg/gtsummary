@@ -6,6 +6,14 @@
 #' useful when combined with R markdown with Word output, since the gt package
 #' does not support Word.
 #'
+#' @details
+#'
+#' The `as_flex_table()` function supports bold and italic markdown syntax (`'**'` and `'_'` only).
+#' Text wrapped in `'**bold text**'` will be made bold, and text in `'_italic text_'` will be made italic.
+#' No other markdown syntax is supported.
+#' To further style your table, you may convert the table to flextable with
+#' `as_flex_table()`, then utilize any of the flextable functions.
+#'
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
 #' @param strip_md_bold DEPRECATED
