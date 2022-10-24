@@ -4,12 +4,7 @@
 \alias{as_flex_table}
 \title{Convert gtsummary object to a flextable object}
 \usage{
-as_flex_table(
-  x,
-  include = everything(),
-  return_calls = FALSE,
-  strip_md_bold = NULL
-)
+as_flex_table(x, include = everything(), return_calls = FALSE, ...)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -23,7 +18,7 @@ Default is \code{everything()}.}
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
 
-\item{strip_md_bold}{DEPRECATED}
+\item{...}{Not used}
 }
 \value{
 A {flextable} object
@@ -36,7 +31,7 @@ useful when combined with R markdown with Word output, since the gt package
 does not support Word.
 }
 \details{
-The \code{as_flex_table()} function supports bold and italic markdown syntax (\code{'**'} and \code{'_'} only).
+The \code{as_flex_table()} function supports bold and italic markdown syntax in column headers (\code{'**'} and \code{'_'} only).
 Text wrapped in \code{'**bold text**'} will be made bold, and text in \code{'_italic text_'} will be made italic.
 No other markdown syntax is supported.
 To further style your table, you may convert the table to flextable with

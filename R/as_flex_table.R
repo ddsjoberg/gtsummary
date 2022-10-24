@@ -7,16 +7,15 @@
 #' does not support Word.
 #'
 #' @details
-#'
-#' The `as_flex_table()` function supports bold and italic markdown syntax (`'**'` and `'_'` only).
+#' The `as_flex_table()` function supports bold and italic markdown syntax in column headers (`'**'` and `'_'` only).
 #' Text wrapped in `'**bold text**'` will be made bold, and text in `'_italic text_'` will be made italic.
 #' No other markdown syntax is supported.
 #' To further style your table, you may convert the table to flextable with
 #' `as_flex_table()`, then utilize any of the flextable functions.
 #'
+#' @param ... Not used
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
-#' @param strip_md_bold DEPRECATED
 #' @export
 #' @return A {flextable} object
 #' @family gtsummary output types
@@ -36,11 +35,12 @@
 #' \if{html}{\out{
 #' `r man_create_image_tag(file = "as_flex_table_ex1.png", width = "60")`
 #' }}
-as_flex_table <- function(x, include = everything(), return_calls = FALSE,
-                          strip_md_bold = NULL) {
+as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) {
   # deprecated arguments -------------------------------------------------------
-  if (!is.null(strip_md_bold)) {
+  dots <- rlang::dots_list(...)
+  if (!is.null(dots$strip_md_bold)) {
     lifecycle::deprecate_warn("1.6.0", "gtsummary::as_flex_table(strip_md_bold=)")
+    dots <- utils::modifyList(dots, val = list(strip_md_bold = NULL), keep.null = FALSE)
   }
 
   .assert_class(x, "gtsummary")
