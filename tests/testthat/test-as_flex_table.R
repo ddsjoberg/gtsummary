@@ -79,3 +79,26 @@ test_that("indent2", {
     NA
   )
 })
+
+test_that("Testing bold/italic markdown syntax in header", {
+  skip_on_os("linux")
+  skip_on_os("mac")
+  save_flextable_png <- function(x) {
+    path <- tempfile(fileext = ".png")
+    flextable::save_as_image(x, path = path, webshot = "webshot2")
+    path
+  }
+
+  path <-
+    save_flextable_png(
+      trial %>%
+        tbl_summary(
+          by = trt,
+          include = age
+        ) %>%
+        add_p() %>%
+        modify_header(all_stat_cols() ~ "**{level}**  \n_N = {n}_") %>%
+        as_flex_table()
+    )
+  expect_snapshot_file(path, "bold-italic-flextable-header.png")
+})
