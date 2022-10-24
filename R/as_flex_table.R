@@ -121,6 +121,13 @@ table_styling_to_flextable_calls <- function(x, ...) {
             replacement = paste0(break_chr, "\\*\\*", "\\1", "\\*\\*", break_chr)
           )
 
+        header <-
+          stringr::str_replace_all(
+            header,
+            pattern = "\\_(.*?)\\_",
+            replacement = paste0(break_chr, "\\_", "\\1", "\\_", break_chr)
+          )
+
         stringr::str_split(header, pattern = break_chr) %>%
           unlist() %>%
           purrr::discard(~.=="") %>%
@@ -130,6 +137,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
                 x <-
                   stringr::str_replace_all(x, pattern = "\\*\\*(.*?)\\*\\*", replacement = "\\1") %>%
                   {rlang::expr(flextable::as_b(!!.))}
+              else if (startsWith(x, "_") && endsWith(x, "_"))
+                x <-
+                  stringr::str_replace_all(x, pattern = "\\_(.*?)\\_", replacement = "\\1") %>%
+                  {rlang::expr(flextable::as_i(!!.))}
 
               return(x)
             }
