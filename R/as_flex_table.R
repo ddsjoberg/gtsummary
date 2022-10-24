@@ -45,14 +45,6 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .table_styling_expr_to_row_number(x)
 
-  # stripping markdown asterisk ------------------------------------------------
-  x$table_styling$header <-
-    x$table_styling$header %>%
-    mutate_at(
-      vars("label", "spanning_header"),
-      ~ str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
-    )
-
   # creating list of flextable calls -------------------------------------------
   flextable_calls <- table_styling_to_flextable_calls(x = x)
 
@@ -110,16 +102,41 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # flextable ------------------------------------------------------------------
   flextable_calls[["flextable"]] <- expr(flextable::flextable())
 
-  # set_header_labels ----------------------------------------------------------
+  # compose_header -------------------------------------------------------------
   col_labels <-
     x$table_styling$header %>%
     filter(.data$hide == FALSE) %>%
     select("column", "label") %>%
     tibble::deframe()
 
-  flextable_calls[["set_header_labels"]] <- expr(
-    flextable::set_header_labels(!!!col_labels)
-  )
+  break_chr <- "@@@@@@@@@@@@@@@@@@@@"
+  flextable_calls[["compose_header"]] <-
+    col_labels %>%
+    purrr::imap(
+      function(header, column) {
+        header <-
+          stringr::str_replace_all(
+            header,
+            pattern = "\\*\\*(.*?)\\*\\*",
+            replacement = paste0(break_chr, "\\*\\*", "\\1", "\\*\\*", break_chr)
+          )
+
+        stringr::str_split(header, pattern = break_chr) %>%
+          unlist() %>%
+          purrr::discard(~.=="") %>%
+          purrr::map(
+            function(x) {
+              if (startsWith(x, "**") && endsWith(x, "**"))
+                x <-
+                  stringr::str_replace_all(x, pattern = "\\*\\*(.*?)\\*\\*", replacement = "\\1") %>%
+                  {rlang::expr(flextable::as_b(!!.))}
+
+              return(x)
+            }
+          ) %>%
+          {rlang::expr(flextable::compose(part = "header", j = !!column, value = flextable::as_paragraph(!!!.)))}
+      }
+    )
 
   # set_caption ----------------------------------------------------------------
   if (!is.null(x$table_styling$caption)) {
