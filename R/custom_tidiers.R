@@ -248,10 +248,11 @@ pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
 #' @rdname custom_tidiers
 #' @export
 tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...) {
-  broom::tidy(x,
-              conf.int = conf.int,
-              conf.level = conf.level,
-              parametric = TRUE, ...
+  suppressWarnings(
+    broom::tidy(x,
+                conf.int = conf.int,
+                conf.level = conf.level,
+                parametric = TRUE, ...)
   ) %>%
     # exponentiate coefs (GAM tidier does not have an `exponentiate=` argument)
     dplyr::mutate_at(
@@ -262,7 +263,7 @@ tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.9
     ) %>%
     dplyr::mutate(parametric = TRUE) %>%
     dplyr::bind_rows(
-      broom::tidy(x, parametric = FALSE, ...) %>%
+      suppressWarnings(broom::tidy(x, parametric = FALSE, ...)) %>%
         dplyr::mutate(parametric = FALSE)
     ) %>%
     dplyr::relocate("parametric", .after = dplyr::last_col())

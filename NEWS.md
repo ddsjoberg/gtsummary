@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Now using {ggstats} to plot regressin model coefficients via `plot()` instead of {GGally}. (#1367)
+
 # gtsummary 1.6.2
 
 * The following updates were made to the indentation implementation for gt output:

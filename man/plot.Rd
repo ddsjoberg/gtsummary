@@ -19,20 +19,20 @@ for categorical variables. Default is \code{TRUE}}
 \item{remove_reference_rows}{logical indicating whether to remove reference rows
 for categorical variables. Default is \code{FALSE}.}
 
-\item{...}{arguments passed to \code{GGally::ggcoef_plot(...)}}
+\item{...}{arguments passed to \code{ggstats::ggcoef_plot(...)}}
 }
 \value{
 a ggplot
 }
 \description{
 The \code{plot()} function extracts \code{x$table_body} and passes the it to
-\code{GGally::ggcoef_plot()} along with a formatting options.
+\code{ggstats::ggcoef_plot()} along with a formatting options.
 }
 \details{
 \lifecycle{experimental}
 }
 \examples{
-\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("GGally", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("ggstats", pkg_search = "gtsummary", boolean = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 glm(response ~ marker + grade, trial, family = binomial) \%>\%
   tbl_regression(
     add_estimate_to_reference_rows = TRUE,
