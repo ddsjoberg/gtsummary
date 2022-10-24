@@ -4,6 +4,8 @@
 
 * Functions `tbl_summary()` and `tbl_svysummary()` now support `"{n}"`, `"{p}"`, and `"{level}"` when no `by=` variable is present for use in functions like `modify_header()`. For the survey summary, the unweighted variants are also available. (#1366)
 
+* Now using {ggstats} to plot regressin model coefficients via `plot()` instead of {GGally}. (#1367)
+
 # gtsummary 1.6.2
 
 * The following updates were made to the indentation implementation for gt output:
