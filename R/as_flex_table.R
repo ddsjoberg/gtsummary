@@ -11,7 +11,7 @@
 #' and spanning headers (`'**'` and `'_'` only).
 #' Text wrapped in double stars (`'**bold**'`) will be made bold, and text between single
 #' underscores (`'_italic_'`) will be made italic.
-#' No other markdown syntax is supported.
+#' No other markdown syntax is supported and the double-star and underscore cannot be combined.
 #' To further style your table, you may convert the table to flextable with
 #' `as_flex_table()`, then utilize any of the flextable functions.
 #'
@@ -413,7 +413,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
 
 
-.chr_with_md_to_ft_compose <- function(x, j, i = 1L, part = "header", break_chr = "@@@@@@@@@@@@@@@@@@@@") {
+.chr_with_md_to_ft_compose <- function(x, j, i = 1L, part = "header", break_chr = "@@@@@@@@@@@&@@@@@@@@@") {
   purrr::map2(
     .x = x, .y = j,
     .f = function(x, j) {

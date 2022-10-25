@@ -35,7 +35,7 @@ The \code{as_flex_table()} function supports bold and italic markdown syntax in 
 and spanning headers (\code{'**'} and \code{'_'} only).
 Text wrapped in double stars (\code{'**bold**'}) will be made bold, and text between single
 underscores (\code{'_italic_'}) will be made italic.
-No other markdown syntax is supported.
+No other markdown syntax is supported and the double-star and underscore cannot be combined.
 To further style your table, you may convert the table to flextable with
 \code{as_flex_table()}, then utilize any of the flextable functions.
 }
