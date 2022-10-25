@@ -7,8 +7,10 @@
 #' does not support Word.
 #'
 #' @details
-#' The `as_flex_table()` function supports bold and italic markdown syntax in column headers (`'**'` and `'_'` only).
-#' Text wrapped in `'**bold text**'` will be made bold, and text in `'_italic text_'` will be made italic.
+#' The `as_flex_table()` function supports bold and italic markdown syntax in column headers
+#' and spanning headers (`'**'` and `'_'` only).
+#' Text wrapped in double stars (`'**bold**'`) will be made bold, and text between single
+#' underscores (`'_italic_'`) will be made italic.
 #' No other markdown syntax is supported.
 #' To further style your table, you may convert the table to flextable with
 #' `as_flex_table()`, then utilize any of the flextable functions.

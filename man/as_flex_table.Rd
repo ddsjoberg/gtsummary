@@ -31,8 +31,10 @@ useful when combined with R markdown with Word output, since the gt package
 does not support Word.
 }
 \details{
-The \code{as_flex_table()} function supports bold and italic markdown syntax in column headers (\code{'**'} and \code{'_'} only).
-Text wrapped in \code{'**bold text**'} will be made bold, and text in \code{'_italic text_'} will be made italic.
+The \code{as_flex_table()} function supports bold and italic markdown syntax in column headers
+and spanning headers (\code{'**'} and \code{'_'} only).
+Text wrapped in double stars (\code{'**bold**'}) will be made bold, and text between single
+underscores (\code{'_italic_'}) will be made italic.
 No other markdown syntax is supported.
 To further style your table, you may convert the table to flextable with
 \code{as_flex_table()}, then utilize any of the flextable functions.
