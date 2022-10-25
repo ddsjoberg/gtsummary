@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9002</span>
       </span>
     </div>
 
@@ -94,7 +94,19 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li>Now using {ggstats} to plot regressin model coefficients via <code><a href="../reference/plot.html">plot()</a></code> instead of {GGally}. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1367" class="external-link">#1367</a>)</li></ul></div>
+<ul><li><p>The <code>modify_cpation()</code> function now works with tables created with <code>gtreg::tbl_listing()</code> that do not contain a column named <code>"label"</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1358" class="external-link">#1358</a>)</p></li>
+<li>
+<p>Functions <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> now support <code>"{n}"</code>, <code>"{p}"</code>, and <code>"{level}"</code> when no <code>by=</code> variable is present for use in functions like <code><a href="../reference/modify.html">modify_header()</a></code>. For example, the following previously invalid code works well for both the overall column and the stratified columns:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">trial</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/add_overall.html">add_overall</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="../reference/modify.html">modify_header</a></span><span class="op">(</span><span class="fu"><a href="../reference/select_helpers.html">all_stat_cols</a></span><span class="op">(</span><span class="op">)</span> <span class="op">~</span> <span class="st">"**{level}**, N = {n}"</span><span class="op">)</span></span></code></pre></div>
+<p>For the survey summary, the unweighted variants are also available. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1366" class="external-link">#1366</a>)</p>
+</li>
+<li><p>Now using {ggstats} to plot regression model coefficients via <code><a href="../reference/plot.html">plot()</a></code> instead of {GGally}. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1367" class="external-link">#1367</a>)</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6.2" id="gtsummary-162">gtsummary 1.6.2<small>2022-09-30</small><a class="anchor" aria-label="anchor" href="#gtsummary-162"></a></h2>
 <ul><li>
@@ -709,18 +721,18 @@
 <h4 id="syntax-1-2-5">Syntax<a class="anchor" aria-label="anchor" href="#syntax-1-2-5"></a></h4>
 <ul><li>
 <p>Package-wide update allowing arguments that accept variable names to accept bare/symbol inputs, character inputs, stored character inputs, and tidyselect helpers. When passing a single variable, the <code><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars()</a></code> function wrapper is no longer required. (<a href="https://github.com/ddsjoberg/gtsummary/issues/250" class="external-link">#250</a>)</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> age <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="st">"age"</span> <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"trt"</span>) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">c</span>(age, trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(age, trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(<span class="fu">everything</span>(), <span class="sc">-</span>age, <span class="sc">-</span>trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>age_column <span class="ot">=</span> <span class="st">"age"</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> age_column <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(age_column) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">map</span>(<span class="fu">c</span>(<span class="st">"trt"</span>, <span class="st">"grade"</span>), <span class="sc">~</span><span class="fu">tbl_summary</span>(trial, <span class="at">by =</span> .x))</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> age <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="st">"age"</span> <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">c</span>(<span class="st">"age"</span>, <span class="st">"trt"</span>) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">c</span>(age, trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(age, trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(<span class="fu">everything</span>(), <span class="sc">-</span>age, <span class="sc">-</span>trt) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>age_column <span class="ot">=</span> <span class="st">"age"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> age_column <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)<span class="er">)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">tbl_summary</span>(trial, <span class="at">label =</span> <span class="fu">vars</span>(age_column) <span class="sc">~</span> <span class="st">"NEW LABEL"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">map</span>(<span class="fu">c</span>(<span class="st">"trt"</span>, <span class="st">"grade"</span>), <span class="sc">~</span><span class="fu">tbl_summary</span>(trial, <span class="at">by =</span> .x))</span></code></pre></div>
 </li>
 <li><p>Updated <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> to allow flexible tidyselect inputs and improved error messaging for arguments <code>x</code> and <code>y</code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/249" class="external-link">#249</a>)</p></li>
 <li><p>After the input updates in <a href="https://github.com/ddsjoberg/gtsummary/issues/250" class="external-link">#250</a>, the <code>exclude=</code> argument appearing in <code><a href="../reference/add_p.html">add_p()</a></code>, <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code>, <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>, <code><a href="../reference/as_gt.html">as_gt()</a></code>, <code><a href="../reference/as_kable.html">as_kable()</a></code>, and <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble()</a></code> was redundant. The <code>exclude=</code> argument is now deprecated. Use <code>include=</code> instead, with tidyselect syntax. (<a href="https://github.com/ddsjoberg/gtsummary/issues/331" class="external-link">#331</a>)</p></li>
@@ -811,7 +823,7 @@
 <li><p>The {gt} package is no longer a required dependency. If {gt} is not installed, tables will be printed with <code><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">knitr::kable()</a></code>. The <code><a href="../reference/as_kable.html">as_kable()</a></code> function was added to the package as well. (<a href="https://github.com/ddsjoberg/gtsummary/issues/180" class="external-link">#180</a>)</p></li>
 <li><p>The function <code><a href="../reference/as_gt.html">as_gt()</a></code> now has <code>include =</code> and <code>exclude =</code> arguments</p></li>
 <li><p>Updated some function names to be the same as they were in the first version</p></li>
-</ul><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+</ul><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span>    <span class="fu"><a href="../reference/bold_p.html">bold_p</a></span><span class="op">(</span><span class="op">)</span>            <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_p</span><span class="op">(</span><span class="op">)</span>  </span>
 <span>    <span class="fu"><a href="../reference/bold_italicize_labels_levels.html">bold_labels</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">tab_style_bold_labels</span><span class="op">(</span><span class="op">)</span>  </span>
@@ -847,7 +859,7 @@
 <p>First release since major re-factoring. The {gt} package is now used as the print engine to create all tables. Some function names have been modified to be more in line with other {gt} function calls, and additional functions have been added. The API for some functions has also been updated. Review documentation and vignettes for details.</p>
 <div class="section level4">
 <h4 id="updated-function-names-1-0-0">Updated Function Names<a class="anchor" aria-label="anchor" href="#updated-function-names-1-0-0"></a></h4>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span>    <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="op">)</span>       <span class="op">&lt;-</span>  <span class="fu">fmt_table1</span><span class="op">(</span><span class="op">)</span>  </span>
 <span>    <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="op">)</span>    <span class="op">&lt;-</span>  <span class="fu">fmt_regression</span><span class="op">(</span><span class="op">)</span>  </span>
@@ -858,9 +870,9 @@
 </div>
 <div class="section level4">
 <h4 id="new-functions-1-0-0">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-0-0"></a></h4>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tbl_survival</span>()          <span class="fu">as_gt</span>()  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tbl_merge</span>()             <span class="fu">style_sigfig</span>()  </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_nevent</span>()            <span class="fu">gtsummary_logo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tbl_survival</span>()          <span class="fu">as_gt</span>()  </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tbl_merge</span>()             <span class="fu">style_sigfig</span>()  </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_nevent</span>()            <span class="fu">gtsummary_logo</span>()</span></code></pre></div>
 </div>
 </div>
     <div class="section level2">
