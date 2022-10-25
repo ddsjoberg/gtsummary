@@ -89,7 +89,7 @@ test_that("Testing bold/italic markdown syntax in header", {
     path
   }
 
-  path <-
+  expect_snapshot_file(
     save_flextable_png(
       trial %>%
         tbl_summary(
@@ -99,6 +99,7 @@ test_that("Testing bold/italic markdown syntax in header", {
         add_p() %>%
         modify_header(all_stat_cols() ~ "**{level}**  \n_N = {n}_") %>%
         as_flex_table()
-    )
-  expect_snapshot_file(path, "bold-italic-flextable-header.png")
+    ),
+    "bold-italic-flextable-header.png"
+  )
 })
