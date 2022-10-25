@@ -25,8 +25,27 @@ test_that("input checks", {
     NA
   )
 
-  expect_error(tbl_summary_noby %>% modify_header(stat_0 = "N = {n}"))
+  expect_error(tbl_summary_noby %>% modify_header(stat_0 = "N = {n}"), NA)
   expect_message(tbl_summary_noby %>% modify_header(stat_1 = "N = {n}"))
+  expect_equal(
+    tbl_summary_by %>%
+      add_overall() %>%
+      modify_header(all_stat_cols() ~ "{level}, N = {n}/{N} ({style_percent(p)}%)") %>%
+      purrr::pluck("table_styling", "header") %>%
+      dplyr::filter(startsWith(column, "stat_")) %>%
+      dplyr::pull("label"),
+    c("Overall, N = 200/200 (100%)", "Drug A, N = 98/200 (49%)", "Drug B, N = 102/200 (51%)")
+  )
+
+  expect_equal(
+    tbl_svysummary_by %>%
+      add_overall() %>%
+      modify_header(all_stat_cols() ~ "{level}, N = {n}/{N} ({style_percent(p)}%)") %>%
+      purrr::pluck("table_styling", "header") %>%
+      dplyr::filter(startsWith(column, "stat_")) %>%
+      dplyr::pull("label"),
+    c("Overall, N = 2201/2201 (100%)", "No, N = 1490/2201 (68%)", "Yes, N = 711/2201 (32%)")
+  )
 
   # this is erring on R 3.6 only WTF??!
   # expect_error(

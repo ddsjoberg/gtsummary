@@ -1,6 +1,19 @@
 # gtsummary (development version)
 
-* Now using {ggstats} to plot regressin model coefficients via `plot()` instead of {GGally}. (#1367)
+* The `modify_cpation()` function now works with tables created with `gtreg::tbl_listing()` that do not contain a column named `"label"`. (#1358)
+
+* Functions `tbl_summary()` and `tbl_svysummary()` now support `"{n}"`, `"{p}"`, and `"{level}"` when no `by=` variable is present for use in functions like `modify_header()`. For example, the following previously invalid code works well for both the overall column and the stratified columns:
+
+  ```r
+  trial %>%
+    tbl_summary(by = trt) %>%
+    add_overall() %>%
+    modify_header(all_stat_cols() ~ "**{level}**, N = {n}")
+  ```
+  
+  For the survey summary, the unweighted variants are also available. (#1366)
+
+* Now using {ggstats} to plot regression model coefficients via `plot()` instead of {GGally}. (#1367)
 
 # gtsummary 1.6.2
 

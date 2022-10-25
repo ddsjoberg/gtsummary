@@ -237,6 +237,13 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
     modify_table_body(~bind_cols(.x, overall %>% select(c("stat_0"))))
 
   # fill in the Ns in the header table modify_stat_* columns
+  x$table_styling$header <-
+    x$table_styling$header %>%
+    dplyr::rows_update(
+      tbl_overall$table_styling$header %>%
+        dplyr::filter(.data$column %in% "stat_0"),
+      by = "column"
+    )
   x <- .fill_table_header_modify_stats(x)
 
   if (last == FALSE) {

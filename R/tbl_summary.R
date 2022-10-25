@@ -325,6 +325,15 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
         by = "column"
       )
   }
+  else {
+    x$table_styling$header <-
+      x$table_styling$header %>%
+      mutate(
+        modify_stat_n = .data$modify_stat_N,
+        modify_stat_p = .data$modify_stat_n / .data$modify_stat_N,
+        modify_stat_level = ifelse(.data$column %in% "stat_0", translate_text("Overall"), NA_character_)
+      )
+  }
 
   # adding headers and footnote ------------------------------------------------
   x <-
