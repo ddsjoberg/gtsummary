@@ -85,7 +85,7 @@ test_that("Testing bold/italic markdown syntax in header", {
   skip_on_os("mac")
   save_flextable_png <- function(x) {
     path <- tempfile(fileext = ".png")
-    flextable::save_as_image(x, path = path, webshot = "webshot2")
+    flextable::save_as_image(x, path = path, webshot = "webshot")
     path
   }
 
