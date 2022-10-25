@@ -6,9 +6,18 @@
 #' useful when combined with R markdown with Word output, since the gt package
 #' does not support Word.
 #'
+#' @details
+#' The `as_flex_table()` function supports bold and italic markdown syntax in column headers
+#' and spanning headers (`'**'` and `'_'` only).
+#' Text wrapped in double stars (`'**bold**'`) will be made bold, and text between single
+#' underscores (`'_italic_'`) will be made italic.
+#' No other markdown syntax is supported and the double-star and underscore cannot be combined.
+#' To further style your table, you may convert the table to flextable with
+#' `as_flex_table()`, then utilize any of the flextable functions.
+#'
+#' @param ... Not used
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
-#' @param strip_md_bold DEPRECATED
 #' @export
 #' @return A {flextable} object
 #' @family gtsummary output types
@@ -28,11 +37,12 @@
 #' \if{html}{\out{
 #' `r man_create_image_tag(file = "as_flex_table_ex1.png", width = "60")`
 #' }}
-as_flex_table <- function(x, include = everything(), return_calls = FALSE,
-                          strip_md_bold = NULL) {
+as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) {
   # deprecated arguments -------------------------------------------------------
-  if (!is.null(strip_md_bold)) {
+  dots <- rlang::dots_list(...)
+  if (!is.null(dots$strip_md_bold)) {
     lifecycle::deprecate_warn("1.6.0", "gtsummary::as_flex_table(strip_md_bold=)")
+    dots <- utils::modifyList(dots, val = list(strip_md_bold = NULL), keep.null = FALSE)
   }
 
   .assert_class(x, "gtsummary")
@@ -44,14 +54,6 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE,
 
   # converting row specifications to row numbers, and removing old cmds --------
   x <- .table_styling_expr_to_row_number(x)
-
-  # stripping markdown asterisk ------------------------------------------------
-  x$table_styling$header <-
-    x$table_styling$header %>%
-    mutate_at(
-      vars("label", "spanning_header"),
-      ~ str_replace_all(., pattern = fixed("**"), replacement = fixed(""))
-    )
 
   # creating list of flextable calls -------------------------------------------
   flextable_calls <- table_styling_to_flextable_calls(x = x)
@@ -110,16 +112,13 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # flextable ------------------------------------------------------------------
   flextable_calls[["flextable"]] <- expr(flextable::flextable())
 
-  # set_header_labels ----------------------------------------------------------
+  # compose_header -------------------------------------------------------------
   col_labels <-
     x$table_styling$header %>%
-    filter(.data$hide == FALSE) %>%
-    select("column", "label") %>%
-    tibble::deframe()
+    filter(.data$hide == FALSE)
 
-  flextable_calls[["set_header_labels"]] <- expr(
-    flextable::set_header_labels(!!!col_labels)
-  )
+  flextable_calls[["compose_header"]] <-
+    .chr_with_md_to_ft_compose(x = col_labels$label, j = col_labels$column)
 
   # set_caption ----------------------------------------------------------------
   if (!is.null(x$table_styling$caption)) {
@@ -156,7 +155,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
       group_by(.data$spanning_header_id) %>%
       mutate(width = n()) %>%
       distinct() %>%
-      ungroup()
+      ungroup() %>%
+      mutate(
+        column_id = purrr::map2(spanning_header_id, width, ~seq(.x, .x + .y - 1L, by = 1L))
+      )
 
     flextable_calls[["add_header_row"]] <- list(
       expr(
@@ -167,6 +169,12 @@ table_styling_to_flextable_calls <- function(x, ...) {
         )
       )
     )
+
+    flextable_calls[["compose_header_row"]] <-
+      .chr_with_md_to_ft_compose(
+        x = df_header$spanning_header,
+        j = df_header$column_id
+      )
   }
 
   # align ----------------------------------------------------------------------
@@ -400,4 +408,47 @@ table_styling_to_flextable_calls <- function(x, ...) {
     )
 
   flextable_calls
+}
+
+
+
+
+.chr_with_md_to_ft_compose <- function(x, j, i = 1L, part = "header", break_chr = "@@@@@@@@@@@&@@@@@@@@@") {
+  purrr::map2(
+    .x = x, .y = j,
+    .f = function(x, j) {
+      x <-
+        stringr::str_replace_all(
+          x,
+          pattern = "\\*\\*(.*?)\\*\\*",
+          replacement = paste0(break_chr, "\\*\\*", "\\1", "\\*\\*", break_chr)
+        )
+
+      x <-
+        stringr::str_replace_all(
+          x,
+          pattern = "\\_(.*?)\\_",
+          replacement = paste0(break_chr, "\\_", "\\1", "\\_", break_chr)
+        )
+
+      stringr::str_split(x, pattern = break_chr) %>%
+        unlist() %>%
+        purrr::discard(~.=="") %>%
+        purrr::map(
+          function(.x) {
+            if (startsWith(.x, "**") && endsWith(.x, "**"))
+              .x <-
+                stringr::str_replace_all(.x, pattern = "\\*\\*(.*?)\\*\\*", replacement = "\\1") %>%
+                {rlang::expr(flextable::as_b(!!.))}
+            else if (startsWith(.x, "_") && endsWith(.x, "_"))
+              .x <-
+                stringr::str_replace_all(.x, pattern = "\\_(.*?)\\_", replacement = "\\1") %>%
+                {rlang::expr(flextable::as_i(!!.))}
+
+            return(.x)
+          }
+        ) %>%
+        {rlang::expr(flextable::compose(part = !!part, i = !!i, j = !!j, value = flextable::as_paragraph(!!!.)))}
+    }
+  )
 }
