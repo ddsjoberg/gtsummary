@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9003</span>
       </span>
     </div>
 
@@ -94,7 +94,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>The <code>modify_cpation()</code> function now works with tables created with <code>gtreg::tbl_listing()</code> that do not contain a column named <code>"label"</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1358" class="external-link">#1358</a>)</p></li>
+<ul><li><p>The <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> function now recognizes markdown bold (<code>**</code>) and italic (<code>_</code>) syntax in the headers and spanning headers. Restrictions apply. See help file for details. Users can no longer place sets of double stars and underscores <em>without</em> the text being formatted as markdown syntax. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1361" class="external-link">#1361</a>)</p></li>
+<li><p>The <code>modify_cpation()</code> function now works with tables created with <code>gtreg::tbl_listing()</code> that do not contain a column named <code>"label"</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1358" class="external-link">#1358</a>)</p></li>
 <li>
 <p>Functions <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> and <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> now support <code>"{n}"</code>, <code>"{p}"</code>, and <code>"{level}"</code> when no <code>by=</code> variable is present for use in functions like <code><a href="../reference/modify.html">modify_header()</a></code>. For example, the following previously invalid code works well for both the overall column and the stratified columns:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">

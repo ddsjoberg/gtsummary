@@ -27,7 +27,7 @@ does not support Word."><meta property="og:image" content="https://www.danieldsj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9003</span>
       </span>
     </div>
 
@@ -106,12 +106,7 @@ does not support Word.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_flex_table</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  return_calls <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  strip_md_bold <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">as_flex_table</span><span class="op">(</span><span class="va">x</span>, include <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span>, return_calls <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -133,8 +128,8 @@ Default is <code><a href="https://tidyselect.r-lib.org/reference/everything.html
 as a list of expressions.</p></dd>
 
 
-<dt>strip_md_bold</dt>
-<dd><p>DEPRECATED</p></dd>
+<dt>...</dt>
+<dd><p>Not used</p></dd>
 
 </dl></div>
     <div id="value">
@@ -142,6 +137,16 @@ as a list of expressions.</p></dd>
     
 
 <p>A flextable object</p>
+    </div>
+    <div id="details">
+    <h2>Details</h2>
+    <p>The <code>as_flex_table()</code> function supports bold and italic markdown syntax in column headers
+and spanning headers (<code>'**'</code> and <code>'_'</code> only).
+Text wrapped in double stars (<code>'**bold**'</code>) will be made bold, and text between single
+underscores (<code>'_italic_'</code>) will be made italic.
+No other markdown syntax is supported and the double-star and underscore cannot be combined.
+To further style your table, you may convert the table to flextable with
+<code>as_flex_table()</code>, then utilize any of the flextable functions.</p>
     </div>
     <div id="example-output">
     <h2>Example Output</h2>
