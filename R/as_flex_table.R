@@ -113,49 +113,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
   # compose_header -------------------------------------------------------------
   col_labels <-
     x$table_styling$header %>%
-    filter(.data$hide == FALSE) %>%
-    select("column", "label") %>%
-    tibble::deframe()
+    filter(.data$hide == FALSE)
 
-  break_chr <- "@@@@@@@@@@@@@@@@@@@@"
   flextable_calls[["compose_header"]] <-
-    col_labels %>%
-    purrr::imap(
-      function(header, column) {
-        header <-
-          stringr::str_replace_all(
-            header,
-            pattern = "\\*\\*(.*?)\\*\\*",
-            replacement = paste0(break_chr, "\\*\\*", "\\1", "\\*\\*", break_chr)
-          )
-
-        header <-
-          stringr::str_replace_all(
-            header,
-            pattern = "\\_(.*?)\\_",
-            replacement = paste0(break_chr, "\\_", "\\1", "\\_", break_chr)
-          )
-
-        stringr::str_split(header, pattern = break_chr) %>%
-          unlist() %>%
-          purrr::discard(~.=="") %>%
-          purrr::map(
-            function(x) {
-              if (startsWith(x, "**") && endsWith(x, "**"))
-                x <-
-                  stringr::str_replace_all(x, pattern = "\\*\\*(.*?)\\*\\*", replacement = "\\1") %>%
-                  {rlang::expr(flextable::as_b(!!.))}
-              else if (startsWith(x, "_") && endsWith(x, "_"))
-                x <-
-                  stringr::str_replace_all(x, pattern = "\\_(.*?)\\_", replacement = "\\1") %>%
-                  {rlang::expr(flextable::as_i(!!.))}
-
-              return(x)
-            }
-          ) %>%
-          {rlang::expr(flextable::compose(part = "header", j = !!column, value = flextable::as_paragraph(!!!.)))}
-      }
-    )
+    .chr_with_md_to_ft_compose(x = col_labels$label, j = col_labels$column)
 
   # set_caption ----------------------------------------------------------------
   if (!is.null(x$table_styling$caption)) {
@@ -192,7 +153,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
       group_by(.data$spanning_header_id) %>%
       mutate(width = n()) %>%
       distinct() %>%
-      ungroup()
+      ungroup() %>%
+      mutate(
+        column_id = purrr::map2(spanning_header_id, width, ~seq(.x, .x + .y - 1L, by = 1L))
+      )
 
     flextable_calls[["add_header_row"]] <- list(
       expr(
@@ -203,6 +167,12 @@ table_styling_to_flextable_calls <- function(x, ...) {
         )
       )
     )
+
+    flextable_calls[["compose_header_row"]] <-
+      .chr_with_md_to_ft_compose(
+        x = df_header$spanning_header,
+        j = df_header$column_id
+      )
   }
 
   # align ----------------------------------------------------------------------
@@ -436,4 +406,47 @@ table_styling_to_flextable_calls <- function(x, ...) {
     )
 
   flextable_calls
+}
+
+
+
+
+.chr_with_md_to_ft_compose <- function(x, j, i = 1L, part = "header", break_chr = "@@@@@@@@@@@@@@@@@@@@") {
+  purrr::map2(
+    .x = x, .y = j,
+    .f = function(x, j) {
+      x <-
+        stringr::str_replace_all(
+          x,
+          pattern = "\\*\\*(.*?)\\*\\*",
+          replacement = paste0(break_chr, "\\*\\*", "\\1", "\\*\\*", break_chr)
+        )
+
+      x <-
+        stringr::str_replace_all(
+          x,
+          pattern = "\\_(.*?)\\_",
+          replacement = paste0(break_chr, "\\_", "\\1", "\\_", break_chr)
+        )
+
+      stringr::str_split(x, pattern = break_chr) %>%
+        unlist() %>%
+        purrr::discard(~.=="") %>%
+        purrr::map(
+          function(.x) {
+            if (startsWith(.x, "**") && endsWith(.x, "**"))
+              .x <-
+                stringr::str_replace_all(.x, pattern = "\\*\\*(.*?)\\*\\*", replacement = "\\1") %>%
+                {rlang::expr(flextable::as_b(!!.))}
+            else if (startsWith(.x, "_") && endsWith(.x, "_"))
+              .x <-
+                stringr::str_replace_all(.x, pattern = "\\_(.*?)\\_", replacement = "\\1") %>%
+                {rlang::expr(flextable::as_i(!!.))}
+
+            return(.x)
+          }
+        ) %>%
+        {rlang::expr(flextable::compose(part = !!part, i = !!i, j = !!j, value = flextable::as_paragraph(!!!.)))}
+    }
+  )
 }
