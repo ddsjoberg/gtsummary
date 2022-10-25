@@ -246,10 +246,12 @@ modify_caption <- function(x, caption, text_interpret = c("md", "html")) {
   updated_call_list <- c(x$call_list, list(modify_caption = match.call()))
 
   # evaluating update with glue ------------------------------------------------
-  caption <- # eval on the label column stats
-    .eval_with_glue(x, list(label = caption)) %>%
-    unlist() %>%
-    unname()
+  if ("label" %in% x$table_styling$header$column) {
+    caption <- # eval on the label column stats
+      .eval_with_glue(x, list(label = caption)) %>%
+      unlist() %>%
+      unname()
+  }
 
   # adding caption to gtsummary object ----------------------------------------
   x$table_styling$caption <- caption
