@@ -22,8 +22,8 @@ gt.doc.images::save_help_file_images(pkg = "gtsummary", path.output = file.path(
 
 # document a single file with
 gt.doc.images::save_help_file_images(pkg = "gtsummary",
-                                     rd_files = "modify_column_merge.Rd",
-                                     path.output = file.path(path, "man-images"))
+                                     rd_files = "as_flex_table.Rd",
+                                     path.output = file.path(here::here(), "man-images"))
 
 # 5. Shrink png files
 gt.doc.images::shrink_help_file_images(pkg = "gtsummary", path.output = file.path(path, "man-images"))
