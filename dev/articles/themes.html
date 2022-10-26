@@ -49,7 +49,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9004</span>
       </span>
     </div>
 
@@ -134,18 +134,34 @@
 
     
     
-<p>It’s possible to set themes in {gtsummary}. The themes control many aspects of how a table is printed. Function defaults can be controlled with themes, as well as other aspects that are not modifiable with function arguments.</p>
-<p>The {gtsummary} package comes with a few themes, and we welcome user-contributed themes as well! Our focus is tables that are ready for publication and encourage themes that assist in that process; for example, the <code>theme_gtsummary_journal(journal = "jama")</code> theme sets defaults that align with the <a href="https://jamanetwork.com/journals/jama/pages/instructions-for-authors#SecTables" class="external-link">published guidelines</a> from the <em>Journal of the American Medical Association</em>—<em>JAMA</em>. The defaults in {gtsummary} were written to align with the reporting guidelines for <em>European Urology</em>, <em>The Journal of Urology</em>, <em>Urology</em>, and the <em>British Journal of Urology International</em>.</p>
+<p>It’s possible to set themes in {gtsummary}. The themes control many
+aspects of how a table is printed. Function defaults can be controlled
+with themes, as well as other aspects that are not modifiable with
+function arguments.</p>
+<p>The {gtsummary} package comes with a few themes, and we welcome
+user-contributed themes as well! Our focus is tables that are ready for
+publication and encourage themes that assist in that process; for
+example, the <code>theme_gtsummary_journal(journal = "jama")</code>
+theme sets defaults that align with the <a href="https://jamanetwork.com/journals/jama/pages/instructions-for-authors#SecTables" class="external-link">published
+guidelines</a> from the <em>Journal of the American Medical
+Association</em>—<em>JAMA</em>. The defaults in {gtsummary} were written
+to align with the reporting guidelines for <em>European Urology</em>,
+<em>The Journal of Urology</em>, <em>Urology</em>, and the <em>British
+Journal of Urology International</em>.</p>
 <div class="section level2">
 <h2 id="setting-themes">Setting Themes<a class="anchor" aria-label="anchor" href="#setting-themes"></a>
 </h2>
-<p>To set a pre-defined theme, simply include the theme function in a script or the R console.</p>
+<p>To set a pre-defined theme, simply include the theme function in a
+script or the R console.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/theme_gtsummary.html">theme_gtsummary_journal</a></span><span class="op">(</span>journal <span class="op">=</span> <span class="st">"jama"</span><span class="op">)</span></span></code></pre></div>
-<p>Use the <code><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code> function to set user-defined themes (more on that below).</p>
+<p>Use the <code><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code> function to set
+user-defined themes (more on that below).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme</a></span><span class="op">(</span><span class="va">my_custom_theme</span><span class="op">)</span></span></code></pre></div>
-<p>Themes must be set before you create the {gtsummary} tables. Let’s take a look at the default table, comparing data between treatment groups.</p>
+<p>Themes must be set before you create the {gtsummary} tables. Let’s
+take a look at the default table, comparing data between treatment
+groups.</p>
 <div class="section level4">
 <h4 id="default-theme">Default Theme<a class="anchor" aria-label="anchor" href="#default-theme"></a>
 </h4>
@@ -156,12 +172,12 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">trt</span>, <span class="va">age</span>, <span class="va">grade</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span>by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="../reference/add_p.html">add_p</a></span><span class="op">(</span><span class="op">)</span> </span></code></pre></div>
-<div id="dmudkgxesj" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="fbvkuetnmu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#dmudkgxesj .gt_table {
+#fbvkuetnmu .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -186,7 +202,7 @@
   border-left-color: #D3D3D3;
 }
 
-#dmudkgxesj .gt_heading {
+#fbvkuetnmu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -198,7 +214,7 @@
   border-right-color: #D3D3D3;
 }
 
-#dmudkgxesj .gt_title {
+#fbvkuetnmu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -210,7 +226,7 @@
   border-bottom-width: 0;
 }
 
-#dmudkgxesj .gt_subtitle {
+#fbvkuetnmu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -222,13 +238,13 @@
   border-top-width: 0;
 }
 
-#dmudkgxesj .gt_bottom_border {
+#fbvkuetnmu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#dmudkgxesj .gt_col_headings {
+#fbvkuetnmu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -243,7 +259,7 @@
   border-right-color: #D3D3D3;
 }
 
-#dmudkgxesj .gt_col_heading {
+#fbvkuetnmu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -263,7 +279,7 @@
   overflow-x: hidden;
 }
 
-#dmudkgxesj .gt_column_spanner_outer {
+#fbvkuetnmu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -275,15 +291,15 @@
   padding-right: 4px;
 }
 
-#dmudkgxesj .gt_column_spanner_outer:first-child {
+#fbvkuetnmu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#dmudkgxesj .gt_column_spanner_outer:last-child {
+#fbvkuetnmu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#dmudkgxesj .gt_column_spanner {
+#fbvkuetnmu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -295,7 +311,7 @@
   width: 100%;
 }
 
-#dmudkgxesj .gt_group_heading {
+#fbvkuetnmu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -320,7 +336,7 @@
   vertical-align: middle;
 }
 
-#dmudkgxesj .gt_empty_group_heading {
+#fbvkuetnmu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -335,15 +351,15 @@
   vertical-align: middle;
 }
 
-#dmudkgxesj .gt_from_md > :first-child {
+#fbvkuetnmu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#dmudkgxesj .gt_from_md > :last-child {
+#fbvkuetnmu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#dmudkgxesj .gt_row {
+#fbvkuetnmu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -362,7 +378,7 @@
   overflow-x: hidden;
 }
 
-#dmudkgxesj .gt_stub {
+#fbvkuetnmu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -375,7 +391,7 @@
   padding-right: 5px;
 }
 
-#dmudkgxesj .gt_stub_row_group {
+#fbvkuetnmu .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -389,11 +405,11 @@
   vertical-align: top;
 }
 
-#dmudkgxesj .gt_row_group_first td {
+#fbvkuetnmu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#dmudkgxesj .gt_summary_row {
+#fbvkuetnmu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -403,16 +419,16 @@
   padding-right: 5px;
 }
 
-#dmudkgxesj .gt_first_summary_row {
+#fbvkuetnmu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#dmudkgxesj .gt_first_summary_row.thick {
+#fbvkuetnmu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#dmudkgxesj .gt_last_summary_row {
+#fbvkuetnmu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -422,7 +438,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#dmudkgxesj .gt_grand_summary_row {
+#fbvkuetnmu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -432,7 +448,7 @@
   padding-right: 5px;
 }
 
-#dmudkgxesj .gt_first_grand_summary_row {
+#fbvkuetnmu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -442,11 +458,11 @@
   border-top-color: #D3D3D3;
 }
 
-#dmudkgxesj .gt_striped {
+#fbvkuetnmu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#dmudkgxesj .gt_table_body {
+#fbvkuetnmu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -455,7 +471,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#dmudkgxesj .gt_footnotes {
+#fbvkuetnmu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -469,7 +485,7 @@
   border-right-color: #D3D3D3;
 }
 
-#dmudkgxesj .gt_footnote {
+#fbvkuetnmu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -478,7 +494,7 @@
   padding-right: 5px;
 }
 
-#dmudkgxesj .gt_sourcenotes {
+#fbvkuetnmu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -492,7 +508,7 @@
   border-right-color: #D3D3D3;
 }
 
-#dmudkgxesj .gt_sourcenote {
+#fbvkuetnmu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -500,64 +516,64 @@
   padding-right: 5px;
 }
 
-#dmudkgxesj .gt_left {
+#fbvkuetnmu .gt_left {
   text-align: left;
 }
 
-#dmudkgxesj .gt_center {
+#fbvkuetnmu .gt_center {
   text-align: center;
 }
 
-#dmudkgxesj .gt_right {
+#fbvkuetnmu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#dmudkgxesj .gt_font_normal {
+#fbvkuetnmu .gt_font_normal {
   font-weight: normal;
 }
 
-#dmudkgxesj .gt_font_bold {
+#fbvkuetnmu .gt_font_bold {
   font-weight: bold;
 }
 
-#dmudkgxesj .gt_font_italic {
+#fbvkuetnmu .gt_font_italic {
   font-style: italic;
 }
 
-#dmudkgxesj .gt_super {
+#fbvkuetnmu .gt_super {
   font-size: 65%;
 }
 
-#dmudkgxesj .gt_footnote_marks {
+#fbvkuetnmu .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#dmudkgxesj .gt_asterisk {
+#fbvkuetnmu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#dmudkgxesj .gt_indent_1 {
+#fbvkuetnmu .gt_indent_1 {
   text-indent: 5px;
 }
 
-#dmudkgxesj .gt_indent_2 {
+#fbvkuetnmu .gt_indent_2 {
   text-indent: 10px;
 }
 
-#dmudkgxesj .gt_indent_3 {
+#fbvkuetnmu .gt_indent_3 {
   text-indent: 15px;
 }
 
-#dmudkgxesj .gt_indent_4 {
+#fbvkuetnmu .gt_indent_4 {
   text-indent: 20px;
 }
 
-#dmudkgxesj .gt_indent_5 {
+#fbvkuetnmu .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -632,12 +648,12 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/theme_gtsummary.html">theme_gtsummary_journal</a></span><span class="op">(</span>journal <span class="op">=</span> <span class="st">"jama"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Setting theme `JAMA`</span></span></code></pre></div>
-<div id="brsgdyjymw" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="vvxskkoigz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#brsgdyjymw .gt_table {
+#vvxskkoigz .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -662,7 +678,7 @@
   border-left-color: #D3D3D3;
 }
 
-#brsgdyjymw .gt_heading {
+#vvxskkoigz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -674,7 +690,7 @@
   border-right-color: #D3D3D3;
 }
 
-#brsgdyjymw .gt_title {
+#vvxskkoigz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -686,7 +702,7 @@
   border-bottom-width: 0;
 }
 
-#brsgdyjymw .gt_subtitle {
+#vvxskkoigz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -698,13 +714,13 @@
   border-top-width: 0;
 }
 
-#brsgdyjymw .gt_bottom_border {
+#vvxskkoigz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#brsgdyjymw .gt_col_headings {
+#vvxskkoigz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -719,7 +735,7 @@
   border-right-color: #D3D3D3;
 }
 
-#brsgdyjymw .gt_col_heading {
+#vvxskkoigz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -739,7 +755,7 @@
   overflow-x: hidden;
 }
 
-#brsgdyjymw .gt_column_spanner_outer {
+#vvxskkoigz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -751,15 +767,15 @@
   padding-right: 4px;
 }
 
-#brsgdyjymw .gt_column_spanner_outer:first-child {
+#vvxskkoigz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#brsgdyjymw .gt_column_spanner_outer:last-child {
+#vvxskkoigz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#brsgdyjymw .gt_column_spanner {
+#vvxskkoigz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -771,7 +787,7 @@
   width: 100%;
 }
 
-#brsgdyjymw .gt_group_heading {
+#vvxskkoigz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -796,7 +812,7 @@
   vertical-align: middle;
 }
 
-#brsgdyjymw .gt_empty_group_heading {
+#vvxskkoigz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -811,15 +827,15 @@
   vertical-align: middle;
 }
 
-#brsgdyjymw .gt_from_md > :first-child {
+#vvxskkoigz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#brsgdyjymw .gt_from_md > :last-child {
+#vvxskkoigz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#brsgdyjymw .gt_row {
+#vvxskkoigz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -838,7 +854,7 @@
   overflow-x: hidden;
 }
 
-#brsgdyjymw .gt_stub {
+#vvxskkoigz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -851,7 +867,7 @@
   padding-right: 5px;
 }
 
-#brsgdyjymw .gt_stub_row_group {
+#vvxskkoigz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -865,11 +881,11 @@
   vertical-align: top;
 }
 
-#brsgdyjymw .gt_row_group_first td {
+#vvxskkoigz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#brsgdyjymw .gt_summary_row {
+#vvxskkoigz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -879,16 +895,16 @@
   padding-right: 5px;
 }
 
-#brsgdyjymw .gt_first_summary_row {
+#vvxskkoigz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#brsgdyjymw .gt_first_summary_row.thick {
+#vvxskkoigz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#brsgdyjymw .gt_last_summary_row {
+#vvxskkoigz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -898,7 +914,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#brsgdyjymw .gt_grand_summary_row {
+#vvxskkoigz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -908,7 +924,7 @@
   padding-right: 5px;
 }
 
-#brsgdyjymw .gt_first_grand_summary_row {
+#vvxskkoigz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -918,11 +934,11 @@
   border-top-color: #D3D3D3;
 }
 
-#brsgdyjymw .gt_striped {
+#vvxskkoigz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#brsgdyjymw .gt_table_body {
+#vvxskkoigz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -931,7 +947,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#brsgdyjymw .gt_footnotes {
+#vvxskkoigz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -945,7 +961,7 @@
   border-right-color: #D3D3D3;
 }
 
-#brsgdyjymw .gt_footnote {
+#vvxskkoigz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -954,7 +970,7 @@
   padding-right: 5px;
 }
 
-#brsgdyjymw .gt_sourcenotes {
+#vvxskkoigz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -968,7 +984,7 @@
   border-right-color: #D3D3D3;
 }
 
-#brsgdyjymw .gt_sourcenote {
+#vvxskkoigz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -976,64 +992,64 @@
   padding-right: 5px;
 }
 
-#brsgdyjymw .gt_left {
+#vvxskkoigz .gt_left {
   text-align: left;
 }
 
-#brsgdyjymw .gt_center {
+#vvxskkoigz .gt_center {
   text-align: center;
 }
 
-#brsgdyjymw .gt_right {
+#vvxskkoigz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#brsgdyjymw .gt_font_normal {
+#vvxskkoigz .gt_font_normal {
   font-weight: normal;
 }
 
-#brsgdyjymw .gt_font_bold {
+#vvxskkoigz .gt_font_bold {
   font-weight: bold;
 }
 
-#brsgdyjymw .gt_font_italic {
+#vvxskkoigz .gt_font_italic {
   font-style: italic;
 }
 
-#brsgdyjymw .gt_super {
+#vvxskkoigz .gt_super {
   font-size: 65%;
 }
 
-#brsgdyjymw .gt_footnote_marks {
+#vvxskkoigz .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#brsgdyjymw .gt_asterisk {
+#vvxskkoigz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#brsgdyjymw .gt_indent_1 {
+#vvxskkoigz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#brsgdyjymw .gt_indent_2 {
+#vvxskkoigz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#brsgdyjymw .gt_indent_3 {
+#vvxskkoigz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#brsgdyjymw .gt_indent_4 {
+#vvxskkoigz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#brsgdyjymw .gt_indent_5 {
+#vvxskkoigz .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1092,23 +1108,27 @@
     </tr></tfoot>
 </table>
 </div>
-<p>By setting the theme, we were able to change the default formatting for the p-value and add a dash between the 25th and 75th percentiles.</p>
+<p>By setting the theme, we were able to change the default formatting
+for the p-value and add a dash between the 25th and 75th
+percentiles.</p>
 </div>
 <div class="section level4">
 <h4 id="jama-compact-theme">JAMA + Compact Theme<a class="anchor" aria-label="anchor" href="#jama-compact-theme"></a>
 </h4>
-<p>Themes can be stacked as well. In the example below, the JAMA theme and the compact theme (reduces font size and cell padding) are both called and both themes are utilized.</p>
+<p>Themes can be stacked as well. In the example below, the JAMA theme
+and the compact theme (reduces font size and cell padding) are both
+called and both themes are utilized.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/theme_gtsummary.html">theme_gtsummary_journal</a></span><span class="op">(</span>journal <span class="op">=</span> <span class="st">"jama"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Setting theme `JAMA`</span></span>
 <span><span class="fu"><a href="../reference/theme_gtsummary.html">theme_gtsummary_compact</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Setting theme `Compact`</span></span></code></pre></div>
-<div id="vqwtvjoemd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="kflammagvg" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#vqwtvjoemd .gt_table {
+#kflammagvg .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1133,7 +1153,7 @@
   border-left-color: #D3D3D3;
 }
 
-#vqwtvjoemd .gt_heading {
+#kflammagvg .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1145,7 +1165,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vqwtvjoemd .gt_title {
+#kflammagvg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1157,7 +1177,7 @@
   border-bottom-width: 0;
 }
 
-#vqwtvjoemd .gt_subtitle {
+#kflammagvg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1169,13 +1189,13 @@
   border-top-width: 0;
 }
 
-#vqwtvjoemd .gt_bottom_border {
+#kflammagvg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vqwtvjoemd .gt_col_headings {
+#kflammagvg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1190,7 +1210,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vqwtvjoemd .gt_col_heading {
+#kflammagvg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1210,7 +1230,7 @@
   overflow-x: hidden;
 }
 
-#vqwtvjoemd .gt_column_spanner_outer {
+#kflammagvg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1222,15 +1242,15 @@
   padding-right: 4px;
 }
 
-#vqwtvjoemd .gt_column_spanner_outer:first-child {
+#kflammagvg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vqwtvjoemd .gt_column_spanner_outer:last-child {
+#kflammagvg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vqwtvjoemd .gt_column_spanner {
+#kflammagvg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1242,7 +1262,7 @@
   width: 100%;
 }
 
-#vqwtvjoemd .gt_group_heading {
+#kflammagvg .gt_group_heading {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1267,7 +1287,7 @@
   vertical-align: middle;
 }
 
-#vqwtvjoemd .gt_empty_group_heading {
+#kflammagvg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1282,15 +1302,15 @@
   vertical-align: middle;
 }
 
-#vqwtvjoemd .gt_from_md > :first-child {
+#kflammagvg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vqwtvjoemd .gt_from_md > :last-child {
+#kflammagvg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vqwtvjoemd .gt_row {
+#kflammagvg .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1309,7 +1329,7 @@
   overflow-x: hidden;
 }
 
-#vqwtvjoemd .gt_stub {
+#kflammagvg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1322,7 +1342,7 @@
   padding-right: 5px;
 }
 
-#vqwtvjoemd .gt_stub_row_group {
+#kflammagvg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1336,11 +1356,11 @@
   vertical-align: top;
 }
 
-#vqwtvjoemd .gt_row_group_first td {
+#kflammagvg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vqwtvjoemd .gt_summary_row {
+#kflammagvg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1350,16 +1370,16 @@
   padding-right: 5px;
 }
 
-#vqwtvjoemd .gt_first_summary_row {
+#kflammagvg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vqwtvjoemd .gt_first_summary_row.thick {
+#kflammagvg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vqwtvjoemd .gt_last_summary_row {
+#kflammagvg .gt_last_summary_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1369,7 +1389,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#vqwtvjoemd .gt_grand_summary_row {
+#kflammagvg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1379,7 +1399,7 @@
   padding-right: 5px;
 }
 
-#vqwtvjoemd .gt_first_grand_summary_row {
+#kflammagvg .gt_first_grand_summary_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1389,11 +1409,11 @@
   border-top-color: #D3D3D3;
 }
 
-#vqwtvjoemd .gt_striped {
+#kflammagvg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vqwtvjoemd .gt_table_body {
+#kflammagvg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1402,7 +1422,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#vqwtvjoemd .gt_footnotes {
+#kflammagvg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1416,7 +1436,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vqwtvjoemd .gt_footnote {
+#kflammagvg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 1px;
@@ -1425,7 +1445,7 @@
   padding-right: 5px;
 }
 
-#vqwtvjoemd .gt_sourcenotes {
+#kflammagvg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1439,7 +1459,7 @@
   border-right-color: #D3D3D3;
 }
 
-#vqwtvjoemd .gt_sourcenote {
+#kflammagvg .gt_sourcenote {
   font-size: 90%;
   padding-top: 1px;
   padding-bottom: 1px;
@@ -1447,64 +1467,64 @@
   padding-right: 5px;
 }
 
-#vqwtvjoemd .gt_left {
+#kflammagvg .gt_left {
   text-align: left;
 }
 
-#vqwtvjoemd .gt_center {
+#kflammagvg .gt_center {
   text-align: center;
 }
 
-#vqwtvjoemd .gt_right {
+#kflammagvg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vqwtvjoemd .gt_font_normal {
+#kflammagvg .gt_font_normal {
   font-weight: normal;
 }
 
-#vqwtvjoemd .gt_font_bold {
+#kflammagvg .gt_font_bold {
   font-weight: bold;
 }
 
-#vqwtvjoemd .gt_font_italic {
+#kflammagvg .gt_font_italic {
   font-style: italic;
 }
 
-#vqwtvjoemd .gt_super {
+#kflammagvg .gt_super {
   font-size: 65%;
 }
 
-#vqwtvjoemd .gt_footnote_marks {
+#kflammagvg .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#vqwtvjoemd .gt_asterisk {
+#kflammagvg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vqwtvjoemd .gt_indent_1 {
+#kflammagvg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vqwtvjoemd .gt_indent_2 {
+#kflammagvg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vqwtvjoemd .gt_indent_3 {
+#kflammagvg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vqwtvjoemd .gt_indent_4 {
+#kflammagvg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vqwtvjoemd .gt_indent_5 {
+#kflammagvg .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1567,13 +1587,14 @@
 <div class="section level4">
 <h4 id="jama-compact-language-theme">JAMA + Compact + Language Theme<a class="anchor" aria-label="anchor" href="#jama-compact-language-theme"></a>
 </h4>
-<p>All {gtsummary} tables can be translated into another language using <code><a href="../reference/theme_gtsummary.html">theme_gtsummary_language()</a></code>!</p>
-<div id="hdbfllmfpi" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<p>All {gtsummary} tables can be translated into another language using
+<code><a href="../reference/theme_gtsummary.html">theme_gtsummary_language()</a></code>!</p>
+<div id="flbfisleva" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#hdbfllmfpi .gt_table {
+#flbfisleva .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1598,7 +1619,7 @@
   border-left-color: #D3D3D3;
 }
 
-#hdbfllmfpi .gt_heading {
+#flbfisleva .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1610,7 +1631,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hdbfllmfpi .gt_title {
+#flbfisleva .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1622,7 +1643,7 @@
   border-bottom-width: 0;
 }
 
-#hdbfllmfpi .gt_subtitle {
+#flbfisleva .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1634,13 +1655,13 @@
   border-top-width: 0;
 }
 
-#hdbfllmfpi .gt_bottom_border {
+#flbfisleva .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hdbfllmfpi .gt_col_headings {
+#flbfisleva .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1655,7 +1676,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hdbfllmfpi .gt_col_heading {
+#flbfisleva .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1675,7 +1696,7 @@
   overflow-x: hidden;
 }
 
-#hdbfllmfpi .gt_column_spanner_outer {
+#flbfisleva .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1687,15 +1708,15 @@
   padding-right: 4px;
 }
 
-#hdbfllmfpi .gt_column_spanner_outer:first-child {
+#flbfisleva .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hdbfllmfpi .gt_column_spanner_outer:last-child {
+#flbfisleva .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hdbfllmfpi .gt_column_spanner {
+#flbfisleva .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1707,7 +1728,7 @@
   width: 100%;
 }
 
-#hdbfllmfpi .gt_group_heading {
+#flbfisleva .gt_group_heading {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1732,7 +1753,7 @@
   vertical-align: middle;
 }
 
-#hdbfllmfpi .gt_empty_group_heading {
+#flbfisleva .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1747,15 +1768,15 @@
   vertical-align: middle;
 }
 
-#hdbfllmfpi .gt_from_md > :first-child {
+#flbfisleva .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hdbfllmfpi .gt_from_md > :last-child {
+#flbfisleva .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hdbfllmfpi .gt_row {
+#flbfisleva .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1774,7 +1795,7 @@
   overflow-x: hidden;
 }
 
-#hdbfllmfpi .gt_stub {
+#flbfisleva .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1787,7 +1808,7 @@
   padding-right: 5px;
 }
 
-#hdbfllmfpi .gt_stub_row_group {
+#flbfisleva .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1801,11 +1822,11 @@
   vertical-align: top;
 }
 
-#hdbfllmfpi .gt_row_group_first td {
+#flbfisleva .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hdbfllmfpi .gt_summary_row {
+#flbfisleva .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1815,16 +1836,16 @@
   padding-right: 5px;
 }
 
-#hdbfllmfpi .gt_first_summary_row {
+#flbfisleva .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hdbfllmfpi .gt_first_summary_row.thick {
+#flbfisleva .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hdbfllmfpi .gt_last_summary_row {
+#flbfisleva .gt_last_summary_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1834,7 +1855,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#hdbfllmfpi .gt_grand_summary_row {
+#flbfisleva .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1844,7 +1865,7 @@
   padding-right: 5px;
 }
 
-#hdbfllmfpi .gt_first_grand_summary_row {
+#flbfisleva .gt_first_grand_summary_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1854,11 +1875,11 @@
   border-top-color: #D3D3D3;
 }
 
-#hdbfllmfpi .gt_striped {
+#flbfisleva .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hdbfllmfpi .gt_table_body {
+#flbfisleva .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1867,7 +1888,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#hdbfllmfpi .gt_footnotes {
+#flbfisleva .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1881,7 +1902,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hdbfllmfpi .gt_footnote {
+#flbfisleva .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 1px;
@@ -1890,7 +1911,7 @@
   padding-right: 5px;
 }
 
-#hdbfllmfpi .gt_sourcenotes {
+#flbfisleva .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1904,7 +1925,7 @@
   border-right-color: #D3D3D3;
 }
 
-#hdbfllmfpi .gt_sourcenote {
+#flbfisleva .gt_sourcenote {
   font-size: 90%;
   padding-top: 1px;
   padding-bottom: 1px;
@@ -1912,64 +1933,64 @@
   padding-right: 5px;
 }
 
-#hdbfllmfpi .gt_left {
+#flbfisleva .gt_left {
   text-align: left;
 }
 
-#hdbfllmfpi .gt_center {
+#flbfisleva .gt_center {
   text-align: center;
 }
 
-#hdbfllmfpi .gt_right {
+#flbfisleva .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hdbfllmfpi .gt_font_normal {
+#flbfisleva .gt_font_normal {
   font-weight: normal;
 }
 
-#hdbfllmfpi .gt_font_bold {
+#flbfisleva .gt_font_bold {
   font-weight: bold;
 }
 
-#hdbfllmfpi .gt_font_italic {
+#flbfisleva .gt_font_italic {
   font-style: italic;
 }
 
-#hdbfllmfpi .gt_super {
+#flbfisleva .gt_super {
   font-size: 65%;
 }
 
-#hdbfllmfpi .gt_footnote_marks {
+#flbfisleva .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#hdbfllmfpi .gt_asterisk {
+#flbfisleva .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hdbfllmfpi .gt_indent_1 {
+#flbfisleva .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hdbfllmfpi .gt_indent_2 {
+#flbfisleva .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hdbfllmfpi .gt_indent_3 {
+#flbfisleva .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hdbfllmfpi .gt_indent_4 {
+#flbfisleva .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hdbfllmfpi .gt_indent_5 {
+#flbfisleva .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2028,7 +2049,8 @@
     </tr></tfoot>
 </table>
 </div>
-<p><em>Clear all previously set themes using</em> <code><a href="../reference/set_gtsummary_theme.html">reset_gtsummary_theme()</a></code>.</p>
+<p><em>Clear all previously set themes using</em>
+<code><a href="../reference/set_gtsummary_theme.html">reset_gtsummary_theme()</a></code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/set_gtsummary_theme.html">reset_gtsummary_theme</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -2039,7 +2061,11 @@
 <div class="section level3">
 <h3 id="theme-structure">Theme Structure<a class="anchor" aria-label="anchor" href="#theme-structure"></a>
 </h3>
-<p>There are many parts of a {gtsummary} table that may be controlled with theme elements. To construct a personalized theme, create a named list of at least one theme element. Here’s an example of a theme that modifies the function that styles p-values and updates the default statistics reported in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>.</p>
+<p>There are many parts of a {gtsummary} table that may be controlled
+with theme elements. To construct a personalized theme, create a named
+list of at least one theme element. Here’s an example of a theme that
+modifies the function that styles p-values and updates the default
+statistics reported in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_theme</span> <span class="op">&lt;-</span>   </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -2050,21 +2076,29 @@
 <span>    <span class="st">"tbl_summary-str:continuous_stat"</span> <span class="op">=</span> <span class="st">"{median} ({p25} - {p75})"</span>,</span>
 <span>    <span class="st">"tbl_summary-str:categorical_stat"</span> <span class="op">=</span> <span class="st">"{n} ({p})"</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p>Once you create the theme, first check the structure using <code><a href="../reference/set_gtsummary_theme.html">check_gtsummary_theme()</a></code>. Then apply or set the theme with <code><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code>.</p>
+<p>Once you create the theme, first check the structure using
+<code><a href="../reference/set_gtsummary_theme.html">check_gtsummary_theme()</a></code>. Then apply or set the theme with
+<code><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme()</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/set_gtsummary_theme.html">set_gtsummary_theme</a></span><span class="op">(</span><span class="va">my_theme</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="theme-elements">Theme Elements<a class="anchor" aria-label="anchor" href="#theme-elements"></a>
 </h3>
-<p>Each theme element follows a naming structure: <code>"&lt;function name&gt;-&lt;input type&gt;:&lt;description&gt;"</code>. The function name is the function the change applies to, the input type specifies class or type of the theme element, and the description is brief text characterizing the theme element.</p>
-<p>Theme elements fall into two categories. The first is modifying internal behavior of the functions that is not directly controllable by function arguments.</p>
-<div id="kakuliivut" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<p>Each theme element follows a naming structure:
+<code>"&lt;function name&gt;-&lt;input type&gt;:&lt;description&gt;"</code>.
+The function name is the function the change applies to, the input type
+specifies class or type of the theme element, and the description is
+brief text characterizing the theme element.</p>
+<p>Theme elements fall into two categories. The first is modifying
+internal behavior of the functions that is not directly controllable by
+function arguments.</p>
+<div id="usimqpkjsd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#kakuliivut .gt_table {
+#usimqpkjsd .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2089,7 +2123,7 @@
   border-left-color: #D3D3D3;
 }
 
-#kakuliivut .gt_heading {
+#usimqpkjsd .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2101,7 +2135,7 @@
   border-right-color: #D3D3D3;
 }
 
-#kakuliivut .gt_title {
+#usimqpkjsd .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2113,7 +2147,7 @@
   border-bottom-width: 0;
 }
 
-#kakuliivut .gt_subtitle {
+#usimqpkjsd .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2125,13 +2159,13 @@
   border-top-width: 0;
 }
 
-#kakuliivut .gt_bottom_border {
+#usimqpkjsd .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kakuliivut .gt_col_headings {
+#usimqpkjsd .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2146,7 +2180,7 @@
   border-right-color: #D3D3D3;
 }
 
-#kakuliivut .gt_col_heading {
+#usimqpkjsd .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2166,7 +2200,7 @@
   overflow-x: hidden;
 }
 
-#kakuliivut .gt_column_spanner_outer {
+#usimqpkjsd .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2178,15 +2212,15 @@
   padding-right: 4px;
 }
 
-#kakuliivut .gt_column_spanner_outer:first-child {
+#usimqpkjsd .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kakuliivut .gt_column_spanner_outer:last-child {
+#usimqpkjsd .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kakuliivut .gt_column_spanner {
+#usimqpkjsd .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2198,7 +2232,7 @@
   width: 100%;
 }
 
-#kakuliivut .gt_group_heading {
+#usimqpkjsd .gt_group_heading {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -2223,7 +2257,7 @@
   vertical-align: middle;
 }
 
-#kakuliivut .gt_empty_group_heading {
+#usimqpkjsd .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2238,15 +2272,15 @@
   vertical-align: middle;
 }
 
-#kakuliivut .gt_from_md > :first-child {
+#usimqpkjsd .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kakuliivut .gt_from_md > :last-child {
+#usimqpkjsd .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kakuliivut .gt_row {
+#usimqpkjsd .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -2265,7 +2299,7 @@
   overflow-x: hidden;
 }
 
-#kakuliivut .gt_stub {
+#usimqpkjsd .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2278,7 +2312,7 @@
   padding-right: 5px;
 }
 
-#kakuliivut .gt_stub_row_group {
+#usimqpkjsd .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2292,11 +2326,11 @@
   vertical-align: top;
 }
 
-#kakuliivut .gt_row_group_first td {
+#usimqpkjsd .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kakuliivut .gt_summary_row {
+#usimqpkjsd .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2306,16 +2340,16 @@
   padding-right: 5px;
 }
 
-#kakuliivut .gt_first_summary_row {
+#usimqpkjsd .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kakuliivut .gt_first_summary_row.thick {
+#usimqpkjsd .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kakuliivut .gt_last_summary_row {
+#usimqpkjsd .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2325,7 +2359,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#kakuliivut .gt_grand_summary_row {
+#usimqpkjsd .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2335,7 +2369,7 @@
   padding-right: 5px;
 }
 
-#kakuliivut .gt_first_grand_summary_row {
+#usimqpkjsd .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2345,11 +2379,11 @@
   border-top-color: #D3D3D3;
 }
 
-#kakuliivut .gt_striped {
+#usimqpkjsd .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kakuliivut .gt_table_body {
+#usimqpkjsd .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2358,7 +2392,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#kakuliivut .gt_footnotes {
+#usimqpkjsd .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2372,7 +2406,7 @@
   border-right-color: #D3D3D3;
 }
 
-#kakuliivut .gt_footnote {
+#usimqpkjsd .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -2381,7 +2415,7 @@
   padding-right: 5px;
 }
 
-#kakuliivut .gt_sourcenotes {
+#usimqpkjsd .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2395,7 +2429,7 @@
   border-right-color: #D3D3D3;
 }
 
-#kakuliivut .gt_sourcenote {
+#usimqpkjsd .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2403,64 +2437,64 @@
   padding-right: 5px;
 }
 
-#kakuliivut .gt_left {
+#usimqpkjsd .gt_left {
   text-align: left;
 }
 
-#kakuliivut .gt_center {
+#usimqpkjsd .gt_center {
   text-align: center;
 }
 
-#kakuliivut .gt_right {
+#usimqpkjsd .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kakuliivut .gt_font_normal {
+#usimqpkjsd .gt_font_normal {
   font-weight: normal;
 }
 
-#kakuliivut .gt_font_bold {
+#usimqpkjsd .gt_font_bold {
   font-weight: bold;
 }
 
-#kakuliivut .gt_font_italic {
+#usimqpkjsd .gt_font_italic {
   font-style: italic;
 }
 
-#kakuliivut .gt_super {
+#usimqpkjsd .gt_super {
   font-size: 65%;
 }
 
-#kakuliivut .gt_footnote_marks {
+#usimqpkjsd .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#kakuliivut .gt_asterisk {
+#usimqpkjsd .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kakuliivut .gt_indent_1 {
+#usimqpkjsd .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kakuliivut .gt_indent_2 {
+#usimqpkjsd .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kakuliivut .gt_indent_3 {
+#usimqpkjsd .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kakuliivut .gt_indent_4 {
+#usimqpkjsd .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kakuliivut .gt_indent_5 {
+#usimqpkjsd .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -2914,13 +2948,15 @@
 </tbody>
 </table>
 </div>
-<p>The second type of theme elements set function argument defaults. The values of these theme elements must align with the functions’ accepted input for the argument.</p>
-<div id="xcddvbdybz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<p>The second type of theme elements set function argument defaults. The
+values of these theme elements must align with the functions’ accepted
+input for the argument.</p>
+<div id="xmdfquakll" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#xcddvbdybz .gt_table {
+#xmdfquakll .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -2945,7 +2981,7 @@
   border-left-color: #D3D3D3;
 }
 
-#xcddvbdybz .gt_heading {
+#xmdfquakll .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2957,7 +2993,7 @@
   border-right-color: #D3D3D3;
 }
 
-#xcddvbdybz .gt_title {
+#xmdfquakll .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2969,7 +3005,7 @@
   border-bottom-width: 0;
 }
 
-#xcddvbdybz .gt_subtitle {
+#xmdfquakll .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2981,13 +3017,13 @@
   border-top-width: 0;
 }
 
-#xcddvbdybz .gt_bottom_border {
+#xmdfquakll .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#xcddvbdybz .gt_col_headings {
+#xmdfquakll .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3002,7 +3038,7 @@
   border-right-color: #D3D3D3;
 }
 
-#xcddvbdybz .gt_col_heading {
+#xmdfquakll .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3022,7 +3058,7 @@
   overflow-x: hidden;
 }
 
-#xcddvbdybz .gt_column_spanner_outer {
+#xmdfquakll .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3034,15 +3070,15 @@
   padding-right: 4px;
 }
 
-#xcddvbdybz .gt_column_spanner_outer:first-child {
+#xmdfquakll .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xcddvbdybz .gt_column_spanner_outer:last-child {
+#xmdfquakll .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xcddvbdybz .gt_column_spanner {
+#xmdfquakll .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3054,7 +3090,7 @@
   width: 100%;
 }
 
-#xcddvbdybz .gt_group_heading {
+#xmdfquakll .gt_group_heading {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -3079,7 +3115,7 @@
   vertical-align: middle;
 }
 
-#xcddvbdybz .gt_empty_group_heading {
+#xmdfquakll .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3094,15 +3130,15 @@
   vertical-align: middle;
 }
 
-#xcddvbdybz .gt_from_md > :first-child {
+#xmdfquakll .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xcddvbdybz .gt_from_md > :last-child {
+#xmdfquakll .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xcddvbdybz .gt_row {
+#xmdfquakll .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -3121,7 +3157,7 @@
   overflow-x: hidden;
 }
 
-#xcddvbdybz .gt_stub {
+#xmdfquakll .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3134,7 +3170,7 @@
   padding-right: 5px;
 }
 
-#xcddvbdybz .gt_stub_row_group {
+#xmdfquakll .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3148,11 +3184,11 @@
   vertical-align: top;
 }
 
-#xcddvbdybz .gt_row_group_first td {
+#xmdfquakll .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#xcddvbdybz .gt_summary_row {
+#xmdfquakll .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3162,16 +3198,16 @@
   padding-right: 5px;
 }
 
-#xcddvbdybz .gt_first_summary_row {
+#xmdfquakll .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#xcddvbdybz .gt_first_summary_row.thick {
+#xmdfquakll .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#xcddvbdybz .gt_last_summary_row {
+#xmdfquakll .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3181,7 +3217,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#xcddvbdybz .gt_grand_summary_row {
+#xmdfquakll .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3191,7 +3227,7 @@
   padding-right: 5px;
 }
 
-#xcddvbdybz .gt_first_grand_summary_row {
+#xmdfquakll .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3201,11 +3237,11 @@
   border-top-color: #D3D3D3;
 }
 
-#xcddvbdybz .gt_striped {
+#xmdfquakll .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#xcddvbdybz .gt_table_body {
+#xmdfquakll .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3214,7 +3250,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#xcddvbdybz .gt_footnotes {
+#xmdfquakll .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3228,7 +3264,7 @@
   border-right-color: #D3D3D3;
 }
 
-#xcddvbdybz .gt_footnote {
+#xmdfquakll .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -3237,7 +3273,7 @@
   padding-right: 5px;
 }
 
-#xcddvbdybz .gt_sourcenotes {
+#xmdfquakll .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3251,7 +3287,7 @@
   border-right-color: #D3D3D3;
 }
 
-#xcddvbdybz .gt_sourcenote {
+#xmdfquakll .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3259,64 +3295,64 @@
   padding-right: 5px;
 }
 
-#xcddvbdybz .gt_left {
+#xmdfquakll .gt_left {
   text-align: left;
 }
 
-#xcddvbdybz .gt_center {
+#xmdfquakll .gt_center {
   text-align: center;
 }
 
-#xcddvbdybz .gt_right {
+#xmdfquakll .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xcddvbdybz .gt_font_normal {
+#xmdfquakll .gt_font_normal {
   font-weight: normal;
 }
 
-#xcddvbdybz .gt_font_bold {
+#xmdfquakll .gt_font_bold {
   font-weight: bold;
 }
 
-#xcddvbdybz .gt_font_italic {
+#xmdfquakll .gt_font_italic {
   font-style: italic;
 }
 
-#xcddvbdybz .gt_super {
+#xmdfquakll .gt_super {
   font-size: 65%;
 }
 
-#xcddvbdybz .gt_footnote_marks {
+#xmdfquakll .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#xcddvbdybz .gt_asterisk {
+#xmdfquakll .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#xcddvbdybz .gt_indent_1 {
+#xmdfquakll .gt_indent_1 {
   text-indent: 5px;
 }
 
-#xcddvbdybz .gt_indent_2 {
+#xmdfquakll .gt_indent_2 {
   text-indent: 10px;
 }
 
-#xcddvbdybz .gt_indent_3 {
+#xmdfquakll .gt_indent_3 {
   text-indent: 15px;
 }
 
-#xcddvbdybz .gt_indent_4 {
+#xmdfquakll .gt_indent_4 {
   text-indent: 20px;
 }
 
-#xcddvbdybz .gt_indent_5 {
+#xmdfquakll .gt_indent_5 {
   text-indent: 25px;
 }
 </style>

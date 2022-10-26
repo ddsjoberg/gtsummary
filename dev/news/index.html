@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9004</span>
       </span>
     </div>
 
@@ -169,7 +169,8 @@
 <h4 id="improvements-to-as_kable_extra-1-6-0">Improvements to <code>as_kable_extra()</code>
 <a class="anchor" aria-label="anchor" href="#improvements-to-as_kable_extra-1-6-0"></a></h4>
 <ul><li>For users who used the default kableExtra print without output-specific formatting, there are no breaking changes…the only changes will be improved output styling.</li>
-<li>The biggest user-facing change is that the default results for <strong>LaTeX output</strong> are now greatly improved compared to previous releases, when <code>escape=FALSE</code> (the new default).<ul><li>Markdown bold, italic, and underline syntax in the headers, spanning headers, caption, and footnote will be converted to escaped LaTeX code.</li>
+<li>The biggest user-facing change is that the default results for <strong>LaTeX output</strong> are now greatly improved compared to previous releases, when <code>escape=FALSE</code> (the new default).
+<ul><li>Markdown bold, italic, and underline syntax in the headers, spanning headers, caption, and footnote will be converted to escaped LaTeX code.</li>
 <li>Special LaTeX characters in the body of the table will be escaped with <code><a href="../reference/kableExtra_utils.html">.escape_latex()</a></code> or <code><a href="../reference/kableExtra_utils.html">.escape_latex2()</a></code>, e.g. <code>%</code> will be updated to <code>\\%</code>, and rendered as <code>%</code> in the PDF document.</li>
 <li>The “” symbol will be recognized as a line break in the table headers, spanning headers, caption, and the table body.</li>
 <li>
@@ -185,7 +186,8 @@
 <li>
 <em>Breaking Change</em> The <code>strip_md_bold=</code> has been deprecated. The markdown syntax will automatically be stripped from headers, unless <code>escape = FALSE</code> and <code>format = "latex"</code>. In that case, the markdown syntax will be converted to LaTeX commands.</li>
 <li>
-<strong>HTML Updates</strong><ul><li>The default markdown syntax in the headers and spanning headers is removed.</li>
+<strong>HTML Updates</strong>
+<ul><li>The default markdown syntax in the headers and spanning headers is removed.</li>
 <li>Special characters in the table body, headers, spanning headers, caption, and footnote will be escaped with <code><a href="../reference/kableExtra_utils.html">.escape_html()</a></code>.</li>
 <li>The <code>"\n"</code> symbol is removed from the footnotes</li>
 </ul></li>
@@ -193,7 +195,8 @@
 <div class="section level4">
 <h4 id="improvements-to-as_flex_table-1-6-0">Improvements to <code>as_flex_table()</code>
 <a class="anchor" aria-label="anchor" href="#improvements-to-as_flex_table-1-6-0"></a></h4>
-<ul><li>Added support for markdown syntax in {flextable} header rows by utilizing the {ftExtra} package. If this package is installed and <code>options(gtsummary.use_ftExtra = TRUE)</code> has been set (or the equivalent theme element), the bold/italic markdown syntax found in the headers will be styled. Otherwise, the markdown syntax is stripped from the header rows. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1200" class="external-link">#1200</a>)</li></ul></div>
+<ul><li>Added support for markdown syntax in {flextable} header rows by utilizing the {ftExtra} package. If this package is installed and <code>options(gtsummary.use_ftExtra = TRUE)</code> has been set (or the equivalent theme element), the bold/italic markdown syntax found in the headers will be styled. Otherwise, the markdown syntax is stripped from the header rows. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1200" class="external-link">#1200</a>)</li>
+</ul></div>
 <div class="section level4">
 <h4 id="new-functions-1-6-0">New Functions<a class="anchor" aria-label="anchor" href="#new-functions-1-6-0"></a></h4>
 <ul><li><p>New function <code><a href="../reference/as_hux_table.html">as_hux_xlsx()</a></code> added to export a formatted {gtsummary} table directly to Excel.</p></li>
@@ -316,7 +319,8 @@
 </ul></div>
 <div class="section level4">
 <h4 id="breaking-changes-1-5-1">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-5-1"></a></h4>
-<ul><li>No longer exporting <code>assert_package()</code>. It has been migrated to {broom.helpers} and we now use <code><a href="https://larmarange.github.io/broom.helpers/reference/assert_package.html" class="external-link">broom.helpers::.assert_package()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1051" class="external-link">#1051</a>)</li></ul></div>
+<ul><li>No longer exporting <code>assert_package()</code>. It has been migrated to {broom.helpers} and we now use <code><a href="https://larmarange.github.io/broom.helpers/reference/assert_package.html" class="external-link">broom.helpers::.assert_package()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1051" class="external-link">#1051</a>)</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.5.0" id="gtsummary-150">gtsummary 1.5.0<small>2021-10-16</small><a class="anchor" aria-label="anchor" href="#gtsummary-150"></a></h2>
@@ -329,7 +333,8 @@
 <li>
 <p>New function <code><a href="../reference/tbl_custom_summary.html">tbl_custom_summary()</a></code> allowing to create a table of summary statistics using a custom summary function (<a href="https://github.com/ddsjoberg/gtsummary/issues/973" class="external-link">#973</a>, <a href="https://github.com/ddsjoberg/gtsummary/issues/976" class="external-link">#976</a>)</p>
 <ul><li>Set of helpers to be used with <code><a href="../reference/tbl_custom_summary.html">tbl_custom_summary()</a></code>: <code><a href="../reference/continuous_summary.html">continuous_summary()</a></code>, <code><a href="../reference/proportion_summary.html">proportion_summary()</a></code>, <code><a href="../reference/ratio_summary.html">ratio_summary()</a></code>
-</li></ul></li>
+</li>
+</ul></li>
 <li><p>New function <code><a href="../reference/deprecated.html">modify_cols_merge()</a></code> that can merge two or more columns in a {gtsummary} table. (<a href="https://github.com/ddsjoberg/gtsummary/issues/939" class="external-link">#939</a>)</p></li>
 <li><p>Added function <code><a href="../reference/tbl_butcher.html">tbl_butcher()</a></code> to reduce the size of a {gtsummary} table. After an object has been butchered, other {gtsummary} functions may not be able to execute on the object.</p></li>
 <li><p>Added new function <code><a href="../reference/custom_tidiers.html">tidy_robust()</a></code> that will add robust standard errors, confidence intervals, and p-values with <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. The function is a wrapper for <code>parameters::model_paramters()</code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/979" class="external-link">#979</a>)</p></li>
@@ -460,7 +465,8 @@
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3.7" id="gtsummary-137">gtsummary 1.3.7<small>2021-02-26</small><a class="anchor" aria-label="anchor" href="#gtsummary-137"></a></h2>
-<ul><li>No changes. Resubmitting to resolve CRAN quirk.</li></ul></div>
+<ul><li>No changes. Resubmitting to resolve CRAN quirk.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3.6" id="gtsummary-136">gtsummary 1.3.6<small>2021-01-08</small><a class="anchor" aria-label="anchor" href="#gtsummary-136"></a></h2>
 <div class="section level4">
@@ -705,7 +711,8 @@
 </div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.6" id="gtsummary-126">gtsummary 1.2.6<small>2020-02-13</small><a class="anchor" aria-label="anchor" href="#gtsummary-126"></a></h2>
-<ul><li>Bug fix for random effects regression model where coefficients were not exponentiated when requested. Using <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom.mixed::tidy()</a></code> rather than <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code> resolved issue.</li></ul></div>
+<ul><li>Bug fix for random effects regression model where coefficients were not exponentiated when requested. Using <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom.mixed::tidy()</a></code> rather than <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code> resolved issue.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.5" id="gtsummary-125">gtsummary 1.2.5<small>2020-02-11</small><a class="anchor" aria-label="anchor" href="#gtsummary-125"></a></h2>
 <div class="section level4">
