@@ -58,7 +58,7 @@
 #' @param add_estimate_to_reference_rows add a reference value. Default is FALSE
 #' @param conf.int Logical indicating whether or not to include a confidence
 #' interval in the output. Defaults to `TRUE`.
-#' @param ... Not used
+#' @param ... Additional arguments passed to [broom.helpers::tidy_plus_plus()]
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
@@ -117,7 +117,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
                                    tidy_fun = NULL,
                                    add_estimate_to_reference_rows = FALSE,
                                    conf.int = NULL, ...) {
-  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
+  # check_dots_empty(error = function(e) inform(c(e$message, e$body)))
   # deprecated arguments -------------------------------------------------------
   .tbl_regression_deprecated_arguments(...)
 
@@ -170,7 +170,8 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
       label = label, show_single_row = !!show_single_row,
       include = !!include,
       add_estimate_to_reference_rows = add_estimate_to_reference_rows,
-      conf.int = conf.int
+      conf.int = conf.int,
+      ...
     )
 
   # saving evaluated `label`, `show_single_row`, and `include` -----------------
@@ -267,7 +268,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   x
 }
 
-.tbl_regression_deprecated_arguments <- function(show_yesno = NULL, exclude = NULL) {
+.tbl_regression_deprecated_arguments <- function(show_yesno = NULL, exclude = NULL, ...) {
   if (!is.null(show_yesno)) {
     lifecycle::deprecate_stop(
       "1.2.2", "tbl_regression(show_yesno = )",

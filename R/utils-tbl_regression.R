@@ -1,7 +1,7 @@
 # prepares the tidy object to be printed with broom.helpers
 tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
                       show_single_row, include, add_estimate_to_reference_rows,
-                      conf.int) {
+                      conf.int, ...) {
   # quoting inputs
   label <- rlang::enquo(label)
   show_single_row <- rlang::enquo(show_single_row)
@@ -11,6 +11,9 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
   tidy_plus_plus_args <-
     get_theme_element("tbl_regression-lst:tidy_plus_plus", default = list()) %>%
     c(list(add_header_rows = TRUE))
+
+  # append with ...
+  tidy_plus_plus_args <- append(tidy_plus_plus_args, list(...))
 
   # keeping the first arg listed if duplicated (first is the user-specified one)
   tidy_plus_plus_args <-
