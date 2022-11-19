@@ -588,6 +588,8 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
     switch (!is.null(by), by),
     switch (summary_type %in% c("categorical", "dichotomous"), variable)
   )
+  full_data <- data # include missing and ungrouped
+
   data <- data %>%
     dplyr::filter(!is.na(.data[[variable]])) %>%
     dplyr::group_by(dplyr::across(all_of(group_vars)), .drop = FALSE)
@@ -596,7 +598,7 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
   df_stats <- data %>%
     dplyr::group_modify(
       stat_fn,
-      full_data = data,
+      full_data = full_data,
       variable = variable,
       by = by,
       type = summary_type,
