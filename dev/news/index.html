@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.2.9005</span>
       </span>
     </div>
 
@@ -107,6 +107,7 @@
 <p>For the survey summary, the unweighted variants are also available. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1366" class="external-link">#1366</a>)</p>
 </li>
 <li><p>Now using {ggstats} to plot regression model coefficients via <code><a href="../reference/plot.html">plot()</a></code> instead of {GGally}. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1367" class="external-link">#1367</a>)</p></li>
+<li><p>Bug fix in <code><a href="../reference/tbl_custom_summary.html">tbl_custom_summary()</a></code>: the full dataset (including missing observations) is now properly passed as <code>full_data</code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/1388" class="external-link">#1388</a>)</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.6.2" id="gtsummary-162">gtsummary 1.6.2<small>2022-09-30</small><a class="anchor" aria-label="anchor" href="#gtsummary-162"></a></h2>
@@ -409,7 +410,7 @@
 <ul><li><p>Added new function <code><a href="../reference/add_glance.html">add_glance_table()</a></code> as a companion to <code><a href="../reference/add_glance.html">add_glance_source_note()</a></code>. Function adds model statistics, such as R-squared, to the bottom of the model summary table.</p></li>
 <li><p>Added new function <code><a href="../reference/add_significance_stars.html">add_significance_stars()</a></code> adding star indicators to significant estimates and an explanatory footnote.</p></li>
 <li><p>Added new function <code><a href="../reference/tbl_strata.html">tbl_strata()</a></code>. The function aids prepares gtsummary tables stratified by one or more variables (<a href="https://github.com/ddsjoberg/gtsummary/issues/679" class="external-link">#679</a>)</p></li>
-<li><p>Adding coefficient <code><a href="../reference/plot.html">plot()</a></code> methods for <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. Function creates a forest plot of model coefficients via <code><a href="https://ggobi.github.io/ggally/reference/ggcoef_model.html" class="external-link">GGally::ggcoef_plot()</a></code>.</p></li>
+<li><p>Adding coefficient <code><a href="../reference/plot.html">plot()</a></code> methods for <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code>. Function creates a forest plot of model coefficients via <code>GGally::ggcoef_plot()</code>.</p></li>
 <li><p>New function <code><a href="../reference/modify_fmt_fun.html">modify_fmt_fun()</a></code> has been introduced to help update the functions that format numeric columns and rows in <code>.x$table_body</code>.</p></li>
 <li><p>New function introduced, <code><a href="../reference/modify_table_styling.html">modify_table_styling()</a></code>, to update printing instructions of tables. This function replaces <code><a href="../reference/modify_table_header.html">modify_table_header()</a></code>, which is now soft deprecated.</p></li>
 <li><p>Added function <code><a href="../reference/add_vif.html">add_vif()</a></code> to include variance inflation factors in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> output. (<a href="https://github.com/ddsjoberg/gtsummary/issues/717" class="external-link">#717</a>)</p></li>
