@@ -276,3 +276,21 @@ test_that("character summaries do not cause error", {
   )
 
 })
+
+test_that("full_data contains all observations including missing values", {
+  fn <- function(data, full_data, variable, ...) {
+    dplyr::tibble(
+      Nobs = nrow(data),
+      Ntot = nrow(full_data)
+    )
+  }
+
+  res <- tbl_custom_summary(
+    trial,
+    stat_fns = ~ fn,
+    statistic = ~ "{Nobs}/{Ntot}",
+    include = age
+  ) %>% as_tibble()
+
+  expect_equal(res[[2]][1], "189/200")
+})
