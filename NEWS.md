@@ -17,6 +17,8 @@
 
 * Now using {ggstats} to plot regression model coefficients via `plot()` instead of {GGally}. (#1367)
 
+* Bug fix in `tbl_custom_summary()`: the full dataset (including missing observations) is now properly passed as `full_data` (#1388)
+
 # gtsummary 1.6.2
 
 * The following updates were made to the indentation implementation for gt output:
