@@ -146,7 +146,7 @@ add_nevent.tbl_survfit <- function(x, ...) {
   updated_call_list <- c(x$call_list, list(add_nevent = match.call()))
 
   # checking survfit is a standard (not multi-state)
-  if (!purrr::every(x$meta_data$survfit, ~ identical(class(.x), "survfit"))) {
+  if (!purrr::every(x$meta_data$survfit, ~ rlang::is_empty(setdiff(class(.x), c("survfit", "survfit2"))))) {
     paste(
       "Each of the `survfit()` objects must have class 'survfit' only.",
       "Multi-state models are not supported by this function."

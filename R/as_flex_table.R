@@ -157,7 +157,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
       distinct() %>%
       ungroup() %>%
       mutate(
-        column_id = purrr::map2(spanning_header_id, width, ~seq(.x, .x + .y - 1L, by = 1L))
+        column_id = purrr::map2(.data$spanning_header_id, .data$width, ~seq(.x, .x + .y - 1L, by = 1L))
       )
 
     flextable_calls[["add_header_row"]] <- list(
