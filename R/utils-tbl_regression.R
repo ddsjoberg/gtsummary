@@ -10,10 +10,8 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
   # getting the default `tidy_plus_plus()` args
   tidy_plus_plus_args <-
     get_theme_element("tbl_regression-lst:tidy_plus_plus", default = list()) %>%
-    c(list(add_header_rows = TRUE))
-
-  # append with ...
-  tidy_plus_plus_args <- append(tidy_plus_plus_args, list(...))
+    c(list(add_header_rows = TRUE)) %>%
+    utils::modifyList(val = rlang::dots_list(...))
 
   # keeping the first arg listed if duplicated (first is the user-specified one)
   tidy_plus_plus_args <-
