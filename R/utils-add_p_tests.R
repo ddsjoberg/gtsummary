@@ -19,11 +19,11 @@ add_p_test_aov <- function(data, variable, by, ...) {
     dplyr::slice(1)
 }
 
-add_p_test_oneway.test <- function(data, variable, by, ...) {
+add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
   .superfluous_args(variable, ...)
 
   rlang::inject(
-    stats::oneway.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = !!data, ...)
+    stats::oneway.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = data, !!!test.args)
   ) %>%
     broom::tidy()
 }
