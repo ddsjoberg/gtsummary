@@ -1,8 +1,12 @@
 # gtsummary (development version)
 
+* Allowing for 'survfit' objects of class `survfit2` in `add_nevent.tbl_survfit()`. (#1389)
+
+* Added `oneway.test()` test to `add_p()`. (#1382)
+
 * The `as_flex_table()` function now recognizes markdown bold (`**`) and italic (`_`) syntax in the headers and spanning headers. Restrictions apply. See help file for details. Users can no longer place sets of double stars and underscores *without* the text being formatted as markdown syntax. (#1361)
 
-* The `modify_cpation()` function now works with tables created with `gtreg::tbl_listing()` that do not contain a column named `"label"`. (#1358)
+* The `modify_caption()` function now works with tables created with `gtreg::tbl_listing()` that do not contain a column named `"label"`. (#1358)
 
 * Functions `tbl_summary()` and `tbl_svysummary()` now support `"{n}"`, `"{p}"`, and `"{level}"` when no `by=` variable is present for use in functions like `modify_header()`. For example, the following previously invalid code works well for both the overall column and the stratified columns:
 
