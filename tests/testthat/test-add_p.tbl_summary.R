@@ -124,6 +124,7 @@ test_that("add_p works well", {
       add_p(test = list(
         vars(mpg) ~ "t.test",
         disp ~ "aov",
+        hp ~ "oneway.test",
         cyl ~ "chisq.test.no.correct"
       )),
     NA

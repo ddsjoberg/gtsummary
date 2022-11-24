@@ -179,7 +179,7 @@ tibble::tribble(
   gt::cols_label(select_helper = gt::md("**Select with Helpers**"),
                  varname = gt::md("**Select by Variable Name**"),
                  named_list = gt::md("**Select with Named List**")) %>%
-  gt::fmt_missing(columns = everything(), missing_text = "---") %>%
+  gt::sub_missing(columns = everything(), missing_text = "---") %>%
   gt::tab_options(table.font.size = "85%") %>%
   gt::cols_width(everything() ~ gt::px(390))
 ```
