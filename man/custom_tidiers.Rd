@@ -33,8 +33,7 @@ tidy_robust(
   exponentiate = FALSE,
   conf.level = 0.95,
   conf.int = TRUE,
-  vcov_estimation = NULL,
-  vcov_type = NULL,
+  vcov = "HC",
   vcov_args = NULL,
   ...,
   quiet = FALSE
@@ -72,7 +71,7 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
 
-\item{vcov_estimation, vcov_type, vcov_args}{arguments passed to
+\item{vcov, vcov_args}{arguments passed to
 \code{parameters::model_parameters()}}
 
 \item{pool.args}{named list of arguments passed to \code{mice::pool()} in
@@ -108,7 +107,7 @@ The tidier uses the output from \code{parameters::model_parameters()}, and
 merely takes the result and puts it in \code{broom::tidy()} format. To use this
 function with \code{tbl_regression()}, pass a function with the arguments for
 \code{tidy_robust()} populated. This is easily done using \code{purrr::partial()} e.g.
-\code{tbl_regression(tidy_fun = partial(tidy_robust, vcov_estimation = "CL"))}
+\code{tbl_regression(tidy_fun = partial(tidy_robust, vcov = "CL"))}
 \item \code{pool_and_tidy_mice()} tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object \emph{before} the model results
 have been pooled. See example.
