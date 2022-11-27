@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated the arguments in `tidy_robust()` to account for updates in {parameters}. (#1376)
+
 * Allowing for 'survfit' objects of class `survfit2` in `add_nevent.tbl_survfit()`. (#1389)
 
 * Added `oneway.test()` test to `add_p()`. (#1382)
