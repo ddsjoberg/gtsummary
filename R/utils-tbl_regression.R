@@ -11,7 +11,7 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
   tidy_plus_plus_args <-
     get_theme_element("tbl_regression-lst:tidy_plus_plus", default = list()) %>%
     c(list(add_header_rows = TRUE)) %>%
-    utils::modifyList(val = rlang::dots_list(...))
+    utils::modifyList(val = rlang::enquos(...))
 
   # keeping the first arg listed if duplicated (first is the user-specified one)
   tidy_plus_plus_args <-
@@ -44,7 +44,12 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
         attributes(.)[names(attributes(.)) %in% c("N_obs", "N_event", "coefficients_type", "coefficients_label")] %>%
           tibble::as_tibble()
       )
-    } %>%
+    }
+
+  if (!"header_row" %in% names(df_tidy))
+    df_tidy$header_row <- NA
+
+  df_tidy <- df_tidy %>%
     mutate(
       row_type = ifelse(.data$header_row | is.na(.data$header_row), "label", "level")
     )
