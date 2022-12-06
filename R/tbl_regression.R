@@ -267,14 +267,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
   x
 }
 
-.tbl_regression_deprecated_arguments <- function(show_yesno = NULL, exclude = NULL, ...) {
-  if (!is.null(show_yesno)) {
-    lifecycle::deprecate_stop(
-      "1.2.2", "tbl_regression(show_yesno = )",
-      "tbl_regression(show_single_row = )"
-    )
-  }
-
+.tbl_regression_deprecated_arguments <- function(exclude = NULL, ...) {
   if (!rlang::quo_is_null(rlang::enquo(exclude))) {
     lifecycle::deprecate_stop(
       "1.2.5",
