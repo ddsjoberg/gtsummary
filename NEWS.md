@@ -1,3 +1,5 @@
+# gtsummary (development version)
+
 # gtsummary 1.6.3
 
 * The `as_flex_table()` function now recognizes markdown bold (`**`) and italic (`_`) syntax in the headers and spanning headers. Restrictions apply. See help file for details. Users can no longer place sets of double stars and underscores *without* the text being formatted as markdown syntax. (#1361)
