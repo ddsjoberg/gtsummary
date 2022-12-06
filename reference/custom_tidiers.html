@@ -25,7 +25,7 @@ Collection of tidiers that can be utilized in gtsummary. See details below."><me
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.6.3</span>
       </span>
     </div>
 
@@ -125,8 +125,7 @@ Collection of tidiers that can be utilized in gtsummary. See details below.</p>
 <span>  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  vcov_estimation <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  vcov_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  vcov <span class="op">=</span> <span class="st">"HC"</span>,</span>
 <span>  vcov_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -176,7 +175,7 @@ interval in the tidied output. Defaults to <code>FALSE</code>.</p></dd>
 <code>FALSE</code></p></dd>
 
 
-<dt>vcov_estimation, vcov_type, vcov_args</dt>
+<dt>vcov, vcov_args</dt>
 <dd><p>arguments passed to
 <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code></p></dd>
 
@@ -188,7 +187,7 @@ interval in the tidied output. Defaults to <code>FALSE</code>.</p></dd>
 
 <dt>tidy_fun</dt>
 <dd><p>Option to specify a particular tidier function for the
-model. Default is to use <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy</a></code>, but if an error occurs
+model. Default is to use <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code>, but if an error occurs
 then tidying of the model is attempted with <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>,
 if installed.</p></dd>
 
@@ -213,7 +212,7 @@ The tidier uses the output from <code><a href="https://easystats.github.io/param
 merely takes the result and puts it in <code><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">broom::tidy()</a></code> format. To use this
 function with <code><a href="tbl_regression.html">tbl_regression()</a></code>, pass a function with the arguments for
 <code>tidy_robust()</code> populated. This is easily done using <code><a href="https://purrr.tidyverse.org/reference/partial.html" class="external-link">purrr::partial()</a></code> e.g.
-<code>tbl_regression(tidy_fun = partial(tidy_robust, vcov_estimation = "CL"))</code></p></li>
+<code>tbl_regression(tidy_fun = partial(tidy_robust, vcov = "CL"))</code></p></li>
 <li><p><code>pool_and_tidy_mice()</code> tidier to report models resulting from multiply imputed data
 using the mice package. Pass the mice model object <em>before</em> the model results
 have been pooled. See example.</p></li>
@@ -293,7 +292,7 @@ Use this tidier with <code>add_global_p(anova_fun = tidy_wald_test)</code></p></
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, Michael Curry, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
+  <p></p><p>Developed by <a href="https://www.danieldsjoberg.com/" class="external-link">Daniel D. Sjoberg</a>, <a href="https://joseph.larmarange.net/" class="external-link">Joseph Larmarange</a>, Michael Curry, <a href="http://www.jessicalavery.com/" class="external-link">Jessica Lavery</a>, Karissa Whiting, <a href="http://www.emilyzabor.com/" class="external-link">Emily C. Zabor</a>.</p>
 </div>
 
 <div class="pkgdown">
