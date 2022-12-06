@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Experimental new feature where additional arguments can be passed to `broom.helpers::tidy_plus_plus()` via `tbl_regression(...)`. (#1383)
+
 * Updated the arguments in `tidy_robust()` to account for updates in {parameters}. (#1376)
 
 * Allowing for 'survfit' objects of class `survfit2` in `add_nevent.tbl_survfit()`. (#1389)
