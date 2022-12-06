@@ -269,7 +269,7 @@ test_that("cmprsk::crr models message", {
 test_that("NSE args could be passed to tidy_plus_plus()", {
   mod <- glm(response ~ age + trt + stage + grade, data = trial, family = binomial)
   expect_error(
-    res <- mod |>
+    res <- mod %>%
       tbl_regression(
         exponentiate = TRUE,
         no_reference_row = c(starts_with("s"), grade)
@@ -287,7 +287,7 @@ test_that("NSE args could be passed to tidy_plus_plus()", {
 test_that("`add_header_rows = FALSE` could be passed to tidy_plus_plus()", {
   mod <- glm(response ~ age + trt + stage + grade, data = trial, family = binomial)
   expect_error(
-    res <- mod |>
+    res <- mod %>%
       tbl_regression(
         add_header_rows = FALSE
       ),
