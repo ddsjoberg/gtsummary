@@ -1,12 +1,4 @@
-# gtsummary (development version)
-
-* Added experimental feature where additional arguments can be passed to `broom.helpers::tidy_plus_plus()` via `tbl_regression(...)`. (#1383)
-
-* Updated the arguments in `tidy_robust()` to account for updates in {parameters}. (#1376)
-
-* Allowing for 'survfit' objects of class `survfit2` in `add_nevent.tbl_survfit()`. (#1389)
-
-* Added `oneway.test()` test to `add_p()`. (#1382)
+# gtsummary 1.6.3
 
 * The `as_flex_table()` function now recognizes markdown bold (`**`) and italic (`_`) syntax in the headers and spanning headers. Restrictions apply. See help file for details. Users can no longer place sets of double stars and underscores *without* the text being formatted as markdown syntax. (#1361)
 
@@ -22,6 +14,14 @@
   ```
   
   For the survey summary, the unweighted variants are also available. (#1366)
+  
+* Added experimental feature where additional arguments can be passed to `broom.helpers::tidy_plus_plus()` via `tbl_regression(...)`. (#1383)
+
+* Updated the arguments in `tidy_robust()` to account for updates in {parameters}. (#1376)
+
+* Allowing for 'survfit' objects of class `survfit2` in `add_nevent.tbl_survfit()`. (#1389)
+
+* Added `oneway.test()` test to `add_p()`. (#1382)
 
 * Now using {ggstats} to plot regression model coefficients via `plot()` instead of {GGally}. (#1367)
 
