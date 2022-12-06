@@ -1,45 +1,3 @@
-# convert columns that use row and values to format ----------------------------
-.convert_table_header_to_styling <- function(x) {
-  if (!is.null(x$table_styling)) {
-    paste(
-      "{.field gtsummary} object was created with code from with {.val <v1.4.0} and {.val >=v1.4.0}.",
-      "Unexpected formatting may occur."
-    ) %>%
-      str_wrap() %>%
-      cli_alert_info()
-  }
-
-  paste(
-    "Updating {.field gtsummary} object from {.code x$table_header} to",
-    "{.code x$table_styling} introduced in {.val v1.4.0}."
-  ) %>%
-    str_wrap() %>%
-    cli_alert_info()
-
-  x$table_styling$header <-
-    x$table_header %>%
-    mutate(interpret_spanning_header = "gt::md") %>%
-    select("column", "hide", "align",
-           interpret_label = "text_interpret", "label",
-           "interpret_spanning_header", "spanning_header"
-    )
-
-  x <-
-    x %>%
-    .convert_header_to_rows_one_column("footnote") %>%
-    .convert_header_to_rows_one_column("footnote_abbrev") %>%
-    .convert_header_to_rows_one_column("missing_emdash") %>%
-    .convert_header_to_rows_one_column("indent") %>%
-    .convert_header_to_rows_one_column("bold") %>%
-    .convert_header_to_rows_one_column("italic") %>%
-    .convert_header_to_rows_one_column("fmt_fun")
-  x$table_styling$cols_merge <- tibble(column = character(), rows = list(), pattern = character())
-
-  x$table_header <- NULL
-  x
-}
-
-
 .convert_header_to_rows_one_column <- function(x, column) {
   if (column %in% c("footnote", "footnote_abbrev")) {
     x$table_styling[[column]] <-
@@ -131,8 +89,6 @@
 #'   tbl_summary(include = c(age, grade)) %>%
 #'   .table_styling_expr_to_row_number()
 .table_styling_expr_to_row_number <- function(x) {
-  if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
-
   # text_format ----------------------------------------------------------------
   x$table_styling$text_format <-
     x$table_styling$text_format %>%

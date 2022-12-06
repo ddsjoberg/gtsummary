@@ -69,15 +69,6 @@ add_n.tbl_summary <- function(x, statistic = "{n}", col_label = "**N**", footnot
     stop("`x` must be class 'tbl_summary' or 'tbl_svysummary'")
   }
 
-  # DEPRECATED specifying statistic via missing argument -----------------------
-  if (!is.null(rlang::dots_list(...)[["missing"]])) {
-    lifecycle::deprecate_stop(
-      "1.2.2",
-      "gtsummary::add_n(missing=)",
-      "gtsummary::add_n(statistic=)"
-    )
-  }
-
   # grabbing summary counts ----------------------------------------------------
   df_stats <-
     x$meta_data$df_stats %>%

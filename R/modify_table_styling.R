@@ -96,7 +96,6 @@ modify_table_styling <- function(x,
   # checking inputs ------------------------------------------------------------
   .assert_class(x, "gtsummary")
 
-  if (is.null(x$table_styling)) x <- .convert_table_header_to_styling(x)
   text_interpret <- match.arg(text_interpret) %>% {
     paste0("gt::", .)
   }
