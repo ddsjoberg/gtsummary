@@ -19,44 +19,44 @@ programming language. The {gtsummary} package summarizes data sets,
 regression models, and more, using sensible defaults with highly
 customizable capabilities.
 
--   [**Summarize data frames or
-    tibbles**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
-    easily in **R**. Perfect for presenting descriptive statistics,
-    comparing group **demographics** (e.g creating a **Table 1** for
-    medical journals), and more. Automatically detects continuous,
-    categorical, and dichotomous variables in your data set, calculates
-    appropriate descriptive statistics, and also includes amount of
-    missingness in each variable.
+- [**Summarize data frames or
+  tibbles**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html)
+  easily in **R**. Perfect for presenting descriptive statistics,
+  comparing group **demographics** (e.g creating a **Table 1** for
+  medical journals), and more. Automatically detects continuous,
+  categorical, and dichotomous variables in your data set, calculates
+  appropriate descriptive statistics, and also includes amount of
+  missingness in each variable.
 
--   [**Summarize regression
-    models**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
-    in R and include reference rows for categorical variables. Common
-    regression models, such as logistic regression and Cox proportional
-    hazards regression, are automatically identified and the tables are
-    pre-filled with appropriate column headers (i.e. Odds Ratio and
-    Hazard Ratio).
+- [**Summarize regression
+  models**](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html)
+  in R and include reference rows for categorical variables. Common
+  regression models, such as logistic regression and Cox proportional
+  hazards regression, are automatically identified and the tables are
+  pre-filled with appropriate column headers (i.e. Odds Ratio and Hazard
+  Ratio).
 
--   [**Customize gtsummary
-    tables**](https://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions)
-    using a growing list of formatting/styling functions.
-    **[Bold](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
-    labels,
-    **[italicize](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
-    levels, **[add
-    p-value](https://www.danieldsjoberg.com/gtsummary/reference/add_p.html)**
-    to summary tables,
-    **[style](https://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)**
-    the statistics however you choose,
-    **[merge](https://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)**
-    or
-    **[stack](https://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)**
-    tables to present results side by side… there are so many
-    possibilities to create the table of your dreams!
+- [**Customize gtsummary
+  tables**](https://www.danieldsjoberg.com/gtsummary/reference/index.html#section-general-formatting-styling-functions)
+  using a growing list of formatting/styling functions.
+  **[Bold](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
+  labels,
+  **[italicize](https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html)**
+  levels, **[add
+  p-value](https://www.danieldsjoberg.com/gtsummary/reference/add_p.html)**
+  to summary tables,
+  **[style](https://www.danieldsjoberg.com/gtsummary/reference/style_percent.html)**
+  the statistics however you choose,
+  **[merge](https://www.danieldsjoberg.com/gtsummary/reference/tbl_merge.html)**
+  or
+  **[stack](https://www.danieldsjoberg.com/gtsummary/reference/tbl_stack.html)**
+  tables to present results side by side… there are so many
+  possibilities to create the table of your dreams!
 
--   **[Report statistics
-    inline](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)**
-    from summary tables and regression summary tables in **R markdown**.
-    Make your reports completely reproducible!
+- **[Report statistics
+  inline](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html)**
+  from summary tables and regression summary tables in **R markdown**.
+  Make your reports completely reproducible!
 
 By leveraging [{broom}](https://broom.tidymodels.org/),
 [{gt}](https://gt.rstudio.com/), and
@@ -208,33 +208,32 @@ tbl %>%
 
 ## Additional Resources
 
--   The best resources are the gtsummary vignettes: [table
-    gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html),
-    [`tbl_summary()`
-    tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html),
-    [`tbl_regression()`
-    tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html),
-    [`inline_text()`
-    tutorial](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html),
-    [gtsummary
-    themes](https://www.danieldsjoberg.com/gtsummary/articles/themes.html),
-    [gtsummary+R
-    markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html).
+- The best resources are the gtsummary vignettes: [table
+  gallery](https://www.danieldsjoberg.com/gtsummary/articles/gallery.html),
+  [`tbl_summary()`
+  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_summary.html),
+  [`tbl_regression()`
+  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html),
+  [`inline_text()`
+  tutorial](https://www.danieldsjoberg.com/gtsummary/articles/inline_text.html),
+  [gtsummary
+  themes](https://www.danieldsjoberg.com/gtsummary/articles/themes.html),
+  [gtsummary+R
+  markdown](https://www.danieldsjoberg.com/gtsummary/articles/rmarkdown.html).
 
--   The R Journal Article [*Reproducible Summary Tables with the
-    gtsummary
-    Package*](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/RJ-2021-053.pdf).
+- The R Journal Article [*Reproducible Summary Tables with the gtsummary
+  Package*](https://github.com/ddsjoberg/gtsummary/raw/main/data-raw/RJ-2021-053.pdf).
 
--   The [RStudio Education
-    Blog](https://education.rstudio.com/blog/2020/07/gtsummary/)
-    includes a post with a brief introduction to the package.
+- The [RStudio Education
+  Blog](https://education.rstudio.com/blog/2020/07/gtsummary/) includes
+  a post with a brief introduction to the package.
 
--   A [recording of a
-    presentation](https://www.youtube.com/watch?v=tANo9E1SYJE) given to
-    the Weill Cornell Biostatistics Department and the Memorial Sloan
-    Kettering R Users Group.
+- A [recording of a
+  presentation](https://www.youtube.com/watch?v=tANo9E1SYJE) given to
+  the Weill Cornell Biostatistics Department and the Memorial Sloan
+  Kettering R Users Group.
 
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/tANo9E1SYJE" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/tANo9E1SYJE" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Cite gtsummary
 
@@ -273,6 +272,7 @@ By contributing to this project, you agree to abide by its terms. Thank
 you to all contributors!  
 [@ablack3](https://github.com/ablack3),
 [@ABorakati](https://github.com/ABorakati),
+[@adilsonbauhofer](https://github.com/adilsonbauhofer),
 [@aghaynes](https://github.com/aghaynes),
 [@ahinton-mmc](https://github.com/ahinton-mmc),
 [@aito123](https://github.com/aito123),
@@ -288,6 +288,7 @@ you to all contributors!
 [@arnmayer](https://github.com/arnmayer),
 [@aspina7](https://github.com/aspina7),
 [@asshah4](https://github.com/asshah4),
+[@AurelienDasre](https://github.com/AurelienDasre),
 [@awcm0n](https://github.com/awcm0n),
 [@barthelmes](https://github.com/barthelmes),
 [@bcjaeger](https://github.com/bcjaeger),
@@ -297,6 +298,7 @@ you to all contributors!
 [@bhattmaulik](https://github.com/bhattmaulik),
 [@BioYork](https://github.com/BioYork),
 [@brachem-christian](https://github.com/brachem-christian),
+[@browne123](https://github.com/browne123),
 [@bwiernik](https://github.com/bwiernik),
 [@bx259](https://github.com/bx259),
 [@calebasaraba](https://github.com/calebasaraba),
@@ -367,6 +369,7 @@ you to all contributors!
 [@jwilliman](https://github.com/jwilliman),
 [@karissawhiting](https://github.com/karissawhiting),
 [@kendonB](https://github.com/kendonB),
+[@kentm4](https://github.com/kentm4),
 [@kmdono02](https://github.com/kmdono02),
 [@kwakuduahc1](https://github.com/kwakuduahc1),
 [@lamhine](https://github.com/lamhine),
@@ -391,14 +394,17 @@ you to all contributors!
 [@mvuorre](https://github.com/mvuorre),
 [@myensr](https://github.com/myensr),
 [@MyKo101](https://github.com/MyKo101),
+[@nalimilan](https://github.com/nalimilan),
 [@oranwutang](https://github.com/oranwutang),
 [@palantre](https://github.com/palantre),
 [@parmsam](https://github.com/parmsam),
 [@Pascal-Schmidt](https://github.com/Pascal-Schmidt),
+[@PaulC91](https://github.com/PaulC91),
 [@pedersebastian](https://github.com/pedersebastian),
 [@perlatex](https://github.com/perlatex),
 [@philsf](https://github.com/philsf),
 [@polc1410](https://github.com/polc1410),
+[@Polperobis](https://github.com/Polperobis),
 [@postgres-newbie](https://github.com/postgres-newbie),
 [@proshano](https://github.com/proshano),
 [@raphidoc](https://github.com/raphidoc),
@@ -415,6 +421,7 @@ you to all contributors!
 [@sbalci](https://github.com/sbalci),
 [@sda030](https://github.com/sda030),
 [@shannonpileggi](https://github.com/shannonpileggi),
+[@shaunporwal](https://github.com/shaunporwal),
 [@shengchaohou](https://github.com/shengchaohou),
 [@ShixiangWang](https://github.com/ShixiangWang),
 [@simonpcouch](https://github.com/simonpcouch),
@@ -426,6 +433,7 @@ you to all contributors!
 [@storopoli](https://github.com/storopoli),
 [@szimmer](https://github.com/szimmer),
 [@tamytsujimoto](https://github.com/tamytsujimoto),
+[@TAOS25](https://github.com/TAOS25),
 [@TarJae](https://github.com/TarJae),
 [@themichjam](https://github.com/themichjam),
 [@THIB20](https://github.com/THIB20),
@@ -440,11 +448,14 @@ you to all contributors!
 [@Valja64](https://github.com/Valja64),
 [@vvm02](https://github.com/vvm02),
 [@xkcococo](https://github.com/xkcococo),
+[@yatirbe](https://github.com/yatirbe),
 [@yonicd](https://github.com/yonicd),
 [@yoursdearboy](https://github.com/yoursdearboy),
+[@yuryzablotski](https://github.com/yuryzablotski),
 [@zabore](https://github.com/zabore),
 [@zachariae](https://github.com/zachariae),
 [@zaddyzad](https://github.com/zaddyzad),
+[@zawkzaw](https://github.com/zawkzaw),
 [@zeyunlu](https://github.com/zeyunlu),
 [@zhengnow](https://github.com/zhengnow),
 [@zlkrvsm](https://github.com/zlkrvsm),
