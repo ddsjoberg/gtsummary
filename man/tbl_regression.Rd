@@ -26,7 +26,7 @@ tbl_regression(x, ...)
 \arguments{
 \item{x}{Regression model object}
 
-\item{...}{Not used}
+\item{...}{\lifecycle{experimental}Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}}
 
 \item{label}{List of formulas specifying variables labels,
 e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}}
