@@ -52,13 +52,13 @@
 #' `pvalue_fun = function(x) style_pvalue(x, digits = 2)` or equivalently,
 #'  `purrr::partial(style_pvalue, digits = 2)`).
 #' @param tidy_fun Option to specify a particular tidier function for the
-#' model. Default is to use `broom::tidy`, but if an error occurs
+#' model. Default is to use `broom::tidy()`, but if an error occurs
 #' then tidying of the model is attempted with `parameters::model_parameters()`,
 #' if installed.
 #' @param add_estimate_to_reference_rows add a reference value. Default is FALSE
 #' @param conf.int Logical indicating whether or not to include a confidence
 #' interval in the output. Defaults to `TRUE`.
-#' @param ... Additional arguments passed to [broom.helpers::tidy_plus_plus()]
+#' @param ... \lifecycle{experimental}Additional arguments passed to [broom.helpers::tidy_plus_plus()]
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
