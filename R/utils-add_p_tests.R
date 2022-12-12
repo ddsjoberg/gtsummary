@@ -28,6 +28,15 @@ add_p_test_oneway.test <- function(data, variable, by, test.args, ...) {
     broom::tidy()
 }
 
+add_p_test_mood.test <- function(data, variable, by, test.args, ...) {
+  .superfluous_args(variable, ...)
+
+  rlang::inject(
+    stats::mood.test(!!rlang::sym(variable) ~ as.factor(!!rlang::sym(by)), data = data, !!!test.args)
+  ) %>%
+    broom::tidy()
+}
+
 add_p_test_kruskal.test <- function(data, variable, by, ...) {
   .superfluous_args(variable, ...)
   stats::kruskal.test(data[[variable]], as.factor(data[[by]])) %>%
