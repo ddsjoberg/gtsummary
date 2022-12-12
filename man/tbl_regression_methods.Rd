@@ -84,7 +84,7 @@
 \item{...}{arguments passed to \code{tbl_regression.default()}}
 
 \item{tidy_fun}{Option to specify a particular tidier function for the
-model. Default is to use \code{broom::tidy}, but if an error occurs
+model. Default is to use \code{broom::tidy()}, but if an error occurs
 then tidying of the model is attempted with \code{parameters::model_parameters()},
 if installed.}
 }

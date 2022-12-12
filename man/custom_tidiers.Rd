@@ -78,7 +78,7 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 \code{pool_and_tidy_mice()}. Default is \code{NULL}}
 
 \item{tidy_fun}{Option to specify a particular tidier function for the
-model. Default is to use \code{broom::tidy}, but if an error occurs
+model. Default is to use \code{broom::tidy()}, but if an error occurs
 then tidying of the model is attempted with \code{parameters::model_parameters()},
 if installed.}
 }

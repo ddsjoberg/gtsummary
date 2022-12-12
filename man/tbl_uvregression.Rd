@@ -57,7 +57,7 @@ quoted variable names, unquoted variable names, or tidyselect select helper
 functions. Default is \code{everything()}.}
 
 \item{tidy_fun}{Option to specify a particular tidier function for the
-model. Default is to use \code{broom::tidy}, but if an error occurs
+model. Default is to use \code{broom::tidy()}, but if an error occurs
 then tidying of the model is attempted with \code{parameters::model_parameters()},
 if installed.}
 
@@ -92,7 +92,7 @@ random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gea
 \item{conf.int}{Logical indicating whether or not to include a confidence
 interval in the output. Defaults to \code{TRUE}.}
 
-\item{...}{Not used}
+\item{...}{\lifecycle{experimental}Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}}
 }
 \value{
 A \code{tbl_uvregression} object

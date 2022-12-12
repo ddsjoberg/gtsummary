@@ -26,7 +26,7 @@ tbl_regression(x, ...)
 \arguments{
 \item{x}{Regression model object}
 
-\item{...}{Not used}
+\item{...}{\lifecycle{experimental}Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}}
 
 \item{label}{List of formulas specifying variables labels,
 e.g. \code{list(age ~ "Age", stage ~ "Path T Stage")}}
@@ -61,7 +61,7 @@ and return a string that is the rounded/formatted p-value (e.g.
 \code{purrr::partial(style_pvalue, digits = 2)}).}
 
 \item{tidy_fun}{Option to specify a particular tidier function for the
-model. Default is to use \code{broom::tidy}, but if an error occurs
+model. Default is to use \code{broom::tidy()}, but if an error occurs
 then tidying of the model is attempted with \code{parameters::model_parameters()},
 if installed.}
 
