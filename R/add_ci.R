@@ -2,14 +2,13 @@
 #'
 #' Add a new column with the confidence intervals for proportions, means, etc.
 #'
-#' @param x A `tbl_summary` object
+#' @param x A `tbl_summary` or a `tbl_svysummary` object
 #' @param statistic Formula indicating how the confidence interval will be displayed.
 #' Default is `list(all_categorical() ~ "{conf.low}%, {conf.high}%", all_continuous() ~ "{conf.low}, {conf.high}")`
 #' @param method Confidence interval method. Default is
-#' `list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")`.
-#' Must be one of
-#' `c("wilson", "wilson.no.correct", "exact", "asymptotic")` for categorical
-#' variables, and `c("t.test", "wilcox.test")` for continuous variables.
+#' `list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")` for `tbl_summary` objects
+#' and `list(all_categorical() ~ "svyprop", all_continuous() ~ "svymean")` for `tbl_svysummary`
+#' objects.
 #' See details below.
 #' @param conf.level Confidence level. Default is `0.95`
 #' @param style_fun Function to style upper and lower bound of confidence
@@ -25,19 +24,50 @@
 #' @inheritParams tbl_summary
 #'
 #' @section method argument:
+#'
+#' **for `tbl_summary` tables**
+#'
+#' Must be one of
+#' `c("wilson", "wilson.no.correct", "exact", "asymptotic")` for categorical
+#' variables, and `c("t.test", "wilcox.test")` for continuous variables.
+#'
 #' Methods `c("wilson", "wilson.no.correct")` are calculated with
 #' `prop.test(correct = c(TRUE, FALSE))`.
 #' The default method, `"wilson"`, includes the Yates continuity correction.
 #' Methods `c("exact", "asymptotic")` are calculated with `Hmisc::binconf(method=)`.
+#'
 #' Confidence intervals for means are calculated using `t.test()` and
 #' `wilcox.test()` for pseudo-medians.
+#'
+#' **for `tbl_svysummary` tables**
+#'
+#' Must be one of
+#' `c("svyprop", "svyprop.logit", "svyprop.likelihood", "svyprop.asin", "svyprop.beta", "svyprop.mean", "svyprop.xlogit")`
+#' for categorical variables, and
+#' `c("svymean", "svymedian", "svymedian.mean", "svymedian.beta", "svymedian.xlogit", "svymedian.asin", "svymedian.score")`
+#' for continuous variables.
+#'
+#' Confidence intervals for proportions are computed with `survey::svyciprop()`.
+#' See the help file of this function for details on the different methods
+#' available to compute CIs. The default method `"svyprop"` is equivalent
+#' to `"svyprop.logit"`, corresponding to a call to `survey::svyciprop()` with
+#' `method = "logit"`.
+#'
+#' Confidence intervals for means (method `"svymean"`) are computed using
+#' `confint(svymean())`.
+#'
+#' Confidence intervals for medians are computed with `survey::svyquantile()`.
+#' See the help file of this function for details on the different methods
+#' available to compute CIs. The default method `"svymedian"` is equivalent
+#' to `"svymedian.mean"`, corresponding to a call to `surevy::svyquantile()`
+#' with `method = "mean"`.
 #'
 #' @return gtsummary table
 #' @rdname add_ci
 #' @export
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
 #'
-#' @family tbl_summary tools
+#' @family tbl_summary tbl_svysummary tools
 #' @examples
 #' \donttest{
 #' # Example 1 ----------------------------------
@@ -96,9 +126,20 @@ add_ci.tbl_summary <- function(x,
     select("variable", "summary_type") %>%
     tibble::deframe()
 
+  if (inherits(x, "tbl_summary"))
+    default_method <- list(
+      all_categorical() ~ "wilson",
+      all_continuous() ~ "t.test"
+    )
+  if (inherits(x, "tbl_svysummary"))
+    default_method <- list(
+      all_categorical() ~ "svyprop",
+      all_continuous() ~ "svymean"
+    )
+
   method <-
     .formula_list_to_named_list(
-      x = list(all_categorical() ~ "wilson", all_continuous() ~ "t.test"),
+      x = default_method,
       var_info = meta_data_to_var_info(x$meta_data[x$meta_data$variable %in% include,]),
       arg_name = "method"
     ) %>%
@@ -176,10 +217,14 @@ add_ci.tbl_summary <- function(x,
   }
 
   # adding new column with CI --------------------------------------------------
+  if (inherits(x, "tbl_summary"))
+    single_ci_fn <- single_ci
+  if (inherits(x, "tbl_svysummary"))
+    single_ci_fn <- single_ci_svy
   x <-
     x %>%
     add_stat(
-      fns = everything() ~ purrr::partial(single_ci,
+      fns = everything() ~ purrr::partial(single_ci_fn,
                                           method = method,
                                           conf.level = conf.level,
                                           statistic = statistic,
@@ -274,7 +319,7 @@ add_ci.tbl_summary <- function(x,
   x
 }
 
-# function to add CI for one variable
+# function to add CI for one variable (tbl_summary)
 single_ci <- function(variable, by, tbl, method, conf.level,
                       style_fun, statistic, summary_type, ...) {
   if (method[[variable]] %in% c("wilson", "wilson.no.correct",
@@ -404,3 +449,197 @@ calculate_prop_ci <- function(x, n, statistic, method, conf.level, style_fun) {
     as.character()
 }
 
+#' @rdname add_ci
+#' @export
+add_ci.tbl_svysummary <- add_ci.tbl_summary
+
+# function to add CI for one variable (tbl_svysummary)
+single_ci_svy <- function(variable, by, tbl, method, conf.level,
+                          style_fun, statistic, summary_type, ...) {
+  assert_package("survey", fn = 'add_ci.tbl_svysummary())')
+
+  if (method[[variable]] %in% c("svymean") &&
+           summary_type[[variable]] %in% c("continuous", "continuous2")) {
+    df_single_ci <-
+      tbl$meta_data %>%
+      filter(.data$variable %in% .env$variable) %>%
+      purrr::pluck("df_stats", 1) %>%
+      dplyr::rowwise() %>%
+      mutate(
+        ci = calculate_svymean_ci(
+          variable = .data$variable,
+          by = .env$by,
+          level = .data[["by"]],
+          tbl = .env$tbl,
+          statistic = statistic[[variable]],
+          conf.level = conf.level,
+          style_fun = style_fun[[variable]]
+        )
+      )
+
+    if (!"mean" %in%
+        names(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]])) {
+      paste("{.code add_ci()} added mean CI for {.val {variable}};",
+            "however, no mean is shown in the {.code tbl_svysummary()} table.") %>%
+        cli::cli_alert_danger()
+    }
+  }
+  else if (stringr::str_starts(method[[variable]], "svymedian") &&
+           summary_type[[variable]] %in% c("continuous", "continuous2")) {
+    svymedian_method <- stringr::str_sub(method[[variable]], start = 11L)
+    if (svymedian_method == "") svymedian_method <- "mean"
+    df_single_ci <-
+      tbl$meta_data %>%
+      filter(.data$variable %in% .env$variable) %>%
+      purrr::pluck("df_stats", 1) %>%
+      dplyr::rowwise() %>%
+      mutate(
+        ci = calculate_svymedian_ci(
+          variable = .data$variable,
+          by = .env$by,
+          level = .data[["by"]],
+          tbl = .env$tbl,
+          method = svymedian_method,
+          statistic = statistic[[variable]],
+          conf.level = conf.level,
+          style_fun = style_fun[[variable]]
+        )
+      )
+
+    if (!"median" %in%
+        names(tbl$meta_data[tbl$meta_data$variable %in% variable, ]$df_stats[[1]])) {
+      paste("{.code add_ci()} added median CI for {.val {variable}};",
+            "however, no median is shown in the {.code tbl_svysummary()} table.") %>%
+        cli::cli_alert_danger()
+    }
+  }
+  else if (stringr::str_starts(method[[variable]], "svyprop") &&
+           summary_type[[variable]] %in% c("categorical", "dichotomous")) {
+    svyprop_method <- stringr::str_sub(method[[variable]], start = 9L)
+    if (svyprop_method == "") svyprop_method <- "logit"
+    df_single_ci <-
+      tbl$meta_data %>%
+      filter(.data$variable %in% .env$variable) %>%
+      purrr::pluck("df_stats", 1) %>%
+      dplyr::rowwise() %>%
+      mutate(
+        ci = calculate_svyprop_ci(
+          variable = .data$variable,
+          variable_levels = .data$variable_levels,
+          by = .env$by,
+          level = .data[["by"]],
+          tbl = .env$tbl,
+          method = svyprop_method,
+          statistic = statistic[[variable]],
+          conf.level = conf.level,
+          style_fun = style_fun[[variable]]
+        )
+      )
+  }
+  else {
+    glue("Error with variable '{variable}'. Method '{method[[variable]]}' ",
+         "cannot be applied to summary type '{summary_type[[variable]]}'.") %>%
+      stop(call. = FALSE)
+  }
+
+  df_single_ci %>%
+    tidyr::pivot_wider(
+      id_cols = any_of("variable_levels"),
+      values_from = "ci",
+      names_from = "col_name"
+    ) %>%
+    select(all_stat_cols()) %>%
+    dplyr::rename_with(.fn = ~ paste0(., "_ci"))
+}
+
+calculate_svymean_ci <- function(variable, by, level, tbl,
+                                 statistic, conf.level, style_fun) {
+  if (is.null(by) || is.na(level))
+    design <- tbl$inputs$data
+  else
+    design <- subset(
+      tbl$inputs$data,
+      tbl$inputs$data$variables[[by]] == level
+    )
+
+  df_ci <-
+    survey::svymean(
+      c_form(right = variable),
+      design = design,
+      na.rm = TRUE
+    ) %>%
+    stats::confint(level = conf.level) %>%
+    dplyr::as_tibble() %>%
+    set_names(c("conf.low", "conf.high"))
+
+  # round and format CI
+  df_ci %>%
+    select(all_of(c("conf.low", "conf.high"))) %>%
+    dplyr::mutate_all(style_fun) %>%
+    glue::glue_data(statistic) %>%
+    as.character()
+}
+
+calculate_svymedian_ci <- function(variable, by, level, tbl, method,
+                                 statistic, conf.level, style_fun) {
+  if (is.null(by) || is.na(level))
+    design <- tbl$inputs$data
+  else
+    design <- subset(
+      tbl$inputs$data,
+      tbl$inputs$data$variables[[by]] == level
+    )
+
+  df_ci <-
+    survey::svyquantile(
+      c_form(right = variable),
+      design = design,
+      quantiles = .5,
+      alpha = 1 - conf.level,
+      interval.type = method,
+      ci = TRUE,
+      na.rm = TRUE
+    ) %>%
+    purrr::pluck(1) %>%
+    dplyr::as_tibble() %>%
+    set_names(c("estimate", "conf.low", "conf.high", "se"))
+
+  # round and format CI
+  df_ci %>%
+    select(all_of(c("conf.low", "conf.high"))) %>%
+    dplyr::mutate_all(style_fun) %>%
+    glue::glue_data(statistic) %>%
+    as.character()
+}
+
+calculate_svyprop_ci <- function(variable, variable_levels, by, level, tbl,
+                                 method, statistic, conf.level, style_fun) {
+  if (is.null(by) || is.na(level))
+    design <- tbl$inputs$data
+  else
+    design <- subset(
+      tbl$inputs$data,
+      tbl$inputs$data$variables[[by]] == level
+    )
+
+  design$variables[["..binary..svyciprop.."]] <-
+    design$variables[[variable]] == variable_levels
+
+  df_ci <-
+    survey::svyciprop(
+      c_form(right = "..binary..svyciprop.."),
+      design = design,
+      method = method,
+      level = conf.level
+    ) %>%
+    purrr::attr_getter("ci")() %>%
+    tibble::as_tibble_row() %>%
+    set_names(c("conf.low", "conf.high"))
+
+  # round and format CI
+  df_ci %>%
+    select(all_of(c("conf.low", "conf.high"))) %>%
+    dplyr::mutate_all(style_fun) %>%
+    glue::glue_data(statistic) %>%
+    as.character()
+}

@@ -3,6 +3,7 @@
 \name{add_ci}
 \alias{add_ci}
 \alias{add_ci.tbl_summary}
+\alias{add_ci.tbl_svysummary}
 \title{Add CI Column}
 \usage{
 add_ci(x, ...)
@@ -17,17 +18,27 @@ add_ci(x, ...)
   pattern = NULL,
   ...
 )
+
+\method{add_ci}{tbl_svysummary}(
+  x,
+  method = NULL,
+  include = everything(),
+  statistic = NULL,
+  conf.level = 0.95,
+  style_fun = NULL,
+  pattern = NULL,
+  ...
+)
 }
 \arguments{
-\item{x}{A \code{tbl_summary} object}
+\item{x}{A \code{tbl_summary} or a \code{tbl_svysummary} object}
 
 \item{...}{Not used}
 
 \item{method}{Confidence interval method. Default is
-\code{list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")}.
-Must be one of
-\code{c("wilson", "wilson.no.correct", "exact", "asymptotic")} for categorical
-variables, and \code{c("t.test", "wilcox.test")} for continuous variables.
+\code{list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")} for \code{tbl_summary} objects
+and \code{list(all_categorical() ~ "svyprop", all_continuous() ~ "svymean")} for \code{tbl_svysummary}
+objects.
 See details below.}
 
 \item{include}{variables to include in the summary table. Default is \code{everything()}}
@@ -56,12 +67,43 @@ Add a new column with the confidence intervals for proportions, means, etc.
 }
 \section{method argument}{
 
+
+\strong{for \code{tbl_summary} tables}
+
+Must be one of
+\code{c("wilson", "wilson.no.correct", "exact", "asymptotic")} for categorical
+variables, and \code{c("t.test", "wilcox.test")} for continuous variables.
+
 Methods \code{c("wilson", "wilson.no.correct")} are calculated with
 \code{prop.test(correct = c(TRUE, FALSE))}.
 The default method, \code{"wilson"}, includes the Yates continuity correction.
 Methods \code{c("exact", "asymptotic")} are calculated with \code{Hmisc::binconf(method=)}.
+
 Confidence intervals for means are calculated using \code{t.test()} and
 \code{wilcox.test()} for pseudo-medians.
+
+\strong{for \code{tbl_svysummary} tables}
+
+Must be one of
+\code{c("svyprop", "svyprop.logit", "svyprop.likelihood", "svyprop.asin", "svyprop.beta", "svyprop.mean", "svyprop.xlogit")}
+for categorical variables, and
+\code{c("svymean", "svymedian", "svymedian.mean", "svymedian.beta", "svymedian.xlogit", "svymedian.asin", "svymedian.score")}
+for continuous variables.
+
+Confidence intervals for proportions are computed with \code{survey::svyciprop()}.
+See the help file of this function for details on the different methods
+available to compute CIs. The default method \code{"svyprop"} is equivalent
+to \code{"svyprop.logit"}, corresponding to a call to \code{survey::svyciprop()} with
+\code{method = "logit"}.
+
+Confidence intervals for means (method \code{"svymean"}) are computed using
+\code{confint(svymean())}.
+
+Confidence intervals for medians are computed with \code{survey::svyquantile()}.
+See the help file of this function for details on the different methods
+available to compute CIs. The default method \code{"svymedian"} is equivalent
+to \code{"svymedian.mean"}, corresponding to a call to \code{surevy::svyquantile()}
+with \code{method = "mean"}.
 }
 
 \section{Example Output}{
@@ -101,23 +143,5 @@ add_ci_ex2 <-
 }
 \seealso{
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
-
-Other tbl_summary tools: 
-\code{\link{add_n.tbl_summary}()},
-\code{\link{add_overall}()},
-\code{\link{add_p.tbl_summary}()},
-\code{\link{add_q}()},
-\code{\link{add_stat_label}()},
-\code{\link{bold_italicize_labels_levels}},
-\code{\link{inline_text.tbl_summary}()},
-\code{\link{inline_text.tbl_survfit}()},
-\code{\link{modify}},
-\code{\link{separate_p_footnotes}()},
-\code{\link{tbl_custom_summary}()},
-\code{\link{tbl_merge}()},
-\code{\link{tbl_split}()},
-\code{\link{tbl_stack}()},
-\code{\link{tbl_strata}()},
-\code{\link{tbl_summary}()}
 }
-\concept{tbl_summary tools}
+\concept{tbl_summary tbl_svysummary tools}

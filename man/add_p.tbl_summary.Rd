@@ -101,7 +101,6 @@ See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summ
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
 Other tbl_summary tools: 
-\code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_q}()},
