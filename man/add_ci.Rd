@@ -16,6 +16,7 @@ add_ci(x, ...)
   conf.level = 0.95,
   style_fun = NULL,
   pattern = NULL,
+  df = NULL,
   ...
 )
 
@@ -27,15 +28,14 @@ add_ci(x, ...)
   conf.level = 0.95,
   style_fun = NULL,
   pattern = NULL,
+  df = NULL,
   ...
 )
 }
 \arguments{
 \item{x}{A \code{tbl_summary} or a \code{tbl_svysummary} object}
 
-\item{...}{For \code{tbl_svysummary()}, you can pass a \code{df} argument to customize
-the number of degrees of freedom used to estimate confidence intervals.
-By default, will use \code{survey::degf()}.}
+\item{...}{Not used}
 
 \item{method}{Confidence interval method. Default is
 \code{list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")} for \code{tbl_summary} objects
@@ -60,6 +60,9 @@ The two columns that will be merged are the statistics column,
 represented by \code{"{stat}"} and the CI column represented by \code{"{ci}"},
 e.g. \code{pattern = "{stat} ({ci})"} will merge the two columns with the CI
 in parentheses.}
+
+\item{df}{For \code{tbl_svysummary()}, the number of degrees of freedom used
+to estimate confidence intervals. By default, will use \code{survey::degf()}.}
 }
 \value{
 gtsummary table
