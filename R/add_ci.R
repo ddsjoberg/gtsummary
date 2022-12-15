@@ -20,6 +20,8 @@
 #' represented by `"{stat}"` and the CI column represented by `"{ci}"`,
 #' e.g. `pattern = "{stat} ({ci})"` will merge the two columns with the CI
 #' in parentheses.
+#' @param df For `tbl_svysummary()`, the number of degrees of freedom used
+#' to estimate confidence intervals. By default, will use `survey::degf()`.
 #' @param ... Not used
 #' @inheritParams tbl_summary
 #'
@@ -111,8 +113,11 @@ add_ci.tbl_summary <- function(x,
                                statistic = NULL,
                                conf.level = 0.95,
                                style_fun = NULL,
-                               pattern = NULL, ...) {
-  check_dots_empty(error = function(e) inform(c(e$message, e$body)))
+                               pattern = NULL,
+                               df = NULL,
+                               ...) {
+  rlang::check_dots_used()
+
   # resolving arguments --------------------------------------------------------
   include <-
     .select_to_varnames(
@@ -136,6 +141,11 @@ add_ci.tbl_summary <- function(x,
       all_categorical() ~ "svyprop",
       all_continuous() ~ "svymean"
     )
+
+  if (inherits(x, "tbl_svysummary") && is.null(df))
+    df <- survey::degf(x$inputs$data)
+  if (inherits(x, "tbl_summary") && !is.null(df))
+    cli::cli_alert_danger("{.arg df} is not used for `tbl_summary` objects.")
 
   method <-
     .formula_list_to_named_list(
@@ -229,7 +239,8 @@ add_ci.tbl_summary <- function(x,
                                           conf.level = conf.level,
                                           statistic = statistic,
                                           style_fun = style_fun,
-                                          summary_type = summary_type),
+                                          summary_type = summary_type,
+                                          df = df),
       location = list(everything() ~ "label", all_categorical(FALSE) ~ "level")
     ) %>%
     # moving the CI cols to after the original stat cols (when `by=` variable present)
@@ -455,7 +466,7 @@ add_ci.tbl_svysummary <- add_ci.tbl_summary
 
 # function to add CI for one variable (tbl_svysummary)
 single_ci_svy <- function(variable, by, tbl, method, conf.level,
-                          style_fun, statistic, summary_type, ...) {
+                          style_fun, statistic, summary_type, df, ...) {
   assert_package("survey", fn = 'add_ci.tbl_svysummary())')
 
   if (method[[variable]] %in% c("svymean") &&
@@ -473,7 +484,8 @@ single_ci_svy <- function(variable, by, tbl, method, conf.level,
           tbl = .env$tbl,
           statistic = statistic[[variable]],
           conf.level = conf.level,
-          style_fun = style_fun[[variable]]
+          style_fun = style_fun[[variable]],
+          df = df
         )
       )
 
@@ -502,7 +514,8 @@ single_ci_svy <- function(variable, by, tbl, method, conf.level,
           method = svymedian_method,
           statistic = statistic[[variable]],
           conf.level = conf.level,
-          style_fun = style_fun[[variable]]
+          style_fun = style_fun[[variable]],
+          df = df
         )
       )
 
@@ -532,7 +545,8 @@ single_ci_svy <- function(variable, by, tbl, method, conf.level,
           method = svyprop_method,
           statistic = statistic[[variable]],
           conf.level = conf.level,
-          style_fun = style_fun[[variable]]
+          style_fun = style_fun[[variable]],
+          df = df
         )
       )
   }
@@ -553,7 +567,7 @@ single_ci_svy <- function(variable, by, tbl, method, conf.level,
 }
 
 calculate_svymean_ci <- function(variable, by, level, tbl,
-                                 statistic, conf.level, style_fun) {
+                                 statistic, conf.level, style_fun, df) {
   if (is.null(by) || is.na(level))
     design <- tbl$inputs$data
   else
@@ -568,7 +582,7 @@ calculate_svymean_ci <- function(variable, by, level, tbl,
       design = design,
       na.rm = TRUE
     ) %>%
-    stats::confint(level = conf.level) %>%
+    stats::confint(level = conf.level, df = df) %>%
     dplyr::as_tibble() %>%
     set_names(c("conf.low", "conf.high"))
 
@@ -581,7 +595,7 @@ calculate_svymean_ci <- function(variable, by, level, tbl,
 }
 
 calculate_svymedian_ci <- function(variable, by, level, tbl, method,
-                                 statistic, conf.level, style_fun) {
+                                 statistic, conf.level, style_fun, df) {
   if (is.null(by) || is.na(level))
     design <- tbl$inputs$data
   else
@@ -598,7 +612,8 @@ calculate_svymedian_ci <- function(variable, by, level, tbl, method,
       alpha = 1 - conf.level,
       interval.type = method,
       ci = TRUE,
-      na.rm = TRUE
+      na.rm = TRUE,
+      df = df
     ) %>%
     purrr::pluck(1) %>%
     dplyr::as_tibble() %>%
@@ -613,7 +628,7 @@ calculate_svymedian_ci <- function(variable, by, level, tbl, method,
 }
 
 calculate_svyprop_ci <- function(variable, variable_levels, by, level, tbl,
-                                 method, statistic, conf.level, style_fun) {
+                                 method, statistic, conf.level, style_fun, df) {
   if (is.null(by) || is.na(level))
     design <- tbl$inputs$data
   else
@@ -630,7 +645,8 @@ calculate_svyprop_ci <- function(variable, variable_levels, by, level, tbl,
       c_form(right = "..binary..svyciprop.."),
       design = design,
       method = method,
-      level = conf.level
+      level = conf.level,
+      df = df
     ) %>%
     purrr::attr_getter("ci")() %>%
     tibble::as_tibble_row() %>%

@@ -33,7 +33,9 @@ add_ci(x, ...)
 \arguments{
 \item{x}{A \code{tbl_summary} or a \code{tbl_svysummary} object}
 
-\item{...}{Not used}
+\item{...}{For \code{tbl_svysummary()}, you can pass a \code{df} argument to customize
+the number of degrees of freedom used to estimate confidence intervals.
+By default, will use \code{survey::degf()}.}
 
 \item{method}{Confidence interval method. Default is
 \code{list(all_categorical() ~ "wilson", all_continuous() ~ "t.test")} for \code{tbl_summary} objects
