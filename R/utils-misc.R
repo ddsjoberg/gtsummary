@@ -89,6 +89,10 @@ gts_mapper <- function(x, context) {
   }
 }
 
+vec_paste0 <- function(..., collapse = NULL) {
+  args <- vctrs::vec_recycle_common(...)
+  rlang::inject(paste0(!!!args, collapse = collapse))
+}
 
 type_check <-
   list(

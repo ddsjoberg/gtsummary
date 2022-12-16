@@ -200,7 +200,7 @@ add_ci.tbl_summary <- function(x,
           dplyr::relocate(all_of(sort(cols_to_order)),
                           .before = all_of(sort(cols_to_order)[1])) %>%
           dplyr::rename_with(
-            .fn = ~paste0(
+            .fn = ~vec_paste0(
               "ci_",
               stringr::str_replace(., pattern = "_ci$", replacement = "")),
             .cols = matches("^stat_\\d+_ci$")
@@ -342,7 +342,7 @@ single_ci <- function(variable, by, tbl, method, conf.level,
       names_from = "col_name"
     ) %>%
     select(all_stat_cols()) %>%
-    dplyr::rename_with(.fn = ~paste0(., "_ci"))
+    dplyr::rename_with(.fn = ~vec_paste0(., "_ci"))
 }
 
 calculate_mean_ci <- function(data, variable, statistic,
