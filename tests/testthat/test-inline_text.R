@@ -375,3 +375,25 @@ test_that("inline_text.gtsummary() errors are triggered", {
     "does not have the required"
   )
 })
+
+# testing mixed class inline text with patterns
+test_that("df_stats_to_table_body() works with mixed class stacking", {
+  skip_if_not_installed("lubridate")
+
+  expect_equal(
+    trial %>%
+      mutate(
+        var_duration =
+          do.call(
+            what = get("duration", asNamespace("lubridate")),
+            args = list(num = 1.5, units = "minutes")
+          )
+      ) %>%
+      tbl_summary(
+        include = c(age, var_duration),
+        type = ~"continuous"
+      )  %>%
+      inline_text(variable = var_duration, pattern = "{median}"),
+    "90.0000"
+  )
+})
