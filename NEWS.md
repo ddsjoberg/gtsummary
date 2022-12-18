@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Now allowing for mixed-class numeric types in `tbl_summary()`, such that `inline_text()` will not throw an error when the pattern argument is specified.
+
 * Added `stats::mood.test()` to `add_p.tbl_summary()`. (#1397)
 
 # gtsummary 1.6.3

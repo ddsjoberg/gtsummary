@@ -656,7 +656,8 @@ df_stats_to_table_body <- function(x) {
                              names_from = "col_name",
                              names_glue = "raw_{col_name}_{.value}",
                              values_from = -any_of(c("variable", "label", "row_type", "col_name")))  %>%
-          select(any_of(c("variable", "row_type", "label")), everything())
+          select(any_of(c("variable", "row_type", "label")), everything()) %>%
+          mutate(dplyr::across(where(is.numeric), as.numeric)) # there are some numeric types that cannot be stacked (e.g. lubridate duration class)
       }
     )
 
