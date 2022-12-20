@@ -757,3 +757,19 @@ test_that("modify_*() family works", {
 })
 
 
+
+
+test_that("no error when data frame contains named vector", {
+  df <-
+    structure(list(swallowing = structure(c(NA, 53, 100, 0, 100),
+                                          names = c("", "", "", "", "")),
+                   salivation = structure(c(NA, 100, 46, 62, 100),
+                                          names = c("", "", "", "", ""))),
+              row.names = c(NA, -5L), class = c("tbl_df", "tbl", "data.frame"))
+
+  expect_error(
+    tbl_summary(df, type = list(everything() ~ "continuous")),
+    NA
+  )
+
+})
