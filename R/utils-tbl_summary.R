@@ -854,7 +854,11 @@ safe_summarise_at <- function(data, variable, fns) {
 .keep_attr <- function(x, .f) {
   x_att <- attributes(x)
   res <- .f(x)
-  attributes(res) <- x_att
+  tryCatch(
+    attributes(res) <- x_att,
+    error = function(e) invisible()
+  )
+
   res
 }
 

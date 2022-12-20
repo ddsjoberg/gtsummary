@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix in `tbl_summary()` that now allows for column vectors to be named within a data frame. (#1403)
+
 * Now allowing for mixed-class numeric types in `tbl_summary()`, such that `inline_text()` will not throw an error when the pattern argument is specified.
 
 * Added `stats::mood.test()` to `add_p.tbl_summary()`. (#1397)
