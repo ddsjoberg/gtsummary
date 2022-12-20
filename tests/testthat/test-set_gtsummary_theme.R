@@ -146,7 +146,7 @@ test_that("setting themes", {
   expect_equal(
     tbl_qjecon1 %>%
       pull(estimate),
-    c(NA, NA, "1.4\n(2.54)", "2.0\n(2.55)")
+    c(NA, NA, "1.4  \n(2.54)", "2.0  \n(2.55)")
   )
   expect_false("ci" %in% names(tbl_qjecon1))
 
