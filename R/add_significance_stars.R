@@ -26,7 +26,7 @@
 #' numeric columns numeric. For the _vast majority_ of users,
 #' _the planned change will be go unnoticed_.
 #'
-#' @examplesIf identical(Sys.getenv("IN_PKGDOWN"), "true") && broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
+#' @examplesIf broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE)
 #' \donttest{
 #' tbl <-
 #'   lm(time ~ ph.ecog + sex, survival::lung) %>%
@@ -48,16 +48,17 @@
 #'   modify_footnote(estimate ~ "CI = Confidence Interval", abbreviation = TRUE)
 #'
 #' # Example 3 ----------------------------------
-#' # Use <br> to put a line break between beta and SE in HTML output
+#' # Use '  \n' to put a line break between beta and SE
 #' add_significance_stars_ex3 <-
 #'   tbl %>%
 #'   add_significance_stars(
 #'     hide_se = TRUE,
-#'     pattern = "{estimate}{stars}<br>({std.error})"
+#'     pattern = "{estimate}{stars}  \n({std.error})"
 #'   ) %>%
-#'   modify_header(estimate ~ "**Beta (SE)**") %>%
+#'   modify_header(estimate ~ "**Beta  \n(SE)**") %>%
 #'   modify_footnote(estimate ~ "SE = Standard Error", abbreviation = TRUE) %>%
 #'   as_gt() %>%
+#'   gt::fmt_markdown(columns = everything()) %>%
 #'   gt::tab_style(
 #'     style = "vertical-align:top",
 #'     locations = gt::cells_body(columns = label)

@@ -206,7 +206,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
             paste(
               x$table_styling$header %>% filter(.data$column == "estimate") %>% pull("label"),
               "**(SE)**",
-              sep = " "
+              sep = "  \n"
             )
 
           estimate_footnote <-
@@ -219,14 +219,20 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
 
           x %>%
             add_significance_stars(
-              pattern = "{estimate}{stars}\n({std.error})",
+              pattern = "{estimate}{stars}  \n({std.error})",
               hide_se = TRUE
             ) %>%
             # update column header
             modify_header(list(estimate = new_header_text)) %>%
             # add SE abbreviation footnote
             modify_footnote(estimate ~ estimate_footnote, abbreviation = TRUE)
-        }
+        },
+        "as_gt-lst:addl_cmds" = list(
+          tab_spanner = list(
+            rlang::expr(gt::fmt_markdown(columns = everything())),
+            rlang::expr(gt::tab_style(style = "vertical-align:top", locations = gt::cells_body(columns = dplyr::any_of("label"))))
+          )
+        )
       )
   }
 

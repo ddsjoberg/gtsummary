@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* All examples that previously used `<br>` for line breaks in gt tables have been updated to use `  \n`. Additionally, the `"qjecon"` journal theme has been updated to use the new line breaker as well. (#1311)
+
 * Fix for `as_flex_table()` when the header is blank. (#1406)
 
 * Fix in `tbl_summary()` that now allows for column vectors to be named within a data frame. (#1403)
