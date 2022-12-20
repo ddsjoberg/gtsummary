@@ -448,6 +448,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
             return(.x)
           }
         ) %>%
+        {switch(!rlang::is_empty(.), .) %||% ""} %>%
         {rlang::expr(flextable::compose(part = !!part, i = !!i, j = !!j, value = flextable::as_paragraph(!!!.)))}
     }
   )

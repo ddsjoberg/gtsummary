@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Fix for `as_flex_table()` when the header is blank. (#1406)
+
 * Fix in `tbl_summary()` that now allows for column vectors to be named within a data frame. (#1403)
 
 * Now allowing for mixed-class numeric types in `tbl_summary()`, such that `inline_text()` will not throw an error when the pattern argument is specified.
