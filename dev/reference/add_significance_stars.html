@@ -25,7 +25,7 @@ Add significance stars to estimates with small p-values"><meta property="og:imag
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.3.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.3.9005</span>
       </span>
     </div>
 
@@ -193,16 +193,17 @@ numeric columns numeric. For the <em>vast majority</em> of users,
 <span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">~</span> <span class="st">"CI = Confidence Interval"</span>, abbreviation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 3 ----------------------------------</span></span></span>
-<span class="r-in"><span><span class="co"># Use &lt;br&gt; to put a line break between beta and SE in HTML output</span></span></span>
+<span class="r-in"><span><span class="co"># Use '  \n' to put a line break between beta and SE</span></span></span>
 <span class="r-in"><span><span class="va">add_significance_stars_ex3</span> <span class="op">&lt;-</span></span></span>
 <span class="r-in"><span>  <span class="va">tbl</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">add_significance_stars</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    hide_se <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>    pattern <span class="op">=</span> <span class="st">"{estimate}{stars}&lt;br&gt;({std.error})"</span></span></span>
+<span class="r-in"><span>    pattern <span class="op">=</span> <span class="st">"{estimate}{stars}  \n({std.error})"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">~</span> <span class="st">"**Beta (SE)**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">~</span> <span class="st">"**Beta  \n(SE)**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span><span class="va">estimate</span> <span class="op">~</span> <span class="st">"SE = Standard Error"</span>, abbreviation <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="as_gt.html">as_gt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/fmt_markdown.html" class="external-link">fmt_markdown</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html" class="external-link">everything</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/tab_style.html" class="external-link">tab_style</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    style <span class="op">=</span> <span class="st">"vertical-align:top"</span>,</span></span>
 <span class="r-in"><span>    locations <span class="op">=</span> <span class="fu">gt</span><span class="fu">::</span><span class="fu"><a href="https://gt.rstudio.com/reference/cells_body.html" class="external-link">cells_body</a></span><span class="op">(</span>columns <span class="op">=</span> <span class="va">label</span><span class="op">)</span></span></span>

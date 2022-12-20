@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.3.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.3.9005</span>
       </span>
     </div>
 
@@ -94,7 +94,8 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Fix for <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> when the header is blank. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1406" class="external-link">#1406</a>)</p></li>
+<ul><li><p>All examples that previously used <code>&lt;br&gt;</code> for line breaks in gt tables have been updated to use <code>\n</code>. Additionally, the <code>"qjecon"</code> journal theme has been updated to use the new line breaker as well. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1311" class="external-link">#1311</a>)</p></li>
+<li><p>Fix for <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> when the header is blank. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1406" class="external-link">#1406</a>)</p></li>
 <li><p>Fix in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code> that now allows for column vectors to be named within a data frame. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1403" class="external-link">#1403</a>)</p></li>
 <li><p>Now allowing for mixed-class numeric types in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>, such that <code><a href="../reference/inline_text.html">inline_text()</a></code> will not throw an error when the pattern argument is specified.</p></li>
 <li><p>Added <code><a href="https://rdrr.io/r/stats/mood.test.html" class="external-link">stats::mood.test()</a></code> to <code><a href="../reference/add_p.tbl_summary.html">add_p.tbl_summary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1397" class="external-link">#1397</a>)</p></li>
