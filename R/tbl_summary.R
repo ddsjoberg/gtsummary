@@ -346,8 +346,10 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       label = paste0("**", translate_text("Characteristic"), "**"),
       all_stat_cols() ~
         ifelse(is.null(by),
-               "**N = {style_number(N)}**",
-               "**{level}**, N = {style_number(n)}")
+               get_theme_element("tbl_summary-str:header-noby",
+                                 default = "**N = {style_number(N)}**"),
+               get_theme_element("tbl_summary-str:header-withby",
+                                 default = "**{level}**, N = {style_number(n)}"))
     )
 
   # assign class and return final tbl ------------------------------------------
