@@ -1,5 +1,13 @@
 # gtsummary (development version)
 
+* Added new theme elements to control the default headers in `tbl_summary()`. (#1401)
+
+* All examples that previously used `<br>` for line breaks in gt tables have been updated to use `  \n`. Additionally, the `"qjecon"` journal theme has been updated to use the new line breaker as well. (#1311)
+
+* Fix for `as_flex_table()` when the header is blank. (#1406)
+
+* Fix in `tbl_summary()` that now allows for column vectors to be named within a data frame. (#1403)
+
 * Now allowing for mixed-class numeric types in `tbl_summary()`, such that `inline_text()` will not throw an error when the pattern argument is specified.
 
 * Added `stats::mood.test()` to `add_p.tbl_summary()`. (#1397)

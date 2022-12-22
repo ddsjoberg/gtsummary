@@ -175,8 +175,6 @@ check_gtsummary_theme <- function(x) {
   cli::cli_alert_success("Looks good!")
   invisible()
 }
-# initializing new env where all gtsummary theme elements are saved
-env_gtsummary_theme <- rlang::new_environment()
 
 # ------------------------------------------------------------------------------
 # this function grabs a gtsummary theme element if it exists
