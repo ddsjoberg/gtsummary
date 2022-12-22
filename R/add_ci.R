@@ -88,6 +88,18 @@
 #'                 missing = "no") %>%
 #'     add_ci(pattern = "{stat} ({ci})") %>%
 #'     modify_footnote(everything() ~ NA)
+#'
+#' # Example 3 ----------------------------------
+#' data(api, package = "survey")
+#' add_ci_ex3 <-
+#'   survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) %>%
+#'   tbl_svysummary(
+#'     include = c(api00, hsg, stype),
+#'     statistic = hsg ~ "{mean} ({sd})"
+#'   ) %>%
+#'   add_ci(
+#'     method = api00 ~ "svymedian"
+#'   )
 #' }
 #' @section Example Output:
 #' \if{html}{Example 1}
@@ -100,6 +112,12 @@
 #'
 #' \if{html}{\out{
 #' `r man_create_image_tag(file = "add_ci_ex2.png", width = "45")`
+#' }}
+#'
+#' \if{html}{Example 3}
+#'
+#' \if{html}{\out{
+#' `r man_create_image_tag(file = "add_ci_ex3.png", width = "45")`
 #' }}
 add_ci <- function(x, ...) {
   UseMethod("add_ci")

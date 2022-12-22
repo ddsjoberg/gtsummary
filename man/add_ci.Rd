@@ -124,6 +124,12 @@ with \code{method = "mean"}.
 \if{html}{\out{
 <img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex2.png" alt="image of rendered example table" style="width:45\%;">
 }}
+
+\if{html}{Example 3}
+
+\if{html}{\out{
+<img src="https://raw.githubusercontent.com/ddsjoberg/gtsummary/main/man-images/add_ci_ex3.png" alt="image of rendered example table" style="width:45\%;">
+}}
 }
 
 \examples{
@@ -144,6 +150,18 @@ add_ci_ex2 <-
                 missing = "no") \%>\%
     add_ci(pattern = "{stat} ({ci})") \%>\%
     modify_footnote(everything() ~ NA)
+
+# Example 3 ----------------------------------
+data(api, package = "survey")
+add_ci_ex3 <-
+  survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc) \%>\%
+  tbl_svysummary(
+    include = c(api00, hsg, stype),
+    statistic = hsg ~ "{mean} ({sd})"
+  ) \%>\%
+  add_ci(
+    method = api00 ~ "svymedian"
+  )
 }
 }
 \seealso{
