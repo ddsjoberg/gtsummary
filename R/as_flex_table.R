@@ -347,7 +347,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
   if (!is.null(x$table_styling$source_note)) {
     flextable_calls[["source_note"]] <-
       expr(
-        flextable::footnote(value = flextable::as_paragraph(!!x$table_styling$source_note), ref_symbols = "")
+        flextable::footnote(value = flextable::as_paragraph(!!x$table_styling$source_note), ref_symbols = " ")
       )
   }
 
