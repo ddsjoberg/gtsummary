@@ -65,6 +65,14 @@ test_that("tbl_merge/tbl_stack", {
   expect_warning(as_flex_table(tbl_merge_ex1), NA)
 })
 
+test_that("tbl_cross", {
+  expect_error(
+    tbl_cross(trial, row = trt, col = response) %>%
+      as_flex_table(),
+    NA
+  )
+})
+
 test_that("indent2", {
   expect_error(
     trial %>%

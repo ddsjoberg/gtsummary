@@ -53,6 +53,8 @@ tbl_summary,tbl_summary-str:categorical_stat,FALSE,"glue string defining the def
 tbl_summary,tbl_summary-str:continuous_stat,FALSE,"glue string defining the default continuous summary statistics to display; default is `""{median} ({p25}, {p75})""`. Also sets default statistic for `tbl_svysummary()`","""{mean} ({sd})"""
 tbl_summary,tbl_summary-str:default_con_type,FALSE,"string indicating the default summary type for continuous variables; default is `""continuous""`; update to `""continuous2""` for multi-line summaries of continuous variables","""continuous2"""
 tbl_summary,tbl_summary-str:missing_stat,FALSE,"string indicating the statistic(s) to present on the missing row. The default is `""{N_miss}""`. Select among `c(""N_miss"", ""N_obs"", ""p_miss"", ""N_nonmiss"", ""p_nonmiss"")`","""{N_miss} ({p_miss}%)"""
+tbl_summary,tbl_summary-str:header-noby,FALSE,string indicating the statistic header when there is no by variable present,"""N={N}"""
+tbl_summary,tbl_summary-str:header-withby,FALSE,string indicating the statistic header when there is a by variable present,"""**{level}**  \nN={n}"""
 tbl_summary,tbl_summary-arg:digits,TRUE,,
 tbl_summary,tbl_summary-arg:label,TRUE,,
 tbl_summary,tbl_summary-arg:missing,TRUE,,
