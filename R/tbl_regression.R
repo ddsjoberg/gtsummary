@@ -117,9 +117,6 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
                                    tidy_fun = NULL,
                                    add_estimate_to_reference_rows = FALSE,
                                    conf.int = NULL, ...) {
-  # deprecated arguments -------------------------------------------------------
-  .tbl_regression_deprecated_arguments(...)
-
   # setting defaults -----------------------------------------------------------
   tidy_fun <- tidy_fun %||% broom.helpers::tidy_with_broom_or_parameters
   pvalue_fun <-
@@ -265,20 +262,4 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
 
   # return results -------------------------------------------------------------
   x
-}
-
-.tbl_regression_deprecated_arguments <- function(exclude = NULL, ...) {
-  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_stop(
-      "1.2.5",
-      "gtsummary::tbl_regression(exclude = )",
-      "tbl_regression(include = )",
-      details = paste0(
-        "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "to `dplyr::select()`. To exclude variable, use the minus sign.\n",
-        "For example, `include = -c(age, stage)`"
-      )
-    )
-  }
-  invisible()
 }

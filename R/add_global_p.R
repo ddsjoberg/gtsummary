@@ -20,7 +20,6 @@
 #' quoted or unquoted variable names. Default is `everything()`
 #' @param quiet Logical indicating whether to print messages in console. Default is
 #' `FALSE`
-#' @param terms DEPRECATED.  Use `include=` argument instead.
 #' @param type Type argument passed to `car::Anova(type=)`. Default is `"III"`
 #' @param ... Additional arguments to be passed to `car::Anova`,
 #' `aod::wald.test()` or `anova_fun` (if specified)
@@ -76,15 +75,8 @@ add_global_p.tbl_regression <- function(x,
                                         keep = FALSE,
                                         anova_fun = NULL,
                                         quiet = NULL,
-                                        ..., terms = NULL) {
+                                        ...) {
   updated_call_list <- c(x$call_list, list(add_global_p = match.call()))
-  # deprecated arguments -------------------------------------------------------
-  if (!is.null(terms)) {
-    lifecycle::deprecate_stop(
-      "1.2.5", "gtsummary::add_global_p.tbl_regression(terms = )",
-      "add_global_p.tbl_regression(include = )"
-    )
-  }
 
   # setting defaults -----------------------------------------------------------
   quiet <- quiet %||% get_theme_element("pkgwide-lgl:quiet") %||% FALSE

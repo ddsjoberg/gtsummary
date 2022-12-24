@@ -2,8 +2,6 @@
 % Please edit documentation in R/deprecated.R
 \name{deprecated}
 \alias{deprecated}
-\alias{tbl_summary_}
-\alias{add_p_}
 \alias{as_flextable}
 \alias{all_numeric}
 \alias{all_character}
@@ -14,10 +12,6 @@
 \alias{modify_cols_merge}
 \title{Deprecated functions}
 \usage{
-tbl_summary_(...)
-
-add_p_(...)
-
 as_flextable(...)
 
 all_numeric()
