@@ -285,7 +285,6 @@ tbl_custom_summary_ex3 <-
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
 Other tbl_summary tools: 
-\code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_p.tbl_summary}()},
