@@ -92,9 +92,6 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL, formula = "{y} ~ {x}",
                              add_estimate_to_reference_rows = NULL, conf.int = NULL, ...) {
-  # deprecated arguments -------------------------------------------------------
-  .tbl_regression_deprecated_arguments(...)
-
   # checking input -------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data) && !is_survey(data)) {

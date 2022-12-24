@@ -1,5 +1,11 @@
 # gtsummary (development version)
 
+* Fully removed deprecated items that were originally deprecated in v1.2.5 (released 3 years ago).
+  - `tbl_summary_()`
+  - `add_p_()`
+  - `add_global_p(terms=)`
+  - `add_p(exclude=)`, `as_gt(exclude=)`, `as_kable(exclude=)`, `as_tibble.gtsummary(exclude=)`, `tbl_regression(exclude=)`,  `tbl_uvregression(exclude=)` 
+
 * Added new function `add_ci.tbl_svysummary()` for adding confidence intervals to `tbl_svysummary()` summary statistics. (#965)
 
 * Added new theme elements to control the default headers in `tbl_summary()`. (#1401)

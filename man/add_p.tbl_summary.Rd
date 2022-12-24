@@ -11,7 +11,6 @@
   group = NULL,
   include = everything(),
   test.args = NULL,
-  exclude = NULL,
   ...
 )
 }
@@ -48,8 +47,6 @@ functions. Default is \code{everything()}.}
 \item{test.args}{List of formulas containing additional arguments to pass to
 tests that accept arguments. For example, add an argument for all t-tests,
 use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
-
-\item{exclude}{DEPRECATED.}
 
 \item{...}{Not used}
 }

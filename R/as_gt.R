@@ -21,7 +21,6 @@
 #' @param return_calls Logical. Default is `FALSE`. If `TRUE`, the calls are returned
 #' as a list of expressions.
 #' @param ... Arguments passed on to [gt::gt]
-#' @param exclude DEPRECATED.
 #' @return A `gt_tbl` object
 #' @family gtsummary output types
 #' @author Daniel D. Sjoberg
@@ -40,22 +39,8 @@
 #' `r man_create_image_tag(file = "as_gt_ex1.png", width = "50")`
 #' }}
 
-as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
-                  exclude = NULL) {
+as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
   .assert_class(x, "gtsummary")
-  # making list of commands to include -----------------------------------------
-  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_stop(
-      "1.2.5",
-      "gtsummary::as_gt(exclude = )",
-      "as_gt(include = )",
-      details = paste0(
-        "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "to `dplyr::select()`. To exclude commands, use the minus sign.\n",
-        "For example, `include = -tab_spanner`"
-      )
-    )
-  }
 
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))
@@ -95,7 +80,6 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...,
     )
 
   # user cannot omit the first 'gt' command
-  include <- include %>% setdiff(exclude)
   include <- "gt" %>% union(include)
 
   # return calls, if requested -------------------------------------------------

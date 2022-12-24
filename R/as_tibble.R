@@ -24,22 +24,8 @@
 #' as_tibble(tbl, col_labels = FALSE)
 #' }
 as_tibble.gtsummary <- function(x, include = everything(), col_labels = TRUE,
-                                return_calls = FALSE, exclude = NULL,
-                                fmt_missing = FALSE, ...) {
+                                return_calls = FALSE, fmt_missing = FALSE, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))
-  # DEPRECATION notes ----------------------------------------------------------
-  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_stop(
-      "1.2.5",
-      "gtsummary::as_tibble(exclude = )",
-      "as_tibble(include = )",
-      details = paste0(
-        "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "to `dplyr::select()`. To exclude commands, use the minus sign.\n",
-        "For example, `include = -cols_hide`"
-      )
-    )
-  }
 
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))

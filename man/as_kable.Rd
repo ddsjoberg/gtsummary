@@ -4,7 +4,7 @@
 \alias{as_kable}
 \title{Convert gtsummary object to a kable object}
 \usage{
-as_kable(x, ..., include = everything(), return_calls = FALSE, exclude = NULL)
+as_kable(x, ..., include = everything(), return_calls = FALSE)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -19,8 +19,6 @@ Default is \code{everything()}.}
 
 \item{return_calls}{Logical. Default is \code{FALSE}. If \code{TRUE}, the calls are returned
 as a list of expressions.}
-
-\item{exclude}{DEPRECATED}
 }
 \value{
 A \code{knitr_kable} object

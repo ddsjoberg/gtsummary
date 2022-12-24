@@ -4,7 +4,7 @@
 \alias{as_gt}
 \title{Convert gtsummary object to a gt object}
 \usage{
-as_gt(x, include = everything(), return_calls = FALSE, ..., exclude = NULL)
+as_gt(x, include = everything(), return_calls = FALSE, ...)
 }
 \arguments{
 \item{x}{Object created by a function from the gtsummary package
@@ -19,8 +19,6 @@ Default is \code{everything()}.}
 as a list of expressions.}
 
 \item{...}{Arguments passed on to \link[gt:gt]{gt::gt}}
-
-\item{exclude}{DEPRECATED.}
 }
 \value{
 A \code{gt_tbl} object

@@ -30,21 +30,6 @@ NULL
 #   1.3.1 2020-06-02
 #   1.3.0 2020-04-17
 #   1.2.6 2020-02-13
-#   1.2.5 2020-02-11
-
-
-# v1.2.5 (2020-02-11) ----------------------------------------------------------
-#' @rdname deprecated
-#' @export
-tbl_summary_ <- function(...) {
-  lifecycle::deprecate_stop("1.2.5", "gtsummary::tbl_summary_()", "tbl_summary()")
-}
-
-#' @rdname deprecated
-#' @export
-add_p_ <- function(...) {
-  lifecycle::deprecate_stop("1.2.5", "gtsummary::add_p_()", "add_p()")
-}
 
 # v1.3.3 (2020-08-11) ----------------------------------------------------------
 #' @rdname deprecated
