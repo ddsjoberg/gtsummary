@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added new function `add_ci.tbl_svysummary()` for adding confidence intervals to `tbl_svysummary()` summary statistics. (#965)
+
 * Added new theme elements to control the default headers in `tbl_summary()`. (#1401)
 
 * All examples that previously used `<br>` for line breaks in gt tables have been updated to use `  \n`. Additionally, the `"qjecon"` journal theme has been updated to use the new line breaker as well. (#1311)
