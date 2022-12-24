@@ -131,7 +131,6 @@ tbl_overall_ex3 <-
 }
 \seealso{
 Other tbl_summary tools: 
-\code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_p.tbl_summary}()},
 \code{\link{add_q}()},
