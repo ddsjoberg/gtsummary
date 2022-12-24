@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.3.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.3.9008</span>
       </span>
     </div>
 
@@ -94,7 +94,16 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="development version" id="gtsummary-development-version">gtsummary (development version)<a class="anchor" aria-label="anchor" href="#gtsummary-development-version"></a></h2>
-<ul><li><p>Added new function <code><a href="../reference/add_ci.html">add_ci.tbl_svysummary()</a></code> for adding confidence intervals to <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> summary statistics. (<a href="https://github.com/ddsjoberg/gtsummary/issues/965" class="external-link">#965</a>)</p></li>
+<ul><li>
+<p>Fully removed deprecated items that were originally deprecated in v1.2.5 (released 3 years ago).</p>
+<ul><li><code>tbl_summary_()</code></li>
+<li><code>add_p_()</code></li>
+<li><code>add_global_p(terms=)</code></li>
+<li>
+<code>add_p(exclude=)</code>, <code>as_gt(exclude=)</code>, <code>as_kable(exclude=)</code>, <code>as_tibble.gtsummary(exclude=)</code>, <code>tbl_regression(exclude=)</code>, <code>tbl_uvregression(exclude=)</code>
+</li>
+</ul></li>
+<li><p>Added new function <code><a href="../reference/add_ci.html">add_ci.tbl_svysummary()</a></code> for adding confidence intervals to <code><a href="../reference/tbl_svysummary.html">tbl_svysummary()</a></code> summary statistics. (<a href="https://github.com/ddsjoberg/gtsummary/issues/965" class="external-link">#965</a>)</p></li>
 <li><p>Added new theme elements to control the default headers in <code><a href="../reference/tbl_summary.html">tbl_summary()</a></code>. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1401" class="external-link">#1401</a>)</p></li>
 <li><p>All examples that previously used <code>&lt;br&gt;</code> for line breaks in gt tables have been updated to use <code>\n</code>. Additionally, the <code>"qjecon"</code> journal theme has been updated to use the new line breaker as well. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1311" class="external-link">#1311</a>)</p></li>
 <li><p>Fix for <code><a href="../reference/as_flex_table.html">as_flex_table()</a></code> when the header is blank. (<a href="https://github.com/ddsjoberg/gtsummary/issues/1406" class="external-link">#1406</a>)</p></li>
@@ -738,7 +747,7 @@
 <div class="section level4">
 <h4 id="breaking-changes-1-2-5">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-1-2-5"></a></h4>
 <ul><li><p>Removed deprecated <code>fmt*_()</code> and <code>cols_label_summary()</code> functions (<a href="https://github.com/ddsjoberg/gtsummary/issues/365" class="external-link">#365</a>)</p></li>
-<li><p>Functions <code><a href="../reference/deprecated.html">tbl_summary_()</a></code> and <code><a href="../reference/deprecated.html">add_p_()</a></code> have been deprecated because the <code>by=</code> and <code>group=</code> arguments now accept strings (<a href="https://github.com/ddsjoberg/gtsummary/issues/250" class="external-link">#250</a>)</p></li>
+<li><p>Functions <code>tbl_summary_()</code> and <code>add_p_()</code> have been deprecated because the <code>by=</code> and <code>group=</code> arguments now accept strings (<a href="https://github.com/ddsjoberg/gtsummary/issues/250" class="external-link">#250</a>)</p></li>
 </ul></div>
 <div class="section level4">
 <h4 id="syntax-1-2-5">Syntax<a class="anchor" aria-label="anchor" href="#syntax-1-2-5"></a></h4>
@@ -807,7 +816,7 @@
 <li><p>Users may now pass a list of formulas, named lists, or a combination of both (<a href="https://github.com/ddsjoberg/gtsummary/issues/251" class="external-link">#251</a>)</p></li>
 <li><p>Users can add an option to their script to append any {gt} calls when a {gtsummary} object is printed: <code>gtsummary.as_gt.addl_cmds</code></p></li>
 <li><p>Added <code>include =</code> and <code>exclude =</code> arguments to <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/240" class="external-link">#240</a>)</p></li>
-<li><p>Added standard evaluation variants, <code><a href="../reference/deprecated.html">tbl_summary_()</a></code> and <code><a href="../reference/deprecated.html">add_p_()</a></code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/223" class="external-link">#223</a>)</p></li>
+<li><p>Added standard evaluation variants, <code>tbl_summary_()</code> and <code>add_p_()</code> (<a href="https://github.com/ddsjoberg/gtsummary/issues/223" class="external-link">#223</a>)</p></li>
 <li><p>Added <code><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble()</a></code> function that converts any {gtsummary} table to a tibble (<a href="https://github.com/ddsjoberg/gtsummary/issues/245" class="external-link">#245</a>)</p></li>
 <li><p>New <code>show_single_row</code> argument in <code><a href="../reference/tbl_regression.html">tbl_regression()</a></code> and <code><a href="../reference/tbl_uvregression.html">tbl_uvregression()</a></code> allows any binary variable to be printed on a single row. Previous argument <code>show_yesno</code> is now deprecated. (<a href="https://github.com/ddsjoberg/gtsummary/issues/220" class="external-link">#220</a>)</p></li>
 </ul></div>
