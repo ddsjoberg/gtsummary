@@ -1,0 +1,45 @@
+---
+title: "gtsummary + Shiny"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Any gtsummary table can be placed into a [Shiny application](https://shiny.rstudio.com/).
+The trick is that the gtsummary must first be converted into a gt table using the `as_gt()` function.
+Once the table is a proper gt table, we can use the methods from the gt package to place the table in the Shiny app. Read more about creating Shiny applications with gt table here [https://gt.rstudio.com/reference/gt_output.html](https://gt.rstudio.com/reference/gt_output.html).
+
+Save the script below locally as `app.R` in a R Project, open in RStudio, and run the application to see a live example.
+
+```r
+library(gtsummary)
+library(shiny)
+library(gt)
+
+# create a gtsummary table
+gtsummary_table <-
+  trial %>%
+  tbl_summary(
+    by = trt, 
+    include = c(age, grade)
+  )
+
+# convert the gtsummary table to a gt table
+gt_table <- as_gt(gtsummary_table)
+
+# create the Shiny app
+ui <- fluidPage(
+  gt_output(outputId = "table")
+)
+
+server <- function(input, output, session) {
+  output$table <- render_gt(expr = gt_table)
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+```
