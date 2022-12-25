@@ -49,7 +49,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtsummary</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.3.9008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="In-development version">1.6.3.9009</span>
       </span>
     </div>
 
@@ -81,7 +81,10 @@
       <a href="../articles/inline_text.html">inline_text() tutorial</a>
     </li>
     <li>
-      <a href="../articles/rmarkdown.html">gtsummary + R markdown</a>
+      <a href="../articles/rmarkdown.html">gtsummary + Quarto/Rmarkdown</a>
+    </li>
+    <li>
+      <a href="../articles/shiny.html">gtsummary + Shiny</a>
     </li>
     <li>
       <a href="../articles/themes.html">gtsummary + themes</a>
@@ -181,12 +184,12 @@ vignette</a> for detailed overview of this function if needed).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tab1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tbl_summary.html">tbl_summary</a></span><span class="op">(</span><span class="va">trial2</span>, by <span class="op">=</span> <span class="va">trt</span><span class="op">)</span></span>
 <span><span class="va">tab1</span></span></code></pre></div>
-<div id="yeihixccdf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="lpxoynsdsn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#yeihixccdf .gt_table {
+#lpxoynsdsn .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -211,7 +214,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-left-color: #D3D3D3;
 }
 
-#yeihixccdf .gt_heading {
+#lpxoynsdsn .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -223,12 +226,12 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-right-color: #D3D3D3;
 }
 
-#yeihixccdf .gt_caption {
+#lpxoynsdsn .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#yeihixccdf .gt_title {
+#lpxoynsdsn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -240,7 +243,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-bottom-width: 0;
 }
 
-#yeihixccdf .gt_subtitle {
+#lpxoynsdsn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -252,13 +255,13 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-top-width: 0;
 }
 
-#yeihixccdf .gt_bottom_border {
+#lpxoynsdsn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#yeihixccdf .gt_col_headings {
+#lpxoynsdsn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -273,7 +276,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-right-color: #D3D3D3;
 }
 
-#yeihixccdf .gt_col_heading {
+#lpxoynsdsn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -293,7 +296,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   overflow-x: hidden;
 }
 
-#yeihixccdf .gt_column_spanner_outer {
+#lpxoynsdsn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -305,15 +308,15 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 4px;
 }
 
-#yeihixccdf .gt_column_spanner_outer:first-child {
+#lpxoynsdsn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#yeihixccdf .gt_column_spanner_outer:last-child {
+#lpxoynsdsn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#yeihixccdf .gt_column_spanner {
+#lpxoynsdsn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -325,7 +328,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   width: 100%;
 }
 
-#yeihixccdf .gt_group_heading {
+#lpxoynsdsn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -351,7 +354,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   text-align: left;
 }
 
-#yeihixccdf .gt_empty_group_heading {
+#lpxoynsdsn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -366,15 +369,15 @@ vignette</a> for detailed overview of this function if needed).</p>
   vertical-align: middle;
 }
 
-#yeihixccdf .gt_from_md > :first-child {
+#lpxoynsdsn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#yeihixccdf .gt_from_md > :last-child {
+#lpxoynsdsn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#yeihixccdf .gt_row {
+#lpxoynsdsn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -393,7 +396,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   overflow-x: hidden;
 }
 
-#yeihixccdf .gt_stub {
+#lpxoynsdsn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -406,7 +409,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 5px;
 }
 
-#yeihixccdf .gt_stub_row_group {
+#lpxoynsdsn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -420,11 +423,11 @@ vignette</a> for detailed overview of this function if needed).</p>
   vertical-align: top;
 }
 
-#yeihixccdf .gt_row_group_first td {
+#lpxoynsdsn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#yeihixccdf .gt_summary_row {
+#lpxoynsdsn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -434,16 +437,16 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 5px;
 }
 
-#yeihixccdf .gt_first_summary_row {
+#lpxoynsdsn .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#yeihixccdf .gt_first_summary_row.thick {
+#lpxoynsdsn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#yeihixccdf .gt_last_summary_row {
+#lpxoynsdsn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -453,7 +456,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-bottom-color: #D3D3D3;
 }
 
-#yeihixccdf .gt_grand_summary_row {
+#lpxoynsdsn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -463,7 +466,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 5px;
 }
 
-#yeihixccdf .gt_first_grand_summary_row {
+#lpxoynsdsn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -473,11 +476,11 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-top-color: #D3D3D3;
 }
 
-#yeihixccdf .gt_striped {
+#lpxoynsdsn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#yeihixccdf .gt_table_body {
+#lpxoynsdsn .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -486,7 +489,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-bottom-color: #D3D3D3;
 }
 
-#yeihixccdf .gt_footnotes {
+#lpxoynsdsn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -500,7 +503,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-right-color: #D3D3D3;
 }
 
-#yeihixccdf .gt_footnote {
+#lpxoynsdsn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -509,7 +512,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 5px;
 }
 
-#yeihixccdf .gt_sourcenotes {
+#lpxoynsdsn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -523,7 +526,7 @@ vignette</a> for detailed overview of this function if needed).</p>
   border-right-color: #D3D3D3;
 }
 
-#yeihixccdf .gt_sourcenote {
+#lpxoynsdsn .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -531,64 +534,64 @@ vignette</a> for detailed overview of this function if needed).</p>
   padding-right: 5px;
 }
 
-#yeihixccdf .gt_left {
+#lpxoynsdsn .gt_left {
   text-align: left;
 }
 
-#yeihixccdf .gt_center {
+#lpxoynsdsn .gt_center {
   text-align: center;
 }
 
-#yeihixccdf .gt_right {
+#lpxoynsdsn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#yeihixccdf .gt_font_normal {
+#lpxoynsdsn .gt_font_normal {
   font-weight: normal;
 }
 
-#yeihixccdf .gt_font_bold {
+#lpxoynsdsn .gt_font_bold {
   font-weight: bold;
 }
 
-#yeihixccdf .gt_font_italic {
+#lpxoynsdsn .gt_font_italic {
   font-style: italic;
 }
 
-#yeihixccdf .gt_super {
+#lpxoynsdsn .gt_super {
   font-size: 65%;
 }
 
-#yeihixccdf .gt_footnote_marks {
+#lpxoynsdsn .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#yeihixccdf .gt_asterisk {
+#lpxoynsdsn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#yeihixccdf .gt_indent_1 {
+#lpxoynsdsn .gt_indent_1 {
   text-indent: 5px;
 }
 
-#yeihixccdf .gt_indent_2 {
+#lpxoynsdsn .gt_indent_2 {
   text-indent: 10px;
 }
 
-#yeihixccdf .gt_indent_3 {
+#lpxoynsdsn .gt_indent_3 {
   text-indent: 15px;
 }
 
-#yeihixccdf .gt_indent_4 {
+#lpxoynsdsn .gt_indent_4 {
   text-indent: 20px;
 }
 
-#yeihixccdf .gt_indent_5 {
+#lpxoynsdsn .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -682,12 +685,12 @@ exponentiate to get the odds ratios.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tbl_m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tbl_regression.html">tbl_regression</a></span><span class="op">(</span><span class="va">m1</span>, exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">tbl_m1</span></span></code></pre></div>
-<div id="zbiuywucqb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="qdwmnxzuln" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#zbiuywucqb .gt_table {
+#qdwmnxzuln .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -712,7 +715,7 @@ exponentiate to get the odds ratios.</p>
   border-left-color: #D3D3D3;
 }
 
-#zbiuywucqb .gt_heading {
+#qdwmnxzuln .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -724,12 +727,12 @@ exponentiate to get the odds ratios.</p>
   border-right-color: #D3D3D3;
 }
 
-#zbiuywucqb .gt_caption {
+#qdwmnxzuln .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zbiuywucqb .gt_title {
+#qdwmnxzuln .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -741,7 +744,7 @@ exponentiate to get the odds ratios.</p>
   border-bottom-width: 0;
 }
 
-#zbiuywucqb .gt_subtitle {
+#qdwmnxzuln .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -753,13 +756,13 @@ exponentiate to get the odds ratios.</p>
   border-top-width: 0;
 }
 
-#zbiuywucqb .gt_bottom_border {
+#qdwmnxzuln .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zbiuywucqb .gt_col_headings {
+#qdwmnxzuln .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -774,7 +777,7 @@ exponentiate to get the odds ratios.</p>
   border-right-color: #D3D3D3;
 }
 
-#zbiuywucqb .gt_col_heading {
+#qdwmnxzuln .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -794,7 +797,7 @@ exponentiate to get the odds ratios.</p>
   overflow-x: hidden;
 }
 
-#zbiuywucqb .gt_column_spanner_outer {
+#qdwmnxzuln .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -806,15 +809,15 @@ exponentiate to get the odds ratios.</p>
   padding-right: 4px;
 }
 
-#zbiuywucqb .gt_column_spanner_outer:first-child {
+#qdwmnxzuln .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zbiuywucqb .gt_column_spanner_outer:last-child {
+#qdwmnxzuln .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zbiuywucqb .gt_column_spanner {
+#qdwmnxzuln .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -826,7 +829,7 @@ exponentiate to get the odds ratios.</p>
   width: 100%;
 }
 
-#zbiuywucqb .gt_group_heading {
+#qdwmnxzuln .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -852,7 +855,7 @@ exponentiate to get the odds ratios.</p>
   text-align: left;
 }
 
-#zbiuywucqb .gt_empty_group_heading {
+#qdwmnxzuln .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -867,15 +870,15 @@ exponentiate to get the odds ratios.</p>
   vertical-align: middle;
 }
 
-#zbiuywucqb .gt_from_md > :first-child {
+#qdwmnxzuln .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zbiuywucqb .gt_from_md > :last-child {
+#qdwmnxzuln .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zbiuywucqb .gt_row {
+#qdwmnxzuln .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -894,7 +897,7 @@ exponentiate to get the odds ratios.</p>
   overflow-x: hidden;
 }
 
-#zbiuywucqb .gt_stub {
+#qdwmnxzuln .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -907,7 +910,7 @@ exponentiate to get the odds ratios.</p>
   padding-right: 5px;
 }
 
-#zbiuywucqb .gt_stub_row_group {
+#qdwmnxzuln .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -921,11 +924,11 @@ exponentiate to get the odds ratios.</p>
   vertical-align: top;
 }
 
-#zbiuywucqb .gt_row_group_first td {
+#qdwmnxzuln .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zbiuywucqb .gt_summary_row {
+#qdwmnxzuln .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -935,16 +938,16 @@ exponentiate to get the odds ratios.</p>
   padding-right: 5px;
 }
 
-#zbiuywucqb .gt_first_summary_row {
+#qdwmnxzuln .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zbiuywucqb .gt_first_summary_row.thick {
+#qdwmnxzuln .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zbiuywucqb .gt_last_summary_row {
+#qdwmnxzuln .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -954,7 +957,7 @@ exponentiate to get the odds ratios.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#zbiuywucqb .gt_grand_summary_row {
+#qdwmnxzuln .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -964,7 +967,7 @@ exponentiate to get the odds ratios.</p>
   padding-right: 5px;
 }
 
-#zbiuywucqb .gt_first_grand_summary_row {
+#qdwmnxzuln .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -974,11 +977,11 @@ exponentiate to get the odds ratios.</p>
   border-top-color: #D3D3D3;
 }
 
-#zbiuywucqb .gt_striped {
+#qdwmnxzuln .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zbiuywucqb .gt_table_body {
+#qdwmnxzuln .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -987,7 +990,7 @@ exponentiate to get the odds ratios.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#zbiuywucqb .gt_footnotes {
+#qdwmnxzuln .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1001,7 +1004,7 @@ exponentiate to get the odds ratios.</p>
   border-right-color: #D3D3D3;
 }
 
-#zbiuywucqb .gt_footnote {
+#qdwmnxzuln .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 4px;
@@ -1010,7 +1013,7 @@ exponentiate to get the odds ratios.</p>
   padding-right: 5px;
 }
 
-#zbiuywucqb .gt_sourcenotes {
+#qdwmnxzuln .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1024,7 +1027,7 @@ exponentiate to get the odds ratios.</p>
   border-right-color: #D3D3D3;
 }
 
-#zbiuywucqb .gt_sourcenote {
+#qdwmnxzuln .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1032,64 +1035,64 @@ exponentiate to get the odds ratios.</p>
   padding-right: 5px;
 }
 
-#zbiuywucqb .gt_left {
+#qdwmnxzuln .gt_left {
   text-align: left;
 }
 
-#zbiuywucqb .gt_center {
+#qdwmnxzuln .gt_center {
   text-align: center;
 }
 
-#zbiuywucqb .gt_right {
+#qdwmnxzuln .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zbiuywucqb .gt_font_normal {
+#qdwmnxzuln .gt_font_normal {
   font-weight: normal;
 }
 
-#zbiuywucqb .gt_font_bold {
+#qdwmnxzuln .gt_font_bold {
   font-weight: bold;
 }
 
-#zbiuywucqb .gt_font_italic {
+#qdwmnxzuln .gt_font_italic {
   font-style: italic;
 }
 
-#zbiuywucqb .gt_super {
+#qdwmnxzuln .gt_super {
   font-size: 65%;
 }
 
-#zbiuywucqb .gt_footnote_marks {
+#qdwmnxzuln .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#zbiuywucqb .gt_asterisk {
+#qdwmnxzuln .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zbiuywucqb .gt_indent_1 {
+#qdwmnxzuln .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zbiuywucqb .gt_indent_2 {
+#qdwmnxzuln .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zbiuywucqb .gt_indent_3 {
+#qdwmnxzuln .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zbiuywucqb .gt_indent_4 {
+#qdwmnxzuln .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zbiuywucqb .gt_indent_5 {
+#qdwmnxzuln .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -1164,12 +1167,12 @@ objects being inserted between curly brackets. The default is
 <code>pattern = "{estimate} ({conf.level*100}% CI {conf.low}, {conf.high}; {p.value})"</code>.
 You have access the to following fields within the <code>pattern</code>
 argument.</p>
-<div id="drzrbiengd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="gkmbgneqas" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#drzrbiengd .gt_table {
+#gkmbgneqas .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -1194,7 +1197,7 @@ argument.</p>
   border-left-color: #D3D3D3;
 }
 
-#drzrbiengd .gt_heading {
+#gkmbgneqas .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1206,12 +1209,12 @@ argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#drzrbiengd .gt_caption {
+#gkmbgneqas .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#drzrbiengd .gt_title {
+#gkmbgneqas .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1223,7 +1226,7 @@ argument.</p>
   border-bottom-width: 0;
 }
 
-#drzrbiengd .gt_subtitle {
+#gkmbgneqas .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1235,13 +1238,13 @@ argument.</p>
   border-top-width: 0;
 }
 
-#drzrbiengd .gt_bottom_border {
+#gkmbgneqas .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#drzrbiengd .gt_col_headings {
+#gkmbgneqas .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1256,7 +1259,7 @@ argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#drzrbiengd .gt_col_heading {
+#gkmbgneqas .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1276,7 +1279,7 @@ argument.</p>
   overflow-x: hidden;
 }
 
-#drzrbiengd .gt_column_spanner_outer {
+#gkmbgneqas .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1288,15 +1291,15 @@ argument.</p>
   padding-right: 4px;
 }
 
-#drzrbiengd .gt_column_spanner_outer:first-child {
+#gkmbgneqas .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#drzrbiengd .gt_column_spanner_outer:last-child {
+#gkmbgneqas .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#drzrbiengd .gt_column_spanner {
+#gkmbgneqas .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1308,7 +1311,7 @@ argument.</p>
   width: 100%;
 }
 
-#drzrbiengd .gt_group_heading {
+#gkmbgneqas .gt_group_heading {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1334,7 +1337,7 @@ argument.</p>
   text-align: left;
 }
 
-#drzrbiengd .gt_empty_group_heading {
+#gkmbgneqas .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1349,15 +1352,15 @@ argument.</p>
   vertical-align: middle;
 }
 
-#drzrbiengd .gt_from_md > :first-child {
+#gkmbgneqas .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#drzrbiengd .gt_from_md > :last-child {
+#gkmbgneqas .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#drzrbiengd .gt_row {
+#gkmbgneqas .gt_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1376,7 +1379,7 @@ argument.</p>
   overflow-x: hidden;
 }
 
-#drzrbiengd .gt_stub {
+#gkmbgneqas .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1389,7 +1392,7 @@ argument.</p>
   padding-right: 5px;
 }
 
-#drzrbiengd .gt_stub_row_group {
+#gkmbgneqas .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1403,11 +1406,11 @@ argument.</p>
   vertical-align: top;
 }
 
-#drzrbiengd .gt_row_group_first td {
+#gkmbgneqas .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#drzrbiengd .gt_summary_row {
+#gkmbgneqas .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1417,16 +1420,16 @@ argument.</p>
   padding-right: 5px;
 }
 
-#drzrbiengd .gt_first_summary_row {
+#gkmbgneqas .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#drzrbiengd .gt_first_summary_row.thick {
+#gkmbgneqas .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#drzrbiengd .gt_last_summary_row {
+#gkmbgneqas .gt_last_summary_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1436,7 +1439,7 @@ argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#drzrbiengd .gt_grand_summary_row {
+#gkmbgneqas .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1446,7 +1449,7 @@ argument.</p>
   padding-right: 5px;
 }
 
-#drzrbiengd .gt_first_grand_summary_row {
+#gkmbgneqas .gt_first_grand_summary_row {
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 5px;
@@ -1456,11 +1459,11 @@ argument.</p>
   border-top-color: #D3D3D3;
 }
 
-#drzrbiengd .gt_striped {
+#gkmbgneqas .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#drzrbiengd .gt_table_body {
+#gkmbgneqas .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1469,7 +1472,7 @@ argument.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#drzrbiengd .gt_footnotes {
+#gkmbgneqas .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1483,7 +1486,7 @@ argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#drzrbiengd .gt_footnote {
+#gkmbgneqas .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-left: 1px;
@@ -1492,7 +1495,7 @@ argument.</p>
   padding-right: 5px;
 }
 
-#drzrbiengd .gt_sourcenotes {
+#gkmbgneqas .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1506,7 +1509,7 @@ argument.</p>
   border-right-color: #D3D3D3;
 }
 
-#drzrbiengd .gt_sourcenote {
+#gkmbgneqas .gt_sourcenote {
   font-size: 90%;
   padding-top: 1px;
   padding-bottom: 1px;
@@ -1514,64 +1517,64 @@ argument.</p>
   padding-right: 5px;
 }
 
-#drzrbiengd .gt_left {
+#gkmbgneqas .gt_left {
   text-align: left;
 }
 
-#drzrbiengd .gt_center {
+#gkmbgneqas .gt_center {
   text-align: center;
 }
 
-#drzrbiengd .gt_right {
+#gkmbgneqas .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#drzrbiengd .gt_font_normal {
+#gkmbgneqas .gt_font_normal {
   font-weight: normal;
 }
 
-#drzrbiengd .gt_font_bold {
+#gkmbgneqas .gt_font_bold {
   font-weight: bold;
 }
 
-#drzrbiengd .gt_font_italic {
+#gkmbgneqas .gt_font_italic {
   font-style: italic;
 }
 
-#drzrbiengd .gt_super {
+#gkmbgneqas .gt_super {
   font-size: 65%;
 }
 
-#drzrbiengd .gt_footnote_marks {
+#gkmbgneqas .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 75%;
   vertical-align: 0.4em;
 }
 
-#drzrbiengd .gt_asterisk {
+#gkmbgneqas .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#drzrbiengd .gt_indent_1 {
+#gkmbgneqas .gt_indent_1 {
   text-indent: 5px;
 }
 
-#drzrbiengd .gt_indent_2 {
+#gkmbgneqas .gt_indent_2 {
   text-indent: 10px;
 }
 
-#drzrbiengd .gt_indent_3 {
+#gkmbgneqas .gt_indent_3 {
   text-indent: 15px;
 }
 
-#drzrbiengd .gt_indent_4 {
+#gkmbgneqas .gt_indent_4 {
   text-indent: 20px;
 }
 
-#drzrbiengd .gt_indent_5 {
+#gkmbgneqas .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
