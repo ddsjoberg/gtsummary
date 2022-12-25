@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Added a new article illustrating how to place gtsummary tables into Shiny applications. (#1335)
+
 * Fully removed deprecated items that were originally deprecated in v1.2.5 (released 3 years ago).
   - `tbl_summary_()`
   - `add_p_()`

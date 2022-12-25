@@ -1,0 +1,33 @@
+---
+title: "gtsummary + Shiny"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Any gtsummary table can be placed into a [Shiny application](https://shiny.rstudio.com/).
+The trick is that the gtsummary must first be converted into a gt table using the `gtsummary::as_gt()` function.
+Once the table is a proper gt table, we can use the methods from the gt package to place the table in the Shiny app.
+Read more about creating Shiny applications with gt tables here: [https://gt.rstudio.com/reference/gt_output.html](https://gt.rstudio.com/reference/gt_output.html).
+
+# Shiny Example
+
+Below is an example of a Shiny app using the gtsummary package to provide dynamic patient characteristic summaries.
+
+<!-- The email address associated with this shiny app is 'danield.sjoberg+gtsummary@gmail.com' -->
+```{=html}
+<iframe src="https://gtsummary.shinyapps.io/gtsummary-shiny-example/" width="100%" height="400" frameborder="no"></iframe>
+```
+
+If the Shiny app has run out of its free server usage, see below for instructions on running the app locally on your machine.
+
+# Shiny Code
+
+```{r, eval=FALSE, file='https://raw.githubusercontent.com/ddsjoberg/gtsummary-shiny-example/main/app.R'}
+```
+
+To run this Shiny app locally on your machine, save the script above as `app.R` in a R Project, open in RStudio, and run the application.
