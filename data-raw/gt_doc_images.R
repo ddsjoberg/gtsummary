@@ -22,7 +22,7 @@ gt.doc.images::save_help_file_images(pkg = "gtsummary", path.output = file.path(
 
 # document a single file with
 gt.doc.images::save_help_file_images(pkg = "gtsummary",
-                                     rd_files = "add_significance_stars.Rd",
+                                     rd_files = "add_ci.Rd",
                                      path.output = file.path(here::here(), "man-images"))
 
 # 5. Shrink png files
