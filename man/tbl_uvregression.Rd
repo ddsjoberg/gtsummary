@@ -92,7 +92,8 @@ random intercept model, the formula may be \code{formula = "{y} ~ {x} + (1 | gea
 \item{conf.int}{Logical indicating whether or not to include a confidence
 interval in the output. Defaults to \code{TRUE}.}
 
-\item{...}{\lifecycle{experimental}Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}}
+\item{...}{\lifecycle{experimental}Additional arguments passed to \code{\link[broom.helpers:tidy_plus_plus]{broom.helpers::tidy_plus_plus()}}.
+See \code{?tidy_plus_plus_dots} for details.}
 }
 \value{
 A \code{tbl_uvregression} object

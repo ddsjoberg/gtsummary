@@ -328,3 +328,19 @@ test_that("tbl_uvregression works with survey object", {
   )
 })
 
+test_that("tbl_uvregression() can pass the dots to tidy_plus_plus()", {
+  # create a table with no reference row and no header rows (3 rows long)
+  expect_equal(
+    trial %>%
+      tbl_uvregression(
+        y = age,
+        method = lm,
+        include = c(trt, grade),
+        no_reference_row =  any_of(c("trt", "grade")),
+        add_header_rows = FALSE
+      ) %>%
+      as_tibble() %>%
+      nrow(),
+    3L
+  )
+})
