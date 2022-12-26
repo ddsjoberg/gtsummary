@@ -32,7 +32,6 @@ add_p <- function(x, ...) {
 #' @param test.args List of formulas containing additional arguments to pass to
 #' tests that accept arguments. For example, add an argument for all t-tests,
 #' use `test.args = all_tests("t.test") ~ list(var.equal = TRUE)`
-#' @param exclude DEPRECATED.
 #' @param ... Not used
 #' @inheritParams tbl_regression
 #' @inheritParams tbl_summary
@@ -76,24 +75,10 @@ add_p <- function(x, ...) {
 #' }}
 
 add_p.tbl_summary <- function(x, test = NULL, pvalue_fun = NULL,
-                              group = NULL, include = everything(), test.args = NULL,
-                              exclude = NULL, ...) {
+                              group = NULL, include = everything(),
+                              test.args = NULL, ...) {
   check_dots_empty(error = function(e) inform(c(e$message, e$body)))
   updated_call_list <- c(x$call_list, list(add_p = match.call()))
-
-  # DEPRECATION notes ----------------------------------------------------------
-  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_stop(
-      "1.2.5",
-      "gtsummary::add_p(exclude = )",
-      "add_p(include = )",
-      details = paste0(
-        "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "to `dplyr::select()`. To exclude variable, use the minus sign.\n",
-        "For example, `include = -c(age, stage)`"
-      )
-    )
-  }
 
   # setting defaults from gtsummary theme --------------------------------------
   test <- test %||% get_theme_element("add_p.tbl_summary-arg:test")

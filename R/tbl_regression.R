@@ -58,7 +58,8 @@
 #' @param add_estimate_to_reference_rows add a reference value. Default is FALSE
 #' @param conf.int Logical indicating whether or not to include a confidence
 #' interval in the output. Defaults to `TRUE`.
-#' @param ... \lifecycle{experimental}Additional arguments passed to [broom.helpers::tidy_plus_plus()]
+#' @param ... \lifecycle{experimental}Additional arguments passed to [broom.helpers::tidy_plus_plus()].
+#' See `?tidy_plus_plus_dots` for details.
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
@@ -117,9 +118,6 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
                                    tidy_fun = NULL,
                                    add_estimate_to_reference_rows = FALSE,
                                    conf.int = NULL, ...) {
-  # deprecated arguments -------------------------------------------------------
-  .tbl_regression_deprecated_arguments(...)
-
   # setting defaults -----------------------------------------------------------
   tidy_fun <- tidy_fun %||% broom.helpers::tidy_with_broom_or_parameters
   pvalue_fun <-
@@ -265,20 +263,4 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
 
   # return results -------------------------------------------------------------
   x
-}
-
-.tbl_regression_deprecated_arguments <- function(exclude = NULL, ...) {
-  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_stop(
-      "1.2.5",
-      "gtsummary::tbl_regression(exclude = )",
-      "tbl_regression(include = )",
-      details = paste0(
-        "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "to `dplyr::select()`. To exclude variable, use the minus sign.\n",
-        "For example, `include = -c(age, stage)`"
-      )
-    )
-  }
-  invisible()
 }

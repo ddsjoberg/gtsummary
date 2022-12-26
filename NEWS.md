@@ -1,5 +1,17 @@
 # gtsummary (development version)
 
+* Arguments pass via the dots in `tbl_uvregression(...)` are now passed to `broom.helpers::tidy_plus_plus()`. (#1396)
+
+* Added a new article illustrating how to place gtsummary tables into Shiny applications. (#1335)
+
+* Fully removed deprecated items that were originally deprecated in v1.2.5 (released 3 years ago).
+  - `tbl_summary_()`
+  - `add_p_()`
+  - `add_global_p(terms=)`
+  - `add_p(exclude=)`, `as_gt(exclude=)`, `as_kable(exclude=)`, `as_tibble.gtsummary(exclude=)`, `tbl_regression(exclude=)`,  `tbl_uvregression(exclude=)` 
+
+* Added new function `add_ci.tbl_svysummary()` for adding confidence intervals to `tbl_svysummary()` summary statistics. (#965)
+
 * Added new theme elements to control the default headers in `tbl_summary()`. (#1401)
 
 * All examples that previously used `<br>` for line breaks in gt tables have been updated to use `  \n`. Additionally, the `"qjecon"` journal theme has been updated to use the new line breaker as well. (#1311)

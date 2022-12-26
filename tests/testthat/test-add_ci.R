@@ -97,3 +97,44 @@ test_that("add_ci() throws errors with bad arguments", {
     add_ci(x = letters)
   )
 })
+
+
+test_that("add_ci() works with tbl_svysummary", {
+  skip_if_not_installed("survey")
+
+  data(api, package = "survey")
+  d <- survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc)
+
+  tbl <- d %>%
+    tbl_svysummary(
+      by = both,
+      include = c(api00, hsg, stype),
+      statistic = hsg ~ "{mean} ({sd})"
+    )
+
+  expect_error(
+    res <- tbl %>% add_ci(method = api00 ~ "svymedian"),
+    NA
+  )
+  expect_equal(
+    as_tibble(res) %>% names(),
+    c("**Characteristic**", "**No**, N = 1,692", "**95% CI**",
+      "**Yes**, N = 4,502", "**95% CI**")
+  )
+  expect_equal(
+    as_tibble(res, col_labels = FALSE) %>% dplyr::pull(ci_stat_1),
+    c("547, 722", "13, 28", NA, "43%, 81%", "6.6%, 27%", "8.7%, 46%")
+  )
+  expect_message(tbl %>% add_ci())
+
+  expect_error(
+    tbl %>% add_ci(
+      method = list(
+        api00 ~ "svymedian.beta",
+        stype ~ "svyprop.mean"
+      ),
+      df = Inf
+    ),
+    NA
+  )
+})

@@ -13,7 +13,6 @@
 #' (e.g. [tbl_summary] or [tbl_regression])
 #' @inheritParams as_gt
 #' @inheritParams as_tibble.gtsummary
-#' @param exclude DEPRECATED
 #' @param ... Additional arguments passed to [knitr::kable]
 #' @export
 #' @return A `knitr_kable` object
@@ -26,22 +25,8 @@
 #'   bold_labels() %>%
 #'   as_kable()
 #' }
-as_kable <- function(x, ..., include = everything(), return_calls = FALSE,
-                     exclude = NULL) {
+as_kable <- function(x, ..., include = everything(), return_calls = FALSE) {
   .assert_class(x, "gtsummary")
-  # DEPRECATION notes ----------------------------------------------------------
-  if (!rlang::quo_is_null(rlang::enquo(exclude))) {
-    lifecycle::deprecate_stop(
-      "1.2.5",
-      "gtsummary::as_kable(exclude = )",
-      "as_kable(include = )",
-      details = paste0(
-        "The `include` argument accepts quoted and unquoted expressions similar\n",
-        "to `dplyr::select()`. To exclude commands, use the minus sign.\n",
-        "For example, `include = -cols_hide`"
-      )
-    )
-  }
 
   # running pre-conversion function, if present --------------------------------
   x <- do.call(get_theme_element("pkgwide-fun:pre_conversion", default = identity), list(x))

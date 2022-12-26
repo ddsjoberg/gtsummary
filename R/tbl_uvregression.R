@@ -92,9 +92,6 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
                              hide_n = FALSE, show_single_row = NULL, conf.level = NULL,
                              estimate_fun = NULL, pvalue_fun = NULL, formula = "{y} ~ {x}",
                              add_estimate_to_reference_rows = NULL, conf.int = NULL, ...) {
-  # deprecated arguments -------------------------------------------------------
-  .tbl_regression_deprecated_arguments(...)
-
   # checking input -------------------------------------------------------------
   # data is a data frame
   if (!is.data.frame(data) && !is_survey(data)) {
@@ -226,6 +223,7 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   # will return call, and all object passed to in table1 call
   # the object func_inputs is a list of every object passed to the function
   tbl_uvregression_inputs <- as.list(environment())
+  dots <- rlang::enquos(...)
   tbl_uvregression_inputs <-
     tbl_uvregression_inputs[!names(tbl_uvregression_inputs) %in% c("x_name", "y_name")]
 
@@ -318,7 +316,8 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   df_model$tbl <- pmap(
     list(df_model$tbl_args, df_model$type, df_model$y),
     function(tbl_args, type, y) {
-      tbl <- call2(tbl_regression, !!!tbl_args) %>% eval()
+      # browser()
+      tbl <- call2(tbl_regression, !!!tbl_args, !!!dots) %>% eval()
       if (type == "y_varies") {
         tbl$table_body$variable <- y
         tbl$table_body$var_type <- NA_character_

@@ -11,7 +11,6 @@
   group = NULL,
   include = everything(),
   test.args = NULL,
-  exclude = NULL,
   ...
 )
 }
@@ -48,8 +47,6 @@ functions. Default is \code{everything()}.}
 \item{test.args}{List of formulas containing additional arguments to pass to
 tests that accept arguments. For example, add an argument for all t-tests,
 use \code{test.args = all_tests("t.test") ~ list(var.equal = TRUE)}}
-
-\item{exclude}{DEPRECATED.}
 
 \item{...}{Not used}
 }
@@ -101,7 +98,6 @@ See tbl_summary \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_summ
 Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsummary
 
 Other tbl_summary tools: 
-\code{\link{add_ci}()},
 \code{\link{add_n.tbl_summary}()},
 \code{\link{add_overall}()},
 \code{\link{add_q}()},
