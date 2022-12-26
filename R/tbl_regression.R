@@ -58,7 +58,8 @@
 #' @param add_estimate_to_reference_rows add a reference value. Default is FALSE
 #' @param conf.int Logical indicating whether or not to include a confidence
 #' interval in the output. Defaults to `TRUE`.
-#' @param ... \lifecycle{experimental}Additional arguments passed to [broom.helpers::tidy_plus_plus()]
+#' @param ... \lifecycle{experimental}Additional arguments passed to [broom.helpers::tidy_plus_plus()].
+#' See `?tidy_plus_plus_dots` for details.
 #' @author Daniel D. Sjoberg
 #' @seealso See tbl_regression \href{https://www.danieldsjoberg.com/gtsummary/articles/tbl_regression.html}{vignette} for detailed examples
 #' @seealso Review [list, formula, and selector syntax][syntax] used throughout gtsummary
