@@ -26,6 +26,8 @@ For a deeper review of propensity score methods, review one or more of the follo
 
 - "A Tutorial and Case Study in Propensity Score Analysis: An Application to Estimating the Effect of In-Hospital Smoking Cessation Counseling on Mortality" published in *Multivariate Behavioral Research*. (doi:10.1080/00273171.2011.540480)[https://doi.org/10.1080%2F00273171.2011.540480].
 
+- "Propensity score methods for bias reduction in the comparison of a treatment to a non-randomized control group ([R B D'Agostino Jr](https://pubmed.ncbi.nlm.nih.gov/9802183/))
+
 ## Construct a Propensity Score
 
 ### Data
@@ -112,7 +114,7 @@ gts_pre_match
 ```
 
 
-Logistic regression model is the most common method to construct the propensity score to predict the probability of receiving the treatment
+Logistic regression model is the most common method to construct the propensity score to predict the probability of receiving the treatment. Alternative methods for propensity score estimation include decision trees (CART) : reference can be found here: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2907172/ 
 
 ```{r Pscore}
 # Construct PS model
@@ -130,7 +132,7 @@ mod_ps %>%
 ```
 
 ```{r warning=FALSE}
-## To explorer the overlapping regions
+## To explorer the overlapping regions (ie common coverage) between the two groups
 df_with_ps <- 
   ## obtained the estimated PS
   broom::augment(
@@ -171,11 +173,12 @@ There are different algorithm for matching: optimal matching (Bersekas, 1991), G
 See Austin (2012) for detailed discussion and comparison of different algorithms for matching on the propensity score.
 The R pckage `MatchIt` written by Noah Greifer, offers different methods for matching. Complete vignette on this package can be found here: https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html#assessing-the-quality-of-matches]
 
-The following codes show the 1:1 Greedy's nearest neighbor matching without replacement with a caliper of 0.25. 
+The following codes show the 1:1 Greedy's nearest neighbor matching without replacement with a caliper of 0.25. The default estimand in `MatchIt` is the average treatment effect of the treated (ATT)
+
 
 Caliper is the actual maximum distance allowed by the matching algorithm.
 It is usually set to be a quarter of standard deviation of the propensity score.
-Reference on selecting the appropriate caliper canbe found here : https://doi.org/10.1093/aje/kwt212
+Reference on selecting the appropriate caliper can be found here : https://doi.org/10.1093/aje/kwt212
 
 ```{r match}
 df_matchit_results <-
@@ -226,6 +229,7 @@ gts_post_match
 
 Now let's visualize the matching by plotting the pre- and post-matching standardized mean differences.
 
+The first figure illustrates the reduction in SMD from pre-matching to post-matching
 ```{r}
 # Extract the SMD pre-matching
 pre_match_smd <-
@@ -314,28 +318,40 @@ Parameters within {matchit} can be tweaked to help improve matching.
 If matching does not improve, consider a different matching strategy.
 
 
-### Analysis  
+### Analysis 
+For deeper understanding, Noah Greifer the author who wrote the the R pckage `MatchIt` has a nice detailed review on estimating the treatment effect after matching and can be found here :https://kosukeimai.github.io/MatchIt/articles/estimating-effects.html#the-standard-case
+
 
 #### Continuous outcome
 
 ```{r}
-# Continuous outcome weight changes
-lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights) %>%
-  tbl_regression()
-# TODO: update for clusters
+# Fitting linear model with continuous outcome weight changes
+fit1<-lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights)
+
+# Use marginaleffects::comparison to estimate the ATT
+comp1 <- marginaleffects::comparisons(fit1,
+                     variables = "qsmk",#the name of the group or treatment
+                     vcov = ~subclass,#a formula with subclass membership (~subclass) to request cluster-robust SEs
+                     newdata = subset(df_post_match, qsmk == 1),#a version of the matched dataset containing only the treated units to request the ATT;
+                     wts = "weights") #the names of the variable in df_post_match containing the matching weights ("weights") to ensure they are included in the analysis
+summary(comp1)
+
+
+
+
 ```
 
 #### Binary outcome
 
 ```{r}
-# Binary outcome
-glm(death ~ qsmk,
-    family = binomial,
-    data = df_post_match, 
-    weights = weights
+# Fit conditional logistic regression for binary outcome
+clogit(death ~ qsmk,data = df_post_match, 
+    weights = weights,method="breslow"
 ) %>% 
   tbl_regression(exponentiate = TRUE)
-#TODO: JC to change this to conditional logistic regression.
+
+
+
 ```
 
 #### Survival outcome
