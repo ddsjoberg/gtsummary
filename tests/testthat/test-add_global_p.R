@@ -6,20 +6,23 @@ test_that("no errors/warnings with standard use after tbl_regression", {
   tbl1 <- tbl_regression(mod1)
 
   expect_warning(
-    tbl1 %>% add_global_p(), NA
+    res <- tbl1 %>% add_global_p(), NA
   )
   expect_equal(
     car::Anova(mod1) %>% select(last_col()) %>% pull() %>% discard(is.na),
     tbl1 %>% add_global_p(include = everything()) %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
+  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
 
   expect_warning(
-    tbl1 %>% add_global_p(keep = TRUE, type = "II"), NA
+    res <- tbl1 %>% add_global_p(keep = TRUE, type = "II"), NA
   )
   expect_equal(
     car::Anova(mod1, type = "II") %>% select(last_col()) %>% pull() %>% discard(is.na),
     tbl1 %>% add_global_p(include = everything(), type = "II") %>% pluck("table_body", "p.value") %>% discard(is.na)
   )
+  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
+
   # testing that p.values are kept with keep = TRUE (only one line without missing p-value)
   expect_equal(
     tbl1 %>% add_global_p(keep = TRUE, type = "II") %>%
@@ -37,15 +40,17 @@ test_that("no errors/warnings with standard use after tbl_regression", {
 test_that("no errors/warnings with standard use after tbl_uvregression", {
   tbl2 <- trial %>% tbl_uvregression(method = lm, y = age)
   expect_error(
-    tbl2 %>% add_global_p(), NA
+    res <- tbl2 %>% add_global_p(), NA
   )
   expect_warning(
     tbl2 %>% add_global_p(), NA
   )
+  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
 
   expect_error(
-    tbl2 %>% add_global_p(type = 2, keep = TRUE), NA
+    res <- tbl2 %>% add_global_p(type = 2, keep = TRUE), NA
   )
+  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
   expect_warning(
     tbl2 %>% add_global_p(type = "II"), NA
   )
@@ -66,8 +71,9 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
   tbl2 <- tbl_regression(mod2)
 
   expect_warning(
-    tbl1 %>% add_global_p(), NA
+    res <- tbl1 %>% add_global_p(), NA
   )
+  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
   expect_equal(
     car::Anova(mod1, type = "II") %>% select(last_col()) %>% pull() %>% discard(is.na),
     tbl1 %>% add_global_p(include = everything(), type = "II") %>% pluck("table_body", "p.value") %>% discard(is.na)
@@ -107,6 +113,7 @@ test_that("no errors/warnings with standard use after tbl_regression with non-st
       add_global_p(),
     NA
   )
+  tbl_bad_names %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
   expect_equal(
     dplyr::filter(tbl_bad_names$table_body, variable == "grade at dx") %>%
       pull(p.value),
@@ -127,6 +134,7 @@ test_that("`add_global_p()` works with `tbl_uvregression(x=)`", {
       add_global_p(keep = TRUE),
     NA
   )
+  tbl %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
   expect_equal(
     as_tibble(tbl, col_labels = FALSE)$p.value,
     c("0.7", NA, "0.6", "0.4", "0.025", NA, "0.010", "0.6")
