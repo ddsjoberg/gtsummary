@@ -20,6 +20,7 @@ test_that("add_ci() works", {
     as_tibble(tbl1, col_labels = FALSE) %>% pull(stat_1),
     c("28 (29%) (21%, 40%)", "46 (37, 59) (44, 50)")
   )
+  tbl1 %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
 
   expect_error(
     tbl1 <-
