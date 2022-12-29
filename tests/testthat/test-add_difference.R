@@ -16,18 +16,19 @@ test_that("add_difference-basic use", {
       ),
     NA
   )
-  # tbl_diff %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
+  expect_snapshot(tbl_diff %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     dplyr::filter(tbl_diff$table_body, variable == "marker") %>% select(estimate, conf.low, conf.high, p.value),
     t.test(marker ~ trt, trial, var.equal = TRUE) %>% broom::tidy() %>% select(estimate, conf.low, conf.high, p.value)
   )
 
-  trial %>%
-    select(trt, response, grade) %>%
-    tbl_summary(by = trt, percent = "row") %>%
-    add_difference() %>%
-    expect_snapshot()
+  expect_snapshot(
+    trial %>%
+      select(trt, response, grade) %>%
+      tbl_summary(by = trt, percent = "row") %>%
+      add_difference()
+  )
 
 })
 
@@ -60,7 +61,7 @@ test_that("p-values are replicated within tbl_summary()", {
         var_mcnemar.test_dots = list(correct = FALSE)
       )
     )
-  # tbl_test.args %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
+  expect_snapshot(tbl_test.args %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     filter(tbl_test.args$meta_data, variable == "var_t.test") %>%
@@ -167,7 +168,7 @@ test_that("p-values are replicated within tbl_summary()", {
       group = "id",
       adj.vars = c("stage", "marker")
     )
-  # tbl_groups %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
+  expect_snapshot(tbl_groups %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     filter(tbl_groups$meta_data, variable == "age_ancova_lme4") %>%
@@ -199,7 +200,7 @@ test_that("row formatting of differences and CIs work", {
       as_tibble(col_labels = FALSE),
     NA
   )
-  # tbl1 %>% expect_snapshot()
+  expect_snapshot(tbl1)
 
   expect_equal(
     tbl1$estimate,
@@ -221,7 +222,7 @@ test_that("no error with missing data", {
       tbl_summary(by = "am", type = hp ~ "continuous", missing = 'no') %>%
       add_difference()
   )
-  # t1 %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
+  expect_snapshot(t1 %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
@@ -247,7 +248,7 @@ test_that("add_difference() with smd", {
     tbl$ci[1:3],
     c("-0.32, 0.25", "-0.37, 0.19", "-0.20, 0.35")
   )
-  # tbl %>% expect_snapshot()
+  expect_snapshot(tbl)
 })
 
 test_that("add_difference() with smd and survey weights", {
@@ -297,7 +298,7 @@ test_that("add_difference() with smd and survey weights", {
     c("0.003", "0.003", "0.009"),
     ignore_attr = TRUE
   )
-  # tbl %>% expect_snapshot()
+  expect_snapshot(tbl)
 })
 
 
