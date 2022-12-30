@@ -171,7 +171,7 @@ test_that("p-values are replicated within tbl_summary()", {
       group = "id",
       adj.vars = c("stage", "marker")
     )
-  # expect_snapshot(tbl_groups %>% as_gt() %>% gt::as_raw_html())
+  expect_snapshot(tbl_groups %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     filter(tbl_groups$meta_data, variable == "age_ancova_lme4") %>%
@@ -203,7 +203,7 @@ test_that("row formatting of differences and CIs work", {
       as_tibble(col_labels = FALSE),
     NA
   )
-  # expect_snapshot(tbl1)
+  expect_snapshot(tbl1)
 
   expect_equal(
     tbl1$estimate,
