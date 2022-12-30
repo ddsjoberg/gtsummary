@@ -4,17 +4,17 @@ t1 <- trial %>% tbl_summary()
 t2 <- trial %>% tbl_summary(by = trt)
 test_that("no errors/warnings with standard use", {
   expect_error(res <- t1 %>% add_n(), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_error(res <- t2 %>% add_n(), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_warning(t1 %>% add_n(), NA)
   expect_warning(t2 %>% add_n(), NA)
 
   expect_error(res <- t1 %>% add_n(last = TRUE), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_error(res <- t2 %>% add_n(last = TRUE), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_warning(t1 %>% add_n(last = TRUE), NA)
   expect_warning(t2 %>% add_n(last = TRUE), NA)
 
@@ -27,7 +27,7 @@ test_that("no errors/warnings with standard use", {
       ),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_error(
     t2 %>%
       add_n(
@@ -36,7 +36,7 @@ test_that("no errors/warnings with standard use", {
       ),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_warning(t1 %>% add_n(
     statistic = "{N}{n}{n_miss}{p}{p_miss}",
     footnote = TRUE
@@ -59,16 +59,16 @@ t1 <- trial %>% tbl_summary(type = all_continuous() ~ "continuous2")
 t2 <- trial %>% tbl_summary(by = trt, type = all_continuous() ~ "continuous2")
 test_that("no errors/warnings with standard use with continuous2", {
   expect_error(res <- t1 %>% add_n(), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_error(res <- t2 %>% add_n(), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_warning(t1 %>% add_n(), NA)
   expect_warning(t2 %>% add_n(), NA)
 
   expect_error(res <- t1 %>% add_n(last = TRUE), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_error(res <- t2 %>% add_n(last = TRUE), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_warning(t1 %>% add_n(last = TRUE), NA)
   expect_warning(t2 %>% add_n(last = TRUE), NA)
 
@@ -80,7 +80,7 @@ test_that("no errors/warnings with standard use with continuous2", {
       ),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
     res <- t2 %>%
@@ -90,7 +90,7 @@ test_that("no errors/warnings with standard use with continuous2", {
       ),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_warning(t1 %>% add_n(
     statistic = "{N}{n}{n_miss}{p}{p_miss}",
@@ -132,11 +132,11 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
     tbl_svysummary(by = trt)
 
   expect_error(res <- t %>% add_n(), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_warning(t %>% add_n(), NA)
 
   expect_error(res <- t %>% add_n(last = TRUE), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_warning(t %>% add_n(last = TRUE), NA)
 
   t <- Titanic %>%
@@ -153,7 +153,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
       ),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_warning(t %>% add_n(
     statistic = "{N}{n}{n_miss}{p}{p_miss}",
     footnote = TRUE
@@ -168,11 +168,11 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
     tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2")
 
   expect_error(res <- t %>% add_n(), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_warning(t %>% add_n(), NA)
 
   expect_error(res <- t %>% add_n(last = TRUE), NA)
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_warning(t %>% add_n(last = TRUE), NA)
 
   t <- Titanic %>%
@@ -188,7 +188,7 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
       ),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_warning(t %>% add_n(
     statistic = "{N}{n}{n_miss}{p}{p_miss}",
     footnote = TRUE
@@ -212,7 +212,7 @@ test_that("add_n.tbl_surfit", {
     res <- add_n(tbl_survfit),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 })
 
 
@@ -225,17 +225,17 @@ test_that("add_n.tbl_regression", {
   expect_error(
     res <- tbl %>% add_n(), NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
     res <- tbl %>% add_n(location = "level"), NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
     res <- tbl %>% add_n(location = c("label", "level")), NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 })
 
 # add_n.tbl_uvregression ---------------------------------------------------------
@@ -252,15 +252,15 @@ test_that("add_n.tbl_regression", {
   expect_error(
     res <- tbl %>% add_n(), NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
     res <- tbl %>% add_n(location = "level"), NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
     res <- tbl %>% add_n(location = c("label", "level")), NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 })

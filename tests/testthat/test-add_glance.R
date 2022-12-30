@@ -19,7 +19,7 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
       ),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
     tbl_glance <-
@@ -31,7 +31,7 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
       ),
     NA
   )
-  expect_snapshot(tbl_glance %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(tbl_glance %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     tbl_glance %>%
@@ -50,7 +50,7 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
       ),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
     res <-
@@ -62,7 +62,7 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
       ),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
     res <-
@@ -72,5 +72,5 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
       ),
     NA
   )
-  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 })
