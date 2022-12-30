@@ -16,18 +16,20 @@ test_that("add_difference-basic use", {
       ),
     NA
   )
+  expect_snapshot(tbl_diff %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     dplyr::filter(tbl_diff$table_body, variable == "marker") %>% select(estimate, conf.low, conf.high, p.value),
     t.test(marker ~ trt, trial, var.equal = TRUE) %>% broom::tidy() %>% select(estimate, conf.low, conf.high, p.value)
   )
 
-  expect_message(
+  expect_snapshot(
     trial %>%
       select(trt, response, grade) %>%
       tbl_summary(by = trt, percent = "row") %>%
       add_difference()
   )
+
 })
 
 test_that("p-values are replicated within tbl_summary()", {
@@ -59,6 +61,7 @@ test_that("p-values are replicated within tbl_summary()", {
         var_mcnemar.test_dots = list(correct = FALSE)
       )
     )
+  expect_snapshot(tbl_test.args %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     filter(tbl_test.args$meta_data, variable == "var_t.test") %>%
@@ -134,7 +137,10 @@ test_that("p-values are replicated within tbl_summary()", {
     filter(tbl_test.args$meta_data, variable == "var_cohens_d") %>%
       purrr::pluck("test_result", 1, "df_result") %>%
       select(any_of(c("estimate", "conf.low", "conf.high", "p.value"))),
-    effectsize::cohens_d(age ~ trt, data = trial) %>%
+    effectsize::cohens_d(
+      age ~ trt,
+      data = trial %>% tidyr::drop_na("age", "trt")
+    ) %>%
       tibble::as_tibble() %>%
       select(-CI) %>%
       purrr::set_names(c("estimate", "conf.low", "conf.high"))
@@ -165,6 +171,7 @@ test_that("p-values are replicated within tbl_summary()", {
       group = "id",
       adj.vars = c("stage", "marker")
     )
+  expect_snapshot(tbl_groups %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     filter(tbl_groups$meta_data, variable == "age_ancova_lme4") %>%
@@ -196,6 +203,7 @@ test_that("row formatting of differences and CIs work", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl1)
 
   expect_equal(
     tbl1$estimate,
@@ -217,6 +225,8 @@ test_that("no error with missing data", {
       tbl_summary(by = "am", type = hp ~ "continuous", missing = 'no') %>%
       add_difference()
   )
+  expect_snapshot(t1 %>% as_gt() %>% gt::as_raw_html())
+
   expect_equal(
     t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
     rep_len(NA_character_, 2)
@@ -241,6 +251,7 @@ test_that("add_difference() with smd", {
     tbl$ci[1:3],
     c("-0.32, 0.25", "-0.37, 0.19", "-0.20, 0.35")
   )
+  expect_snapshot(tbl)
 })
 
 test_that("add_difference() with smd and survey weights", {
@@ -290,7 +301,7 @@ test_that("add_difference() with smd and survey weights", {
     c("0.003", "0.003", "0.009"),
     ignore_attr = TRUE
   )
-
+  expect_snapshot(tbl)
 })
 
 
@@ -304,10 +315,11 @@ test_that("add_difference() with emmeans()", {
     )
 
   expect_error(
-    tbl %>%
+    res <- tbl %>%
       add_difference(test = everything() ~ "emmeans", adj.vars = "stage"),
     NA
   )
+  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_error(
     tbl %>%
       add_difference(test = everything() ~ "emmeans", group = "death"),
