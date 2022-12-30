@@ -1,6 +1,6 @@
 # gtsummary (development version)
 
-* Updated a default argument in `tidy_robust()` to `parameters::model_parameters(ci_method = "wald")`.
+* Updated a default argument values in `tidy_robust(vcov=NULL, vcov_args=NULL)`. Users must specify the type of robust standard errors using these arguments.
 
 * Arguments pass via the dots in `tbl_uvregression(...)` are now passed to `broom.helpers::tidy_plus_plus()`. (#1396)
 
