@@ -12,22 +12,25 @@ test_that("add_ci() works", {
     NA
   )
   expect_equal(
-   as_tibble(tbl1) %>% names(),
-   c("**Characteristic**", "**Drug A**, N = 98 (**95% CI**)",
-     "**Drug B**, N = 102 (**95% CI**)", "**p-value**")
- )
+    as_tibble(tbl1) %>% names(),
+    c("**Characteristic**", "**Drug A**, N = 98 (**95% CI**)",
+      "**Drug B**, N = 102 (**95% CI**)", "**p-value**")
+  )
   expect_equal(
     as_tibble(tbl1, col_labels = FALSE) %>% pull(stat_1),
     c("28 (29%) (21%, 40%)", "46 (37, 59) (44, 50)")
   )
+  tbl1 %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
 
+  res <-
+    trial %>%
+    select(response, age, trt) %>%
+    tbl_summary(by = trt, missing = "no") %>%
+    add_p() %>%
+    add_ci()
   expect_error(
     tbl1 <-
-      trial %>%
-      select(response, age, trt) %>%
-      tbl_summary(by = trt, missing = "no") %>%
-      add_p() %>%
-      add_ci() %>%
+      res %>%
       as_tibble(col_labels = FALSE),
     NA
   )
@@ -40,17 +43,19 @@ test_that("add_ci() works", {
     list(ci_stat_1 = c("21%, 40%", "44, 50"),
          ci_stat_2 = c("25%, 44%", "45, 50"))
   )
+  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
 
-
+  res <-
+    trial %>%
+    select(response, trt) %>%
+    tbl_summary(missing = "no") %>%
+    add_ci(
+      method = everything() ~ "exact",
+      statistic = everything() ~  "{conf.low} to {conf.high}"
+    )
   expect_error(
     tbl2 <-
-      trial %>%
-      select(response, trt) %>%
-      tbl_summary(missing = "no") %>%
-      add_ci(
-        method = everything() ~ "exact",
-        statistic = everything() ~  "{conf.low} to {conf.high}"
-      ) %>%
+      res  %>%
       as_tibble(col_labels = FALSE),
     NA
   )
@@ -62,6 +67,7 @@ test_that("add_ci() works", {
     tbl2$ci_stat_0,
     c("25 to 39", NA, "42 to 56", "44 to 58")
   )
+  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
 })
 
 test_that("add_ci() throws errors with bad arguments", {
@@ -100,7 +106,7 @@ test_that("add_ci() throws errors with bad arguments", {
 
 
 test_that("add_ci() works with tbl_svysummary", {
-  skip_if_not_installed("survey")
+  skip_if_not(assert_package("survey", boolean = TRUE))
 
   data(api, package = "survey")
   d <- survey::svydesign(id = ~dnum, weights = ~pw, data = apiclus1, fpc = ~fpc)
@@ -113,28 +119,32 @@ test_that("add_ci() works with tbl_svysummary", {
     )
 
   expect_error(
-    res <- tbl %>% add_ci(method = api00 ~ "svymedian"),
+    svyres <- tbl %>% add_ci(method = api00 ~ "svymedian"),
     NA
   )
   expect_equal(
-    as_tibble(res) %>% names(),
+    as_tibble(svyres) %>% names(),
     c("**Characteristic**", "**No**, N = 1,692", "**95% CI**",
       "**Yes**, N = 4,502", "**95% CI**")
   )
   expect_equal(
-    as_tibble(res, col_labels = FALSE) %>% dplyr::pull(ci_stat_1),
+    as_tibble(svyres, col_labels = FALSE) %>% dplyr::pull(ci_stat_1),
     c("547, 722", "13, 28", NA, "43%, 81%", "6.6%, 27%", "8.7%, 46%")
   )
   expect_message(tbl %>% add_ci())
+  svyres %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
 
   expect_error(
-    tbl %>% add_ci(
-      method = list(
-        api00 ~ "svymedian.beta",
-        stype ~ "svyprop.mean"
+    res <-
+      tbl %>%
+      add_ci(
+        method = list(
+          api00 ~ "svymedian.beta",
+          stype ~ "svyprop.mean"
+        ),
+        df = Inf
       ),
-      df = Inf
-    ),
     NA
   )
+  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
 })

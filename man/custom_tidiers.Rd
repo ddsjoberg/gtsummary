@@ -33,7 +33,7 @@ tidy_robust(
   exponentiate = FALSE,
   conf.level = 0.95,
   conf.int = TRUE,
-  vcov = "HC",
+  vcov = NULL,
   vcov_args = NULL,
   ...,
   quiet = FALSE
@@ -72,7 +72,8 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 \code{FALSE}}
 
 \item{vcov, vcov_args}{arguments passed to
-\code{parameters::model_parameters()}}
+\code{parameters::model_parameters()}. At least one of these arguments \strong{must}
+be specified.}
 
 \item{pool.args}{named list of arguments passed to \code{mice::pool()} in
 \code{pool_and_tidy_mice()}. Default is \code{NULL}}

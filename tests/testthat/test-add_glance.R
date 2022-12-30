@@ -10,7 +10,8 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
     tbl_regression()
 
   expect_error(
-    tbl1 %>%
+    res <-
+      tbl1 %>%
       add_glance_source_note(
         label = list(df ~ "Degrees of Freedom", sigma ~ "\U03C3"),
         fmt_fun = df ~ style_number,
@@ -18,6 +19,7 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
       ),
     NA
   )
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
     tbl_glance <-
@@ -29,6 +31,7 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
       ),
     NA
   )
+  # expect_snapshot(tbl_glance %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     tbl_glance %>%
@@ -40,15 +43,18 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
   )
 
   expect_error(
-    tbl2 %>%
+    res <-
+      tbl2 %>%
       add_glance_source_note(
         glance_fun = broom.mixed::glance
       ),
     NA
   )
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
-    tbl1 %>%
+    res <-
+      tbl1 %>%
       add_glance_table(
         label = list(df ~ "Degrees of Freedom", sigma ~ "\U03C3"),
         fmt_fun = df ~ style_number,
@@ -56,12 +62,15 @@ test_that("add_glance_source_note: no errors/warnings with standard use", {
       ),
     NA
   )
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 
   expect_error(
-    tbl2 %>%
+    res <-
+      tbl2 %>%
       add_glance_table(
         glance_fun = broom.mixed::glance
       ),
     NA
   )
+  # expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
 })
