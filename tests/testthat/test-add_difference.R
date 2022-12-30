@@ -225,7 +225,7 @@ test_that("no error with missing data", {
       tbl_summary(by = "am", type = hp ~ "continuous", missing = 'no') %>%
       add_difference()
   )
-  # expect_snapshot(t1 %>% as_gt() %>% gt::as_raw_html())
+  expect_snapshot(t1 %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     t1 %>% as_tibble(col_labels = FALSE) %>% dplyr::pull(p.value),
@@ -251,7 +251,7 @@ test_that("add_difference() with smd", {
     tbl$ci[1:3],
     c("-0.32, 0.25", "-0.37, 0.19", "-0.20, 0.35")
   )
-  # expect_snapshot(tbl)
+  expect_snapshot(tbl)
 })
 
 test_that("add_difference() with smd and survey weights", {
@@ -301,7 +301,7 @@ test_that("add_difference() with smd and survey weights", {
     c("0.003", "0.003", "0.009"),
     ignore_attr = TRUE
   )
-  # expect_snapshot(tbl)
+  expect_snapshot(tbl)
 })
 
 
