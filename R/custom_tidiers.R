@@ -45,7 +45,7 @@
 #' @inheritParams add_global_p
 #' @param pool.args named list of arguments passed to `mice::pool()` in
 #' `pool_and_tidy_mice()`. Default is `NULL`
-#' @param vcov,vcov_args arguments passed to
+#' @param ci_method,vcov,vcov_args arguments passed to
 #' `parameters::model_parameters()`
 #' @param ... arguments passed to method;
 #' - `pool_and_tidy_mice()`: `mice::tidy(x, ...)`
@@ -181,6 +181,7 @@ tidy_robust <- function(x,
                         exponentiate = FALSE,
                         conf.level = 0.95,
                         conf.int = TRUE,
+                        ci_method = "wald",
                         vcov = "HC", #type of robust estimation
                         vcov_args = NULL, #specify the cluster-structure
                         ...,
@@ -191,7 +192,7 @@ tidy_robust <- function(x,
   dots <- rlang::dots_list(...)
   lst_model_parameters_args <-
     rlang::inject(list(ci = !!conf.level,
-                       robust = TRUE,
+                       ci_method = !!ci_method,
                        vcov = !!vcov,
                        vcov_args = !!vcov_args,
                        !!!dots)) %>%

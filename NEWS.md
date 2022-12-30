@@ -1,5 +1,7 @@
 # gtsummary (development version)
 
+* Updated a default argument in `tidy_robust()` to `parameters::model_parameters(ci_method = "wald")`.
+
 * Arguments pass via the dots in `tbl_uvregression(...)` are now passed to `broom.helpers::tidy_plus_plus()`. (#1396)
 
 * Added a new article illustrating how to place gtsummary tables into Shiny applications. (#1335)

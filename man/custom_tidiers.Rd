@@ -33,6 +33,7 @@ tidy_robust(
   exponentiate = FALSE,
   conf.level = 0.95,
   conf.int = TRUE,
+  ci_method = "wald",
   vcov = "HC",
   vcov_args = NULL,
   ...,
@@ -71,7 +72,7 @@ interval in the tidied output. Defaults to \code{FALSE}.}
 \item{quiet}{Logical indicating whether to print messages in console. Default is
 \code{FALSE}}
 
-\item{vcov, vcov_args}{arguments passed to
+\item{ci_method, vcov, vcov_args}{arguments passed to
 \code{parameters::model_parameters()}}
 
 \item{pool.args}{named list of arguments passed to \code{mice::pool()} in
