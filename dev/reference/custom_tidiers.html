@@ -128,7 +128,7 @@ Collection of tidiers that can be utilized in gtsummary. See details below.</p>
 <span>  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  conf.int <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  vcov <span class="op">=</span> <span class="st">"HC"</span>,</span>
+<span>  vcov <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vcov_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -180,7 +180,8 @@ interval in the tidied output. Defaults to <code>FALSE</code>.</p></dd>
 
 <dt>vcov, vcov_args</dt>
 <dd><p>arguments passed to
-<code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code></p></dd>
+<code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>. At least one of these arguments <strong>must</strong>
+be specified.</p></dd>
 
 
 <dt>pool.args</dt>
