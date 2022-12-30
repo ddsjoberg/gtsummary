@@ -16,19 +16,19 @@ test_that("add_difference-basic use", {
       ),
     NA
   )
-  # expect_snapshot(tbl_diff %>% as_gt() %>% gt::as_raw_html())
+  expect_snapshot(tbl_diff %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     dplyr::filter(tbl_diff$table_body, variable == "marker") %>% select(estimate, conf.low, conf.high, p.value),
     t.test(marker ~ trt, trial, var.equal = TRUE) %>% broom::tidy() %>% select(estimate, conf.low, conf.high, p.value)
   )
 
-  # expect_snapshot(
-  #   trial %>%
-  #     select(trt, response, grade) %>%
-  #     tbl_summary(by = trt, percent = "row") %>%
-  #     add_difference()
-  # )
+  expect_snapshot(
+    trial %>%
+      select(trt, response, grade) %>%
+      tbl_summary(by = trt, percent = "row") %>%
+      add_difference()
+  )
 
 })
 
@@ -61,7 +61,7 @@ test_that("p-values are replicated within tbl_summary()", {
         var_mcnemar.test_dots = list(correct = FALSE)
       )
     )
-  # expect_snapshot(tbl_test.args %>% as_gt() %>% gt::as_raw_html())
+  expect_snapshot(tbl_test.args %>% as_gt() %>% gt::as_raw_html())
 
   expect_equal(
     filter(tbl_test.args$meta_data, variable == "var_t.test") %>%
