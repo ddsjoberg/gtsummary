@@ -46,7 +46,8 @@
 #' @param pool.args named list of arguments passed to `mice::pool()` in
 #' `pool_and_tidy_mice()`. Default is `NULL`
 #' @param vcov,vcov_args arguments passed to
-#' `parameters::model_parameters()`
+#' `parameters::model_parameters()`. At least one of these arguments **must**
+#' be specified.
 #' @param ... arguments passed to method;
 #' - `pool_and_tidy_mice()`: `mice::tidy(x, ...)`
 #' - `tidy_standardize()`: `parameters::standardize_parameters(x, ...)`
@@ -181,17 +182,22 @@ tidy_robust <- function(x,
                         exponentiate = FALSE,
                         conf.level = 0.95,
                         conf.int = TRUE,
-                        vcov = "HC", #type of robust estimation
+                        vcov = NULL, #type of robust estimation
                         vcov_args = NULL, #specify the cluster-structure
                         ...,
                         quiet = FALSE) {
   assert_package("parameters", "tidy_robust()")
   assert_package("insight", "tidy_robust()")
+  if (is.null(vcov) && is.null(vcov_args)) {
+    paste("Arguments {.code vcov} and {.code vcov_args} have not been specified",
+          "in {.code tidy_robust()}.",
+          "Specify at least one to obtain robust standard errors.") %>%
+      cli::cli_inform()
+  }
 
   dots <- rlang::dots_list(...)
   lst_model_parameters_args <-
     rlang::inject(list(ci = !!conf.level,
-                       robust = TRUE,
                        vcov = !!vcov,
                        vcov_args = !!vcov_args,
                        !!!dots)) %>%

@@ -80,6 +80,11 @@ test_that("no errors/warnings with tidy_robust()", {
       ),
     NA
   )
+
+  # expect message when `vcov` and `vcov_args` have not been specified
+  expect_snapshot(
+    glm(response ~ age + trt, trial, family = binomial) %>% tidy_robust()
+  )
 })
 
 test_that("no errors/warnings with tidy_wald_test()", {
