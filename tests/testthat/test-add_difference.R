@@ -315,10 +315,11 @@ test_that("add_difference() with emmeans()", {
     )
 
   expect_error(
-    tbl %>%
+    res <- tbl %>%
       add_difference(test = everything() ~ "emmeans", adj.vars = "stage"),
     NA
   )
+  expect_snapshot(res %>% as_gt() %>% gt::as_raw_html())
   expect_error(
     tbl %>%
       add_difference(test = everything() ~ "emmeans", group = "death"),
