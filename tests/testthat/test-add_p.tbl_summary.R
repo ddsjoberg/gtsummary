@@ -6,7 +6,7 @@ test_that("add_p creates output without error/warning", {
   )
 
   expect_snapshot(
-    tbl_summary(mtcars, by = am) %>% add_p() %>% render_as_html()
+    tbl_summary(mtcars, by = am) %>% add_p() %>% as_tibble()
   )
   expect_warning(
     tbl_summary(mtcars, by = am) %>% add_p(),
@@ -57,11 +57,11 @@ test_that("add_p & lme4", {
 
 test_that("add_p creates output without error/warning for continuous2", {
   expect_snapshot(
-    tbl_summary(trial, by = grade, type = all_continuous() ~ "continuous2") %>% add_p() %>% render_as_html()
+    tbl_summary(trial, by = grade, type = all_continuous() ~ "continuous2") %>% add_p() %>% as_tibble()
   )
 
   expect_snapshot(
-    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p() %>% render_as_html()
+    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p() %>% as_tibble()
   )
   expect_warning(
     tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p(),
@@ -112,22 +112,23 @@ test_that("add_p creates errors with bad args", {
 test_that("add_p works well", {
   expect_snapshot(
     tbl_summary(mtcars, by = am) %>%
-      add_p(test = list(
-        vars(mpg) ~ "t.test",
-        disp ~ "aov",
-        hp ~ "oneway.test",
-        cyl ~ "chisq.test.no.correct",
-        carb ~ "mood.test"
-      )) %>%
-      render_as_html()
+      add_p(
+        test = list(vars(mpg) ~ "t.test",
+                    disp ~ "aov",
+                    hp ~ "oneway.test",
+                    cyl ~ "chisq.test.no.correct",
+                    carb ~ "mood.test")
+      ) %>%
+      as_tibble()
   )
 
   expect_snapshot(
     tbl_summary(mtcars, by = am) %>%
-      add_p(test = list(
-        vars(mpg) ~ t.test,
-        disp ~ aov
-      )) %>% render_as_html()
+      add_p(
+        test = list(vars(mpg) ~ t.test,
+                    disp ~ aov)
+      ) %>%
+      as_tibble()
   )
 })
 
@@ -200,19 +201,19 @@ test_that("p-values are replicated within tbl_summary()", {
   tbl_test.args <-
     trial %>%
     dplyr::select(trt,
-           var_t.test = age,
-           var_t.test_dots = age,
-           var_kruskal.test = age,
-           var_wilcox.test = age,
-           var_wilcox.test_dots = age,
-           var_aov = age,
-           var_chisq.test = response,
-           var_chisq.test_dots = response,
-           var_chisq.test.no.correct = response,
-           var_fisher.test = response,
-           var_fisher.test_dots = response,
-           var_mcnemar.test = response,
-           var_mcnemar.test_dots = response,
+                  var_t.test = age,
+                  var_t.test_dots = age,
+                  var_kruskal.test = age,
+                  var_wilcox.test = age,
+                  var_wilcox.test_dots = age,
+                  var_aov = age,
+                  var_chisq.test = response,
+                  var_chisq.test_dots = response,
+                  var_chisq.test.no.correct = response,
+                  var_fisher.test = response,
+                  var_fisher.test_dots = response,
+                  var_mcnemar.test = response,
+                  var_mcnemar.test_dots = response,
     ) %>%
     tbl_summary(by = trt, missing = "no") %>%
     add_p(
