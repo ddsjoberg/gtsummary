@@ -1,51 +1,51 @@
 skip_on_cran()
 
 test_that("add_p.tbl_continuous() works", {
-  expect_error(
+  expect_snapshot(
     tbl_continuous(
       data = trial,
       variable = age,
       by = trt,
       include = grade
     ) %>%
-      add_p(),
-    NA
+      add_p() %>%
+      render_as_html()
   )
-  expect_error(
+  expect_snapshot(
     tbl_continuous(
       data = trial,
       variable = age,
       include = grade
     ) %>%
-      add_p(),
-    NA
+      add_p() %>%
+      render_as_html()
   )
-  expect_error(
+  expect_snapshot(
     tbl_continuous(
       data = trial,
       variable = age,
       include = trt
     ) %>%
-      add_p(everything() ~ "t.test"),
-    NA
+      add_p(everything() ~ "t.test") %>%
+      render_as_html()
   )
-  expect_error(
+  expect_snapshot(
     tbl_continuous(
       data = trial,
       variable = age,
       include = trt
     ) %>%
-      add_p(everything() ~ "wilcox.test"),
-    NA
+      add_p(everything() ~ "wilcox.test") %>%
+      render_as_html()
   )
-  expect_error(
+  expect_snapshot(
     tbl_continuous(
       data = trial,
       variable = age,
       include = trt
     ) %>%
-      add_p(everything() ~ "lme4", group = "stage"),
-    NA
+      add_p(everything() ~ "lme4", group = "stage") %>%
+      render_as_html()
   )
 
 
@@ -67,6 +67,7 @@ test_that("add_p.tbl_continuous() works", {
       include = trt,
       by = grade
     ) %>%
-      add_p(everything() ~ "wilcox.test.NOT.A.TEST")
+      add_p(everything() ~ "wilcox.test.NOT.A.TEST") %>%
+      render_as_html()
   )
 })
