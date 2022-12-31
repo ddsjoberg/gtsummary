@@ -20,7 +20,7 @@ test_that("add_ci() works", {
     as_tibble(tbl1, col_labels = FALSE) %>% pull(stat_1),
     c("28 (29%) (21%, 40%)", "46 (37, 59) (44, 50)")
   )
-  tbl1 %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
+  tbl1 %>% render_as_html() %>% expect_snapshot()
 
   res <-
     trial %>%
@@ -43,7 +43,7 @@ test_that("add_ci() works", {
     list(ci_stat_1 = c("21%, 40%", "44, 50"),
          ci_stat_2 = c("25%, 44%", "45, 50"))
   )
-  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
+  res %>% render_as_html() %>% expect_snapshot()
 
   res <-
     trial %>%
@@ -67,7 +67,7 @@ test_that("add_ci() works", {
     tbl2$ci_stat_0,
     c("25 to 39", NA, "42 to 56", "44 to 58")
   )
-  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
+  res %>% render_as_html() %>% expect_snapshot()
 })
 
 test_that("add_ci() throws errors with bad arguments", {
@@ -132,7 +132,7 @@ test_that("add_ci() works with tbl_svysummary", {
     c("547, 722", "13, 28", NA, "43%, 81%", "6.6%, 27%", "8.7%, 46%")
   )
   expect_message(tbl %>% add_ci())
-  svyres %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
+  svyres %>% render_as_html() %>% expect_snapshot()
 
   expect_error(
     res <-
@@ -146,5 +146,5 @@ test_that("add_ci() works with tbl_svysummary", {
       ),
     NA
   )
-  res %>% as_gt() %>% gt::as_raw_html() %>% expect_snapshot()
+  res %>% render_as_html() %>% expect_snapshot()
 })
