@@ -90,20 +90,7 @@
 ---
 
     Code
-      tbl %>% add_stat_label() %>% add_p() %>% render_as_html()
-    Message
-      Warning for variable 'mpg':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'disp':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'hp':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'drat':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'wt':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'qsec':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
+      tbl00 %>% render_as_html()
     Output
       <div  style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
         
@@ -598,20 +585,7 @@
 ---
 
     Code
-      tbl %>% add_stat_label() %>% add_p() %>% render_as_html()
-    Message
-      Warning for variable 'mpg':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'disp':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'hp':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'drat':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'wt':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'qsec':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
+      tbl00 %>% render_as_html()
     Output
       <div  style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
         

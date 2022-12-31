@@ -29,7 +29,7 @@ test_that("no errors/warnings with standard use after tbl_uvregression() and add
     ) %>%
     add_global_p()
 
-  expect_snapshot(add_q(uni_reg))
+  expect_snapshot(add_q(uni_reg) %>% render_as_html())
   expect_warning(add_q(uni_reg), NA)
 })
 

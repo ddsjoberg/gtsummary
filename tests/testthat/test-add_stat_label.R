@@ -5,7 +5,8 @@ test_that("no errors/warnings with standard use", {
   expect_snapshot(tbl %>% add_stat_label() %>% render_as_html())
   expect_warning(tbl %>% add_stat_label(), NA)
 
-  expect_snapshot(tbl %>% add_stat_label() %>% add_p() %>% render_as_html())
+  expect_error(tbl00 <- tbl %>% add_stat_label() %>% add_p(), NA)
+  expect_snapshot(tbl00 %>% render_as_html())
   expect_warning(tbl %>% add_stat_label() %>% add_p(), NA)
 
   expect_snapshot(tbl %>% add_overall() %>% add_stat_label() %>% render_as_html())
@@ -46,7 +47,8 @@ test_that("no errors/warnings with standard use for continuous2", {
   expect_snapshot(tbl %>% add_stat_label() %>% render_as_html())
   expect_warning(tbl %>% add_stat_label(), NA)
 
-  expect_snapshot(tbl %>% add_stat_label() %>% add_p() %>% render_as_html())
+  expect_error(tbl00 <- tbl %>% add_stat_label() %>% add_p(), NA)
+  expect_snapshot(tbl00 %>% render_as_html())
   expect_warning(tbl %>% add_stat_label() %>% add_p(), NA)
 
   expect_snapshot(tbl %>% add_overall() %>% add_stat_label() %>% render_as_html())

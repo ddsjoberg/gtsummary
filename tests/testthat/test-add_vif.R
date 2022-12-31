@@ -19,7 +19,8 @@ test_that("no errors/warnings with standard", {
   expect_snapshot(
     lm(age ~ marker + grade, trial) %>%
       tbl_regression() %>%
-      add_vif(statistic = "aGVIF")
+      add_vif(statistic = "aGVIF") %>%
+      render_as_html()
   )
 
   expect_snapshot(
