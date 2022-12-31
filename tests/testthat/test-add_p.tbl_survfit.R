@@ -3,38 +3,37 @@ skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 
-library(survival)
-
 test_that("add_p.tbl_survfit works", {
   survfit_list <-
     list(
-      survfit(Surv(ttdeath, death) ~ trt, trial),
-      survfit(Surv(trial$ttdeath, trial$death) ~ trial$trt)
+      survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial),
+      survival::survfit(survival::Surv(trial$ttdeath, trial$death) ~ trial$trt)
     )
 
-  expect_error(
+  expect_snapshot(
     survfit_list %>%
-      purrr::map(~ tbl_survfit(.x, times = c(12, 24)) %>% add_p()),
+      purrr::map(~ tbl_survfit(.x, times = c(12, 24)) %>% add_p() %>% render_as_html())
+  )
+
+  expect_snapshot(
+    survfit_list %>%
+      tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>% add_p() %>% render_as_html(),
     NA
   )
 
-  expect_error(
-    survfit_list %>%
-      tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>% add_p(),
-    NA
-  )
-
-  expect_error(
+  expect_snapshot(
     survfit_list[[1]] %>%
-      tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>% add_p(),
-    NA
+      tbl_survfit(prob = c(seq(0.1, 0.9, by = 0.1))) %>%
+      add_p() %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     trial %>%
       select(trt, grade, ttdeath, death) %>%
-      tbl_survfit(times = c(12, 24), y = Surv(ttdeath, death)) %>% add_p(),
-    NA
+      tbl_survfit(times = c(12, 24), y = survival::Surv(ttdeath, death)) %>%
+      add_p() %>%
+      render_as_html()
   )
 })
 
@@ -43,34 +42,35 @@ test_that("add_p.tbl_survfit works", {
 test_that("add_p.tbl_survfit survdiff family checks", {
   tbl_survfit <-
     list(
-      survfit(Surv(ttdeath, death) ~ trt, trial),
-      survfit(Surv(ttdeath, death) ~ response, trial),
-      survfit(Surv(ttdeath, death) ~ grade, trial),
-      survfit(Surv(ttdeath, death) ~ stage, trial)
+      survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial),
+      survival::survfit(survival::Surv(ttdeath, death) ~ response, trial),
+      survival::survfit(survival::Surv(ttdeath, death) ~ grade, trial),
+      survival::survfit(survival::Surv(ttdeath, death) ~ stage, trial)
     ) %>%
     tbl_survfit(times = c(12, 24))
+  expect_snapshot(tbl_survfit %>% render_as_html())
 
   # logrank
   logrank_trt <-
-    survdiff(Surv(ttdeath, death) ~ trt, trial) %>%
+    survival::survdiff(survival::Surv(ttdeath, death) ~ trt, trial) %>%
     broom::glance() %>%
     dplyr::pull(p.value)
 
   # G-rho
   grho_response <-
-    survdiff(Surv(ttdeath, death) ~ response, trial, rho = 0.5) %>%
+    survival::survdiff(survival::Surv(ttdeath, death) ~ response, trial, rho = 0.5) %>%
     broom::glance() %>%
     dplyr::pull(p.value)
 
   # pete, peto
   peto_grade <-
-    survdiff(Surv(ttdeath, death) ~ grade, trial, rho = 1) %>%
+    survival::survdiff(survival::Surv(ttdeath, death) ~ grade, trial, rho = 1) %>%
     broom::glance() %>%
     dplyr::pull(p.value)
 
   # tarone-ware
   tarone_stage <-
-    survdiff(Surv(ttdeath, death) ~ stage, trial, rho = 1.5) %>%
+    survival::survdiff(survival::Surv(ttdeath, death) ~ stage, trial, rho = 1.5) %>%
     broom::glance() %>%
     dplyr::pull(p.value)
 
@@ -95,27 +95,28 @@ test_that("add_p.tbl_survfit survdiff family checks", {
 test_that("add_p.tbl_survfit coxph family checks", {
   tbl_survfit <-
     list(
-      survfit(Surv(ttdeath, death) ~ trt, trial),
-      survfit(Surv(ttdeath, death) ~ response, trial),
-      survfit(Surv(ttdeath, death) ~ grade, trial)
+      survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial),
+      survival::survfit(survival::Surv(ttdeath, death) ~ response, trial),
+      survival::survfit(survival::Surv(ttdeath, death) ~ grade, trial)
     ) %>%
     tbl_survfit(times = c(12, 24))
+  expect_snapshot(tbl_survfit %>% render_as_html())
 
   # LRT
   lrt_trt <-
-    coxph(Surv(ttdeath, death) ~ trt, trial) %>%
+    survival::coxph(survival::Surv(ttdeath, death) ~ trt, trial) %>%
     broom::glance() %>%
     dplyr::pull(p.value.log)
 
   # Wald
   wald_response <-
-    coxph(Surv(ttdeath, death) ~ response, trial) %>%
+    survival::coxph(survival::Surv(ttdeath, death) ~ response, trial) %>%
     broom::glance() %>%
     dplyr::pull(p.value.wald)
 
   # Score
   score_grade <-
-    coxph(Surv(ttdeath, death) ~ grade, trial) %>%
+    survival::coxph(survival::Surv(ttdeath, death) ~ grade, trial) %>%
     broom::glance() %>%
     dplyr::pull(p.value.sc)
 
