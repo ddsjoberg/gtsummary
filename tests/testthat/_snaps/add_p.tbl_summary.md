@@ -113,20 +113,7 @@
 ---
 
     Code
-      tbl_summary(mtcars, by = am) %>% add_p() %>% as_tibble()
-    Message
-      Warning for variable 'mpg':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'disp':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'hp':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'drat':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'wt':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'qsec':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
+      tbl
     Output
       # A tibble: 22 x 4
          `**Characteristic**` `**0**, N = 19`      `**1**, N = 13`      `**p-value**`
@@ -380,21 +367,7 @@
 ---
 
     Code
-      tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p() %>%
-        as_tibble()
-    Message
-      Warning for variable 'mpg':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'disp':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'hp':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'drat':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'wt':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'qsec':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
+      tbl
     Output
       # A tibble: 28 x 4
          `**Characteristic**` `**0**, N = 19`   `**1**, N = 13`   `**p-value**`
@@ -643,20 +616,7 @@
 # add_p works well
 
     Code
-      tbl_summary(mtcars, by = am) %>% add_p(test = list(vars(mpg) ~ "t.test", disp ~
-        "aov", hp ~ "oneway.test", cyl ~ "chisq.test.no.correct", carb ~ "mood.test")) %>%
-        as_tibble()
-    Message
-      ! Use of `vars()` is now deprecated and support will soon be removed. Please replace calls to `vars()` with `c()`.
-      Warning for variable 'cyl':
-      simpleWarning in stats::chisq.test(x = c(6, 6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, : Chi-squared approximation may be incorrect
-      Multiple parameters; naming those columns num.df, den.df
-      Warning for variable 'drat':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'wt':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'qsec':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
+      tbl
     Output
       # A tibble: 22 x 4
          `**Characteristic**` `**0**, N = 19`      `**1**, N = 13`      `**p-value**`
@@ -676,18 +636,7 @@
 ---
 
     Code
-      tbl_summary(mtcars, by = am) %>% add_p(test = list(vars(mpg) ~ t.test, disp ~
-        aov)) %>% as_tibble()
-    Message
-      ! Use of `vars()` is now deprecated and support will soon be removed. Please replace calls to `vars()` with `c()`.
-      Warning for variable 'hp':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'drat':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'wt':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'qsec':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
+      tbl
     Output
       # A tibble: 22 x 4
          `**Characteristic**` `**0**, N = 19`      `**1**, N = 13`      `**p-value**`

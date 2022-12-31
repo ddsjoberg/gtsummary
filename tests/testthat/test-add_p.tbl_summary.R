@@ -5,9 +5,8 @@ test_that("add_p creates output without error/warning", {
     tbl_summary(trial, by = grade) %>% add_p() %>% render_as_html()
   )
 
-  expect_snapshot(
-    tbl_summary(mtcars, by = am) %>% add_p() %>% as_tibble()
-  )
+  tbl <- tbl_summary(mtcars, by = am) %>% add_p() %>% as_tibble()
+  expect_snapshot(tbl)
   expect_warning(
     tbl_summary(mtcars, by = am) %>% add_p(),
     NA
@@ -60,9 +59,8 @@ test_that("add_p creates output without error/warning for continuous2", {
     tbl_summary(trial, by = grade, type = all_continuous() ~ "continuous2") %>% add_p() %>% as_tibble()
   )
 
-  expect_snapshot(
-    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p() %>% as_tibble()
-  )
+  tbl <- tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p() %>% as_tibble()
+  expect_snapshot(tbl)
   expect_warning(
     tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>% add_p(),
     NA
@@ -110,8 +108,9 @@ test_that("add_p creates errors with bad args", {
 
 
 test_that("add_p works well", {
-  expect_snapshot(
-    tbl_summary(mtcars, by = am) %>%
+  expect_error(
+    tbl <-
+      tbl_summary(mtcars, by = am) %>%
       add_p(
         test = list(vars(mpg) ~ "t.test",
                     disp ~ "aov",
@@ -119,17 +118,22 @@ test_that("add_p works well", {
                     cyl ~ "chisq.test.no.correct",
                     carb ~ "mood.test")
       ) %>%
-      as_tibble()
+      as_tibble(),
+    NA
   )
+  expect_snapshot(tbl)
 
-  expect_snapshot(
-    tbl_summary(mtcars, by = am) %>%
+  expect_error(
+    tbl <-
+      tbl_summary(mtcars, by = am) %>%
       add_p(
         test = list(vars(mpg) ~ t.test,
                     disp ~ aov)
       ) %>%
-      as_tibble()
+      as_tibble(),
+    NA
   )
+  expect_snapshot(tbl)
 })
 
 test_that("add_p with custom p-value function", {
