@@ -2,16 +2,21 @@ skip_on_cran()
 
 test_that("no errors/warnings with standard use", {
   tbl <- mtcars %>% tbl_summary(by = am)
-  expect_error(tbl %>% add_stat_label(), NA)
+  expect_snapshot(tbl %>% add_stat_label() %>% render_as_html())
   expect_warning(tbl %>% add_stat_label(), NA)
 
-  expect_error(tbl %>% add_stat_label() %>% add_p(), NA)
+  expect_error(tbl00 <- tbl %>% add_stat_label() %>% add_p(), NA)
+  expect_snapshot(tbl00 %>% render_as_html())
   expect_warning(tbl %>% add_stat_label() %>% add_p(), NA)
 
-  expect_error(tbl %>% add_overall() %>% add_stat_label(), NA)
+  expect_snapshot(tbl %>% add_overall() %>% add_stat_label() %>% render_as_html())
   expect_warning(tbl %>% add_overall() %>% add_stat_label(), NA)
 
-  expect_error(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
+  expect_snapshot(
+    tbl %>%
+      add_stat_label(location = "column", label = all_categorical() ~ "no. (%)") %>%
+      render_as_html()
+  )
   expect_warning(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
 
   expect_error(
@@ -26,6 +31,7 @@ test_that("no errors/warnings with standard use", {
       add_stat_label(label = age ~ c("Mean (SD)", "Min - Max")),
     NA
   )
+  expect_snapshot(tbl %>% render_as_html())
   expect_equal(
     tbl %>%
       modify_column_unhide(everything()) %>%
@@ -38,16 +44,17 @@ test_that("no errors/warnings with standard use", {
 
 test_that("no errors/warnings with standard use for continuous2", {
   tbl <- mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2")
-  expect_error(tbl %>% add_stat_label(), NA)
+  expect_snapshot(tbl %>% add_stat_label() %>% render_as_html())
   expect_warning(tbl %>% add_stat_label(), NA)
 
-  expect_error(tbl %>% add_stat_label() %>% add_p(), NA)
+  expect_error(tbl00 <- tbl %>% add_stat_label() %>% add_p(), NA)
+  expect_snapshot(tbl00 %>% render_as_html())
   expect_warning(tbl %>% add_stat_label() %>% add_p(), NA)
 
-  expect_error(tbl %>% add_overall() %>% add_stat_label(), NA)
+  expect_snapshot(tbl %>% add_overall() %>% add_stat_label() %>% render_as_html())
   expect_warning(tbl %>% add_overall() %>% add_stat_label(), NA)
 
-  expect_error(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
+  expect_snapshot(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)") %>% render_as_html())
   expect_warning(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
 })
 
@@ -58,10 +65,10 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt)
 
-  expect_error(tbl %>% add_stat_label(), NA)
+  expect_snapshot(tbl %>% add_stat_label() %>% render_as_html())
   expect_warning(tbl %>% add_stat_label(), NA)
 
-  expect_error(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
+  expect_snapshot(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)") %>% render_as_html())
   expect_warning(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
 })
 
@@ -71,10 +78,10 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2")
 
-  expect_error(tbl %>% add_stat_label(), NA)
+  expect_snapshot(tbl %>% add_stat_label() %>% render_as_html())
   expect_warning(tbl %>% add_stat_label(), NA)
 
-  expect_error(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
+  expect_snapshot(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)") %>% render_as_html())
   expect_warning(tbl %>% add_stat_label(location = "column", label = all_categorical() ~ "no. (%)"), NA)
 })
 
@@ -89,6 +96,7 @@ test_that("add_stat_label() with tbl_merge()", {
     tbl1 <- tbl_merge(list(tbl0, tbl0)),
     NA
   )
+  expect_snapshot(tbl1 %>% render_as_html())
 
   expect_equal(
     as_tibble(tbl1, col_labels = FALSE) %>% dplyr::pull(label),
