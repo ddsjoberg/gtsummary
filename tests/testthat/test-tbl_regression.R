@@ -183,7 +183,7 @@ test_that("All labels print with cubic splines", {
 
 
 test_that("Testing lme4 results", {
-  mod_glmer <- lme4::glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
+  mod_glmer <- lme4::glmer(am ~ hp + factor(vs) + (1 | gear), mtcars, family = binomial)
 
   # tbl_regerssion runs without error
   expect_error(
