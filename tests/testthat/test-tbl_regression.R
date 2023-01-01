@@ -25,8 +25,12 @@ test_that("glm: logistic and poisson regression", {
   expect_warning(tbl_regression(mod_logistic), NA)
 
   expect_snapshot(
-    tbl_regression(mod_poisson, show_single_row = "trt", estimate_fun = purrr::partial(style_ratio, digits = 1)) %>%
-      render_as_html()
+    tbl_regression(
+      mod_poisson,
+      show_single_row = "trt",
+      estimate_fun = purrr::partial(style_ratio, digits = 1)
+    ) %>%
+      as_tibble()
   )
   expect_warning(tbl_regression(mod_poisson, show_single_row = "trt"), NA)
   expect_equal(
@@ -59,7 +63,7 @@ test_that("glm: logistic and poisson regression", {
       show_single_row = "trt",
       estimate_fun = purrr::partial(style_ratio, digits = 1)
     ) %>%
-      render_as_html()
+      as_tibble()
   )
   expect_warning(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt"), NA)
   expect_equal(
