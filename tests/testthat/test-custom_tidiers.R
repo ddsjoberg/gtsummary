@@ -5,13 +5,13 @@ mod <- lm(age ~ marker + grade, trial)
 
 test_that("no errors/warnings with tidy_standardize", {
   skip_if_not(broom.helpers::.assert_package("effectsize", pkg_search = "gtsummary", boolean = TRUE))
-  expect_error(tbl_regression(mod, tidy_fun = tidy_standardize), NA)
+  expect_snapshot(tbl_regression(mod, tidy_fun = tidy_standardize) %>% render_as_html())
 })
 
 test_that("no errors/warnings with tidy_bootstrap", {
   skip_if_not(broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE))
   skip_if_not_installed("boot")
-  expect_error(tbl_regression(mod, tidy_fun = tidy_bootstrap), NA)
+  expect_snapshot(tbl_regression(mod, tidy_fun = tidy_bootstrap) %>% render_as_html())
   expect_warning(tbl_regression(mod, tidy_fun = tidy_bootstrap), NA)
 })
 
@@ -22,7 +22,7 @@ test_that("no errors/warnings with pool_and_tidy_mice", {
     suppressWarnings(mice::mice(trial, m = 2)) %>%
     with(glm(response ~ age + marker + grade, family = binomial))
 
-  expect_error(tbl_regression(mod_mice), NA)
+  expect_snapshot(tbl_regression(mod_mice) %>% render_as_html())
   expect_error(mice::pool(mod_mice) %>% tbl_regression(), NA)
   expect_output(mice::pool(mod_mice), NA)
 })
@@ -35,21 +35,15 @@ test_that("no errors/warnings with tbl_regression.multinom", {
       nnet::multinom(grade ~ age, trial) %>%
       tbl_regression()
   )
-  expect_error(
-    tbl_nnet %>%
-      as_tibble(),
-    NA
-  )
+  expect_snapshot(tbl_nnet %>% render_as_html())
+  expect_snapshot(tbl_nnet %>% as_tibble())
 })
 
 test_that("no errors/warnings with tbl_regression.gam", {
   skip_if_not(broom.helpers::.assert_package("mgcv", pkg_search = "gtsummary", boolean = TRUE))
   mod <- mgcv::gam(response ~ s(marker, age) + grade, data = trial, family = binomial)
 
-  expect_error(
-    mod %>% tidy_gam(),
-    NA
-  )
+  expect_snapshot(mod %>% tidy_gam())
 
   # test the exp argument is working
   expect_equal(
@@ -59,26 +53,26 @@ test_that("no errors/warnings with tbl_regression.gam", {
       dplyr::mutate_at(vars(any_of(c("estimate", "conf.low", "conf.high"))), exp)
   )
 
-  expect_error(
+  expect_snapshot(
     mod %>%
       tbl_regression(
         exponentiate = TRUE,
         label = `s(marker,age)` ~ "Smoothed marker/age"
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 })
 
 test_that("no errors/warnings with tidy_robust()", {
   skip_if_not(broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE))
   skip_if_not(broom.helpers::.assert_package("insight", pkg_search = "gtsummary", boolean = TRUE))
-  expect_error(
+  expect_snapshot(
     glm(response ~ age + trt, trial, family = binomial) %>%
       tbl_regression(
         tidy_fun = purrr::partial(tidy_robust, vcov_estimation = "CL"),
         exponentiate = TRUE
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
   # expect message when `vcov` and `vcov_args` have not been specified
