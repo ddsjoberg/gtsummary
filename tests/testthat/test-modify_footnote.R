@@ -31,10 +31,11 @@ test_that("modify_footnote works", {
       render_as_html()
   )
 
-  expect_snapshot(
+  expect_equal(
+    tbl_summary %>% utils::modifyList(val = list(call_list = NULL)),
     tbl_summary %>%
       modify_footnote(update = NULL) %>%
-      render_as_html()
+      utils::modifyList(val = list(call_list = NULL))
   )
 
   expect_snapshot(
