@@ -22,6 +22,7 @@ test_that("tbl_custom_summary() basics", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl1)
 
   expect_equal(
     tbl1 %>%
@@ -91,6 +92,7 @@ test_that("tbl_custom_summary() basics", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl)
   expect_equal(
     tbl$label,
     c("__Grade__", "_I_", "_II_", "_III_", "__T Stage__", "_T1_",
@@ -129,6 +131,7 @@ test_that("tbl_custom_summary() basics", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl)
   expect_equal(
     tbl$stat_1,
     c("1.02 [0.83; 1.20]", "6", "20.2 [19.2; 21.2]")
@@ -161,6 +164,7 @@ test_that("tbl_custom_summary() manage factor levels with no observation", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl)
 
   expect_equal(
     c(tbl$stat_1[tbl$label == "IV"], tbl$stat_2[tbl$label == "IV"]),
@@ -184,6 +188,8 @@ test_that("tbl_custom_summary() helpers work as expected", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl)
+
   expect_equal(
     tbl$stat_1,
     c(NA, "0.012 [0.00; 0.02] (7/583)", "0.011 [0.00; 0.02] (6/528)",
@@ -202,6 +208,8 @@ test_that("tbl_custom_summary() helpers work as expected", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl)
+
   expect_equal(
     tbl$stat_1,
     c(NA, "46 [36-60]", "44 [31-54]", "52 [42-60]")
@@ -221,6 +229,8 @@ test_that("tbl_custom_summary() helpers work as expected", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl)
+
   expect_equal(
     tbl$stat_1,
     c(NA, "45.3% (29/64) [33-58]", "20.3% (338/1,667) [18-22]", NA,
@@ -244,15 +254,15 @@ test_that("character summaries do not cause error", {
     )
   }
 
-  expect_error(
+  expect_snapshot(
     trial %>%
       tbl_custom_summary(
         include = c("stage"),
         by = "trt",
         stat_fns = ~ diff_to_great_mean,
         statistic = ~ "{mean} ({level}) [{date}]"
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
   # by variable can be named "variable"
@@ -285,12 +295,15 @@ test_that("full_data contains all observations including missing values", {
     )
   }
 
-  res <- tbl_custom_summary(
-    trial,
-    stat_fns = ~ fn,
-    statistic = ~ "{Nobs}/{Ntot}",
-    include = age
-  ) %>% as_tibble()
+  res <-
+    tbl_custom_summary(
+      trial,
+      stat_fns = ~ fn,
+      statistic = ~ "{Nobs}/{Ntot}",
+      include = age
+    ) %>%
+    as_tibble()
 
+  expect_snapshot(res)
   expect_equal(res[[2]][1], "189/200")
 })

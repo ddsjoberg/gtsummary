@@ -1,7 +1,5 @@
 skip_on_cran()
 
-library(survival)
-library(purrr)
 # univariate regression models
 t0 <-
   trial %>%
@@ -15,12 +13,11 @@ t0 <-
 # MVA logistic regression
 t1 <-
   glm(response ~ trt + grade + age, trial, family = binomial) %>%
-  tbl_regression(
-    exponentiate = TRUE
-  )
+  tbl_regression(exponentiate = TRUE)
+
 # MVA cox regression
 t2 <-
-  coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+  survival::coxph(survival::Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
   tbl_regression(
     exponentiate = TRUE
   )
@@ -30,28 +27,28 @@ t2 <-
 covars <- c("trt", "age")
 
 # get model covariates adjusted by stage and grade
-adj_mods <- map(covars, ~
-                  coxph(
-                    as.formula(
-                      paste("Surv(ttdeath, death) ~ grade + ", .x)
-                    ),
-                    trial
-                  ) %>%
-                  tbl_regression(
-                    include = all_of(.x),
-                    exponentiate = TRUE
-                  ))
+adj_mods <-
+  purrr::map(
+    covars, ~
+      survival::coxph(
+        as.formula(
+          paste("survival::Surv(ttdeath, death) ~ grade + ", .x)
+        ),
+        trial
+      ) %>%
+      tbl_regression(
+        include = all_of(.x),
+        exponentiate = TRUE
+      )
+  )
 
 # now get stage and grade models adjusted for each other
-adj_mods[["grade_mod"]] <- coxph(
-  as.formula(
-    paste("Surv(ttdeath, death) ~ grade")
-  ),
-  trial
-) %>%
-  tbl_regression(
-    exponentiate = TRUE
-  )
+adj_mods[["grade_mod"]] <-
+  survival::coxph(
+    as.formula(paste("survival::Surv(ttdeath, death) ~ grade")),
+    trial
+  ) %>%
+  tbl_regression(exponentiate = TRUE)
 
 # stack all your adjusted models
 t3 <- tbl_stack(adj_mods)
@@ -72,13 +69,14 @@ t5 <-
 t6 <-
   tbl_uvregression(
     trial %>% dplyr::select(ttdeath, death, age, grade, response),
-    method = coxph,
-    y = Surv(ttdeath, death),
+    method = survival::coxph,
+    y = survival::Surv(ttdeath, death),
     exponentiate = TRUE,
     hide_n = TRUE
   )
 
 test_that("no errors/warnings with standard use", {
+  expect_snapshot(t4 %>% render_as_html())
   expect_error(t4, NA)
   expect_warning(t4, NA)
   expect_error(tbl_merge(tbls = list(t5, t6)), NA)
@@ -121,6 +119,7 @@ test_that("tbl_merge() column ordering", {
       as_tibble(col_labels = FALSE) %>%
       select(label, ends_with("_1"), ends_with("_2"), ends_with("_3"))
   )
+  expect_snapshot(tbl_merge(list(t1, t2, t3)) %>% render_as_html())
 })
 
 test_that("tbl_merge() no spanning header", {
@@ -130,6 +129,7 @@ test_that("tbl_merge() no spanning header", {
     tbl_no_spanning <- tbl_merge(list(tbl, tbl), tab_spanner = FALSE),
     NA
   )
+  expect_snapshot(tbl_no_spanning %>% render_as_html())
   expect_true(
     is.na(tbl_no_spanning$table_styling$header$spanning_header) %>% all()
   )
@@ -142,6 +142,7 @@ test_that("tbl_merge() one table", {
     tbl_only_one <- tbl_merge(list(tbl)),
     NA
   )
+  expect_snapshot(tbl_only_one %>% render_as_html())
 })
 
 test_that("tbl_merge() errors are triggered", {
@@ -180,11 +181,10 @@ test_that("tbl_merge with complicated tbl_stack + cols_merge", {
       include = c(age, response)
     )
 
-  expect_error(
+  expect_snapshot(
     tbl_merge(tbls = list(t3, t4)) %>%
       modify_spanning_header(everything() ~ NA) %>%
-      as_gt(),
-    NA
+      render_as_html()
   )
   reset_gtsummary_theme()
 })

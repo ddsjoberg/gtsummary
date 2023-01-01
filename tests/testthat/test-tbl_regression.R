@@ -1,33 +1,38 @@
 skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("Hmisc", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
-
-library(survival)
-library(lme4)
-
+set.seed(123)
 
 mod_lm <- lm(hp ~ am, data = mtcars)
-mod_survreg <- survreg(Surv(time, status) ~ age + ph.ecog, data = lung)
+mod_survreg <- survival::survreg(survival::Surv(time, status) ~ age + ph.ecog, data = survival::lung)
 mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
 mod_poisson <- glm(count ~ age + trt,
-                   trial %>% dplyr::mutate(count = sample.int(20, size = nrow(trial), replace = TRUE)),
+                   trial %>% dplyr::mutate(count = dplyr::row_number() %% 10),
                    family = poisson
 )
-mod_lmer <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
-mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
+mod_lmer <- lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
+mod_glmer <- lme4::glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
 
 mod_lm_interaction <- lm(age ~ trt * grade * response, data = trial)
 
-lung2 <- lung
+lung2 <- survival::lung
 Hmisc::label(lung2$sex) <- "Gender"
 Hmisc::label(lung2$age) <- "AGE"
-cox_hmisclbl <- coxph(Surv(time, status) ~ age + sex, data = lung2)
+cox_hmisclbl <- survival::coxph(survival::Surv(time, status) ~ age + sex, data = lung2)
 
 
 test_that("glm: logistic and poisson regression", {
-  expect_error(tbl_regression(mod_logistic), NA)
+  expect_snapshot(tbl_regression(mod_logistic) %>% render_as_html())
   expect_warning(tbl_regression(mod_logistic), NA)
-  expect_error(tbl_regression(mod_poisson, show_single_row = "trt"), NA)
+
+  expect_snapshot(
+    tbl_regression(
+      mod_poisson,
+      show_single_row = "trt",
+      estimate_fun = purrr::partial(style_ratio, digits = 1)
+    ) %>%
+      as_tibble()
+  )
   expect_warning(tbl_regression(mod_poisson, show_single_row = "trt"), NA)
   expect_equal(
     tbl_regression(mod_logistic)$table_styling$header %>% filter(column == "estimate") %>% pull(label),
@@ -41,9 +46,26 @@ test_that("glm: logistic and poisson regression", {
   expect_false(
     "ci" %in% names(tbl_regression(mod_logistic, conf.int = FALSE) %>% as_tibble(col_labels = FALSE))
   )
-  expect_error(tbl_regression(mod_logistic, exponentiate = TRUE), NA)
+
+  expect_snapshot(
+    tbl_regression(
+      mod_logistic,
+      exponentiate = TRUE,
+      estimate_fun = purrr::partial(style_ratio, digits = 1)
+    ) %>%
+      render_as_html()
+  )
   expect_warning(tbl_regression(mod_logistic, exponentiate = TRUE), NA)
-  expect_error(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt"), NA)
+
+  expect_snapshot(
+    tbl_regression(
+      mod_poisson,
+      exponentiate = TRUE,
+      show_single_row = "trt",
+      estimate_fun = purrr::partial(style_ratio, digits = 1)
+    ) %>%
+      as_tibble()
+  )
   expect_warning(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt"), NA)
   expect_equal(
     tbl_regression(mod_logistic, exponentiate = TRUE)$table_styling$header %>% filter(column == "estimate") %>% pull(label),
@@ -56,33 +78,33 @@ test_that("glm: logistic and poisson regression", {
 })
 
 test_that("lm: no errors/warnings with standard use", {
-  expect_error(tbl_regression(mod_lm), NA)
+  expect_snapshot(tbl_regression(mod_lm) %>% render_as_html())
   expect_warning(tbl_regression(mod_lm), NA)
 })
 
 test_that("lm with tidyfun: no errors/warnings with standard use", {
-  expect_error(tbl_regression(mod_lm, tidy_fun = broom::tidy), NA)
+  expect_snapshot(tbl_regression(mod_lm, tidy_fun = broom::tidy) %>% render_as_html())
   expect_warning(tbl_regression(mod_lm, tidy_fun = broom::tidy), NA)
 })
 
 
 test_that("survreg: no errors/warnings with standard use", {
-  expect_error(tbl_regression(mod_survreg), NA)
+  expect_snapshot(tbl_regression(mod_survreg) %>% render_as_html())
   expect_warning(tbl_regression(mod_survreg), NA)
 })
 
 test_that("lmer: no errors/warnings with standard use", {
-  expect_error(tbl_regression(mod_lmer), NA)
+  expect_snapshot(tbl_regression(mod_lmer) %>% render_as_html())
   expect_warning(tbl_regression(mod_lmer), NA)
 })
 
 test_that("glmer: no errors/warnings with standard use", {
-  expect_error(tbl_regression(mod_glmer), NA)
+  expect_snapshot(tbl_regression(mod_glmer) %>% render_as_html())
   expect_warning(tbl_regression(mod_glmer), NA)
 })
 
 test_that("lm with interactions: no errors/warnings with standard use", {
-  expect_error(tbl_regression(mod_lm_interaction), NA)
+  expect_snapshot(tbl_regression(mod_lm_interaction) %>% render_as_html())
   expect_warning(tbl_regression(mod_lm_interaction), NA)
 })
 
@@ -161,7 +183,7 @@ test_that("All labels print with cubic splines", {
 
 
 test_that("Testing lme4 results", {
-  mod_glmer <- glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
+  mod_glmer <- lme4::glmer(am ~ hp + factor(vs) + (1 | gear), mtcars, family = binomial)
 
   # tbl_regerssion runs without error
   expect_error(
@@ -171,6 +193,7 @@ test_that("Testing lme4 results", {
     ),
     NA
   )
+  expect_snapshot(tbl_lme4 %>% render_as_html())
 
   # coefs are exponentiated properly
   expect_equal(
@@ -193,6 +216,7 @@ test_that("Interaction modifications", {
       ),
     NA
   )
+  expect_snapshot(tbl_i %>% render_as_html())
 
   # checking modifications to table
   expect_equal(
@@ -211,6 +235,7 @@ test_that("Interaction modifications", {
 test_that("tidymodels/parsnip/workflows", {
   skip_if_not(broom.helpers::.assert_package("parsnip", pkg_search = "gtsummary", boolean = TRUE))
   skip_if_not(broom.helpers::.assert_package("workflows", pkg_search = "gtsummary", boolean = TRUE))
+
   expect_equal(
     parsnip::linear_reg() %>%
       parsnip::set_engine('lm') %>%
@@ -247,15 +272,17 @@ test_that("tidycrr models work", {
     tbl <- tbl_regression(mod, exponentiate = TRUE),
     NA
   )
+  expect_snapshot(tbl %>% render_as_html())
   expect_equal(
     as_tibble(tbl, col_labels = FALSE)$estimate,
     c("1.01", NA, NA, "1.06", "1.54")
   )
-  expect_error(add_global_p(tbl), NA)
+  expect_snapshot(add_global_p(tbl) %>% render_as_html())
 })
 
 test_that("cmprsk::crr models message", {
   skip_if_not(broom.helpers::.assert_package("cmprsk", pkg_search = "gtsummary", boolean = TRUE))
+
   set.seed(10)
   ftime <- rexp(200)
   fstatus <- sample(0:2,200,replace=TRUE)
@@ -276,6 +303,7 @@ test_that("NSE args could be passed to tidy_plus_plus()", {
       ),
     NA
   )
+  expect_snapshot(res %>% render_as_html())
   res <- as_tibble(res)
   expect_equal(
     unname(res[[1]]),
@@ -293,6 +321,7 @@ test_that("`add_header_rows = FALSE` could be passed to tidy_plus_plus()", {
       ),
     NA
   )
+  expect_snapshot(res %>% render_as_html())
   res <- as_tibble(res)
   expect_equal(
     unname(res[[1]]),
