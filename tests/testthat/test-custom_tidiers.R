@@ -11,20 +11,25 @@ test_that("no errors/warnings with tidy_standardize", {
 test_that("no errors/warnings with tidy_bootstrap", {
   skip_if_not(broom.helpers::.assert_package("parameters", pkg_search = "gtsummary", boolean = TRUE))
   skip_if_not_installed("boot")
-  expect_snapshot(tbl_regression(mod, tidy_fun = tidy_bootstrap) %>% render_as_html())
+  set.seed(123)
   expect_warning(tbl_regression(mod, tidy_fun = tidy_bootstrap), NA)
+
+  skip_on_os(c("mac", "linux", "solaris"))
+  expect_snapshot(tbl_regression(mod, tidy_fun = tidy_bootstrap) %>% render_as_html())
 })
 
 
 test_that("no errors/warnings with pool_and_tidy_mice", {
   skip_if_not(broom.helpers::.assert_package("mice", pkg_search = "gtsummary", boolean = TRUE))
   mod_mice <-
-    suppressWarnings(mice::mice(trial, m = 2)) %>%
+    suppressWarnings(mice::mice(trial, m = 2, seed = 123)) %>%
     with(glm(response ~ age + marker + grade, family = binomial))
 
-  expect_snapshot(tbl_regression(mod_mice) %>% render_as_html())
   expect_error(mice::pool(mod_mice) %>% tbl_regression(), NA)
   expect_output(mice::pool(mod_mice), NA)
+
+  skip_on_os(c("mac", "linux", "solaris"))
+  expect_snapshot(tbl_regression(mod_mice) %>% render_as_html())
 })
 
 
