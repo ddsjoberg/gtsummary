@@ -1,11 +1,10 @@
 skip_on_cran()
 
-#### new comment
 test_that("no errors/warnings with standard use in tbl_summary() and add_p()", {
   tbl_summary_comp <- tbl_summary(mtcars, by = am) %>%
     add_p()
 
-  expect_error(bold_p(tbl_summary_comp), NA)
+  expect_snapshot(bold_p(tbl_summary_comp) %>% render_as_html())
   expect_warning(bold_p(tbl_summary_comp), NA)
 })
 
@@ -14,7 +13,7 @@ test_that("expect error with use in tbl_summary() but NO add_p()", {
   table1_without_comp <-
     tbl_summary(mtcars, by = am)
 
-  expect_error(bold_p(table1_without_comp), NULL)
+  expect_error(bold_p(table1_without_comp))
 })
 
 

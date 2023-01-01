@@ -1,5 +1,3 @@
-
-
 skip_on_cran()
 
 tbl <- trial %>%
@@ -22,33 +20,33 @@ tbl_uv_ex1 <-
 
 
 test_that("tab_style: bold and italicize", {
-  expect_error(
+  expect_snapshot(
     tbl %>%
       bold_labels() %>%
       bold_levels() %>%
       italicize_labels() %>%
       italicize_levels() %>%
       bold_p() %>%
-      bold_p(q = TRUE, t = 0.2),
-    NA
+      bold_p(q = TRUE, t = 0.2) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     tbl_cross_ex %>%
       bold_labels() %>%
       bold_levels() %>%
       italicize_labels() %>%
-      italicize_levels(),
-    NA
+      italicize_levels() %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     tbl_uv_ex1 %>%
       bold_labels() %>%
       bold_levels() %>%
       italicize_labels() %>%
-      italicize_levels(),
-    NA
+      italicize_levels() %>%
+      render_as_html()
   )
 
   expect_warning(
