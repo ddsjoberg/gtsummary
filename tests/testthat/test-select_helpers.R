@@ -80,7 +80,7 @@ test_that("test-select helpers", {
   )
 
   expect_snapshot(
-    tbl_summary(trial, by = trt, include = c(stage, grade, trt)) %>%
+    tbl_summary(trial, by = trt, include = c(stage, response, trt)) %>%
       add_p(
         test = everything() ~ "fisher.test",
         test.args = all_tests("fisher.test") ~ list(simulate.p.value = TRUE)
