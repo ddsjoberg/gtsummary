@@ -5,6 +5,7 @@ test_that("input checks", {
     lm(age ~ marker + grade, trial) %>%
       tbl_regression() %>%
       modify_column_hide(column = ci) %>%
-      modify_column_unhide(column = std.error)
+      modify_column_unhide(column = std.error) %>%
+      render_as_html()
   )
 })
