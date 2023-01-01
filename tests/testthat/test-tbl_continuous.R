@@ -13,15 +13,17 @@ test_that("tbl_continuous() works", {
       as_tibble(),
     NA
   )
+  expect_snapshot(tbl1)
 
-  expect_error(
+  expect_snapshot(
     tbl_continuous(
       data = trial,
       variable = age,
       by = trt,
       include = c(grade, stage)
-    ) %>% add_overall(),
-    NA
+    ) %>%
+      add_overall() %>%
+      render_as_html()
   )
 
   expect_equal(
@@ -53,6 +55,7 @@ test_that("tbl_continuous() works", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl2)
 
   expect_equal(
     tbl2$stat_0,
