@@ -1,36 +1,36 @@
 skip_on_cran()
 
 test_that("checks for rows arg", {
-  expect_error(
+  expect_snapshot(
     tbl_summary(trial[c("trt", "age")]) %>%
       modify_table_styling(
         columns = label,
         footnote = "test footnote",
         rows = variable == "age"
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
   footnote_variable <- "age"
-  expect_error(
+  expect_snapshot(
     tbl_summary(trial[c("trt", "age")]) %>%
       modify_table_styling(
         columns = label,
         footnote = "test footnote",
         rows = variable == footnote_variable
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
   null_value <- NULL
-  expect_error(
+  expect_snapshot(
     tbl_summary(trial[c("trt", "age")]) %>%
       modify_table_styling(
         columns = label,
         footnote = "test footnote",
         rows = null_value
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
 
@@ -47,6 +47,7 @@ test_that("checks for rows arg", {
       ),
     NA
   )
+  expect_snapshot(tbl1 %>% render_as_html())
   expect_equal(
     as_tibble(tbl1, col_labels = FALSE) %>% pull(stat_1),
     c("46 (37, 59)  ---  48 (39, 56)", "28 (29%)  ---  33 (34%)")
@@ -63,6 +64,7 @@ test_that("checks for rows arg", {
       modify_column_unhide(all_stat_cols()),
     NA
   )
+  expect_snapshot(tbl2 %>% render_as_html())
   expect_equal(
     as_tibble(tbl2, col_labels = FALSE) %>% pull(stat_1),
     c("46 (37, 59)", "28 (29%)")
