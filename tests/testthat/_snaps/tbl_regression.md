@@ -59,8 +59,8 @@
       # A tibble: 2 x 4
         `**Characteristic**`   `**log(IRR)**` `**95% CI**` `**p-value**`
         <chr>                  <chr>          <chr>        <chr>        
-      1 Age                    0.0            0.0, 0.0     0.4          
-      2 Chemotherapy Treatment 0.1            0.0, 0.2     0.052        
+      1 Age                    0.0            0.0, 0.0     0.6          
+      2 Chemotherapy Treatment 0.0            -0.1, 0.2    0.7          
 
 ---
 
@@ -124,8 +124,8 @@
       # A tibble: 2 x 4
         `**Characteristic**`   `**IRR**` `**95% CI**` `**p-value**`
         <chr>                  <chr>     <chr>        <chr>        
-      1 Age                    1.0       1.0, 1.0     0.4          
-      2 Chemotherapy Treatment 1.1       1.0, 1.2     0.052        
+      1 Age                    1.0       1.0, 1.0     0.6          
+      2 Chemotherapy Treatment 1.0       0.9, 1.2     0.7          
 
 # lm: no errors/warnings with standard use
 

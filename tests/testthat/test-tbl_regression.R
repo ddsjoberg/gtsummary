@@ -1,12 +1,13 @@
 skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("Hmisc", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
+set.seed(123)
 
 mod_lm <- lm(hp ~ am, data = mtcars)
 mod_survreg <- survival::survreg(survival::Surv(time, status) ~ age + ph.ecog, data = survival::lung)
 mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
 mod_poisson <- glm(count ~ age + trt,
-                   trial %>% dplyr::mutate(count = sample.int(20, size = nrow(trial), replace = TRUE)),
+                   trial %>% dplyr::mutate(count = dplyr::row_number() %% 10),
                    family = poisson
 )
 mod_lmer <- lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
