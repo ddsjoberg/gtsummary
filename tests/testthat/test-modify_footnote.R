@@ -6,42 +6,43 @@ test_that("modify_footnote works", {
     dplyr::select(trt, age, grade) %>%
     tbl_summary(by = trt)
 
-  expect_error(
+  expect_snapshot(
     tbl_summary %>%
       modify_footnote(
         update = starts_with("stat_") ~
           "median (IQR) for continuous variables; n (%) categorical variables"
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     tbl_summary %>%
       modify_footnote(
         label = "Variable Footnote",
         starts_with("stat_") ~
         "median (IQR) for continuous variables; n (%) categorical variables"
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     tbl_summary %>%
-      modify_footnote(update = everything() ~ NA),
-    NA
+      modify_footnote(update = everything() ~ NA) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_equal(
+    tbl_summary %>% utils::modifyList(val = list(call_list = NULL)),
     tbl_summary %>%
-      modify_footnote(update = NULL),
-    NA
+      modify_footnote(update = NULL) %>%
+      utils::modifyList(val = list(call_list = NULL))
   )
 
-  expect_error(
+  expect_snapshot(
     glm(response ~ age + grade, trial, family = binomial) %>%
       tbl_regression(exponentiate = TRUE) %>%
-      modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE),
-    NA
+      modify_footnote(ci ~ "CI = Credible Interval", abbreviation = TRUE) %>%
+      render_as_html()
   )
 
   expect_true(

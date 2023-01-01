@@ -11,4 +11,5 @@ test_that("fmt_fun works", {
       ),
     NA
   )
+  expect_snapshot(tbl1 %>% render_as_html())
 })

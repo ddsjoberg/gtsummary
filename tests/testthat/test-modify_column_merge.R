@@ -9,6 +9,7 @@ test_that("modify_column_merge() works", {
       ),
     NA
   )
+  expect_snapshot(tbl %>% render_as_html())
 
   expect_equal(
     as_tibble(tbl, col_labels = FALSE) %>%
