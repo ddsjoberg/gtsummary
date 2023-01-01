@@ -24,7 +24,10 @@ test_that("glm: logistic and poisson regression", {
   expect_snapshot(tbl_regression(mod_logistic) %>% render_as_html())
   expect_warning(tbl_regression(mod_logistic), NA)
 
-  expect_snapshot(tbl_regression(mod_poisson, show_single_row = "trt") %>% render_as_html())
+  expect_snapshot(
+    tbl_regression(mod_poisson, show_single_row = "trt", estimate_fun = purrr::partial(style_ratio, digits = 1)) %>%
+      render_as_html()
+  )
   expect_warning(tbl_regression(mod_poisson, show_single_row = "trt"), NA)
   expect_equal(
     tbl_regression(mod_logistic)$table_styling$header %>% filter(column == "estimate") %>% pull(label),
@@ -39,10 +42,25 @@ test_that("glm: logistic and poisson regression", {
     "ci" %in% names(tbl_regression(mod_logistic, conf.int = FALSE) %>% as_tibble(col_labels = FALSE))
   )
 
-  expect_snapshot(tbl_regression(mod_logistic, exponentiate = TRUE) %>% render_as_html())
+  expect_snapshot(
+    tbl_regression(
+      mod_logistic,
+      exponentiate = TRUE,
+      estimate_fun = purrr::partial(style_ratio, digits = 1)
+    ) %>%
+      render_as_html()
+  )
   expect_warning(tbl_regression(mod_logistic, exponentiate = TRUE), NA)
 
-  expect_snapshot(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt") %>% render_as_html())
+  expect_snapshot(
+    tbl_regression(
+      mod_poisson,
+      exponentiate = TRUE,
+      show_single_row = "trt",
+      estimate_fun = purrr::partial(style_ratio, digits = 1)
+    ) %>%
+      render_as_html()
+  )
   expect_warning(tbl_regression(mod_poisson, exponentiate = TRUE, show_single_row = "trt"), NA)
   expect_equal(
     tbl_regression(mod_logistic, exponentiate = TRUE)$table_styling$header %>% filter(column == "estimate") %>% pull(label),
@@ -193,7 +211,7 @@ test_that("Interaction modifications", {
       ),
     NA
   )
-  expect_snapshot(tbl_i)
+  expect_snapshot(tbl_i %>% render_as_html())
 
   # checking modifications to table
   expect_equal(
@@ -249,7 +267,7 @@ test_that("tidycrr models work", {
     tbl <- tbl_regression(mod, exponentiate = TRUE),
     NA
   )
-  expect_snapshot(tbl)
+  expect_snapshot(tbl %>% render_as_html())
   expect_equal(
     as_tibble(tbl, col_labels = FALSE)$estimate,
     c("1.01", NA, NA, "1.06", "1.54")
