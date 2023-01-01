@@ -63,29 +63,29 @@ test_that("test-select helpers", {
     c("trt", "grade", stage_variable)
   )
 
-  expect_error(
-    tbl_summary(trial, statistic = all_continuous() ~ "{mean}"), NA
+  expect_snapshot(
+    tbl_summary(trial, statistic = all_continuous() ~ "{mean}") %>% render_as_html()
   )
 
-  expect_error(
-    tbl_summary(trial, statistic = all_categorical() ~ "{n}"), NA
+  expect_snapshot(
+    tbl_summary(trial, statistic = all_categorical() ~ "{n}") %>% render_as_html()
   )
 
-  expect_error(
-    tbl_summary(trial, statistic = all_dichotomous() ~ "{n}"), NA
+  expect_snapshot(
+    tbl_summary(trial, statistic = all_dichotomous() ~ "{n}") %>% render_as_html()
   )
 
-  expect_error(
-    tbl_summary(trial, statistic = all_categorical(dichotomous = FALSE) ~ "{n}"), NA
+  expect_snapshot(
+    tbl_summary(trial, statistic = all_categorical(dichotomous = FALSE) ~ "{n}") %>% render_as_html()
   )
 
-  expect_error(
-    tbl_summary(trial, by = trt, include = c(stage, grade, trt)) %>%
+  expect_snapshot(
+    tbl_summary(trial, by = trt, include = c(stage, response, trt)) %>%
       add_p(
         test = everything() ~ "fisher.test",
         test.args = all_tests("fisher.test") ~ list(simulate.p.value = TRUE)
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
   df <-
