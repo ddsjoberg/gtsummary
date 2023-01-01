@@ -45,6 +45,7 @@ test_that("setting themes", {
     tbl <- tbl_summary(trial, by = trt) %>% add_p() %>% add_stat_label(),
     NA
   )
+  expect_snapshot(tbl %>% render_as_html())
 
   expect_equal(
     tbl$table_styling$footnote %>% dplyr::filter(column == "p.value") %>% purrr::pluck("footnote"),
@@ -57,11 +58,10 @@ test_that("setting themes", {
     NA
   )
 
-  expect_error(
+  expect_snapshot(
     lm(age ~ marker + grade, trial) %>%
       tbl_regression() %>%
-      as_gt(),
-    NA
+      render_as_html()
   )
 
   expect_error(
@@ -83,6 +83,7 @@ test_that("setting themes", {
     set_gtsummary_theme()
 
   expect_error(tbl_theme <- tbl_summary(trial[c("trt", "age")]), NA)
+  expect_snapshot(tbl_theme %>% render_as_html())
   expect_equal(
     tbl_theme$meta_data$stat_display,
     list("{n} / {N} ({p}%)", c("{median} ({p25} - {p75})", "{mean} ({sd})"))
@@ -106,6 +107,7 @@ test_that("setting themes", {
     tbl_summary(by = trt, missing = "no") %>%
     add_difference() %>%
     as_tibble(col_labels = FALSE)
+  expect_snapshot(tbl1)
   expect_equal(
     tbl1 %>%
       purrr::pluck("estimate"),
@@ -136,27 +138,32 @@ test_that("setting themes", {
 
 
   theme_gtsummary_journal("qjecon")
+  tbl_qjecon1 <-
+    lm(age ~ grade, trial) %>%
+    tbl_regression()
   expect_error(
-    tbl_qjecon1 <-
-      lm(age ~ grade, trial) %>%
-      tbl_regression() %>%
+    tbl_qjecon1 %>%
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl_qjecon1 %>% render_as_html())
   expect_equal(
     tbl_qjecon1 %>%
-      pull(estimate),
+      as_tibble(col_labels = FALSE) %>%
+      dplyr::pull(estimate),
     c(NA, NA, "1.4  \n(2.54)", "2.0  \n(2.55)")
   )
   expect_false("ci" %in% names(tbl_qjecon1))
 
+  tbl_qjecon2 <-
+    mtcars %>%
+    tbl_uvregression(method = lm, y = hp)
   expect_error(
-    tbl_qjecon2 <-
-      mtcars %>%
-      tbl_uvregression(method = lm, y = hp) %>%
+    tbl_qjecon2 %>%
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl_qjecon2 %>% render_as_html())
   expect_false("ci" %in% names(tbl_qjecon2))
 
   reset_gtsummary_theme()
@@ -169,6 +176,7 @@ test_that("setting themes", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl)
   expect_equal(tbl$label, c("Age", "Median (IQR)", "Mean (SD)", "Range", "Unknown"))
   expect_equal(tbl$stat_0, c(NA, "47 (38, 57)", "47 (14)", "6, 83", "11"))
 
