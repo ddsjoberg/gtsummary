@@ -1,7 +1,7 @@
 skip_on_cran()
 
 test_that("no errors with standard use", {
-  expect_error(
+  expect_snapshot(
     trial %>%
       select(age, grade, stage, trt) %>%
       mutate(grade = paste("Grade", grade)) %>%
@@ -11,11 +11,11 @@ test_that("no errors with standard use", {
           ~ .x %>%
             tbl_summary(by = trt) %>%
             add_p()
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     trial %>%
       select(age, grade, stage, trt) %>%
       mutate(
@@ -28,11 +28,11 @@ test_that("no errors with standard use", {
           ~ .x %>%
             tbl_summary(by = trt) %>%
             add_p(test = all_continuous() ~ "t.test")
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     trial %>%
       select(age, grade, stage, trt) %>%
       mutate(grade = paste("Grade", grade)) %>%
@@ -41,11 +41,11 @@ test_that("no errors with standard use", {
         .tbl_fun = tbl_summary,
         by = trt,
         missing = "no"
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     trial %>%
       select(age, grade, stage, trt) %>%
       mutate(grade = paste("Grade", grade)) %>%
@@ -56,11 +56,11 @@ test_that("no errors with standard use", {
             tbl_summary(by = trt) %>%
             add_p(),
         .combine_with = "tbl_stack"
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     trial %>%
       select(age, grade, stage, trt) %>%
       mutate(grade = paste("Grade", grade)) %>%
@@ -72,11 +72,11 @@ test_that("no errors with standard use", {
               y = age,
               method = lm
             )
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     trial %>%
       select(grade, stage, trt) %>%
       mutate(grade = paste("Grade", grade)) %>%
@@ -86,11 +86,11 @@ test_that("no errors with standard use", {
           ~ .x %>%
             tbl_cross() %>%
             add_p()
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     trial %>%
       select(grade, stage, trt) %>%
       mutate(grade = paste("Grade", grade)) %>%
@@ -100,11 +100,11 @@ test_that("no errors with standard use", {
           ~ .x %>%
           tbl_cross() %>%
           add_p()
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     trial %>%
       select(grade, response) %>%
       tbl_strata2(
@@ -116,20 +116,20 @@ test_that("no errors with standard use", {
               label = list(response = .y),
               missing = "no"
             )
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
   skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
-  expect_error(
+  expect_snapshot(
     survey::svydesign(~1, data = trial, weights = ~1) %>%
       tbl_strata(
         strata = grade,
         ~ tbl_svysummary(.x, by = trt, include = c(stage, trt), percent = "cell") %>%
           modify_header(all_stat_cols() ~ "**{level}**"),
         .combine_with = "tbl_stack"
-      ),
-    NA
+      ) %>%
+      render_as_html()
   )
 
   # check .combine_args works, no spanning header anywhere
@@ -146,6 +146,7 @@ test_that("no errors with standard use", {
       ),
     NA
   )
+  expect_snapshot(tbl %>% render_as_html())
   expect_true(all(is.na(tbl$table_styling$header$spanning_header)))
 
   lifecycle::expect_deprecated(

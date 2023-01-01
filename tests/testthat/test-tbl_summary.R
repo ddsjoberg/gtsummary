@@ -1,11 +1,11 @@
 skip_on_cran()
-library(glue)
 
 test_that("tbl_summary creates output without error/warning (no by var)", {
   expect_error(
-    purrr::map(list(mtcars, iris), ~ tbl_summary(.x, sort = list(all_categorical() ~ "frequency"))),
+    lst_tbl <- purrr::map(list(mtcars, iris), ~ tbl_summary(.x, sort = list(all_categorical() ~ "frequency"))),
     NA
   )
+  expect_snapshot(purrr::map(lst_tbl, as_tibble))
   expect_warning(
     purrr::map(list(mtcars, iris), ~ tbl_summary(.x)),
     NA
@@ -14,9 +14,9 @@ test_that("tbl_summary creates output without error/warning (no by var)", {
 
 
 test_that("tbl_summary creates output without error/warning (with by var)", {
-  expect_error(
-    tbl_summary(mtcars, by = am),
-    NA
+  expect_snapshot(
+    tbl_summary(mtcars, by = am) %>%
+      render_as_html()
   )
   expect_warning(
     tbl_summary(mtcars, by = am),
@@ -25,9 +25,9 @@ test_that("tbl_summary creates output without error/warning (with by var)", {
 })
 
 test_that("tbl_summary allows for named list input", {
-  expect_error(
-    tbl_summary(mtcars, by = am, label = list(mpg = "New mpg", cyl = "New cyl")),
-    NA
+  expect_snapshot(
+    tbl_summary(mtcars, by = am, label = list(mpg = "New mpg", cyl = "New cyl")) %>%
+      render_as_html()
   )
   expect_warning(
     tbl_summary(mtcars, by = am, label = list(mpg = "New mpg", cyl = "New cyl")),
@@ -48,29 +48,28 @@ test_that("tbl_summary throws errors/messages with bad 'sort = ' specifications"
 })
 
 test_that("tbl_summary value argument works properly", {
-  expect_error(
-    tbl_summary(trial, value = "grade" ~ "III"),
-    NA
+  expect_snapshot(
+    tbl_summary(trial, value = "grade" ~ "III") %>%
+      render_as_html()
   )
 })
 
 test_that("tbl_summary works in character inputs for `by=`", {
   my_by_variable <- "trt"
 
-  expect_error(
-    tbl_summary(trial, by = all_of(my_by_variable)),
-    NA
+  expect_snapshot(
+    tbl_summary(trial, by = all_of(my_by_variable)) %>%
+      render_as_html()
   )
-  expect_error(
-    tbl_summary(trial, by = "trt"),
-    NA
+  expect_snapshot(
+    tbl_summary(trial, by = "trt") %>%
+      render_as_html()
   )
-  expect_error(
+  expect_snapshot(
     purrr::map(
       c("trt", "grade", "stage"),
-      ~ tbl_summary(trial, by = all_of(.x))
-    ),
-    NA
+      ~ tbl_summary(trial, by = all_of(.x)) %>% as_tibble()
+    )
   )
 })
 
@@ -157,6 +156,7 @@ test_that("tbl_summary-testing tidyselect parsing", {
       ),
     NA
   )
+  expect_snapshot(big_test %>% render_as_html())
 
   # checking missing
   expect_equal(
@@ -276,14 +276,14 @@ test_that("tbl_summary-all_categorical() use with `type=`", {
 
 
 test_that("tbl_summary-difftime does not cause error", {
-  expect_error(
+  expect_snapshot(
     dplyr::storms %>%
       dplyr::mutate(
         date = ISOdate(year, month, day),
         date_diff = difftime(dplyr::lag(date, 5), date, units = "days")
       ) %>%
-      tbl_summary(),
-    NA
+      tbl_summary() %>%
+      render_as_html()
   )
 })
 
@@ -303,16 +303,18 @@ test_that("tbl_summary-all missing data does not cause error", {
     all_missing_no_by <- tbl_summary(df_missing %>% select(-my_by_var)),
     NA
   )
+  expect_snapshot(all_missing_no_by %>% render_as_html())
 
   expect_error(
     all_missing_by <- tbl_summary(df_missing, by = my_by_var),
     NA
   )
+  expect_snapshot(all_missing_by %>% render_as_html())
 
   # making categorical, variables that cannot be summarized as categorical
-  expect_error(
-    tbl_summary(df_missing, by = my_by_var, type = vars(int, dbl) ~ "categorical"),
-    NA
+  expect_snapshot(
+    tbl_summary(df_missing, by = my_by_var, type = vars(int, dbl) ~ "categorical") %>%
+      render_as_html()
   )
 
   expect_equal(
@@ -366,6 +368,7 @@ test_that("tbl_summary-all missing data does not cause error", {
       tbl_summary(by = response2),
     NA
   )
+  expect_snapshot(missing_fct_by %>% render_as_html())
 
   expect_equal(
     missing_fct_by$table_body %>% select(starts_with("stat_")) %>% names(),
@@ -375,43 +378,43 @@ test_that("tbl_summary-all missing data does not cause error", {
 
 
 test_that("tbl_summary-no error when *data frame* with single column passed", {
-  expect_error(
+  expect_snapshot(
     trial["trt"] %>%
       as.data.frame() %>%
-      tbl_summary(label = trt ~ "TREATMENT GROUP"),
-    NA
+      tbl_summary(label = trt ~ "TREATMENT GROUP") %>%
+      render_as_html()
   )
 })
 
 
 test_that("tbl_summary-no error when by variable is ordered factor", {
-  expect_error(
+  expect_snapshot(
     trial %>%
       dplyr::mutate(grade = as.ordered(grade)) %>%
-      tbl_summary(by = grade),
-    NA
+      tbl_summary(by = grade) %>%
+      render_as_html()
   )
 })
 
 test_that("tbl_summary- works with grouped data (it ungroups it first)", {
-  expect_error(
+  expect_snapshot(
     trial %>% dplyr::group_by(response) %>%
       dplyr::select(response, death, trt) %>%
-      tbl_summary(by = trt),
-    NA
+      tbl_summary(by = trt) %>%
+      render_as_html()
   )
 })
 
 test_that("tbl_summary-works with ordered factors", {
-  expect_error(
+  expect_snapshot(
     trial %>%
       select(response, trt) %>%
       dplyr::mutate_at(
         vars(response, trt),
         ~ factor(., ordered = TRUE)
       ) %>%
-      tbl_summary(by = trt),
-    NA
+      tbl_summary(by = trt) %>%
+      render_as_html()
   )
 })
 
@@ -448,12 +451,15 @@ test_that("tbl_summary-complex environments check", {
 
 
 test_that("tbl_summary creates output without error/warning for continuous2 (no by var)", {
-  expect_error(
-    purrr::map(list(mtcars, iris), ~ tbl_summary(.x,
-      type = all_continuous() ~ "continuous2",
-      sort = list(all_categorical() ~ "frequency")
-    )),
-    NA
+  expect_snapshot(
+    purrr::map(
+      list(mtcars, iris),
+      ~ tbl_summary(.x,
+                    type = all_continuous() ~ "continuous2",
+                    sort = list(all_categorical() ~ "frequency")
+      ) %>%
+        as_tibble()
+    )
   )
   expect_warning(
     purrr::map(list(mtcars, iris), ~ tbl_summary(.x)),
@@ -463,9 +469,9 @@ test_that("tbl_summary creates output without error/warning for continuous2 (no 
 
 
 test_that("tbl_summary creates output without error/warning for continuous2 (with by var)", {
-  expect_error(
-    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2"),
-    NA
+  expect_snapshot(
+    tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2") %>%
+      render_as_html()
   )
   expect_warning(
     tbl_summary(mtcars, by = am, type = all_continuous() ~ "continuous2"),
@@ -500,17 +506,18 @@ test_that("tbl_summary(digits=) tests with fn inputs", {
       ),
     NA
   )
+  expect_snapshot(tbl_digits %>% render_as_html())
 
   # checking the display is correct
   expect_equal(
     tbl_digits$table_body %>% filter(variable == "age") %>% pull(stat_0),
-    with(trial, glue("{format(mean(age, na.rm = TRUE), digits = 2, scientific = TRUE)}")) %>% as.character(),
+    with(trial, glue::glue("{format(mean(age, na.rm = TRUE), digits = 2, scientific = TRUE)}")) %>% as.character(),
     ignore_attr = TRUE
   )
 
   expect_equal(
     tbl_digits$table_body %>% filter(variable == "marker") %>% pull(stat_0),
-    with(trial, glue(
+    with(trial, glue::glue(
       "{round(mean(marker, na.rm = TRUE))} ",
       "{round(sd(marker, na.rm = TRUE), 2)} ",
       "{sprintf(length(marker),  fmt = '%#.1f')} ",
@@ -538,12 +545,14 @@ test_that("tbl_summary() continuous vars with cat summary vars only", {
     tbl1 <- trial %>% select(age) %>% tbl_summary(statistic = age ~ "{N_obs}"),
     NA
   )
+  expect_snapshot(tbl1 %>% render_as_html())
   expect_equal(tbl1$table_body$stat_0, c("200", "11"))
 
   expect_error(
     tbl2 <- trial %>% select(age, trt) %>% tbl_summary(by = trt, statistic = age ~ "{N_obs}"),
     NA
   )
+  expect_snapshot(tbl2 %>% render_as_html())
   expect_equal(tbl2$meta_data$df_stats %>% pluck(1, "N_obs"), c(98, 102),
     ignore_attr = TRUE
   )
@@ -561,6 +570,7 @@ test_that("tbl_summary() works with date and date/time", {
     tbl1 <- df_date %>% tbl_summary(),
     NA
   )
+  expect_snapshot(tbl1 %>% render_as_html())
 
   expect_equal(
     tbl1 %>% as_tibble() %>% select(last_col()) %>% dplyr::pull(),
@@ -572,6 +582,7 @@ test_that("tbl_summary() works with date and date/time", {
     tbl1 <- df_date %>% select(-group) %>% tbl_summary(type = everything() ~ "continuous", digits = everything() ~ month_year),
     NA
   )
+  expect_snapshot(tbl1 %>% render_as_html())
 
   expect_equal(
     tbl1 %>% as_tibble() %>% select(last_col()) %>% dplyr::pull(),
@@ -582,11 +593,13 @@ test_that("tbl_summary() works with date and date/time", {
     tbl1 <- df_date %>% tbl_summary(by = group, type = everything() ~ "continuous", digits = everything() ~ month_year),
     NA
   )
+  expect_snapshot(tbl1 %>% render_as_html())
 
   expect_error(
     tbl2 <- df_date %>% tbl_summary(by = group),
     NA
   )
+  expect_snapshot(tbl2 %>% render_as_html())
 })
 
 
@@ -637,31 +650,26 @@ test_that("Hmisc labelled data don't error", {
 })
 
 test_that("no error when by variable omitted from include", {
-  expect_error(
+  expect_snapshot(
     trial %>%
-      tbl_summary(by = trt, include  = age),
-    NA
+      tbl_summary(by = trt, include  = age) %>%
+      render_as_html()
   )
 })
 
 test_that("all column names are accepted", {
   df <- data.frame(variable = c(rep("A", 5), rep("B", 5)), value= 1:10)
 
-  expect_error(
-    tbl_summary(df, by = "variable"),
-    NA
+  expect_snapshot(
+    tbl_summary(df, by = "variable") %>%
+      render_as_html()
   )
-  expect_error(
-    tbl_summary(df),
-    NA
+  expect_snapshot(tbl_summary(df) %>% render_as_html())
+  expect_snapshot(
+    tbl_summary(df %>% dplyr::rename(by = variable)) %>% render_as_html()
   )
-  expect_error(
-    tbl_summary(df %>% dplyr::rename(by = variable)),
-    NA
-  )
-  expect_error(
-    tbl_summary(df %>% dplyr::rename(by = variable), by = "by"),
-    NA
+  expect_snapshot(
+    tbl_summary(df %>% dplyr::rename(by = variable), by = "by") %>% render_as_html()
   )
 
 })
@@ -677,6 +685,7 @@ test_that("no error with factor variable with all NA and no specifed levels", {
       as_tibble(col_labels = FALSE),
     NA
   )
+  expect_snapshot(tbl)
   expect_equal(
     tbl$stat_1,
     c("0 (NA%)", "98")
@@ -767,9 +776,8 @@ test_that("no error when data frame contains named vector", {
                                           names = c("", "", "", "", ""))),
               row.names = c(NA, -5L), class = c("tbl_df", "tbl", "data.frame"))
 
-  expect_error(
-    tbl_summary(df, type = list(everything() ~ "continuous")),
-    NA
+  expect_snapshot(
+    tbl_summary(df, type = list(everything() ~ "continuous")) %>% render_as_html()
   )
 
 })
