@@ -29,7 +29,8 @@ test_that("no errors/warnings with pool_and_tidy_mice", {
   expect_output(mice::pool(mod_mice), NA)
 
   skip_on_os(c("mac", "linux", "solaris"))
-  expect_snapshot(tbl_regression(mod_mice) %>% render_as_html())
+  tbl_mice <- tbl_regression(mod_mice)
+  expect_snapshot(tbl_mice %>% render_as_html())
 })
 
 

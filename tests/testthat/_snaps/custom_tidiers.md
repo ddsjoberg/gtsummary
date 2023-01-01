@@ -97,10 +97,7 @@
 # no errors/warnings with pool_and_tidy_mice
 
     Code
-      tbl_regression(mod_mice) %>% render_as_html()
-    Message
-      pool_and_tidy_mice(): Tidying mice model with
-      `mice::pool(x) %>% mice::tidy(conf.int = TRUE, conf.level = 0.95)`
+      tbl_mice %>% render_as_html()
     Output
       <div  style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
         
