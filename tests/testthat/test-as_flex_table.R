@@ -2,15 +2,18 @@ skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("flextable", pkg_search = "gtsummary", boolean = TRUE))
 
 test_that("tbl_summary", {
-  expect_error(tbl_summary(trial) %>% as_flex_table(), NA)
+  expect_error(tbl <- tbl_summary(trial) %>% as_flex_table(), NA)
   expect_warning(tbl_summary(trial) %>% as_flex_table(), NA)
+  expect_snapshot(tbl)
 
   expect_error(
-    tbl_summary(trial[c("trt", "age")]) %>%
+    tbl <-
+      tbl_summary(trial[c("trt", "age")]) %>%
       modify_table_styling(columns = label, footnote = "test footnote", rows = variable == "age") %>%
       as_flex_table(),
     NA
   )
+  expect_snapshot(tbl)
 })
 
 test_that("tbl_summary", {
@@ -18,23 +21,35 @@ test_that("tbl_summary", {
   expect_warning(tbl_summary(trial) %>% as_flex_table(return_calls = TRUE), NA)
 })
 
+test_that("tbl_cross", {
+  expect_error(
+    tbl <-
+      tbl_cross(trial, row = trt, col = response) %>%
+      as_flex_table(),
+    NA
+  )
+  expect_snapshot(tbl)
+})
+
 test_that("tbl_regression", {
-  expect_error(lm(marker ~ age, trial) %>% tbl_regression() %>% as_flex_table(), NA)
+  expect_error(tbl <- lm(marker ~ age, trial) %>% tbl_regression() %>% as_flex_table(), NA)
   expect_warning(lm(marker ~ age, trial) %>% tbl_regression() %>% as_flex_table(), NA)
+  expect_snapshot(tbl)
 })
 
 test_that("tbl_uvregression", {
-  expect_error(trial %>% tbl_uvregression(method = lm, y = age) %>% as_flex_table(), NA)
+  expect_error(tbl <- trial %>% tbl_uvregression(method = lm, y = age) %>% as_flex_table(), NA)
   expect_warning(trial %>% tbl_uvregression(method = lm, y = age) %>% as_flex_table(), NA)
+  expect_snapshot(tbl)
 })
 
 test_that("tbl_survfit", {
   skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-  library(survival)
-  fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
+  fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
 
-  expect_error(tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months") %>% as_flex_table(), NA)
+  expect_error(tbl <- tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months") %>% as_flex_table(), NA)
   expect_warning(tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months") %>% as_flex_table(), NA)
+  expect_snapshot(tbl)
 })
 
 test_that("tbl_merge/tbl_stack", {
@@ -43,7 +58,7 @@ test_that("tbl_merge/tbl_stack", {
     glm(response ~ trt + grade + age, trial, family = binomial) %>%
     tbl_regression(exponentiate = TRUE)
   t2 <-
-    coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+    survival::coxph(survival::Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
     tbl_regression(exponentiate = TRUE)
 
   tbl_merge_ex1 <-
@@ -52,8 +67,9 @@ test_that("tbl_merge/tbl_stack", {
       tab_spanner = c("**Tumor Response**", "**Time to Death**")
     )
 
-  expect_error(as_flex_table(tbl_merge_ex1), NA)
+  expect_error(tbl <- as_flex_table(tbl_merge_ex1), NA)
   expect_warning(as_flex_table(tbl_merge_ex1), NA)
+  expect_snapshot(tbl)
 
   tbl_stack_ex1 <-
     tbl_stack(
@@ -61,17 +77,12 @@ test_that("tbl_merge/tbl_stack", {
       group_header = c("**Tumor Response**", "**Time to Death**")
     )
 
-  expect_error(as_flex_table(tbl_merge_ex1), NA)
+  expect_error(tbl <- as_flex_table(tbl_merge_ex1), NA)
   expect_warning(as_flex_table(tbl_merge_ex1), NA)
+  expect_snapshot(tbl)
 })
 
-test_that("tbl_cross", {
-  expect_error(
-    tbl_cross(trial, row = trt, col = response) %>%
-      as_flex_table(),
-    NA
-  )
-})
+
 
 test_that("indent2", {
   expect_error(
