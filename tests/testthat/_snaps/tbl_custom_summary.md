@@ -105,20 +105,6 @@
       7 3rd   17.3% (88/510) [14-21]    45.9% (90/196) [39-53] 
       8 Crew  22.3% (192/862) [20-25]   87.0% (20/23) [65-97]  
 
-# character summaries do not cause error
-
-    Code
-      tbl %>% as_tibble()
-    Output
-      # A tibble: 5 x 3
-        `**Characteristic**` `**Drug A**, N = 98`    `**Drug B**, N = 102`   
-        <chr>                <chr>                   <chr>                   
-      1 T Stage              <NA>                    <NA>                    
-      2 T1                   0.74 (low) [2023-01-01] 0.66 (low) [2023-01-01] 
-      3 T2                   1.2 (high) [2023-01-01] 1.0 (high) [2023-01-01] 
-      4 T3                   1.1 (high) [2023-01-01] 0.94 (high) [2023-01-01]
-      5 T4                   1.1 (high) [2023-01-01] 0.67 (low) [2023-01-01] 
-
 # full_data contains all observations including missing values
 
     Code
