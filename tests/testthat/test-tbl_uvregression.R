@@ -1,38 +1,41 @@
 skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
-library(survival)
-library(lme4)
-
 
 test_that("lm: no errors/warnings with standard use", {
-  expect_error(mtcars %>%
-    tbl_uvregression(
-      method = lm,
-      y = mpg
-    ), NA)
-  expect_error(mtcars %>%
-    tbl_uvregression(
-      method = lm,
-      y = "mpg"
-    ), NA)
+  expect_snapshot(
+    mtcars %>%
+      tbl_uvregression(
+        method = lm,
+        y = mpg
+      ) %>%
+      render_as_html()
+  )
+  expect_snapshot(
+    mtcars %>%
+      tbl_uvregression(
+        method = lm,
+        y = "mpg"
+      ) %>%
+      render_as_html()
+  )
   expect_warning(mtcars %>%
-    tbl_uvregression(
-      method = lm,
-      y = mpg
-    ), NA)
+                   tbl_uvregression(
+                     method = lm,
+                     y = mpg
+                   ), NA)
 
   expect_false(
     "ci" %in%
       names(tbl_uvregression(mtcars, method = lm, y = mpg, conf.int = FALSE) %>%
-          as_tibble(col_labels = FALSE))
+              as_tibble(col_labels = FALSE))
   )
 })
 
 test_that("geeglm: no errors/warnings with standard use", {
   skip_if_not(broom.helpers::.assert_package("geepack", pkg_search = "gtsummary", boolean = TRUE))
 
-  expect_error(
+  expect_snapshot(
     tbl_uvregression(
       na.omit(trial),
       y = age,
@@ -42,7 +45,8 @@ test_that("geeglm: no errors/warnings with standard use", {
         corstr = "exchangeable"
       ),
       include = -response
-    ), NA
+    ) %>%
+      render_as_html()
   )
   expect_warning(
     tbl_uvregression(
@@ -59,40 +63,44 @@ test_that("geeglm: no errors/warnings with standard use", {
 })
 
 test_that("lm specifying tidy_fun: no errors/warnings with standard use", {
-  expect_error(mtcars %>%
-    tbl_uvregression(
-      method = lm,
-      y = mpg,
-      tidy_fun = broom::tidy
-    ), NA)
+  expect_snapshot(
+    mtcars %>%
+      tbl_uvregression(
+        method = lm,
+        y = mpg,
+        tidy_fun = broom::tidy
+      ) %>%
+      render_as_html()
+  )
   expect_warning(mtcars %>%
-    tbl_uvregression(
-      method = lm,
-      y = mpg,
-      tidy_fun = broom::tidy
-    ), NA)
+                   tbl_uvregression(
+                     method = lm,
+                     y = mpg,
+                     tidy_fun = broom::tidy
+                   ), NA)
 })
 
 test_that("coxph: no errors/warnings with standard use", {
   expect_error(
     coxph_uv <-
-      lung %>%
+      survival::lung %>%
       tbl_uvregression(
-        method = coxph,
-        y = Surv(time, status)
+        method = survival::coxph,
+        y = survival::Surv(time, status)
       ), NA
   )
+  expect_snapshot(coxph_uv %>% render_as_html())
   expect_warning(
-    lung %>%
+    survival::lung %>%
       tbl_uvregression(
-        method = coxph,
-        y = Surv(time, status)
+        method = survival::coxph,
+        y = survival::Surv(time, status)
       ), NA
   )
 
   expect_identical(
     coxph_uv$meta_data$variable,
-    setdiff(names(lung), c("time", "status"))
+    setdiff(names(survival::lung), c("time", "status"))
   )
 })
 
@@ -103,19 +111,21 @@ test_that("glmer: no errors/warnings with standard use", {
       mtcars %>%
       select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
-        method = glmer,
+        method = lme4::glmer,
         y = am,
         formula = "{y} ~ {x} + (1 | gear)",
         method.args = list(family = binomial),
         label = "cyl" ~ "No. Cylinders",
         hide_n = TRUE
-      ), NA
+      ),
+    NA
   )
+  expect_snapshot(lme4_uv %>% render_as_html())
   expect_warning(
     mtcars %>%
       select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
-        method = glmer,
+        method = lme4::glmer,
         y = am,
         formula = "{y} ~ {x} + (1 | gear)",
         method.args = list(family = binomial)
@@ -128,23 +138,26 @@ test_that("glmer: no errors/warnings with standard use", {
   )
 
   expect_error(
-    mtcars %>%
+    tbl <-
+      mtcars %>%
       select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
-        method = glmer,
+        method = lme4::glmer,
         y = am,
         formula = "{y} ~ {x} + (1 | gear)",
         method.args = list(family = binomial),
         label = "cyl" ~ "No. Cylinders",
         hide_n = TRUE,
         include = c("am", "gear", "hp", "cyl"),
-      ), NA
+      ),
+    NA
   )
+  expect_snapshot(tbl %>% render_as_html())
   expect_warning(
     mtcars %>%
       select("am", "gear", "hp", "cyl") %>%
       tbl_uvregression(
-        method = glmer,
+        method = lme4::glmer,
         y = am,
         formula = "{y} ~ {x} + (1 | gear)",
         method.args = list(family = binomial),
@@ -163,6 +176,7 @@ test_that("tbl_uvregression x= argument tests", {
     ),
     NA
   )
+  expect_snapshot(ux_x %>% render_as_html())
 
   expect_equal(
     ux_x %>%
@@ -187,17 +201,17 @@ test_that("tbl_uvregression creates errors with bad inputs", {
   expect_error(
     tbl_uvregression(
       data = mtcars,
-      method = coxph,
-      y = Surv(time, status),
+      method = survival::coxph,
+      y = survival::Surv(time, status),
       pvalue_fun = mtcars
     ),
     NULL
   )
   expect_error(
     tbl_uvregression(
-      data = lung,
-      method = coxph,
-      y = Surv(time, status),
+      data = survival::lung,
+      method = survival::coxph,
+      y = survival::Surv(time, status),
       estimate_fun = mtcars
     ),
     NULL
@@ -205,59 +219,59 @@ test_that("tbl_uvregression creates errors with bad inputs", {
   expect_error(
     tbl_uvregression(
       data = mtcars,
-      method = coxph,
-      y = Surv(time, status),
+      method = survival::coxph,
+      y = survival::Surv(time, status),
       tidy_fun = mtcars
     ),
     NULL
   )
   expect_error(
     tbl_uvregression(
-      data = lung,
-      method = coxph,
-      y = Surv(time, status),
+      data = survival::lung,
+      method = survival::coxph,
+      y = survival::Surv(time, status),
       label = "Labels! YAY"
     ),
     NULL
   )
   expect_error(
     tbl_uvregression(
-      data = lung,
-      method = coxph,
-      y = Surv(time, status),
+      data = survival::lung,
+      method = survival::coxph,
+      y = survival::Surv(time, status),
       label = list("Age")
     ),
     NULL
   )
   expect_error(
     tbl_uvregression(
-      data = lung,
-      method = coxph,
-      y = Surv(time, status),
+      data = survival::lung,
+      method = survival::coxph,
+      y = survival::Surv(time, status),
       label = list("age" ~ c("Age", "Two"))
     ),
     NULL
   )
   expect_error(
     tbl_uvregression(
-      data = list(lung),
-      method = coxph,
-      y = Surv(time, status)
+      data = list(survival::lung),
+      method = survival::coxph,
+      y = survival::Surv(time, status)
     ),
     NULL
   )
   expect_error(
     tbl_uvregression(
-      data = lung,
-      method = coxph,
-      y = Surv(time, status),
+      data = survival::lung,
+      method = survival::coxph,
+      y = survival::Surv(time, status),
       formula = "y ~ x"
     ),
     NULL
   )
   expect_error(
     tbl_uvregression(
-      data = lung,
+      data = survival::lung,
       method = lm,
       y = age,
       x = marker
@@ -266,7 +280,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
   )
   expect_error(
     tbl_uvregression(
-      data = lung,
+      data = survival::lung,
       method = lm,
       y = c(age, sex)
     ),
@@ -277,7 +291,7 @@ test_that("tbl_uvregression creates errors with bad inputs", {
 
 test_that("tbl_uvregression estimate_fun and pvalue_fun respected", {
   tbl_fmt <- tbl_uvregression(
-    data = lung %>% select(age, inst),
+    data = survival::lung %>% select(age, inst),
     method = lm,
     y = age,
     pvalue_fun = ~ style_pvalue(.x, digits = 3),
@@ -293,9 +307,10 @@ test_that("tbl_uvregression estimate_fun and pvalue_fun respected", {
 
 test_that("tbl_uvregression does not throw error with odd variable names in `data=`", {
   expect_error(
-    trial %>% dplyr::rename(`age person` = age) %>% tbl_uvregression(method = lm, y = `age person`),
+    tbl <- trial %>% dplyr::rename(`age person` = age) %>% tbl_uvregression(method = lm, y = `age person`),
     NA
   )
+  expect_snapshot(tbl %>% render_as_html())
 })
 
 test_that("tbl_uvregression throw error with bad arguments in model function", {
@@ -321,6 +336,7 @@ test_that("tbl_uvregression works with survey object", {
       ),
     NA
   )
+  expect_snapshot(tbl_uvreg %>% render_as_html())
 
   expect_equal(
     tbl_uvreg$tbls$age$model_obj %>% broom::tidy(),
