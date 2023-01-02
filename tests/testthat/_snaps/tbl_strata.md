@@ -382,18 +382,7 @@
 ---
 
     Code
-      trial %>% select(age, grade, stage, trt) %>% mutate(grade = paste("Grade",
-        grade)) %>% tbl_strata(strata = grade, .tbl_fun = ~ .x %>% tbl_summary(by = trt) %>%
-        add_p(), .combine_with = "tbl_stack") %>% render_as_html()
-    Message
-      Warning for variable 'age':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'age':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      Warning for variable 'age':
-      simpleWarning in wilcox.test.default(x = DATA[[1L]], y = DATA[[2L]], ...): cannot compute exact p-value with ties
-      i Column headers among stacked tables differ. Headers from the first table are
-      used. Use `quiet = TRUE` to supress this message.
+      tbl %>% render_as_html()
     Output
       <div  style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
         

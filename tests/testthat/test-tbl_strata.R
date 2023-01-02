@@ -10,8 +10,8 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-            tbl_summary(by = trt) %>%
-            add_p()
+          tbl_summary(by = trt) %>%
+          add_p()
       ),
     NA
   )
@@ -28,8 +28,8 @@ test_that("no errors with standard use", {
         strata = c(grade, stage),
         .tbl_fun =
           ~ .x %>%
-            tbl_summary(by = trt) %>%
-            add_p(test = all_continuous() ~ "t.test")
+          tbl_summary(by = trt) %>%
+          add_p(test = all_continuous() ~ "t.test")
       ) %>%
       render_as_html()
   )
@@ -49,20 +49,22 @@ test_that("no errors with standard use", {
   )
   expect_snapshot(tbl %>% render_as_html())
 
-  expect_snapshot(
-    trial %>%
+  expect_error(
+    tbl <-
+      trial %>%
       select(age, grade, stage, trt) %>%
       mutate(grade = paste("Grade", grade)) %>%
       tbl_strata(
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-            tbl_summary(by = trt) %>%
-            add_p(),
+          tbl_summary(by = trt) %>%
+          add_p(),
         .combine_with = "tbl_stack"
-      ) %>%
-      render_as_html()
+      ),
+    NA
   )
+  expect_snapshot(tbl %>% render_as_html())
 
   expect_snapshot(
     trial %>%
@@ -72,10 +74,10 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-            tbl_uvregression(
-              y = age,
-              method = lm
-            )
+          tbl_uvregression(
+            y = age,
+            method = lm
+          )
       ) %>%
       render_as_html()
   )
@@ -88,8 +90,8 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-            tbl_cross() %>%
-            add_p()
+          tbl_cross() %>%
+          add_p()
       ) %>%
       render_as_html()
   )
@@ -115,11 +117,11 @@ test_that("no errors with standard use", {
         strata = grade,
         .tbl_fun =
           ~ .x %>%
-            tbl_summary(
-              include = response,
-              label = list(response = .y),
-              missing = "no"
-            )
+          tbl_summary(
+            include = response,
+            label = list(response = .y),
+            missing = "no"
+          )
       ) %>%
       render_as_html()
   )
