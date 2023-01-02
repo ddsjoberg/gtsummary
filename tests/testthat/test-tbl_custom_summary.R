@@ -254,16 +254,18 @@ test_that("character summaries do not cause error", {
     )
   }
 
-  expect_snapshot(
-    trial %>%
+  expect_error(
+    tbl <-
+      trial %>%
       tbl_custom_summary(
         include = c("stage"),
         by = "trt",
         stat_fns = ~ diff_to_great_mean,
         statistic = ~ "{mean} ({level}) [{date}]"
-      ) %>%
-      render_as_html()
+      ),
+    NA
   )
+  expect_snapshot(tbl %>% render_as_html())
 
   # by variable can be named "variable"
   expect_equal(

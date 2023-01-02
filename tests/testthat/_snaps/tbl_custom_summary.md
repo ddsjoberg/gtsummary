@@ -108,9 +108,7 @@
 # character summaries do not cause error
 
     Code
-      trial %>% tbl_custom_summary(include = c("stage"), by = "trt", stat_fns = ~
-      diff_to_great_mean, statistic = ~"{mean} ({level}) [{date}]") %>%
-        render_as_html()
+      tbl %>% render_as_html()
     Output
       <div  style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
         

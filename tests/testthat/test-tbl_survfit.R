@@ -40,7 +40,8 @@ test_that("no errors/warnings with stratified variable", {
       s1,
       probs = c(0.2, 0.4),
       estimate_fun = partial(style_sigfig, digits = 4)
-    )
+    ) %>%
+      render_as_html()
   )
   expect_warning(
     tbl_survfit(
@@ -146,7 +147,7 @@ test_that("no errors/warnings with competing events", {
     dplyr::mutate(
       death_cr = dplyr::case_when(
         death == 0 ~ "censor",
-        runif(nrow(.)) < 0.5 ~ "death from cancer",
+        dplyr::row_number() %% 2 == 0L ~ "death from cancer",
         TRUE ~ "death other causes"
       ) %>% factor()
     )
