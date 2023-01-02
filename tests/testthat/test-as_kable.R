@@ -1,8 +1,15 @@
 skip_on_cran()
 
 test_that("tbl_summary", {
-  expect_error(tbl_summary(trial) %>% as_kable(), NA)
+  expect_error(tbl <- tbl_summary(trial) %>% as_kable(format = "pipe"), NA)
   expect_warning(tbl_summary(trial) %>% as_kable(), NA)
+  expect_snapshot(tbl)
+})
+
+test_that("tbl_cross", {
+  expect_error(tbl <- tbl_cross(trial, grade, trt) %>% as_kable(format = "pipe"), NA)
+  expect_warning(tbl_summary(trial) %>% as_kable(), NA)
+  expect_snapshot(tbl)
 })
 
 test_that("tbl_summary", {
@@ -11,33 +18,35 @@ test_that("tbl_summary", {
 })
 
 test_that("tbl_regression", {
-  expect_error(lm(marker ~ age, trial) %>% tbl_regression() %>% as_kable(), NA)
+  expect_error(tbl <- lm(marker ~ age, trial) %>% tbl_regression() %>% as_kable(format = "pipe"), NA)
   expect_warning(lm(marker ~ age, trial) %>% tbl_regression() %>% as_kable(), NA)
+  expect_snapshot(tbl)
 })
 
 test_that("tbl_uvregression", {
-  expect_error(trial %>% tbl_uvregression(method = lm, y = age) %>% as_kable(), NA)
+  expect_error(tbl <- trial %>% tbl_uvregression(method = lm, y = age) %>% as_kable(format = "pipe"), NA)
   expect_warning(trial %>% tbl_uvregression(method = lm, y = age) %>% as_kable(), NA)
+  expect_snapshot(tbl)
 })
 
 test_that("tbl_survfit", {
   skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-  library(survival)
-  fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
+  fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
 
-  expect_error(tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months") %>% as_kable(), NA)
+  expect_error(tbl <- tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months") %>% as_kable(format = "pipe"), NA)
   expect_warning(tbl_survfit(fit1, times = c(12, 24), label_header = "{time} Months") %>% as_kable(), NA)
+  expect_snapshot(tbl)
 })
 
 
 test_that("tbl_merge/tbl_stack", {
   skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-  library(survival)
+
   t1 <-
     glm(response ~ trt + grade + age, trial, family = binomial) %>%
     tbl_regression(exponentiate = TRUE)
   t2 <-
-    coxph(Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
+    survival::coxph(survival::Surv(ttdeath, death) ~ trt + grade + age, trial) %>%
     tbl_regression(exponentiate = TRUE)
   tbl_merge_ex1 <-
     tbl_merge(
@@ -51,10 +60,13 @@ test_that("tbl_merge/tbl_stack", {
       group_header = c("**Tumor Response**", "**Time to Death**")
     )
 
-  expect_error(tbl_merge_ex1 %>% as_kable(), NA)
+  expect_error(tbl <- tbl_merge_ex1 %>% as_kable(format = "pipe"), NA)
   expect_warning(tbl_merge_ex1 %>% as_kable(), NA)
-  expect_error(tbl_stack_ex1 %>% as_kable(), NA)
+  expect_snapshot(tbl)
+
+  expect_error(tbl <- tbl_stack_ex1 %>% as_kable(format = "pipe"), NA)
   expect_warning(tbl_stack_ex1 %>% as_kable(), NA)
+  expect_snapshot(tbl)
 })
 
 test_that("No errors replacing default arg values",{
