@@ -265,7 +265,7 @@ test_that("character summaries do not cause error", {
       ),
     NA
   )
-  expect_snapshot(tbl %>% render_as_html())
+  expect_snapshot(tbl %>% as_tibble())
 
   # by variable can be named "variable"
   expect_equal(
