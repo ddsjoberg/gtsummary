@@ -1,8 +1,9 @@
 skip_on_cran()
 
 test_that("no errors with standard use", {
-  expect_snapshot(
-    trial %>%
+  expect_error(
+    tbl <-
+      trial %>%
       select(age, grade, stage, trt) %>%
       mutate(grade = paste("Grade", grade)) %>%
       tbl_strata(
@@ -11,9 +12,10 @@ test_that("no errors with standard use", {
           ~ .x %>%
             tbl_summary(by = trt) %>%
             add_p()
-      ) %>%
-      render_as_html()
+      ),
+    NA
   )
+  expect_snapshot(tbl %>% render_as_html())
 
   expect_snapshot(
     trial %>%
@@ -32,8 +34,9 @@ test_that("no errors with standard use", {
       render_as_html()
   )
 
-  expect_snapshot(
-    trial %>%
+  expect_error(
+    tbl <-
+      trial %>%
       select(age, grade, stage, trt) %>%
       mutate(grade = paste("Grade", grade)) %>%
       tbl_strata(
@@ -41,9 +44,10 @@ test_that("no errors with standard use", {
         .tbl_fun = tbl_summary,
         by = trt,
         missing = "no"
-      ) %>%
-      render_as_html()
+      ),
+    NA
   )
+  expect_snapshot(tbl %>% render_as_html())
 
   expect_snapshot(
     trial %>%

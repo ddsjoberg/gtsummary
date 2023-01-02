@@ -327,8 +327,8 @@ test_that("tbl_svysummary-all missing data does not cause error", {
   expect_snapshot(all_missing_by %>% render_as_html())
 
   # making categorical, variables that cannot be summarized as categorical
-  expect_error(
-    tbl_svysummary(design_missing, by = my_by_var, type = vars(int, dbl) ~ "categorical") %>%
+  expect_snapshot(
+    tbl_svysummary(design_missing, by = my_by_var, type = c(int, dbl) ~ "categorical") %>%
       render_as_html()
   )
 
