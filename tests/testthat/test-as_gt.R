@@ -1,14 +1,22 @@
 skip_on_cran()
 
 test_that("tbl_summary", {
-  expect_error(tbl_summary(trial) %>% as_gt(), NA)
+  expect_error(tbl <- tbl_summary(trial) %>% as_gt(), NA)
+  expect_snapshot(tbl %>% render_as_html())
 
   expect_error(
-    tbl_summary(trial[c("trt", "age")]) %>%
+    tbl <-
+      tbl_summary(trial[c("trt", "age")]) %>%
       modify_table_styling(columns = label, footnote = "test footnote", rows = variable == "age") %>%
       as_gt(),
     NA
   )
+  expect_snapshot(tbl %>% render_as_html())
+})
+
+test_that("tbl_cross", {
+  expect_error(tbl <- tbl_cross(trial, trt, grade) %>% as_gt(), NA)
+  expect_snapshot(tbl %>% render_as_html())
 })
 
 test_that("tbl_summary", {
@@ -16,25 +24,29 @@ test_that("tbl_summary", {
 })
 
 test_that("tbl_regression", {
-  expect_error(lm(marker ~ age, trial) %>% tbl_regression() %>% as_gt(), NA)
+  expect_error(tbl <- lm(marker ~ age, trial) %>% tbl_regression() %>% as_gt(), NA)
+  expect_snapshot(tbl %>% render_as_html())
 })
 
 test_that("tbl_uvregression", {
-  expect_error(trial %>% tbl_uvregression(method = lm, y = age) %>% as_gt(), NA)
+  expect_error(tbl <- trial %>% tbl_uvregression(method = lm, y = age) %>% as_gt(), NA)
+  expect_snapshot(tbl %>% render_as_html())
 })
 
 test_that("tbl_survfit", {
   skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-  library(survival)
-  fit1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
 
-  expect_error(tbl_survfit(fit1, times = c(12, 24), label_header = "**{time} Months**") %>% as_gt(), NA)
+  fit1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
+
+  expect_error(tbl <- tbl_survfit(fit1, times = c(12, 24), label_header = "**{time} Months**") %>% as_gt(), NA)
+  expect_snapshot(tbl %>% render_as_html())
   expect_error(as_gt(fit1))
 })
 
 test_that("indent2", {
   expect_error(
-    trial %>%
+    tbl <-
+      trial %>%
       select(age) %>%
       tbl_summary() %>%
       modify_table_styling(
@@ -45,5 +57,6 @@ test_that("indent2", {
       as_gt(),
     NA
   )
+  expect_snapshot(tbl %>% render_as_html())
 })
 
