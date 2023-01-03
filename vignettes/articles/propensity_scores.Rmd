@@ -193,8 +193,9 @@ df_matchit_results <-
     replace = FALSE
   )
 
-# Extract matched data for analysis
-df_post_match <- MatchIt::match.data(df_matchit_results)
+# Extract matched data for analysis and rename variable "subclass" to "matched_group_id"
+df_post_match <- MatchIt::match.data(df_matchit_results) %>%
+  rename(matched_group_id=subclass)
 ```
 
 ### Summarize the matched groups
@@ -319,7 +320,7 @@ If matching does not improve, consider a different matching strategy.
 
 
 ### Analysis 
-For deeper understanding, Noah Greifer the author who wrote the the R pckage `MatchIt` has a nice detailed review on estimating the treatment effect after matching and can be found here :https://kosukeimai.github.io/MatchIt/articles/estimating-effects.html#the-standard-case
+
 
 
 #### Continuous outcome
@@ -328,16 +329,19 @@ For deeper understanding, Noah Greifer the author who wrote the the R pckage `Ma
 # Fitting linear model with continuous outcome weight changes
 fit1<-lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights)
 
-# Use marginaleffects::comparison to estimate the ATT
-comp1 <- marginaleffects::comparisons(fit1,
-                     variables = "qsmk",#the name of the group or treatment
-                     vcov = ~subclass,#a formula with subclass membership (~subclass) to request cluster-robust SEs
-                     newdata = subset(df_post_match, qsmk == 1),#a version of the matched dataset containing only the treated units to request the ATT;
-                     wts = "weights") #the names of the variable in df_post_match containing the matching weights ("weights") to ensure they are included in the analysis
-summary(comp1)
+
+# get a model summary with clustered robust standard errors
+tidy_robust(fit1, vcov = "vcovCL", vcov_args = list(cluster = ~matched_group_id))
 
 
+# create a gtsummary regression summary using the clustered robust SE
+tbl <-
+  tbl_regression(
+    fit1, 
+    tidy_fun = purrr::partial(tidy_robust, vcov = "vcovCL", vcov_args = list(cluster = df_post_match$matched_group_id))
+  )
 
+tbl
 
 ```
 
@@ -364,7 +368,7 @@ coxMatchedclust <-
   coxph(Surv(followup_yrs, death) ~ qsmk,
         robust = TRUE,
         weights = weights,
-        cluster = subclass,
+        cluster = matched_group_id,
         data = df_post_match
   ) %>%
   tbl_regression(exponentiate = TRUE)
@@ -373,7 +377,7 @@ coxMatchedclust <-
 # Frailty model
 coxMatchedfrail <- 
   coxph(
-    Surv(followup_yrs, death) ~ qsmk + frailty(subclass),
+    Surv(followup_yrs, death) ~ qsmk + frailty(matched_group_id),
     data = df_post_match
   ) %>% 
   tbl_regression(exponentiate = TRUE, include = qsmk)
