@@ -258,7 +258,7 @@ ggplot() +
     size = 2
   ) +
   geom_hline(yintercept = 0.1, color = "black", 
-             size = 0.5, linetype = "longdash") +
+             linewidth = 0.5, linetype = "longdash") +
   geom_segment(
     data = df_pre_post_smd %>% pivot_wider(id_cols = label, names_from = type, values_from = smd),
     mapping = aes(x = label, xend = label, y = `Pre-Match`, yend = `Post-Match`),
