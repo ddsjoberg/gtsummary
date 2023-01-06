@@ -245,18 +245,31 @@ post_match_smd <-
   select(variable, label, smd = estimate) %>%
   drop_na()
 
-pre_match_smd %>% 
+df_pre_post_smd <- 
+  pre_match_smd %>% 
   mutate(type = "Pre-Match") %>%
   bind_rows(post_match_smd %>% mutate(type = "Post-Match")) %>%
-  mutate(smd = abs(smd)) %>%
-  ggplot(aes(x = label, y = smd, group = type, color = type)) +
-  geom_point(size = 2) +
+  mutate(smd = abs(smd))
+
+ggplot() +
+  geom_point(
+    data = df_pre_post_smd, 
+    mapping = aes(x = label, y = smd, group = type, color = type),
+    size = 2
+  ) +
   geom_hline(yintercept = 0.1, color = "black", 
-             size = 0.1, linetype = "dashed") +
+             size = 0.5, linetype = "longdash") +
+  geom_segment(
+    data = df_pre_post_smd %>% pivot_wider(id_cols = label, names_from = type, values_from = smd),
+    mapping = aes(x = label, xend = label, y = `Pre-Match`, yend = `Post-Match`),
+    arrow = arrow(length = unit(0.25, "cm")),
+    color = "grey70"
+  ) +
   labs(y = "SMD", x = NULL, group = NULL, color = NULL) +
   coord_flip() +
   theme_bw() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom", 
+        panel.grid.major.y = element_blank())
 ```
 
 We can also assess the matching algorithm using histograms.
