@@ -270,11 +270,17 @@
         marker, nk = 4, inclx = TRUE, norm = 0), data = na.omit(trial)) %>%
         tbl_regression() %>% combine_terms(formula_update = . ~ . - Hmisc::rcspline.eval(
         marker, nk = 4, inclx = TRUE, norm = 0)) %>% render_as_html()
+    Condition
+      Warning:
+      The `exponentiate` argument is not supported in the `tidy()` method for `survreg` objects and will be ignored.
     Message
       combine_terms: Creating a reduced model with
       `reduced_model <- stats::update(x$model_obj, formula. = . ~ . - Hmisc::rcspline.eval(marker, nk = 4, inclx = TRUE, norm = 0))`
       combine_terms: Calculating p-value comparing full and reduced models with
       `stats::anova(x$model_obj, reduced_model)`
+    Condition
+      Warning:
+      The `exponentiate` argument is not supported in the `tidy()` method for `survreg` objects and will be ignored.
     Output
       <div  style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
         

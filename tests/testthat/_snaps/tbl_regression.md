@@ -195,6 +195,9 @@
 
     Code
       tbl_regression(mod_survreg) %>% render_as_html()
+    Condition
+      Warning:
+      The `exponentiate` argument is not supported in the `tidy()` method for `survreg` objects and will be ignored.
     Output
       <div  style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
         
