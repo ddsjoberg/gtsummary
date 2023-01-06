@@ -436,6 +436,8 @@ More details on estimating effect after matching can be found here: [https://kos
 
 ### Analysis
 
+We've created a survey design object to handle the weights, and now we can simply use the `survey::svyglm()` and `survey::svycoxph()` functions to estimate the regression models accounting for the weighting scheme.
+
 #### Continuous outcome
 
 ```{r}
