@@ -1,0 +1,118 @@
+# tbl_custom_summary() basics
+
+    Code
+      tbl1
+    Output
+      # A tibble: 8 x 8
+        variable var_type    var_label            row_type label  stat_1 stat_2 stat_0
+        <chr>    <chr>       <chr>                <chr>    <chr>  <chr>  <chr>  <chr> 
+      1 grade    categorical Grade                label    Grade  <NA>   <NA>   <NA>  
+      2 grade    categorical Grade                level    I      45.9   46.4   46.2  
+      3 grade    categorical Grade                level    II     44.6   50.3   47.5  
+      4 grade    categorical Grade                level    III    51.0   45.7   48.1  
+      5 response dichotomous Tumor Response       label    Tumor~ 50.1   49.5   49.8  
+      6 response dichotomous Tumor Response       missing  Unkno~ 3      4      7     
+      7 marker   continuous  Marker Level (ng/mL) label    Marke~ 46.5   47.5   47.0  
+      8 marker   continuous  Marker Level (ng/mL) missing  Unkno~ 6      4      10    
+
+---
+
+    Code
+      tbl
+    Output
+      # A tibble: 10 x 5
+         label                   n     stat_0                stat_1             stat_2
+         <chr>                   <chr> <chr>                 <chr>              <chr> 
+       1 __Grade__               200   <NA>                  <NA>               <NA>  
+       2 _I_                     <NA>  1.1 (high, diff: 0.2) 1.2 (high, diff: ~ 1.0 (~
+       3 _II_                    <NA>  0.7 (low, diff: -0.2) 0.9 (low, diff: -~ 0.5 (~
+       4 _III_                   <NA>  1.0 (high, diff: 0.1) 1.0 (high, diff: ~ 1.0 (~
+       5 __T Stage__             200   <NA>                  <NA>               <NA>  
+       6 _T1_                    <NA>  0.7 (low, diff: -0.2) 0.7 (low, diff: -~ 0.7 (~
+       7 _T2_                    <NA>  1.1 (high, diff: 0.2) 1.2 (high, diff: ~ 1.0 (~
+       8 _T3_                    <NA>  1.0 (high, diff: 0.1) 1.1 (high, diff: ~ 0.9 (~
+       9 _T4_                    <NA>  0.9 (low, diff: -0.1) 1.1 (high, diff: ~ 0.7 (~
+      10 __All grades & stages__ 200   0.9 (low, diff: 0.0)  1.0 (high, diff: ~ 0.8 (~
+
+---
+
+    Code
+      tbl
+    Output
+      # A tibble: 3 x 3
+        label                  stat_1            stat_2           
+        <chr>                  <chr>             <chr>            
+      1 Marker Level (ng/mL)   1.02 [0.83; 1.20] 0.82 [0.65; 0.99]
+      2 Unknown                6                 4                
+      3 Months to Death/Censor 20.2 [19.2; 21.2] 19.0 [18.0; 20.1]
+
+# tbl_custom_summary() manage factor levels with no observation
+
+    Code
+      tbl
+    Output
+      # A tibble: 6 x 3
+        label   stat_1 stat_2
+        <chr>   <chr>  <chr> 
+      1 Overall 46     48    
+      2 Grade   <NA>   <NA>  
+      3 I       46     48    
+      4 II      44     50    
+      5 III     52     45    
+      6 IV      NA     NA    
+
+# tbl_custom_summary() helpers work as expected
+
+    Code
+      tbl
+    Output
+      # A tibble: 5 x 3
+        label   stat_1                     stat_2                     
+        <chr>   <chr>                      <chr>                      
+      1 T Stage <NA>                       <NA>                       
+      2 T1      0.012 [0.00; 0.02] (7/583) 0.021 [0.01; 0.04] (11/522)
+      3 T2      0.011 [0.00; 0.02] (6/528) 0.012 [0.01; 0.03] (7/560) 
+      4 T3      0.019 [0.01; 0.04] (8/426) 0.016 [0.01; 0.03] (7/425) 
+      5 T4      0.016 [0.01; 0.03] (7/445) 0.018 [0.01; 0.04] (8/434) 
+
+---
+
+    Code
+      tbl
+    Output
+      # A tibble: 4 x 3
+        label stat_1     stat_2    
+        <chr> <chr>      <chr>     
+      1 Grade <NA>       <NA>      
+      2 I     46 [36-60] 48 [42-55]
+      3 II    44 [31-54] 50 [43-57]
+      4 III   52 [42-60] 45 [36-52]
+
+---
+
+    Code
+      tbl
+    Output
+      # A tibble: 8 x 3
+        label stat_1                    stat_2                 
+        <chr> <chr>                     <chr>                  
+      1 Age   <NA>                      <NA>                   
+      2 Child 45.3% (29/64) [33-58]     62.2% (28/45) [47-76]  
+      3 Adult 20.3% (338/1,667) [18-22] 74.4% (316/425) [70-78]
+      4 Class <NA>                      <NA>                   
+      5 1st   34.4% (62/180) [28-42]    97.2% (141/145) [93-99]
+      6 2nd   14.0% (25/179) [9.4-20]   87.7% (93/106) [80-93] 
+      7 3rd   17.3% (88/510) [14-21]    45.9% (90/196) [39-53] 
+      8 Crew  22.3% (192/862) [20-25]   87.0% (20/23) [65-97]  
+
+# full_data contains all observations including missing values
+
+    Code
+      res
+    Output
+      # A tibble: 2 x 2
+        `**Characteristic**` `**N = 200**`
+        <chr>                <chr>        
+      1 Age                  189/200      
+      2 Unknown              11           
+

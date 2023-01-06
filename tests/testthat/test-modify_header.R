@@ -1,7 +1,5 @@
-
 skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
-library(dplyr)
 
 tbl_summary_noby <- trial %>% tbl_summary()
 tbl_summary_by <- trial %>% tbl_summary(by = trt)
@@ -10,14 +8,12 @@ tbl_svysummary_by <-
   tbl_svysummary(by = Survived)
 
 test_that("input checks", {
-  expect_error(
-    tbl_summary_noby %>% modify_header(stat_0 = "test"),
-    NA
+  expect_snapshot(
+    tbl_summary_noby %>% modify_header(stat_0 = "test") %>% render_as_html()
   )
 
-  expect_error(
-    tbl_summary_noby %>% modify_header(stat_0 ~ "test"),
-    NA
+  expect_snapshot(
+    tbl_summary_noby %>% modify_header(stat_0 ~ "test") %>% render_as_html()
   )
 
   expect_error(
@@ -25,7 +21,7 @@ test_that("input checks", {
     NA
   )
 
-  expect_error(tbl_summary_noby %>% modify_header(stat_0 = "N = {n}"), NA)
+  expect_snapshot(tbl_summary_noby %>% modify_header(stat_0 = "N = {n}") %>% render_as_html())
   expect_message(tbl_summary_noby %>% modify_header(stat_1 = "N = {n}"))
   expect_equal(
     tbl_summary_by %>%
@@ -65,6 +61,7 @@ test_that("checking glue inserts to headers", {
       ),
     NA
   )
+  expect_snapshot(tbl1 %>% render_as_html())
 
   expect_equal(
     tbl1$table_styling$header %>% dplyr::filter(hide == FALSE) %>% dplyr::pull(label),
@@ -82,6 +79,7 @@ test_that("checking glue inserts to headers", {
       ),
     NA
   )
+  expect_snapshot(tbl2 %>% render_as_html())
 
   expect_equal(
     tbl2$table_styling$header %>% dplyr::filter(hide == FALSE) %>% dplyr::pull(label),
@@ -99,6 +97,7 @@ test_that("checking glue inserts to headers", {
       modify_header(label ~ "Variable (N = {N})"),
     NA
   )
+  expect_snapshot(tbl3 %>% render_as_html())
   expect_equal(
     tbl3$table_styling$header %>% dplyr::filter(column == "label") %>% dplyr::pull(label),
     c("Variable (N = 32)")

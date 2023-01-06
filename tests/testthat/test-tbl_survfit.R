@@ -1,33 +1,32 @@
 skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("car", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-library(survival)
 
 test_that("no errors/warnings with stratified variable", {
-  s1 <- survfit(Surv(ttdeath, death) ~ trt, trial)
-  s1.1 <- survfit(Surv(trial$ttdeath, trial$death) ~ trial$trt)
-  expect_error(
+  s1 <- survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
+  s1.1 <- survival::survfit(survival::Surv(trial$ttdeath, trial$death) ~ trial$trt)
+  expect_snapshot(
     tbl_survfit(
       s1,
       times = c(12, 24)
-    ),
-    NA
+    ) %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     tbl_survfit(
       s1.1,
       times = c(12, 24)
-    ),
-    NA
+    ) %>%
+      render_as_html()
   )
-  expect_error(
+  expect_snapshot(
     tbl_survfit(
       s1,
       times = c(12, 24),
       reverse = TRUE
-    ),
-    NA
+    ) %>%
+      render_as_html()
   )
   expect_warning(
     tbl_survfit(
@@ -36,13 +35,13 @@ test_that("no errors/warnings with stratified variable", {
     ),
     NA
   )
-  expect_error(
+  expect_snapshot(
     tbl_survfit(
       s1,
       probs = c(0.2, 0.4),
       estimate_fun = partial(style_sigfig, digits = 4)
-    ),
-    NA
+    ) %>%
+      render_as_html()
   )
   expect_warning(
     tbl_survfit(
@@ -55,21 +54,21 @@ test_that("no errors/warnings with stratified variable", {
 })
 
 test_that("no errors/warnings with no stratified variable", {
-  s2 <- survfit(Surv(ttdeath, death) ~ 1, trial)
-  s2.1 <- survfit(Surv(trial$ttdeath, trial$death) ~ 1)
-  expect_error(
+  s2 <- survival::survfit(survival::Surv(ttdeath, death) ~ 1, trial)
+  s2.1 <- survival::survfit(survival::Surv(trial$ttdeath, trial$death) ~ 1)
+  expect_snapshot(
     tbl_survfit(
       s2,
       times = c(12, 24)
-    ),
-    NA
+    ) %>%
+      render_as_html()
   )
-  expect_error(
+  expect_snapshot(
     tbl_survfit(
       s2.1,
       times = c(12, 24)
-    ),
-    NA
+    ) %>%
+      render_as_html()
   )
   expect_warning(
     tbl_survfit(
@@ -78,13 +77,13 @@ test_that("no errors/warnings with no stratified variable", {
     ),
     NA
   )
-  expect_error(
+  expect_snapshot(
     tbl_survfit(
       s2,
       probs = c(0.2, 0.4),
       estimate_fun = partial(style_sigfig, digits = 4)
-    ),
-    NA
+    ) %>%
+      render_as_html()
   )
   expect_warning(
     tbl_survfit(
@@ -127,12 +126,13 @@ test_that("no errors/warnings with no stratified variable", {
   )
 
   expect_error(
-    tbl_survfit(trial, y = Surv(ttdeath, death), include = c(grade, trt), times = 10),
+    tbl <- tbl_survfit(trial, y = survival::Surv(ttdeath, death), include = c(grade, trt), times = 10),
     NA
   )
+  expect_snapshot(tbl %>% render_as_html())
 
   expect_message(
-    tbl_survfit(survfit(Surv(ttdeath, death) ~ grade + trt, trial), times = 10),
+    tbl_survfit(survival::survfit(survival::Surv(ttdeath, death) ~ grade + trt, trial), times = 10),
     "*"
   )
 })
@@ -147,19 +147,20 @@ test_that("no errors/warnings with competing events", {
     dplyr::mutate(
       death_cr = dplyr::case_when(
         death == 0 ~ "censor",
-        runif(nrow(.)) < 0.5 ~ "death from cancer",
+        dplyr::row_number() %% 2 == 0L ~ "death from cancer",
         TRUE ~ "death other causes"
       ) %>% factor()
     )
-  cr_1 <- survfit(Surv(ttdeath, death_cr) ~ 1, data = trial2)
-  cr_2 <- survfit(Surv(ttdeath, death_cr) ~ grade, data = trial2)
+  cr_1 <- survival::survfit(survival::Surv(ttdeath, death_cr) ~ 1, data = trial2)
+  cr_2 <- survival::survfit(survival::Surv(ttdeath, death_cr) ~ grade, data = trial2)
 
-  expect_error(
-    tbl_survfit(cr_1, times = c(12, 24)), NA
+  expect_snapshot(
+    tbl_survfit(cr_1, times = c(12, 24)) %>% render_as_html()
   )
   expect_error(
     summod2 <- tbl_survfit(cr_2, times = c(12, 24), label = ~"Tumor Grade"), NA
   )
+  expect_snapshot(summod2 %>% render_as_html())
 
   # output is identical in tbl_survfit and summary
   summod <- summary(cr_2, times = c(12, 24))

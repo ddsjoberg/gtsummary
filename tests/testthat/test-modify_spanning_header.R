@@ -6,16 +6,17 @@ test_that("modify_spanning_header works", {
     dplyr::select(trt, age, grade) %>%
     tbl_summary(by = trt)
 
-  expect_error(
+  expect_snapshot(
     tbl1 %>%
-      modify_spanning_header(starts_with("stat_") ~ "**Randomization Assignment**"),
-    NA
+      modify_spanning_header(starts_with("stat_") ~ "**Randomization Assignment**") %>%
+      render_as_html()
   )
 
-  expect_error(
+  expect_snapshot(
     tbl1 %>%
-      modify_spanning_header(label = "Variables", starts_with("stat_") ~ "**Randomization Assignment**"),
-    NA
+      modify_spanning_header(
+        label = "Variables", starts_with("stat_") ~ "**Randomization Assignment**") %>%
+      render_as_html()
   )
 
   expect_error(

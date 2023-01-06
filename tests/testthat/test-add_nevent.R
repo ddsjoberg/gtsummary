@@ -2,38 +2,29 @@ skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("lme4", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
 
-library(survival)
-fit_cox <- coxph(Surv(time, status) ~ sex, lung)
+fit_cox <- survival::coxph(survival::Surv(time, status) ~ sex, survival::lung)
 fit_glm <- glm(response ~ trt, trial, family = binomial)
 
 test_that("add_nevent after tbl_regression creates output without error/warning", {
   # cox model
   expect_error(
-    fit_cox %>%
+    res <-
+      fit_cox %>%
       tbl_regression() %>%
       add_nevent(),
     NA
   )
-  expect_warning(
-    fit_cox %>%
-      tbl_regression() %>%
-      add_nevent(),
-    NA
-  )
+  expect_snapshot(res %>% render_as_html())
 
   # glm model
   expect_error(
-    fit_glm %>%
+    res <-
+      fit_glm %>%
       tbl_regression() %>%
       add_nevent(),
     NA
   )
-  expect_warning(
-    fit_glm %>%
-      tbl_regression() %>%
-      add_nevent(),
-    NA
-  )
+  expect_snapshot(res %>% render_as_html())
 })
 
 
@@ -41,27 +32,22 @@ test_that("add_nevent after tbl_regression creates output without error/warning"
 test_that("add_nevent after tbl_uvregression creates output without error/warning", {
   # cox model
   expect_error(
-    tbl_uvregression(
+    res <-
+      tbl_uvregression(
       trial,
-      method = coxph,
-      y = Surv(ttdeath, death),
+      method = survival::coxph,
+      y = survival::Surv(ttdeath, death),
     ) %>%
       add_nevent(),
     NA
   )
-  expect_warning(
-    tbl_uvregression(
-      trial,
-      method = coxph,
-      y = Surv(ttdeath, death),
-    ) %>%
-      add_nevent(),
-    NA
-  )
+  expect_snapshot(res %>% render_as_html())
+
 
   # glm model
   expect_error(
-    tbl_uvregression(
+    res <-
+      tbl_uvregression(
       trial,
       method = glm,
       y = response,
@@ -70,16 +56,7 @@ test_that("add_nevent after tbl_uvregression creates output without error/warnin
       add_nevent(),
     NA
   )
-  expect_warning(
-    tbl_uvregression(
-      trial,
-      method = glm,
-      y = response,
-      method.args = list(family = binomial)
-    ) %>%
-      add_nevent(),
-    NA
-  )
+  expect_snapshot(res %>% render_as_html())
 })
 
 test_that("add_nevent error with bad inputs", {
@@ -100,19 +77,18 @@ test_that("add_nevent error with bad inputs", {
 # add_nevent.tbl_surfit --------------------------------------------------------
 
 test_that("add_nevent.tbl_surfit", {
-  library(survival)
-
   tbl_survfit <-
     list(
-      survfit(Surv(ttdeath, death) ~ 1, trial),
-      survfit(Surv(ttdeath, death) ~ trt, trial)
+      survival::survfit(survival::Surv(ttdeath, death) ~ 1, trial),
+      survival::survfit(survival::Surv(ttdeath, death) ~ trt, trial)
     ) %>%
     tbl_survfit(times = c(12, 24))
 
   expect_error(
-    add_nevent(tbl_survfit),
+    res <- add_nevent(tbl_survfit),
     NA
   )
+  expect_snapshot(res %>% render_as_html())
 })
 
 # add_nevent.tbl_regression ---------------------------------------------------------
@@ -122,16 +98,19 @@ test_that("add_nevent.tbl_regression", {
     tbl_regression()
 
   expect_error(
-    tbl %>% add_nevent(), NA
+    res <- tbl %>% add_nevent(), NA
   )
+  expect_snapshot(res %>% render_as_html())
 
   expect_error(
-    tbl %>% add_nevent(location = "level"), NA
+    res <- tbl %>% add_nevent(location = "level"), NA
   )
+  expect_snapshot(res %>% render_as_html())
 
   expect_error(
-    tbl %>% add_nevent(location = c("label", "level")), NA
+    res <- tbl %>% add_nevent(location = c("label", "level")), NA
   )
+  expect_snapshot(res %>% render_as_html())
 })
 
 # add_nevent.tbl_uvregression ---------------------------------------------------------
@@ -146,14 +125,17 @@ test_that("add_nevent.tbl_regression", {
     )
 
   expect_error(
-    tbl %>% add_nevent(), NA
+    res <- tbl %>% add_nevent(), NA
   )
+  expect_snapshot(res %>% render_as_html())
 
   expect_error(
-    tbl %>% add_nevent(location = "level"), NA
+    res <- tbl %>% add_nevent(location = "level"), NA
   )
+  expect_snapshot(res %>% render_as_html())
 
   expect_error(
-    tbl %>% add_nevent(location = c("label", "level")), NA
+    res <- tbl %>% add_nevent(location = c("label", "level")), NA
   )
+  expect_snapshot(res %>% render_as_html())
 })

@@ -1,55 +1,66 @@
 skip_on_cran()
 skip_if_not(broom.helpers::.assert_package("survey", pkg_search = "gtsummary", boolean = TRUE))
 skip_if_not(broom.helpers::.assert_package("survival", pkg_search = "gtsummary", boolean = TRUE))
-library(survival)
 
 test_that("no errors/warnings with standard use", {
-  expect_error(mtcars %>% tbl_summary(by = am) %>% add_overall(), NA)
+  expect_error(res <- mtcars %>% tbl_summary(by = am) %>% add_overall(), NA)
   expect_warning(mtcars %>% tbl_summary(by = am) %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 
-  expect_error(mtcars %>% tbl_summary(by = am) %>% add_overall(last = TRUE), NA)
+  expect_error(res <- mtcars %>% tbl_summary(by = am) %>% add_overall(last = TRUE), NA)
   expect_warning(mtcars %>% tbl_summary(by = am) %>% add_overall(last = TRUE), NA)
+  expect_snapshot(res %>% render_as_html())
 
-  expect_error(iris %>% tbl_summary(by = Species) %>% add_overall(), NA)
+  expect_error(res <- iris %>% tbl_summary(by = Species) %>% add_overall(), NA)
   expect_warning(iris %>% tbl_summary(by = Species) %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 })
 
 test_that("no errors/warnings with missing data", {
-  expect_error(lung %>% tbl_summary(by = sex) %>% add_overall(), NA)
-  expect_warning(lung %>% tbl_summary(by = sex) %>% add_overall(), NA)
+  expect_error(res <- survival::lung %>% tbl_summary(by = sex) %>% add_overall(), NA)
+  expect_warning(survival::lung %>% tbl_summary(by = sex) %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 
-  expect_error(lung %>% tbl_summary(by = sex) %>% add_overall(last = TRUE), NA)
-  expect_warning(lung %>% tbl_summary(by = sex) %>% add_overall(last = TRUE), NA)
+  expect_error(res <- survival::lung %>% tbl_summary(by = sex) %>% add_overall(last = TRUE), NA)
+  expect_warning(survival::lung %>% tbl_summary(by = sex) %>% add_overall(last = TRUE), NA)
+  expect_snapshot(res %>% render_as_html())
 })
 
 
 test_that("no errors/warnings with standard use for continuous 2", {
-  expect_error(mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+  expect_error(res <- mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
   expect_warning(mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 
-  expect_error(mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
+  expect_error(res <- mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
   expect_warning(mtcars %>% tbl_summary(by = am, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
+  expect_snapshot(res %>% render_as_html())
 
-  expect_error(iris %>% tbl_summary(by = Species, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+  expect_error(res <- iris %>% tbl_summary(by = Species, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
   expect_warning(iris %>% tbl_summary(by = Species, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 })
 
 test_that("no errors/warnings with missing data for continuous 2", {
-  expect_error(lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
-  expect_warning(lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+  expect_error(res <- survival::lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+  expect_warning(survival::lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 
-  expect_error(lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
-  expect_warning(lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
+  expect_error(res <- survival::lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
+  expect_warning(survival::lung %>% tbl_summary(by = sex, type = all_continuous() ~ "continuous2") %>% add_overall(last = TRUE), NA)
+  expect_snapshot(res %>% render_as_html())
 })
 
 
 test_that("no errors/warnings with missing data in by variable", {
-  expect_error(trial %>% tbl_summary(by = response) %>% add_overall(), NA)
+  expect_error(res <- trial %>% tbl_summary(by = response) %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 })
 
 test_that("add_overall-works with ordered factors", {
   expect_error(
-    trial %>%
+    res <-
+      trial %>%
       select(response, trt) %>%
       dplyr::mutate_at(
         vars(response, trt),
@@ -59,6 +70,7 @@ test_that("add_overall-works with ordered factors", {
       add_overall(),
     NA
   )
+  expect_snapshot(res %>% render_as_html())
 })
 
 test_that("no errors/warnings with standard use for tbl_svysummary", {
@@ -68,19 +80,22 @@ test_that("no errors/warnings with standard use for tbl_svysummary", {
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt)
 
-  expect_error(t %>% add_overall(), NA)
+  expect_error(res <- t %>% add_overall(), NA)
   expect_warning(t %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 
-  expect_error(t %>% add_overall(last = TRUE), NA)
+  expect_error(res <- t %>% add_overall(last = TRUE), NA)
   expect_warning(t %>% add_overall(last = TRUE), NA)
+  expect_snapshot(res %>% render_as_html())
 
   t <- Titanic %>%
     as.data.frame() %>%
     survey::svydesign(data = ., ids = ~1, weights = ~Freq) %>%
     tbl_svysummary(by = Survived)
 
-  expect_error(t %>% add_overall(), NA)
+  expect_error(res <- t %>% add_overall(), NA)
   expect_warning(t %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 })
 
 test_that("no errors/warnings with standard use for tbl_svysummary with continuous2", {
@@ -90,19 +105,22 @@ test_that("no errors/warnings with standard use for tbl_svysummary with continuo
     survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
     tbl_svysummary(by = trt, type = all_continuous() ~ "continuous2")
 
-  expect_error(t %>% add_overall(), NA)
+  expect_error(res <- t %>% add_overall(), NA)
   expect_warning(t %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 
-  expect_error(t %>% add_overall(last = TRUE), NA)
+  expect_error(res <- t %>% add_overall(last = TRUE), NA)
   expect_warning(t %>% add_overall(last = TRUE), NA)
+  expect_snapshot(res %>% render_as_html())
 
   t <- Titanic %>%
     as.data.frame() %>%
     survey::svydesign(data = ., ids = ~1, weights = ~Freq) %>%
     tbl_svysummary(by = Survived, type = all_continuous() ~ "continuous2")
 
-  expect_error(t %>% add_overall(), NA)
+  expect_error(res <- t %>% add_overall(), NA)
   expect_warning(t %>% add_overall(), NA)
+  expect_snapshot(res %>% render_as_html())
 })
 
 test_that("errors produced when expected", {

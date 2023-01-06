@@ -5,7 +5,7 @@ table1 <- trial %>%
   add_p()
 
 test_that("no errors/warnings with standard use after tbl_summary() and add_p()", {
-  expect_error(add_q(table1), NA)
+  expect_snapshot(add_q(table1) %>% render_as_html())
   expect_warning(add_q(table1), NA)
 })
 
@@ -29,7 +29,7 @@ test_that("no errors/warnings with standard use after tbl_uvregression() and add
     ) %>%
     add_global_p()
 
-  expect_error(add_q(uni_reg), NA)
+  expect_snapshot(add_q(uni_reg) %>% render_as_html())
   expect_warning(add_q(uni_reg), NA)
 })
 
