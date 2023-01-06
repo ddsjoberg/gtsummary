@@ -11,9 +11,9 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-The randomized controlled trial (RCT) is considered the gold standard approach for estimating treatment effects.
+The randomized controlled trial (RCT) is considered the gold standard for estimating treatment and causal effects.
 Randomization ensures treatment assignment will not be confounded by either measured or unmeasured baseline characteristics.
-In observational or non-randomized studies, treatment selection is often related by subject characteristics, such as disease severity or comorbidities.
+In observational or non-randomized studies, treatment selection is often influenced by subject characteristics, such as disease severity or comorbidities.
 Propensity score (PS) is one approach to reduce the effects of confounding these studies with potential selection biases for treatment. 
 
 Herein, we review how to perform propensity score analysis aided with the {gtsummary} package.
@@ -32,11 +32,7 @@ For a deeper review of propensity score methods, review one or more of the follo
 
 ### Data
 
-Using the National Health and Nutrition Examination Survey Data, we are interested in the relationship between whether a participant quit smoking (the exposure), and three outcomes: subsequent death (binary), time to death (time to event), and weight change (continuous).
-
-The data can be found in {causaldata} package: `causaldata::nhefs_complete`.
-
-We will assess the relationship between the exposure and the outcome in the presenece of the following potential counding variables: `sex`, `age`,`smokeyrs`,`sbp`,`dbp`,`race`,`income`,`diabetes`,`exercise`,`income` and `wt71` 
+Using the National Health and Nutrition Examination Survey Data, we will assess the relationship between whether a participant quit smoking (the exposure), and three outcomes: subsequent death (binary), time to death (time to event), and weight change (continuous).
 
 To begin, install the following packages and prepare the data.
 Note that the {gtsummary} package utilizes column labels and we assign the labels using the {labelled} package.
@@ -44,6 +40,10 @@ Note that the {gtsummary} package utilizes column labels and we assign the label
 ```{r, eval = FALSE}
 install.packages(c("gtsummary", "tidyverse" "causaldata", "Matching", "MatchIt", "labelled"))
 ```
+
+The data can be found in {causaldata} package: `causaldata::nhefs_complete`.
+
+We will assess the relationship between the exposure and the outcome in the presence of the following potential confounding variables: `sex`, `age`,`smokeyrs`,`sbp`,`dbp`,`race`,`income`,`diabetes`,`exercise`,`income` and `wt71` 
 
 ```{r setup, echo = FALSE, message=FALSE}
 library(gtsummary)
@@ -82,11 +82,11 @@ nhefs <-
 
 ### Estimate the propensity score
 
-Use `tbl_summary` to examine collected baseline characteristics between treated and un-treated groups.
+Use the `tbl_summary()` function to examine baseline characteristics by their exposure status, i.e. whether or not the participant quit smoking.
 The standardized mean difference (SMD) is a commonly used measure to assess differences or balance between two groups.
-A rule-of-thumb method to assess potentially important imbalance between the two groups is when the magnitude of the SMD is larger than 0.1.
+A rule-of-thumb to assess potentially important imbalance between the two groups is when the magnitude of the SMD is larger than 0.1.
 
-In the summary table below, all the variables have SMD greater than 0.1, suggesting imbalanced between baseline characteristics and the groups that did and did not quit smoking.
+In the summary table below, all the variables have SMD greater than 0.1, suggesting imbalance between baseline characteristics and the groups that did and did not quit smoking.
 
 ```{r pre_match_smd}
 gts_pre_match <-
@@ -113,10 +113,10 @@ gts_pre_match <-
 gts_pre_match
 ```
 
+Logistic regression is a common method to construct propensity scores, that is, the probability of quitting smoking.
+Alternative methods for propensity score estimation include decision trees or CART. (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2907172/)
 
-Logistic regression model is the most common method to construct the propensity score to predict the probability of receiving the treatment. Alternative methods for propensity score estimation include decision trees (CART) : reference can be found here: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2907172/ 
-
-```{r Pscore}
+```{r p_score}
 # Construct PS model
 mod_ps <- 
   glm(
@@ -128,7 +128,7 @@ mod_ps <-
 ## Summarize the PS findings
 mod_ps %>%
   tbl_regression(exponentiate = TRUE) %>%
-  modify_caption("**Factors associated with quitted smoking**")
+  modify_caption("**Factors associated with quitting smoking**")
 ```
 
 ```{r warning=FALSE}
@@ -165,20 +165,20 @@ ggplot() +
 ```
 
 Before applying the estimated PS (either through matching, stratification or inverse probability weight), it is important to examine the region of common support.
-If the two groups do not have sufficient common region (i.e, the distributions  are total mirror imaging of each other), then applying PS analysis may not be feasible. 
+If the two groups do not have sufficient common region, then applying PS analysis may not be feasible. 
 
 ## Method 1: Propensity Score Matching
 
-There are different algorithm for matching: optimal matching (Bersekas, 1991), Greedy's nearest neighbour matching (with or without replacement).
+There are different algorithm for matching: optimal matching (Bersekas, 1991), Greedy's nearest neighbor matching.
 See Austin (2012) for detailed discussion and comparison of different algorithms for matching on the propensity score.
-The R pckage `MatchIt` written by Noah Greifer, offers different methods for matching. Complete vignette on this package can be found here: https://cran.r-project.org/web/packages/MatchIt/vignettes/MatchIt.html#assessing-the-quality-of-matches]
+The R package `MatchIt`, offers different methods for matching.
 
-The following codes show the 1:1 Greedy's nearest neighbor matching without replacement with a caliper of 0.25. The default estimand in `MatchIt` is the average treatment effect of the treated (ATT)
+The following codes illustrates the 1:1 Greedy's nearest neighbor matching without replacement with a caliper of 0.25.
+The default estimand in `MatchIt` is the average treatment effect of the treated (ATT).
 
-
-Caliper is the actual maximum distance allowed by the matching algorithm.
+The caliper is the actual maximum distance allowed by the matching algorithm.
 It is usually set to be a quarter of standard deviation of the propensity score.
-Reference on selecting the appropriate caliper can be found here : https://doi.org/10.1093/aje/kwt212
+Reference on selecting the appropriate caliper can be found here: https://doi.org/10.1093/aje/kwt212
 
 ```{r match}
 df_matchit_results <-
@@ -201,11 +201,11 @@ df_post_match <- MatchIt::match.data(df_matchit_results) %>%
 ### Summarize the matched groups
 
 After matching, we can use `tbl_summary()` to assess the balance of covariates between the matched group.
-Alternative way is to use the mirrored histograms to review the distributions of propensity score for the matched and unmatched groups.
+Alternatively, we may use the mirrored histograms to review the distributions of propensity score for the matched and unmatched groups.
 
 ### Post-matching Assessment
 
-We now see the distributions are fairly balanced between the two groups and abs(SMD) are all below 0.1.
+We now see the distributions are fairly balanced between the two groups and `abs(SMD)` are all below 0.1.
 
 ```{r postmatchSMD}
 gts_post_match <-
@@ -230,7 +230,8 @@ gts_post_match
 
 Now let's visualize the matching by plotting the pre- and post-matching standardized mean differences.
 
-The first figure illustrates the reduction in SMD from pre-matching to post-matching
+The first figure illustrates the reduction in SMD from pre-matching to post-matching.
+
 ```{r}
 # Extract the SMD pre-matching
 pre_match_smd <-
@@ -306,29 +307,13 @@ df_with_ps %>%
 Mirrored histograms again are helpful to view the distribution of PS for the matched (colored) and unmatched (gray) of the control and treated groups.
 This is a helpful visualization to show if the  unmatched were very different between cases and controls
 
-### Strategy to improve balance between groups 
-
-Parameters within {matchit} can be tweaked to help improve matching.
-
-- Relaxing or tightening the maximum caliper width will affect how closely the pairs are matched may improve the overall balance.
-
-- Choosing a different matching algorithm, for example, the default is to match the largest (`m.order` = "largest") matching takes place in descending order of distance measures.
-
-- Re-specify the PS model with additional covariates
-
-If matching does not improve, consider a different matching strategy.
-
-
 ### Analysis 
-
-
 
 #### Continuous outcome
 
 ```{r}
 # Fitting linear model with continuous outcome weight changes
-fit1<-lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights)
-
+fit1 <- lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights)
 
 # get a model summary with clustered robust standard errors
 tidy_robust(fit1, vcov = "vcovCL", vcov_args = list(cluster = ~matched_group_id))
@@ -338,11 +323,10 @@ tidy_robust(fit1, vcov = "vcovCL", vcov_args = list(cluster = ~matched_group_id)
 tbl <-
   tbl_regression(
     fit1, 
-    tidy_fun = purrr::partial(tidy_robust, vcov = "vcovCL", vcov_args = list(cluster = df_post_match$matched_group_id))
+    tidy_fun = purrr::partial(tidy_robust, vcov = "vcovCL", vcov_args = list(cluster = ~matched_group_id))
   )
 
 tbl
-
 ```
 
 #### Binary outcome
@@ -353,9 +337,6 @@ clogit(death ~ qsmk,data = df_post_match,
     weights = weights,method="breslow"
 ) %>% 
   tbl_regression(exponentiate = TRUE)
-
-
-
 ```
 
 #### Survival outcome
