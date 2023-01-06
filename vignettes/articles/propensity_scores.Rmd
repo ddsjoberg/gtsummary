@@ -309,24 +309,25 @@ This is a helpful visualization to show if the  unmatched were very different be
 
 ### Analysis 
 
+Below we illustrate various ways to account for the induced correlation after matching on the propensity score, include clustered robust standard errors, conditional logistic regression, and a frailty model (similar to a random intercept mixed-effects regression model).
+
 #### Continuous outcome
 
 ```{r}
 # Fitting linear model with continuous outcome weight changes
 fit1 <- lm(wt82_71 ~ qsmk, data = df_post_match, weights = weights)
 
-# get a model summary with clustered robust standard errors
-tidy_robust(fit1, vcov = "vcovCL", vcov_args = list(cluster = ~matched_group_id))
-
-
 # create a gtsummary regression summary using the clustered robust SE
-tbl <-
-  tbl_regression(
-    fit1, 
-    tidy_fun = purrr::partial(tidy_robust, vcov = "vcovCL", vcov_args = list(cluster = ~matched_group_id))
-  )
-
-tbl
+tbl_regression(
+  fit1, 
+  tidy_fun = 
+    # use the `tidy_robust()` tidier to include clustered robust SEs
+    purrr::partial(
+      tidy_robust, 
+      vcov = "vcovCL", 
+      vcov_args = list(cluster = ~matched_group_id)
+    )
+)
 ```
 
 #### Binary outcome
@@ -334,7 +335,7 @@ tbl
 ```{r}
 # Fit conditional logistic regression for binary outcome
 clogit(death ~ qsmk,data = df_post_match, 
-    weights = weights,method="breslow"
+       weights = weights,method="breslow"
 ) %>% 
   tbl_regression(exponentiate = TRUE)
 ```
@@ -366,7 +367,6 @@ coxMatchedfrail <-
 list(coxMatchedclust, coxMatchedfrail) %>%
   tbl_merge(tab_spanner = c("**Marginal HR model**", "**Frailty model**"))
 ```
-
 
 ## Method 2: Matching weights
 
@@ -416,7 +416,7 @@ svy_nhefs %>%
   modify_column_hide(columns = ci)          # remove 95%CI
 ```
 
-Note that effective sample sizes were rounded to whole numbers for convenience but should not be interpreted as the number of patients because  some patient may only be contributing a portion of his/her information.
+Note that effective sample sizes were rounded to whole numbers for convenience but should not be interpreted as the number of patients because some patient may only be contributing a portion of his/her information.
 Therefore, the focus should be on the comparison of percentages in each exposure group.   
 
 More details on estimating effect after matching can be found here: [https://kosukeimai.github.io/MatchIt/articles/estimating-effects.html](https://kosukeimai.github.io/MatchIt/articles/estimating-effects.html)
@@ -434,7 +434,6 @@ survey::svyglm(
   tbl_regression()
 ```
 
-
 #### Binary outcome
 
 ```{r}
@@ -445,7 +444,6 @@ survey::svyglm(
 ) %>%
   tbl_regression(exponentiate = TRUE)
 ```
-
 
 #### Survival outcome
 
