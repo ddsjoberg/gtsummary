@@ -167,7 +167,7 @@ ggplot() +
 Before applying the estimated PS (either through matching, stratification or inverse probability weight), it is important to examine the region of common support.
 If the two groups do not have sufficient common region, then applying PS analysis may not be feasible. 
 
-## Method 1: Propensity Score Matching
+## Method 1: Matching
 
 There are different algorithm for matching: optimal matching (Bersekas, 1991), Greedy's nearest neighbor matching.
 See Austin (2012) for detailed discussion and comparison of different algorithms for matching on the propensity score.
@@ -381,7 +381,7 @@ list(coxMatchedclust, coxMatchedfrail) %>%
   tbl_merge(tab_spanner = c("**Marginal HR model**", "**Frailty model**"))
 ```
 
-## Method 2: Matching weights
+## Method 2: Weights
 
 The matching weights method is a weighting analogue to the 1:1 pairwise matching ([https://pubmed.ncbi.nlm.nih.gov/23902694/](https://pubmed.ncbi.nlm.nih.gov/23902694/)). 
 
