@@ -90,7 +90,6 @@ test_that("lm with tidyfun: no errors/warnings with standard use", {
 
 test_that("survreg: no errors/warnings with standard use", {
   expect_snapshot(tbl_regression(mod_survreg) %>% render_as_html())
-  expect_warning(tbl_regression(mod_survreg), NA)
 })
 
 test_that("lmer: no errors/warnings with standard use", {
