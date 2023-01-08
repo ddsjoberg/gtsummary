@@ -122,7 +122,8 @@ modify_header <- function(x, update = NULL, ..., text_interpret = c("md", "html"
   if (!is.null(stat_by)) {
     lifecycle::deprecate_stop(
       "1.3.6", "gtsummary::modify_header(stat_by=)",
-      details = glue("Use `all_stat_cols(FALSE) ~ {stat_by}` instead."))
+      details = glue("Use `all_stat_cols(FALSE) ~ {stat_by}` instead.")
+    )
   }
   update <- .combine_update_and_dots(x, update, ...)
 
@@ -166,7 +167,13 @@ modify_footnote <- function(x, update = NULL, ..., abbreviation = FALSE,
   x <- .update_table_styling(x)
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <- .combine_update_and_dots(x, {update}, ...)
+  update <- .combine_update_and_dots(
+    x,
+    {
+      update
+    },
+    ...
+  )
 
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
@@ -178,10 +185,12 @@ modify_footnote <- function(x, update = NULL, ..., abbreviation = FALSE,
   update <- .eval_with_glue(x, update)
 
   # updating footnotes ---------------------------------------------------------
-  modify_table_styling_args <- list(x = x,
-                                    columns = names(update),
-                                    footnote = unlist(update),
-                                    text_interpret = text_interpret)
+  modify_table_styling_args <- list(
+    x = x,
+    columns = names(update),
+    footnote = unlist(update),
+    text_interpret = text_interpret
+  )
   if (isTRUE(abbreviation)) { # for abbreviations, update list names
     modify_table_styling_args <-
       stats::setNames(
@@ -211,7 +220,13 @@ modify_spanning_header <- function(x, update = NULL, ...,
   x <- .update_table_styling(x)
 
   # converting update arg to a tidyselect list ---------------------------------
-  update <- .combine_update_and_dots(x, {update}, ...)
+  update <- .combine_update_and_dots(
+    x,
+    {
+      update
+    },
+    ...
+  )
 
   # if no columns selected, print helpful message
   if (identical(quiet, FALSE) && rlang::is_empty(update)) .modify_no_selected_vars(x)
@@ -320,11 +335,11 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
     data = x$table_body,
     var_info =
       x$table_styling$header %>%
-      select("column", "hide", starts_with("modify_selector_")) %>%
-      dplyr::rename_with(
-        .fn = ~stringr::str_remove(., pattern = fixed("modify_selector_")),
-        starts_with("modify_selector_")
-      ),
+        select("column", "hide", starts_with("modify_selector_")) %>%
+        dplyr::rename_with(
+          .fn = ~ stringr::str_remove(., pattern = fixed("modify_selector_")),
+          starts_with("modify_selector_")
+        ),
     arg_name = "... or update",
     type_check = chuck(type_check, "is_string_or_na", "fn"),
     type_check_msg = chuck(type_check, "is_string_or_na", "msg")
@@ -335,7 +350,7 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
   df_header <-
     x$table_styling$header %>%
     select("column", starts_with("modify_stat_")) %>%
-    dplyr::rename_with(~stringr::str_replace(., fixed("modify_stat_"), fixed("")))
+    dplyr::rename_with(~ stringr::str_replace(., fixed("modify_stat_"), fixed("")))
 
   imap(
     update,
@@ -359,10 +374,11 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
             tryCatch(
               {
                 cls <-
-                  imap(lst_env_for_eval, ~glue("{{.field {.y}}} ({{.cls {class(.x)[1]}}})")) %>%
+                  imap(lst_env_for_eval, ~ glue("{{.field {.y}}} ({{.cls {class(.x)[1]}}})")) %>%
                   paste(collapse = ", ")
                 cli::cli_alert_danger(
-                  "There was an error processing column {.val {y}}--likely a glue syntax error.")
+                  "There was an error processing column {.val {y}}--likely a glue syntax error."
+                )
                 paste("The following fields are available to insert via glue syntax:\n", cls) %>%
                   cli::cli_alert_info()
               },
@@ -376,4 +392,3 @@ show_header_names <- function(x = NULL, include_example = TRUE, quiet = NULL) {
   ) %>%
     purrr::compact()
 }
-

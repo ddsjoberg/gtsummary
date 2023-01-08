@@ -63,8 +63,10 @@ table_styling_to_kable_calls <- function(x, ...) {
   dots <- rlang::enexprs(...)
 
   if (!is.null(dots[["fmt_missing"]])) {
-    lifecycle::deprecate_warn(when = "1.6.0",
-                              what = "gtsummary::as_kable_extra(fmt_missing=)")
+    lifecycle::deprecate_warn(
+      when = "1.6.0",
+      what = "gtsummary::as_kable_extra(fmt_missing=)"
+    )
     dots <- purrr::list_modify(fmt_missing = NULL) %>% purrr::compact()
   }
 
@@ -73,8 +75,10 @@ table_styling_to_kable_calls <- function(x, ...) {
 
   # fmt_missing ----------------------------------------------------------------
   kable_calls[["fmt_missing"]] <-
-    c(kable_calls[["fmt_missing"]],
-      list(expr(dplyr::mutate_all(~ ifelse(is.na(.), "", .)))))
+    c(
+      kable_calls[["fmt_missing"]],
+      list(expr(dplyr::mutate_all(~ ifelse(is.na(.), "", .))))
+    )
 
   # kable ----------------------------------------------------------------------
   kable_calls[["kable"]] <- .construct_call_to_kable(x, ...)
@@ -93,8 +97,8 @@ table_styling_to_kable_calls <- function(x, ...) {
       col.names = dplyr::filter(x$table_styling$header, .data$hide == FALSE)$label,
       align =
         filter(x$table_styling$header, .data$hide == FALSE) %>%
-        dplyr::pull("align") %>%
-        stringr::str_sub(1, 1)
+          dplyr::pull("align") %>%
+          stringr::str_sub(1, 1)
     ) %>%
     # update with any args from theme element
     purrr::list_modify(!!!get_theme_element("as_kable-arg:dots")) %>%

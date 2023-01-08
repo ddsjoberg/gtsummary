@@ -49,7 +49,7 @@ inline_text.gtsummary <- function(x, variable,
   # adding raw stats if user will use them -------------------------------------
   if (!is.null(pattern) && !column_is_null) {
     if (is.null(x$meta_data) || !"df_stats" %in% names(x$meta_data) ||
-        !all(c("label", "col_name") %in% names(x$meta_data$df_stats[[1]]))) {
+      !all(c("label", "col_name") %in% names(x$meta_data$df_stats[[1]]))) {
       paste(
         "When both `column=` and `pattern=` are specified, the gtsummary",
         "object must have a `x$meta_data` table with column 'df_stats',",
@@ -87,13 +87,16 @@ inline_text.gtsummary <- function(x, variable,
 
   # check if tbl contains duplicate variable names
   if ("row_type" %in% names(df_gtsummary) &&
-      nrow(df_gtsummary %>% filter(.data$row_type %in% "label")) > 1)
+    nrow(df_gtsummary %>% filter(.data$row_type %in% "label")) > 1) {
     glue("Variable '{variable}' likely not unique in gtsummary table, and",
-         "the cell(s) you wish to display may not be accessible.",
-         "This may occur when gtsummary tables with repeated variable",
-         "names are combined using `tbl_stack()`.", .sep = " ") %>%
-    stringr::str_wrap() %>%
-    inform()
+      "the cell(s) you wish to display may not be accessible.",
+      "This may occur when gtsummary tables with repeated variable",
+      "names are combined using `tbl_stack()`.",
+      .sep = " "
+    ) %>%
+      stringr::str_wrap() %>%
+      inform()
+  }
 
   # level selection ------------------------------------------------------------
   if (!level_is_null && "" %in% df_gtsummary$label) {
@@ -154,10 +157,10 @@ inline_text.gtsummary <- function(x, variable,
       df_gtsummary %>%
       bind_cols(
         select(., starts_with(vec_paste0("raw_", column, "_"))) %>%
-        dplyr::rename_with(
-          .fn = ~stringr::str_remove(., fixed(vec_paste0("raw_", column, "_"))),
-          .cols = starts_with(vec_paste0("raw_", column, "_"))
-        )
+          dplyr::rename_with(
+            .fn = ~ stringr::str_remove(., fixed(vec_paste0("raw_", column, "_"))),
+            .cols = starts_with(vec_paste0("raw_", column, "_"))
+          )
       )
   }
 
@@ -259,9 +262,9 @@ inline_text.tbl_summary <- function(x, variable, column = NULL, level = NULL,
       filter(.data$input == !!column) %>%
       slice(1) %>%
       pull("column_name")
-  }
-  else if (column_is_null && is.null(x$by)) column <- "stat_0"
-  else if (column_is_null && !is.null(x$by)) column <- NULL
+  } else if (column_is_null && is.null(x$by)) {
+    column <- "stat_0"
+  } else if (column_is_null && !is.null(x$by)) column <- NULL
 
   # call generic inline_text() function ----------------------------------------
   inline_text.gtsummary(
@@ -492,17 +495,19 @@ inline_text.tbl_survfit <-
       if (!time %in% x$inputs$times) {
         glue("`time=` must be one of {quoted_list(x$inputs$times)}") %>% abort()
       }
-      column <- which(x$inputs$times %in% time) %>% {
-        paste0("stat_", .)
-      }
+      column <- which(x$inputs$times %in% time) %>%
+        {
+          paste0("stat_", .)
+        }
     }
     if (!is.null(prob)) {
       if (!prob %in% x$inputs$probs) {
         glue("`prob=` must be one of {quoted_list(x$inputs$probs)}") %>% abort()
       }
-      column <- which(x$inputs$probs %in% prob) %>% {
-        paste0("stat_", .)
-      }
+      column <- which(x$inputs$probs %in% prob) %>%
+        {
+          paste0("stat_", .)
+        }
     }
     column <- x$table_body %>%
       select({{ column }}) %>%
@@ -580,8 +585,7 @@ inline_text.tbl_cross <-
     if (!is.null(row_level) && row_level == x$inputs$margin_text && "..total.." %in% x$meta_data$variable) {
       variable <- "..total.."
       row_level <- NULL
-    }
-    else {
+    } else {
       variable <- x$inputs$row
     }
 
@@ -650,12 +654,16 @@ df_stats_to_table_body <- function(x) {
           ifelse("variable_levels" %in% names(.x), "level", "label")
 
         .x %>%
-          select(-any_of(c("by", "stat_display", "variable_levels",
-                           "col_label", "strata"))) %>%
-          tidyr::pivot_wider(id_cols = any_of(c("variable", "label", "row_type")),
-                             names_from = "col_name",
-                             names_glue = "raw_{col_name}_{.value}",
-                             values_from = -any_of(c("variable", "label", "row_type", "col_name")))  %>%
+          select(-any_of(c(
+            "by", "stat_display", "variable_levels",
+            "col_label", "strata"
+          ))) %>%
+          tidyr::pivot_wider(
+            id_cols = any_of(c("variable", "label", "row_type")),
+            names_from = "col_name",
+            names_glue = "raw_{col_name}_{.value}",
+            values_from = -any_of(c("variable", "label", "row_type", "col_name"))
+          ) %>%
           select(any_of(c("variable", "row_type", "label")), everything()) %>%
           mutate(dplyr::across(where(is.numeric), as.numeric)) # there are some numeric types that cannot be stacked (e.g. lubridate duration class)
       }
@@ -669,12 +677,14 @@ df_stats_to_table_body <- function(x) {
         tibble(
           colname =
             names(df_stats) %>%
-            setdiff(c("variable", "by", "stat_display", "col_label", "strata",
-                      "variable_levels", "label", "col_name"))
+              setdiff(c(
+                "variable", "by", "stat_display", "col_label", "strata",
+                "variable_levels", "label", "col_name"
+              ))
         ) %>%
           mutate(
             variable = unique(df_stats$variable),
-            raw_colname = map(.data$colname, ~paste("raw", unique(df_stats$col_name), .x, sep = "_")),
+            raw_colname = map(.data$colname, ~ paste("raw", unique(df_stats$col_name), .x, sep = "_")),
             fmt_fun =
               map(
                 .data$colname,
@@ -695,7 +705,7 @@ df_stats_to_table_body <- function(x) {
   expr_fmt_fun <-
     map(
       seq_len(nrow(df_fmt_fun)),
-      ~expr(
+      ~ expr(
         modify_table_styling(
           columns = !!df_fmt_fun$raw_colname[[.x]],
           rows = variable %in% !!df_fmt_fun$variable[.x],
@@ -709,7 +719,7 @@ df_stats_to_table_body <- function(x) {
   x <-
     modify_table_body(
       x,
-      ~left_join(
+      ~ left_join(
         .x,
         df_raw_stats,
         by = c("variable", "row_type", "label")

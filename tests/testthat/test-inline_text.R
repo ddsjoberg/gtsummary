@@ -350,7 +350,6 @@ test_that("check for messaging about duplicate variables", {
     tbl_stack(list(t1, t1)) %>%
       inline_text(variable = marker, column = estimate)
   )
-
 })
 
 test_that("inline_text.gtsummary() errors are triggered", {
@@ -392,7 +391,7 @@ test_that("df_stats_to_table_body() works with mixed class stacking", {
       tbl_summary(
         include = c(age, var_duration),
         type = ~"continuous"
-      )  %>%
+      ) %>%
       inline_text(variable = var_duration, pattern = "{median}"),
     "90.0000"
   )

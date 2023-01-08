@@ -195,7 +195,6 @@ expect_error(
           formula = paste0(.x, " ~ age + stage") %>% as.formula(),
           data = trial, family = gaussian
         )
-
       ),
       tbl = purrr::map2(mod, exp, ~ tbl_regression(.x, exponentiate = .y)),
       tbl2 = purrr::map2(

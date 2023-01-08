@@ -96,9 +96,10 @@ modify_table_styling <- function(x,
   # checking inputs ------------------------------------------------------------
   .assert_class(x, "gtsummary")
 
-  text_interpret <- match.arg(text_interpret) %>% {
-    paste0("gt::", .)
-  }
+  text_interpret <- match.arg(text_interpret) %>%
+    {
+      paste0("gt::", .)
+    }
   if (!is.null(text_format)) {
     text_format <- match.arg(text_format,
       choices = c("bold", "italic", "indent", "indent2"),
@@ -108,9 +109,10 @@ modify_table_styling <- function(x,
   rows <- enquo(rows)
   rows_eval_error <-
     tryCatch(
-      eval_tidy(rows, data = x$table_body) %>% {
-        !is.null(.) && !is.logical(.)
-      },
+      eval_tidy(rows, data = x$table_body) %>%
+        {
+          !is.null(.) && !is.logical(.)
+        },
       error = function(e) TRUE
     )
   if (rows_eval_error) {
@@ -224,7 +226,9 @@ modify_table_styling <- function(x,
         format_type = text_format,
         undo_text_format = undo_text_format
       ) %>%
-      {tidyr::expand_grid(!!!.)} %>%
+      {
+        tidyr::expand_grid(!!!.)
+      } %>%
       {
         bind_rows(x$table_styling$text_format, .)
       }
@@ -238,7 +242,9 @@ modify_table_styling <- function(x,
         rows = list(rows),
         symbol = missing_symbol
       ) %>%
-      {tidyr::expand_grid(!!!.)} %>%
+      {
+        tidyr::expand_grid(!!!.)
+      } %>%
       {
         bind_rows(x$table_styling$fmt_missing, .)
       }
@@ -266,8 +272,8 @@ modify_table_styling <- function(x,
   rows <- enquo(rows)
   all_columns <-
     str_extract_all(pattern, "\\{.*?\\}") %>%
-    map(~str_remove_all(.x, pattern = fixed("}"))) %>%
-    map(~str_remove_all(.x, pattern = fixed("{"))) %>%
+    map(~ str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~ str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist()
 
   if (!is.na(pattern) && !all(all_columns %in% x$table_styling$header$column)) {

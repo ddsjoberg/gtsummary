@@ -18,7 +18,6 @@ assign_dichotomous_value <- function(data, variable, summary_type, value) {
 }
 
 assign_dichotomous_value_one <- function(data, variable, summary_type, value) {
-
   # only assign value for dichotomous data
   if (!summary_type %in% "dichotomous") {
     return(NULL)
@@ -205,11 +204,11 @@ assign_summary_type <- function(data, variable, summary_type, value,
             return("dichotomous")
           }
           if (inherits(data[[variable]], "factor") &&
-              !rlang::is_empty(attr(data[[variable]], "levels"))) {
+            !rlang::is_empty(attr(data[[variable]], "levels"))) {
             return("categorical")
           }
           if (inherits(data[[variable]], "factor") &&
-              rlang::is_empty(attr(data[[variable]], "levels"))) {
+            rlang::is_empty(attr(data[[variable]], "levels"))) {
             return("dichotomous")
           }
         }
@@ -423,10 +422,10 @@ df_by <- function(data, by) {
         by_id = 1:n(), # 'by' variable ID
         by_chr = as.character(.data$by), # Character version of 'by' variable
         by_fct = # factor version of 'by' variable
-        switch(inherits(.data$by, "factor"),
-          factor(.data$by, levels = attr(.data$by, "levels"), ordered = FALSE)
-        ) %||%
-          factor(.data$by),
+          switch(inherits(.data$by, "factor"),
+            factor(.data$by, levels = attr(.data$by, "levels"), ordered = FALSE)
+          ) %||%
+            factor(.data$by),
         by_col = paste0("stat_", .data$by_id) # Column name of in fmt_table1 output
       ) %>%
       select(starts_with("by"), everything())
@@ -640,10 +639,12 @@ footnote_stat_label <- function(meta_data) {
     distinct() %>%
     pull("message") %>%
     stats::na.omit() %>%
-    {.purrr_when(
-      rlang::is_empty(.) ~ NA_character_,
-      TRUE ~ paste(., collapse = "; ")
-    )}
+    {
+      .purrr_when(
+        rlang::is_empty(.) ~ NA_character_,
+        TRUE ~ paste(., collapse = "; ")
+      )
+    }
 }
 
 # summarize_categorical --------------------------------------------------------
@@ -737,8 +738,7 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
         variable = variable,
         stat_display = .env$stat_display
       )
-    }
-    else {
+    } else {
       df_stats <- tibble(
         variable = variable,
         stat_display = .env$stat_display
@@ -810,8 +810,7 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
         by = character()
       ) %>%
       select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
-  }
-  else {
+  } else {
     return <-
       df_stats %>%
       mutate(stat_display = .env$stat_display) %>%
@@ -823,18 +822,23 @@ summarize_continuous <- function(data, variable, by, stat_display, summary_type)
 }
 
 safe_summarise_at <- function(data, variable, fns) {
-  tryCatch({
-    # ref for all this `.keep_attr()` nonsense stackoverflow.com/questions/67291199
-    dplyr::summarise_at(data,
-                        vars("variable"),
-                        map(
-                          fns,
-                          function(.x) {
-                            if (identical(.x, stats::median))
-                              return(rlang::inject(function(x) .keep_attr(x, .f = !!.x)))
-                            else return(.x)
-                          }
-                        ))
+  tryCatch(
+    {
+      # ref for all this `.keep_attr()` nonsense stackoverflow.com/questions/67291199
+      dplyr::summarise_at(
+        data,
+        vars("variable"),
+        map(
+          fns,
+          function(.x) {
+            if (identical(.x, stats::median)) {
+              return(rlang::inject(function(x) .keep_attr(x, .f = !!.x)))
+            } else {
+              return(.x)
+            }
+          }
+        )
+      )
     },
     error = function(e) {
       # replace p[0:100] stats with `quantile`
@@ -869,8 +873,8 @@ extracting_function_calls_from_stat_display <- function(stat_display, variable) 
     stat_display %>%
     paste(collapse = " ") %>%
     str_extract_all("\\{.*?\\}") %>%
-    map(~str_remove_all(.x, pattern = fixed("}"))) %>%
-    map(~str_remove_all(.x, pattern = fixed("{"))) %>%
+    map(~ str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~ str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist()
 
   if (length(fns_names_chr) == 0) {
@@ -905,8 +909,8 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
   # extracting statistics requested
   fns_names_chr <-
     str_extract_all(stat_display, "\\{.*?\\}") %>%
-    map(~str_remove_all(.x, pattern = fixed("}"))) %>%
-    map(~str_remove_all(.x, pattern = fixed("{"))) %>%
+    map(~ str_remove_all(.x, pattern = fixed("}"))) %>%
+    map(~ str_remove_all(.x, pattern = fixed("{"))) %>%
     unlist()
   base_stats <- c(
     "p_miss", "p_nonmiss", "N_miss", "N_nonmiss", "N_obs",
@@ -980,17 +984,21 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
 
         # if the variable is categorical and a percent, use `style_percent`
         else if (summary_type %in% c("categorical", "dichotomous") &
-                 colname %in% c("p", "p_unweighted", "p_miss", "p_nonmiss",
-                                "p_miss_unweighted", "p_nonmiss_unweighted")) {
+          colname %in% c(
+            "p", "p_unweighted", "p_miss", "p_nonmiss",
+            "p_miss_unweighted", "p_nonmiss_unweighted"
+          )) {
           attr(column, "fmt_fun") <- percent_fun
         }
 
         # if the variable is categorical and an N, use `style_number`
         else if (summary_type %in% c("categorical", "dichotomous") &
-                 colname %in% c("N", "n", "n_unweighted", "N_unweighted",
-                                "N_obs", "N_miss", "N_nonmiss",
-                                "N_obs_unweighted", "N_miss_unweighted",
-                                "N_nonmiss_unweighted")) {
+          colname %in% c(
+            "N", "n", "n_unweighted", "N_unweighted",
+            "N_obs", "N_miss", "N_nonmiss",
+            "N_obs_unweighted", "N_miss_unweighted",
+            "N_nonmiss_unweighted"
+          )) {
           attr(column, "fmt_fun") <- style_number
         }
 
@@ -1008,8 +1016,7 @@ adding_formatting_as_attr <- function(df_stats, data, variable, summary_type,
         # but these are sometimes used in `tbl_custom_summary()`
         else if (is.numeric(column)) {
           attr(column, "fmt_fun") <- style_sigfig
-        }
-        else {
+        } else {
           attr(column, "fmt_fun") <- as.character
         }
 
@@ -1067,8 +1074,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
         names_from = "by_col",
         values_from = "statistic"
       )
-  }
-  else {
+  } else {
     df_stats_wide <-
       df_stats %>%
       select(any_of(c("by", "variable", "variable_levels", "statistic"))) %>%
@@ -1095,8 +1101,7 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
         label = var_label
       ) %>%
       bind_rows(result)
-  }
-  else if (summary_type %in% c("continuous", "dichotomous")) {
+  } else if (summary_type %in% c("continuous", "dichotomous")) {
     result <-
       df_stats_wide %>%
       mutate(
@@ -1114,9 +1119,11 @@ df_stats_to_tbl <- function(data, variable, summary_type, by, var_label, stat_di
       result %>%
       bind_rows(
         df_stats_original %>%
-          select(any_of(c("by", "variable", "N_miss", "N_obs", "p_miss", "N_nonmiss", "p_nonmiss",
-                          "N_obs_unweighted", "N_miss_unweighted", "N_nonmiss_unweighted",
-                          "p_miss_unweighted", "p_nonmiss_unweighted"))) %>%
+          select(any_of(c(
+            "by", "variable", "N_miss", "N_obs", "p_miss", "N_nonmiss", "p_nonmiss",
+            "N_obs_unweighted", "N_miss_unweighted", "N_nonmiss_unweighted",
+            "p_miss_unweighted", "p_nonmiss_unweighted"
+          ))) %>%
           distinct() %>%
           mutate(stat_display = .env$missing_stat) %>%
           {
@@ -1201,16 +1208,14 @@ df_stats_fun <- function(summary_type, variable, dichotomous_value, sort,
       return %>%
       left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
       rename(col_name = "by_col")
-  }
-  else {
+  } else {
     return$col_name <- "stat_0"
   }
 
   # adding label column
   if ("variable_levels" %in% names(return)) {
     return$label <- as.character(return$variable_levels)
-  }
-  else {
+  } else {
     return$label <- var_label
   }
 
@@ -1254,7 +1259,7 @@ meta_data_to_var_info <- function(meta_data) {
   if ("class" %in% names(var_info)) {
     var_info <-
       var_info %>%
-      mutate(var_class = map_chr(.data$class, ~pluck(.x, 1))) %>%
+      mutate(var_class = map_chr(.data$class, ~ pluck(.x, 1))) %>%
       select(-"class")
   }
   if ("summary_type" %in% names(var_info)) {

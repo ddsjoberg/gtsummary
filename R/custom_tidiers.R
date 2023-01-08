@@ -182,33 +182,39 @@ tidy_robust <- function(x,
                         exponentiate = FALSE,
                         conf.level = 0.95,
                         conf.int = TRUE,
-                        vcov = NULL, #type of robust estimation
-                        vcov_args = NULL, #specify the cluster-structure
+                        vcov = NULL, # type of robust estimation
+                        vcov_args = NULL, # specify the cluster-structure
                         ...,
                         quiet = FALSE) {
   assert_package("parameters", "tidy_robust()")
   assert_package("insight", "tidy_robust()")
   if (is.null(vcov) && is.null(vcov_args)) {
-    paste("Arguments {.code vcov} and {.code vcov_args} have not been specified",
-          "in {.code tidy_robust()}.",
-          "Specify at least one to obtain robust standard errors.") %>%
+    paste(
+      "Arguments {.code vcov} and {.code vcov_args} have not been specified",
+      "in {.code tidy_robust()}.",
+      "Specify at least one to obtain robust standard errors."
+    ) %>%
       cli::cli_inform()
   }
 
   dots <- rlang::dots_list(...)
   lst_model_parameters_args <-
-    rlang::inject(list(ci = !!conf.level,
-                       vcov = !!vcov,
-                       vcov_args = !!vcov_args,
-                       !!!dots)) %>%
+    rlang::inject(list(
+      ci = !!conf.level,
+      vcov = !!vcov,
+      vcov_args = !!vcov_args,
+      !!!dots
+    )) %>%
     purrr::compact()
 
   # calculating robust coefs
   robust_coef_expr <-
     expr(parameters::model_parameters(model = x, !!!lst_model_parameters_args))
   if (quiet == FALSE) {
-    glue("tidy_robust(): Robust estimation with\n",
-         "  `{deparse(robust_coef_expr, width.cutoff = 500L)}`\n\n") %>%
+    glue(
+      "tidy_robust(): Robust estimation with\n",
+      "  `{deparse(robust_coef_expr, width.cutoff = 500L)}`\n\n"
+    ) %>%
       inform()
   }
   robust_coef <- eval(robust_coef_expr)
@@ -224,7 +230,7 @@ tidy_robust <- function(x,
 
   # removing conf int, if requested --------------------------------------------
   if (!conf.int) {
-    tidy <- select(tidy,-any_of(c("conf.low", "conf.high")))
+    tidy <- select(tidy, -any_of(c("conf.low", "conf.high")))
   }
 
   # return results -------------------------------------------------------------
@@ -255,15 +261,16 @@ pool_and_tidy_mice <- function(x, pool.args = NULL, ..., quiet = FALSE) {
 tidy_gam <- function(x, conf.int = FALSE, exponentiate = FALSE, conf.level = 0.95, ...) {
   suppressWarnings(
     broom::tidy(x,
-                conf.int = conf.int,
-                conf.level = conf.level,
-                parametric = TRUE, ...)
+      conf.int = conf.int,
+      conf.level = conf.level,
+      parametric = TRUE, ...
+    )
   ) %>%
     # exponentiate coefs (GAM tidier does not have an `exponentiate=` argument)
     dplyr::mutate_at(
       vars(any_of(c("estimate", "conf.low", "conf.high"))),
       ~ switch(exponentiate == TRUE,
-               exp(.)
+        exp(.)
       ) %||% .
     ) %>%
     dplyr::mutate(parametric = TRUE) %>%
@@ -302,7 +309,7 @@ tidy_wald_test <- function(x, tidy_fun = NULL, ...) {
           b = stats::coef(x),
           Terms = .data$model_terms_id
         ) %>%
-        list(),
+          list(),
       df = .data$wald_test$result$chi2 %>% purrr::pluck("df"),
       statistic = .data$wald_test$result$chi2 %>% purrr::pluck("chi2"),
       p.value = .data$wald_test$result$chi2 %>% purrr::pluck("P"),

@@ -133,29 +133,35 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   y <- rlang::enexpr(y)
   x <-
     switch(!is.null(x),
-           tryCatch({
-             .select_to_varnames(
-               select = !!x,
-               data = .extract_data_frame(data),
-               arg_name = "x"
-             ) %>%
-               rlang::sym()},
-             error = function(e) x
-           ) %>%
-             rlang::quo_text())
+      tryCatch(
+        {
+          .select_to_varnames(
+            select = !!x,
+            data = .extract_data_frame(data),
+            arg_name = "x"
+          ) %>%
+            rlang::sym()
+        },
+        error = function(e) x
+      ) %>%
+        rlang::quo_text()
+    )
 
   y <-
     switch(!is.null(y),
-           tryCatch({
-             .select_to_varnames(
-               select = !!y,
-               data = .extract_data_frame(data),
-               arg_name = "y"
-             ) %>%
-               rlang::sym()},
-             error = function(e) y
-           ) %>%
-             rlang::quo_text())
+      tryCatch(
+        {
+          .select_to_varnames(
+            select = !!y,
+            data = .extract_data_frame(data),
+            arg_name = "y"
+          ) %>%
+            rlang::sym()
+        },
+        error = function(e) y
+      ) %>%
+        rlang::quo_text()
+    )
 
   # checking selections of x and y
   if (is.null(x) + is.null(y) != 1L) {
@@ -332,8 +338,9 @@ tbl_uvregression <- function(data, method, y = NULL, x = NULL, method.args = NUL
   class(results) <- c("tbl_uvregression", "gtsummary")
 
   # update column header if `x=` was used --------------------------------------
-  if (!is.null(x))
+  if (!is.null(x)) {
     results <- modify_table_styling(results, columns = "label", label = "**Outcome**")
+  }
 
   # creating a meta_data table -------------------------------------------------
   # (this will be used in subsequent functions, eg add_global_p)

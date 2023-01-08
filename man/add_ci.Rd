@@ -138,18 +138,22 @@ with \code{method = "mean"}.
 add_ci_ex1 <-
   trial \%>\%
   select(marker, response, trt) \%>\%
-  tbl_summary(missing = "no",
-              statistic = all_continuous() ~ "{mean} ({sd})") \%>\%
+  tbl_summary(
+    missing = "no",
+    statistic = all_continuous() ~ "{mean} ({sd})"
+  ) \%>\%
   add_ci()
 
 # Example 2 ----------------------------------
 add_ci_ex2 <-
   trial \%>\%
-    select(response, grade) \%>\%
-    tbl_summary(statistic = all_categorical() ~ "{p}\%",
-                missing = "no") \%>\%
-    add_ci(pattern = "{stat} ({ci})") \%>\%
-    modify_footnote(everything() ~ NA)
+  select(response, grade) \%>\%
+  tbl_summary(
+    statistic = all_categorical() ~ "{p}\%",
+    missing = "no"
+  ) \%>\%
+  add_ci(pattern = "{stat} ({ci})") \%>\%
+  modify_footnote(everything() ~ NA)
 
 # Example 3 ----------------------------------
 data(api, package = "survey")

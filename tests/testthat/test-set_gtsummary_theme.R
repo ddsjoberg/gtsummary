@@ -182,26 +182,30 @@ test_that("setting themes", {
 
   reset_gtsummary_theme()
 
-  expect_equal({
-    theme_gtsummary_journal("lancet")
-    with_gtsummary_theme(
-      x = list("style_number-arg:decimal.mark" = "."),
-      expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
-    ) %>%
-      dplyr::pull(stat_0)},
+  expect_equal(
+    {
+      theme_gtsummary_journal("lancet")
+      with_gtsummary_theme(
+        x = list("style_number-arg:decimal.mark" = "."),
+        expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
+      ) %>%
+        dplyr::pull(stat_0)
+    },
     "0.64 (0.22 – 1.39)"
   )
 
-  expect_equal({
-    theme_gtsummary_journal("lancet")
-    with_gtsummary_theme(
-      x = list("style_number-arg:decimal.mark" = "."),
-      expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
-    )
-    thm_names <- names(get_gtsummary_theme())
-    get_gtsummary_theme()},
-  theme_gtsummary_journal("lancet", set_theme = FALSE)[thm_names],
-  ignore_function_env = TRUE
+  expect_equal(
+    {
+      theme_gtsummary_journal("lancet")
+      with_gtsummary_theme(
+        x = list("style_number-arg:decimal.mark" = "."),
+        expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
+      )
+      thm_names <- names(get_gtsummary_theme())
+      get_gtsummary_theme()
+    },
+    theme_gtsummary_journal("lancet", set_theme = FALSE)[thm_names],
+    ignore_function_env = TRUE
   )
 
   expect_true({
@@ -210,18 +214,20 @@ test_that("setting themes", {
       x = list("style_number-arg:decimal.mark" = ","),
       expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
     )
-    rlang::is_empty(get_gtsummary_theme())}
-  )
+    rlang::is_empty(get_gtsummary_theme())
+  })
 
-  expect_equal({
-    theme_gtsummary_journal("lancet")
-    with_gtsummary_theme(
-      x = list("style_number-arg:decimal.mark" = "."),
-      expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
-    )
-    tbl_summary(trial, include = marker, missing = "no") %>%
-      as_tibble(col_labels = FALSE) %>%
-      dplyr::pull(stat_0)},
+  expect_equal(
+    {
+      theme_gtsummary_journal("lancet")
+      with_gtsummary_theme(
+        x = list("style_number-arg:decimal.mark" = "."),
+        expr = tbl_summary(trial, include = marker, missing = "no") %>% as_tibble(col_labels = FALSE)
+      )
+      tbl_summary(trial, include = marker, missing = "no") %>%
+        as_tibble(col_labels = FALSE) %>%
+        dplyr::pull(stat_0)
+    },
     "0·64 (0·22 – 1·39)"
   )
 

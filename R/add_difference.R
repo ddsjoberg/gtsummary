@@ -117,10 +117,9 @@ add_difference <- function(x, test = NULL, group = NULL,
     x$meta_data$variable %>%
     map(
       ~ estimate_fun[[.x]] %||%
-        switch(
-          x$meta_data[x$meta_data$variable %in% .x,]$summary_type %in% "dichotomous" &&
-            !identical(test[[.x]], "smd"),
-          function(x) ifelse(!is.na(x), paste0(style_sigfig(x * 100), "%"), NA_character_)
+        switch(x$meta_data[x$meta_data$variable %in% .x, ]$summary_type %in% "dichotomous" &&
+          !identical(test[[.x]], "smd"),
+        function(x) ifelse(!is.na(x), paste0(style_sigfig(x * 100), "%"), NA_character_)
         ) %||%
         style_sigfig
     ) %>%
@@ -193,9 +192,10 @@ add_difference <- function(x, test = NULL, group = NULL,
         .data$test,
         function(test) {
           .get_add_p_test_fun(class(x)[1],
-                              test = test,
-                              env = caller_env,
-                              parent_fun = "add_difference")
+            test = test,
+            env = caller_env,
+            parent_fun = "add_difference"
+          )
         }
       ),
       test_name = map_chr(.data$test_info, ~ pluck(.x, "test_name"))
@@ -258,4 +258,3 @@ add_difference <- function(x, test = NULL, group = NULL,
   # return results -------------------------------------------------------------
   x
 }
-

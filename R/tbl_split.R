@@ -55,7 +55,7 @@ tbl_split.gtsummary <- function(x, variables, ...) {
     tidyr::nest(data = -"..group..") %>%
     dplyr::pull("data") %>%
     purrr::map(
-      ~list(.) %>%
+      ~ list(.) %>%
         purrr::set_names("table_body") %>%
         c(purrr::list_modify(x, "table_body" = NULL)) %>% # add the other parts of the gtsummary table
         `class<-`(class(x)) # add original class from `x`

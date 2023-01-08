@@ -84,8 +84,3 @@ test_that("error when non-gtsummary object passed", {
     NULL
   )
 })
-
-
-
-
-

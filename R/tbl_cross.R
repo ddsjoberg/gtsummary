@@ -71,7 +71,6 @@ tbl_cross <- function(data,
                       missing = c("ifany", "always", "no"),
                       missing_text = "Unknown",
                       margin_text = "Total") {
-
   # checking data input --------------------------------------------------------
   if (!is.data.frame(data) || nrow(data) == 0 || ncol(data) < 2) {
     stop("`data=` argument must be a data frame with at least one row and two columns.",
@@ -183,8 +182,10 @@ tbl_cross <- function(data,
     select(any_of(c(row, col, "..total.."))) %>%
     tbl_summary(
       by = any_of(col),
-      statistic = ~glue("{statistic}"),
-      digits = switch(!is.null(digits), everything() ~ digits),
+      statistic = ~ glue("{statistic}"),
+      digits = switch(!is.null(digits),
+        everything() ~ digits
+      ),
       percent = ifelse(percent == "none", "cell", percent),
       label = new_label,
       missing_text = missing_text,

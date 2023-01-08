@@ -38,12 +38,12 @@
 #'     include = grade,
 #'     by = trt,
 #'     percent = "row",
-#'     statistic = ~ "{p}%",
-#'     digits = ~ 1
+#'     statistic = ~"{p}%",
+#'     digits = ~1
 #'   ) %>%
 #'   add_overall(
 #'     last = TRUE,
-#'     statistic = ~ "{p}% (n={n})",
+#'     statistic = ~"{p}% (n={n})",
 #'     digits = ~ c(1, 0)
 #'   )
 #'
@@ -109,8 +109,10 @@ add_overall.tbl_custom_summary <- add_overall.tbl_summary
 add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
   # checking that input x has a by var
   if (is.null(x$inputs[["by"]])) {
-    paste("Cannot add Overall column when no `by=` variable in",
-          "original summary table call.") %>%
+    paste(
+      "Cannot add Overall column when no `by=` variable in",
+      "original summary table call."
+    ) %>%
       stop(call. = FALSE)
   }
 
@@ -124,7 +126,7 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
 
   # if overall row, already included in data -----------------------------------
   if (isTRUE(x$inputs$overall_row)) {
-    x_copy$inputs$overall_row = FALSE
+    x_copy$inputs$overall_row <- FALSE
   }
 
   # evaluate statistic and digits args -----------------------------------------
@@ -163,16 +165,14 @@ add_overall_generic <- function(x, last, col_label, statistic, digits, call) {
   # if user passed updates statistics or digits, update the calls
   if (!is.null(statistic)) {
     x_copy$inputs$statistic <-
-      switch(
-        is.null(x_copy$inputs$statistic),
+      switch(is.null(x_copy$inputs$statistic),
         statistic
       ) %||%
       purrr::list_modify(x_copy$inputs$statistic, !!!statistic)
   }
   if (!is.null(digits)) {
     x_copy$inputs$digits <-
-      switch(
-        is.null(x_copy$inputs$digits),
+      switch(is.null(x_copy$inputs$digits),
         digits
       ) %||%
       purrr::list_modify(x_copy$inputs$digits, !!!digits)
@@ -219,12 +219,12 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
       function(.x) {
         bind_rows(
           x$meta_data$df_stats[[which(x$meta_data$variable %in% .x)]],
-          tbl_overall$meta_data$df_stats[[which(tbl_overall$meta_data$variable  %in% .x)]]
+          tbl_overall$meta_data$df_stats[[which(tbl_overall$meta_data$variable %in% .x)]]
         ) %>%
           purrr::imap_dfc(
             function(vec, colname) {
               attributes(vec) <-
-                attributes(x$meta_data$df_stats[[which(x$meta_data$variable  %in% .x)]][[colname]])
+                attributes(x$meta_data$df_stats[[which(x$meta_data$variable %in% .x)]][[colname]])
               vec
             }
           )
@@ -234,7 +234,7 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
   # adding overall stat to the table_body data frame
   x <-
     x %>%
-    modify_table_body(~bind_cols(.x, overall %>% select(c("stat_0"))))
+    modify_table_body(~ bind_cols(.x, overall %>% select(c("stat_0"))))
 
   # fill in the Ns in the header table modify_stat_* columns
   x$table_styling$header <-
@@ -266,9 +266,8 @@ add_overall_merge <- function(x, tbl_overall, last, col_label) {
     modify_header(
       stat_0 =
         col_label %||%
-        paste0("**", translate_text("Overall"), "**, N = {style_number(N)}"),
+          paste0("**", translate_text("Overall"), "**, N = {style_number(N)}"),
     )
 
   x
 }
-

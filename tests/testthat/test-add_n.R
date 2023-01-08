@@ -102,8 +102,10 @@ test_that("no errors/warnings with standard use with continuous2", {
   ), NA)
 
   expect_equal(
-    data.frame(x = c(1,2,NA, NA, NA, 1, 2, 1),
-               y = c(rep(0,4), rep(1,4))) %>%
+    data.frame(
+      x = c(1, 2, NA, NA, NA, 1, 2, 1),
+      y = c(rep(0, 4), rep(1, 4))
+    ) %>%
       tbl_summary(by = y) %>%
       add_n(statistic = "{n_miss}/{N} = {p_miss}%") %>%
       as_tibble(col_labels = FALSE) %>%
@@ -112,8 +114,10 @@ test_that("no errors/warnings with standard use with continuous2", {
   )
 
   expect_equal(
-    data.frame(x = c(1,2,NA, NA, NA, 1, 2, 1),
-               y = c(rep(0,4), rep(1,4))) %>%
+    data.frame(
+      x = c(1, 2, NA, NA, NA, 1, 2, 1),
+      y = c(rep(0, 4), rep(1, 4))
+    ) %>%
       select(x) %>%
       tbl_summary() %>%
       add_n(statistic = "{n_miss}/{N} = {p_miss}%") %>%

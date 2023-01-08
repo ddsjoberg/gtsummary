@@ -170,7 +170,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
   meta_data <-
     tibble(
       survfit = x,
-      tidy = map(.data$survfit, ~broom::tidy(.x)),
+      tidy = map(.data$survfit, ~ broom::tidy(.x)),
       stratified = map_lgl(.data$tidy, ~ "strata" %in% names(.x)),
       variable = survfit_to_var(.data$survfit, .data$stratified, .data$tidy, quiet)
     )
@@ -189,7 +189,7 @@ tbl_survfit.list <- function(x, times = NULL, probs = NULL,
     meta_data %>%
     mutate(
       var_label = survfit_to_label(.data$survfit, .data$variable, .data$stratified, label),
-      var_type = map_chr(.data$stratified, ~ifelse(.x, "categorical", "continuous"))
+      var_type = map_chr(.data$stratified, ~ ifelse(.x, "categorical", "continuous"))
     )
 
   meta_data <-
@@ -328,7 +328,7 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
             reverse = inputs$reverse,
             quiet = inputs$quiet, tidy = ..3,
             var_label = ..4,
-            estimate_fun =  estimate_fun
+            estimate_fun = estimate_fun
           ),
           "probs" = survfit_prob(..1,
             variable = ..2, probs = inputs$probs,
@@ -336,7 +336,7 @@ meta_to_df_stats <- function(meta_data, inputs, estimate_type, estimate_fun,
             conf.level = inputs$conf.level,
             quiet = inputs$quiet, tidy = ..3,
             var_label = ..4,
-            estimate_fun =  estimate_fun
+            estimate_fun = estimate_fun
           )
         )
       ),
@@ -421,7 +421,7 @@ survfit_prob <- function(x, variable, probs, label_header, conf.level, quiet,
         glue() %>% as.character()
     )
   if (length(strata) > 0) {
-    df_stat$variable_levels = df_stat$label
+    df_stat$variable_levels <- df_stat$label
   }
 
   # removing strata column if there are no stratum in survfit
@@ -527,7 +527,7 @@ survfit_time <- function(x, variable, times, label_header, conf.level,
       everything(), -"time_max"
     )
   if (length(strata) > 0) {
-    df_stat$variable_levels = df_stat$label
+    df_stat$variable_levels <- df_stat$label
   }
 
   # converting to reverse probs, if requested

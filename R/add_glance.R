@@ -166,9 +166,10 @@ add_glance_source_note <- function(x, include = everything(), label = NULL,
     left_join(lst_prep_glance$df_fmt_fun, by = c("variable" = "glance_statistic")) %>%
     rowwise() %>%
     mutate(
-      fmt_stat = do.call(fmt_fun, list(.data$estimate)) %>% {
-        paste0(.data$label, sep1, .)
-      }
+      fmt_stat = do.call(fmt_fun, list(.data$estimate)) %>%
+        {
+          paste0(.data$label, sep1, .)
+        }
     ) %>%
     pull("fmt_stat") %>%
     paste(collapse = sep2)

@@ -93,8 +93,7 @@ style_pvalue <- function(x, digits = 1, prepend_p = FALSE,
           decimal.mark = decimal.mark, ...
         ))
       )
-  }
-  else {
+  } else {
     stop("The `digits=` argument must be 1, 2, or 3.")
   }
 

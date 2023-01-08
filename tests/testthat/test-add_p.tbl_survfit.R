@@ -12,7 +12,9 @@ test_that("add_p.tbl_survfit works", {
 
   expect_snapshot(
     survfit_list %>%
-      purrr::map(~ tbl_survfit(.x, times = c(12, 24)) %>% add_p() %>% render_as_html())
+      purrr::map(~ tbl_survfit(.x, times = c(12, 24)) %>%
+        add_p() %>%
+        render_as_html())
   )
 
   expect_snapshot(

@@ -38,7 +38,7 @@ test_that("no errors/warnings with all output types", {
       trial %>%
       select(age) %>%
       tbl_summary() %>%
-      modify_table_body(~rename(.x, label2 = label)) %>%
+      modify_table_body(~ rename(.x, label2 = label)) %>%
       modify_column_unhide(label2) %>%
       modify_caption("captions are great"),
     NA

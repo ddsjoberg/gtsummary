@@ -13,14 +13,18 @@ test_that("add_ci() works", {
   )
   expect_equal(
     as_tibble(tbl1) %>% names(),
-    c("**Characteristic**", "**Drug A**, N = 98 (**95% CI**)",
-      "**Drug B**, N = 102 (**95% CI**)", "**p-value**")
+    c(
+      "**Characteristic**", "**Drug A**, N = 98 (**95% CI**)",
+      "**Drug B**, N = 102 (**95% CI**)", "**p-value**"
+    )
   )
   expect_equal(
     as_tibble(tbl1, col_labels = FALSE) %>% pull(stat_1),
     c("28 (29%) (21%, 40%)", "46 (37, 59) (44, 50)")
   )
-  tbl1 %>% render_as_html() %>% expect_snapshot()
+  tbl1 %>%
+    render_as_html() %>%
+    expect_snapshot()
 
   res <-
     trial %>%
@@ -40,10 +44,14 @@ test_that("add_ci() works", {
   )
   expect_equal(
     tbl1 %>% select(starts_with("ci_stat_")) %>% as.list(),
-    list(ci_stat_1 = c("21%, 40%", "44, 50"),
-         ci_stat_2 = c("25%, 44%", "45, 50"))
+    list(
+      ci_stat_1 = c("21%, 40%", "44, 50"),
+      ci_stat_2 = c("25%, 44%", "45, 50")
+    )
   )
-  res %>% render_as_html() %>% expect_snapshot()
+  res %>%
+    render_as_html() %>%
+    expect_snapshot()
 
   res <-
     trial %>%
@@ -51,11 +59,11 @@ test_that("add_ci() works", {
     tbl_summary(missing = "no") %>%
     add_ci(
       method = everything() ~ "exact",
-      statistic = everything() ~  "{conf.low} to {conf.high}"
+      statistic = everything() ~ "{conf.low} to {conf.high}"
     )
   expect_error(
     tbl2 <-
-      res  %>%
+      res %>%
       as_tibble(col_labels = FALSE),
     NA
   )
@@ -67,7 +75,9 @@ test_that("add_ci() works", {
     tbl2$ci_stat_0,
     c("25 to 39", NA, "42 to 56", "44 to 58")
   )
-  res %>% render_as_html() %>% expect_snapshot()
+  res %>%
+    render_as_html() %>%
+    expect_snapshot()
 })
 
 test_that("add_ci() throws errors with bad arguments", {
@@ -124,15 +134,19 @@ test_that("add_ci() works with tbl_svysummary", {
   )
   expect_equal(
     as_tibble(svyres) %>% names(),
-    c("**Characteristic**", "**No**, N = 1,692", "**95% CI**",
-      "**Yes**, N = 4,502", "**95% CI**")
+    c(
+      "**Characteristic**", "**No**, N = 1,692", "**95% CI**",
+      "**Yes**, N = 4,502", "**95% CI**"
+    )
   )
   expect_equal(
     as_tibble(svyres, col_labels = FALSE) %>% dplyr::pull(ci_stat_1),
     c("547, 722", "13, 28", NA, "43%, 81%", "6.6%, 27%", "8.7%, 46%")
   )
   expect_message(tbl %>% add_ci())
-  svyres %>% render_as_html() %>% expect_snapshot()
+  svyres %>%
+    render_as_html() %>%
+    expect_snapshot()
 
   expect_error(
     res <-
@@ -146,5 +160,7 @@ test_that("add_ci() works with tbl_svysummary", {
       ),
     NA
   )
-  res %>% render_as_html() %>% expect_snapshot()
+  res %>%
+    render_as_html() %>%
+    expect_snapshot()
 })

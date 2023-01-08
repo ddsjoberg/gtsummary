@@ -25,7 +25,7 @@
 #'     include = c("stage", "grade"),
 #'     by = "trt",
 #'     stat_fns = ~ continuous_summary("age"),
-#'     statistic = ~ "{median} [{p25}-{p75}]",
+#'     statistic = ~"{median} [{p25}-{p75}]",
 #'     overall_row = TRUE,
 #'     overall_row_label = "All stages & grades"
 #'   ) %>%
@@ -94,7 +94,7 @@ continuous_summary <- function(variable) {
 #'     include = c("stage", "grade"),
 #'     by = "trt",
 #'     stat_fns = ~ ratio_summary("response", "ttdeath"),
-#'     statistic = ~ "{ratio} [{conf.low}; {conf.high}] ({num}/{denom})",
+#'     statistic = ~"{ratio} [{conf.low}; {conf.high}] ({num}/{denom})",
 #'     digits = ~ c(3, 2, 2, 0, 0),
 #'     overall_row = TRUE,
 #'     overall_row_label = "All stages & grades"
@@ -180,9 +180,11 @@ ratio_summary <- function(numerator, denominator, na.rm = TRUE, conf.level = 0.9
 #'     include = c("Age", "Class"),
 #'     by = "Sex",
 #'     stat_fns = ~ proportion_summary("Survived", "Yes", weights = "Freq"),
-#'     statistic = ~ "{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
+#'     statistic = ~"{prop}% ({n}/{N}) [{conf.low}-{conf.high}]",
 #'     digits = ~ list(
-#'       function(x) {style_percent(x, digits = 1)},
+#'       function(x) {
+#'         style_percent(x, digits = 1)
+#'       },
 #'       0, 0, style_percent, style_percent
 #'     ),
 #'     overall_row = TRUE,
@@ -217,21 +219,22 @@ proportion_summary <- function(variable, value, weights = NULL, na.rm = TRUE,
       if (method %in% c("wilson", "wilson.no.correct")) {
         ci <-
           stats::prop.test(n, N,
-                           conf.level = conf.level,
-                           correct = isTRUE(method == "wilson")) %>%
+            conf.level = conf.level,
+            correct = isTRUE(method == "wilson")
+          ) %>%
           purrr::pluck("conf.int")
-      }
-      else if (method %in% c("exact", "asymptotic")) {
+      } else if (method %in% c("exact", "asymptotic")) {
         assert_package("Hmisc", fn = 'proportion_summary(method = c("exact", "asymptotic"))')
         ci <-
           Hmisc::binconf(n, N,
-                         method = method, alpha = 1 - conf.level)[2:3]
+            method = method, alpha = 1 - conf.level
+          )[2:3]
       }
     }
     dplyr::tibble(
       n = n,
       N = N,
-      prop = n/N,
+      prop = n / N,
       conf.low = ci[1],
       conf.high = ci[2]
     )

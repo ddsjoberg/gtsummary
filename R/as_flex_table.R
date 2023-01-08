@@ -93,7 +93,6 @@ as_flex_table <- function(x, include = everything(), return_calls = FALSE, ...) 
 
 # creating flextable calls from table_styling ----------------------------------
 table_styling_to_flextable_calls <- function(x, ...) {
-
   # adding id number for columns not hidden
   x$table_styling$header <-
     x$table_styling$header %>%
@@ -139,7 +138,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
       select("spanning_header") %>%
       mutate(
         spanning_header = ifelse(is.na(.data$spanning_header),
-                                 " ", .data$spanning_header
+          " ", .data$spanning_header
         ),
         spanning_header_id = dplyr::row_number()
       )
@@ -157,7 +156,7 @@ table_styling_to_flextable_calls <- function(x, ...) {
       distinct() %>%
       ungroup() %>%
       mutate(
-        column_id = purrr::map2(.data$spanning_header_id, .data$width, ~seq(.x, .x + .y - 1L, by = 1L))
+        column_id = purrr::map2(.data$spanning_header_id, .data$width, ~ seq(.x, .x + .y - 1L, by = 1L))
       )
 
     flextable_calls[["add_header_row"]] <- list(
@@ -242,15 +241,17 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
   df_footnote <-
     .number_footnotes(x) %>%
-    inner_join(x$table_styling$header %>%
-                 select("column", column_id = "id"),
-               by = "column"
+    inner_join(
+      x$table_styling$header %>%
+        select("column", column_id = "id"),
+      by = "column"
     ) %>%
     mutate(
       row_numbers =
         ifelse(.data$tab_location == "header",
-               header_i_index,
-               .data$row_numbers)
+          header_i_index,
+          .data$row_numbers
+        )
     ) %>%
     select(
       "footnote_id", "footnote", "tab_location",
@@ -306,9 +307,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
   df_bold <-
     x$table_styling$text_format %>%
     filter(.data$format_type == "bold") %>%
-    inner_join(x$table_styling$header %>%
-                 select("column", column_id = "id"),
-               by = "column"
+    inner_join(
+      x$table_styling$header %>%
+        select("column", column_id = "id"),
+      by = "column"
     ) %>%
     select("format_type", "row_numbers", "column_id")
 
@@ -326,9 +328,10 @@ table_styling_to_flextable_calls <- function(x, ...) {
   df_italic <-
     x$table_styling$text_format %>%
     filter(.data$format_type == "italic") %>%
-    inner_join(x$table_styling$header %>%
-                 select("column", column_id = "id"),
-               by = "column"
+    inner_join(
+      x$table_styling$header %>%
+        select("column", column_id = "id"),
+      by = "column"
     ) %>%
     select("format_type", "row_numbers", "column_id")
 
@@ -433,23 +436,34 @@ table_styling_to_flextable_calls <- function(x, ...) {
 
       stringr::str_split(x, pattern = break_chr) %>%
         unlist() %>%
-        purrr::discard(~.=="") %>%
+        purrr::discard(~ . == "") %>%
         purrr::map(
           function(.x) {
-            if (startsWith(.x, "**") && endsWith(.x, "**"))
+            if (startsWith(.x, "**") && endsWith(.x, "**")) {
               .x <-
                 stringr::str_replace_all(.x, pattern = "\\*\\*(.*?)\\*\\*", replacement = "\\1") %>%
-                {rlang::expr(flextable::as_b(!!.))}
-            else if (startsWith(.x, "_") && endsWith(.x, "_"))
+                {
+                  rlang::expr(flextable::as_b(!!.))
+                }
+            } else if (startsWith(.x, "_") && endsWith(.x, "_")) {
               .x <-
                 stringr::str_replace_all(.x, pattern = "\\_(.*?)\\_", replacement = "\\1") %>%
-                {rlang::expr(flextable::as_i(!!.))}
+                {
+                  rlang::expr(flextable::as_i(!!.))
+                }
+            }
 
             return(.x)
           }
         ) %>%
-        {switch(!rlang::is_empty(.), .) %||% ""} %>%
-        {rlang::expr(flextable::compose(part = !!part, i = !!i, j = !!j, value = flextable::as_paragraph(!!!.)))}
+        {
+          switch(!rlang::is_empty(.),
+            .
+          ) %||% ""
+        } %>%
+        {
+          rlang::expr(flextable::compose(part = !!part, i = !!i, j = !!j, value = flextable::as_paragraph(!!!.)))
+        }
     }
   )
 }

@@ -1,5 +1,4 @@
 test_that("style_number() works", {
-
   expect_equal(
     style_number(c(-0.5, 0.5)),
     c("-1", "1")

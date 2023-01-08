@@ -23,8 +23,10 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
 # this function is used to fill in missing values in the
 # x$table_styling$header$modify_stat_* columns
 .fill_table_header_modify_stats <-
-  function(x, modify_stats = c("modify_stat_N", "modify_stat_N_event",
-                               "modify_stat_N_unweighted")) {
+  function(x, modify_stats = c(
+             "modify_stat_N", "modify_stat_N_event",
+             "modify_stat_N_unweighted"
+           )) {
     modify_stats <-
       x$table_styling$header %>%
       select(any_of(modify_stats) & where(.single_value)) %>%
@@ -38,7 +40,9 @@ add_expr_after <- function(calls, add_after, expr, new_name = NULL) {
   }
 
 .single_value <- function(x) {
-  if (length(unique(stats::na.omit(x))) == 1L) return(TRUE)
+  if (length(unique(stats::na.omit(x))) == 1L) {
+    return(TRUE)
+  }
   FALSE
 }
 
@@ -71,10 +75,12 @@ gts_mapper <- function(x, context) {
 # This messaging was added in v1.6.0
 .get_deprecated_option <- function(x, default = NULL) {
   if (!is.null(getOption(x, default = NULL))) {
-    paste("Global option {.val {x}} is soft deprecated and will",
-          "{.emph soon} be removed from {.pkg gtsummary}.\nThe functionality",
-          "has been migrated to a function argument or a gtsummary theme.",
-          "\n{.url https://www.danieldsjoberg.com/gtsummary/articles/themes.html}") %>%
+    paste(
+      "Global option {.val {x}} is soft deprecated and will",
+      "{.emph soon} be removed from {.pkg gtsummary}.\nThe functionality",
+      "has been migrated to a function argument or a gtsummary theme.",
+      "\n{.url https://www.danieldsjoberg.com/gtsummary/articles/themes.html}"
+    ) %>%
       cli::cli_alert_danger()
   }
   getOption(x, default = default)
@@ -97,30 +103,48 @@ vec_paste0 <- function(..., collapse = NULL) {
 type_check <-
   list(
     is_string =
-      list(msg = "Expecting a string as the passed value.",
-           fn = function(x) is_string(x)),
+      list(
+        msg = "Expecting a string as the passed value.",
+        fn = function(x) is_string(x)
+      ),
     is_string_summary_type =
-      list(msg = "Expecting one of `c('categorical', 'dichotomous', 'continuous', 'continuous2')` as the passed value.",
-           fn = function(x) is_string(x) && x %in% c("categorical", "dichotomous", "continuous", "continuous2")),
+      list(
+        msg = "Expecting one of `c('categorical', 'dichotomous', 'continuous', 'continuous2')` as the passed value.",
+        fn = function(x) is_string(x) && x %in% c("categorical", "dichotomous", "continuous", "continuous2")
+      ),
     is_string_summary_sort =
-      list(msg = "Expecting one of `c('frequency', 'alphanumeric')` as the passed value.",
-           fn = function(x) is_string(x) && x %in% c("frequency", "alphanumeric")),
+      list(
+        msg = "Expecting one of `c('frequency', 'alphanumeric')` as the passed value.",
+        fn = function(x) is_string(x) && x %in% c("frequency", "alphanumeric")
+      ),
     is_character =
-      list(msg = "Expecting a character as the passed value.",
-           fn = function(x) is.character(x)),
+      list(
+        msg = "Expecting a character as the passed value.",
+        fn = function(x) is.character(x)
+      ),
     is_function =
-      list(msg = "Expecting a function as the passed value.",
-           fn = function(x) is.function(x)),
+      list(
+        msg = "Expecting a function as the passed value.",
+        fn = function(x) is.function(x)
+      ),
     is_function_or_string =
-      list(msg = "Expecting a function or a string of a function name.",
-           fn = function(x) is_string(x) || is.function(x)),
+      list(
+        msg = "Expecting a function or a string of a function name.",
+        fn = function(x) is_string(x) || is.function(x)
+      ),
     is_string_or_na =
-      list(msg = "Expecting a string or NA as the passed value.",
-           fn = function(x) is_string(x) || is.na(x)),
+      list(
+        msg = "Expecting a string or NA as the passed value.",
+        fn = function(x) is_string(x) || is.na(x)
+      ),
     is_named =
-      list(msg = "Expecting a named vector or list as the passed value.",
-           fn = function(x) is_named(x)),
+      list(
+        msg = "Expecting a named vector or list as the passed value.",
+        fn = function(x) is_named(x)
+      ),
     digits =
-      list(msg = "Expecting an integer, function, or a vector/list of intergers/functions as the passed value.",
-           fn = function(x) rlang::is_integerish(x) || is.function(x) || purrr::every(x, ~rlang::is_integerish(.x) || is.function(.x)))
+      list(
+        msg = "Expecting an integer, function, or a vector/list of intergers/functions as the passed value.",
+        fn = function(x) rlang::is_integerish(x) || is.function(x) || purrr::every(x, ~ rlang::is_integerish(.x) || is.function(.x))
+      )
   )

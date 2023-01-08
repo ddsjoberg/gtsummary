@@ -24,7 +24,6 @@
 #'   modify_column_indent(columns = label, undo = TRUE)
 modify_column_indent <- function(x, columns, rows = NULL,
                                  double_indent = FALSE, undo = FALSE) {
-
   modify_table_styling(
     x,
     columns = {{ columns }},
@@ -32,5 +31,4 @@ modify_column_indent <- function(x, columns, rows = NULL,
     text_format = ifelse(double_indent, "indent2", "indent"),
     undo_text_format = undo
   )
-
 }

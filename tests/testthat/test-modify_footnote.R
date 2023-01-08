@@ -20,7 +20,7 @@ test_that("modify_footnote works", {
       modify_footnote(
         label = "Variable Footnote",
         starts_with("stat_") ~
-        "median (IQR) for continuous variables; n (%) categorical variables"
+          "median (IQR) for continuous variables; n (%) categorical variables"
       ) %>%
       render_as_html()
   )

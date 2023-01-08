@@ -90,7 +90,8 @@ modify_column_merge_ex1 <-
   select(age, marker, trt) \%>\%
   tbl_summary(by = trt, missing = "no") \%>\%
   add_p(all_continuous() ~ "t.test",
-        pvalue_fun = ~style_pvalue(., prepend_p = TRUE)) \%>\%
+    pvalue_fun = ~ style_pvalue(., prepend_p = TRUE)
+  ) \%>\%
   modify_fmt_fun(statistic ~ style_sigfig) \%>\%
   modify_column_merge(pattern = "t = {statistic}; {p.value}") \%>\%
   modify_header(statistic ~ "**t-test**")

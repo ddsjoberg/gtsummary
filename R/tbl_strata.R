@@ -78,15 +78,15 @@
 #'   tbl_strata2(
 #'     strata = grade,
 #'     .tbl_fun =
-#'       ~.x %>%
-#'       tbl_summary(
-#'         label = list(response = .y),
-#'         missing = "no",
-#'         statistic = response ~ "{p}%"
-#'       ) %>%
-#'       add_ci(pattern = "{stat} ({ci})") %>%
-#'      modify_header(stat_0 = "**Rate (95% CI)**") %>%
-#'      modify_footnote(stat_0 = NA),
+#'       ~ .x %>%
+#'         tbl_summary(
+#'           label = list(response = .y),
+#'           missing = "no",
+#'           statistic = response ~ "{p}%"
+#'         ) %>%
+#'         add_ci(pattern = "{stat} ({ci})") %>%
+#'         modify_header(stat_0 = "**Rate (95% CI)**") %>%
+#'         modify_footnote(stat_0 = NA),
 #'     .combine_with = "tbl_stack",
 #'     .combine_args = list(group_header = NULL),
 #'     .quiet = TRUE
@@ -121,20 +121,21 @@ tbl_strata <- function(data,
                          ifelse(.combine_with == "tbl_merge", "**{strata}**", "{strata}"),
                        .stack_group_header = NULL,
                        .quiet = NULL) {
-
   .combine_with <- match.arg(.combine_with)
   # run `tbl_strata()``
-  tbl_strata_internal(data = data,
-                      strata = {{ strata }},
-                      .tbl_fun = .tbl_fun,
-                      ...,
-                      .sep = .sep,
-                      .combine_with = .combine_with,
-                      .combine_args = .combine_args,
-                      .header = .header,
-                      .stack_group_header = .stack_group_header,
-                      .quiet = .quiet,
-                      .parent_fun = "tbl_strata")
+  tbl_strata_internal(
+    data = data,
+    strata = {{ strata }},
+    .tbl_fun = .tbl_fun,
+    ...,
+    .sep = .sep,
+    .combine_with = .combine_with,
+    .combine_args = .combine_args,
+    .header = .header,
+    .stack_group_header = .stack_group_header,
+    .quiet = .quiet,
+    .parent_fun = "tbl_strata"
+  )
 }
 
 #' @export
@@ -150,20 +151,21 @@ tbl_strata2 <- function(data,
                           ifelse(.combine_with == "tbl_merge", "**{strata}**", "{strata}"),
                         .stack_group_header = NULL,
                         .quiet = NULL) {
-
   .combine_with <- match.arg(.combine_with)
   # run `tbl_strata()``
-  tbl_strata_internal(data = data,
-                      strata = {{ strata }},
-                      .tbl_fun = .tbl_fun,
-                      ...,
-                      .sep = .sep,
-                      .combine_with = .combine_with,
-                      .combine_args = .combine_args,
-                      .header = .header,
-                      .stack_group_header = .stack_group_header,
-                      .quiet = .quiet,
-                      .parent_fun = "tbl_strata2")
+  tbl_strata_internal(
+    data = data,
+    strata = {{ strata }},
+    .tbl_fun = .tbl_fun,
+    ...,
+    .sep = .sep,
+    .combine_with = .combine_with,
+    .combine_args = .combine_args,
+    .header = .header,
+    .stack_group_header = .stack_group_header,
+    .quiet = .quiet,
+    .parent_fun = "tbl_strata2"
+  )
 }
 
 tbl_strata_internal <- function(data,
@@ -191,8 +193,7 @@ tbl_strata_internal <- function(data,
   # selecting stratum ----------------------------------------------------------
   strata <-
     select(
-      switch(
-        is_survey(data),
+      switch(is_survey(data),
         data$variables
       ) %||% data, # select from data frame
       {{ strata }}
@@ -209,8 +210,7 @@ tbl_strata_internal <- function(data,
       data_for_strata %>%
       mutate(strata = paste(!!!syms(strata), sep = .sep)) %>%
       df_by(by = "strata")
-  }
-  else {
+  } else {
     data_for_strata$variables <-
       data_for_strata$variables %>%
       mutate(strata = paste(!!!syms(strata), sep = .sep))
@@ -220,9 +220,13 @@ tbl_strata_internal <- function(data,
   }
   df_by <-
     df_by %>%
-    select(strata = "by",
-           any_of(c("n", "N", "p",
-                    "n_unweighted", "N_unweighted", "p_unweighted"))) %>%
+    select(
+      strata = "by",
+      any_of(c(
+        "n", "N", "p",
+        "n_unweighted", "N_unweighted", "p_unweighted"
+      ))
+    ) %>%
     mutate(header = glue::glue_data(dplyr::cur_data(), .header))
 
   # nesting data and building tbl objects --------------------------------------
@@ -239,12 +243,10 @@ tbl_strata_internal <- function(data,
     ) %>%
     mutate(
       tbl =
-        switch(
-          .parent_fun,
+        switch(.parent_fun,
           "tbl_strata" = map(.data$data, .tbl_fun, ...),
           "tbl_strata2" = map2(.data$data, .data$header, .tbl_fun, ...)
         )
-
     )
 
   # deprecated argument --------------------------------------------------------
@@ -253,17 +255,15 @@ tbl_strata_internal <- function(data,
       when = "1.5.1",
       what = "gtsummary::tbl_strata(.stack_group_header)",
       details =
-        switch(
-          isFALSE(.stack_group_header),
+        switch(isFALSE(.stack_group_header),
           glue(
             "Use the following instead:\n",
-            "gtsummary::tbl_strata(.combine_args = list(group_header = NULL))")
+            "gtsummary::tbl_strata(.combine_args = list(group_header = NULL))"
+          )
         )
-
     )
     .combine_args <-
-      switch(
-        isFALSE(.stack_group_header),
+      switch(isFALSE(.stack_group_header),
         list(group_header = NULL)
       ) %||%
       list(group_header = df_tbls$strata)
@@ -272,8 +272,7 @@ tbl_strata_internal <- function(data,
   # combining tbls -------------------------------------------------------------
   .combine_args <-
     # default arguments
-    switch(
-      .combine_with,
+    switch(.combine_with,
       "tbl_merge" = list(tab_spanner = df_tbls$header),
       "tbl_stack" = list(group_header = df_tbls$header, quiet = .quiet)
     ) %>%
@@ -282,8 +281,7 @@ tbl_strata_internal <- function(data,
 
   if (.combine_with == "tbl_merge") {
     tbl <- rlang::inject(tbl_merge(tbls = df_tbls$tbl, !!!.combine_args))
-  }
-  else if (.combine_with == "tbl_stack") {
+  } else if (.combine_with == "tbl_stack") {
     tbl <- rlang::inject(tbl_stack(tbls = df_tbls$tbl, !!!.combine_args))
   }
 

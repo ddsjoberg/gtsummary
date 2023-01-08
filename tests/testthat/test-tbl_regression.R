@@ -7,8 +7,8 @@ mod_lm <- lm(hp ~ am, data = mtcars)
 mod_survreg <- survival::survreg(survival::Surv(time, status) ~ age + ph.ecog, data = survival::lung)
 mod_logistic <- glm(response ~ age + stage, trial, family = binomial)
 mod_poisson <- glm(count ~ age + trt,
-                   trial %>% dplyr::mutate(count = dplyr::row_number() %% 10),
-                   family = poisson
+  trial %>% dplyr::mutate(count = dplyr::row_number() %% 10),
+  family = poisson
 )
 mod_lmer <- lme4::lmer(Reaction ~ Days + (Days | Subject), lme4::sleepstudy)
 mod_glmer <- lme4::glmer(am ~ hp + factor(cyl) + (1 | gear), mtcars, family = binomial)
@@ -173,9 +173,10 @@ test_that("All labels print with cubic splines", {
   rsc_mod <- lm(age ~ spline_fun(marker, inclx = TRUE) + response, trial)
 
   expect_equal(
-    tbl_regression(rsc_mod) %>% purrr::pluck("table_body", "label") %>% {
-      sum(is.na(.))
-    },
+    tbl_regression(rsc_mod) %>% purrr::pluck("table_body", "label") %>%
+      {
+        sum(is.na(.))
+      },
     0
   )
 })
@@ -187,8 +188,8 @@ test_that("Testing lme4 results", {
   # tbl_regerssion runs without error
   expect_error(
     tbl_lme4 <- tbl_regression(mod_glmer,
-                               exponentiate = TRUE,
-                               conf.level = 0.90
+      exponentiate = TRUE,
+      conf.level = 0.90
     ),
     NA
   )
@@ -237,8 +238,8 @@ test_that("tidymodels/parsnip/workflows", {
 
   expect_equal(
     parsnip::linear_reg() %>%
-      parsnip::set_engine('lm') %>%
-      parsnip::set_mode('regression') %>%
+      parsnip::set_engine("lm") %>%
+      parsnip::set_mode("regression") %>%
       parsnip::fit(age ~ grade + stage, data = trial) %>%
       tbl_regression() %>%
       purrr::pluck("table_body"),
@@ -265,7 +266,7 @@ test_that("tidymodels/parsnip/workflows", {
 
 test_that("tidycrr models work", {
   skip_if_not(broom.helpers::.assert_package("tidycmprsk", pkg_search = "gtsummary", boolean = TRUE))
-  mod <- tidycmprsk::crr(tidycmprsk::Surv(ttdeath, death_cr) ~  age + grade, tidycmprsk::trial)
+  mod <- tidycmprsk::crr(tidycmprsk::Surv(ttdeath, death_cr) ~ age + grade, tidycmprsk::trial)
 
   expect_error(
     tbl <- tbl_regression(mod, exponentiate = TRUE),
@@ -284,10 +285,10 @@ test_that("cmprsk::crr models message", {
 
   set.seed(10)
   ftime <- rexp(200)
-  fstatus <- sample(0:2,200,replace=TRUE)
-  cov <- matrix(runif(600),nrow=200)
-  dimnames(cov)[[2]] <- c('x1','x2','x3')
-  mod <- cmprsk::crr(ftime,fstatus,cov)
+  fstatus <- sample(0:2, 200, replace = TRUE)
+  cov <- matrix(runif(600), nrow = 200)
+  dimnames(cov)[[2]] <- c("x1", "x2", "x3")
+  mod <- cmprsk::crr(ftime, fstatus, cov)
 
   expect_message(tbl_regression(mod))
 })
@@ -306,8 +307,10 @@ test_that("NSE args could be passed to tidy_plus_plus()", {
   res <- as_tibble(res)
   expect_equal(
     unname(res[[1]]),
-    c("Age", "Chemotherapy Treatment", "Drug A", "Drug B", "T Stage",
-      "T2", "T3", "T4", "Grade", "II", "III")
+    c(
+      "Age", "Chemotherapy Treatment", "Drug A", "Drug B", "T Stage",
+      "T2", "T3", "T4", "Grade", "II", "III"
+    )
   )
 })
 
@@ -324,7 +327,9 @@ test_that("`add_header_rows = FALSE` could be passed to tidy_plus_plus()", {
   res <- as_tibble(res)
   expect_equal(
     unname(res[[1]]),
-    c("Age", "Drug A", "Drug B", "T1", "T2", "T3", "T4", "I", "II",
-      "III")
+    c(
+      "Age", "Drug A", "Drug B", "T1", "T2", "T3", "T4", "I", "II",
+      "III"
+    )
   )
 })

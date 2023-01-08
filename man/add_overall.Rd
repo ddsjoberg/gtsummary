@@ -109,12 +109,12 @@ tbl_overall_ex2 <-
     include = grade,
     by = trt,
     percent = "row",
-    statistic = ~ "{p}\%",
-    digits = ~ 1
+    statistic = ~"{p}\%",
+    digits = ~1
   ) \%>\%
   add_overall(
     last = TRUE,
-    statistic = ~ "{p}\% (n={n})",
+    statistic = ~"{p}\% (n={n})",
     digits = ~ c(1, 0)
   )
 
