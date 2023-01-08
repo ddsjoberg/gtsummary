@@ -311,15 +311,15 @@ each stratum's summary table.</p></li>
 <span class="r-in"><span>  <span class="fu">tbl_strata2</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    strata <span class="op">=</span> <span class="va">grade</span>,</span></span>
 <span class="r-in"><span>    .tbl_fun <span class="op">=</span></span></span>
-<span class="r-in"><span>      <span class="op">~</span><span class="va">.x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>      <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>response <span class="op">=</span> <span class="va">.y</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        missing <span class="op">=</span> <span class="st">"no"</span>,</span></span>
-<span class="r-in"><span>        statistic <span class="op">=</span> <span class="va">response</span> <span class="op">~</span> <span class="st">"{p}%"</span></span></span>
-<span class="r-in"><span>      <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>      <span class="fu"><a href="add_ci.html">add_ci</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"{stat} ({ci})"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>     <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="st">"**Rate (95% CI)**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>     <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>      <span class="op">~</span> <span class="va">.x</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="tbl_summary.html">tbl_summary</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>          label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>response <span class="op">=</span> <span class="va">.y</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>          missing <span class="op">=</span> <span class="st">"no"</span>,</span></span>
+<span class="r-in"><span>          statistic <span class="op">=</span> <span class="va">response</span> <span class="op">~</span> <span class="st">"{p}%"</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="add_ci.html">add_ci</a></span><span class="op">(</span>pattern <span class="op">=</span> <span class="st">"{stat} ({ci})"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="modify.html">modify_header</a></span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="st">"**Rate (95% CI)**"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="modify.html">modify_footnote</a></span><span class="op">(</span>stat_0 <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    .combine_with <span class="op">=</span> <span class="st">"tbl_stack"</span>,</span></span>
 <span class="r-in"><span>    .combine_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>group_header <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    .quiet <span class="op">=</span> <span class="cn">TRUE</span></span></span>
