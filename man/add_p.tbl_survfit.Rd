@@ -103,7 +103,7 @@ add_p_tbl_survfit_ex2 <-
 Other tbl_survfit tools: 
 \code{\link{add_n.tbl_survfit}()},
 \code{\link{add_nevent.tbl_survfit}()},
-\code{\link{modify}},
+\code{\link{modify}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},

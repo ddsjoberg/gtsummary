@@ -46,7 +46,7 @@ Review \link[=syntax]{list, formula, and selector syntax} used throughout gtsumm
 Other tbl_survfit tools: 
 \code{\link{add_nevent.tbl_survfit}()},
 \code{\link{add_p.tbl_survfit}()},
-\code{\link{modify}},
+\code{\link{modify}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},

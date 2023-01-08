@@ -80,7 +80,7 @@ Other tbl_uvregression tools:
 \code{\link{add_global_p}()},
 \code{\link{add_q}()},
 \code{\link{bold_italicize_labels_levels}},
-\code{\link{modify}},
+\code{\link{modify}()},
 \code{\link{tbl_merge}()},
 \code{\link{tbl_split}()},
 \code{\link{tbl_stack}()},
