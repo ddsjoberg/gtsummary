@@ -144,15 +144,18 @@ add_stat <- function(x, fns, location = NULL, ...) {
   # deprecated arguments -------------------------------------------------------
   dots <- rlang::dots_list(...)
   dep_args <-
-    list(fmt_fun = list("gtsummary::add_stat(fmt_fun=)", "modify_fmt_fun()"),
-         header = list("gtsummary::add_stat(header=)", "modify_header()"),
-         footnote = list("gtsummary::add_stat(footnote=)", "modify_footnote()"),
-         new_col_name = list("gtsummary::add_stat(new_col_name=)", NULL))
+    list(
+      fmt_fun = list("gtsummary::add_stat(fmt_fun=)", "modify_fmt_fun()"),
+      header = list("gtsummary::add_stat(header=)", "modify_header()"),
+      footnote = list("gtsummary::add_stat(footnote=)", "modify_footnote()"),
+      new_col_name = list("gtsummary::add_stat(new_col_name=)", NULL)
+    )
   purrr::iwalk(
     dep_args,
     function(.x, .y) {
-      if (!is.null(dots[[.y]]))
+      if (!is.null(dots[[.y]])) {
         lifecycle::deprecate_stop(when = "1.4.0", what = .x[[1]], with = .x[[2]])
+      }
     }
   )
 
@@ -168,8 +171,8 @@ add_stat <- function(x, fns, location = NULL, ...) {
     .formula_list_to_named_list(
       x = location,
       data = switch(class(x)[1],
-                    "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
-                    "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
+        "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
+        "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
       ),
       var_info = x$table_body,
       arg_name = "location",
@@ -179,7 +182,7 @@ add_stat <- function(x, fns, location = NULL, ...) {
   imap(
     location,
     ~ switch(!is_string(.x) || !.x %in% c("label", "level", "missing"),
-             abort("RHS of `location=` formulas must be one of 'label', 'level', or 'missing'")
+      abort("RHS of `location=` formulas must be one of 'label', 'level', or 'missing'")
     )
   )
 
@@ -187,8 +190,8 @@ add_stat <- function(x, fns, location = NULL, ...) {
     .formula_list_to_named_list(
       x = fns,
       data = switch(class(x)[1],
-                    "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
-                    "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
+        "tbl_summary" = select(x$inputs$data, any_of(x$meta_data$variable)),
+        "tbl_svysummary" = select(x$inputs$data$variables, any_of(x$meta_data$variable))
       ),
       var_info = x$table_body,
       arg_name = "fns",
@@ -209,7 +212,7 @@ add_stat <- function(x, fns, location = NULL, ...) {
   df_new_stat <-
     tibble(variable = names(fns)) %>%
     left_join(x$meta_data %>% select("variable", "summary_type"),
-              by = "variable"
+      by = "variable"
     ) %>%
     mutate(
       row_type = map_chr(.data$variable, ~ location[[.x]] %||% "label"),
@@ -227,7 +230,7 @@ add_stat <- function(x, fns, location = NULL, ...) {
   df_new_stat$df_add_stats <-
     df_new_stat$df_add_stats %>%
     map(~ switch(is.data.frame(.x),
-                 .x
+      .x
     ) %||% tibble(!!stat_col_name := .x))
 
   # check dims of calculated statistics ----------------------------------------

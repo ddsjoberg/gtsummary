@@ -56,7 +56,8 @@
 #'   select(age, marker, trt) %>%
 #'   tbl_summary(by = trt, missing = "no") %>%
 #'   add_p(all_continuous() ~ "t.test",
-#'         pvalue_fun = ~style_pvalue(., prepend_p = TRUE)) %>%
+#'     pvalue_fun = ~ style_pvalue(., prepend_p = TRUE)
+#'   ) %>%
 #'   modify_fmt_fun(statistic ~ style_sigfig) %>%
 #'   modify_column_merge(pattern = "t = {statistic}; {p.value}") %>%
 #'   modify_header(statistic ~ "**t-test**")
@@ -92,7 +93,7 @@ modify_column_merge <- function(x, pattern, rows = NULL) {
   columns <-
     pattern %>%
     str_extract_all("\\{.*?\\}") %>%
-    map(~str_remove_all(.x, pattern = "^\\{|\\}$")) %>%
+    map(~ str_remove_all(.x, pattern = "^\\{|\\}$")) %>%
     unlist()
   if (length(columns) == 0L) {
     cli::cli_alert_danger("No column names found in {.code modify_column_merge(pattern=)}")
@@ -101,9 +102,11 @@ modify_column_merge <- function(x, pattern, rows = NULL) {
   }
   if (!all(columns %in% names(x$table_body))) {
     problem_cols <- columns %>% setdiff(names(x$table_body))
-    paste("Some columns specified in {.code modify_column_merge(pattern=)}",
-          "were not found in the table, e.g. {.val {problem_cols}}") %>%
-    cli::cli_alert_danger()
+    paste(
+      "Some columns specified in {.code modify_column_merge(pattern=)}",
+      "were not found in the table, e.g. {.val {problem_cols}}"
+    ) %>%
+      cli::cli_alert_danger()
     cli::cli_ul("Select from {.val {names(x$table_body)}}.")
     abort("Error in `pattern=` argument")
   }

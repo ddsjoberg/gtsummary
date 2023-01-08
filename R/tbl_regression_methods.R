@@ -27,17 +27,21 @@ tbl_regression.workflow <- function(x, ...) {
   assert_package("workflows", "tbl_regression.workflow()")
 
   if (isTRUE(!x$pre$actions$formula$blueprint$indicators %in% "none")) {
-    paste("To take full advantage of model formatting, e.g. grouping categorical",
-          "variables, please add the following argument to the `workflows::add_model()` call:") %>%
+    paste(
+      "To take full advantage of model formatting, e.g. grouping categorical",
+      "variables, please add the following argument to the `workflows::add_model()` call:"
+    ) %>%
       stringr::str_wrap() %>%
       paste("`blueprint = hardhat::default_formula_blueprint(indicators = 'none')`", sep = "\n") %>%
       paste("\n") %>%
       rlang::inform()
   }
 
-  paste("Extracting {workflows} model fit with",
-        "`workflows::extract_fit_parsnip(x) %>% tbl_regression(...)`") %>%
-  message()
+  paste(
+    "Extracting {workflows} model fit with",
+    "`workflows::extract_fit_parsnip(x) %>% tbl_regression(...)`"
+  ) %>%
+    message()
 
   tbl_regression(x = workflows::extract_fit_parsnip(x), ...)
 }
@@ -146,7 +150,7 @@ tbl_regression.multinom <- function(x, ...) {
     modify_table_styling(
       x = x,
       columns = all_of("groupname_col"),
-      hide= FALSE,
+      hide = FALSE,
       label = "**Outcome**",
       align = "left"
     )

@@ -1,8 +1,10 @@
 # 1. install pkg that will run and save the documentation images
 install.packages(
-  'gt.doc.images',
-  repos = c(ddsjoberg = 'https://ddsjoberg.r-universe.dev',
-            CRAN = 'https://cloud.r-project.org')
+  "gt.doc.images",
+  repos = c(
+    ddsjoberg = "https://ddsjoberg.r-universe.dev",
+    CRAN = "https://cloud.r-project.org"
+  )
 )
 
 # 2. Install the most recent version of gtsummary
@@ -21,16 +23,20 @@ install.packages(
 gt.doc.images::save_help_file_images(pkg = "gtsummary", path.output = file.path(path, "man-images"))
 
 # document a single file with
-gt.doc.images::save_help_file_images(pkg = "gtsummary",
-                                     rd_files = "add_ci.Rd",
-                                     path.output = file.path(here::here(), "man-images"))
+gt.doc.images::save_help_file_images(
+  pkg = "gtsummary",
+  rd_files = "add_ci.Rd",
+  path.output = file.path(here::here(), "man-images")
+)
 
 # 5. Shrink png files
 gt.doc.images::shrink_help_file_images(pkg = "gtsummary", path.output = file.path(path, "man-images"))
 
 gt.doc.images::shrink_help_file_images(pkg = "gtsummary", image_files = "tbl_strata_ex1.png", path.output = file.path(path, "man-images"))
 
-c("as_kable_extra_ex1_pdf.png", "as_kable_extra_ex2_pdf.png",
+c(
+  "as_kable_extra_ex1_pdf.png", "as_kable_extra_ex2_pdf.png",
   "as_flex_table_ex1.png",
-  "gt_output_formats.PNG") |>
-  purrr::walk(~webshot2::shrink(here::here("man", "figures", .x)))
+  "gt_output_formats.PNG"
+) |>
+  purrr::walk(~ webshot2::shrink(here::here("man", "figures", .x)))

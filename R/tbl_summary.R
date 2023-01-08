@@ -237,7 +237,8 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
   missing_text <-
     missing_text %||%
     get_theme_element("tbl_summary-arg:missing_text",
-                      default = translate_text("Unknown"))
+      default = translate_text("Unknown")
+    )
   sort <- sort %||% get_theme_element("tbl_summary-arg:sort")
   percent <- percent %||% get_theme_element("tbl_summary-arg:percent",
     default = "column"
@@ -318,14 +319,15 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       x$table_styling$header %>%
       dplyr::left_join(
         x$df_by %>%
-          select(column = "by_col",
-                 modify_stat_n = "n",
-                 modify_stat_p = "p",
-                 modify_stat_level = "by_chr"),
+          select(
+            column = "by_col",
+            modify_stat_n = "n",
+            modify_stat_p = "p",
+            modify_stat_level = "by_chr"
+          ),
         by = "column"
       )
-  }
-  else {
+  } else {
     x$table_styling$header <-
       x$table_styling$header %>%
       mutate(
@@ -346,10 +348,13 @@ tbl_summary <- function(data, by = NULL, label = NULL, statistic = NULL,
       label = paste0("**", translate_text("Characteristic"), "**"),
       all_stat_cols() ~
         ifelse(is.null(by),
-               get_theme_element("tbl_summary-str:header-noby",
-                                 default = "**N = {style_number(N)}**"),
-               get_theme_element("tbl_summary-str:header-withby",
-                                 default = "**{level}**, N = {style_number(n)}"))
+          get_theme_element("tbl_summary-str:header-noby",
+            default = "**N = {style_number(N)}**"
+          ),
+          get_theme_element("tbl_summary-str:header-withby",
+            default = "**{level}**, N = {style_number(n)}"
+          )
+        )
     )
 
   # assign class and return final tbl ------------------------------------------

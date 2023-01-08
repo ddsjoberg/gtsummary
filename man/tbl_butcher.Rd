@@ -30,18 +30,18 @@ properly.
 \examples{
 \donttest{
 tbl_large <-
- trial \%>\%
- tbl_uvregression(
-   y = age,
-   method = lm
- )
+  trial \%>\%
+  tbl_uvregression(
+    y = age,
+    method = lm
+  )
 
- tbl_butchered <-
-   tbl_large \%>\%
-   tbl_butcher()
+tbl_butchered <-
+  tbl_large \%>\%
+  tbl_butcher()
 
- # size comparison
- object.size(tbl_large) \%>\% format(units = "Mb")
- object.size(tbl_butchered) \%>\% format(units = "Mb")
- }
+# size comparison
+object.size(tbl_large) \%>\% format(units = "Mb")
+object.size(tbl_butchered) \%>\% format(units = "Mb")
+}
 }

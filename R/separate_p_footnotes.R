@@ -32,10 +32,12 @@
 separate_p_footnotes <- function(x) {
   # check inputs ---------------------------------------------------------------
   .assert_class(x, "gtsummary")
-  if (!"p.value" %in% names(x$table_body))
+  if (!"p.value" %in% names(x$table_body)) {
     stop("`x=` must be a gtsummary table with a p-value column.", call. = FALSE)
-  if (!"stat_test_lbl" %in% names(x$meta_data))
+  }
+  if (!"stat_test_lbl" %in% names(x$meta_data)) {
     stop("The `x$meta_data` data frame must have a column called 'stat_test_lbl'.")
+  }
 
 
   # remove p-value column footnote ---------------------------------------------
@@ -48,10 +50,12 @@ separate_p_footnotes <- function(x) {
     tibble::deframe() %>%
     map(translate_text) %>%
     purrr::imap(
-      ~rlang::expr(
-        gtsummary::modify_table_styling(columns = "p.value",
-                                        rows = .data$variable %in% !!.y & !is.na(.data$p.value),
-                                        footnote = !!.x)
+      ~ rlang::expr(
+        gtsummary::modify_table_styling(
+          columns = "p.value",
+          rows = .data$variable %in% !!.y & !is.na(.data$p.value),
+          footnote = !!.x
+        )
       )
     )
 

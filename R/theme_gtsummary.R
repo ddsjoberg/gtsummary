@@ -168,8 +168,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
           )
         }
       )
-  }
-  else if (journal == "nejm") {
+  } else if (journal == "nejm") {
     lst_theme <-
       list(
         "pkgwide-str:theme_name" = "New England Journal of Medicine",
@@ -181,8 +180,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "tbl_summary-str:categorical_stat" = "{n} ({p})",
         "pkgwide-str:ci.sep" = " to "
       )
-  }
-  else if (journal == "lancet") {
+  } else if (journal == "lancet") {
     lst_theme <-
       list(
         "pkgwide-str:theme_name" = "The Lancet",
@@ -194,8 +192,7 @@ theme_gtsummary_journal <- function(journal = c("jama", "lancet", "nejm", "qjeco
         "style_number-arg:big.mark" = "\U2009",
         "pkgwide-str:ci.sep" = " to "
       )
-  }
-  else if (journal == "qjecon") {
+  } else if (journal == "qjecon") {
     lst_theme <-
       list(
         "pkgwide-str:theme_name" = "The Quarterly Journal of Economics",

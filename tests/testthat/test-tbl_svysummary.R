@@ -78,7 +78,7 @@ test_that("tbl_svysummary works in character inputs for `by=`", {
   expect_snapshot(
     purrr::map(
       c("Survived", "Class", "Sex", "Age"),
-      ~tbl_svysummary(d, by = all_of(.x)) %>% as_tibble()
+      ~ tbl_svysummary(d, by = all_of(.x)) %>% as_tibble()
     )
   )
 })
@@ -269,7 +269,8 @@ test_that("tbl_svysummary-order of output columns", {
       survey::svydesign(data = ., ids = ~1, weights = ~1) %>%
       tbl_svysummary(by = grade_str) %>%
       purrr::pluck("table_body") %>%
-      names() %>% {
+      names() %>%
+      {
         .[startsWith(., "stat_")]
       },
     paste0("stat_", 1:3)
@@ -281,9 +282,9 @@ test_that("tbl_svysummary-all_categorical() use with `type=`", {
   expect_true(
     !"dichotomous" %in%
       (survey::svydesign(data = trial, ids = ~1, weights = ~1) %>%
-         tbl_svysummary(type = all_dichotomous() ~ "categorical") %>%
-         purrr::pluck("meta_data") %>%
-         dplyr::pull(summary_type))
+        tbl_svysummary(type = all_dichotomous() ~ "categorical") %>%
+        purrr::pluck("meta_data") %>%
+        dplyr::pull(summary_type))
   )
 })
 
@@ -533,7 +534,8 @@ test_that("tbl_svysummary() works with date and date/time", {
       dates = as.Date("2021-02-20") + 1:10,
       times = as.POSIXct("2021-02-20 20:31:33 EST") + 1:10,
       group = 1:10 %% 2
-    ) %>% {
+    ) %>%
+    {
       survey::svydesign(~1, data = ., weights = ~1)
     }
 
@@ -586,9 +588,11 @@ test_that("tbl_svysummary() works with date and date/time", {
   # checking that formatting the unweighted proportion works
   data(api, package = "survey")
   dstrat <-
-    survey::svydesign(id = ~1, strata = ~stype,
-                      weights = ~pw, data = apistrat, fpc = ~fpc,
-                      variables = apistrat[, c("pcttest", "growth", "awards")])
+    survey::svydesign(
+      id = ~1, strata = ~stype,
+      weights = ~pw, data = apistrat, fpc = ~fpc,
+      variables = apistrat[, c("pcttest", "growth", "awards")]
+    )
   expect_equal(
     tbl_svysummary(
       data = dstrat,
@@ -617,7 +621,7 @@ test_that("tbl_svysummary() works with date and date/time", {
 
 test_that("tbl_svysummary() works with 0/1 variables", {
   expect_snapshot(
-    survey::svydesign(data = trial, ids = ~ 1, weights = ~ 1) %>%
+    survey::svydesign(data = trial, ids = ~1, weights = ~1) %>%
       tbl_svysummary(include = response) %>%
       render_as_html()
   )
@@ -625,7 +629,7 @@ test_that("tbl_svysummary() works with 0/1 variables", {
 
 test_that("tbl_svysummary() works with a factor having only one levem", {
   d <- tibble(fct = factor(c("a", "a", "a", "a", "a"))) %>%
-    survey::svydesign(data = ., ids = ~ 1, weights = ~ 1)
+    survey::svydesign(data = ., ids = ~1, weights = ~1)
 
   expect_error(
     res <- d %>% tbl_svysummary(),
@@ -638,4 +642,3 @@ test_that("tbl_svysummary() works with a factor having only one levem", {
     c(NA, "5 (100%)")
   )
 })
-

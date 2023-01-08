@@ -15,9 +15,10 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
 
   # keeping the first arg listed if duplicated (first is the user-specified one)
   tidy_plus_plus_args <-
-    tidy_plus_plus_args[names(tidy_plus_plus_args) %>% {
-      !duplicated(.)
-    }]
+    tidy_plus_plus_args[names(tidy_plus_plus_args) %>%
+      {
+        !duplicated(.)
+      }]
 
   # tidying up the tidy data frame with `broom.helpers::tidy_plus_plus()`
   df_tidy <-
@@ -46,8 +47,9 @@ tidy_prep <- function(x, tidy_fun, exponentiate, conf.level, intercept, label,
       )
     }
 
-  if (!"header_row" %in% names(df_tidy))
+  if (!"header_row" %in% names(df_tidy)) {
     df_tidy$header_row <- NA
+  }
 
   df_tidy <- df_tidy %>%
     mutate(

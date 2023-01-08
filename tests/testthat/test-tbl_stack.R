@@ -92,12 +92,13 @@ test_that("Stacking tbl_summary objects", {
 
   expect_equal(
     tbl_stack(
-      list(tbl,
-           tbl %>% modify_fmt_fun(p.value ~ purrr::partial(style_sigfig, digits = 3)))
+      list(
+        tbl,
+        tbl %>% modify_fmt_fun(p.value ~ purrr::partial(style_sigfig, digits = 3))
+      )
     ) %>%
       as_tibble(col_labels = FALSE) %>%
       dplyr::pull(p.value),
     c("0.8", "0.6", "0.834", "0.637")
   )
-
 })

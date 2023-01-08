@@ -89,8 +89,8 @@ as_gt <- function(x, include = everything(), return_calls = FALSE, ...) {
 
   # taking each gt function call, concatenating them with %>% separating them
   gt_calls[include] %>%
-  c(parse_expr(.get_deprecated_option("gtsummary.as_gt.addl_cmds", default = "NULL"))) %>%
-  .eval_list_of_exprs()
+    c(parse_expr(.get_deprecated_option("gtsummary.as_gt.addl_cmds", default = "NULL"))) %>%
+    .eval_list_of_exprs()
 }
 
 # creating gt calls from table_styling -----------------------------------------
@@ -99,11 +99,16 @@ table_styling_to_gt_calls <- function(x, ...) {
 
   # gt -------------------------------------------------------------------------
   groupname_col <-
-    switch("groupname_col" %in% x$table_styling$header$column, "groupname_col")
+    switch("groupname_col" %in% x$table_styling$header$column,
+      "groupname_col"
+    )
   caption <-
     switch(!is.null(x$table_styling$caption),
-           rlang::call2(attr(x$table_styling$caption, "text_interpret"),
-                        x$table_styling$caption))
+      rlang::call2(
+        attr(x$table_styling$caption, "text_interpret"),
+        x$table_styling$caption
+      )
+    )
   gt_calls[["gt"]] <-
     expr(gt::gt(
       data = x$table_body,
@@ -228,8 +233,7 @@ table_styling_to_gt_calls <- function(x, ...) {
   if (nrow(x$table_styling$footnote) == 0 &&
     nrow(x$table_styling$footnote_abbrev) == 0) {
     gt_calls[["tab_footnote"]] <- list()
-  }
-  else {
+  } else {
     df_footnotes <-
       bind_rows(
         x$table_styling$footnote,
@@ -288,7 +292,7 @@ table_styling_to_gt_calls <- function(x, ...) {
         .data$interpret_spanning_header, .data$spanning_header,
         ~ call2(parse_expr(.x), .y)
       ),
-      cols = map(.data$cols, ~pull(.x))
+      cols = map(.data$cols, ~ pull(.x))
     ) %>%
     select("spanning_header", "cols")
 
@@ -324,10 +328,12 @@ table_styling_to_gt_calls <- function(x, ...) {
   gt_calls[["cols_hide"]] <-
     names(x$table_body) %>%
     setdiff(.cols_to_show(x)) %>%
-    {.purrr_when(
-      rlang::is_empty(.) ~ NULL,
-      TRUE ~ expr(gt::cols_hide(columns = !!.))
-    )}
+    {
+      .purrr_when(
+        rlang::is_empty(.) ~ NULL,
+        TRUE ~ expr(gt::cols_hide(columns = !!.))
+      )
+    }
 
   # return list of gt expressions
   gt_calls

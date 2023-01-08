@@ -70,5 +70,4 @@ test_that("no errors/warnings with standard use", {
       tbl_summary(include = grade) %>%
       remove_row_type(variable = grade, type = "header", level_value = "I")
   )
-
 })

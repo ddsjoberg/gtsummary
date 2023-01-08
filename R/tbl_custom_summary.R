@@ -112,8 +112,8 @@
 #' \donttest{
 #' # Example 1 ----------------------------------
 #' my_stats <- function(data, ...) {
-#'   marker_sum = sum(data$marker, na.rm = TRUE)
-#'   mean_age = mean(data$age, na.rm = TRUE)
+#'   marker_sum <- sum(data$marker, na.rm = TRUE)
+#'   mean_age <- mean(data$age, na.rm = TRUE)
 #'   dplyr::tibble(
 #'     marker_sum = marker_sum,
 #'     mean_age = mean_age
@@ -155,8 +155,8 @@
 #'   tbl_custom_summary(
 #'     include = c("marker", "ttdeath"),
 #'     by = "trt",
-#'     stat_fns = ~ mean_ci,
-#'     statistic = ~ "{mean} [{conf.low}; {conf.high}]"
+#'     stat_fns = ~mean_ci,
+#'     statistic = ~"{mean} [{conf.low}; {conf.high}]"
 #'   ) %>%
 #'   add_overall(last = TRUE) %>%
 #'   modify_footnote(
@@ -183,8 +183,8 @@
 #'   tbl_custom_summary(
 #'     include = c("grade", "stage"),
 #'     by = "trt",
-#'     stat_fns = ~ diff_to_great_mean,
-#'     statistic = ~ "{mean} ({level}, diff: {diff})",
+#'     stat_fns = ~diff_to_great_mean,
+#'     statistic = ~"{mean} ({level}, diff: {diff})",
 #'     overall_row = TRUE
 #'   ) %>%
 #'   bold_labels()
@@ -208,15 +208,14 @@
 #' `r man_create_image_tag(file = "tbl_custom_summary_ex3.png", width = "35")`
 #' }}
 
-tbl_custom_summary <- function(
-                        data, by = NULL, label = NULL,
-                        stat_fns, statistic,
-                        digits = NULL, type = NULL, value = NULL,
-                        missing = NULL, missing_text = NULL,
-                        include = everything(),
-                        overall_row = FALSE,
-                        overall_row_last = FALSE,
-                        overall_row_label = NULL) {
+tbl_custom_summary <- function(data, by = NULL, label = NULL,
+                               stat_fns, statistic,
+                               digits = NULL, type = NULL, value = NULL,
+                               missing = NULL, missing_text = NULL,
+                               include = everything(),
+                               overall_row = FALSE,
+                               overall_row_last = FALSE,
+                               overall_row_label = NULL) {
   # ungrouping data ------------------------------------------------------------
   data <- data %>% ungroup()
 
@@ -238,13 +237,17 @@ tbl_custom_summary <- function(
 
   # adding overall row? --------------------------------------------------------
   if (overall_row) {
-    if (is.null(overall_row_label))
+    if (is.null(overall_row_label)) {
       overall_row_label <- translate_text("Overall")
+    }
     data$.overall <- TRUE
     attr(data$.overall, "label") <- overall_row_label
 
-    if (overall_row_last) include <- c(include, ".overall")
-    else include <- c(".overall", include)
+    if (overall_row_last) {
+      include <- c(include, ".overall")
+    } else {
+      include <- c(".overall", include)
+    }
   }
 
   # setting defaults from gtsummary theme --------------------------------------
@@ -268,7 +271,8 @@ tbl_custom_summary <- function(
     missing_text %||%
     get_theme_element("tbl_custom_summary-arg:missing_text") %||%
     get_theme_element("tbl_summary-arg:missing_text",
-                      default = translate_text("Unknown"))
+      default = translate_text("Unknown")
+    )
 
   # matching arguments ---------------------------------------------------------
   missing <- match.arg(missing, choices = c("ifany", "always", "no"))
@@ -344,14 +348,15 @@ tbl_custom_summary <- function(
       x$table_styling$header %>%
       dplyr::left_join(
         x$df_by %>%
-          select(column = "by_col",
-                 modify_stat_n = "n",
-                 modify_stat_p = "p",
-                 modify_stat_level = "by_chr"),
+          select(
+            column = "by_col",
+            modify_stat_n = "n",
+            modify_stat_p = "p",
+            modify_stat_level = "by_chr"
+          ),
         by = "column"
       )
-  }
-  else {
+  } else {
     x$table_styling$header <-
       x$table_styling$header %>%
       mutate(
@@ -373,8 +378,9 @@ tbl_custom_summary <- function(
       label = paste0("**", translate_text("Characteristic"), "**"),
       all_stat_cols() ~
         ifelse(is.null(by),
-               "**N = {style_number(N)}**",
-               "**{level}**, N = {style_number(n)}")
+          "**N = {style_number(N)}**",
+          "**{level}**, N = {style_number(n)}"
+        )
     )
 
   # assign class and return final tbl ------------------------------------------
@@ -538,7 +544,7 @@ df_custom_stats_fun <- function(summary_type, variable, dichotomous_value, stat_
 
   # returning table will all stats
   merge_vars <- switch(!is.null(by),
-                       c("by", "variable")
+    c("by", "variable")
   ) %||% "variable"
   return <- left_join(t1, t2, by = merge_vars)
 
@@ -548,16 +554,14 @@ df_custom_stats_fun <- function(summary_type, variable, dichotomous_value, stat_
       return %>%
       left_join(df_by(data, by)[c("by", "by_col")], by = "by") %>%
       rename(col_name = "by_col")
-  }
-  else {
+  } else {
     return$col_name <- "stat_0"
   }
 
   # adding label column
   if ("variable_levels" %in% names(return)) {
     return$label <- as.character(return$variable_levels)
-  }
-  else {
+  } else {
     return$label <- var_label
   }
 
@@ -574,19 +578,23 @@ df_custom_stats_fun <- function(summary_type, variable, dichotomous_value, stat_
 
 summarize_custom <- function(data, stat_fn, variable, by, stat_display,
                              summary_type, dichotomous_value) {
-
   # prepping data set
   df_by <- df_by(data, by)
 
-  if (!is.null(dichotomous_value))
+  if (!is.null(dichotomous_value)) {
     data[[variable]] <- forcats::fct_expand(
       as.factor(data[[variable]]),
       as.character(dichotomous_value)
     )
+  }
 
   group_vars <- c(
-    switch (!is.null(by), by),
-    switch (summary_type %in% c("categorical", "dichotomous"), variable)
+    switch(!is.null(by),
+      by
+    ),
+    switch(summary_type %in% c("categorical", "dichotomous"),
+      variable
+    )
   )
   full_data <- data # include missing and ungrouped
 
@@ -631,8 +639,7 @@ summarize_custom <- function(data, stat_fn, variable, by, stat_display,
         by = character()
       ) %>%
       select(any_of(c("by", "variable", "variable_levels", "stat_display")), everything())
-  }
-  else {
+  } else {
     return <-
       df_stats %>%
       mutate(stat_display = .env$stat_display) %>%

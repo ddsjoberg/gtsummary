@@ -39,7 +39,7 @@ path_figure <- list(
 )
 
 # first make the key to go in the footnote
-gt_markdown_key <- 
+gt_markdown_key <-
   tibble::tibble(
     figure = 1:5,
     desc = c(
@@ -74,12 +74,12 @@ gt_markdown_key <-
     }
   ) %>%
   tab_options(
-    table.font.size = 'x-small', 
+    table.font.size = "x-small",
     data_row.padding = px(3),
     column_labels.hidden = TRUE
   ) %>%
   opt_table_lines(extent = "none") %>%
-  tab_options(table.align='left')
+  tab_options(table.align = "left")
 
 # making table with gt
 list(
@@ -104,19 +104,19 @@ list(
   tidyr::pivot_wider(id_cols = printer, names_from = output, values_from = rating) %>%
   dplyr::mutate(
     link = dplyr::case_when(
-      printer == "gt" ~ 
+      printer == "gt" ~
         "[gt](https://gt.rstudio.com/index.html)",
-      printer == "kable" ~ 
+      printer == "kable" ~
         "[kable](https://bookdown.org/yihui/rmarkdown-cookbook/kable.html)",
       printer == "flextable" ~
         "[flextable](https://davidgohel.github.io/flextable/articles/overview.html)",
-      printer == "kableExtra" ~ 
+      printer == "kableExtra" ~
         "[kableExtra](http://haozhu233.github.io/kableExtra/)",
       printer == "huxtable" ~
         "[huxtable](https://hughjonesd.github.io/huxtable/)",
-      printer == "tibble" ~ 
+      printer == "tibble" ~
         "[tibble](https://tibble.tidyverse.org/)"
-    ),  
+    ),
     fns = dplyr::case_when(
       printer == "gt" ~ "`as_gt()`",
       printer == "kable" ~ "`as_kable()`",
@@ -129,10 +129,12 @@ list(
   gt() %>%
   cols_move_to_start(columns = c(link, fns)) %>%
   cols_hide(columns = c(printer)) %>%
-  cols_label(link = md("**Print Engine**"), 
-             fns = md("**Function**"), 
-             HTML = md("**HTML**"), PDF = md("**PDF**"), 
-             RTF = md("**RTF**"), Word = md("**Word**")) %>%
+  cols_label(
+    link = md("**Print Engine**"),
+    fns = md("**Function**"),
+    HTML = md("**HTML**"), PDF = md("**PDF**"),
+    RTF = md("**RTF**"), Word = md("**Word**")
+  ) %>%
   fmt_markdown(columns = c(fns, link)) %>%
   data_color(
     columns = c(HTML, PDF, RTF, Word),
@@ -155,9 +157,11 @@ list(
       )
     }
   ) %>%
-  cols_width(c(HTML, PDF, RTF, Word) ~ px(60),
-             c(link) ~ px(110),
-             c(link, fns) ~ px(140)) %>%
+  cols_width(
+    c(HTML, PDF, RTF, Word) ~ px(60),
+    c(link) ~ px(110),
+    c(link, fns) ~ px(140)
+  ) %>%
   gt::tab_source_note(
     source_note = gt_markdown_key %>% as_raw_html() %>% html()
   ) %>%
@@ -186,25 +190,33 @@ tibble::tibble(
   default_printer = c("**{gt}**", "**kable**", "**kable**", "**flextable**"),
   desc = c(
     "**{gt}** output is fully supported with **HTML** output.",
-    paste("You may force printing with **{gt}** by converting a **{gtsummary}**",
-          "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
-          "**PDF** output is under development in the **{gt}** package.",
-          "You may get a gorgeous table, but you may also get an error or a malformed table."),
-    paste("You may force printing with **{gt}** by converting a **{gtsummary}**",
-          "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
-          "**RTF** output is under development in the **{gt}** package.",
-          "You may get a gorgeous table, but you may also get an error or a malformed table."),
-    paste("**{flextable}** is the default print engine for **Word** output,",
-          "as **{gt}** does not support **Word**. If **{flextable}** is not installed,",
-          "**kable** is used.")
+    paste(
+      "You may force printing with **{gt}** by converting a **{gtsummary}**",
+      "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
+      "**PDF** output is under development in the **{gt}** package.",
+      "You may get a gorgeous table, but you may also get an error or a malformed table."
+    ),
+    paste(
+      "You may force printing with **{gt}** by converting a **{gtsummary}**",
+      "object to **{gt}** with `as_gt()`, e.g. `tbl_summary(trial) %>% as_gt()`.",
+      "**RTF** output is under development in the **{gt}** package.",
+      "You may get a gorgeous table, but you may also get an error or a malformed table."
+    ),
+    paste(
+      "**{flextable}** is the default print engine for **Word** output,",
+      "as **{gt}** does not support **Word**. If **{flextable}** is not installed,",
+      "**kable** is used."
+    )
   )
 ) %>%
   gt() %>%
   fmt_markdown(columns = everything()) %>%
-  cols_label(output = md("**Output Type**"), 
-             default_printer = md("**Default Engine**"), 
-             desc = md("**Details**")) %>%
-  tab_options(table.font.size = 'small')
+  cols_label(
+    output = md("**Output Type**"),
+    default_printer = md("**Default Engine**"),
+    desc = md("**Details**")
+  ) %>%
+  tab_options(table.font.size = "small")
 ```
 
 When a table is printed with `knitr::kable()` the resulting table is less full featured compared to a table printed with **{gt}**.
@@ -248,9 +260,9 @@ as_kable(tbl, format = "latex")
 Use the {gt} package's `gt::gtsave()` function to save images of {gtsummary} tables. 
 
 ```{r, eval = FALSE}
-tbl_summary(trial) %>%    # build gtsummary table
-  as_gt() %>%             # convert to gt table
-  gt::gtsave(             # save table as image
+tbl_summary(trial) %>% # build gtsummary table
+  as_gt() %>% # convert to gt table
+  gt::gtsave( # save table as image
     filename = "my_table_image.png"
   )
 ```

@@ -36,7 +36,7 @@ style_sigfig <- function(x, digits = 2, scale = 1, big.mark = NULL, decimal.mark
   d <-
     paste0(
       "round2(abs(x * scale), digits = ", digits:1 + 1L, ") ",
-      "< 10^(", 1:digits - 1 ,") - 0.5 * 10^(", -(digits:1) ,") ~ ", digits:1,
+      "< 10^(", 1:digits - 1, ") - 0.5 * 10^(", -(digits:1), ") ~ ", digits:1,
       collapse = ", "
     ) %>%
     {

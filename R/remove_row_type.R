@@ -81,12 +81,12 @@ remove_row_type <- function(x, variables = everything(),
       lst_expr <- list(
         variables = c("row_type", "label"),
         expr = expr(.data$row_type == "level" & .data$label %in% level_value)
-        )
+      )
     } else {
       lst_expr <- list(
         variables = "row_type",
         expr = expr(.data$row_type == "level")
-        )
+      )
     }
   } else if (type == "all") {
     lst_expr <- list(

@@ -118,8 +118,10 @@ add_significance_stars_ex4 <-
   lm(marker ~ stage + grade, data = trial) \%>\%
   tbl_regression() \%>\%
   add_global_p() \%>\%
-  add_significance_stars(hide_p = FALSE,
-                           pattern = "{p.value}{stars}") \%>\%
+  add_significance_stars(
+    hide_p = FALSE,
+    pattern = "{p.value}{stars}"
+  ) \%>\%
   as_gt() \%>\%
   gt::tab_style(
     style = "vertical-align:top",

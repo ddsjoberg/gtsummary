@@ -10,9 +10,10 @@ trial <-
     stage = sample(c("T1", "T2", "T3", "T4"), size = n, replace = TRUE) %>% factor(),
     grade = sample(c("I", "II", "III"), size = n, replace = TRUE) %>% factor(),
     response_prob =
-      ((trt == "Drug") - 0.2 * as.numeric(stage) - 0.1 * as.numeric(grade) + 0.1 * marker) %>% {
-        1 / (1 + exp(-.))
-      },
+      ((trt == "Drug") - 0.2 * as.numeric(stage) - 0.1 * as.numeric(grade) + 0.1 * marker) %>%
+        {
+          1 / (1 + exp(-.))
+        },
     response = runif(n) < response_prob,
     ttdeath_true =
       exp(1 + 0.2 * response +

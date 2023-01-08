@@ -249,7 +249,7 @@ tbl_regression.default <- function(x, label = NULL, exponentiate = FALSE,
     x[c("N", "n", "N_event")] %>%
     purrr::compact() %>%
     as_tibble() %>%
-    dplyr::rename_with(.fn = ~vec_paste0("modify_stat_", .), .cols = everything()) %>%
+    dplyr::rename_with(.fn = ~ vec_paste0("modify_stat_", .), .cols = everything()) %>%
     full_join(
       x$table_styling$header,
       by = character()

@@ -45,12 +45,14 @@ Let's take a look at the default table, comparing data between treatment groups.
 #### Default Theme
 
 ```{r, message=FALSE}
-library(gtsummary); library(gt); library(dplyr)
+library(gtsummary)
+library(gt)
+library(dplyr)
 
 trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
-  add_p() 
+  add_p()
 ```
 
 #### JAMA Theme
@@ -65,7 +67,7 @@ theme_gtsummary_journal(journal = "jama")
 trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
-  add_p() 
+  add_p()
 ```
 
 By setting the theme, we were able to change the default formatting for the p-value and add a dash between the 25th and 75th percentiles.
@@ -84,7 +86,7 @@ theme_gtsummary_compact()
 trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
-  add_p() 
+  add_p()
 ```
 
 #### JAMA + Compact + Language Theme
@@ -101,7 +103,7 @@ set_gtsummary_theme(theme_gtsummary_language("es"))
 trial %>%
   select(trt, age, grade) %>%
   tbl_summary(by = trt) %>%
-  add_p() 
+  add_p()
 ```
 
 *Clear all previously set themes using* `reset_gtsummary_theme()`.
@@ -119,7 +121,7 @@ To construct a personalized theme, create a named list of at least one theme ele
 Here's an example of a theme that modifies the function that styles p-values and updates the default statistics reported in `tbl_summary()`.
 
 ```{r}
-my_theme <-   
+my_theme <-
   list(
     # round large p-values to two places
     "pkgwide-fn:pvalue_fun" = function(x) style_pvalue(x, digits = 2),
@@ -156,14 +158,17 @@ gtsummary:::df_theme_elements %>%
   dplyr::group_by(fn) %>%
   gt::gt() %>%
   gt::cols_align(columns = everything(), align = "left") %>%
-  gt::cols_label(name = "Theme Element", desc = "Description",
-                 example = "Example") %>%
+  gt::cols_label(
+    name = "Theme Element", desc = "Description",
+    example = "Example"
+  ) %>%
   gt::fmt_markdown(columns = c(name, desc, example)) %>%
   gt::sub_missing(columns = everything(), missing_text = "") %>%
-  gt::tab_options(table.font.size = 'small',
-                  data_row.padding = gt::px(1),
-                  row_group.padding = gt::px(1))
-
+  gt::tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
 ```
 
 The second type of theme elements set function argument defaults.
@@ -180,7 +185,9 @@ gtsummary:::df_theme_elements %>%
   gt() %>%
   cols_label(arg_list = "Theme Element") %>%
   fmt_markdown(columns = c(arg_list)) %>%
-  tab_options(table.font.size = 'small',
-                  data_row.padding = gt::px(1),
-                  row_group.padding = gt::px(1))
+  tab_options(
+    table.font.size = "small",
+    data_row.padding = gt::px(1),
+    row_group.padding = gt::px(1)
+  )
 ```
