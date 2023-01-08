@@ -72,9 +72,11 @@ proportion_summary_ex1 <-
     include = c("Age", "Class"),
     by = "Sex",
     stat_fns = ~ proportion_summary("Survived", "Yes", weights = "Freq"),
-    statistic = ~ "{prop}\% ({n}/{N}) [{conf.low}-{conf.high}]",
+    statistic = ~"{prop}\% ({n}/{N}) [{conf.low}-{conf.high}]",
     digits = ~ list(
-      function(x) {style_percent(x, digits = 1)},
+      function(x) {
+        style_percent(x, digits = 1)
+      },
       0, 0, style_percent, style_percent
     ),
     overall_row = TRUE,
